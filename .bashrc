@@ -571,7 +571,7 @@ function edit {
 	if [[ ${1} == -d ]] ||
 	   [[ ${1} == -u ]] ||
 	   [[ ${1} == -v ]]; then
-		[[ ${1} == -u ]] && DIFF="vdiff -u"
+		[[ ${1} == -u ]] && DIFF="vdiff -u -U10"
 		[[ ${1} == -v ]] && DIFF="vdiff"
 		shift
 		for FILE in "${@}"; do
