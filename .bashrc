@@ -943,7 +943,10 @@ function shell {
 
 function vdiff {
 	declare VDIFF="/tmp/vdiff"
-	if [[ ${1} == -x ]]; then
+	if [[ ${1} == -g ]]; then
+		shift
+		$(which git) diff -u -U10 --full-index "${@}" >${VDIFF}
+	elif [[ ${1} == -x ]]; then
 		shift
 		xmldiff "${@}" >${VDIFF}
 	else
