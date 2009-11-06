@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+################################################################################
+
+declare QNUM="${1}"
+declare QMEM="${2}"
+declare FILE="${3}"
+declare QSYS="${4}"
+shift
+shift
+shift
+shift
+
+################################################################################
+
+declare IPA="10.0.2.1${QNUM}"
+declare SSH="tcp:220${QNUM}:${IPA}:22"
+
+declare NAME="${FILE}"
+declare FLOC="${FILE}"
+FLOC="${FLOC} /.g/_data/_systems/.drives/${FILE}"
+FLOC="${FLOC} /.g/_data/_target/iso/${FILE}"
+
+declare QIMG=
+declare I=
+for I in $(eval find ${FLOC} 2>/dev/null)
+do
+	QIMG="${I}"
+done
+
+if [[ ${FILE} == "NULL" ]]
+then
+	if [[ $(uname) == "FreeBSD" ]]
+	then
+		QIMG="/dev/da1"
+	else
+		QIMG="/dev/sdb"
+	fi
+fi
+
+while
+[[ ! -c /dev/kqemu ]] &&
+[[ ! -c /dev/kqemu0 ]]
+do
+	if [[ $(uname) == "FreeBSD" ]]
+	then
+		kldunload kqemu
+		kldload kqemu
+	else
+		rmmod kqemu
+		modprobe kqemu major="0"
+	fi
+done
+
+declare QOPT=
+if
+[[ ${QSYS} == TRUE ]]
+then
+	QOPT="-hda ${QIMG} -vnc 127.0.0.1:${QNUM}"
+elif
+[[ ${QSYS} == REAL ]]
+then
+	QOPT="-hda ${QIMG}"
+elif
+[[ ${QSYS} == LIVE ]]
+then
+	QOPT="-cdrom ${QIMG} -boot d"
+else
+	QOPT="-cdrom ${QIMG} -boot d -vnc 127.0.0.1:${QNUM}"
+fi
+
+export SDL_VIDEO_X11_DGAMOUSE="0"
+export SDL_VIDEO_X11_MOUSEACCEL="0/0/0"
+qemu \
+	-name ${NAME} \
+	-monitor stdio \
+	-m ${QMEM} \
+	-net nic -net user \
+	-redir ${SSH} \
+	-usb \
+	-usbdevice tablet \
+	${QOPT} \
+	${*}
+
+################################################################################
+# end of file
+################################################################################
