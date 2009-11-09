@@ -234,18 +234,19 @@ alias rdiff-rm="${RDIFF_RM}"
 
 ########################################
 
-export RSYNC_W="reporter rsync \
+export RSYNC_C="reporter rsync \
 	-vv \
 	--rsh=ssh \
-	--force \
 	--recursive \
 	--itemize-changes \
 	--progress \
 	--compress \
 	--fuzzy \
-	--delete \
-	--delete-during \
 	--times"
+export RSYNC_W="${RSYNC_C} \
+	--force \
+	--delete \
+	--delete-during"
 export RSYNC_U="${RSYNC_W} \
 	--devices \
 	--specials \
