@@ -951,6 +951,9 @@ function vdiff {
 		[[ -z ${1} ]] && shift && CACHED="HEAD"
 		[[ ${1} == -c ]] && shift && CACHED="--cached"
 		$(which git) diff -u -U10 --full-index ${CACHED} "${@}" >${VDIFF}
+	elif [[ ${1} == -l ]]; then
+		shift
+		$(which git) log -u -U10 --full-index "${@}" >${VDIFF}
 	elif [[ ${1} == -x ]]; then
 		shift
 		xmldiff "${@}" >${VDIFF}
