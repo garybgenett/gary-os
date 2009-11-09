@@ -947,6 +947,7 @@ function vdiff {
 	if [[ ${1} == -g ]]; then
 		shift
 		declare CACHED=
+		[[ -z ${1} ]] && shift && CACHED="HEAD"
 		[[ ${1} == -c ]] && shift && CACHED="--cached"
 		$(which git) diff -u -U10 --full-index ${CACHED} "${@}" >${VDIFF}
 	elif [[ ${1} == -x ]]; then
