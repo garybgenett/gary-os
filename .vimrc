@@ -130,8 +130,8 @@ map <F3> <ESC>:set invpaste<CR>
 map <F4> <ESC>:set invwrap<CR>
 
 " (un)set automatic formatting
-map <F5> <ESC>:set formatoptions+=a<CR><ESC>:set invexpandtab<CR><ESC>:set invlist<CR><ESC>:set textwidth=80<CR>
-map <F6> <ESC>:set formatoptions-=a<CR><ESC>:set invexpandtab<CR><ESC>:set invlist<CR><ESC>:set textwidth=0<CR>
+map <F5> <ESC>:set formatoptions+=a<CR><ESC>:set expandtab<CR><ESC>:set nolist<CR><ESC>:set textwidth=80<CR>
+map <F6> <ESC>:set formatoptions-=a<CR><ESC>:set noexpandtab<CR><ESC>:set list<CR><ESC>:set textwidth=0<CR>
 
 " remove all spaces from the end of all lines
 map <F9> <ESC>:%s/[ \t]*$//g<CR>1G
