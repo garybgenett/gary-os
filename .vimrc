@@ -85,13 +85,17 @@ set list
 set listchars				=tab:,.,trail:=,extends:>,precedes:<
 
 set linebreak
+set breakat				=\ \\
 set showbreak				=+
-set formatoptions			=cnqrt
-set comments			=sr:/*,mb:*,ex:*/,b://,b:###,b:#,b:%,b:-,bf:+
+
+set textwidth				=0
+set formatlistpat			=^\\s*\\w\\+[\\.)]\\s*
+set formatoptions			=1cnqrto
+set comments				=sr:/*,mb:*,ex:*/,b://,b:###,b:#,b:%,bf:+,bf:-
 
 set highlight				=sr
 set laststatus				=2
-set statusline	=[\ %<%F%R%M%W%H\ ]\ %=\ [\ %n\ %B\ \|\ %c%V\ %l/%L\ %p%%\ ]
+set statusline				=[\ %<%F%R%M%W%H\ ]\ %=\ [\ %n\ %B\ \|\ %c%V\ %l/%L\ %p%%\ ]
 
 "#######################################
 " abbreviations
@@ -119,19 +123,15 @@ map z. <ESC>:set foldlevel=1<CR>zv
 map  <C-J> <ESC>/+VIM+<CR>c5l
 map! <C-J> <C-O>/+VIM+<CR><C-O>c5l
 
-" (re)set folding, columns and textwidth
+" (re)set folding, columns, pasting and wrapping
 map <F1> <ESC>:set foldlevel=1<CR>
 map <F2> <ESC>:set columns=81<CR>
-map <F3> <ESC>:set textwidth=80<CR>
+map <F3> <ESC>:set invpaste<CR>
+map <F4> <ESC>:set invwrap<CR>
 
-" (un)set paste, wrap and indent
-map <F4> <ESC>:set invpaste<CR>
-map <F5> <ESC>:set invwrap<CR>
-map <F6> <ESC>:set invautoindent<CR><ESC>:set invsmartindent<CR>
-
-" (un)comment lines manually
-map <F7> <ESC>g$Bhi<CR><ESC>0
-map <F8> <ESC>0jd/\ <CR>kJ<ESC>0
+" (un)set automatic formatting
+map <F5> <ESC>:set formatoptions+=a<CR><ESC>:set invexpandtab<CR><ESC>:set invlist<CR><ESC>:set textwidth=80<CR>
+map <F6> <ESC>:set formatoptions-=a<CR><ESC>:set invexpandtab<CR><ESC>:set invlist<CR><ESC>:set textwidth=0<CR>
 
 " remove all spaces from the end of all lines
 map <F9> <ESC>:%s/[ \t]*$//g<CR>1G
