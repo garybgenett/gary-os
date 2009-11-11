@@ -945,22 +945,28 @@ function shell {
 
 function vdiff {
 	declare VDIFF="/tmp/vdiff"
+	declare SEARCH=
 	if [[ ${1} == -g ]]; then
 		shift
-		declare CACHED=
-		[[ -z ${1} ]] && shift && CACHED="HEAD"
-		[[ ${1} == -c ]] && shift && CACHED="--cached"
-		$(which git) diff -u -U10 -M --full-index ${CACHED} "${@}" >${VDIFF}
+		declare SEARCH="+/^diff"
+		declare TREE=
+		[[ -z ${1} ]] && TREE="HEAD" && shift
+		[[ ${1} == -c ]] && TREE="--cached" && shift
+		$(which git) diff -u -U10 -M --full-index ${TREE} "${@}" >${VDIFF}
 	elif [[ ${1} == -l ]]; then
 		shift
-		$(which git) log -u -U10 -M --full-index --follow --summary --stat "${@}" >${VDIFF}
+		declare SEARCH="+/^commit"
+		declare FOLLOW=
+		declare FILE="${#}"
+		(( ${FILE} > 0 )) && [[ -f ${!FILE} ]] && FOLLOW="--follow"
+		$(which git) log -u -U10 -M --full-index --summary --stat ${FOLLOW} "${@}" >${VDIFF} 2>&1
 	elif [[ ${1} == -x ]]; then
 		shift
 		xmldiff "${@}" >${VDIFF}
 	else
 		diff "${@}" >${VDIFF}
 	fi
-	${VIEW} ${VDIFF}
+	${VIEW} ${SEARCH} ${VDIFF}
 	${RM} ${VDIFF} >/dev/null 2>&1
 	return 0
 }
