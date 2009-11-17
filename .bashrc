@@ -265,7 +265,7 @@ alias rsync="${RSYNC_U}"
 
 ########################################
 
-export UNISON="/.g/_data/+sync"
+export UNISON="${HOME}/.unison"
 
 export UNISON_W="reporter unison \
 	-log \
