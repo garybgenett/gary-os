@@ -217,6 +217,9 @@ alias SymlinkProgram="${GOBO_ENV} ${GOBO_SYMLINK}"
 export GIT="reporter git"					; alias git="${GIT}"
 export SVN="reporter svn"					; alias svn="${SVN}"
 
+alias g-add="${GIT} add --verbose"
+alias g-commit="${GIT} commit --verbose"
+
 ########################################
 
 export RDIFF_BACKUP="reporter rdiff-backup \
