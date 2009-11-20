@@ -590,7 +590,9 @@ function edit {
 		shift
 		${GREP} -r "${@}" \
 			/.g/_data/zactive/.setup \
-			/.g/_data/zactive/.static
+			/.g/_data/zactive/.static |
+			${GREP} -v "[+.]git" |
+			${GREP} "${@}"
 	elif [[ ${1} == -r ]]; then
 		shift
 		env ${EDIT} $(
