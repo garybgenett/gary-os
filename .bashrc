@@ -671,7 +671,7 @@ function email-copy {
 ########################################
 
 function journal {
-	cd /.g/_data/zactive/writing
+	cd /.g/_data/zactive/writing/tresobis/_staging
 	prompt -x ${FUNCNAME}
 	${VI} \
 		"${@}" \
