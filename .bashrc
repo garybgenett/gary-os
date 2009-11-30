@@ -176,6 +176,12 @@ fi
 
 ########################################
 
+export RDP="rdesktop -z -n NULL -g 90% -a 24"
+
+alias rdp="${RDP}"
+
+########################################
+
 export GOBO_ENV="prompt -z"
 if [[ -f /etc/debian_version ]] &&
    [[ -n $(mount | ${GREP} "/.g/[+]gobo") ]]; then
@@ -371,7 +377,6 @@ alias pics-x="feh -F -rz -D5"
 alias ports="netstat -an | ${MORE}"
 alias projectm="LC_NUMERIC=C projectM-pulseaudio"
 alias pstree="pstree -clnpuA"
-alias rdp="rdesktop -5 -m -z -n NULL -g 90% -a 24 -r sound:remote"
 alias remind="remind -v -uplastic"
 alias schedule="remind -v -uplastic -g -m -b1 -cc+2 -w90 ${HOME}/.reminders"
 alias sheep="electricsheep --debug 1 --mplayer 1 --server d2v6.sheepserver.net"
