@@ -68,7 +68,7 @@ set scrolljump				=1
 set scrolloff				=10
 set sidescroll				=10
 set sidescrolloff			=10
-set history				=10
+set history				=100
 set undolevels				=1000
 
 set foldenable
