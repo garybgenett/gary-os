@@ -124,20 +124,20 @@ map  <C-J> <ESC>/+VIM+<CR>c5l
 map! <C-J> <C-O>/+VIM+<CR><C-O>c5l
 
 " (re)set folding, columns, pasting and wrapping
-map <F1> <ESC>:set foldlevel=1<CR>
-map <F2> <ESC>:set columns=81<CR>
-map <F3> <ESC>:set invpaste<CR>
-map <F4> <ESC>:set invwrap<CR>
-
-" (un)set automatic formatting
-map <F5> <ESC>:set formatoptions+=a<CR><ESC>:set expandtab<CR><ESC>:set nolist<CR><ESC>:set textwidth=80<CR>
-map <F6> <ESC>:set formatoptions-=a<CR><ESC>:set noexpandtab<CR><ESC>:set list<CR><ESC>:set textwidth=0<CR>
+map <F5> <ESC>:set foldlevel=1<CR>
+map <F6> <ESC>:set columns=81<CR>
+map <F7> <ESC>:set invpaste<CR>
+map <F8> <ESC>:set invwrap<CR>
 
 " remove all spaces from the end of all lines
 map <F9> <ESC>:%s/[ \t]*$//g<CR>1G
 
 " convert tab-delimited file to properly formatted csv
 map <F10> <ESC>:%s/^/\"/g<CR>:%s/\t/\"\,\"/g<CR>:%s/$/\"/g<CR>
+
+" (un)set automatic formatting
+map <F11> <ESC>:set formatoptions+=a<CR><ESC>:set expandtab<CR><ESC>:set nolist<CR><ESC>:set textwidth=80<CR>
+map <F12> <ESC>:set formatoptions-=a<CR><ESC>:set noexpandtab<CR><ESC>:set list<CR><ESC>:set textwidth=0<CR>
 
 "###############################################################################
 " end of file
