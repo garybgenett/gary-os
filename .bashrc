@@ -178,7 +178,7 @@ fi
 
 ########################################
 
-export RDP="rdesktop -z -n NULL -g 90% -a 24"
+export RDP="rdesktop -z -n NULL -g 90% -a 24 -r sound:remote"
 
 alias rdp="${RDP}"
 
