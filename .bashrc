@@ -29,6 +29,38 @@ complete -d -o dirnames cd
 # variables
 ################################################################################
 
+export SCRIPT="$(basename -- "${0}")"
+export UNAME="$(uname -s)"
+
+export PIMDIR="/.g/_data/zactive/_pim"
+export MAILDIR="${HOME}/Maildir"
+export MAILCAPS="${HOME}/.mailcap"
+
+########################################
+
+export TERM="linux"
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+export LC_COLLATE="C"
+#>>>export LC_TIME="en_DK.UTF-8"
+export LC_ALL=
+
+export HISTFILE="${HOSTNAME}.${USER}.$(basename ${SHELL}).$(date +%Y-%m)"
+export HISTFILE="${HOME}/.history/${HISTFILE}"
+export HISTSIZE="$(( (2**31)-1 ))"
+export HISTFILESIZE="${HISTFILESIZE}"
+export HISTTIMEFORMAT="%Y-%m-%dT%H:%M:%S "
+
+export MAKEFLAGS="-j3"
+export CC="gcc"
+export CXX="g++"
+export CFLAGS="-march=i686 -mtune=i686 -O2 -ggdb -pipe"
+export CXXFLAGS="${CFLAGS}"
+export CCACHE_DIR="/_ccache"
+export PKG_CONFIG_PATH="/System/Links/Libraries/pkgconfig:/usr/lib/pkgconfig"
+
+########################################
+
 export CDPATH="."
 export CDPATH="${CDPATH}:${HOME}"
 export CDPATH="${CDPATH}:/.g"
@@ -53,35 +85,6 @@ if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
 	export PATH="${PATH}:/c/WINDOWS"
 	export PATH="${PATH}:/c/WINDOWS/system32"
 fi
-
-export SCRIPT="$(basename -- "${0}")"
-export UNAME="$(uname -s)"
-
-########################################
-
-export PIMDIR="/.g/_data/zactive/_pim"
-export MAILDIR="${HOME}/Maildir"
-export MAILCAPS="${HOME}/.mailcap"
-
-export LANG="en_US.UTF-8"
-export LC_ALL="en_US.UTF-8"
-export LC_COLLATE="C"
-#>>>export LC_TIME="en_DK.UTF-8"
-export LC_ALL=
-
-export HISTFILE="${HOSTNAME}.${USER}.$(basename ${SHELL}).$(date +%Y-%m)"
-export HISTFILE="${HOME}/.history/${HISTFILE}"
-export HISTSIZE="$(( (2**31)-1 ))"
-export HISTFILESIZE="${HISTFILESIZE}"
-export HISTTIMEFORMAT="%Y-%m-%dT%H:%M:%S "
-
-export MAKEFLAGS="-j3"
-export CC="gcc"
-export CXX="g++"
-export CFLAGS="-march=i686 -mtune=i686 -O2 -ggdb -pipe"
-export CXXFLAGS="${CFLAGS}"
-export CCACHE_DIR="/_ccache"
-export PKG_CONFIG_PATH="/System/Links/Libraries/pkgconfig:/usr/lib/pkgconfig"
 
 ########################################
 
@@ -778,10 +781,9 @@ function prompt {
 		fi
 		/usr/bin/env -i \
 			PS1='------------------------------\nENV(\u@\h \w)\$ ' \
-			TERM="linux" \
 			USER="${USER}" \
 			HOME="${HOME}" \
-			PATH="${PATH}" \
+			TERM="${TERM}" \
 			LANG="${LANG}" \
 			LC_ALL="${LANG}" \
 			HISTFILE="${HISTFILE}" \
@@ -795,6 +797,7 @@ function prompt {
 			CXXFLAGS="${CXXFLAGS}" \
 			CCACHE_DIR="${CCACHE_DIR}" \
 			PKG_CONFIG_PATH="${PKG_CONFIG_PATH}" \
+			PATH="${PATH}" \
 			${CMD} || return 1
 		return 0
 	fi
@@ -895,7 +898,6 @@ function setconf {
 ########################################
 
 function shell {
-	export TERM="linux"
 	[[ -z ${1} ]] && return 0
 	declare DEST="${1}" && shift
 	declare SSH="sudo -H ssh -2 -X"
@@ -937,7 +939,7 @@ function shell {
 			;;
 	esac
 	if [[ ${1} == -v[0-9] ]]; then
-		OPTS="${OPTS} -L 590${1/#-v/}:127.0.0.1:590${1/#-w}"
+		OPTS="${OPTS} -L 590${1/#-v/}:127.0.0.1:590${1/#-v}"
 		shift
 	fi
 	if [[ ${1} == -s[=0-9] ]]; then
