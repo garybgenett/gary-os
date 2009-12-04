@@ -981,7 +981,7 @@ function vdiff {
 		declare FOLLOW=
 		declare FILE="${#}"
 		(( ${FILE} > 0 )) && [[ -f ${!FILE} ]] && FOLLOW="--follow"
-		$(which git) log ${DIFF_OPTS} -M --full-index --summary --stat ${FOLLOW} "${@}" >${VDIFF} 2>&1
+		$(which git) log ${DIFF_OPTS} -M --full-index --stat --summary --date=iso --pretty=fuller ${FOLLOW} "${@}" >${VDIFF} 2>&1
 	elif [[ ${1} == -x ]]; then
 		shift
 		xmldiff "${@}" >${VDIFF}
