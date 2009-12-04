@@ -509,7 +509,7 @@ function archiver {
 		if [[ -z $(diff ${LAST} ${PIMDIR}/${FILE}.${EXTN} 2>/dev/null) ]]; then
 			continue
 		fi
-		vdiff -u -U10 ${LAST} ${PIMDIR}/${FILE}.${EXTN}
+		vdiff ${LAST} ${PIMDIR}/${FILE}.${EXTN}
 		echo -ne "\n Archive (y/n)? "
 		read -n1 INPUT
 		echo -ne "\n"
@@ -583,9 +583,7 @@ function edit {
 		EDIT="cat"
 	fi
 	if [[ ${1} == -d ]] ||
-	   [[ ${1} == -u ]] ||
 	   [[ ${1} == -v ]]; then
-		[[ ${1} == -u ]] && DIFF="vdiff -u -U10"
 		[[ ${1} == -v ]] && DIFF="vdiff"
 		shift
 		for FILE in "${@}"; do
@@ -965,30 +963,27 @@ function shell {
 function vdiff {
 	declare VDIFF="/tmp/vdiff"
 	declare GIT_OPTS="-B -M --full-index --stat --summary --date=iso --pretty=fuller"
+	declare DIFF_OPTS="-u -U10"
 	declare SEARCH=
 	if [[ ${1} == -g ]]; then
 		shift
-		declare SEARCH="+/^diff"
+		SEARCH="+/^diff"
 		declare TREE=
 		[[ -z ${1} ]] && TREE="HEAD" && shift
 		[[ ${1} == -c ]] && TREE="--cached" && shift
 		echo "diff" >${VDIFF}
-		$(which git) diff ${GIT_OPTS} -u -U10 ${TREE} "${@}" >>${VDIFF} 2>&1
+		$(which git) diff ${GIT_OPTS} ${DIFF_OPTS} ${TREE} "${@}" >>${VDIFF} 2>&1
 	elif [[ ${1} == -l ]] ||
 	     [[ ${1} == -s ]]; then
-		declare DIFF_OPTS=
-		[[ ${1} == -l ]] && DIFF_OPTS="-u -U10"
+		[[ ${1} == -s ]] && DIFF_OPTS=
 		shift
-		declare SEARCH="+/^commit"
+		SEARCH="+/^commit"
 		declare FOLLOW=
 		declare FILE="${#}"
 		(( ${FILE} > 0 )) && [[ -f ${!FILE} ]] && FOLLOW="--follow"
 		$(which git) log ${GIT_OPTS} ${DIFF_OPTS} ${FOLLOW} "${@}" >${VDIFF} 2>&1
-	elif [[ ${1} == -x ]]; then
-		shift
-		xmldiff "${@}" >${VDIFF}
 	else
-		diff "${@}" >${VDIFF}
+		diff ${DIFF_OPTS} "${@}" >${VDIFF}
 	fi
 	${VIEW} ${SEARCH} ${VDIFF}
 	${RM} ${VDIFF} >/dev/null 2>&1
