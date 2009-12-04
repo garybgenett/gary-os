@@ -964,6 +964,7 @@ function shell {
 
 function vdiff {
 	declare VDIFF="/tmp/vdiff"
+	declare GIT_OPTS="-B -M --full-index --stat --summary --date=iso --pretty=fuller"
 	declare SEARCH=
 	if [[ ${1} == -g ]]; then
 		shift
@@ -971,7 +972,8 @@ function vdiff {
 		declare TREE=
 		[[ -z ${1} ]] && TREE="HEAD" && shift
 		[[ ${1} == -c ]] && TREE="--cached" && shift
-		$(which git) diff -u -U10 -B -M --full-index ${TREE} "${@}" >${VDIFF}
+		echo "diff" >${VDIFF}
+		$(which git) diff ${GIT_OPTS} -u -U10 ${TREE} "${@}" >>${VDIFF} 2>&1
 	elif [[ ${1} == -l ]] ||
 	     [[ ${1} == -s ]]; then
 		declare DIFF_OPTS=
@@ -981,7 +983,7 @@ function vdiff {
 		declare FOLLOW=
 		declare FILE="${#}"
 		(( ${FILE} > 0 )) && [[ -f ${!FILE} ]] && FOLLOW="--follow"
-		$(which git) log ${DIFF_OPTS} -B -M --full-index --stat --summary --date=iso --pretty=fuller ${FOLLOW} "${@}" >${VDIFF} 2>&1
+		$(which git) log ${GIT_OPTS} ${DIFF_OPTS} ${FOLLOW} "${@}" >${VDIFF} 2>&1
 	elif [[ ${1} == -x ]]; then
 		shift
 		xmldiff "${@}" >${VDIFF}
