@@ -178,9 +178,8 @@ fi
 
 ########################################
 
-export RDP="rdesktop -z -n NULL -g 90% -a 24 -r sound:remote"
-
-alias rdp="${RDP}"
+export RDP="rdesktop -z -n NULL -g 90% -a 24 -r sound:remote"	; alias rdp="${RDP}"
+export SVN="reporter svn"					; alias svn="${SVN}"
 
 ########################################
 
@@ -222,11 +221,12 @@ alias SymlinkProgram="${GOBO_ENV} ${GOBO_SYMLINK}"
 
 ########################################
 
-export GIT="reporter git"					; alias git="${GIT}"
-export SVN="reporter svn"					; alias svn="${SVN}"
+export GIT="reporter git"
+export GIT_FMT="-B -M --full-index --stat --summary --date=iso --pretty=fuller"
 
-alias g-add="${GIT} add --verbose"
-alias g-commit="${GIT} commit --verbose"
+alias git="${GIT}"
+alias git-add="${GIT} add --verbose"
+alias git-commit="${GIT} commit --verbose"
 
 ########################################
 
@@ -962,7 +962,6 @@ function shell {
 
 function vdiff {
 	declare VDIFF="/tmp/vdiff"
-	declare GIT_OPTS="-B -M --full-index --stat --summary --date=iso --pretty=fuller"
 	declare DIFF_OPTS="-u -U10"
 	declare SEARCH=
 	if [[ ${1} == -g ]]; then
@@ -972,7 +971,7 @@ function vdiff {
 		[[ -z ${1} ]] && TREE="HEAD" && shift
 		[[ ${1} == -c ]] && TREE="--cached" && shift
 		echo "diff" >${VDIFF}
-		$(which git) diff ${GIT_OPTS} ${DIFF_OPTS} ${TREE} "${@}" >>${VDIFF} 2>&1
+		$(which git) diff ${GIT_FMT} ${DIFF_OPTS} ${TREE} "${@}" >>${VDIFF} 2>&1
 	elif [[ ${1} == -l ]] ||
 	     [[ ${1} == -s ]]; then
 		[[ ${1} == -s ]] && DIFF_OPTS=
@@ -981,7 +980,7 @@ function vdiff {
 		declare FOLLOW=
 		declare FILE="${#}"
 		(( ${FILE} > 0 )) && [[ -f ${!FILE} ]] && FOLLOW="--follow"
-		$(which git) log ${GIT_OPTS} ${DIFF_OPTS} ${FOLLOW} "${@}" >${VDIFF} 2>&1
+		$(which git) log ${GIT_FMT} ${DIFF_OPTS} ${FOLLOW} "${@}" >${VDIFF} 2>&1
 	else
 		diff ${DIFF_OPTS} "${@}" >${VDIFF}
 	fi
