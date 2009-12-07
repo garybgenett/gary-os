@@ -44,7 +44,7 @@ export LC_COLLATE="C"
 #>>>export LC_TIME="en_DK.UTF-8"
 export LC_ALL=
 
-export HISTFILE="${HOSTNAME}.${USER}.$(date +%Y-%m)"
+export HISTFILE="${HOSTNAME}.${USER}.$(basename ${SHELL}).$(date +%Y-%m)"
 export HISTFILE="${HOME}/.history/shell/${HISTFILE}"
 export HISTSIZE="$(( (2**31)-1 ))"
 export HISTFILESIZE="${HISTFILESIZE}"
