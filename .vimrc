@@ -136,8 +136,8 @@ map <F9> <ESC>:%s/[ \t]*$//g<CR>1G
 map <F10> <ESC>:%s/^/\"/g<CR>:%s/\t/\"\,\"/g<CR>:%s/$/\"/g<CR>
 
 " (un)set automatic formatting
-map <F11> <ESC>:set formatoptions+=a<CR><ESC>:set expandtab<CR><ESC>:set nolist<CR><ESC>:set textwidth=80<CR>
-map <F12> <ESC>:set formatoptions-=a<CR><ESC>:set noexpandtab<CR><ESC>:set list<CR><ESC>:set textwidth=0<CR>
+map <F11> <ESC>:set formatoptions+=a<CR><ESC>:set nolist<CR><ESC>:set textwidth=80<CR>
+map <F12> <ESC>:set formatoptions-=a<CR><ESC>:set list<CR><ESC>:set textwidth=0<CR>
 
 "###############################################################################
 " end of file
