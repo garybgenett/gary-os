@@ -677,6 +677,60 @@ function email-copy {
 
 ########################################
 
+function git-backup {
+	${GIT} add --verbose .							|| return 1
+	${GIT} commit --all --message="[${FUNCNAME} :: $(date --iso=s)]"	|| return 1
+	if [[ -n "${1}" ]]; then
+		git-logfile "${1}"	|| return 1
+	fi
+	if [[ -n "${2}" ]]; then
+		git-purge "${2}"	|| return 1
+	fi
+	return 0
+}
+
+########################################
+
+function git-logfile {
+	declare LOG_F="$($(which git) rev-parse "HEAD@{${1}}")" && shift
+	declare _HEAD="$($(which git) rev-parse "HEAD")"
+	if [[ -z ${LOG_F} ]] ||
+	   [[ -z ${_HEAD} ]] ||
+	   [[ ${LOG_F} == ${_HEAD} ]]; then
+		echo -ne "\n !!! ERROR IN LOGFILE REQUEST !!!\n\n" >&2
+		return 1
+	fi
+	$(which git) log ${GIT_FMT} -u -U10 "${LOG_F}..${_HEAD}" >./+gitlog.txt
+	return 0
+}
+
+########################################
+
+function git-purge {
+	declare PURGE="$($(which git) rev-parse "HEAD@{${1}}")" && shift
+	declare _HEAD="$($(which git) rev-parse "HEAD")"
+	if [[ -z ${PURGE} ]] ||
+	   [[ -z ${_HEAD} ]] ||
+	   [[ ${PURGE} == ${_HEAD} ]]; then
+		echo -ne "\n !!! ERROR IN PURGE REQUEST !!!\n\n" >&2
+		return 1
+	fi
+	${GIT} filter-branch \
+		-d /dev/shm/.git_filter \
+		--original refs/.git_filter \
+		--parent-filter "[ ${PURGE} = \$GIT_COMMIT ] || cat" \
+		HEAD					|| return 1
+	${RM} ${G_DATA}/_gobo/.git/refs/.git_filter	|| return 1
+	${GIT} reset --soft				|| return 1
+#>>>	${GIT} reflog expire --expire-unreachable=0	|| return 1
+#>>>	${GIT} gc --prune				|| return 1
+	${GIT} gc --auto				|| return 1
+	${GIT} fsck --full --strict			|| return 1
+	return 0
+}
+
+########################################
+
 function journal {
 	cd /.g/_data/zactive/writing/tresobis/_staging
 	prompt -x ${FUNCNAME}
