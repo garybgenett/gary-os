@@ -908,7 +908,7 @@ function reporter {
 	declare SRC="$((${#}-1))"	; SRC="${!SRC}"
 	declare DST="${#}"		; DST="${!DST}"
 	echo -ne "\n reporting [${CMD}]: '${SRC}' -> '${DST}'\n"
-	echo -ne "(${PWD}) ${@}\n"
+	echo -ne "(${HOSTNAME}:${PWD}) ${@}\n"
 	time "${@}" || return 1
 	return 0
 }
