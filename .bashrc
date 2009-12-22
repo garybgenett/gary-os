@@ -227,6 +227,7 @@ export GIT_FMT="-B -M --full-index --stat --summary --date=iso --pretty=fuller"
 alias git="${GIT}"
 alias git-add="${GIT} add --verbose"
 alias git-commit="${GIT} commit --verbose"
+alias git-status="${GIT} status --verbose"
 
 ########################################
 
