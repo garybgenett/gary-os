@@ -221,13 +221,16 @@ alias SymlinkProgram="${GOBO_ENV} ${GOBO_SYMLINK}"
 
 ########################################
 
+export DIFF_OPTS="-u -U10"
+
 export GIT="reporter git"
 export GIT_FMT="-B -M --full-index --stat --summary --date=iso --pretty=fuller"
+export GIT_PAT="-B -M --full-index --stat --summary --binary --keep-subject --raw ${DIFF_OPTS}"
 
 alias git="${GIT}"
 alias git-add="${GIT} add --verbose"
 alias git-commit="${GIT} commit --verbose"
-alias git-status="${GIT} status --verbose"
+alias git-patch="${GIT} format-patch ${GIT_PAT}"
 
 ########################################
 
@@ -701,7 +704,7 @@ function git-logfile {
 		echo -ne "\n !!! ERROR IN LOGFILE REQUEST !!!\n\n" >&2
 		return 1
 	fi
-	$(which git) log ${GIT_FMT} -u -U10 "${LOG_F}..${_HEAD}" >./+gitlog.txt
+	$(which git) log ${GIT_FMT} ${DIFF_OPTS} "${LOG_F}..${_HEAD}" >./+gitlog.txt
 	return 0
 }
 
@@ -1017,22 +1020,25 @@ function shell {
 
 function vdiff {
 	declare VDIFF="/tmp/vdiff"
-	declare DIFF_OPTS="-u -U10"
 	declare SEARCH=
 	if [[ ${1} == -g ]]; then
 		shift
 		SEARCH="+/^diff"
+		declare TREE=
+		[[ -z ${1} ]] && TREE="HEAD" && shift
+		[[ ${1} == -c ]] && TREE="--cached" && shift
 		echo "diff" >${VDIFF}
-		$(which git) status --verbose ${DIFF_OPTS/% -U10} "${@}" >>${VDIFF} 2>&1
+		$(which git) diff ${GIT_FMT} ${DIFF_OPTS} ${TREE} "${@}" >>${VDIFF} 2>&1
 	elif [[ ${1} == -l ]] ||
 	     [[ ${1} == -s ]]; then
-		[[ ${1} == -s ]] && DIFF_OPTS=
+		declare DIFF="${DIFF_OPTS}"
+		[[ ${1} == -s ]] && DIFF=
 		shift
 		SEARCH="+/^commit"
 		declare FOLLOW=
 		declare FILE="${#}"
 		(( ${FILE} > 0 )) && [[ -f ${!FILE} ]] && FOLLOW="--follow"
-		$(which git) log ${GIT_FMT} ${DIFF_OPTS} ${FOLLOW} "${@}" >${VDIFF} 2>&1
+		$(which git) log ${GIT_FMT} ${DIFF} ${FOLLOW} "${@}" >${VDIFF} 2>&1
 	else
 		diff ${DIFF_OPTS} "${@}" >${VDIFF}
 	fi
