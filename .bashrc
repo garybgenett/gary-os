@@ -1022,11 +1022,8 @@ function vdiff {
 	if [[ ${1} == -g ]]; then
 		shift
 		SEARCH="+/^diff"
-		declare TREE=
-		[[ -z ${1} ]] && TREE="HEAD" && shift
-		[[ ${1} == -c ]] && TREE="--cached" && shift
 		echo "diff" >${VDIFF}
-		$(which git) diff ${GIT_FMT} ${DIFF_OPTS} ${TREE} "${@}" >>${VDIFF} 2>&1
+		$(which git) status --verbose ${DIFF_OPTS/% -U10} "${@}" >>${VDIFF} 2>&1
 	elif [[ ${1} == -l ]] ||
 	     [[ ${1} == -s ]]; then
 		[[ ${1} == -s ]] && DIFF_OPTS=
