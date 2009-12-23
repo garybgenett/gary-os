@@ -704,7 +704,7 @@ function git-logfile {
 		echo -ne "\n !!! ERROR IN LOGFILE REQUEST !!!\n\n" >&2
 		return 1
 	fi
-	$(which git) log ${GIT_FMT} ${DIFF_OPTS} "${LOG_F}..${_HEAD}" >./+gitlog.txt
+	$(which git) log ${GIT_FMT} "${LOG_F}..${_HEAD}" >./+gitlog.txt
 	return 0
 }
 
