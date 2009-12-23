@@ -684,11 +684,13 @@ function email-copy {
 function git-backup {
 	${GIT} add --verbose .							|| return 1
 	${GIT} commit --all --message="[${FUNCNAME} :: $(date --iso=s)]"	|| return 1
+	declare FAIL=
 	if [[ -n "${1}" ]]; then
-		git-logfile "${1}"	|| return 1
+		git-purge "${1}"	|| FAIL="1"
+		git-logfile		|| FAIL="1"
 	fi
-	if [[ -n "${2}" ]]; then
-		git-purge "${2}"	|| return 1
+	if [[ -n ${FAIL} ]]; then
+		return 1
 	fi
 	return 0
 }
@@ -696,15 +698,7 @@ function git-backup {
 ########################################
 
 function git-logfile {
-	declare LOG_F="$($(which git) rev-parse "HEAD@{${1}}")" && shift
-	declare _HEAD="$($(which git) rev-parse "HEAD")"
-	if [[ -z ${LOG_F} ]] ||
-	   [[ -z ${_HEAD} ]] ||
-	   [[ ${LOG_F} == ${_HEAD} ]]; then
-		echo -ne "\n !!! ERROR IN LOGFILE REQUEST !!!\n\n" >&2
-		return 1
-	fi
-	$(which git) log ${GIT_FMT} ${DIFF_OPTS} "${LOG_F}..${_HEAD}" >./+gitlog.txt
+	$(which git) log ${GIT_FMT} --walk-reflogs >./+gitlog.txt	|| return 1
 	return 0
 }
 
