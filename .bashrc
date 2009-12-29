@@ -509,7 +509,6 @@ function archiver {
 		EXTN="$(echo "${PIM}" | ${SED} "s/^(.+):(.+):(.+)$/\3/g")"
 		LAST="$(ls ${PIMDIR}/${FOLD}-[0-9][0-9][0-9][0-9]/${FILE}-[0-9][0-9][0-9][0-9]-*.${EXTN} 2>/dev/null | sort | tail -n1)"
 		echo -ne "${FILE}:\t$(basename ${LAST})\n"
-		sleep 1
 		if [[ -z $(diff ${LAST} ${PIMDIR}/${FILE}.${EXTN} 2>/dev/null) ]]; then
 			continue
 		fi
@@ -536,7 +535,6 @@ function archiver {
 				sudo -H -u \#1000 dos2unix ${PIMDIR}/${INPUT}.vcf
 			fi
 		done
-		sleep 3
 	done
 	prompt
 	cd - >/dev/null
