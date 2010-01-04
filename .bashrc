@@ -1010,6 +1010,16 @@ function shell {
 
 ########################################
 
+function sslvpn {
+	cd /.g/_data/zactive/data.f5/zwww/scripts/sslvpn
+	killall -9 pppd
+	./${1}.sh
+	cd - >/dev/null
+	return 0
+}
+
+########################################
+
 function vdiff {
 	declare VDIFF="/tmp/vdiff"
 	declare SEARCH=
