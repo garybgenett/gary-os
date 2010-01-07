@@ -28,6 +28,7 @@ set updatetime				=10
 highlight cursor     guibg=red   ctermbg=red   guifg=black    ctermfg=black
 highlight normal     guibg=black ctermbg=black guifg=gray     ctermfg=gray
 
+filetype				on
 syntax					on
 set background				=light
 
