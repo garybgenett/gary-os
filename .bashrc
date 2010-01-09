@@ -715,13 +715,13 @@ function git-purge {
 		-d /dev/shm/.git_filter \
 		--original refs/.git_filter \
 		--parent-filter "[ ${PURGE} = \$GIT_COMMIT ] || cat" \
-		HEAD					|| return 1
-	${RM} ${G_DATA}/_gobo/.git/refs/.git_filter	|| return 1
-	${GIT} reset --soft				|| return 1
-#>>>	${GIT} reflog expire --expire-unreachable=0	|| return 1
-#>>>	${GIT} gc --prune				|| return 1
-	${GIT} gc --auto				|| return 1
-	${GIT} fsck --full --strict			|| return 1
+		HEAD						|| return 1
+	${RM} ${G_DATA}/_gobo/.git/refs/.git_filter		|| return 1
+	${GIT} reset --soft					|| return 1
+	${GIT} reflog expire --all --expire-unreachable=0	|| return 1
+	${GIT} gc --prune=0					|| return 1
+	${GIT} gc --auto					|| return 1
+	${GIT} fsck --full --no-reflogs --strict		|| return 1
 	return 0
 }
 
