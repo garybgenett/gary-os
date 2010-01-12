@@ -712,11 +712,12 @@ function git-purge {
 		return 1
 	fi
 	${GIT} filter-branch \
-		-d /dev/shm/.git_filter \
-		--original refs/.git_filter \
+		-d ./.git_purge \
+		--original refs/.git_purge \
 		--parent-filter "[ ${PURGE} = \$GIT_COMMIT ] || cat" \
 		HEAD						|| return 1
-	${RM} ${G_DATA}/_gobo/.git/refs/.git_filter		|| return 1
+#>>>	${RM} ./.git_purge					|| return 1
+#>>>	${RM} ./.git/refs/.git_purge				|| return 1
 	${GIT} reset --soft					|| return 1
 	${GIT} reflog expire --all --expire-unreachable=0	|| return 1
 	${GIT} gc --prune=0					|| return 1
