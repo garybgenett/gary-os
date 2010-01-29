@@ -695,8 +695,20 @@ function git-backup {
 
 ########################################
 
+function git-list {
+	$(which git) log --pretty=format:"%ai %H %s %d" "${@}"
+	return 0
+}
+
+########################################
+
 function git-logfile {
-	$(which git) log ${GIT_FMT} --walk-reflogs >./+gitlog.txt	|| return 1
+	$(which git) log ${GIT_FMT} $(
+			$(which git) log --full-index --pretty=oneline |
+			tail -n1 |
+			cut -d' ' -f1
+		)..HEAD \
+		>./+gitlog.txt	|| return 1
 	return 0
 }
 
