@@ -178,6 +178,7 @@ fi
 
 ########################################
 
+export METASTORE="metastore --verbose --mtime"			; alias metastore="${METASTORE}"
 export RDP="rdesktop -z -n NULL -g 90% -a 24 -r sound:remote"	; alias rdp="${RDP}"
 export SVN="reporter svn"					; alias svn="${SVN}"
 
@@ -680,13 +681,17 @@ function email-copy {
 ########################################
 
 function git-backup {
+	if [[ -n "$(which metastore)" ]]; then
+		${METASTORE} --compare	| sort >.metastore.diff			|| return 1
+		${METASTORE} --save	| sort >.metastore			|| return 1
+	fi
 	${GIT} add --verbose .							|| return 1
 	${GIT} commit --all --message="[${FUNCNAME} :: $(date --iso=s)]"	|| return 1
 	declare FAIL=
 	if [[ -n "${1}" ]]; then
-		git-purge "${1}"	|| FAIL="1"
-		git-logfile		|| FAIL="1"
+		git-purge "${1}"						|| FAIL="1"
 	fi
+	git-logfile								|| FAIL="1"
 	if [[ -n ${FAIL} ]]; then
 		return 1
 	fi
