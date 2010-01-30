@@ -683,7 +683,9 @@ function email-copy {
 
 function git-backup {
 	if [[ -n "$(which metastore)" ]]; then
-		${METASTORE} --compare | sort >.metastore.diff			|| return 1
+		${METASTORE} --compare |
+			${GREP} -v "no difference" |
+			sort >.metastore.diff					|| return 1
 		${METASTORE} --save						|| return 1
 	fi
 	${GIT} add --verbose .							|| return 1
