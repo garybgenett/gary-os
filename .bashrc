@@ -134,17 +134,17 @@ fi
 # commands
 ################################################################################
 
-export CP="cp -pvR"						; alias cp="${CP}"
-export GREP="grep --color=auto -E"				; alias grep="${GREP}"
-export LN="ln -fsv"						; alias ln="${LN}"
-export MKDIR="mkdir -pv"					; alias mkdir="${MKDIR}"
-export MORE="less -RX"						; alias more="${MORE}"
-export PS="ps -auwwx"						; alias psl="${PS}"
-export MV="mv -v"						; alias mv="${MV}"
-export RM="rm -frv"						; alias rm="${RM}"
-export RMDIR="rmdir -v"						; alias rmdir="${RMDIR}"
-export VI="vim -u ${HOME}/.vimrc -i NONE"			; alias vi="${VI}"
-export VIEW="eval ${VI} -nR -c \"set nowrap\""			; alias view="${VIEW/#eval\ /}"
+export CP="cp -pvR"				; alias cp="${CP}"
+export GREP="grep --color=auto -E"		; alias grep="${GREP}"
+export LN="ln -fsv"				; alias ln="${LN}"
+export MKDIR="mkdir -pv"			; alias mkdir="${MKDIR}"
+export MORE="less -RX"				; alias more="${MORE}"
+export PS="ps -auwwx"				; alias psl="${PS}"
+export MV="mv -v"				; alias mv="${MV}"
+export RM="rm -frv"				; alias rm="${RM}"
+export RMDIR="rmdir -v"				; alias rmdir="${RMDIR}"
+export VI="vim -u ${HOME}/.vimrc -i NONE"	; alias vi="${VI}"
+export VIEW="eval ${VI} -nR -c \"set nowrap\""	; alias view="${VIEW/#eval\ /}"
 
 ########################################
 
@@ -154,26 +154,27 @@ unset VISUAL
 
 ########################################
 
-export LS="ls --color=auto"					; alias ls="${LS}"
-export LL="ls --color=auto -asF -l"				; alias ll="${LL}"
-export LX="ls --color=auto -asF -kC"				; alias lx="${LX}"
+export LS="ls --color=auto"			; alias ls="${LS}"
+export LL="ls --color=auto -asF -l"		; alias ll="${LL}"
+export LX="ls --color=auto -asF -kC"		; alias lx="${LX}"
 if [[ ${UNAME} == FreeBSD ]]; then
-	export LS="ls -G"					; alias ls="${LS}"
-	export LL="ls -G -asF -l"				; alias ll="${LL}"
-	export LX="ls -G -asF -kx"				; alias lx="${LX}"
+	export LS="ls -G"			; alias ls="${LS}"
+	export LL="ls -G -asF -l"		; alias ll="${LL}"
+	export LX="ls -G -asF -kx"		; alias lx="${LX}"
 fi
-export LF="eval ${LL} -d \`find . -maxdepth 1 ! -type l\`"	; alias lf="${LF}"
+export LF="eval ${LL} -d \
+\`find . -maxdepth 1 ! -type l\`"		; alias lf="${LF}"
 
 ########################################
 
-export DU="du -b --time --time-style=long-iso"			; alias du="${DU}"
-export LU="${DU} -ak --max-depth 1"				; alias lu="${LU}"
+export DU="du -b --time --time-style=long-iso"	; alias du="${DU}"
+export LU="${DU} -ak --max-depth 1"		; alias lu="${LU}"
 
 ########################################
 
-export SED="sed -r"						; alias sed="${SED}"
+export SED="sed -r"				; alias sed="${SED}"
 if [[ ${UNAME} == FreeBSD ]]; then
-	export SED="sed -E"					; alias sed="${SED}"
+	export SED="sed -E"			; alias sed="${SED}"
 fi
 
 ########################################
