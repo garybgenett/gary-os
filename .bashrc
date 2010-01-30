@@ -225,7 +225,9 @@ alias SymlinkProgram="${GOBO_ENV} ${GOBO_SYMLINK}"
 
 export DIFF_OPTS="-u -U10"
 
-export GIT="reporter git"
+export GIT="reporter git --git-dir=+git"
+export GIT_CMD="${GIT/#reporter }"
+
 export GIT_FMT="-B -M --full-index --stat --summary --date=iso --pretty=fuller"
 export GIT_PAT="-B -M --full-index --stat --summary --binary --keep-subject --raw ${DIFF_OPTS}"
 
@@ -704,15 +706,15 @@ function git-backup {
 ########################################
 
 function git-list {
-	$(which git) log --pretty=format:"%ai %H %s %d" "${@}"
+	${GIT_CMD} log --pretty=format:"%ai %H %s %d" "${@}"
 	return 0
 }
 
 ########################################
 
 function git-logfile {
-	$(which git) log ${GIT_FMT} $(
-			$(which git) log --full-index --pretty=oneline |
+	${GIT_CMD} log ${GIT_FMT} $(
+			${GIT_CMD} log --full-index --pretty=oneline |
 			tail -n1 |
 			cut -d' ' -f1
 		)..HEAD \
@@ -723,8 +725,8 @@ function git-logfile {
 ########################################
 
 function git-purge {
-	declare PURGE="$($(which git) rev-parse "HEAD@{${1}}")" && shift
-	declare _HEAD="$($(which git) rev-parse "HEAD")"
+	declare PURGE="$(${GIT_CMD} rev-parse "HEAD@{${1}}")" && shift
+	declare _HEAD="$(${GIT_CMD} rev-parse "HEAD")"
 	if [[ -z ${PURGE} ]] ||
 	   [[ -z ${_HEAD} ]] ||
 	   [[ ${PURGE} == ${_HEAD} ]]; then
@@ -1051,7 +1053,7 @@ function vdiff {
 		[[ -z ${1} ]] && TREE="HEAD" && shift
 		[[ ${1} == -c ]] && TREE="--cached" && shift
 		echo "diff" >${VDIFF}
-		$(which git) diff ${GIT_FMT} ${DIFF_OPTS} ${TREE} "${@}" >>${VDIFF} 2>&1
+		${GIT_CMD} diff ${GIT_FMT} ${DIFF_OPTS} ${TREE} "${@}" >>${VDIFF} 2>&1
 	elif [[ ${1} == -l ]] ||
 	     [[ ${1} == -s ]]; then
 		declare DIFF="${DIFF_OPTS}"
@@ -1061,7 +1063,7 @@ function vdiff {
 		declare FOLLOW=
 		declare FILE="${#}"
 		(( ${FILE} > 0 )) && [[ -f ${!FILE} ]] && FOLLOW="--follow"
-		$(which git) log ${GIT_FMT} ${DIFF} ${FOLLOW} "${@}" >${VDIFF} 2>&1
+		${GIT_CMD} log ${GIT_FMT} ${DIFF} ${FOLLOW} "${@}" >${VDIFF} 2>&1
 	else
 		diff ${DIFF_OPTS} "${@}" >${VDIFF}
 	fi
