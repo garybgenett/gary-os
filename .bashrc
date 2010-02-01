@@ -225,7 +225,7 @@ alias SymlinkProgram="${GOBO_ENV} ${GOBO_SYMLINK}"
 
 export DIFF_OPTS="-u -U10"
 
-export GIT="reporter git --git-dir=+git"
+export GIT="reporter git --git-dir=\"\${PWD}.git\" --work-tree=\"\${PWD}\""
 export GIT_CMD="${GIT/#reporter }"
 
 export GIT_FMT="-B -M --full-index --stat --summary --date=iso --pretty=fuller"
