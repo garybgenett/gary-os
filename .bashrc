@@ -225,11 +225,13 @@ alias SymlinkProgram="${GOBO_ENV} ${GOBO_SYMLINK}"
 
 export DIFF_OPTS="-u -U10"
 
-export GIT="reporter git --git-dir=\"\${PWD}.git\" --work-tree=\"\${PWD}\""
-export GIT_CMD="eval ${GIT/#reporter }"
+export GIT="reporter $(which git) --git-dir=\"\${PWD}.git\" --work-tree=\"\${PWD}\""
+export GIT_CMD="${GIT/#reporter/eval}"
 
 export GIT_FMT="-B -M --full-index --stat --summary --date=iso --pretty=fuller"
 export GIT_PAT="-B -M --full-index --stat --summary --binary --keep-subject --raw ${DIFF_OPTS}"
+
+export GIT_FMT_WIDE="${GIT_FMT/--stat/--stat=128,128}"
 
 alias git="${GIT}"
 alias git-add="${GIT} add --verbose"
@@ -713,7 +715,7 @@ function git-list {
 ########################################
 
 function git-logfile {
-	${GIT_CMD} log ${GIT_FMT} $(
+	${GIT_CMD} log ${GIT_FMT_WIDE} $(
 			${GIT_CMD} log --full-index --pretty=oneline |
 			tail -n1 |
 			cut -d' ' -f1
@@ -1053,7 +1055,7 @@ function vdiff {
 		[[ -z ${1} ]] && TREE="HEAD" && shift
 		[[ ${1} == -c ]] && TREE="--cached" && shift
 		echo "diff" >${VDIFF}
-		${GIT_CMD} diff ${GIT_FMT} ${DIFF_OPTS} ${TREE} "${@}" >>${VDIFF} 2>&1
+		${GIT_CMD} diff ${GIT_FMT_WIDE} ${DIFF_OPTS} ${TREE} "${@}" >>${VDIFF} 2>&1
 	elif [[ ${1} == -l ]] ||
 	     [[ ${1} == -s ]]; then
 		declare DIFF="${DIFF_OPTS}"
@@ -1063,7 +1065,7 @@ function vdiff {
 		declare FOLLOW=
 		declare FILE="${#}"
 		(( ${FILE} > 0 )) && [[ -f ${!FILE} ]] && FOLLOW="--follow"
-		${GIT_CMD} log ${GIT_FMT} ${DIFF} ${FOLLOW} "${@}" >${VDIFF} 2>&1
+		${GIT_CMD} log ${GIT_FMT_WIDE} ${DIFF} ${FOLLOW} "${@}" >${VDIFF} 2>&1
 	else
 		diff ${DIFF_OPTS} "${@}" >${VDIFF}
 	fi
