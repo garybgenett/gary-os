@@ -226,6 +226,7 @@ alias SymlinkProgram="${GOBO_ENV} ${GOBO_SYMLINK}"
 export DIFF_OPTS="-u -U10"
 
 export GIT_CMD="git"
+export GIT_SVN="reporter $(which git) svn"
 export GIT="reporter ${GIT_CMD}"
 
 export GIT_FMT="-B -M --full-index --stat --summary --date=iso --pretty=fuller"
@@ -234,6 +235,7 @@ export GIT_PAT="-B -M --full-index --stat --summary --binary --keep-subject --ra
 export GIT_FMT_WIDE="${GIT_FMT/--stat/--stat=128,128}"
 
 alias git="${GIT}"
+alias git-svn="${GIT_SVN}"
 alias git-add="${GIT} add --verbose"
 alias git-commit="${GIT} commit --verbose"
 alias git-patch="${GIT} format-patch ${GIT_PAT}"
