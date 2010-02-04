@@ -457,6 +457,12 @@ function git {
 
 ########################################
 
+function git-list {
+	${GIT_CMD} log --pretty=format:"%ai %H %s %d" "${@}"
+}
+
+########################################
+
 function ldir {
 	${LL} -R "${@}" | more
 }
@@ -710,13 +716,6 @@ function git-backup {
 	if [[ -n ${FAIL} ]]; then
 		return 1
 	fi
-	return 0
-}
-
-########################################
-
-function git-list {
-	${GIT_CMD} log --pretty=format:"%ai %H %s %d" "${@}"
 	return 0
 }
 
