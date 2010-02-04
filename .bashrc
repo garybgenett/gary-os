@@ -229,8 +229,8 @@ export GIT_CMD="git"
 export GIT_SVN="reporter ${GIT_CMD} svn"
 export GIT="reporter ${GIT_CMD}"
 
-export GIT_FMT="-B -M --full-index --stat --summary --date=iso --pretty=fuller"
-export GIT_PAT="-B -M --full-index --stat --summary --binary --keep-subject --raw ${DIFF_OPTS}"
+export GIT_FMT="-M --full-index --stat --summary --date=iso --pretty=fuller"
+export GIT_PAT="-M --full-index --stat --summary --binary --keep-subject --raw ${DIFF_OPTS}"
 
 export GIT_FMT_WIDE="${GIT_FMT/--stat/--stat=128,128}"
 
