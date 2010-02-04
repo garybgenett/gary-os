@@ -226,7 +226,7 @@ alias SymlinkProgram="${GOBO_ENV} ${GOBO_SYMLINK}"
 export DIFF_OPTS="-u -U10"
 
 export GIT_CMD="git"
-export GIT_SVN="reporter $(which git) svn"
+export GIT_SVN="reporter ${GIT_CMD} svn"
 export GIT="reporter ${GIT_CMD}"
 
 export GIT_FMT="-B -M --full-index --stat --summary --date=iso --pretty=fuller"
