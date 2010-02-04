@@ -723,12 +723,17 @@ function git-list {
 ########################################
 
 function git-logfile {
-	${GIT_CMD} log ${GIT_FMT_WIDE} $(
-			${GIT_CMD} log --full-index --pretty=oneline |
-			tail -n1 |
-			cut -d' ' -f1
-		)..HEAD \
-		>./+gitlog.txt	|| return 1
+	declare GITLOG="./+gitlog.txt"
+	function gitlog {
+		${GIT_CMD} log ${GIT_FMT_WIDE} $(
+				${GIT_CMD} log --full-index --pretty=oneline |
+				tail -n1 |
+				cut -d' ' -f1
+			)..HEAD \
+			>${GITLOG}	|| return 1
+		return 0
+	}
+	reporter gitlog		|| return 1
 	return 0
 }
 
