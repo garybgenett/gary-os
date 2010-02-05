@@ -712,7 +712,7 @@ function git-backup {
 	if [[ -n "${1}" ]]; then
 		git-purge "${1}"						|| FAIL="1"
 	fi
-	git-logfile								|| FAIL="1"
+	git-logdir								|| FAIL="1"
 	if [[ -n ${FAIL} ]]; then
 		return 1
 	fi
@@ -721,18 +721,28 @@ function git-backup {
 
 ########################################
 
-function git-logfile {
-	declare GITLOG="./+gitlog.txt"
-	function gitlog {
-		${GIT_CMD} log ${GIT_FMT} $(
-				${GIT_CMD} log --full-index --pretty=oneline |
-				tail -n1 |
-				cut -d' ' -f1
-			)..HEAD \
-			>${GITLOG}	|| return 1
-		return 0
-	}
-	reporter gitlog		|| return 1
+function git-logdir {
+	declare GITDIR="./+gitdir"
+	declare LAST_P="$(ls ${GITDIR}/cur 2>/dev/null | tail -n1)"
+	declare FROM_C="$(${GIT_CMD} log --full-index --pretty=oneline |
+		tail -n1 |
+		cut -d' ' -f1)"
+	declare FROM_N="1"
+	if [[ ! -d ${GITDIR} ]]; then
+		maildirmake ${GITDIR}
+	fi
+	if [[ -n "${LAST_P}" ]]; then
+		FROM_C="$(${GREP} "^From[ ]" ${GITDIR}/cur/${LAST_P} |
+			head -n1 |
+			cut -d' ' -f2)"
+		FROM_N="$(( $(echo "${LAST_P}" |
+			${SED} "s/^0*//" |
+			${SED} "s/-.+$//g") +1 ))"
+	fi
+	git-patch \
+		--start-number ${FROM_N} \
+		--output-directory ${GITDIR}/cur \
+		${FROM_C}	|| return 1
 	return 0
 }
 
