@@ -223,20 +223,16 @@ alias SymlinkProgram="${GOBO_ENV} ${GOBO_SYMLINK}"
 
 ########################################
 
-export DIFF_OPTS="-u -U10"
-
 export GIT_CMD="git"
-export GIT_SVN="reporter ${GIT_CMD} svn"
-export GIT="reporter ${GIT_CMD}"
+export GIT="reporter ${GIT_CMD}"		; alias git="${GIT}"
+export GIT_SVN="reporter ${GIT_CMD} svn"	; alias git-svn="${GIT_SVN}"
+export GIT_ADD="${GIT} add --verbose"		; alias git-add="${GIT_ADD}"
+export GIT_CMT="${GIT} commit --verbose"	; alias git-commit="${GIT_CMT}"
+export GIT_STS="${GIT} status"			; alias git-status="${GIT_STS}"
 
+export DIFF_OPTS="-u -U10"
 export GIT_FMT="-M --full-index --summary --stat=128,128 --date=iso --pretty=fuller"
 export GIT_PAT="-M --full-index --summary --stat=128,128 --binary --keep-subject"
-
-alias git="${GIT}"
-alias git-svn="${GIT_SVN}"
-alias git-add="${GIT} add --verbose"
-alias git-commit="${GIT} commit --verbose"
-alias git-patch="${GIT} format-patch ${GIT_PAT} ${DIFF_OPTS}"
 
 ########################################
 
@@ -457,6 +453,12 @@ function git {
 
 function git-list {
 	${GIT_CMD} log --pretty=format:"%ai %H %s %d" "${@}"
+}
+
+########################################
+
+function git-patch {
+	${GIT} format-patch ${GIT_PAT} ${DIFF_OPTS} "${@}"
 }
 
 ########################################
