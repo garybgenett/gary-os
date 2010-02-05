@@ -192,7 +192,7 @@ export GIT_PAT="-M --full-index --summary --stat=128,128 --binary --keep-subject
 
 ########################################
 
-export METASTORE="metastore --file .metastore --verbose --mtime"	; alias metastore="${METASTORE}"
+export METASTORE="metastore --file +metastore --verbose --mtime"	; alias metastore="${METASTORE}"
 export RDP="rdesktop -z -n NULL -g 90% -a 24 -r sound:remote"		; alias rdp="${RDP}"
 export SVN="reporter svn"						; alias svn="${SVN}"
 
@@ -704,7 +704,7 @@ function git-backup {
 	if [[ -n "$(which metastore)" ]]; then
 #>>>		${METASTORE} --compare |
 #>>>			${GREP} -v "no difference" |
-#>>>			sort >.metastore.diff					|| FAIL="1"
+#>>>			sort >+metastore.diff					|| FAIL="1"
 		${METASTORE} --save						|| FAIL="1"
 	fi
 	${GIT} add --verbose .							|| return 1
