@@ -179,6 +179,19 @@ fi
 
 ########################################
 
+export GIT_CMD="git"
+export GIT="reporter ${GIT_CMD}"		; alias git="${GIT}"
+export GIT_SVN="reporter ${GIT_CMD} svn"	; alias git-svn="${GIT_SVN}"
+export GIT_ADD="${GIT} add --verbose"		; alias git-add="${GIT_ADD}"
+export GIT_CMT="${GIT} commit --verbose"	; alias git-commit="${GIT_CMT}"
+export GIT_STS="${GIT} status"			; alias git-status="${GIT_STS}"
+
+export DIFF_OPTS="-u -U10"
+export GIT_FMT="-M --full-index --summary --stat=128,128 --date=iso --pretty=fuller"
+export GIT_PAT="-M --full-index --summary --stat=128,128 --binary --keep-subject"
+
+########################################
+
 export METASTORE="metastore --file .metastore --verbose --mtime"	; alias metastore="${METASTORE}"
 export RDP="rdesktop -z -n NULL -g 90% -a 24 -r sound:remote"		; alias rdp="${RDP}"
 export SVN="reporter svn"						; alias svn="${SVN}"
@@ -220,19 +233,6 @@ alias        Freshen="${GOBO_ENV} ${GOBO_FRESHEN}"
 alias InstallPackage="${GOBO_ENV} ${GOBO_INSTALL}"
 alias  RemoveProgram="${GOBO_ENV} ${GOBO_REMPROG}"
 alias SymlinkProgram="${GOBO_ENV} ${GOBO_SYMLINK}"
-
-########################################
-
-export GIT_CMD="git"
-export GIT="reporter ${GIT_CMD}"		; alias git="${GIT}"
-export GIT_SVN="reporter ${GIT_CMD} svn"	; alias git-svn="${GIT_SVN}"
-export GIT_ADD="${GIT} add --verbose"		; alias git-add="${GIT_ADD}"
-export GIT_CMT="${GIT} commit --verbose"	; alias git-commit="${GIT_CMT}"
-export GIT_STS="${GIT} status"			; alias git-status="${GIT_STS}"
-
-export DIFF_OPTS="-u -U10"
-export GIT_FMT="-M --full-index --summary --stat=128,128 --date=iso --pretty=fuller"
-export GIT_PAT="-M --full-index --summary --stat=128,128 --binary --keep-subject"
 
 ########################################
 
