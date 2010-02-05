@@ -230,7 +230,7 @@ export GIT_SVN="reporter ${GIT_CMD} svn"
 export GIT="reporter ${GIT_CMD}"
 
 export GIT_FMT="-M --full-index --stat --summary --date=iso --pretty=fuller"
-export GIT_PAT="-M --full-index --stat --summary --binary --keep-subject --raw ${DIFF_OPTS}"
+export GIT_PAT="-M --full-index --stat --summary --binary --keep-subject"
 
 export GIT_FMT_WIDE="${GIT_FMT/--stat/--stat=128,128}"
 
@@ -238,7 +238,7 @@ alias git="${GIT}"
 alias git-svn="${GIT_SVN}"
 alias git-add="${GIT} add --verbose"
 alias git-commit="${GIT} commit --verbose"
-alias git-patch="${GIT} format-patch ${GIT_PAT}"
+alias git-patch="${GIT} format-patch ${GIT_PAT} ${DIFF_OPTS}"
 
 ########################################
 
