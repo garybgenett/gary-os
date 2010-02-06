@@ -715,7 +715,8 @@ function git-backup {
 	${GIT} add --verbose .							|| return 1
 	${GIT} commit --all --message="[${FUNCNAME} :: $(date --iso=s)]"	|| return 1
 	if [[ -n "${1}" ]]; then
-		git-purge "${1}"						|| FAIL="1"
+		{ git-purge "${1}" &&
+			${RM} ./+gitdir/cur/*; }				|| FAIL="1"
 	fi
 	git-logdir								|| FAIL="1"
 	if [[ -n ${FAIL} ]]; then
