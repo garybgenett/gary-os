@@ -188,7 +188,7 @@ export GIT_STS="${GIT} status"			; alias git-status="${GIT_STS}"
 
 export DIFF_OPTS="-u -U10"
 export GIT_FMT="-M --full-index --summary --stat=128,128 --date=iso --pretty=fuller"
-export GIT_PAT="-M --full-index --summary --stat=128,128 --binary --keep-subject"
+export GIT_PAT="-M --full-index --summary --stat=128,128 --attach --binary --keep-subject"
 
 ########################################
 
@@ -460,7 +460,7 @@ function git-list {
 function git-patch {
 	if [[ ${1} == -l ]]; then
 		shift
-		${GIT} format-patch ${GIT_PAT/--binary } ${DIFF_OPTS/%0} "${@}"
+		${GIT} format-patch ${GIT_PAT/--binary/--no-binary} ${DIFF_OPTS} "${@}"
 	else
 		${GIT} format-patch ${GIT_PAT} ${DIFF_OPTS} "${@}"
 	fi
