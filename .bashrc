@@ -510,64 +510,6 @@ function mirror {
 # advanced functions
 ################################################################################
 
-function archiver {
-	declare DATE="$(date --iso=s)"
-	declare YEAR="${DATE/%-*}"
-	declare PIM
-	declare FILE
-	declare FOLD
-	declare EXTN
-	declare LAST
-	declare INPUT
-	cd ${PIMDIR}
-	prompt -x ${FUNCNAME}
-	for PIM in \
-		_mission:_mission:txt \
-		bookmarks:bookmarks:html \
-		calendar:calendar:rem \
-		contacts:contacts:adb \
-		contacts-keep:contacts:adb \
-		passwords:passwords:kdb
-	do
-		FILE="$(echo "${PIM}" | ${SED} "s/^(.+):(.+):(.+)$/\1/g")"
-		FOLD="$(echo "${PIM}" | ${SED} "s/^(.+):(.+):(.+)$/\2/g")"
-		EXTN="$(echo "${PIM}" | ${SED} "s/^(.+):(.+):(.+)$/\3/g")"
-		LAST="$(ls ${PIMDIR}/${FOLD}-[0-9][0-9][0-9][0-9]/${FILE}-[0-9][0-9][0-9][0-9]-*.${EXTN} 2>/dev/null | sort | tail -n1)"
-		echo -ne "${FILE}:\t$(basename ${LAST})\n"
-		if [[ -z $(diff ${LAST} ${PIMDIR}/${FILE}.${EXTN} 2>/dev/null) ]]; then
-			continue
-		fi
-		vdiff ${LAST} ${PIMDIR}/${FILE}.${EXTN}
-		echo -ne "\n Archive (y/n)? "
-		read -n1 INPUT
-		echo -ne "\n"
-		if [[ ${INPUT} != y ]]; then
-			continue
-		fi
-		if [[ ! -d ${PIMDIR}/${FOLD}-${YEAR} ]]; then
-			${MKDIR} ${PIMDIR}/${FOLD}-${YEAR}
-		fi
-		${CP} ${PIMDIR}/${FILE}.${EXTN} ${PIMDIR}/${FOLD}-${YEAR}/${FILE}-${DATE}.${EXTN}
-		for INPUT in contacts contacts-keep; do
-			if [[ ${FILE}.${EXTN} == ${INPUT}.adb ]]; then
-				${RM} ${PIMDIR}/${INPUT}.vcf
-				sudo -H -u \#1000 abook \
-					--convert \
-					--infile ${PIMDIR}/${INPUT}.adb \
-					--informat abook \
-					--outfile ${PIMDIR}/${INPUT}.vcf \
-					--outformat gcrd
-				sudo -H -u \#1000 dos2unix ${PIMDIR}/${INPUT}.vcf
-			fi
-		done
-	done
-	prompt
-	cd - >/dev/null
-	return 0
-}
-
-########################################
-
 function calendar {
 	cd ${PIMDIR}
 	prompt -x ${FUNCNAME}
