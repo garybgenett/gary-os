@@ -586,6 +586,21 @@ function contacts {
 	if [[ ${1} == -k ]]; then
 		shift
 		CONTACTS="contacts-keep"
+	elif [[ ${1} == -c ]]; then
+		shift
+		declare FILE
+		for FILE in *.adb; do
+			${RM} ./${FILE/%\.adb}.vcf
+			sudo -H -u \#1000 abook \
+				--convert \
+				--infile ./${FILE} \
+				--informat abook \
+				--outfile ./${FILE/%\.adb}.vcf \
+				--outformat gcrd
+			sudo -H -u \#1000 dos2unix ./${FILE/%\.adb}.vcf
+			chmod 750 ./${FILE/%\.adb}.vcf
+		done
+		return 0
 	fi
 	cd ${PIMDIR}
 	prompt -x ${FUNCNAME}
