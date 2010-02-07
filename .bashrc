@@ -712,8 +712,8 @@ function git-backup {
 #>>>			sort >+metastore.diff					|| FAIL="1"
 		${METASTORE} --save						|| FAIL="1"
 	fi
-	${GIT} add --verbose .							|| return 1
-	${GIT} commit --all --message="[${FUNCNAME} :: $(date --iso=s)]"	|| return 1
+	${GIT_ADD}								|| return 1
+	${GIT_CMT} --all --message="[${FUNCNAME} :: $(date --iso=s)]"		|| return 1
 	if [[ -n "${1}" ]]; then
 		{ git-purge "${1}" &&
 			${RM} ./+gitdir/cur/*; }				|| FAIL="1"
