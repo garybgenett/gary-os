@@ -712,6 +712,7 @@ function git-logdir {
 ########################################
 
 function git-purge {
+	declare MEM_DIR="/dev/shm"
 	declare PURGE="$(${GIT_CMD} rev-parse "HEAD@{${1}}")" && shift
 	declare _HEAD="$(${GIT_CMD} rev-parse "HEAD")"
 	if [[ -z ${PURGE} ]] ||
@@ -721,7 +722,7 @@ function git-purge {
 		return 1
 	fi
 	${GIT} filter-branch \
-		-d ./.git_purge \
+		-d ${MEM_DIR}/.git_purge \
 		--original refs/.git_purge \
 		--parent-filter "[ ${PURGE} = \$GIT_COMMIT ] || cat" \
 		HEAD						|| return 1
