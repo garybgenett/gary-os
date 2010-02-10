@@ -550,6 +550,7 @@ function contacts {
 		--config ${HOME}/.abookrc \
 		--datafile ./${CONTACTS}.adb \
 		"${@}"
+	${FUNCNAME} -c
 	chmod 750 ./${CONTACTS}.adb
 	prompt
 	cd - >/dev/null
