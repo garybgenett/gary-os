@@ -548,8 +548,9 @@ function contacts {
 	prompt -x ${FUNCNAME}
 	sudo -H -u \#1000 abook \
 		--config ${HOME}/.abookrc \
-		--datafile ${CONTACTS}.adb \
+		--datafile ./${CONTACTS}.adb \
 		"${@}"
+	chmod 750 ./${CONTACTS}.adb
 	prompt
 	cd - >/dev/null
 	return 0
