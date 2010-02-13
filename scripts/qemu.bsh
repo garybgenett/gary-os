@@ -37,19 +37,19 @@ then
 	fi
 fi
 
-while
-[[ ! -c /dev/kqemu ]] &&
-[[ ! -c /dev/kqemu0 ]]
-do
-	if [[ $(uname) == "FreeBSD" ]]
-	then
-		kldunload kqemu
-		kldload kqemu
-	else
-		rmmod kqemu
-		modprobe kqemu major="0"
-	fi
-done
+#>>>while
+#>>>[[ ! -c /dev/kqemu ]] &&
+#>>>[[ ! -c /dev/kqemu0 ]]
+#>>>do
+#>>>	if [[ $(uname) == "FreeBSD" ]]
+#>>>	then
+#>>>		kldunload kqemu
+#>>>		kldload kqemu
+#>>>	else
+#>>>		rmmod kqemu
+#>>>		modprobe kqemu major="0"
+#>>>	fi
+#>>>done
 
 declare QOPT=
 if
