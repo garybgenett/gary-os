@@ -688,7 +688,9 @@ function git-backup {
 
 function git-logdir {
 	declare GITDIR="./+gitdir"
-	declare LAST_P="$(ls ${GITDIR}/cur 2>/dev/null | tail -n1)"
+	declare LAST_P="$(ls ${GITDIR}/cur 2>/dev/null |
+		sort -n |
+		tail -n1)"
 	declare FROM_C="$(${GIT_CMD} log --full-index --pretty=oneline |
 		tail -n1 |
 		cut -d' ' -f1)"
