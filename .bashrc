@@ -531,6 +531,9 @@ function contacts {
 	if [[ ${1} == -k ]]; then
 		shift
 		CONTACTS="contacts-keep"
+	elif [[ ${1} == -l ]]; then
+		shift
+		CONTACTS="contacts.ldif"
 	elif [[ ${1} == -c ]]; then
 		shift
 		declare FILE
