@@ -536,18 +536,25 @@ function contacts {
 		CONTACTS="contacts-ldap"
 	elif [[ ${1} == -c ]]; then
 		shift
+		declare EXP_DIR="contacts.export"
+		${RM} ./${EXP_DIR}/*
 		declare FILE
 		for FILE in *.adb; do
-			${RM} ./${FILE/%\.adb}.vcf
 			sudo -H -u \#1000 abook \
 				--convert \
 				--infile ./${FILE} \
 				--informat abook \
-				--outfile ./${FILE/%\.adb}.vcf \
+				--outfile ./${EXP_DIR}/${FILE/%\.adb}.ldif \
+				--outformat ldif
+			sudo -H -u \#1000 abook \
+				--convert \
+				--infile ./${FILE} \
+				--informat abook \
+				--outfile ./${EXP_DIR}/${FILE/%\.adb}.vcf \
 				--outformat gcrd
-			sudo -H -u \#1000 dos2unix ./${FILE/%\.adb}.vcf
-			chmod 750 ./${FILE/%\.adb}.vcf
 		done
+		sudo -H -u \#1000 dos2unix ./${EXP_DIR}/*
+		chmod -R 750 ./${EXP_DIR}
 		return 0
 	fi
 	cd ${PIMDIR}
