@@ -546,6 +546,9 @@ function contacts {
 				--informat abook \
 				--outfile ./${EXP_DIR}/${FILE/%\.adb}.ldif \
 				--outformat ldif
+			${SED} -i \
+				"s/^xmozillaanyphone/telephoneNumber/g" \
+				./${EXP_DIR}/${FILE/%\.adb}.ldif
 			sudo -H -u \#1000 abook \
 				--convert \
 				--infile ./${FILE} \
