@@ -533,7 +533,7 @@ function contacts {
 		CONTACTS="contacts-keep"
 	elif [[ ${1} == -l ]]; then
 		shift
-		CONTACTS="contacts.ldif"
+		CONTACTS="contacts-ldap"
 	elif [[ ${1} == -c ]]; then
 		shift
 		declare FILE
