@@ -207,11 +207,13 @@ fi
 
 export GOBO_CHRTCMP="/Programs/ChrootCompile/Current/bin/ChrootCompile \
 	--verbose \
-	--new-names \
+	--local-repository \
 	--no-recursive \
 	--no-sign \
 	--no-web \
+	--use-tmpfs \
 	--use-directory /.g/_data/_gobo.svn/_build"
+#>>>	--new-names \
 export GOBO_COMPILE="/Programs/Compile/Current/bin/Compile \
 	--batch \
 	--no-dependencies \
