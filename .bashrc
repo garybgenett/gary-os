@@ -211,8 +211,7 @@ export GOBO_CHRTCMP="/Programs/ChrootCompile/Current/bin/ChrootCompile \
 	--no-recursive \
 	--no-sign \
 	--no-web \
-	--use-tmpfs \
-	--use-directory /.g/_data/_gobo.svn/_build"
+	--use-tmpfs"
 #>>>	--new-names \
 export GOBO_COMPILE="/Programs/Compile/Current/bin/Compile \
 	--batch \
