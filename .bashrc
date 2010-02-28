@@ -205,7 +205,7 @@ if [[ -f /etc/debian_version ]] &&
 	export GOBO_ENV="prompt -z -g"
 fi
 
-export GOBO_CHRTCMP="/Programs/Scripts/Current/bin/ChrootCompile \
+export GOBO_CHRTCMP="/Programs/ChrootCompile/Current/bin/ChrootCompile \
 	--verbose \
 	--new-names \
 	--no-recursive \
