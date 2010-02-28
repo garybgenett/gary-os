@@ -231,9 +231,11 @@ export GOBO_FRESHEN="/Programs/Freshen/Current/bin/Freshen \
 #>>>	--thorough \
 #>>>	--package \
 export GOBO_INSTALL="/Programs/Scripts/Current/bin/InstallPackage \
-	--batch \
 	--keep \
-	--same remove"
+	--same remove \
+	--batch \
+	--no-dependencies \
+	--symlink force"
 export GOBO_REMPROG="/Programs/Scripts/Current/bin/RemoveProgram"
 export GOBO_SYMLINK="/Programs/Scripts/Current/bin/SymlinkProgram \
 	--conflict overwrite \
