@@ -205,6 +205,13 @@ if [[ -f /etc/debian_version ]] &&
 	export GOBO_ENV="prompt -z -g"
 fi
 
+export GOBO_CHRTCMP="/Programs/Scripts/Current/bin/ChrootCompile \
+	--verbose \
+	--new-names \
+	--no-recursive \
+	--no-sign \
+	--no-web \
+	--use-directory /.g/_data/_gobo.svn/_build"
 export GOBO_COMPILE="/Programs/Compile/Current/bin/Compile \
 	--batch \
 	--no-dependencies \
@@ -228,6 +235,7 @@ export GOBO_SYMLINK="/Programs/Scripts/Current/bin/SymlinkProgram \
 	--unmanaged install \
 	--relative"
 
+alias  ChrootCompile="${GOBO_ENV} ${GOBO_CHRTCMP}"
 alias        Compile="${GOBO_ENV} ${GOBO_COMPILE}"
 alias    FindPackage="${GOBO_ENV} ${GOBO_FINDPKG}"
 alias        Freshen="${GOBO_ENV} ${GOBO_FRESHEN}"
