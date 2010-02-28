@@ -216,6 +216,11 @@ export GOBO_COMPILE="/Programs/Compile/Current/bin/Compile \
 	--batch \
 	--no-dependencies \
 	--symlink force"
+export GOBO_CREATEP="/Programs/Scripts/Current/bin/CreatePackage \
+	--verbose \
+	--bzip2 \
+	--no-sign \
+	--target-directory /.g/_data/_gobo.svn/_build"
 export GOBO_FINDPKG="/Programs/Scripts/Current/bin/FindPackage \
 	--substring"
 export GOBO_FRESHEN="/Programs/Freshen/Current/bin/Freshen \
@@ -237,6 +242,7 @@ export GOBO_SYMLINK="/Programs/Scripts/Current/bin/SymlinkProgram \
 
 alias  ChrootCompile="${GOBO_ENV} ${GOBO_CHRTCMP}"
 alias        Compile="${GOBO_ENV} ${GOBO_COMPILE}"
+alias  CreatePackage="${GOBO_ENV} ${GOBO_CREATEP}"
 alias    FindPackage="${GOBO_ENV} ${GOBO_FINDPKG}"
 alias        Freshen="${GOBO_ENV} ${GOBO_FRESHEN}"
 alias InstallPackage="${GOBO_ENV} ${GOBO_INSTALL}"
