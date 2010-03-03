@@ -220,8 +220,7 @@ export GOBO_COMPILE="/Programs/Compile/Current/bin/Compile \
 export GOBO_CREATEP="/Programs/Scripts/Current/bin/CreatePackage \
 	--verbose \
 	--bzip2 \
-	--no-sign \
-	--target-directory /.g/_data/_gobo.svn/_build"
+	--no-sign"
 export GOBO_FINDPKG="/Programs/Scripts/Current/bin/FindPackage \
 	--substring"
 export GOBO_FRESHEN="/Programs/Freshen/Current/bin/Freshen \
