@@ -208,11 +208,11 @@ fi
 export GOBO_CHRTCMP="/Programs/ChrootCompile/Current/bin/ChrootCompile \
 	--verbose \
 	--local-repository \
+	--new-names \
 	--no-recursive \
 	--no-sign \
 	--no-web \
 	--use-tmpfs"
-#>>>	--new-names \
 export GOBO_COMPILE="/Programs/Compile/Current/bin/Compile \
 	--batch \
 	--no-dependencies \
