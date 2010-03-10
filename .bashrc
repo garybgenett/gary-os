@@ -658,8 +658,8 @@ function email {
 		sudo -H -u \#1000 mutt \
 			-nxF /dev/null \
 			-e "set sendmail = \"msmtp -d -C ${HOME}/.msmtprc\"" \
-			-e "set realname = \"GaryBGenett.net Automation\"" \
-			-e "set from = \"root@garybgenett.net\"" \
+			-e "set realname = \"${EMAIL_NAME:-GaryBGenett.net Automation}\"" \
+			-e "set from = \"${EMAIL_MAIL:-root@garybgenett.net}\"" \
 			-e "set use_envelope_from = yes" \
 			-e "set copy = no" \
 			"${@}"
