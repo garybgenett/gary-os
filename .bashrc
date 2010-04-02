@@ -1022,7 +1022,7 @@ function shell {
 			OPTS="${OPTS} \"bash -c 'source ~/.bashrc ; _menu ${1}'\""
 			shift
 			;;
-		(bas)	DEST="bastion.olympus.f5net.com"
+		(hp)	DEST="hp.gbg.es.f5net.com"
 			[[ -z $(${PS} 2>/dev/null | ${GREP} "5903[:]") ]] && OPTS="${OPTS} -L 5903:127.0.0.1:5900"
 			;;
 		(nin)	DEST="pogo.gbg.es.f5net.com"
