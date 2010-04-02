@@ -1017,11 +1017,6 @@ function shell {
 			[[ -z $(${PS} 2>/dev/null | ${GREP} "5900[:]") ]] && OPTS="${OPTS} -L 5900:127.0.0.1:5900"
 			[[ -z $(${PS} 2>/dev/null | ${GREP} "5901[:]") ]] && OPTS="${OPTS} -L 5901:127.0.0.1:5901"
 			;;
-		(run)	DEST="me.garybgenett.net"
-			LOG="plastic"
-			OPTS="${OPTS} \"bash -c 'source ~/.bashrc ; _menu ${1}'\""
-			shift
-			;;
 		(hp)	DEST="hp.gbg.es.f5net.com"
 			[[ -z $(${PS} 2>/dev/null | ${GREP} "5903[:]") ]] && OPTS="${OPTS} -L 5903:127.0.0.1:5900"
 			;;
