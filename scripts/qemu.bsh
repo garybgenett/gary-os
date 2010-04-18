@@ -5,10 +5,8 @@ declare QNUM="${1}"
 declare QMEM="${2}"
 declare FILE="${3}"
 declare QSYS="${4}"
-shift
-shift
-shift
-shift
+
+shift 4
 
 ################################################################################
 
@@ -22,27 +20,21 @@ FLOC="${FLOC} /.g/_data/_target/iso/${FILE}"
 
 declare QIMG=
 declare I=
-for I in $(eval find ${FLOC} 2>/dev/null)
-do
+for I in $(eval find ${FLOC} 2>/dev/null); do
 	QIMG="${I}"
 done
 
-if [[ ${FILE} == "NULL" ]]
-then
-	if [[ $(uname) == "FreeBSD" ]]
-	then
+if [[ ${FILE} == "NULL" ]]; then
+	if [[ $(uname) == "FreeBSD" ]]; then
 		QIMG="/dev/da1"
 	else
 		QIMG="/dev/sdb"
 	fi
 fi
 
-#>>>while
-#>>>[[ ! -c /dev/kqemu ]] &&
-#>>>[[ ! -c /dev/kqemu0 ]]
-#>>>do
-#>>>	if [[ $(uname) == "FreeBSD" ]]
-#>>>	then
+#>>>while [[ ! -c /dev/kqemu ]] &&
+#>>>      [[ ! -c /dev/kqemu0 ]]; do
+#>>>	if [[ $(uname) == "FreeBSD" ]]; then
 #>>>		kldunload kqemu
 #>>>		kldload kqemu
 #>>>	else
@@ -52,17 +44,11 @@ fi
 #>>>done
 
 declare QOPT=
-if
-[[ ${QSYS} == TRUE ]]
-then
+if [[ ${QSYS} == TRUE ]]; then
 	QOPT="-hda ${QIMG} -vnc 127.0.0.1:${QNUM}"
-elif
-[[ ${QSYS} == REAL ]]
-then
+elif [[ ${QSYS} == REAL ]]; then
 	QOPT="-hda ${QIMG}"
-elif
-[[ ${QSYS} == LIVE ]]
-then
+elif [[ ${QSYS} == LIVE ]]; then
 	QOPT="-cdrom ${QIMG} -boot d"
 else
 	QOPT="-cdrom ${QIMG} -boot d -vnc 127.0.0.1:${QNUM}"
