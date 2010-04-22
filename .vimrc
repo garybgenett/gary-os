@@ -49,6 +49,7 @@ set hidden
 set hlsearch
 set ignorecase
 set incsearch
+set modeline
 set noruler
 set showcmd
 set noshowmode
