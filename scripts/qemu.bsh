@@ -15,7 +15,7 @@ declare SSH="tcp:220${QNUM}:${IPA}:22"
 
 declare NAME="${FILE}"
 declare FLOC="${FILE}"
-FLOC="${FLOC} /.g/_data/_systems/${FILE}"
+FLOC="${FLOC} /.g/_data/_systems/qemu/${FILE}"
 FLOC="${FLOC} /.g/_data/_target/iso/${FILE}"
 
 declare QIMG=
