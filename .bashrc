@@ -50,13 +50,20 @@ export HISTSIZE="$(( (2**31)-1 ))"
 export HISTFILESIZE="${HISTFILESIZE}"
 export HISTTIMEFORMAT="%Y-%m-%dT%H:%M:%S "
 
-export MAKEFLAGS="-j3"
+########################################
+
+export CARCH="i686"
+export CHOST="i686-pc-linux-gnu"
+
 export CC="gcc"
 export CXX="g++"
 export CFLAGS="-march=i686 -mtune=i686 -O2 -ggdb -pipe"
 export CXXFLAGS="${CFLAGS}"
-export CCACHE_DIR="/_ccache"
-export PKG_CONFIG_PATH="/System/Links/Libraries/pkgconfig:/usr/lib/pkgconfig"
+export LDFLAGS="-Wl,--hash-style=gnu -Wl,--as-needed"
+export MAKEFLAGS="-j3"
+
+export CCACHE_DIR="/.arch/=ccache"
+export CCACHE_LOGFILE="/.arch/=ccache.log"
 
 ########################################
 
@@ -885,13 +892,16 @@ function prompt {
 			HISTSIZE="${HISTSIZE}" \
 			HISTFILESIZE="${HISTFILESIZE}" \
 			HISTTIMEFORMAT="${HISTTIMEFORMAT}" \
-			MAKEFLAGS="${MAKEFLAGS}" \
+			CARCH="${CARCH}" \
+			CHOST="${CHOST}" \
 			CC="${CC}" \
 			CXX="${CXX}" \
 			CFLAGS="${CFLAGS}" \
 			CXXFLAGS="${CXXFLAGS}" \
+			LDFLAGS="${LDFLAGS}" \
+			MAKEFLAGS="${MAKEFLAGS}" \
 			CCACHE_DIR="${CCACHE_DIR}" \
-			PKG_CONFIG_PATH="${PKG_CONFIG_PATH}" \
+			CCACHE_LOGFILE="${CCACHE_LOGFILE}" \
 			PATH="${PATH}" \
 			${CMD} || return 1
 		return 0
