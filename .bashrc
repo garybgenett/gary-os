@@ -206,60 +206,6 @@ export X2VNC="x2vnc -west -tunnel -shared -noblank -lockdelay 60 -timeout 60"	; 
 
 ########################################
 
-export GOBO_ENV="prompt -z"
-if [[ -f /etc/debian_version ]] &&
-   [[ -n $(mount | ${GREP} "/.g/[+]gobo") ]]; then
-	export GOBO_ENV="prompt -z -g"
-fi
-
-export GOBO_CHRTCMP="/Programs/ChrootCompile/Current/bin/ChrootCompile \
-	--verbose \
-	--local-repository \
-	--new-names \
-	--no-recursive \
-	--no-sign \
-	--no-web \
-	--use-tmpfs"
-export GOBO_COMPILE="/Programs/Compile/Current/bin/Compile \
-	--batch \
-	--no-dependencies \
-	--symlink force"
-export GOBO_CREATEP="/Programs/Scripts/Current/bin/CreatePackage \
-	--verbose \
-	--bzip2 \
-	--no-sign"
-export GOBO_FINDPKG="/Programs/Scripts/Current/bin/FindPackage \
-	--substring"
-export GOBO_FRESHEN="/Programs/Freshen/Current/bin/Freshen \
-	--no-cache \
-	--recipe \
-	--prompt-install"
-#>>>	--with-revisions \
-#>>>	--thorough \
-#>>>	--package \
-export GOBO_INSTALL="/Programs/Scripts/Current/bin/InstallPackage \
-	--keep \
-	--same remove \
-	--batch \
-	--no-dependencies \
-	--symlink force"
-export GOBO_REMPROG="/Programs/Scripts/Current/bin/RemoveProgram"
-export GOBO_SYMLINK="/Programs/Scripts/Current/bin/SymlinkProgram \
-	--conflict overwrite \
-	--unmanaged install \
-	--relative"
-
-alias  ChrootCompile="${GOBO_ENV} ${GOBO_CHRTCMP}"
-alias        Compile="${GOBO_ENV} ${GOBO_COMPILE}"
-alias  CreatePackage="${GOBO_ENV} ${GOBO_CREATEP}"
-alias    FindPackage="${GOBO_ENV} ${GOBO_FINDPKG}"
-alias        Freshen="${GOBO_ENV} ${GOBO_FRESHEN}"
-alias InstallPackage="${GOBO_ENV} ${GOBO_INSTALL}"
-alias  RemoveProgram="${GOBO_ENV} ${GOBO_REMPROG}"
-alias SymlinkProgram="${GOBO_ENV} ${GOBO_SYMLINK}"
-
-########################################
-
 export RDIFF_BACKUP="reporter rdiff-backup \
 	-v6 \
 	--force \
@@ -872,12 +818,6 @@ function prompt {
 		if [[ ${1} == zsh ]]; then
 			shift
 			CMD="zsh -l -d -f ${@}"
-		elif [[ ${1} == -d ]]; then
-			shift
-			CMD="chroot /.g/+debian ${@}"
-		elif [[ ${1} == -g ]]; then
-			shift
-			CMD="chroot /.g/+gobo ${@}"
 		elif [[ -n ${@} ]]; then
 			CMD="${@}"
 		fi
@@ -904,12 +844,6 @@ function prompt {
 			CCACHE_LOGFILE="${CCACHE_LOGFILE}" \
 			PATH="${PATH}" \
 			${CMD} || return 1
-		return 0
-	fi
-	if [[ ${1} == -g ]]; then
-		cd /.g/_data/_systems/rootless
-		source Programs/Rootless/Current/bin/StartRootless
-		cd - >/dev/null
 		return 0
 	fi
 	if [[ ${1} == -d ]]; then
