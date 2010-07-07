@@ -546,7 +546,7 @@ function contacts {
 
 function edit {
 	declare DIFF="diff"
-	declare EDIT="vi"
+	declare EDIT="${EDITOR}"
 	declare FILES
 	declare FILE
 	if [[ ${1} == -c ]]; then
