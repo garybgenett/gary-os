@@ -728,7 +728,12 @@ function git-purge {
 ########################################
 
 function journal {
-	cd /.g/_data/zactive/writing/tresobis/_staging
+	declare JOURNAL_DIR="/.g/_data/zactive/_pim/journal"
+	if [[ -d "${1}" ]]; then
+		JOURNAL_DIR="${1}"
+		shift
+	fi
+	cd "${JOURNAL_DIR}"
 	prompt -x ${FUNCNAME}
 	${VI} \
 		"${@}" \
