@@ -146,10 +146,11 @@ export GREP="grep --color=auto -E"		; alias grep="${GREP}"
 export LN="ln -fsv"				; alias ln="${LN}"
 export MKDIR="mkdir -pv"			; alias mkdir="${MKDIR}"
 export MORE="less -RX"				; alias more="${MORE}"
-export PS="ps aux -ww"				; alias psl="${PS}"
 export MV="mv -v"				; alias mv="${MV}"
+export PS="ps aux -ww"				; alias psl="${PS}"
 export RM="rm -frv"				; alias rm="${RM}"
 export RMDIR="rmdir -v"				; alias rmdir="${RMDIR}"
+export SED="sed -r"				; alias sed="${SED}"
 export VI="vim -u ${HOME}/.vimrc -i NONE"	; alias vi="${VI}"
 export VIEW="eval ${VI} -nR -c \"set nowrap\""	; alias view="${VIEW/#eval\ /}"
 
@@ -164,25 +165,11 @@ unset VISUAL
 export LS="ls --color=auto"			; alias ls="${LS}"
 export LL="ls --color=auto -asF -l"		; alias ll="${LL}"
 export LX="ls --color=auto -asF -kC"		; alias lx="${LX}"
-if [[ ${UNAME} == FreeBSD ]]; then
-	export LS="ls -G"			; alias ls="${LS}"
-	export LL="ls -G -asF -l"		; alias ll="${LL}"
-	export LX="ls -G -asF -kx"		; alias lx="${LX}"
-fi
 export LF="eval ${LL} -d \
 \`find . -maxdepth 1 ! -type l\`"		; alias lf="${LF}"
 
-########################################
-
 export DU="du -b --time --time-style=long-iso"	; alias du="${DU}"
 export LU="${DU} -ak --max-depth 1"		; alias lu="${LU}"
-
-########################################
-
-export SED="sed -r"				; alias sed="${SED}"
-if [[ ${UNAME} == FreeBSD ]]; then
-	export SED="sed -E"			; alias sed="${SED}"
-fi
 
 ########################################
 
@@ -369,9 +356,6 @@ alias vlc="vlc -I ncurses --no-color --fullscreen"
 alias vlc-help="vlc --help --full-help --longhelp --advanced 2>&1 | ${MORE}"
 alias vlc-play="vlc ${HOME}/setup/_misc/playlist.m3u"
 alias vlc-vlm="telnet 127.0.0.1 4212"
-if [[ ${UNAME} == FreeBSD ]]; then
-	alias watch="cmdwatch"
-fi
 alias web="w3m google.com"
 
 ################################################################################
@@ -407,11 +391,7 @@ function format {
 		shift
 		mkntfs -vI "${@}"
 	else
-		if [[ ${UNAME} == FreeBSD ]]; then
-			newfs -U "${@}"
-		else
-			mke2fs -jvm 0 "${@}"
-		fi
+		mke2fs -jvm 0 "${@}"
 	fi
 }
 
