@@ -62,8 +62,8 @@ export CXXFLAGS="${CFLAGS}"
 export LDFLAGS="-Wl,--hash-style=gnu -Wl,--as-needed"
 export MAKEFLAGS="-j3"
 
-export CCACHE_DIR="/.arch/=ccache"
-export CCACHE_LOGFILE="/.arch/=ccache.log"
+export CCACHE_DIR="/_arch/=ccache"
+export CCACHE_LOGFILE="/_arch/=ccache.log"
 
 ########################################
 
