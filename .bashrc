@@ -49,6 +49,8 @@ export HISTFILE="${HOME}/.history/shell/${HISTFILE}"
 export HISTSIZE="$(( (2**31)-1 ))"
 export HISTFILESIZE="${HISTSIZE}"
 export HISTTIMEFORMAT="%Y-%m-%dT%H:%M:%S "
+export HISTCONTROL=
+export HISTIGNORE=
 
 ########################################
 
