@@ -47,7 +47,7 @@ export LC_ALL=
 export HISTFILE="${HOSTNAME}.${USER}.$(basename ${SHELL}).$(date +%Y-%m)"
 export HISTFILE="${HOME}/.history/shell/${HISTFILE}"
 export HISTSIZE="$(( (2**31)-1 ))"
-export HISTFILESIZE="${HISTFILESIZE}"
+export HISTFILESIZE="${HISTSIZE}"
 export HISTTIMEFORMAT="%Y-%m-%dT%H:%M:%S "
 
 ########################################
