@@ -5,8 +5,9 @@ declare QNUM="${1}"
 declare QMEM="${2}"
 declare FILE="${3}"
 declare QSYS="${4}"
+declare QCPU="${5}"
 
-shift 4
+shift 5
 
 ################################################################################
 
@@ -41,7 +42,8 @@ else
 	QOPT="-cdrom ${QIMG} -boot d -vnc 127.0.0.1:${QNUM}"
 fi
 
-if [[ ${QSYS} == VIRT ]]; then
+if [[ ${QCPU} == qemu64 ]] ||
+   [[ ${QCPU} == qemu32 ]]; then
 	while [[ ! -c /dev/kvm ]]; do
 		rmmod kvm-intel
 		rmmod kvm
@@ -60,11 +62,12 @@ declare QEMU="qemu"
 declare QEMU_CPU=""
 declare QEMU_NET="\
 		-net nic			-net user"
-if [[ ${QSYS} == VIRT ]]; then
+if [[ ${QCPU} == qemu64 ]] ||
+   [[ ${QCPU} == qemu32 ]]; then
 	QEMU="qemu-system-x86_64"
 	QEMU_CPU="\
 		-enable-kvm \
-		-cpu qemu32"
+		-cpu ${QCPU}"
 	QEMU_NET="\
 		-net nic,vlan=0			-net user,vlan=0 \
 		-net nic,vlan=1,model=virtio	-net tap,vlan=1,script=no"
