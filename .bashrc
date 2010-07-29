@@ -505,7 +505,7 @@ function contacts {
 				--outfile ./${EXP_DIR}/${FILE/%\.adb}.vcf \
 				--outformat gcrd
 		done
-		sudo -H -u \#1000 dos2unix -U ./${EXP_DIR}/*.{ldif,vcf}
+		sudo -H -u \#1000 dos2unix ./${EXP_DIR}/*.{ldif,vcf}
 		chmod -R 750 ./${EXP_DIR}
 		return 0
 	fi
