@@ -651,6 +651,17 @@ function git-backup {
 
 ########################################
 
+function git-clean {
+	${GIT} reset --soft					|| return 1
+	${GIT} reflog expire --all --expire-unreachable=0	|| return 1
+	${GIT} gc --prune=0					|| return 1
+	${GIT} gc --auto					|| return 1
+	${GIT} fsck --full --no-reflogs --strict		|| return 1
+	return 0
+}
+
+########################################
+
 function git-logdir {
 	declare GITDIR="./+gitdir"
 	declare LAST_P="$(ls ${GITDIR}/cur 2>/dev/null |
@@ -694,14 +705,10 @@ function git-purge {
 		-d ${MEM_DIR}/.git_purge \
 		--original refs/.git_purge \
 		--parent-filter "[ ${PURGE} = \$GIT_COMMIT ] || cat" \
-		HEAD						|| return 1
-#>>>	${RM} ./.git_purge					|| return 1
-#>>>	${RM} ./.git/refs/.git_purge				|| return 1
-	${GIT} reset --soft					|| return 1
-	${GIT} reflog expire --all --expire-unreachable=0	|| return 1
-	${GIT} gc --prune=0					|| return 1
-	${GIT} gc --auto					|| return 1
-	${GIT} fsck --full --no-reflogs --strict		|| return 1
+		HEAD			|| return 1
+#>>>	${RM} ./.git_purge		|| return 1
+#>>>	${RM} ./.git/refs/.git_purge	|| return 1
+	git-clean			|| return 1
 	return 0
 }
 
