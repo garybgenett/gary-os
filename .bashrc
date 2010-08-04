@@ -85,8 +85,6 @@ export PATH="${PATH}:/usr/bin"
 export PATH="${PATH}:/usr/sbin"
 export PATH="${PATH}:/bin"
 export PATH="${PATH}:/sbin"
-export PATH="${PATH}:/usr/X11R6/bin"
-export PATH="${PATH}:/usr/games"
 if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
 	export PATH="${PATH}:/c/WINDOWS"
 	export PATH="${PATH}:/c/WINDOWS/system32"
