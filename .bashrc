@@ -57,15 +57,13 @@ export HISTIGNORE=
 export CARCH="i686"
 export CHOST="i686-pc-linux-gnu"
 
-export CC="gcc"
-export CXX="g++"
 export CFLAGS="-march=i686 -mtune=i686 -O2 -ggdb -pipe"
 export CXXFLAGS="${CFLAGS}"
 export LDFLAGS="-Wl,--hash-style=gnu -Wl,--as-needed"
 export MAKEFLAGS="-j3"
 
 export CCACHE_DIR="/_arch/=ccache"
-export CCACHE_LOGFILE="/_arch/=ccache.log"
+export CCACHE_LOGFILE= #>>>"/_arch/=ccache.log"
 
 ########################################
 
@@ -824,8 +822,6 @@ function prompt {
 			HISTTIMEFORMAT="${HISTTIMEFORMAT}" \
 			CARCH="${CARCH}" \
 			CHOST="${CHOST}" \
-			CC="${CC}" \
-			CXX="${CXX}" \
 			CFLAGS="${CFLAGS}" \
 			CXXFLAGS="${CXXFLAGS}" \
 			LDFLAGS="${LDFLAGS}" \
