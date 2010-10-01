@@ -833,9 +833,9 @@ function prompt {
 	fi
 	if [[ ${1} == -d ]]; then
 		if [[ ${2} == [0-9] ]]; then
-			export DISPLAY=":${2}.0"
+			export DISPLAY=":${2}"
 		else
-			export DISPLAY=":0.0"
+			export DISPLAY=":0"
 		fi
 		if [[ ${2} == -x ]] || [[ ${3} == -x ]]; then
 			declare XAUTH="/var/lib/xdm/{,authdir/}authfiles/*"
