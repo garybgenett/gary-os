@@ -840,6 +840,9 @@ function prompt {
 		if [[ ${2} == -x ]] || [[ ${3} == -x ]]; then
 			declare XAUTH="/var/lib/xdm/{,authdir/}authfiles/*"
 			export XAUTHORITY="$(eval "ls ${XAUTH}" 2>/dev/null | head -n1)"
+			if [[ -z "${XAUTHORITY}" ]]; then
+				export XAUTHORITY=$(${PS} 2>/dev/null | ${GREP} "xinit" | ${GREP} "${DISPLAY} -auth" | ${SED} "s/^.+-auth //g")
+			fi
 		fi
 	elif [[ ${1} == -b ]]; then
 		export PROMPT="basic"
