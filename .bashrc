@@ -638,7 +638,7 @@ function git-backup {
 		{ git-purge "${1}" &&
 			${RM} ./+gitdir/cur/*; }				|| FAIL="1"
 	fi
-	git-logdir								|| FAIL="1"
+#>>>	git-logdir								|| FAIL="1"
 	if [[ -n ${FAIL} ]]; then
 		return 1
 	fi
