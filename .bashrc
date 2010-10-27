@@ -636,7 +636,7 @@ function git-backup {
 	${GIT_CMT} --all --message="[${FUNCNAME} :: $(date --iso=s)]"		|| return 1
 	if [[ -n "${1}" ]]; then
 		{ git-purge "${1}" &&
-			${RM} ./+gitdir/cur/*; }				|| FAIL="1"
+			${RM} ${PWD}.gitlog; }					|| FAIL="1"
 	fi
 #>>>	git-logdir								|| FAIL="1"
 	if [[ -n ${FAIL} ]]; then
@@ -659,7 +659,7 @@ function git-clean {
 ########################################
 
 function git-logdir {
-	declare GITDIR="./+gitdir"
+	declare GITDIR="${PWD}.gitlog"
 	declare LAST_P="$(ls ${GITDIR}/cur 2>/dev/null |
 		sort -n |
 		tail -n1)"
