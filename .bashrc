@@ -990,16 +990,6 @@ function shell {
 
 ########################################
 
-function sslvpn {
-	cd /.g/_data/zactive/data.f5/zwww/scripts/sslvpn
-	killall -9 pppd
-	./${1}.sh
-	cd - >/dev/null
-	return 0
-}
-
-########################################
-
 function vdiff {
 	declare VDIFF="/tmp/vdiff"
 	declare SEARCH=
@@ -1040,6 +1030,11 @@ function vpn {
 			-i ${HOME}/.ssh/remote_id \
 			-R 65535:127.0.0.1:22 \
 			plastic@me.garybgenett.net
+	else
+		cd /.g/_data/zactive/data.f5/zwww/scripts/sslvpn
+		killall -9 pppd
+		./${1}.sh
+		cd - >/dev/null
 	fi
 	return 0
 }
