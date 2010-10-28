@@ -1050,24 +1050,6 @@ function vpn {
 			)" |
 			${SED} "s/^.+\((.+)\).+$/\1/g"
 		) -v9
-	elif [[ ${1} == -c ]]; then
-		shift
-		declare DEST="${1}" && shift
-		pkill -9 -f "do[ ]htc"
-		killall -9 htc
-		(bash -c "while :; do htc -w -F 8080 ${DEST}:8080 ; sleep 10 ; done" \
-			>/dev/null 2>&1 &)
-	elif [[ ${1} == -s ]]; then
-		shift
-		pkill -9 -f "do[ ]hts"
-		killall -9 hts
-		(bash -c "while :; do hts -w -F 127.0.0.1:22 8080 ; sleep 10 ; done" \
-			>/dev/null 2>&1 &)
-	elif [[ ${1} == -z ]]; then
-		pkill -9 -f "do[ ]htc"
-		killall -9 htc
-		pkill -9 -f "do[ ]hts"
-		killall -9 hts
 	fi
 	return 0
 }
