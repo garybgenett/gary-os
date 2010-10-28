@@ -1040,16 +1040,6 @@ function vpn {
 			-i ${HOME}/.ssh/remote_id \
 			-R 65535:127.0.0.1:22 \
 			plastic@me.garybgenett.net
-	elif [[ ${1} == -x ]]; then
-		shell $(
-			arp -an |
-			${GREP} -i "$(
-				cat /etc/openvpn/status.log |
-				${GREP} "^[0-9a-f:]+,client.garybgenett.net" |
-				cut -d, -f1
-			)" |
-			${SED} "s/^.+\((.+)\).+$/\1/g"
-		) -v9
 	fi
 	return 0
 }
