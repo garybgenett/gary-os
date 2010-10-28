@@ -25,6 +25,11 @@ if [[ -f /etc/bash_completion ]]; then
 fi
 complete -d -o dirnames cd
 
+########################################
+
+mkdir -pv ${HOME}/.history/screen	2>/dev/null
+mkdir -pv ${HOME}/.history/shell	2>/dev/null
+
 ################################################################################
 # variables
 ################################################################################
