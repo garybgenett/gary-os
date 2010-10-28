@@ -1033,21 +1033,7 @@ function vdiff {
 ########################################
 
 function vpn {
-	if [[ ${1} == 0 ]]; then
-		ifdown eth0
-		ifup eth0
-		ifdown eth1
-		ifup eth1
-		/etc/init.d/openvpn stop
-		psk "openvpn"
-		psk "adb fork-server server"
-	elif [[ ${1} == 1 ]]; then
-		setconf /etc/openvpn
-		${VI} +/remote /etc/openvpn/openvpn.conf
-		${FUNCNAME} 0
-		adb forward tcp:443 localabstract:Tunnel
-		/etc/init.d/openvpn start
-	elif [[ ${1} == -a ]]; then
+	if [[ ${1} == -a ]]; then
 		killall -9 autossh
 		autossh \
 			-M 0 -f \
