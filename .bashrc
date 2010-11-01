@@ -44,7 +44,7 @@ export MAILCAPS="${HOME}/.mailcap"
 ########################################
 
 export LANG="en_US.UTF-8"
-export LC_ALL="en_US.UTF-8"
+export LC_ALL="${LANG}"
 export LC_COLLATE="C"
 #>>>export LC_TIME="en_DK.UTF-8"
 export LC_ALL=
