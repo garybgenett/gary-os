@@ -1,0 +1,50 @@
+################################################################################
+# portage package use file
+################################################################################
+
+app-text/ghostscript-gpl		cups		# gentoo required
+app-text/poppler			cairo		# gentoo required
+dev-libs/libxml2			python		# gentoo required
+media-libs/libsdl			joystick	# gentoo required
+media-sound/pulseaudio			avahi		# gentoo required
+sys-libs/ncurses			static-libs	# gentoo required
+
+########################################
+
+app-office/openoffice			-debug java	# required to build
+media-libs/svgalib			build		# required to build
+net-fs/samba				-debug		# required to build
+
+########################################
+
+sys-libs/pam				-debug		# causes failures
+
+################################################################################
+
+sys-devel/gcc				-gtk
+
+########################################
+
+app-portage/layman			subversion
+dev-vcs/git				subversion
+
+########################################
+
+dev-libs/cyrus-sasl			-ldap
+media-video/vlc				qt4
+net-fs/samba				cups
+net-print/cups				samba
+
+################################################################################
+
+app-text/lcdf-typetools			kpathsea	# gentoo required
+media-libs/freetype			kpathsea	# gentoo required
+
+########################################
+
+app-text/enchant			aspell -hunspell
+mail-client/mutt			sidebar
+
+################################################################################
+# end of file
+################################################################################
