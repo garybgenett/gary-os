@@ -1,0 +1,472 @@
+#!/usr/bin/env bash
+################################################################################
+
+export _PACKAGES=(
+
+########################################
+# toolchain
+
+glibc
+binutils
+gmp
+mpfr
+gcc
+#>>>gcj					# included in "gcc"
+
+ccache
+
+autoconf
+automake
+bison
+libtool
+patch
+pkgconfig
+
+########################################
+# base system
+
+ca-certificates
+iso-codes
+timezone-data				#>>> tzdata
+
+cracklib
+libpcre
+
+pam					# kernel upgrade
+man-pages
+
+db
+sed
+e2fsprogs
+coreutils
+baselayout				#>>> iana-etc
+m4
+ncurses
+procps
+zlib
+perl
+readline
+bash
+bash-completion
+bzip2
+diffutils
+file
+findutils
+flex
+gawk
+gettext
+grep
+groff
+grub
+gzip
+net-tools				#>>> inetutils
+iproute2
+iptables
+kbd
+less
+make
+man
+module-init-tools
+psmisc
+shadow					# kernel upgrade
+sysklogd
+sysvinit
+tar
+texinfo
+udev					# kernel upgrade
+util-linux				#>>> util-linux-ng
+
+busybox
+curl
+inotify-tools
+
+runit
+
+########################################
+# gentoo system
+
+openssl
+openssh
+
+popt
+#>>>device-mapper			# conflicts with "udev"
+cryptsetup
+
+sys-fs/fuse				#>>> fuse	# kernel upgrade
+xz-utils
+
+tcl
+sqlite
+
+subversion
+gnupg
+
+deb2targz
+debianutils
+p7zip
+rar
+rpm
+rpm2targz
+unrar
+unzip
+zip
+zziplib
+
+########################################
+# gentoo packages
+
+eselect
+genkernel
+gentoo-bashcomp
+gentoo-sources
+app-vim/gentoo-syntax			#>>> gentoo-syntax
+gentoolkit
+layman
+portage
+portage-utils
+ufed
+
+########################################
+# x server
+
+pixman
+libdrm
+mesa
+
+xorg-server
+xorg-drivers
+xorg-x11
+xterm
+twm
+
+xorg-cf-files
+gccmakedep
+imake
+
+fontconfig
+freetype
+Xaw3d
+
+#WORK nvidia-drivers				# kernel upgrade
+#WORK nvidia-settings				# kernel upgrade
+
+########################################
+# toolkits
+
+debugedit
+dmalloc
+gdb
+
+xfig
+transfig
+texlive
+dblatex					# gentoo overlay
+
+docbook-xml-dtd
+docbook-xsl-stylesheets
+xmlto
+asciidoc
+
+jpeg
+openjpeg
+tiff
+
+nspr
+nss
+
+gtk+
+gtk-doc
+qt
+tk
+wxGTK
+
+cyrus-sasl
+openldap
+
+dev-perl/DateManip			#>>> perl-date-manip
+dev-perl/libwww-perl			#>>> perl-libwww
+
+expect
+git
+metastore				# gentoo overlay
+sash
+zsh
+
+clisp
+lua
+luarocks
+python
+ruby
+rubygems
+
+########################################
+# libraries
+
+shared-mime-info
+mime-types
+
+alsa-lib
+alsa-oss
+alsa-utils
+
+libsdl
+
+a52dec
+aalib
+flac
+giflib					#>>> libungif
+imlib2
+lame
+libcaca
+libcddb
+libcdio
+libdvdcss
+libdvdnav
+libdvdread
+libexif
+libmpeg2
+libogg
+libsndfile
+libvorbis
+taglib
+
+cmake
+enchant
+gucharmap
+dev-lang/ocaml				#>>> ocaml
+openmotif
+scrollkeeper
+xulrunner
+
+exif
+exiv2
+ffmpeg
+ispell
+
+########################################
+# utilities
+
+hdparm
+pciutils
+usbutils
+
+bc
+bind-tools				#>>> dnsutils
+bridge-utils
+cadaver
+cpio
+dcfldd
+ddrescue
+dhcpcd
+dos2unix
+dosfstools
+ed
+kexec-tools				# kernel upgrade
+lrzsz
+lsof
+ltrace
+minicom
+nano
+net-tools
+netcat
+netkit-base
+nmap
+ntfs3g
+ntfsprogs
+ppp
+procinfo
+sshfs-fuse
+ssldump
+strace
+sudo
+sysstat
+tcpdump
+tcptrace
+traceroute
+vconfig
+whois
+wireless-tools
+wpa_supplicant
+xdelta
+
+tcp-wrappers
+rpcbind					#>>> portmap
+nfs-utils
+
+########################################
+# tools
+
+apache
+bind
+cups
+dhcp
+dovecot
+lighttpd
+ntp
+openvpn
+proftpd
+quagga
+samba
+tftp-hpa
+thttpd
+
+ghostscript-gpl
+foomatic-db
+foomatic-db-engine
+foomatic-filters
+
+aspell
+aspell-en
+
+gvim
+htop
+lynx
+rsync
+screen
+vim-spell-en
+wget
+
+bluez
+bluez-firmware
+bluez-hcidump
+#>>>bluez-libs				# no package
+#>>>bluez-utils				# no package
+
+pulseaudio
+libcanberra
+padevchooser
+#>>>paman				# no package
+paprefs
+pavucontrol
+pavumeter
+
+lirc
+#WORK xbmc
+
+########################################
+# programs
+
+abook
+autossh
+sci-mathematics/calc			#>>> calc
+clockywock
+fetchmail
+httptunnel
+lftp
+mailx
+msmtp
+mutt
+#>>>mutt-sidebar			# included in "mutt" with "sidebar" patch
+offlineimap
+procmail
+rdiff-backup
+remind
+safecat
+unison
+urlview
+wyrd
+
+openbox
+obconf
+
+#>>>qemu				# conflicts with "qemu-kvm"
+qemu-kvm
+
+nxclient
+nxnode
+nxserver-freeedition			#>>> nxserver
+
+aumix
+feh
+firefox
+sci-visualization/gnuplot		#>>> gnuplot
+graphviz
+imagemagick
+keepassx
+mplayer
+picard
+quodlibet
+rdesktop
+#WORK realvnc-enterprise			#>>> realvnc	# gentoo overlay
+rtorrent
+rxvt
+rxvt-unicode
+thunderbird
+tightvnc
+transset-df
+vlc
+w3m
+wireshark
+wmctrl
+x11vnc
+x2vnc
+xautolock
+xcompmgr
+xlockmore
+xpdf
+xterm
+xvkbd
+
+adobe-flash				# binary package
+sun-jdk					# binary package
+virtualbox-bin				# binary package
+
+#WORK openoffice
+
+cdparanoia
+cdrdao
+cdrtools
+cdtool
+cgoban
+comix
+dosbox
+dosemu
+dvd+rw-tools
+gimp
+gnuboy					#>>> tuxboy
+gnuchess
+gnugo
+nestopia
+nethack
+netris
+#WORK projectm-pulseaudio			# gentoo overlay
+sdcv					#>>> stardict-sdcv
+stardict
+xboard
+
+########################################
+# kde
+
+#>>>kde-meta-kdebase
+
+#>>>kde-meta-kdeaccessibility
+#>>>kde-meta-kdeadmin
+#>>>kde-meta-kdeartwork
+#>>>kde-meta-kdeedu
+#>>>kde-meta-kdegames
+#>>>kde-meta-kdegraphics
+#>>>kde-meta-kdemultimedia
+#>>>kde-meta-kdenetwork
+#>>>kde-meta-kdepim
+#>>>kde-meta-kdeplasma-addons
+#>>>kde-meta-kdesdk
+#>>>kde-meta-kdetoys
+#>>>kde-meta-kdeutils
+#>>>kde-meta-kdewebdev
+
+#>>>kde
+
+########################################
+
+)
+
+################################################################################
+
+if [[ "$(basename "${0}")" == ".packages" ]]; then
+	echo "${_PACKAGES[*]}"
+fi
+
+exit 0
+################################################################################
+# end of file
+################################################################################

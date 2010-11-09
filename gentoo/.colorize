@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+################################################################################
+
+declare SCRIPT="${0}"
+
+########################################
+
+declare DEF_COLOR="\e[0;37m"	# light gray
+declare MSG_COLOR="\e[0;36m"	# cyan
+
+declare MARK_COLOR="\e[0;35m"	# magenta
+
+declare TERM_COLOR="\e[1;34m"	# dark blue
+declare DARK_COLOR="\e[1;30m"	# dark gray
+declare GOOD_COLOR="\e[1;32m"	# light green
+declare WARN_COLOR="\e[1;33m"	# yellow
+declare FAIL_COLOR="\e[1;31m"	# red
+
+################################################################################
+
+if [[ "${1}" == "on" ]]; then
+	[[ -z "$(grep "${SCRIPT}" /usr/lib/portage/bin/ebuild.sh)" ]] &&
+	sed -r -i \
+		-e "s|! (\"\\$\{ECONF_SOURCE\}/configure\")|! ${SCRIPT} \1|g" \
+		-e "s|(\\$\{MAKE:-make\})|${SCRIPT} \1|g" \
+		/usr/lib/portage/bin/ebuild.sh
+	[[ -z "$(grep "${SCRIPT}" /usr/lib/portage/bin/ebuild-helpers/emake)" ]] &&
+	sed -r -i \
+		-e "s|^(\\$\{MAKE:-make\})|${SCRIPT} \1|g" \
+		/usr/lib/portage/bin/ebuild-helpers/emake
+	exit 0
+elif [[ "${1}" == "off" ]]; then
+	sed -r -i \
+		-e "s|${SCRIPT} ||g" \
+		/usr/lib/portage/bin/ebuild.sh
+	sed -r -i \
+		-e "s|${SCRIPT} ||g" \
+		/usr/lib/portage/bin/ebuild-helpers/emake
+	exit 0
+fi
+
+########################################
+
+${*} 2>&1 |
+	perl -p -e "\
+	      s/(no|false|failed)(\\s|\$)/${FAIL_COLOR}\1${DEF_COLOR}\2/gi;	\
+	s/(yes|true|ok|succeeded)(\\s|\$)/${GOOD_COLOR}\1${DEF_COLOR}\2/gi;	\
+	              s/(\\.\\.\\.) (.+)$/\1 ${MSG_COLOR}\2/gi;			\
+	                    s/(.*error.*)/${FAIL_COLOR}\1/gi;			\
+	                  s/(.*warning.*)/${WARN_COLOR}\1/gi;			\
+	          s/^(making [^ ]+ in .+)/${MARK_COLOR}\1/gi;			\
+	                      s/^(\*\*.+)/${MARK_COLOR}\1/gi;			\
+	                        s/^(--.+)/${MARK_COLOR}\1/gi;			\
+	           s/^(patching file)(.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;	\
+	       s/^(generating .+ for)(.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;	\
+	       s/^(created directory)(.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;	\
+	              s/^(installing)(.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;	\
+	                   s/^(.+:)(\s.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;	\
+	          s/([\\$]?\\([^\\)]+\\))/${MARK_COLOR}\1${DEF_COLOR}/gi;	\
+	         s/.{7}(\\(cached\\)).{7}/${WARN_COLOR}\1${MSG_COLOR}/gi;	\
+	                     s/(-o [^ ]+)/${MSG_COLOR}\1${DEF_COLOR}/gi;	\
+	                              s/^/${DEF_COLOR}/gi;			\
+"
+
+declare STATUS="${PIPESTATUS[0]}"
+echo -en "${DEF_COLOR}"
+exit ${STATUS}
+
+################################################################################
+# end of file
+################################################################################
