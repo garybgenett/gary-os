@@ -11,8 +11,9 @@ declare TOKEN
 ################################################################################
 
 if [[ ! -f ${OUT_DIR}/.emerge ]]; then
-	emerge --info					>${OUT_DIR}/.info	2>&1
-	emerge --pretend --emptytree system world	>${OUT_DIR}/.emerge	2>&1
+	declare EMERGE_CMD="$(which emerge) --verbose --pretend"
+	env - ${EMERGE_CMD} --info			>${OUT_DIR}/.info	2>&1
+	env - ${EMERGE_CMD} --emptytree system world	>${OUT_DIR}/.emerge	2>&1
 fi
 
 ########################################
