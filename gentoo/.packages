@@ -147,8 +147,8 @@ fontconfig
 freetype
 Xaw3d
 
-#WORK nvidia-drivers				# kernel upgrade
-#WORK nvidia-settings				# kernel upgrade
+nvidia-drivers				# kernel upgrade
+nvidia-settings				# kernel upgrade
 
 ########################################
 # toolkits
