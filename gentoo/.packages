@@ -302,6 +302,7 @@ cups
 dhcp
 dovecot
 lighttpd
+mysql
 ntp
 openvpn
 proftpd
@@ -339,9 +340,6 @@ padevchooser
 paprefs
 pavucontrol
 pavumeter
-
-lirc
-#WORK xbmc
 
 ########################################
 # programs
@@ -411,7 +409,7 @@ adobe-flash				# binary package
 sun-jdk					# binary package
 virtualbox-bin				# binary package
 
-#WORK openoffice
+openoffice
 
 cdparanoia
 cdrdao
@@ -429,10 +427,13 @@ gnugo
 nestopia
 nethack
 netris
-#WORK projectm-pulseaudio			# gentoo overlay
 sdcv					#>>> stardict-sdcv
 stardict
 xboard
+
+lirc
+projectm-pulseaudio			# gentoo overlay
+xbmc
 
 ########################################
 # kde
