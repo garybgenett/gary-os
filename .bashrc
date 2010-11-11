@@ -188,9 +188,11 @@ export GIT_PAT="-M --full-index --summary --stat=128,128 --attach --binary --kee
 
 ########################################
 
+export CVS="reporter cvs"							; alias cvs="${CVS}"
+export SVN="reporter svn"							; alias svn="${SVN}"
+
 export METASTORE="metastore --file +metastore --verbose --mtime"		; alias metastore="${METASTORE}"
 export RDP="rdesktop -z -n NULL -g 90% -a 24 -r sound:remote"			; alias rdp="${RDP}"
-export SVN="reporter svn"							; alias svn="${SVN}"
 export X2VNC="x2vnc -west -tunnel -shared -noblank -lockdelay 60 -timeout 60"	; alias x2vnc="${X2VNC}"
 
 ########################################
