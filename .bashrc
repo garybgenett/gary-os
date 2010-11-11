@@ -131,11 +131,11 @@ else
 		export PROMPT="${PROMPT}"
 		export PROMPT_KEY="( ${PROMPT} )"
 	fi
-	export PROMPT_COMMAND="echo -ne \"${PRE_PROMPT}\""
+	export PROMPT_COMMAND="echo -en \"${PRE_PROMPT}\""
 	if [[ -n ${PROMPT_KEY} ]] &&
 	   [[ ${BASH_EXECUTION_STRING/%\ *} != rsync ]] &&
 	   [[ ${BASH_EXECUTION_STRING/%\ *} != scp ]]; then
-		eval "echo -ne \"${PRE_PROMPT}\""
+		eval "echo -en \"${PRE_PROMPT}\""
 	fi
 fi
 
@@ -545,7 +545,7 @@ function edit {
 			else
 				FILE="$(which ${FILE} 2>/dev/null)"
 			fi
-			echo -ne "\n----------[ ${FILE} ]----------\n"
+			echo -en "\n----------[ ${FILE} ]----------\n"
 			${DIFF} -r ${FILE/zactive/zbackup} ${FILE}
 		done
 	elif [[ ${1} == -g ]]; then
@@ -613,12 +613,12 @@ function email-copy {
 	declare SRC="${1}"
 	declare DST="${2}"
 	if [[ -d ${SRC} ]] && [[ -d ${DST} ]]; then
-		echo -ne "set mbox_type = maildir\n" >${TMPFILE}
-		echo -ne "folder-hook . \"push " >>${TMPFILE}
-			echo -ne "<tag-pattern>~A<enter>" >>${TMPFILE}
-			echo -ne "<tag-prefix><copy-message><kill-line>${DST}<enter>y" >>${TMPFILE}
-			echo -ne "<quit>y" >>${TMPFILE}
-		echo -ne "\"\n" >>${TMPFILE}
+		echo -en "set mbox_type = maildir\n" >${TMPFILE}
+		echo -en "folder-hook . \"push " >>${TMPFILE}
+			echo -en "<tag-pattern>~A<enter>" >>${TMPFILE}
+			echo -en "<tag-prefix><copy-message><kill-line>${DST}<enter>y" >>${TMPFILE}
+			echo -en "<quit>y" >>${TMPFILE}
+		echo -en "\"\n" >>${TMPFILE}
 		sudo -H -u \#1000 mutt \
 			-nF ${TMPFILE} \
 			-zRf ${SRC}
@@ -699,7 +699,7 @@ function git-purge {
 	if [[ -z ${PURGE} ]] ||
 	   [[ -z ${_HEAD} ]] ||
 	   [[ ${PURGE} == ${_HEAD} ]]; then
-		echo -ne "\n !!! ERROR IN PURGE REQUEST !!!\n\n" >&2
+		echo -en "\n !!! ERROR IN PURGE REQUEST !!!\n\n" >&2
 		return 1
 	fi
 	${GIT} filter-branch \
@@ -872,11 +872,11 @@ function rater {
 		DEVS="eth0.91 eth0.92 eth1.251 eth1.252 eth1.253 eth1.255"
 	fi
 	for DEV in ${DEVS}; do
-		echo -ne "\n ${DEV}:\n"
+		echo -en "\n ${DEV}:\n"
 		tc -d -s filter show dev ${DEV}
-		echo -ne "\n"
+		echo -en "\n"
 		tc -d -s qdisc show dev ${DEV}
-		echo -ne "\n"
+		echo -en "\n"
 		tc -d -s class show dev ${DEV}
 	done 2>&1 | ${MORE}
 	return 0
@@ -888,8 +888,8 @@ function reporter {
 	declare CMD="$(basename ${1})"
 	declare SRC="$((${#}-1))"	; SRC="${!SRC}"
 	declare DST="${#}"		; DST="${!DST}"
-	echo -ne "\n reporting [${CMD}]: '${SRC}' -> '${DST}'\n"
-	echo -ne "(${HOSTNAME}:${PWD}) ${@}\n"
+	echo -en "\n reporting [${CMD}]: '${SRC}' -> '${DST}'\n"
+	echo -en "(${HOSTNAME}:${PWD}) ${@}\n"
 	time "${@}" || return 1
 	return 0
 }
