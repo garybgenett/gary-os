@@ -186,6 +186,8 @@ openldap
 dev-perl/DateManip			#>>> perl-date-manip
 dev-perl/libwww-perl			#>>> perl-libwww
 
+cvs
+cvsps
 expect
 git
 metastore				# gentoo overlay
