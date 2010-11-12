@@ -101,7 +101,7 @@ export PS1='\
 \n\
 [\u@\h]:[\D{%a/%j_%FT%T%z}]\
 \n\
-[\#/\!]\033k\033\\:\w\$'
+[\#/\!]\[\033k\033\\\]:\w\$'
 
 declare PRE_PROMPT='\
 \033]0;\
@@ -117,12 +117,12 @@ if [[ ${PROMPT} == basic ]]; then
 	export PROMPT="basic"
 	export PROMPT_KEY=
 	export PROMPT_COMMAND=
-	export PS1='[\!]\033k\033\\:\W\$'
+	export PS1='[\!]\[\033k\033\\\]:\W\$'
 elif [[ ${PROMPT} == simple ]]; then
 	export PROMPT="simple"
 	export PROMPT_KEY=
 	export PROMPT_COMMAND=
-	export PS1='\n[\u@\h]\n[\#/\!]\033k\033\\:\W\$'
+	export PS1='\n[\u@\h]\n[\#/\!]\[\033k\033\\\]:\W\$'
 else
 	if [[ -z ${PROMPT} ]]; then
 		export PROMPT=
