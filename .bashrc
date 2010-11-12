@@ -406,6 +406,18 @@ function git {
 
 ########################################
 
+function git-clone {
+	if [[ ${1} == svn ]]; then
+		shift
+		${GIT_SVN} clone --verbose "${@}"
+	else
+		${GIT} clone --verbose "${@}"
+	fi
+	${MV} "${#}/.git" "${#}.git"
+}
+
+########################################
+
 function git-list {
 	${GIT_CMD} log --pretty=format:"%ai %H %s %d" "${@}"
 }
