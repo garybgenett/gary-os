@@ -175,8 +175,7 @@ export LU="${DU} -ak --max-depth 1"		; alias lu="${LU}"
 
 ########################################
 
-export GIT_CMD="git"
-export GIT="reporter ${GIT_CMD}"		; alias git="${GIT}"
+export GIT="reporter git"			; alias git="${GIT}"
 export GIT_ADD="${GIT} add --verbose"		; alias git-add="${GIT_ADD}"
 export GIT_CMT="${GIT} commit --verbose"	; alias git-commit="${GIT_CMT}"
 export GIT_STS="${GIT} status"			; alias git-status="${GIT_STS}"
@@ -419,7 +418,7 @@ function git-clone {
 ########################################
 
 function git-list {
-	${GIT_CMD} log --pretty=format:"%ai %H %s %d" "${@}"
+	git log --pretty=format:"%ai %H %s %d" "${@}"
 }
 
 ########################################
@@ -682,7 +681,7 @@ function git-logdir {
 	declare LAST_P="$(ls ${GITDIR}/cur 2>/dev/null |
 		sort -n |
 		tail -n1)"
-	declare FROM_C="$(${GIT_CMD} log --full-index --pretty=oneline |
+	declare FROM_C="$(git log --full-index --pretty=oneline |
 		tail -n1 |
 		cut -d' ' -f1)"
 	declare FROM_N="1"
@@ -708,8 +707,8 @@ function git-logdir {
 
 function git-purge {
 	declare MEM_DIR="/dev/shm"
-	declare PURGE="$(${GIT_CMD} rev-parse "HEAD@{${1}}")" && shift
-	declare _HEAD="$(${GIT_CMD} rev-parse "HEAD")"
+	declare PURGE="$(git rev-parse "HEAD@{${1}}")" && shift
+	declare _HEAD="$(git rev-parse "HEAD")"
 	if [[ -z ${PURGE} ]] ||
 	   [[ -z ${_HEAD} ]] ||
 	   [[ ${PURGE} == ${_HEAD} ]]; then
@@ -1015,7 +1014,7 @@ function vdiff {
 		[[ ${1} == -c ]]	&& TREE="--cached HEAD"		&& shift
 		[[ ${1} == -i ]]	&& TREE=""			&& shift
 		echo "diff" >${VDIFF}
-		${GIT_CMD} diff ${GIT_FMT} ${DIFF_OPTS} ${TREE} "${@}" >>${VDIFF} 2>&1
+		git diff ${GIT_FMT} ${DIFF_OPTS} ${TREE} "${@}" >>${VDIFF} 2>&1
 	elif [[ ${1} == -l ]] ||
 	     [[ ${1} == -s ]]; then
 		declare DIFF="${DIFF_OPTS}"
@@ -1025,7 +1024,7 @@ function vdiff {
 		declare FOLLOW=
 		declare FILE="${#}"
 		(( ${FILE} > 0 )) && [[ -f ${!FILE} ]] && FOLLOW="--follow"
-		${GIT_CMD} log ${GIT_FMT} ${DIFF} ${FOLLOW} "${@}" >${VDIFF} 2>&1
+		git log ${GIT_FMT} ${DIFF} ${FOLLOW} "${@}" >${VDIFF} 2>&1
 	else
 		diff ${DIFF_OPTS} "${@}" >${VDIFF}
 	fi
