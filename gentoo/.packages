@@ -187,6 +187,7 @@ dev-perl/DateManip			#>>> perl-date-manip
 dev-perl/libwww-perl			#>>> perl-libwww
 
 cvs
+cvs2svn
 cvsps
 expect
 git

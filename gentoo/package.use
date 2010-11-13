@@ -26,6 +26,7 @@ sys-devel/gcc				-gtk
 ########################################
 
 app-portage/layman			subversion
+dev-vcs/cvs2svn				git
 dev-vcs/git				subversion
 
 ########################################
