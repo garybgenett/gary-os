@@ -409,11 +409,12 @@ function git {
 function git-clone {
 	if [[ ${1} == svn ]]; then
 		shift
-		${GIT_SVN} clone --verbose "${@}"
+		reporter $(which git) svn clone "${@}"
 	else
-		${GIT} clone --verbose "${@}"
+		reporter $(which git) clone --verbose "${@}"
 	fi
-	${MV} "${#}/.git" "${#}.git"
+	(cd ${!#} &&
+		${MV} "${PWD}/.git" "${PWD}.git")
 }
 
 ########################################
