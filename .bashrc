@@ -359,6 +359,7 @@ alias trust="_sync archive"
 alias vlc="vlc -I ncurses --no-color --fullscreen"
 alias vlc-help="vlc --help --full-help --longhelp --advanced 2>&1 | ${MORE}"
 alias vlc-play="vlc ${HOME}/setup/_misc/playlist.m3u"
+alias vlc-rc="nc 127.0.0.1 4212"
 alias web="w3m google.com"
 
 ################################################################################
