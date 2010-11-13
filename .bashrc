@@ -359,7 +359,6 @@ alias trust="_sync archive"
 alias vlc="vlc -I ncurses --no-color --fullscreen"
 alias vlc-help="vlc --help --full-help --longhelp --advanced 2>&1 | ${MORE}"
 alias vlc-play="vlc ${HOME}/setup/_misc/playlist.m3u"
-alias vlc-rc="nc 127.0.0.1 4212"
 alias web="w3m google.com"
 
 ################################################################################
@@ -473,6 +472,14 @@ function psk {
 function mirror {
 	declare PREFIX="$(echo "${!#}" | ${SED} "s|^(http\|ftp)[s]?://||g" | ${SED} "s|^([^/]+)/.+$|\1|g")-$(date +%Y.%m.%d)"
 	${WGET} -P "${PREFIX}" "${@}" 2>&1 | tee -a ${PREFIX}.log
+}
+
+function vlc-rc {
+	if [[ -n ${@} ]]; then
+		echo "${@}" | nc -q 1 127.0.0.1 4212
+	else
+		nc 127.0.0.1 4212
+	fi
 }
 
 ################################################################################
