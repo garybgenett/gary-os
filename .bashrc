@@ -647,9 +647,6 @@ function email-copy {
 function git-backup {
 	declare FAIL=
 	if [[ -n "$(which metastore)" ]]; then
-#>>>		${METASTORE} --compare |
-#>>>			${GREP} -v "no difference" |
-#>>>			sort >+metastore.diff					|| FAIL="1"
 		${METASTORE} --save						|| FAIL="1"
 	fi
 	${GIT_ADD} ./								|| return 1
