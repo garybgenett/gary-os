@@ -121,6 +121,7 @@ gentoo-bashcomp
 gentoo-sources
 app-vim/gentoo-syntax			#>>> gentoo-syntax
 gentoolkit
+gentoolkit-dev
 layman
 portage
 portage-utils
