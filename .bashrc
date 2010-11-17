@@ -1051,6 +1051,14 @@ function vpn {
 			-i ${HOME}/.ssh/remote_id \
 			-R 65535:127.0.0.1:22 \
 			plastic@me.garybgenett.net
+	elif [[ ${1} == -v ]]; then
+		declare SRC="root@me.garybgenett.net:/.g/_data/zactive"
+		${RSYNC_U} ${SRC}/.setup/openvpn/openvpn.conf+VPN			/etc/openvpn/openvpn.conf
+		${RSYNC_U} ${SRC}/.static/.openssl/server-ca.garybgenett.net.crt	/etc/openvpn
+		${RSYNC_U} ${SRC}/.static/.openssl/client.garybgenett.net.*		/etc/openvpn
+		echo "1" >/proc/sys/net/ipv4/ip_forward
+		/etc/init.d/openvpn restart
+		tail -f /var/log/syslog
 	fi
 	return 0
 }
