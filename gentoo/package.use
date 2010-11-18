@@ -39,6 +39,7 @@ net-print/cups				samba
 ################################################################################
 
 app-text/lcdf-typetools			kpathsea	# gentoo required
+app-text/texlive-core			xetex		# gentoo required
 media-libs/freetype			kpathsea	# gentoo required
 
 ########################################
