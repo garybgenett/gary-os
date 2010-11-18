@@ -177,9 +177,15 @@ nss
 
 gtk+
 gtk-doc
-qt
 tk
 wxGTK
+
+qt-assistant
+qt-core
+qt-demo
+qt-gui
+qt-test
+#>>>qt
 
 cyrus-sasl
 openldap
