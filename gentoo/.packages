@@ -190,11 +190,13 @@ dev-perl/libwww-perl			#>>> perl-libwww
 cvs
 cvs2svn
 cvsps
-expect
+
 git
 gitosis
-metastore				# gentoo overlay
 qgit
+
+expect
+metastore				# gentoo overlay
 sash
 zsh
 
