@@ -1055,7 +1055,9 @@ function vpn {
 		declare SRC="root@me.garybgenett.net:/.g/_data/zactive"
 		${RSYNC_U} ${SRC}/.setup/openvpn/openvpn.conf+VPN			/etc/openvpn/openvpn.conf
 		${RSYNC_U} ${SRC}/.static/.openssl/server-ca.garybgenett.net.crt	/etc/openvpn
-		${RSYNC_U} ${SRC}/.static/.openssl/client.garybgenett.net.*		/etc/openvpn
+		${RSYNC_U} ${SRC}/.static/.openssl/vpn-client.garybgenett.net.*		/etc/openvpn
+		fwinit off
+		iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 		echo "1" >/proc/sys/net/ipv4/ip_forward
 		/etc/init.d/openvpn restart
 		tail -f /var/log/syslog
