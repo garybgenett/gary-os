@@ -193,6 +193,7 @@ cvsps
 expect
 git
 metastore				# gentoo overlay
+qgit
 sash
 zsh
 
