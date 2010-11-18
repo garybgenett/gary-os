@@ -2,7 +2,6 @@
 # portage package unmask file
 ################################################################################
 
-=x11-libs/qt-4*
 >=x11-drivers/nvidia-drivers-260
 games-roguelike/nethack
 media-tv/xbmc
