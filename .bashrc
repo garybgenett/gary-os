@@ -442,14 +442,6 @@ function ldir {
 
 ########################################
 
-function nxrun {
-	prompt -d 8
-	_menu ${@}
-	tail -f /.runit/log/nxproxys
-}
-
-########################################
-
 function pages {
 	calc "$(lynx -dump "${@}" | wc -l) / 60"
 }
