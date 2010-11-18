@@ -375,10 +375,6 @@ obconf
 #>>>qemu				# conflicts with "qemu-kvm"
 qemu-kvm
 
-nxclient
-nxnode
-nxserver-freeedition			#>>> nxserver
-
 aumix
 feh
 firefox
