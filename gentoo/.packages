@@ -192,6 +192,7 @@ cvs2svn
 cvsps
 expect
 git
+gitosis
 metastore				# gentoo overlay
 qgit
 sash
