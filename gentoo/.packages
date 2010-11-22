@@ -116,6 +116,7 @@ zziplib
 # gentoo packages
 
 eselect
+gcc-config
 genkernel
 gentoo-bashcomp
 gentoo-sources
