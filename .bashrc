@@ -842,8 +842,6 @@ function prompt {
 			MAKEFLAGS="${MAKEFLAGS}" \
 			CCACHE_DIR="${CCACHE_DIR}" \
 			CCACHE_LOGFILE="${CCACHE_LOGFILE}" \
-			JAVA_HOME="${JAVA_HOME}" \
-			JAVAC="${JAVAC}" \
 			PATH="${PATH}" \
 			${CMD} || return 1
 		return 0
