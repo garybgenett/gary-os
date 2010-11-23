@@ -123,6 +123,7 @@ gentoo-sources
 app-vim/gentoo-syntax			#>>> gentoo-syntax
 gentoolkit
 gentoolkit-dev
+java-config
 layman
 portage
 portage-utils
@@ -419,6 +420,7 @@ xvkbd
 
 adobe-flash				# binary package
 sun-jdk					# binary package
+'<=sun-jdk-1.6'				# binary package
 virtualbox-bin				# binary package
 
 openoffice
