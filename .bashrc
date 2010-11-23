@@ -329,10 +329,6 @@ alias mangler="iptables -L -nvx --line-numbers -t mangle | ${MORE}"
 
 ########################################
 
-alias adb="$(ls /.g/_data/source/android/android-sdk-linux*/tools/adb 2>/dev/null)"
-if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
-	alias adb="\"$(ls "${SYSTEMROOT}/android-sdk-windows/tools/adb" 2>/dev/null)\""
-fi
 alias clean="_sync clean"
 alias clock="clockywock"
 alias cryptsetup="cryptsetup --hash sha256 --cipher aes-cbc-essiv:sha256 --key-size 256"
