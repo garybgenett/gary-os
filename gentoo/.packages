@@ -398,12 +398,11 @@ mplayer
 picard
 quodlibet
 rdesktop
-realvnc-enterprise			#>>> realvnc	# gentoo overlay
 rtorrent
 rxvt
 rxvt-unicode
 thunderbird
-#>>>tightvnc				# conflicts with "realvnc"
+tigervnc
 transset-df
 vlc
 w3m
