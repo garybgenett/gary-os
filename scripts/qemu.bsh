@@ -82,6 +82,8 @@ ${QEMU} \
 	-m ${QMEM} \
 	${QEMU_NET} \
 	-redir ${SSH} \
+	-vga std \
+	-soundhw hda \
 	-usb \
 	-usbdevice tablet \
 	${QOPT} \
