@@ -433,8 +433,12 @@ function git-patch {
 ########################################
 
 function git-save {
+	declare MESSAGE="${FUNCNAME}"
+	if [[ -n ${1} ]]; then
+		MESSAGE="${1}"
+	fi
 	${GIT_ADD} ./							|| return 1
-	${GIT_CMT} --all --message="[${FUNCNAME} :: $(date --iso=s)]"	|| return 1
+	${GIT_CMT} --all --message="[${MESSAGE} :: $(date --iso=s)]"	|| return 1
 	return 0
 }
 
