@@ -75,7 +75,7 @@ fi
 
 export SDL_VIDEO_X11_DGAMOUSE="0"
 export SDL_VIDEO_X11_MOUSEACCEL="0/0/0"
-export QEMU_AUDIO_DRV="pa"
+export QEMU_AUDIO_DRV="alsa"
 ${QEMU} \
 	-name ${NAME} \
 	-monitor stdio \
