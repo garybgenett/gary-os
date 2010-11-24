@@ -647,7 +647,7 @@ function git-backup {
 		${METASTORE} --save		|| FAIL="1"
 	fi
 	git-save ${FUNCNAME}			|| return 1
-	if [[ -n "${1}" ]]; then
+	if [[ -n ${1} ]]; then
 		{ git-purge "${1}" &&
 			${RM} ${PWD}.gitlog; }	|| FAIL="1"
 	fi
