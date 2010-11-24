@@ -432,6 +432,14 @@ function git-patch {
 
 ########################################
 
+function git-save {
+	${GIT_ADD} ./							|| return 1
+	${GIT_CMT} --all --message="[${FUNCNAME} :: $(date --iso=s)]"	|| return 1
+	return 0
+}
+
+########################################
+
 function ldir {
 	${LL} -R "${@}" | more
 }
