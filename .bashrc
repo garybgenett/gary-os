@@ -650,17 +650,17 @@ function email-copy {
 
 function git-backup {
 	declare FAIL=
-	${LL} -R >+index							|| FAIL="1"
+	${LL} -R >+index						|| FAIL="1"
 	if [[ -n "$(which metastore)" ]]; then
-		${METASTORE} --save						|| FAIL="1"
+		${METASTORE} --save					|| FAIL="1"
 	fi
-	${GIT_ADD} ./								|| return 1
-	${GIT_CMT} --all --message="[${FUNCNAME} :: $(date --iso=s)]"		|| return 1
+	${GIT_ADD} ./							|| return 1
+	${GIT_CMT} --all --message="[${FUNCNAME} :: $(date --iso=s)]"	|| return 1
 	if [[ -n "${1}" ]]; then
 		{ git-purge "${1}" &&
-			${RM} ${PWD}.gitlog; }					|| FAIL="1"
+			${RM} ${PWD}.gitlog; }				|| FAIL="1"
 	fi
-#>>>	git-logdir								|| FAIL="1"
+#>>>	git-logdir							|| FAIL="1"
 	if [[ -n ${FAIL} ]]; then
 		return 1
 	fi
