@@ -314,6 +314,7 @@ nfs-utils
 # tools
 
 apache
+awstats
 bind
 cups
 dhcp
