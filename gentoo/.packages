@@ -341,6 +341,7 @@ htop
 lynx
 rsync
 screen
+taglist					#>>> gvim-taglist
 vim-spell-en
 wget
 
