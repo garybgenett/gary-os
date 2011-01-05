@@ -10,6 +10,10 @@ media-sound/pulseaudio			avahi		# gentoo required
 sys-auth/consolekit			policykit	# gentoo required
 sys-libs/ncurses			static-libs	# gentoo required
 
+app-emulation/libvirt			python		# gentoo required
+net-libs/gtk-vnc			python		# gentoo required
+x11-libs/vte				python		# gentoo required
+
 ########################################
 
 app-office/openoffice			-debug java	# required to build
