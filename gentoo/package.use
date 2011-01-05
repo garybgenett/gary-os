@@ -7,6 +7,7 @@ app-text/poppler			cairo		# gentoo required
 dev-libs/libxml2			python		# gentoo required
 media-libs/libsdl			joystick	# gentoo required
 media-sound/pulseaudio			avahi		# gentoo required
+sys-auth/consolekit			policykit	# gentoo required
 sys-libs/ncurses			static-libs	# gentoo required
 
 ########################################
@@ -37,6 +38,8 @@ net-fs/samba				cups
 net-print/cups				samba
 
 ################################################################################
+
+sys-block/parted			device-mapper	# gentoo required
 
 app-text/lcdf-typetools			kpathsea	# gentoo required
 app-text/texlive-core			xetex		# gentoo required
