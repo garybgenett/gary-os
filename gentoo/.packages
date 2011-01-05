@@ -285,7 +285,7 @@ ltrace
 minicom
 nano
 net-tools
-netcat
+netcat6
 netkit-base
 nmap
 ntfs3g
@@ -388,6 +388,11 @@ obconf
 
 #>>>qemu				# conflicts with "qemu-kvm"
 qemu-kvm
+xen
+xen-sources
+xen-tools
+libvirt
+virt-manager
 
 aumix
 feh
