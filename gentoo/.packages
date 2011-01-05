@@ -429,7 +429,7 @@ sun-jdk					# binary package
 '<=sun-jdk-1.6'				# binary package
 virtualbox-bin				# binary package
 
-openoffice
+openoffice				#>>> MAKEFLAGS="-j1" emerge openoffice
 
 cdparanoia
 cdrdao
