@@ -53,6 +53,7 @@ media-libs/freetype			kpathsea	# gentoo required
 
 app-text/enchant			aspell -hunspell
 mail-client/mutt			sidebar
+mail-client/thunderbird			ldap
 net-analyzer/tcpdump			-chroot
 x11-drivers/nvidia-drivers		-acpi
 
