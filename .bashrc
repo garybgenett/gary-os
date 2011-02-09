@@ -735,6 +735,98 @@ function git-save {
 
 ########################################
 
+function index-dir {
+	declare INDEX_D="${PWD}"
+	declare INDEX_N="10"
+	if [[ -d "${1}" ]]; then
+		INDEX_D="${1}"
+		shift
+	fi
+	if [[ "${1}" == +([0-9]) ]]; then
+		INDEX_N="$(((${1}*3)+1))"
+		shift
+	fi
+	declare EXCL_PATHS=
+	declare EXCL_PATH=
+	for EXCL_PATH in "${@}"; do
+		EXCL_PATHS="${EXCL_PATHS} ( -path ${EXCL_PATH} -prune ) -o"
+	done
+	declare IO_NICE="ionice -c2 -n7"
+	declare INDEX_I="${INDEX_D}/+index"
+	declare CUR_IDX="${INDEX_I}/$(date --iso=s)"
+	declare LST_IDX="$(find ${INDEX_I} -type d 2>/dev/null | sort | tail -n1)"
+	declare I_FILES="${CUR_IDX}/files.txt"
+	declare I_FLIST="${CUR_IDX}/files.listing.txt"
+	declare I_FHASH="${CUR_IDX}/files.md5.txt"
+	declare I_UREPT="${CUR_IDX}/usage.report.txt"
+	declare I_USAGE="${CUR_IDX}/usage.txt"
+	declare I_DIFF_="${CUR_IDX}_diff.txt"
+	declare I_ERROR="${CUR_IDX}_errors.txt"
+	(cd ${INDEX_I} 2>/dev/null && ${RM} $(ls | sort -r | tail -n+${INDEX_N}))
+	${MKDIR} ${CUR_IDX}
+	for FILE in ${I_FILES} ${I_FLIST} ${I_FHASH} ${I_UREPT} ${I_USAGE} ${I_DIFF_} ${I_ERROR}; do
+		cat /dev/null >${FILE}
+	done
+	(cd ${INDEX_D} && ${IO_NICE} ${LL} -R)				>>${I_FLIST}		2>>${I_ERROR}
+	(cd ${INDEX_D} && ${IO_NICE} find .)				>>${I_FILES}		2>>${I_ERROR}
+		sort ${I_FILES}						 >${I_FILES}.sorted &&	${MV} ${I_FILES}.sorted ${I_FILES}
+	(cd ${INDEX_D} && ${IO_NICE} find . \
+		${EXCL_PATHS} \
+		\( -type f -print0 \) |
+			xargs \
+			-0 \
+			--max-procs=2 \
+			--max-args=10 \
+			${IO_NICE} md5sum)				>>${I_FHASH}		2>>${I_ERROR}
+		sort -k2 ${I_FHASH}					 >${I_FHASH}.sorted &&	${MV} ${I_FHASH}.sorted ${I_FHASH}
+	(cd ${INDEX_D} && ${IO_NICE} ${DU} .)				>>${I_USAGE}		2>>${I_ERROR}
+		sort -k3 -t$'\t' ${I_USAGE}				 >${I_USAGE}.sorted &&	${MV} ${I_USAGE}.sorted ${I_USAGE}
+	(cd ${INDEX_D} && for DIR in \
+		$(find . -mindepth 1 -maxdepth 3 -type d); do
+			${GREP} -m1 "$(echo "${DIR}" |
+			${SED} "s/([+.])/\\\\\1/g")$" ${I_USAGE}; \
+		done)							>>${I_UREPT}		2>>${I_ERROR}
+		echo -en "<MARK>"					 >${I_UREPT}.sorted	2>>${I_ERROR}
+		head -n1 ${I_USAGE}					>>${I_UREPT}.sorted	2>>${I_ERROR}
+		for DIR in \
+			$(sort -nr ${I_UREPT} |
+			cut -f3 |
+			sed "s/^[.][/]//g" |
+			${GREP} -v "[/]"); do
+			echo -en "<MARK>"				>>${I_UREPT}.sorted	2>>${I_ERROR}
+			${GREP} "[.][/]$(echo "${DIR}" |
+			${SED} "s/([+.])/\\\\\1/g")([/]|$)" ${I_UREPT} |
+			sort -nr					>>${I_UREPT}.sorted	2>>${I_ERROR}
+		done;										${MV} ${I_UREPT}.sorted ${I_UREPT}
+		cat ${I_UREPT} |
+			perl -e 'while (<>) {
+				if ($_ =~ /^$/) {
+					print "\n";
+					next;
+				};
+				my($size, $date, $file) = split(/\t/, $_);
+				$size = reverse($size);
+				$size =~ s/([0-9]{3})/\1\ /g;
+				$size = reverse($size);
+				if ($size =~ /^<MARK>/) {
+					$size =~ s/^<MARK>//g;
+					print "-"x7 .">";
+					printf("%21s", $size);
+				} else {
+					printf("%29s", $size);
+				};
+				print "\t${date}\t${file}";
+			}'						 >${I_UREPT}.format	2>>${I_ERROR} &&
+												${MV} ${I_UREPT}.format ${I_UREPT}
+												${LN} ${I_UREPT} ${INDEX_I}_usage.txt
+	for FILE in $(ls ${CUR_IDX}); do
+		diff -ru -U10 ${LST_IDX}/${FILE} ${CUR_IDX}/${FILE}	>>${I_DIFF_}		2>&1
+	done
+	return 0
+}
+
+########################################
+
 function journal {
 	declare JOURNAL_DIR="/.g/_data/zactive/_pim/journal"
 	if [[ -d "${1}" ]]; then
