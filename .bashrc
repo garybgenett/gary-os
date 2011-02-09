@@ -642,7 +642,7 @@ function email-copy {
 
 function git-backup {
 	declare FAIL=
-	${LL} -R >+index			|| FAIL="1"
+	${LL} -R >+listing			|| FAIL="1"
 	if [[ -n "$(which metastore)" ]]; then
 		${METASTORE} --save		|| FAIL="1"
 	fi
