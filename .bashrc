@@ -445,7 +445,7 @@ function pages {
 ########################################
 
 function psg {
-	$(which ps) -uww -p $(pgrep -d, -f "${@}" | ${SED} "s/[,]$//g")
+	$(which ps) u -ww -p $(pgrep -d, -f "${@}" | ${SED} "s/[,]$//g")
 }
 
 ########################################
