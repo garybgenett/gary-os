@@ -395,6 +395,7 @@ libvirt
 virt-manager
 
 aumix
+evince
 feh
 firefox
 sci-visualization/gnuplot		#>>> gnuplot
