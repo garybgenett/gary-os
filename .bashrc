@@ -1102,6 +1102,76 @@ function shell {
 
 ########################################
 
+function sync-dir {
+	declare BAS_DIR="${PWD}"
+	declare REP_TYP="${1}" && shift
+	declare REP_SRC="${1}" && shift
+	declare REP_DST="${1}" && shift
+	declare REP_FUL="${1}" && shift
+	${MKDIR} $(dirname ${BAS_DIR}/${REP_DST})
+	if [[ ${REP_TYP} == rsync ]]; then
+		${RSYNC_U/--rsh=ssh } ${REP_SRC}/ ${BAS_DIR}/${REP_DST}
+	elif [[ ${REP_TYP} == git ]]; then
+		if [[ ! -d ${BAS_DIR}/${REP_DST} ]]; then
+			git-clone ${REP_SRC} ${BAS_DIR}/${REP_DST}
+		fi
+		(cd ${BAS_DIR}/${REP_DST} &&
+			${GIT} pull)
+	elif [[ ${REP_TYP} == svn ]]; then
+		if [[ ! -d ${BAS_DIR}/${REP_DST} ]]; then
+			git-clone svn ${REP_SRC} ${BAS_DIR}/${REP_DST}
+			(cd ${BAS_DIR}/${REP_DST} &&
+				${GIT} checkout --force)
+		fi
+		(cd ${BAS_DIR}/${REP_DST} &&
+			${GIT_SVN} fetch &&
+			${GIT_SVN} rebase &&
+			${GIT} checkout --force)
+	elif [[ ${REP_TYP} == cvs ]]; then
+		declare CVSROOT=":pserver:anonymous@${REP_SRC/%\/=\/*}"
+		declare CVS_MOD="${REP_SRC/#*\/=\/}"
+		(cd ${BAS_DIR} &&
+			${CVS} -d ${CVSROOT} checkout -d ${REP_DST} ${CVS_MOD})
+		if [[ -n ${REP_FUL} ]]; then
+			(cd ${BAS_DIR}/${REP_DST} &&
+				${GIT} -c i18n.commitencoding=ascii cvsimport -akmR)
+		fi
+	elif [[ ${REP_TYP} == repo ]]; then
+		if [[ ! -d ${BAS_DIR}/${REP_DST} ]]; then
+			${MKDIR} ${BAS_DIR}/${REP_DST}
+			(cd ${BAS_DIR}/${REP_DST} &&
+				reporter ${BAS_DIR}/repo/repo \
+					init -u ${REP_SRC//\/=\// })
+		fi
+		(cd ${BAS_DIR}/${REP_DST} &&
+			reporter ${BAS_DIR}/repo/repo sync)
+	fi
+	if [[ ${REP_TYP} == rsync ]] &&
+	   [[ -n $(echo "${REP_DST}" | ${GREP} "CVSROOT$") ]]; then
+		declare NEW_DST="${BAS_DIR}/${REP_DST/%\/CVSROOT}"
+		(cd ${BAS_DIR} &&
+			${CVS} -d ${NEW_DST} checkout -d ${NEW_DST}.dir CVSROOT)
+		if [[ -n ${REP_FUL} ]]; then
+			${MKDIR} ${NEW_DST}.git
+			(cd ${NEW_DST}.git &&
+				reporter cvs2git \
+					--encoding		ascii \
+					--fallback-encoding	ascii \
+					--username		cvs2git \
+					--tmpdir		cvs2git.tmp \
+					--blobfile		cvs2git.blob \
+					--dumpfile		cvs2git.dump \
+					${NEW_DST} &&
+				${GIT} init &&
+				cat cvs2git.blob cvs2git.dump | ${GIT} fast-import &&
+				${GIT} checkout --force)
+		fi
+	fi
+	return 0
+}
+
+########################################
+
 function vdiff {
 	declare VDIFF="/tmp/vdiff"
 	declare SEARCH=
