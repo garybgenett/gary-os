@@ -1109,8 +1109,14 @@ function sync-dir {
 	declare REP_DST="${1}" && shift
 	declare REP_FUL="${1}" && shift
 	${MKDIR} $(dirname ${BAS_DIR}/${REP_DST})
-	if [[ ${REP_TYP} == rsync ]]; then
-		${RSYNC_U/--rsh=ssh } ${REP_SRC}/ ${BAS_DIR}/${REP_DST}
+	if [[ ${REP_TYP} == repo ]]; then
+		if [[ ! -d ${BAS_DIR}/${REP_DST} ]]; then
+			${MKDIR} ${BAS_DIR}/${REP_DST}
+			(cd ${BAS_DIR}/${REP_DST} &&
+				reporter ${BAS_DIR}/repo/repo init -u ${REP_SRC//\/=\// })
+		fi
+		(cd ${BAS_DIR}/${REP_DST} &&
+			reporter ${BAS_DIR}/repo/repo sync)
 	elif [[ ${REP_TYP} == git ]]; then
 		if [[ ! -d ${BAS_DIR}/${REP_DST} ]]; then
 			git-clone ${REP_SRC} ${BAS_DIR}/${REP_DST}
@@ -1136,35 +1142,27 @@ function sync-dir {
 			(cd ${BAS_DIR}/${REP_DST} &&
 				${GIT} -c i18n.commitencoding=ascii cvsimport -akmR)
 		fi
-	elif [[ ${REP_TYP} == repo ]]; then
-		if [[ ! -d ${BAS_DIR}/${REP_DST} ]]; then
-			${MKDIR} ${BAS_DIR}/${REP_DST}
-			(cd ${BAS_DIR}/${REP_DST} &&
-				reporter ${BAS_DIR}/repo/repo \
-					init -u ${REP_SRC//\/=\// })
-		fi
-		(cd ${BAS_DIR}/${REP_DST} &&
-			reporter ${BAS_DIR}/repo/repo sync)
-	fi
-	if [[ ${REP_TYP} == rsync ]] &&
-	   [[ -n $(echo "${REP_DST}" | ${GREP} "CVSROOT$") ]]; then
-		declare NEW_DST="${BAS_DIR}/${REP_DST/%\/CVSROOT}"
-		(cd ${BAS_DIR} &&
-			${CVS} -d ${NEW_DST} checkout -d ${NEW_DST}.dir CVSROOT)
-		if [[ -n ${REP_FUL} ]]; then
-			${MKDIR} ${NEW_DST}.git
-			(cd ${NEW_DST}.git &&
-				reporter cvs2git \
-					--encoding		ascii \
-					--fallback-encoding	ascii \
-					--username		cvs2git \
-					--tmpdir		cvs2git.tmp \
-					--blobfile		cvs2git.blob \
-					--dumpfile		cvs2git.dump \
-					${NEW_DST} &&
-				${GIT} init &&
-				cat cvs2git.blob cvs2git.dump | ${GIT} fast-import &&
-				${GIT} checkout --force)
+	elif [[ ${REP_TYP} == rsync ]]; then
+		${RSYNC_U/--rsh=ssh } ${REP_SRC}/ ${BAS_DIR}/${REP_DST}
+		if [[ -n $(echo "${REP_DST}" | ${GREP} "CVSROOT$") ]]; then
+			declare NEW_DST="${BAS_DIR}/${REP_DST/%\/CVSROOT}"
+			(cd ${BAS_DIR} &&
+				${CVS} -d ${NEW_DST} checkout -d ${NEW_DST}.dir CVSROOT)
+			if [[ -n ${REP_FUL} ]]; then
+				${MKDIR} ${NEW_DST}.git
+				(cd ${NEW_DST}.git &&
+					reporter cvs2git \
+						--encoding		ascii \
+						--fallback-encoding	ascii \
+						--username		cvs2git \
+						--tmpdir		cvs2git.tmp \
+						--blobfile		cvs2git.blob \
+						--dumpfile		cvs2git.dump \
+						${NEW_DST} &&
+					${GIT} init &&
+					cat cvs2git.blob cvs2git.dump | ${GIT} fast-import &&
+					${GIT} checkout --force)
+			fi
 		fi
 	fi
 	return 0
