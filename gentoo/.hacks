@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 ################################################################################
+
+chmod -v 000 /usr/libexec/polkitd
+chmod -v 000 /usr/libexec/udisks-daemon
+chmod -v 000 /usr/libexec/upowerd
+chmod -v 000 /usr/sbin/console-kit-daemon
+
 exit 0
 ################################################################################
 # end of file
