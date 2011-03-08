@@ -151,6 +151,15 @@ for TOKEN in $(cat ${OUT_DIR}/makeconf.vars); do
 	fi
 done
 
+########################################
+
+cat /dev/null >${OUT_DIR}/+okay
+
+for TOKEN in ${OUT_DIR}/*.OKAY; do
+	echo -e "\n${TOKEN/%\.OKAY}" >>${OUT_DIR}/+okay
+	diff ${TOKEN} ${TOKEN/%\.OKAY} >>${OUT_DIR}/+okay
+done
+
 exit 0
 ################################################################################
 # end of file
