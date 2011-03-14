@@ -212,6 +212,7 @@ clisp
 lua
 luarocks
 python
+'<=dev-lang/python-2.7'
 ruby
 rubygems
 
