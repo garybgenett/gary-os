@@ -8,6 +8,8 @@ set autoread
 set secure
 set ttyfast
 
+let loaded_matchparen			=1
+
 "#######################################
 " files
 "#######################################
