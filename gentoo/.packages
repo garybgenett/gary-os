@@ -268,6 +268,7 @@ pciutils
 sysprof
 usbutils
 
+apache-tools
 bc
 bind-tools				#>>> dnsutils
 bridge-utils
