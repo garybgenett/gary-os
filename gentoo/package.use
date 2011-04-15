@@ -18,6 +18,8 @@ dev-libs/libgpg-error			static-libs	# gentoo required
 dev-libs/popt				static-libs	# gentoo required
 sys-libs/ncurses			static-libs	# gentoo required
 
+x11-libs/qt-declarative			webkit		# gentoo required
+
 ########################################
 
 app-office/openoffice			-debug java	# required to build
