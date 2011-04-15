@@ -422,12 +422,7 @@ function git-list {
 ########################################
 
 function git-patch {
-	if [[ ${1} == -l ]]; then
-		shift
-		${GIT} format-patch ${GIT_PAT/--binary/--no-binary} ${DIFF_OPTS} "${@}"
-	else
-		${GIT} format-patch ${GIT_PAT} ${DIFF_OPTS} "${@}"
-	fi
+	${GIT} format-patch ${GIT_PAT} ${DIFF_OPTS} "${@}"
 }
 
 ########################################
@@ -691,7 +686,7 @@ function git-logdir {
 			${SED} "s/^0*//" |
 			${SED} "s/-.+$//g") +1 ))"
 	fi
-	git-patch -l \
+	git-patch \
 		--start-number ${FROM_N} \
 		--output-directory ${GITDIR}/cur \
 		${FROM_C}	|| return 1
