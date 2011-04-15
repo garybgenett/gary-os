@@ -689,7 +689,11 @@ function git-logdir {
 	git-patch \
 		--start-number ${FROM_N} \
 		--output-directory ${GITDIR}/cur \
-		${FROM_C}	|| return 1
+		$(if [[ ${FROM_N} == 1 ]]; then
+			echo "--root"
+		else
+			echo "${FROM_C}"
+		fi)	|| return 1
 	return 0
 }
 
