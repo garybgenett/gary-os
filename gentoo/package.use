@@ -6,7 +6,6 @@ app-text/ghostscript-gpl		cups		# gentoo required
 app-text/poppler			cairo		# gentoo required
 dev-libs/libxml2			python		# gentoo required
 media-libs/libsdl			joystick	# gentoo required
-media-sound/pulseaudio			avahi		# gentoo required
 sys-auth/consolekit			policykit	# gentoo required
 
 app-emulation/libvirt			python		# gentoo required
@@ -58,6 +57,10 @@ media-libs/freetype			kpathsea	# gentoo required
 ########################################
 
 media-video/mplayer			iconv -cdio	# required to build
+
+########################################
+
+media-libs/phonon			-vlc
 
 ########################################
 
