@@ -354,14 +354,6 @@ bluez-hcidump
 #>>>bluez-libs				# no package
 #>>>bluez-utils				# no package
 
-pulseaudio
-libcanberra
-padevchooser
-#>>>paman				# no package
-paprefs
-pavucontrol
-pavumeter
-
 ########################################
 # programs
 
@@ -456,7 +448,6 @@ stella
 xboard
 
 lirc
-projectm-pulseaudio			# gentoo overlay
 xbmc
 
 )
