@@ -48,6 +48,7 @@ net-print/cups				samba
 
 ################################################################################
 
+media-libs/libpng			apng		# gentoo required
 sys-block/parted			device-mapper	# gentoo required
 
 app-text/lcdf-typetools			kpathsea	# gentoo required
