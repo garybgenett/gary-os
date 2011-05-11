@@ -120,6 +120,7 @@ gcc-config
 genkernel
 gentoo-bashcomp
 gentoo-sources
+'=gentoo-sources-2.6.36-r1'
 app-vim/gentoo-syntax			#>>> gentoo-syntax
 gentoolkit
 gentoolkit-dev
@@ -212,7 +213,7 @@ clisp
 lua
 luarocks
 python
-'<=dev-lang/python-2.7'
+#>>>'<=dev-lang/python-2.7'
 ruby
 rubygems
 
