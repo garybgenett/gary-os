@@ -182,11 +182,11 @@ gtk-doc
 tk
 wxGTK
 
-qt-assistant
+#>>>qt-assistant
 qt-core
-qt-demo
+#>>>qt-demo
 qt-gui
-qt-test
+#>>>qt-test
 #>>>qt
 
 cyrus-sasl
