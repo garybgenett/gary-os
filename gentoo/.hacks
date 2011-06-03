@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 ################################################################################
 
+chmod -v 666 /dev/dsp
+chmod -v 666 /dev/mixer
+
 chmod -v 666 /dev/snd/control*
 chmod -v 666 /dev/snd/pcm*
 chmod -v 666 /dev/snd/timer*
