@@ -423,6 +423,7 @@ adobe-flash				# binary package
 sun-jdk					# binary package
 #>>>'<=sun-jdk-1.6'				# binary package
 virtualbox-bin				# binary package
+vmware-server				# binary package
 
 libreoffice
 
