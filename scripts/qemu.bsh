@@ -61,15 +61,16 @@ fi
 declare QEMU="qemu"
 declare QEMU_CPU=""
 declare QEMU_NET="\
-		-net nic			-net user"
+		-net nic,model=e1000		-net user"
 if [[ ${QCPU} == qemu64 ]] ||
    [[ ${QCPU} == qemu32 ]]; then
 	QEMU="qemu-system-x86_64"
 	QEMU_CPU="\
 		-enable-kvm \
-		-cpu ${QCPU}"
+		-cpu ${QCPU} \
+		-smp 2,cores=2"
 	QEMU_NET="\
-		-net nic,vlan=0			-net user,vlan=0 \
+		-net nic,vlan=0,model=e1000	-net user,vlan=0 \
 		-net nic,vlan=1,model=virtio	-net tap,vlan=1,script=no"
 fi
 
