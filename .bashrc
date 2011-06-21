@@ -603,7 +603,10 @@ function email {
 			-e "set copy = no" \
 			"${@}"
 	else
-		sudo -H -u \#1000 EDITOR="${VI} +/^$" mutt \
+		sudo -H -u \#1000 \
+				DISPLAY=":1" \
+				EDITOR="${VI} +/^$" \
+			mutt \
 			-nF ${HOME}/.muttrc \
 			"${@}"
 	fi
