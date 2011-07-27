@@ -296,6 +296,7 @@ ntfs3g
 ntfsprogs
 ppp
 procinfo
+socat
 sshfs-fuse
 ssldump
 strace
