@@ -263,28 +263,32 @@ alias unison="${UNISON_U}"
 
 ########################################
 
-export WGET="wget \
+export WGET_C="wget \
 	--verbose \
 	--user-agent=Mozilla/5.0 \
 	--execute robots=off \
 	--server-response \
 	--restrict-file-names=windows \
 	--no-check-certificate \
-	--recursive \
-	--level=inf \
-	--force-directories \
-	--no-host-directories \
-	--no-parent \
 	--backup-converted \
 	--page-requisites \
-	--html-extension \
+	--adjust-extension \
 	--convert-links \
-	--timestamping \
+	--timestamping"
+
+export WGET_S="${WGET_C} \
+	--force-directories \
+	--no-host-directories \
+	--no-parent"
+
+export WGET_R="${WGET_S} \
+	--recursive \
+	--level=inf \
 	--random-wait \
 	--tries=3 \
 	--wait=3"
 
-#>>>alias wget="${WGET}"
+alias wget="${WGET_C}"
 
 ################################################################################
 # aliases
@@ -453,8 +457,8 @@ function psk {
 ########################################
 
 function mirror {
-	declare PREFIX="$(echo "${!#}" | ${SED} "s|^(http\|ftp)[s]?://||g" | ${SED} "s|^([^/]+)/.+$|\1|g")-$(date +%Y.%m.%d)"
-	${WGET} -P "${PREFIX}" "${@}" 2>&1 | tee -a ${PREFIX}.log
+	declare PREFIX="$(echo "${!#}" | ${SED} "s|^(http\|ftp)[s]?://||g" | ${SED} "s|^([^/]+).*$|\1|g")-$(date --iso)"
+	${WGET_R} -P "${PREFIX}" "${@}" 2>&1 | tee -a ${PREFIX}.log
 }
 
 function vlc-rc {
