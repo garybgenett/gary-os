@@ -643,6 +643,7 @@ function email-copy {
 
 function git-backup {
 	declare FAIL=
+	find . -type d -empty | sort >+empty	|| FAIL="1"
 	${LL} -R >+listing			|| FAIL="1"
 	git-save ${FUNCNAME}			|| return 1
 	if [[ -n ${1} ]]; then
