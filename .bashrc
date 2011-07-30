@@ -267,22 +267,20 @@ alias unison="${UNISON_U}"
 
 export WGET_C="wget \
 	--verbose \
-	--user-agent=Mozilla/5.0 \
 	--execute robots=off \
-	--server-response \
+	--user-agent=Mozilla/5.0 \
 	--restrict-file-names=windows \
 	--no-check-certificate \
-	--backup-converted \
-	--page-requisites \
+	--server-response \
 	--adjust-extension \
-	--convert-links \
 	--timestamping"
-
 export WGET_S="${WGET_C} \
 	--force-directories \
 	--no-host-directories \
-	--no-parent"
-
+	--no-parent \
+	--page-requisites \
+	--convert-links \
+	--backup-converted"
 export WGET_R="${WGET_S} \
 	--recursive \
 	--level=inf \
