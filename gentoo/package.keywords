@@ -6,6 +6,9 @@
 
 app-emulation/qemu-kvm **
 media-tv/xbmc **
+sys-apps/metastore **
+
+>=games-emulation/mekanix-070 **
 
 ################################################################################
 # end of file
