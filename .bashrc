@@ -193,7 +193,6 @@ export GIT_PAT="--full-index --summary --stat=128,128 --attach --binary --keep-s
 export CVS="reporter cvs"							; alias cvs="${CVS}"
 export SVN="reporter svn"							; alias svn="${SVN}"
 
-export METASTORE="metastore --file +metastore --verbose --mtime"		; alias metastore="${METASTORE}"
 export RDP="rdesktop -z -n NULL -g 90% -a 24 -r sound:remote"			; alias rdp="${RDP}"
 export VNC="vncviewer -Shared -FullColor"					; alias vnc="${VNC}"
 export X2VNC="x2vnc -west -tunnel -shared -noblank -lockdelay 60 -timeout 60"	; alias x2vnc="${X2VNC}"
@@ -645,9 +644,6 @@ function email-copy {
 function git-backup {
 	declare FAIL=
 	${LL} -R >+listing			|| FAIL="1"
-	if [[ -n "$(which metastore)" ]]; then
-		${METASTORE} --save		|| FAIL="1"
-	fi
 	git-save ${FUNCNAME}			|| return 1
 	if [[ -n ${1} ]]; then
 		{ git-purge "${1}" &&
