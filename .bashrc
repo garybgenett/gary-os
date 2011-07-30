@@ -59,10 +59,13 @@ export HISTIGNORE=
 
 ########################################
 
-export CARCH="i686"
-export CHOST="i686-pc-linux-gnu"
+#>>>export CARCH="i686"
+#>>>export CHOST="i686-pc-linux-gnu"
+export CARCH="x86_64"
+export CHOST="x86_64-pc-linux-gnu"
 
-export CFLAGS="-march=i686 -mtune=i686 -O2 -ggdb -pipe"
+#>>>export CFLAGS="-march=i686 -mtune=i686 -O2 -ggdb -pipe"
+export CFLAGS="-march=core2 -mtune=core2 -O2 -ggdb -pipe"
 export CXXFLAGS="${CFLAGS}"
 export LDFLAGS="-Wl,--hash-style=gnu -Wl,--as-needed"
 export MAKEFLAGS="-j3"
