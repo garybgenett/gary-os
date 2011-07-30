@@ -164,11 +164,10 @@ unset VISUAL
 
 ########################################
 
-export LS="ls --color=auto"			; alias ls="${LS}"
-export LL="ls --color=auto -asF -l"		; alias ll="${LL}"
-export LX="ls --color=auto -asF -kC"		; alias lx="${LX}"
-export LF="eval ${LL} -d \
-\`find . -maxdepth 1 ! -type l\`"		; alias lf="${LF}"
+export LS="ls --color=auto --time-style=long-iso"		; alias ls="${LS}"
+export LL="${LS} -asF -l"					; alias ll="${LL}"
+export LX="${LS} -asF -kC"					; alias lx="${LX}"
+export LF="eval ${LL} -d \`find . -maxdepth 1 ! -type l\`"	; alias lf="${LF}"
 
 export DU="du -b --time --time-style=long-iso"	; alias du="${DU}"
 export LU="${DU} -ak --max-depth 1"		; alias lu="${LU}"
