@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+source ${HOME}/.bashrc
 ################################################################################
 
 declare QNUM="${1}"
@@ -10,8 +11,8 @@ shift 4
 
 ################################################################################
 
-declare SSH="tcp:220${QNUM}:10.0.2.1${QNUM}:22"
-declare VNC="-vnc 127.0.0.1:${QNUM}"
+declare QSSH="tcp:220${QNUM}:10.0.2.1${QNUM}:22"
+declare QVNC="-vnc 127.0.0.1:${QNUM}"
 
 declare FLOC="${FILE}"
 FLOC="${FLOC} /.g/_data/_systems/qemu/${FILE}"
@@ -38,6 +39,8 @@ while [[ ! -c /dev/kvm ]]; do
 	modprobe kvm-intel
 done
 
+(sleep 1; ${VNC} 127.0.0.1:590${QNUM}) &
+
 export SDL_VIDEO_X11_DGAMOUSE="0"
 export SDL_VIDEO_X11_MOUSEACCEL="0/0/0"
 export QEMU_AUDIO_DRV="alsa"
@@ -50,8 +53,8 @@ qemu-system-x86_64 \
 	-m ${QMEM} \
 	-net nic,vlan=0,model=e1000 -net user,vlan=0 \
 	-net nic,vlan=1,model=e1000 -net tap,vlan=1,script=no \
-	-redir ${SSH} \
-	${VNC} \
+	-redir ${QSSH} \
+	${QVNC} \
 	-vga std \
 	-soundhw all \
 	-usb \
