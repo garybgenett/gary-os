@@ -5,16 +5,14 @@ declare QNUM="${1}"
 declare QMEM="${2}"
 declare FILE="${3}"
 declare QSYS="${4}"
-declare QCPU="${5}"
 
-shift 5
+shift 4
 
 ################################################################################
 
-declare IPA="10.0.2.1${QNUM}"
-declare SSH="tcp:220${QNUM}:${IPA}:22"
+declare SSH="tcp:220${QNUM}:10.0.2.1${QNUM}:22"
+declare VNC="-vnc 127.0.0.1:${QNUM}"
 
-declare NAME="${FILE}"
 declare FLOC="${FILE}"
 FLOC="${FLOC} /.g/_data/_systems/qemu/${FILE}"
 FLOC="${FLOC} /.g/_data/_target/iso/${FILE}"
@@ -25,65 +23,35 @@ for I in $(eval find ${FLOC} 2>/dev/null); do
 	QIMG="${I}"
 done
 
-if [[ ${FILE} == "NULL" ]]; then
-	QIMG="/dev/sdb"
-fi
-
 declare QOPT=
-if [[ ${QSYS} == VIRT ]]; then
-	QOPT="-drive file=${QIMG},media=disk,index=0,if=virtio,boot=on -vnc 127.0.0.1:${QNUM}"
-elif [[ ${QSYS} == TRUE ]]; then
-	QOPT="-hda ${QIMG} -vnc 127.0.0.1:${QNUM}"
-elif [[ ${QSYS} == REAL ]]; then
-	QOPT="-hda ${QIMG}"
-elif [[ ${QSYS} == LIVE ]]; then
-	QOPT="-cdrom ${QIMG} -boot d"
+if [[ -n ${QSYS} ]]; then
+#>>>	QOPT="-drive file=${QIMG},if=scsi,bus=0,unit=0,media=disk,boot=on"
+	QOPT="-drive file=${QIMG},if=ide,index=0,media=disk,boot=on"
 else
-	QOPT="-cdrom ${QIMG} -boot d -vnc 127.0.0.1:${QNUM}"
+	QOPT="-drive file=${QIMG},if=ide,index=3,media=cdrom,boot=on -boot once=d"
 fi
 
-if [[ ${QCPU} == qemu64 ]] ||
-   [[ ${QCPU} == qemu32 ]]; then
-	while [[ ! -c /dev/kvm ]]; do
-		rmmod kvm-intel
-		rmmod kvm
-		modprobe kvm
-		modprobe kvm-intel
-	done
-else
-	while [[ ! -c /dev/kqemu ]] &&
-	      [[ ! -c /dev/kqemu0 ]]; do
-		rmmod kqemu
-		modprobe kqemu major="0"
-	done
-fi
-
-declare QEMU="qemu"
-declare QEMU_CPU=""
-declare QEMU_NET="\
-		-net nic,model=e1000		-net user"
-if [[ ${QCPU} == qemu64 ]] ||
-   [[ ${QCPU} == qemu32 ]]; then
-	QEMU="qemu-system-x86_64"
-	QEMU_CPU="\
-		-enable-kvm \
-		-cpu ${QCPU} \
-		-smp 2,cores=2"
-	QEMU_NET="\
-		-net nic,vlan=0,model=e1000	-net user,vlan=0 \
-		-net nic,vlan=1,model=virtio	-net tap,vlan=1,script=no"
-fi
+while [[ ! -c /dev/kvm ]]; do
+	rmmod kvm-intel
+	rmmod kvm
+	modprobe kvm
+	modprobe kvm-intel
+done
 
 export SDL_VIDEO_X11_DGAMOUSE="0"
 export SDL_VIDEO_X11_MOUSEACCEL="0/0/0"
 export QEMU_AUDIO_DRV="alsa"
-${QEMU} \
-	-name ${NAME} \
+qemu-system-x86_64 \
+	-name ${FILE} \
 	-monitor stdio \
-	${QEMU_CPU} \
+	-enable-kvm \
+	-cpu core2duo \
+	-smp 2,cores=2 \
 	-m ${QMEM} \
-	${QEMU_NET} \
+	-net nic,vlan=0,model=e1000 -net user,vlan=0 \
+	-net nic,vlan=1,model=e1000 -net tap,vlan=1,script=no \
 	-redir ${SSH} \
+	${VNC} \
 	-vga std \
 	-soundhw all \
 	-usb \
