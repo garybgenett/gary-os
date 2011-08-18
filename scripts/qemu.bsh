@@ -36,8 +36,6 @@ while [[ ! -c /dev/kvm ]]; do
 	modprobe kvm-intel
 done
 
-(sleep 1; ${VNC} 127.0.0.1:590${QNUM}) &
-
 export SDL_VIDEO_X11_DGAMOUSE="0"
 export SDL_VIDEO_X11_MOUSEACCEL="0/0/0"
 export QEMU_AUDIO_DRV="alsa"
@@ -58,6 +56,10 @@ exec qemu-system-x86_64 \
 	-usbdevice tablet \
 	${QOPT} \
 	${*} &
+
+sleep 1
+
+exec ${VNC} 127.0.0.1:590${QNUM} &
 
 ################################################################################
 # end of file
