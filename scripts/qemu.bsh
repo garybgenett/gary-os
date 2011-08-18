@@ -41,7 +41,7 @@ done
 export SDL_VIDEO_X11_DGAMOUSE="0"
 export SDL_VIDEO_X11_MOUSEACCEL="0/0/0"
 export QEMU_AUDIO_DRV="alsa"
-qemu-system-x86_64 \
+exec qemu-system-x86_64 \
 	-name ${FILE} \
 	-monitor stdio \
 	-enable-kvm \
@@ -57,7 +57,7 @@ qemu-system-x86_64 \
 	-usb \
 	-usbdevice tablet \
 	${QOPT} \
-	${*}
+	${*} &
 
 ################################################################################
 # end of file
