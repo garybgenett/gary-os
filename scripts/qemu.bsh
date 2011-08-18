@@ -41,7 +41,7 @@ export SDL_VIDEO_X11_MOUSEACCEL="0/0/0"
 export QEMU_AUDIO_DRV="alsa"
 exec qemu-system-x86_64 \
 	-name ${FILE} \
-	-monitor stdio \
+	-monitor telnet:127.0.0.1:599${QNUM},server,nowait \
 	-enable-kvm \
 	-cpu core2duo \
 	-smp 2,cores=2 \
@@ -60,6 +60,7 @@ exec qemu-system-x86_64 \
 sleep 1
 
 exec ${VNC} 127.0.0.1:590${QNUM} &
+exec telnet 127.0.0.1 599${QNUM}
 
 ################################################################################
 # end of file
