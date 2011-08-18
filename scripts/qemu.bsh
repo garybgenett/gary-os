@@ -11,9 +11,6 @@ shift 4
 
 ################################################################################
 
-declare QSSH="tcp:220${QNUM}:10.0.2.1${QNUM}:22"
-declare QVNC="-vnc 127.0.0.1:${QNUM}"
-
 declare FLOC="${FILE}"
 FLOC="${FLOC} /.g/_data/_systems/qemu/${FILE}"
 FLOC="${FLOC} /.g/_data/_target/iso/${FILE}"
@@ -53,8 +50,8 @@ qemu-system-x86_64 \
 	-m ${QMEM} \
 	-net nic,vlan=0,model=e1000 -net user,vlan=0 \
 	-net nic,vlan=1,model=e1000 -net tap,vlan=1,script=no \
-	-redir ${QSSH} \
-	${QVNC} \
+	-redir tcp:220${QNUM}:10.0.2.1${QNUM}:22 \
+	-vnc 127.0.0.1:${QNUM} \
 	-vga std \
 	-soundhw all \
 	-usb \
