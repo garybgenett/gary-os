@@ -185,8 +185,8 @@ export GIT_STS="${GIT} status"			; alias git-status="${GIT_STS}"
 export GIT_SVN="${GIT} svn"			; alias git-svn="${GIT_SVN}"
 
 export DIFF_OPTS="-u -U10"
-export GIT_FMT="--full-index --summary --stat=128,128 -M --date=iso --pretty=fuller"
-export GIT_PAT="--full-index --summary --stat=128,128 --attach --binary --keep-subject"
+export GIT_FMT="--find-renames --full-index --summary --stat=128,128 --pretty=fuller --date=iso --decorate"
+export GIT_PAT="--find-renames --full-index --summary --stat=128,128 --attach --binary --keep-subject"
 
 ########################################
 
