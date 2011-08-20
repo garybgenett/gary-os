@@ -185,8 +185,9 @@ export GIT_STS="${GIT} status"			; alias git-status="${GIT_STS}"
 export GIT_SVN="${GIT} svn"			; alias git-svn="${GIT_SVN}"
 
 export DIFF_OPTS="-u -U10"
-export GIT_FMT="--find-renames --full-index --summary --stat=128,128 --pretty=fuller --date=iso --decorate"
-export GIT_PAT="--find-renames --full-index --summary --stat=128,128 --attach --binary --keep-subject"
+export GIT_DIF="--find-renames --full-index --summary --stat=128,128"
+export GIT_FMT="${GIT_DIF} --pretty=fuller --date=iso --decorate"
+export GIT_PAT="${GIT_DIF} --attach --binary --keep-subject"
 
 ########################################
 
@@ -1184,7 +1185,7 @@ function vdiff {
 		[[ ${1} == -c ]]	&& TREE="--cached HEAD"		&& shift
 		[[ ${1} == -i ]]	&& TREE=""			&& shift
 		echo "diff" >${VDIFF}
-		${GIT_CMD} diff ${GIT_FMT} ${DIFF_OPTS} ${TREE} "${@}" >>${VDIFF} 2>&1
+		${GIT_CMD} diff ${GIT_DIF} ${DIFF_OPTS} ${TREE} "${@}" >>${VDIFF} 2>&1
 	elif [[ ${1} == -l ]] ||
 	     [[ ${1} == -s ]]; then
 		declare DIFF="${DIFF_OPTS}"
