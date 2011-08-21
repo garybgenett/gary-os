@@ -598,7 +598,9 @@ function email {
 	if [[ ${1} == -x ]]
 	then
 		shift
-		sudo -H -u \#1000 mutt \
+		sudo -H -u \#1000 \
+				TMPDIR="${TMPDIR}" \
+			mutt \
 			-nxF /dev/null \
 			-e "set sendmail = \"msmtp -d -C ${HOME}/.msmtprc\"" \
 			-e "set realname = \"${EMAIL_NAME:-GaryBGenett.net Automation}\"" \
@@ -608,8 +610,9 @@ function email {
 			"${@}"
 	else
 		sudo -H -u \#1000 \
-				DISPLAY=":1" \
+				TMPDIR="${TMPDIR}" \
 				EDITOR="${VI} +/^$" \
+				DISPLAY=":1" \
 			mutt \
 			-nF ${HOME}/.muttrc \
 			"${@}"
