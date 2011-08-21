@@ -1079,10 +1079,10 @@ function shell {
 		(nin)	DEST="pogo.gbg.es.f5net.com"
 			[[ -z $(${PS} 2>/dev/null | ${GREP} "5904[:]") ]] && OPTS="${OPTS} -L 5904:127.0.0.1:5901"
 			;;
-		(1|2)	DEST="localhost -p6553${DEST}"
+		(1|2|3)	DEST="localhost -p6553${DEST}"
 			LOG="plastic"
 			;;
-		(3|4)	DEST="localhost -p6553${DEST}"
+		(4)	DEST="localhost -p6553${DEST}"
 			;;
 		(5)	DEST="localhost -p6553${DEST}"
 			OPTS="${OPTS} -o \"BatchMode yes\""
