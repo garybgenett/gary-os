@@ -1176,7 +1176,7 @@ function sync-dir {
 ########################################
 
 function vdiff {
-	declare VDIFF="/tmp/vdiff"
+	declare VDIFF="$(mktemp /tmp/vdiff.XXX 2>/dev/null)"
 	declare SEARCH=
 	if [[ ${1} == -g ]]; then
 		shift
