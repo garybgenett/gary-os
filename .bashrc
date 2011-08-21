@@ -1074,10 +1074,8 @@ function shell {
 			[[ -z $(${PS} 2>/dev/null | ${GREP} "5901[:]") ]] && OPTS="${OPTS} -L 5901:127.0.0.1:5901"
 			;;
 		(hp)	DEST="hp.gbg.es.f5net.com"
-			[[ -z $(${PS} 2>/dev/null | ${GREP} "5903[:]") ]] && OPTS="${OPTS} -L 5903:127.0.0.1:5900"
 			;;
 		(nin)	DEST="pogo.gbg.es.f5net.com"
-			[[ -z $(${PS} 2>/dev/null | ${GREP} "5904[:]") ]] && OPTS="${OPTS} -L 5904:127.0.0.1:5901"
 			;;
 		(1|2|3)	DEST="localhost -p6553${DEST}"
 			LOG="plastic"
