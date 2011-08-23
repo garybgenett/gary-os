@@ -159,6 +159,10 @@ export SED="sed -r"				; alias sed="${SED}"
 export VI="vim -u ${HOME}/.vimrc -i NONE"	; alias vi="${VI}"
 export VIEW="eval ${VI} -nR -c \"set nowrap\""	; alias view="${VIEW/#eval\ /}"
 
+if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
+	unalias sed
+fi
+
 ########################################
 
 export PAGER="${MORE}"
