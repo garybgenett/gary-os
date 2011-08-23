@@ -4,6 +4,7 @@
 chmod -v 666 /dev/sg0
 chmod -v 666 /dev/sr0
 
+chmod -v 666 /dev/audio
 chmod -v 666 /dev/dsp
 chmod -v 666 /dev/mixer
 
