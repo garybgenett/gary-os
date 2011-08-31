@@ -42,7 +42,7 @@ export QEMU_AUDIO_DRV="alsa"
 
 exec qemu-system-x86_64 \
 	-name ${FILE} \
-	-monitor telnet:127.0.0.1:599${QNUM},server,nowait \
+	-monitor telnet:127.0.0.1:999${QNUM},server,nowait \
 	-enable-kvm \
 	-cpu core2duo \
 	-smp 2,cores=2 \
@@ -61,7 +61,7 @@ exec qemu-system-x86_64 \
 sleep 1
 
 exec ${VNC} 127.0.0.1:590${QNUM} &
-exec telnet 127.0.0.1 599${QNUM}
+exec telnet 127.0.0.1 999${QNUM}
 
 ################################################################################
 # end of file
