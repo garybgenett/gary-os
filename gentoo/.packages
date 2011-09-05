@@ -230,6 +230,7 @@ net-tools
 netcat6
 nethogs
 netkit-base
+netkit-telnetd
 nmap
 ntfs3g
 ntfsprogs
