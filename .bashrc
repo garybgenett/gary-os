@@ -766,7 +766,7 @@ function index-dir {
 	declare EXCL_PATHS=
 	declare EXCL_PATH=
 	for EXCL_PATH in "${@}"; do
-		EXCL_PATHS="${EXCL_PATHS} ( -path ${EXCL_PATH} -prune ) -o"
+		EXCL_PATHS="${EXCL_PATHS} \( -path \"${EXCL_PATH}\" -prune \) -o"
 	done
 	declare INDEX_I="${INDEX_D}/+index"
 	declare CUR_IDX="${INDEX_I}/$(date --iso=s)"
@@ -776,9 +776,9 @@ function index-dir {
 	(cd ${INDEX_I} && \
 		${RM} $(ls -A | sort -r | tail -n+${INDEX_N})		) 2>>${I_ERROR}
 	(cd ${INDEX_D} && \
-		find . ${EXCL_PATHS} -print	|
-		sort				|
-		indexer				>${CUR_IDX}		) 2>>${I_ERROR}
+		eval find . ${EXCL_PATHS} -print	|
+		sort					|
+		indexer					>${CUR_IDX}	) 2>>${I_ERROR}
 	(cd ${INDEX_I} && \
 		${LN} $(basename ${CUR_IDX}) _current.txt		) 2>>${I_ERROR}
 	return 0
