@@ -4,7 +4,6 @@
 
 <sys-boot/grub-9999 **
 
-app-emulation/qemu-kvm **
 media-tv/xbmc **
 sys-apps/metastore **
 
