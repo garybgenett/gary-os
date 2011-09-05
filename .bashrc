@@ -654,11 +654,7 @@ function email-copy {
 
 function git-backup {
 	declare FAIL=
-	find .						\
-		\( -path ./rdiff-backup-data -prune \)	\
-		-o -print				|
-		sort					|
-		indexer -0 >+index			|| FAIL="1"
+	index-dir -0 ./rdiff-backup-data
 	git-save ${FUNCNAME}				|| return 1
 	if [[ -n ${1} ]]; then
 		{ git-purge "${1}" &&
