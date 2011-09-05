@@ -751,7 +751,7 @@ function git-save {
 function index-dir {
 	declare SINGLE="false"
 	declare INDEX_D="${PWD}"
-	declare INDEX_N="$((12+3))"
+	declare INDEX_N="$((12+4))"
 	[[ "${1}" == -0 ]]		&& SINGLE="true"		&& shift
 	[[ -d "${1}" ]]			&& INDEX_D="${1}"		&& shift
 	[[ "${1}" == +([0-9]) ]]	&& INDEX_N="$((${1}+3))"	&& shift
@@ -763,6 +763,7 @@ function index-dir {
 	declare INDEX_I="${INDEX_D}/+index"
 	declare CUR_IDX="${INDEX_I}/$(date --iso=s)"
 	declare I_ERROR="${INDEX_I}/_error.log"
+	declare I_USAGE="${INDEX_I}/_usage.txt"
 	if ${SINGLE}; then
 		(cd ${INDEX_D} && \
 			eval find . ${EXCL_PATHS} -print	|
@@ -777,6 +778,8 @@ function index-dir {
 			eval find . ${EXCL_PATHS} -print	|
 			sort					|
 			indexer					>${CUR_IDX}	) 2>>${I_ERROR}
+		(cd ${INDEX_D} && \
+			cat ${CUR_IDX} | indexer -s		>${I_USAGE}	) 2>>${I_ERROR}
 		(cd ${INDEX_I} && \
 			${LN} $(basename ${CUR_IDX}) _current.txt		) 2>>${I_ERROR}
 	fi
