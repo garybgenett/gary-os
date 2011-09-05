@@ -656,13 +656,9 @@ function git-backup {
 	declare FAIL=
 	find .						\
 		\( -path ./rdiff-backup-data -prune \)	\
-		-o -print				\
-			>+index				&&
-		${MV} +index +index.0			&&
-		sort +index.0 >+index			&&
-		${MV} +index +index.0			&&
-		cat +index.0 | indexer -0 >+index	&&
-		${RM} +index.0				|| FAIL="1"
+		-o -print				|
+		sort					|
+		indexer -0 >+index			|| FAIL="1"
 	git-save ${FUNCNAME}				|| return 1
 	if [[ -n ${1} ]]; then
 		{ git-purge "${1}" &&
@@ -776,15 +772,15 @@ function index-dir {
 	declare CUR_IDX="${INDEX_I}/$(date --iso=s)"
 	declare I_ERROR="${INDEX_I}/_error.log"
 	${MKDIR} ${INDEX_I}
-	cat /dev/null								>${I_ERROR}
-	(cd ${INDEX_I} && ${RM} $(ls -A | sort -r | tail -n+${INDEX_N})		) 2>>${I_ERROR}
-	(cd ${INDEX_D} && find . ${EXCL_PATHS} -print >${CUR_IDX}		&&
-		${MV} ${CUR_IDX} ${CUR_IDX}.0					&&
-		sort ${CUR_IDX}.0 >${CUR_IDX}					&&
-		${MV} ${CUR_IDX} ${CUR_IDX}.0					&&
-		cat ${CUR_IDX}.0 | indexer >${CUR_IDX}				&&
-		${RM} ${CUR_IDX}.0						) 2>>${I_ERROR}
-	(cd ${INDEX_I} && ${LN} $(basename ${CUR_IDX}) _current.txt		) 2>>${I_ERROR}
+	cat /dev/null							>${I_ERROR}
+	(cd ${INDEX_I} && \
+		${RM} $(ls -A | sort -r | tail -n+${INDEX_N})		) 2>>${I_ERROR}
+	(cd ${INDEX_D} && \
+		find . ${EXCL_PATHS} -print	|
+		sort				|
+		indexer				>${CUR_IDX}		) 2>>${I_ERROR}
+	(cd ${INDEX_I} && \
+		${LN} $(basename ${CUR_IDX}) _current.txt		) 2>>${I_ERROR}
 	return 0
 }
 
