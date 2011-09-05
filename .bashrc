@@ -654,14 +654,21 @@ function email-copy {
 
 function git-backup {
 	declare FAIL=
-	find . -type d -empty | sort >+empty	|| FAIL="1"
-	${LL} -R >+listing			|| FAIL="1"
-	git-save ${FUNCNAME}			|| return 1
+	find .						\
+		\( -path ./rdiff-backup-data -prune \)	\
+		-o -print				\
+			>+index				&&
+		${MV} +index +index.0			&&
+		sort +index.0 >+index			&&
+		${MV} +index +index.0			&&
+		cat +index.0 | indexer -0 >+index	&&
+		${RM} +index.0				|| FAIL="1"
+	git-save ${FUNCNAME}				|| return 1
 	if [[ -n ${1} ]]; then
 		{ git-purge "${1}" &&
-			${RM} ${PWD}.gitlog; }	|| FAIL="1"
+			${RM} ${PWD}.gitlog; }		|| FAIL="1"
 	fi
-#>>>	git-logdir				|| FAIL="1"
+#>>>	git-logdir					|| FAIL="1"
 	if [[ -n ${FAIL} ]]; then
 		return 1
 	fi
@@ -757,7 +764,7 @@ function index-dir {
 		shift
 	fi
 	if [[ "${1}" == +([0-9]) ]]; then
-		INDEX_N="$(((${1}*3)+1))"
+		INDEX_N="$((${1}+3))"
 		shift
 	fi
 	declare EXCL_PATHS=
@@ -767,72 +774,216 @@ function index-dir {
 	done
 	declare INDEX_I="${INDEX_D}/+index"
 	declare CUR_IDX="${INDEX_I}/$(date --iso=s)"
-	declare LST_IDX="$(find ${INDEX_I} -type d 2>/dev/null | sort | tail -n1)"
-	declare I_FILES="${CUR_IDX}/files.txt"
-	declare I_FLIST="${CUR_IDX}/files.listing.txt"
-	declare I_FHASH="${CUR_IDX}/files.md5.txt"
-	declare I_UREPT="${CUR_IDX}/usage.report.txt"
-	declare I_USAGE="${CUR_IDX}/usage.txt"
-	declare I_DIFF_="${CUR_IDX}_diff.txt"
-	declare I_ERROR="${CUR_IDX}_errors.txt"
-	(cd ${INDEX_I} 2>/dev/null && ${RM} $(ls | sort -r | tail -n+${INDEX_N}))
-	${MKDIR} ${CUR_IDX}
-	for FILE in ${I_FILES} ${I_FLIST} ${I_FHASH} ${I_UREPT} ${I_USAGE} ${I_DIFF_} ${I_ERROR}; do
-		cat /dev/null >${FILE}
-	done
-	(cd ${INDEX_D} && ${IONICE} ${LL} -R)				>>${I_FLIST}		2>>${I_ERROR}
-	(cd ${INDEX_D} && ${IONICE} find .)				>>${I_FILES}		2>>${I_ERROR}
-		sort ${I_FILES}						 >${I_FILES}.sorted &&	${MV} ${I_FILES}.sorted ${I_FILES}
-	(cd ${INDEX_D} && ${IONICE} find . \
-		${EXCL_PATHS} \
-		\( -type f -print0 \) |
-			${XARGS} \
-			-0 \
-			${IONICE} md5sum)				>>${I_FHASH}		2>>${I_ERROR}
-		sort -k2 ${I_FHASH}					 >${I_FHASH}.sorted &&	${MV} ${I_FHASH}.sorted ${I_FHASH}
-	(cd ${INDEX_D} && ${IONICE} ${DU} .)				>>${I_USAGE}		2>>${I_ERROR}
-		sort -k3 -t$'\t' ${I_USAGE}				 >${I_USAGE}.sorted &&	${MV} ${I_USAGE}.sorted ${I_USAGE}
-	(cd ${INDEX_D} && for DIR in \
-		$(find . -mindepth 1 -maxdepth 3 -type d); do
-			${GREP} -m1 "$(echo "${DIR}" |
-			${SED} "s/([+.])/\\\\\1/g")$" ${I_USAGE}; \
-		done)							>>${I_UREPT}		2>>${I_ERROR}
-		echo -en "<MARK>"					 >${I_UREPT}.sorted	2>>${I_ERROR}
-		head -n1 ${I_USAGE}					>>${I_UREPT}.sorted	2>>${I_ERROR}
-		for DIR in \
-			$(sort -nr ${I_UREPT} |
-			cut -f3 |
-			sed "s/^[.][/]//g" |
-			${GREP} -v "[/]"); do
-			echo -en "<MARK>"				>>${I_UREPT}.sorted	2>>${I_ERROR}
-			${GREP} "[.][/]$(echo "${DIR}" |
-			${SED} "s/([+.])/\\\\\1/g")([/]|$)" ${I_UREPT} |
-			sort -nr					>>${I_UREPT}.sorted	2>>${I_ERROR}
-		done;										${MV} ${I_UREPT}.sorted ${I_UREPT}
-		cat ${I_UREPT} |
-			perl -e 'while (<>) {
-				if ($_ =~ /^$/) {
-					print "\n";
-					next;
+	declare I_ERROR="${INDEX_I}/_error.log"
+	${MKDIR} ${INDEX_I}
+	cat /dev/null								>${I_ERROR}
+	(cd ${INDEX_I} && ${RM} $(ls -A | sort -r | tail -n+${INDEX_N})		) 2>>${I_ERROR}
+	(cd ${INDEX_D} && find . ${EXCL_PATHS} -print >${CUR_IDX}		&&
+		${MV} ${CUR_IDX} ${CUR_IDX}.0					&&
+		sort ${CUR_IDX}.0 >${CUR_IDX}					&&
+		${MV} ${CUR_IDX} ${CUR_IDX}.0					&&
+		cat ${CUR_IDX}.0 | indexer >${CUR_IDX}				&&
+		${RM} ${CUR_IDX}.0						) 2>>${I_ERROR}
+	(cd ${INDEX_I} && ${LN} $(basename ${CUR_IDX}) _current.txt		) 2>>${I_ERROR}
+	return 0
+}
+
+########################################
+
+#  0	type,target_type
+#  1	inode
+#  2	hard_links
+#  3	char_mode,octal_mode
+#  4	user:group,uid:gid
+#  5	mod_time_iso,mod_time_epoch,mod_time_zone
+#  6	blocks,size_in_k
+#  7	size_in_k	(directories only)
+#  8	md5_hash	(files only)
+#  9	@d,@f		(directories and files only, denotes empty)
+# 10	name
+# 11	(target)
+
+function indexer {
+	declare FILE=
+	if [[ "${1}" == "-p" ]]; then
+		shift
+		perl -e '
+			use strict;
+			use warnings;
+			my $matches = [@ARGV];
+			undef(@ARGV);
+			if(!@{$matches}){
+				$matches = [".*",];
+			};
+			while(<>){
+				chomp();
+				my $a = [split(/\0/)];
+				foreach my $match (@{$matches}){
+					if($a->[10] =~ m|${match}|){
+						print "@{$a}\n";
+					};
 				};
-				my($size, $date, $file) = split(/\t/, $_);
+			};
+		' -- "${@}"
+	elif [[ "${1}" == "-l" ]]; then
+		shift
+		perl -e '
+			use strict;
+			use warnings;
+			my $emp_dir = [];
+			my $emp_fil = [];
+			my $brk_sym = [];
+			my $symlink = [];
+			my $failure = [];
+			while(<>){
+				chomp();
+				my $a = [split(/\0/)];
+				if($a->[9] eq "\@d"){ push(@{$emp_dir}, $a); };
+				if($a->[9] eq "\@f"){ push(@{$emp_fil}, $a); };
+				if($a->[0] eq "l,l"){ push(@{$brk_sym}, $a); };
+				if($a->[0] =~ /l,/ ){ push(@{$symlink}, $a); };
+				if($a->[7] eq "!"  ||
+				   $a->[8] eq "!"  ||
+				   $a->[9] eq "!"  ){ push(@{$failure}, $a); };
+			};
+			print "\n Empty directories:\n"	; foreach my $out (@{$emp_dir}){ print "@{$out}\n"; };
+			print "\n Empty files:\n"	; foreach my $out (@{$emp_fil}){ print "@{$out}\n"; };
+			print "\n Broken symlinks:\n"	; foreach my $out (@{$brk_sym}){ print "@{$out}\n"; };
+			print "\n Symlinks:\n"		; foreach my $out (@{$symlink}){ print "@{$out}\n"; };
+			print "\n Failures:\n"		; foreach my $out (@{$failure}){ print "@{$out}\n"; };
+		' -- "${@}"
+	elif [[ "${1}" == "-s" ]]; then
+		shift
+		perl -e '
+			use strict;
+			use warnings;
+			my $tlds = [];
+			my $subs = {};
+			while(<>){
+				chomp();
+				my $a = [split(/\0/)];
+				if($a->[0] eq "d,d"){
+					if($a->[10] =~ m|^[.](/[^/]+)?$|){
+						push(@{$tlds}, [$a->[7], $a->[10],]);
+					}else{
+						my $cur = $a->[10];
+						$cur =~ s|(^[.]/[^/]+)/.+$|\1|g;
+						push(@{$subs->{$cur}}, [$a->[7], $a->[10],]);
+						my $exists = 0;
+						foreach my $tld (@{$tlds}){
+							if($cur eq $tld->[1]){
+								$exists = 1;
+							};
+						};
+						if(!${exists}){
+							push(@{$tlds}, [0, $cur,]);
+						};
+					};
+				};
+			};
+			@{$tlds} = (sort({$b->[0] <=> $a->[0] || $a->[1] cmp $b->[1]} @{$tlds}));
+			while(my($tld, $obj) = each(%{$subs})){
+				@{$subs->{$tld}} = (sort({$b->[0] <=> $a->[0] || $a->[1] cmp $b->[1]} @{$subs->{$tld}}));
+			};
+			sub format_output {
+				my($head, $size, $file) = (shift, shift, shift);
 				$size = reverse($size);
 				$size =~ s/([0-9]{3})/\1\ /g;
 				$size = reverse($size);
-				if ($size =~ /^<MARK>/) {
-					$size =~ s/^<MARK>//g;
+				if($head){
 					print "-"x7 .">";
 					printf("%21s", $size);
-				} else {
+				}else{
 					printf("%29s", $size);
 				};
-				print "\t${date}\t${file}";
-			}'						 >${I_UREPT}.format	2>>${I_ERROR} &&
-												${MV} ${I_UREPT}.format ${I_UREPT}
-												${LN} ${I_UREPT} ${INDEX_I}_usage.txt
-	for FILE in $(ls ${CUR_IDX}); do
-		diff -ru -U10 ${LST_IDX}/${FILE} ${CUR_IDX}/${FILE}	>>${I_DIFF_}		2>&1
-	done
+				print "\t${file}\n";
+			};
+			foreach my $tld (@{$tlds}){
+				format_output(1, $tld->[0], $tld->[1]);
+				foreach my $sub (@{$subs->{$tld->[1]}}){
+					format_output(0, $sub->[0], $sub->[1]);
+				};
+			};
+		' -- "${@}"
+	elif [[ "${1}" == "-v" ]]; then
+		tr '\0' '\t' | while read -r FILE; do
+			declare MD5="$(echo -n "${FILE}" | cut -d$'\t' -f9)"
+			declare FIL="$(echo -n "${FILE}" | cut -d$'\t' -f11)"
+			if [[ "${MD5}" != "*" ]] &&
+			   [[ "${MD5}" != "!" ]]; then
+				echo "${MD5}  ${FIL}"
+			fi
+		done | ${IONICE} md5sum -c -
+	elif [[ "${1}" == "-r" ]]; then
+		tr '\0' '\t' | while read -r FILE; do
+			declare TARGET="$(echo -n "${FILE}" | cut -d$'\t' -f11)"
+			if [[ -e "${TARGET}" ]]; then
+				echo "Restoring: ${TARGET}"
+				if [[          "$(echo -n "${FILE}" | cut -d$'\t' -f1 | cut -d, -f1)" != "l" ]]; then
+					chmod	$(echo -n "${FILE}" | cut -d$'\t' -f4 | cut -d, -f2) "${TARGET}"
+				fi &&
+				chown -h	$(echo -n "${FILE}" | cut -d$'\t' -f5 | cut -d, -f2) "${TARGET}" &&
+				touch -ht	$(echo -n "${FILE}" | cut -d$'\t' -f6 | cut -d, -f1) "${TARGET}" ||
+				echo "Error: ${TARGET}" 1>&2
+			else
+				echo "Missing: ${TARGET}" 1>&2
+			fi
+		done
+	elif [[ "${1}" == "-d" ]]; then
+		shift
+		perl -e '
+			use strict;
+			use warnings;
+			use File::Find;
+			while(<>){
+				chomp;
+				my $size = 0;
+				my $size_of = sub {
+					if(-L){
+						$size += (lstat)[7];
+					}else{
+						$size += (stat)[7];
+					};
+				};
+				if(-d){
+					find($size_of, ${_});
+				}else{
+					&{$size_of};
+				};
+				print "${size}\t${_}\n";
+			};
+		' -- "${@}"
+	else
+		declare FORKS="true"
+		if [[ "${1}" == "-0" ]]; then
+			FORKS="false"
+		fi
+		function get_output {
+			${IONICE} "${@}" "${FILE}" 2>/dev/null | ${SED} "s/[[:space:]].+$//g"
+		}
+		function get_null {
+			declare TYPE="${1}" && shift
+			if [[ -n "$(find "${FILE}" -maxdepth 0 -empty 2>/dev/null)" ]]; then
+				echo -n "@${TYPE}"
+			else
+				echo -n "-"
+			fi
+		}
+		while read -r FILE; do
+			declare SIZE="*"
+			declare HASH="*"
+			declare NULL="*"
+			test -d "${FILE}" -a ! -L "${FILE}"	&& SIZE="$(${FORKS} && get_output du -bs)" && NULL="$(get_null d)"
+			test -f "${FILE}" -a ! -L "${FILE}"	&& HASH="$(${FORKS} && get_output md5sum)" && NULL="$(get_null f)"
+			test -z "${SIZE}"			&& SIZE="!"
+			test -z "${HASH}"			&& HASH="!"
+			test -z "${NULL}"			&& NULL="!"
+			${IONICE} find "${FILE}" \
+				-maxdepth 0 \
+				-printf "%y,%Y\t%i\t%n\t%M,%m\t%u:%g,%U:%G\t%TY%Tm%Td%TH%TM,%T@,%TZ\t%k,%s\t${SIZE}\t${HASH}\t${NULL}\t%p\t(%l)\n" |
+					tr '\t' '\0'
+		done
+	fi
 	return 0
 }
 
