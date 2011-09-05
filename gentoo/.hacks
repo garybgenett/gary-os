@@ -12,6 +12,8 @@ chmod -v 666 /dev/snd/control*
 chmod -v 666 /dev/snd/pcm*
 chmod -v 666 /dev/snd/timer*
 
+chmod -v 000 /usr/bin/dbus-daemon
+chmod -v 000 /usr/bin/dbus-launch
 chmod -v 000 /usr/libexec/polkitd
 chmod -v 000 /usr/libexec/udisks-daemon
 chmod -v 000 /usr/libexec/upowerd
