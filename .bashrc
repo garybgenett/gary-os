@@ -1082,8 +1082,7 @@ function prompt {
 	if [[ ${1} == -z ]]; then
 		shift
 		export CMD=
-		[[ -z ${1} ]]		&& CMD="bash --login --noprofile --norc -o vi"	&& shift
-		[[ ${1} == zsh ]]	&& CMD="zsh -l -d -f"				&& shift
+		[[ -z ${1} ]] && CMD="bash --login --noprofile --norc -o vi" && shift
 		/usr/bin/env -i \
 			PS1='------------------------------\nENV(\u@\h \w)\$ ' \
 			USER="${USER}" \
