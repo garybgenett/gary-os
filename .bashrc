@@ -755,14 +755,8 @@ function git-save {
 function index-dir {
 	declare INDEX_D="${PWD}"
 	declare INDEX_N="$((12+3))"
-	if [[ -d "${1}" ]]; then
-		INDEX_D="${1}"
-		shift
-	fi
-	if [[ "${1}" == +([0-9]) ]]; then
-		INDEX_N="$((${1}+3))"
-		shift
-	fi
+	[[ -d "${1}" ]]			&& INDEX_D="${1}"		&& shift
+	[[ "${1}" == +([0-9]) ]]	&& INDEX_N="$((${1}+3))"	&& shift
 	declare EXCL_PATHS=
 	declare EXCL_PATH=
 	for EXCL_PATH in "${@}"; do
