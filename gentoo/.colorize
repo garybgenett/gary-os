@@ -44,23 +44,23 @@ fi
 
 prompt -z "${@}" 2>&1 |
 	perl -p -e "\
-	      s/(no|false|failed)(\\s|\$)/${FAIL_COLOR}\1${DEF_COLOR}\2/gi;	\
-	s/(yes|true|ok|succeeded)(\\s|\$)/${GOOD_COLOR}\1${DEF_COLOR}\2/gi;	\
-	              s/(\\.\\.\\.) (.+)$/\1 ${MSG_COLOR}\2/gi;			\
-	                    s/(.*error.*)/${FAIL_COLOR}\1/gi;			\
-	                  s/(.*warning.*)/${WARN_COLOR}\1/gi;			\
-	          s/^(making [^ ]+ in .+)/${MARK_COLOR}\1/gi;			\
-	                      s/^(\*\*.+)/${MARK_COLOR}\1/gi;			\
-	                        s/^(--.+)/${MARK_COLOR}\1/gi;			\
-	           s/^(patching file)(.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;	\
-	       s/^(generating .+ for)(.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;	\
-	       s/^(created directory)(.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;	\
-	              s/^(installing)(.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;	\
-	                   s/^(.+:)(\s.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;	\
-	          s/([\\$]?\\([^\\)]+\\))/${MARK_COLOR}\1${DEF_COLOR}/gi;	\
-	         s/.{7}(\\(cached\\)).{7}/${WARN_COLOR}\1${MSG_COLOR}/gi;	\
-	                     s/(-o [^ ]+)/${MSG_COLOR}\1${DEF_COLOR}/gi;	\
-	                              s/^/${DEF_COLOR}/gi;			\
+	      s/(no|false|failed)(\\s|\$)/${FAIL_COLOR}\1${DEF_COLOR}\2/gi;
+	s/(yes|true|ok|succeeded)(\\s|\$)/${GOOD_COLOR}\1${DEF_COLOR}\2/gi;
+	              s/(\\.\\.\\.) (.+)$/\1 ${MSG_COLOR}\2/gi;
+	                    s/(.*error.*)/${FAIL_COLOR}\1/gi;
+	                  s/(.*warning.*)/${WARN_COLOR}\1/gi;
+	          s/^(making [^ ]+ in .+)/${MARK_COLOR}\1/gi;
+	                      s/^(\*\*.+)/${MARK_COLOR}\1/gi;
+	                        s/^(--.+)/${MARK_COLOR}\1/gi;
+	           s/^(patching file)(.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;
+	       s/^(generating .+ for)(.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;
+	       s/^(created directory)(.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;
+	              s/^(installing)(.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;
+	                   s/^(.+:)(\s.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;
+	          s/([\\$]?\\([^\\)]+\\))/${MARK_COLOR}\1${DEF_COLOR}/gi;
+	         s/.{7}(\\(cached\\)).{7}/${WARN_COLOR}\1${MSG_COLOR}/gi;
+	                     s/(-o [^ ]+)/${MSG_COLOR}\1${DEF_COLOR}/gi;
+	                              s/^/${DEF_COLOR}/gi;
 "
 
 declare STATUS="${PIPESTATUS[0]}"
