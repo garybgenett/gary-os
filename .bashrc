@@ -906,6 +906,7 @@ function indexer {
 			declare MD5="$(echo -n "${FILE}" | cut -d$'\t' -f9)"
 			declare FIL="$(echo -n "${FILE}" | cut -d$'\t' -f11)"
 			if [[ "${MD5}" != "*" ]] &&
+			   [[ "${MD5}" != "x" ]] &&
 			   [[ "${MD5}" != "!" ]]; then
 				echo "${MD5}  ${FIL}"
 			fi
