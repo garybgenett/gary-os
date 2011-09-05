@@ -5,7 +5,6 @@
 <sys-boot/grub-9999 **
 
 media-tv/xbmc **
-sys-apps/metastore **
 
 >=games-emulation/mekanix-070 **
 
