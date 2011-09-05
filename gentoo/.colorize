@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+source /.g/.home/.bashrc
 ################################################################################
 
 declare SCRIPT="${0}"
@@ -41,7 +42,7 @@ fi
 
 ########################################
 
-${*} 2>&1 |
+prompt -z "${@}" 2>&1 |
 	perl -p -e "\
 	      s/(no|false|failed)(\\s|\$)/${FAIL_COLOR}\1${DEF_COLOR}\2/gi;	\
 	s/(yes|true|ok|succeeded)(\\s|\$)/${GOOD_COLOR}\1${DEF_COLOR}\2/gi;	\
