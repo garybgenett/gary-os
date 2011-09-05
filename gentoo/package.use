@@ -58,7 +58,7 @@ media-libs/freetype			kpathsea	# gentoo required
 
 ########################################
 
-media-video/mplayer			iconv -cdio	# required to build
+media-video/mplayer			-cdio iconv	# required to build
 
 ########################################
 
@@ -66,7 +66,7 @@ media-libs/phonon			-vlc
 
 ########################################
 
-app-text/enchant			aspell -hunspell
+app-text/enchant			-hunspell aspell
 mail-client/mutt			sidebar
 mail-client/thunderbird			ldap
 net-analyzer/tcpdump			-chroot
