@@ -88,12 +88,7 @@ runit
 openssl
 openssh
 
-popt
-#>>>device-mapper			# conflicts with "udev"
 cryptsetup
-
-sys-fs/fuse				#>>> fuse	# kernel upgrade
-xz-utils
 
 tcl
 sqlite
@@ -133,23 +128,9 @@ ufed
 ########################################
 # x server
 
-pixman
-libdrm
-mesa
-
-xorg-server
-xorg-drivers
 xorg-x11
 xterm
 twm
-
-xorg-cf-files
-gccmakedep
-imake
-
-fontconfig
-freetype
-Xaw3d
 
 nvidia-drivers				# kernel upgrade
 nvidia-settings				# kernel upgrade
@@ -164,7 +145,6 @@ gdb
 xfig
 transfig
 texlive
-dblatex					# gentoo overlay
 
 docbook-xml-dtd
 docbook-xsl-stylesheets
@@ -178,11 +158,6 @@ tiff
 nspr
 nss
 
-gtk+
-gtk-doc
-tk
-wxGTK
-
 #>>>qt-assistant
 qt-core
 #>>>qt-demo
@@ -190,7 +165,6 @@ qt-gui
 #>>>qt-test
 #>>>qt
 
-cyrus-sasl
 openldap
 
 dev-perl/DateManip			#>>> perl-date-manip
@@ -205,9 +179,6 @@ gitosis
 qgit
 
 expect
-metastore				# gentoo overlay
-sash
-zsh
 
 clisp
 lua
@@ -220,46 +191,13 @@ rubygems
 ########################################
 # libraries
 
-shared-mime-info
-mime-types
-
 alsa-lib
 alsa-oss
 alsa-utils
 
-libsdl
-
-a52dec
-aalib
-flac
-giflib					#>>> libungif
-imlib2
-lame
-libcaca
-libcddb
-libcdio
-libdvdcss
-libdvdnav
-libdvdread
-libexif
-libmpeg2
-libogg
-libsndfile
-libvorbis
-taglib
-
-cmake
-enchant
-gucharmap
-dev-lang/ocaml				#>>> ocaml
-openmotif
-scrollkeeper
-xulrunner
-
 exif
 exiv2
 ffmpeg
-ispell
 
 ########################################
 # utilities
@@ -351,12 +289,6 @@ taglist					#>>> gvim-taglist
 vim-spell-en
 wget
 
-bluez
-bluez-firmware
-bluez-hcidump
-#>>>bluez-libs				# no package
-#>>>bluez-utils				# no package
-
 ########################################
 # programs
 
@@ -385,11 +317,6 @@ obconf
 
 #>>>qemu				# conflicts with "qemu-kvm"
 qemu-kvm
-xen
-xen-sources
-xen-tools
-libvirt
-virt-manager
 
 aumix
 feh
@@ -423,8 +350,6 @@ xvkbd
 
 adobe-flash				# binary package
 sun-jdk					# binary package
-#>>>'<=sun-jdk-1.6'				# binary package
-virtualbox-bin				# binary package
 vmware-player				# binary package
 
 libreoffice
@@ -451,7 +376,6 @@ stardict
 stella
 xboard
 
-lirc
 xbmc
 
 )
