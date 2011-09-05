@@ -754,7 +754,7 @@ function git-save {
 
 function index-dir {
 	declare INDEX_D="${PWD}"
-	declare INDEX_N="12"
+	declare INDEX_N="$((12+3))"
 	if [[ -d "${1}" ]]; then
 		INDEX_D="${1}"
 		shift
