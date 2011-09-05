@@ -959,7 +959,11 @@ function indexer {
 			FORKS="false"
 		fi
 		function get_output {
-			${IONICE} "${@}" "${FILE}" 2>/dev/null | ${SED} "s/[[:space:]].+$//g"
+			if ${FORKS}; then
+				${IONICE} "${@}" "${FILE}" 2>/dev/null | ${SED} "s/[[:space:]].+$//g"
+			else
+				echo -n "x"
+			fi
 		}
 		function get_null {
 			declare TYPE="${1}" && shift
@@ -973,8 +977,8 @@ function indexer {
 			declare SIZE="*"
 			declare HASH="*"
 			declare NULL="*"
-			test -d "${FILE}" -a ! -L "${FILE}"	&& SIZE="$(${FORKS} && get_output du -bs)" && NULL="$(get_null d)"
-			test -f "${FILE}" -a ! -L "${FILE}"	&& HASH="$(${FORKS} && get_output md5sum)" && NULL="$(get_null f)"
+			test -d "${FILE}" -a ! -L "${FILE}"	&& SIZE="$(get_output du -bs)" && NULL="$(get_null d)"
+			test -f "${FILE}" -a ! -L "${FILE}"	&& HASH="$(get_output md5sum)" && NULL="$(get_null f)"
 			test -z "${SIZE}"			&& SIZE="!"
 			test -z "${HASH}"			&& HASH="!"
 			test -z "${NULL}"			&& NULL="!"
