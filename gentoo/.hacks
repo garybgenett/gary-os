@@ -19,6 +19,13 @@ chmod -v 000 /usr/libexec/udisks-daemon
 chmod -v 000 /usr/libexec/upowerd
 chmod -v 000 /usr/sbin/console-kit-daemon
 
+declare MODULE=
+for MODULE in \
+	/lib/modules/*/kernel/drivers/gpu/drm/nouveau/nouveau.ko
+do
+	mv -fv ${MODULE} ${MODULE}.bak
+done
+
 exit 0
 ################################################################################
 # end of file
