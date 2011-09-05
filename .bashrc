@@ -181,6 +181,9 @@ export LU="${DU} -ak --max-depth 1"		; alias lu="${LU}"
 
 ########################################
 
+export CVS="reporter cvs"			; alias cvs="${CVS}"
+export SVN="reporter svn"			; alias svn="${SVN}"
+
 export GIT_CMD="git"
 export GIT="reporter ${GIT_CMD}"		; alias git="${GIT}"
 export GIT_ADD="${GIT} add --verbose"		; alias git-add="${GIT_ADD}"
@@ -194,9 +197,6 @@ export GIT_FMT="${GIT_DIF} --pretty=fuller --date=iso --decorate"
 export GIT_PAT="${GIT_DIF} --attach --binary --keep-subject"
 
 ########################################
-
-export CVS="reporter cvs"							; alias cvs="${CVS}"
-export SVN="reporter svn"							; alias svn="${SVN}"
 
 export RDP="rdesktop -z -n NULL -g 90% -a 24 -r sound:remote"			; alias rdp="${RDP}"
 export VNC="vncviewer -Shared -FullColor"					; alias vnc="${VNC}"
