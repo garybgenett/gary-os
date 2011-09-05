@@ -753,8 +753,10 @@ function git-save {
 ########################################
 
 function index-dir {
+	declare SINGLE="false"
 	declare INDEX_D="${PWD}"
 	declare INDEX_N="$((12+3))"
+	[[ "${1}" == -0 ]]		&& SINGLE="true"		&& shift
 	[[ -d "${1}" ]]			&& INDEX_D="${1}"		&& shift
 	[[ "${1}" == +([0-9]) ]]	&& INDEX_N="$((${1}+3))"	&& shift
 	declare EXCL_PATHS=
@@ -765,16 +767,23 @@ function index-dir {
 	declare INDEX_I="${INDEX_D}/+index"
 	declare CUR_IDX="${INDEX_I}/$(date --iso=s)"
 	declare I_ERROR="${INDEX_I}/_error.log"
-	${MKDIR} ${INDEX_I}
-	cat /dev/null							>${I_ERROR}
-	(cd ${INDEX_I} && \
-		${RM} $(ls -A | sort -r | tail -n+${INDEX_N})		) 2>>${I_ERROR}
-	(cd ${INDEX_D} && \
-		eval find . ${EXCL_PATHS} -print	|
-		sort					|
-		indexer					>${CUR_IDX}	) 2>>${I_ERROR}
-	(cd ${INDEX_I} && \
-		${LN} $(basename ${CUR_IDX}) _current.txt		) 2>>${I_ERROR}
+	if ${SINGLE}; then
+		(cd ${INDEX_D} && \
+			eval find . ${EXCL_PATHS} -print	|
+			sort					|
+			indexer -0				>${INDEX_I}	)
+	else
+		${MKDIR} ${INDEX_I}
+		cat /dev/null							>${I_ERROR}
+		(cd ${INDEX_I} && \
+			${RM} $(ls -A | sort -r | tail -n+${INDEX_N})		) 2>>${I_ERROR}
+		(cd ${INDEX_D} && \
+			eval find . ${EXCL_PATHS} -print	|
+			sort					|
+			indexer					>${CUR_IDX}	) 2>>${I_ERROR}
+		(cd ${INDEX_I} && \
+			${LN} $(basename ${CUR_IDX}) _current.txt		) 2>>${I_ERROR}
+	fi
 	return 0
 }
 
