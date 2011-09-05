@@ -59,7 +59,7 @@ exec qemu-system-x86_64 \
 	-usb \
 	-usbdevice tablet \
 	${QOPT} \
-	${*} &
+	"${@}" &
 
 sleep 1
 
