@@ -7,6 +7,7 @@ app-text/poppler			cairo		# gentoo required
 dev-libs/libxml2			python		# gentoo required
 media-libs/libsdl			joystick	# gentoo required
 sys-auth/consolekit			policykit	# gentoo required
+sys-auth/pambase			consolekit	# gentoo required
 
 app-emulation/libvirt			python		# gentoo required
 net-libs/gtk-vnc			python		# gentoo required
@@ -21,7 +22,7 @@ x11-libs/qt-declarative			webkit		# gentoo required
 
 ########################################
 
-app-office/libreoffice			-debug		# required to build
+app-office/libreoffice			-debug cups	# required to build
 media-libs/svgalib			build		# required to build
 net-fs/samba				-debug		# required to build
 
