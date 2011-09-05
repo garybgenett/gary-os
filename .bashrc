@@ -785,6 +785,7 @@ function index-dir {
 
 ########################################
 
+function indexer {
 #  0	type,target_type
 #  1	inode
 #  2	hard_links
@@ -797,8 +798,6 @@ function index-dir {
 #  9	@d,@f		(directories and files only, denotes empty)
 # 10	name
 # 11	(target)
-
-function indexer {
 	declare FILE=
 	if [[ "${1}" == "-p" ]]; then
 		shift
