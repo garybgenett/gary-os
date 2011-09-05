@@ -198,6 +198,9 @@ export GIT_PAT="${GIT_DIF} --attach --binary --keep-subject"
 
 ########################################
 
+export IONICE="ionice --class 2 --classdata 7"					; alias ionice="${IONICE}"
+export XARGS="xargs --max-procs=2 --max-args=10"				; alias xargs="${XARGS}"
+
 export RDP="rdesktop -z -n NULL -g 90% -a 24 -r sound:remote"			; alias rdp="${RDP}"
 export VNC="vncviewer -Shared -FullColor"					; alias vnc="${VNC}"
 export X2VNC="x2vnc -west -tunnel -shared -noblank -lockdelay 60 -timeout 60"	; alias x2vnc="${X2VNC}"
@@ -762,7 +765,6 @@ function index-dir {
 	for EXCL_PATH in "${@}"; do
 		EXCL_PATHS="${EXCL_PATHS} ( -path ${EXCL_PATH} -prune ) -o"
 	done
-	declare IO_NICE="ionice -c2 -n7"
 	declare INDEX_I="${INDEX_D}/+index"
 	declare CUR_IDX="${INDEX_I}/$(date --iso=s)"
 	declare LST_IDX="$(find ${INDEX_I} -type d 2>/dev/null | sort | tail -n1)"
@@ -778,19 +780,17 @@ function index-dir {
 	for FILE in ${I_FILES} ${I_FLIST} ${I_FHASH} ${I_UREPT} ${I_USAGE} ${I_DIFF_} ${I_ERROR}; do
 		cat /dev/null >${FILE}
 	done
-	(cd ${INDEX_D} && ${IO_NICE} ${LL} -R)				>>${I_FLIST}		2>>${I_ERROR}
-	(cd ${INDEX_D} && ${IO_NICE} find .)				>>${I_FILES}		2>>${I_ERROR}
+	(cd ${INDEX_D} && ${IONICE} ${LL} -R)				>>${I_FLIST}		2>>${I_ERROR}
+	(cd ${INDEX_D} && ${IONICE} find .)				>>${I_FILES}		2>>${I_ERROR}
 		sort ${I_FILES}						 >${I_FILES}.sorted &&	${MV} ${I_FILES}.sorted ${I_FILES}
-	(cd ${INDEX_D} && ${IO_NICE} find . \
+	(cd ${INDEX_D} && ${IONICE} find . \
 		${EXCL_PATHS} \
 		\( -type f -print0 \) |
-			xargs \
+			${XARGS} \
 			-0 \
-			--max-procs=2 \
-			--max-args=10 \
-			${IO_NICE} md5sum)				>>${I_FHASH}		2>>${I_ERROR}
+			${IONICE} md5sum)				>>${I_FHASH}		2>>${I_ERROR}
 		sort -k2 ${I_FHASH}					 >${I_FHASH}.sorted &&	${MV} ${I_FHASH}.sorted ${I_FHASH}
-	(cd ${INDEX_D} && ${IO_NICE} ${DU} .)				>>${I_USAGE}		2>>${I_ERROR}
+	(cd ${INDEX_D} && ${IONICE} ${DU} .)				>>${I_USAGE}		2>>${I_ERROR}
 		sort -k3 -t$'\t' ${I_USAGE}				 >${I_USAGE}.sorted &&	${MV} ${I_USAGE}.sorted ${I_USAGE}
 	(cd ${INDEX_D} && for DIR in \
 		$(find . -mindepth 1 -maxdepth 3 -type d); do
