@@ -1081,13 +1081,9 @@ function organize {
 function prompt {
 	if [[ ${1} == -z ]]; then
 		shift
-		export CMD="bash --login --noprofile --norc -o vi"
-		if [[ ${1} == zsh ]]; then
-			shift
-			CMD="zsh -l -d -f ${@}"
-		elif [[ -n ${@} ]]; then
-			CMD="${@}"
-		fi
+		export CMD=
+		[[ -z ${1} ]]		&& CMD="bash --login --noprofile --norc -o vi"	&& shift
+		[[ ${1} == zsh ]]	&& CMD="zsh -l -d -f"				&& shift
 		/usr/bin/env -i \
 			PS1='------------------------------\nENV(\u@\h \w)\$ ' \
 			USER="${USER}" \
@@ -1108,7 +1104,7 @@ function prompt {
 			CCACHE_DIR="${CCACHE_DIR}" \
 			CCACHE_LOGFILE="${CCACHE_LOGFILE}" \
 			PATH="${PATH}" \
-			${CMD} || return 1
+			${CMD} "${@}" || return 1
 		return 0
 	fi
 	if [[ ${1} == -d ]]; then
