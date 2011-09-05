@@ -203,6 +203,7 @@ ffmpeg
 # utilities
 
 hdparm
+mdadm
 pciutils
 sysprof
 usbutils
