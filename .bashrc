@@ -789,18 +789,20 @@ function index-dir {
 ########################################
 
 function indexer {
+####################
 #  0	type,target_type
 #  1	inode
 #  2	hard_links
 #  3	char_mode,octal_mode
 #  4	user:group,uid:gid
 #  5	mod_time_iso,mod_time_epoch,mod_time_zone
-#  6	blocks,size_in_k
-#  7	size_in_k	(directories only)
-#  8	md5_hash	(files only)
-#  9	@d,@f		(directories and files only, denotes empty)
+#  6	blocks,size_in_b
+#  7	size_in_b	[*,!,x]		(directories only)
+#  8	md5_hash	[*,!,x]		(files only)
+#  9	@d,@f		[*,!,-]		(directories and files only, denotes empty)
 # 10	name
 # 11	(target)
+####################
 	declare FILE=
 	if [[ "${1}" == "-p" ]]; then
 		shift
