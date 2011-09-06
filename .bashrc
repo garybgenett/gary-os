@@ -807,7 +807,12 @@ function indexer {
 	declare SED_TIME="[0-9]{2}[:][0-9]{2}[:][0-9]{2}"
 	declare SED_ZONE="[A-Z]{3}"
 	declare FILE=
-	if [[ "${1}" == "-p" ]]; then
+	if [[ "${1}" == -[pvr] ]] &&
+	   (( "${#}" >= 2 )); then
+		declare OPTION="${1}" && shift
+		${FUNCNAME} -m "${@}" | ${FUNCNAME} "${OPTION}"
+		return 0
+	elif [[ "${1}" == "-p" ]]; then
 		shift
 		perl -e '
 			use strict;
