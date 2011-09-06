@@ -909,8 +909,8 @@ function indexer {
 			declare MD5="$(echo -n "${FILE}" | cut -d$'\t' -f9)"
 			declare FIL="$(echo -n "${FILE}" | cut -d$'\t' -f11)"
 			if [[ "${MD5}" != "*" ]] &&
-			   [[ "${MD5}" != "x" ]] &&
-			   [[ "${MD5}" != "!" ]]; then
+			   [[ "${MD5}" != "!" ]] &&
+			   [[ "${MD5}" != "x" ]]; then
 				echo "${MD5}  ${FIL}"
 			fi
 		done | ${IONICE} md5sum -c -
