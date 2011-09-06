@@ -812,6 +812,17 @@ function indexer {
 		perl -e '
 			use strict;
 			use warnings;
+			while(<>){
+				chomp();
+				my $a = [split(/\0/)];
+				print "@{$a}\n";
+			};
+		' -- "${@}"
+	elif [[ "${1}" == "-m" ]]; then
+		shift
+		perl -e '
+			use strict;
+			use warnings;
 			my $matches = [@ARGV];
 			undef(@ARGV);
 			if(!@{$matches}){
@@ -822,7 +833,7 @@ function indexer {
 				my $a = [split(/\0/)];
 				foreach my $match (@{$matches}){
 					if($a->[10] =~ m|${match}|){
-						print "@{$a}\n";
+						print "${_}\n";
 					};
 				};
 			};
