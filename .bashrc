@@ -795,7 +795,7 @@ function indexer {
 #  2	hard_links
 #  3	char_mode,octal_mode
 #  4	user:group,uid:gid
-#  5	mod_time_iso,mod_time_epoch,mod_time_zone
+#  5	mod_time_iso,mod_time_epoch
 #  6	blocks,size_in_b
 #  7	size_in_b	[*,!,x]		(directories only)
 #  8	md5_hash	[*,!,x]		(files only)
@@ -803,6 +803,9 @@ function indexer {
 # 10	name
 # 11	(target)
 ####################
+	declare SED_DATE="[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+	declare SED_TIME="[0-9]{2}[:][0-9]{2}[:][0-9]{2}"
+	declare SED_ZONE="[A-Z]{3}"
 	declare FILE=
 	if [[ "${1}" == "-p" ]]; then
 		shift
@@ -920,10 +923,10 @@ function indexer {
 			if [[ -e "${TARGET}" ]]; then
 				echo "Restoring: ${TARGET}"
 				if [[          "$(echo -n "${FILE}" | cut -d$'\t' -f1 | cut -d, -f1)" != "l" ]]; then
-					chmod	$(echo -n "${FILE}" | cut -d$'\t' -f4 | cut -d, -f2) "${TARGET}"
+					chmod	"$(echo -n "${FILE}" | cut -d$'\t' -f4 | cut -d, -f2)" "${TARGET}"
 				fi &&
-				chown -h	$(echo -n "${FILE}" | cut -d$'\t' -f5 | cut -d, -f2) "${TARGET}" &&
-				touch -ht	$(echo -n "${FILE}" | cut -d$'\t' -f6 | cut -d, -f1) "${TARGET}" ||
+				chown -h	"$(echo -n "${FILE}" | cut -d$'\t' -f5 | cut -d, -f2)" "${TARGET}" &&
+				touch -hd	"$(echo -n "${FILE}" | cut -d$'\t' -f6 | cut -d, -f1 | ${SED} "s/(${SED_DATE})[T](${SED_TIME}${SED_ZONE})/\1 \2/g")" "${TARGET}" ||
 				echo "Error: ${TARGET}" 1>&2
 			else
 				echo "Missing: ${TARGET}" 1>&2
@@ -984,7 +987,8 @@ function indexer {
 			test -z "${NULL}"			&& NULL="!"
 			${IONICE} find "${FILE}" \
 				-maxdepth 0 \
-				-printf "%y,%Y\t%i\t%n\t%M,%m\t%u:%g,%U:%G\t%TY%Tm%Td%TH%TM,%T@,%TZ\t%k,%s\t${SIZE}\t${HASH}\t${NULL}\t%p\t(%l)\n" |
+				-printf "%y,%Y\t%i\t%n\t%M,%m\t%u:%g,%U:%G\t%T+%TZ,%T@\t%k,%s\t${SIZE}\t${HASH}\t${NULL}\t%p\t(%l)\n" |
+					${SED} -e "s/[.]0000000000//g" -e "s/(${SED_DATE})[+](${SED_TIME}${SED_ZONE})/\1T\2/g" |
 					tr '\t' '\0'
 		done
 	fi
