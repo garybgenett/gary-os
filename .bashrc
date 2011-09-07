@@ -743,14 +743,14 @@ function git-save {
 ########################################
 
 function index-dir {
-	declare OPTION=
-	declare SINGLE="false"
 	declare INDEX_D="${PWD}"
 	declare INDEX_N="$((12+4))"
-	[[ "${1}" == -[a-z] ]]		&& OPTION="${1}"		&& shift
-	[[ "${1}" == -0 ]]		&& SINGLE="true"		&& shift
+	declare OPTION=
+	declare SINGLE="false"
 	[[ -d "${1}" ]]			&& INDEX_D="${1}"		&& shift
 	[[ "${1}" == +([0-9]) ]]	&& INDEX_N="$((${1}+4))"	&& shift
+	[[ "${1}" == -[a-z] ]]		&& OPTION="${1}"		&& shift
+	[[ "${1}" == -0 ]]		&& SINGLE="true"		&& shift
 	declare EXCL_PATHS=
 	declare EXCL_PATH=
 	for EXCL_PATH in "${@}"; do
