@@ -685,9 +685,7 @@ function git-logdir {
 	declare LAST_P="$(ls ${GITDIR}/cur 2>/dev/null |
 		sort -n |
 		tail -n1)"
-	declare FROM_C="$(${GIT_CMD} log --full-index --pretty=oneline |
-		tail -n1 |
-		cut -d' ' -f1)"
+	declare FROM_C="--root"
 	declare FROM_N="1"
 	if [[ ! -d ${GITDIR} ]]; then
 		maildirmake ${GITDIR}
@@ -703,11 +701,7 @@ function git-logdir {
 	git-patch \
 		--start-number ${FROM_N} \
 		--output-directory ${GITDIR}/cur \
-		$(if [[ ${FROM_N} == 1 ]]; then
-			echo "--root"
-		else
-			echo "${FROM_C}"
-		fi)	|| return 1
+		${FROM_C}	|| return 1
 	return 0
 }
 
