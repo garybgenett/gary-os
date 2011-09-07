@@ -655,6 +655,18 @@ function email-copy {
 
 function git-backup {
 	declare FAIL=
+	if [[ "${1}" == -r ]]; then
+		shift
+		declare COMMIT="HEAD"
+		declare ENTIRE=
+		[[ -n "$(echo "${1}" | ${GREP} "^[a-z0-9]{40}$")" ]] && COMMIT="${1}" && shift
+		[[ -z "${@}" ]] && ENTIRE="."
+		${GIT} rm -r --cached .			>/dev/null 2>&1
+		${GIT} checkout ${COMMIT} ${ENTIRE} "${@}"
+		${GIT} checkout ${COMMIT} +index	>/dev/null 2>&1 &&
+			index-dir ${PWD} -r "${@}"
+		return 0
+	fi
 	index-dir ${PWD} -0 ./rdiff-backup-data
 	git-save ${FUNCNAME}				|| return 1
 	if [[ -n "${1}" ]]; then
