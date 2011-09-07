@@ -661,9 +661,12 @@ function git-backup {
 		declare ENTIRE=
 		[[ -n "$(echo "${1}" | ${GREP} "^[a-z0-9]{40}$")" ]] && COMMIT="${1}" && shift
 		[[ -z "${@}" ]] && ENTIRE="."
-		${GIT} rm -r --cached .			>/dev/null 2>&1
-		${GIT} checkout ${COMMIT} ${ENTIRE} "${@}"
-		${GIT} checkout ${COMMIT} +index	>/dev/null 2>&1 &&
+		touch +${FUNCNAME}				>/dev/null 2>&1 &&
+		${GIT_ADD} +${FUNCNAME}				>/dev/null 2>&1 &&
+		${RM} +${FUNCNAME}				>/dev/null 2>&1 &&
+		${GIT} rm -r --cached .				>/dev/null 2>&1 &&
+		${GIT} checkout ${COMMIT} ${ENTIRE} "${@}"	&&
+		${GIT} checkout ${COMMIT} +index		>/dev/null 2>&1 &&
 			index-dir ${PWD} -r "${@}"
 		return 0
 	fi
