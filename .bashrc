@@ -780,23 +780,25 @@ function index-dir {
 		else
 			cat ${CUR_LNK}
 		fi |
-		indexer "${OPTION}" "${@}"
+		${PV} | indexer "${OPTION}" "${@}"
 		return 0
 	fi
 	if ${SINGLE}; then
 		(cd ${INDEX_D} && \
-			eval find . ${EXCL_PATHS} -print		|
-			sort						|
-			indexer -0			>${INDEX_I}	)
+			eval find . ${EXCL_PATHS} -print		2>&3 | ${PV} -N find |
+			sort						2>&3 | ${PV} -N sort |
+			indexer -0					2>&3 | ${PV} -N indx |
+			cat				>${INDEX_I}	) 3>&2
 	else
 		${MKDIR} ${INDEX_I}
 		cat /dev/null						>${I_ERROR}
 		(cd ${INDEX_I} && \
 			${RM} $(ls -A | sort -r | tail -n+${INDEX_N})	) 2>>${I_ERROR}
 		(cd ${INDEX_D} && \
-			eval find . ${EXCL_PATHS} -print		|
-			sort						|
-			indexer				>${CUR_IDX}	) 2>>${I_ERROR}
+			eval find . ${EXCL_PATHS} -print		2>&3 | ${PV} -N find |
+			sort						2>&3 | ${PV} -N sort |
+			indexer						2>&3 | ${PV} -N indx |
+			cat				>${CUR_IDX}	) 3>>${I_ERROR}
 		(cd ${INDEX_D} && \
 			cat ${CUR_IDX} | indexer -s	>${I_USAGE}	) 2>>${I_ERROR}
 		(cd ${INDEX_I} && \
