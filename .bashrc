@@ -199,6 +199,7 @@ export GIT_PAT="${GIT_DIF} --attach --binary --keep-subject"
 ########################################
 
 export IONICE="ionice --class 2 --classdata 7"					; alias ionice="${IONICE}"
+export PV="pv --width 80 --cursor --bytes --timer --rate --average-rate"	; alias pv="${PV}"
 export XARGS="xargs --max-procs=2 --max-args=10"				; alias xargs="${XARGS}"
 
 export RDP="rdesktop -z -n NULL -g 90% -a 24 -r sound:remote"			; alias rdp="${RDP}"
