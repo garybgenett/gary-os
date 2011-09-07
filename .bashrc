@@ -762,10 +762,10 @@ function index-dir {
 	declare I_ERROR="${INDEX_I}/_error.log"
 	declare I_USAGE="${INDEX_I}/_usage.txt"
 	if [[ -n "${OPTION}" ]]; then
-		if [[ -d ${INDEX_I} ]]; then
-			cat ${CUR_LNK}
-		else
+		if [[ -f ${INDEX_I} ]]; then
 			cat ${INDEX_I}
+		else
+			cat ${CUR_LNK}
 		fi |
 		indexer "${OPTION}" "${@}"
 		return 0
