@@ -944,6 +944,7 @@ function indexer {
 	elif [[ "${1}" == -r ]]; then
 		shift
 		function do_file {
+			{ [[ "${IDX_EMPTY}" != "@d" ]] || ${MKDIR} "${TARGET}"; }			&&
 			{ [[ "${IDX__TYPE}" == "l"  ]] || chmod -v "${IDX_CHMOD}" "${TARGET}"; }	&&
 			chown -hv "${IDX_CHOWN}" "${TARGET}"						&&
 			touch -hd "${IDX_TOUCH}" "${TARGET}"						&&
@@ -951,8 +952,10 @@ function indexer {
 			return 1
 		}
 		tr '\0' '\t' | while read -r FILE; do
-			declare TARGET="$(echo -en "${FILE}" | cut -d$'\t' -f11)"
-			if [[ -e "${TARGET}" ]]; then
+			declare    TARGET="$(echo -en "${FILE}" | cut -d$'\t' -f11)"
+			declare IDX_EMPTY="$(echo -en "${FILE}" | cut -d$'\t' -f10)"
+			if [[ -e "${TARGET}" ]] ||
+			   [[ "${IDX_EMPTY}" == "@d" ]]; then
 				declare IDX__TYPE="$(echo -en "${FILE}" | cut -d$'\t' -f1 | cut -d, -f1)"
 				declare IDX_CHMOD="$(echo -en "${FILE}" | cut -d$'\t' -f4 | cut -d, -f2)"
 				declare IDX_CHOWN="$(echo -en "${FILE}" | cut -d$'\t' -f5 | cut -d, -f2)"
