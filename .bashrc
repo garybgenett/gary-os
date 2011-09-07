@@ -886,7 +886,7 @@ function indexer {
 						push(@{$tlds}, [$a->[7], $a->[10],]);
 					}else{
 						my $cur = $a->[10];
-						$cur =~ s|(^[.]/[^/]+)/.+$|\1|g;
+						$cur =~ s|(^[.]/[^/]+)/.+$|$1|g;
 						push(@{$subs->{$cur}}, [$a->[7], $a->[10],]);
 						my $exists = 0;
 						foreach my $tld (@{$tlds}){
@@ -907,7 +907,7 @@ function indexer {
 			sub format_output {
 				my($head, $size, $file) = (shift, shift, shift);
 				$size = reverse($size);
-				$size =~ s/([0-9]{3})/\1\ /g;
+				$size =~ s/([0-9]{3})/$1\ /g;
 				$size = reverse($size);
 				if($head){
 					print "-"x7 .">";
