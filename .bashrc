@@ -756,6 +756,7 @@ function index-dir {
 	done
 	declare INDEX_I="${INDEX_D}/+index"
 	declare CUR_IDX="${INDEX_I}/$(date --iso=s)"
+	declare CUR_LNK="${INDEX_I}/_current.txt"
 	declare I_ERROR="${INDEX_I}/_error.log"
 	declare I_USAGE="${INDEX_I}/_usage.txt"
 	if ${SINGLE}; then
@@ -775,7 +776,7 @@ function index-dir {
 		(cd ${INDEX_D} && \
 			cat ${CUR_IDX} | indexer -s		>${I_USAGE}	) 2>>${I_ERROR}
 		(cd ${INDEX_I} && \
-			${LN} $(basename ${CUR_IDX}) _current.txt		) 2>>${I_ERROR}
+			${LN} $(basename ${CUR_IDX}) ${CUR_LNK}			) 2>>${I_ERROR}
 	fi
 	return 0
 }
