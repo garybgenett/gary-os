@@ -807,12 +807,13 @@ function indexer {
 	declare SED_TIME="[0-9]{2}[:][0-9]{2}[:][0-9]{2}"
 	declare SED_ZONE="[A-Z]{3}"
 	declare FILE=
-	if [[ "${1}" == -[pvr] ]] &&
+	if [[ "${1}" == -[a-z] ]] &&
+	   [[ "${1}" != -m ]] &&
 	   (( "${#}" >= 2 )); then
 		declare OPTION="${1}" && shift
 		${FUNCNAME} -m "${@}" | ${FUNCNAME} "${OPTION}"
 		return 0
-	elif [[ "${1}" == "-p" ]]; then
+	elif [[ "${1}" == -p ]]; then
 		shift
 		perl -e '
 			use strict;
@@ -823,7 +824,7 @@ function indexer {
 				print "@{$a}\n";
 			};
 		' -- "${@}"
-	elif [[ "${1}" == "-m" ]]; then
+	elif [[ "${1}" == -m ]]; then
 		shift
 		perl -e '
 			use strict;
@@ -843,7 +844,7 @@ function indexer {
 				};
 			};
 		' -- "${@}"
-	elif [[ "${1}" == "-l" ]]; then
+	elif [[ "${1}" == -l ]]; then
 		shift
 		perl -e '
 			use strict;
@@ -870,7 +871,7 @@ function indexer {
 			print "\n Symlinks:\n"		; foreach my $out (@{$symlink}){ print "@{$out}\n"; };
 			print "\n Failures:\n"		; foreach my $out (@{$failure}){ print "@{$out}\n"; };
 		' -- "${@}"
-	elif [[ "${1}" == "-s" ]]; then
+	elif [[ "${1}" == -s ]]; then
 		shift
 		perl -e '
 			use strict;
@@ -923,7 +924,8 @@ function indexer {
 				};
 			};
 		' -- "${@}"
-	elif [[ "${1}" == "-v" ]]; then
+	elif [[ "${1}" == -v ]]; then
+		shift
 		tr '\0' '\t' | while read -r FILE; do
 			declare MD5="$(echo -en "${FILE}" | cut -d$'\t' -f9)"
 			declare FIL="$(echo -en "${FILE}" | cut -d$'\t' -f11)"
@@ -933,7 +935,8 @@ function indexer {
 				echo "${MD5}  ${FIL}"
 			fi
 		done | ${IONICE} md5sum -c -
-	elif [[ "${1}" == "-r" ]]; then
+	elif [[ "${1}" == -r ]]; then
+		shift
 		tr '\0' '\t' | while read -r FILE; do
 			declare TARGET="$(echo -en "${FILE}" | cut -d$'\t' -f11)"
 			if [[ -e "${TARGET}" ]]; then
@@ -948,7 +951,7 @@ function indexer {
 				echo "Missing: ${TARGET}" 1>&2
 			fi
 		done
-	elif [[ "${1}" == "-d" ]]; then
+	elif [[ "${1}" == -d ]]; then
 		shift
 		perl -e '
 			use strict;
@@ -974,7 +977,7 @@ function indexer {
 		' -- "${@}"
 	else
 		declare FORKS="true"
-		if [[ "${1}" == "-0" ]]; then
+		if [[ "${1}" == -0 ]]; then
 			FORKS="false"
 		fi
 		function get_output {
