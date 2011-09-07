@@ -943,15 +943,22 @@ function indexer {
 		done | ${IONICE} md5sum -c -
 	elif [[ "${1}" == -r ]]; then
 		shift
+		function do_file {
+			{ [[ "${IDX__TYPE}" == "l"  ]] || chmod -v "${IDX_CHMOD}" "${TARGET}"; }	&&
+			chown -hv "${IDX_CHOWN}" "${TARGET}"						&&
+			touch -hd "${IDX_TOUCH}" "${TARGET}"						&&
+			return 0
+			return 1
+		}
 		tr '\0' '\t' | while read -r FILE; do
 			declare TARGET="$(echo -en "${FILE}" | cut -d$'\t' -f11)"
 			if [[ -e "${TARGET}" ]]; then
+				declare IDX__TYPE="$(echo -en "${FILE}" | cut -d$'\t' -f1 | cut -d, -f1)"
+				declare IDX_CHMOD="$(echo -en "${FILE}" | cut -d$'\t' -f4 | cut -d, -f2)"
+				declare IDX_CHOWN="$(echo -en "${FILE}" | cut -d$'\t' -f5 | cut -d, -f2)"
+				declare IDX_TOUCH="$(echo -en "${FILE}" | cut -d$'\t' -f6 | cut -d, -f1 | ${SED} "s/(${SED_DATE})[T](${SED_TIME}${SED_ZONE})/\1 \2/g")"
 				echo "Restoring: ${TARGET}"
-				if [[          "$(echo -en "${FILE}" | cut -d$'\t' -f1 | cut -d, -f1)" != "l" ]]; then
-					chmod	"$(echo -en "${FILE}" | cut -d$'\t' -f4 | cut -d, -f2)" "${TARGET}"
-				fi &&
-				chown -h	"$(echo -en "${FILE}" | cut -d$'\t' -f5 | cut -d, -f2)" "${TARGET}" &&
-				touch -hd	"$(echo -en "${FILE}" | cut -d$'\t' -f6 | cut -d, -f1 | ${SED} "s/(${SED_DATE})[T](${SED_TIME}${SED_ZONE})/\1 \2/g")" "${TARGET}" ||
+				do_file >/dev/null 2>&1 ||
 				echo "Error: ${TARGET}" 1>&2
 			else
 				echo "Missing: ${TARGET}" 1>&2
