@@ -925,8 +925,8 @@ function indexer {
 		' -- "${@}"
 	elif [[ "${1}" == "-v" ]]; then
 		tr '\0' '\t' | while read -r FILE; do
-			declare MD5="$(echo -n "${FILE}" | cut -d$'\t' -f9)"
-			declare FIL="$(echo -n "${FILE}" | cut -d$'\t' -f11)"
+			declare MD5="$(echo -en "${FILE}" | cut -d$'\t' -f9)"
+			declare FIL="$(echo -en "${FILE}" | cut -d$'\t' -f11)"
 			if [[ "${MD5}" != "*" ]] &&
 			   [[ "${MD5}" != "!" ]] &&
 			   [[ "${MD5}" != "x" ]]; then
@@ -935,14 +935,14 @@ function indexer {
 		done | ${IONICE} md5sum -c -
 	elif [[ "${1}" == "-r" ]]; then
 		tr '\0' '\t' | while read -r FILE; do
-			declare TARGET="$(echo -n "${FILE}" | cut -d$'\t' -f11)"
+			declare TARGET="$(echo -en "${FILE}" | cut -d$'\t' -f11)"
 			if [[ -e "${TARGET}" ]]; then
 				echo "Restoring: ${TARGET}"
-				if [[          "$(echo -n "${FILE}" | cut -d$'\t' -f1 | cut -d, -f1)" != "l" ]]; then
-					chmod	"$(echo -n "${FILE}" | cut -d$'\t' -f4 | cut -d, -f2)" "${TARGET}"
+				if [[          "$(echo -en "${FILE}" | cut -d$'\t' -f1 | cut -d, -f1)" != "l" ]]; then
+					chmod	"$(echo -en "${FILE}" | cut -d$'\t' -f4 | cut -d, -f2)" "${TARGET}"
 				fi &&
-				chown -h	"$(echo -n "${FILE}" | cut -d$'\t' -f5 | cut -d, -f2)" "${TARGET}" &&
-				touch -hd	"$(echo -n "${FILE}" | cut -d$'\t' -f6 | cut -d, -f1 | ${SED} "s/(${SED_DATE})[T](${SED_TIME}${SED_ZONE})/\1 \2/g")" "${TARGET}" ||
+				chown -h	"$(echo -en "${FILE}" | cut -d$'\t' -f5 | cut -d, -f2)" "${TARGET}" &&
+				touch -hd	"$(echo -en "${FILE}" | cut -d$'\t' -f6 | cut -d, -f1 | ${SED} "s/(${SED_DATE})[T](${SED_TIME}${SED_ZONE})/\1 \2/g")" "${TARGET}" ||
 				echo "Error: ${TARGET}" 1>&2
 			else
 				echo "Missing: ${TARGET}" 1>&2
@@ -981,15 +981,15 @@ function indexer {
 			if ${FORKS}; then
 				${IONICE} "${@}" "${FILE}" 2>/dev/null | ${SED} "s/[[:space:]].+$//g"
 			else
-				echo -n "x"
+				echo -en "x"
 			fi
 		}
 		function get_null {
 			declare TYPE="${1}" && shift
 			if [[ -n "$(find "${FILE}" -maxdepth 0 -empty 2>/dev/null)" ]]; then
-				echo -n "@${TYPE}"
+				echo -en "@${TYPE}"
 			else
-				echo -n "-"
+				echo -en "-"
 			fi
 		}
 		while read -r FILE; do
