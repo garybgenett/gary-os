@@ -813,11 +813,13 @@ function indexer {
 	declare SED_TIME="[0-9]{2}[:][0-9]{2}[:][0-9]{2}"
 	declare SED_ZONE="[A-Z]{3}"
 	declare FILE=
+	declare DEBUG="false"
+	[[ "${1}" == -d ]] && DEBUG="true" && shift
 	if [[ "${1}" == -[a-z] ]] &&
 	   [[ "${1}" != -m ]] &&
 	   (( "${#}" >= 2 )); then
 		declare OPTION="${1}" && shift
-		${FUNCNAME} -m "${@}" | ${FUNCNAME} "${OPTION}"
+		${FUNCNAME} -m "${@}" | ${FUNCNAME} $(${DEBUG} && echo "-d") "${OPTION}"
 		return 0
 	elif [[ "${1}" == -p ]]; then
 		shift
