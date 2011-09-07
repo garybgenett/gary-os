@@ -945,6 +945,13 @@ function indexer {
 		done | ${IONICE} md5sum -c -
 	elif [[ "${1}" == -r ]]; then
 		shift
+		if ! ${DEBUG}; then
+			for FILE in errors missing; do
+				if [[ -f +${FUNCNAME}.${FILE} ]]; then
+					${RM} +${FUNCNAME}.${FILE}
+				fi
+			done
+		fi
 		function do_file {
 			{ [[ "${IDX_EMPTY}" != "@d" ]] || ${MKDIR} "${TARGET}"; }			&&
 			{ [[ "${IDX__TYPE}" == "l"  ]] || chmod -v "${IDX_CHMOD}" "${TARGET}"; }	&&
@@ -962,13 +969,35 @@ function indexer {
 				declare IDX_CHMOD="$(echo -en "${FILE}" | cut -d$'\t' -f4 | cut -d, -f2)"
 				declare IDX_CHOWN="$(echo -en "${FILE}" | cut -d$'\t' -f5 | cut -d, -f2)"
 				declare IDX_TOUCH="$(echo -en "${FILE}" | cut -d$'\t' -f6 | cut -d, -f1 | ${SED} "s/(${SED_DATE})[T](${SED_TIME}${SED_ZONE})/\1 \2/g")"
-				echo "Restoring: ${TARGET}"
-				do_file >/dev/null 2>&1 ||
-				echo "Error: ${TARGET}" 1>&2
+				if ${DEBUG}; then
+					echo -en "RESTORE: ${TARGET}\n"
+					do_file
+				else
+					if do_file >/dev/null 2>&1; then
+						echo -en "."
+					else
+						echo -en "!"
+						echo "${FILE}" | tr '\t' '\0' >>+${FUNCNAME}.errors
+					fi
+				fi
 			else
-				echo "Missing: ${TARGET}" 1>&2
+				if ${DEBUG}; then
+					echo -en "MISSING: ${TARGET}\n" 1>&2
+				else
+					echo -en "*"
+					echo "${FILE}" | tr '\t' '\0' >>+${FUNCNAME}.missing
+				fi
 			fi
 		done
+		if ! ${DEBUG}; then
+			echo -en "\n"
+			for FILE in errors missing; do
+				if [[ -f +${FUNCNAME}.${FILE} ]]; then
+					echo -en "\n"
+					cat +${FUNCNAME}.${FILE} | ${FUNCNAME} -d -r
+				fi
+			done
+		fi
 	elif [[ "${1}" == -d ]]; then
 		shift
 		perl -e '
