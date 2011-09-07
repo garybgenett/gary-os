@@ -743,9 +743,11 @@ function git-save {
 ########################################
 
 function index-dir {
+	declare OPTION=
 	declare SINGLE="false"
 	declare INDEX_D="${PWD}"
 	declare INDEX_N="$((12+4))"
+	[[ "${1}" == -[a-z] ]]		&& OPTION="${1}"		&& shift
 	[[ "${1}" == -0 ]]		&& SINGLE="true"		&& shift
 	[[ -d "${1}" ]]			&& INDEX_D="${1}"		&& shift
 	[[ "${1}" == +([0-9]) ]]	&& INDEX_N="$((${1}+4))"	&& shift
@@ -759,6 +761,15 @@ function index-dir {
 	declare CUR_LNK="${INDEX_I}/_current.txt"
 	declare I_ERROR="${INDEX_I}/_error.log"
 	declare I_USAGE="${INDEX_I}/_usage.txt"
+	if [[ -n "${OPTION}" ]]; then
+		if [[ -d ${INDEX_I} ]]; then
+			cat ${CUR_LNK}
+		else
+			cat ${INDEX_I}
+		fi |
+		indexer "${OPTION}" "${@}"
+		return 0
+	fi
 	if ${SINGLE}; then
 		(cd ${INDEX_D} && \
 			eval find . ${EXCL_PATHS} -print	|
