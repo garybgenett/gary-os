@@ -330,15 +330,14 @@ fi
 
 ########################################
 
-alias synctail="tail -f /.g/_data/+sync/_sync.log"
-alias logtail="tail -f /.runit/log/syslogd"
-
 alias rsynclook="${GREP} -v '^[.<>c][fdDLS]'"
-alias tcplook="tcpdump -r /.runit/log/tcpdump"
+
+alias logtail="tail -f /.runit/log/syslogd"
+alias synctail="tail -f /.g/_data/+sync/_sync.log"
 
 alias filter="iptables -L -nvx --line-numbers | ${MORE}"
-alias natter="iptables -L -nvx --line-numbers -t nat | ${MORE}"
 alias mangler="iptables -L -nvx --line-numbers -t mangle | ${MORE}"
+alias natter="iptables -L -nvx --line-numbers -t nat | ${MORE}"
 
 ########################################
 
