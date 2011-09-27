@@ -2,7 +2,7 @@
 # portage package keywords file
 ################################################################################
 
-<sys-boot/grub-9999 **
+sys-boot/grub **
 
 media-tv/xbmc **
 
