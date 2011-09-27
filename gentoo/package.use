@@ -16,6 +16,7 @@ x11-libs/vte				python		# gentoo required
 dev-libs/libgcrypt			static-libs	# gentoo required
 dev-libs/libgpg-error			static-libs	# gentoo required
 dev-libs/popt				static-libs	# gentoo required
+sys-apps/util-linux			static-libs	# gentoo required
 sys-libs/ncurses			static-libs	# gentoo required
 
 x11-libs/qt-declarative			webkit		# gentoo required
@@ -52,6 +53,7 @@ net-print/cups				samba
 media-libs/libpng			apng		# gentoo required
 sys-block/parted			device-mapper	# gentoo required
 sys-fs/udev				gudev		# gentoo required
+sys-libs/zlib				minizip		# gentoo required
 
 app-text/lcdf-typetools			kpathsea	# gentoo required
 app-text/texlive-core			xetex		# gentoo required
