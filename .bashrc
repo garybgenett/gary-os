@@ -670,10 +670,14 @@ function git-backup {
 		index-dir ${PWD} -r "${@}"
 		return 0
 	fi
-	index-dir ${PWD} -0 $(
-		${GREP} "^/" .gitignore |
-		${SED} -e "s|^/|./|g" -e "s|/$||g"
-		)
+	if [[ "${1}" == -! ]]; then
+		shift
+	else
+		index-dir ${PWD} -0 $(
+			${GREP} "^/" .gitignore |
+			${SED} -e "s|^/|./|g" -e "s|/$||g"
+			)
+	fi
 	git-save ${FUNCNAME}				|| return 1
 	if [[ -n "${1}" ]]; then
 		{ git-purge "${1}" &&
