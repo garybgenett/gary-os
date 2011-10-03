@@ -1048,6 +1048,19 @@ function indexer {
 				print "${size}\t${_}\n";
 			};
 		' -- "${@}"
+	elif [[ "${1}" == -! ]]; then
+		shift
+		perl -e '
+			while(<>){
+				chomp();
+				# \000 = null character
+				# \042 = double quote
+				# \047 = single quote
+				if($_ =~ m|([^A-Za-z0-9 \000\042\047 \(\)\[\]\{\} \!\#\$\%\&\*\+\,\/\:\;\=\?\@\^\~ _.-])|){
+					print "[$1]: $_\n";
+				};
+			};
+		' -- "${@}"
 	else
 		declare FORKS="true"
 		if [[ "${1}" == -0 ]]; then
