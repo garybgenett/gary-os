@@ -912,7 +912,7 @@ function indexer {
 						push(@{$tlds}, [$a->[7], $a->[10],]);
 					}else{
 						my $cur = $a->[10];
-						$cur =~ s|(^[.]/[^/]+)/.+$|$1|g;
+						$cur =~ s|^([.]/[^/]+)/.+$|$1|g;
 						push(@{$subs->{$cur}}, [$a->[7], $a->[10],]);
 						my $exists = 0;
 						foreach my $tld (@{$tlds}){
