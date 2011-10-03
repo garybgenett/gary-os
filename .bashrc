@@ -667,7 +667,7 @@ function git-backup {
 		${GIT} rm -r --cached .				>/dev/null 2>&1 &&
 		${GIT} checkout ${COMMIT} ${ENTIRE} "${@}"	&&
 		${GIT} checkout ${COMMIT} +index		>/dev/null 2>&1 &&
-			index-dir ${PWD} -r "${@}"
+		index-dir ${PWD} -r "${@}"
 		return 0
 	fi
 	index-dir ${PWD} -0 ./rdiff-backup-data
