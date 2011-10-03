@@ -798,9 +798,10 @@ function index-dir {
 		(cd ${INDEX_I} && \
 			${RM} $(ls -A | sort -r | tail -n+${INDEX_N})	) 2>>${I_ERROR}
 		(cd ${INDEX_D} && \
-			eval find . ${EXCL_PATHS} -print		2>&3 | ${PV} -N find |
-			sort						2>&3 | ${PV} -N sort |
-			indexer						2>&3 | ${PV} -N indx |
+			(	eval find . ${EXCL_PATHS} -print	2>&3;
+				eval find "${@}" -type d -print		2>&3) | ${PV} -N find |
+			sort						2>&3  | ${PV} -N sort |
+			indexer						2>&3  | ${PV} -N indx |
 			cat				>${CUR_IDX}	) 3>>${I_ERROR}
 		(cd ${INDEX_D} && \
 			cat ${CUR_IDX} | indexer -s	>${I_USAGE}	) 2>>${I_ERROR}
