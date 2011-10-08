@@ -20,11 +20,11 @@ declare FAIL_COLOR="\e[1;31m"	# red
 ################################################################################
 
 if [[ "${1}" == "on" ]]; then
-	[[ -z "$(grep "${SCRIPT}" /usr/lib/portage/bin/ebuild.sh)" ]] &&
+	[[ -z "$(grep "${SCRIPT}" /usr/lib/portage/bin/phase-helpers.sh)" ]] &&
 	sed -r -i \
 		-e "s|! (\"\\$\{ECONF_SOURCE\}/configure\")|! ${SCRIPT} \1|g" \
 		-e "s|(\\$\{MAKE:-make\})|${SCRIPT} \1|g" \
-		/usr/lib/portage/bin/ebuild.sh
+		/usr/lib/portage/bin/phase-helpers.sh
 	[[ -z "$(grep "${SCRIPT}" /usr/lib/portage/bin/ebuild-helpers/emake)" ]] &&
 	sed -r -i \
 		-e "s|^(\\$\{MAKE:-make\})|${SCRIPT} \1|g" \
@@ -33,7 +33,7 @@ if [[ "${1}" == "on" ]]; then
 elif [[ "${1}" == "off" ]]; then
 	sed -r -i \
 		-e "s|${SCRIPT} ||g" \
-		/usr/lib/portage/bin/ebuild.sh
+		/usr/lib/portage/bin/phase-helpers.sh
 	sed -r -i \
 		-e "s|${SCRIPT} ||g" \
 		/usr/lib/portage/bin/ebuild-helpers/emake
