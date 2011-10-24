@@ -808,7 +808,7 @@ function index-dir {
 			${RM} $(ls -A | sort -r | tail -n+${INDEX_N})	) 2>>${I_ERROR}
 		echo -en "\n"
 		(cd ${INDEX_D} && \
-			(	eval find . ${EXCL_PATHS} -print	2>&3;
+			(	eval find . ${EXCL_PATHS} -print	2>&3; [[ -n "${@}" ]] &&
 				eval find "${@}" -type d -print		2>&3) | ${PV} -N find |
 			sort						2>&3  | ${PV} -N sort |
 			indexer						2>&3  | ${PV} -N indx |
