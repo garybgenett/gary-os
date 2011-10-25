@@ -265,6 +265,7 @@ bind
 cups
 dhcp
 dovecot
+hostapd
 lighttpd
 mysql
 ntp
