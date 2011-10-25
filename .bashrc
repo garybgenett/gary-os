@@ -176,6 +176,8 @@ export LL="${LS} -asF -l"					; alias ll="${LL}"
 export LX="${LS} -asF -kC"					; alias lx="${LX}"
 export LF="eval ${LL} -d \`find . -maxdepth 1 ! -type l\`"	; alias lf="${LF}"
 
+export LI="find . | sort | indexer | indexer -p"		; alias li="${LI}"
+
 export DU="du -b --time --time-style=long-iso"			; alias du="${DU}"
 export LU="${DU} -ak --max-depth 1"				; alias lu="${LU}"
 
