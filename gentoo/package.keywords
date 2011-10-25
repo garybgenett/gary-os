@@ -4,9 +4,9 @@
 
 sys-boot/grub **
 
+games-board/xboard **
+games-emulation/mekanix **
 media-tv/xbmc **
-
->=games-emulation/mekanix-070 **
 
 ################################################################################
 # end of file
