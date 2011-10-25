@@ -115,7 +115,6 @@ gcc-config
 genkernel
 gentoo-bashcomp
 gentoo-sources
-'=gentoo-sources-2.6.39-r2'
 '=gentoo-sources-3.0.6'
 app-vim/gentoo-syntax			#>>> gentoo-syntax
 gentoolkit
