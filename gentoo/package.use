@@ -7,71 +7,33 @@ app-text/poppler			cairo		# gentoo required
 dev-libs/libxml2			python		# gentoo required
 media-libs/libsdl			joystick	# gentoo required
 sys-auth/consolekit			policykit	# gentoo required
-sys-auth/pambase			consolekit	# gentoo required
 
-app-emulation/libvirt			python		# gentoo required
-net-libs/gtk-vnc			python		# gentoo required
-x11-libs/vte				python		# gentoo required
+########################################
+
+media-libs/freetype			kpathsea	# gentoo required
+media-libs/libpng			apng		# gentoo required
+sys-auth/pambase			consolekit	# gentoo required
+sys-libs/zlib				minizip		# gentoo required
 
 dev-libs/libgcrypt			static-libs	# gentoo required
 dev-libs/libgpg-error			static-libs	# gentoo required
 dev-libs/popt				static-libs	# gentoo required
 sys-apps/util-linux			static-libs	# gentoo required
-sys-libs/ncurses			static-libs	# gentoo required
-
-x11-libs/qt-declarative			webkit		# gentoo required
-
-########################################
-
-app-office/libreoffice			-debug cups	# required to build
-media-libs/svgalib			build		# required to build
-net-fs/samba				-debug		# required to build
-
-########################################
-
-sys-libs/pam				-debug		# causes failures
 
 ################################################################################
 
-sys-devel/gcc				-gtk
-
-########################################
-
-app-portage/layman			subversion
+app-portage/layman			git subversion
 dev-vcs/cvs2svn				git
 dev-vcs/git				subversion
 
-########################################
-
-dev-libs/cyrus-sasl			-ldap
 media-video/vlc				qt4
 net-fs/samba				cups
 net-print/cups				samba
 
-################################################################################
-
-media-libs/libpng			apng		# gentoo required
-sys-block/parted			device-mapper	# gentoo required
-sys-fs/udev				gudev		# gentoo required
-sys-libs/zlib				minizip		# gentoo required
-
-app-text/lcdf-typetools			kpathsea	# gentoo required
-app-text/texlive-core			xetex		# gentoo required
-media-libs/freetype			kpathsea	# gentoo required
-
 ########################################
 
-media-video/mplayer			-cdio iconv	# required to build
-
-########################################
-
-media-libs/phonon			-vlc
-
-########################################
-
-app-text/enchant			-hunspell aspell
+app-text/enchant			aspell
 mail-client/mutt			sidebar
-mail-client/thunderbird			ldap
 net-analyzer/tcpdump			-chroot
 x11-base/xorg-server			xnest xvfb
 x11-drivers/nvidia-drivers		-acpi
