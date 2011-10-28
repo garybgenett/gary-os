@@ -12,6 +12,9 @@ chmod -v 666 /dev/snd/control*
 chmod -v 666 /dev/snd/pcm*
 chmod -v 666 /dev/snd/timer*
 
+chmod -v 666 /dev/nvidia0
+chmod -v 666 /dev/nvidiactl
+
 ########################################
 
 chmod -v 000 /usr/bin/dbus-daemon
