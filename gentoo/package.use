@@ -3,17 +3,19 @@
 ################################################################################
 
 app-text/ghostscript-gpl		cups		# gentoo required
-app-text/poppler			cairo		# gentoo required
+app-text/poppler			cairo qt4	# gentoo required
 dev-libs/libxml2			python		# gentoo required
 media-libs/libsdl			joystick	# gentoo required
 sys-auth/consolekit			policykit	# gentoo required
 
 ########################################
 
+dev-python/PyQt4			webkit		# gentoo required
 media-libs/freetype			kpathsea	# gentoo required
 media-libs/libpng			apng		# gentoo required
 sys-auth/pambase			consolekit	# gentoo required
 sys-libs/zlib				minizip		# gentoo required
+x11-libs/libdrm				libkms		# gentoo required
 
 dev-libs/libgcrypt			static-libs	# gentoo required
 dev-libs/libgpg-error			static-libs	# gentoo required
