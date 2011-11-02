@@ -441,6 +441,16 @@ function git-patch {
 
 ########################################
 
+function hist-grep {
+	${GREP} "${@}" ${HOME}/.history/shell/${HOSTNAME}.${USER}.$(basename ${SHELL}).* |
+		cut -d: -f2- |
+		sort |
+		uniq |
+		${GREP} "${@}"
+}
+
+########################################
+
 function ldir {
 	${LL} -R "${@}" | more
 }
