@@ -218,7 +218,7 @@ export RDIFF_BACKUP="reporter rdiff-backup \
 	--preserve-numerical-ids"
 export RDIFF_RM="rdiff-backup \
 	--force \
-	--remove-older-than 1Y"
+	--remove-older-than 6M"
 
 alias rdiff-backup="${RDIFF_BACKUP}"
 alias rdiff-rm="${RDIFF_RM}"
