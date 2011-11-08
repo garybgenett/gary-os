@@ -183,15 +183,21 @@ export LU="${DU} -ak --max-depth 1"				; alias lu="${LU}"
 
 ########################################
 
-export CVS="reporter cvs"			; alias cvs="${CVS}"
-export SVN="reporter svn"			; alias svn="${SVN}"
+export IONICE="ionice --class 2 --classdata 7"			; alias ionice="${IONICE}"
+export PV="pv --cursor --bytes --timer --rate --average-rate"	; alias pv="${PV}"
+export XARGS="xargs --max-procs=2 --max-args=10"		; alias xargs="${XARGS}"
+
+########################################
+
+export CVS="reporter cvs"					; alias cvs="${CVS}"
+export SVN="reporter svn"					; alias svn="${SVN}"
 
 export GIT_CMD="git"
-export GIT="reporter ${GIT_CMD}"		; alias git="${GIT}"
-export GIT_ADD="${GIT} add --verbose"		; alias git-add="${GIT_ADD}"
-export GIT_CMT="${GIT} commit --verbose"	; alias git-commit="${GIT_CMT}"
-export GIT_STS="${GIT} status"			; alias git-status="${GIT_STS}"
-export GIT_SVN="${GIT} svn"			; alias git-svn="${GIT_SVN}"
+export GIT="reporter ${GIT_CMD}"				; alias git="${GIT}"
+export GIT_ADD="${GIT} add --verbose"				; alias git-add="${GIT_ADD}"
+export GIT_CMT="${GIT} commit --verbose"			; alias git-commit="${GIT_CMT}"
+export GIT_STS="${GIT} status"					; alias git-status="${GIT_STS}"
+export GIT_SVN="${GIT} svn"					; alias git-svn="${GIT_SVN}"
 
 export DIFF_OPTS="-u -U10"
 export GIT_DIF="--find-renames --full-index --summary --stat=128,128"
@@ -199,10 +205,6 @@ export GIT_FMT="${GIT_DIF} --pretty=fuller --date=iso --decorate"
 export GIT_PAT="${GIT_DIF} --attach --binary --keep-subject"
 
 ########################################
-
-export IONICE="ionice --class 2 --classdata 7"			; alias ionice="${IONICE}"
-export PV="pv --cursor --bytes --timer --rate --average-rate"	; alias pv="${PV}"
-export XARGS="xargs --max-procs=2 --max-args=10"		; alias xargs="${XARGS}"
 
 export RDP="rdesktop -z -n NULL -g 90% -a 24 -r sound:remote"			; alias rdp="${RDP}"
 export VNC="vncviewer -Shared -FullColor"					; alias vnc="${VNC}"
