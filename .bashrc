@@ -1118,7 +1118,7 @@ function indexer {
 ########################################
 
 function journal {
-	declare JOURNAL_DIR="/.g/_data/zactive/_pim/journal"
+	declare JOURNAL_DIR="/.g/_data/zactive/writing/tresobis/_staging"
 	if [[ -d "${1}" ]]; then
 		JOURNAL_DIR="${1}"
 		shift
