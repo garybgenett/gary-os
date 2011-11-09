@@ -167,15 +167,15 @@ unset VISUAL
 
 ########################################
 
-export CP="cp -pvR"				; alias cp="${CP}"
-export GREP="grep --color=auto -E"		; alias grep="${GREP}"
-export LN="ln -fsv"				; alias ln="${LN}"
-export MKDIR="mkdir -pv"			; alias mkdir="${MKDIR}"
-export MV="mv -v"				; alias mv="${MV}"
-export PS="ps aux -ww"				; alias psl="${PS}"
-export RM="rm -frv"				; alias rm="${RM}"
-export RMDIR="rmdir -v"				; alias rmdir="${RMDIR}"
-export SED="sed -r"				; alias sed="${SED}"
+export CP="cp -pvR"			; alias cp="${CP}"
+export GREP="grep --color=auto -E"	; alias grep="${GREP}"
+export LN="ln -fsv"			; alias ln="${LN}"
+export MKDIR="mkdir -pv"		; alias mkdir="${MKDIR}"
+export MV="mv -v"			; alias mv="${MV}"
+export PS="ps aux -ww"			; alias psl="${PS}"
+export RM="rm -frv"			; alias rm="${RM}"
+export RMDIR="rmdir -v"			; alias rmdir="${RMDIR}"
+export SED="sed -r"			; alias sed="${SED}"
 
 if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
 	unalias sed
@@ -212,8 +212,8 @@ export GIT_PAT="${GIT_DIF} --attach --binary --keep-subject"
 
 ########################################
 
-export PV="pv --cursor --bytes --timer --rate --average-rate"	; alias pv="${PV}"
-export XARGS="xargs --max-procs=2 --max-args=10"		; alias xargs="${XARGS}"
+export PV="pv --cursor --bytes --timer --rate --average-rate"			; alias pv="${PV}"
+export XARGS="xargs --max-procs=2 --max-args=10"				; alias xargs="${XARGS}"
 
 export RDP="rdesktop -z -n NULL -g 90% -a 24 -r sound:remote"			; alias rdp="${RDP}"
 export VNC="vncviewer -Shared -FullColor"					; alias vnc="${VNC}"
