@@ -200,7 +200,7 @@ export GIT_PAT="${GIT_DIF} --attach --binary --keep-subject"
 
 ########################################
 
-export IONICE="nice -n 19 ionice --class 2 --classdata 7"	; alias ionice="${IONICE}"
+export NICELY="nice -n 19 ionice --class 2 --classdata 7"	; alias nicely="${NICELY}"
 export PV="pv --cursor --bytes --timer --rate --average-rate"	; alias pv="${PV}"
 export XARGS="xargs --max-procs=2 --max-args=10"		; alias xargs="${XARGS}"
 
@@ -411,7 +411,7 @@ function format {
 ########################################
 
 function git {
-	${IONICE} $(which git) --git-dir="${PWD}.git" --work-tree="${PWD}" "${@}"
+	${NICELY} $(which git) --git-dir="${PWD}.git" --work-tree="${PWD}" "${@}"
 }
 
 ########################################
@@ -983,7 +983,7 @@ function indexer {
 			   [[ "${MD5}" != "x" ]]; then
 				echo "${MD5}  ${FIL}"
 			fi
-		done | ${IONICE} md5sum -c -
+		done | ${NICELY} md5sum -c -
 	elif [[ "${1}" == -r ]]; then
 		shift
 		if ! ${DEBUG}; then
@@ -1083,7 +1083,7 @@ function indexer {
 		fi
 		function get_output {
 			if ${FORKS}; then
-				${IONICE} "${@}" "${FILE}" 2>/dev/null | ${SED} "s/[[:space:]].+$//g"
+				${NICELY} "${@}" "${FILE}" 2>/dev/null | ${SED} "s/[[:space:]].+$//g"
 			else
 				echo -en "x"
 			fi
@@ -1105,7 +1105,7 @@ function indexer {
 			test -z "${SIZE}"			&& SIZE="!"
 			test -z "${HASH}"			&& HASH="!"
 			test -z "${NULL}"			&& NULL="!"
-			${IONICE} find "${FILE}" \
+			${NICELY} find "${FILE}" \
 				-maxdepth 0 \
 				-printf "%y,%Y\t%i\t%n\t%M,%m\t%u:%g,%U:%G\t%T+%TZ,%T@\t%k,%s\t${SIZE}\t${HASH}\t${NULL}\t%p\t(%l)\n" |
 					${SED} -e "s/[.]0000000000//g" -e "s/(${SED_DATE})[+](${SED_TIME}${SED_ZONE})/\1T\2/g" |
@@ -1288,7 +1288,7 @@ function reporter {
 	echo -en "\n reporting [${CMD}]: '${SRC}' -> '${DST}'\n"
 	echo -en "(${HOSTNAME}:${PWD}) ${@}\n"
 	if [[ ${1} != git ]]; then
-		time ${IONICE} "${@}" || return 1
+		time ${NICELY} "${@}" || return 1
 	else
 		time "${@}" || return 1
 	fi
