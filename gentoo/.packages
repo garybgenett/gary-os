@@ -121,6 +121,7 @@ gentoolkit
 gentoolkit-dev
 java-config
 layman
+module-rebuild
 portage
 portage-utils
 ufed
