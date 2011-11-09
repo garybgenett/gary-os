@@ -718,11 +718,11 @@ function git-backup {
 ########################################
 
 function git-clean {
-	${GIT} reset --soft					|| return 1
-	${GIT} reflog expire --all --expire-unreachable=0	|| return 1
-	${GIT} gc --prune=0					|| return 1
-	${GIT} gc --auto					|| return 1
-	${GIT} fsck --full --no-reflogs --strict		|| return 1
+	${GIT} reset --soft						|| return 1
+	${GIT} reflog expire --verbose --all --expire-unreachable=0	|| return 1
+	${GIT} gc --prune=0						|| return 1
+	${GIT} gc --auto						|| return 1
+	${GIT} fsck --verbose --full --no-reflogs --strict		|| return 1
 	return 0
 }
 
