@@ -411,7 +411,7 @@ function format {
 ########################################
 
 function git {
-	$(which git) --git-dir="${PWD}.git" --work-tree="${PWD}" "${@}"
+	${IONICE} $(which git) --git-dir="${PWD}.git" --work-tree="${PWD}" "${@}"
 }
 
 ########################################
@@ -1287,7 +1287,11 @@ function reporter {
 	declare DST="${#}"		; DST="${!DST}"
 	echo -en "\n reporting [${CMD}]: '${SRC}' -> '${DST}'\n"
 	echo -en "(${HOSTNAME}:${PWD}) ${@}\n"
-	time "${@}" || return 1
+	if [[ ${1} != git ]]; then
+		time ${IONICE} "${@}" || return 1
+	else
+		time "${@}" || return 1
+	fi
 	return 0
 }
 
