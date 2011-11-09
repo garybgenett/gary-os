@@ -200,7 +200,7 @@ export GIT_PAT="${GIT_DIF} --attach --binary --keep-subject"
 
 ########################################
 
-export IONICE="ionice --class 2 --classdata 7"			; alias ionice="${IONICE}"
+export IONICE="nice -n 19 ionice --class 2 --classdata 7"	; alias ionice="${IONICE}"
 export PV="pv --cursor --bytes --timer --rate --average-rate"	; alias pv="${PV}"
 export XARGS="xargs --max-procs=2 --max-args=10"		; alias xargs="${XARGS}"
 
