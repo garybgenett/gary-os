@@ -620,6 +620,7 @@ function email {
 	if [[ ${1} == -x ]]
 	then
 		shift
+		${REALTIME} \
 		sudo -H -u \#1000 \
 				TMPDIR="${TMPDIR}" \
 			mutt \
@@ -631,6 +632,7 @@ function email {
 			-e "set copy = no" \
 			"${@}"
 	else
+		${REALTIME} \
 		sudo -H -u \#1000 \
 				TMPDIR="${TMPDIR}" \
 				EDITOR="${VI} +/^$" \
@@ -1199,6 +1201,7 @@ function organize {
 			awk '{printf("%2d %s\n",NR,$0);}' |
 			${GREP} "[ ]~[ ]"
 	else
+		${REALTIME} \
 		${VI} "${@}" "${ORGANIZE}"
 	fi
 	prompt
