@@ -146,8 +146,8 @@ fi
 # commands
 ################################################################################
 
-export NICELY="nice -n 19 ionice --class 2 --classdata 7"	; alias nicely="${NICELY}"
-export REALTIME="nice -n -20 ionice --class 1 --classdata 0"	; alias realtime="${REALTIME}"
+export NICELY="sudo nice -n 19 ionice --class 2 --classdata 7"		; alias nicely="${NICELY}"
+export REALTIME="sudo nice -n -20 ionice --class 1 --classdata 0"	; alias realtime="${REALTIME}"
 
 if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
 	export NICELY=
