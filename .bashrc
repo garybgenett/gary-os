@@ -156,28 +156,30 @@ fi
 
 ########################################
 
+export MORE="less -RX"				; alias more="${MORE}"
+export VI="vim -u ${HOME}/.vimrc -i NONE"	; alias vi="${VI}"
+export VIEW="eval ${VI} -nR -c \"set nowrap\""	; alias view="${VIEW/#eval\ /}"
+
+export PAGER="${MORE}"
+export EDITOR="${VI}"
+
+unset VISUAL
+
+########################################
+
 export CP="cp -pvR"				; alias cp="${CP}"
 export GREP="grep --color=auto -E"		; alias grep="${GREP}"
 export LN="ln -fsv"				; alias ln="${LN}"
 export MKDIR="mkdir -pv"			; alias mkdir="${MKDIR}"
-export MORE="less -RX"				; alias more="${MORE}"
 export MV="mv -v"				; alias mv="${MV}"
 export PS="ps aux -ww"				; alias psl="${PS}"
 export RM="rm -frv"				; alias rm="${RM}"
 export RMDIR="rmdir -v"				; alias rmdir="${RMDIR}"
 export SED="sed -r"				; alias sed="${SED}"
-export VI="vim -u ${HOME}/.vimrc -i NONE"	; alias vi="${VI}"
-export VIEW="eval ${VI} -nR -c \"set nowrap\""	; alias view="${VIEW/#eval\ /}"
 
 if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
 	unalias sed
 fi
-
-########################################
-
-export PAGER="${MORE}"
-export EDITOR="${VI}"
-unset VISUAL
 
 ########################################
 
