@@ -238,6 +238,7 @@ ntfsprogs
 ppp
 procinfo
 pv
+snort
 socat
 sshfs-fuse
 ssldump
