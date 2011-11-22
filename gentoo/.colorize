@@ -60,12 +60,10 @@ prompt -z "${@}" 2>&1 |
 	            s/([\\$]?\\([^\\)]+\\))/${MARK_COLOR}\1${DEF_COLOR}/gi;
 	           s/.{7}(\\(cached\\)).{7}/${WARN_COLOR}\1${MSG_COLOR}/gi;
 	                     s/(-o [^\\s]+)/${MSG_COLOR}\1${DEF_COLOR}/gi;
-	                                s/^/${DEF_COLOR}/gi;
+	                                s/$/${DEF_COLOR}/gi;
 "
 
-declare STATUS="${PIPESTATUS[0]}"
-echo -en "${DEF_COLOR}"
-exit ${STATUS}
+exit ${PIPESTATUS[0]}
 
 ################################################################################
 # end of file
