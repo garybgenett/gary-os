@@ -28,7 +28,7 @@ app-portage/layman			git subversion
 dev-vcs/cvs2svn				git
 dev-vcs/git				subversion
 
-media-video/vlc				qt4
+media-video/vlc				httpd projectm qt4
 net-fs/samba				cups
 net-print/cups				samba
 
