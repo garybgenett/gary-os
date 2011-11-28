@@ -1224,8 +1224,11 @@ function organize {
 function prompt {
 	if [[ ${1} == -z ]]; then
 		shift
-		declare CMD=
-		[[ -z ${1} ]]		&& CMD="bash --login --noprofile --norc -o vi"	&& shift
+		declare CMD="bash --login --noprofile --norc -o vi"
+		if [[ -n ${1} ]]; then
+			CMD="${1}"
+			shift
+		fi
 		/usr/bin/env -i \
 			PS1='------------------------------\nENV(\u@\h \w)\$ ' \
 			USER="${USER}" \
