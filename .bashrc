@@ -1224,9 +1224,7 @@ function organize {
 function prompt {
 	if [[ ${1} == -z ]]; then
 		shift
-		declare CLR="false"
 		declare CMD=
-		[[ ${1} == -c ]]	&& CLR="true"					&& shift
 		[[ -z ${1} ]]		&& CMD="bash --login --noprofile --norc -o vi"	&& shift
 		/usr/bin/env -i \
 			PS1='------------------------------\nENV(\u@\h \w)\$ ' \
@@ -1248,38 +1246,38 @@ function prompt {
 			CCACHE_DIR="${CCACHE_DIR}" \
 			CCACHE_LOGFILE="${CCACHE_LOGFILE}" \
 			PATH="${PATH}" \
-			${CMD} "${@}" |
-				if ${CLR}; then
-					perl -p -e '
-						my $DEF_COLOR	= "\e[0;37m";	# light gray
-						my $MSG_COLOR	= "\e[0;36m";	# cyan
-						my $MARK_COLOR	= "\e[0;35m";	# magenta
-						my $TERM_COLOR	= "\e[1;34m";	# dark blue
-						my $DARK_COLOR	= "\e[1;30m";	# dark gray
-						my $GOOD_COLOR	= "\e[1;32m";	# light green
-						my $WARN_COLOR	= "\e[1;33m";	# yellow
-						my $FAIL_COLOR	= "\e[1;31m";	# red
-					      s/(\s)(no|false|failed)(\s)/\1${FAIL_COLOR}\2${DEF_COLOR}\3/gi;
-					s/(\s)(yes|true|ok|succeeded)(\s)/\1${GOOD_COLOR}\2${DEF_COLOR}\3/gi;
-					                 s/(\.\.\.)(\s.+)/\1${MSG_COLOR}\2/gi;
-					                    s/(.*error.*)/${FAIL_COLOR}\1/gi;
-					                  s/(.*warning.*)/${WARN_COLOR}\1/gi;
-					         s/^(making [^\s]+ in .+)/${MARK_COLOR}\1/gi;
-					                      s/^(\*\*.+)/${MARK_COLOR}\1/gi;
-					                        s/^(--.+)/${MARK_COLOR}\1/gi;
-					           s/^(patching file)(.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;
-					       s/^(generating .+ for)(.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;
-					       s/^(created directory)(.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;
-					              s/^(installing)(.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;
-					              s/^(.+[^\s]:)(\s.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;
-					              s/([\$]?\([^\)]+\))/${MARK_COLOR}\1${DEF_COLOR}/gi;
-					           s/.{7}(\(cached\)).{7}/${WARN_COLOR}\1${MSG_COLOR}/gi;
-					                    s/(-o [^\s]+)/${MSG_COLOR}\1${DEF_COLOR}/gi;
-					                              s/$/${DEF_COLOR}/gi;
-					'
-				else
-					cat
-				fi
+			${CMD} "${@}"
+		return ${PIPESTATUS[0]}
+	fi
+	if [[ ${1} == -c ]]; then
+		shift
+		perl -p -e '
+			my $DEF_COLOR	= "\e[0;37m";	# light gray
+			my $MSG_COLOR	= "\e[0;36m";	# cyan
+			my $MARK_COLOR	= "\e[0;35m";	# magenta
+			my $TERM_COLOR	= "\e[1;34m";	# dark blue
+			my $DARK_COLOR	= "\e[1;30m";	# dark gray
+			my $GOOD_COLOR	= "\e[1;32m";	# light green
+			my $WARN_COLOR	= "\e[1;33m";	# yellow
+			my $FAIL_COLOR	= "\e[1;31m";	# red
+		      s/(\s)(no|false|failed)(\s)/\1${FAIL_COLOR}\2${DEF_COLOR}\3/gi;
+		s/(\s)(yes|true|ok|succeeded)(\s)/\1${GOOD_COLOR}\2${DEF_COLOR}\3/gi;
+		                 s/(\.\.\.)(\s.+)/\1${MSG_COLOR}\2/gi;
+		                    s/(.*error.*)/${FAIL_COLOR}\1/gi;
+		                  s/(.*warning.*)/${WARN_COLOR}\1/gi;
+		         s/^(making [^\s]+ in .+)/${MARK_COLOR}\1/gi;
+		                      s/^(\*\*.+)/${MARK_COLOR}\1/gi;
+		                        s/^(--.+)/${MARK_COLOR}\1/gi;
+		           s/^(patching file)(.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;
+		       s/^(generating .+ for)(.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;
+		       s/^(created directory)(.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;
+		              s/^(installing)(.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;
+		              s/^(.+[^\s]:)(\s.+)/${TERM_COLOR}\1${DARK_COLOR}\2/gi;
+		              s/([\$]?\([^\)]+\))/${MARK_COLOR}\1${DEF_COLOR}/gi;
+		           s/.{7}(\(cached\)).{7}/${WARN_COLOR}\1${MSG_COLOR}/gi;
+		                    s/(-o [^\s]+)/${MSG_COLOR}\1${DEF_COLOR}/gi;
+		                              s/$/${DEF_COLOR}/gi;
+		'
 		return ${PIPESTATUS[0]}
 	fi
 	if [[ ${1} == -d ]]; then
