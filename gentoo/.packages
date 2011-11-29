@@ -206,8 +206,16 @@ ffmpeg
 hdparm
 mdadm
 pciutils
-sysprof
 usbutils
+
+kexec-tools				# kernel upgrade
+ltrace
+procinfo
+pv
+schedtool
+strace
+sysprof
+sysstat
 
 apache-tools
 bc
@@ -221,10 +229,8 @@ dhcpcd
 dos2unix
 dosfstools
 ed
-kexec-tools				# kernel upgrade
 lrzsz
 lsof
-ltrace
 minicom
 nano
 net-tools
@@ -236,15 +242,11 @@ nmap
 ntfs3g
 ntfsprogs
 ppp
-procinfo
-pv
 snort
 socat
 sshfs-fuse
 ssldump
-strace
 sudo
-sysstat
 tcpdump
 tcptrace
 traceroute
