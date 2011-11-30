@@ -65,6 +65,7 @@ iptables
 kbd
 less
 make
+'=make-3.81-r2'
 man
 module-init-tools
 psmisc
