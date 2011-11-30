@@ -10,6 +10,11 @@ sys-auth/consolekit			policykit	# gentoo required
 
 ########################################
 
+dev-libs/libgcrypt			static-libs	# gentoo required
+dev-libs/libgpg-error			static-libs	# gentoo required
+dev-libs/popt				static-libs	# gentoo required
+sys-apps/util-linux			static-libs	# gentoo required
+
 dev-python/PyQt4			webkit		# gentoo required
 media-libs/freetype			kpathsea	# gentoo required
 media-libs/libpng			apng		# gentoo required
@@ -17,18 +22,12 @@ sys-auth/pambase			consolekit	# gentoo required
 sys-libs/zlib				minizip		# gentoo required
 x11-libs/libdrm				libkms		# gentoo required
 
-dev-libs/libgcrypt			static-libs	# gentoo required
-dev-libs/libgpg-error			static-libs	# gentoo required
-dev-libs/popt				static-libs	# gentoo required
-sys-apps/util-linux			static-libs	# gentoo required
-
 ################################################################################
 
 app-portage/layman			git subversion
 dev-vcs/cvs2svn				git
 dev-vcs/git				subversion
 
-media-video/vlc				httpd projectm qt4
 net-fs/samba				cups
 net-print/cups				samba
 
@@ -37,8 +36,11 @@ net-print/cups				samba
 app-text/enchant			aspell
 mail-client/mutt			sidebar
 net-analyzer/tcpdump			-chroot
+
 x11-base/xorg-server			xnest xvfb
 x11-drivers/nvidia-drivers		-acpi
+
+media-video/vlc				httpd projectm qt4
 
 app-emulation/vmware-tools		vmware_guest_freebsd vmware_guest_linux vmware_guest_windows
 
