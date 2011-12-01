@@ -10,10 +10,14 @@ sys-auth/consolekit			policykit	# gentoo required
 
 ########################################
 
+dev-libs/gmp				static-libs	# gentoo required
 dev-libs/libgcrypt			static-libs	# gentoo required
 dev-libs/libgpg-error			static-libs	# gentoo required
+dev-libs/mpfr				static-libs	# gentoo required
+dev-libs/openssl			static-libs	# gentoo required
 dev-libs/popt				static-libs	# gentoo required
 sys-apps/util-linux			static-libs	# gentoo required
+sys-libs/zlib				static-libs	# gentoo required
 
 dev-python/PyQt4			webkit		# gentoo required
 media-libs/freetype			kpathsea	# gentoo required
