@@ -453,6 +453,12 @@ function git-patch {
 
 ########################################
 
+function git-remove {
+	${GIT} filter-branch --index-filter "git rm -fr --cached --ignore-unmatch ${@}" HEAD
+}
+
+########################################
+
 function hist-grep {
 	${GREP} "${@}" ${HOME}/.history/shell/${HOSTNAME}.${USER}.$(basename ${SHELL}).* |
 		cut -d: -f2- |
