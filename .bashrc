@@ -442,7 +442,11 @@ function git-clone {
 ########################################
 
 function git-list {
-	${GIT_CMD} log --pretty=format:"%ai %H %s %d" "${@}"
+	if [[ -n "$(echo "${1}" | ${GREP} "^[a-z0-9]{40}$")" ]]; then
+		${GIT} ls-tree -lrt "${@}"
+	else
+		${GIT_CMD} log --pretty=format:"%ai %H %s %d" "${@}"
+	fi
 }
 
 ########################################
