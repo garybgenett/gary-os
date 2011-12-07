@@ -1419,10 +1419,10 @@ function shell {
 			;;
 		(nin)	DEST="pogo.gbg.es.f5net.com"
 			;;
-		(1|2|3)	DEST="localhost -p6553${DEST}"
+		(1|2)	DEST="localhost -p6553${DEST}"
 			LOG="plastic"
 			;;
-		(4)	DEST="localhost -p6553${DEST}"
+		(3|4)	DEST="localhost -p6553${DEST}"
 			;;
 		(5)	DEST="localhost -p6553${DEST}"
 			OPTS="${OPTS} -o \"BatchMode yes\""
