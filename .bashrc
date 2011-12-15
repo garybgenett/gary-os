@@ -71,7 +71,7 @@ export LDFLAGS="-Wl,--hash-style=gnu -Wl,--as-needed"
 export MAKEFLAGS="-j3"
 
 export CCACHE_DIR="/tmp/.ccache"
-export CCACHE_LOGFILE= #>>>"/_arch/=ccache.log"
+export CCACHE_LOGFILE= #>>>"/tmp/.ccache.log"
 
 ########################################
 
