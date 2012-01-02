@@ -27,6 +27,12 @@ sys-fs/udev				gudev		# gentoo required
 sys-libs/zlib				minizip		# gentoo required
 x11-libs/libdrm				libkms		# gentoo required
 
+dev-ruby/json				ruby_targets_ruby19	# gentoo required
+dev-ruby/racc				ruby_targets_ruby19	# gentoo required
+dev-ruby/rake				ruby_targets_ruby19	# gentoo required
+dev-ruby/rdoc				ruby_targets_ruby19	# gentoo required
+dev-ruby/rubygems			ruby_targets_ruby19	# gentoo required
+
 ################################################################################
 
 app-portage/layman			git subversion
