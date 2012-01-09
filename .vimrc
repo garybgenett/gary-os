@@ -122,7 +122,9 @@ iab @.s ====-==-==T==:==:==-==== ====-==-== <C-R>=strftime("%FT%T%z")<CR> <C-R>=
 "#######################################
 
 " clean up folding
-map z. <ESC>:set foldlevel=1<CR>zv
+map z. <ESC>:set foldlevel=0<CR>zv
+map z1 <ESC>:set foldlevel=0<CR>/\[personal\]<CR>
+map z2 <ESC>:set foldlevel=0<CR>/\[work\]<CR>
 
 " jump/edit next token
 map  <C-J> <ESC>/+VIM+<CR>c5l
