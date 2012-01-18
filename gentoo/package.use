@@ -6,6 +6,7 @@ app-text/ghostscript-gpl		cups		# gentoo required
 app-text/poppler			cairo qt4	# gentoo required
 dev-libs/libxml2			python		# gentoo required
 media-libs/libsdl			joystick	# gentoo required
+media-video/mplayer			iconv		# gentoo required
 sys-auth/consolekit			policykit	# gentoo required
 
 ########################################
