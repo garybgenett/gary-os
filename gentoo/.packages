@@ -358,6 +358,13 @@ xpdf
 xterm
 xvkbd
 
+pidgin
+#>>>pidgin-encryption
+#>>>pidgin-extprefs
+#>>>pidgin-hotkeys
+#>>>pidgin-otr
+pidgin-sipe
+
 adobe-flash				# binary package
 oracle-jdk-bin				# binary package
 sun-jdk					# binary package
