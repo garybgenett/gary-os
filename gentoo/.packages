@@ -193,7 +193,7 @@ rubygems
 ########################################
 # libraries
 
-alsa-lib
+#>>>alsa-lib
 alsa-oss
 alsa-utils
 
