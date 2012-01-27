@@ -8,6 +8,7 @@ dev-libs/libxml2			python		# gentoo required
 media-libs/libsdl			joystick	# gentoo required
 media-video/mplayer			iconv		# gentoo required
 sys-auth/consolekit			policykit	# gentoo required
+sys-libs/gdbm				berkdb		# gentoo required
 
 ########################################
 
