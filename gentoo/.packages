@@ -209,6 +209,7 @@ mdadm
 pciutils
 usbutils
 
+btrace
 kexec-tools				# kernel upgrade
 ltrace
 procinfo
