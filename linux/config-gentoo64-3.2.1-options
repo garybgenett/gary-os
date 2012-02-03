@@ -1,0 +1,56 @@
+################################################################################
+# default-grml64-2.6.38
+################################################################################
+
+Processor type and features
+	Paravirtualized guest support						CONFIG_PARAVIRT_GUEST=y
+		Xen guest support						CONFIG_XEN=y
+		KVM paravirtualized clock					CONFIG_KVM_CLOCK=y
+		KVM Guest support						CONFIG_KVM_GUEST=y
+		Enable paravirtualization code					CONFIG_PARAVIRT=y
+
+Device Drivers
+	Block devices								CONFIG_BLK_DEV=y
+		Xen virtual block device support				CONFIG_XEN_BLKDEV_FRONTEND=y
+		Virtio block driver (EXPERIMENTAL)				CONFIG_VIRTIO_BLK=y
+	Multiple devices driver support (RAID and LVM)				CONFIG_MD=y
+		RAID support							CONFIG_BLK_DEV_MD=y
+		Autodetect RAID arrays during kernel boot			CONFIG_MD_AUTODETECT=y
+		Linear (append) mode						CONFIG_MD_LINEAR=y
+		RAID-0 (striping) mode						CONFIG_MD_RAID0=y
+		RAID-1 (mirroring) mode						CONFIG_MD_RAID1=y
+		RAID-10 (mirrored striping) mode				CONFIG_MD_RAID10=y
+		RAID-4/RAID-5/RAID-6 mode					CONFIG_MD_RAID456=y
+	Character devices
+		Serial drivers
+			8250/16550 and compatible serial support		CONFIG_SERIAL_8250=y
+			Console on 8250/16550 and compatible serial port	CONFIG_SERIAL_8250_CONSOLE=y
+		Xen Hypervisor Console support					CONFIG_HVC_XEN=y
+		Virtio console							CONFIG_VIRTIO_CONSOLE=y
+		Enhanced Real Time Clock Support (legacy PC RTC driver)		CONFIG_RTC=y
+	HID Devices								CONFIG_HID_SUPPORT=y
+		Generic HID support						CONFIG_HID=y
+		USB Human Interface Device (full HID) support			CONFIG_USB_HID=y
+	USB support								CONFIG_USB_SUPPORT=y
+		Support for Host-side USB					CONFIG_USB=y
+		xHCI HCD (USB 3.0) support (EXPERIMENTAL)			CONFIG_USB_XHCI_HCD=y
+		EHCI HCD (USB 2.0) support					CONFIG_USB_EHCI_HCD=y
+		OHCI HCD support						CONFIG_USB_OHCI_HCD=y
+		UHCI HCD (most Intel and VIA) support				CONFIG_USB_UHCI_HCD=y
+		USB Printer support						CONFIG_USB_PRINTER=n
+		USB Mass Storage support					CONFIG_USB_STORAGE=y
+		USB Serial Converter support					CONFIG_USB_SERIAL=y
+			USB Serial Console device support			CONFIG_USB_SERIAL_CONSOLE=y
+			USB Generic Serial Driver				CONFIG_USB_SERIAL_GENERIC=y
+
+Virtualization									CONFIG_VIRTUALIZATION=y
+	Kernel-based Virtual Machine (KVM) support				CONFIG_KVM=m
+	KVM for Intel processors support					CONFIG_KVM_INTEL=m
+	KVM for AMD processors support						CONFIG_KVM_AMD=m
+	Host kernel accelerator for virtio net (EXPERIMENTAL)			CONFIG_VHOST_NET=m
+	PCI driver for virtio devices (EXPERIMENTAL)				CONFIG_VIRTIO_PCI=y
+	Virtio balloon driver (EXPERIMENTAL)					CONFIG_VIRTIO_BALLOON=m
+
+################################################################################
+# end of file
+################################################################################
