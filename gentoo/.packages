@@ -73,7 +73,7 @@ shadow					# kernel upgrade
 sysklogd
 sysvinit
 tar
-texinfo
+sys-apps/texinfo			#>>> texinfo
 udev					# kernel upgrade
 util-linux				#>>> util-linux-ng
 
@@ -329,6 +329,7 @@ obconf
 qemu-kvm
 
 aumix
+epdfview				#>>> replaces "xpdf"
 feh
 firefox
 sci-visualization/gnuplot		#>>> gnuplot
@@ -354,7 +355,6 @@ x2vnc
 xautolock
 xcompmgr
 xlockmore
-xpdf
 xterm
 xvkbd
 
