@@ -231,6 +231,7 @@ dhcpcd
 dos2unix
 dosfstools
 ed
+iotop
 lrzsz
 lsof
 minicom
