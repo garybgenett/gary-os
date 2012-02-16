@@ -23,10 +23,10 @@ done
 
 declare QOPT=
 if [[ -n ${QSYS} ]]; then
-#>>>	QOPT="-drive file=${QIMG},if=scsi,bus=0,unit=0,media=disk,boot=on"
-	QOPT="-drive file=${QIMG},if=ide,index=0,media=disk,boot=on"
+#>>>	QOPT="-drive file=${QIMG},if=scsi,bus=0,unit=0,media=disk"
+	QOPT="-drive file=${QIMG},if=ide,index=0,media=disk"
 else
-	QOPT="-drive file=${QIMG},if=ide,index=3,media=cdrom,boot=on -boot once=d"
+	QOPT="-drive file=${QIMG},if=ide,index=3,media=cdrom -boot once=d"
 fi
 
 while [[ ! -c /dev/kvm ]]; do
