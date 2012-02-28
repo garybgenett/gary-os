@@ -367,6 +367,7 @@ pidgin
 #>>>pidgin-otr
 pidgin-sipe
 
+acroread				# binary package
 adobe-flash				# binary package
 openproj-bin				# binary package
 oracle-jdk-bin				# binary package
