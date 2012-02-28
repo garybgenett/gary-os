@@ -41,6 +41,8 @@ export PIMDIR="/.g/_data/zactive/_pim"
 export MAILDIR="${HOME}/Maildir"
 export MAILCAPS="${HOME}/.mailcap"
 
+export ACRO_ALLOW_SUDO="set"
+
 ########################################
 
 export LANG="en_US.UTF-8"
