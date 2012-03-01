@@ -318,6 +318,7 @@ offlineimap
 procmail
 rdiff-backup
 remind
+run-mailcap
 safecat
 task
 unison
