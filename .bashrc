@@ -1397,7 +1397,7 @@ function shell {
 	[[ -z ${1} ]] && return 0
 	declare DEST="${1}" && shift
 	declare PROMPT_NAME="${FUNCNAME}_${DEST}"
-	[[ ${1} != -*(*) ]] && PROMPT_NAME="${1/#=/}" && shift
+	[[ -n ${1} ]] && [[ ${1} != -*(*) ]] && PROMPT_NAME="${1/#=/}" && shift
 	declare SSH="sudo -H ssh -2 -X"
 	declare LOG="root"
 	declare OPTS
