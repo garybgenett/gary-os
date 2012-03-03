@@ -54,7 +54,7 @@ x11-base/xorg-server			xnest xvfb
 x11-drivers/nvidia-drivers		-acpi
 
 media-tv/xbmc				projectm webserver
-media-video/vlc				httpd projectm qt4
+media-video/vlc				projectm qt4 vlm
 
 app-emulation/vmware-tools		vmware_guest_freebsd vmware_guest_linux vmware_guest_windows
 
