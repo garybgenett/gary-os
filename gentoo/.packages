@@ -135,8 +135,11 @@ xorg-x11
 xterm
 twm
 
-nvidia-drivers				# kernel upgrade
-nvidia-settings				# kernel upgrade
+nvidia-drivers				# binary package, kernel upgrade
+nvidia-settings				# binary package, kernel upgrade
+
+ati-drivers				# binary package, kernel upgrade
+radeontool				# binary package, kernel upgrade
 
 ########################################
 # toolkits
