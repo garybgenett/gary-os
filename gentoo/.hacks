@@ -28,7 +28,9 @@ chmod -v 000 /usr/sbin/console-kit-daemon
 
 declare MODULE=
 for MODULE in \
-	/lib/modules/*/kernel/drivers/gpu/drm/nouveau/nouveau.ko
+	/lib/modules/*/kernel/drivers/gpu/drm/nouveau/nouveau.ko \
+	/lib/modules/*/kernel/drivers/gpu/drm/radeon/radeon.ko \
+	/lib/modules/*/kernel/drivers/video/aty/radeonfb.ko
 do
 	mv -fv ${MODULE} ${MODULE}.bak
 done
