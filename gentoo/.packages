@@ -247,7 +247,6 @@ netkit-base
 netkit-telnetd
 nmap
 ntfs3g
-ntfsprogs
 ppp
 snort
 socat
