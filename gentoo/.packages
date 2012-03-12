@@ -139,6 +139,7 @@ nvidia-drivers				# binary package, kernel upgrade
 nvidia-settings				# binary package, kernel upgrade
 
 ati-drivers				# binary package, kernel upgrade
+radeon-ucode				# binary package, kernel upgrade
 radeontool				# binary package, kernel upgrade
 
 ########################################
