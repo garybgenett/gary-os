@@ -123,6 +123,7 @@ gentoolkit
 gentoolkit-dev
 java-config
 layman
+mirrorselect
 module-rebuild
 portage
 portage-utils
