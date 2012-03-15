@@ -199,6 +199,8 @@ export LU="${DU} -ak --max-depth 1"				; alias lu="${LU}"
 
 ########################################
 
+export EMERGE_CMD="prompt -z emerge"		; alias emerge="${EMERGE_CMD}"
+
 export CVS="reporter cvs"			; alias cvs="${CVS}"
 export SVN="reporter svn"			; alias svn="${SVN}"
 
