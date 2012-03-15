@@ -4,10 +4,23 @@ source ${HOME}/.bashrc
 
 declare SAFE_ENV="prompt -z EMERGE_DEFAULT_OPTS="
 
+if [[ ${1} == -u ]]; then
+	SAFE_ENV="prompt -z"
+fi
+
 ################################################################################
 
-${SAFE_ENV} emerge --verbose --sync
-${SAFE_ENV} emerge --emptytree --fetch-all-uri system world
+if [[ ${1} == -u ]]; then
+	${SAFE_ENV} emerge --update --deep --newuse system world	|| exit 1
+	${SAFE_ENV} dispatch-conf					|| exit 1
+	${SAFE_ENV} emerge --depclean					|| exit 1
+	${SAFE_ENV} revdep-rebuild					|| exit 1
+	${SAFE_ENV} emaint --fix all					|| exit 1
+	${SAFE_ENV} equery list --duplicates '*'
+else
+	${SAFE_ENV} emerge --verbose --sync
+	${SAFE_ENV} emerge --emptytree --fetch-all-uri system world
+fi
 
 ########################################
 
