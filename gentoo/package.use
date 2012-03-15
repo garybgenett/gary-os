@@ -24,6 +24,7 @@ sys-libs/zlib				static-libs	# gentoo required
 dev-python/PyQt4			webkit		# gentoo required
 media-libs/freetype			kpathsea	# gentoo required
 media-libs/libpng			apng		# gentoo required
+media-libs/mesa				xa		# gentoo required
 sys-auth/pambase			consolekit	# gentoo required
 sys-fs/udev				gudev		# gentoo required
 sys-libs/zlib				minizip		# gentoo required
