@@ -10,12 +10,10 @@ declare TOKEN
 
 ################################################################################
 
-if [[ ! -f ${OUT_DIR}/.emerge ]]; then
-	declare EMERGE_CMD="$(which emerge) --verbose --pretend"
-	env - ${EMERGE_CMD} --emptytree system world	>${OUT_DIR}/.emerge	2>&1
-	env - ${EMERGE_CMD} --info			>${OUT_DIR}/.info	2>&1
-	sort /var/lib/portage/world			>${OUT_DIR}/.world	2>&1
-fi
+declare EMERGE_CMD="$(which emerge) --verbose --pretend"
+env - ${EMERGE_CMD} --emptytree system world	>${OUT_DIR}/.emerge	2>&1
+env - ${EMERGE_CMD} --info			>${OUT_DIR}/.info	2>&1
+sort /var/lib/portage/world			>${OUT_DIR}/.world	2>&1
 
 ########################################
 
