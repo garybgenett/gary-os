@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+source ${HOME}/.bashrc
+################################################################################
+
+declare SAFE_ENV="prompt -z EMERGE_DEFAULT_OPTS="
+
+################################################################################
+
+${SAFE_ENV} emerge --verbose --sync
+${SAFE_ENV} emerge --emptytree --fetch-all-uri system world
+
+########################################
+
+${SAFE_ENV} ${HOME}/setup/gentoo/.emergent
+${SAFE_ENV} ${HOME}/setup/gentoo/.hacks
+
+exit 0
+################################################################################
+# end of file
+################################################################################
