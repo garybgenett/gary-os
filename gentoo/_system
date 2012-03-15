@@ -19,7 +19,7 @@ if [[ ${1} == -u ]]; then
 	${SAFE_ENV} equery list --duplicates '*'
 else
 	${SAFE_ENV} emerge --verbose --sync
-	${SAFE_ENV} emerge --emptytree --fetch-all-uri system world
+	${SAFE_ENV} emerge --emptytree --fetchonly system world
 fi
 
 ########################################
