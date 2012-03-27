@@ -67,7 +67,7 @@ less
 make
 '=make-3.81-r2'
 man
-module-init-tools
+kmod					#>>> module-init-tools
 psmisc
 shadow					# kernel upgrade
 sysklogd
