@@ -19,7 +19,12 @@ dev-libs/mpfr				static-libs	# gentoo required
 dev-libs/openssl			static-libs	# gentoo required
 dev-libs/popt				static-libs	# gentoo required
 sys-apps/util-linux			static-libs	# gentoo required
+sys-fs/lvm2				static-libs	# gentoo required
+sys-fs/udev				static-libs	# gentoo required
 sys-libs/zlib				static-libs	# gentoo required
+
+net-ftp/proftpd				openssl		# gentoo required
+sys-fs/cryptsetup			static		# gentoo required
 
 dev-python/PyQt4			webkit		# gentoo required
 media-libs/freetype			kpathsea	# gentoo required
