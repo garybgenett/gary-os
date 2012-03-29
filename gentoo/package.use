@@ -52,6 +52,9 @@ net-print/cups				samba
 
 ########################################
 
+x11-terms/rxvt-unicode			fading-colors focused-urgency font-styles mousewheel perl
+x11-terms/rxvt-unicode			-vanilla buffer-on-clear secondary-wheel
+
 app-text/enchant			aspell
 mail-client/mutt			sidebar
 net-analyzer/tcpdump			-chroot
