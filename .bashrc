@@ -101,33 +101,30 @@ fi
 
 ########################################
 
-export PS1='\u@\h:\w\$ '
-export PS1='\
-\n\
-[\u@\h]:[\D{%a/%j_%FT%T%z}]\
-\n\
-[\#/\!]\[\033k\033\\\]:\w\$'
+export PROMPT_DIRTRIM=
+declare PROMPT_TOKEN_HOST="\h"
+declare PROMPT_TOKEN_PPWD="\w"
+
+if [[ ${HOSTNAME} == spider ]]; then
+	PROMPT_TOKEN_HOST="\e[1;32m\h\e[0;37m"
+fi
 
 declare PRE_PROMPT='\
-\033]0;\
+\e]0;\
 ${PROMPT_KEY}[ ${TERM} | ${USER}@${HOSTNAME%%.*} | ${PWD/#$HOME/~} ]\
-\007'
+\a'
 
 if { [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; } &&
    { [[ -z ${PROMPT} ]] || [[ ${PROMPT} == \$P\$G ]]; }; then
 	export PROMPT="cygwin"
 fi
 
-if [[ ${PROMPT} == basic ]]; then
-	export PROMPT="basic"
-	export PROMPT_KEY=
-	export PROMPT_COMMAND=
-	export PS1='[\!]\[\033k\033\\\]:\W\$'
-elif [[ ${PROMPT} == simple ]]; then
+if [[ ${PROMPT} == simple ]]; then
 	export PROMPT="simple"
 	export PROMPT_KEY=
 	export PROMPT_COMMAND=
-	export PS1='\n[\u@\h]\n[\#/\!]\[\033k\033\\\]:\W\$'
+	echo -en "\e]0;\a"
+	PROMPT_TOKEN_PPWD="<\W>"
 else
 	if [[ -z ${PROMPT} ]]; then
 		export PROMPT=
@@ -138,11 +135,19 @@ else
 	fi
 	export PROMPT_COMMAND="echo -en \"${PRE_PROMPT}\""
 	if [[ -n ${PROMPT_KEY} ]] &&
-	   [[ ${BASH_EXECUTION_STRING/%\ *} != rsync ]] &&
-	   [[ ${BASH_EXECUTION_STRING/%\ *} != scp ]]; then
+	   [[ ${BASH_EXECUTION_STRING/%\ *} != rsync  ]] &&
+	   [[ ${BASH_EXECUTION_STRING/%\ *} != scp    ]] &&
+	   [[ ${BASH_EXECUTION_STRING/%\ *} != unison ]]; then
 		eval "echo -en \"${PRE_PROMPT}\""
 	fi
 fi
+
+export PS1="\u@\h:\w\$ "
+export PS1="\
+\n\
+[\u@${PROMPT_TOKEN_HOST}]:[\D{%a/%j_%FT%T%z}]\
+\n\
+[\#/\!]\[\ek\e\\\\\]:${PROMPT_TOKEN_PPWD}\$"
 
 ################################################################################
 # commands
@@ -1247,7 +1252,8 @@ function prompt {
 			shift
 		fi
 		/usr/bin/env -i \
-			PS1='------------------------------\nENV(\u@\h \w)\$ ' \
+			PROMPT_DIRTRIM="1" \
+			PS1="------------------------------\nENV(\u@\h \w)\$ " \
 			USER="${USER}" \
 			HOME="${HOME}" \
 			TERM="${TERM}" \
@@ -1313,8 +1319,6 @@ function prompt {
 				export XAUTHORITY=$(${PS} 2>/dev/null | ${GREP} "xinit" | ${GREP} "${DISPLAY} -auth" | ${SED} "s/^.+-auth //g")
 			fi
 		fi
-	elif [[ ${1} == -b ]]; then
-		export PROMPT="basic"
 	elif [[ ${1} == -s ]]; then
 		export PROMPT="simple"
 	elif [[ ${1} == -x ]]; then
