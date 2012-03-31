@@ -1458,7 +1458,7 @@ function shell {
 	fi
 	cd
 	prompt -x "${PROMPT_NAME}"
-	eval TERM=ansi ${SSH} ${LOG}@${DEST} ${OPTS} "${@}"
+	eval ${SSH} ${LOG}@${DEST} ${OPTS} "${@}"
 	prompt
 	cd - >/dev/null
 	return 0
