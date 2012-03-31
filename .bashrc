@@ -402,13 +402,13 @@ alias web="w3m google.com"
 function burn {
 	if [[ ${1} == -l ]]; then
 		shift
-		cdrecord -v --devices "${@}"
+		cdrecord -v dev=ATAPI -scanbus "${@}"
 	elif [[ ${1} == -i ]]; then
 		shift
-		cdrecord -v -data "${@}"
+		cdrecord -v dev=ATAPI -data "${@}"
 	elif [[ ${1} == -e ]]; then
 		shift
-		cdrecord -v -eject "${@}"
+		cdrecord -v dev=ATAPI -eject "${@}"
 	fi
 }
 
