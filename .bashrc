@@ -1416,7 +1416,7 @@ function shell {
 	if [[ ${DEST} == -m[0-9] ]]; then
 		DEST="${DEST/#-m/}"
 		cd
-		prompt -x "${FUNCNAME}_${DEST}"
+		prompt -x "minicom_${DEST}"
 		minicom ${DEST}
 		prompt
 		cd - >/dev/null
