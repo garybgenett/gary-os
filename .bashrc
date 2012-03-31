@@ -1405,7 +1405,8 @@ function shell {
 	[[ -z ${1} ]] && return 0
 	declare DEST="${1}" && shift
 	declare PROMPT_NAME="${FUNCNAME}_${DEST}"
-	[[ -n ${1} ]] && [[ ${1} != -*(*) ]] && PROMPT_NAME="${1}" && shift
+	declare SHELL_TERM="${TERM}"
+	[[ -n ${1} ]] && [[ ${1} != -*(*) ]] && PROMPT_NAME="${1}" && SHELL_TERM="ansi" && shift
 	declare SSH="sudo -H ssh -2 -X"
 	declare LOG="root"
 	declare OPTS
@@ -1458,7 +1459,7 @@ function shell {
 	fi
 	cd
 	prompt -x "${PROMPT_NAME}"
-	eval ${SSH} ${LOG}@${DEST} ${OPTS} "${@}"
+	eval TERM="${SHELL_TERM}" ${SSH} ${LOG}@${DEST} ${OPTS} "${@}"
 	prompt
 	cd - >/dev/null
 	return 0
