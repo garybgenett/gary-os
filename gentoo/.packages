@@ -336,8 +336,9 @@ urlview
 wyrd
 
 dwm
-openbox
 obconf
+openbox
+windowmaker
 
 #>>>qemu				# conflicts with "qemu-kvm"
 qemu-kvm
