@@ -253,6 +253,7 @@ netkit-base
 netkit-telnetd
 nmap
 ntfs3g
+pipes
 ppp
 snort
 socat
