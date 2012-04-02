@@ -218,6 +218,7 @@ pciutils
 usbutils
 
 btrace
+dstat
 kexec-tools				# kernel upgrade
 ltrace
 procinfo
