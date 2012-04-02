@@ -134,8 +134,9 @@ ufed
 # x server
 
 xorg-x11
-xterm
 twm
+xsel
+xterm
 
 nvidia-drivers				# binary package, kernel upgrade
 nvidia-settings				# binary package, kernel upgrade
