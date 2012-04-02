@@ -240,6 +240,7 @@ dhcpcd
 dos2unix
 dosfstools
 ed
+indent
 iotop
 lrzsz
 lsof
