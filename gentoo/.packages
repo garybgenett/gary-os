@@ -82,6 +82,7 @@ curl
 inotify-tools
 
 btrfs-progs
+ext3grep
 parted
 
 runit
