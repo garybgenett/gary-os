@@ -85,6 +85,7 @@ btrfs-progs
 ext3grep
 ext4magic
 extundelete
+gptfdisk
 parted
 
 runit
