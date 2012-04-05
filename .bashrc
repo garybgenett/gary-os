@@ -428,7 +428,7 @@ function format {
 		shift
 		mkntfs -vI "${@}"
 	else
-		mke2fs -jvm 0 "${@}"
+		mke2fs -t ext4 -jvm 0 "${@}"
 	fi
 }
 
