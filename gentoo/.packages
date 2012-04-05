@@ -84,6 +84,7 @@ inotify-tools
 btrfs-progs
 ext3grep
 ext4magic
+extundelete
 parted
 
 runit
