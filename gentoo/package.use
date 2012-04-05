@@ -50,6 +50,8 @@ dev-vcs/git				subversion
 net-fs/samba				cups
 net-print/cups				samba
 
+sys-fs/btrfs-progs			acl
+
 ########################################
 
 x11-terms/rxvt-unicode			fading-colors focused-urgency font-styles mousewheel perl
