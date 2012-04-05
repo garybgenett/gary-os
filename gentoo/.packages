@@ -80,6 +80,8 @@ util-linux				#>>> util-linux-ng
 busybox
 curl
 inotify-tools
+
+btrfs-progs
 parted
 
 runit
