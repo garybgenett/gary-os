@@ -1184,6 +1184,36 @@ function maildirmake {
 
 ########################################
 
+function mount-robust {
+	declare CHK_EXT="fsck -t ext4 -pCV"
+	declare CHK_FAT="fsck -t vfat -V"
+	declare MNT_EXT="mount -v -t ext4 -o relatime,errors=remount-ro"
+	declare MNT_FAT="mount -v -t vfat -o relatime,errors=remount-ro,shortname=mixed"
+	declare MNT_BND="mount -v --bind"
+	declare DEV="${1}"
+	declare DIR="${2}"
+	declare PNT="$(df ${DEV} 2>&1 | ${GREP} "^${DEV}" | ${SED} "s/^.+[[:space:]]//g")"
+	if [[ -n ${PNT} ]]; then
+		if [[ ${PNT} == "/" ]]; then
+			echo "Root Filesystem: ${DEV}"
+		fi
+		if [[ ${PNT} == ${DIR} ]] ||
+		   [[ -n $(mount 2>&1 | ${GREP} "^${PNT} on ${DIR}.+bind[)]$") ]]; then
+			echo "Already Mounted: ${DEV}"
+			return 0
+		fi
+		${MNT_BND}	${PNT}	${DIR}	|| return 1
+	else
+		${CHK_EXT}	${DEV}		||
+		${CHK_FAT}	${DEV}		|| return 1
+		${MNT_EXT}	${DEV}	${DIR}	||
+		${MNT_FAT}	${DEV}	${DIR}	|| return 1
+	fi
+	return 0
+}
+
+########################################
+
 function organize {
 	declare SEARCH="\*"
 	declare ORGANIZE="_mission.txt"
