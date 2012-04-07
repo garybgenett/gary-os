@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-source ${HOME}/.bashrc
+source /.g/.home/.bashrc
 ################################################################################
 
 declare SCRIPT="${0}"
