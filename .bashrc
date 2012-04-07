@@ -253,6 +253,7 @@ export RSYNC_C="reporter rsync \
 	-vv \
 	--rsh=ssh \
 	--recursive \
+	--one-file-system \
 	--itemize-changes \
 	--progress \
 	--compress \
