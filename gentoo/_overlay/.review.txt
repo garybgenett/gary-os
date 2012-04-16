@@ -1,0 +1,38 @@
+diff :: x11-plugins/gkrellaclock ===============================================
+
+diff -u -U10 -r /usr/portage/x11-plugins/gkrellaclock/Manifest x11-plugins/gkrellaclock/Manifest
+--- /usr/portage/x11-plugins/gkrellaclock/Manifest	2009-12-15 09:52:30.000000000 -0800
++++ x11-plugins/gkrellaclock/Manifest	2012-04-16 15:20:18.402495388 -0700
+@@ -1,4 +1,11 @@
++AUX _gkrellaclock.c 33385 RMD160 bbe4cbea1898a4ccf798253fba3cd948b569ecef SHA1 eff6c540783b3ab30992344ae00def59df8ce07e SHA256 fc39a01a034b03d952b3766dea7d9cff3c8f133e1bcf5e69ba75d03533026a55
++AUX gkrellaclock.c 37097 RMD160 f8a8fc8fd12a49b3115f053a7513e3e39d81e839 SHA1 5424e284221ce68070c4c16300b2a7dd451a6dc3 SHA256 9ff709abcc49155fc15c4fb009411eba7cbdef36b9a4751351425a17e21e6fce
++AUX gkrellaclock.c.2012-04-04 37258 RMD160 816307fa497fb4fa6e70b20055cae916d598efab SHA1 46c18962cb1f07d5f174ec4ee6140b08d91e8161 SHA256 0a81dea015a19ac577a61713dd0b314e37487c1ceb702e77a998e2dbd47a692a
++AUX gkrellaclock.c.2012-04-06 37097 RMD160 f8a8fc8fd12a49b3115f053a7513e3e39d81e839 SHA1 5424e284221ce68070c4c16300b2a7dd451a6dc3 SHA256 9ff709abcc49155fc15c4fb009411eba7cbdef36b9a4751351425a17e21e6fce
++AUX xclock_size_hack.patch 11760 RMD160 0bd4604468090d1af1e1ac602f0040ad637be455 SHA1 42b2d6beeec32a38665064126d80a7bd38e0101d SHA256 f0c0c6261a8d3e2c5913f4dbf46f9688daf7f031f41c0221abf665651c76eea6
++AUX xclock_size_hack.patch.2012-04-04 11849 RMD160 41011ec1e6325346593d7eaef789bdf2c935e031 SHA1 71c4eb1067464224743c25d8f6e72b7bf4621d67 SHA256 461e3c325774dc49775126ec00af975d9217fedc3c288c361c3aa62bedd6afb0
++AUX xclock_size_hack.patch.2012-04-06 11760 RMD160 0bd4604468090d1af1e1ac602f0040ad637be455 SHA1 42b2d6beeec32a38665064126d80a7bd38e0101d SHA256 f0c0c6261a8d3e2c5913f4dbf46f9688daf7f031f41c0221abf665651c76eea6
+ DIST gkrellaclock-0.3.4.tar.gz 18853 RMD160 f62fc0ddae3c9475c375c2af8436544cf13d4b56 SHA1 9adb9a02b2aa6eb5d9f48babb291139a7074c76f SHA256 5923c5fa6c31ceb1944e57219d893634e503d44dc5e91f3deba46f0d71e787b7
+-EBUILD gkrellaclock-0.3.4.ebuild 573 RMD160 5dd02ae0e572a94aec29073a71ed8015d117640f SHA1 4d21bb9d0dbf563cea9964154ea616151a4ea4c1 SHA256 e2a76bc7938175ba0abf1fe884fee8b491a6dc7801f86abe824e4c8ac7d9f001
++EBUILD gkrellaclock-0.3.4.ebuild 618 RMD160 7cb436b4ddc7267cdd1f2ef8472cf5e55c3ec990 SHA1 39a85aeb0aa021f0119f5eb178974ab8dcfdf1f8 SHA256 0eb8a6c30fe44b75a3e05635565ae8120017f16bebdb589babd8365e675d91ac
+ MISC ChangeLog 3608 RMD160 548380b28def324638e59dcc0744b0cc8a4ecd2a SHA1 7721e5844b140fce75e3bebc6027c43c3fd101ed SHA256 8c7775cb4bed190dff902fd7b23ac474d25fec9657859e0dfc5262e5b3391e31
+ MISC metadata.xml 254 RMD160 415926d9875e8fe9b0d03e74435ad2521fac159c SHA1 172a4c3880766b1bb7e75f4f2b4ed0b62c1d2d6c SHA256 dafc7e6c5cb681b9d6ecbe2ff4280bb987d3533c30bb334b4845faee02aa7279
+Only in x11-plugins/gkrellaclock: files
+diff -u -U10 -r /usr/portage/x11-plugins/gkrellaclock/gkrellaclock-0.3.4.ebuild x11-plugins/gkrellaclock/gkrellaclock-0.3.4.ebuild
+--- /usr/portage/x11-plugins/gkrellaclock/gkrellaclock-0.3.4.ebuild	2009-12-15 09:52:16.000000000 -0800
++++ x11-plugins/gkrellaclock/gkrellaclock-0.3.4.ebuild	2012-04-02 16:26:52.000000000 -0700
+@@ -9,14 +9,15 @@
+ DESCRIPTION="Nice analog clock for GKrellM2"
+ SRC_URI="mirror://gentoo/${P}.tar.gz"
+ HOMEPAGE="http://www.gkrellm.net/"
+ 
+ SLOT="2"
+ LICENSE="GPL-2"
+ KEYWORDS="alpha amd64 ppc sparc x86"
+ 
+ src_compile() {
+ 	make clean #166133
++	epatch "${FILESDIR}"/xclock_size_hack.patch
+ 
+ 	export CFLAGS="${CFLAGS/-O?/}"
+ 	emake || die 'emake failed'
+ }
