@@ -167,6 +167,7 @@ transfig
 texlive
 
 docbook-xml-dtd
+docbook-xsl-ns-stylesheets
 docbook-xsl-stylesheets
 xmlto
 asciidoc
