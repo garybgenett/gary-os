@@ -59,6 +59,8 @@ x11-terms/rxvt-unicode			fading-colors focused-urgency font-styles mousewheel pe
 
 app-text/enchant			aspell
 mail-client/mutt			sidebar
+
+dev-libs/openssl			rfc3779
 net-analyzer/tcpdump			-chroot
 
 x11-base/xorg-server			xnest xvfb
