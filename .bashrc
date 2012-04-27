@@ -808,8 +808,8 @@ function git-save {
 	if [[ -n ${1} ]]; then
 		MESSAGE="${1}"
 	fi
-	${GIT_ADD} ./							|| return 1
-	${GIT_CMT} --all --message="[${MESSAGE} :: $(date --iso=s)]"	|| return 1
+	${GIT_ADD} ./								|| return 1
+	${GIT_CMT} --all --message="[${MESSAGE} :: $(date --iso=seconds)]"	|| return 1
 	return 0
 }
 
@@ -830,7 +830,7 @@ function index-dir {
 		EXCL_PATHS="${EXCL_PATHS} \( -path \"${EXCL_PATH}\" -prune \) -o"
 	done
 	declare INDEX_I="${INDEX_D}/+index"
-	declare CUR_IDX="${INDEX_I}/$(date --iso=s)"
+	declare CUR_IDX="${INDEX_I}/$(date --iso=seconds | ${SED} "s/[:]/-/g")"
 	declare CUR_LNK="${INDEX_I}/_current.txt"
 	declare I_ERROR="${INDEX_I}/_error.log"
 	declare I_USAGE="${INDEX_I}/_usage.txt"
@@ -1165,7 +1165,7 @@ function journal {
 	prompt -x ${FUNCNAME}
 	${VI} \
 		"${@}" \
-		$(date --iso=s).txt
+		$(date --iso=seconds | ${SED} "s/[:]/-/g").txt
 	prompt
 	cd - >/dev/null
 	return 0
