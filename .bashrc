@@ -1218,7 +1218,7 @@ function mount-robust {
 
 function organize {
 	declare SEARCH="\*"
-	declare ORGANIZE="_mission.txt"
+	declare ORGANIZE="_mission"
 	if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
 		ORGANIZE="${USERPROFILE}/Desktop/${ORGANIZE}"
 	else
@@ -1231,7 +1231,7 @@ function organize {
 		if [[ -n ${1} ]]; then
 			SEARCH="${1}"
 		fi
-		${SED} "s/^[[:space:]]+//g" "${ORGANIZE}" |
+		${SED} "s/^[[:space:]]+//g" "${ORGANIZE}.txt" |
 			eval ${GREP} "${SEARCH}" |
 			${GREP} "[ ]~[ ]" |
 			${GREP} -v "^[*]" |
@@ -1243,7 +1243,7 @@ function organize {
 		if [[ -n ${1} ]]; then
 			SEARCH="${1}"
 		fi
-		${SED} "s/^[[:space:]]+//g" "${ORGANIZE}" |
+		${SED} "s/^[[:space:]]+//g" "${ORGANIZE}.txt" |
 			eval ${GREP} "${SEARCH}" |
 			${GREP} "[ ]~[ ]" |
 			${GREP} -v "^[*]" |
@@ -1266,7 +1266,7 @@ function organize {
 			${GREP} "[ ]~[ ]"
 	else
 		${REALTIME} \
-		${VI} "${@}" "${ORGANIZE}"
+		${VI} "${@}" "${ORGANIZE}"{.txt,-*}
 	fi
 	prompt
 	cd - >/dev/null
