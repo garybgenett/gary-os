@@ -1,0 +1,45 @@
+From 5827fd064da19c8173dd4cb6c582052c6e9c6579 Mon Sep 17 00:00:00 2001
+From: Sebastian Pipping <sebastian@pipping.org>
+Date: Mon, 7 Feb 2011 00:39:50 +0100
+Subject: [PATCH] Fix version string
+
+---
+ nicolas33-offlineimap-98f5181/bin/offlineimap      |    2 +-
+ nicolas33-offlineimap-98f5181/offlineimap.py       |    2 +-
+ .../offlineimap/version.py                         |    2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/nicolas33-offlineimap-98f5181/bin/offlineimap b/nicolas33-offlineimap-98f5181/bin/offlineimap
+index 420ddb0..46cd481 100755
+--- a/nicolas33-offlineimap-98f5181/bin/offlineimap
++++ b/nicolas33-offlineimap-98f5181/bin/offlineimap
+@@ -20,4 +20,4 @@
+ from offlineimap import OfflineImap
+ 
+ offlineimap = OfflineImap()
+-offlineimap.startup('6.2.0')
++offlineimap.startup('6.3.1')
+diff --git a/nicolas33-offlineimap-98f5181/offlineimap.py b/nicolas33-offlineimap-98f5181/offlineimap.py
+index 566bd36..9b92b3c 100755
+--- a/nicolas33-offlineimap-98f5181/offlineimap.py
++++ b/nicolas33-offlineimap-98f5181/offlineimap.py
+@@ -20,4 +20,4 @@
+ from offlineimap import OfflineImap
+ 
+ offlineimap = OfflineImap()
+-offlineimap.startup('6.2.0')
++offlineimap.startup('6.3.1')
+diff --git a/nicolas33-offlineimap-98f5181/offlineimap/version.py b/nicolas33-offlineimap-98f5181/offlineimap/version.py
+index 6ae95fc..045b56b 100644
+--- a/nicolas33-offlineimap-98f5181/offlineimap/version.py
++++ b/nicolas33-offlineimap-98f5181/offlineimap/version.py
+@@ -1,5 +1,5 @@
+ productname = 'OfflineIMAP'
+-versionstr = "6.2.0"
++versionstr = "6.3.1"
+ 
+ versionlist = versionstr.split(".")
+ major = versionlist[0]
+-- 
+1.7.4
+
