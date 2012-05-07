@@ -172,7 +172,7 @@ docbook-xsl-stylesheets
 xmlto
 asciidoc
 
-jpeg
+libjpeg-turbo				#>>> jpeg
 openjpeg
 tiff
 
