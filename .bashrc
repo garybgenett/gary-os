@@ -20,8 +20,8 @@ eval $(dircolors	2>/dev/null)
 setterm -blank 10	2>/dev/null
 setterm -blength 0	2>/dev/null
 
-if [[ -f /etc/bash_completion ]]; then
-	source /etc/bash_completion
+if [[ -f /etc/profile.d/bash-completion.sh ]]; then
+	source /etc/profile.d/bash-completion.sh
 fi
 complete -d -o dirnames cd
 
