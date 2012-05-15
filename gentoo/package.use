@@ -21,6 +21,7 @@ dev-libs/popt				static-libs	# gentoo required
 sys-apps/util-linux			static-libs	# gentoo required
 sys-fs/lvm2				static-libs	# gentoo required
 sys-fs/udev				static-libs	# gentoo required
+sys-libs/e2fsprogs-libs			static-libs	# gentoo required
 sys-libs/zlib				static-libs	# gentoo required
 
 net-ftp/proftpd				openssl		# gentoo required
