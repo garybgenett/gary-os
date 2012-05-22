@@ -123,8 +123,8 @@ gcc-config
 genkernel
 gentoo-bashcomp
 gentoo-sources
-'=gentoo-sources-3.2.9'
 '=gentoo-sources-3.3.0'
+'=gentoo-sources-3.3.5'
 app-vim/gentoo-syntax			#>>> gentoo-syntax
 gentoolkit
 gentoolkit-dev
