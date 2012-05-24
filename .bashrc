@@ -361,7 +361,7 @@ fi
 alias rsynclook="${GREP} -v '^[.<>c][fdDLS]'"
 
 alias logtail="tail -f /.runit/log/syslogd"
-alias synctail="tail -f /.g/_data/+sync/_sync.log"
+alias synctail="${GREP} '^ERROR[:][ ]' /.g/_data/+sync/_sync.log ; echo ; tail -f /.g/_data/+sync/_sync.log"
 
 alias filter="iptables -L -nvx --line-numbers | ${MORE}"
 alias mangler="iptables -L -nvx --line-numbers -t mangle | ${MORE}"
@@ -1384,15 +1384,22 @@ function rater {
 ########################################
 
 function reporter {
+	declare MARKER="($(date --iso=s) ${HOSTNAME}:${PWD}) ${@}"
 	declare CMD="$(basename ${1})"
 	declare SRC="$((${#}-1))"	; SRC="${!SRC}"
 	declare DST="${#}"		; DST="${!DST}"
 	echo -en "\n reporting [${CMD}]: '${SRC}' -> '${DST}'\n"
-	echo -en "(${HOSTNAME}:${PWD}) ${@}\n"
+	echo -en "${MARKER}\n"
 	if [[ ${1} != git ]]; then
-		time ${NICELY} "${@}" || return 1
+		time ${NICELY} "${@}" || {
+			echo -en "ERROR: ${MARKER}\n"
+			return 1;
+		};
 	else
-		time "${@}" || return 1
+		time "${@}" || {
+			echo -en "ERROR: ${MARKER}\n"
+			return 1;
+		};
 	fi
 	return 0
 }
