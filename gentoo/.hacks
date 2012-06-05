@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 ################################################################################
 
-chmod -v 666 /dev/sg0
-chmod -v 666 /dev/sr0
+chmod -v 666 /dev/sg*
+chmod -v 666 /dev/sr*
 
 chmod -v 666 /dev/audio
 chmod -v 666 /dev/dsp
@@ -12,8 +12,7 @@ chmod -v 666 /dev/snd/control*
 chmod -v 666 /dev/snd/pcm*
 chmod -v 666 /dev/snd/timer*
 
-chmod -v 666 /dev/nvidia0
-chmod -v 666 /dev/nvidiactl
+chmod -v 666 /dev/nvidia*
 
 ########################################
 
