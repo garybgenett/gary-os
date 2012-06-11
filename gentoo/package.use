@@ -71,7 +71,7 @@ net-analyzer/tcpdump			-chroot
 x11-base/xorg-server			xnest xvfb
 
 media-tv/xbmc				projectm webserver
-media-video/vlc				projectm qt4 vlm
+media-video/vlc				projectm qt4 vlm libass
 
 app-emulation/vmware-tools		vmware_guest_freebsd vmware_guest_linux vmware_guest_windows
 
