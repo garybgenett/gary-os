@@ -35,7 +35,6 @@ src_prepare() {
 	distutils_src_prepare
 	# see http://pogma.com/2009/09/09/snow-leopard-and-offlineimap/ and bug 284925
 	epatch "${FILESDIR}"/"${P}"-darwin10.patch
-	epatch "${FILESDIR}"/sslv2_fix.patch
 }
 
 src_compile() {
