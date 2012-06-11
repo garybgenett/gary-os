@@ -5,6 +5,9 @@
 app-text/ghostscript-gpl		cups		# gentoo required
 app-text/poppler			cairo qt4	# gentoo required
 dev-libs/libxml2			python		# gentoo required
+media-fonts/font-adobe-100dpi		nls		# gentoo required
+media-fonts/font-misc-misc		nls		# gentoo required
+media-gfx/graphviz			cairo		# gentoo required
 media-libs/libsdl			joystick	# gentoo required
 media-video/mplayer			iconv		# gentoo required
 sys-auth/consolekit			policykit	# gentoo required
@@ -33,6 +36,7 @@ media-libs/libpng			apng		# gentoo required
 media-libs/mesa				xa		# gentoo required
 sys-auth/pambase			consolekit	# gentoo required
 sys-fs/udev				gudev		# gentoo required
+sys-fs/udev				hwdb		# gentoo required
 sys-libs/zlib				minizip		# gentoo required
 x11-libs/libdrm				libkms		# gentoo required
 
