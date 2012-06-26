@@ -1407,6 +1407,8 @@ function reporter {
 ########################################
 
 function session {
+	chown -vR root:root ${HOME}/.screen
+	chmod -vR 700 ${HOME}/.screen
 	if [[ ${1} == -l ]]; then
 		screen -list
 		psg screen
