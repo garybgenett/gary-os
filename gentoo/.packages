@@ -293,7 +293,6 @@ cups
 dhcp
 dovecot
 hostapd
-lighttpd
 mysql
 ntp
 openvpn
@@ -301,7 +300,6 @@ proftpd
 quagga
 samba
 tftp-hpa
-thttpd
 
 ghostscript-gpl
 foomatic-db
