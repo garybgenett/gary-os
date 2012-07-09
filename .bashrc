@@ -1599,6 +1599,7 @@ function vdiff {
 		(( ${FILE} > 0 )) && [[ -f ${!FILE} ]] && FOLLOW="--follow"
 		${GIT_CMD} log ${GIT_FMT} ${DIFF} ${FOLLOW} "${@}" >${VDIFF} 2>&1
 	else
+		{ [[ ! -d ${1} ]] && [[ ! -f ${1} ]]; } && SEARCH="${1}" && shift
 		diff ${DIFF_OPTS} "${@}" >${VDIFF}
 	fi
 	${VIEW} ${SEARCH} ${VDIFF}
