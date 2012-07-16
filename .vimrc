@@ -95,7 +95,7 @@ set showbreak				=+
 
 set textwidth				=0
 set formatlistpat			=^\\s*\\w\\+[\\.)]\\s*
-set formatoptions			=1cnqrto
+set formatoptions			=12cjnoqrt
 set comments				=sr:/*,mb:*,ex:*/,b://,b:###,b:#,b:%,bf:+,bf:-
 
 set highlight				=sr
@@ -130,21 +130,21 @@ map z2 <ESC>:set foldlevel=0<CR>/\[work\]<CR>
 map  <C-J> <ESC>/+VIM+<CR>c5l
 map! <C-J> <C-O>/+VIM+<CR><C-O>c5l
 
-" (re)set folding, columns, pasting and wrapping
-map <F5> <ESC>:set foldlevel=1<CR>
-map <F6> <ESC>:set columns=81<CR>
+" convert tab-delimited file to properly formatted csv
+map <F5> <ESC>:%s/^/\"/g<CR>:%s/\t/\"\,\"/g<CR>:%s/$/\"/g<CR>
+
+" (re)set folding, pasting and wrapping
+map <F6> <ESC>:set foldlevel=1<CR>
 map <F7> <ESC>:set invpaste<CR>
 map <F8> <ESC>:set invwrap<CR>
 
 " remove all spaces from the end of all lines
 map <F9> <ESC>:%s/[ \t]*$//g<CR>1G
 
-" convert tab-delimited file to properly formatted csv
-map <F10> <ESC>:%s/^/\"/g<CR>:%s/\t/\"\,\"/g<CR>:%s/$/\"/g<CR>
-
 " (un)set automatic formatting
-map <F11> <ESC>:set formatoptions+=a<CR><ESC>:set nolist<CR><ESC>:set spell<CR><ESC>:set textwidth=80<CR>
-map <F12> <ESC>:set formatoptions-=a<CR><ESC>:set list<CR><ESC>:set nospell<CR><ESC>:set textwidth=0<CR>
+map <F10> <ESC>:set formatoptions+=a<CR><ESC>:set   spell<CR><ESC>:set   expandtab<CR><ESC>:set shiftwidth=4<CR><ESC>:set tabstop=4<CR><ESC>:set columns=73<CR><ESC>:set textwidth=72<CR>
+map <F11> <ESC>:set formatoptions-=a<CR><ESC>:set nospell<CR><ESC>:set   expandtab<CR><ESC>:set shiftwidth=4<CR><ESC>:set tabstop=4<CR><ESC>:set columns=73<CR><ESC>:set textwidth=72<CR>
+map <F12> <ESC>:set formatoptions-=a<CR><ESC>:set nospell<CR><ESC>:set noexpandtab<CR><ESC>:set shiftwidth=8<CR><ESC>:set tabstop=8<CR><ESC>:set columns=81<CR><ESC>:set textwidth=0<CR>
 
 "###############################################################################
 " end of file
