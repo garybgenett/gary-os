@@ -31,6 +31,7 @@ net-ftp/proftpd				openssl		# gentoo required
 sys-fs/cryptsetup			static		# gentoo required
 
 dev-python/PyQt4			webkit		# gentoo required
+media-libs/chromaprint			tools		# gentoo required
 media-libs/freetype			kpathsea	# gentoo required
 media-libs/libpng			apng		# gentoo required
 media-libs/mesa				xa		# gentoo required
