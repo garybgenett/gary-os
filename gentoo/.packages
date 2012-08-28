@@ -80,6 +80,7 @@ util-linux				#>>> util-linux-ng
 busybox
 curl
 inotify-tools
+ulogd
 
 btrfs-progs
 ext3grep
