@@ -27,6 +27,7 @@ chmod -v 000 /usr/sbin/console-kit-daemon
 
 declare MODULE=
 for MODULE in \
+	/lib/modules/*/kernel/drivers/input/evbug.ko		\
 	/lib/modules/*/kernel/drivers/video/aty/radeonfb.ko	\
 	/lib/modules/*/kernel/drivers/video/nvidia/nvidiafb.ko	\
 	/lib/modules/*/kernel/drivers/video/riva/rivafb.ko
