@@ -165,6 +165,7 @@ gdb
 xfig
 transfig
 texlive
+texmfind
 
 docbook-xml-dtd
 docbook-xsl-ns-stylesheets
