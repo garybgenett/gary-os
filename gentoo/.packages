@@ -353,7 +353,6 @@ windowmaker
 qemu-kvm
 
 aumix
-epdfview				#>>> replaces "xpdf"
 feh
 firefox
 sci-visualization/gnuplot		#>>> gnuplot
@@ -362,6 +361,7 @@ imagemagick
 keepassx
 mplayer
 picard
+qpdfview				#>>> replaces "xpdf"
 quodlibet
 rdesktop
 rtorrent
