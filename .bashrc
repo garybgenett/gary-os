@@ -70,7 +70,7 @@ export CHOST="x86_64-pc-linux-gnu"
 export CFLAGS="-march=core2 -mtune=core2 -O2 -ggdb -pipe"
 export CXXFLAGS="${CFLAGS}"
 export LDFLAGS="-Wl,--hash-style=gnu -Wl,--as-needed"
-export MAKEFLAGS="-j3"
+export MAKEFLAGS="-j9"
 
 export CCACHE_DIR="/tmp/.ccache"
 export CCACHE_LOGFILE= #>>>"/tmp/.ccache.log"
