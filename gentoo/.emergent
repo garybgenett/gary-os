@@ -44,7 +44,7 @@ done
 cat /dev/null >${OUT_DIR}/_use.disabled
 cat /dev/null >${OUT_DIR}/_use.enabled
 
-for TOKEN in $(source /etc/make.conf ; echo ${USE}); do
+for TOKEN in $(source /etc/portage/make.conf ; echo ${USE}); do
 	if [[ ${TOKEN} == ${TOKEN/#-} ]]; then
 		grep -E "^${TOKEN}[ ][-]" /usr/portage/profiles/use.desc |
 			sort \
@@ -87,7 +87,7 @@ rm -frv ${OUT_DIR}/emerge__tmp
 
 ########################################
 
-(source /etc/make.conf ; echo ${USE}) |
+(source /etc/portage/make.conf ; echo ${USE}) |
 	sed -r "s/^-//g"	|
 	sed -r "s/ -/ /g"	|
 	sed -r "s/ /\n/g"	|
@@ -95,7 +95,7 @@ rm -frv ${OUT_DIR}/emerge__tmp
 	uniq			\
 	>${OUT_DIR}/makeconf.use
 
-grep -E "^[A-Z_]+=" /etc/make.conf |
+grep -E "^[A-Z_]+=" /etc/portage/make.conf |
 	grep -vE "^USE="	|
 	sed -r "s/=.+$//g"	|
 	sort			|
