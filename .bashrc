@@ -649,9 +649,13 @@ function edit {
 function email {
 	declare TMPDIR="/.g/_data/zactive/_zcache"
 	declare MUTTRC="${HOME}/.muttrc"
-	if [[ ${1} == -x ]]
+	if [[ ${1} == -x ]] || [[ ${1} == -i ]]
 	then
 		TMPDIR="/tmp/_mutt"
+	fi
+	if [[ ${1} == -i ]]; then
+		shift
+		MUTTRC="${MUTTRC}.imap"
 	fi
 	sudo -H -u \#1000 \
 		${MKDIR} ${TMPDIR}
