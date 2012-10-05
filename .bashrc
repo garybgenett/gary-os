@@ -675,7 +675,7 @@ function email {
 		sudo -H -u \#1000 \
 				TMPDIR="${TMPDIR}" \
 				EDITOR="${VI} +/^$" \
-				DISPLAY=":1" \
+				DISPLAY=":0" \
 			mutt \
 			-nF ${HOME}/.muttrc \
 			"${@}"
