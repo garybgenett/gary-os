@@ -648,7 +648,12 @@ function edit {
 
 function email {
 	declare TMPDIR="/.g/_data/zactive/_zcache"
-	${MKDIR} ${TMPDIR}
+	if [[ ${1} == -x ]]
+	then
+		TMPDIR="/tmp/_mutt"
+	fi
+	sudo -H -u \#1000 \
+		${MKDIR} ${TMPDIR}
 	cd ${TMPDIR}
 	prompt -x ${FUNCNAME}
 	if [[ ${1} == -x ]]
