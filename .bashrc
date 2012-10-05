@@ -648,6 +648,7 @@ function edit {
 
 function email {
 	declare TMPDIR="/.g/_data/zactive/_zcache"
+	declare MUTTRC="${HOME}/.muttrc"
 	if [[ ${1} == -x ]]
 	then
 		TMPDIR="/tmp/_mutt"
@@ -677,7 +678,7 @@ function email {
 				EDITOR="${VI} +/^$" \
 				DISPLAY=":0" \
 			mutt \
-			-nF ${HOME}/.muttrc \
+			-nF ${MUTTRC} \
 			"${@}"
 	fi
 	prompt
