@@ -251,6 +251,7 @@ ddrescue
 dhcpcd
 dos2unix
 dosfstools
+ebtables
 ed
 indent
 iotop
