@@ -433,6 +433,13 @@ gkrellweather
 
 xbmc
 
+doom3
+doom3-data
+doom3-ducttape
+glxquake-bin
+quake1-data
+quakeforge
+
 )
 
 ################################################################################
