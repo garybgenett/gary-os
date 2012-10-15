@@ -351,8 +351,7 @@ obconf
 openbox
 windowmaker
 
-#>>>qemu				# conflicts with "qemu-kvm"
-qemu-kvm
+qemu
 
 aumix
 feh
