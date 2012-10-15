@@ -41,6 +41,17 @@ rm -frv /home
 rm -frv /media
 rm -frv /root
 
+rm -frv $(find / \
+	\( -path /.g -prune \) \
+	-o \( -path /dev -prune \) \
+	-o \( -path /mnt -prune \) \
+	-o \( -path /proc -prune \) \
+	-o \( -path /sys -prune \) \
+	-o -print |
+	sort |
+	grep -E \
+		-e "[/][.]keep(|dir|[_].+)$")
+
 exit 0
 ################################################################################
 # end of file
