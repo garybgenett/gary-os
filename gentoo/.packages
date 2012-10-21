@@ -410,11 +410,13 @@ comix
 dosbox
 dosemu
 dvd+rw-tools
+dvdbackup
 gimp
 gnuboy					#>>> tuxboy
 gnuchess
 gnugo
 golly
+lsdvd
 mekanix
 nestopia
 nethack
