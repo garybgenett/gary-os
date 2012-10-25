@@ -158,6 +158,17 @@ for TOKEN in ${OUT_DIR}/*.OKAY; do
 	diff ${TOKEN} ${TOKEN/%\.OKAY} >>${OUT_DIR}/+okay
 done
 
+echo -e "\n[emerge output]" >>${OUT_DIR}/+okay
+grep -vE \
+	-e "^$" \
+	-e "^[[]" \
+	-e "^PORTAGE_BZIP2_COMMAND[ ]" \
+	-e "^These are the packages that would be merged" \
+	-e "^Calculating dependencies" \
+	-e "^Total[:][ ]" \
+	-e "^Fetch Restriction[:][ ]" \
+	${OUT_DIR}/.emerge >>${OUT_DIR}/+okay
+
 exit 0
 ################################################################################
 # end of file
