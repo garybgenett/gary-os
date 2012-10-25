@@ -60,6 +60,9 @@ net-print/cups				samba
 
 sys-fs/btrfs-progs			acl
 
+dev-vcs/subversion			-apache2
+www-servers/apache			-threads
+
 ########################################
 
 x11-terms/rxvt-unicode			fading-colors focused-urgency font-styles mousewheel perl
