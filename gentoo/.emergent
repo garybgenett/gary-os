@@ -59,11 +59,11 @@ done
 ########################################
 
 cat ${OUT_DIR}/.emerge |
-	sed -r "s/ ([A-Z_]+=)/\n\1/g"	|
-	sed -r "s/\" .*$/\"/g"		|
-	grep -E "^[A-Z_]+="		|
-	sort				|
-	uniq				\
+	sed -r "s/ ([A-Z0-9_]+=)/\n\1/g"	|
+	sed -r "s/\" [^\"]+$/\"/g"		|
+	grep -E "^[A-Z0-9_]+="			|
+	sort					|
+	uniq					\
 	>${OUT_DIR}/emerge__tmp
 
 grep -E "^USE=" ${OUT_DIR}/emerge__tmp |
@@ -95,7 +95,7 @@ rm -frv ${OUT_DIR}/emerge__tmp
 	uniq			\
 	>${OUT_DIR}/makeconf.use
 
-grep -E "^[A-Z_]+=" /etc/portage/make.conf |
+grep -E "^[A-Z0-9_]+=" /etc/portage/make.conf |
 	grep -vE "^USE="	|
 	sed -r "s/=.+$//g"	|
 	sort			|
