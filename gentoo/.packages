@@ -351,6 +351,8 @@ obconf
 openbox
 windowmaker
 
+dosbox
+dosemu
 qemu
 
 aumix
@@ -400,32 +402,20 @@ vmware-player				# binary package
 
 libreoffice
 
-beep
-calibre
 cdparanoia
 cdrdao
 cdrtools
 cdtool
-cgoban
-comix
-dosbox
-dosemu
 dvd+rw-tools
 dvdbackup
-gimp
-gnuboy					#>>> tuxboy
-gnuchess
-gnugo
-golly
 lsdvd
-mekanix
-nestopia
-nethack
-netris
+
+beep
+calibre
+comix
+gimp
 sdcv					#>>> stardict-sdcv
 stardict
-stella
-xboard
 
 gkrellm
 gkrellaclock
@@ -433,6 +423,18 @@ gkrellmoon
 gkrellstock
 gkrellsun
 gkrellweather
+
+cgoban
+gnuboy					#>>> tuxboy
+gnuchess
+gnugo
+golly
+mekanix
+nestopia
+nethack
+netris
+stella
+xboard
 
 xbmc
 
