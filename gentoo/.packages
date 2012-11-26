@@ -198,7 +198,7 @@ cvs2svn
 cvsps
 
 git
-gitosis
+gitolite
 qgit
 
 expect
