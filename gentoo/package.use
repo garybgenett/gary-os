@@ -38,9 +38,9 @@ media-libs/freetype			kpathsea	# gentoo required
 media-libs/libpng			apng		# gentoo required
 media-libs/mesa				xa		# gentoo required
 sys-auth/pambase			consolekit	# gentoo required
-sys-fs/udev				gudev		# gentoo required
-sys-fs/udev				hwdb		# gentoo required
+sys-fs/udev				gudev hwdb	# gentoo required
 sys-libs/zlib				minizip		# gentoo required
+virtual/udev				gudev hwdb	# gentoo required
 x11-libs/libdrm				libkms		# gentoo required
 
 dev-ruby/json				ruby_targets_ruby19	# gentoo required
