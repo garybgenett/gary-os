@@ -80,6 +80,7 @@ util-linux				#>>> util-linux-ng
 busybox
 curl
 inotify-tools
+libperl
 ulogd
 
 btrfs-progs
@@ -192,6 +193,7 @@ openldap
 
 dev-perl/DateManip			#>>> perl-date-manip
 dev-perl/libwww-perl			#>>> perl-libwww
+perl-core/CGI
 
 cvs
 cvs2svn
@@ -206,7 +208,9 @@ expect
 clisp
 lua
 luarocks
+parrot
 python
+rakudo
 ruby
 rubygems
 
@@ -296,6 +300,7 @@ cups
 dhcp
 dovecot
 hostapd
+mod_perl
 mysql
 ntp
 openvpn
