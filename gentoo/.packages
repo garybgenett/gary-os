@@ -135,6 +135,7 @@ layman
 linux-firmware				# binary package, kernel upgrade
 mirrorselect
 module-rebuild
+paludis
 portage
 portage-utils
 ufed

@@ -65,6 +65,8 @@ www-servers/apache			-threads
 
 ########################################
 
+sys-apps/paludis			pbins portage prebuilt-documentation search-index visibility
+
 x11-terms/rxvt-unicode			fading-colors focused-urgency font-styles mousewheel perl
 #>>>x11-terms/rxvt-unicode			-vanilla buffer-on-clear secondary-wheel
 
