@@ -3,7 +3,6 @@ source ${HOME}/.bashrc
 ################################################################################
 
 declare SAFE_ENV="prompt -z EMERGE_DEFAULT_OPTS="
-
 if [[ ${1} == -u ]]; then
 	SAFE_ENV="prompt -z"
 fi
