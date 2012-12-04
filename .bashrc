@@ -1425,11 +1425,15 @@ function session {
 		shift
 	fi
 	if [[ ${NAME} == all ]]; then
+		declare RETURN=false
 		declare SESSION
 		for SESSION in $(screen -list | ${SED} -n "s/^[[:space:]]+[0-9]+[.](.+)[[:space:]]+[(](Attached|Detached)[)]$/\1/gp" | sort); do
+			RETURN=true
 			${FUNCNAME} --${SESSION}
 		done
-		return 0
+		if ${RETURN}; then
+			return 0
+		fi
 	fi
 	if [[ ${1} == -l ]]; then
 		screen -list
