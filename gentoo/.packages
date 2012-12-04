@@ -78,7 +78,7 @@ udev					# kernel upgrade
 util-linux				#>>> util-linux-ng
 
 busybox
-curl
+net-misc/curl				#>>> curl
 inotify-tools
 libperl
 ulogd
@@ -104,7 +104,7 @@ tcl
 sqlite
 
 subversion
-gnupg
+app-crypt/gnupg				#>>> gnupg
 
 deb2targz
 debianutils
@@ -369,7 +369,7 @@ graphviz
 imagemagick
 keepassx
 mplayer
-picard
+media-sound/picard			#>>> picard
 qpdfview				#>>> replaces "xpdf"
 quodlibet
 rdesktop
