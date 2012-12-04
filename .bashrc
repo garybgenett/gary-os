@@ -1419,6 +1419,11 @@ function reporter {
 function session {
 	chown -vR root:root ${HOME}/.screen
 	chmod -vR 700 ${HOME}/.screen
+	declare NAME="session"
+	if [[ ${1} == --*(*) ]]; then
+		NAME="${1/#--}"
+		shift
+	fi
 	if [[ ${1} == -l ]]; then
 		screen -list
 		psg screen
@@ -1430,7 +1435,7 @@ function session {
 		   { [[ -z ${CYGWIN} ]] && [[ -z ${CYGWIN_ROOT} ]]; }; then
 			su - root
 		else
-			screen -xAR "${@}" || return 1
+			screen -xAR -S "${NAME}" "${@}" || return 1
 		fi
 	fi
 	return 0
