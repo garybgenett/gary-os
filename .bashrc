@@ -1510,7 +1510,12 @@ function shell {
 		shift
 	fi
 	if [[ ${1} == -s[=0-9] ]]; then
-		OPTS="${OPTS} -t \"bash -c 'source ~/.bashrc ; session -p${1/#-s/}'\""
+		if [[ ${2} == --*(*) ]]; then
+			OPTS="${OPTS} -t \"bash -c 'source ~/.bashrc ; session ${2} -p${1/#-s/}'\""
+			shift
+		else
+			OPTS="${OPTS} -t \"bash -c 'source ~/.bashrc ; session -p${1/#-s/}'\""
+		fi
 		shift
 	fi
 	cd
