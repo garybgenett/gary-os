@@ -12,11 +12,14 @@ fi
 if [[ ${1} == -u ]]; then
 	${LL} /_gentoo
 	cat /_gentoo/+okay
-	${SAFE_ENV} emerge --update --deep --newuse system world	|| exit 1
-	${SAFE_ENV} dispatch-conf					|| exit 1
-	${SAFE_ENV} emerge --depclean					|| exit 1
-	${SAFE_ENV} revdep-rebuild --ignore				|| exit 1
-	${SAFE_ENV} emaint --fix all					|| exit 1
+	cat /dev/null >/var/lib/portage/world
+	${SAFE_ENV} emerge --update --deep --newuse system				|| exit 1
+	${SAFE_ENV} emerge --noreplace --select $(${HOME}/setup/gentoo/.packages)	|| exit 1
+	${SAFE_ENV} emerge --update --deep --newuse world				|| exit 1
+	${SAFE_ENV} dispatch-conf							|| exit 1
+	${SAFE_ENV} emerge --depclean							|| exit 1
+	${SAFE_ENV} revdep-rebuild --ignore						|| exit 1
+	${SAFE_ENV} emaint --fix all							|| exit 1
 	${SAFE_ENV} equery list --duplicates '*'
 else
 	${SAFE_ENV} emerge --verbose --sync
