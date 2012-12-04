@@ -2,8 +2,6 @@
 # portage package keywords file
 ################################################################################
 
-sys-boot/grub **
-
 games-board/xboard **
 games-emulation/mekanix **
 media-tv/xbmc **
