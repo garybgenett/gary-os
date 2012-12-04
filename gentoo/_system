@@ -2,14 +2,55 @@
 source ${HOME}/.bashrc
 ################################################################################
 
+declare INST_DIR="/.g/_toor"
+declare FILE_SRC="/.g/_data/_target/iso"
+
+declare LTIME="/usr/share/zoneinfo/US/Pacific"
+
+########################################
+
 declare SAFE_ENV="prompt -z EMERGE_DEFAULT_OPTS="
-if [[ ${1} == -u ]]; then
+if [[ ${1} == -i ]]; then
+	SAFE_ENV="prompt -z chroot ${INST_DIR}"
+elif [[ ${1} == -u ]]; then
 	SAFE_ENV="prompt -z"
 fi
 
 ################################################################################
 
-if [[ ${1} == -u ]]; then
+if [[ ${1} == -i ]]; then
+	umount -v				${INST_DIR}/dev/*
+	umount -v				${INST_DIR}/*
+	if [[ ! -d ${INST_DIR}/boot ]]; then
+#>>>		tar -pvvx -C ${INST_DIR} -f	$(ls ${FILE_SRC}/*stage3-i686*.tar.bz2	| tail -n1)
+		tar -pvvx -C ${INST_DIR} -f	$(ls ${FILE_SRC}/*stage3-amd64*.tar.bz2	| tail -n1)
+		xz -cd				$(ls ${FILE_SRC}/*portage*.tar.xz	| tail -n1) |
+		tar -pvvx -f- -C		${INST_DIR}/usr
+	fi
+	${MKDIR}				${INST_DIR}/_gentoo
+	${CP} -L /_gentoo/*.{okay,OKAY}		${INST_DIR}/_gentoo
+	${MKDIR}				${INST_DIR}/.setup
+	${CP} -L ${HOME}/setup/gentoo		${INST_DIR}/.setup
+	${LN} /.setup/gentoo/make.conf		${INST_DIR}/etc/portage
+	${LN} /.setup/gentoo/package.*		${INST_DIR}/etc/portage
+	${CP} -L ${INST_DIR}${LTIME}		${INST_DIR}/etc/localtime
+	${CP} -L /etc/locale.gen		${INST_DIR}/etc/
+	${CP} -L /etc/resolv.conf		${INST_DIR}/etc/
+	mount -v --bind /dev			${INST_DIR}/dev
+	mount -v --bind /dev/pts		${INST_DIR}/dev/pts
+	mount -v --bind /proc			${INST_DIR}/proc
+	mount -v --bind /sys			${INST_DIR}/sys
+	${SAFE_ENV}				locale-gen
+	${SAFE_ENV}				eselect profile set 1
+	${MKDIR}				${INST_DIR}/.g
+	${CP} -L /.g/.home			${INST_DIR}/.g/.home
+	${CP} -L ${HOME}/setup/gentoo		${INST_DIR}/.g/.home/setup
+	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system
+	HOME=/.g/.home ${SAFE_ENV}		emerge ccache portage
+	HOME=/.g/.home ${SAFE_ENV}		emerge --emptytree system world
+	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system -u
+	exit 0
+elif [[ ${1} == -u ]]; then
 	${LL} /_gentoo
 	cat /_gentoo/+okay
 	cat /dev/null >/var/lib/portage/world
