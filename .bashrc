@@ -1424,6 +1424,13 @@ function session {
 		NAME="${1/#--}"
 		shift
 	fi
+	if [[ ${NAME} == all ]]; then
+		declare SESSION
+		for SESSION in $(screen -list | ${SED} -n "s/^[[:space:]]+[0-9]+[.](.+)[[:space:]]+[(](Attached|Detached)[)]$/\1/gp" | sort); do
+			${FUNCNAME} --${SESSION}
+		done
+		return 0
+	fi
 	if [[ ${1} == -l ]]; then
 		screen -list
 		psg screen
