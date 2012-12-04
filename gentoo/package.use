@@ -27,6 +27,7 @@ sys-fs/lvm2				static-libs	# gentoo required
 sys-fs/udev				static-libs	# gentoo required
 sys-libs/e2fsprogs-libs			static-libs	# gentoo required
 sys-libs/zlib				static-libs	# gentoo required
+virtual/udev				static-libs	# gentoo required
 
 net-ftp/proftpd				openssl		# gentoo required
 sys-fs/cryptsetup			static		# gentoo required
