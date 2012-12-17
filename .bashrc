@@ -1420,16 +1420,17 @@ function session {
 	chown -vR root:root ${HOME}/.screen
 	chmod -vR 700 ${HOME}/.screen
 	declare NAME="session"
-	if [[ ${1} == --*(*) ]]; then
+	if [[ ${1} == --*(*) ]] && [[ ${1} != --all ]]; then
 		NAME="${1/#--}"
 		shift
 	fi
-	if [[ ${NAME} == all ]]; then
+	if [[ ${1} == --all ]]; then
+		shift
 		declare RETURN=false
 		declare SESSION
 		for SESSION in $(screen -list | ${SED} -n "s/^[[:space:]]+[0-9]+[.](.+)[[:space:]]+[(](Attached|Detached)[)]$/\1/gp" | sort); do
 			RETURN=true
-			${FUNCNAME} --${SESSION}
+			${FUNCNAME} --${SESSION} "${@}"
 		done
 		if ${RETURN}; then
 			return 0
