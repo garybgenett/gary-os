@@ -73,6 +73,7 @@ elif [[ ${1} == -u ]]; then
 		eselect opencl set nvidia
 		eselect opengl set nvidia
 	fi
+	declare ECLEAN="eclean --verbose --destructive --package-names"
 	${SAFE_ENV} emerge --update --deep --newuse system				|| exit 1
 	${SAFE_ENV} emerge --noreplace --select $(${HOME}/setup/gentoo/.packages)	|| exit 1
 	${SAFE_ENV} emerge --update --deep --newuse world				|| exit 1
@@ -80,6 +81,8 @@ elif [[ ${1} == -u ]]; then
 	${SAFE_ENV} emerge --depclean							|| exit 1
 	${SAFE_ENV} revdep-rebuild --ignore						|| exit 1
 	${SAFE_ENV} emaint --fix all							|| exit 1
+	${SAFE_ENV} ${ECLEAN} distfiles --fetch-restricted				|| exit 1
+	${SAFE_ENV} ${ECLEAN} packages							|| exit 1
 	${SAFE_ENV} equery list --duplicates '*'
 else
 	${SAFE_ENV} emerge --verbose --sync
