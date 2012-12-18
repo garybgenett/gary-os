@@ -1419,7 +1419,7 @@ function reporter {
 function session {
 	chown -vR root:root ${HOME}/.screen
 	chmod -vR 700 ${HOME}/.screen
-	declare NAME="session"
+	declare NAME="_${FUNCNAME}"
 	if [[ ${1} == --*(*) ]] && [[ ${1} != --all ]]; then
 		NAME="${1/#--}"
 		shift
