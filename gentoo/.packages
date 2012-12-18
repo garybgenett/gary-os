@@ -301,7 +301,7 @@ cups
 dhcp
 dovecot
 hostapd
-mod_perl
+#>>>mod_perl				# incompatible with apache 2.4.x
 mysql
 ntp
 openvpn
