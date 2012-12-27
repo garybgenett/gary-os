@@ -65,6 +65,8 @@ sys-fs/btrfs-progs			acl
 dev-vcs/subversion			-apache2
 www-servers/apache			-threads
 
+net-nds/openldap			-gnutls
+
 ########################################
 
 sys-apps/paludis			pbins portage prebuilt-documentation search-index visibility
