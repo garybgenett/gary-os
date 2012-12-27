@@ -45,6 +45,8 @@ if [[ ${1} == -i ]]; then
 	${MKDIR}				${INST_DIR}/.g
 	${CP} -L /.g/.home			${INST_DIR}/.g/.home
 	${CP} -L ${HOME}/setup/gentoo		${INST_DIR}/.g/.home/setup
+	${RSYNC_U} --filter="-_/packages/**" \
+		/usr/portage/			${INST_DIR}/usr/portage
 	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system
 	HOME=/.g/.home ${SAFE_ENV}		emerge ccache portage
 	HOME=/.g/.home ${SAFE_ENV}		emerge --emptytree system world
