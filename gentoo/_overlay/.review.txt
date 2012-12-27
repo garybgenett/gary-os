@@ -1,3 +1,62 @@
+diff :: games-fps/quake1-data ==================================================
+
+diff -u -U10 -r /usr/portage/games-fps/quake1-data/Manifest games-fps/quake1-data/Manifest
+--- /usr/portage/games-fps/quake1-data/Manifest	2012-01-16 11:17:49.000000000 -0800
++++ games-fps/quake1-data/Manifest	2012-12-27 13:12:48.216333764 -0800
+@@ -1,23 +1,3 @@
+------BEGIN PGP SIGNED MESSAGE-----
+-Hash: SHA1
+-
+-EBUILD quake1-data-2.40.ebuild 2103 RMD160 bd13571163f98f22d58257df341933d67a4fbada SHA1 6fc91d2a953cb42e999a0bb5d0ec94cb297b5928 SHA256 868bce9fb1a43c3dcce27442c5c3f9ad169e9e34c25419b87b0c19c25928963c
+-MISC ChangeLog 1723 RMD160 a079a0c3f8357726688dac997ec70e608e2cefe0 SHA1 6fe09c38aca8d148d9c1957f1a2f358ff8342f13 SHA256 ceaf4fa05024a98586ac07e0e21da043b73340b44f3d375568e0cd3c695af9fd
+-MISC metadata.xml 158 RMD160 cbd9984bb6b426c8c9cee5022fe0a26261612fea SHA1 be5251fa1dacef5c41b74761bb1c8c54fb633b9e SHA256 1423a4fdd4a79b1728a2056d9e300f7e1074253095d82726218d9e9b953888a3
+------BEGIN PGP SIGNATURE-----
+-Version: GnuPG v2.0.18 (GNU/Linux)
+-
+-iQIcBAEBAgAGBQJPFHfqAAoJEDxpGckxwJCBIRQP/2+GpdpTH+ISawZZbtAx5Sqx
+-G+bVxTC3lbu1fE/AaxDrrutr9lUnRUoHcq0//BwDrN991VjRCUcekUbuxAujf3f9
+-ASXgXrj2zniz/LD1BJ03MUdvSmWIo6t+xkhAvl5tM1tmzbgSqOEDylrfDgJqx4WZ
+-qlLYW8yU7QzPftN0PFbdqyLvtsqYrm3ZgNrnuSvwuos/1roS94TDb1zsZX10k/Mv
+-PP475yqEjxE/ebL7wSHMVhngToU5q+js1QbK8Xs3/aT4CK1kbG2Fe/Uv5GpCUelG
+-VESQGt9jVtZ+YOqjRn4rHwFduvoP4R9exnFysE7WIRFhRyhfL3DSVvB+x7fMRVOz
+-6mTvFxvp9lfFhDa1yVX4Fng5mp50C/0RksHAsNFIiJs8pA/9ZWDr3KCbFr2tnfWY
+-jKrfwxubgK/WcjJY3oMvlxZuP/gAqu31qgMf1MebQ70mxMUe7rY2wAOTGEC56hsu
+-PIEr/9Y4pnsgFr1JY8JQw9+xmzFc+AL1TW5eqzdWnPwxldj1ZcZ16cU925ToLf3T
+-XhjnJtsvVj1G1qGAmou/nSRxIbs898bF+vpFazC1XNbOFtoXitL+brMI049Rtj0u
+-gkBrYj/+sRT2VlZzwAbfxQFtc2rYV1qSL6SPIra5JtRypozAayPGYmTL1dgzMnoy
+-m4KMKm7lvSlmfFEQOrh7
+-=RVRV
+------END PGP SIGNATURE-----
++EBUILD quake1-data-2.40.ebuild 2166 SHA256 ec845ed3810791fbb83d1b5cc4cd39d0df80be902658b4d415ab9377a5466558 SHA512 e7bc9157c81c6230d6b3f00bc23eee7344a00f8d5f16c4704f67a26f0980df9ecab93146369fd8fdc4688bb4beb5ba77019e8f9229602db45d5615da4d948329 WHIRLPOOL 0c1fb67089ddfdc2843b2571ad93ef6c0f4151066aff048553788fec41bb6e7cc3d432087e026c4d319b1fec79a08d2dcb384730bf234fe983e8a810b04b0b56
++MISC ChangeLog 1723 SHA256 ceaf4fa05024a98586ac07e0e21da043b73340b44f3d375568e0cd3c695af9fd SHA512 da9a370b9371ae1a337403e6af9c48e6e5939a30cae3ee3c325ebce4c15f83e211458863306033a3dc57ad67fd240ffc2eef2b6c777fd08603dc7113ef980d55 WHIRLPOOL bca6be7fa9c57ca416009d0740bd9644445501d0640c0c32e63f9a641871188d3e1b96fb6800ebd386a37a11f14ab4054694ce872687817b68895cae9d365396
++MISC metadata.xml 158 SHA256 1423a4fdd4a79b1728a2056d9e300f7e1074253095d82726218d9e9b953888a3 SHA512 d954564236b67b6ab97846b73f74e715e8f1bec2dba6595e9a5046c2e8c3b93f4879c293f9d1d02d99a533bee56156dae3f31a485697128c51af14cdbfdada8a WHIRLPOOL d03e7293d09d794d61c095a423f945b3644355a247f270a73ca8d30b4dfe9c98244297536bfd1a4bd6c14794aa1152eca20fd83bfdf3e1e74d4f676152d35ada
+diff -u -U10 -r /usr/portage/games-fps/quake1-data/quake1-data-2.40.ebuild games-fps/quake1-data/quake1-data-2.40.ebuild
+--- /usr/portage/games-fps/quake1-data/quake1-data-2.40.ebuild	2012-01-16 11:17:40.000000000 -0800
++++ games-fps/quake1-data/quake1-data-2.40.ebuild	2012-10-17 13:52:35.294586714 -0700
+@@ -38,21 +38,22 @@
+ 	export CDROM_NAME_SET=("Existing Install" "Quake CD (1.01)" "Ultimate Quake Collection" "Quake CD (newer)")
+ 	cdrom_get_cds id1:q101_int.1:Setup/ID1:resource.1
+ 	if [[ ${CDROM_SET} == "1" ]] ; then
+ 		echo ">>> Unpacking q101_int.lha to ${PWD}"
+ 		cat "${CDROM_ROOT}"/q101_int.1 "${CDROM_ROOT}"/q101_int.2 > \
+ 			"${S}"/q101_int.exe
+ 		lha xqf "${S}"/q101_int.exe || die "failure unpacking q101_int.exe"
+ 		rm -f q101_int.exe
+ 	elif [[ ${CDROM_SET} == "3" ]] ; then
+ 		echo ">>> Unpacking resource.1 to ${PWD}"
+-		lha xqf "${CDROM_ROOT}"/resource.1 || die "failure unpacking resource.1"
++		cp "${CDROM_ROOT}"/resource.1 resource.x || die "failure copying resource.1"
++		lha xqf resource.x || die "failure unpacking resource.x"
+ 	fi
+ }
+ 
+ src_install() {
+ 	insinto "${GAMES_DATADIR}"/quake1/id1
+ 	case ${CDROM_SET} in
+ 		0)  doins "${CDROM_ROOT}"/id1/* || die "doins pak files"
+ 		    dodoc "${CDROM_ROOT}"/*.txt
+ 		    ;;
+ 		1|3)doins id1/* || die "doins pak files"
 diff :: x11-plugins/gkrellaclock ===============================================
 
 diff -u -U10 -r /usr/portage/x11-plugins/gkrellaclock/Manifest x11-plugins/gkrellaclock/Manifest
