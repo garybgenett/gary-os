@@ -2,7 +2,6 @@
 # portage package keywords file
 ################################################################################
 
-games-board/xboard **
 games-emulation/mekanix **
 media-tv/xbmc **
 
