@@ -1,0 +1,16 @@
+--- configure	2010-10-23 11:50:24.000000000 -0700
++++ configure.new	2013-01-07 13:29:42.078967142 -0800
+@@ -1788,12 +1788,8 @@
+ # check for sufficient OCAMLVERSION
+ OCAMLMAJORVERSION=`echo $OCAMLVERSION | cut -d '.' -f 1`
+ OCAMLMINORVERSION=`echo $OCAMLVERSION | cut -d '.' -f 2`
+-if test $OCAMLMAJORVERSION -lt 3 ; then
++if test $OCAMLMAJORVERSION -lt 4 ; then
+    as_fn_error "Wyrd requires OCaml version 3.08 or greater." "$LINENO" 5
+-else
+-   if test $OCAMLMINORVERSION -lt 8 ; then
+-      as_fn_error "Wyrd requires OCaml version 3.08 or greater." "$LINENO" 5
+-   fi
+ fi
+ 
+ 
