@@ -1,0 +1,25 @@
+--- lib/stdio.in.h	2011-08-08 03:10:09.000000000 -0700
++++ lib/stdio.in.h.new	2013-01-07 13:55:13.606052653 -0800
+@@ -685,17 +685,17 @@
+ #   undef gets
+ #   define gets rpl_gets
+ #  endif
+-_GL_FUNCDECL_RPL (gets, char *, (char *s) _GL_ARG_NONNULL ((1)));
+-_GL_CXXALIAS_RPL (gets, char *, (char *s));
++_GL_FUNCDECL_RPL (fgets, char *, (char *s) _GL_ARG_NONNULL ((1)));
++_GL_CXXALIAS_RPL (fgets, char *, (char *s));
+ # else
+-_GL_CXXALIAS_SYS (gets, char *, (char *s));
++_GL_CXXALIAS_SYS (fgets, char *, (char *s));
+ #  undef gets
+ # endif
+-_GL_CXXALIASWARN (gets);
++_GL_CXXALIASWARN (fgets);
+ /* It is very rare that the developer ever has full control of stdin,
+    so any use of gets warrants an unconditional warning.  Assume it is
+    always declared, since it is required by C89.  */
+-_GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
++_GL_WARN_ON_USE (fgets, "gets is a security hole - use fgets instead");
+ #endif
+ 
+ 
