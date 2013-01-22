@@ -402,6 +402,7 @@ acroread				# binary package
 adobe-flash				# binary package
 openproj-bin				# binary package
 oracle-jdk-bin				# binary package
+sun-jdk					# binary package
 vmware-player				# binary package
 
 libreoffice
