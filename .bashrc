@@ -1044,8 +1044,8 @@ function indexer {
 			done
 		fi
 		function do_file {
-			{ [[ "${IDX_EMPTY}" != "@d" ]] || ${MKDIR} "${TARGET}"; }			&&
-			{ [[ "${IDX__TYPE}" == "l"  ]] || chmod -v "${IDX_CHMOD}" "${TARGET}"; }	&&
+			{ [[ "${IDX_EMPTY}" == "@d" ]] && ${MKDIR} "${TARGET}"; }			&&
+			{ [[ "${IDX__TYPE}" != "l"  ]] && chmod -v "${IDX_CHMOD}" "${TARGET}"; }	&&
 			chown -hv "${IDX_CHOWN}" "${TARGET}"						&&
 			touch -hd "${IDX_TOUCH}" "${TARGET}"						&&
 			return 0
