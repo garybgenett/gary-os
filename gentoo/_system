@@ -71,7 +71,7 @@ elif [[ ${1} == -u ]]; then
 	do
 		eval ${COMMAND}
 	done
-	declare ECLEAN="eclean --verbose --destructive --package-names"
+	declare ECLEAN="eclean --verbose --destructive" #>>> --package-names
 	${SAFE_ENV} emerge --update --deep --newuse system				|| exit 1
 	${SAFE_ENV} emerge --noreplace --select $(${HOME}/setup/gentoo/.packages)	|| exit 1
 	${SAFE_ENV} emerge --update --deep --newuse world				|| exit 1
