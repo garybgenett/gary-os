@@ -192,6 +192,7 @@ qt-gui
 openldap
 
 dev-perl/DateManip			#>>> perl-date-manip
+dev-perl/WWW-Mechanize
 dev-perl/libwww-perl			#>>> perl-libwww
 perl-core/CGI
 
