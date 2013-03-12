@@ -565,7 +565,8 @@ function contacts {
 				--outfile ./${EXP_DIR}/${FILE/%\.adb}.ldif \
 				--outformat ldif
 			${SED} -i \
-				"s/^xmozillaanyphone/telephoneNumber/g" \
+				-e "s/^cn[:][ ](([^ ]+)[ ]?(.*))$/cn: \1\ngivenName: \2\nsn: \3/g" \
+				-e "s/^xmozillaanyphone[:]/telephoneNumber:/g" \
 				./${EXP_DIR}/${FILE/%\.adb}.ldif
 			sudo -H -u \#1000 abook \
 				--convert \
