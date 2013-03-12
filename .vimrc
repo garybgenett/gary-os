@@ -81,7 +81,7 @@ set foldcolumn				=1
 set foldlevelstart			=99
 set foldminlines			=0
 set foldmethod				=indent
-set foldtext	=v:folddashes.\"\ \".v:foldlevel.\"\ \[\".(v:foldend\ \-\ v:foldstart\ \+\ 1).\"\,\ \".v:foldstart.\"\/\".v:foldend.\"\]\ \"
+set foldtext	=v:folddashes.\"\ \".v:foldlevel.\"\ \[\".(v:foldend\ \-\ v:foldstart\ \+\ 1).\"\,\ \".v:foldstart.\"\-\".v:foldend.\"\]\ \"
 
 set whichwrap				=b,s
 set backspace				=indent,eol
@@ -100,7 +100,7 @@ set comments				=sr:/*,mb:*,ex:*/,b://,b:###,b:#,b:%,bf:+,bf:-
 
 set highlight				=sr
 set laststatus				=2
-set statusline				=[\ %<%F%R%M%W%H\ ]\ %=\ [\ %n\ %B\ \|\ %c%V\ %l/%L\ %p%%\ ]
+set statusline				=[\ %<%F%R%M%W%H\ ]\ %=\ [\ %n\ %B\ \|\ %c,%v\ %l/%L\ %p%%\ ]
 
 "#######################################
 " abbreviations
