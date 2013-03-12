@@ -182,11 +182,11 @@ tiff
 nspr
 nss
 
-#>>>qt-assistant
-qt-core
-#>>>qt-demo
-qt-gui
-#>>>qt-test
+#>>>qtassistant
+qtcore
+#>>>qtdemo
+qtgui
+#>>>qttest
 #>>>qt
 
 openldap
