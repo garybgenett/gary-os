@@ -915,7 +915,7 @@ function indexer {
 		return 0
 	elif [[ "${1}" == -p ]]; then
 		shift
-		perl -e '
+		DEBUG="${DEBUG}" perl -e '
 			use strict;
 			use warnings;
 			while(<>){
@@ -926,7 +926,7 @@ function indexer {
 		' -- "${@}"
 	elif [[ "${1}" == -m ]]; then
 		shift
-		perl -e '
+		DEBUG="${DEBUG}" perl -e '
 			use strict;
 			use warnings;
 			my $matches = [@ARGV];
@@ -946,7 +946,7 @@ function indexer {
 		' -- "${@}"
 	elif [[ "${1}" == -l ]]; then
 		shift
-		perl -e '
+		DEBUG="${DEBUG}" perl -e '
 			use strict;
 			use warnings;
 			my $emp_dir = [];
@@ -973,7 +973,7 @@ function indexer {
 		' -- "${@}"
 	elif [[ "${1}" == -s ]]; then
 		shift
-		perl -e '
+		DEBUG="${DEBUG}" perl -e '
 			use strict;
 			use warnings;
 			my $tlds = [];
@@ -1090,9 +1090,9 @@ function indexer {
 				fi
 			done
 		fi
-	elif [[ "${1}" == -d ]]; then
+	elif [[ "${1}" == -du ]]; then
 		shift
-		perl -e '
+		DEBUG="${DEBUG}" perl -e '
 			use strict;
 			use warnings;
 			use File::Find;
@@ -1116,7 +1116,7 @@ function indexer {
 		' -- "${@}"
 	elif [[ "${1}" == -! ]]; then
 		shift
-		perl -e '
+		DEBUG="${DEBUG}" perl -e '
 			while(<>){
 				chomp();
 				# \000 = null character
