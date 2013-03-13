@@ -965,11 +965,11 @@ function indexer {
 				   $a->[8] eq "!"  ||
 				   $a->[9] eq "!"  ){ push(@{$failure}, $a); };
 			};
-			print "\n Empty directories:\n"	; foreach my $out (@{$emp_dir}){ print "@{$out}\n"; };
-			print "\n Empty files:\n"	; foreach my $out (@{$emp_fil}){ print "@{$out}\n"; };
-			print "\n Broken symlinks:\n"	; foreach my $out (@{$brk_sym}){ print "@{$out}\n"; };
-			print "\n Symlinks:\n"		; foreach my $out (@{$symlink}){ print "@{$out}\n"; };
-			print "\n Failures:\n"		; foreach my $out (@{$failure}){ print "@{$out}\n"; };
+			print ">>> Empty directories: "	. ($#{$emp_dir} + 1) . "\n"; if (${ENV{DEBUG}} eq "true") { foreach my $out (@{$emp_dir}) { print "@{$out}\n"; }; };
+			print ">>> Empty files: "	. ($#{$emp_fil} + 1) . "\n"; if (${ENV{DEBUG}} eq "true") { foreach my $out (@{$emp_fil}) { print "@{$out}\n"; }; };
+			print ">>> Broken symlinks: "	. ($#{$brk_sym} + 1) . "\n"; if (${ENV{DEBUG}} eq "true") { foreach my $out (@{$brk_sym}) { print "@{$out}\n"; }; };
+			print ">>> Symlinks: "		. ($#{$symlink} + 1) . "\n"; if (${ENV{DEBUG}} eq "true") { foreach my $out (@{$symlink}) { print "@{$out}\n"; }; };
+			print ">>> Failures: "		. ($#{$failure} + 1) . "\n"; if (${ENV{DEBUG}} eq "true") { foreach my $out (@{$failure}) { print "@{$out}\n"; }; };
 		' -- "${@}"
 	elif [[ "${1}" == -s ]]; then
 		shift
