@@ -828,6 +828,34 @@ function git-save {
 
 ########################################
 
+function gtasks {
+	cd ${PIMDIR}
+	if [[ "${1}" == -c ]]; then
+		declare FILE
+		for FILE in ${PIMDIR}/.tasks.*; do
+			echo -en ">>> ${FILE}\n"
+			cat ${FILE}
+			echo -en "\n"
+			${RM} ${FILE} >/dev/null
+		done
+		return 0
+	fi
+	if [[ -n "${@}" ]]; then
+		gtasks_export.pl "${@}"
+	else
+		gtasks_export.pl		&&
+			read			&&
+			${GIT_CMT}		\
+				.auth		\
+				.token		\
+				tasks*		\
+				-e -m "Updated \"tasks\"."
+	fi
+	return 0
+}
+
+########################################
+
 function index-dir {
 	declare INDEX_D="${PWD}"
 	declare INDEX_N="$((12+4))"
