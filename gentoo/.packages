@@ -263,6 +263,7 @@ iotop
 lrzsz
 lsof
 minicom
+mtpfs
 nano
 net-tools
 netcat6
