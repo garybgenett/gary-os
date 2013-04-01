@@ -43,6 +43,9 @@ done
 
 ########################################
 
+rm -frv /control.tar.gz
+rm -frv /data.tar.gz
+rm -frv /debian-binary
 rm -frv /home
 rm -frv /media
 rm -frv /root
