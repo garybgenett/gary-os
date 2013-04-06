@@ -839,6 +839,7 @@ function gtasks {
 			echo -en "\n"
 			${RM} ${FILE} >/dev/null
 		done
+		gtasks_export.pl cruft
 		return 0
 	fi
 	if [[ -n "${@}" ]]; then
