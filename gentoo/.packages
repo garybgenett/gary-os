@@ -369,6 +369,7 @@ sci-visualization/gnuplot		#>>> gnuplot
 graphviz
 imagemagick
 keepassx
+mediainfo
 mplayer
 media-sound/picard			#>>> picard
 qpdfview				#>>> replaces "xpdf"
