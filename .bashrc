@@ -1314,7 +1314,7 @@ function organize {
 			${GREP} "[ ]~[ ]"
 	else
 		${REALTIME} \
-		${VI} "${@}" "${ORGANIZE}"{.txt,-*}
+		${VI} "${@}" "${ORGANIZE}"{.txt,-*.txt}
 	fi
 	prompt
 	cd - >/dev/null
