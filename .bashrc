@@ -856,7 +856,7 @@ function gtasks {
 				.auth		\
 				.token		\
 				tasks*		\
-				-e -m "Updated \"tasks\"."
+				--edit --message "Updated \"tasks\"."
 	fi
 	return 0
 }
