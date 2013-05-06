@@ -850,12 +850,12 @@ function gtasks {
 			gtasks_export.pl "${@}"
 		fi
 	else
-		gtasks_export.pl		&&
-			read			&&
-			${GIT_CMT}		\
-				.auth		\
-				.token		\
-				tasks*		\
+		gtasks_export.pl	&&
+			read		&&
+			${GIT_CMT}	\
+				.auth	\
+				.token	\
+				tasks*	\
 				--edit --message "Updated \"tasks\"."
 	fi
 	return 0
