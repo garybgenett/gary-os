@@ -1701,6 +1701,20 @@ function vpn {
 	return 0
 }
 
+########################################
+
+function zpim-commit {
+	cd ${PIMDIR}
+	chown -vR plastic:plastic ${PIMDIR}
+	chmod -vR 750 ${PIMDIR}
+	if [[ -n "${@}" ]]; then
+		declare FILE="${1}" && shift
+		${GIT_ADD} ${FILE}*
+		${GIT_CMT} ${FILE}* --edit --message "Updated \"${FILE}\"."
+	fi
+	return 0
+}
+
 ################################################################################
 # end of file
 ################################################################################
