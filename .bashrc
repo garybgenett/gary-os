@@ -1707,6 +1707,7 @@ function zpim-commit {
 	cd ${PIMDIR}
 	chown -vR plastic:plastic ${PIMDIR}
 	chmod -vR 750 ${PIMDIR}
+	${SED} -i "s/<HR>/<HR>\n/g" bookmarks.html
 	if [[ -n "${@}" ]]; then
 		declare FILE="${1}" && shift
 		${GIT_ADD} ${FILE}*
