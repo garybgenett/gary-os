@@ -657,6 +657,10 @@ function email {
 	then
 		TMPDIR="/tmp/_mutt"
 	fi
+	if [[ ${1} == -a ]]; then
+		shift
+		MUTTRC="${MUTTRC}.all"
+	fi
 	if [[ ${1} == -i ]]; then
 		shift
 		MUTTRC="${MUTTRC}.imap"
