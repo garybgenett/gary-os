@@ -40,16 +40,16 @@ if [[ ${1} == -i ]]; then
 	mount -v --bind /dev/pts		${INST_DIR}/dev/pts
 	mount -v --bind /proc			${INST_DIR}/proc
 	mount -v --bind /sys			${INST_DIR}/sys
-	${SAFE_ENV}				locale-gen
-	${SAFE_ENV}				eselect profile set 1
+#BUILD	${SAFE_ENV}				locale-gen
+#BUILD	${SAFE_ENV}				eselect profile set 1
 	${MKDIR}				${INST_DIR}/.g
 	${CP} -L /.g/.home			${INST_DIR}/.g/.home
 	${CP} -L ${HOME}/setup/gentoo		${INST_DIR}/.g/.home/setup
-	${RSYNC_U} --filter="-_/packages/**" \
-		/usr/portage/			${INST_DIR}/usr/portage
-	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system
-	HOME=/.g/.home ${SAFE_ENV}		emerge ccache portage
-	HOME=/.g/.home ${SAFE_ENV}		emerge --emptytree system world
+#BUILD	${RSYNC_U} --filter="-_/packages/**" \
+#BUILD		/usr/portage/			${INST_DIR}/usr/portage
+#>>>	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system
+#BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge ccache portage
+#BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge --emptytree system world
 	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system -u
 	exit 0
 elif [[ ${1} == -s ]]; then
