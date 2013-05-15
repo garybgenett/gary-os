@@ -7,9 +7,6 @@ export _PACKAGES=(
 # toolchain
 
 glibc
-binutils
-gmp
-mpfr
 gcc
 #>>>gcj					# included in "gcc"
 
@@ -17,10 +14,6 @@ ccache
 
 autoconf
 automake
-bison
-libtool
-patch
-pkgconfig
 
 ########################################
 # base system
@@ -35,28 +28,21 @@ libpcre
 pam					# kernel upgrade
 man-pages
 
-db
 sed
 e2fsprogs
 coreutils
 baselayout				#>>> iana-etc
-m4
-ncurses
 procps
-zlib
 perl
-readline
 bash
 bash-completion
 bzip2
 diffutils
 file
 findutils
-flex
 gawk
 gettext
 grep
-groff
 grub
 gzip
 net-tools				#>>> inetutils
@@ -67,14 +53,11 @@ less
 make
 #>>>'=make-3.81-r2'
 man
-kmod					#>>> module-init-tools
 psmisc
-shadow					# kernel upgrade
 sysklogd
 sysvinit
 tar
 sys-apps/texinfo			#>>> texinfo
-udev					# kernel upgrade
 util-linux				#>>> util-linux-ng
 
 busybox
@@ -107,15 +90,12 @@ subversion
 app-crypt/gnupg				#>>> gnupg
 
 deb2targz
-debianutils
 p7zip
 rar
-rpm
 rpm2targz
 unrar
 unzip
 zip
-zziplib
 
 ########################################
 # gentoo packages
@@ -151,7 +131,6 @@ xterm
 # toolkits
 
 debugedit
-dmalloc
 gdb
 
 xfig
@@ -160,7 +139,6 @@ texlive
 texmfind
 
 docbook-xml-dtd
-docbook-xsl-ns-stylesheets
 docbook-xsl-stylesheets
 xmlto
 asciidoc
@@ -168,9 +146,6 @@ asciidoc
 libjpeg-turbo				#>>> jpeg
 openjpeg
 tiff
-
-nspr
-nss
 
 #>>>qtassistant
 qtcore
@@ -208,7 +183,7 @@ rubygems
 ########################################
 # libraries
 
-#>>>alsa-lib
+alsa-lib
 alsa-oss
 alsa-utils
 
@@ -258,7 +233,6 @@ nano
 net-tools
 netcat6
 nethogs
-netkit-base
 netkit-telnetd
 nmap
 ntfs3g
@@ -278,7 +252,6 @@ wireless-tools
 wpa_supplicant
 xdelta
 
-tcp-wrappers
 rpcbind					#>>> portmap
 nfs-utils
 
