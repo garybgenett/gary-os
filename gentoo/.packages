@@ -6,173 +6,197 @@ export _PACKAGES=(
 ########################################
 # toolchain
 
-glibc
-gcc
-#>>>gcj					# included in "gcc"
-
-ccache
-
 autoconf
 automake
+ccache
+gcc
+glibc
+make
+
+debugedit
+gdb
 
 ########################################
-# base system
+# system
+
+baselayout
+sysvinit
 
 ca-certificates
 iso-codes
-timezone-data				#>>> tzdata
-
-cracklib
-libpcre
-
-pam					# kernel upgrade
-man-pages
-
-sed
-e2fsprogs
-coreutils
-baselayout				#>>> iana-etc
-procps
-perl
-bash
-bash-completion
-bzip2
-diffutils
-file
-findutils
-gawk
-gettext
-grep
-grub
-gzip
-net-tools				#>>> inetutils
-iproute2
-iptables
-kbd
-less
-make
-#>>>'=make-3.81-r2'
-man
-psmisc
-sysklogd
-sysvinit
-tar
-sys-apps/texinfo			#>>> texinfo
-util-linux				#>>> util-linux-ng
+timezone-data
 
 busybox
-net-misc/curl				#>>> curl
-inotify-tools
-libperl
-ulogd
+grub
+runit
 
 btrfs-progs
+cryptsetup
+dosfstools
+e2fsprogs
 ext3grep
 ext4magic
 extundelete
 gptfdisk
 parted
 
-runit
+coreutils
+diffutils
+file
+findutils
+gawk
+grep
+less
+net-tools
+procps
+psmisc
+sed
+tar
+util-linux
 
-########################################
-# gentoo system
+inotify-tools
+sysklogd
+ulogd
 
-openssl
+cracklib
+pam
+sudo
+
+gettext
+kbd
+
+iproute2
+iptables
+net-tools
+
+lftp
+lynx
+net-misc/curl
+rsync
+w3m
+wget
+
+app-misc/screen
+bash
+bash-completion
+htop
+
+dev-perl/DateManip
+dev-perl/Expect
+dev-perl/WWW-Mechanize
+dev-perl/libwww-perl
+g-cpan
+libpcre
+libperl
+#>>>mod_perl
+perl
+perl-core/CGI
+perl-core/JSON-PP
+
+app-crypt/gnupg
 openssh
+openssl
 
-cryptsetup
-
-tcl
-sqlite
-
-subversion
-app-crypt/gnupg				#>>> gnupg
-
-deb2targz
+bzip2
+cpio
+gzip
 p7zip
 rar
-rpm2targz
 unrar
 unzip
+xdelta
 zip
 
-########################################
-# gentoo packages
+man
+man-pages
+sys-apps/texinfo
 
-eselect
-gcc-config
-genkernel
-gentoo-bashcomp
+aspell
+aspell-en
+
+ed
+gvim
+indent
+nano
+taglist
+vim-spell-en
+
+dos2unix
+
+deb2targz
+rpm2targz
+
+########################################
+# gentoo
+
 gentoo-sources
 '=gentoo-sources-3.7.1'
-app-vim/gentoo-syntax			#>>> gentoo-syntax
-gentoolkit
-gentoolkit-dev
-java-config
-layman
-linux-firmware				# binary package, kernel upgrade
-mirrorselect
+linux-firmware
 module-rebuild
+
 paludis
 portage
 portage-utils
+
+app-vim/gentoo-syntax
+genkernel
+gentoo-bashcomp
+gentoolkit
+gentoolkit-dev
+
+eselect
+gcc-config
+java-config
+
+layman
+mirrorselect
 ufed
 
 ########################################
-# x server
+# x11
 
 xorg-x11
-twm
+
+rxvt
+rxvt-unicode
 xsel
 xterm
+
+dwm
+obconf
+openbox
+twm
+windowmaker
+
+transset
+whaw
+wmctrl
+xautolock
+xcompmgr
+xlockmore
+xvkbd
 
 ########################################
 # toolkits
 
-debugedit
-gdb
+rdiff-backup
+unison
 
-xfig
-transfig
-texlive
-texmfind
-
+asciidoc
 docbook-xml-dtd
 docbook-xsl-stylesheets
+texlive
+texmfind
+transfig
 xmlto
-asciidoc
-
-libjpeg-turbo				#>>> jpeg
-openjpeg
-tiff
-
-#>>>qtassistant
-qtcore
-#>>>qtdemo
-qtgui
-#>>>qttest
-#>>>qt
-
-openldap
-
-dev-perl/DateManip			#>>> perl-date-manip
-dev-perl/Expect
-dev-perl/WWW-Mechanize
-dev-perl/libwww-perl			#>>> perl-libwww
-g-cpan
-perl-core/CGI
-perl-core/JSON-PP
 
 cvs
 cvs2svn
 cvsps
-
 git
 gitolite
 qgit
-
-expect
+subversion
 
 clisp
 lua
@@ -182,183 +206,151 @@ python
 rakudo
 ruby
 rubygems
+tcl
 
-########################################
-# libraries
+expect
+sqlite
+
+qtcore
+qtgui
 
 alsa-lib
 alsa-oss
 alsa-utils
 
-exif
-exiv2
-ffmpeg
-
 ########################################
 # utilities
 
+bc
+sci-mathematics/calc
+
+kexec-tools
+ltrace
+strace
+
+btrace
 hdparm
 mdadm
+
+dcfldd
+ddrescue
+
 pciutils
 usbutils
 
-btrace
 dstat
-kexec-tools				# kernel upgrade
-ltrace
+iotop
+lsof
 procinfo
 pv
 schedtool
-strace
 sysprof
 sysstat
 
-apache-tools
-bc
-bind-tools				#>>> dnsutils
 bridge-utils
-cadaver
-cpio
-dcfldd
-ddrescue
 dhcpcd
-dos2unix
-dosfstools
 ebtables
-ed
-indent
-iotop
-lrzsz
-lsof
-minicom
-mtpfs
-nano
-net-tools
+vconfig
+wireless-tools
+wpa_supplicant
+
+bind-tools
+cadaver
 netcat6
 nethogs
 netkit-telnetd
 nmap
-ntfs3g
-pipes
-ppp
 snort
 socat
-sshfs-fuse
 ssldump
-sudo
 tcpdump
 tcptrace
 traceroute
-vconfig
 whois
-wireless-tools
-wpa_supplicant
-xdelta
+wireshark
 
-rpcbind					#>>> portmap
+autossh
+httptunnel
+pipes
+
+lrzsz
+minicom
+ppp
+
+mtpfs
 nfs-utils
+ntfs3g
+rpcbind
+sshfs-fuse
 
 ########################################
-# tools
+# servers
 
 apache
+apache-tools
 awstats
 bind
 cups
 dhcp
 dovecot
 hostapd
-#>>>mod_perl				# incompatible with apache 2.4.x
 mysql
 ntp
+openldap
 openvpn
 proftpd
 quagga
 samba
 tftp-hpa
 
-ghostscript-gpl
 foomatic-db
 foomatic-db-engine
 foomatic-filters
-
-aspell
-aspell-en
-
-gvim
-htop
-lynx
-rsync
-app-misc/screen				#>>> screen
-taglist					#>>> gvim-taglist
-vim-spell-en
-wget
+ghostscript-gpl
 
 ########################################
 # programs
-
-abook
-autossh
-sci-mathematics/calc			#>>> calc
-clockywock
-fetchmail
-httptunnel
-lftp
-mailx
-msmtp
-mutt
-#>>>mutt-sidebar			# included in "mutt" with "sidebar" patch
-offlineimap
-procmail
-rdiff-backup
-remind
-run-mailcap
-safecat
-task
-unison
-urlview
-wyrd
-
-dwm
-obconf
-openbox
-windowmaker
 
 dosbox
 dosemu
 qemu
 
-aumix
-feh
+run-mailcap
+urlview
+
+abook
+remind
+task
+wyrd
+
+fetchmail
+mailx
+msmtp
+mutt
+offlineimap
+procmail
+safecat
+
 firefox
-sci-visualization/gnuplot		#>>> gnuplot
-graphviz
-imagemagick
 keepassx
-mediainfo
-mplayer
-media-sound/picard			#>>> picard
-qpdfview				#>>> replaces "xpdf"
-quodlibet
-rdesktop
-rtorrent
-rxvt
-rxvt-unicode
+qpdfview
 thunderbird
+
+graphviz
+sci-visualization/gnuplot
+xfig
+
+rdesktop
 tigervnc
-transset				#>>> transset-df
-vlc
-w3m
-whaw
-wireshark
-wmctrl
 x11vnc
 x2vnc
-xautolock
-xcompmgr
-xlockmore
-xterm
-xvkbd
+
+gkrellaclock
+gkrellm
+gkrellmoon
+gkrellstock
+gkrellsun
+gkrellweather
 
 pidgin
 #>>>pidgin-encryption
@@ -367,14 +359,23 @@ pidgin
 #>>>pidgin-otr
 pidgin-sipe
 
-acroread				# binary package
-adobe-flash				# binary package
-openproj-bin				# binary package
-oracle-jdk-bin				# binary package
-sun-jdk					# binary package
-vmware-player				# binary package
+acroread
+adobe-flash
+openproj-bin
+oracle-jdk-bin
+sun-jdk
+vmware-player
 
 libreoffice
+
+########################################
+# media
+
+aumix
+beep
+clockywock
+
+rtorrent
 
 cdparanoia
 cdrdao
@@ -384,22 +385,28 @@ dvd+rw-tools
 dvdbackup
 lsdvd
 
-beep
+exif
+exiv2
+feh
+ffmpeg
+imagemagick
+libjpeg-turbo
+media-sound/picard
+mediainfo
+mplayer
+openjpeg
+quodlibet
+tiff
+vlc
+
 calibre
 comix
 gimp
-sdcv					#>>> stardict-sdcv
+sdcv
 stardict
 
-gkrellm
-gkrellaclock
-gkrellmoon
-gkrellstock
-gkrellsun
-gkrellweather
-
 cgoban
-gnuboy					#>>> tuxboy
+gnuboy
 gnuchess
 gnugo
 golly
@@ -410,15 +417,15 @@ netris
 stella
 xboard
 
-xbmc
-xboxdrv
-
 doom3
 #>>>doom3-data
 #>>>doom3-roe
-quakeforge
-#>>>quake1-data
 lha
+#>>>quake1-data
+quakeforge
+
+xbmc
+xboxdrv
 
 )
 
