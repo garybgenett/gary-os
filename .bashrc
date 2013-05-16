@@ -143,12 +143,12 @@ else
 	fi
 fi
 
-export PS1="\u@\h:\w\$ "
+export PS1="\u@\h:\w\\$ "
 export PS1="\
 \n\
 [\u@${PROMPT_TOKEN_HOST}]:[\D{%a/%j_%FT%T%z}]\
 \n\
-[\#/\!]\[\ek\e\\\\\]:${PROMPT_TOKEN_PPWD}\$"
+[\#/\!]\[\ek\e\\\\\]:${PROMPT_TOKEN_PPWD}\\$"
 
 ################################################################################
 # commands
@@ -1337,7 +1337,7 @@ function prompt {
 		fi
 		/usr/bin/env -i \
 			PROMPT_DIRTRIM="1" \
-			PS1="------------------------------\nENV(\u@\h \w)\$ " \
+			PS1="------------------------------\nENV(\u@\h \w)\\$ " \
 			USER="${USER}" \
 			HOME="${HOME}" \
 			TERM="${TERM}" \
