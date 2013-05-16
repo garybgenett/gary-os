@@ -65,8 +65,6 @@ sys-fs/btrfs-progs			acl
 dev-vcs/subversion			-apache2
 www-servers/apache			-threads
 
-net-nds/openldap			-gnutls
-
 ########################################
 
 sys-apps/paludis			pbins portage prebuilt-documentation search-index visibility
@@ -85,7 +83,7 @@ net-analyzer/tcpdump			-chroot
 x11-base/xorg-server			xnest xvfb
 
 media-tv/xbmc				projectm -webserver
-media-video/vlc				projectm qt4 vlm libass
+media-video/vlc				projectm qt4 vlm
 
 app-emulation/vmware-tools		vmware_guest_freebsd vmware_guest_linux vmware_guest_windows
 
