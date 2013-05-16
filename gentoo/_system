@@ -89,6 +89,8 @@ fi
 
 ########################################
 
+${RSYNC_U} ${HOME}/setup/gentoo/ /_gentoo/_gentoo
+
 ${SAFE_ENV} ${HOME}/setup/gentoo/.emergent
 ${SAFE_ENV} ${HOME}/setup/gentoo/.hacks
 
