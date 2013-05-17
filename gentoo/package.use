@@ -6,37 +6,19 @@ app-text/ghostscript-gpl		cups		# gentoo required
 app-text/poppler			cairo lcms qt4	# gentoo required
 dev-libs/keybinder			python		# gentoo required
 dev-libs/libxml2			python		# gentoo required
-dev-qt/qtcore				iconv		# gentoo required
 media-fonts/font-adobe-100dpi		nls		# gentoo required
 media-fonts/font-misc-misc		nls		# gentoo required
 media-gfx/graphviz			cairo		# gentoo required
 media-libs/libsdl			joystick	# gentoo required
-media-video/mplayer			iconv		# gentoo required
 sys-auth/consolekit			policykit	# gentoo required
 sys-libs/gdbm				berkdb		# gentoo required
 
 ########################################
 
-dev-libs/gmp				static-libs	# gentoo required
-dev-libs/libgcrypt			static-libs	# gentoo required
-dev-libs/libgpg-error			static-libs	# gentoo required
-dev-libs/mpfr				static-libs	# gentoo required
-dev-libs/openssl			static-libs	# gentoo required
-dev-libs/popt				static-libs	# gentoo required
-sys-apps/util-linux			static-libs	# gentoo required
-sys-fs/lvm2				static-libs	# gentoo required
-sys-fs/udev				static-libs	# gentoo required
-sys-libs/e2fsprogs-libs			static-libs	# gentoo required
-sys-libs/zlib				static-libs	# gentoo required
-virtual/udev				static-libs	# gentoo required
-
 net-ftp/proftpd				openssl		# gentoo required
-sys-fs/cryptsetup			static		# gentoo required
 
-app-text/poppler			xpdf-headers	# gentoo required
 dev-python/PyQt4			webkit		# gentoo required
 media-libs/chromaprint			tools		# gentoo required
-media-libs/freetype			kpathsea	# gentoo required
 media-libs/libpng			apng		# gentoo required
 media-libs/mesa				xa		# gentoo required
 sys-auth/pambase			consolekit	# gentoo required
@@ -44,12 +26,6 @@ sys-fs/udev				gudev hwdb	# gentoo required
 sys-libs/zlib				minizip		# gentoo required
 virtual/udev				gudev hwdb	# gentoo required
 x11-libs/libdrm				libkms		# gentoo required
-
-dev-ruby/json				ruby_targets_ruby19	# gentoo required
-dev-ruby/racc				ruby_targets_ruby19	# gentoo required
-dev-ruby/rake				ruby_targets_ruby19	# gentoo required
-dev-ruby/rdoc				ruby_targets_ruby19	# gentoo required
-dev-ruby/rubygems			ruby_targets_ruby19	# gentoo required
 
 ################################################################################
 
@@ -59,8 +35,6 @@ dev-vcs/git				subversion
 
 net-fs/samba				cups
 net-print/cups				samba
-
-sys-fs/btrfs-progs			acl
 
 dev-vcs/subversion			-apache2
 www-servers/apache			-threads
