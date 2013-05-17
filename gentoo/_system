@@ -48,7 +48,7 @@ if [[ ${1} == -i ]]; then
 #BUILD	${RSYNC_U} --filter="-_/packages/**" \
 #BUILD		/usr/portage/			${INST_DIR}/usr/portage
 #>>>	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system
-#BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge ccache portage
+#BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge ccache debugedit portage
 #BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge --emptytree system world
 	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system -u
 	exit 0
