@@ -53,11 +53,17 @@ if [[ ${1} == -i ]]; then
 #BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge --emptytree system world
 	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system -u
 	exit 0
+
+########################################
+
 elif [[ ${1} == -s ]]; then
 	${SAFE_ENV} /bin/bash -o vi
 #>>>	source /etc/profile
 #>>>	alias ll="ls -la"
 	exit 0
+
+########################################
+
 elif [[ ${1} == -u ]]; then
 	${LL} /_gentoo
 	cat /_gentoo/+okay
@@ -68,8 +74,7 @@ elif [[ ${1} == -u ]]; then
 		-e "s/^#[[:space:]]+(java-config[ ].+$)/\1/gp" \
 		-e "s/^#[[:space:]]+(eselect[ ].+[ ]set[ ].+$)/\1/gp" \
 		${HOME}/setup/gentoo/make.conf |
-	while read -r COMMAND
-	do
+	while read -r COMMAND; do
 		eval ${COMMAND}
 	done
 	declare ECLEAN="eclean --verbose --destructive" #>>> --package-names
@@ -83,12 +88,15 @@ elif [[ ${1} == -u ]]; then
 	${SAFE_ENV} ${ECLEAN} distfiles --fetch-restricted				|| exit 1
 	${SAFE_ENV} ${ECLEAN} packages							|| exit 1
 	${SAFE_ENV} equery list --duplicates '*'
+
+########################################
+
 else
 	${SAFE_ENV} emerge --verbose --sync
 	${SAFE_ENV} emerge --emptytree --fetch-all-uri system world
 fi
 
-########################################
+################################################################################
 
 ${RSYNC_U} ${HOME}/setup/gentoo/ /_gentoo/_gentoo
 
