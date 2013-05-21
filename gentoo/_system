@@ -43,7 +43,7 @@ if [[ ${1} == -i ]]; then
 #BUILD	${SAFE_ENV}				locale-gen
 #BUILD	${SAFE_ENV}				eselect profile set 1
 	${MKDIR}				${INST_DIR}/.g
-	${CP} -L /.g/.home			${INST_DIR}/.g/.home
+	${CP} -L /.g/.home			${INST_DIR}/.g
 	${CP} -L ${HOME}/setup/gentoo		${INST_DIR}/.g/.home/setup
 #BUILD	${RSYNC_U} --filter="-_/packages/**" \
 #BUILD		/usr/portage/			${INST_DIR}/usr/portage
