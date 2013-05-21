@@ -45,8 +45,7 @@ if [[ ${1} == -i ]]; then
 	${MKDIR}				${INST_DIR}/.g
 	${CP} -L /.g/.home			${INST_DIR}/.g
 	${CP} -L ${HOME}/setup/gentoo		${INST_DIR}/.g/.home/setup
-#BUILD	${RSYNC_U} --filter="-_/packages/**" \
-#BUILD		/usr/portage/			${INST_DIR}/usr/portage
+#BUILD	${RSYNC_U} /usr/portage/		${INST_DIR}/usr/portage
 #>>>	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system
 #BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge ccache debugedit portage
 #BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge eselect gcc-config gentoolkit java-config
