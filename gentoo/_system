@@ -28,14 +28,14 @@ if [[ ${1} == -i ]]; then
 		tar -pvvx -f- -C		${INST_DIR}/usr
 	fi
 	${MKDIR}				${INST_DIR}/_gentoo
-	${CP} -L /_gentoo/*.{okay,OKAY}		${INST_DIR}/_gentoo
+	${RSYNC_U} /_gentoo/*.{okay,OKAY}	${INST_DIR}/_gentoo/
 	${MKDIR}				${INST_DIR}/.setup
-	${CP} -L ${HOME}/setup/gentoo		${INST_DIR}/.setup
+	${RSYNC_U} ${HOME}/setup/gentoo/	${INST_DIR}/.setup/gentoo
 	${LN} /.setup/gentoo/make.conf		${INST_DIR}/etc/portage
 	${LN} /.setup/gentoo/package.*		${INST_DIR}/etc/portage
-	${CP} -L ${INST_DIR}${LTIME}		${INST_DIR}/etc/localtime
-	${CP} -L /etc/locale.gen		${INST_DIR}/etc/
-	${CP} -L /etc/resolv.conf		${INST_DIR}/etc/
+	${RSYNC_U} -L ${INST_DIR}${LTIME}	${INST_DIR}/etc/localtime
+	${RSYNC_U} -L /etc/locale.gen		${INST_DIR}/etc/
+	${RSYNC_U} -L /etc/resolv.conf		${INST_DIR}/etc/
 	mount -v --bind /dev			${INST_DIR}/dev
 	mount -v --bind /dev/pts		${INST_DIR}/dev/pts
 	mount -v --bind /proc			${INST_DIR}/proc
@@ -43,8 +43,8 @@ if [[ ${1} == -i ]]; then
 #BUILD	${SAFE_ENV}				locale-gen
 #BUILD	${SAFE_ENV}				eselect profile set 1
 	${MKDIR}				${INST_DIR}/.g
-	${CP} -L /.g/.home			${INST_DIR}/.g
-	${CP} -L ${HOME}/setup/gentoo		${INST_DIR}/.g/.home/setup
+	${RSYNC_U} /.g/.home/			${INST_DIR}/.g/.home
+	${RSYNC_U} ${HOME}/setup/gentoo/	${INST_DIR}/.g/.home/setup/gentoo
 #BUILD	${RSYNC_U} /usr/portage/		${INST_DIR}/usr/portage
 #>>>	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system
 #BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge ccache debugedit portage
