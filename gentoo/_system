@@ -129,6 +129,7 @@ declare OPTS="-mindepth 1 -mount \
 	-or \( -path /usr/src/debug -prune \) \
 	-or \( -path /usr/src/linux-\* -prune \) \
 	-or \( -path /var/db/pkg -prune \) \
+	-or \( -path /~~\*~~ -prune \) \
 "
 (
 	eval find -L / ${OPTS} '-or \( -type l -print \)';
