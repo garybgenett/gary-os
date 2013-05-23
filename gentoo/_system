@@ -112,6 +112,36 @@ fi
 
 ################################################################################
 
+declare OPTS="-mindepth 1 -mount \
+	    \( -path /.g -prune \) \
+	-or \( -path /.runit -prune \) \
+	-or \( -path /.setup -prune \) \
+	-or \( -path /_gentoo -prune \) \
+	-or \( -path /boot -prune \) \
+	-or \( -path /lib64/firmware -prune \) \
+	-or \( -path /lib64/modules -prune \) \
+	-or \( -path /opt/Adobe -prune \) \
+	-or \( -path /opt/oracle-jdk-bin-\* -prune \) \
+	-or \( -path /opt/sun-jdk-\* -prune \) \
+	-or \( -path /tmp -prune \) \
+	-or \( -path /usr/lib64/debug -prune \) \
+	-or \( -path /usr/portage -prune \) \
+	-or \( -path /usr/src/debug -prune \) \
+	-or \( -path /usr/src/linux-\* -prune \) \
+	-or \( -path /var/db/pkg -prune \) \
+"
+(
+	eval find -L / ${OPTS} '-or \( -type l -print \)';
+	eval find    / ${OPTS} '-or \( -type d -empty -print \)';
+	eval find    / ${OPTS} '-or -print' |
+		qfile --orphans --from -;
+) |
+	sort |
+	uniq \
+	>/_gentoo/_orphans
+
+########################################
+
 ${RSYNC_U} ${HOME}/setup/gentoo/ /_gentoo/_gentoo
 
 ${SAFE_ENV} ${HOME}/setup/gentoo/.emergent
