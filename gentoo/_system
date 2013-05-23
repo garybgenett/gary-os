@@ -19,8 +19,8 @@ fi
 ################################################################################
 
 if [[ ${1} == -i ]]; then
-	umount -v				${INST_DIR}/dev/*
-	umount -v				${INST_DIR}/*
+	umount					${INST_DIR}/dev/*	2>/dev/null
+	umount					${INST_DIR}/*		2>/dev/null
 	if [[ ! -d ${INST_DIR}/boot ]]; then
 #>>>		tar -pvvx -C ${INST_DIR} -f	$(ls ${FILE_SRC}/*stage3-i686*.tar.bz2	| tail -n1)
 		tar -pvvx -C ${INST_DIR} -f	$(ls ${FILE_SRC}/*stage3-amd64*.tar.bz2	| tail -n1)
@@ -51,6 +51,8 @@ if [[ ${1} == -i ]]; then
 #BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge eselect gcc-config gentoolkit java-config
 #BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge --emptytree system world
 	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system -u
+	umount					${INST_DIR}/dev/*	2>/dev/null
+	umount					${INST_DIR}/*		2>/dev/null
 	exit 0
 
 ########################################
