@@ -29,6 +29,8 @@ Device Drivers
 		Virtio block driver						CONFIG_VIRTIO_BLK=y
 	SCSI device support
 		SCSI device support						CONFIG_SCSI=y
+		SCSI disk support						CONFIG_BLK_DEV_SD=y
+		SCSI CDROM support						CONFIG_BLK_DEV_SR=y
 	Multiple devices driver support (RAID and LVM)				CONFIG_MD=y
 		RAID support							CONFIG_BLK_DEV_MD=y
 		Autodetect RAID arrays during kernel boot			CONFIG_MD_AUTODETECT=y
