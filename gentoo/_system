@@ -27,6 +27,10 @@ if [[ ${1} == -i ]]; then
 		xz -cd				$(ls ${FILE_SRC}/portage-*.tar.xz	| tail -n1) |
 		tar -pvvx -f- -C		${INST_DIR}/usr
 	fi
+	${MKDIR}				${INST_DIR}/_build
+	${RSYNC_U} ${FILE_SRC}/handbook-*	${INST_DIR}/_build/
+	${RSYNC_U} ${FILE_SRC}/portage-*	${INST_DIR}/_build/
+	${RSYNC_U} ${FILE_SRC}/stage3-*		${INST_DIR}/_build/
 	${MKDIR}				${INST_DIR}/_gentoo
 	${RSYNC_U} /_gentoo/*.{okay,OKAY}	${INST_DIR}/_gentoo/
 	${MKDIR}				${INST_DIR}/.setup
