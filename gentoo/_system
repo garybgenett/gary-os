@@ -47,7 +47,7 @@ if [[ ${1} == -i ]]; then
 #BUILD	${SAFE_ENV}				locale-gen
 #BUILD	${SAFE_ENV}				eselect profile set 1
 	${MKDIR}				${INST_DIR}/.g/.home
-	_sync _home _build			${INST_DIR}/.g/.home
+	${HOME}/scripts/_sync _home _build	${INST_DIR}/.g/.home
 	${RM}					${INST_DIR}/.g/.home/.ssh/id_*
 #BUILD	${RSYNC_U} /usr/portage/		${INST_DIR}/usr/portage					|| exit 1
 #>>>	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system					|| exit 1
