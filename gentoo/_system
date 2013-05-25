@@ -22,9 +22,9 @@ if [[ ${1} == -i ]]; then
 	umount					${INST_DIR}/dev/*	2>/dev/null
 	umount					${INST_DIR}/*		2>/dev/null
 	if [[ ! -d ${INST_DIR}/boot ]]; then
-#>>>		tar -pvvx -C ${INST_DIR} -f	$(ls ${FILE_SRC}/*stage3-i686*.tar.bz2	| tail -n1)
-		tar -pvvx -C ${INST_DIR} -f	$(ls ${FILE_SRC}/*stage3-amd64*.tar.bz2	| tail -n1)
-		xz -cd				$(ls ${FILE_SRC}/*portage*.tar.xz	| tail -n1) |
+#>>>		tar -pvvx -C ${INST_DIR} -f	$(ls ${FILE_SRC}/stage3-i686-*.tar.bz2	| tail -n1)
+		tar -pvvx -C ${INST_DIR} -f	$(ls ${FILE_SRC}/stage3-amd64-*.tar.bz2	| tail -n1)
+		xz -cd				$(ls ${FILE_SRC}/portage-*.tar.xz	| tail -n1) |
 		tar -pvvx -f- -C		${INST_DIR}/usr
 	fi
 	${MKDIR}				${INST_DIR}/_gentoo
