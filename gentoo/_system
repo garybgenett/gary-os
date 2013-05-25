@@ -27,6 +27,10 @@ if [[ ${1} == -i ]]; then
 		xz -cd				$(ls ${FILE_SRC}/portage-*.tar.xz	| tail -n1) |
 		tar -pvvx -f- -C		${INST_DIR}/usr
 	fi
+	mount -v --bind /dev			${INST_DIR}/dev
+	mount -v --bind /dev/pts		${INST_DIR}/dev/pts
+	mount -v --bind /proc			${INST_DIR}/proc
+	mount -v --bind /sys			${INST_DIR}/sys
 	${MKDIR}				${INST_DIR}/_build
 	${RSYNC_U} ${FILE_SRC}/handbook-*	${INST_DIR}/_build/
 	${RSYNC_U} ${FILE_SRC}/portage-*	${INST_DIR}/_build/
@@ -40,10 +44,6 @@ if [[ ${1} == -i ]]; then
 	${RSYNC_U} -L ${INST_DIR}${LTIME}	${INST_DIR}/etc/localtime
 	${RSYNC_U} -L /etc/locale.gen		${INST_DIR}/etc/
 	${RSYNC_U} -L /etc/resolv.conf		${INST_DIR}/etc/
-	mount -v --bind /dev			${INST_DIR}/dev
-	mount -v --bind /dev/pts		${INST_DIR}/dev/pts
-	mount -v --bind /proc			${INST_DIR}/proc
-	mount -v --bind /sys			${INST_DIR}/sys
 #BUILD	${SAFE_ENV}				locale-gen
 #BUILD	${SAFE_ENV}				eselect profile set 1
 	${MKDIR}				${INST_DIR}/.g/.home
