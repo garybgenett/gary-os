@@ -151,26 +151,10 @@ ${SAFE_ENV} ${HOME}/setup/gentoo/.hacks
 ########################################
 
 echo -en "\n"
-
-echo -en "emerge: "
-cat /_gentoo/.emerge |
-	${GREP} "^[[]ebuild" |
-	${SED} -e "s/^[^]]+[]][ ]//g" -e "s/[-][0-9].+$//g" |
-	wc -l
-
-echo -en "pkg_db: "
-find /var/db/pkg -mindepth 2 -maxdepth 2 -type d |
-	wc -l
-
-declare PKG
-for PKG in $(
-	find /var/db/pkg -mindepth 2 -maxdepth 2 -type d |
-	${SED} "s|^/var/db/pkg/||g"
-); do
-	if [[ -z $(${GREP} ${PKG/+/.} /_gentoo/.emerge 2>/dev/null) ]]; then
-		echo ${PKG}
-	fi
-done
+wc -l /_gentoo/_packages
+wc -l /_gentoo/_packages.db
+diff  /_gentoo/_packages.db /_gentoo/_packages |
+	${GREP} "^[<>]"
 
 exit 0
 ################################################################################

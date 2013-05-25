@@ -19,10 +19,14 @@ sort /var/lib/portage/world			>${OUT_DIR}/.world	2>&1
 ########################################
 
 cat ${OUT_DIR}/.emerge |
-	${GREP} "^\["			|
-	awk '{print $4;}'		|
-	sort				\
+	${SED} -n "s/^[[]ebuild[^]]+[]][ ]([^: ]+)[: ].*$/\1/gp"	|
+	sort								\
 	>${OUT_DIR}/_packages
+
+find /var/db/pkg -mindepth 2 -maxdepth 2 -type d	|
+	${SED} "s|^/var/db/pkg/||g"			|
+	sort						\
+	>${OUT_DIR}/_packages.db
 
 cat /dev/null >${OUT_DIR}/_packages.added
 
