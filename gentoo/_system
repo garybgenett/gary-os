@@ -49,11 +49,11 @@ if [[ ${1} == -i ]]; then
 	${MKDIR}				${INST_DIR}/.g/.home
 	_sync _home _build			${INST_DIR}/.g/.home
 	${RM}					${INST_DIR}/.g/.home/.ssh/id_*
-#BUILD	${RSYNC_U} /usr/portage/		${INST_DIR}/usr/portage
-#>>>	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system
-#BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge ccache debugedit portage
-#BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge eselect gcc-config gentoolkit java-config
-#BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge --emptytree system world
+#BUILD	${RSYNC_U} /usr/portage/		${INST_DIR}/usr/portage					|| exit 1
+#>>>	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system					|| exit 1
+#BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge ccache debugedit portage				|| exit 1
+#BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge eselect gcc-config gentoolkit java-config	|| exit 1
+#BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge --emptytree system world				|| exit 1
 #BUILD	HOME=/.g/.home ${SAFE_ENV}		eselect news read all
 #BUILD	HOME=/.g/.home ${SAFE_ENV}		eselect news purge
 	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system -u
@@ -100,8 +100,8 @@ elif [[ ${1} == -u ]]; then
 ########################################
 
 elif [[ ${1} != -! ]]; then
-	${SAFE_ENV} emerge --verbose --sync
-	${SAFE_ENV} emerge --emptytree --fetch-all-uri system world
+	${SAFE_ENV} emerge --verbose --sync				|| exit 1
+	${SAFE_ENV} emerge --emptytree --fetch-all-uri system world	|| exit 1
 fi
 
 ################################################################################
