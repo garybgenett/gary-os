@@ -50,20 +50,11 @@ if [[ ${1} == -i ]]; then
 #BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge ccache debugedit portage
 #BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge eselect gcc-config gentoolkit java-config
 #BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge --emptytree system world
+#BUILD	HOME=/.g/.home ${SAFE_ENV}		eselect news read all
+#BUILD	HOME=/.g/.home ${SAFE_ENV}		eselect news purge
 	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system -u
 	umount					${INST_DIR}/dev/*	2>/dev/null
 	umount					${INST_DIR}/*		2>/dev/null
-#BUILD	${RM}					\
-#BUILD						${INST_DIR}/dev/*
-#BUILD						${INST_DIR}/mnt/*
-#BUILD						${INST_DIR}/proc/*
-#BUILD						${INST_DIR}/sys/*
-#BUILD						${INST_DIR}/tmp/*
-#BUILD						${INST_DIR}/tmp/.ccache
-#BUILD						${INST_DIR}/var/log/*
-#BUILD						${INST_DIR}/var/tmp/*
-#BUILD	HOME=/.g/.home ${SAFE_ENV}		eselect news read all
-#BUILD	HOME=/.g/.home ${SAFE_ENV}		eselect news purge
 	exit 0
 
 ########################################
