@@ -96,7 +96,6 @@ elif [[ ${1} == -u ]]; then
 	${SAFE_ENV} emaint --fix all							|| exit 1
 	${SAFE_ENV} ${ECLEAN} distfiles --fetch-restricted				|| exit 1
 	${SAFE_ENV} ${ECLEAN} packages							|| exit 1
-	${SAFE_ENV} equery list --duplicates '*'
 
 ########################################
 
