@@ -46,9 +46,9 @@ if [[ ${1} == -i ]]; then
 	mount -v --bind /sys			${INST_DIR}/sys
 #BUILD	${SAFE_ENV}				locale-gen
 #BUILD	${SAFE_ENV}				eselect profile set 1
-	${MKDIR}				${INST_DIR}/.g
-	${RSYNC_U} /.g/.home/			${INST_DIR}/.g/.home
-	${RSYNC_U} ${HOME}/setup/gentoo/	${INST_DIR}/.g/.home/setup/gentoo
+	${MKDIR}				${INST_DIR}/.g/.home
+	_sync _home _build			${INST_DIR}/.g/.home
+	${RM}					${INST_DIR}/.g/.home/.ssh/id_*
 #BUILD	${RSYNC_U} /usr/portage/		${INST_DIR}/usr/portage
 #>>>	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system
 #BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge ccache debugedit portage
