@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+source ${HOME}/.bashrc
 ################################################################################
 
 declare OUT_DIR="/_gentoo"
@@ -18,7 +19,7 @@ sort /var/lib/portage/world			>${OUT_DIR}/.world	2>&1
 ########################################
 
 cat ${OUT_DIR}/.emerge |
-	grep -E "^\["			|
+	${GREP} "^\["			|
 	awk '{print $4;}'		|
 	sort				\
 	>${OUT_DIR}/_packages
@@ -26,7 +27,7 @@ cat ${OUT_DIR}/.emerge |
 cat /dev/null >${OUT_DIR}/_packages.added
 
 for TOKEN in $(cat ${OUT_DIR}/_packages); do
-	if [[ -z $(grep -E "^${TOKEN/%-[0-9].*}" /var/lib/portage/world) ]]; then
+	if [[ -z $(${GREP} "^${TOKEN/%-[0-9].*}" /var/lib/portage/world) ]]; then
 		echo "${TOKEN}" >>${OUT_DIR}/_packages.added
 	fi
 done
@@ -34,7 +35,7 @@ done
 cat /dev/null >${OUT_DIR}/_packages.use
 
 for TOKEN in $(cat ${OUT_DIR}/_packages); do
-	grep -E "^${TOKEN/%-[0-9].*}[:]" /usr/portage/profiles/use.local.desc |
+	${GREP} "^${TOKEN/%-[0-9].*}[:]" /usr/portage/profiles/use.local.desc |
 		sort \
 		>>${OUT_DIR}/_packages.use
 done
@@ -46,11 +47,11 @@ cat /dev/null >${OUT_DIR}/_use.enabled
 
 for TOKEN in $(source /etc/portage/make.conf ; echo ${USE}); do
 	if [[ ${TOKEN} == ${TOKEN/#-} ]]; then
-		grep -E "^${TOKEN}[ ][-]" /usr/portage/profiles/use.desc |
+		${GREP} "^${TOKEN}[ ][-]" /usr/portage/profiles/use.desc |
 			sort \
 			>>${OUT_DIR}/_use.enabled
 	else
-		grep -E "^${TOKEN/#-}[ ][-]" /usr/portage/profiles/use.desc |
+		${GREP} "^${TOKEN/#-}[ ][-]" /usr/portage/profiles/use.desc |
 			sort \
 			>>${OUT_DIR}/_use.disabled
 	fi
@@ -59,26 +60,26 @@ done
 ########################################
 
 cat ${OUT_DIR}/.emerge |
-	sed -r "s/ ([A-Z0-9_]+=)/\n\1/g"	|
-	sed -r "s/\" [^\"]+$/\"/g"		|
-	grep -E "^[A-Z0-9_]+="			|
+	${SED} "s/ ([A-Z0-9_]+=)/\n\1/g"	|
+	${SED} "s/\" [^\"]+$/\"/g"		|
+	${GREP} "^[A-Z0-9_]+="			|
 	sort					|
 	uniq					\
 	>${OUT_DIR}/emerge__tmp
 
-grep -E "^USE=" ${OUT_DIR}/emerge__tmp |
-	sed -r "s/^USE=\"//g"	|
-	sed -r "s/\"$//g"	|
-	sed -r "s/[()*%]//g"	|
-	sed -r "s/^-//g"	|
-	sed -r "s/ -/ /g"	|
-	sed -r "s/ /\n/g"	|
+${GREP} "^USE=" ${OUT_DIR}/emerge__tmp |
+	${SED} "s/^USE=\"//g"	|
+	${SED} "s/\"$//g"	|
+	${SED} "s/[()*%]//g"	|
+	${SED} "s/^-//g"	|
+	${SED} "s/ -/ /g"	|
+	${SED} "s/ /\n/g"	|
 	sort			|
 	uniq			\
 	>${OUT_DIR}/emerge.use
 
-grep -vE "^USE=" ${OUT_DIR}/emerge__tmp |
-	sed -r "s/=.+$//g"	|
+${GREP} -v "^USE=" ${OUT_DIR}/emerge__tmp |
+	${SED} "s/=.+$//g"	|
 	sort			|
 	uniq			\
 	>${OUT_DIR}/emerge.vars
@@ -88,16 +89,16 @@ rm -frv ${OUT_DIR}/emerge__tmp
 ########################################
 
 (source /etc/portage/make.conf ; echo ${USE}) |
-	sed -r "s/^-//g"	|
-	sed -r "s/ -/ /g"	|
-	sed -r "s/ /\n/g"	|
+	${SED} "s/^-//g"	|
+	${SED} "s/ -/ /g"	|
+	${SED} "s/ /\n/g"	|
 	sort			|
 	uniq			\
 	>${OUT_DIR}/makeconf.use
 
-grep -E "^[A-Z0-9_]+=" /etc/portage/make.conf |
-	grep -vE "^USE="	|
-	sed -r "s/=.+$//g"	|
+${GREP} "^[A-Z0-9_]+=" /etc/portage/make.conf |
+	${GREP} -v "^USE="	|
+	${SED} "s/=.+$//g"	|
 	sort			|
 	uniq			\
 	>${OUT_DIR}/makeconf.vars
@@ -108,15 +109,15 @@ cat /dev/null >${OUT_DIR}/use.missing.global
 cat /dev/null >${OUT_DIR}/use.missing.local
 
 for TOKEN in $(cat ${OUT_DIR}/emerge.use); do
-	if [[ -z $(grep -E "^${TOKEN}$" ${OUT_DIR}/makeconf.use) ]]; then
-		if [[ -n $(grep -E "^${TOKEN}[ ][-]" /usr/portage/profiles/use.desc) ]]; then
-			grep -E "^${TOKEN}[ ][-]" /usr/portage/profiles/use.desc |
+	if [[ -z $(${GREP} "^${TOKEN}$" ${OUT_DIR}/makeconf.use) ]]; then
+		if [[ -n $(${GREP} "^${TOKEN}[ ][-]" /usr/portage/profiles/use.desc) ]]; then
+			${GREP} "^${TOKEN}[ ][-]" /usr/portage/profiles/use.desc |
 				sort \
 				>>${OUT_DIR}/use.missing.global
 		else
 			echo -e "\n${TOKEN}" \
 				>>${OUT_DIR}/use.missing.local
-			grep -E "[:]${TOKEN}[ ][-]" /usr/portage/profiles/use.local.desc |
+			${GREP} "[:]${TOKEN}[ ][-]" /usr/portage/profiles/use.local.desc |
 				sort \
 				>>${OUT_DIR}/use.missing.local
 		fi
@@ -126,7 +127,7 @@ done
 cat /dev/null >${OUT_DIR}/vars.missing
 
 for TOKEN in $(cat ${OUT_DIR}/emerge.vars); do
-	if [[ -z $(grep -E "^${TOKEN}$" ${OUT_DIR}/makeconf.vars) ]]; then
+	if [[ -z $(${GREP} "^${TOKEN}$" ${OUT_DIR}/makeconf.vars) ]]; then
 		echo "${TOKEN}" >>${OUT_DIR}/vars.missing
 	fi
 done
@@ -136,7 +137,7 @@ done
 cat /dev/null >${OUT_DIR}/use.extra
 
 for TOKEN in $(cat ${OUT_DIR}/makeconf.use); do
-	if [[ -z $(grep -E "^${TOKEN}$" ${OUT_DIR}/emerge.use) ]]; then
+	if [[ -z $(${GREP} "^${TOKEN}$" ${OUT_DIR}/emerge.use) ]]; then
 		echo "${TOKEN}" >>${OUT_DIR}/use.extra
 	fi
 done
@@ -144,7 +145,7 @@ done
 cat /dev/null >${OUT_DIR}/vars.extra
 
 for TOKEN in $(cat ${OUT_DIR}/makeconf.vars); do
-	if [[ -z $(grep -E "^${TOKEN}$" ${OUT_DIR}/emerge.vars) ]]; then
+	if [[ -z $(${GREP} "^${TOKEN}$" ${OUT_DIR}/emerge.vars) ]]; then
 		echo "${TOKEN}" >>${OUT_DIR}/vars.extra
 	fi
 done
@@ -159,7 +160,7 @@ for TOKEN in ${OUT_DIR}/*.OKAY; do
 done
 
 echo -e "\n[emerge output]" >>${OUT_DIR}/+okay
-grep -vE \
+${GREP} -v \
 	-e "^$" \
 	-e "^[[]" \
 	-e "^PORTAGE_BZIP2_COMMAND[ ]" \
