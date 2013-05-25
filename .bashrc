@@ -744,7 +744,7 @@ function git-backup {
 	else
 		index-dir ${PWD} -0 $(
 			${GREP} "^/" .gitignore |
-			${SED} -e "s|^/|./|g" -e "s|/$||g"
+			${SED} -e "s|^/||g" -e "s|/$||g"
 			)
 	fi
 	git-save ${FUNCNAME}				|| return 1
@@ -880,7 +880,7 @@ function index-dir {
 	declare EXCL_PATHS=
 	declare EXCL_PATH=
 	for EXCL_PATH in "${@}"; do
-		EXCL_PATHS="${EXCL_PATHS} \( -path \"${EXCL_PATH}\" -prune \) -o"
+		EXCL_PATHS="${EXCL_PATHS} \( -path \"./${EXCL_PATH}\" -prune \) -o"
 	done
 	declare INDEX_I="${INDEX_D}/+index"
 	declare CUR_IDX="${INDEX_I}/$(date --iso=seconds | ${SED} "s/[:]/-/g")"
