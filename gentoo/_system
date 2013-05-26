@@ -37,18 +37,18 @@ if [[ ${1} == -i ]]; then
 	${RSYNC_U} ${FILE_SRC}/stage3-*		${INST_DIR}/_build/
 	${MKDIR}				${INST_DIR}/_gentoo
 	${RSYNC_U} /_gentoo/*.{okay,OKAY}	${INST_DIR}/_gentoo/
-#BUILD	${SAFE_ENV}				locale-gen
-#BUILD	${SAFE_ENV}				eselect profile set 1
 	${MKDIR}				${INST_DIR}/.g/.home
 	${HOME}/scripts/_sync _home _build	${INST_DIR}/.g/.home
 	${RM}					${INST_DIR}/.g/.home/.ssh/id_*
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/scripts/_sync mount g sda
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/setup/.setconf
-#BUILD	${RSYNC_U} /usr/portage/		${INST_DIR}/usr/portage					|| exit 1
-#>>>	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system					|| exit 1
+#BUILD	${SAFE_ENV}				locale-gen
 #BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge ccache debugedit portage				|| exit 1
 #BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge eselect gcc-config gentoolkit java-config	|| exit 1
 #BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge --emptytree system world				|| exit 1
+#BUILD	${RSYNC_U} /usr/portage/		${INST_DIR}/usr/portage					|| exit 1
+#>>>	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system					|| exit 1
+#BUILD	${SAFE_ENV}				eselect profile set 1
 #BUILD	HOME=/.g/.home ${SAFE_ENV}		eselect news read all
 #BUILD	HOME=/.g/.home ${SAFE_ENV}		eselect news purge
 	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system -u
