@@ -37,18 +37,13 @@ if [[ ${1} == -i ]]; then
 	${RSYNC_U} ${FILE_SRC}/stage3-*		${INST_DIR}/_build/
 	${MKDIR}				${INST_DIR}/_gentoo
 	${RSYNC_U} /_gentoo/*.{okay,OKAY}	${INST_DIR}/_gentoo/
-	${MKDIR}				${INST_DIR}/.setup
-	${RSYNC_U} ${HOME}/setup/gentoo/	${INST_DIR}/.setup/gentoo
-	${LN} /.setup/gentoo/make.conf		${INST_DIR}/etc/portage
-	${LN} /.setup/gentoo/package.*		${INST_DIR}/etc/portage
-	${RSYNC_U} -L ${INST_DIR}${LTIME}	${INST_DIR}/etc/localtime
-	${RSYNC_U} -L /etc/locale.gen		${INST_DIR}/etc/
-	${RSYNC_U} -L /etc/resolv.conf		${INST_DIR}/etc/
 #BUILD	${SAFE_ENV}				locale-gen
 #BUILD	${SAFE_ENV}				eselect profile set 1
 	${MKDIR}				${INST_DIR}/.g/.home
 	${HOME}/scripts/_sync _home _build	${INST_DIR}/.g/.home
 	${RM}					${INST_DIR}/.g/.home/.ssh/id_*
+	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/scripts/_sync mount g sda
+	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/setup/.setconf
 #BUILD	${RSYNC_U} /usr/portage/		${INST_DIR}/usr/portage					|| exit 1
 #>>>	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system					|| exit 1
 #BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge ccache debugedit portage				|| exit 1
