@@ -7,6 +7,19 @@ declare SOURCE="/.g/_data/_target/iso"
 
 ########################################
 
+declare AUTO="false"
+declare OPT="--ask y"
+declare BLD="false"
+
+if [[ ${1} == -a ]]; then
+	shift
+	AUTO="true"
+	OPT="--ask n"
+	BLD="true"
+fi
+
+########################################
+
 declare SAFE_ENV="prompt -z EMERGE_DEFAULT_OPTS="
 if [[ ${1} == -i ]] || [[ ${1} == -s ]]; then
 	SAFE_ENV="prompt -z chroot ${TARGET}"
@@ -45,13 +58,15 @@ elif [[ ${1} == -i ]]; then
 	${RM}					${TARGET}/.g/.home/.ssh/id_*
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/scripts/_sync mount g sda
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/setup/.setconf
-	${SAFE_ENV}				locale-gen
-	HOME=/.g/.home ${SAFE_ENV}		emerge ccache debugedit portage glibc gcc		|| exit 1
-	HOME=/.g/.home ${SAFE_ENV}		emerge eselect genkernel gentoolkit			|| exit 1
-	${SAFE_ENV}				eselect profile set 1					|| exit 1
-	HOME=/.g/.home ${SAFE_ENV}		emerge --emptytree system world				|| exit 1
-	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system -f				|| exit 1
-	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system -u				|| exit 1
+	if ${BLD}; then
+		${SAFE_ENV}			locale-gen
+		HOME=/.g/.home ${SAFE_ENV}	emerge ${OPT} ccache debugedit portage glibc gcc	|| exit 1
+		HOME=/.g/.home ${SAFE_ENV}	emerge ${OPT} eselect genkernel gentoolkit		|| exit 1
+		${SAFE_ENV}			eselect profile set 1					|| exit 1
+		HOME=/.g/.home ${SAFE_ENV}	emerge ${OPT} --emptytree system world			|| exit 1
+	fi
+	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system -f	|| exit 1
+	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system -u	|| exit 1
 	umount					${TARGET}/dev/*	2>/dev/null
 	umount					${TARGET}/*	2>/dev/null
 	exit 0
