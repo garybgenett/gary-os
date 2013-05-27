@@ -10,12 +10,14 @@ declare SOURCE="/.g/_data/_target/iso"
 declare AUTO="false"
 declare OPT="--ask y"
 declare BLD="false"
+declare KRN="false"
 
 if [[ ${1} == -a ]]; then
 	shift
 	AUTO="true"
 	OPT="--ask n"
 	BLD="true"
+	KRN="true"
 fi
 
 ########################################
@@ -65,6 +67,23 @@ elif [[ ${1} == -i ]]; then
 		${SAFE_ENV}			eselect profile set 1					|| exit 1
 		HOME=/.g/.home ${SAFE_ENV}	emerge ${OPT} --emptytree system world			|| exit 1
 	fi
+	if ${KRN}; then for KRN in $(
+		${SED} -n "s/^['][=]gentoo-sources-(.+)[']$/\1/gp" ${HOME}/setup/gentoo/.packages
+	); do
+		${RM}				${TARGET}/usr/src/linux					|| exit 1
+		${LN} linux-${KRN}-gentoo	${TARGET}/usr/src/linux					|| exit 1
+		HOME=/.g/.home ${SAFE_ENV}	emerge ${OPT} =gentoo-sources-${KRN}			|| exit 1
+		if !${AUTO}; then
+		HOME=/.g/.home ${SAFE_ENV}	genkernel --loglevel=5 --symlink kernel --menuconfig	|| exit 1; else
+		HOME=/.g/.home ${SAFE_ENV}	genkernel --loglevel=5 --symlink kernel			\
+						--kernel-config=/.setup/linux/config-gentoo64-${KRN}	|| exit 1; fi
+		${RM}				${TARGET}/boot/_cur					|| exit 1
+		${LN} kernel-*-${KRN}-gentoo	${TARGET}/boot/_cur					|| exit 1
+		${RM}				${TARGET}/boot/_new					|| exit 1
+		${LN} kernel			${TARGET}/boot/_new					|| exit 1
+		${RM}				${TARGET}/boot/_old					|| exit 1
+		${LN} kernel.old		${TARGET}/boot/_old					|| exit 1
+	done; fi
 	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system -f	|| exit 1
 	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system -u	|| exit 1
 	umount					${TARGET}/dev/*	2>/dev/null
