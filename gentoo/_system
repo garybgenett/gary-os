@@ -46,15 +46,15 @@ elif [[ ${1} == -i ]]; then
 #>>>		tar -jpvvx -C ${TARGET} -f	$(ls ${SOURCE}/stage3-i686-*.tar.bz2	| tail -n1)
 		tar -jpvvx -C ${TARGET} -f	$(ls ${SOURCE}/stage3-amd64-*.tar.bz2	| tail -n1)
 		tar -jpvvx -C ${TARGET}/usr -f	$(ls ${SOURCE}/portage-*.tar.bz2	| tail -n1)
+		${MKDIR}			${TARGET}/_build
+		${RSYNC_U} ${SOURCE}/handbook-*	${TARGET}/_build/
+		${RSYNC_U} ${SOURCE}/portage-*	${TARGET}/_build/
+		${RSYNC_U} ${SOURCE}/stage3-*	${TARGET}/_build/
 	fi
 	mount -v --bind /dev			${TARGET}/dev
 	mount -v --bind /dev/pts		${TARGET}/dev/pts
 	mount -v --bind /proc			${TARGET}/proc
 	mount -v --bind /sys			${TARGET}/sys
-	${MKDIR}				${TARGET}/_build
-	${RSYNC_U} ${SOURCE}/handbook-*		${TARGET}/_build/
-	${RSYNC_U} ${SOURCE}/portage-*		${TARGET}/_build/
-	${RSYNC_U} ${SOURCE}/stage3-*		${TARGET}/_build/
 	${MKDIR}				${TARGET}/_gentoo
 	${RSYNC_U} /_gentoo/*.{okay,OKAY}	${TARGET}/_gentoo/
 	${MKDIR}				${TARGET}/.g/.home
