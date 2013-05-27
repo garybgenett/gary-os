@@ -1,0 +1,9 @@
+build - !!internal use only!! DO NOT SET THIS FLAG YOURSELF!, used for creating build images and the first half of bootstrapping [make stage1]
+custom-cflags - Build with user-specified CFLAGS (unsupported)
+cxx - Builds support for C++ (bindings, extra libraries, code generation, ...)
+livecd - !!internal use only!! DO NOT SET THIS FLAG YOURSELF!, used during livecd building
+prefix - Defines if a Gentoo Prefix offset installation is used
+savedconfig - Use this to restore your config from /etc/portage/savedconfig ${CATEGORY}/${PN}. Make sure your USE flags allow for appropriate dependencies
+static - !!do not set this during bootstrap!! Causes binaries to be statically linked instead of dynamically
+static-libs - Build static libraries
+vanilla - Do not add extra patches which change default behaviour; DO NOT USE THIS ON A GLOBAL SCALE as the severity of the meaning changes drastically
