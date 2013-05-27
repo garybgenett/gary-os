@@ -26,10 +26,9 @@ elif [[ ${1} == -i ]]; then
 	umount					${TARGET}/dev/*	2>/dev/null
 	umount					${TARGET}/*	2>/dev/null
 	if [[ ! -d ${TARGET}/boot ]]; then
-#>>>		tar -pvvx -C ${TARGET} -f	$(ls ${SOURCE}/stage3-i686-*.tar.bz2	| tail -n1)
-		tar -pvvx -C ${TARGET} -f	$(ls ${SOURCE}/stage3-amd64-*.tar.bz2	| tail -n1)
-		xz -cd				$(ls ${SOURCE}/portage-*.tar.xz		| tail -n1) |
-		tar -pvvx -f- -C		${TARGET}/usr
+#>>>		tar -jpvvx -C ${TARGET} -f	$(ls ${SOURCE}/stage3-i686-*.tar.bz2	| tail -n1)
+		tar -jpvvx -C ${TARGET} -f	$(ls ${SOURCE}/stage3-amd64-*.tar.bz2	| tail -n1)
+		tar -jpvvx -C ${TARGET}/usr -f	$(ls ${SOURCE}/portage-*.tar.bz2	| tail -n1)
 	fi
 	mount -v --bind /dev			${TARGET}/dev
 	mount -v --bind /dev/pts		${TARGET}/dev/pts
