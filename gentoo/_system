@@ -49,8 +49,6 @@ if [[ ${1} == -i ]]; then
 #BUILD	${RSYNC_U} /usr/portage/		${INST_DIR}/usr/portage					|| exit 1
 #>>>	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system					|| exit 1
 #BUILD	${SAFE_ENV}				eselect profile set 1
-#BUILD	HOME=/.g/.home ${SAFE_ENV}		eselect news read all
-#BUILD	HOME=/.g/.home ${SAFE_ENV}		eselect news purge
 	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system -u
 	umount					${INST_DIR}/dev/*	2>/dev/null
 	umount					${INST_DIR}/*		2>/dev/null
@@ -138,6 +136,12 @@ ${RSYNC_U} ${HOME}/setup/gentoo/ /_gentoo/_gentoo
 
 ${SAFE_ENV} ${HOME}/setup/gentoo/.emergent
 ${SAFE_ENV} ${HOME}/setup/gentoo/.hacks
+
+########################################
+
+if [[ -n ${1} ]] && [[ ${1} != -f ]]; then
+	eselect news read new
+fi
 
 ########################################
 
