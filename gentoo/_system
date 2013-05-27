@@ -45,14 +45,13 @@ elif [[ ${1} == -i ]]; then
 	${RM}					${TARGET}/.g/.home/.ssh/id_*
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/scripts/_sync mount g sda
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/setup/.setconf
-#BUILD	${SAFE_ENV}				locale-gen
-#BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge ccache debugedit portage				|| exit 1
-#BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge eselect gcc-config gentoolkit java-config	|| exit 1
-#BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge --emptytree system world				|| exit 1
-#BUILD	${RSYNC_U} /usr/portage/		${TARGET}/usr/portage					|| exit 1
-#>>>	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system					|| exit 1
-#BUILD	${SAFE_ENV}				eselect profile set 1
-	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system -u
+	${SAFE_ENV}				locale-gen
+	HOME=/.g/.home ${SAFE_ENV}		emerge ccache debugedit portage				|| exit 1
+	HOME=/.g/.home ${SAFE_ENV}		emerge eselect gcc-config gentoolkit java-config	|| exit 1
+	${SAFE_ENV}				eselect profile set 1					|| exit 1
+	HOME=/.g/.home ${SAFE_ENV}		emerge --emptytree system world				|| exit 1
+	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system -f				|| exit 1
+	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system -u				|| exit 1
 	umount					${TARGET}/dev/*	2>/dev/null
 	umount					${TARGET}/*	2>/dev/null
 	exit 0
