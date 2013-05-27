@@ -55,8 +55,6 @@ elif [[ ${1} == -i ]]; then
 	mount -v --bind /dev/pts		${TARGET}/dev/pts
 	mount -v --bind /proc			${TARGET}/proc
 	mount -v --bind /sys			${TARGET}/sys
-	${MKDIR}				${TARGET}/_gentoo
-	${RSYNC_U} /_gentoo/*.{okay,OKAY}	${TARGET}/_gentoo/
 	${MKDIR}				${TARGET}/.g/.home
 	${HOME}/scripts/_sync _home _build	${TARGET}/.g/.home
 	${RM}					${TARGET}/.g/.home/.ssh/id_*
