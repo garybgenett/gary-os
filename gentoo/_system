@@ -68,14 +68,24 @@ elif [[ ${1} == -u ]]; then
 	${LL} /_gentoo
 	cat /_gentoo/+okay
 	locale-gen
-	declare COMMAND
-	${SED} -n \
-		-e "s/^#[[:space:]]+(gcc-config[ ].+$)/\1/gp" \
-		-e "s/^#[[:space:]]+(java-config[ ].+$)/\1/gp" \
-		-e "s/^#[[:space:]]+(eselect[ ].+[ ]set[ ].+$)/\1/gp" \
-		${HOME}/setup/gentoo/make.conf |
-	while read -r COMMAND; do
-		eval ${COMMAND}
+	gcc-config ${CHOST}-$(equery list gcc | awk '{print $1;}' | cut -d- -f3 | sort -n | tail -n1)
+	gcc-config --list-profiles
+	java-config --set-system-vm $(equery list oracle-jdk-bin | awk '{print $1;}' | cut -d/ -f2 | cut -d. -f-2 | sort -n | tail -n1)
+	java-config --list-available-vms
+	for SELECT in \
+		mesa:--auto		\
+		opengl:xorg-x11		\
+		python:python2.7	\
+		unison:2.45		\
+		vi:gvim			\
+		\
+		package-manager:portage	\
+		profile:1
+	do
+		declare KEY="$(echo "${SELECT}" | ${SED} "s/^(.+)[:](.+)$/\1/g")"
+		declare VAL="$(echo "${SELECT}" | ${SED} "s/^(.+)[:](.+)$/\2/g")"
+		eselect ${KEY} set ${VAL}
+		eselect ${KEY} list
 	done
 	cat /dev/null >/var/lib/portage/world
 	declare ECLEAN="eclean --verbose --destructive" #>>> --package-names
