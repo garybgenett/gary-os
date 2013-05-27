@@ -19,6 +19,10 @@ if [[ ${1} == -a ]]; then
 	OPT="--ask n"
 	BLD="true"
 	KRN="true"
+fi
+
+if [[ ${1} == -c ]]; then
+	shift
 	CFG="true"
 fi
 
