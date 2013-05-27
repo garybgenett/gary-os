@@ -121,7 +121,7 @@ ${GREP} -v "^USE=" ${OUT_DIR}/emerge__tmp |
 	uniq			\
 	>${OUT_DIR}/emerge.vars
 
-rm -frv ${OUT_DIR}/emerge__tmp
+${RM} ${OUT_DIR}/emerge__tmp >/dev/null 2>&1
 
 ########################################
 
@@ -139,6 +139,24 @@ ${GREP} "^[A-Z0-9_]+=" /etc/portage/make.conf |
 	sort			|
 	uniq			\
 	>${OUT_DIR}/makeconf.vars
+
+########################################
+
+cat /dev/null >${OUT_DIR}/use.extra
+
+for TOKEN in $(cat ${OUT_DIR}/makeconf.use); do
+	if [[ -z $(${GREP} "^${TOKEN}$" ${OUT_DIR}/emerge.use) ]]; then
+		echo "${TOKEN}" >>${OUT_DIR}/use.extra
+	fi
+done
+
+cat /dev/null >${OUT_DIR}/vars.extra
+
+for TOKEN in $(cat ${OUT_DIR}/makeconf.vars); do
+	if [[ -z $(${GREP} "^${TOKEN}$" ${OUT_DIR}/emerge.vars) ]]; then
+		echo "${TOKEN}" >>${OUT_DIR}/vars.extra
+	fi
+done
 
 ########################################
 
@@ -166,24 +184,6 @@ cat /dev/null >${OUT_DIR}/vars.missing
 for TOKEN in $(cat ${OUT_DIR}/emerge.vars); do
 	if [[ -z $(${GREP} "^${TOKEN}$" ${OUT_DIR}/makeconf.vars) ]]; then
 		echo "${TOKEN}" >>${OUT_DIR}/vars.missing
-	fi
-done
-
-########################################
-
-cat /dev/null >${OUT_DIR}/use.extra
-
-for TOKEN in $(cat ${OUT_DIR}/makeconf.use); do
-	if [[ -z $(${GREP} "^${TOKEN}$" ${OUT_DIR}/emerge.use) ]]; then
-		echo "${TOKEN}" >>${OUT_DIR}/use.extra
-	fi
-done
-
-cat /dev/null >${OUT_DIR}/vars.extra
-
-for TOKEN in $(cat ${OUT_DIR}/makeconf.vars); do
-	if [[ -z $(${GREP} "^${TOKEN}$" ${OUT_DIR}/emerge.vars) ]]; then
-		echo "${TOKEN}" >>${OUT_DIR}/vars.extra
 	fi
 done
 
