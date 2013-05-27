@@ -96,7 +96,8 @@ elif [[ ${1} == -u ]]; then
 ########################################
 
 elif [[ ${1} != -! ]]; then
-	${SAFE_ENV} emerge --verbose --sync				|| exit 1
+	if [[ ${1} != -f ]]; then
+	${SAFE_ENV} emerge --verbose --sync				|| exit 1; fi
 	${SAFE_ENV} emerge --emptytree --fetch-all-uri system world	|| exit 1
 fi
 
