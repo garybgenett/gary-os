@@ -46,8 +46,8 @@ elif [[ ${1} == -i ]]; then
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/scripts/_sync mount g sda
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/setup/.setconf
 	${SAFE_ENV}				locale-gen
-	HOME=/.g/.home ${SAFE_ENV}		emerge ccache debugedit portage				|| exit 1
-	HOME=/.g/.home ${SAFE_ENV}		emerge eselect gcc-config gentoolkit java-config	|| exit 1
+	HOME=/.g/.home ${SAFE_ENV}		emerge ccache debugedit portage glibc gcc		|| exit 1
+	HOME=/.g/.home ${SAFE_ENV}		emerge eselect genkernel gentoolkit			|| exit 1
 	${SAFE_ENV}				eselect profile set 1					|| exit 1
 	HOME=/.g/.home ${SAFE_ENV}		emerge --emptytree system world				|| exit 1
 	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system -f				|| exit 1
