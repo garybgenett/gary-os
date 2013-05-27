@@ -11,6 +11,7 @@ declare AUTO="false"
 declare OPT="--ask y"
 declare BLD="false"
 declare KRN="false"
+declare CFG="false"
 
 if [[ ${1} == -a ]]; then
 	shift
@@ -18,6 +19,7 @@ if [[ ${1} == -a ]]; then
 	OPT="--ask n"
 	BLD="true"
 	KRN="true"
+	CFG="true"
 fi
 
 ########################################
@@ -84,6 +86,78 @@ elif [[ ${1} == -i ]]; then
 		${RM}				${TARGET}/boot/_old					|| exit 1
 		${LN} kernel.old		${TARGET}/boot/_old					|| exit 1
 	done; fi
+	if ${CFG}; then
+		cat >>${TARGET}/etc/passwd <<END_OF_FILE
+---
+root:x:0:0::/.g/_data/zactive/.home:/bin/bash
+plastic:x:1000:1000::/.g/_data/zactive/.home:/bin/bash
+user:x:1001:1001::/.g/_data/zactive/.home:/bin/bash
+null:x:666:666::/tmp/.null:/bin/nologin
+---
+END_OF_FILE
+		cat >>${TARGET}/etc/shadow <<END_OF_FILE
+---
+root::::::::
+plastic::::::::
+user:*:::::::
+null:*:::::::
+---
+END_OF_FILE
+		cat >>${TARGET}/etc/group <<END_OF_FILE
+---
+root:x:0:root,plastic
+wheel:x:10:root,plastic
+plastic:x:1000:root,plastic
+user:x:1001:root,plastic,user
+null:x:666:root,plastic,null
+---
+audio:x:---:root,plastic,null
+cdrom:x:---:root,plastic,null
+video:x:---:root,plastic,null
+games:x:---:root,plastic,null
+---
+END_OF_FILE
+		cat >>${TARGET}/etc/gshadow <<END_OF_FILE
+---
+root:::root,plastic
+wheel:::root,plastic
+plastic:::root,plastic
+user:::root,plastic,user
+null:::root,plastic,null
+---
+audio:::root,plastic,null
+cdrom:::root,plastic,null
+video:::root,plastic,null
+games:::root,plastic,null
+---
+END_OF_FILE
+		cat >>${TARGET}/etc/pam.d/su <<END_OF_FILE
+---
+auth sufficient pam_wheel.so use_uid trust
+auth required pam_wheel.so use_uid
+---
+END_OF_FILE
+		cat >>${TARGET}/etc/sudoers <<END_OF_FILE
+---
+root ALL=(ALL) ALL
+%wheel ALL=(ALL) ALL
+%wheel ALL=(ALL) NOPASSWD: ALL
+---
+END_OF_FILE
+		${EDITOR}			${TARGET}/etc/passwd	\
+						${TARGET}/etc/shadow	\
+						${TARGET}/etc/group	\
+						${TARGET}/etc/gshadow	\
+						${TARGET}/etc/pam.d/su	\
+						${TARGET}/etc/sudoers
+		for USER in			root	\
+						plastic
+		do				echo "password: ${USER}"
+			until			${SAFE_ENV} passwd ${USER}
+			do			echo "retry: ${USER}"
+			done
+		done
+	fi
 	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system -f	|| exit 1
 	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system -u	|| exit 1
 	umount					${TARGET}/dev/*	2>/dev/null
