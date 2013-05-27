@@ -3,7 +3,8 @@ source ${HOME}/.bashrc
 ################################################################################
 
 declare OUT_DIR="/_gentoo"
-mkdir -pv ${OUT_DIR}
+${MKDIR} ${OUT_DIR}
+${RSYNC_C} ${HOME}/setup/gentoo/_gentoo/ ${OUT_DIR}/
 
 ########################################
 
