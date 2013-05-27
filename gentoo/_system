@@ -2,16 +2,14 @@
 source ${HOME}/.bashrc
 ################################################################################
 
-declare INST_DIR="/.g/_toor"
-declare FILE_SRC="/.g/_data/_target/iso"
-
-declare LTIME="/usr/share/zoneinfo/US/Pacific"
+declare TARGET="/.g/_toor"
+declare SOURCE="/.g/_data/_target/iso"
 
 ########################################
 
 declare SAFE_ENV="prompt -z EMERGE_DEFAULT_OPTS="
 if [[ ${1} == -i ]] || [[ ${1} == -s ]]; then
-	SAFE_ENV="prompt -z chroot ${INST_DIR}"
+	SAFE_ENV="prompt -z chroot ${TARGET}"
 elif [[ ${1} == -u ]]; then
 	SAFE_ENV="prompt -z"
 fi
@@ -19,39 +17,39 @@ fi
 ################################################################################
 
 if [[ ${1} == -i ]]; then
-	umount					${INST_DIR}/dev/*	2>/dev/null
-	umount					${INST_DIR}/*		2>/dev/null
-	if [[ ! -d ${INST_DIR}/boot ]]; then
-#>>>		tar -pvvx -C ${INST_DIR} -f	$(ls ${FILE_SRC}/stage3-i686-*.tar.bz2	| tail -n1)
-		tar -pvvx -C ${INST_DIR} -f	$(ls ${FILE_SRC}/stage3-amd64-*.tar.bz2	| tail -n1)
-		xz -cd				$(ls ${FILE_SRC}/portage-*.tar.xz	| tail -n1) |
-		tar -pvvx -f- -C		${INST_DIR}/usr
+	umount					${TARGET}/dev/*		2>/dev/null
+	umount					${TARGET}/*		2>/dev/null
+	if [[ ! -d ${TARGET}/boot ]]; then
+#>>>		tar -pvvx -C ${TARGET} -f	$(ls ${SOURCE}/stage3-i686-*.tar.bz2	| tail -n1)
+		tar -pvvx -C ${TARGET} -f	$(ls ${SOURCE}/stage3-amd64-*.tar.bz2	| tail -n1)
+		xz -cd				$(ls ${SOURCE}/portage-*.tar.xz		| tail -n1) |
+		tar -pvvx -f- -C		${TARGET}/usr
 	fi
-	mount -v --bind /dev			${INST_DIR}/dev
-	mount -v --bind /dev/pts		${INST_DIR}/dev/pts
-	mount -v --bind /proc			${INST_DIR}/proc
-	mount -v --bind /sys			${INST_DIR}/sys
-	${MKDIR}				${INST_DIR}/_build
-	${RSYNC_U} ${FILE_SRC}/handbook-*	${INST_DIR}/_build/
-	${RSYNC_U} ${FILE_SRC}/portage-*	${INST_DIR}/_build/
-	${RSYNC_U} ${FILE_SRC}/stage3-*		${INST_DIR}/_build/
-	${MKDIR}				${INST_DIR}/_gentoo
-	${RSYNC_U} /_gentoo/*.{okay,OKAY}	${INST_DIR}/_gentoo/
-	${MKDIR}				${INST_DIR}/.g/.home
-	${HOME}/scripts/_sync _home _build	${INST_DIR}/.g/.home
-	${RM}					${INST_DIR}/.g/.home/.ssh/id_*
+	mount -v --bind /dev			${TARGET}/dev
+	mount -v --bind /dev/pts		${TARGET}/dev/pts
+	mount -v --bind /proc			${TARGET}/proc
+	mount -v --bind /sys			${TARGET}/sys
+	${MKDIR}				${TARGET}/_build
+	${RSYNC_U} ${SOURCE}/handbook-*	${TARGET}/_build/
+	${RSYNC_U} ${SOURCE}/portage-*	${TARGET}/_build/
+	${RSYNC_U} ${SOURCE}/stage3-*		${TARGET}/_build/
+	${MKDIR}				${TARGET}/_gentoo
+	${RSYNC_U} /_gentoo/*.{okay,OKAY}	${TARGET}/_gentoo/
+	${MKDIR}				${TARGET}/.g/.home
+	${HOME}/scripts/_sync _home _build	${TARGET}/.g/.home
+	${RM}					${TARGET}/.g/.home/.ssh/id_*
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/scripts/_sync mount g sda
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/setup/.setconf
 #BUILD	${SAFE_ENV}				locale-gen
 #BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge ccache debugedit portage				|| exit 1
 #BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge eselect gcc-config gentoolkit java-config	|| exit 1
 #BUILD	HOME=/.g/.home ${SAFE_ENV}		emerge --emptytree system world				|| exit 1
-#BUILD	${RSYNC_U} /usr/portage/		${INST_DIR}/usr/portage					|| exit 1
+#BUILD	${RSYNC_U} /usr/portage/		${TARGET}/usr/portage					|| exit 1
 #>>>	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system					|| exit 1
 #BUILD	${SAFE_ENV}				eselect profile set 1
 	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system -u
-	umount					${INST_DIR}/dev/*	2>/dev/null
-	umount					${INST_DIR}/*		2>/dev/null
+	umount					${TARGET}/dev/*		2>/dev/null
+	umount					${TARGET}/*		2>/dev/null
 	exit 0
 
 ########################################
