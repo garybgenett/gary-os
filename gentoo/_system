@@ -70,6 +70,7 @@ elif [[ ${1} == -u ]]; then
 	${LL} /_gentoo
 	cat /_gentoo/+okay
 	cat /dev/null >/var/lib/portage/world
+	locale-gen
 	declare COMMAND
 	${SED} -n \
 		-e "s/^#[[:space:]]+(gcc-config[ ].+$)/\1/gp" \
@@ -100,10 +101,6 @@ elif [[ ${1} != -! ]]; then
 fi
 
 ################################################################################
-
-locale-gen
-
-########################################
 
 declare OPTS="-mindepth 1 -mount \
 	    \( -path /.g -prune \) \
