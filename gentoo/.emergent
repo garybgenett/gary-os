@@ -69,6 +69,19 @@ for TOKEN in $(cat ${OUT_DIR}/_packages.db); do
 	fi
 done
 
+${GREP} -v "^[#]" ${HOME}/setup/gentoo/package.*		|
+	${SED} -n "s/^[^:]+[:]([a-z][^[:space:]]+).+$/\1/gp"	|
+	sort							|
+	uniq							\
+	>${OUT_DIR}/_packages.modified
+
+${GREP} -v "^[#]" ${HOME}/setup/gentoo/package.*		|
+	${GREP} "[#][ ]gentoo[ ]required"			|
+	${SED} -n "s/^[^:]+[:]([a-z][^[:space:]]+).+$/\1/gp"	|
+	sort							|
+	uniq							\
+	>${OUT_DIR}/_packages.modified.required
+
 ########################################
 
 cat /dev/null >${OUT_DIR}/_use.disabled
