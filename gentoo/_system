@@ -65,7 +65,7 @@ elif [[ ${1} == -i ]]; then
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/scripts/_sync mount g sda
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/setup/.setconf
 	if ${BLD}; then
-		${SAFE_ENV}			locale-gen
+		${SAFE_ENV}			locale-gen						|| exit 1
 		HOME=/.g/.home ${SAFE_ENV}	emerge ${OPT} ccache debugedit portage glibc gcc	|| exit 1
 		HOME=/.g/.home ${SAFE_ENV}	emerge ${OPT} eselect genkernel gentoolkit		|| exit 1
 		${SAFE_ENV}			eselect profile set 1					|| exit 1
@@ -81,8 +81,10 @@ elif [[ ${1} == -i ]]; then
 		HOME=/.g/.home ${SAFE_ENV}	genkernel --loglevel=5 --symlink kernel --menuconfig	|| exit 1; else
 		HOME=/.g/.home ${SAFE_ENV}	genkernel --loglevel=5 --symlink kernel			\
 						--kernel-config=/.setup/linux/config-gentoo64-${KRN}	|| exit 1; fi
+#>>>		KRN="kernel-genkernel-x86-${KRN}-gentoo"						|| exit 1
+		KRN="kernel-genkernel-x86_64-${KRN}-gentoo"						|| exit 1
 		${RM}				${TARGET}/boot/_cur					|| exit 1
-		${LN} kernel-*-${KRN}-gentoo	${TARGET}/boot/_cur					|| exit 1
+		${LN} ${KRN}			${TARGET}/boot/_cur					|| exit 1
 		${RM}				${TARGET}/boot/_new					|| exit 1
 		${LN} kernel			${TARGET}/boot/_new					|| exit 1
 		${RM}				${TARGET}/boot/_old					|| exit 1
@@ -209,8 +211,9 @@ elif [[ ${1} == -u ]]; then
 
 elif [[ ${1} != -! ]]; then
 	if [[ ${1} != -f ]]; then
-	${SAFE_ENV} emerge --verbose --sync				|| exit 1; fi
-	${SAFE_ENV} emerge --emptytree --fetch-all-uri system world	|| exit 1
+		${SAFE_ENV} emerge --verbose --sync
+	fi
+	${SAFE_ENV} emerge --emptytree --fetch-all-uri system world
 fi
 
 ################################################################################
