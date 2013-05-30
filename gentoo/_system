@@ -181,7 +181,7 @@ elif [[ ${1} == -u ]]; then
 	for SELECT in \
 		mesa:--auto		\
 		opengl:xorg-x11		\
-		python:python2.7	\
+		python:python3.2	\
 		unison:2.45		\
 		vi:gvim			\
 		\
