@@ -7,16 +7,16 @@ declare SOURCE="/.g/_data/_target/iso"
 
 ########################################
 
-declare AUTO="false"
-declare OPT="--ask y"
+declare AUTO=
+declare ASK="--ask y"
 declare BLD="false"
 declare KRN="false"
 declare CFG="false"
 
 if [[ ${1} == -a ]]; then
 	shift
-	AUTO="true"
-	OPT="--ask n"
+	AUTO="-a"
+	ASK="--ask n"
 	BLD="true"
 	KRN="true"
 fi
@@ -66,18 +66,18 @@ elif [[ ${1} == -i ]]; then
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/setup/.setconf
 	if ${BLD}; then
 		${SAFE_ENV}			locale-gen						|| exit 1
-		HOME=/.g/.home ${SAFE_ENV}	emerge ${OPT} ccache debugedit portage glibc gcc	|| exit 1
-		HOME=/.g/.home ${SAFE_ENV}	emerge ${OPT} eselect genkernel gentoolkit		|| exit 1
+		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} ccache debugedit portage glibc gcc	|| exit 1
+		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} eselect genkernel gentoolkit		|| exit 1
 		${SAFE_ENV}			eselect profile set 1					|| exit 1
-		HOME=/.g/.home ${SAFE_ENV}	emerge ${OPT} --emptytree system world			|| exit 1
+		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} --emptytree system world			|| exit 1
 	fi
 	if ${KRN}; then for KRN in $(
 		${SED} -n "s/^['][=]gentoo-sources-(.+)[']$/\1/gp" ${HOME}/setup/gentoo/.packages
 	); do
 		${RM}				${TARGET}/usr/src/linux					|| exit 1
 		${LN} linux-${KRN}-gentoo	${TARGET}/usr/src/linux					|| exit 1
-		HOME=/.g/.home ${SAFE_ENV}	emerge ${OPT} =gentoo-sources-${KRN}			|| exit 1
-		if !${AUTO}; then
+		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} =gentoo-sources-${KRN}			|| exit 1
+		if [[ -z ${AUTO} ]]; then
 		HOME=/.g/.home ${SAFE_ENV}	genkernel --loglevel=5 --symlink kernel --menuconfig	|| exit 1; else
 		HOME=/.g/.home ${SAFE_ENV}	genkernel --loglevel=5 --symlink kernel			\
 						--kernel-config=/.setup/linux/config-gentoo64-${KRN}	|| exit 1; fi
@@ -162,8 +162,8 @@ END_OF_FILE
 			done
 		done
 	fi
-	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system -f	|| exit 1
-	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system -u	|| exit 1
+	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system ${AUTO} -f	|| exit 1
+	HOME=/.g/.home ${SAFE_ENV}		/.setup/gentoo/_system ${AUTO} -u	|| exit 1
 	umount					${TARGET}/dev/*	2>/dev/null
 	umount					${TARGET}/*	2>/dev/null
 	exit 0
@@ -195,17 +195,17 @@ elif [[ ${1} == -u ]]; then
 	done
 	cat /dev/null >/var/lib/portage/world
 	declare ECLEAN="eclean --verbose --destructive" #>>> --package-names
-	${SAFE_ENV} emerge --update --deep --newuse system				|| exit 1
-	${SAFE_ENV} emerge --noreplace --select $(${HOME}/setup/gentoo/.packages)	|| exit 1
-	${SAFE_ENV} emerge --update --deep --newuse world				|| exit 1
-	${SAFE_ENV} dispatch-conf							|| exit 1
-	${SAFE_ENV} emerge --depclean							|| exit 1
-	${SAFE_ENV} revdep-rebuild --ignore						|| exit 1
-	${SAFE_ENV} module-rebuild populate						|| exit 1
-	${SAFE_ENV} module-rebuild rebuild						|| exit 1
-	${SAFE_ENV} emaint --fix all							|| exit 1
-	${SAFE_ENV} ${ECLEAN} distfiles --fetch-restricted				|| exit 1
-	${SAFE_ENV} ${ECLEAN} packages							|| exit 1
+	${SAFE_ENV} emerge ${ASK} --update --deep --newuse system				|| exit 1
+	${SAFE_ENV} emerge ${ASK} --noreplace --select $(${HOME}/setup/gentoo/.packages)	|| exit 1
+	${SAFE_ENV} emerge ${ASK} --update --deep --newuse world				|| exit 1
+	${SAFE_ENV} dispatch-conf								|| exit 1
+	${SAFE_ENV} emerge --depclean								|| exit 1
+	${SAFE_ENV} revdep-rebuild --ignore							|| exit 1
+	${SAFE_ENV} module-rebuild populate							|| exit 1
+	${SAFE_ENV} module-rebuild rebuild							|| exit 1
+	${SAFE_ENV} emaint --fix all								|| exit 1
+	${SAFE_ENV} ${ECLEAN} distfiles --fetch-restricted					|| exit 1
+	${SAFE_ENV} ${ECLEAN} packages								|| exit 1
 
 ########################################
 
@@ -225,7 +225,7 @@ ${SAFE_ENV} ${HOME}/setup/gentoo/.hacks
 
 ########################################
 
-if [[ -n ${1} ]] && [[ ${1} != -f ]]; then
+if [[ -z ${AUTO} ]] && [[ ${1} == -u ]]; then
 	eselect news read new
 fi
 
