@@ -49,6 +49,13 @@ fi
 
 ########################################
 
+if [[ ${1} == -0  ]]; then ${HOME}/setup/gentoo/_system -a -b -k -i	; exit 0; fi
+if [[ ${1} == -0! ]]; then ${HOME}/setup/gentoo/_system -a -i		; exit 0; fi
+if [[ ${1} == -1  ]]; then ${HOME}/setup/gentoo/_system -c -i		; exit 0; fi
+if [[ ${1} == -1! ]]; then ${HOME}/setup/gentoo/_system -a -b -i	; exit 0; fi
+
+########################################
+
 if [[ ${1} == -i ]]; then
 	umount					${TARGET}/dev/*	2>/dev/null
 	umount					${TARGET}/*	2>/dev/null
