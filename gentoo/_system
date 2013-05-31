@@ -9,18 +9,15 @@ declare SOURCE="/.g/_data/_target/iso"
 
 declare AUTO=
 declare ASK="--ask y"
-declare BLD="false"
-declare KRN="false"
-declare CFG="false"
-
 if [[ ${1} == -a ]]; then
 	shift
 	AUTO="-a"
 	ASK="--ask n"
-	BLD="true"
-	KRN="true"
 fi
 
+declare BLD="false"
+declare KRN="false"
+declare CFG="false"
 if [[ ${1} == -b ]]; then
 	shift
 	BLD="true"
