@@ -21,6 +21,10 @@ if [[ ${1} == -a ]]; then
 	KRN="true"
 fi
 
+if [[ ${1} == -b ]]; then
+	shift
+	BLD="true"
+fi
 if [[ ${1} == -c ]]; then
 	shift
 	CFG="true"
