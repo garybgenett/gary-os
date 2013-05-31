@@ -45,10 +45,11 @@ fi
 if [[ ${1} == -s ]]; then
 	${SAFE_ENV} /usr/bin/env bash -o vi
 	exit 0
+fi
 
 ########################################
 
-elif [[ ${1} == -i ]]; then
+if [[ ${1} == -i ]]; then
 	umount					${TARGET}/dev/*	2>/dev/null
 	umount					${TARGET}/*	2>/dev/null
 	if [[ ! -d ${TARGET}/boot ]]; then
@@ -172,10 +173,11 @@ END_OF_FILE
 	umount					${TARGET}/dev/*	2>/dev/null
 	umount					${TARGET}/*	2>/dev/null
 	exit 0
+fi
 
-########################################
+################################################################################
 
-elif [[ ${1} == -u ]]; then
+if [[ ${1} == -u ]]; then
 	${LL} /_gentoo
 	cat /_gentoo/+okay
 	locale-gen
