@@ -2,31 +2,10 @@
 # portage package mask file
 ################################################################################
 
-# http://forums.gentoo.org/viewtopic-p-7300738.html?sid=7936e02637b5c5e5f34bb1e395f9490e
-# sed -i 's/AM_CONFIG_HEADER/AC_CONFIG_HEADERS/' configure.ac || die
->=sys-devel/automake-1.13
-
-# http://forums.gentoo.org/viewtopic-t-958182.html?sid=34055b963b72e1f272c948b61f21652e
-# issue with "caps" USE flag
->=dev-libs/libgcrypt-1.5.2
-
-# dependency errors with ">=app-misc/pax-utils-0.5"
->=sys-kernel/genkernel-3.4.45
-
 # https://bugs.gentoo.org/show_bug.cgi?id=466766
-# fails to build
+# fails to build: =dev-lang/rakudo-2013.04.ebuild
 >=dev-lang/nqp-2013.02
 >=dev-lang/rakudo-2013.02
-
-# causes dependency errors
->=dev-lisp/asdf-2.33
->=dev-lisp/uiop-2.33
->=dev-lisp/gentoo-init-1.0
-# fails to build
->=dev-lisp/clisp-2.49
-
-# fails to build
->=net-analyzer/wireshark-1.10
 
 ################################################################################
 # end of file
