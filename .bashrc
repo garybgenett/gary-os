@@ -1100,7 +1100,7 @@ function indexer {
 				declare IDX__TYPE="$(echo -en "${FILE}" | cut -d$'\t' -f1 | cut -d, -f1)"
 				declare IDX_CHMOD="$(echo -en "${FILE}" | cut -d$'\t' -f4 | cut -d, -f2)"
 				declare IDX_CHOWN="$(echo -en "${FILE}" | cut -d$'\t' -f5 | cut -d, -f2)"
-				declare IDX_TOUCH="$(echo -en "${FILE}" | cut -d$'\t' -f6 | cut -d, -f1 | ${SED} "s/(${SED_DATE})[T](${SED_TIME}${SED_ZONE})/\1 \2/g")"
+				declare IDX_TOUCH="$(echo -en "${FILE}" | cut -d$'\t' -f6 | cut -d, -f1 | ${SED} "s/(${SED_DATE})[T+](${SED_TIME}${SED_ZONE})/\1 \2/g")"
 				if ${DEBUG}; then
 					echo -en "RESTORE: ${TARGET}\n"
 					do_file
