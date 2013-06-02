@@ -26,6 +26,10 @@ x11-plugins/pidgin-sipe			~amd64		# gentoo required
 sys-boot/efibootmgr			~amd64
 sys-boot/grub				~amd64
 
+dev-lang/perl				~amd64
+perl-core/ExtUtils-ParseXS		~amd64
+virtual/perl-ExtUtils-ParseXS		~amd64
+
 net-misc/unison				~amd64
 
 ########################################
