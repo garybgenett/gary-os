@@ -32,6 +32,10 @@ virtual/perl-ExtUtils-ParseXS		~amd64
 
 net-misc/unison				~amd64
 
+www-client/firefox			~amd64
+mail-client/thunderbird			~amd64
+dev-libs/nspr				~amd64
+
 ########################################
 
 # https://bugs.gentoo.org/show_bug.cgi?id=405475
