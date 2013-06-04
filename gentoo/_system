@@ -251,6 +251,9 @@ wc -l /_gentoo/_packages.db
 diff  /_gentoo/_packages.db /_gentoo/_packages |
 	${GREP} "^[<>]"
 
+echo -en "\n"
+${LL} /_gentoo/+okay*
+
 exit 0
 ################################################################################
 # end of file
