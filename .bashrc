@@ -942,7 +942,7 @@ function indexer {
 # 11	(target)
 ####################
 	declare SED_DATE="[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
-	declare SED_TIME="[0-9]{2}[:][0-9]{2}[:][0-9]{2}"
+	declare SED_TIME="[0-9]{2}[:][0-9]{2}[:][0-9]{2}([.][0-9]{10})?"
 	declare SED_ZONE="[A-Z]{3}"
 	declare FILE=
 	declare DEBUG="false"
@@ -1199,7 +1199,7 @@ function indexer {
 			${NICELY} find "${FILE}" \
 				-maxdepth 0 \
 				-printf "%y,%Y\t%i\t%n\t%M,%m\t%u:%g,%U:%G\t%T+%TZ,%T@\t%k,%s\t${SIZE}\t${HASH}\t${NULL}\t%p\t(%l)\n" |
-					${SED} -e "s/[.]0000000000//g" -e "s/(${SED_DATE})[+](${SED_TIME}${SED_ZONE})/\1T\2/g" |
+					${SED} -e "s/[.][0]{10}//g" -e "s/(${SED_DATE})[T+](${SED_TIME}${SED_ZONE})/\1T\2/g" |
 					tr '\t' '\0'
 		done
 	fi
