@@ -12,6 +12,7 @@ dev-lang/parrot				~amd64		# gentoo required
 dev-lang/rakudo				~amd64		# gentoo required
 dev-lua/luarocks			~amd64		# gentoo required
 games-fps/quakeforge			~amd64		# gentoo required
+media-gfx/mcomix			~amd64		# gentoo required
 net-analyzer/snort			~amd64		# gentoo required
 net-analyzer/tcptrace			~amd64		# gentoo required
 net-misc/cadaver			~amd64		# gentoo required
@@ -21,6 +22,10 @@ sys-devel/bison				~amd64		# gentoo required
 sys-fs/ext3grep				~amd64		# gentoo required
 x11-misc/whaw				~amd64		# gentoo required
 x11-plugins/pidgin-sipe			~amd64		# gentoo required
+
+########################################
+
+games-emulation/mekanix			x86		# gentoo required
 
 ################################################################################
 
@@ -33,9 +38,9 @@ virtual/perl-ExtUtils-ParseXS		~amd64
 
 net-misc/unison				~amd64
 
-www-client/firefox			~amd64
-mail-client/thunderbird			~amd64
 dev-libs/nspr				~amd64
+mail-client/thunderbird			~amd64
+www-client/firefox			~amd64
 
 ########################################
 
@@ -45,11 +50,6 @@ media-gfx/xfig				~amd64
 
 # fails to build: =dev-libs/ffcall-1.10
 dev-libs/ffcall				~amd64
-
-########################################
-
-games-emulation/mekanix			x86
-media-gfx/mcomix			~amd64
 
 ################################################################################
 # end of file
