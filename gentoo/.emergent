@@ -25,13 +25,24 @@ declare OPTS="-mindepth 1 -mount \
 	-or \( -path /.runit -prune \) \
 	-or \( -path /.setup -prune \) \
 	-or \( -path /_gentoo -prune \) \
+	\
+	-or \( -path /dev -prune \) \
+	-or \( -path /lost+found -prune \) \
+	-or \( -path /mnt -prune \) \
+	-or \( -path /proc -prune \) \
+	-or \( -path /run -prune \) \
+	-or \( -path /sys -prune \) \
+	-or \( -path /tmp -prune \) \
+	-or \( -path /var/log -prune \) \
+	-or \( -path /var/tmp -prune \) \
+	\
 	-or \( -path /boot -prune \) \
 	-or \( -path /lib64/firmware -prune \) \
 	-or \( -path /lib64/modules -prune \) \
 	-or \( -path /opt/Adobe -prune \) \
 	-or \( -path /opt/oracle-jdk-bin-\* -prune \) \
 	-or \( -path /opt/sun-jdk-\* -prune \) \
-	-or \( -path /tmp -prune \) \
+	-or \( -path /usr/lib32/debug -prune \) \
 	-or \( -path /usr/lib64/debug -prune \) \
 	-or \( -path /usr/portage -prune \) \
 	-or \( -path /usr/src/debug -prune \) \
