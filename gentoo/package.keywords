@@ -38,6 +38,13 @@ virtual/perl-ExtUtils-ParseXS		~amd64
 
 net-misc/unison				~amd64
 
+x11-base/xorg-drivers			~amd64
+x11-base/xorg-server			~amd64
+x11-drivers/*				~amd64
+x11-misc/xlockmore			~amd64
+x11-proto/inputproto			~amd64
+x11-wm/openbox				~amd64
+
 dev-libs/nspr				~amd64
 mail-client/thunderbird			~amd64
 www-client/firefox			~amd64
