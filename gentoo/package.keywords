@@ -38,6 +38,9 @@ virtual/perl-ExtUtils-ParseXS		~amd64
 
 net-misc/unison				~amd64
 
+app-admin/apache-tools			~amd64
+www-servers/apache			~amd64
+
 x11-base/xorg-drivers			~amd64
 x11-base/xorg-server			~amd64
 x11-drivers/*				~amd64
