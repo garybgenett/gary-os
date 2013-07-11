@@ -2,7 +2,7 @@
 source ${HOME}/.bashrc
 ################################################################################
 
-declare TARGET="/.g/_toor"
+declare TARGET="/.g/_data/_build/_gentoo"
 declare SOURCE="/.g/_data/_target/iso"
 
 ########################################
