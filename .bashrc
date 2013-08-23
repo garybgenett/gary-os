@@ -460,7 +460,13 @@ function git-clone {
 ########################################
 
 function git-list {
-	if [[ -n "$(echo "${1}" | ${GREP} "^[a-z0-9]{40}$")" ]]; then
+	if [[ ${1} == -r ]]; then
+		shift
+		declare HASH
+		for HASH in $(${FUNCNAME} | cut -d' ' -f4); do
+			${FUNCNAME} ${HASH} "${@}"
+		done
+	elif [[ -n "$(echo "${1}" | ${GREP} "^[a-z0-9]{40}$")" ]]; then
 		${GIT} ls-tree -lrt "${@}"
 	else
 		${GIT_CMD} log --pretty=format:"%ai %H %s %d" "${@}"
