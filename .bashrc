@@ -842,7 +842,13 @@ function git-save {
 
 function gtasks {
 	cd ${PIMDIR}
-	if [[ "${1}" == -c ]]; then
+	if [[ "${1}" == -a ]]; then
+		cd ${PIMDIR}
+		${FUNCNAME} -c
+		echo -en "\n"
+		${FUNCNAME}
+		${GIT_STS}
+	elif [[ "${1}" == -c ]]; then
 		declare FILE
 		for FILE in ${PIMDIR}/.tasks.*; do
 			echo -en ">>> ${FILE}\n"
