@@ -34,6 +34,7 @@ mkdir -p ${HOME}/.history/shell		2>/dev/null
 # variables
 ################################################################################
 
+export _SELF="$(realpath -- "${0}")"
 export SCRIPT="$(basename -- "${0}")"
 export UNAME="$(uname -s)"
 
