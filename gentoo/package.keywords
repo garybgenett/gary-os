@@ -31,6 +31,7 @@ games-emulation/mekanix			x86		# gentoo required
 
 sys-boot/efibootmgr			~amd64
 sys-boot/grub				~amd64
+sys-kernel/gentoo-sources		~amd64
 
 dev-lang/perl				~amd64
 perl-core/ExtUtils-ParseXS		~amd64
