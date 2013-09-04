@@ -49,6 +49,18 @@ x11-misc/xlockmore			~amd64
 x11-proto/inputproto			~amd64
 x11-wm/openbox				~amd64
 
+dev-libs/e_dbus				~amd64
+dev-libs/ecore				~amd64
+dev-libs/eet				~amd64
+dev-libs/eeze				~amd64
+dev-libs/efreet				~amd64
+dev-libs/eina				~amd64
+dev-libs/eio				~amd64
+dev-libs/embryo				~amd64
+media-libs/edje				~amd64
+media-libs/evas				~amd64
+x11-wm/enlightenment			~amd64
+
 dev-libs/nspr				~amd64
 mail-client/thunderbird			~amd64
 www-client/firefox			~amd64
