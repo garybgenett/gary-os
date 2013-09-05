@@ -2,8 +2,15 @@
 source ${HOME}/.bashrc
 ################################################################################
 
-declare TARGET="/.g/_data/_build/_gentoo"
 declare SOURCE="/.g/_data/_target/iso"
+
+declare TARGET="/.g/_data/_build/_gentoo"
+declare TOOR="-t"
+if [[ ${1} == -t ]]; then
+	shift
+	TARGET="/.g/_toor"
+	TOOR="-t"
+fi
 
 ########################################
 
@@ -49,10 +56,10 @@ fi
 
 ########################################
 
-if [[ ${1} == -0 ]]; then ${HOME}/setup/gentoo/_system -a -b -k -i	; exit 0; fi
-if [[ ${1} == -/ ]]; then ${HOME}/setup/gentoo/_system -a -i		; exit 0; fi
-if [[ ${1} == -1 ]]; then ${HOME}/setup/gentoo/_system -a -b -i		; exit 0; fi
-if [[ ${1} == -2 ]]; then ${HOME}/setup/gentoo/_system -c -i		; exit 0; fi
+if [[ ${1} == -0 ]]; then ${HOME}/setup/gentoo/_system ${TOOR} -a -b -k -i	; exit 0; fi
+if [[ ${1} == -/ ]]; then ${HOME}/setup/gentoo/_system ${TOOR} -a -i		; exit 0; fi
+if [[ ${1} == -1 ]]; then ${HOME}/setup/gentoo/_system ${TOOR} -a -b -i		; exit 0; fi
+if [[ ${1} == -2 ]]; then ${HOME}/setup/gentoo/_system ${TOOR} -c -i		; exit 0; fi
 
 ########################################
 
