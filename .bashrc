@@ -525,7 +525,7 @@ function psk {
 
 function mirror {
 	declare PREFIX="$(echo "${!#}" | ${SED} "s|^(http\|ftp)[s]?://||g" | ${SED} "s|^([^/]+).*$|\1|g")-$(date --iso)"
-	${WGET_R} -P "${PREFIX}" "${@}" 2>&1 | tee -a ${PREFIX}.log
+	${WGET_R} --directory-prefix "${PREFIX}" "${@}" 2>&1 | tee -a ${PREFIX}.log
 }
 
 function vlc-rc {
