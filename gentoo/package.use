@@ -51,7 +51,7 @@ dev-libs/openssl			rfc3779
 net-analyzer/tcpdump			-chroot
 
 x11-base/xorg-server			xnest xvfb
-x11-terms/rxvt-unicode			buffer-on-clear fading-colors focused-urgency font-styles mousewheel perl
+x11-terms/rxvt-unicode			fading-colors focused-urgency font-styles mousewheel perl
 
 app-text/enchant			aspell
 mail-client/mutt			sidebar
