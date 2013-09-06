@@ -45,6 +45,8 @@ www-servers/apache			-threads
 
 ########################################
 
+sys-boot/grub				-multislot
+
 sys-apps/paludis			pbins portage prebuilt-documentation search-index visibility
 
 dev-libs/openssl			rfc3779
