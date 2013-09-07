@@ -746,6 +746,7 @@ function git-backup {
 		index-dir ${PWD} -r "${@}"
 		return 0
 	fi
+	echo -en "* -delta\n" >${PWD}/.gitattributes
 	if [[ "${1}" == -! ]]; then
 		shift
 	else
