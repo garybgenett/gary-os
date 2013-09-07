@@ -754,12 +754,22 @@ function git-backup {
 			${SED} -e "s|^/|./|g" -e "s|/$||g"
 			)
 	fi
-	git-save ${FUNCNAME}				|| return 1
-	if [[ -n "${1}" ]]; then
-		{ git-purge "${1}" &&
-			${RM} ${PWD}.gitlog; }		|| FAIL="1"
+	declare COUNT=
+	declare AMEND=
+	if [[ "${1}" == *([0-9]) ]]; then
+		COUNT="${1}"
+		shift
 	fi
-#>>>	git-logdir					|| FAIL="1"
+	if [[ -n "${1}" ]]; then
+		AMEND="${1}"
+		shift
+	fi
+	git-save "${FUNCNAME}" "${AMEND}"	|| return 1
+	if [[ -n "${COUNT}" ]]; then
+		{ git-purge "${COUNT}" &&
+			${RM} ${PWD}.gitlog; }	|| FAIL="1"
+	fi
+#>>>	git-logdir				|| FAIL="1"
 	if [[ -n "${FAIL}" ]]; then
 		return 1
 	fi
@@ -831,11 +841,17 @@ function git-purge {
 
 function git-save {
 	declare MESSAGE="${FUNCNAME}"
+	declare AMEND=
 	if [[ -n ${1} ]]; then
 		MESSAGE="${1}"
+		shift
 	fi
-	${GIT_ADD} ./								|| return 1
-	${GIT_CMT} --all --message="[${MESSAGE} :: $(date --iso=seconds)]"	|| return 1
+	if [[ -n ${1} ]]; then
+		AMEND="[${1}]"
+		shift
+	fi
+	${GIT_ADD} ./									|| return 1
+	${GIT_CMT} --all --message="[${MESSAGE} :: $(date --iso=seconds)]${AMEND}"	|| return 1
 	return 0
 }
 
