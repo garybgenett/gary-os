@@ -4,16 +4,17 @@
 
 app-text/ghostscript-gpl		cups		# gentoo required
 app-text/poppler			cairo lcms qt4	# gentoo required
+dev-libs/e_dbus				connman		# gentoo required
 dev-libs/e_dbus				libnotify	# gentoo required
 dev-libs/keybinder			python		# gentoo required
 dev-libs/libxml2			python		# gentoo required
 media-fonts/font-adobe-100dpi		nls		# gentoo required
 media-fonts/font-misc-misc		nls		# gentoo required
-media-gfx/graphviz			cairo		# gentoo required
 media-libs/libsdl			joystick	# gentoo required
 net-wireless/wpa_supplicant		dbus		# gentoo required
 sys-auth/consolekit			policykit	# gentoo required
 sys-libs/gdbm				berkdb		# gentoo required
+sys-libs/talloc				python		# gentoo required
 
 ########################################
 
@@ -22,9 +23,7 @@ net-ftp/proftpd				openssl		# gentoo required
 dev-python/PyQt4			webkit		# gentoo required
 media-libs/chromaprint			tools		# gentoo required
 media-libs/libpng			apng		# gentoo required
-media-libs/mesa				gles2		# gentoo required
 media-libs/mesa				xa		# gentoo required
-media-video/ffmpeg			opus		# gentoo required
 sys-auth/pambase			consolekit	# gentoo required
 sys-fs/udev				gudev hwdb	# gentoo required
 sys-libs/zlib				minizip		# gentoo required
