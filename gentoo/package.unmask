@@ -2,6 +2,12 @@
 # portage package unmask file
 ################################################################################
 
+=sys-kernel/gentoo-sources-3.8.13
+
+########################################
+
+dev-java/sun-jdk
+
 games-roguelike/nethack
 
 games-fps/doom3

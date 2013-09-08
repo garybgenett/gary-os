@@ -7,13 +7,17 @@
 
 ########################################
 
-# https://bugs.gentoo.org/show_bug.cgi?id=466766
-# fails to build: =dev-lang/rakudo-2013.04.ebuild
->=dev-lang/nqp-2013.02
->=dev-lang/rakudo-2013.02
+# causes build errors
+>=sys-devel/automake-1.13
 
-# limited by sogo connector development
->=mail-client/thunderbird-17.0.6
+# causes dependency errors
+>=dev-lang/ruby-2.0.0
+
+# fails to build
+>=dev-lisp/clisp-2.49
+
+# fails to build
+>=net-analyzer/wireshark-1.10
 
 ################################################################################
 # end of file
