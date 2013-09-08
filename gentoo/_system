@@ -74,6 +74,8 @@ if [[ ${1} == -i ]]; then
 		${RSYNC_U} ${SOURCE}/handbook-*	${TARGET}/_build/
 		${RSYNC_U} ${SOURCE}/portage-*	${TARGET}/_build/
 		${RSYNC_U} ${SOURCE}/stage3-*	${TARGET}/_build/
+		${RSYNC_C}			${SOURCE}/portage-distfiles/* \
+						${TARGET}/usr/portage/distfiles/
 	fi
 	mount -v --bind /dev			${TARGET}/dev
 	mount -v --bind /dev/pts		${TARGET}/dev/pts
