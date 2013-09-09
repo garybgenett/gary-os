@@ -179,6 +179,7 @@ END_OF_FILE
 						${TARGET}/etc/gshadow	\
 						${TARGET}/etc/pam.d/su	\
 						${TARGET}/etc/sudoers
+		declare USER
 		for USER in			root	\
 						plastic
 		do				echo "password: ${USER}"
@@ -204,6 +205,7 @@ if [[ ${1} == -u ]]; then
 	gcc-config --list-profiles
 	java-config --set-system-vm $(equery list oracle-jdk-bin | awk '{print $1;}' | cut -d/ -f2 | cut -d. -f-2 | sort -n | tail -n1)
 	java-config --list-available-vms
+	declare SELECT
 	for SELECT in \
 		mesa:--auto		\
 		opengl:xorg-x11		\
