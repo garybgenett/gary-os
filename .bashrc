@@ -483,7 +483,8 @@ function git-patch {
 ########################################
 
 function git-remove {
-	${GIT} filter-branch --index-filter "git rm -fr --cached --ignore-unmatch ${@}" HEAD
+	declare FILTER="git rm -fr --cached --ignore-unmatch ${@}"
+	${GIT} filter-branch --index-filter "${FILTER}" HEAD
 }
 
 ########################################
