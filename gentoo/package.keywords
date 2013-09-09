@@ -37,6 +37,9 @@ dev-lang/perl				~amd64
 perl-core/ExtUtils-ParseXS		~amd64
 virtual/perl-ExtUtils-ParseXS		~amd64
 
+dev-lang/v8				~amd64
+net-libs/nodejs				~amd64
+
 net-misc/unison				~amd64
 
 app-admin/apache-tools			~amd64
@@ -67,7 +70,6 @@ mail-client/thunderbird			~amd64
 www-client/firefox			~amd64
 
 app-accessibility/speech-dispatcher	~amd64
-dev-lang/v8				~amd64
 media-plugins/gst-plugins-ffmpeg	~amd64
 media-tv/xbmc				~amd64
 media-video/ffmpeg			~amd64
