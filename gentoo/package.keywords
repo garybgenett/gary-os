@@ -69,10 +69,6 @@ dev-libs/nspr				~amd64
 mail-client/thunderbird			~amd64
 www-client/firefox			~amd64
 
-app-accessibility/speech-dispatcher	~amd64
-media-plugins/gst-plugins-ffmpeg	~amd64
-media-tv/xbmc				~amd64
-media-video/ffmpeg			~amd64
 www-client/chromium			~amd64
 
 ########################################
