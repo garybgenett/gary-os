@@ -89,6 +89,7 @@ if [[ ${1} == -i ]]; then
 						${TARGET}/usr/portage/distfiles/
 	fi
 	echo -en "${COMMIT}"			>${TARGET}/_commit
+	${RSYNC_U} ${HOME}/setup/gentoo/	${TARGET}/_gentoo/_gentoo
 	mount -v --bind /dev			${TARGET}/dev
 	mount -v --bind /dev/pts		${TARGET}/dev/pts
 	mount -v --bind /proc			${TARGET}/proc
@@ -254,8 +255,6 @@ elif [[ ${1} != -! ]]; then
 fi
 
 ################################################################################
-
-${RSYNC_U} ${HOME}/setup/gentoo/ /_gentoo/_gentoo
 
 ${SAFE_ENV} ${HOME}/setup/gentoo/.emergent
 ${SAFE_ENV} ${HOME}/setup/gentoo/.hacks
