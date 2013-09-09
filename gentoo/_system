@@ -12,6 +12,8 @@ if [[ ${1} == -t ]]; then
 	TOOR="-t"
 fi
 
+declare COMMIT="$(cat /.g/_data/zactive/.setup.git/refs/heads/master)"
+
 ########################################
 
 declare AUTO=
@@ -77,6 +79,7 @@ if [[ ${1} == -i ]]; then
 		${RSYNC_C}			${SOURCE}/portage-distfiles/* \
 						${TARGET}/usr/portage/distfiles/
 	fi
+	echo "${COMMIT}"			>${TARGET}/_commit
 	mount -v --bind /dev			${TARGET}/dev
 	mount -v --bind /dev/pts		${TARGET}/dev/pts
 	mount -v --bind /proc			${TARGET}/proc
