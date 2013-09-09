@@ -205,12 +205,14 @@ subversion
 clisp
 lua
 luarocks
+nodejs
 parrot
 python
 rakudo
 ruby
 rubygems
 tcl
+v8
 
 expect
 sqlite
