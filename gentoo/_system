@@ -90,6 +90,7 @@ if [[ ${1} == -i ]]; then
 	fi
 	echo -en "${COMMIT}"			>${TARGET}/_build/_commit
 	${RSYNC_U} ${HOME}/setup/gentoo/	${TARGET}/_build/_config
+	${RSYNC_U} ${HOME}/setup/linux/		${TARGET}/_build/_kernel
 	mount -v --bind /dev			${TARGET}/dev
 	mount -v --bind /dev/pts		${TARGET}/dev/pts
 	mount -v --bind /proc			${TARGET}/proc
