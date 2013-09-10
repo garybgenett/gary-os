@@ -239,6 +239,7 @@ if [[ ${1} == -u ]]; then
 	${SAFE_ENV} emerge ${ASK} --update --deep --newuse world				|| exit 1
 	${SAFE_ENV} dispatch-conf								|| exit 1
 	${SAFE_ENV} emerge --depclean								|| exit 1
+	${SAFE_ENV} emerge \@preserved-rebuild							|| exit 1
 	${SAFE_ENV} revdep-rebuild --ignore							|| exit 1
 	${SAFE_ENV} module-rebuild populate							|| exit 1
 	${SAFE_ENV} module-rebuild rebuild							|| exit 1
