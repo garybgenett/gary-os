@@ -19,7 +19,7 @@ for REPO in \
 	.static
 do
 	COMMIT="${COMMIT}${REPO}: $(
-		cat /.g/_data/zactive/${REPO}.git/refs/heads/master
+		cat /.g/_data/zactive/${REPO}.git/refs/heads/master 2>/dev/null
 	)\n"
 done
 
