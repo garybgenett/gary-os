@@ -780,6 +780,61 @@ function git-backup {
 
 ########################################
 
+function git-check {
+	declare FILE="${1}" && shift
+	declare NEW=".${FUNCNAME}-new"
+	declare OLD=".${FUNCNAME}-old"
+	function git-check-out {
+		touch --reference ${FILE} ${FILE}${NEW}		|| return 1
+		${GIT} checkout ${FILE}				|| return 1
+		chown --reference ${FILE}${NEW} ${FILE}		|| return 1
+		chmod --reference ${FILE}${NEW} ${FILE}		|| return 1
+		${CP} ${FILE} ${FILE}${OLD}			|| return 1
+		return 0
+	}
+	function git-check-new {
+		if [[ -n $(diff ${FILE} ${FILE}${NEW} 2>/dev/null) ]]; then
+			vdiff ${FILE} ${FILE}${NEW}		|| return 1
+		fi
+		return 0
+	}
+	function git-check-old {
+		if [[ -z $(diff ${FILE} ${FILE}${OLD} 2>/dev/null) ]]; then
+			return 1
+		fi
+		return 0
+	}
+	function git-check-end {
+		if {
+			[[ -f ${FILE}${NEW} ]] &&
+			[[ -z $(diff ${FILE} ${FILE}${NEW} 2>/dev/null) ]];
+		} || {
+			[[ -f ${FILE}${OLD} ]] &&
+			[[ -z $(diff ${FILE} ${FILE}${OLD} 2>/dev/null) ]];
+		} then
+			${MV} ${FILE}${NEW} ${FILE}		|| return 1
+			${RM} ${FILE}${OLD}			|| return 1
+		fi
+		${GIT_STS}					|| return 1
+		return 0
+	}
+	if [[ ! -f ${FILE}${NEW} ]]; then
+		${CP} ${FILE} ${FILE}${NEW}			|| return 1
+		${FUNCNAME}-out					|| return 1
+		${FUNCNAME}-new					|| return 1
+	fi
+	${VI} ${FILE} ${FILE}${NEW}				|| return 1
+	if ${FUNCNAME}-old; then
+		${FUNCNAME}-new					|| return 1
+		${GIT_CMT} ${FILE}				|| { ${FUNCNAME}-end; return 1; };
+		${FUNCNAME}-out					|| return 1
+	fi
+	${FUNCNAME}-end						|| return 1
+	return 0
+}
+
+########################################
+
 function git-clean {
 	${GIT} reset --soft							|| return 1
 	declare REF
