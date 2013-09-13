@@ -44,6 +44,8 @@ net-libs/nodejs				~amd64
 
 net-misc/unison				~amd64
 
+app-text/poppler			~amd64
+
 app-admin/apache-tools			~amd64
 www-servers/apache			~amd64
 
