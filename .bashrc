@@ -781,11 +781,17 @@ function git-backup {
 ########################################
 
 function git-clean {
-	${GIT} reset --soft						|| return 1
-	${GIT} reflog expire --verbose --all --expire-unreachable=0	|| return 1
-	${GIT} gc --prune=0						|| return 1
-	${GIT} gc --auto						|| return 1
-	${GIT} fsck --verbose --full --no-reflogs --strict		|| return 1
+	${GIT} reset --soft							|| return 1
+	declare REF
+	for REF in $(
+		${GIT_CMD} for-each-ref --format="%(refname)" refs/original	2>/dev/null
+	); do
+		${GIT} update-ref -d ${REF}					|| return 1
+	done
+	${GIT} reflog expire --verbose --all --expire=0 --expire-unreachable=0	|| return 1
+	${GIT} gc --prune=0							|| return 1
+	${GIT} gc --auto							|| return 1
+	${GIT} fsck --verbose --full --no-reflogs --strict			|| return 1
 	return 0
 }
 
