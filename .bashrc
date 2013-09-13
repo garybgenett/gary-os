@@ -1713,7 +1713,7 @@ function sync-dir {
 		declare CVSROOT=":pserver:anonymous@${REP_SRC/%\/=\/*}"
 		declare CVS_MOD="${REP_SRC/#*\/=\/}"
 		(cd ${BAS_DIR} &&
-			${CVS} -d${CVSROOT} checkout -d ${REP_DST} ${CVS_MOD})
+			${CVS} -d ${CVSROOT} checkout -d ${REP_DST} ${CVS_MOD})
 		if [[ -n ${REP_FUL} ]]; then
 			(cd ${BAS_DIR}/${REP_DST} &&
 				${GIT} -c i18n.commitencoding=ascii cvsimport -akmR)
