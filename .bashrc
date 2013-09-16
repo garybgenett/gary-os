@@ -362,7 +362,7 @@ fi
 
 ########################################
 
-alias rsynclook="${GREP} -v '^[.<>c][fdDLS]'"
+alias rsynclook="${GREP} -v '^[.<>][fdDLS][ ]'"
 
 alias logtail="tail -f /.runit/log/syslogd"
 alias synctail="${GREP} '^ERROR[:][ ]' /.g/_data/+sync/_sync.log ; echo ; tail -f /.g/_data/+sync/_sync.log"
