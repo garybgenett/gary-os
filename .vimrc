@@ -103,6 +103,31 @@ set laststatus				=2
 set statusline				=[\ %<%F%R%M%W%H\ ]%y\ %=\ [\ %n\ \|\ %b\ 0x%B\ \|\ %c,%v\ %l/%L\ %p%%\ ]
 
 "#######################################
+" tabline
+"#######################################
+
+set showtabline				=2
+set tabline				=%!CustomTabLine()
+
+function CustomTabLine()
+	let s = ''
+	for i in range(tabpagenr('$'))
+		let n = i + 1
+		let buflist = tabpagebuflist(n)
+		let winnr = tabpagewinnr(n) - 1
+		let s .= '%' . n . 'T'
+		let s .= '[ '
+		let s .= buflist[winnr] . (n == tabpagenr() ? '*' : '')
+		let s .= ' '
+		let s .= bufname(buflist[winnr]) . (getbufvar(n, '&modified') ? ',+' : '')
+		let s .= ' ]'
+	endfor
+	let s .= '%='
+	let s .= '%999X[X]%X'
+	return s
+endfunction
+
+"#######################################
 " abbreviations
 "#######################################
 
