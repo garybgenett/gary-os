@@ -100,7 +100,7 @@ set comments				=sr:/*,mb:*,ex:*/,b://,b:###,b:#,b:%,bf:+,bf:-
 
 set highlight				=sr
 set laststatus				=2
-set statusline				=[\ %<%F%R%M%W%H\ ]\ %=\ [\ %n\ %B\ \|\ %c,%v\ %l/%L\ %p%%\ ]
+set statusline				=[\ %<%F%R%M%W%H\ ]%y\ %=\ [\ %n\ \|\ %b\ 0x%B\ \|\ %c,%v\ %l/%L\ %p%%\ ]
 
 "#######################################
 " abbreviations
