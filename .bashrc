@@ -168,9 +168,9 @@ fi
 
 ########################################
 
-export MORE="less -RX"					; alias more="${MORE}"
-export VI="${REALTIME} vim -u ${HOME}/.vimrc -i NONE"	; alias vi="${VI}"
-export VIEW="eval ${VI} -nR -c \"set nowrap\""		; alias view="${VIEW/#eval\ /}"
+export MORE="less -RX"						; alias more="${MORE}"
+export VI="${REALTIME} vim -u ${HOME}/.vimrc -i NONE -p"	; alias vi="${VI}"
+export VIEW="eval ${VI} -nR -c \"set nowrap\""			; alias view="${VIEW/#eval\ /}"
 
 export PAGER="${MORE}"
 export EDITOR="${VI}"
