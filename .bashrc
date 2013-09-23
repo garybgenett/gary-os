@@ -693,6 +693,16 @@ function email {
 			-e "set copy = no" \
 			"${@}"
 	else
+		if [[ -d "${MAILDIR}" ]]; then
+			declare CRUFT="$(cd ${MAILDIR}; find $(find . -type d | ${GREP} "[/]tmp$") ! -empty	| sort)"
+			declare EMPTY="$(cd ${MAILDIR}; find . -type f -empty | ${GREP} -v "[/]lock$"		| sort)"
+			if [[ -n ${CRUFT} ]] || [[ -n ${EMPTY} ]]; then
+				echo -en "[CRUFT]\n${CRUFT}\n"
+				echo -en "[EMPTY]\n${EMPTY}\n"
+				cd - >/dev/null
+				return 1
+			fi
+		fi
 		${REALTIME} \
 		sudo -H -u \#1000 \
 				TMPDIR="${TMPDIR}" \
