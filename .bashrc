@@ -695,7 +695,7 @@ function email {
 	else
 		if [[ -d "${MAILDIR}" ]]; then
 			declare CRUFT="$(cd ${MAILDIR}; find $(find . -type d | ${GREP} "[/]tmp$") ! -empty	| sort)"
-			declare EMPTY="$(cd ${MAILDIR}; find . -type f -empty | ${GREP} -v "[/]lock$"		| sort)"
+			declare EMPTY="$(cd ${MAILDIR}; find . -type f -empty | ${GREP} -v "[./]lock$"		| sort)"
 			if [[ -n ${CRUFT} ]] || [[ -n ${EMPTY} ]]; then
 				echo -en "[CRUFT]\n${CRUFT}\n"
 				echo -en "[EMPTY]\n${EMPTY}\n"
