@@ -238,18 +238,23 @@ export X2VNC="x2vnc -west -tunnel -shared -noblank -lockdelay 60 -timeout 60"	; 
 
 ########################################
 
-export RDIFF_BACKUP="reporter rdiff-backup \
-	-v6 \
-	--force \
-	--backup-mode \
-	--no-hard-links \
-	--preserve-numerical-ids"
-export RDIFF_RM="rdiff-backup \
-	--force \
-	--remove-older-than 6M"
+export UNISON="${HOME}/.unison"
 
-alias rdiff-backup="${RDIFF_BACKUP}"
-alias rdiff-rm="${RDIFF_RM}"
+export UNISON_W="reporter unison \
+	-ui text \
+	-log \
+	-logfile ${UNISON}/_log \
+	-times \
+	-perms 0"
+export UNISON_U="${UNISON_W} \
+	-perms -1 \
+	-numericids \
+	-owner \
+	-group"
+export UNISON_F="${UNISON_U} \
+	-fastcheck false"
+
+alias unison="${UNISON_U}"
 
 ########################################
 
@@ -282,26 +287,6 @@ export RSYNC_W="${RSYNC_W} \
 	--modify-window=10"
 
 alias rsync="${RSYNC_U}"
-
-########################################
-
-export UNISON="${HOME}/.unison"
-
-export UNISON_W="reporter unison \
-	-ui text \
-	-log \
-	-logfile ${UNISON}/_log \
-	-times \
-	-perms 0"
-export UNISON_U="${UNISON_W} \
-	-perms -1 \
-	-numericids \
-	-owner \
-	-group"
-export UNISON_F="${UNISON_U} \
-	-fastcheck false"
-
-alias unison="${UNISON_U}"
 
 ########################################
 
