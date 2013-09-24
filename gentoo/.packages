@@ -183,7 +183,6 @@ xvkbd
 ########################################
 # toolkits
 
-rdiff-backup
 unison
 
 asciidoc
