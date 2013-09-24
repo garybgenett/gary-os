@@ -651,10 +651,6 @@ function email {
 		shift
 		MUTTRC="${MUTTRC}.all"
 	fi
-	if [[ ${1} == -i ]]; then
-		shift
-		MUTTRC="${MUTTRC}.imap"
-	fi
 	sudo -H -u \#1000 \
 		${MKDIR} ${TMPDIR}
 	cd ${TMPDIR}
