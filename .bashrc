@@ -645,12 +645,8 @@ function edit {
 ########################################
 
 function email {
-	declare TMPDIR="/.g/_data/zactive/_zcache"
+	declare TMPDIR="${HOME}/Desktop"
 	declare MUTTRC="${HOME}/.muttrc"
-	if [[ ${1} == -x ]] || [[ ${1} == -i ]]
-	then
-		TMPDIR="/tmp/_mutt"
-	fi
 	if [[ ${1} == -a ]]; then
 		shift
 		MUTTRC="${MUTTRC}.all"
@@ -690,6 +686,7 @@ function email {
 		fi
 		${REALTIME} \
 		sudo -H -u \#1000 \
+				MAILDIR="${MAILDIR}" \
 				TMPDIR="${TMPDIR}" \
 				EDITOR="${VI} +/^$" \
 				DISPLAY=":0" \
