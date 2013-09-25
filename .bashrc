@@ -1614,6 +1614,10 @@ function shell {
 		cd - >/dev/null
 		return 0
 	fi
+	if [[ ${DEST} == -i ]]; then
+		rsync root@me.garybgenett.net:/.g/_data/zactive/.static/.ssh/id_* ${HOME}/.ssh/
+		return 0
+	fi
 	case ${DEST} in
 		(me)	DEST="me.garybgenett.net"
 			[[ -z $(${PS} 2>/dev/null | ${GREP} "5900[:]") ]] && OPTS="${OPTS} -L 5900:127.0.0.1:5900"
