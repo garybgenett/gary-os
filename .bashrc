@@ -1217,7 +1217,7 @@ function indexer {
 			use warnings;
 			use File::Find;
 			while(<>){
-				chomp;
+				chomp();
 				my $size = 0;
 				my $size_of = sub {
 					if(-L){
