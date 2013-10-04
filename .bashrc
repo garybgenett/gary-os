@@ -651,6 +651,10 @@ function email {
 		shift
 		MUTTRC="${MUTTRC}.all"
 	fi
+	if [[ ${1} == -p ]]; then
+		shift
+		MUTTRC="${HOME}/.procmail.mutt"
+	fi
 	sudo -H -u \#1000 \
 		${MKDIR} ${TMPDIR}
 	cd ${TMPDIR}
