@@ -704,8 +704,8 @@ function email-copy {
 	if [[ -d ${SRC} ]] && [[ -d ${DST} ]]; then
 		echo -en "set mbox_type = maildir\n" >${TMPFILE}
 		echo -en "folder-hook . \"push " >>${TMPFILE}
-			echo -en "<tag-pattern>~A<enter>" >>${TMPFILE}
-			echo -en "<tag-prefix><copy-message><kill-line>${DST}<enter>y" >>${TMPFILE}
+			echo -en "<tag-pattern>~A<return>" >>${TMPFILE}
+			echo -en "<tag-prefix><copy-message><kill-line>${DST}<return>y" >>${TMPFILE}
 			echo -en "<quit>y" >>${TMPFILE}
 		echo -en "\"\n" >>${TMPFILE}
 		sudo -H -u \#1000 mutt \
