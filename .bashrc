@@ -479,6 +479,7 @@ function hist-grep {
 		cut -d: -f2- |
 		sort |
 		uniq --count |
+		sort --numeric-sort |
 		${GREP} "${@}"
 }
 
