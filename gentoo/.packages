@@ -160,6 +160,7 @@ xorg-x11
 arandr
 evtest
 libtxc_dxtn
+xev
 xrandr
 
 rxvt
