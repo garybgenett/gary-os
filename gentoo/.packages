@@ -157,8 +157,10 @@ ufed
 # x11
 
 xorg-x11
-libtxc_dxtn
+arandr
 evtest
+libtxc_dxtn
+xrandr
 
 rxvt
 rxvt-unicode
