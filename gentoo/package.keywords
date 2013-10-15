@@ -35,6 +35,7 @@ sys-kernel/gentoo-sources		~amd64
 
 dev-lang/perl				~amd64
 perl-core/ExtUtils-ParseXS		~amd64
+perl-core/Switch			~amd64
 virtual/perl-ExtUtils-ParseXS		~amd64
 
 dev-vcs/cvs2svn				~amd64
