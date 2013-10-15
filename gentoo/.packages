@@ -93,6 +93,7 @@ libperl
 perl
 perl-core/CGI
 perl-core/JSON-PP
+perl-core/Switch
 
 app-crypt/gnupg
 openssh
