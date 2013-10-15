@@ -39,6 +39,7 @@ ext4magic
 extundelete
 gptfdisk
 parted
+squashfs-tools
 
 coreutils
 diffutils
