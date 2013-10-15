@@ -838,7 +838,6 @@ function git-clean {
 	done
 	${GIT} reflog expire --verbose --all --expire=0 --expire-unreachable=0	|| return 1
 	${GIT} gc --prune=0							|| return 1
-	${GIT} gc --auto							|| return 1
 	${GIT} fsck --verbose --full --no-reflogs --strict			|| return 1
 	return 0
 }
