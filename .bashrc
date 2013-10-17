@@ -88,6 +88,7 @@ export CDPATH="${CDPATH}:/.g/_data/zactive"
 
 export PATH="."
 export PATH="${PATH}:${HOME}"
+export PATH="${PATH}:${HOME}/commands"
 export PATH="${PATH}:${HOME}/scripts"
 export PATH="${PATH}:/usr/local/bin"
 export PATH="${PATH}:/usr/local/sbin"
