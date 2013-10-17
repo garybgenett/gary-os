@@ -58,6 +58,10 @@ x11-misc/xlockmore			~amd64
 x11-proto/inputproto			~amd64
 x11-wm/openbox				~amd64
 
+x11-misc/dmenu				~amd64
+x11-terms/st				~amd64
+x11-wm/dwm				~amd64
+
 dev-libs/e_dbus				~amd64
 dev-libs/ecore				~amd64
 dev-libs/eet				~amd64
