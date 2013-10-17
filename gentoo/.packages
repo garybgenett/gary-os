@@ -167,9 +167,11 @@ xrandr
 
 rxvt
 rxvt-unicode
+st
 xsel
 xterm
 
+dmenu
 dwm
 enlightenment
 obconf
