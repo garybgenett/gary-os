@@ -27,20 +27,20 @@ set updatetime				=10
 " colors
 "#######################################
 
-highlight cursor     guibg=red   ctermbg=red   guifg=black    ctermfg=black
-highlight normal     guibg=black ctermbg=black guifg=gray     ctermfg=gray
+highlight cursor     guibg=red   ctermbg=red  guifg=black    ctermfg=black
+highlight normal     guibg=black ctermbg=none guifg=gray     ctermfg=gray
 
 filetype				on
 syntax					on
 set background				=light
 set guioptions				=aciA
 
-highlight comment    guibg=black ctermbg=black guifg=darkcyan ctermfg=darkcyan
-highlight nontext    guibg=black ctermbg=black guifg=darkcyan ctermfg=darkcyan
-highlight specialkey guibg=black ctermbg=black guifg=darkcyan ctermfg=darkcyan
+highlight comment    guibg=black ctermbg=none guifg=darkcyan ctermfg=darkcyan
+highlight nontext    guibg=black ctermbg=none guifg=darkcyan ctermfg=darkcyan
+highlight specialkey guibg=black ctermbg=none guifg=darkcyan ctermfg=darkcyan
 
-highlight folded     guibg=black ctermbg=black guifg=darkblue ctermfg=darkblue
-highlight foldcolumn guibg=black ctermbg=black guifg=darkblue ctermfg=darkblue
+highlight folded     guibg=black ctermbg=none guifg=darkblue ctermfg=darkblue
+highlight foldcolumn guibg=black ctermbg=none guifg=darkblue ctermfg=darkblue
 
 "#######################################
 " interface
