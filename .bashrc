@@ -933,9 +933,7 @@ function gtasks {
 			${RM} ${FILE} >/dev/null
 		done
 		gtasks_export.pl cruft
-		return 0
-	fi
-	if [[ -n "${@}" ]]; then
+	elif [[ -n "${@}" ]]; then
 		gtasks_export.pl "${@}"
 	else
 		gtasks_export.pl	&&
