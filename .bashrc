@@ -936,12 +936,7 @@ function gtasks {
 		return 0
 	fi
 	if [[ -n "${@}" ]]; then
-		if [[ "${1}" == 0 ]]; then
-			shift
-			gtasks_export.pl "0.Projects" "${@}"
-		else
-			gtasks_export.pl "${@}"
-		fi
+		gtasks_export.pl "${@}"
 	else
 		gtasks_export.pl	&&
 			read		&&
