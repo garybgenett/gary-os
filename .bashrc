@@ -549,6 +549,9 @@ function contacts {
 	elif [[ ${1} == -l ]]; then
 		shift
 		CONTACTS="contacts-ldap"
+	elif [[ ${1} == -p ]]; then
+		shift
+		CONTACTS="contacts-pathfinder"
 	elif [[ ${1} == -c ]]; then
 		shift
 		declare EXP_DIR="contacts.export"
