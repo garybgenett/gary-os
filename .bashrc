@@ -922,6 +922,8 @@ function gtasks {
 		cd ${PIMDIR}
 		${FUNCNAME} -c
 		echo -en "\n"
+		${FUNCNAME} -l
+		echo -en "\n"
 		${FUNCNAME}
 		${GIT_STS}
 	elif [[ "${1}" == -c ]]; then
@@ -933,6 +935,8 @@ function gtasks {
 			${RM} ${FILE} >/dev/null
 		done
 		gtasks_export.pl cruft
+	elif [[ "${1}" == -l ]]; then
+		gtasks_export.pl links
 	elif [[ -n "${@}" ]]; then
 		gtasks_export.pl "${@}"
 	else
