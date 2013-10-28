@@ -919,6 +919,7 @@ function git-save {
 function gtasks {
 	cd ${PIMDIR}
 	if [[ "${1}" == -a ]]; then
+		shift
 		cd ${PIMDIR}
 		${FUNCNAME} -c
 		echo -en "\n"
@@ -927,6 +928,7 @@ function gtasks {
 		${FUNCNAME}
 		${GIT_STS}
 	elif [[ "${1}" == -c ]]; then
+		shift
 		declare FILE
 		for FILE in ${PIMDIR}/.tasks.*; do
 			echo -en ">>> ${FILE}\n"
@@ -934,13 +936,14 @@ function gtasks {
 			echo -en "\n"
 			${RM} ${FILE} >/dev/null
 		done
-		gtasks_export.pl cruft
+		gtasks_export.pl cruft "${@}"
 	elif [[ "${1}" == -l ]]; then
-		gtasks_export.pl links
+		shift
+		gtasks_export.pl links "${@}"
 	elif [[ -n "${@}" ]]; then
 		gtasks_export.pl "${@}"
 	else
-		gtasks_export.pl	&&
+		gtasks_export.pl "${@}"	&&
 			read		&&
 			${GIT_CMT}	\
 				.auth	\
