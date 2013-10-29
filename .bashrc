@@ -940,6 +940,7 @@ function gtasks {
 	elif [[ "${1}" == -l ]]; then
 		shift
 		${FUNCNAME} -s -r
+		echo -en "\n"
 		gtasks_export.pl links "${@}"
 	elif [[ "${1}" == -s ]]; then
 		shift
