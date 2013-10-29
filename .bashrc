@@ -940,6 +940,9 @@ function gtasks {
 	elif [[ "${1}" == -l ]]; then
 		shift
 		gtasks_export.pl links "${@}"
+	elif [[ "${1}" == -s ]]; then
+		shift
+		gtasks_export.pl search "${@}"
 	elif [[ -n "${@}" ]]; then
 		gtasks_export.pl "${@}"
 	else
