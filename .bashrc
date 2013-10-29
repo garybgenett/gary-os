@@ -939,10 +939,20 @@ function gtasks {
 		gtasks_export.pl cruft "${@}"
 	elif [[ "${1}" == -l ]]; then
 		shift
+		${FUNCNAME} -s -r
 		gtasks_export.pl links "${@}"
 	elif [[ "${1}" == -s ]]; then
 		shift
-		gtasks_export.pl search "${@}"
+		if [[ "${1}" == -r ]]; then
+			shift
+			declare DUE_DATE="[0-9]{4}[-][0-9]{2}[-][0-9]{2}[T][0-9]{2}[:][0-9]{2}[:][0-9]{2}[.][0-9]{3}[Z]"
+			declare SOFT_LINK="[[].+[:].+[]]"
+			declare HTTP_LINK="http[s]?[:][/][/]"
+			declare BASH_LINK="[#$][ ]"
+			gtasks_export.pl search "(${DUE_DATE}|${SOFT_LINK}|${HTTP_LINK}|${BASH_LINK})"
+		else
+			gtasks_export.pl search "${@}"
+		fi
 	elif [[ -n "${@}" ]]; then
 		gtasks_export.pl "${@}"
 	else
