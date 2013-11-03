@@ -359,6 +359,7 @@ alias natter="iptables -L -nvx --line-numbers -t nat | ${MORE}"
 
 ########################################
 
+alias cal="cal --monday --three"
 alias clean="_sync clean"
 alias clock="clockywock"
 alias cryptsetup="cryptsetup --hash sha256 --cipher aes-cbc-essiv:sha256 --key-size 256"
