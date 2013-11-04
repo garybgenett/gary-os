@@ -954,6 +954,9 @@ function gtasks {
 		else
 			gtasks_export.pl search "${@}"
 		fi
+	elif [[ "${1}" == -z ]]; then
+		shift
+		gtasks_export.pl "0" "[working]"
 	elif [[ -n "${@}" ]]; then
 		gtasks_export.pl "${@}"
 	else
