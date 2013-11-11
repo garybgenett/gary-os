@@ -346,8 +346,11 @@ safecat
 chromium
 firefox
 keepassx
-qpdfview
 thunderbird
+
+pdftk
+qpdf
+qpdfview
 
 graphviz
 sci-visualization/gnuplot
