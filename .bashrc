@@ -105,9 +105,18 @@ fi
 
 ########################################
 
+# title escapes
+#	screen	ESC k ${TITLE} ESC \
+#	xterm	ESC ]0; ${TITLE} BEL
+# color escapes
+#	ansi	ESC [ ${0=normal,1=bold,7=reverse} ; ${30-37=color} m
+# escape codes
+#	ESC	\e
+#	BEL	\a
+
 export PROMPT_DIRTRIM=
 declare PROMPT_TOKEN_CLR="\[\e[7;31m\]"
-declare PROMPT_TOKEN_DFL="\[\e[0m\]"
+declare PROMPT_TOKEN_DFL="\[\e[0m\]"	# reset color
 declare PROMPT_TOKEN_PWD="\w"
 
 if [[ ${HOSTNAME} == spider ]]; then
@@ -130,7 +139,7 @@ if [[ ${PROMPT} == simple ]]; then
 	export PROMPT="simple"
 	export PROMPT_KEY=
 	export PROMPT_COMMAND=
-	echo -en "\e]0;\a"
+	echo -en "\e]0;\a"	# clear xterm title
 	PROMPT_TOKEN_PWD="<\W>"
 else
 	if [[ -z ${PROMPT} ]]; then
