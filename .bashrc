@@ -106,11 +106,14 @@ fi
 ########################################
 
 export PROMPT_DIRTRIM=
-declare PROMPT_TOKEN_HOST="\h"
-declare PROMPT_TOKEN_PPWD="\w"
+declare PROMPT_TOKEN_CLR="\[\e[7;31m\]"
+declare PROMPT_TOKEN_DFL="\[\e[0m\]"
+declare PROMPT_TOKEN_PWD="\w"
 
 if [[ ${HOSTNAME} == spider ]]; then
-	PROMPT_TOKEN_HOST="\e[1;32m\h\e[0;37m"
+	PROMPT_TOKEN_CLR="\[\e[0;32m\]"
+elif [[ ${HOSTNAME} == bastion ]]; then
+	PROMPT_TOKEN_CLR="\[\e[0;33m\]"
 fi
 
 declare PRE_PROMPT='\
@@ -128,7 +131,7 @@ if [[ ${PROMPT} == simple ]]; then
 	export PROMPT_KEY=
 	export PROMPT_COMMAND=
 	echo -en "\e]0;\a"
-	PROMPT_TOKEN_PPWD="<\W>"
+	PROMPT_TOKEN_PWD="<\W>"
 else
 	if [[ -z ${PROMPT} ]]; then
 		export PROMPT=
@@ -149,9 +152,12 @@ fi
 export PS1="\u@\h:\w\\$ "
 export PS1="\
 \n\
-[\u@${PROMPT_TOKEN_HOST}]:[\D{%a/%j_%FT%T%z}]\
+${PROMPT_TOKEN_CLR}\
+[\u@\h]:[\D{%a/%j_%FT%T%z}]\
 \n\
-[\#/\!]\[\ek\e\\\\\]:${PROMPT_TOKEN_PPWD}\\$"
+[\#/\!]\
+${PROMPT_TOKEN_DFL}\
+\[\ek\e\\\\\]:${PROMPT_TOKEN_PWD}\\$"
 
 ################################################################################
 # commands
