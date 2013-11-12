@@ -120,9 +120,9 @@ declare PROMPT_TOKEN_DFL="\[\e[0m\]"	# reset color
 declare PROMPT_TOKEN_PWD="\w"
 
 if [[ ${HOSTNAME} == spider ]]; then
-	PROMPT_TOKEN_CLR="\[\e[0;32m\]"
+	PROMPT_TOKEN_CLR="\[\e[7;32m\]"
 elif [[ ${HOSTNAME} == bastion ]]; then
-	PROMPT_TOKEN_CLR="\[\e[0;33m\]"
+	PROMPT_TOKEN_CLR="\[\e[7;33m\]"
 fi
 
 declare PRE_PROMPT='\
