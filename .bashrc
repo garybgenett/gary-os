@@ -123,6 +123,8 @@ if [[ ${HOSTNAME} == spider ]]; then
 	PROMPT_TOKEN_CLR="\[\e[7;32m\]"
 elif [[ ${HOSTNAME} == bastion ]]; then
 	PROMPT_TOKEN_CLR="\[\e[7;33m\]"
+elif [[ ${HOSTNAME} == gbg-autobot ]]; then
+	PROMPT_TOKEN_CLR="\[\e[7;35m\]"
 fi
 
 declare PRE_PROMPT='\
