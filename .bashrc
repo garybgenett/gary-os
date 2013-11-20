@@ -1364,10 +1364,15 @@ function maildirmake {
 ########################################
 
 function mount-robust {
+	declare RO=
+	if [[ ${1} == -0 ]]; then
+		RO="ro,"
+		shift
+	fi
 	declare CHK_EXT="fsck -t ext4 -pCV"
 	declare CHK_FAT="fsck -t vfat -V"
-	declare MNT_EXT="mount -v -t ext4 -o relatime,errors=remount-ro"
-	declare MNT_FAT="mount -v -t vfat -o relatime,errors=remount-ro,shortname=mixed"
+	declare MNT_EXT="mount -v -t ext4 -o ${RO}relatime,errors=remount-ro"
+	declare MNT_FAT="mount -v -t vfat -o ${RO}relatime,errors=remount-ro,shortname=mixed"
 	declare MNT_BND="mount -v --bind"
 	declare DEV="${1}"
 	declare DIR="${2}"
