@@ -34,9 +34,9 @@ sys-boot/grub				~amd64
 sys-kernel/gentoo-sources		~amd64
 
 dev-lang/perl				~amd64
-perl-core/ExtUtils-ParseXS		~amd64
-perl-core/Switch			~amd64
-virtual/perl-ExtUtils-ParseXS		~amd64
+perl-core/ExtUtils-ParseXS		~amd64		# gentoo required
+perl-core/Switch			~amd64		# gentoo required
+virtual/perl-ExtUtils-ParseXS		~amd64		# gentoo required
 
 dev-vcs/cvs2svn				~amd64
 
@@ -53,28 +53,28 @@ www-servers/apache			~amd64
 x11-base/xorg-drivers			~amd64
 x11-base/xorg-server			~amd64
 x11-drivers/*				~amd64
-x11-libs/libdrm				~amd64
-x11-misc/xlockmore			~amd64
-x11-proto/inputproto			~amd64
+x11-libs/libdrm				~amd64		# gentoo required
+x11-misc/xlockmore			~amd64		# gentoo required
+x11-proto/inputproto			~amd64		# gentoo required
 x11-wm/openbox				~amd64
 
 x11-misc/dmenu				~amd64
 x11-terms/st				~amd64
 x11-wm/dwm				~amd64
 
-dev-libs/e_dbus				~amd64
-dev-libs/ecore				~amd64
-dev-libs/eet				~amd64
-dev-libs/eeze				~amd64
-dev-libs/efreet				~amd64
-dev-libs/eina				~amd64
-dev-libs/eio				~amd64
-dev-libs/embryo				~amd64
-media-libs/edje				~amd64
-media-libs/evas				~amd64
+dev-libs/e_dbus				~amd64		# gentoo required
+dev-libs/ecore				~amd64		# gentoo required
+dev-libs/eet				~amd64		# gentoo required
+dev-libs/eeze				~amd64		# gentoo required
+dev-libs/efreet				~amd64		# gentoo required
+dev-libs/eina				~amd64		# gentoo required
+dev-libs/eio				~amd64		# gentoo required
+dev-libs/embryo				~amd64		# gentoo required
+media-libs/edje				~amd64		# gentoo required
+media-libs/evas				~amd64		# gentoo required
 x11-wm/enlightenment			~amd64
 
-dev-libs/nspr				~amd64
+dev-libs/nspr				~amd64		# gentoo required
 mail-client/thunderbird			~amd64
 www-client/firefox			~amd64
 
