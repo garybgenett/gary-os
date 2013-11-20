@@ -292,6 +292,7 @@ export RSYNC_W="${RSYNC_C} \
 	--delete \
 	--delete-during"
 export RSYNC_U="${RSYNC_W} \
+	--sparse \
 	--devices \
 	--specials \
 	--hard-links \
