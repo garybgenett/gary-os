@@ -312,6 +312,7 @@ openldap
 openvpn
 proftpd
 quagga
+radvd
 samba
 tftp-hpa
 
