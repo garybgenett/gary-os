@@ -74,6 +74,18 @@ media-libs/edje				~amd64		# gentoo required
 media-libs/evas				~amd64		# gentoo required
 x11-wm/enlightenment			~amd64
 
+app-emulation/libvirt			~amd64
+app-emulation/lxc			~amd64
+app-emulation/qemu			~amd64
+app-emulation/spice			~amd64
+app-emulation/spice-protocol		~amd64
+app-emulation/spice-vdagent		~amd64
+app-emulation/virt-manager		~amd64
+app-emulation/virt-viewer		~amd64
+net-misc/spice-gtk			~amd64
+sys-firmware/ipxe			~amd64		# gentoo required
+sys-firmware/seabios			~amd64		# gentoo required
+
 dev-libs/nspr				~amd64		# gentoo required
 dev-libs/nss				~amd64		# gentoo required
 mail-client/thunderbird			~amd64

@@ -30,6 +30,19 @@ sys-libs/zlib				minizip		# gentoo required
 virtual/udev				gudev hwdb	# gentoo required
 x11-libs/libdrm				libkms		# gentoo required
 
+########################################
+
+app-emulation/libvirt			python				# gentoo required
+app-emulation/libvirt-glib		introspection python		# gentoo required
+dev-libs/atk				introspection			# gentoo required
+net-dns/dnsmasq				script				# gentoo required
+net-libs/gtk-vnc			introspection python		# gentoo required
+net-misc/spice-gtk			introspection python gtk3	# gentoo required
+x11-libs/gdk-pixbuf			introspection			# gentoo required
+x11-libs/gtk+				introspection			# gentoo required
+x11-libs/pango				introspection			# gentoo required
+x11-libs/vte				introspection			# gentoo required
+
 ################################################################################
 
 app-portage/layman			git subversion
@@ -62,6 +75,8 @@ www-client/firefox			-wifi
 media-tv/xbmc				projectm -webserver
 media-video/vlc				projectm qt4 vlm
 
+app-emulation/libvirt			libvirtd lxc qemu uml virt-network
+app-emulation/qemu			ncurses sdl spice
 app-emulation/vmware-tools		vmware_guest_freebsd vmware_guest_linux vmware_guest_windows
 
 ################################################################################
