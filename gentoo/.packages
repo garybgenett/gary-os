@@ -84,6 +84,7 @@ htop
 
 dev-perl/DateManip
 dev-perl/Expect
+dev-perl/Sys-Virt
 dev-perl/WWW-Mechanize
 dev-perl/libwww-perl
 g-cpan
@@ -326,7 +327,15 @@ ghostscript-gpl
 
 dosbox
 dosemu
+libvirt
+lxc
 qemu
+app-emulation/spice
+spice-gtk
+spice-protocol
+spice-vdagent
+virt-manager
+virt-viewer
 
 run-mailcap
 urlview
