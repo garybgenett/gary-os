@@ -75,6 +75,7 @@ media-libs/evas				~amd64		# gentoo required
 x11-wm/enlightenment			~amd64
 
 dev-libs/nspr				~amd64		# gentoo required
+dev-libs/nss				~amd64		# gentoo required
 mail-client/thunderbird			~amd64
 www-client/firefox			~amd64
 
