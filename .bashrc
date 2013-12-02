@@ -975,7 +975,7 @@ function gtasks {
 		fi
 	elif [[ "${1}" == -z ]]; then
 		shift
-		gtasks_export.pl "0" "[working]"
+		gtasks_export.pl "0.GTD" "[today]"
 	elif [[ -n "${@}" ]]; then
 		gtasks_export.pl "${@}"
 	else
