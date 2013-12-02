@@ -973,6 +973,9 @@ function gtasks {
 		else
 			gtasks_export.pl search "${@}"
 		fi
+	elif [[ "${1}" == -x ]]; then
+		shift
+		gtasks_export.pl "0.GTD" "[weekly review]"
 	elif [[ "${1}" == -z ]]; then
 		shift
 		gtasks_export.pl "0.GTD" "[today]"
