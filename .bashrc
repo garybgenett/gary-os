@@ -769,7 +769,7 @@ function git-backup {
 		shift
 	else
 		index-dir ${PWD} -0 $(
-			${GREP} "^/" .gitignore |
+			${GREP} "^/" .gitignore 2>/dev/null |
 			${SED} -e "s|^/|./|g" -e "s|/$||g"
 			)
 	fi
