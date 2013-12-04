@@ -940,6 +940,8 @@ function gtasks {
 	cd ${PIMDIR}
 	if [[ "${1}" == -a ]]; then
 		shift
+		${FUNCNAME} -z
+		echo -en "\n"
 		${FUNCNAME} -c
 		echo -en "\n"
 		${FUNCNAME} -l
