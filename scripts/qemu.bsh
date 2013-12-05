@@ -132,9 +132,13 @@ exec qemu-system-x86_64 \
 
 sleep 1
 
-#>>>exec ${VNC} 127.0.0.1:590${QNUM} &
-exec spicy --host=127.0.0.1 --port=666${QNUM} &
-exec telnet 127.0.0.1 999${QNUM}
+if [[ ${QSYS} == 2 ]]; then
+	exec telnet 127.0.0.1 990${QNUM}
+else
+#>>>	exec ${VNC} 127.0.0.1:590${QNUM} &
+	exec spicy --host=127.0.0.1 --port=666${QNUM} &
+	exec telnet 127.0.0.1 999${QNUM}
+fi
 
 ################################################################################
 # end of file
