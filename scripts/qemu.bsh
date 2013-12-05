@@ -44,24 +44,42 @@ export QEMU_AUDIO_DRV="alsa"
 
 ########################################
 
-declare USER_NIC="net=10.10.0.0/24"
-USER_NIC="${USER_NIC},host=10.10.0.254"
-USER_NIC="${USER_NIC},dns=10.10.0.253"
-USER_NIC="${USER_NIC},smb=/tmp,smbserver=10.10.0.252"
-USER_NIC="${USER_NIC},dhcpstart=10.10.0.${QNUM}"
-USER_NIC="${USER_NIC},hostfwd=tcp::220${QNUM}-10.10.0.${QNUM}:22"
-USER_NIC="${USER_NIC},hostfwd=tcp::443${QNUM}-10.10.0.${QNUM}:443"
-USER_NIC="${USER_NIC},hostfwd=tcp::339${QNUM}-10.10.0.${QNUM}:3389"
+declare USER_NIC="user,vlan=0"
+USER_NIC="${USER_NIC},net=10.0.0.0/24"
+USER_NIC="${USER_NIC},host=10.0.0.254"
+USER_NIC="${USER_NIC},dns=10.0.0.253"
+USER_NIC="${USER_NIC},smb=/tmp,smbserver=10.0.0.252"
+USER_NIC="${USER_NIC},dhcpstart=10.0.0.${QNUM}"
+USER_NIC="${USER_NIC},hostfwd=tcp::220${QNUM}-10.0.0.${QNUM}:22"
+USER_NIC="${USER_NIC},hostfwd=tcp::443${QNUM}-10.0.0.${QNUM}:443"
+USER_NIC="${USER_NIC},hostfwd=tcp::339${QNUM}-10.0.0.${QNUM}:3389"
+
+declare BR
+declare VNIC[*]
+for BR in {1..5}; do
+	brctl addbr qemu${BR}					2>/dev/null
+	ip link set dev qemu${BR} up				2>/dev/null
+	ip address add dev qemu${BR} local 10.${BR}.0.254/16	2>/dev/null
+	VNIC[${BR}]="tap,vlan=${BR}"
+	VNIC[${BR}]="${VNIC[$BR]},name=qemu_10_${BR}_${QNUM}"
+	VNIC[${BR}]="${VNIC[$BR]},ifname=qemu_10_${BR}_${QNUM}"
+	VNIC[${BR}]="${VNIC[$BR]},script=/tmp/qemu-up"
+	VNIC[${BR}]="${VNIC[$BR]},downscript=/tmp/qemu-down"
+	iptables -D INPUT	-i qemu${BR}			-j ACCEPT 2>/dev/null
+	iptables -I INPUT 1	-i qemu${BR}			-j ACCEPT 2>/dev/null
+	iptables -D FORWARD	-i qemu${BR}	-o qemu${BR}	-j ACCEPT 2>/dev/null
+	iptables -I FORWARD 1	-i qemu${BR}	-o qemu${BR}	-j ACCEPT 2>/dev/null
+	iptables -D OUTPUT			-o qemu${BR}	-j ACCEPT 2>/dev/null
+	iptables -I OUTPUT 1			-o qemu${BR}	-j ACCEPT 2>/dev/null
+done
 
 cat >/tmp/qemu-up <<_EOF_
 #!/bin/bash
 echo \${@}
 IFC=\${1}
-NUM=\${IFC/#qemu}
+BR=\$(echo \${IFC} | cut -d_ -f3)
 ip link set dev \${IFC} up
-ip address add dev \${IFC} local 10.10.\${NUM}.254/24
-iptables -I INPUT 1 -i \${IFC} -j ACCEPT
-iptables -I OUTPUT 1 -o \${IFC} -j ACCEPT
+brctl addif qemu\${BR} \${IFC}
 # end of file
 _EOF_
 chmod -v 755 /tmp/qemu-up
@@ -70,9 +88,10 @@ cat >/tmp/qemu-down <<_EOF_
 #!/bin/bash
 echo \${@}
 IFC=\${1}
-NUM=\${IFC/#qemu}
-iptables -D INPUT -i \${IFC} -j ACCEPT
-iptables -D OUTPUT -o \${IFC} -j ACCEPT
+BR=\$(echo \${IFC} | cut -d_ -f3)
+ip link set dev \${IFC} down
+brctl delif qemu\${BR} \${IFC}
+ip link delete dev \${IFC}
 # end of file
 _EOF_
 chmod -v 755 /tmp/qemu-down
@@ -81,6 +100,7 @@ chmod -v 755 /tmp/qemu-down
 
 #>>>	-daemonize \
 #>>>	-vnc 127.0.0.1:${QNUM} \
+
 exec qemu-system-x86_64 \
 	-name ${FILE} \
 	-nodefaults \
@@ -94,12 +114,12 @@ exec qemu-system-x86_64 \
 	-smp cpus=2,sockets=2,cores=1,threads=1 \
 	-realtime mlock=off \
 	-m ${QMEM} \
-	-net nic,vlan=0,model=e1000 -net user,vlan=0,${USER_NIC} \
-	-net nic,vlan=1,model=e1000 -net tap,vlan=1,name=qemu1,ifname=qemu1,script=/tmp/qemu-up,downscript=/tmp/qemu-down \
-	-net nic,vlan=2,model=e1000 -net tap,vlan=2,name=qemu2,ifname=qemu2,script=/tmp/qemu-up,downscript=/tmp/qemu-down \
-	-net nic,vlan=3,model=e1000 -net tap,vlan=3,name=qemu3,ifname=qemu3,script=/tmp/qemu-up,downscript=/tmp/qemu-down \
-	-net nic,vlan=4,model=e1000 -net tap,vlan=4,name=qemu4,ifname=qemu4,script=/tmp/qemu-up,downscript=/tmp/qemu-down \
-	-net nic,vlan=5,model=e1000 -net tap,vlan=5,name=qemu5,ifname=qemu5,script=/tmp/qemu-up,downscript=/tmp/qemu-down \
+	-net nic,vlan=0,model=e1000,macaddr=52:54:00:10:00:0${QNUM} -net ${USER_NIC} \
+	-net nic,vlan=1,model=e1000,macaddr=52:54:00:10:01:0${QNUM} -net ${VNIC[1]} \
+	-net nic,vlan=2,model=e1000,macaddr=52:54:00:10:02:0${QNUM} -net ${VNIC[2]} \
+	-net nic,vlan=3,model=e1000,macaddr=52:54:00:10:03:0${QNUM} -net ${VNIC[3]} \
+	-net nic,vlan=4,model=e1000,macaddr=52:54:00:10:04:0${QNUM} -net ${VNIC[4]} \
+	-net nic,vlan=5,model=e1000,macaddr=52:54:00:10:05:0${QNUM} -net ${VNIC[5]} \
 	-spice addr=127.0.0.1,port=666${QNUM},disable-ticketing \
 	-vga qxl \
 	-soundhw hda \
