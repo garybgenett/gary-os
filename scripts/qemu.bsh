@@ -50,21 +50,27 @@ USER_NIC="${USER_NIC},hostfwd=tcp::339${QNUM}-10.0.2.1${QNUM}:3389"
 
 ########################################
 
+#>>>	-daemonize \
 #>>>	-vnc 127.0.0.1:${QNUM} \
 
 exec qemu-system-x86_64 \
 	-name ${FILE} \
-	-monitor telnet:127.0.0.1:999${QNUM},server,nowait \
-	-rtc base=utc,clock=host \
+	-nodefaults \
+	-no-user-config \
+	-machine type=pc,accel=kvm \
 	-enable-kvm \
-	-cpu core2duo \
-	-smp 2,cores=2 \
+	-monitor telnet:127.0.0.1:999${QNUM},server,nowait \
+	-serial telnet:127.0.0.1:990${QNUM},server,nowait \
+	-rtc base=utc,clock=host \
+	-cpu host \
+	-smp cpus=2,sockets=2,cores=1,threads=1 \
+	-realtime mlock=off \
 	-m ${QMEM} \
 	-net nic,vlan=0,model=e1000 -net user,vlan=0,${USER_NIC} \
 	-net nic,vlan=1,model=e1000 -net tap,vlan=1,script=no \
 	-spice addr=127.0.0.1,port=666${QNUM},disable-ticketing \
-	-vga std \
-	-soundhw all \
+	-vga qxl \
+	-soundhw hda \
 	-usb \
 	-usbdevice tablet \
 	${QOPT} \
