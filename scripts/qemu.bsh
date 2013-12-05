@@ -45,14 +45,14 @@ export QEMU_AUDIO_DRV="alsa"
 ########################################
 
 declare USER_NIC="user,vlan=0"
-USER_NIC="${USER_NIC},net=10.0.0.0/24"
+USER_NIC="${USER_NIC},net=10.0.0.0/16"
 USER_NIC="${USER_NIC},host=10.0.0.254"
 USER_NIC="${USER_NIC},dns=10.0.0.253"
 USER_NIC="${USER_NIC},smb=/tmp,smbserver=10.0.0.252"
-USER_NIC="${USER_NIC},dhcpstart=10.0.0.${QNUM}"
-USER_NIC="${USER_NIC},hostfwd=tcp::220${QNUM}-10.0.0.${QNUM}:22"
-USER_NIC="${USER_NIC},hostfwd=tcp::443${QNUM}-10.0.0.${QNUM}:443"
-USER_NIC="${USER_NIC},hostfwd=tcp::339${QNUM}-10.0.0.${QNUM}:3389"
+USER_NIC="${USER_NIC},dhcpstart=10.0.${QNUM}.254"
+USER_NIC="${USER_NIC},hostfwd=tcp::220${QNUM}-10.0.${QNUM}.254:22"
+USER_NIC="${USER_NIC},hostfwd=tcp::443${QNUM}-10.0.${QNUM}.254:443"
+USER_NIC="${USER_NIC},hostfwd=tcp::339${QNUM}-10.0.${QNUM}.254:3389"
 
 declare BR
 declare VNIC[*]
