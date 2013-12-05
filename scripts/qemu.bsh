@@ -29,6 +29,8 @@ else
 	QOPT="-drive file=${QIMG},if=ide,index=3,media=cdrom -boot once=d"
 fi
 
+########################################
+
 while [[ ! -c /dev/kvm ]]; do
 	rmmod kvm-intel
 	rmmod kvm
@@ -40,9 +42,13 @@ export SDL_VIDEO_X11_DGAMOUSE="0"
 export SDL_VIDEO_X11_MOUSEACCEL="0/0/0"
 export QEMU_AUDIO_DRV="alsa"
 
+########################################
+
 declare USER_NIC="dhcpstart=10.0.2.1${QNUM}"
 USER_NIC="${USER_NIC},hostfwd=tcp::220${QNUM}-10.0.2.1${QNUM}:22"
 USER_NIC="${USER_NIC},hostfwd=tcp::339${QNUM}-10.0.2.1${QNUM}:3389"
+
+########################################
 
 exec qemu-system-x86_64 \
 	-name ${FILE} \
@@ -61,6 +67,8 @@ exec qemu-system-x86_64 \
 	-usbdevice tablet \
 	${QOPT} \
 	"${@}" &
+
+########################################
 
 sleep 1
 
