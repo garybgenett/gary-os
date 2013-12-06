@@ -32,6 +32,12 @@ if [[ $(id -u) == 0 ]]; then
 	ROOT="true"
 fi
 
+########################################
+
+declare QDSK=
+
+declare I=
+
 ################################################################################
 
 if ${ROOT}; then
@@ -49,23 +55,25 @@ export QEMU_AUDIO_DRV="alsa"
 
 ########################################
 
-declare FLOC="${FILE}"
-FLOC="${FLOC} /.g/_data/_systems/qemu/${FILE}"
-FLOC="${FLOC} /.g/_data/_target/iso/${FILE}"
+QDSK="${FILE}"
+QDSK="${QDSK} /.g/_data/_systems/qemu/${FILE}"
+QDSK="${QDSK} /.g/_data/_target/iso/${FILE}"
 
-declare QIMG=
-declare I=
-for I in $(eval find ${FLOC} 2>/dev/null); do
-	QIMG="${I}"
+for I in $(eval find ${QDSK} 2>/dev/null); do
+	QDSK="${I}"
 done
 
-declare QOPT=
-if [[ -n ${QSYS} ]]; then
-#>>>	QOPT="-drive file=${QIMG},if=scsi,bus=0,unit=0,media=disk"
-	QOPT="-drive file=${QIMG},if=ide,index=0,media=disk"
-else
-	QOPT="-drive file=${QIMG},if=ide,index=3,media=cdrom -boot once=d"
-fi
+#>>>QDSK="-drive file=${QDSK},if=scsi,bus=0,unit=0,media=disk"
+#>>>QDSK="-drive file=${QDSK},if=ide,index=0,media=disk"
+#>>>QDSK="-drive file=${QDSK},if=ide,index=3,media=cdrom -boot once=d"
+
+QDSK="-device ahci,id=ahci0,multifunction=on"
+
+QDSK+=" "; QDSK+="-drive id=cdrom0,if=none"
+QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ahci0.0,bootindex=0"
+
+QDSK+=" "; QDSK+="-drive id=disk0,if=none,file=${I}"
+QDSK+=" "; QDSK+="-device ide-drive,drive=disk0,bus=ahci0.1,bootindex=1"
 
 ########################################
 
@@ -150,7 +158,7 @@ eval exec qemu-system-x86_64 \
 	-soundhw hda \
 	-usb \
 	-usbdevice tablet \
-	${QOPT} \
+	${QDSK} \
 	"${@}" ${FORK}
 
 ########################################
