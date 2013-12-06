@@ -9,12 +9,21 @@ declare QSYS="${1}"			; shift
 
 ################################################################################
 
-while [[ ! -c /dev/kvm ]]; do
-	rmmod -v kvm-intel
-	rmmod -v kvm
-	modprobe -v kvm
-	modprobe -v kvm-intel
-done
+declare ROOT="false"
+if [[ $(id -u) == 0 ]]; then
+	ROOT="true"
+fi
+
+################################################################################
+
+if ${ROOT}; then
+	while [[ ! -c /dev/kvm ]]; do
+		rmmod -v kvm-intel
+		rmmod -v kvm
+		modprobe -v kvm
+		modprobe -v kvm-intel
+	done
+fi
 
 export SDL_VIDEO_X11_DGAMOUSE="0"
 export SDL_VIDEO_X11_MOUSEACCEL="0/0/0"
