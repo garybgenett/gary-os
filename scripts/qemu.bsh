@@ -9,6 +9,24 @@ declare QSYS="${1}"			; shift
 
 ################################################################################
 
+declare FORK="true"
+declare INTERFACE="display"
+
+if [[ ${QSYS} == 0 ]]; then
+	FORK="false"
+elif [[ ${QSYS} == 1 ]]; then
+	INTERFACE="console"
+fi
+
+if ${FORK}; then
+	FORK="&"
+else
+	FORK=
+	INTERFACE=
+fi
+
+########################################
+
 declare ROOT="false"
 if [[ $(id -u) == 0 ]]; then
 	ROOT="true"
@@ -108,7 +126,7 @@ chmod -v 755 /tmp/qemu-down
 #>>>	-daemonize \
 #>>>	-vnc 127.0.0.1:${QNUM} \
 
-exec qemu-system-x86_64 \
+eval exec qemu-system-x86_64 \
 	-name ${FILE} \
 	-nodefaults \
 	-no-user-config \
@@ -133,20 +151,21 @@ exec qemu-system-x86_64 \
 	-usb \
 	-usbdevice tablet \
 	${QOPT} \
-	"${@}" &
+	"${@}" ${FORK}
 
 ########################################
 
 sleep 1
 
-if [[ ${QSYS} == 2 ]]; then
-	exec telnet 127.0.0.1 990${QNUM}
-else
+if [[ ${INTERFACE} == display ]]; then
 #>>>	exec ${VNC} 127.0.0.1:590${QNUM} &
 	exec spicy --host=127.0.0.1 --port=666${QNUM} &
 	exec telnet 127.0.0.1 999${QNUM}
+elif [[ ${INTERFACE} == console ]]; then
+	exec telnet 127.0.0.1 990${QNUM}
 fi
 
+exit 0
 ################################################################################
 # end of file
 ################################################################################
