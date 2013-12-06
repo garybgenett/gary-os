@@ -10,11 +10,13 @@ declare QSYS="${1}"			; shift
 ################################################################################
 
 declare FORK="true"
+declare NET_TAP="false"
 declare INTERFACE="display"
 
 if [[ ${QSYS} == 0 ]]; then
 	FORK="false"
 elif [[ ${QSYS} == 1 ]]; then
+	NET_TAP="true"
 	INTERFACE="console"
 fi
 
@@ -30,6 +32,8 @@ fi
 declare ROOT="false"
 if [[ $(id -u) == 0 ]]; then
 	ROOT="true"
+else
+	NET_TAP="false"
 fi
 
 ########################################
@@ -101,15 +105,28 @@ QNET+=",hostfwd=tcp::220${QNUM}-10.0.${QNUM}.254:22"
 QNET+=",hostfwd=tcp::443${QNUM}-10.0.${QNUM}.254:443"
 QNET+=",hostfwd=tcp::339${QNUM}-10.0.${QNUM}.254:3389"
 
-for I in {0..5}; do
-	declare TYPE="tap"
-	QNET+=" "; QNET+="-netdev ${TYPE}"
-	QNET+=",id=${TYPE}${I}"
-	QNET+=",ifname=qemu${I}_${QNUM}"
-	QNET+=",script=${HOME}/scripts/qemu-network-up.bsh"
-	QNET+=",downscript=${HOME}/scripts/qemu-network-down.bsh"
+#>>>QNET+=" "; QNET+="-net dump"
+#>>>QNET+=",vlan=0"
+#>>>QNET+=",file=/tmp/qemu-vlan0.pcap"
 
-	if [[ ${I} == 0 ]]; then
+for I in {0..5}; do
+	declare TYPE=
+	if ${NET_TAP}; then
+		TYPE="tap"
+		QNET+=" "; QNET+="-netdev ${TYPE}"
+		QNET+=",id=${TYPE}${I}"
+		QNET+=",ifname=qemu${I}_${QNUM}"
+		QNET+=",script=${HOME}/scripts/qemu-network-up.bsh"
+		QNET+=",downscript=${HOME}/scripts/qemu-network-down.bsh"
+	else
+		TYPE="socket"
+		QNET+=" "; QNET+="-netdev ${TYPE}"
+		QNET+=",id=${TYPE}${I}"
+		QNET+=",mcast=239.0.0.${I}:10000"
+		QNET+=",localaddr=127.0.0.1"
+	fi
+
+	if ! ${NET_TAP} && [[ ${I} == 0 ]]; then
 		TYPE="user"
 	fi
 	QNET+=" "; QNET+="-device e1000"
@@ -117,7 +134,9 @@ for I in {0..5}; do
 	QNET+=",netdev=${TYPE}${I}"
 	QNET+=",mac=52:54:00:10:0${I}:0${QNUM}"
 
-	${HOME}/scripts/qemu-network.bsh
+	if ${NET_TAP}; then
+		${HOME}/scripts/qemu-network.bsh
+	fi
 done
 
 ################################################################################
