@@ -36,6 +36,7 @@ fi
 
 declare QDSK=
 declare QMCH=
+declare QNET=
 
 declare I=
 
@@ -89,31 +90,43 @@ fi
 
 ########################################
 
-declare USER_NIC="user,vlan=0"
-USER_NIC="${USER_NIC},net=10.0.0.0/16"
-USER_NIC="${USER_NIC},host=10.0.0.254"
-USER_NIC="${USER_NIC},dns=10.0.0.253"
-USER_NIC="${USER_NIC},smb=/tmp,smbserver=10.0.0.252"
-USER_NIC="${USER_NIC},dhcpstart=10.0.${QNUM}.254"
-USER_NIC="${USER_NIC},hostfwd=tcp::220${QNUM}-10.0.${QNUM}.254:22"
-USER_NIC="${USER_NIC},hostfwd=tcp::443${QNUM}-10.0.${QNUM}.254:443"
-USER_NIC="${USER_NIC},hostfwd=tcp::339${QNUM}-10.0.${QNUM}.254:3389"
+QNET="-netdev user"
+QNET+=",id=user0"
+QNET+=",net=10.0.0.0/16"
+QNET+=",host=10.0.0.254"
+QNET+=",dns=10.0.0.253"
+QNET+=",smb=/tmp,smbserver=10.0.0.252"
+QNET+=",dhcpstart=10.0.${QNUM}.254"
+QNET+=",hostfwd=tcp::220${QNUM}-10.0.${QNUM}.254:22"
+QNET+=",hostfwd=tcp::443${QNUM}-10.0.${QNUM}.254:443"
+QNET+=",hostfwd=tcp::339${QNUM}-10.0.${QNUM}.254:3389"
 
-declare BR
-declare VNIC[*]
-for BR in {1..5}; do
+for I in {0..5}; do
+	declare TYPE="tap"
+	QNET+=" "; QNET+="-netdev ${TYPE}"
+	QNET+=",id=${TYPE}${I}"
+	QNET+=",ifname=qemu_10_${I}_${QNUM}"
+	QNET+=",script=/tmp/qemu-up"
+	QNET+=",downscript=/tmp/qemu-down"
+
+	if [[ ${I} == 0 ]]; then
+		TYPE="user"
+	fi
+	QNET+=" "; QNET+="-device e1000"
+	QNET+=",id=nic${I}"
+	QNET+=",netdev=${TYPE}${I}"
+	QNET+=",mac=52:54:00:10:0${I}:0${QNUM}"
+
 	brctl addbr qemu${BR}					2>/dev/null
 	ip link set dev qemu${BR} up				2>/dev/null
 	ip address add dev qemu${BR} local 10.${BR}.0.254/16	2>/dev/null
-	VNIC[${BR}]="tap,vlan=${BR}"
-	VNIC[${BR}]="${VNIC[$BR]},name=qemu_10_${BR}_${QNUM}"
-	VNIC[${BR}]="${VNIC[$BR]},ifname=qemu_10_${BR}_${QNUM}"
-	VNIC[${BR}]="${VNIC[$BR]},script=/tmp/qemu-up"
-	VNIC[${BR}]="${VNIC[$BR]},downscript=/tmp/qemu-down"
+
 	iptables -D INPUT	-i qemu${BR}			-j ACCEPT 2>/dev/null
 	iptables -I INPUT 1	-i qemu${BR}			-j ACCEPT 2>/dev/null
 	iptables -D FORWARD	-i qemu${BR}	-o qemu${BR}	-j ACCEPT 2>/dev/null
 	iptables -I FORWARD 1	-i qemu${BR}	-o qemu${BR}	-j ACCEPT 2>/dev/null
+	iptables -D FORWARD	-i qemu${BR}			-j DROP 2>/dev/null
+	iptables -I FORWARD 1	-i qemu${BR}			-j DROP 2>/dev/null
 	iptables -D OUTPUT			-o qemu${BR}	-j ACCEPT 2>/dev/null
 	iptables -I OUTPUT 1			-o qemu${BR}	-j ACCEPT 2>/dev/null
 done
@@ -157,12 +170,7 @@ eval exec qemu-system-x86_64 \
 	-smp cpus=2,sockets=2,cores=1,threads=1 \
 	-realtime mlock=off \
 	-m ${QMEM} \
-	-net nic,vlan=0,model=e1000,macaddr=52:54:00:10:00:0${QNUM} -net ${USER_NIC} \
-	-net nic,vlan=1,model=e1000,macaddr=52:54:00:10:01:0${QNUM} -net ${VNIC[1]} \
-	-net nic,vlan=2,model=e1000,macaddr=52:54:00:10:02:0${QNUM} -net ${VNIC[2]} \
-	-net nic,vlan=3,model=e1000,macaddr=52:54:00:10:03:0${QNUM} -net ${VNIC[3]} \
-	-net nic,vlan=4,model=e1000,macaddr=52:54:00:10:04:0${QNUM} -net ${VNIC[4]} \
-	-net nic,vlan=5,model=e1000,macaddr=52:54:00:10:05:0${QNUM} -net ${VNIC[5]} \
+	${QNET} \
 	-spice addr=127.0.0.1,port=666${QNUM},disable-ticketing \
 	-vga qxl \
 	-soundhw hda \
