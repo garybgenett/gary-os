@@ -105,9 +105,9 @@ for I in {0..5}; do
 	declare TYPE="tap"
 	QNET+=" "; QNET+="-netdev ${TYPE}"
 	QNET+=",id=${TYPE}${I}"
-	QNET+=",ifname=qemu_10_${I}_${QNUM}"
-	QNET+=",script=/tmp/qemu-up"
-	QNET+=",downscript=/tmp/qemu-down"
+	QNET+=",ifname=qemu${I}_${QNUM}"
+	QNET+=",script=${HOME}/scripts/qemu-network-up.bsh"
+	QNET+=",downscript=${HOME}/scripts/qemu-network-down.bsh"
 
 	if [[ ${I} == 0 ]]; then
 		TYPE="user"
@@ -117,42 +117,8 @@ for I in {0..5}; do
 	QNET+=",netdev=${TYPE}${I}"
 	QNET+=",mac=52:54:00:10:0${I}:0${QNUM}"
 
-	brctl addbr qemu${BR}					2>/dev/null
-	ip link set dev qemu${BR} up				2>/dev/null
-	ip address add dev qemu${BR} local 10.${BR}.0.254/16	2>/dev/null
-
-	iptables -D INPUT	-i qemu${BR}			-j ACCEPT 2>/dev/null
-	iptables -I INPUT 1	-i qemu${BR}			-j ACCEPT 2>/dev/null
-	iptables -D FORWARD	-i qemu${BR}	-o qemu${BR}	-j ACCEPT 2>/dev/null
-	iptables -I FORWARD 1	-i qemu${BR}	-o qemu${BR}	-j ACCEPT 2>/dev/null
-	iptables -D FORWARD	-i qemu${BR}			-j DROP 2>/dev/null
-	iptables -I FORWARD 1	-i qemu${BR}			-j DROP 2>/dev/null
-	iptables -D OUTPUT			-o qemu${BR}	-j ACCEPT 2>/dev/null
-	iptables -I OUTPUT 1			-o qemu${BR}	-j ACCEPT 2>/dev/null
+	${HOME}/scripts/qemu-network.bsh
 done
-
-cat >/tmp/qemu-up <<_EOF_
-#!/bin/bash
-echo \${@}
-IFC=\${1}
-BR=\$(echo \${IFC} | cut -d_ -f3)
-ip link set dev \${IFC} up
-brctl addif qemu\${BR} \${IFC}
-# end of file
-_EOF_
-chmod -v 755 /tmp/qemu-up
-
-cat >/tmp/qemu-down <<_EOF_
-#!/bin/bash
-echo \${@}
-IFC=\${1}
-BR=\$(echo \${IFC} | cut -d_ -f3)
-ip link set dev \${IFC} down
-brctl delif qemu\${BR} \${IFC}
-ip link delete dev \${IFC}
-# end of file
-_EOF_
-chmod -v 755 /tmp/qemu-down
 
 ################################################################################
 
