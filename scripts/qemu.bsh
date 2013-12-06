@@ -2,12 +2,10 @@
 source ${HOME}/.bashrc
 ################################################################################
 
-declare QNUM="${1}"
-declare QMEM="${2}"
-declare FILE="${3}"
-declare QSYS="${4}"
-
-shift 4
+declare QNUM="${1}"			; shift
+declare QMEM="${1}"			; shift
+declare FILE="${1}"			; shift
+declare QSYS="${1}"			; shift
 
 ################################################################################
 
