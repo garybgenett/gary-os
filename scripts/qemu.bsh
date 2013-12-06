@@ -35,6 +35,7 @@ fi
 ########################################
 
 declare QDSK=
+declare QMCH=
 
 declare I=
 
@@ -74,6 +75,17 @@ QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ahci0.0,bootindex=0"
 
 QDSK+=" "; QDSK+="-drive id=disk0,if=none,file=${I}"
 QDSK+=" "; QDSK+="-device ide-drive,drive=disk0,bus=ahci0.1,bootindex=1"
+
+########################################
+
+if ${ROOT}; then
+	QMCH="-machine type=q35,accel=kvm"
+	QMCH+=" "; QMCH+="-enable-kvm"
+	QMCH+=" "; QMCH+="-cpu host"
+else
+	QMCH="-machine type=pc"
+	QMCH+=" "; QMCH+="-cpu qemu64"
+fi
 
 ########################################
 
@@ -129,7 +141,7 @@ ip link delete dev \${IFC}
 _EOF_
 chmod -v 755 /tmp/qemu-down
 
-########################################
+################################################################################
 
 #>>>	-daemonize \
 #>>>	-vnc 127.0.0.1:${QNUM} \
@@ -138,12 +150,10 @@ eval exec qemu-system-x86_64 \
 	-name ${FILE} \
 	-nodefaults \
 	-no-user-config \
-	-machine type=pc,accel=kvm \
-	-enable-kvm \
+	${QMCH} \
 	-monitor telnet:127.0.0.1:999${QNUM},server,nowait \
 	-serial telnet:127.0.0.1:990${QNUM},server,nowait \
 	-rtc base=utc,clock=host \
-	-cpu host \
 	-smp cpus=2,sockets=2,cores=1,threads=1 \
 	-realtime mlock=off \
 	-m ${QMEM} \
