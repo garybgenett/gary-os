@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+source ${HOME}/.bashrc
+################################################################################
+
+declare SCRIPT="$(basename ${0})"
+
+if [[ -n ${@} ]]; then
+	echo -en "COMMAND: ${SCRIPT} ${@}\n"
+fi
+
+########################################
+
+declare QIFC="${1}"			; shift
+
+################################################################################
+
+declare I=
+
+################################################################################
+
+if [[ ${SCRIPT} == qemu-network-up.bsh ]]; then
+	I="${QIFC/%_*}"
+	ip link set dev ${QIFC} up
+	brctl addif ${I} ${QIFC}
+	exit 0
+fi
+
+########################################
+
+if [[ ${SCRIPT} == qemu-network-down.bsh ]]; then
+	I="${QIFC/%_*}"
+	ip link set dev ${QIFC} down
+	brctl delif ${I} ${QIFC}
+	ip link delete dev ${QIFC}
+	exit 0
+fi
+
+########################################
+
+for I in {0..5}; do
+	if [[ ${QIFC} == off ]]; then
+		ip link set dev qemu${I} down
+		brctl delbr qemu${I}
+
+		iptables -D INPUT	-i qemu${I}				-j ACCEPT
+		iptables -D FORWARD	-i qemu${I}	-o qemu${I}		-j ACCEPT
+		iptables -D FORWARD	-i qemu${I}				-j DROP
+		iptables -D OUTPUT			-o qemu${I}		-j ACCEPT
+	else
+		brctl addbr qemu${I}						2>/dev/null
+		ip link set dev qemu${I} up					2>/dev/null
+		ip address add dev qemu${I} local 10.${I}.0.254/16		2>/dev/null
+
+		declare IP=
+		for IP in {1..3}; do
+			ip address add dev qemu${I} local 10.${I}.0.${IP}/16	2>/dev/null
+		done
+
+		iptables -D INPUT	-i qemu${I}				-j ACCEPT
+		iptables -I INPUT 1	-i qemu${I}				-j ACCEPT
+		iptables -D FORWARD	-i qemu${I}	-o qemu${I}		-j ACCEPT
+		iptables -I FORWARD 1	-i qemu${I}	-o qemu${I}		-j ACCEPT
+		iptables -D FORWARD	-i qemu${I}				-j DROP
+		iptables -I FORWARD 1	-i qemu${I}				-j DROP
+		iptables -D OUTPUT			-o qemu${I}		-j ACCEPT
+		iptables -I OUTPUT 1			-o qemu${I}		-j ACCEPT
+	fi
+done
+
+exit 0
+################################################################################
+# end of file
+################################################################################
