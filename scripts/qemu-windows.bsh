@@ -9,6 +9,23 @@ declare QSYS="${1}"			; shift
 
 ########################################
 
+if [[ -n ${QSYS} ]] && [[ ${QSYS} != [0-9] ]]; then
+	qemu-img create -f qcow2 -o compat=1.1						${QSYS}.0_1_install.qcow2 100G
+	qemu-img create -f qcow2 -o compat=1.1,backing_file=${QSYS}.0_1_install.qcow2	${QSYS}.0_2_update.qcow2
+	qemu-img create -f qcow2 -o compat=1.1,backing_file=${QSYS}.0_2_update.qcow2	${QSYS}.0_3_config.qcow2
+	qemu-img create -f qcow2 -o compat=1.1,backing_file=${QSYS}.0_3_config.qcow2	${QSYS}.1_1_system.qcow2
+	qemu-img create -f qcow2 -o compat=1.1,backing_file=${QSYS}.1_1_system.qcow2	${QSYS}.1_2_drivers.qcow2
+	qemu-img create -f qcow2 -o compat=1.1,backing_file=${QSYS}.1_2_drivers.qcow2	${QSYS}.qcow2
+	${LN} ${QSYS}.0_1_install.qcow2 ${FILE}
+	for QSYS in ${QSYS}*; do
+		echo -en "\n"
+		qemu-img info ${QSYS}
+	done
+	exit 0
+fi
+
+########################################
+
 #>>>Bus 002 Device 014: ID 03f0:4605 Hewlett-Packard ScanJet G4050
 #>>>Bus 002 Device 017: ID 043d:00cc Lexmark International, Inc. E120(n)
 
