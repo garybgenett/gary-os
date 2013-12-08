@@ -10,7 +10,7 @@ declare QSYS="${1}"			; shift
 ################################################################################
 
 declare FORK="true"
-declare NET_TAP="false"
+declare NET_TAP="true"
 declare INTERFACE="display"
 
 if [[ ${QSYS} == 0 ]]; then
