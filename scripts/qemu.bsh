@@ -9,6 +9,8 @@ declare QSYS="${1}"			; shift
 
 ################################################################################
 
+declare NUM_NET="0"
+
 declare FORK="true"
 declare NET_TAP="true"
 declare INTERFACE="display"
@@ -16,6 +18,7 @@ declare INTERFACE="display"
 if [[ ${QSYS} == 0 ]]; then
 	FORK="false"
 elif [[ ${QSYS} == 1 ]]; then
+	NUM_NET="5"
 	NET_TAP="true"
 	INTERFACE="console"
 fi
@@ -109,7 +112,7 @@ QNET+=",hostfwd=tcp::339${QNUM}-10.0.${QNUM}.254:3389"
 #>>>QNET+=",vlan=0"
 #>>>QNET+=",file=/tmp/qemu-vlan0.pcap"
 
-for I in {0..5}; do
+for I in {0..${NUM_NET}}; do
 	declare TYPE=
 	if ${NET_TAP}; then
 		TYPE="tap"
