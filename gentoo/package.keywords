@@ -29,6 +29,7 @@ games-emulation/mekanix			x86		# gentoo required
 
 ################################################################################
 
+app-crypt/efitools			~amd64
 sys-boot/efibootmgr			~amd64
 sys-boot/grub				~amd64
 sys-kernel/gentoo-sources		~amd64
