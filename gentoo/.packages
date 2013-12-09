@@ -27,6 +27,8 @@ iso-codes
 timezone-data
 
 busybox
+efibootmgr
+efitools
 grub
 runit
 
