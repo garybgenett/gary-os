@@ -32,8 +32,8 @@ fi
 
 qemu.bsh "${QNUM}" "${QMEM}" "${FILE}" "${QSYS}" \
 	-rtc base=localtime,clock=host \
-	-usbdevice host:03f0:4605 \
-	-usbdevice host:043d:00cc \
+	-device usb-host,vendorid=0x03f0,productid=0x4605 \
+	-device usb-host,vendorid=0x043d,productid=0x00cc \
 	"${@}"
 
 ################################################################################
