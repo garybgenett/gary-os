@@ -1,0 +1,121 @@
+################################################################################
+# default-grml64-3.7.9
+################################################################################
+
+General setup
+	Enable deprecated sysfs features to support old userspace tools		CONFIG_SYSFS_DEPRECATED=n
+
+Processor type and features
+	Linux guest support							CONFIG_HYPERVISOR_GUEST=y
+		Enable paravirtualization code					CONFIG_PARAVIRT=y
+		Xen guest support						CONFIG_XEN=y
+		KVM Guest support (including kvmclock)				CONFIG_KVM_GUEST=y
+	Preemption Model -> Preemptible Kernel (Low-Latency Desktop)
+
+Networking support								CONFIG_NET=y
+	Networking options
+		Network packet filtering framework (Netfilter)			CONFIG_NETFILTER=y
+			IP: Netfilter Configuration
+				IPv4 NAT					CONFIG_NF_NAT_IPV4=m
+				MASQUERADE target support			CONFIG_IP_NF_TARGET_MASQUERADE=m
+			IPv6: Netfilter Configuration
+				IPv6 NAT					CONFIG_NF_NAT_IPV6=m
+				MASQUERADE target support			CONFIG_IP6_NF_TARGET_MASQUERADE=m
+
+Device Drivers
+	Block devices								CONFIG_BLK_DEV=y
+		Xen virtual block device support				CONFIG_XEN_BLKDEV_FRONTEND=y
+		Xen block-device backend driver					CONFIG_XEN_BLKDEV_BACKEND=y
+		Virtio block driver						CONFIG_VIRTIO_BLK=y
+	SCSI device support
+		SCSI device support						CONFIG_SCSI=y
+		SCSI disk support						CONFIG_BLK_DEV_SD=y
+		SCSI CDROM support						CONFIG_BLK_DEV_SR=y
+	Serial ATA and Parallel ATA drivers					CONFIG_ATA=y
+		Verbose ATA error reporting					CONFIG_ATA_VERBOSE_ERROR=y
+		ATA ACPI Support						CONFIG_ATA_ACPI=y
+		SATA Port Multiplier support					CONFIG_SATA_PMP=y
+		AHCI SATA support						CONFIG_SATA_AHCI=y
+		Platform AHCI SATA support					CONFIG_SATA_AHCI_PLATFORM=y
+		Initio 162x SATA support					CONFIG_SATA_INIC162X=y
+		ACard AHCI variant (ATP 8620)					CONFIG_SATA_ACARD_AHCI=y
+		Silicon Image 3124/3132 SATA support				CONFIG_SATA_SIL24=y
+		ATA SFF support (for legacy IDE and PATA)			CONFIG_ATA_SFF=y
+		Pacific Digital ADMA support					CONFIG_PDC_ADMA=y
+		Pacific Digital SATA QStor support				CONFIG_SATA_QSTOR=y
+		Promise SATA SX4 support (Experimental)				CONFIG_SATA_SX4=y
+		ATA BMDMA support						CONFIG_ATA_BMDMA=y
+		Intel ESB, ICH, PIIX3, PIIX4 PATA/SATA support			CONFIG_ATA_PIIX=y
+		Calxeda Highbank SATA support					CONFIG_SATA_HIGHBANK is not set
+		Marvell SATA support						CONFIG_SATA_MV=y
+		NVIDIA SATA support						CONFIG_SATA_NV=y
+		Promise SATA TX2/TX4 support					CONFIG_SATA_PROMISE=y
+		Silicon Image SATA support					CONFIG_SATA_SIL=y
+		SiS 964/965/966/180 SATA support				CONFIG_SATA_SIS=y
+		ServerWorks Frodo / Apple K2 SATA support			CONFIG_SATA_SVW=y
+		ULi Electronics SATA support					CONFIG_SATA_ULI=y
+		VIA SATA support						CONFIG_SATA_VIA=y
+		VITESSE VSC-7174 / INTEL 31244 SATA support			CONFIG_SATA_VITESSE=y
+		ACPI firmware driver for PATA					CONFIG_PATA_ACPI=m
+		Generic ATA support						CONFIG_ATA_GENERIC=y
+		Legacy ISA PATA support (Experimental)				CONFIG_PATA_LEGACY=m
+	Multiple devices driver support (RAID and LVM)				CONFIG_MD=y
+		RAID support							CONFIG_BLK_DEV_MD=y
+		Autodetect RAID arrays during kernel boot			CONFIG_MD_AUTODETECT=y
+		Linear (append) mode						CONFIG_MD_LINEAR=y
+		RAID-0 (striping) mode						CONFIG_MD_RAID0=y
+		RAID-1 (mirroring) mode						CONFIG_MD_RAID1=y
+		RAID-10 (mirrored striping) mode				CONFIG_MD_RAID10=y
+		RAID-4/RAID-5/RAID-6 mode					CONFIG_MD_RAID456=y
+		Device mapper support						CONFIG_BLK_DEV_DM=y
+		Crypt target support						CONFIG_DM_CRYP=y
+		Snapshot target							CONFIG_DM_SNAPSHOT=y
+		Thin provisioning target (EXPERIMENTAL)				CONFIG_DM_THIN_PROVISIONING=y
+		Mirror target							CONFIG_DM_MIRROR=y
+		RAID 1/4/5/6/10 target						CONFIG_DM_RAID=y
+	Network device support							CONFIG_NETDEVICES=y
+		Wireless LAN							CONFIG_WLAN=y
+			Atheros Wireless Cards					CONFIG_ATH_CARDS=m
+	Character devices
+		Serial drivers
+			8250/16550 and compatible serial support		CONFIG_SERIAL_8250=y
+			Console on 8250/16550 and compatible serial port	CONFIG_SERIAL_8250_CONSOLE=y
+		Xen Hypervisor Console support					CONFIG_HVC_XEN=y
+		Virtio console							CONFIG_VIRTIO_CONSOLE=y
+	HID support
+		HID bus support							CONFIG_HID=y
+		Generic HID driver						CONFIG_HID_GENERIC=y
+		USB HID support
+			USB HID transport layer					CONFIG_USB_HID=y
+	USB support								CONFIG_USB_SUPPORT=y
+		Support for Host-side USB					CONFIG_USB=y
+		xHCI HCD (USB 3.0) support					CONFIG_USB_XHCI_HCD=y
+		EHCI HCD (USB 2.0) support					CONFIG_USB_EHCI_HCD=y
+		OHCI HCD support						CONFIG_USB_OHCI_HCD=y
+		UHCI HCD (most Intel and VIA) support				CONFIG_USB_UHCI_HCD=y
+		USB Printer support						CONFIG_USB_PRINTER=n
+		USB Mass Storage support					CONFIG_USB_STORAGE=y
+		USB Serial Converter support					CONFIG_USB_SERIAL=y
+			USB Serial Console device support			CONFIG_USB_SERIAL_CONSOLE=y
+			USB Generic Serial Driver				CONFIG_USB_SERIAL_GENERIC=y
+	Real Time Clock								CONFIG_RTC_CLASS=y
+	Virtio drivers
+		PCI driver for virtio devices (EXPERIMENTAL)			CONFIG_VIRTIO_PCI=y
+		Virtio balloon driver						CONFIG_VIRTIO_BALLOON=y
+
+File systems
+	Second extended fs support						CONFIG_EXT2_FS=y
+	Ext3 journalling file system support					CONFIG_EXT3_FS=y
+	The Extended 4 (ext4) filesystem					CONFIG_EXT4_FS=y
+	XFS filesystem support							CONFIG_XFS_FS=y
+	Btrfs filesystem (EXPERIMENTAL) Unstable disk format			CONFIG_BTRFS_FS=y
+
+Virtualization									CONFIG_VIRTUALIZATION=y
+	Kernel-based Virtual Machine (KVM) support				CONFIG_KVM=m
+	KVM for Intel processors support					CONFIG_KVM_INTEL=m
+	KVM for AMD processors support						CONFIG_KVM_AMD=m
+	Host kernel accelerator for virtio net (EXPERIMENTAL)			CONFIG_VHOST_NET=m
+
+################################################################################
+# end of file
+################################################################################
