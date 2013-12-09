@@ -82,7 +82,7 @@ QDSK+=" "; QDSK+="-drive id=cdrom0,if=none"
 QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ahci0.1,bootindex=0"
 
 QDSK+=" "; QDSK+="-drive id=disk0,if=none,file=${I}"
-QDSK+=" "; QDSK+="-device ide-drive,drive=disk0,bus=ahci0.0,bootindex=1"
+QDSK+=" "; QDSK+="-device ide-hd,drive=disk0,bus=ahci0.0,bootindex=1"
 
 ########################################
 
