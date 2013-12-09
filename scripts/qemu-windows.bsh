@@ -17,10 +17,11 @@ if [[ -n ${QSYS} ]] && [[ ${QSYS} != [0-9] ]]; then
 	qemu-img create -f qcow2 -o compat=1.1,backing_file=${QSYS}.1_1_system.qcow2	${QSYS}.1_2_drivers.qcow2
 	qemu-img create -f qcow2 -o compat=1.1,backing_file=${QSYS}.1_2_drivers.qcow2	${QSYS}.qcow2
 	${LN} ${QSYS}.0_1_install.qcow2 ${FILE}
-	for QSYS in ${QSYS}*; do
-		echo -en "\n"
-		qemu-img info ${QSYS}
-	done
+#>>>	for QSYS in ${QSYS}*; do
+#>>>		echo -en "\n"
+#>>>		qemu-img info ${QSYS}
+#>>>	done
+	qemu-img info --backing-chain ${QSYS}.qcow2
 	exit 0
 fi
 
