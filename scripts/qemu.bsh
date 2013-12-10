@@ -119,7 +119,7 @@ QNET+=",hostfwd=tcp::339${QNUM}-10.0.${QNUM}.254:3389"
 #>>>QNET+=",vlan=0"
 #>>>QNET+=",file=/tmp/qemu-vlan0.pcap"
 
-for I in {0..${NUM_NET}}; do
+for I in $(eval echo -en "{0..${NUM_NET}}"); do
 	declare TYPE=
 	if ${NET_TAP}; then
 		TYPE="tap"
