@@ -121,10 +121,11 @@ declare PROMPT_TOKEN_PWD="\w"
 
 if [[ ${HOSTNAME} == spider ]]; then
 	PROMPT_TOKEN_CLR="\[\e[7;32m\]"
+elif [[ ${HOSTNAME} == tarantula ]]; then
+	PROMPT_TOKEN_CLR="\[\e[7;36m\]"
 elif [[ ${HOSTNAME} == bastion ]]; then
 	PROMPT_TOKEN_CLR="\[\e[7;33m\]"
-elif [[ ${HOSTNAME} == Arachnid ]] ||
-     [[ ${HOSTNAME} == gbg-autobot ]]; then
+elif [[ ${HOSTNAME} == Arachnid ]]; then
 	PROMPT_TOKEN_CLR="\[\e[7;35m\]"
 fi
 
