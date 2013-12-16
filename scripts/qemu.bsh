@@ -82,13 +82,13 @@ if [[ -n $(file ${I} 2>/dev/null | ${GREP} "ISO[ ]9660") ]]; then
 	QDSK+=" "; QDSK+="-drive id=cdrom0,if=none,file=${I}"
 	QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ahci0.1,bootindex=0"
 elif [[ -n ${I} ]]; then
-	QDSK+=" "; QDSK+="-drive id=cdrom0,if=none"
-	QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ahci0.1"
 	QDSK+=" "; QDSK+="-drive id=disk0,if=none,file=${I}"
-	QDSK+=" "; QDSK+="-device ide-hd,drive=disk0,bus=ahci0.0,bootindex=0"
+	QDSK+=" "; QDSK+="-device ide-hd,drive=disk0,bus=ahci0.0,bootindex=1"
+	QDSK+=" "; QDSK+="-drive id=cdrom0,if=none"
+	QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ahci0.1,bootindex=0"
 else
 	QDSK+=" "; QDSK+="-drive id=cdrom0,if=none"
-	QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ahci0.1"
+	QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ahci0.1,bootindex=0"
 fi
 
 ########################################
