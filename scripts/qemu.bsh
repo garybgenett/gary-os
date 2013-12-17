@@ -96,7 +96,8 @@ fi
 if ${ROOT}; then
 	QMCH="-machine type=q35,accel=kvm"
 	QMCH+=" "; QMCH+="-enable-kvm"
-	QMCH+=" "; QMCH+="-cpu host"
+#>>>	QMCH+=" "; QMCH+="-cpu host"
+	QMCH+=" "; QMCH+="-cpu qemu64"
 else
 	QMCH="-machine type=pc"
 	QMCH+=" "; QMCH+="-cpu qemu64"
