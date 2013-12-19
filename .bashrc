@@ -540,6 +540,18 @@ function mirror {
 
 ########################################
 
+function swint {
+	declare INT="${1}" && shift
+	${SED} -i "s/eth0/${INT}/g" \
+		${HOME}/scripts/fw.${HOSTNAME} \
+		${HOME}/scripts/ip.${HOSTNAME} \
+		/.runit/_config/dhclient \
+		/.runit/_config/tcpdump
+	ip-setup
+}
+
+########################################
+
 function vlc-rc {
 	if [[ -n ${@} ]]; then
 		echo "${@}" | nc -q 1 127.0.0.1 4212
