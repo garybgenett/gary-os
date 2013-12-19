@@ -379,6 +379,7 @@ alias natter="iptables -L -nvx --line-numbers -t nat | ${MORE}"
 
 ########################################
 
+alias adb-vpn="cd /.g/_data/_build/_android ; _adb.sh forward tcp:8080 tcp:8080 ; _adb.sh forward --list"
 alias cal="cal --monday --three"
 alias clean="_sync clean"
 alias clock="clockywock"
