@@ -538,6 +538,8 @@ function mirror {
 	${WGET_R} --directory-prefix "${PREFIX}" "${@}" 2>&1 | tee -a ${PREFIX}.log
 }
 
+########################################
+
 function vlc-rc {
 	if [[ -n ${@} ]]; then
 		echo "${@}" | nc -q 1 127.0.0.1 4212
