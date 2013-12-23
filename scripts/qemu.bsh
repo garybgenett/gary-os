@@ -154,6 +154,7 @@ done
 eval exec qemu-system-x86_64 \
 	-name ${FILE} \
 	-nodefaults \
+	-nodefconfig \
 	-no-user-config \
 	${QMCH} \
 	-monitor telnet:127.0.0.1:999${QNUM},server,nowait \
@@ -169,7 +170,8 @@ eval exec qemu-system-x86_64 \
 	-usb \
 	-usbdevice tablet \
 	${QDSK} \
-	"${@}" ${FORK}
+	"${@}" \
+	-writeconfig /dev/stdout ${FORK}
 
 ########################################
 
