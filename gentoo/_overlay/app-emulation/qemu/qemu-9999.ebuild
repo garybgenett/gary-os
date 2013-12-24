@@ -229,7 +229,7 @@ src_prepare() {
 	sed -i 's/^\(C\|OP_C\|HELPER_C\)FLAGS=/\1FLAGS+=/' \
 		Makefile Makefile.target || die
 
-#>>>	epatch "${FILESDIR}"/qemu-9999-cflags.patch
+	epatch "${FILESDIR}"/qemu-9999-cflags.patch
 	[[ -n ${BACKPORTS} ]] && \
 		EPATCH_FORCE=yes EPATCH_SUFFIX="patch" EPATCH_SOURCE="${S}/patches" \
 			epatch
@@ -468,7 +468,7 @@ src_install() {
 	cd "${S}"
 	dodoc Changelog MAINTAINERS docs/specs/pci-ids.txt
 	newdoc pc-bios/README README.pc-bios
-#>>>	dodoc QMP/qmp-commands.txt QMP/qmp-events.txt QMP/qmp-spec.txt
+	dodoc QMP/qmp-commands.txt QMP/qmp-events.txt QMP/qmp-spec.txt
 
 	# Remove SeaBIOS since we're using the SeaBIOS packaged one
 	rm "${ED}/usr/share/qemu/bios.bin"
