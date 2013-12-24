@@ -71,10 +71,6 @@ QDSK="${QDSK} /.g/_data/_target/iso/${FILE}"
 
 QDSK="$(find ${QDSK} 2>/dev/null | sort -n | tail -n1)"
 
-#>>>QDSK="-drive file=${QDSK},if=scsi,bus=0,unit=0,media=disk"
-#>>>QDSK="-drive file=${QDSK},if=ide,index=0,media=disk"
-#>>>QDSK="-drive file=${QDSK},if=ide,index=3,media=cdrom -boot once=d"
-
 if [[ -n $(file ${QDSK} 2>/dev/null | ${GREP} "ISO[ ]9660") ]]; then
 	QDSK="-drive id=cdrom0,if=none,file=${QDSK}"
 	QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ide.0,bootindex=0"
@@ -122,10 +118,6 @@ QNET+=",hostfwd=tcp::220${QNUM}-10.0.${QNUM}.254:22"
 QNET+=",hostfwd=tcp::443${QNUM}-10.0.${QNUM}.254:443"
 QNET+=",hostfwd=tcp::339${QNUM}-10.0.${QNUM}.254:3389"
 
-#>>>QNET+=" "; QNET+="-net dump"
-#>>>QNET+=",vlan=0"
-#>>>QNET+=",file=/tmp/qemu-vlan0.pcap"
-
 for I in $(eval echo -en "{0..${NUM_NET}}"); do
 	declare TYPE=
 	if ${NET_TAP}; then
@@ -157,8 +149,6 @@ for I in $(eval echo -en "{0..${NUM_NET}}"); do
 done
 
 ################################################################################
-
-#>>>	-daemonize \
 
 eval exec qemu-system-x86_64 \
 	-name ${FILE} \
