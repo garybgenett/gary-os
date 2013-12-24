@@ -149,7 +149,6 @@ done
 ################################################################################
 
 #>>>	-daemonize \
-#>>>	-vnc 127.0.0.1:${QNUM} \
 
 eval exec qemu-system-x86_64 \
 	-name ${FILE} \
@@ -164,10 +163,12 @@ eval exec qemu-system-x86_64 \
 	-realtime mlock=off \
 	-m ${QMEM} \
 	${QNET} \
+	-vnc 127.0.0.1:9${QNUM} \
 	-spice addr=127.0.0.1,port=666${QNUM},disable-ticketing \
 	-vga qxl \
 	-soundhw ac97 \
 	-usb \
+	-usbdevice mouse \
 	-usbdevice tablet \
 	${QDSK} \
 	"${@}" \
@@ -178,7 +179,7 @@ eval exec qemu-system-x86_64 \
 sleep 1
 
 if [[ ${INTERFACE} == display ]]; then
-#>>>	exec ${VNC} 127.0.0.1:590${QNUM} &
+#>>>	exec ${VNC} 127.0.0.1:599${QNUM} &
 	exec spicy --host=127.0.0.1 --port=666${QNUM} &
 	exec telnet 127.0.0.1 999${QNUM}
 elif [[ ${INTERFACE} == console ]]; then
