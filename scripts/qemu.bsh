@@ -74,16 +74,16 @@ QDSK="$(find ${QDSK} 2>/dev/null | sort -n | tail -n1)"
 #>>>QDSK="-drive file=${QDSK},if=ide,index=0,media=disk"
 #>>>QDSK="-drive file=${QDSK},if=ide,index=3,media=cdrom -boot once=d"
 
-if [[ -n $(file ${I} 2>/dev/null | ${GREP} "ISO[ ]9660") ]]; then
-	QDSK+=" "; QDSK+="-drive id=cdrom0,if=none,file=${I}"
+if [[ -n $(file ${QDSK} 2>/dev/null | ${GREP} "ISO[ ]9660") ]]; then
+	QDSK="-drive id=cdrom0,if=none,file=${QDSK}"
 	QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ide.0,bootindex=0"
-elif [[ -n ${I} ]]; then
-	QDSK+=" "; QDSK+="-drive id=disk0,if=none,file=${I}"
+elif [[ -n ${QDSK} ]]; then
+	QDSK="-drive id=disk0,if=none,file=${QDSK}"
 	QDSK+=" "; QDSK+="-device ide-hd,drive=disk0,bus=ide.1,bootindex=1"
 	QDSK+=" "; QDSK+="-drive id=cdrom0,if=none"
 	QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ide.0,bootindex=0"
 else
-	QDSK+=" "; QDSK+="-drive id=cdrom0,if=none"
+	QDSK="-drive id=cdrom0,if=none"
 	QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ide.0,bootindex=0"
 fi
 
