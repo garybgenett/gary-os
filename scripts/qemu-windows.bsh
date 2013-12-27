@@ -9,7 +9,7 @@ declare QSYS="${1}"			; shift
 
 ########################################
 
-if [[ -n ${QSYS} ]] && [[ ${QSYS} != [0-9] ]]; then
+if [[ -n ${QSYS} ]] && [[ ${QSYS} != [0-9] ]] && [[ ${QSYS} != "usb" ]]; then
 	qemu-img create -f qcow2 -o compat=1.1						${QSYS}.0_1_install.qcow2 100G
 	qemu-img create -f qcow2 -o compat=1.1,backing_file=${QSYS}.0_1_install.qcow2	${QSYS}.0_2_update.qcow2
 	qemu-img create -f qcow2 -o compat=1.1,backing_file=${QSYS}.0_2_update.qcow2	${QSYS}.0_3_config.qcow2
@@ -22,6 +22,27 @@ if [[ -n ${QSYS} ]] && [[ ${QSYS} != [0-9] ]]; then
 #>>>		qemu-img info ${QSYS}
 #>>>	done
 	qemu-img info --backing-chain ${QSYS}.qcow2
+	exit 0
+fi
+
+########################################
+
+if [[ ${QSYS} == usb ]]; then
+	declare NC="nc -q 1 127.0.0.1 999${QNUM}"
+	declare I
+	for I in $(echo "info usb" | ${NC} |
+		${GREP} -a -i "(hp[ ]scanjet[ ]scanner|lexmark[ ]e120n|usb[ ]pnp[ ]sound[ ]device)" |
+		cut -d' ' -f'4,6' |
+		${SED} -e "s/,//g" -e "s/[ ]/./g"
+	); do
+		echo "usb_del ${I}" | ${NC}
+	done
+	echo "info usb" | ${NC}
+	for I in 03f0:4605 043d:00cc 0d8c:0139
+	do
+		echo "usb_add host:${I}" | ${NC}
+	done
+	echo "info usb" | ${NC}
 	exit 0
 fi
 
