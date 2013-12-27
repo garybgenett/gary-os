@@ -31,7 +31,7 @@ fi
 #>>>Bus 002 Device 017: ID 043d:00cc Lexmark International, Inc. E120(n)
 #>>>Bus 002 Device 030: ID 0d8c:0139 C-Media Electronics, Inc.
 
-qemu.bsh "${QNUM}" "${QMEM}" "${FILE}" "${QSYS}" \
+exec qemu.bsh "${QNUM}" "${QMEM}" "${FILE}" "${QSYS}" \
 	-rtc base=localtime,clock=host \
 	-device usb-host,vendorid=0x03f0,productid=0x4605 \
 	-device usb-host,vendorid=0x043d,productid=0x00cc \
