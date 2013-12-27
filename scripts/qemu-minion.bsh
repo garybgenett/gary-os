@@ -9,12 +9,12 @@ declare QSYS="${1}"			; shift
 
 ########################################
 
-#>>>Bus 002 Device 035: ID 152d:2352 JMicron Technology Corp. / JMicron USA Technology Corp. ATA/ATAPI Bridge
-#>>>Bus 004 Device 002: ID 1058:0741 Western Digital Technologies, Inc.
+# ID 152d:2352 JMicron Technology Corp. / JMicron USA Technology Corp. ATA/ATAPI Bridge
+# ID 1058:0741 Western Digital Technologies, Inc.
 
 exec qemu.bsh "${QNUM}" "${QMEM}" "${FILE}" "${QSYS}" \
-	-device usb-host,vendorid=0x152d,productid=0x2352 \
-	-device usb-host,vendorid=0x1058,productid=0x0741 \
+	-device usb-host,bus=xhci0.0,vendorid=0x152d,productid=0x2352 \
+	-device usb-host,bus=xhci0.0,vendorid=0x1058,productid=0x0741 \
 	"${@}"
 
 ################################################################################
