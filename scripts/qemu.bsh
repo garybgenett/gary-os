@@ -99,6 +99,9 @@ fi
 
 ########################################
 
+# http://www.linux-kvm.org/page/SPICE
+# http://www.spice-space.org/page/Whiteboard/AgentProtocol
+
 # SPICE Channel: vdagent
 # SPICE Device: com.redhat.spice.0
 
@@ -107,6 +110,8 @@ QVDA+=" "; QVDA+="-chardev spicevmc,id=spicevmc0,name=vdagent"
 QVDA+=" "; QVDA+="-device virtserialport,chardev=spicevmc0,bus=serial0.0,name=com.redhat.spice.0"
 
 ########################################
+
+# http://www.kraxel.org/cgit/qemu/tree/docs/usb2.txt
 
 QUSB="-usb"
 QUSB+=" "; QUSB+="-device usb-mouse,bus=usb-bus.0"
