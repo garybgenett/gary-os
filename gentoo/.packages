@@ -394,6 +394,8 @@ oracle-jdk-bin
 sun-jdk
 vmware-player
 
+icedtea
+icedtea-bin
 libreoffice
 unoconv
 
