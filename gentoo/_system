@@ -214,7 +214,7 @@ if [[ ${1} == -u ]]; then
 	locale-gen
 	gcc-config ${CHOST}-$(equery list gcc | awk '{print $1;}' | cut -d- -f3 | sort -n | tail -n1)
 	gcc-config --list-profiles
-	java-config --set-system-vm $(equery list oracle-jdk-bin | awk '{print $1;}' | cut -d/ -f2 | cut -d. -f-2 | sort -n | tail -n1)
+	java-config --set-system-vm $(equery list icedtea | awk '{print $1;}' | cut -d/ -f2 | cut -d. -f-1 | sort -n | tail -n1)
 	java-config --list-available-vms
 	declare SELECT
 	for SELECT in \
