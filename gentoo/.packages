@@ -395,6 +395,7 @@ sun-jdk
 vmware-player
 
 icedtea
+icedtea:6
 icedtea-bin
 libreoffice
 unoconv
