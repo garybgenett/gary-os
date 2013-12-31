@@ -94,9 +94,12 @@ www-client/firefox			~amd64
 
 www-client/chromium			~amd64
 
-dev-java/icedtea			~amd64
-dev-java/icedtea-bin			~amd64
-dev-java/icedtea-web			~amd64
+dev-java/ecj-gcj			~amd64		# gentoo required
+dev-java/gcj-jdk			~amd64		# gentoo required
+dev-java/icedtea			~amd64		# gentoo required
+dev-java/icedtea-bin			~amd64		# gentoo required
+dev-java/icedtea-web			~amd64		# gentoo required
+sys-devel/gcc				~amd64		# gentoo required
 
 ########################################
 
