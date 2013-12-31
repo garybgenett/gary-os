@@ -388,13 +388,12 @@ pidgin
 pidgin-sipe
 
 acroread
-oracle-jdk-bin
-sun-jdk
 vmware-player
 
+gcj-jdk
 icedtea
 icedtea:6
-icedtea-bin
+
 libreoffice
 unoconv
 
