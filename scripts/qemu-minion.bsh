@@ -4,17 +4,16 @@ source ${HOME}/.bashrc
 
 declare QNUM="6"
 declare QMEM="2048"
-declare FILE="NULL"
+declare FILE="${1}"			; shift
 declare QSYS="${1}"			; shift
 
 ########################################
 
-# ID 152d:2352 JMicron Technology Corp. / JMicron USA Technology Corp. ATA/ATAPI Bridge
-# ID 1058:0741 Western Digital Technologies, Inc.
+qemu-img create -f qcow2 /tmp/null.qcow2 100G
 
-exec qemu.bsh "${QNUM}" "${QMEM}" "${FILE}" "${QSYS}" \
-	-device usb-host,bus=xhci0.0,vendorid=0x152d,productid=0x2352 \
-	-device usb-host,bus=xhci0.0,vendorid=0x1058,productid=0x0741 \
+exec qemu.bsh "${QNUM}" "${QMEM}" "/tmp/null.qcow2" "${QSYS}" \
+	-drive id=drive0,if=none,file=${FILE} \
+	-device ide-hd,drive=drive0,bus=ide.0,bootindex=0 \
 	"${@}"
 
 ################################################################################
