@@ -188,7 +188,7 @@ eval exec qemu-system-x86_64 \
 	${QUSB} \
 	${QDSK} \
 	"${@}" \
-	-writeconfig /dev/stdout ${FORK}
+	-writeconfig - ${FORK}
 
 ########################################
 
