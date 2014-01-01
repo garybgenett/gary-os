@@ -74,15 +74,15 @@ I="$(find ${I} 2>/dev/null | sort -n | tail -n1)"
 
 if [[ -n $(file ${I} 2>/dev/null | ${GREP} "ISO[ ]9660") ]]; then
 	QDSK="-drive id=cdrom0,if=none,file=${I}"
-	QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ide.1,bootindex=0"
+	QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ide.1,bootindex=1"
 elif [[ -n ${I} ]]; then
 	QDSK="-drive id=disk0,if=none,file=${I}"
-	QDSK+=" "; QDSK+="-device ide-hd,drive=disk0,bus=ide.0,bootindex=1"
+	QDSK+=" "; QDSK+="-device ide-hd,drive=disk0,bus=ide.0,bootindex=2"
 	QDSK+=" "; QDSK+="-drive id=cdrom0,if=none"
-	QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ide.1,bootindex=0"
+	QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ide.1,bootindex=1"
 else
 	QDSK="-drive id=cdrom0,if=none"
-	QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ide.1,bootindex=0"
+	QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ide.1,bootindex=1"
 fi
 
 ########################################
@@ -156,6 +156,9 @@ for I in $(eval echo -en "{0..${NUM_NET}}"); do
 	QNET+=",id=nic${I}"
 	QNET+=",netdev=${TYPE}${I}"
 	QNET+=",mac=52:54:00:10:0${I}:0${QNUM}"
+	if [[ ${I} == 0 ]]; then
+		QNET+=",bootindex=3"
+	fi
 
 	if ${NET_TAP}; then
 		${HOME}/scripts/qemu-network.bsh
