@@ -137,7 +137,6 @@ rpm2targz
 gentoo-sources
 '=gentoo-sources-3.10.17'
 linux-firmware
-module-rebuild
 
 paludis
 portage
