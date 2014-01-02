@@ -179,7 +179,7 @@ auth required pam_wheel.so use_uid
 END_OF_FILE
 		cat >>${TARGET}/etc/sudoers <<END_OF_FILE
 ---
-root ALL=(ALL) ALL
+Defaults exempt_group=wheel
 %wheel ALL=(ALL) ALL
 %wheel ALL=(ALL) NOPASSWD: ALL
 ---
