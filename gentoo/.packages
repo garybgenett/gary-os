@@ -135,8 +135,7 @@ rpm2targz
 # gentoo
 
 gentoo-sources
-'=gentoo-sources-3.8.13'
-'=gentoo-sources-3.10.10'
+'=gentoo-sources-3.10.17'
 linux-firmware
 module-rebuild
 
