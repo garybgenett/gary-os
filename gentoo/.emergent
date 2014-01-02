@@ -12,6 +12,31 @@ declare TOKEN
 
 ################################################################################
 
+if [[ ${1} == -v ]]; then
+	echo -en "\n===[ packages ]===\n\n"
+	${GREP} "[#][ ]gentoo[ ]required" ${HOME}/setup/gentoo/package.* |
+		${GREP} -v "[#]WORK" |
+		${SED} -e "s|^.+/package[.]||g" |
+		${GREP} "^[^[:space:]]+"
+	echo -en "\n===[ keywords ]===\n"
+	declare PKG
+	for PKG in $(
+		${GREP} -v "^[#]" ${HOME}/setup/gentoo/package.keywords |
+		cut -f1 |
+		sort
+	); do
+		echo -en "\n"
+		${GREP} ${PKG} /.g/_data/_build/_gentoo/_gentoo/.emerge |
+			${GREP} --only-matching "${PKG}[^[:space:]]+"
+		${GREP} --with-filename "KEYWORDS" /.g/_toor/usr/portage/${PKG}/*.ebuild |
+			${GREP} "[^~]amd64" |
+			${SED} -e "s|^.+/||g" -e "s|:.+$||g"
+	done
+	exit 0
+fi
+
+################################################################################
+
 declare EMERGE_CMD="$(which emerge) --verbose --pretend"
 env - ${EMERGE_CMD} --emptytree system world	>${OUT_DIR}/.emerge	2>&1
 env - ${EMERGE_CMD} --info			>${OUT_DIR}/.info	2>&1
