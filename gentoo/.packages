@@ -8,10 +8,12 @@ export _PACKAGES=(
 
 autoconf
 automake
+binutils
 ccache
 gcc
 glibc
 make
+patch
 
 debugedit
 gdb
@@ -56,6 +58,7 @@ psmisc
 sed
 tar
 util-linux
+which
 
 inotify-tools
 sysklogd
@@ -70,6 +73,7 @@ kbd
 
 iproute2
 iptables
+iputils
 net-tools
 
 lftp
@@ -92,7 +96,7 @@ dev-perl/libwww-perl
 g-cpan
 libpcre
 libperl
-#>>>mod_perl
+mod_perl
 perl
 perl-core/CGI
 perl-core/JSON-PP
@@ -110,10 +114,12 @@ rar
 unrar
 unzip
 xdelta
+xz-utils
 zip
 
 man
 man-pages
+man-pages-posix
 sys-apps/texinfo
 
 aspell
@@ -379,10 +385,9 @@ gkrellsun
 gkrellweather
 
 pidgin
-#>>>pidgin-encryption
-#>>>pidgin-extprefs
-#>>>pidgin-hotkeys
-#>>>pidgin-otr
+pidgin-encryption
+pidgin-extprefs
+pidgin-hotkeys
 pidgin-sipe
 
 acroread
@@ -391,6 +396,7 @@ vmware-player
 gcj-jdk
 icedtea
 icedtea:6
+icedtea:7
 
 libreoffice
 unoconv
