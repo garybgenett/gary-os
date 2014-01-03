@@ -13,12 +13,6 @@ declare TOKEN
 ################################################################################
 
 if [[ ${1} == -v ]]; then
-	echo -en "\n===[ packages ]===\n\n"
-	${GREP} "[#][ ]gentoo[ ]required" ${HOME}/setup/gentoo/package.* |
-		${GREP} -v "[#]WORK" |
-		${SED} -e "s|^.+/package[.]||g" |
-		${GREP} "^[^[:space:]]+"
-	echo -en "\n===[ keywords ]===\n"
 	declare PKG
 	for PKG in $(
 		${GREP} -v "^[#]" ${HOME}/setup/gentoo/package.keywords |
