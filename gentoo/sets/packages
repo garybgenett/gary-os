@@ -404,6 +404,7 @@ app-office/libreoffice
 app-office/unoconv
 
 app-misc/gtypist
+app-misc/hello
 games-misc/typespeed
 
 ########################################
