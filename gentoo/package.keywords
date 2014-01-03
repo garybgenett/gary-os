@@ -23,6 +23,8 @@ app-emulation/vmware-modules		~amd64		# gentoo required
 app-emulation/vmware-player		~amd64		# gentoo required
 app-emulation/vmware-tools		~amd64		# gentoo required
 
+dev-perl/Template-Tiny			~amd64		# gentoo required
+
 ########################################
 
 games-emulation/mekanix			x86		# gentoo required
