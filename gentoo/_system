@@ -232,10 +232,10 @@ if [[ ${1} == -u ]]; then
 		eselect ${KEY} set ${VAL}
 		eselect ${KEY} list
 	done
-	cat /dev/null >/var/lib/portage/world
+	cat /dev/null		>/var/lib/portage/world
+	echo "@packages"	>/var/lib/portage/world_sets
 	declare ECLEAN="eclean --verbose --destructive" #>>> --package-names
 	${SAFE_ENV} emerge ${ASK} --update --deep --newuse \@system	|| exit 1
-	${SAFE_ENV} emerge ${ASK} --noreplace --select \@packages	|| exit 1
 	${SAFE_ENV} emerge ${ASK} --update --deep --newuse \@world	|| exit 1
 	${SAFE_ENV} dispatch-conf					|| exit 1
 	${SAFE_ENV} emerge \@preserved-rebuild				|| exit 1
