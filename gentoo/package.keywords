@@ -2,6 +2,7 @@
 # portage package keywords file
 ################################################################################
 
+app-misc/hello				~amd64		# gentoo required
 dev-lang/nqp				~amd64		# gentoo required
 dev-lang/parrot				~amd64		# gentoo required
 dev-lang/rakudo				~amd64		# gentoo required
