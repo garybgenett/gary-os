@@ -224,10 +224,11 @@ dev-lang/python
 dev-lang/rakudo
 dev-lang/ruby
 dev-lang/tcl
-dev-lang/v8
 dev-lisp/clisp
 dev-lua/luarocks
 dev-ruby/rubygems
+
+#>>>dev-lang/v8
 net-libs/nodejs
 
 dev-db/sqlite
@@ -298,7 +299,6 @@ sys-fs/sshfs-fuse
 ########################################
 # servers
 
-app-admin/apache-tools
 dev-db/mysql
 net-dns/bind
 net-fs/samba
@@ -313,8 +313,10 @@ net-misc/radvd
 net-nds/openldap
 net-print/cups
 net-wireless/hostapd
-www-apache/mod_perl
 www-misc/awstats
+
+app-admin/apache-tools
+#>>>www-apache/mod_perl
 www-servers/apache
 
 app-text/ghostscript-gpl
