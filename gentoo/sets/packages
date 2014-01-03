@@ -201,6 +201,13 @@ x11-misc/xvkbd
 
 net-misc/unison
 
+dev-perl/Template-DBI
+dev-perl/Template-GD
+dev-perl/Template-Latex
+dev-perl/Template-Tiny
+dev-perl/Template-Toolkit
+dev-perl/Template-XML
+
 app-text/asciidoc
 app-text/docbook-xml-dtd
 app-text/docbook-xsl-stylesheets
