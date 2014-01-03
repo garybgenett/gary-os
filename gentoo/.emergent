@@ -13,6 +13,8 @@ declare TOKEN
 ################################################################################
 
 if [[ ${1} == -v ]]; then
+	declare CUR="/.g/_data/_build/_gentoo"
+	declare NEW="/.g/_toor"
 	declare PKG
 	for PKG in $(
 		${GREP} -v "^[#]" ${HOME}/setup/gentoo/package.keywords |
@@ -20,9 +22,9 @@ if [[ ${1} == -v ]]; then
 		sort
 	); do
 		echo -en "\n"
-		${GREP} ${PKG} /.g/_data/_build/_gentoo/_gentoo/.emerge |
+		${GREP} ${PKG} ${CUR}/_gentoo/.emerge |
 			${GREP} --only-matching "${PKG}[^[:space:]]+"
-		${GREP} --with-filename "KEYWORDS" /.g/_toor/usr/portage/${PKG}/*.ebuild |
+		${GREP} --with-filename "KEYWORDS" ${NEW}/usr/portage/${PKG}/*.ebuild |
 			${GREP} "[^~]amd64" |
 			${SED} -e "s|^.+/||g" -e "s|:.+$||g"
 	done
