@@ -96,6 +96,7 @@ dev-libs/libpcre
 dev-perl/DateManip
 dev-perl/Expect
 dev-perl/Sys-Virt
+dev-perl/WWW-Curl
 dev-perl/WWW-Mechanize
 dev-perl/libwww-perl
 perl-core/CGI
