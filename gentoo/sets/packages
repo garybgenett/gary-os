@@ -211,6 +211,7 @@ dev-perl/Template-XML
 
 app-text/asciidoc
 app-text/docbook-xml-dtd
+app-text/docbook-xsl-ns-stylesheets
 app-text/docbook-xsl-stylesheets
 app-text/texlive
 app-text/xmlto
