@@ -133,6 +133,7 @@ root:x:0:0::/.g/_data/zactive/.home:/bin/bash
 plastic:x:1000:1000::/.g/_data/zactive/.home:/bin/bash
 user:x:1001:1001::/.g/_data/zactive/.home:/bin/bash
 null:x:666:666::/tmp/.null:/bin/nologin
+lfs-user:x:9999:9999::/.g/_data/_build/_lfs/.lfs/lfs-user:/bin/bash
 ---
 END_OF_FILE
 		cat >>${TARGET}/etc/shadow <<END_OF_FILE
@@ -141,15 +142,17 @@ root::::::::
 plastic::::::::
 user:*:::::::
 null:*:::::::
+lfs-user:*:::::::
 ---
 END_OF_FILE
 		cat >>${TARGET}/etc/group <<END_OF_FILE
 ---
 root:x:0:root,plastic
-wheel:x:10:root,plastic
+wheel:x:10:root,plastic,lfs-user
 plastic:x:1000:root,plastic
 user:x:1001:root,plastic,user
 null:x:666:root,plastic,null
+lfs-user:x:9999:root,plastic,lfs-user
 ---
 audio:x:---:root,plastic,null
 cdrom:x:---:root,plastic,null
@@ -160,10 +163,11 @@ END_OF_FILE
 		cat >>${TARGET}/etc/gshadow <<END_OF_FILE
 ---
 root:::root,plastic
-wheel:::root,plastic
+wheel:::root,plastic,lfs-user
 plastic:::root,plastic
 user:::root,plastic,user
 null:::root,plastic,null
+lfs-user:::root,plastic,lfs-user
 ---
 audio:::root,plastic,null
 cdrom:::root,plastic,null
