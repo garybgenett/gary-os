@@ -75,8 +75,8 @@ if [[ ${1} == -2 ]]; then ${_SELF} ${TOOR} -c -i	; exit 0; fi
 ########################################
 
 if [[ ${1} == -i ]]; then
-	umount					${TARGET}/dev/*	2>/dev/null
-	umount					${TARGET}/*	2>/dev/null
+	umount					${TARGET}/dev/{pts,shm}		2>/dev/null
+	umount					${TARGET}/{dev,proc,sys}	2>/dev/null
 	if [[ ! -d ${TARGET}/boot ]]; then
 #>>>		tar -jpvvx -C ${TARGET} -f	$(ls ${SOURCE}/stage3-i686-*.tar.bz2	| tail -n1)
 		tar -jpvvx -C ${TARGET} -f	$(ls ${SOURCE}/stage3-amd64-*.tar.bz2	| tail -n1)
@@ -205,8 +205,8 @@ END_OF_FILE
 	fi
 	HOME=/.g/.home ${SAFE_ENV}		${_SELF} ${AUTO} -f	|| exit 1
 	HOME=/.g/.home ${SAFE_ENV}		${_SELF} ${AUTO} -u	|| exit 1
-	umount					${TARGET}/dev/*	2>/dev/null
-	umount					${TARGET}/*	2>/dev/null
+	umount					${TARGET}/dev/{pts,shm}		2>/dev/null
+	umount					${TARGET}/{dev,proc,sys}	2>/dev/null
 	exit 0
 fi
 
