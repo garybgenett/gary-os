@@ -115,18 +115,23 @@ fi
 #	BEL	\a
 
 export PROMPT_DIRTRIM=
+declare PROMPT_SCR_COLOR="r"
 declare PROMPT_TOKEN_CLR="\[\e[7;31m\]"
 declare PROMPT_TOKEN_DFL="\[\e[0m\]"	# reset color
 declare PROMPT_TOKEN_PWD="\w"
 
 if [[ ${HOSTNAME} == spider ]]; then
 	PROMPT_TOKEN_CLR="\[\e[7;32m\]"
+	PROMPT_SCR_COLOR="g"
 elif [[ ${HOSTNAME} == tarantula ]]; then
 	PROMPT_TOKEN_CLR="\[\e[7;36m\]"
+	PROMPT_SCR_COLOR="c"
 elif [[ ${HOSTNAME} == bastion ]]; then
 	PROMPT_TOKEN_CLR="\[\e[7;33m\]"
+	PROMPT_SCR_COLOR="y"
 elif [[ ${HOSTNAME} == Arachnid ]]; then
 	PROMPT_TOKEN_CLR="\[\e[7;35m\]"
+	PROMPT_SCR_COLOR="m"
 fi
 
 declare PRE_PROMPT='\
@@ -1651,6 +1656,11 @@ function session {
 	fi
 	return 0
 }
+
+if [[ -n "${STY}" ]] &&
+   [[ -n "$(echo ${-} | ${GREP} -o "i")" ]]; then
+	session -c "${PROMPT_SCR_COLOR}"
+fi
 
 ########################################
 
