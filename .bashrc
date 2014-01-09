@@ -1629,7 +1629,13 @@ function session {
 			return 0
 		fi
 	fi
-	if [[ ${1} == -l ]]; then
+	if [[ ${1} == -c ]]; then
+		declare COLOR="${2}"
+		eval screen -X "$(
+			${GREP} "^caption[[:space:]]+string[[:space:]]+" ${HOME}/.screenrc |
+			${SED} "s/= dr/= d${COLOR}/g"
+		)"
+	elif [[ ${1} == -l ]]; then
 		screen -list
 		psg screen
 	elif [[ ${1} == -x ]]; then
