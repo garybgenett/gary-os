@@ -519,6 +519,18 @@ function ldir {
 
 ########################################
 
+function letmeknow {
+	wall "$(
+		echo -en "[${?}]:["
+		history | tail -n1 | tr '\n' ' ' | ${SED} \
+			-e "s/^[[:space:]]*[0-9]+[[:space:]]+[0-9T:-]+[[:space:]]+//g" \
+			-e "s/[[:space:]]*;[[:space:]]*letmeknow[[:space:]]*$//g"
+		echo -en "]"
+	)"
+}
+
+########################################
+
 function pages {
 	calc "$(lynx -dump "${@}" | wc -l) / 60"
 }
