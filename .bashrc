@@ -27,6 +27,14 @@ complete -d -o dirnames cd
 
 ########################################
 
+if [[ -n "$(echo ${-} | ${GREP} -o "i")" ]] &&
+   [[ -x /usr/bin/fortune ]] &&
+   [[ -x /usr/bin/lolcat ]]; then
+	fortune -ac all | lolcat --force
+fi
+
+########################################
+
 mkdir -p ${HOME}/.history/screen	2>/dev/null
 mkdir -p ${HOME}/.history/shell		2>/dev/null
 
