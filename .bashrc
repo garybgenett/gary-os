@@ -1615,8 +1615,6 @@ function reporter {
 ########################################
 
 function session {
-	chown -vR root:root ${HOME}/.screen
-	chmod -vR 700 ${HOME}/.screen
 	declare NAME="_${FUNCNAME}"
 	if [[ ${1} == --*(*) ]] && [[ ${1} != --all ]]; then
 		NAME="${1/#--}"
@@ -1651,6 +1649,8 @@ function session {
 		   { [[ -z ${CYGWIN} ]] && [[ -z ${CYGWIN_ROOT} ]]; }; then
 			su - root
 		else
+			chown -vR root:root ${HOME}/.screen
+			chmod -vR 700 ${HOME}/.screen
 			screen -xAR -S "${NAME}" "${@}" || return 1
 		fi
 	fi
