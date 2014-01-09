@@ -1675,8 +1675,8 @@ function session {
 	return 0
 }
 
-if [[ -n "${STY}" ]] &&
-   [[ -n "$(echo ${-} | ${GREP} -o "i")" ]]; then
+if [[ -n "$(echo ${-} | ${GREP} -o "i")" ]] &&
+   [[ -n "${STY}" ]]; then
 	session -c "${PROMPT_SCR_COLOR}"
 fi
 
