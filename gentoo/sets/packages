@@ -274,6 +274,7 @@ sys-apps/usbutils
 
 app-admin/procinfo
 app-admin/sysstat
+app-misc/reptyr
 sys-apps/dstat
 sys-apps/pv
 
