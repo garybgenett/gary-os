@@ -236,6 +236,7 @@ export EMERGE_CMD="prompt -z emerge"		; alias emerge="${EMERGE_CMD}"
 
 export CVS="reporter cvs"			; alias cvs="${CVS}"
 export SVN="reporter svn"			; alias svn="${SVN}"
+export SVNSYNC="reporter svnsync"		; alias svnsync="${SVNSYNC}"
 
 export GIT_CMD="git"
 export GIT="reporter ${GIT_CMD}"		; alias git="${GIT}"
@@ -1796,11 +1797,17 @@ function sync-dir {
 			${GIT} pull)
 	elif [[ ${REP_TYP} == svn ]]; then
 		if [[ ! -d ${BAS_DIR}/${REP_DST} ]]; then
-			git-clone svn ${REP_SRC} ${BAS_DIR}/${REP_DST}
-			(cd ${BAS_DIR}/${REP_DST} &&
-				${GIT} checkout --force)
+			# http://cournape.wordpress.com/2007/12/18/making-a-local-mirror-of-a-subversion-repository-using-svnsync
+			(reporter svnadmin create ${BAS_DIR}/${REP_DST}.svn &&
+				${MKDIR} ${BAS_DIR}/${REP_DST}.svn/hooks &&
+				echo -en "#!/bin/bash\nexit 0\n" >${BAS_DIR}/${REP_DST}.svn/hooks/pre-revprop-change &&
+				chmod 755 ${BAS_DIR}/${REP_DST}.svn/hooks/pre-revprop-change &&
+				${SVNSYNC} init file://${BAS_DIR}/${REP_DST}.svn ${REP_SRC} &&
+				${SVNSYNC} sync file://${BAS_DIR}/${REP_DST}.svn &&
+				git-clone svn file://${BAS_DIR}/${REP_DST}.svn ${BAS_DIR}/${REP_DST})
 		fi
 		(cd ${BAS_DIR}/${REP_DST} &&
+			${SVNSYNC} sync file://${BAS_DIR}/${REP_DST}.svn &&
 			${GIT_SVN} fetch &&
 			${GIT_SVN} rebase &&
 			${GIT} checkout --force)
