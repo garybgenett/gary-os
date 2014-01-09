@@ -455,12 +455,14 @@ function format {
 ########################################
 
 function git {
-	${NICELY} $(which git) --git-dir="${PWD}.git" --work-tree="${PWD}" "${@}"
+	declare DIR="$(realpath "${PWD}")"
+	${NICELY} $(which git) --git-dir="${DIR}.git" --work-tree="${DIR}" "${@}"
 }
 
 ########################################
 
 function git-clone {
+	declare DIR="$(realpath "${PWD}")"
 	if [[ ${1} == svn ]]; then
 		shift
 		reporter $(which git) svn clone "${@}"
@@ -468,7 +470,7 @@ function git-clone {
 		reporter $(which git) clone --verbose "${@}"
 	fi
 	(cd ${!#} &&
-		${MV} "${PWD}/.git" "${PWD}.git")
+		${MV} "${DIR}/.git" "${DIR}.git")
 }
 
 ########################################
@@ -781,6 +783,7 @@ function email-copy {
 ########################################
 
 function git-backup {
+	declare DIR="$(realpath "${PWD}")"
 	declare FAIL=
 	if [[ "${1}" == -r ]]; then
 		shift
@@ -794,14 +797,14 @@ function git-backup {
 		${GIT} rm -r --cached .				>/dev/null 2>&1 &&
 		${GIT} checkout ${COMMIT} ${ENTIRE} "${@}"	&&
 		${GIT} checkout ${COMMIT} +index		>/dev/null 2>&1 &&
-		index-dir ${PWD} -r "${@}"
+		index-dir ${DIR} -r "${@}"
 		return 0
 	fi
-	echo -en "* -delta\n" >${PWD}/.gitattributes
+	echo -en "* -delta\n" >${DIR}/.gitattributes
 	if [[ "${1}" == -! ]]; then
 		shift
 	else
-		index-dir ${PWD} -0 $(
+		index-dir ${DIR} -0 $(
 			${GREP} "^/" .gitignore 2>/dev/null |
 			${SED} -e "s|^/|./|g" -e "s|/$||g"
 			)
@@ -819,7 +822,7 @@ function git-backup {
 	git-save "${FUNCNAME}" "${AMEND}"	|| return 1
 	if [[ -n "${COUNT}" ]]; then
 		{ git-purge "${COUNT}" &&
-			${RM} ${PWD}.gitlog; }	|| FAIL="1"
+			${RM} ${DIR}.gitlog; }	|| FAIL="1"
 	fi
 #>>>	git-logdir				|| FAIL="1"
 	if [[ -n "${FAIL}" ]]; then
@@ -902,7 +905,8 @@ function git-clean {
 ########################################
 
 function git-logdir {
-	declare GITDIR="${PWD}.gitlog"
+	declare DIR="$(realpath "${PWD}")"
+	declare GITDIR="${DIR}.gitlog"
 	declare LAST_P="$(ls ${GITDIR}/cur 2>/dev/null |
 		sort -n |
 		tail -n1)"
@@ -929,6 +933,7 @@ function git-logdir {
 ########################################
 
 function git-purge {
+	declare DIR="$(realpath "${PWD}")"
 	declare MEM_DIR="/dev/shm"
 	declare PURGE="$(${GIT_CMD} rev-parse "HEAD~$((${1}-1))")" && shift
 	declare _HEAD="$(${GIT_CMD} rev-parse "HEAD")"
@@ -944,7 +949,7 @@ function git-purge {
 		--parent-filter "[ ${PURGE} = \$GIT_COMMIT ] || cat" \
 		HEAD							|| return 1
 	${GIT} update-ref -d refs/${FUNCNAME}/refs/heads/master		|| return 1
-#>>>	${RM} ${PWD}.git/refs/${FUNCNAME}				|| return 1
+#>>>	${RM} ${DIR}.git/refs/${FUNCNAME}				|| return 1
 	git-clean							|| return 1
 	return 0
 }
