@@ -27,7 +27,7 @@ complete -d -o dirnames cd
 
 ########################################
 
-if [[ -n "$(echo ${-} | ${GREP} -o "i")" ]] &&
+if [[ "${-/i}" != "${-}" ]] &&
    [[ -x /usr/bin/fortune ]] &&
    [[ -x /usr/bin/lolcat ]]; then
 	fortune -ac all | lolcat --force
@@ -1683,7 +1683,7 @@ function session {
 	return 0
 }
 
-if [[ -n "$(echo ${-} | ${GREP} -o "i")" ]] &&
+if [[ "${-/i}" != "${-}" ]] &&
    [[ -n "${STY}" ]]; then
 	session -c "${PROMPT_SCR_COLOR}"
 fi
