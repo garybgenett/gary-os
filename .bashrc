@@ -131,7 +131,7 @@ fi
 
 declare PRE_PROMPT='\
 \e]0;\
-${PROMPT_KEY}[ ${TERM} | ${USER}@${HOSTNAME%%.*} | ${PWD/#$HOME/~} ]\
+${PROMPT_KEY}[ ${TERM} | ${USER}@${HOSTNAME/%.*} | ${PWD/#$HOME/~} ]\
 \a'
 
 if { [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; } &&
