@@ -451,6 +451,10 @@ media-gfx/gimp
 media-gfx/mcomix
 
 app-misc/golly
+games-misc/fortune-mod
+games-misc/fortune-mod-all
+games-misc/lolcat
+
 games-arcade/netris
 games-board/cgoban
 games-board/gnuchess
