@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/x86 3.10.17-gentoo Kernel Configuration
+# Linux/x86 3.10.25-gentoo Kernel Configuration
 #
 
 #
