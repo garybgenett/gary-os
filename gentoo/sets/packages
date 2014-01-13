@@ -144,7 +144,7 @@ app-arch/rpm2targz
 
 sys-kernel/genkernel
 sys-kernel/gentoo-sources
-sys-kernel/gentoo-sources:3.10.17
+sys-kernel/gentoo-sources:3.10.25
 sys-kernel/linux-firmware
 
 app-portage/portage-utils
