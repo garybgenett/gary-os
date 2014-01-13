@@ -107,7 +107,7 @@ diff -u -U10 -r /usr/portage/games-fps/quake1-data/quake1-data-2.40.ebuild games
 +		lha xqf resource.x || die "failure unpacking resource.x"
  	fi
  }
-
+ 
  src_install() {
  	insinto "${GAMES_DATADIR}"/quake1/id1
  	case ${CDROM_SET} in
@@ -200,15 +200,15 @@ diff -u -U10 -r /usr/portage/x11-plugins/gkrellaclock/gkrellaclock-0.3.4.ebuild 
  DESCRIPTION="Nice analog clock for GKrellM2"
  SRC_URI="mirror://gentoo/${P}.tar.gz"
  HOMEPAGE="http://www.gkrellm.net/"
-
+ 
  SLOT="2"
  LICENSE="GPL-2"
  KEYWORDS="alpha amd64 ppc sparc x86"
-
+ 
  src_compile() {
  	make clean #166133
 +	epatch "${FILESDIR}"/xclock_size_hack.patch
-
+ 
  	export CFLAGS="${CFLAGS/-O?/}"
  	emake || die 'emake failed'
  }
