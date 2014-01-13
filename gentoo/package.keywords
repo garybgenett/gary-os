@@ -2,29 +2,44 @@
 # portage package keywords file
 ################################################################################
 
+app-emulation/lxc			~amd64		# gentoo required
 app-misc/hello				~amd64		# gentoo required
 dev-lang/nqp				~amd64		# gentoo required
 dev-lang/parrot				~amd64		# gentoo required
 dev-lang/rakudo				~amd64		# gentoo required
+dev-libs/apr				~amd64		# gentoo required
 dev-lua/luarocks			~amd64		# gentoo required
 games-fps/quakeforge			~amd64		# gentoo required
 media-gfx/mcomix			~amd64		# gentoo required
-media-libs/libwebp			~amd64		# gentoo required
 net-analyzer/snort			~amd64		# gentoo required
 net-analyzer/tcptrace			~amd64		# gentoo required
 net-misc/cadaver			~amd64		# gentoo required
 net-misc/pipes				~amd64		# gentoo required
+sys-apps/dtc				~amd64		# gentoo required
 sys-apps/paludis			~amd64		# gentoo required
 sys-devel/bison				~amd64		# gentoo required
 sys-fs/ext3grep				~amd64		# gentoo required
 x11-misc/whaw				~amd64		# gentoo required
 x11-plugins/pidgin-sipe			~amd64		# gentoo required
 
+dev-perl/Template-Tiny			~amd64		# gentoo required
+perl-core/Switch			~amd64		# gentoo required
+
 app-emulation/vmware-modules		~amd64		# gentoo required
 app-emulation/vmware-player		~amd64		# gentoo required
 app-emulation/vmware-tools		~amd64		# gentoo required
 
-dev-perl/Template-Tiny			~amd64		# gentoo required
+app-admin/eselect-java			~amd64		# gentoo required
+dev-java/ecj-gcj			~amd64		# gentoo required
+dev-java/gcj-jdk			~amd64		# gentoo required
+dev-java/icedtea			~amd64		# gentoo required
+dev-java/icedtea-web			~amd64		# gentoo required
+dev-java/java-config			~amd64		# gentoo required
+sys-apps/baselayout-java		~amd64		# gentoo required
+
+dev-ruby/paint				~amd64		# gentoo required
+dev-ruby/trollop			~amd64		# gentoo required
+games-misc/lolcat			~amd64		# gentoo required
 
 ########################################
 
@@ -32,39 +47,35 @@ games-emulation/mekanix			x86		# gentoo required
 
 ################################################################################
 
-app-crypt/efitools			~amd64
-sys-boot/efibootmgr			~amd64
-sys-boot/grub				~amd64
-sys-kernel/gentoo-sources		~amd64
+=dev-lisp/clisp-2.48-r2			~amd64		# build fail: 2.48-r1
 
-dev-lang/perl				~amd64
-perl-core/ExtUtils-ParseXS		~amd64		# gentoo required
-perl-core/Switch			~amd64		# gentoo required
-virtual/perl-ExtUtils-ParseXS		~amd64		# gentoo required
+dev-games/cegui				~amd64		# build fail: 0.6.2b
+dev-libs/ffcall				~amd64		# build fail: 1.10
+sys-block/btrace			~amd64		# build fail: 1.0.1-r1 (http://fedoraproject.org/wiki/UnderstandingDSOLinkChange)
+x11-wm/windowmaker			~amd64		# build fail: 0.92.0-r11
 
-dev-vcs/cvs2svn				~amd64
+app-crypt/efitools			~amd64		# gentoo required
+sys-boot/gnu-efi			~amd64		# required for: efitools
 
-dev-lang/v8				~amd64
-net-libs/nodejs				~amd64
+app-emulation/libvirt			~amd64		# build fail: 1.1.3.1
+app-emulation/libvirt-glib		~amd64		# build fail: 0.1.7
+app-emulation/qemu			~amd64		# build fail: 1.6.1
+app-emulation/spice			~amd64		# build fail: 0.12.3-r1
+app-emulation/virt-manager		~amd64		# build fail: 0.10.0
+app-emulation/virt-viewer		~amd64		# build fail: 0.5.6
+dev-perl/Sys-Virt			~amd64		# build fail: 1.0.0
 
-net-misc/unison				~amd64
+net-libs/libtorrent			~amd64		# required for: rtorrent
+net-p2p/rtorrent			~amd64		# build fail: 0.8.9
 
-app-text/poppler			~amd64
+########################################
 
-app-admin/apache-tools			~amd64
-www-servers/apache			~amd64
+dev-vcs/cvs2svn				~amd64		# 2.4.0
 
-x11-base/xorg-drivers			~amd64
-x11-base/xorg-server			~amd64
-x11-drivers/*				~amd64
-x11-libs/libdrm				~amd64		# gentoo required
-x11-misc/xlockmore			~amd64		# gentoo required
-x11-proto/inputproto			~amd64		# gentoo required
-x11-wm/openbox				~amd64
+net-misc/unison				~amd64		# 2.45.4
 
-x11-misc/dmenu				~amd64
-x11-terms/st				~amd64
-x11-wm/dwm				~amd64
+app-admin/apache-tools			~amd64		# 2.4.6
+www-servers/apache			~amd64		# 2.4.6
 
 dev-libs/e_dbus				~amd64		# gentoo required
 dev-libs/ecore				~amd64		# gentoo required
@@ -76,41 +87,23 @@ dev-libs/eio				~amd64		# gentoo required
 dev-libs/embryo				~amd64		# gentoo required
 media-libs/edje				~amd64		# gentoo required
 media-libs/evas				~amd64		# gentoo required
-x11-wm/enlightenment			~amd64
+x11-wm/enlightenment			~amd64		# 0.17.4
 
-app-emulation/libvirt			~amd64
-app-emulation/lxc			~amd64
-app-emulation/qemu			~amd64
-app-emulation/spice			~amd64
-app-emulation/spice-protocol		~amd64
-app-emulation/spice-vdagent		~amd64
-app-emulation/virt-manager		~amd64
-app-emulation/virt-viewer		~amd64
-net-misc/spice-gtk			~amd64
-sys-firmware/ipxe			~amd64		# gentoo required
+app-emulation/qemu			~amd64		# 1.6.0
+app-emulation/spice-vdagent		~amd64		# gentoo required
 sys-firmware/seabios			~amd64		# gentoo required
 
-dev-libs/nspr				~amd64		# gentoo required
-dev-libs/nss				~amd64		# gentoo required
-mail-client/thunderbird			~amd64
-www-client/firefox			~amd64
-
-www-client/chromium			~amd64
-
-dev-java/ecj-gcj			~amd64		# gentoo required
-dev-java/gcj-jdk			~amd64		# gentoo required
-dev-java/icedtea			~amd64		# gentoo required
-dev-java/icedtea-bin			~amd64		# gentoo required
-dev-java/icedtea-web			~amd64		# gentoo required
-sys-devel/gcc				~amd64		# gentoo required
+media-libs/libdvdcss			~amd64		# gentoo required
+media-libs/libdvdnav			~amd64		# 4.2.1
+media-libs/libdvdread			~amd64		# 4.2.1
 
 ########################################
 
-# results in no "brctl" binary: =net-misc/bridge-utils-1.4
-net-misc/bridge-utils			~amd64
+x11-wm/openbox				~amd64
 
-# fails to build: =dev-libs/ffcall-1.10
-dev-libs/ffcall				~amd64
+x11-misc/dmenu				~amd64
+x11-terms/st				~amd64
+x11-wm/dwm				~amd64
 
 ################################################################################
 # end of file

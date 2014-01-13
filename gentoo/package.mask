@@ -2,22 +2,7 @@
 # portage package mask file
 ################################################################################
 
-# not really e17
->=x11-wm/enlightenment-1.0
-
-########################################
-
-# causes build errors
->=sys-devel/automake-1.13
-
-# causes dependency errors
->=dev-lang/ruby-2.0.0
-
-# fails to build
->=dev-lisp/clisp-2.49
-
-# fails to build
->=net-analyzer/wireshark-1.10
+>=x11-wm/enlightenment-1.0		# not really e17
 
 ################################################################################
 # end of file
