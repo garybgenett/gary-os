@@ -471,15 +471,13 @@ function git {
 ########################################
 
 function git-clone {
-	declare DIR="$(realpath "${PWD}")"
 	if [[ ${1} == svn ]]; then
 		shift
 		reporter $(which git) svn clone "${@}"
 	else
 		reporter $(which git) clone --verbose "${@}"
 	fi
-	(cd ${!#} &&
-		${MV} "${DIR}/.git" "${DIR}.git")
+	${MV} "${!#}/.git" "${!#}.git"
 }
 
 ########################################
