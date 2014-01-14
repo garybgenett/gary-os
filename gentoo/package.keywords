@@ -57,6 +57,10 @@ x11-wm/windowmaker			~amd64		# build fail: 0.92.0-r11
 app-crypt/efitools			~amd64		# gentoo required
 sys-boot/gnu-efi			~amd64		# required for: efitools
 
+sys-fs/zfs				~amd64		# gentoo rquired
+sys-fs/zfs-kmod				~amd64		# required for: zfs
+sys-kernel/spl				~amd64		# required for: zfs
+
 app-emulation/libvirt			~amd64		# build fail: 1.1.3.1
 app-emulation/libvirt-glib		~amd64		# build fail: 0.1.7
 app-emulation/qemu			~amd64		# build fail: 1.6.1
