@@ -40,6 +40,7 @@ sys-fs/ext3grep
 sys-fs/ext4magic
 sys-fs/extundelete
 sys-fs/squashfs-tools
+sys-fs/zfs
 
 sys-apps/coreutils
 sys-apps/diffutils
