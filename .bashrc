@@ -1658,7 +1658,7 @@ function session {
 		declare COLOR="${2}"
 		eval screen -X "$(
 			${GREP} "^caption[[:space:]]+string[[:space:]]+" ${HOME}/.screenrc |
-			${SED} "s/= dr/= d${COLOR}/g"
+			${SED} -e "s/= dr/= d${COLOR}/g" -e "s/\"/\'/g"
 		)"
 	elif [[ ${1} == -l ]]; then
 		screen -list
