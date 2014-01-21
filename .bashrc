@@ -87,7 +87,7 @@ export CCACHE_LOGFILE= #>>>"/tmp/.ccache.log"
 
 ########################################
 
-export CDPATH="${HOME}"
+export CDPATH=".:${HOME}"
 export CDPATH="${CDPATH}:/.g"
 export CDPATH="${CDPATH}:/.g/_data"
 export CDPATH="${CDPATH}:/.g/_data/media"
