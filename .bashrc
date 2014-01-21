@@ -793,15 +793,11 @@ function git-backup {
 	if [[ "${1}" == -r ]]; then
 		shift
 		declare COMMIT="HEAD"
-		declare ENTIRE=
+		declare ENTIRE="+index"
 		[[ -n "$(echo "${1}" | ${GREP} "^[a-z0-9]{40}$")" ]] && COMMIT="${1}" && shift
-		[[ -z "${@}" ]] && ENTIRE="."
-		touch +${FUNCNAME}				>/dev/null 2>&1 &&
-		${GIT_ADD} +${FUNCNAME}				>/dev/null 2>&1 &&
-		${RM} +${FUNCNAME}				>/dev/null 2>&1 &&
-		${GIT} rm -r --cached .				>/dev/null 2>&1 &&
-		${GIT} checkout ${COMMIT} ${ENTIRE} "${@}"	&&
-		${GIT} checkout ${COMMIT} +index		>/dev/null 2>&1 &&
+		[[ -z "${@}" ]] && ENTIRE=". ${ENTIRE}"
+		${GIT} reset	${COMMIT} ${ENTIRE} "${@}" &&
+		${GIT} checkout	${COMMIT} ${ENTIRE} "${@}" &&
 		index-dir ${DIR} -r "${@}"
 		return 0
 	fi
