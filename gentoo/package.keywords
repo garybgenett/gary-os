@@ -9,6 +9,7 @@ dev-lang/parrot				~amd64		# gentoo required
 dev-lang/rakudo				~amd64		# gentoo required
 dev-libs/apr				~amd64		# gentoo required
 dev-lua/luarocks			~amd64		# gentoo required
+dev-util/metro				~amd64		# gentoo required
 games-fps/quakeforge			~amd64		# gentoo required
 media-gfx/mcomix			~amd64		# gentoo required
 net-analyzer/snort			~amd64		# gentoo required
