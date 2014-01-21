@@ -2,6 +2,12 @@
 # portage package use file
 ################################################################################
 
+#>>>dev-java/icedtea-bin			-X		# gentoo required: first build
+#>>>dev-java/icedtea-bin			-nsplugin	# gentoo required: first build
+#>>>x11-libs/gdk-pixbuf			-jpeg		# gentoo required: first build
+
+################################################################################
+
 app-arch/libarchive			xattr		# gentoo required
 app-text/ghostscript-gpl		cups		# gentoo required
 app-text/poppler			cairo		# gentoo required
