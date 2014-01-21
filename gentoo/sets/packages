@@ -149,6 +149,7 @@ sys-kernel/gentoo-sources:3.10.25
 sys-kernel/linux-firmware
 
 app-portage/portage-utils
+dev-util/metro
 sys-apps/paludis
 sys-apps/portage
 
