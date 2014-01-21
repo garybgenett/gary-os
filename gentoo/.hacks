@@ -49,6 +49,7 @@ rm -frv /debian-binary
 rm -frv /home
 rm -frv /media
 rm -frv /root
+rm -frv /tftproot
 
 #>>>rm -frv $(find / \
 #>>>	\( -path /.g -prune \) \
