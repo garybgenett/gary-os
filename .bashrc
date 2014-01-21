@@ -1072,7 +1072,8 @@ function index-dir {
 	if ${SINGLE}; then
 		echo -en "\n"
 		(cd ${INDEX_D} && \
-			eval find . ${EXCL_PATHS} -print		2>&3 | ${PV} -N find |
+			(	eval find . ${EXCL_PATHS} -print	2>&3; [[ -n "${@}" ]] &&
+				eval find "${@}" -type d -print		2>&3) | ${PV} -N find |
 			sort						2>&3 | ${PV} -N sort |
 			indexer -0					2>&3 | ${PV} -N indx |
 			cat				>${INDEX_I}	) 3>&2
