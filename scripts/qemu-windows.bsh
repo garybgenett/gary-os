@@ -7,6 +7,8 @@ declare QMEM="2048"
 declare FILE="windows.img"
 declare QSYS="${1}"			; shift
 
+declare NC="nc -q 1 127.0.0.1 999${QNUM}"
+
 ########################################
 
 if [[ ${QSYS} == -d ]]; then
@@ -29,11 +31,18 @@ fi
 
 ########################################
 
+if [[ ${QSYS} == -i ]]; then
+	echo "info qtree" | ${NC} | ${GREP} -ai -A1 "(spice|vdagent|virtio-serial)"
+	echo "info spice" | ${NC}
+	exit 0
+fi
+
+########################################
+
 if [[ ${QSYS} == -u ]]; then
-	declare NC="nc -q 1 127.0.0.1 999${QNUM}"
 	declare I
 	for I in $(echo "info usb" | ${NC} |
-		${GREP} -a -i "(hp[ ]scanjet[ ]scanner|lexmark[ ]e120n|usb[ ]pnp[ ]sound[ ]device)" |
+		${GREP} -ai "(hp[ ]scanjet[ ]scanner|lexmark[ ]e120n|usb[ ]pnp[ ]sound[ ]device)" |
 		cut -d' ' -f'4,6' |
 		${SED} -e "s/,//g" -e "s/[ ]/./g"
 	); do
