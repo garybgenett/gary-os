@@ -41,6 +41,7 @@ fi
 
 ########################################
 
+declare QOUT=
 declare QDSK=
 declare QMCH=
 declare QVDA=
@@ -73,14 +74,17 @@ I+=" "; I+="/.g/_data/_target/iso/${FILE}"
 I="$(find ${I} 2>/dev/null | sort -n | tail -n1)"
 
 if [[ -n $(file ${I} 2>/dev/null | ${GREP} "ISO[ ]9660") ]]; then
+	QOUT="${I}.qemu"
 	QDSK="-drive id=cdrom0,if=none,file=${I}"
 	QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ide.1,bootindex=1"
 elif [[ -n ${I} ]]; then
+	QOUT="${I}.qemu"
 	QDSK="-drive id=disk0,if=none,file=${I}"
 	QDSK+=" "; QDSK+="-device ide-hd,drive=disk0,bus=ide.0,bootindex=2"
 	QDSK+=" "; QDSK+="-drive id=cdrom0,if=none"
 	QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ide.1,bootindex=1"
 else
+	QOUT="/tmp/qemu.${QNUM}"
 	QDSK="-drive id=cdrom0,if=none"
 	QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ide.1,bootindex=1"
 fi
@@ -188,11 +192,12 @@ eval exec qemu-system-x86_64 \
 	${QUSB} \
 	${QDSK} \
 	"${@}" \
-	-writeconfig - ${FORK}
+	-writeconfig "${QOUT}" ${FORK}
 
 ########################################
 
 sleep 1
+cat "${QOUT}"
 
 if [[ ${INTERFACE} == display ]]; then
 #>>>	exec ${VNC} 127.0.0.1:599${QNUM} &
