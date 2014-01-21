@@ -105,9 +105,9 @@ fi
 # SPICE Channel: vdagent
 # SPICE Device: com.redhat.spice.0
 
-QVDA="-device virtio-serial,id=serial0"
+QVDA="-device virtio-serial,id=virtio-serial0"
 QVDA+=" "; QVDA+="-chardev spicevmc,id=spicevmc0,name=vdagent"
-QVDA+=" "; QVDA+="-device virtserialport,chardev=spicevmc0,bus=serial0.0,name=com.redhat.spice.0"
+QVDA+=" "; QVDA+="-device virtserialport,chardev=spicevmc0,bus=virtio-serial0.0,nr=1,name=com.redhat.spice.0"
 
 ########################################
 
