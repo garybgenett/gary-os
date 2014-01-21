@@ -247,7 +247,7 @@ if [[ ${1} == -u ]]; then
 	done
 	cat /dev/null		>/var/lib/portage/world
 	echo "@packages"	>/var/lib/portage/world_sets
-	declare ECLEAN="eclean --verbose --destructive" #>>> --package-names
+	declare ECLEAN="eclean --verbose"
 	${SAFE_ENV} emerge ${ASK} --update --deep --newuse \@system	|| exit 1
 	${SAFE_ENV} emerge ${ASK} --update --deep --newuse \@world	|| exit 1
 	${SAFE_ENV} dispatch-conf					|| exit 1
@@ -256,7 +256,7 @@ if [[ ${1} == -u ]]; then
 	${SAFE_ENV} emerge --depclean					|| exit 1
 	${SAFE_ENV} revdep-rebuild --ignore				|| exit 1
 	${SAFE_ENV} emaint --fix all					|| exit 1
-	${SAFE_ENV} ${ECLEAN} distfiles --fetch-restricted		|| exit 1
+	${SAFE_ENV} ${ECLEAN} distfiles					|| exit 1
 	${SAFE_ENV} ${ECLEAN} packages					|| exit 1
 
 ########################################
