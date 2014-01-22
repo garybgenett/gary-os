@@ -23,10 +23,15 @@ declare DOUT="${DST}/${TYPE}/${PLAT}/${ARCH}"
 
 declare NAME="$(cat ${SRC}/etc/builds/${TYPE}/build.conf |
 	${SED} -n "s/^name[:][ ]//gp")"
-declare DATE="$(ls ${ISO}/stage3-*${TYPE}*.tar.xz |
+declare DATE="$(ls {${ISO},${DOUT}/*}/stage3-*${TYPE}*.tar.xz |
 	${SED} "s/^.+([0-9]{4}-[0-9]{2}-[0-9]{2}).+$/\1/g" |
 	sort -n |
 	tail -n1)"
+
+echo -en "\n"
+echo -en "NAME: ${NAME}\n"
+echo -en "DATE: ${DATE}\n"
+echo -en "\n"
 
 ########################################
 
@@ -48,28 +53,41 @@ ${MKDIR} ${DST}
 #>>>${RM} /var/tmp/metro
 #>>>${LN} ${TEMP} /var/tmp/metro
 
-${MKDIR} ${DOUT}/${DATE}
-${RSYNC_C} ${ISO}/stage3-*${TYPE}*-${DATE}.tar.xz ${DOUT}/${DATE}/
-
 ${MKDIR} ${DOUT}/.control/{strategy,version}
 echo -en "local\n"	>${DOUT}/.control/strategy/build
 echo -en "stage3\n"	>${DOUT}/.control/strategy/seed
 echo -en "${DATE}\n"	>${DOUT}/.control/version/stage3
 
+declare FILE=
+for FILE in $(ls ${ISO}/stage3-*${TYPE}*.tar.xz |
+	${SED} "s/^.+([0-9]{4}-[0-9]{2}-[0-9]{2}).+$/\1/g" |
+	sort -n)
+do
+	${MKDIR} ${DOUT}/${FILE}
+	${RSYNC_C} ${ISO}/stage3-*${TYPE}*-${FILE}.tar.xz ${DOUT}/${FILE}/
+done
+
 if [[ ! -d ${TEMP}/cache/cloned-repositories/${NAME} ]]; then
-	${MKDIR} ${TEMP}/cache/cloned-repositories/${NAME}
-	${RSYNC_U} ${PORT}.git/ ${TEMP}/cache/cloned-repositories/${NAME}/.git
-	(cd ${TEMP}/cache/cloned-repositories/${NAME} && $(which git) checkout .)
+	${MKDIR}		${TEMP}/cache/cloned-repositories/${NAME}
+	${RSYNC_U} ${PORT}.git/	${TEMP}/cache/cloned-repositories/${NAME}.git
+	${RM}			${TEMP}/cache/cloned-repositories/${NAME}/.git
+	${LN} ../${NAME}.git	${TEMP}/cache/cloned-repositories/${NAME}/.git
 fi
+(cd ${TEMP}/cache/cloned-repositories/${NAME} &&
+	${GIT} checkout --force funtoo.org)
 
 ########################################
+
+echo -en "\n"
+${SAFE_ENV} env
+echo -en "\n"
 
 ${SAFE_ENV} ${METRO_CMD} \
 	multi: yes \
 	multi/mode: full \
 	path/mirror: ${DST} \
-	path/tmp: ${TEMP} \
 	path/distfiles: ${DIST} \
+	path/tmp: ${TEMP} \
 	target/build: ${TYPE} \
 	target/subarch: ${ARCH} \
 	target/version: $(date --iso=d) || exit 1
