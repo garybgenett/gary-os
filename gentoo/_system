@@ -33,9 +33,14 @@ if [[ ${1} == -a ]]; then
 	ASK="--ask n"
 fi
 
+declare NEW="false"
 declare BLD="false"
 declare KRN="false"
 declare CFG="false"
+if [[ ${1} == -n ]]; then
+	shift
+	NEW="true"
+fi
 if [[ ${1} == -b ]]; then
 	shift
 	BLD="true"
@@ -77,10 +82,10 @@ fi
 
 ########################################
 
-if [[ ${1} == -0 ]]; then ${_SELF} ${TOOR} -a -b -k -i	| prompt -c	; exit 0; fi
-if [[ ${1} == -/ ]]; then ${_SELF} ${TOOR} -a -i	| prompt -c	; exit 0; fi
-if [[ ${1} == -1 ]]; then ${_SELF} ${TOOR} -a -b -i	| prompt -c	; exit 0; fi
-if [[ ${1} == -2 ]]; then ${_SELF} ${TOOR} -c -i			; exit 0; fi
+if [[ ${1} == -0 ]]; then ${_SELF} ${TOOR} -a -n -b -k -i	| prompt -c	; exit 0; fi
+if [[ ${1} == -/ ]]; then ${_SELF} ${TOOR} -a -i		| prompt -c	; exit 0; fi
+if [[ ${1} == -1 ]]; then ${_SELF} ${TOOR} -a -b -i		| prompt -c	; exit 0; fi
+if [[ ${1} == -2 ]]; then ${_SELF} ${TOOR} -c -i				; exit 0; fi
 
 ########################################
 
@@ -110,6 +115,11 @@ if [[ ${1} == -i ]]; then
 	${RM}					${TARGET}/.g/.home/.ssh/id_*
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/scripts/_sync mount g sda
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/setup/.setconf
+	if ${NEW}; then for NEW in \
+		${TARGET}/.setup/gentoo/package.*
+	do
+		${SED} -i "s|^[#][{]NEW[}][ ](.+)$|\1|g" ${NEW}
+	done; fi
 	if ${BLD}; then
 		${SAFE_ENV}			locale-gen						|| exit 1
 		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} ccache debugedit portage glibc gcc	|| exit 1
