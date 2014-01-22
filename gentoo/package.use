@@ -2,9 +2,9 @@
 # portage package use file
 ################################################################################
 
-#>>>dev-java/icedtea-bin			-X		# gentoo required: first build
-#>>>dev-java/icedtea-bin			-nsplugin	# gentoo required: first build
-#>>>x11-libs/gdk-pixbuf			-jpeg		# gentoo required: first build
+#{NEW} dev-java/icedtea-bin		-X		# gentoo required
+#{NEW} dev-java/icedtea-bin		-nsplugin	# gentoo required
+#{NEW} x11-libs/gdk-pixbuf		-jpeg		# gentoo required
 
 ################################################################################
 
