@@ -795,7 +795,7 @@ function git-backup {
 		declare COMMIT="HEAD"
 		declare ENTIRE="+index"
 		[[ -n "$(echo "${1}" | ${GREP} "^[a-z0-9]{40}$")" ]] && COMMIT="${1}" && shift
-		[[ -z "${@}" ]] && ENTIRE=". ${ENTIRE}"
+		[[ -z "${@}" ]] && ENTIRE="./ ${ENTIRE}"
 		${GIT} reset	${COMMIT} ${ENTIRE} "${@}" &&
 		${GIT} checkout	${COMMIT} ${ENTIRE} "${@}" &&
 		index-dir ${DIR} -r "${@}"
