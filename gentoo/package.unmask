@@ -2,6 +2,10 @@
 # portage package unmask file
 ################################################################################
 
+sys-apps/paludis
+
+########################################
+
 games-roguelike/nethack
 
 games-fps/doom3

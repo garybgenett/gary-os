@@ -18,22 +18,19 @@ dev-libs/e_dbus				libnotify	# gentoo required
 media-libs/libsdl			joystick	# gentoo required
 net-wireless/wpa_supplicant		dbus		# gentoo required
 sys-auth/consolekit			policykit	# gentoo required
+sys-libs/gdbm				berkdb		# gentoo required
 
 ########################################
 
 net-dns/dnsmasq				script		# gentoo required
 net-ftp/proftpd				openssl		# gentoo required
+net-nds/openldap			sasl		# gentoo required
 
 dev-python/PyQt4			webkit		# gentoo required
 media-libs/chromaprint			tools		# gentoo required
-media-libs/libpng			apng		# gentoo required
 media-libs/mesa				xa		# gentoo required
 net-misc/spice-gtk			gtk3		# gentoo required
-sys-devel/gcc				awt		# gentoo required
-sys-fs/udev				gudev		# gentoo required
 sys-libs/zlib				minizip		# gentoo required
-virtual/udev				gudev		# gentoo required
-x11-libs/libdrm				libkms		# gentoo required
 
 ################################################################################
 
