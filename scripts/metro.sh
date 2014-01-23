@@ -21,17 +21,14 @@ declare DOUT="${DST}/${TYPE}/${PLAT}/${ARCH}"
 
 ########################################
 
-declare NAME="$(cat ${SRC}/etc/builds/${TYPE}/build.conf |
+declare NAME="$(cat ${SRC}/etc/builds/${TYPE}/build.conf	2>/dev/null |
 	${SED} -n "s/^name[:][ ]//gp")"
-declare DATE="$(ls {${ISO},${DOUT}/*}/stage3-*${TYPE}*.tar.xz |
+declare DATE="$(ls {${ISO},${DOUT}/*}/stage3-*${TYPE}*.tar.xz	2>/dev/null |
 	${SED} "s/^.+([0-9]{4}-[0-9]{2}-[0-9]{2}).+$/\1/g" |
 	sort -n |
 	tail -n1)"
 
-echo -en "\n"
-echo -en "NAME: ${NAME}\n"
-echo -en "DATE: ${DATE}\n"
-echo -en "\n"
+{ [[ -z ${NAME} ]] || [[ -z ${DATE} ]]; } && exit 1
 
 ########################################
 
@@ -79,9 +76,13 @@ fi
 ########################################
 
 echo -en "\n"
-${SAFE_ENV} env
-echo -en "\n"
+echo -en "NAME: ${NAME}\n"
+echo -en "DATE: ${DATE}\n"
 
+echo -en "\n"
+${SAFE_ENV} env
+
+echo -en "\n"
 ${SAFE_ENV} ${METRO_CMD} \
 	multi: yes \
 	multi/mode: full \
