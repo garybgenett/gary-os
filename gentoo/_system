@@ -96,8 +96,7 @@ if [[ ${1} == -i ]]; then
 #>>>		tar -pvvxJ -C ${TARGET} -f	$(ls ${SOURCE}/stage3-*i686*funtoo*.tar.xz	| tail -n1)
 		tar -pvvxJ -C ${TARGET} -f	$(ls ${SOURCE}/stage3-*core2_64*funtoo*.tar.xz	| tail -n1)
 		${RSYNC_U} ${SOURCE}/*funtoo*	${TARGET}/_build/
-		${RSYNC_U} ${GITDIR}.git/	${TARGET}/usr/portage/.git
-		${LN} portage/.git		${TARGET}/usr/portage.git
+		${RSYNC_U} ${GITDIR}{,.git}	${TARGET}/usr/
 		(cd				${TARGET}/usr/portage &&
 		${GIT} reset --hard		$(cat ${HOME}/setup/gentoo/.funtoo))
 		${RSYNC_U}			${SOURCE}/portage-distfiles/* \
@@ -281,7 +280,10 @@ if [[ ${1} == -u ]]; then
 
 elif [[ ${1} != -! ]]; then
 	if [[ ${1} != -f ]]; then
+		${RM} /usr/portage/.git
+		${LN} ../portage.git /usr/portage/.git
 		${SAFE_ENV} emerge --verbose --sync
+		${RM} /usr/portage/.git
 	fi
 	${SAFE_ENV} emerge --emptytree --fetch-all-uri \@system \@world
 fi
