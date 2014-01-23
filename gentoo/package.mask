@@ -2,6 +2,7 @@
 # portage package mask file
 ################################################################################
 
+>=app-emulation/vmware-modules-279.1	# gentoo required: version match
 >=net-misc/spice-gtk-0.21		# breaks clipboard sharing
 
 ########################################
