@@ -13,6 +13,7 @@ declare SPRT="${BLD}/funtoo/portage"
 declare TYPE="funtoo-stable"
 declare PLAT="x86-64bit"
 declare ARCH="core2_64"
+declare SARC="${ARCH}"
 
 declare DEST="${BLD}/_metro"
 declare DFIL="${DEST}/.distfiles"
@@ -62,9 +63,11 @@ ${MKDIR} ${DEST}
 #>>>${RM} /var/tmp/metro
 #>>>${LN} ${DTMP} /var/tmp/metro
 
-${MKDIR} ${DOUT}/.control/{strategy,version}
-echo -en "local\n"	>${DOUT}/.control/strategy/build
+${MKDIR} ${DOUT}/.control/{strategy,remote,version}
+echo -en "remote\n"	>${DOUT}/.control/strategy/build
 echo -en "stage3\n"	>${DOUT}/.control/strategy/seed
+echo -en "${TYPE}\n"	>${DOUT}/.control/remote/build
+echo -en "${SARC}\n"	>${DOUT}/.control/remote/subarch
 echo -en "${DATE}\n"	>${DOUT}/.control/version/stage3
 
 if [[ ! -d ${DTMP}/cache/cloned-repositories/${NAME} ]]; then
