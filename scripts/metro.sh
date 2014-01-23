@@ -58,7 +58,25 @@ ${RSYNC_U} ${SMET}/ ${DMET}
 
 ########################################
 
+function makeconf_var {
+	source ${HOME}/setup/gentoo/make.conf
+	eval echo -en "\${${1}}" | tr '\n' ' '
+}
+
+declare OPTS="	$(makeconf_var EMERGE_DEFAULT_OPTS	| ${SED} "s/[-][-]ask[^[:space:]]*//g")"
+OPTS+="		$(makeconf_var MAKEOPTS			| ${GREP} -o "[-]j[0-9]+")"
+
+declare FEAT="$(makeconf_var FEATURES)"
+declare MKOP="$(makeconf_var MAKEOPTS)"
+
+########################################
+
 ${SED} -i \
+	-e "s%^(options:).*jobs.*$%\1	${OPTS}%g" \
+	\
+	-e "s%^(FEATURES:.*)$%\1	${FEAT}%g" \
+	-e "s%^(MAKEOPTS:).*$%\1	${MKOP}%g" \
+	\
 	-e "s%^(branch/tar:).*$%\1	.%g" \
 	-e "s%^(options:).*pull.*$%\1	%g" \
 	\
