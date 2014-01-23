@@ -37,7 +37,7 @@ declare METRO_CMD="${DMET}/metro \
 	path/tmp:	${DTMP} \
 	target/build:	${TYPE} \
 	target/subarch:	${ARCH} \
-	target/version:	$(date --iso=d) \
+	target/version:	$(date --iso=h) \
 "
 
 ########################################
@@ -45,7 +45,7 @@ declare METRO_CMD="${DMET}/metro \
 declare NAME="$(cat ${SMET}/etc/builds/${TYPE}/build.conf	2>/dev/null |
 	${SED} -n "s/^name[:][ ]//gp")"
 declare DATE="$(ls {${ISO},${DOUT}/*}/stage3-*${TYPE}*.tar.xz	2>/dev/null |
-	${SED} "s/^.+([0-9]{4}-[0-9]{2}-[0-9]{2}).+$/\1/g" |
+	${SED} "s/^.+([0-9]{4}-[0-9]{2}-[0-9]{2}(T[0-9]{2}-[0-9]{4})?).+$/\1/g" |
 	sort -n |
 	tail -n1)"
 
