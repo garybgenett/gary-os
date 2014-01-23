@@ -3,6 +3,7 @@ source ${HOME}/.bashrc
 ################################################################################
 
 declare SOURCE="/.g/_data/_target/iso"
+declare GITDIR="/.g/_data/_build/funtoo/portage"
 
 declare TARGET="/.g/_data/_build/_gentoo"
 declare TOOR=
@@ -92,14 +93,14 @@ if [[ ${1} == -2 ]]; then ${_SELF} ${TOOR} -c -i				; exit 0; fi
 if [[ ${1} == -i ]]; then
 	umount					${TARGET}/{dev{/pts,/shm,},proc,sys}	2>/dev/null
 	if [[ ! -d ${TARGET}/boot ]]; then
-#>>>		tar -jpvvx -C ${TARGET} -f	$(ls ${SOURCE}/stage3-i686-*.tar.bz2	| tail -n1)
-		tar -jpvvx -C ${TARGET} -f	$(ls ${SOURCE}/stage3-amd64-*.tar.bz2	| tail -n1)
-		tar -jpvvx -C ${TARGET}/usr -f	$(ls ${SOURCE}/portage-*.tar.bz2	| tail -n1)
-		${MKDIR}			${TARGET}/_build
-		${RSYNC_U} ${SOURCE}/handbook-*	${TARGET}/_build/
-		${RSYNC_U} ${SOURCE}/portage-*	${TARGET}/_build/
-		${RSYNC_U} ${SOURCE}/stage3-*	${TARGET}/_build/
-		${RSYNC_C}			${SOURCE}/portage-distfiles/* \
+#>>>		tar -pvvxJ -C ${TARGET} -f	$(ls ${SOURCE}/stage3-*i686*funtoo*.tar.xz	| tail -n1)
+		tar -pvvxJ -C ${TARGET} -f	$(ls ${SOURCE}/stage3-*core2_64*funtoo*.tar.xz	| tail -n1)
+		${RSYNC_U} ${SOURCE}/*funtoo*	${TARGET}/_build/
+		${RSYNC_U} ${GITDIR}.git/	${TARGET}/usr/portage/.git
+		${LN} portage/.git		${TARGET}/usr/portage.git
+		(cd				${TARGET}/usr/portage &&
+		${GIT} reset --hard		$(cat ${HOME}/setup/gentoo/.funtoo))
+		${RSYNC_U}			${SOURCE}/portage-distfiles/* \
 						${TARGET}/usr/portage/distfiles/
 	fi
 	echo -en "${COMMIT}"			>${TARGET}/_build/_commit
@@ -124,7 +125,9 @@ if [[ ${1} == -i ]]; then
 		${SAFE_ENV}			locale-gen						|| exit 1
 		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} ccache debugedit portage glibc gcc	|| exit 1
 		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} eselect genkernel gentoolkit		|| exit 1
-		${SAFE_ENV}			eselect profile set 1					|| exit 1
+#>>>		${SAFE_ENV}			eselect profile add 1					|| exit 1
+		${SAFE_ENV}			eselect profile set-build 3				|| exit 1
+		${SAFE_ENV}			eselect profile set-flavor 8				|| exit 1
 		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} --emptytree \@system \@world		|| exit 1
 	fi
 	if ${KRN}; then for KRN in $(
@@ -239,6 +242,9 @@ if [[ ${1} == -u ]]; then
 	gcc-config --list-profiles
 	java-config --set-system-vm $(equery list icedtea | awk '{print $1;}' | cut -d/ -f2 | cut -d. -f-1 | sort -n | tail -n1)
 	java-config --list-available-vms
+#>>>	eselect profile add 1
+	eselect profile set-build 3
+	eselect profile set-flavor 8
 	declare SELECT
 	for SELECT in \
 		mesa:--auto		\
