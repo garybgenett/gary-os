@@ -49,7 +49,7 @@ www-servers/apache			-threads
 
 ########################################
 
-sys-boot/grub				-multislot
+sys-boot/grub				-multislot device-mapper libzfs mount
 
 sys-apps/paludis			pbins portage prebuilt-documentation search-index visibility
 
