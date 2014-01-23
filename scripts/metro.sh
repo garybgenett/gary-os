@@ -77,7 +77,7 @@ ${SED} -i \
 	-e "s%^(FEATURES:.*)$%\1	${FEAT}%g" \
 	-e "s%^(MAKEOPTS:).*$%\1	${MKOP}%g" \
 	\
-	-e "s%^(branch/tar:).*$%\1	.%g" \
+	-e "s%^(branch/tar:).*$%\1	./%g" \
 	-e "s%^(options:).*pull.*$%\1	%g" \
 	\
 	-e "s%\t+% %g" \
