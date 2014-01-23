@@ -42,9 +42,9 @@ declare METRO_CMD="${DMET}/metro \
 
 ########################################
 
-declare NAME="$(cat ${SMET}/etc/builds/${TYPE}/build.conf	2>/dev/null |
+declare NAME="$(cat ${SMET}/etc/builds/${TYPE}/build.conf		2>/dev/null |
 	${SED} -n "s/^name[:][ ]//gp")"
-declare DATE="$(ls {${ISO},${DOUT}/*}/stage3-*${TYPE}*.tar.xz	2>/dev/null |
+declare DATE="$(ls {${ISO},${DOUT}/*}/stage3-*${SARC}*${TYPE}*.tar.xz	2>/dev/null |
 	${SED} "s/^.+([0-9]{4}-[0-9]{2}-[0-9]{2}(T[0-9]{2}-[0-9]{4})?).+$/\1/g" |
 	sort -n |
 	tail -n1)"
@@ -105,12 +105,12 @@ ${RM}			${DTMP}/cache/cloned-repositories/${NAME}.git
 ${LN} ../${NAME}/.git	${DTMP}/cache/cloned-repositories/${NAME}.git
 
 declare FILE=
-for FILE in $(ls ${ISO}/stage3-*${TYPE}*.tar.xz |
+for FILE in $(ls ${ISO}/stage3-*${SARC}*${TYPE}*.tar.xz |
 	${SED} "s/^.+([0-9]{4}-[0-9]{2}-[0-9]{2}).+$/\1/g" |
 	sort -n)
 do
 	${MKDIR} ${DOUT}/${FILE}
-	${RSYNC_U} ${ISO}/stage3-*${TYPE}*-${FILE}.tar.xz ${DOUT}/${FILE}/
+	${RSYNC_U} ${ISO}/stage3-*${SARC}*${TYPE}*-${FILE}.tar.xz ${DOUT}/${FILE}/
 done
 
 ########################################
