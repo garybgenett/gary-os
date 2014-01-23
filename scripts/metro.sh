@@ -17,6 +17,7 @@ declare SARC="${ARCH}"
 
 declare DEST="${BLD}/_metro"
 declare DFIL="${DEST}/.distfiles"
+declare DMET="${DEST}/.metro"
 declare DTMP="${DEST}/.temp"
 declare DOUT="${DEST}/${TYPE}/${PLAT}/${ARCH}"
 
@@ -25,8 +26,8 @@ declare DOUT="${DEST}/${TYPE}/${PLAT}/${ARCH}"
 declare SAFE_ENV="prompt -z"
 export CCACHE_DIR=
 
-declare METRO_CMD="${SMET}/metro \
-	--libdir ${SMET} \
+declare METRO_CMD="${DMET}/metro \
+	--libdir ${DMET} \
 	--verbose \
 	--debug \
 	multi:		yes \
@@ -53,13 +54,23 @@ declare DATE="$(ls {${ISO},${DOUT}/*}/stage3-*${TYPE}*.tar.xz	2>/dev/null |
 ################################################################################
 
 ${MKDIR} ${DEST}
+${RSYNC_U} ${SMET}/ ${DMET}
 
 ########################################
 
+${SED} -i \
+	-e "s%^(branch/tar:).*$%\1	.%g" \
+	-e "s%^(options:).*pull.*$%\1	%g" \
+	\
+	-e "s%\t+% %g" \
+	${DMET}/etc/builds/${TYPE}/build.conf || exit 1
+
+################################################################################
+
 #>>>${RM} /usr/bin/metro
-#>>>${LN} ${SMET}/metro /usr/bin/metro
+#>>>${LN} ${DMET}/metro /usr/bin/metro
 #>>>${RM} /usr/lib/metro
-#>>>${LN} ${SMET} /usr/lib/metro
+#>>>${LN} ${DMET} /usr/lib/metro
 #>>>${RM} /var/tmp/metro
 #>>>${LN} ${DTMP} /var/tmp/metro
 
@@ -70,14 +81,10 @@ echo -en "${TYPE}\n"	>${DOUT}/.control/remote/build
 echo -en "${SARC}\n"	>${DOUT}/.control/remote/subarch
 echo -en "${DATE}\n"	>${DOUT}/.control/version/stage3
 
-if [[ ! -d ${DTMP}/cache/cloned-repositories/${NAME} ]]; then
-	${MKDIR}		${DTMP}/cache/cloned-repositories/${NAME}
-	${RSYNC_U} ${SPRT}.git/	${DTMP}/cache/cloned-repositories/${NAME}.git
-	${RM}			${DTMP}/cache/cloned-repositories/${NAME}/.git
-	${LN} ../${NAME}.git	${DTMP}/cache/cloned-repositories/${NAME}/.git
-fi
-(cd ${DTMP}/cache/cloned-repositories/${NAME} &&
-	${GIT} checkout --force funtoo.org)
+${MKDIR}		${DTMP}/cache/cloned-repositories/${NAME}
+${RSYNC_U} ${SPRT}.git/	${DTMP}/cache/cloned-repositories/${NAME}/.git
+${RM}			${DTMP}/cache/cloned-repositories/${NAME}.git
+${LN} ../${NAME}/.git	${DTMP}/cache/cloned-repositories/${NAME}.git
 
 declare FILE=
 for FILE in $(ls ${ISO}/stage3-*${TYPE}*.tar.xz |
@@ -89,6 +96,10 @@ do
 done
 
 ########################################
+
+echo -en "\n"
+diff	${SMET}/etc/builds/${TYPE}/build.conf \
+	${DMET}/etc/builds/${TYPE}/build.conf
 
 echo -en "\n"
 echo -en "NAME: ${NAME}\n"
