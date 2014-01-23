@@ -2,7 +2,7 @@
 # portage package mask file
 ################################################################################
 
->net-misc/spice-gtk-0.20-r1		# 0.21 breaks clipboard sharing
+>=net-misc/spice-gtk-0.21		# breaks clipboard sharing
 
 ########################################
 
