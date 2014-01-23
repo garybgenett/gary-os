@@ -60,7 +60,7 @@ declare SAFE_ENV="prompt -z EMERGE_DEFAULT_OPTS="
 if [[ ${1} == -i ]] || [[ ${1} == -s ]]; then
 	SAFE_ENV="prompt -z chroot ${TARGET}"
 elif [[ ${1} == -u ]]; then
-	SAFE_ENV="prompt -z"
+	SAFE_ENV="eval prompt -z"
 fi
 
 ################################################################################
@@ -258,9 +258,10 @@ if [[ ${1} == -u ]]; then
 	cat /dev/null		>/var/lib/portage/world
 	echo "@packages"	>/var/lib/portage/world_sets
 	declare ECLEAN="eclean --verbose"
+	declare D_CONF="dispatch-conf"
+	[[ -n ${AUTO} ]] && D_CONF="expect -c \"spawn ${D_CONF}; expect use-new {send u\r; exp_continue;};\""
 	${SAFE_ENV} emerge ${ASK} --update --deep --newuse \@system	|| exit 1
 	${SAFE_ENV} emerge ${ASK} --update --deep --newuse \@world	|| exit 1
-	${SAFE_ENV} dispatch-conf					|| exit 1
 	${SAFE_ENV} emerge ${ASK} \@preserved-rebuild			|| exit 1
 	${SAFE_ENV} emerge ${ASK} \@module-rebuild			|| exit 1
 	${SAFE_ENV} emerge ${ASK} --depclean				|| exit 1
@@ -268,6 +269,7 @@ if [[ ${1} == -u ]]; then
 	${SAFE_ENV} emaint --fix all					|| exit 1
 	${SAFE_ENV} ${ECLEAN} distfiles					|| exit 1
 	${SAFE_ENV} ${ECLEAN} packages					|| exit 1
+	${SAFE_ENV} ${D_CONF}						|| exit 1
 
 ########################################
 
