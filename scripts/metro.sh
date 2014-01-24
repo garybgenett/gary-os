@@ -67,6 +67,7 @@ function makeconf_var {
 
 declare OPTS="	$(makeconf_var EMERGE_DEFAULT_OPTS	| ${SED} "s/[-][-]ask[^[:space:]]*//g")"
 OPTS+="		$(makeconf_var MAKEOPTS			| ${GREP} -o "[-]j[0-9]+")"
+declare PKGS="$(cat ${HOME}/setup/gentoo/sets/metro	| ${GREP} -v -e "^[#]" -e "^$" | sort | tr '\n' ' ')"
 
 declare FEAT="$(makeconf_var FEATURES)"
 declare MKOP="$(makeconf_var MAKEOPTS)"
@@ -75,6 +76,7 @@ declare MKOP="$(makeconf_var MAKEOPTS)"
 
 ${SED} -i \
 	-e "s%^(options:).*jobs.*$%\1	${OPTS}%g" \
+	-e "s%^(packages:.*)$%\1\n	${PKGS}%g" \
 	\
 	-e "s%^(FEATURES:.*)$%\1	${FEAT}%g" \
 	-e "s%^(MAKEOPTS:).*$%\1	${MKOP}%g" \
