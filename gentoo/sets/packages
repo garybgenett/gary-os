@@ -458,6 +458,8 @@ games-misc/fortune-mod
 games-misc/fortune-mod-all
 games-misc/lolcat
 
+games-arcade/lbreakout
+games-arcade/lbreakout2
 games-arcade/netris
 games-board/cgoban
 games-board/gnuchess
