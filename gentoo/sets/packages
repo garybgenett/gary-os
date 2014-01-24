@@ -477,9 +477,12 @@ games-emulation/nestopia
 games-emulation/stella
 
 app-arch/lha
+#>>>games-fps/doom-data
 games-fps/doom3
 #>>>games-fps/doom3-data
 #>>>games-fps/doom3-roe
+games-fps/freedoom
+games-fps/prboom
 #>>>games-fps/quake1-data
 games-fps/quakeforge
 
