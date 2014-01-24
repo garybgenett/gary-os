@@ -1868,8 +1868,7 @@ function vdiff {
 		shift
 		SEARCH="+/^commit"
 		declare FOLLOW=
-		declare FILE="${#}"
-		(( ${FILE} > 0 )) && [[ -f ${!FILE} ]] && FOLLOW="--follow"
+		(( ${#} == 1 )) && FOLLOW="--follow"
 		${GIT_CMD} log ${GIT_FMT} ${DIFF} ${FOLLOW} "${@}" >${VDIFF} 2>&1
 	else
 		SEARCH="+/^[-+]"
