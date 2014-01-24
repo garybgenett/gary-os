@@ -19,7 +19,9 @@ declare DEST="${BLD}/_metro"
 declare DFIL="${DEST}/.distfiles"
 declare DMET="${DEST}/.metro"
 declare DTMP="${DEST}/.temp"
+
 declare DOUT="${DEST}/${TYPE}/${PLAT}/${ARCH}"
+declare SOUT="${DEST}/${TYPE}/${PLAT}/${SARC}"
 
 ########################################
 
@@ -44,7 +46,7 @@ declare METRO_CMD="${DMET}/metro \
 
 declare NAME="$(cat ${SMET}/etc/builds/${TYPE}/build.conf		2>/dev/null |
 	${SED} -n "s/^name[:][ ]//gp")"
-declare DATE="$(ls {${ISO},${DOUT}/*}/stage3-*${SARC}*${TYPE}*.tar.xz	2>/dev/null |
+declare DATE="$(ls {${ISO},${SOUT}/*}/stage3-*${SARC}*${TYPE}*.tar.xz	2>/dev/null |
 	${SED} "s/^.+([0-9]{4}-[0-9]{2}-[0-9]{2}(T[0-9]{2}-[0-9]{4})?).+$/\1/g" |
 	sort -n |
 	tail -n1)"
@@ -92,12 +94,13 @@ ${SED} -i \
 #>>>${RM} /var/tmp/metro
 #>>>${LN} ${DTMP} /var/tmp/metro
 
-${MKDIR} ${DOUT}/.control/{strategy,remote,version}
+${MKDIR} ${DOUT}/.control/{strategy,remote}
 echo -en "remote\n"	>${DOUT}/.control/strategy/build
 echo -en "stage3\n"	>${DOUT}/.control/strategy/seed
 echo -en "${TYPE}\n"	>${DOUT}/.control/remote/build
 echo -en "${SARC}\n"	>${DOUT}/.control/remote/subarch
-echo -en "${DATE}\n"	>${DOUT}/.control/version/stage3
+${MKDIR} ${SOUT}/.control/version
+echo -en "${DATE}\n"	>${SOUT}/.control/version/stage3
 
 ${MKDIR}		${DTMP}/cache/cloned-repositories/${NAME}
 ${RSYNC_U} ${SPRT}.git/	${DTMP}/cache/cloned-repositories/${NAME}/.git
@@ -109,8 +112,8 @@ for FILE in $(ls ${ISO}/stage3-*${SARC}*${TYPE}*.tar.xz |
 	${SED} "s/^.+([0-9]{4}-[0-9]{2}-[0-9]{2}).+$/\1/g" |
 	sort -n)
 do
-	${MKDIR} ${DOUT}/${FILE}
-	${RSYNC_U} ${ISO}/stage3-*${SARC}*${TYPE}*-${FILE}.tar.xz ${DOUT}/${FILE}/
+	${MKDIR} ${SOUT}/${FILE}
+	${RSYNC_U} ${ISO}/stage3-*${SARC}*${TYPE}*-${FILE}.tar.xz ${SOUT}/${FILE}/
 done
 
 ########################################
