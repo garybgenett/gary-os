@@ -1779,6 +1779,7 @@ function sync-dir {
 	declare REP_FUL="${1}" && shift
 	${MKDIR} $(dirname ${BAS_DIR}/${REP_DST})
 	if [[ ${REP_TYP} == repo ]]; then
+		export PATH="${BAS_DIR}/${REP_DST}:${PATH}"
 		if [[ ! -d ${BAS_DIR}/${REP_DST} ]]; then
 			${MKDIR} ${BAS_DIR}/${REP_DST}
 			${LN} /usr/bin/python2.7 ${BAS_DIR}/${REP_DST}/python
