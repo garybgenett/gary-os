@@ -458,13 +458,17 @@ games-misc/fortune-mod
 games-misc/fortune-mod-all
 games-misc/lolcat
 
-games-arcade/lbreakout
-games-arcade/lbreakout2
-games-arcade/netris
 games-board/cgoban
 games-board/gnuchess
 games-board/gnugo
 games-board/xboard
+
+games-action/barrage
+games-arcade/lbreakout
+games-arcade/lbreakout2
+games-arcade/netris
+games-puzzle/lmarbles
+games-puzzle/ltris
 games-roguelike/nethack
 
 games-emulation/gnuboy
