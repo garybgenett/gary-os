@@ -57,6 +57,7 @@ app-crypt/efitools			~amd64		# gentoo required
 sys-boot/gnu-efi			~amd64		# build fail: efitools
 
 dev-libs/ffcall				~amd64		# build fail: 1.10
+net-analyzer/ssldump			~amd64		# build fail: 0.9-r2
 
 net-libs/libtorrent			~amd64		# build fail: rtorrent
 net-p2p/rtorrent			~amd64		# build fail: 0.8.9
