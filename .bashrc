@@ -38,6 +38,11 @@ fi
 mkdir -p ${HOME}/.history/screen	2>/dev/null
 mkdir -p ${HOME}/.history/shell		2>/dev/null
 
+export SCREENDIR="${HOME}/.screen"
+mkdir -p ${SCREENDIR}			2>/dev/null
+chown -R root:root ${SCREENDIR}		2>/dev/null
+chmod -R 700 ${SCREENDIR}		2>/dev/null
+
 ################################################################################
 # variables
 ################################################################################
@@ -1668,8 +1673,6 @@ function session {
 		   { [[ -z ${CYGWIN} ]] && [[ -z ${CYGWIN_ROOT} ]]; }; then
 			su - root
 		else
-			chown -vR root:root ${HOME}/.screen
-			chmod -vR 700 ${HOME}/.screen
 			screen -xAR -S "${NAME}" "${@}" || return 1
 		fi
 	fi
