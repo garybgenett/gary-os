@@ -145,6 +145,8 @@ if [[ ${1} == -i ]]; then
 		${LN} kernel			${TARGET}/boot/_new					|| exit 1
 		${RM}				${TARGET}/boot/_old					|| exit 1
 		${LN} kernel.old		${TARGET}/boot/_old					|| exit 1
+		{ [[ -L				${TARGET}/boot/kernel.old ]] ||
+		${LN} ${KRN}			${TARGET}/boot/kernel.old; }				|| exit 1
 	done; fi
 	if ${CFG}; then
 		cat >>${TARGET}/etc/passwd <<END_OF_FILE
