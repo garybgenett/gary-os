@@ -64,6 +64,8 @@ net-p2p/rtorrent			~amd64		# build fail: 0.8.9
 
 ########################################
 
+=dev-lang/perl-5.16*			~amd64
+
 =net-misc/unison-2.45*			~amd64
 
 =dev-vcs/cvs2svn-2.4*			~amd64
