@@ -9,11 +9,25 @@ declare QSYS="${1}"			; shift
 
 ########################################
 
+declare QOPT=
+QOPT="-drive id=drive0,if=none,file=${FILE}"
+QOPT+=" "; QOPT+="-device ide-hd,drive=drive0,bus=ide.0,bootindex=0"
+
+if [[ -n $(
+	file -L ${FILE} 2>/dev/null |
+	${GREP} "Linux[ ]kernel[ ].+[ ]boot[ ]executable"
+) ]]; then
+	QOPT="-display curses"
+	QOPT+=" "; QOPT+="-kernel ${FILE}"
+	QSYS="0"
+fi
+
+########################################
+
 qemu-img create -f qcow2 /tmp/null.qcow2 100G
 
 exec qemu.bsh "${QNUM}" "${QMEM}" "/tmp/null.qcow2" "${QSYS}" \
-	-drive id=drive0,if=none,file=${FILE} \
-	-device ide-hd,drive=drive0,bus=ide.0,bootindex=0 \
+	${QOPT} \
 	"${@}"
 
 ################################################################################
