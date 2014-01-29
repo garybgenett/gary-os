@@ -278,6 +278,7 @@ sys-apps/usbutils
 
 app-admin/procinfo
 app-admin/sysstat
+app-misc/binwalk
 app-misc/reptyr
 app-text/tree
 sys-apps/dstat
