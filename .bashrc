@@ -1537,7 +1537,7 @@ function prompt {
 			CCACHE_LOGFILE="${CCACHE_LOGFILE}" \
 			PATH="${PATH}" \
 			${CMD} "${@}"
-		return ${PIPESTATUS[0]}
+		return ${?}
 	fi
 	if [[ ${1} == -c ]]; then
 		shift
@@ -1568,7 +1568,7 @@ function prompt {
 		                    s/(-o [^\s]+)/${MSG_COLOR}\1${DEF_COLOR}/gi;
 		                              s/$/${DEF_COLOR}/gi;
 		'
-		return ${PIPESTATUS[0]}
+		return ${?}
 	fi
 	if [[ ${1} == -d ]]; then
 		if [[ ${2} == [0-9] ]]; then
