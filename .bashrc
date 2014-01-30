@@ -1824,10 +1824,10 @@ function sync-dir {
 		declare CVS_MOD="${REP_SRC/#*\/=\/}"
 		(cd ${BAS_DIR} &&
 			${CVS} -d ${CVSROOT} checkout -d ${REP_DST} ${CVS_MOD})
-		if [[ -n ${REP_FUL} ]]; then
+#>>>		if [[ -n ${REP_FUL} ]]; then
 			(cd ${BAS_DIR}/${REP_DST} &&
 				${GIT} -c i18n.commitencoding=ascii cvsimport -akmR)
-		fi
+#>>>		fi
 	elif [[ ${REP_TYP} == rsync ]]; then
 		${RSYNC_U/--rsh=ssh } ${REP_SRC}/ ${BAS_DIR}/${REP_DST}
 		if [[ -n $(echo "${REP_DST}" | ${GREP} "CVSROOT$") ]]; then
