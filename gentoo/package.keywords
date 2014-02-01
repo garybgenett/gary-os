@@ -4,6 +4,7 @@
 
 app-accessibility/at-spi2-atk		~amd64		# gentoo required
 app-emulation/lxc			~amd64		# gentoo required
+app-misc/binwalk			~amd64		# gentoo required
 app-misc/hello				~amd64		# gentoo required
 dev-lang/nqp				~amd64		# gentoo required
 dev-lang/parrot				~amd64		# gentoo required
