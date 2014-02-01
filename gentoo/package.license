@@ -1,0 +1,40 @@
+################################################################################
+# portage package license file
+################################################################################
+
+app-emulation/emul-linux-x86-medialibs	MPEG-4
+sys-kernel/gentoo-sources		freedist
+sys-kernel/linux-firmware		freedist
+
+########################################
+
+app-arch/rar				RAR
+app-arch/unrar				unRAR
+
+app-misc/run-mailcap			freedist
+app-text/calibre			unRAR
+games-emulation/mekanix			mekanix
+
+games-misc/fortune-mod			fairuse
+games-misc/fortune-mod-calvin		fairuse
+games-misc/fortune-mod-dubya		fairuse
+games-misc/fortune-mod-familyguy	fairuse
+games-misc/fortune-mod-firefly		fairuse
+games-misc/fortune-mod-futurama		fairuse
+games-misc/fortune-mod-humorixfortunes	fairuse freedist
+games-misc/fortune-mod-smac		fairuse
+games-misc/fortune-mod-strangelove	fairuse
+
+################################################################################
+
+app-emulation/vmware-player		vmware
+app-emulation/vmware-tools		vmware
+
+app-text/acroread			Adobe
+
+app-arch/lha				lha
+games-fps/doom3				DOOM3
+
+################################################################################
+# end of file
+################################################################################
