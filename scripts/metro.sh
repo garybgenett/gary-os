@@ -132,6 +132,38 @@ ${SED} -i \
 	-e "s%^(USE=.+)$%\1${USE_}%g" \
 	${DMET}/targets/gentoo/target/files.spec || exit 1
 
+########################################
+
+USE_=
+USE_+="files/package.keywords: [			\n\
+]\n"
+USE_+="files/package.license: [				\n\
+]\n"
+USE_+="files/package.mask: [				\n\
+]\n"
+USE_+="files/package.unmask: [				\n\
+]\n"
+USE_+="files/package.use: [				\n\
+]\n"
+
+${SED} -i \
+	-e "s%^(USE:.+)$%\1\n${USE_}%g" \
+	${DMET}/etc/builds/${TYPE}/build.conf || exit 1
+
+########################################
+
+USE_="\
+if [ \"\$[portage/files/package.license?]\" = \"yes\" ]	\n\
+then							\n\
+cat > /etc/portage/package.license << \"EOF\"		\n\
+\$[[portage/files/package.license:lax]]			\n\
+EOF\nfi							\n\
+"
+
+${SED} -i \
+	-e "s%^(if[ ].+portage/files/package.use.+)$%${USE_}\1%g" \
+	${DMET}/targets/gentoo/steps/stage.spec || exit 1
+
 ################################################################################
 
 #>>>${RM} /usr/bin/metro
@@ -165,6 +197,7 @@ done
 ########################################
 
 for FILE in \
+	/targets/gentoo/steps/stage.spec	\
 	/targets/gentoo/target/files.spec	\
 	/etc/builds/${TYPE}/build.conf
 do
