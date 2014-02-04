@@ -3,6 +3,7 @@ source ${HOME}/.bashrc
 ################################################################################
 
 declare BLD="/.g/_data/_build"
+declare SAV="/.g/_data/_builds/_metro"
 declare ISO="/.g/_data/_target/iso"
 
 ########################################
@@ -44,9 +45,9 @@ declare METRO_CMD="${DMET}/metro \
 
 ########################################
 
-declare NAME="$(cat ${SMET}/etc/builds/${TYPE}/build.conf		2>/dev/null |
+declare NAME="$(cat ${SMET}/etc/builds/${TYPE}/build.conf 2>/dev/null |
 	${SED} -n "s/^name[:][ ]//gp")"
-declare DATE="$(ls {${ISO},${SOUT}/*}/stage3-*${SARC}*${TYPE}*.tar.xz	2>/dev/null |
+declare DATE="$(ls {${SAV}/*/*/*/*,${ISO},${SOUT}/*}/stage3-*${SARC}*${TYPE}*.tar.xz 2>/dev/null |
 	${SED} "s/^.+([0-9]{4}-[0-9]{2}-[0-9]{2}(T[0-9]{2}-[0-9]{4})?).+$/\1/g" |
 	sort -n |
 	tail -n1)"
@@ -110,12 +111,12 @@ ${RM}			${DTMP}/cache/cloned-repositories/${NAME}.git
 ${LN} ../${NAME}/.git	${DTMP}/cache/cloned-repositories/${NAME}.git
 
 declare FILE=
-for FILE in $(ls ${ISO}/stage3-*${SARC}*${TYPE}*.tar.xz |
+for FILE in $(ls {${SAV}/*/*/*/*,${ISO}}/stage3-*${SARC}*${TYPE}*.tar.xz |
 	${SED} "s/^.+([0-9]{4}-[0-9]{2}-[0-9]{2}).+$/\1/g" |
 	sort -n)
 do
 	${MKDIR} ${SOUT}/${FILE}
-	${RSYNC_U} ${ISO}/stage3-*${SARC}*${TYPE}*-${FILE}.tar.xz ${SOUT}/${FILE}/
+	${RSYNC_U} {${SAV}/*/*/*/*,${ISO}}/stage3-*${SARC}*${TYPE}*-${FILE}.tar.xz ${SOUT}/${FILE}/
 done
 
 ########################################
@@ -135,6 +136,9 @@ ${SAFE_ENV} env
 
 echo -en "\n"
 ${SAFE_ENV} ${METRO_CMD} || exit 1
+
+${MKDIR} ${SAV}
+${RSYNC_C} ${DEST}/ ${SAV}
 
 exit 0
 ################################################################################
