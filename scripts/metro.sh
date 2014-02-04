@@ -164,6 +164,18 @@ ${SED} -i \
 	-e "s%^(if[ ].+portage/files/package.use.+)$%${USE_}\1%g" \
 	${DMET}/targets/gentoo/steps/stage.spec || exit 1
 
+########################################
+
+USE_="\
+genkernel --loglevel=5 --symlink all || exit 1		\n\
+mkdir -p /boot/grub || exit 1				\n\
+grub-mkconfig -o /boot/grub/grub.cfg || exit 1		\n\
+"
+
+${SED} -i \
+	-e "s%^(emerge.+system.+)$%\1\n${USE_}%g" \
+	${DMET}/targets/gentoo/stage3.spec || exit 1
+
 ################################################################################
 
 #>>>${RM} /usr/bin/metro
@@ -197,6 +209,7 @@ done
 ########################################
 
 for FILE in \
+	/targets/gentoo/stage3.spec		\
 	/targets/gentoo/steps/stage.spec	\
 	/targets/gentoo/target/files.spec	\
 	/etc/builds/${TYPE}/build.conf
