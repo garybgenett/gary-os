@@ -55,6 +55,10 @@ declare DATE="$(ls {${SAV}/*/*/*/*,${ISO},${SOUT}/*}/stage3-*${SARC}*${TYPE}*.ta
 
 { [[ -z ${NAME} ]] || [[ -z ${DATE} ]]; } && exit 1
 
+########################################
+
+declare FILE=
+
 ################################################################################
 
 ${MKDIR} ${DEST}
@@ -67,14 +71,25 @@ function makeconf_var {
 	eval echo -en "\${${1}}" | tr '\n' ' '
 }
 
+########################################
+
 declare OPTS="	$(makeconf_var EMERGE_DEFAULT_OPTS	| ${SED} "s/[-][-]ask[^[:space:]]*//g")"
 OPTS+="		$(makeconf_var MAKEOPTS			| ${GREP} -o "[-]j[0-9]+")"
 declare PKGS="$(cat ${HOME}/setup/gentoo/sets/metro	| ${GREP} -v -e "^[#]" -e "^$" | sort | tr '\n' ' ')"
 
 declare FEAT="$(makeconf_var FEATURES)"
 declare MKOP="$(makeconf_var MAKEOPTS)"
+declare USE_= #>>>"$(makeconf_var USE			| ${SED} "s/[ ][-]?(X|gtk|java)[ ]/ -\1 /g")"
 
-########################################
+#>>>USE_+="\nACCEPT_KEYWORDS:		$(makeconf_var ACCEPT_KEYWORDS)"
+USE_+="\nACCEPT_LICENSE:		$(makeconf_var ACCEPT_LICENSE)"
+USE_+="\nEMERGE_DEFAULT_OPTS:		$(makeconf_var EMERGE_DEFAULT_OPTS	| ${SED} "s/[-][-]ask[^[:space:]]*//g")"
+USE_+="\nGRUB_PLATFORMS:		$(makeconf_var GRUB_PLATFORMS)"
+USE_+="\nLANG:				$(makeconf_var LANG)"
+USE_+="\nLC_ALL:			$(makeconf_var LC_ALL)"
+USE_+="\nLDFLAGS:			$(makeconf_var LDFLAGS)"
+USE_+="\nPORTAGE_IONICE_COMMAND:	$(makeconf_var PORTAGE_IONICE_COMMAND)"
+USE_+="\nPORTAGE_NICENESS:		$(makeconf_var PORTAGE_NICENESS)"
 
 ${SED} -i \
 	-e "s%^(options:).*jobs.*$%\1	${OPTS}%g" \
@@ -82,12 +97,40 @@ ${SED} -i \
 	\
 	-e "s%^(FEATURES:.*)$%\1	${FEAT}%g" \
 	-e "s%^(MAKEOPTS:).*$%\1	${MKOP}%g" \
+	-e "s%^(USE:).*$%\1		${USE_}%g" \
 	\
 	-e "s%^(branch/tar:).*$%\1	./%g" \
 	-e "s%^(options:).*pull.*$%\1	%g" \
 	\
 	-e "s%\t+% %g" \
 	${DMET}/etc/builds/${TYPE}/build.conf || exit 1
+
+########################################
+
+USE_=
+for FILE in \
+	ACCEPT_KEYWORDS		\
+	ACCEPT_LICENSE		\
+	CHOST			\
+	EMERGE_DEFAULT_OPTS	\
+	FEATURES		\
+	GRUB_PLATFORMS		\
+	LANG			\
+	LC_ALL			\
+	LDFLAGS			\
+	MAKEOPTS		\
+	PORTAGE_IONICE_COMMAND	\
+	PORTAGE_NICENESS
+do
+	USE_+="\n${FILE}=\"\$[portage/${FILE}:zap]\""
+	${SED} -i \
+		-e "s%^(${FILE}=.+)$%%g" \
+		${DMET}/targets/gentoo/target/files.spec || exit 1
+done
+
+${SED} -i \
+	-e "s%^(USE=.+)$%\1${USE_}%g" \
+	${DMET}/targets/gentoo/target/files.spec || exit 1
 
 ################################################################################
 
@@ -111,7 +154,6 @@ ${RSYNC_U} ${SPRT}.git/	${DTMP}/cache/cloned-repositories/${NAME}/.git
 ${RM}			${DTMP}/cache/cloned-repositories/${NAME}.git
 ${LN} ../${NAME}/.git	${DTMP}/cache/cloned-repositories/${NAME}.git
 
-declare FILE=
 for FILE in $(ls {${SAV}/*/*/*/*,${ISO}}/stage3-*${SARC}*${TYPE}*.tar.xz |
 	${SED} "s/^.+([0-9]{4}-[0-9]{2}-[0-9]{2}).+$/\1/g" |
 	sort -n)
@@ -122,9 +164,13 @@ done
 
 ########################################
 
-echo -en "\n"
-diff	${SMET}/etc/builds/${TYPE}/build.conf \
-	${DMET}/etc/builds/${TYPE}/build.conf
+for FILE in \
+	/targets/gentoo/target/files.spec	\
+	/etc/builds/${TYPE}/build.conf
+do
+	echo -en "\n[${FILE}]\n"
+	diff ${SMET}/${FILE} ${DMET}/${FILE}
+done
 
 echo -en "\n"
 echo -en "NAME: ${NAME}\n"
