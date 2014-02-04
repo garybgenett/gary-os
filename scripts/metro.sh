@@ -40,8 +40,9 @@ declare METRO_CMD="${DMET}/metro \
 	path/tmp:	${DTMP} \
 	target/build:	${TYPE} \
 	target/subarch:	${ARCH} \
-	target/version:	$(date --iso=h) \
+	target/version:	$(date --iso=d) \
 "
+#>>>	target/version:	$(date --iso=h) \
 
 ########################################
 
