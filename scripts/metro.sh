@@ -46,9 +46,25 @@ declare METRO_CMD="${DMET}/metro \
 
 ########################################
 
+declare COMMIT=
+declare REPO
+for REPO in \
+	.setup	\
+	.static	\
+	metro	\
+	portage
+do
+	COMMIT="${COMMIT}${REPO}: $(
+		cat /.g/_data/zactive/${REPO}.git/refs/heads/master 2>/dev/null;
+		cat ${BLD}/funtoo/${REPO}.git/refs/heads/master 2>/dev/null;
+	)\n"
+done
+
+########################################
+
 declare NAME="$(cat ${SMET}/etc/builds/${TYPE}/build.conf 2>/dev/null |
 	${SED} -n "s/^name[:][ ]//gp")"
-declare DATE="$(ls {${SAV}/*/*/*/*,${ISO},${SOUT}/*}/stage3-*${SARC}*${TYPE}*.tar.xz 2>/dev/null |
+declare DATE="$(ls {${SAV},${ISO},${SOUT}/*}/stage3-*${SARC}*${TYPE}*.tar.xz 2>/dev/null |
 	${SED} "s/^.+([0-9]{4}-[0-9]{2}-[0-9]{2}(T[0-9]{2}-[0-9]{4})?).+$/\1/g" |
 	sort -n |
 	tail -n1)"
@@ -203,12 +219,12 @@ ${RSYNC_U} ${SPRT}.git/	${DTMP}/cache/cloned-repositories/${NAME}/.git
 ${RM}			${DTMP}/cache/cloned-repositories/${NAME}.git
 ${LN} ../${NAME}/.git	${DTMP}/cache/cloned-repositories/${NAME}.git
 
-for FILE in $(ls {${SAV}/*/*/*/*,${ISO}}/stage3-*${SARC}*${TYPE}*.tar.xz |
+for FILE in $(ls {${SAV},${ISO}}/stage3-*${SARC}*${TYPE}*.tar.xz |
 	${SED} "s/^.+([0-9]{4}-[0-9]{2}-[0-9]{2}).+$/\1/g" |
 	sort -n)
 do
 	${MKDIR} ${SOUT}/${FILE}
-	${RSYNC_U} {${SAV}/*/*/*/*,${ISO}}/stage3-*${SARC}*${TYPE}*-${FILE}.tar.xz ${SOUT}/${FILE}/
+	${RSYNC_U} {${SAV},${ISO}}/stage3-*${SARC}*${TYPE}*-${FILE}.tar.xz ${SOUT}/${FILE}/
 done
 
 ########################################
@@ -235,8 +251,17 @@ ${SAFE_ENV} env
 echo -en "\n"
 ${SAFE_ENV} ${METRO_CMD} || exit 1
 
-${MKDIR} ${SAV}
-${RSYNC_C} ${DEST}/ ${SAV}
+########################################
+
+FILE="$(find ${DEST}/funtoo-* -type f 2>/dev/null |
+	${GREP} "[.]tar[.]xz$")"
+
+${MKDIR}				${SAV}
+echo -en "${COMMIT}"			>${SAV}/_commit
+${RSYNC_U} ${HOME}/setup/gentoo/	${SAV}/_config
+${RSYNC_U} ${HOME}/scripts/metro.sh	${SAV}/_metro.sh
+${RSYNC_U} ${DFIL}/			${SAV}/$(basename ${DFIL})
+${RSYNC_U} ${FILE}			${SAV}/
 
 exit 0
 ################################################################################
