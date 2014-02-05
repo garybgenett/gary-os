@@ -97,7 +97,7 @@ declare PKGS="$(cat ${HOME}/setup/gentoo/sets/metro	| ${GREP} -v -e "^[#]" -e "^
 
 declare FEAT="$(makeconf_var FEATURES)"
 declare MKOP="$(makeconf_var MAKEOPTS)"
-declare USE_= #>>>"$(makeconf_var USE			| ${SED} "s/[ ][-]?(X|gtk|java)[ ]/ -\1 /g")"
+declare USE_="$(makeconf_var USE			| ${SED} "s/[ ][-]?(X|gdbm|gtk|imlib|introspection|java|tk|udev|wxwidgets)[ ]/ -\1 /g")"
 
 #>>>USE_+="\nACCEPT_KEYWORDS:		$(makeconf_var ACCEPT_KEYWORDS)"
 USE_+="\nACCEPT_LICENSE:		$(makeconf_var ACCEPT_LICENSE)"
@@ -154,8 +154,22 @@ ${SED} -i \
 
 USE_=
 USE_+="files/package.keywords: [			\n\
+# required						\n\
+app-crypt/efitools		~\$[target/arch]	\n\
+net-analyzer/tcptrace		~\$[target/arch]	\n\
+sys-fs/ext3grep			~\$[target/arch]	\n\
+sys-fs/zfs			~\$[target/arch]	\n\
+sys-fs/zfs-kmod			~\$[target/arch]	\n\
+sys-kernel/spl			~\$[target/arch]	\n\
+# fail							\n\
+net-analyzer/ssldump		~\$[target/arch]	\n\
+sys-boot/gnu-efi		~\$[target/arch]	\n\
 ]\n"
 USE_+="files/package.license: [				\n\
+app-arch/rar			RAR			\n\
+app-arch/unrar			unRAR			\n\
+sys-kernel/gentoo-sources	freedist		\n\
+sys-kernel/linux-firmware	freedist		\n\
 ]\n"
 USE_+="files/package.mask: [				\n\
 ]\n"
