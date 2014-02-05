@@ -17,9 +17,7 @@ if [[ -n $(
 	file -L ${FILE} 2>/dev/null |
 	${GREP} "Linux[ ]kernel[ ].+[ ]boot[ ]executable"
 ) ]]; then
-	QOPT="-display curses"
-	QOPT+=" "; QOPT+="-kernel ${FILE}"
-	QSYS="0"
+	QOPT="-kernel ${FILE}"
 fi
 
 ########################################
