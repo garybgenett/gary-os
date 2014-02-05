@@ -68,7 +68,9 @@ ${RSYNC_U} ${SMET}/ ${DMET}
 
 function makeconf_var {
 	source ${HOME}/setup/gentoo/make.conf
-	eval echo -en "\${${1}}" | tr '\n' ' '
+	eval echo -en "\${${1}}" |
+		${SED} "s/[$]/\\\\\\\\$/g" |
+		tr '\n' ' '
 }
 
 ########################################
