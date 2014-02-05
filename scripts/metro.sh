@@ -56,7 +56,7 @@ for REPO in \
 do
 	COMMIT="${COMMIT}${REPO}: $(
 		cat /.g/_data/zactive/${REPO}.git/refs/heads/master 2>/dev/null;
-		cat ${BLD}/funtoo/${REPO}.git/refs/heads/master 2>/dev/null;
+		cat ${BLD}/funtoo/${REPO}.git/refs/heads/{master,funtoo.org} 2>/dev/null;
 	)\n"
 done
 
