@@ -184,6 +184,7 @@ eval exec qemu-system-x86_64 \
 	-realtime mlock=off \
 	-m ${QMEM} \
 	${QNET} \
+	-display curses \
 	-vnc 127.0.0.1:9${QNUM} \
 	-spice addr=127.0.0.1,port=666${QNUM},disable-ticketing \
 	${QVDA} \
