@@ -121,8 +121,6 @@ function makeconf_var {
 		tr '\n' ' '
 }
 
-########################################
-
 declare OPTS="	$(makeconf_var EMERGE_DEFAULT_OPTS	| ${SED} "s/[-][-]ask[^[:space:]]*//g")"
 OPTS+="		$(makeconf_var MAKEOPTS			| ${GREP} -o "[-]j[0-9]+")"
 declare PKGS="$(cat ${HOME}/setup/gentoo/sets/metro	| ${GREP} -v -e "^[#]" -e "^$" | sort | tr '\n' ' ')"
@@ -158,8 +156,6 @@ ${SED} -i \
 ${SED} -i \
 	-e "s%^git checkout (.+branch/tar.+)$%git reset --hard \1%g" \
 	${DMET}/targets/gentoo/snapshot/source/git || exit 1
-
-########################################
 
 USE_=
 for FILE in \
@@ -217,8 +213,6 @@ USE_+="files/package.use: [				\n\
 ${SED} -i \
 	-e "s%^(USE:.+)$%\1\n${USE_}%g" \
 	${DMET}/etc/builds/${TYPE}/build.conf || exit 1
-
-########################################
 
 USE_="\
 if [ \"\$[portage/files/package.license?]\" = \"yes\" ]	\n\
