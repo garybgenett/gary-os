@@ -275,12 +275,12 @@ ${SAFE_ENV} ${METRO_CMD} || exit 1
 FILE="$(find ${DEST}/funtoo-* -type f 2>/dev/null |
 	${GREP} "[.]tar[.]xz$")"
 
-${MKDIR}				${SAV}
-echo -en "${COMMIT}"			>${SAV}/_commit
-${RSYNC_U} ${HOME}/setup/gentoo/	${SAV}/_config
-${RSYNC_U} ${HOME}/scripts/metro.sh	${SAV}/_metro.sh
-${RSYNC_U} ${DFIL}/			${SAV}/$(basename ${DFIL})
-${RSYNC_U} ${FILE}			${SAV}/
+${MKDIR}				${SAV}				|| exit 1
+echo -en "${COMMIT}"			>${SAV}/_commit			|| exit 1
+${RSYNC_U} ${HOME}/setup/gentoo/	${SAV}/_config			|| exit 1
+${RSYNC_U} ${HOME}/scripts/metro.sh	${SAV}/_metro.sh		|| exit 1
+${RSYNC_U} ${DFIL}/			${SAV}/$(basename ${DFIL})	|| exit 1
+${RSYNC_U} ${FILE}			${SAV}/				|| exit 1
 
 exit 0
 ################################################################################
