@@ -178,8 +178,6 @@ ${SED} -i \
 	-e "s%^(branch/tar:).*$%\1	$(cat ${HOME}/setup/gentoo/.funtoo)%g" \
 	-e "s%^(options:).*pull.*$%\1	%g" \
 	\
-	-e "s%^(options:).*clean.*$%\1	%g" \
-	\
 	-e "s%\t+% %g" \
 	${DMET}/etc/builds/${TYPE}/build.conf || exit 1
 
@@ -270,6 +268,18 @@ genkernel --loglevel=5 --symlink all || exit 1		\n\
 ${SED} -i \
 	-e "s%^(emerge.+system)(.+)$%\1 ${FILE}\2\n${USE_}%g" \
 	${DMET}/targets/gentoo/stage3.spec || exit 1
+
+########################################
+
+${SED} -i \
+	-e "s%^(options:.*)clean/auto(.*)$%\1\2%g" \
+	${DMET}/etc/builds/${TYPE}/build.conf || exit 1
+
+${SED} -i \
+	-e "s%^([[:space:]]*emerge -C .*(ccache|genkernel).*)$%echo \"\1\"%g" \
+	-e "s%^([[:space:]]*rm -rf .*linux.*)$%echo \"\1\"%g" \
+	${DMET}/targets/gentoo/steps/kernel.spec \
+	${DMET}/targets/gentoo/steps/stage.spec || exit 1
 
 ################################################################################
 
