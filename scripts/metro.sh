@@ -2,6 +2,9 @@
 source ${HOME}/.bashrc
 ################################################################################
 
+declare AUTHOR="Gary B. Genett <me@garybgenett.net>"
+declare TITLE="gary-os"
+
 declare BLD="/.g/_data/_build"
 declare SAV="/.g/_data/_builds/_metro"
 declare ISO="/.g/_data/_target/iso"
@@ -99,7 +102,6 @@ if [[ ${1} == -/ ]]; then
 
 	declare INIT_SRC="${FILE}"
 	declare INIT_DST="${FILE}.dir"
-	declare INIT_NAM="rescue"
 
 	${RM} ${INIT_DST}						|| exit 1
 	${MKDIR} ${INIT_DST}						|| exit 1
@@ -110,9 +112,9 @@ if [[ ${1} == -/ ]]; then
 		-e "s/^([^#].+)$/#\1/g" \
 		${INIT_DST}/etc/fstab					|| exit 1
 	${SED} -i \
-		-e "s/^(hostname=[\"]?)[^\"]+([\"]?)$/\1${INIT_NAM}\2/g" \
+		-e "s/^(hostname=[\"]?)[^\"]+([\"]?)$/\1${TITLE}\2/g" \
 		${INIT_DST}/etc/conf.d/hostname				|| exit 1
-	echo -en "${INIT_NAM}\n${INIT_NAM}\n" |
+	echo -en "${TITLE}\n${TITLE}\n" |
 		chroot ${INIT_DST} /usr/bin/passwd root			|| exit 1
 
 	${CP} -L ${INIT_DST}/boot/kernel ${INIT_SRC}.kernel		|| exit 1
@@ -127,6 +129,10 @@ fi
 
 ${MKDIR} ${DEST}
 ${RSYNC_U} ${SMET}/ ${DMET}
+
+${SED} -i \
+	-e "s%^(author:).*$%\1 ${AUTHOR}%g" \
+	${DMET}/etc/builds/${TYPE}/build.conf || exit 1
 
 ########################################
 
