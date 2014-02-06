@@ -91,6 +91,9 @@ if [[ ${1} == -/ ]]; then
 
 	${LN} sbin/init ${INIT_DST}/init				|| exit 1
 	${SED} -i \
+		-e "s/^([^#].+)$/#\1/g" \
+		${INIT_DST}/etc/fstab					|| exit 1
+	${SED} -i \
 		-e "s/^(hostname=[\"]?)[^\"]+([\"]?)$/\1${INIT_NAM}\2/g" \
 		${INIT_DST}/etc/conf.d/hostname				|| exit 1
 	echo -en "${INIT_NAM}\n${INIT_NAM}\n" |
