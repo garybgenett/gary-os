@@ -77,6 +77,35 @@ declare FILE=
 
 ################################################################################
 
+if [[ ${1} == -/ ]]; then
+	FILE="$(ls ${SAV}/stage3-*${ARCH}*${TYPE}*${DATE}*.tar.xz 2>/dev/null)"
+	[[ -z ${FILE} ]] && exit 1
+
+	declare INIT_SRC="${FILE}"
+	declare INIT_DST="${FILE}.dir"
+	declare INIT_NAM="rescue"
+
+	${RM} ${INIT_DST}						|| exit 1
+	${MKDIR} ${INIT_DST}						|| exit 1
+	tar -pvvxJ -C ${INIT_DST} -f ${INIT_SRC}			|| exit 1
+
+	${LN} sbin/init ${INIT_DST}/init				|| exit 1
+	${SED} -i \
+		-e "s/^(hostname=[\"]?)[^\"]+([\"]?)$/\1${INIT_NAM}\2/g" \
+		${INIT_DST}/etc/conf.d/hostname				|| exit 1
+	echo -en "${INIT_NAM}\n${INIT_NAM}\n" |
+		chroot ${INIT_DST} /usr/bin/passwd root			|| exit 1
+
+	${CP} -L ${INIT_DST}/boot/kernel ${INIT_SRC}.kernel		|| exit 1
+	(cd ${INIT_DST} &&
+		find . | cpio -ovH newc | gzip >${INIT_SRC}.initrd)	|| exit 1
+	${RM} ${INIT_DST}						|| exit 1
+
+	exit 0
+fi
+
+################################################################################
+
 ${MKDIR} ${DEST}
 ${RSYNC_U} ${SMET}/ ${DMET}
 
@@ -281,6 +310,8 @@ ${RSYNC_U} ${HOME}/setup/gentoo/	${SAV}/_config			|| exit 1
 ${RSYNC_U} ${HOME}/scripts/metro.sh	${SAV}/_metro.sh		|| exit 1
 ${RSYNC_U} ${DFIL}/			${SAV}/$(basename ${DFIL})	|| exit 1
 ${RSYNC_U} ${FILE}			${SAV}/				|| exit 1
+
+${_SELF} -/ || exit 1
 
 exit 0
 ################################################################################
