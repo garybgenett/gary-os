@@ -231,7 +231,7 @@ echo -en "${DATE}\n"	>${SOUT}/.control/version/stage3
 ${MKDIR}		${DTMP}/cache/cloned-repositories/${NAME}
 ${RSYNC_U} ${SPRT}.git/	${DTMP}/cache/cloned-repositories/${NAME}/.git
 ${RM}			${DTMP}/cache/cloned-repositories/${NAME}.git
-${LN} ../${NAME}/.git	${DTMP}/cache/cloned-repositories/${NAME}.git
+${LN} ${NAME}/.git	${DTMP}/cache/cloned-repositories/${NAME}.git
 
 for FILE in $(ls {${SAV},${ISO}}/stage3-*${SARC}*${TYPE}*.tar.xz |
 	${SED} "s/^.+([0-9]{4}-[0-9]{2}-[0-9]{2}).+$/\1/g" |
@@ -244,10 +244,10 @@ done
 ########################################
 
 for FILE in \
-	/targets/gentoo/stage3.spec		\
-	/targets/gentoo/steps/stage.spec	\
-	/targets/gentoo/target/files.spec	\
-	/etc/builds/${TYPE}/build.conf
+	targets/gentoo/stage3.spec		\
+	targets/gentoo/steps/stage.spec		\
+	targets/gentoo/target/files.spec	\
+	etc/builds/${TYPE}/build.conf
 do
 	echo -en "\n[${FILE}]\n"
 	diff ${SMET}/${FILE} ${DMET}/${FILE}
