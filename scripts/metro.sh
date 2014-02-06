@@ -77,6 +77,22 @@ declare FILE=
 
 ################################################################################
 
+echo -en "NAME: ${NAME}\n"
+echo -en "DATE: ${DATE}\n"
+
+echo -en "\n"
+${SAFE_ENV} env
+read FILE
+
+########################################
+
+if [[ ${1} == -0 ]]; then
+	vdiff -r ${SMET} ${DMET}
+	exit 0
+fi
+
+########################################
+
 if [[ ${1} == -/ ]]; then
 	FILE="$(ls ${SAV}/stage3-*${ARCH}*${TYPE}*${DATE}*.tar.xz 2>/dev/null)"
 	[[ -z ${FILE} ]] && exit 1
@@ -272,26 +288,6 @@ do
 	${MKDIR} ${SOUT}/${FILE}
 	${RSYNC_U} {${SAV},${ISO}}/stage3-*${SARC}*${TYPE}*-${FILE}.tar.xz ${SOUT}/${FILE}/
 done
-
-########################################
-
-for FILE in \
-	targets/gentoo/snapshot/source/git	\
-	targets/gentoo/stage3.spec		\
-	targets/gentoo/steps/stage.spec		\
-	targets/gentoo/target/files.spec	\
-	etc/builds/${TYPE}/build.conf
-do
-	echo -en "\n[${FILE}]\n"
-	diff ${SMET}/${FILE} ${DMET}/${FILE}
-done
-
-echo -en "\n"
-echo -en "NAME: ${NAME}\n"
-echo -en "DATE: ${DATE}\n"
-
-echo -en "\n"
-${SAFE_ENV} env
 
 ########################################
 
