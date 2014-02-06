@@ -134,6 +134,12 @@ ${SED} -i \
 	-e "s%^(author:).*$%\1 ${AUTHOR}%g" \
 	${DMET}/etc/builds/${TYPE}/build.conf || exit 1
 
+${SED} -i \
+	-e "s%^(: ).*mirror.*$%\1${DEST}%g" \
+	-e "s%^(distfiles: ).*$%\1${DFIL}%g" \
+	-e "s%^(tmp: ).*$%\1${DTMP}%g" \
+	${DMET}/etc/metro.conf || exit 1
+
 ########################################
 
 function makeconf_var {
