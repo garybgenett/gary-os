@@ -150,6 +150,8 @@ ${SED} -i \
 	-e "s%^(branch/tar:).*$%\1	$(cat ${HOME}/setup/gentoo/.funtoo)%g" \
 	-e "s%^(options:).*pull.*$%\1	%g" \
 	\
+	-e "s%^(options:).*clean.*$%\1	%g" \
+	\
 	-e "s%\t+% %g" \
 	${DMET}/etc/builds/${TYPE}/build.conf || exit 1
 
