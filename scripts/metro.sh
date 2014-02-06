@@ -260,7 +260,7 @@ ${SED} -i \
 
 FILE="$(${GREP} "^.+/gentoo-sources(:.+)?$" ${HOME}/setup/gentoo/sets/metro |
 	sort -n |
-	tail -n1)"
+	tail -n1) genkernel" #>>> grub
 USE_="\
 genkernel --loglevel=5 --symlink all || exit 1		\n\
 #>>>mkdir -p /boot/grub || exit 1			\n\
@@ -268,7 +268,7 @@ genkernel --loglevel=5 --symlink all || exit 1		\n\
 "
 
 ${SED} -i \
-	-e "s%^(emerge.+system)(.+)$%\1 ${FILE} genkernel grub\2\n${USE_}%g" \
+	-e "s%^(emerge.+system)(.+)$%\1 ${FILE}\2\n${USE_}%g" \
 	${DMET}/targets/gentoo/stage3.spec || exit 1
 
 ################################################################################
