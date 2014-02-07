@@ -21,7 +21,7 @@ if [[ -n $(
 fi
 if [[ -n $(
 	file -L ${FILE/%.kernel}.initrd 2>/dev/null |
-	${GREP} "gzip[ ]compressed[ ]data"
+	${GREP} "(XZ|gzip)[ ]compressed[ ]data"
 ) ]]; then
 	QOPT+=" "; QOPT+="-initrd ${FILE/%.kernel}.initrd"
 fi
