@@ -218,28 +218,19 @@ ${SED} -i \
 
 USE_=
 USE_+="files/package.keywords: [			\n\
-# required						\n\
-app-crypt/efitools		~\$[target/arch]	\n\
-net-analyzer/tcptrace		~\$[target/arch]	\n\
-sys-fs/ext3grep			~\$[target/arch]	\n\
-sys-fs/zfs			~\$[target/arch]	\n\
-sys-fs/zfs-kmod			~\$[target/arch]	\n\
-sys-kernel/spl			~\$[target/arch]	\n\
-# fail							\n\
-net-analyzer/ssldump		~\$[target/arch]	\n\
-sys-boot/gnu-efi		~\$[target/arch]	\n\
+$(${SED} "s%$%\\\\n%g" ${CONFIG}/package.keywords	| tr -d '\n')\
 ]\n"
 USE_+="files/package.license: [				\n\
-app-arch/rar			RAR			\n\
-app-arch/unrar			unRAR			\n\
-sys-kernel/gentoo-sources	freedist		\n\
-sys-kernel/linux-firmware	freedist		\n\
+$(${SED} "s%$%\\\\n%g" ${CONFIG}/package.license	| tr -d '\n')\
 ]\n"
 USE_+="files/package.mask: [				\n\
+$(${SED} "s%$%\\\\n%g" ${CONFIG}/package.mask		| tr -d '\n')\
 ]\n"
 USE_+="files/package.unmask: [				\n\
+$(${SED} "s%$%\\\\n%g" ${CONFIG}/package.unmask		| tr -d '\n')\
 ]\n"
 USE_+="files/package.use: [				\n\
+$(${SED} "s%$%\\\\n%g" ${CONFIG}/package.use		| tr -d '\n')\
 ]\n"
 
 ${SED} -i \
