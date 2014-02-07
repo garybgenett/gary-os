@@ -5,6 +5,10 @@ source ${HOME}/.bashrc
 declare AUTHOR="Gary B. Genett <me@garybgenett.net>"
 declare TITLE="gary-os"
 
+declare CONFIG="${HOME}/setup/gentoo"
+declare SET="${CONFIG}/sets/metro"
+declare REVISION="$(cat ${CONFIG}/.funtoo)"
+
 declare BLD="/.g/_data/_build"
 declare SAV="/.g/_data/_builds/_metro"
 declare ISO="/.g/_data/_target/iso"
@@ -143,7 +147,7 @@ ${SED} -i \
 ########################################
 
 function makeconf_var {
-	source ${HOME}/setup/gentoo/make.conf
+	source ${CONFIG}/make.conf
 	eval echo -en "\${${1}}" |
 		${SED} "s/[$]/\\\\\\\\$/g" |
 		tr '\n' ' '
@@ -151,7 +155,7 @@ function makeconf_var {
 
 declare OPTS="	$(makeconf_var EMERGE_DEFAULT_OPTS	| ${SED} "s/[-][-]ask[^[:space:]]*//g")"
 OPTS+="		$(makeconf_var MAKEOPTS			| ${GREP} -o "[-]j[0-9]+")"
-declare PKGS="$(cat ${HOME}/setup/gentoo/sets/metro	| ${GREP} -v -e "^[#]" -e "^$" | sort | tr '\n' ' ')"
+declare PKGS="$(cat ${SET}				| ${GREP} -v -e "^[#]" -e "^$" | sort | tr '\n' ' ')"
 
 declare FEAT="$(makeconf_var FEATURES)"
 declare MKOP="$(makeconf_var MAKEOPTS)"
@@ -175,7 +179,7 @@ ${SED} -i \
 	-e "s%^(MAKEOPTS:).*$%\1	${MKOP}%g" \
 	-e "s%^(USE:).*$%\1		${USE_}%g" \
 	\
-	-e "s%^(branch/tar:).*$%\1	$(cat ${HOME}/setup/gentoo/.funtoo)%g" \
+	-e "s%^(branch/tar:).*$%\1	${REVISION}%g" \
 	-e "s%^(options:).*pull.*$%\1	%g" \
 	\
 	-e "s%\t+% %g" \
@@ -256,7 +260,7 @@ ${SED} -i \
 
 ########################################
 
-FILE="$(${GREP} "^.+/gentoo-sources(:.+)?$" ${HOME}/setup/gentoo/sets/metro |
+FILE="$(${GREP} "^.+/gentoo-sources(:.+)?$" ${SET} |
 	sort -n |
 	tail -n1) genkernel" #>>> grub
 USE_="\
@@ -321,12 +325,12 @@ ${SAFE_ENV} ${METRO_CMD} || exit 1
 FILE="$(find ${DEST}/funtoo-* -type f 2>/dev/null |
 	${GREP} "[.]tar[.]xz$")"
 
-${MKDIR}				${SAV}				|| exit 1
-echo -en "${COMMIT}"			>${SAV}/_commit			|| exit 1
-${RSYNC_U} ${HOME}/setup/gentoo/	${SAV}/_config			|| exit 1
-${RSYNC_U} ${HOME}/scripts/metro.sh	${SAV}/_metro.sh		|| exit 1
-${RSYNC_U} ${DFIL}/			${SAV}/$(basename ${DFIL})	|| exit 1
-${RSYNC_U} ${FILE}			${SAV}/				|| exit 1
+${MKDIR}		${SAV}				|| exit 1
+echo -en "${COMMIT}"	>${SAV}/_commit			|| exit 1
+${RSYNC_U} ${CONFIG}/	${SAV}/_config			|| exit 1
+${RSYNC_U} ${_SELF}	${SAV}/_$(basename ${_SELF})	|| exit 1
+${RSYNC_U} ${DFIL}/	${SAV}/$(basename ${DFIL})	|| exit 1
+${RSYNC_U} ${FILE}	${SAV}/				|| exit 1
 
 ${_SELF} -/ || exit 1
 
