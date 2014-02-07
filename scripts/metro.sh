@@ -100,6 +100,36 @@ fi
 
 ########################################
 
+if [[ ${1} == -1 ]]; then
+	declare INIT_DIR="${PWD}"
+
+	${LN} sbin/init ${INIT_DIR}/init			|| exit 1
+	${SED} -i \
+		-e "s/^([^#].+)$/#\1/g" \
+		${INIT_DIR}/etc/fstab				|| exit 1
+	${SED} -i \
+		-e "s/^(hostname=[\"]?)[^\"]+([\"]?)$/\1${TITLE}\2/g" \
+		${INIT_DIR}/etc/conf.d/hostname			|| exit 1
+	echo -en "${TITLE}\n${TITLE}\n" |
+		chroot ${INIT_DIR} /usr/bin/passwd root		|| exit 1
+
+	${CP} -L ${INIT_DIR}/boot/kernel ${INIT_DIR}.kernel	|| exit 1
+	eval find ./ \
+		'\( -path ./tmp/.ccache		-prune \)' -o \
+		'\( -path ./usr/lib32/debug	-prune \)' -o \
+		'\( -path ./usr/lib64/debug	-prune \)' -o \
+		'\( -path ./usr/portage		-prune \)' -o \
+		'\( -path ./usr/portage.git	-prune \)' -o \
+		'\( -path ./usr/src/debug	-prune \)' -o \
+		$(for FILE in ./usr/src/linux-*; do echo -en "\( -path ${FILE} -prune \) -o "; done) \
+		-print |
+	cpio -ovH newc | gzip -c >${INIT_DIR}.initrd		|| exit 1
+
+	exit 0
+fi
+
+########################################
+
 if [[ ${1} == -/ ]]; then
 	FILE="$(ls ${SAV}/stage3-*${ARCH}*${TYPE}*${DATE}*.tar.xz 2>/dev/null)"
 	[[ -z ${FILE} ]] && exit 1
@@ -107,24 +137,14 @@ if [[ ${1} == -/ ]]; then
 	declare INIT_SRC="${FILE}"
 	declare INIT_DST="${FILE}.dir"
 
-	${RM} ${INIT_DST}						|| exit 1
-	${MKDIR} ${INIT_DST}						|| exit 1
-	tar -pvvxJ -C ${INIT_DST} -f ${INIT_SRC}			|| exit 1
+	${RM} ${INIT_DST}				|| exit 1
+	${MKDIR} ${INIT_DST}				|| exit 1
+	tar -pvvxJ -C ${INIT_DST} -f ${INIT_SRC}	|| exit 1
 
-	${LN} sbin/init ${INIT_DST}/init				|| exit 1
-	${SED} -i \
-		-e "s/^([^#].+)$/#\1/g" \
-		${INIT_DST}/etc/fstab					|| exit 1
-	${SED} -i \
-		-e "s/^(hostname=[\"]?)[^\"]+([\"]?)$/\1${TITLE}\2/g" \
-		${INIT_DST}/etc/conf.d/hostname				|| exit 1
-	echo -en "${TITLE}\n${TITLE}\n" |
-		chroot ${INIT_DST} /usr/bin/passwd root			|| exit 1
-
-	${CP} -L ${INIT_DST}/boot/kernel ${INIT_SRC}.kernel		|| exit 1
-	(cd ${INIT_DST} &&
-		find . | cpio -ovH newc | gzip >${INIT_SRC}.initrd)	|| exit 1
-	${RM} ${INIT_DST}						|| exit 1
+	(cd ${INIT_DST} && echo | ${_SELF} -1)		|| exit 1
+	${MV} ${INIT_DST}.kernel ${INIT_SRC}.kernel	|| exit 1
+	${MV} ${INIT_DST}.initrd ${INIT_SRC}.initrd	|| exit 1
+	${RM} ${INIT_DST}				|| exit 1
 
 	exit 0
 fi
@@ -320,7 +340,7 @@ ${RSYNC_U} ${_SELF}	${SAV}/_$(basename ${_SELF})	|| exit 1
 ${RSYNC_U} ${DFIL}/	${SAV}/$(basename ${DFIL})	|| exit 1
 ${RSYNC_U} ${FILE}	${SAV}/				|| exit 1
 
-${_SELF} -/ || exit 1
+echo | ${_SELF} -/ || exit 1
 
 exit 0
 ################################################################################
