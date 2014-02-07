@@ -130,7 +130,8 @@ sys-apps/texinfo
 app-dicts/aspell-en
 app-text/aspell
 
-app-editors/vim				#>>> app-editors/gvim
+#>>>app-editors/gvim
+app-editors/vim
 app-editors/nano
 app-text/dos2unix
 app-vim/taglist
@@ -147,6 +148,9 @@ app-arch/rpm2targz
 sys-kernel/genkernel
 sys-kernel/gentoo-sources:3.10.25
 sys-kernel/linux-firmware
+
+dev-python/boto
+dev-util/metro
 
 app-portage/portage-utils
 sys-apps/portage
@@ -209,7 +213,7 @@ sys-devel/bc
 
 dev-util/ltrace
 dev-util/strace
-dev-util/sysprof
+#>>>dev-util/sysprof
 sys-apps/kexec-tools
 
 sys-apps/hdparm
@@ -238,7 +242,7 @@ net-analyzer/ssldump
 net-analyzer/tcpdump
 net-analyzer/tcptrace
 net-analyzer/traceroute
-net-analyzer/wireshark
+#>>>net-analyzer/wireshark
 net-dns/bind-tools
 net-misc/cadaver
 net-misc/netkit-telnetd
