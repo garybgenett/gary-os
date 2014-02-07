@@ -159,7 +159,7 @@ declare PKGS="$(cat ${SET}				| ${GREP} -v -e "^[#]" -e "^$" | sort | tr '\n' ' 
 
 declare FEAT="$(makeconf_var FEATURES)"
 declare MKOP="$(makeconf_var MAKEOPTS)"
-declare USE_="$(makeconf_var USE			| ${SED} "s/[ ][-]?(X|gdbm|gtk|imlib|introspection|java|tk|udev|wxwidgets)[ ]/ -\1 /g")"
+declare USE_="$(makeconf_var USE)			$(makeconf_var METRO_USE)"
 
 #>>>USE_+="\nACCEPT_KEYWORDS:		$(makeconf_var ACCEPT_KEYWORDS)"
 USE_+="\nACCEPT_LICENSE:		$(makeconf_var ACCEPT_LICENSE)"
@@ -225,7 +225,7 @@ for FILE in \
 	use
 do
 	USE_+="files/package.${FILE}: [\n$(
-		${SED} "s%$%\\\\n%g" ${CONFIG}/package.${FILE} 2>/dev/null |
+		${SED} -e "s|^[#][{]MET[}][ ](.+)$|\1|g" -e "s%$%\\\\n%g" ${CONFIG}/package.${FILE} 2>/dev/null |
 		tr -d '\n'
 	)]\n"
 done
