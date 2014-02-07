@@ -217,21 +217,18 @@ ${SED} -i \
 ########################################
 
 USE_=
-USE_+="files/package.keywords: [			\n\
-$(${SED} "s%$%\\\\n%g" ${CONFIG}/package.keywords	| tr -d '\n')\
-]\n"
-USE_+="files/package.license: [				\n\
-$(${SED} "s%$%\\\\n%g" ${CONFIG}/package.license	| tr -d '\n')\
-]\n"
-USE_+="files/package.mask: [				\n\
-$(${SED} "s%$%\\\\n%g" ${CONFIG}/package.mask		| tr -d '\n')\
-]\n"
-USE_+="files/package.unmask: [				\n\
-$(${SED} "s%$%\\\\n%g" ${CONFIG}/package.unmask		| tr -d '\n')\
-]\n"
-USE_+="files/package.use: [				\n\
-$(${SED} "s%$%\\\\n%g" ${CONFIG}/package.use		| tr -d '\n')\
-]\n"
+for FILE in \
+	keywords	\
+	license		\
+	mask		\
+	unmask		\
+	use
+do
+	USE_+="files/package.${FILE}: [\n$(
+		${SED} "s%$%\\\\n%g" ${CONFIG}/package.${FILE} 2>/dev/null |
+		tr -d '\n'
+	)]\n"
+done
 
 ${SED} -i \
 	-e "s%^(USE:.+)$%\1\n${USE_}%g" \
