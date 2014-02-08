@@ -113,7 +113,7 @@ if [[ ${1} == -1 ]]; then
 	echo -en "${TITLE}\n${TITLE}\n" |
 		chroot ${INIT_DIR} /usr/bin/passwd root		|| exit 1
 
-	${CP} -L ${INIT_DIR}/boot/kernel ${INIT_DIR}.kernel	|| exit 1
+	${CP} -L ${INIT_DIR}/boot/kernel ${INIT_DIR}.kernel	#>>> || exit 1
 	eval find ./ \
 		'\( -path ./tmp/.ccache		-prune \)' -o \
 		'\( -path ./usr/lib32/debug	-prune \)' -o \
