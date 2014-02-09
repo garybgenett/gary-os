@@ -7,7 +7,8 @@ declare TITLE="gary-os"
 
 declare CONFIG="${HOME}/setup/gentoo"
 declare SET="${CONFIG}/sets/metro"
-declare REVISION="$(cat ${CONFIG}/.funtoo)"
+declare DVER="$(cat ${CONFIG}/.funtoo).0"
+#>>>DVER="$(date --iso=d)"
 
 declare BLD="/.g/_data/_build"
 declare SAV="/.g/_data/_builds/_metro"
@@ -36,6 +37,7 @@ declare SOUT="${DEST}/${TYPE}/${PLAT}/${SARC}"
 declare SAFE_ENV="prompt -z"
 export CCACHE_DIR=
 
+declare VERSION_REGEX="([0-9]{4}-[0-9]{2}-[0-9]{2}(T[0-9]{2}-[0-9]{4})?|[0-9]{40}[.][0-9])"
 declare METRO_CMD="${DMET}/metro \
 	--libdir ${DMET} \
 	--verbose \
@@ -47,9 +49,8 @@ declare METRO_CMD="${DMET}/metro \
 	path/tmp:	${DTMP} \
 	target/build:	${TYPE} \
 	target/subarch:	${ARCH} \
-	target/version:	$(date --iso=d) \
+	target/version:	${DVER} \
 "
-#>>>	target/version:	$(date --iso=h) \
 
 ########################################
 
@@ -71,12 +72,11 @@ done
 
 declare REPO="$(cat ${SMET}/etc/builds/${TYPE}/build.conf 2>/dev/null |
 	${SED} -n "s/^name[:][ ]//gp")"
-declare DATE="$(ls {${SAV},${ISO},${SOUT}/*}/stage3-*${SARC}*${TYPE}*.tar.xz 2>/dev/null |
-	${SED} "s/^.+([0-9]{4}-[0-9]{2}-[0-9]{2}(T[0-9]{2}-[0-9]{4})?).+$/\1/g" |
-	sort -n |
-	tail -n1)"
+declare SVER="$(ls -t {${SAV},${ISO},${SOUT}/*}/stage3-*${SARC}*${TYPE}*.tar.xz 2>/dev/null |
+	${SED} "s/^.+${VERSION_REGEX}.+$/\1/g" |
+	head -n1)"
 
-{ [[ -z ${REPO} ]] || [[ -z ${DATE} ]]; } && exit 1
+{ [[ -z ${REPO} ]] || [[ -z ${SVER} ]]; } && exit 1
 
 ########################################
 
@@ -85,7 +85,8 @@ declare FILE=
 ################################################################################
 
 echo -en "REPO: ${REPO}\n"
-echo -en "DATE: ${DATE}\n"
+echo -en "SVER: ${SVER}\n"
+echo -en "DVER: ${DVER}\n"
 
 echo -en "\n"
 ${SAFE_ENV} env
@@ -131,7 +132,7 @@ fi
 ########################################
 
 if [[ ${1} == -/ ]]; then
-	FILE="$(ls ${SAV}/stage3-*${ARCH}*${TYPE}*${DATE}*.tar.xz 2>/dev/null)"
+	FILE="$(ls ${SAV}/stage3-*${ARCH}*${TYPE}*${DVER}*.tar.xz 2>/dev/null)"
 	[[ -z ${FILE} ]] && exit 1
 
 	declare INIT_SRC="${FILE}"
@@ -199,7 +200,7 @@ ${SED} -i \
 	-e "s%^(MAKEOPTS:).*$%\1	${MKOP}%g" \
 	-e "s%^(USE:).*$%\1		${USE_}%g" \
 	\
-	-e "s%^(branch/tar:).*$%\1	${REVISION}%g" \
+	-e "s%^(branch/tar:).*$%\1	${DVER}%g" \
 	-e "s%^(options:).*pull.*$%\1	%g" \
 	\
 	-e "s%\t+% %g" \
@@ -308,16 +309,15 @@ echo -en "stage3\n"	>${DOUT}/.control/strategy/seed
 echo -en "${TYPE}\n"	>${DOUT}/.control/remote/build
 echo -en "${SARC}\n"	>${DOUT}/.control/remote/subarch
 ${MKDIR} ${SOUT}/.control/version
-echo -en "${DATE}\n"	>${SOUT}/.control/version/stage3
+echo -en "${SVER}\n"	>${SOUT}/.control/version/stage3
 
 ${MKDIR}		${DTMP}/cache/cloned-repositories/${REPO}
 ${RSYNC_U} ${SPRT}.git/	${DTMP}/cache/cloned-repositories/${REPO}/.git
 ${RM}			${DTMP}/cache/cloned-repositories/${REPO}.git
 ${LN} ${REPO}/.git	${DTMP}/cache/cloned-repositories/${REPO}.git
 
-for FILE in $(ls {${SAV},${ISO}}/stage3-*${SARC}*${TYPE}*.tar.xz |
-	${SED} "s/^.+([0-9]{4}-[0-9]{2}-[0-9]{2}).+$/\1/g" |
-	sort -n)
+for FILE in $(ls -t {${SAV},${ISO}}/stage3-*${SARC}*${TYPE}*.tar.xz |
+	${SED} "s/^.+${VERSION_REGEX}.+$/\1/g")
 do
 	${MKDIR} ${SOUT}/${FILE}
 	${RSYNC_U} {${SAV},${ISO}}/stage3-*${SARC}*${TYPE}*-${FILE}.tar.xz ${SOUT}/${FILE}/
@@ -330,8 +330,8 @@ ${SAFE_ENV} ${METRO_CMD} || exit 1
 
 ########################################
 
-FILE="$(find ${DEST}/funtoo-* -type f 2>/dev/null |
-	${GREP} "[.]tar[.]xz$")"
+FILE="$(find ${DEST}/${TYPE} -type f 2>/dev/null |
+	${GREP} "(${SVER}|${DVER})[.]tar[.]xz$")"
 
 ${MKDIR}		${SAV}				|| exit 1
 echo -en "${COMMIT}"	>${SAV}/_commit			|| exit 1
