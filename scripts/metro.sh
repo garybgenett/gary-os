@@ -7,7 +7,8 @@ declare TITLE="gary-os"
 
 declare CONFIG="${HOME}/setup/gentoo"
 declare SET="${CONFIG}/sets/metro"
-declare DVER="$(cat ${CONFIG}/.funtoo).0"
+declare HASH="$(cat ${CONFIG}/.funtoo)"
+declare DVER="${HASH}.0"
 #>>>DVER="$(date --iso=d)"
 
 declare BLD="/.g/_data/_build"
@@ -85,6 +86,7 @@ declare FILE=
 ################################################################################
 
 echo -en "REPO: ${REPO}\n"
+echo -en "HASH: ${HASH}\n"
 echo -en "SVER: ${SVER}\n"
 echo -en "DVER: ${DVER}\n"
 
@@ -200,7 +202,7 @@ ${SED} -i \
 	-e "s%^(MAKEOPTS:).*$%\1	${MKOP}%g" \
 	-e "s%^(USE:).*$%\1		${USE_}%g" \
 	\
-	-e "s%^(branch/tar:).*$%\1	${DVER}%g" \
+	-e "s%^(branch/tar:).*$%\1	${HASH}%g" \
 	-e "s%^(options:).*pull.*$%\1	%g" \
 	\
 	-e "s%\t+% %g" \
