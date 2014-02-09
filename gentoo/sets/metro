@@ -238,7 +238,7 @@ net-analyzer/netcat6
 net-analyzer/nethogs
 net-analyzer/nmap
 net-analyzer/snort
-net-analyzer/ssldump
+#>>>net-analyzer/ssldump
 net-analyzer/tcpdump
 net-analyzer/tcptrace
 net-analyzer/traceroute
