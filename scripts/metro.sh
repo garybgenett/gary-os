@@ -69,14 +69,14 @@ done
 
 ########################################
 
-declare NAME="$(cat ${SMET}/etc/builds/${TYPE}/build.conf 2>/dev/null |
+declare REPO="$(cat ${SMET}/etc/builds/${TYPE}/build.conf 2>/dev/null |
 	${SED} -n "s/^name[:][ ]//gp")"
 declare DATE="$(ls {${SAV},${ISO},${SOUT}/*}/stage3-*${SARC}*${TYPE}*.tar.xz 2>/dev/null |
 	${SED} "s/^.+([0-9]{4}-[0-9]{2}-[0-9]{2}(T[0-9]{2}-[0-9]{4})?).+$/\1/g" |
 	sort -n |
 	tail -n1)"
 
-{ [[ -z ${NAME} ]] || [[ -z ${DATE} ]]; } && exit 1
+{ [[ -z ${REPO} ]] || [[ -z ${DATE} ]]; } && exit 1
 
 ########################################
 
@@ -84,7 +84,7 @@ declare FILE=
 
 ################################################################################
 
-echo -en "NAME: ${NAME}\n"
+echo -en "REPO: ${REPO}\n"
 echo -en "DATE: ${DATE}\n"
 
 echo -en "\n"
@@ -310,10 +310,10 @@ echo -en "${SARC}\n"	>${DOUT}/.control/remote/subarch
 ${MKDIR} ${SOUT}/.control/version
 echo -en "${DATE}\n"	>${SOUT}/.control/version/stage3
 
-${MKDIR}		${DTMP}/cache/cloned-repositories/${NAME}
-${RSYNC_U} ${SPRT}.git/	${DTMP}/cache/cloned-repositories/${NAME}/.git
-${RM}			${DTMP}/cache/cloned-repositories/${NAME}.git
-${LN} ${NAME}/.git	${DTMP}/cache/cloned-repositories/${NAME}.git
+${MKDIR}		${DTMP}/cache/cloned-repositories/${REPO}
+${RSYNC_U} ${SPRT}.git/	${DTMP}/cache/cloned-repositories/${REPO}/.git
+${RM}			${DTMP}/cache/cloned-repositories/${REPO}.git
+${LN} ${REPO}/.git	${DTMP}/cache/cloned-repositories/${REPO}.git
 
 for FILE in $(ls {${SAV},${ISO}}/stage3-*${SARC}*${TYPE}*.tar.xz |
 	${SED} "s/^.+([0-9]{4}-[0-9]{2}-[0-9]{2}).+$/\1/g" |
