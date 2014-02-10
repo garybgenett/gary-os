@@ -1,0 +1,10 @@
+
+/_gentoo/use.extra
+
+/_gentoo/use.missing.global
+
+/_gentoo/vars.extra
+
+/_gentoo/vars.missing
+
+[emerge output]

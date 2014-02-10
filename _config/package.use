@@ -1,0 +1,74 @@
+################################################################################
+# portage package use file
+################################################################################
+
+#{NEW} dev-java/icedtea-bin		-X		# gentoo required
+#{NEW} dev-java/icedtea-bin		-nsplugin	# gentoo required
+#{NEW} x11-libs/gdk-pixbuf		-jpeg		# gentoo required
+
+################################################################################
+
+app-arch/libarchive			xattr		# gentoo required
+app-text/ghostscript-gpl		cups		# gentoo required
+app-text/poppler			cairo		# gentoo required
+app-text/poppler			lcms		# gentoo required
+app-text/poppler			qt4		# gentoo required
+dev-libs/e_dbus				connman		# gentoo required
+dev-libs/e_dbus				libnotify	# gentoo required
+media-libs/libsdl			joystick	# gentoo required
+net-wireless/wpa_supplicant		dbus		# gentoo required
+sys-auth/consolekit			policykit	# gentoo required
+sys-libs/gdbm				berkdb		# gentoo required
+
+########################################
+
+net-dns/dnsmasq				script		# gentoo required
+net-ftp/proftpd				openssl		# gentoo required
+net-nds/openldap			sasl		# gentoo required
+
+dev-python/PyQt4			webkit		# gentoo required
+media-libs/chromaprint			tools		# gentoo required
+media-libs/mesa				xa		# gentoo required
+net-misc/spice-gtk			gtk3		# gentoo required
+sys-libs/zlib				minizip		# gentoo required
+
+################################################################################
+
+app-portage/layman			git subversion
+dev-vcs/cvs2svn				git
+dev-vcs/git				subversion
+
+net-fs/samba				cups
+net-print/cups				samba
+
+dev-vcs/subversion			-apache2
+www-servers/apache			-threads
+
+########################################
+
+sys-boot/grub				-multislot device-mapper libzfs mount
+
+sys-apps/paludis			pbins portage prebuilt-documentation search-index visibility
+
+dev-libs/openssl			rfc3779
+net-analyzer/tcpdump			-chroot
+
+x11-base/xorg-server			xnest xvfb
+x11-terms/rxvt-unicode			fading-colors focused-urgency font-styles mousewheel perl
+
+app-text/enchant			aspell
+mail-client/mutt			sidebar
+mail-client/thunderbird			-wifi ldap lightning
+www-client/firefox			-wifi
+
+media-tv/xbmc				projectm -webserver
+media-video/vlc				projectm qt4 vlm
+
+app-emulation/libvirt			libvirtd lxc qemu uml virt-network
+app-emulation/qemu			ncurses sdl spice
+app-emulation/spice			client gui
+app-emulation/vmware-tools		vmware_guest_freebsd vmware_guest_linux vmware_guest_windows
+
+################################################################################
+# end of file
+################################################################################
