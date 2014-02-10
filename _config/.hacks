@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+################################################################################
+
+chmod -v 666 /dev/sg*
+chmod -v 666 /dev/sr*
+
+chmod -v 666 /dev/audio
+chmod -v 666 /dev/dsp
+chmod -v 666 /dev/mixer
+
+chmod -v 666 /dev/snd/control*
+chmod -v 666 /dev/snd/pcm*
+chmod -v 666 /dev/snd/timer*
+
+chmod -v 666 /dev/nvidia*
+
+########################################
+
+chmod -v 000 /usr/bin/dbus-daemon
+chmod -v 000 /usr/bin/dbus-launch
+chmod -v 000 /usr/libexec/polkitd
+chmod -v 000 /usr/libexec/udisks-daemon
+chmod -v 000 /usr/libexec/upowerd
+chmod -v 000 /usr/sbin/console-kit-daemon
+
+########################################
+
+#>>>	/lib/modules/*/kernel/drivers/gpu/drm/nouveau/nouveau.ko	\
+#>>>	/lib/modules/*/kernel/drivers/gpu/drm/radeon/radeon.ko		\
+
+declare MODULE=
+for MODULE in \
+	/lib/modules/*/kernel/drivers/input/evbug.ko			\
+	/lib/modules/*/kernel/drivers/video/aty/radeonfb.ko		\
+	/lib/modules/*/kernel/drivers/video/nvidia/nvidiafb.ko		\
+	/lib/modules/*/kernel/drivers/video/riva/rivafb.ko		\
+	/lib/modules/*/misc/nvidiabl.ko					\
+	/lib/modules/*/video/fglrx.ko					\
+	/lib/modules/*/video/nvidia.ko
+do
+	mv -fv ${MODULE} ${MODULE}.bak
+done
+
+########################################
+
+rm -frv /control.tar.gz
+rm -frv /data.tar.gz
+rm -frv /debian-binary
+rm -frv /home
+rm -frv /media
+rm -frv /root
+rm -frv /tftproot
+
+#>>>rm -frv $(find / \
+#>>>	\( -path /.g -prune \) \
+#>>>	-o \( -path /dev -prune \) \
+#>>>	-o \( -path /mnt -prune \) \
+#>>>	-o \( -path /proc -prune \) \
+#>>>	-o \( -path /sys -prune \) \
+#>>>	-o -print |
+#>>>	sort |
+#>>>	grep -E \
+#>>>		-e "[/][.]keep(|dir|[_].+)$")
+
+########################################
+
+find /etc/config-archive |
+	sort
+
+find / \
+	\( -path /.g -prune \) \
+	-o \( -path /dev -prune \) \
+	-o \( -path /mnt -prune \) \
+	-o \( -path /proc -prune \) \
+	-o \( -path /sys -prune \) \
+	-o -print |
+	sort |
+	grep -E \
+		-e "[/][.].+[.]swp$" \
+		-e "[/][.][_]cfg.+$"
+
+exit 0
+################################################################################
+# end of file
+################################################################################

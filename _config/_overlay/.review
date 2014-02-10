@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+source ${HOME}/.bashrc
+################################################################################
+
+declare FILE
+
+########################################
+
+for FILE in $(find . -mindepth 2 -maxdepth 2  \( -path ./.working/\* -prune \) -o \( -type d -print \) | ${SED} "s|^[.]/||g" | sort); do
+	perl -e 'printf("%-80.80s", "diff :: ${ARGV[0]} " . "=" x 80); print "\n\n";' ${FILE}
+	diff ${DIFF_OPTS} -r /usr/portage/${FILE} ${FILE}
+done >${0}.txt
+
+${VIEW} +/=== ${0}.txt
+
+################################################################################
+# end of file
+################################################################################
