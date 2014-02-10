@@ -1,0 +1,261 @@
+#!/usr/bin/env bash
+source ${HOME}/.bashrc
+################################################################################
+
+declare OUT_DIR="/_gentoo"
+${MKDIR} ${OUT_DIR}
+${RSYNC_C} ${HOME}/setup/gentoo/_gentoo/ ${OUT_DIR}/
+
+########################################
+
+declare TOKEN
+
+################################################################################
+
+if [[ ${1} == -v ]]; then
+	declare CUR="/.g/_data/_build/_gentoo"
+	declare NEW="/.g/_toor"
+	declare PKG
+	for PKG in $(
+		${GREP} -v "^[#]" ${HOME}/setup/gentoo/package.keywords |
+		cut -f1 |
+		sort
+	); do
+		echo -en "\n"
+		${GREP} ${PKG} ${CUR}/_gentoo/.emerge |
+			${GREP} --only-matching "${PKG}[^[:space:]]+"
+		${GREP} --with-filename "KEYWORDS" ${NEW}/usr/portage/${PKG}/*.ebuild |
+			${GREP} "[^~]amd64" |
+			${SED} -e "s|^.+/||g" -e "s|:.+$||g"
+	done
+	exit 0
+fi
+
+################################################################################
+
+declare EMERGE_CMD="$(which emerge) --verbose --pretend"
+env - ${EMERGE_CMD} --emptytree system world	>${OUT_DIR}/.emerge	2>&1
+env - ${EMERGE_CMD} --info			>${OUT_DIR}/.info	2>&1
+
+${SED} -n "s/^.*parser[.]add_section[(][\"](.+)[\"][)].*$/\1/gp" \
+	/usr/lib/portage/pym/portage/_sets/__init__.py |
+	sort					>${OUT_DIR}/.sets	2>&1
+env - $(which equery) list --duplicates '*'	>${OUT_DIR}/.slots	2>&1
+
+########################################
+
+#>>>declare OPTS="-mindepth 1 -mount \
+#>>>	    \( -path /.g -prune \) \
+#>>>	-or \( -path /.runit -prune \) \
+#>>>	-or \( -path /.setup -prune \) \
+#>>>	-or \( -path /_gentoo -prune \) \
+#>>>	\
+#>>>	-or \( -path /dev -prune \) \
+#>>>	-or \( -path /lost+found -prune \) \
+#>>>	-or \( -path /mnt -prune \) \
+#>>>	-or \( -path /proc -prune \) \
+#>>>	-or \( -path /run -prune \) \
+#>>>	-or \( -path /sys -prune \) \
+#>>>	-or \( -path /tmp -prune \) \
+#>>>	-or \( -path /var/log -prune \) \
+#>>>	-or \( -path /var/tmp -prune \) \
+#>>>	\
+#>>>	-or \( -path /boot -prune \) \
+#>>>	-or \( -path /lib64/firmware -prune \) \
+#>>>	-or \( -path /lib64/modules -prune \) \
+#>>>	-or \( -path /opt/Adobe -prune \) \
+#>>>	-or \( -path /opt/oracle-jdk-bin-\* -prune \) \
+#>>>	-or \( -path /opt/sun-jdk-\* -prune \) \
+#>>>	-or \( -path /usr/lib32/debug -prune \) \
+#>>>	-or \( -path /usr/lib64/debug -prune \) \
+#>>>	-or \( -path /usr/portage -prune \) \
+#>>>	-or \( -path /usr/src/debug -prune \) \
+#>>>	-or \( -path /usr/src/linux-\* -prune \) \
+#>>>	-or \( -path /var/db/pkg -prune \) \
+#>>>	-or \( -path /~~\*~~ -prune \) \
+#>>>"
+#>>>(
+#>>>	eval find -L / ${OPTS} '-or \( -type l -print \)';
+#>>>	eval find    / ${OPTS} '-or \( -type d -empty -print \)';
+#>>>	eval find    / ${OPTS} '-or -print' |
+#>>>		qfile --orphans --from -;
+#>>>) |
+#>>>	sort |
+#>>>	uniq \
+#>>>	>/_gentoo/_orphans
+
+########################################
+
+cat ${OUT_DIR}/.emerge |
+	${SED} -n "s/^[[]ebuild[^]]+[]][ ]([^: ]+)[: ].*$/\1/gp"	|
+	sort								\
+	>${OUT_DIR}/_packages
+
+find /var/db/pkg -mindepth 2 -maxdepth 2 -type d	|
+	${SED} "s|^/var/db/pkg/||g"			|
+	sort						\
+	>${OUT_DIR}/_packages.db
+
+cat /dev/null >${OUT_DIR}/_packages.db.added
+
+for TOKEN in $(cat ${OUT_DIR}/_packages.db); do
+	if [[ -z $(${GREP} "^${TOKEN/%-[0-9].*}" /var/lib/portage/world) ]]; then
+		echo "${TOKEN}" >>${OUT_DIR}/_packages.db.added
+	fi
+done
+
+#>>>${GREP} -v "^[#]" ${HOME}/setup/gentoo/package.*		|
+#>>>	${SED} -n "s/^[^:]+[:]([a-z][^[:space:]]+).+$/\1/gp"	|
+#>>>	sort							|
+#>>>	uniq							\
+#>>>	>${OUT_DIR}/_packages.modified
+
+#>>>${GREP} -v "^[#]" ${HOME}/setup/gentoo/package.*		|
+#>>>	${GREP} "[#][ ]gentoo[ ]required"			|
+#>>>	${SED} -n "s/^[^:]+[:]([a-z][^[:space:]]+).+$/\1/gp"	|
+#>>>	sort							|
+#>>>	uniq							\
+#>>>	>${OUT_DIR}/_packages.modified.required
+
+########################################
+
+cat /dev/null >${OUT_DIR}/_use.disabled
+cat /dev/null >${OUT_DIR}/_use.enabled
+
+for TOKEN in $(source /etc/portage/make.conf ; echo ${USE}); do
+	if [[ ${TOKEN} == ${TOKEN/#-} ]]; then
+		${GREP} "^${TOKEN/#-}[ ][-]" /usr/portage/profiles/use.desc |
+			sort \
+			>>${OUT_DIR}/_use.enabled
+	else
+		${GREP} "^${TOKEN/#-}[ ][-]" /usr/portage/profiles/use.desc |
+			sort \
+			>>${OUT_DIR}/_use.disabled
+	fi
+done
+
+cat /dev/null >${OUT_DIR}/_use.packages
+
+for TOKEN in $(cat ${OUT_DIR}/_packages); do
+	${GREP} "^${TOKEN/%-[0-9].*}[:]" /usr/portage/profiles/use.local.desc |
+		sort \
+		>>${OUT_DIR}/_use.packages
+done
+
+########################################
+
+cat ${OUT_DIR}/.emerge |
+	${SED} "s/ ([A-Z0-9_]+=)/\n\1/g"	|
+	${SED} "s/\" [^\"]+$/\"/g"		|
+	${GREP} "^[A-Z0-9_]+="			|
+	sort					|
+	uniq					\
+	>${OUT_DIR}/emerge__tmp
+
+${GREP} "^USE=" ${OUT_DIR}/emerge__tmp |
+	${SED} "s/^USE=\"//g"	|
+	${SED} "s/\"$//g"	|
+	${SED} "s/[()*%]//g"	|
+	${SED} "s/^-//g"	|
+	${SED} "s/ -/ /g"	|
+	${SED} "s/ /\n/g"	|
+	sort			|
+	uniq			\
+	>${OUT_DIR}/emerge.use
+
+${GREP} -v "^USE=" ${OUT_DIR}/emerge__tmp |
+	${SED} "s/=.+$//g"	|
+	sort			|
+	uniq			\
+	>${OUT_DIR}/emerge.vars
+
+${RM} ${OUT_DIR}/emerge__tmp >/dev/null 2>&1
+
+########################################
+
+(source /etc/portage/make.conf ; echo ${USE}) |
+	${SED} "s/^-//g"	|
+	${SED} "s/ -/ /g"	|
+	${SED} "s/ /\n/g"	|
+	sort			|
+	uniq			\
+	>${OUT_DIR}/makeconf.use
+
+${GREP} "^[A-Z0-9_]+=" /etc/portage/make.conf |
+	${GREP} -v "^USE="	|
+	${SED} "s/=.+$//g"	|
+	sort			|
+	uniq			\
+	>${OUT_DIR}/makeconf.vars
+
+########################################
+
+cat /dev/null >${OUT_DIR}/use.extra
+
+for TOKEN in $(cat ${OUT_DIR}/makeconf.use); do
+	if [[ -z $(${GREP} "^${TOKEN}$" ${OUT_DIR}/emerge.use) ]]; then
+		echo "${TOKEN}" >>${OUT_DIR}/use.extra
+	fi
+done
+
+cat /dev/null >${OUT_DIR}/vars.extra
+
+for TOKEN in $(cat ${OUT_DIR}/makeconf.vars); do
+	if [[ -z $(${GREP} "^${TOKEN}$" ${OUT_DIR}/emerge.vars) ]]; then
+		echo "${TOKEN}" >>${OUT_DIR}/vars.extra
+	fi
+done
+
+########################################
+
+cat /dev/null >${OUT_DIR}/use.missing.global
+cat /dev/null >${OUT_DIR}/use.missing.local
+
+for TOKEN in $(cat ${OUT_DIR}/emerge.use); do
+	if [[ -z $(${GREP} "^${TOKEN}$" ${OUT_DIR}/makeconf.use) ]]; then
+		if [[ -n $(${GREP} "^${TOKEN}[ ][-]" /usr/portage/profiles/use.desc) ]]; then
+			${GREP} "^${TOKEN}[ ][-]" /usr/portage/profiles/use.desc |
+				sort \
+				>>${OUT_DIR}/use.missing.global
+		else
+			echo -e "\n${TOKEN}" \
+				>>${OUT_DIR}/use.missing.local
+			${GREP} "[:]${TOKEN}[ ][-]" /usr/portage/profiles/use.local.desc |
+				sort \
+				>>${OUT_DIR}/use.missing.local
+		fi
+	fi
+done
+
+cat /dev/null >${OUT_DIR}/vars.missing
+
+for TOKEN in $(cat ${OUT_DIR}/emerge.vars); do
+	if [[ -z $(${GREP} "^${TOKEN}$" ${OUT_DIR}/makeconf.vars) ]]; then
+		echo "${TOKEN}" >>${OUT_DIR}/vars.missing
+	fi
+done
+
+########################################
+
+cat /dev/null >${OUT_DIR}/+okay
+
+for TOKEN in ${OUT_DIR}/*.OKAY; do
+	echo -e "\n${TOKEN/%\.OKAY}" >>${OUT_DIR}/+okay
+	diff ${TOKEN} ${TOKEN/%\.OKAY} >>${OUT_DIR}/+okay
+done
+
+echo -e "\n[emerge output]" >>${OUT_DIR}/+okay
+${GREP} -v \
+	-e "^$" \
+	-e "^[[]" \
+	-e "^PORTAGE_BZIP2_COMMAND[ ]" \
+	-e "^These are the packages that would be merged" \
+	-e "^Calculating dependencies" \
+	-e "^Total[:][ ]" \
+	-e "^Fetch Restriction[:][ ]" \
+	${OUT_DIR}/.emerge >>${OUT_DIR}/+okay
+
+exit 0
+################################################################################
+# end of file
+################################################################################
