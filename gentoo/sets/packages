@@ -380,6 +380,7 @@ app-admin/keepassx
 mail-client/thunderbird
 www-client/chromium
 www-client/firefox
+www-client/midori
 
 app-text/acroread
 app-text/qpdf
