@@ -263,6 +263,8 @@ sys-fs/mtpfs
 sys-fs/ntfs3g
 sys-fs/sshfs-fuse
 
+app-forensics/sleuthkit
+
 ########################################
 # programs
 
