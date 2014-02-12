@@ -22,6 +22,7 @@ sys-apps/paludis			~amd64		# gentoo required
 sys-devel/bison				~amd64		# gentoo required
 sys-fs/ext3grep				~amd64		# gentoo required
 sys-libs/zlib				~amd64		# gentoo required
+www-client/midori			~amd64		# gentoo required
 x11-misc/whaw				~amd64		# gentoo required
 x11-plugins/pidgin-sipe			~amd64		# gentoo required
 
