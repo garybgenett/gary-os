@@ -31,6 +31,28 @@ if [[ ${1} == -v ]]; then
 	exit 0
 fi
 
+########################################
+
+if [[ -n ${@} ]]; then
+	for TOKEN in ${@}; do
+		if [[ ! -d $(ls -d /var/db/pkg/${TOKEN}-[0-9]* 2>/dev/null) ]]; then
+			if [[ -n $(emerge -s ${TOKEN/#*\/} | ${GREP} "found[ ][:][ ]0") ]]; then
+				echo -en "${TOKEN}\tNONE FOUND\n"
+				continue
+			fi
+			emerge -s ${TOKEN/#*\/} |
+				${GREP} -A7 "${TOKEN/+/[+]}($|[[:space:]])" |
+				${GREP} "(${TOKEN}|Description)" |
+				${SED} "s/^[*][[:space:]]*//g" |
+				${SED} "s/[[:space:]]*[[][ ]Masked[ ][]]$//g" |
+				${SED} "s/^[[:space:]]*Description[:][[:space:]]*/\t/g" |
+				tr -d '\n'
+			echo -en "\n"
+		fi
+	done
+	exit 0
+fi
+
 ################################################################################
 
 declare EMERGE_CMD="$(which emerge) --verbose --pretend"
