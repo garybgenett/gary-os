@@ -402,6 +402,7 @@ x11-plugins/gkrellsun
 x11-plugins/gkrellweather
 
 net-im/pidgin
+net-irc/irssi
 x11-plugins/pidgin-encryption
 x11-plugins/pidgin-extprefs
 x11-plugins/pidgin-hotkeys
