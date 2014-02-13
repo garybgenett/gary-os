@@ -3,12 +3,10 @@
 ################################################################################
 
 app-accessibility/at-spi2-atk		~amd64		# gentoo required
+app-crypt/chntpw			~amd64		# gentoo required
 app-emulation/lxc			~amd64		# gentoo required
 app-misc/binwalk			~amd64		# gentoo required
 app-misc/hello				~amd64		# gentoo required
-dev-lang/nqp				~amd64		# gentoo required
-dev-lang/parrot				~amd64		# gentoo required
-dev-lang/rakudo				~amd64		# gentoo required
 dev-libs/apr				~amd64		# gentoo required
 dev-lua/luarocks			~amd64		# gentoo required
 games-fps/quakeforge			~amd64		# gentoo required
@@ -19,9 +17,12 @@ net-misc/cadaver			~amd64		# gentoo required
 net-misc/pipes				~amd64		# gentoo required
 sys-apps/dtc				~amd64		# gentoo required
 sys-apps/paludis			~amd64		# gentoo required
+sys-block/whdd				~amd64		# gentoo required
 sys-devel/bison				~amd64		# gentoo required
 sys-fs/ext3grep				~amd64		# gentoo required
 sys-libs/zlib				~amd64		# gentoo required
+sys-process/nmon			~amd64		# gentoo required
+www-client/midori			~amd64		# gentoo required
 x11-misc/whaw				~amd64		# gentoo required
 x11-plugins/pidgin-sipe			~amd64		# gentoo required
 
@@ -31,6 +32,10 @@ sys-kernel/spl				~amd64		# gentoo required
 
 dev-perl/Template-Tiny			~amd64		# gentoo required
 perl-core/Switch			~amd64		# gentoo required
+
+dev-lang/nqp				~amd64		# gentoo required
+dev-lang/parrot				~amd64		# gentoo required
+dev-lang/rakudo				~amd64		# gentoo required
 
 app-emulation/vmware-modules		~amd64		# gentoo required
 app-emulation/vmware-player		~amd64		# gentoo required
