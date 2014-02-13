@@ -13,7 +13,7 @@ declare TOKEN
 ################################################################################
 
 if [[ ${1} == -v ]]; then
-	declare CUR="/.g/_data/_build/_gentoo"
+	declare CUR="/.g/_data/_builds/_gentoo"
 	declare NEW="/.g/_toor"
 	declare PKG
 	for PKG in $(
