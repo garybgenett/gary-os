@@ -5,10 +5,18 @@ source ${HOME}/.bashrc
 declare AUTHOR="Gary B. Genett <me@garybgenett.net>"
 declare TITLE="gary-os"
 
+declare REVN="0"
+if [[ ${1} == [0-9] ]]; then
+	REVN="${1}"
+	shift
+fi
+
+########################################
+
 declare CONFIG="${HOME}/setup/gentoo"
 declare SET="${CONFIG}/sets/metro"
 declare HASH="$(cat ${CONFIG}/.funtoo)"
-declare DVER="${HASH}.0"
+declare DVER="${HASH}.${REVN}"
 #>>>DVER="$(date --iso=d)"
 
 declare BLD="/.g/_data/_build"
@@ -144,7 +152,7 @@ if [[ ${1} == -/ ]]; then
 	${MKDIR} ${INIT_DST}				|| exit 1
 	tar -pvvxJ -C ${INIT_DST} -f ${INIT_SRC}	|| exit 1
 
-	(cd ${INIT_DST} && echo | ${_SELF} -1)		|| exit 1
+	(cd ${INIT_DST} && echo | ${_SELF} ${REVN} -1)	|| exit 1
 	${MV} ${INIT_DST}.kernel ${INIT_SRC}.kernel	|| exit 1
 	${MV} ${INIT_DST}.initrd ${INIT_SRC}.initrd	|| exit 1
 	${RM} ${INIT_DST}				|| exit 1
@@ -345,7 +353,7 @@ FILE="$(find ${DEST}/${TYPE} -type f 2>/dev/null |
 	${GREP} "(${SVER}|${DVER})[.]tar[.]xz$")"
 ${RSYNC_U} ${FILE}	${SAV}/			|| exit 1
 
-echo | ${_SELF} -/ || exit 1
+echo | ${_SELF} ${REVN} -/ || exit 1
 
 exit 0
 ################################################################################
