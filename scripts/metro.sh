@@ -46,7 +46,7 @@ declare SOUT="${DEST}/${TYPE}/${PLAT}/${SARC}"
 declare SAFE_ENV="prompt -z"
 export CCACHE_DIR=
 
-declare VERSION_REGEX="([0-9]{4}-[0-9]{2}-[0-9]{2}(T[0-9]{2}-[0-9]{4})?|[0-9]{40}[.][0-9])"
+declare VERSION_REGEX="([0-9]{4}-[0-9]{2}-[0-9]{2}(T[0-9]{2}-[0-9]{4})?|[a-z0-9]{40}[.][0-9])"
 declare METRO_CMD="${DMET}/metro \
 	--libdir ${DMET} \
 	--verbose \
