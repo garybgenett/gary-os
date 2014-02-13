@@ -5,7 +5,7 @@ source ${HOME}/.bashrc
 declare SOURCE="/.g/_data/_target/iso"
 declare GITDIR="/.g/_data/_build/funtoo/portage"
 
-declare TARGET="/.g/_data/_build/_gentoo"
+declare TARGET="/.g/_data/_builds/_gentoo"
 declare TOOR=
 if [[ ${1} == -t ]]; then
 	shift
