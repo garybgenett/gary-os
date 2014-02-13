@@ -6,9 +6,6 @@ app-accessibility/at-spi2-atk		~amd64		# gentoo required
 app-emulation/lxc			~amd64		# gentoo required
 app-misc/binwalk			~amd64		# gentoo required
 app-misc/hello				~amd64		# gentoo required
-dev-lang/nqp				~amd64		# gentoo required
-dev-lang/parrot				~amd64		# gentoo required
-dev-lang/rakudo				~amd64		# gentoo required
 dev-libs/apr				~amd64		# gentoo required
 dev-lua/luarocks			~amd64		# gentoo required
 games-fps/quakeforge			~amd64		# gentoo required
@@ -32,6 +29,10 @@ sys-kernel/spl				~amd64		# gentoo required
 
 dev-perl/Template-Tiny			~amd64		# gentoo required
 perl-core/Switch			~amd64		# gentoo required
+
+dev-lang/nqp				~amd64		# gentoo required
+dev-lang/parrot				~amd64		# gentoo required
+dev-lang/rakudo				~amd64		# gentoo required
 
 app-emulation/vmware-modules		~amd64		# gentoo required
 app-emulation/vmware-player		~amd64		# gentoo required
