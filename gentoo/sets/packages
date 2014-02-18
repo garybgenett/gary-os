@@ -366,6 +366,7 @@ net-misc/ntp
 net-misc/openvpn
 net-misc/quagga
 net-misc/radvd
+net-misc/tor
 net-nds/openldap
 net-print/cups
 net-wireless/hostapd
