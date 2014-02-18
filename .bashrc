@@ -976,7 +976,7 @@ function git-save {
 		AMEND="[${1}]"
 		shift
 	fi
-	${GIT_ADD} ./									|| return 1
+	${GIT_ADD} --all ./								|| return 1
 	${GIT_CMT} --all --message="[${MESSAGE} :: $(date --iso=seconds)]${AMEND}"	|| return 1
 	return 0
 }
