@@ -190,27 +190,21 @@ net-misc/unison
 
 dev-perl/Template-DBI
 dev-perl/Template-GD
-dev-perl/Template-Latex
 dev-perl/Template-Tiny
 dev-perl/Template-Toolkit
 dev-perl/Template-XML
 
-app-text/asciidoc
 app-text/docbook-xml-dtd
 app-text/docbook-xsl-ns-stylesheets
 app-text/docbook-xsl-stylesheets
 app-text/htmltidy
-app-text/texlive
 app-text/xmlto
-dev-tex/texmfind
-media-gfx/transfig
 
 dev-vcs/cvs
 dev-vcs/cvs2svn
 dev-vcs/cvsps
 dev-vcs/git
 dev-vcs/gitolite
-dev-vcs/qgit
 dev-vcs/subversion
 
 dev-lang/perl
@@ -218,6 +212,10 @@ dev-lang/python
 
 dev-db/sqlite
 dev-tcltk/expect
+
+media-libs/alsa-lib
+media-libs/alsa-oss
+media-sound/alsa-utils
 
 ########################################
 # utilities
@@ -227,7 +225,6 @@ sys-devel/bc
 
 dev-util/ltrace
 dev-util/strace
-#>>>dev-util/sysprof
 sys-apps/kexec-tools
 
 sys-apps/hdparm
@@ -271,7 +268,6 @@ net-analyzer/tcptrace
 net-analyzer/tcptraceroute
 net-analyzer/traceroute
 net-analyzer/vnstat
-#>>>net-analyzer/wireshark
 net-dns/bind-tools
 net-misc/cadaver
 net-misc/iperf
@@ -301,13 +297,14 @@ app-forensics/foremost
 app-forensics/sleuthkit
 sys-apps/flashrom
 
-
 ########################################
 # programs
 
 app-emulation/libvirt
 app-emulation/lxc
 app-emulation/qemu
+app-emulation/spice
+app-emulation/spice-protocol
 
 app-misc/run-mailcap
 net-misc/urlview
@@ -324,6 +321,32 @@ mail-mta/msmtp
 net-mail/fetchmail
 net-mail/offlineimap
 net-mail/safecat
+
+net-irc/irssi
+
+app-misc/gtypist
+app-misc/hello
+games-misc/typespeed
+
+########################################
+# media
+
+app-misc/beep
+app-misc/clockywock
+media-sound/aumix
+
+net-p2p/rtorrent
+
+app-cdr/cdrdao
+app-cdr/cdrtools
+app-cdr/dvd+rw-tools
+media-sound/cdparanoia
+media-sound/cdtool
+media-video/dvdbackup
+media-video/lsdvd
+
+media-gfx/exif
+media-gfx/exiv2
 
 ################################################################################
 # end of file
