@@ -314,7 +314,7 @@ ${SED} -i \
 
 FILE="$(${GREP} "^.+/gentoo-sources(:.+)?$" ${SET} |
 	sort -n |
-	tail -n1) genkernel" #>>> grub
+	tail -n1) ccache debugedit genkernel" #>>> grub
 USE_="\
 genkernel --loglevel=5 --symlink all || exit 1		\n\
 #>>>mkdir -p /boot/grub || exit 1			\n\
