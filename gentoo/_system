@@ -4,13 +4,23 @@ source ${HOME}/.bashrc
 
 declare SOURCE="/.g/_data/_target/iso"
 declare GITDIR="/.g/_data/_build/funtoo/portage"
+declare METDIR="/.g/_data/_builds/_metro"
 
 declare TARGET="/.g/_data/_builds/_gentoo"
 declare TOOR=
+declare _NEW="NEW"
+declare _PKG="packages"
 if [[ ${1} == -t ]]; then
 	shift
 	TARGET="/.g/_toor"
 	TOOR="-t"
+fi
+if [[ ${1} == -m ]] || [[ ${1} == -~ ]]; then
+	[[ ${1} == -~ ]] || shift
+	TARGET="/.g/_toor"
+	TOOR="-m"
+	_NEW="MET"
+	_PKG="metro"
 fi
 
 declare COMMIT=
@@ -88,13 +98,24 @@ if [[ ${1} == -/ ]]; then ${_SELF} ${TOOR} -a -i		| prompt -c	; exit 0; fi
 if [[ ${1} == -1 ]]; then ${_SELF} ${TOOR} -a -b -i		| prompt -c	; exit 0; fi
 if [[ ${1} == -2 ]]; then ${_SELF} ${TOOR} -c -i				; exit 0; fi
 
+if [[ ${1} == -~ ]]; then
+	if [[ -n $(find ${TARGET} -maxdepth 0 -empty) ]]; then
+#>>>		tar -pvvxJ -C ${TARGET} -f		$(ls -t ${SOURCE}/stage3-*i686*funtoo*.tar.xz		| head -n1)
+		tar -pvvxJ -C ${TARGET} -f		$(ls -t ${METDIR}/stage3-*core2_64*funtoo*.tar.xz	| head -n1)
+		tar -pvvxJ -C ${TARGET}/usr -f		$(ls -t ${METDIR}/portage-*.tar.xz			| head -n1)
+		${RSYNC_U} ${METDIR}/.distfiles/	${TARGET}/usr/portage/distfiles
+	fi
+	${_SELF} ${TOOR} -a -n -i | prompt -c
+	exit 0
+fi
+
 ########################################
 
 if [[ ${1} == -i ]]; then
 	umount					${TARGET}/{dev{/pts,/shm,},proc,sys}	2>/dev/null
 	if [[ ! -d ${TARGET}/boot ]]; then
-#>>>		tar -pvvxJ -C ${TARGET} -f	$(ls ${SOURCE}/stage3-*i686*funtoo*.tar.xz	| tail -n1)
-		tar -pvvxJ -C ${TARGET} -f	$(ls ${SOURCE}/stage3-*core2_64*funtoo*.tar.xz	| tail -n1)
+#>>>		tar -pvvxJ -C ${TARGET} -f	$(ls -t ${SOURCE}/stage3-*i686*funtoo*.tar.xz		| head -n1)
+		tar -pvvxJ -C ${TARGET} -f	$(ls -t ${SOURCE}/stage3-*core2_64*funtoo*.tar.xz	| head -n1)
 		${RSYNC_U} ${SOURCE}/*funtoo*	${TARGET}/_build/
 		${RSYNC_U} ${GITDIR}{,.git}	${TARGET}/usr/
 		(cd				${TARGET}/usr/portage &&
@@ -113,11 +134,16 @@ if [[ ${1} == -i ]]; then
 	${RM}					${TARGET}/.g/.home/.ssh/id_*
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/scripts/_sync mount g sda
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/setup/.setconf
-	if ${NEW}; then for NEW in \
-		${TARGET}/.setup/gentoo/package.*
-	do
-		${SED} -i "s|^[#][{]NEW[}][ ](.+)$|\1|g" ${NEW}
-	done; fi
+	if ${NEW}; then
+		if [[ ${_NEW} == "MET" ]]; then
+			${SED} -i "N;N;N;N;N;s|^[\"]\n\nMETRO_USE=([^\n]+)\n||g" ${TARGET}/.setup/gentoo/make.conf
+		fi
+		for NEW in \
+			${TARGET}/.setup/gentoo/package.*
+		do
+			${SED} -i "s|^[#][{]${_NEW}[}][ ](.+)$|\1|g" ${NEW}
+		done
+	fi
 	if ${BLD}; then
 		${SAFE_ENV}			locale-gen						|| exit 1
 		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} ccache debugedit portage glibc gcc	|| exit 1
@@ -128,7 +154,7 @@ if [[ ${1} == -i ]]; then
 		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} --emptytree \@system \@world		|| exit 1
 	fi
 	if ${KRN}; then for KRN in $(
-		${SED} -n "s|^.+/gentoo-sources:(.+)$|\1|gp" ${HOME}/setup/gentoo/sets/packages
+		${SED} -n "s|^.+/gentoo-sources:(.+)$|\1|gp" ${HOME}/setup/gentoo/sets/${_PKG}
 	); do
 		${RM}				${TARGET}/usr/src/linux					|| exit 1
 		${LN} linux-${KRN}-gentoo	${TARGET}/usr/src/linux					|| exit 1
@@ -225,8 +251,8 @@ END_OF_FILE
 			done
 		done
 	fi
-	HOME=/.g/.home ${SAFE_ENV}		${_SELF} ${AUTO} -f	|| exit 1
-	HOME=/.g/.home ${SAFE_ENV}		${_SELF} ${AUTO} -u	|| exit 1
+	HOME=/.g/.home ${SAFE_ENV}		${_SELF} ${TOOR} ${AUTO} -f	|| exit 1
+	HOME=/.g/.home ${SAFE_ENV}		${_SELF} ${TOOR} ${AUTO} -u	|| exit 1
 	umount					${TARGET}/{dev{/pts,/shm,},proc,sys}	2>/dev/null
 	exit 0
 fi
@@ -260,8 +286,8 @@ if [[ ${1} == -u ]]; then
 		eselect ${KEY} set ${VAL}
 		eselect ${KEY} list
 	done
-	cat /dev/null		>/var/lib/portage/world
-	echo "@packages"	>/var/lib/portage/world_sets
+	cat /dev/null	>/var/lib/portage/world
+	echo "@${_PKG}"	>/var/lib/portage/world_sets
 	declare ECLEAN="eclean --verbose"
 	declare D_CONF="dispatch-conf"
 	[[ -n ${AUTO} ]] && D_CONF="expect -c \"spawn ${D_CONF}; expect use-new {send u\r; exp_continue;};\""
