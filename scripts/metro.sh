@@ -126,15 +126,41 @@ if [[ ${1} == -1 ]]; then
 
 	${CP} -L ${INIT_DIR}/boot/kernel ${INIT_DIR}.kernel	#>>> || exit 1
 	eval find ./ \
+		$(for FILE in ./usr/src/linux-*; do echo -en "\( -path ${FILE} -prune \) -o "; done) \
+		'\( -path ./boot		-prune \)' -o \
+		\
+		'\( -path ./usr/portage		-prune \)' -o \
+		'\( -path ./usr/portage.git	-prune \)' -o \
+		'\( -path ./var/db/pkg		-prune \)' -o \
+		\
 		'\( -path ./tmp/.ccache		-prune \)' -o \
 		'\( -path ./usr/lib32/debug	-prune \)' -o \
 		'\( -path ./usr/lib64/debug	-prune \)' -o \
-		'\( -path ./usr/portage		-prune \)' -o \
-		'\( -path ./usr/portage.git	-prune \)' -o \
 		'\( -path ./usr/src/debug	-prune \)' -o \
-		$(for FILE in ./usr/src/linux-*; do echo -en "\( -path ${FILE} -prune \) -o "; done) \
 		-print |
-	cpio -ovH newc | gzip -c >${INIT_DIR}.initrd		|| exit 1
+	cpio -ovH newc >${INIT_DIR}.cpio			|| exit 1
+	gzip -c ${INIT_DIR}.cpio >${INIT_DIR}.initrd		|| exit 1
+
+	if [[ -d ${INIT_DIR}/usr/src/linux ]]; then
+		declare INITRAMFS_CONFIG="\n"
+		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_SOURCE=\"${INIT_DIR}.cpio\"\n"
+		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_ROOT_GID=0\n"
+		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_ROOT_UID=0\n"
+		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_COMPRESSION_XZ=y\n"
+		INITRAMFS_CONFIG+="# CONFIG_INITRAMFS_COMPRESSION_BZIP2 is not set\n"
+		INITRAMFS_CONFIG+="# CONFIG_INITRAMFS_COMPRESSION_GZIP is not set\n"
+		INITRAMFS_CONFIG+="# CONFIG_INITRAMFS_COMPRESSION_LZMA is not set\n"
+		INITRAMFS_CONFIG+="# CONFIG_INITRAMFS_COMPRESSION_LZO is not set\n"
+		INITRAMFS_CONFIG+="# CONFIG_INITRAMFS_COMPRESSION_NONE is not set\n"
+		${SED} -i \
+			-e "s%^CONFIG_INITRAMFS_SOURCE=\"\"$%${INITRAMFS_CONFIG}%g" \
+			${INIT_DIR}/usr/src/linux/.config	|| exit 1
+		(cd ${INIT_DIR}/usr/src/linux && make bzImage)	|| exit 1
+		${CP} -L $(
+			ls -t ${INIT_DIR}/usr/src/linux/arch/*/boot/bzImage |
+			head -n1) ${INIT_DIR}.kernel.initrd	|| exit 1
+	fi
+	${RM} ${INIT_DIR}.cpio					|| exit 1
 
 	exit 0
 fi
@@ -148,14 +174,21 @@ if [[ ${1} == -/ ]]; then
 	declare INIT_SRC="${FILE}"
 	declare INIT_DST="${FILE}.dir"
 
-	${RM} ${INIT_DST}				|| exit 1
-	${MKDIR} ${INIT_DST}				|| exit 1
-	tar -pvvxJ -C ${INIT_DST} -f ${INIT_SRC}	|| exit 1
+	${RM} ${INIT_DST}					|| exit 1
+	${MKDIR} ${INIT_DST}					|| exit 1
+	tar -pvvxJ -C ${INIT_DST} -f ${INIT_SRC}		|| exit 1
 
-	(cd ${INIT_DST} && echo | ${_SELF} ${REVN} -1)	|| exit 1
-	${MV} ${INIT_DST}.kernel ${INIT_SRC}.kernel	|| exit 1
-	${MV} ${INIT_DST}.initrd ${INIT_SRC}.initrd	|| exit 1
-	${RM} ${INIT_DST}				|| exit 1
+	(cd ${INIT_DST} && echo | ${_SELF} ${REVN} -1)		|| exit 1
+	if [[ -f ${INIT_DST}.kernel.initrd ]]; then
+		${MV} ${INIT_DST}.kernel.initrd \
+			${INIT_SRC}.kernel			|| exit 1
+		${RM} ${INIT_DST}.kernel			|| exit 1
+		${RM} ${INIT_DST}.initrd			|| exit 1
+	else
+		${MV} ${INIT_DST}.kernel ${INIT_SRC}.kernel	|| exit 1
+		${MV} ${INIT_DST}.initrd ${INIT_SRC}.initrd	|| exit 1
+	fi
+	${RM} ${INIT_DST}					|| exit 1
 
 	exit 0
 fi
