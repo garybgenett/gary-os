@@ -316,15 +316,19 @@ ${SED} -i \
 
 FILE="$(${GREP} "^.+/gentoo-sources(:.+)?$" ${SET} |
 	sort -n |
-	tail -n1) genkernel grub"
+	tail -n1)"
 USE_="\
-genkernel --loglevel=5 --symlink all || exit 1		\n\
-#>>>mkdir -p /boot/grub || exit 1			\n\
-#>>>grub-mkconfig -o /boot/grub/grub.cfg || exit 1	\n\
+emerge \$eopts ccache debugedit || exit 1	\n\
+\\1						\n\
+emerge \$eopts genkernel ${FILE} || exit 1	\n\
+genkernel --loglevel=5 --symlink all || exit 1	\n\
+emerge \$eopts grub || exit 1			\n\
+mkdir -p /boot/grub || exit 1			\n\
+grub-mkconfig -o /boot/grub/grub.cfg || exit 1	\n\
 "
 
 ${SED} -i \
-	-e "s%^(emerge.+system)(.+)$%emerge \$eopts ccache debugedit || exit 1\n\1 ${FILE}\2\n${USE_}%g" \
+	-e "s%^(emerge.+system.+)$%${USE_}%g" \
 	${DMET}/targets/gentoo/stage3.spec || exit 1
 
 ########################################
