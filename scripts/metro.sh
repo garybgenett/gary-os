@@ -314,15 +314,18 @@ ${SED} -i \
 
 FILE="$(${GREP} "^.+/gentoo-sources(:.+)?$" ${SET} |
 	sort -n |
-	tail -n1) ccache debugedit genkernel" #>>> grub
+	tail -n1)"
+${SED} -i \
+	-e "s%^(pkglist = .+)[ ][]]$%\1, \"ccache\", \"debugedit\", \"genkernel\", \"${FILE}\", \"grub\" ]%g" \
+	${DMET}/targets/gentoo/stage2.spec || exit 1
+
 USE_="\
 genkernel --loglevel=5 --symlink all || exit 1		\n\
 #>>>mkdir -p /boot/grub || exit 1			\n\
 #>>>grub-mkconfig -o /boot/grub/grub.cfg || exit 1	\n\
 "
-
 ${SED} -i \
-	-e "s%^(emerge.+system)(.+)$%\1 ${FILE}\2\n${USE_}%g" \
+	-e "s%^(emerge.+system.+)$%\1\n${USE_}%g" \
 	${DMET}/targets/gentoo/stage3.spec || exit 1
 
 ########################################
