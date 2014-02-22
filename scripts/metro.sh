@@ -29,7 +29,9 @@ declare SMET="${BLD}/funtoo/metro"
 declare SPRT="${BLD}/funtoo/portage"
 
 declare TYPE="funtoo-stable"
+#>>>declare PLAT="x86-32bit"
 declare PLAT="x86-64bit"
+#>>>declare ARCH="i686"
 declare ARCH="core2_64"
 declare SARC="${ARCH}"
 
@@ -373,18 +375,18 @@ ${SAFE_ENV} ${METRO_CMD} || exit 1
 
 ########################################
 
-${MKDIR}		${SAV}			|| exit 1
-echo -en "${COMMIT}"	>${SAV}/_commit		|| exit 1
-${RSYNC_U} ${CONFIG}/	${SAV}/_config		|| exit 1
-${RSYNC_U} ${_SELF}	${SAV}/_${SCRIPT}	|| exit 1
-${RSYNC_U} ${DFIL}/	${SAV}/.distfiles	|| exit 1
+${MKDIR}		${SAV}				|| exit 1
+echo -en "${COMMIT}"	>${SAV}/_commit			|| exit 1
+${RSYNC_U} ${CONFIG}/	${SAV}/_config			|| exit 1
+${RSYNC_U} ${_SELF}	${SAV}/_${SCRIPT}		|| exit 1
+${RSYNC_U} ${DFIL}/	${SAV}/.distfiles		|| exit 1
 
 FILE="${DTMP}/cache/build/${TYPE}/stage3-${ARCH}-${TYPE}-${DVER}/package"
-${RSYNC_U} ${FILE}/	${SAV}/.packages	|| exit 1
+${RSYNC_U} ${FILE}/	${SAV}/.packages.${ARCH}	|| exit 1
 
 FILE="$(find ${DEST}/${TYPE} -type f 2>/dev/null |
 	${GREP} "(${SVER}|${DVER})[.]tar[.]xz$")"
-${RSYNC_U} ${FILE}	${SAV}/			|| exit 1
+${RSYNC_U} ${FILE}	${SAV}/				|| exit 1
 
 echo | ${_SELF} ${REVN} -/ || exit 1
 
