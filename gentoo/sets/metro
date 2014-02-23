@@ -95,7 +95,7 @@ net-misc/wget
 www-client/elinks
 www-client/links
 www-client/lynx
-www-client/w3m
+#>>>www-client/w3m
 
 app-misc/screen
 app-shells/bash
