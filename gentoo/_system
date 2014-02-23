@@ -159,9 +159,10 @@ if [[ ${1} == -i ]]; then
 		${RM}				${TARGET}/usr/src/linux					|| exit 1
 		${LN} linux-${KRN}-gentoo	${TARGET}/usr/src/linux					|| exit 1
 		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} =gentoo-sources-${KRN}			|| exit 1
+		declare GENKERNEL_OPTS="--loglevel=5 --bootloader=grub --symlink kernel"
 		if [[ -z ${AUTO} ]]; then
-		HOME=/.g/.home ${SAFE_ENV}	genkernel --loglevel=5 --symlink kernel --menuconfig	|| exit 1; else
-		HOME=/.g/.home ${SAFE_ENV}	genkernel --loglevel=5 --symlink kernel			\
+		HOME=/.g/.home ${SAFE_ENV}	genkernel ${GENKERNEL_OPTS} kernel --menuconfig		|| exit 1; else
+		HOME=/.g/.home ${SAFE_ENV}	genkernel ${GENKERNEL_OPTS} kernel			\
 						--kernel-config=/.setup/linux/config-gentoo64-${KRN}	|| exit 1; fi
 #>>>		KRN="kernel-genkernel-x86-${KRN}-gentoo"						|| exit 1
 		KRN="kernel-genkernel-x86_64-${KRN}-gentoo"						|| exit 1
