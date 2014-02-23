@@ -1734,9 +1734,9 @@ function shell {
 			[[ -z $(${PS} 2>/dev/null | ${GREP} "5900[:]") ]] && OPTS="${OPTS} -L 5900:127.0.0.1:5900"
 			[[ -z $(${PS} 2>/dev/null | ${GREP} "5901[:]") ]] && OPTS="${OPTS} -L 5901:127.0.0.1:5901"
 			[[ -z $(${PS} 2>/dev/null | ${GREP} "5902[:]") ]] && OPTS="${OPTS} -L 5902:127.0.0.1:5902"
-			[[ -z $(${PS} 2>/dev/null | ${GREP} "6666[:]") ]] && OPTS="${OPTS} -L 6666:127.0.0.1:6666"
 			if [[ ${HOSTNAME} != spider ]]; then
 				[[ -z $(${PS} 2>/dev/null | ${GREP} "5909[:]") ]] && OPTS="${OPTS} -L 5909:127.0.0.1:5900"
+				[[ -z $(${PS} 2>/dev/null | ${GREP} "6606[:]") ]] && OPTS="${OPTS} -L 6606:127.0.0.1:6666"
 			fi
 			;;
 		(you)	DEST="bastion.olympus.f5net.com"
