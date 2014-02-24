@@ -100,7 +100,7 @@ if [[ ${1} == -2 ]]; then ${_SELF} ${TOOR} -c -i				; exit 0; fi
 
 if [[ ${1} == -~ ]]; then
 	if [[ -n $(find ${TARGET} -maxdepth 0 -empty) ]]; then
-#>>>		tar -pvvxJ -C ${TARGET} -f		$(ls -t ${SOURCE}/stage3-*i686*funtoo*.tar.xz		| head -n1)
+#>>>		tar -pvvxJ -C ${TARGET} -f		$(ls -t ${METDIR}/stage3-*i686*funtoo*.tar.xz		| head -n1)
 		tar -pvvxJ -C ${TARGET} -f		$(ls -t ${METDIR}/stage3-*core2_64*funtoo*.tar.xz	| head -n1)
 		tar -pvvxJ -C ${TARGET}/usr -f		$(ls -t ${METDIR}/portage-*.tar.xz			| head -n1)
 		${RSYNC_U} ${METDIR}/.distfiles/	${TARGET}/usr/portage/distfiles
