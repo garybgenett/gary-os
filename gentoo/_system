@@ -149,6 +149,7 @@ if [[ ${1} == -i ]]; then
 		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} ccache debugedit portage glibc gcc	|| exit 1
 		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} eselect genkernel gentoolkit		|| exit 1
 #>>>		${SAFE_ENV}			eselect profile add 1					|| exit 1
+#>>>		${SAFE_ENV}			eselect profile set-build 2				|| exit 1
 		${SAFE_ENV}			eselect profile set-build 3				|| exit 1
 		${SAFE_ENV}			eselect profile set-flavor 8				|| exit 1
 		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} --emptytree \@system \@world		|| exit 1
@@ -269,6 +270,7 @@ if [[ ${1} == -u ]]; then
 	java-config --set-system-vm $(equery list icedtea | awk '{print $1;}' | cut -d/ -f2 | cut -d. -f-1 | sort -n | tail -n1)
 	java-config --list-available-vms
 #>>>	eselect profile add 1
+#>>>	eselect profile set-build 2
 	eselect profile set-build 3
 	eselect profile set-flavor 8
 	declare SELECT
