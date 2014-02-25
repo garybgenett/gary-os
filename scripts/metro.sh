@@ -5,6 +5,11 @@ source ${HOME}/.bashrc
 declare AUTHOR="Gary B. Genett <me@garybgenett.net>"
 declare TITLE="gary-os"
 
+declare BITS="64"
+if [[ ${1} == 32 ]]; then
+	BITS="32"
+	shift
+fi
 declare REVN="0"
 if [[ ${1} == [0-9] ]]; then
 	REVN="${1}"
@@ -29,10 +34,8 @@ declare SMET="${BLD}/funtoo/metro"
 declare SPRT="${BLD}/funtoo/portage"
 
 declare TYPE="funtoo-stable"
-#>>>declare PLAT="x86-32bit"
-declare PLAT="x86-64bit"
-#>>>declare ARCH="i686"
-declare ARCH="core2_64"
+declare PLAT="x86-${BITS}bit"
+declare ARCH="core2_${BITS}"
 declare SARC="${ARCH}"
 
 declare DEST="${BLD}/_metro"
@@ -180,7 +183,7 @@ if [[ ${1} == -/ ]]; then
 	${MKDIR} ${INIT_DST}					|| exit 1
 	tar -pvvxJ -C ${INIT_DST} -f ${INIT_SRC}		|| exit 1
 
-	(cd ${INIT_DST} && echo | ${_SELF} ${REVN} -1)		|| exit 1
+	(cd ${INIT_DST} && echo | ${_SELF} ${BITS} ${REVN} -1)	|| exit 1
 	if [[ -f ${INIT_DST}.kernel.initrd ]]; then
 		${MV} ${INIT_DST}.kernel.initrd \
 			${INIT_SRC}.kernel			|| exit 1
@@ -390,7 +393,7 @@ FILE="$(find ${DEST}/${TYPE} -type f 2>/dev/null |
 	${GREP} "(${SVER}|${DVER})[.]tar[.]xz$")"
 ${RSYNC_U} ${FILE}	${SAV}/				|| exit 1
 
-echo | ${_SELF} ${REVN} -/ || exit 1
+echo | ${_SELF} ${BITS} ${REVN} -/ || exit 1
 
 exit 0
 ################################################################################
