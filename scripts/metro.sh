@@ -230,7 +230,6 @@ declare USE_="$(makeconf_var USE)			$(makeconf_var METRO_USE)"
 #>>>USE_+="\nACCEPT_KEYWORDS:		$(makeconf_var ACCEPT_KEYWORDS)"
 USE_+="\nACCEPT_LICENSE:		$(makeconf_var ACCEPT_LICENSE)"
 USE_+="\nEMERGE_DEFAULT_OPTS:		$(makeconf_var EMERGE_DEFAULT_OPTS	| ${SED} "s/[-][-]ask[^[:space:]]*//g")"
-USE_+="\nGRUB_PLATFORMS:		$(makeconf_var GRUB_PLATFORMS)"
 USE_+="\nLANG:				$(makeconf_var LANG)"
 USE_+="\nLC_ALL:			$(makeconf_var LC_ALL)"
 USE_+="\nLDFLAGS:			$(makeconf_var LDFLAGS)"
@@ -262,7 +261,6 @@ for FILE in \
 	CHOST			\
 	EMERGE_DEFAULT_OPTS	\
 	FEATURES		\
-	GRUB_PLATFORMS		\
 	LANG			\
 	LC_ALL			\
 	LDFLAGS			\
