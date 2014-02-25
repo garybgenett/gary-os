@@ -136,7 +136,7 @@ if [[ ${1} == -i ]]; then
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/setup/.setconf
 	if ${NEW}; then
 		if [[ ${_NEW} == "MET" ]]; then
-			${SED} -i "N;N;N;N;N;s|^[\"]\n\nMETRO_USE=([^\n]+)\n||g" ${TARGET}/.setup/gentoo/make.conf
+			${SED} -i "N;N;N;N;N;s|[\"]\n\nMETRO_USE=[^\n]+\n||g" ${TARGET}/.setup/gentoo/make.conf
 		fi
 		for NEW in \
 			${TARGET}/.setup/gentoo/package.*
