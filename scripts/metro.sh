@@ -35,8 +35,8 @@ declare SPRT="${BLD}/funtoo/portage"
 
 declare TYPE="funtoo-stable"
 declare PLAT="x86-${BITS}bit"
-declare ARCH="core2_${BITS}"
-declare SARC="${ARCH}"
+declare ARCH="generic_${BITS}"
+declare SARC="core2_${BITS}"		; [[ ${BITS} == 32 ]] && SARC="i686"
 
 declare DEST="${BLD}/_metro"
 declare DFIL="${DEST}/.distfiles"
