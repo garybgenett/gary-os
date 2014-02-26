@@ -250,6 +250,7 @@ ${SED} -i \
 	-e "s%^(branch/tar:).*$%\1	${HASH}%g" \
 	-e "s%^(options:).*pull.*$%\1	%g" \
 	\
+	-e "s%[-]fomit[-]frame[-]pointer%%g" \
 	-e "s%\t+% %g" \
 	${DMET}/etc/builds/${TYPE}/build.conf || exit 1
 
