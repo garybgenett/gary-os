@@ -925,7 +925,7 @@ function git-logdir {
 		maildirmake ${GITDIR}
 	fi
 	if [[ -n "${LAST_P}" ]]; then
-		FROM_C="$(${GREP} "^From[ ]" ${GITDIR}/{cur,new}/${LAST_P} |
+		FROM_C="$(${GREP} "^From[ ]" ${GITDIR}/{cur,new}/${LAST_P} 2>/dev/null |
 			head -n1 |
 			cut -d' ' -f2)"
 		FROM_N="$(( $(echo "${LAST_P}" |
