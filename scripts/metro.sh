@@ -250,7 +250,6 @@ ${SED} -i \
 	-e "s%^(branch/tar:).*$%\1	${HASH}%g" \
 	-e "s%^(options:).*pull.*$%\1	%g" \
 	\
-	-e "s%[-]fomit[-]frame[-]pointer%%g" \
 	-e "s%\t+% %g" \
 	${DMET}/etc/builds/${TYPE}/build.conf || exit 1
 
@@ -344,6 +343,12 @@ ${SED} -i \
 	-e "s%^([[:space:]]*rm -rf .*linux.*)$%echo \"\1\"%g" \
 	${DMET}/targets/gentoo/steps/kernel.spec \
 	${DMET}/targets/gentoo/steps/stage.spec || exit 1
+
+########################################
+
+${SED} -i \
+	-e "s%[-]fomit[-]frame[-]pointer%%g" \
+	${DMET}/subarch/${ARCH}.spec || exit 1
 
 ################################################################################
 
