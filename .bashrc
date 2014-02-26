@@ -916,7 +916,7 @@ function git-clean {
 function git-logdir {
 	declare DIR="$(realpath "${PWD}")"
 	declare GITDIR="${DIR}.gitlog"
-	declare LAST_P="$(ls ${GITDIR}/cur 2>/dev/null |
+	declare LAST_P="$(ls ${GITDIR}/{cur,new} 2>/dev/null |
 		sort -n |
 		tail -n1)"
 	declare FROM_C="--root"
@@ -925,7 +925,7 @@ function git-logdir {
 		maildirmake ${GITDIR}
 	fi
 	if [[ -n "${LAST_P}" ]]; then
-		FROM_C="$(${GREP} "^From[ ]" ${GITDIR}/cur/${LAST_P} |
+		FROM_C="$(${GREP} "^From[ ]" ${GITDIR}/{cur,new}/${LAST_P} |
 			head -n1 |
 			cut -d' ' -f2)"
 		FROM_N="$(( $(echo "${LAST_P}" |
@@ -934,8 +934,9 @@ function git-logdir {
 	fi
 	git-patch \
 		--start-number ${FROM_N} \
-		--output-directory ${GITDIR}/cur \
-		${FROM_C}	|| return 1
+		--output-directory ${GITDIR}/new \
+		${FROM_C} \
+		"${@}" || return 1
 	return 0
 }
 
