@@ -6,8 +6,8 @@ declare AUTHOR="Gary B. Genett <me@garybgenett.net>"
 declare TITLE="gary-os"
 
 declare BITS="64"
-if [[ ${1} == 32 ]]; then
-	BITS="32"
+if [[ ${1} == @(64|32) ]]; then
+	BITS="${1}"
 	shift
 fi
 declare REVN="0"
