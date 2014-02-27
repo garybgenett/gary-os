@@ -24,9 +24,9 @@ app-misc/ca-certificates
 app-text/iso-codes
 sys-libs/timezone-data
 
-app-crypt/efitools
+#>>>app-crypt/efitools
 sys-apps/busybox
-sys-boot/efibootmgr
+#>>>sys-boot/efibootmgr
 sys-boot/grub
 sys-boot/os-prober
 sys-boot/syslinux
@@ -93,7 +93,7 @@ net-misc/curl
 net-misc/rsync
 net-misc/wget
 www-client/elinks
-www-client/links
+#>>>www-client/links
 www-client/lynx
 #>>>www-client/w3m
 
@@ -228,7 +228,7 @@ dev-util/strace
 sys-apps/kexec-tools
 
 sys-apps/hdparm
-sys-block/btrace
+#>>>sys-block/btrace
 sys-fs/mdadm
 
 sys-apps/dcfldd
