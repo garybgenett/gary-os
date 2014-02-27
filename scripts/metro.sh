@@ -98,6 +98,8 @@ declare FILE=
 
 ################################################################################
 
+echo -en "BITS: ${BITS}\n"
+echo -en "REVN: ${REVN}\n"
 echo -en "REPO: ${REPO}\n"
 echo -en "HASH: ${HASH}\n"
 echo -en "SVER: ${SVER}\n"
