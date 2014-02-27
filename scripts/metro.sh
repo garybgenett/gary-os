@@ -98,6 +98,18 @@ declare FILE=
 
 ################################################################################
 
+function checksum {
+	declare CHECKSUM="${1}" && shift
+	if [[ -f ${CHECKSUM} ]]; then
+		cat /dev/null			>${CHECKSUM}.hash.txt
+		sha256sum --tag ${CHECKSUM}	| tee -a ${CHECKSUM}.hash.txt || return 1
+		md5sum --tag ${CHECKSUM}	| tee -a ${CHECKSUM}.hash.txt || return 1
+	fi
+	return 0
+}
+
+################################################################################
+
 echo -en "BITS: ${BITS}\n"
 echo -en "REVN: ${REVN}\n"
 echo -en "REPO: ${REPO}\n"
@@ -196,6 +208,9 @@ if [[ ${1} == -/ ]]; then
 		${MV} ${INIT_DST}.initrd ${INIT_SRC}.initrd	|| exit 1
 	fi
 	${RM} ${INIT_DST}					|| exit 1
+
+	checksum ${INIT_SRC}.kernel				|| exit 1
+	checksum ${INIT_SRC}.initrd				|| exit 1
 
 	exit 0
 fi
@@ -397,9 +412,15 @@ ${RSYNC_U} ${DFIL}/	${SAV}/.distfiles		|| exit 1
 FILE="${DTMP}/cache/build/${TYPE}/stage3-${ARCH}-${TYPE}-${DVER}/package"
 ${RSYNC_U} ${FILE}/	${SAV}/.packages.${ARCH}	|| exit 1
 
-FILE="$(find ${DEST}/${TYPE} -type f 2>/dev/null |
-	${GREP} "(${SVER}|${DVER})[.]tar[.]xz$")"
-${RSYNC_U} ${FILE}	${SAV}/				|| exit 1
+for FILE in $(
+	find ${DEST}/${TYPE} -type f 2>/dev/null |
+	${GREP} "(${SVER}|${DVER})[.]tar[.]xz$"
+); do
+	${RSYNC_U} ${FILE} ${SAV}/			|| exit 1
+	checksum ${SAV}/$(basename ${FILE})		|| exit 1
+done
+
+########################################
 
 echo | ${_SELF} ${BITS} ${REVN} -/ || exit 1
 
