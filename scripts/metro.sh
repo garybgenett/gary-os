@@ -11,6 +11,7 @@ declare TITLE="gary-os"
 declare GITHUB="ssh://git@github.com/${LOGIN}/${TITLE}.git"
 declare SFCODE="ssh://${LOGIN}@git.code.sf.net/p/${TITLE}/code"
 declare SFFILE="${LOGIN}@web.sourceforge.net:/home/frs/project/${TITLE}"
+declare SF_SSH="${LOGIN},${TITLE}@shell.sourceforge.net create"
 
 declare -a RELEASE
 declare -a CMT_HSH
@@ -205,6 +206,12 @@ if [[ ${1} == -! ]]; then
 			NUM="$((${NUM}+1))"			|| exit 1
 		done &&
 		git-clean &&
+		declare GIT_CFG="git --git-dir=/home/git/p/${TITLE}/code.git config" &&
+		declare COMMAND= &&
+		COMMAND+="${GIT_CFG} --unset receive.denynonfastforwards;" &&
+		COMMAND+="${GIT_CFG} --list;" &&
+		COMMAND+="exit 0;" &&
+		echo "${COMMAND}" | ssh ${SF_SSH} &&
 		${GIT} push --mirror ${GITHUB} &&
 		${GIT} push --mirror ${SFCODE}
 	)							|| exit 1
