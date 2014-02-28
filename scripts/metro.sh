@@ -67,6 +67,8 @@ declare DTMP="${DEST}/.temp"
 declare DOUT="${DEST}/${TYPE}/${PLAT}/${ARCH}"
 declare SOUT="${DEST}/${TYPE}/${PLAT}/${SARC}"
 
+declare EXTN=".tar.xz"
+
 ########################################
 
 declare SAFE_ENV="prompt -z"
@@ -110,7 +112,7 @@ declare REPO="$(
 	${SED} -n "s/^name[:][ ]//gp"
 )"
 declare SVER="$(
-	ls -t {${SAV},${ISO},${SOUT}/*}/stage3-*${SARC}*${TYPE}*.tar.xz 2>/dev/null |
+	ls -t {${SAV},${ISO},${SOUT}/*}/stage3-*${SARC}*${TYPE}*${EXTN} 2>/dev/null |
 	${SED} "s/^.+${VERSION_REGEX}.+$/\1/g" |
 	head -n1
 )"
@@ -304,7 +306,7 @@ fi
 ########################################
 
 if [[ ${1} == -/ ]]; then
-	FILE="$(ls ${SAV}/stage3-*${ARCH}*${TYPE}*${DVER}*.tar.xz 2>/dev/null)"
+	FILE="$(ls ${SAV}/stage3-*${ARCH}*${TYPE}*${DVER}*${EXTN} 2>/dev/null)"
 	[[ -z ${FILE} ]] && exit 1
 
 	declare INIT_SRC="${FILE}"
@@ -504,11 +506,11 @@ ${RM}			${DTMP}/cache/cloned-repositories/${REPO}.git
 ${LN} ${REPO}/.git	${DTMP}/cache/cloned-repositories/${REPO}.git
 
 for FILE in $(
-	ls -t {${SAV},${ISO}}/stage3-*${SARC}*${TYPE}*.tar.xz |
+	ls -t {${SAV},${ISO}}/stage3-*${SARC}*${TYPE}*${EXTN} |
 	${SED} "s/^.+${VERSION_REGEX}.+$/\1/g"
 ); do
 	${MKDIR} ${SOUT}/${FILE}
-	${RSYNC_U} {${SAV},${ISO}}/stage3-*${SARC}*${TYPE}*-${FILE}.tar.xz ${SOUT}/${FILE}/
+	${RSYNC_U} {${SAV},${ISO}}/stage3-*${SARC}*${TYPE}*-${FILE}${EXTN} ${SOUT}/${FILE}/
 done
 
 ########################################
