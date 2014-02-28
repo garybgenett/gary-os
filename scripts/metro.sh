@@ -4,6 +4,7 @@ source ${HOME}/.bashrc
 
 declare AUTHOR="Gary B. Genett <me@garybgenett.net>"
 declare TITLE="gary-os"
+declare GITHUB="git@github.com:garybgenett/${TITLE}.git"
 
 declare BITS="64"
 if [[ ${1} == @(64|32) ]]; then
@@ -112,6 +113,71 @@ function checksum {
 	fi
 	return 0
 }
+
+########################################
+
+function sort_by_date {
+	for FILE in $(
+		${GREP} "^Date[:][ ]" "${@}" |
+		${SED} "s|^(.+)[:]Date[:][ ](.+)$|\1::\2|g" |
+		${SED} "s|[ ]|^|g"
+	); do
+		declare DATE="$(date --iso=s --date="$(
+			echo "${FILE/#*::}" | tr '^' ' '
+		)")"
+		echo -en "${DATE} :: ${FILE/%::*}\n"
+	done |
+		sort -n |
+		${SED} "s|^.+[ ]::[ ]||g"
+	return 0
+}
+
+if [[ ${1} == -! ]]; then
+	declare REL_DIR="/.g/_data/_builds/.${TITLE}"
+	if [[ ! -d ${REL_DIR}/.${TITLE} ]]; then
+		${MKDIR} ${REL_DIR}/.${TITLE}			|| exit 1
+		(cd ${REL_DIR}/.${TITLE} && ${GIT} init)	|| exit 1
+	fi
+	for FILE in \
+		metro:/.g/_data/_builds/_metro:+index^_commit \
+		setup:/.g/_data/zactive/.setup:gentoo \
+		static:/.g/_data/zactive/.static:.bashrc^scripts/metro.sh \
+		${TITLE}:/.g/_data/_builds/${TITLE}:
+	do
+		declare NAM="$(echo "${FILE}" | cut -d: -f1)"
+		declare DIR="$(echo "${FILE}" | cut -d: -f2)"
+		declare FIL="$(echo "${FILE}" | cut -d: -f3 | tr '^' ' ')"
+		${MKDIR} ${REL_DIR}/${NAM}			|| exit 1
+		${RM} ${REL_DIR}/${NAM}.git			|| exit 1
+		${LN} ${DIR}.git ${REL_DIR}/${NAM}.git		|| exit 1
+		(cd ${REL_DIR}/${NAM} && git-logdir -- ${FIL})	|| exit 1
+	done
+	if [[ -n $(ls ${REL_DIR}/[a-z]*.gitlog/new 2>/dev/null) ]]; then
+		${SED} -i \
+			-e "s|^(From[:][ ]).+|\1${AUTHOR}|g" \
+			${REL_DIR}/[a-z]*.gitlog/new/*		|| exit 1
+		${SED} -i \
+			-e "N;N;s|^(Subject[:][ ])[[]git-backup[^[]+[[](.+)[]]|\1(RELEASE:\2)|g" \
+			${REL_DIR}/[a-z]*.gitlog/new/*		|| exit 1
+		${SED} -i \
+			-e "N;N;s|^(From 444e47c253085ed084c4069e53505113b39619da.+Date[:][ ].+)-0800|\1+0000|g" \
+			${REL_DIR}/[a-z]*.gitlog/new/*		|| exit 1
+	fi
+	for FILE in $(
+		sort_by_date ${REL_DIR}/[a-z]*.gitlog/new/*
+	); do
+		(cd ${REL_DIR}/.${TITLE} && ${GIT} am \
+			--ignore-space-change \
+			--ignore-whitespace \
+			--whitespace=nowarn \
+			${FILE})				|| exit 1
+		${MV} ${FILE} ${FILE//\/new\//\/cur\/}		|| exit 1
+	done
+	(cd ${REL_DIR}/.${TITLE} &&
+		git-clean &&
+		${GIT} push --mirror ${GITHUB})			|| exit 1
+	exit 0
+fi
 
 ################################################################################
 
