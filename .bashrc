@@ -252,7 +252,7 @@ export SVNSYNC="reporter svnsync"		; alias svnsync="${SVNSYNC}"
 
 export GIT_CMD="git"
 export GIT="reporter ${GIT_CMD}"		; alias git="${GIT}"
-export GIT_ADD="${GIT} add --verbose"		; alias git-add="${GIT_ADD}"
+export GIT_ADD="${GIT} add --verbose --all"	; alias git-add="${GIT_ADD}"
 export GIT_CMT="${GIT} commit --verbose"	; alias git-commit="${GIT_CMT}"
 export GIT_STS="${GIT} status"			; alias git-status="${GIT_STS}"
 export GIT_SVN="${GIT} svn"			; alias git-svn="${GIT_SVN}"
@@ -977,7 +977,7 @@ function git-save {
 		AMEND="[${1}]"
 		shift
 	fi
-	${GIT_ADD} --all ./								|| return 1
+	${GIT_ADD} ./									|| return 1
 	${GIT_CMT} --all --message="[${MESSAGE} :: $(date --iso=seconds)]${AMEND}"	|| return 1
 	return 0
 }
