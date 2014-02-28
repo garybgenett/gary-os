@@ -4,7 +4,9 @@ source ${HOME}/.bashrc
 
 declare AUTHOR="Gary B. Genett <me@garybgenett.net>"
 declare TITLE="gary-os"
-declare GITHUB="git@github.com:garybgenett/${TITLE}.git"
+declare LOGIN="garybgenett"
+
+declare GITHUB="ssh://git@github.com/${LOGIN}/${TITLE}.git"
 
 declare BITS="64"
 if [[ ${1} == @(64|32) ]]; then
