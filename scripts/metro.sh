@@ -118,7 +118,7 @@ function checksum {
 
 function sort_by_date {
 	for FILE in $(
-		${GREP} "^Date[:][ ]" "${@}" |
+		${GREP} --with-filename "^Date[:][ ]" "${@}" |
 		${SED} "s|^(.+)[:]Date[:][ ](.+)$|\1::\2|g" |
 		${SED} "s|[ ]|^|g"
 	); do
