@@ -99,11 +99,16 @@ declare FILE=
 ################################################################################
 
 function checksum {
-	declare CHECKSUM="${1}" && shift
-	if [[ -f ${CHECKSUM} ]]; then
-		cat /dev/null			>${CHECKSUM}.hash.txt
-		sha256sum --tag ${CHECKSUM}	| tee -a ${CHECKSUM}.hash.txt || return 1
-		md5sum --tag ${CHECKSUM}	| tee -a ${CHECKSUM}.hash.txt || return 1
+	declare CHECKDIR="$(dirname ${1})"
+	declare CHECKFIL="$(basename ${1})"
+	declare CHECKSUM="${1}.hash.txt"
+	shift
+	if [[ -f ${CHECKDIR}/${CHECKFIL} ]]; then
+		(set -o pipefail; (cd ${CHECKDIR} &&
+			sha256sum --tag ${CHECKFIL} &&
+			md5sum --tag ${CHECKFIL}
+		) | tee ${CHECKSUM}
+		) || return 1
 	fi
 	return 0
 }
