@@ -1710,7 +1710,7 @@ function shell {
 	declare PROMPT_NAME="${FUNCNAME}_${DEST}"
 	declare SHELL_TERM="${TERM}"
 	[[ -n ${1} ]] && [[ ${1} != -*(*) ]] && PROMPT_NAME="${1}" && SHELL_TERM="ansi" && shift
-	declare SSH="sudo -H ssh -2 -X"
+	declare SSH="sudo -H ssh -2"
 	declare LOG="root"
 	declare OPTS
 	if { [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; } ||
