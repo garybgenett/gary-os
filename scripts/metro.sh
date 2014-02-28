@@ -214,9 +214,6 @@ if [[ ${1} == -/ ]]; then
 	fi
 	${RM} ${INIT_DST}					|| exit 1
 
-	checksum ${INIT_SRC}.kernel				|| exit 1
-	checksum ${INIT_SRC}.initrd				|| exit 1
-
 	exit 0
 fi
 
@@ -417,13 +414,9 @@ ${RSYNC_U} ${DFIL}/	${SAV}/.distfiles		|| exit 1
 FILE="${DTMP}/cache/build/${TYPE}/stage3-${ARCH}-${TYPE}-${DVER}/package"
 ${RSYNC_U} ${FILE}/	${SAV}/.packages.${ARCH}	|| exit 1
 
-for FILE in $(
-	find ${DEST}/${TYPE} -type f 2>/dev/null |
-	${GREP} "(${SVER}|${DVER})[.]tar[.]xz$"
-); do
-	${RSYNC_U} ${FILE} ${SAV}/			|| exit 1
-	checksum ${SAV}/$(basename ${FILE})		|| exit 1
-done
+FILE="$(find ${DEST}/${TYPE} -type f 2>/dev/null |
+	${GREP} "(${SVER}|${DVER})[.]tar[.]xz$")"
+${RSYNC_U} ${FILE}	${SAV}/				|| exit 1
 
 ########################################
 
