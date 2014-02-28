@@ -130,7 +130,8 @@ function checksum {
 				sha256sum --tag ${CHECKFIL} &&
 				md5sum --tag ${CHECKFIL}
 			) | tee ${CHECKSUM}
-			) || return 1
+			)						|| return 1
+			touch -r ${CHECKDIR}/${CHECKFIL} ${CHECKSUM}	|| return 1
 		fi
 	done
 	return 0
