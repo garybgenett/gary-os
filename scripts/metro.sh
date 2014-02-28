@@ -12,6 +12,12 @@ declare GITHUB="ssh://git@github.com/${LOGIN}/${TITLE}.git"
 declare SFCODE="ssh://${LOGIN}@git.code.sf.net/p/${TITLE}/code"
 declare SFFILE="${LOGIN}@web.sourceforge.net:/home/frs/project/${TITLE}"
 
+declare -a RELEASE
+declare -a CMT_HSH
+RELEASE[0]="v0.1"; CMT_HSH[0]="4d1b46b02798a1d3d3421b1c8087d80a80012a53"
+RELEASE[1]="v0.2"; CMT_HSH[1]="99c1bafbf1116c1400705803da45e1ac03f3d492"
+RELEASE[2]="v0.3"; CMT_HSH[2]="6e968d212ea62a1054e3cafa2436b6a98cf8776b"
+
 ########################################
 
 declare REL_DIR="/.g/_data/_builds/.${TITLE}"
@@ -109,6 +115,7 @@ declare SVER="$(ls -t {${SAV},${ISO},${SOUT}/*}/stage3-*${SARC}*${TYPE}*.tar.xz 
 ########################################
 
 declare FILE=
+declare NUM=
 
 ################################################################################
 
@@ -152,7 +159,7 @@ if [[ ${1} == -! ]]; then
 	fi
 
 	for FILE in \
-		metro:${SAV}:+index^_commit \
+		metro:${SAV}:_commit \
 		setup:/.g/_data/zactive/.setup:gentoo \
 		static:/.g/_data/zactive/.static:.bashrc^scripts/metro.sh \
 		${TITLE}:${DOC_DIR}:
@@ -189,6 +196,14 @@ if [[ ${1} == -! ]]; then
 	done
 
 	(cd ${REL_DIR}/.${TITLE} &&
+		NUM=0 &&
+		for FILE in $(
+			git-list --reverse | ${GREP} "RELEASE" | ${GREP} -o "[a-z0-9]{40}[ ]"
+		); do
+			${GIT} tag --force \
+				${RELEASE[${NUM}]} ${FILE}	|| exit 1
+			NUM="$((${NUM}+1))"			|| exit 1
+		done &&
 		git-clean &&
 		${GIT} push --mirror ${GITHUB} &&
 		${GIT} push --mirror ${SFCODE}
