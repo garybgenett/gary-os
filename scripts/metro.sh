@@ -21,8 +21,9 @@ RELEASE[2]="v0.3"; CMT_HSH[2]="6e968d212ea62a1054e3cafa2436b6a98cf8776b"
 
 ########################################
 
-declare REL_DIR="/.g/_data/_builds/.${TITLE}"
 declare DOC_DIR="/.g/_data/_builds/${TITLE}"
+declare OUT_DIR="/.g/_data/_builds/.${TITLE}.release"
+declare REL_DIR="/.g/_data/_builds/.${TITLE}"
 
 ################################################################################
 
@@ -224,6 +225,29 @@ if [[ ${1} == -! ]]; then
 		${GIT} push --mirror ${GITHUB} &&
 		${GIT} push --mirror ${SFCODE}
 	)							|| exit 1
+
+	${MKDIR} ${OUT_DIR}					|| exit 1
+	${RM} ${OUT_DIR}.git					|| exit 1
+	${LN} ${SAV}.git ${OUT_DIR}.git				|| exit 1
+	for NUM in $(
+		eval echo -en "{0..$((${#RELEASE[*]}-1))}"
+	); do
+		${MKDIR} ${OUT_DIR}/${RELEASE[${NUM}]}		|| exit 1
+		(cd ${OUT_DIR} &&
+			git-backup -r ${CMT_HSH[${NUM}]} portage* stage3* &&
+			checksum ${OUT_DIR}/{portage,stage3}* &&
+			${RSYNC_U} ${OUT_DIR}/{portage,stage3}* ${OUT_DIR}/${RELEASE[${NUM}]}/ &&
+			${RM} ${OUT_DIR}/{portage,stage3}* &&
+			touch -r ${OUT_DIR}/${RELEASE[${NUM}]}/*.kernel ${OUT_DIR}/${RELEASE[${NUM}]}
+		)						|| exit 1
+	done
+	${RM} ${OUT_DIR}/+index*				|| exit 1
+	${RM} ${OUT_DIR}.git					|| exit 1
+
+	${RSYNC_U} ${DOC_DIR}/* ${OUT_DIR}/			|| exit 1
+	${RSYNC_U} ${OUT_DIR}/ ${SFFILE}			|| exit 1
+
+	${LL} -R ${OUT_DIR}
 
 	exit 0
 fi
