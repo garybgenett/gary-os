@@ -244,6 +244,21 @@ if [[ ${1} == -! ]]; then
 	${RM} ${OUT_DIR}/+index*				|| exit 1
 	${RM} ${OUT_DIR}.git					|| exit 1
 
+	(cd ${OUT_DIR} &&
+		for NUM in ${RELEASE[*]}; do
+			for FILE in $(
+				ls ${NUM} |
+				${GREP} "^stage3.+[.](kernel|initrd)(|.hash.txt)$"
+			); do
+				${RSYNC_U} ${NUM}/${FILE} $(
+					echo "${FILE}" |
+					${SED} \
+						-e "s|^stage3|${TITLE}|g" \
+						-e "s|[a-z0-9]{40}[.][0-9]${EXTN}|${NUM}|g"
+				)				|| exit 1
+			done
+		done
+	)							|| exit 1
 	${RSYNC_U} ${DOC_DIR}/* ${OUT_DIR}/			|| exit 1
 	${RSYNC_U} ${OUT_DIR}/ ${SFFILE}			|| exit 1
 
