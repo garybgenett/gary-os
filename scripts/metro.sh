@@ -7,6 +7,8 @@ declare TITLE="gary-os"
 declare LOGIN="garybgenett"
 
 declare GITHUB="ssh://git@github.com/${LOGIN}/${TITLE}.git"
+declare SFCODE="ssh://${LOGIN}@git.code.sf.net/p/${TITLE}/code"
+declare SFFILE="${LOGIN}@web.sourceforge.net:/home/frs/project/${TITLE}"
 
 declare BITS="64"
 if [[ ${1} == @(64|32) ]]; then
@@ -177,7 +179,8 @@ if [[ ${1} == -! ]]; then
 	done
 	(cd ${REL_DIR}/.${TITLE} &&
 		git-clean &&
-		${GIT} push --mirror ${GITHUB})			|| exit 1
+		${GIT} push --mirror ${GITHUB} &&
+		${GIT} push --mirror ${SFCODE})			|| exit 1
 	exit 0
 fi
 
