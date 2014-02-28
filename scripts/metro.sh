@@ -3,12 +3,21 @@ source ${HOME}/.bashrc
 ################################################################################
 
 declare AUTHOR="Gary B. Genett <me@garybgenett.net>"
-declare TITLE="gary-os"
 declare LOGIN="garybgenett"
+declare TITLE="gary-os"
+
+########################################
 
 declare GITHUB="ssh://git@github.com/${LOGIN}/${TITLE}.git"
 declare SFCODE="ssh://${LOGIN}@git.code.sf.net/p/${TITLE}/code"
 declare SFFILE="${LOGIN}@web.sourceforge.net:/home/frs/project/${TITLE}"
+
+########################################
+
+declare REL_DIR="/.g/_data/_builds/.${TITLE}"
+declare DOC_DIR="/.g/_data/_builds/${TITLE}"
+
+################################################################################
 
 declare BITS="64"
 if [[ ${1} == @(64|32) ]]; then
@@ -137,16 +146,16 @@ function sort_by_date {
 }
 
 if [[ ${1} == -! ]]; then
-	declare REL_DIR="/.g/_data/_builds/.${TITLE}"
 	if [[ ! -d ${REL_DIR}/.${TITLE} ]]; then
 		${MKDIR} ${REL_DIR}/.${TITLE}			|| exit 1
 		(cd ${REL_DIR}/.${TITLE} && ${GIT} init)	|| exit 1
 	fi
+
 	for FILE in \
-		metro:/.g/_data/_builds/_metro:+index^_commit \
+		metro:${SAV}:+index^_commit \
 		setup:/.g/_data/zactive/.setup:gentoo \
 		static:/.g/_data/zactive/.static:.bashrc^scripts/metro.sh \
-		${TITLE}:/.g/_data/_builds/${TITLE}:
+		${TITLE}:${DOC_DIR}:
 	do
 		declare NAM="$(echo "${FILE}" | cut -d: -f1)"
 		declare DIR="$(echo "${FILE}" | cut -d: -f2)"
@@ -174,13 +183,17 @@ if [[ ${1} == -! ]]; then
 			--ignore-space-change \
 			--ignore-whitespace \
 			--whitespace=nowarn \
-			${FILE})				|| exit 1
+			${FILE}
+		)						|| exit 1
 		${MV} ${FILE} ${FILE//\/new\//\/cur\/}		|| exit 1
 	done
+
 	(cd ${REL_DIR}/.${TITLE} &&
 		git-clean &&
 		${GIT} push --mirror ${GITHUB} &&
-		${GIT} push --mirror ${SFCODE})			|| exit 1
+		${GIT} push --mirror ${SFCODE}
+	)							|| exit 1
+
 	exit 0
 fi
 
@@ -251,7 +264,8 @@ if [[ ${1} == -1 ]]; then
 		(cd ${INIT_DIR}/usr/src/linux && make bzImage)	|| exit 1
 		${CP} -L $(
 			ls -t ${INIT_DIR}/usr/src/linux/arch/*/boot/bzImage |
-			head -n1) ${INIT_DIR}.kernel.initrd	|| exit 1
+			head -n1
+		) ${INIT_DIR}.kernel.initrd			|| exit 1
 	fi
 	${RM} ${INIT_DIR}.cpio					|| exit 1
 
@@ -460,9 +474,10 @@ ${RSYNC_U} ${SPRT}.git/	${DTMP}/cache/cloned-repositories/${REPO}/.git
 ${RM}			${DTMP}/cache/cloned-repositories/${REPO}.git
 ${LN} ${REPO}/.git	${DTMP}/cache/cloned-repositories/${REPO}.git
 
-for FILE in $(ls -t {${SAV},${ISO}}/stage3-*${SARC}*${TYPE}*.tar.xz |
-	${SED} "s/^.+${VERSION_REGEX}.+$/\1/g")
-do
+for FILE in $(
+	ls -t {${SAV},${ISO}}/stage3-*${SARC}*${TYPE}*.tar.xz |
+	${SED} "s/^.+${VERSION_REGEX}.+$/\1/g"
+); do
 	${MKDIR} ${SOUT}/${FILE}
 	${RSYNC_U} {${SAV},${ISO}}/stage3-*${SARC}*${TYPE}*-${FILE}.tar.xz ${SOUT}/${FILE}/
 done
