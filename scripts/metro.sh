@@ -105,11 +105,15 @@ done
 
 ########################################
 
-declare REPO="$(cat ${SMET}/etc/builds/${TYPE}/build.conf 2>/dev/null |
-	${SED} -n "s/^name[:][ ]//gp")"
-declare SVER="$(ls -t {${SAV},${ISO},${SOUT}/*}/stage3-*${SARC}*${TYPE}*.tar.xz 2>/dev/null |
+declare REPO="$(
+	cat ${SMET}/etc/builds/${TYPE}/build.conf 2>/dev/null |
+	${SED} -n "s/^name[:][ ]//gp"
+)"
+declare SVER="$(
+	ls -t {${SAV},${ISO},${SOUT}/*}/stage3-*${SARC}*${TYPE}*.tar.xz 2>/dev/null |
 	${SED} "s/^.+${VERSION_REGEX}.+$/\1/g" |
-	head -n1)"
+	head -n1
+)"
 
 { [[ -z ${REPO} ]] || [[ -z ${SVER} ]]; } && exit 1
 
@@ -141,7 +145,7 @@ function checksum {
 
 function sort_by_date {
 	for FILE in $(
-		${GREP} --with-filename "^Date[:][ ]" "${@}" |
+		${GREP} --with-filename "^Date[:][ ]" "${@}" 2>/dev/null |
 		${SED} "s|^(.+)[:]Date[:][ ](.+)$|\1::\2|g" |
 		${SED} "s|[ ]|^|g"
 	); do
