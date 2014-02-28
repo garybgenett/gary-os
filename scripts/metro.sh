@@ -121,17 +121,18 @@ declare NUM=
 ################################################################################
 
 function checksum {
-	declare CHECKDIR="$(dirname ${1})"
-	declare CHECKFIL="$(basename ${1})"
-	declare CHECKSUM="${1}.hash.txt"
-	shift
-	if [[ -f ${CHECKDIR}/${CHECKFIL} ]]; then
-		(set -o pipefail; (cd ${CHECKDIR} &&
-			sha256sum --tag ${CHECKFIL} &&
-			md5sum --tag ${CHECKFIL}
-		) | tee ${CHECKSUM}
-		) || return 1
-	fi
+	for FILE in "${@}"; do
+		declare CHECKDIR="$(dirname ${FILE})"
+		declare CHECKFIL="$(basename ${FILE})"
+		declare CHECKSUM="${FILE}.hash.txt"
+		if [[ -f ${CHECKDIR}/${CHECKFIL} ]]; then
+			(set -o pipefail; (cd ${CHECKDIR} &&
+				sha256sum --tag ${CHECKFIL} &&
+				md5sum --tag ${CHECKFIL}
+			) | tee ${CHECKSUM}
+			) || return 1
+		fi
+	done
 	return 0
 }
 
