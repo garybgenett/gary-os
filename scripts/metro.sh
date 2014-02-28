@@ -217,11 +217,9 @@ if [[ ${1} == -1 ]]; then
 	${CP} -L ${INIT_DIR}/boot/kernel ${INIT_DIR}.kernel	#>>> || exit 1
 	eval find ./ \
 		$(for FILE in ./usr/src/linux-*; do echo -en "\( -path ${FILE} -prune \) -o "; done) \
-		'\( -path ./boot		-prune \)' -o \
 		\
 		'\( -path ./usr/portage		-prune \)' -o \
 		'\( -path ./usr/portage.git	-prune \)' -o \
-		'\( -path ./var/db/pkg		-prune \)' -o \
 		\
 		'\( -path ./tmp/.ccache		-prune \)' -o \
 		'\( -path ./usr/lib32/debug	-prune \)' -o \
