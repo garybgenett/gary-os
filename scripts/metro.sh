@@ -174,6 +174,7 @@ if [[ ${1} == -! ]]; then
 		${RM} ${REL_DIR}/${NAM}.git			|| exit 1
 		${LN} ${DIR}.git ${REL_DIR}/${NAM}.git		|| exit 1
 		(cd ${REL_DIR}/${NAM} && git-logdir -- ${FIL})	|| exit 1
+		${RM} ${REL_DIR}/${NAM}.git			|| exit 1
 	done
 	if [[ -n $(ls ${REL_DIR}/[a-z]*.gitlog/new/* 2>/dev/null) ]]; then
 		${SED} -i \
