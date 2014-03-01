@@ -83,6 +83,9 @@ a ready-to-go Funtoo/Gentoo installation.
 ------------------------------------
 
 2014-02-28 v1.0 95ad4fd257697618bae7402d4bc3a27499035d30.3
+  * Files
+    * 64-bit: gary-os-generic_64-funtoo-stable-v1.0.kernel
+    * 32-bit: gary-os-generic_32-funtoo-stable-v1.0.kernel
   * Metro script
     * Completed support for both 64-bit and 32-bit builds
     * Switched to "generic" for all builds
@@ -95,6 +98,8 @@ a ready-to-go Funtoo/Gentoo installation.
     * Commented packages that broke during 32-bit build
 
 2014-02-24 v0.3 95ad4fd257697618bae7402d4bc3a27499035d30.2
+  * Files
+    * 64-bit: gary-os-core2_64-funtoo-stable-v0.3.kernel
   * Metro script
     * Consolidated kernel/initrd into single kernel/initramfs file
     * Added initial support for both 64-bit and 32-bit builds
@@ -107,6 +112,9 @@ a ready-to-go Funtoo/Gentoo installation.
     * Added sound and miscellaneous media packages
 
 2014-02-13 v0.2 95ad4fd257697618bae7402d4bc3a27499035d30.1
+  * Files
+    * 64-bit kernel: gary-os-core2_64-funtoo-stable-v0.2.kernel
+    * 64-bit initrd: gary-os-core2_64-funtoo-stable-v0.2.initrd
   * Metro script
     * Added revison handling
   * Funtoo/Gentoo configuration
@@ -114,6 +122,9 @@ a ready-to-go Funtoo/Gentoo installation.
     * Enabled "gpm" USE flag
 
 2014-02-09 v0.1 95ad4fd257697618bae7402d4bc3a27499035d30.0
+  * Files
+    * 64-bit kernel: gary-os-core2_64-funtoo-stable-v0.1.kernel
+    * 64-bit initrd: gary-os-core2_64-funtoo-stable-v0.1.initrd
   * Metro script
     * Initial proof of concept, with separate kernel/initrd files
   * Funtoo/Gentoo configuration
