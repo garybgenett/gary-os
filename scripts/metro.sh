@@ -236,6 +236,7 @@ if [[ ${1} == -! ]]; then
 		${MKDIR} ${OUT_DIR}/${RELEASE[${NUM}]}		|| exit 1
 		(cd ${OUT_DIR} &&
 			git-backup -r ${CMT_HSH[${NUM}]} portage* stage3* &&
+			${GIT} reset &&
 			checksum ${OUT_DIR}/{portage,stage3}* &&
 			${RSYNC_U} ${OUT_DIR}/{portage,stage3}* ${OUT_DIR}/${RELEASE[${NUM}]}/ &&
 			${RM} ${OUT_DIR}/{portage,stage3}* &&
