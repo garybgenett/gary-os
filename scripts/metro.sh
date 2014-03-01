@@ -240,7 +240,10 @@ if [[ ${1} == -! ]]; then
 			checksum ${OUT_DIR}/{portage,stage3}* &&
 			${RSYNC_U} ${OUT_DIR}/{portage,stage3}* ${OUT_DIR}/${RELEASE[${NUM}]}/ &&
 			${RM} ${OUT_DIR}/{portage,stage3}* &&
-			touch -r ${OUT_DIR}/${RELEASE[${NUM}]}/*.kernel ${OUT_DIR}/${RELEASE[${NUM}]}
+			touch -r $(
+				ls -t ${OUT_DIR}/${RELEASE[${NUM}]}/*.kernel |
+				head -n1
+			) ${OUT_DIR}/${RELEASE[${NUM}]}
 		)						|| exit 1
 	done
 	${RM} ${OUT_DIR}/+index*				|| exit 1
