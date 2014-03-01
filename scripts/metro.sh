@@ -227,6 +227,8 @@ if [[ ${1} == -! ]]; then
 		${GIT} push --mirror ${SFCODE}
 	)							|| exit 1
 
+	read FILE
+
 	${MKDIR} ${OUT_DIR}					|| exit 1
 	${RM} ${OUT_DIR}.git					|| exit 1
 	${LN} ${SAV}.git ${OUT_DIR}.git				|| exit 1
