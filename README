@@ -1,0 +1,153 @@
+########################################################################
+# Welcome to GaryOS (gary-os)
+########################################################################
+
+"The one file that does it all."
+
+Homepage: https://github.com/garybgenett/gary-os
+Download: https://sourceforge.net/projects/gary-os
+
+------------------------------------
+- Contents
+------------------------------------
+
+  * Overview
+    * Quick Start
+    * Version History
+  * Details
+    * Tools
+
+========================================================================
+= Overview
+========================================================================
+
+GaryOS is an entire GNU/Linux system in a single bootable file.
+
+While most boot/rescue systems use an ISO with SquashFS, GaryOS is
+a single binary file consisting of a Linux kernel and a Funtoo/Gentoo
+Initramfs.  The file is generated using a customized Gentoo
+configuration and the default Gentoo Genkernel configuration via the
+Metro automated build tool.
+
+This is a mostly personal project that I'm distributing in the hopes it
+is useful to others, since I'm not aware of any projects which take this
+same approach.
+
+------------------------------------
+- Quick Start
+------------------------------------
+
+If you just want to check it out, you can run it inside any
+virtualization program that can boot a Linux kernel directly.  On
+a Linux system with Qemu installed, this can be as trivial as:
+
+    DISPLAY=:0 qemu -m 4096 -kernel gary-os-[...].kernel
+
+To use it "for real", simply point your bootloader (such as Grub) to the
+file on disk.  In Grub, this looks like:
+
+    kernel gary-os-[...].kernel
+
+All the standard Linux kernel options/parameters are valid.  For
+example, the amount of memory Linux allocates to itself can be specified
+as usual:
+
+    kernel gary-os-[...].kernel mem=4096m
+
+A minimum of 2-3GB of RAM is required, but a minimum of 4GB is
+recommended.  There are files for both 32-bit and 64-bit processors, but
+only x86 platforms are supported.
+
+Twice during boot, at initial kernel load and initramfs extraction, it
+can appear to hang as the kernel/initramfs is extracted into memory.
+This is normal, and only takes a few moments each.
+
+Once booted, the entire system resides in memory.  It is a blank slate
+with only two daemons running (Udev and SSH).  It does not touch any
+disks or otherwise do anything you don't tell it to.
+
+Log in as "root" with password "gary-os".
+
+From there, whatever rescue/administrative work that needs to be done
+can be accomplished, including using "emerge" to install or upgrade
+packages.
+
+The in-memory filesystem is a complete Funtoo/Gentoo installation, and
+can be copied to a partition just like a standard "stage3" file.  GaryOS
+goes one step further, however, since a Linux kernel has already been
+prepared.  Simply configuring and installing Grub will result in
+a ready-to-go Funtoo/Gentoo installation.
+
+------------------------------------
+- Version History
+------------------------------------
+
+2014-02-28 v1.0 95ad4fd257697618bae7402d4bc3a27499035d30.3
+  * Metro script
+    * Completed support for both 64-bit and 32-bit builds
+    * Switched to "generic" for all builds
+    * Removed "-fomit-frame-pointer" GCC flag
+    * Removed "grub" customizations
+    * Re-added "boot" and "pkg" directories, so the initramfs can be used as
+      a "stage3" replacement
+    * Added release/distribution processing
+  * Funtoo/Gentoo configuration
+    * Commented packages that broke during 32-bit build
+
+2014-02-24 v0.3 95ad4fd257697618bae7402d4bc3a27499035d30.2
+  * Metro script
+    * Consolidated kernel/initrd into single kernel/initramfs file
+    * Added initial support for both 64-bit and 32-bit builds
+  * Funtoo/Gentoo configuration
+    * Updated build/installation script with code to expand Metro
+      "stage3" files for testing package builds and fixing breaks
+    * Customized package list and USE flags for Metro build, to reduce
+      size of installation to below 500MB Linux kernel limit
+    * Completely removed X, Java and TeX Live / LaTeX
+    * Added sound and miscellaneous media packages
+
+2014-02-13 v0.2 95ad4fd257697618bae7402d4bc3a27499035d30.1
+  * Metro script
+    * Added revison handling
+  * Funtoo/Gentoo configuration
+    * Added packages from Grml and SystemRescueCD package lists
+    * Enabled "gpm" USE flag
+
+2014-02-09 v0.1 95ad4fd257697618bae7402d4bc3a27499035d30.0
+  * Metro script
+    * Initial proof of concept, with separate kernel/initrd files
+  * Funtoo/Gentoo configuration
+    * Active personal configuration at time of build
+    * Commented packages that broke
+
+========================================================================
+= Details
+========================================================================
+
+------------------------------------
+- Tools
+------------------------------------
+
+All the real heavy-lifting is accomplished using these tools/projects:
+  * Metro:  http://www.funtoo.org/Metro_Quick_Start_Tutorial
+  * Funtoo: http://www.funtoo.org
+  * Gentoo: http://www.gentoo.org
+  * Linux Initramfs: http://www.kernel.org/doc [...]
+    * [...] Documentation/filesystems/ramfs-rootfs-initramfs.txt
+
+Inspiration was provided by:
+  * Buildroot: http://buildroot.uclibc.org
+  * BusyBox: http://www.busybox.net
+  * StaticPerl: http://software.schmorp.de/pkg/App-Staticperl.html
+
+Package lists and acknowledgements to:
+  * Grml: http://grml.org
+  * SystemRescueCd: http://www.sysresccd.org/SystemRescueCd_Homepage
+
+Homage to those who started it all:
+  * tomsrtbt: http://www.toms.net/rb
+  * KNOPPIX: http://www.knopper.net/knoppix/index-en.html
+
+########################################################################
+# End Of File
+########################################################################
