@@ -578,7 +578,7 @@ FILE="${DTMP}/cache/build/${TYPE}/stage3-${ARCH}-${TYPE}-${DVER}/package"
 ${RSYNC_U} ${FILE}/	${SAV}/.packages.${ARCH}	|| exit 1
 
 FILE="$(find ${DEST}/${TYPE} -type f 2>/dev/null |
-	${GREP} "(${SVER}|${DVER})[.]tar[.]xz$")"
+	${GREP} "(${SVER}|${DVER})${EXTN//./[.]}$")"
 ${RSYNC_U} ${FILE}	${SAV}/				|| exit 1
 
 ########################################
