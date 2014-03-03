@@ -385,6 +385,7 @@ net-print/foomatic-filters
 ########################################
 # programs
 
+app-emulation/bochs
 app-emulation/dosemu
 app-emulation/libvirt
 app-emulation/lxc
