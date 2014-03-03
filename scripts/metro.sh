@@ -111,11 +111,11 @@ done
 
 declare REPO="$(
 	cat ${SMET}/etc/builds/${TYPE}/build.conf 2>/dev/null |
-	${SED} -n "s/^name[:][ ]//gp"
+	${SED} -n "s%^name[:][ ]%%gp"
 )"
 declare SVER="$(
 	ls -t {${SAV},${ISO},${SOUT}/*}/stage3-*${SARC}*${TYPE}*${EXTN} 2>/dev/null |
-	${SED} "s/^.+${VERSION_REGEX}.+$/\1/g" |
+	${SED} "s%^.+${VERSION_REGEX}.+$%\1%g" |
 	head -n1
 )"
 
@@ -150,8 +150,8 @@ function checksum {
 function sort_by_date {
 	for FILE in $(
 		${GREP} --with-filename "^Date[:][ ]" "${@}" 2>/dev/null |
-		${SED} "s|^(.+)[:]Date[:][ ](.+)$|\1::\2|g" |
-		${SED} "s|[ ]|^|g"
+		${SED} "s%^(.+)[:]Date[:][ ](.+)$%\1::\2%g" |
+		${SED} "s%[ ]%^%g"
 	); do
 		declare DATE="$(date --iso=s --date="$(
 			echo "${FILE/#*::}" | tr '^' ' '
@@ -159,7 +159,7 @@ function sort_by_date {
 		echo -en "${DATE} :: ${FILE/%::*}\n"
 	done |
 		sort -n |
-		${SED} "s|^.+[ ]::[ ]||g"
+		${SED} "s%^.+[ ]::[ ]%%g"
 	return 0
 }
 
@@ -186,13 +186,13 @@ if [[ ${1} == -! ]]; then
 	done
 	if [[ -n $(ls ${REL_DIR}/[a-z]*.gitlog/new/* 2>/dev/null) ]]; then
 		${SED} -i \
-			-e "s|^(From[:][ ]).+|\1${AUTHOR}|g" \
+			-e "s%^(From[:][ ]).+%\1${AUTHOR}%g" \
 			${REL_DIR}/[a-z]*.gitlog/new/*		|| exit 1
 		${SED} -i \
-			-e "N;N;s|^(Subject[:][ ])[[]git-backup[^[]+[[](.+)[]]|\1(RELEASE:\2)|g" \
+			-e "N;N;s%^(Subject[:][ ])[[]git-backup[^[]+[[](.+)[]]%\1(RELEASE:\2)%g" \
 			${REL_DIR}/[a-z]*.gitlog/new/*		|| exit 1
 		${SED} -i \
-			-e "N;N;s|^(From 444e47c253085ed084c4069e53505113b39619da.+Date[:][ ].+)-0800|\1+0000|g" \
+			-e "N;N;s%^(From 444e47c253085ed084c4069e53505113b39619da.+Date[:][ ].+)-0800%\1+0000%g" \
 			${REL_DIR}/[a-z]*.gitlog/new/*		|| exit 1
 	fi
 	for FILE in $(
@@ -259,8 +259,8 @@ if [[ ${1} == -! ]]; then
 			declare OUTFILE="$(
 				echo "${FILE}" |
 				${SED} \
-					-e "s|^stage3|${TITLE}|g" \
-					-e "s|[a-z0-9]{40}[.][0-9]${EXTN}|${NUM}|g"
+					-e "s%^stage3%${TITLE}%g" \
+					-e "s%[a-z0-9]{40}[.][0-9]${EXTN}%${NUM}%g"
 			)"					|| exit 1
 			${RSYNC_U} \
 				${OUT_DIR}/${NUM}/${FILE} \
@@ -303,10 +303,10 @@ if [[ ${1} == -1 ]]; then
 
 	${LN} sbin/init ${INIT_DIR}/init			|| exit 1
 	${SED} -i \
-		-e "s/^([^#].+)$/#\1/g" \
+		-e "s%^([^#].+)$%#\1%g" \
 		${INIT_DIR}/etc/fstab				|| exit 1
 	${SED} -i \
-		-e "s/^(hostname=[\"]?)[^\"]+([\"]?)$/\1${TITLE}\2/g" \
+		-e "s%^(hostname=[\"]?)[^\"]+([\"]?)$%\1${TITLE}\2%g" \
 		${INIT_DIR}/etc/conf.d/hostname			|| exit 1
 	echo -en "${TITLE}\n${TITLE}\n" |
 		chroot ${INIT_DIR} /usr/bin/passwd root		|| exit 1
@@ -399,11 +399,11 @@ ${SED} -i \
 function makeconf_var {
 	source ${CONFIG}/make.conf
 	eval echo -en "\${${1}}" |
-		${SED} "s/[$]/\\\\\\\\$/g" |
+		${SED} "s%[$]%\\\\\\\\$%g" |
 		tr '\n' ' '
 }
 
-declare OPTS="	$(makeconf_var EMERGE_DEFAULT_OPTS	| ${SED} "s/[-][-]ask[^[:space:]]*//g")"
+declare OPTS="	$(makeconf_var EMERGE_DEFAULT_OPTS	| ${SED} "s%[-][-]ask[^[:space:]]*%%g")"
 OPTS+="		$(makeconf_var MAKEOPTS			| ${GREP} -o "[-]j[0-9]+")"
 declare PKGS="$(cat ${SET}				| ${GREP} -v -e "^[#]" -e "^$" | sort | tr '\n' ' ')"
 
@@ -413,7 +413,7 @@ declare USE_="$(makeconf_var USE)			$(makeconf_var METRO_USE)"
 
 #>>>USE_+="\nACCEPT_KEYWORDS:		$(makeconf_var ACCEPT_KEYWORDS)"
 USE_+="\nACCEPT_LICENSE:		$(makeconf_var ACCEPT_LICENSE)"
-USE_+="\nEMERGE_DEFAULT_OPTS:		$(makeconf_var EMERGE_DEFAULT_OPTS	| ${SED} "s/[-][-]ask[^[:space:]]*//g")"
+USE_+="\nEMERGE_DEFAULT_OPTS:		$(makeconf_var EMERGE_DEFAULT_OPTS	| ${SED} "s%[-][-]ask[^[:space:]]*%%g")"
 USE_+="\nLANG:				$(makeconf_var LANG)"
 USE_+="\nLC_ALL:			$(makeconf_var LC_ALL)"
 USE_+="\nLDFLAGS:			$(makeconf_var LDFLAGS)"
@@ -473,7 +473,7 @@ for FILE in \
 	use
 do
 	USE_+="files/package.${FILE}: [\n$(
-		${SED} -e "s|^[#][{]MET[}][ ](.+)$|\1|g" -e "s%$%\\\\n%g" ${CONFIG}/package.${FILE} 2>/dev/null |
+		${SED} -e "s%^[#][{]MET[}][ ](.+)$%\1%g" -e "s%$%\\\\n%g" ${CONFIG}/package.${FILE} 2>/dev/null |
 		tr -d '\n'
 	)]\n"
 done
@@ -555,7 +555,7 @@ ${LN} ${REPO}/.git	${DTMP}/cache/cloned-repositories/${REPO}.git
 
 for FILE in $(
 	ls -t {${SAV},${ISO}}/stage3-*${SARC}*${TYPE}*${EXTN} |
-	${SED} "s/^.+${VERSION_REGEX}.+$/\1/g"
+	${SED} "s%^.+${VERSION_REGEX}.+$%\1%g"
 ); do
 	${MKDIR} ${SOUT}/${FILE}
 	${RSYNC_U} {${SAV},${ISO}}/stage3-*${SARC}*${TYPE}*-${FILE}${EXTN} ${SOUT}/${FILE}/
