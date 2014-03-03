@@ -216,7 +216,10 @@ if [[ ${1} == -! ]]; then
 				${RELEASE[${NUM}]} ${FILE}	|| exit 1
 			NUM="$((${NUM}+1))"			|| exit 1
 		done &&
-		git-clean &&
+		git-clean
+	)							|| exit 1
+
+	(cd ${REL_DIR}/.${TITLE} &&
 		declare GIT_CFG="git --git-dir=/home/git/p/${TITLE}/code.git config" &&
 		declare COMMAND= &&
 		COMMAND+="${GIT_CFG} --unset receive.denynonfastforwards;" &&
@@ -227,50 +230,50 @@ if [[ ${1} == -! ]]; then
 		${GIT} push --mirror ${SFCODE}
 	)							|| exit 1
 
-	read FILE
-
-	${MKDIR} ${OUT_DIR}					|| exit 1
-	${RM} ${OUT_DIR}.git					|| exit 1
-	${LN} ${SAV}.git ${OUT_DIR}.git				|| exit 1
-	for NUM in $(
-		eval echo -en "{0..$((${#RELEASE[*]}-1))}"
-	); do
-		${MKDIR} ${OUT_DIR}/${RELEASE[${NUM}]}		|| exit 1
-		(cd ${OUT_DIR} &&
-			git-backup -r ${CMT_HSH[${NUM}]} portage-* stage3-* &&
-			${GIT} reset &&
-			checksum ${OUT_DIR}/{portage,stage3}-* &&
-			${RSYNC_U} ${OUT_DIR}/{portage,stage3}-* ${OUT_DIR}/${RELEASE[${NUM}]}/ &&
-			${RM} ${OUT_DIR}/{portage,stage3}-* &&
-			touch -r $(
-				ls -t ${OUT_DIR}/${RELEASE[${NUM}]}/*.kernel |
-				head -n1
-			) ${OUT_DIR}/${RELEASE[${NUM}]}
-		)						|| exit 1
-	done
-	${RM} ${OUT_DIR}/+index*				|| exit 1
-	${RM} ${OUT_DIR}.git					|| exit 1
-
-	for NUM in ${RELEASE[*]}; do
-		for FILE in $(
-			ls ${OUT_DIR}/${NUM} |
-			${GREP} "^stage3.+[.](kernel|initrd)$"
+	if [[ ${2} == -! ]]; then
+		${MKDIR} ${OUT_DIR}				|| exit 1
+		${RM} ${OUT_DIR}.git				|| exit 1
+		${LN} ${SAV}.git ${OUT_DIR}.git			|| exit 1
+		for NUM in $(
+			eval echo -en "{0..$((${#RELEASE[*]}-1))}"
 		); do
-			declare OUTFILE="$(
-				echo "${FILE}" |
-				${SED} \
-					-e "s%^stage3%${TITLE}%g" \
-					-e "s%[a-z0-9]{40}[.][0-9]${EXTN//./[.]}%${NUM}%g"
-			)"					|| exit 1
-			${RSYNC_U} \
-				${OUT_DIR}/${NUM}/${FILE} \
-				${OUT_DIR}/${OUTFILE}		|| exit 1
-			checksum ${OUT_DIR}/${OUTFILE}		|| exit 1
+			${MKDIR} ${OUT_DIR}/${RELEASE[${NUM}]}	|| exit 1
+			(cd ${OUT_DIR} &&
+				git-backup -r ${CMT_HSH[${NUM}]} portage-* stage3-* &&
+				${GIT} reset &&
+				checksum ${OUT_DIR}/{portage,stage3}-* &&
+				${RSYNC_U} ${OUT_DIR}/{portage,stage3}-* ${OUT_DIR}/${RELEASE[${NUM}]}/ &&
+				${RM} ${OUT_DIR}/{portage,stage3}-* &&
+				touch -r $(
+					ls -t ${OUT_DIR}/${RELEASE[${NUM}]}/*.kernel |
+					head -n1
+				) ${OUT_DIR}/${RELEASE[${NUM}]}
+			)					|| exit 1
 		done
-	done
+		${RM} ${OUT_DIR}/+index*			|| exit 1
+		${RM} ${OUT_DIR}.git				|| exit 1
+
+		for NUM in ${RELEASE[*]}; do
+			for FILE in $(
+				ls ${OUT_DIR}/${NUM} |
+				${GREP} "^stage3.+[.](kernel|initrd)$"
+			); do
+				declare OUTFILE="$(
+					echo "${FILE}" |
+					${SED} \
+						-e "s%^stage3%${TITLE}%g" \
+						-e "s%[a-z0-9]{40}[.][0-9]${EXTN//./[.]}%${NUM}%g"
+				)"				|| exit 1
+				${RSYNC_U} \
+					${OUT_DIR}/${NUM}/${FILE} \
+					${OUT_DIR}/${OUTFILE}	|| exit 1
+				checksum ${OUT_DIR}/${OUTFILE}	|| exit 1
+			done
+		done
+	fi
+
 	${RSYNC_U} ${DOC_DIR}/* ${OUT_DIR}/			|| exit 1
 	${RSYNC_U} ${OUT_DIR}/ ${SFFILE}			|| exit 1
-
 	${LL} -R ${OUT_DIR}
 
 	exit 0
