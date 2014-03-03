@@ -114,7 +114,7 @@ declare REPO="$(
 	${SED} -n "s%^name[:][ ]%%gp"
 )"
 declare SVER="$(
-	ls -t {${SAV},${ISO},${SOUT}/*}/stage3-*${SARC}*${TYPE}*${EXTN} 2>/dev/null |
+	ls -t {${SAV},${ISO},${SOUT}/*}/stage3-${SARC}-${TYPE}-*${EXTN} 2>/dev/null |
 	${SED} "s%^.+${VERSION_REGEX}.+$%\1%g" |
 	head -n1
 )"
@@ -237,11 +237,11 @@ if [[ ${1} == -! ]]; then
 	); do
 		${MKDIR} ${OUT_DIR}/${RELEASE[${NUM}]}		|| exit 1
 		(cd ${OUT_DIR} &&
-			git-backup -r ${CMT_HSH[${NUM}]} portage* stage3* &&
+			git-backup -r ${CMT_HSH[${NUM}]} portage-* stage3-* &&
 			${GIT} reset &&
-			checksum ${OUT_DIR}/{portage,stage3}* &&
-			${RSYNC_U} ${OUT_DIR}/{portage,stage3}* ${OUT_DIR}/${RELEASE[${NUM}]}/ &&
-			${RM} ${OUT_DIR}/{portage,stage3}* &&
+			checksum ${OUT_DIR}/{portage,stage3}-* &&
+			${RSYNC_U} ${OUT_DIR}/{portage,stage3}-* ${OUT_DIR}/${RELEASE[${NUM}]}/ &&
+			${RM} ${OUT_DIR}/{portage,stage3}-* &&
 			touch -r $(
 				ls -t ${OUT_DIR}/${RELEASE[${NUM}]}/*.kernel |
 				head -n1
@@ -354,7 +354,7 @@ fi
 ########################################
 
 if [[ ${1} == -/ ]]; then
-	FILE="$(ls ${SAV}/stage3-*${ARCH}*${TYPE}*${DVER}*${EXTN} 2>/dev/null)"
+	FILE="$(ls ${SAV}/stage3-${ARCH}-${TYPE}-${DVER}${EXTN} 2>/dev/null)"
 	[[ -z ${FILE} ]] && exit 1
 
 	declare INIT_SRC="${FILE}"
@@ -554,11 +554,11 @@ ${RM}			${DTMP}/cache/cloned-repositories/${REPO}.git
 ${LN} ${REPO}/.git	${DTMP}/cache/cloned-repositories/${REPO}.git
 
 for FILE in $(
-	ls -t {${SAV},${ISO}}/stage3-*${SARC}*${TYPE}*${EXTN} |
+	ls -t {${SAV},${ISO}}/stage3-${SARC}-${TYPE}-*${EXTN} |
 	${SED} "s%^.+${VERSION_REGEX}.+$%\1%g"
 ); do
 	${MKDIR} ${SOUT}/${FILE}
-	${RSYNC_U} {${SAV},${ISO}}/stage3-*${SARC}*${TYPE}*-${FILE}${EXTN} ${SOUT}/${FILE}/
+	${RSYNC_U} {${SAV},${ISO}}/stage3-${SARC}-${TYPE}-${FILE}${EXTN} ${SOUT}/${FILE}/
 done
 
 ########################################
