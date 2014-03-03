@@ -56,13 +56,13 @@ fi
 ################################################################################
 
 declare EMERGE_CMD="$(which emerge) --verbose --pretend"
-env - ${EMERGE_CMD} --emptytree system world	>${OUT_DIR}/.emerge	2>&1
-env - ${EMERGE_CMD} --info			>${OUT_DIR}/.info	2>&1
+env - ${EMERGE_CMD} --emptytree \@system \@world	>${OUT_DIR}/.emerge	2>&1
+env - ${EMERGE_CMD} --info				>${OUT_DIR}/.info	2>&1
 
 ${SED} -n "s/^.*parser[.]add_section[(][\"](.+)[\"][)].*$/\1/gp" \
 	/usr/lib/portage/pym/portage/_sets/__init__.py |
-	sort					>${OUT_DIR}/.sets	2>&1
-env - $(which equery) list --duplicates '*'	>${OUT_DIR}/.slots	2>&1
+	sort						>${OUT_DIR}/.sets	2>&1
+env - $(which equery) list --duplicates '*'		>${OUT_DIR}/.slots	2>&1
 
 ########################################
 
@@ -121,7 +121,7 @@ find /var/db/pkg -mindepth 2 -maxdepth 2 -type d	|
 cat /dev/null >${OUT_DIR}/_packages.db.added
 
 for TOKEN in $(cat ${OUT_DIR}/_packages.db); do
-	if [[ -z $(${GREP} "^${TOKEN/%-[0-9].*}" /var/lib/portage/world) ]]; then
+	if [[ -z $(${GREP} "^${TOKEN/%-[0-9].*}" ${HOME}/setup/gentoo/sets/packages) ]]; then
 		echo "${TOKEN}" >>${OUT_DIR}/_packages.db.added
 	fi
 done
