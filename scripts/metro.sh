@@ -260,7 +260,7 @@ if [[ ${1} == -! ]]; then
 				echo "${FILE}" |
 				${SED} \
 					-e "s%^stage3%${TITLE}%g" \
-					-e "s%[a-z0-9]{40}[.][0-9]${EXTN}%${NUM}%g"
+					-e "s%[a-z0-9]{40}[.][0-9]${EXTN//./[.]}%${NUM}%g"
 			)"					|| exit 1
 			${RSYNC_U} \
 				${OUT_DIR}/${NUM}/${FILE} \
