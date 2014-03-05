@@ -510,6 +510,7 @@ genkernel --loglevel=5 --bootloader=grub --symlink all	|| exit 1\n\
 emerge \$eopts grub					|| exit 1\n\
 #>>>mkdir -p /boot/grub					|| exit 1\n\
 #>>>grub-mkconfig -o /boot/grub/grub.cfg		|| exit 1\n\
+#>>>boot-update						|| exit 1\n\
 "
 
 ${SED} -i \
