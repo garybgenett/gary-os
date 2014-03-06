@@ -164,7 +164,7 @@ sys-kernel/gentoo-sources:3.10.25
 sys-kernel/linux-firmware
 
 dev-python/boto
-dev-util/metro
+#>>>dev-util/metro
 
 app-portage/portage-utils
 sys-apps/portage
