@@ -54,8 +54,6 @@ games-misc/lolcat			~*		# gentoo required
 
 ########################################
 
-dev-util/metro				**		# gentoo required
-
 games-emulation/mekanix			x86		# gentoo required
 
 ################################################################################
