@@ -172,7 +172,7 @@ if [[ ${1} == -! ]]; then
 	for FILE in \
 		metro:${SAV}:_commit \
 		setup:/.g/_data/zactive/.setup:gentoo \
-		static:/.g/_data/zactive/.static:.bashrc^scripts/metro.sh \
+		static:/.g/_data/zactive/.static:.bashrc^scripts/grub.sh^scripts/metro.sh \
 		${TITLE}:${DOC_DIR}:
 	do
 		declare NAM="$(echo "${FILE}" | cut -d: -f1)"
@@ -270,6 +270,14 @@ if [[ ${1} == -! ]]; then
 				checksum ${OUT_DIR}/${OUTFILE}	|| exit 1
 			done
 		done
+
+		FILE="${OUT_DIR}/${TITLE}.grub"			|| exit 1
+		${RM} ${FILE}					|| exit 1
+		${MKDIR} ${FILE}				|| exit 1
+		(cd ${FILE} && ${HOME}/scripts/grub.sh)		|| exit 1
+		(cd ${OUT_DIR} &&
+			tar -cvvJ -f ${FILE}${EXTN} \
+			${TITLE}.grub)				|| exit 1
 	fi
 
 	${RSYNC_U} ${DOC_DIR}/* ${OUT_DIR}/			|| exit 1
