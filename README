@@ -68,13 +68,13 @@ a Linux system with Qemu installed, this can be as trivial as:
 To use it "for real", simply point your bootloader (such as Grub) to the
 file on disk.  In Grub, this looks like:
 
-    kernel gary-os-[...].kernel
+    linux gary-os-[...].kernel
 
 All the standard Linux kernel options/parameters are valid.  For
 example, the amount of memory Linux allocates to itself can be specified
 as usual:
 
-    kernel gary-os-[...].kernel mem=4096m
+    linux gary-os-[...].kernel mem=4096m
 
 A minimum of 2-3GB of RAM is required, but a minimum of 4GB is
 recommended.  There are files for both 32-bit and 64-bit processors, but
