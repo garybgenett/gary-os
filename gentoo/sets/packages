@@ -156,6 +156,7 @@ app-arch/dpkg
 app-arch/rpm
 app-arch/rpm2targz
 app-crypt/chntpw
+sys-apps/fakeroot
 
 ########################################
 # gentoo
