@@ -235,7 +235,7 @@ Inspiration was provided by:
   * BusyBox: http://www.busybox.net
   * StaticPerl: http://software.schmorp.de/pkg/App-Staticperl.html
 
-Package lists and acknowledgements to:
+Kernel configuration, package lists and acknowledgements to:
   * Grml: http://grml.org
   * SystemRescueCd: http://www.sysresccd.org/SystemRescueCd_Homepage
 
