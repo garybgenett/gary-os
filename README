@@ -139,7 +139,7 @@ a ready-to-go Funtoo/Gentoo installation.
     * 64-bit kernel: gary-os-core2_64-funtoo-stable-v0.2.kernel
     * 64-bit initrd: gary-os-core2_64-funtoo-stable-v0.2.initrd
   * Metro script
-    * Added revison handling
+    * Added revision handling
   * Funtoo/Gentoo configuration
     * Added packages from Grml and SystemRescueCD package lists
     * Enabled "gpm" USE flag
