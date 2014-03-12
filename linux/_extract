@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+source ${HOME}/.bashrc
+################################################################################
+
+declare ISO="${1}" && shift
+declare KRN="${1}" && shift
+
+if [[ ! -f ${ISO} ]]; then
+	KRN="/boot/grml${ISO}full/vmlinuz"
+	ISO="$(ls -t /.g/_data/_target/iso/grml${ISO}-*.iso | head -n1)"
+fi
+
+########################################
+
+declare MNT="/mnt"
+
+################################################################################
+
+mount -o loop ${ISO} ${MNT}		|| exit 1
+if [[ -f ${MNT}${KRN} ]]; then
+	/usr/src/linux/scripts/extract-ikconfig ${MNT}${KRN} \
+		>${_SELF}.config	|| exit 1
+fi
+umount ${ISO}				|| exit 1
+
+exit 0
+################################################################################
+# end of file
+################################################################################
