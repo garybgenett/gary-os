@@ -192,6 +192,7 @@ app-portage/ufed
 
 app-misc/evtest
 media-libs/libtxc_dxtn
+x11-apps/xdm
 x11-apps/xev
 x11-apps/xrandr
 x11-base/xorg-x11
