@@ -152,6 +152,8 @@ sys-apps/ed
 
 app-arch/cabextract
 app-arch/deb2targz
+app-arch/dpkg
+app-arch/rpm
 app-arch/rpm2targz
 app-crypt/chntpw
 
