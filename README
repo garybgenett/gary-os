@@ -54,7 +54,7 @@ The main disadvantages:
   * Requires bootable media and configured bootloader (PXE, Grub, etc.)
   * Constrained in size; initramfs must compress to less than 500MB
     hard-coded limit in Linux kernel
-  * Does not have any graphical/usability packages (no Xorg)
+  * Does not have any graphical/usability packages (no X.Org)
 
 GaryOS enables you to drop a single file on any media, point
 a bootloader at it and go.  Upgrades are as simple as replacing the
@@ -279,7 +279,7 @@ Definition:
   * Configure/install X.Org to provide a GUI.
 
 Last tested with:
-  * GaryOS v1.0, with 8192m memory
+  * GaryOS v1.0, with 8192MB memory
 
 A complete Funtoo/Gentoo environment is available.  In order to
 install/update packages, a couple of missing items need to be put into
