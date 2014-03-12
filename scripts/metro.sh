@@ -123,6 +123,25 @@ declare SVER="$(
 
 ########################################
 
+declare KERN="${ISO}/grml${BITS}-full_2013.09.iso"
+
+if [[ -f ${KERN} ]]; then
+	declare MNT="/mnt"				|| exit 1
+	declare KRN="/boot/grml${BITS}full/vmlinuz"	|| exit 1
+	mount -o loop ${KERN} ${MNT}			|| exit 1
+	if [[ -f ${MNT}${KRN} ]]; then
+		${MKDIR} ${SAV}				|| exit 1
+		/usr/src/linux/scripts/extract-ikconfig \
+			${MNT}${KRN} \
+			>${SAV}/_config.${BITS}		|| exit 1
+	fi
+	umount ${KERN}					|| exit 1
+fi
+
+KERN="${SAV}/_config.${BITS}"
+
+########################################
+
 declare FILE=
 declare NUM=
 
@@ -170,7 +189,7 @@ if [[ ${1} == -! ]]; then
 	fi
 
 	for FILE in \
-		metro:${SAV}:_commit \
+		metro:${SAV}:_commit^_config.32^_config.64 \
 		setup:/.g/_data/zactive/.setup:gentoo \
 		static:/.g/_data/zactive/.static:.bashrc^scripts/grub.sh^scripts/metro.sh \
 		${TITLE}:${DOC_DIR}:
@@ -488,9 +507,13 @@ do
 		tr -d '\n'
 	)]\n"
 done
+USE_+="files/linux.config: [\n]\n"
 
 ${SED} -i \
 	-e "s%^(USE:.+)$%\1\n${USE_}%g" \
+	${DMET}/etc/builds/${TYPE}/build.conf || exit 1
+${SED} -i \
+	-e "/files[\/]linux[.]config[:]/r ${KERN}" \
 	${DMET}/etc/builds/${TYPE}/build.conf || exit 1
 
 USE_="\
@@ -498,6 +521,11 @@ if [ \"\$[portage/files/package.license?]\" = \"yes\" ]	\n\
 then							\n\
 cat > /etc/portage/package.license << \"EOF\"		\n\
 \$[[portage/files/package.license:lax]]			\n\
+EOF\nfi							\n\
+if [ \"\$[portage/files/linux.config?]\" = \"yes\" ]	\n\
+then							\n\
+cat > /_config.${BITS} << \"EOF\"			\n\
+\$[[portage/files/linux.config:lax]]			\n\
 EOF\nfi							\n\
 "
 
@@ -514,7 +542,12 @@ USE_="\
 emerge \$eopts ccache debugedit				|| exit 1\n\
 \\1\n\
 emerge \$eopts genkernel ${FILE}			|| exit 1\n\
-genkernel --loglevel=5 --bootloader=grub --symlink all	|| exit 1\n\
+GK_OPTS=\"--loglevel=5 --bootloader=grub --symlink\"	|| exit 1\n\
+if [ -f \"/_config.${BITS}\" ]				\n\
+then							\n\
+	GK_OPTS+=\" --kernel-config=/_config.${BITS}\"	|| exit 1\n\
+fi							\n\
+genkernel \${GK_OPTS} all				|| exit 1\n\
 emerge \$eopts grub					|| exit 1\n\
 #>>>mkdir -p /boot/grub					|| exit 1\n\
 #>>>grub-mkconfig -o /boot/grub/grub.cfg		|| exit 1\n\
