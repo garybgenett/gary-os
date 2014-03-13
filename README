@@ -71,7 +71,7 @@ GaryOS.
 
 If you just want to check it out, you can run it inside any
 virtualization program that can boot a Linux kernel directly.  On
-a Linux system with Qemu installed, this can be as trivial as:
+a GNU/Linux system with Qemu installed, this can be as trivial as:
 
     DISPLAY=:0 qemu -m 4096 -kernel gary-os-[...].kernel
 
