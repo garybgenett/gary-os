@@ -524,7 +524,8 @@ cat > /etc/portage/package.license << \"EOF\"		\n\
 EOF\nfi							\n\
 if [ \"\$[portage/files/linux.config?]\" = \"yes\" ]	\n\
 then							\n\
-cat > /_config.${BITS} << \"EOF\"			\n\
+mkdir /etc/kernels					\n\
+cat > /etc/kernels/.config << \"EOF\"			\n\
 \$[[portage/files/linux.config:lax]]			\n\
 EOF\nfi							\n\
 "
@@ -543,9 +544,9 @@ emerge \$eopts ccache debugedit				|| exit 1\n\
 \\1\n\
 emerge \$eopts genkernel ${FILE}			|| exit 1\n\
 GK_OPTS=\"--loglevel=5 --bootloader=grub --symlink\"	|| exit 1\n\
-if [ -f \"/_config.${BITS}\" ]				\n\
+if [ -f \"/etc/kernels/.config\" ]			\n\
 then							\n\
-	GK_OPTS+=\" --kernel-config=/_config.${BITS}\"	|| exit 1\n\
+GK_OPTS+=\" --kernel-config=/etc/kernels/.config\"	|| exit 1\n\
 fi							\n\
 genkernel \${GK_OPTS} all				|| exit 1\n\
 emerge \$eopts grub					|| exit 1\n\
