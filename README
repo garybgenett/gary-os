@@ -177,7 +177,7 @@ customizations, the difference between a "stage3" and a system that
 could be run "live" began to disappear.
 
 In parallel, explorations of Buildroot/Busybox introduced me to the
-embedded Initramfs concept, and gave me the idea to package the guts of
+embedded initramfs concept, and gave me the idea to package the guts of
 the "stage3" files from Metro into a Linux kernel for a relatively novel
 "live" OS.
 
@@ -252,7 +252,7 @@ GaryOS shares many of the same goals and attributes/features as these
 projects.  The primary difference being that both these projects strive
 to be minimalist and/or otherwise purely rescue/development focused.
 GaryOS instead tries to be as complete an environment as possible while
-still fitting in an Initramfs.
+still fitting in an initramfs.
 
 ------------------------------------
 - Tools
