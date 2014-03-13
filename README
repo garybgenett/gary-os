@@ -116,6 +116,18 @@ a ready-to-go Funtoo/Gentoo installation.
 - Version History
 ------------------------------------
 
+2014-03-13 v1.1 95ad4fd257697618bae7402d4bc3a27499035d30.4
+  * Files
+    * 64-bit: gary-os-generic_64-funtoo-stable-v1.1.kernel
+    * 32-bit: gary-os-generic_32-funtoo-stable-v1.1.kernel
+  * Metro/Grub scripts
+    * Added Linux kernel configurations from Grml, to provide more
+      comprehensive and flexible hardware/feature support
+    * Created Grub script, for rescue and dual-boot
+    * Syntax and formatting clean-up
+  * Funtoo/Gentoo configuration
+    * Miscellaneous package changes
+
 2014-02-28 v1.0 95ad4fd257697618bae7402d4bc3a27499035d30.3
   * Files
     * 64-bit: gary-os-generic_64-funtoo-stable-v1.0.kernel
