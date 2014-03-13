@@ -17,6 +17,7 @@ Download: https://sourceforge.net/projects/gary-os
   * Design
     * Goals
     * Rationale
+    * Caveats
   * Details
     * Similar Projects
     * Tools
@@ -322,6 +323,25 @@ this project exists.
 
 The reader, of course, must make up their own mind about what is best
 for them.
+
+------------------------------------
+- Caveats
+------------------------------------
+
+This is a purely personal project.  I have no aspirations of becoming
+yet another GNU/Linux distribution.  While I hope this is useful to
+others, and I want to hear feedback on how it could be improved for more
+general-purpose use, I don't foresee this becoming anything more than
+a pet project that I make available to others.
+
+The code I've written to wrap the below tools and ultimately power all
+this is horrible.  It will make your eyes bleed.  However, the end
+result does work, and my goal when doing all this originally was to
+learn and have fun hacking.  I never intended for much of this to ever
+see the light of day past my own monitor.
+
+In other words, if you are considering hiring me, this is not an example
+of my best work.  ;^)
 
 ========================================================================
 = Details
