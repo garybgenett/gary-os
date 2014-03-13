@@ -18,7 +18,7 @@ if [[ ${1} == -d ]]; then
 	shift
 fi
 
-declare GINST="${GDEST}/rescue_example.img"
+declare GINST="${GDEST}/rescue_example.raw"
 if [[ -b ${1} ]]; then
 	GINST="${1}"
 	shift
