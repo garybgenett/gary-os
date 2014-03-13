@@ -15,6 +15,7 @@ Download: https://sourceforge.net/projects/gary-os
     * Quick Start
     * Version History
   * Design
+    * Goals
   * Details
     * Similar Projects
     * Tools
@@ -199,6 +200,40 @@ a tongue-in-cheek and somewhat self-deprecating manner.
 That final point is worth re-iterating: GaryOS is 95%+ the work of other
 projects.  All I've done is tie things together in a way I find novel,
 appealing and useful.
+
+------------------------------------
+- Goals
+------------------------------------
+
+While not originally "designed" in the traditional sense, GaryOS does
+have clear structure and requirements.
+
+Top requirements:
+  * Bootable from a single kernel file, using initramfs
+  * Based on Funtoo/Gentoo, using "stage3" build automation
+  * Generic kernel/build configuration; should run on most modern x86
+    platforms (both 64-bit and 32-bit)
+  * Minimal customization of default installation, outside of package
+    build tuning (i.e. "portage" configuration)
+  * Make Funtoo/Gentoo installation trivial as a "live" media
+  * All-purpose, multi-OS rescue environment
+
+Other objectives:
+  * Widely deployable; support PXE and native dual-booting with other
+    popular OSes, such as Windows and Mac OS X
+  * Learning environment for those new to GNU/Linux or Funtoo/Gentoo
+  * Example configuration and scripts for tuning and maintaining
+    a Funtoo/Gentoo system
+  * Maintain DIY (Do It Yourself) approach; favor documentation and
+    instructions over helper scripts
+  * Provide upstream enhancements to "stage3" automation
+
+Explicit non-goals:
+  * Growining bigger than a single kernel file
+  * Customization or deep branding of overall system
+  * Development of helper scripts/commands library, or customization of
+    boot and "init" infrastructure
+  * Becoming a "live" desktop environment (X.Org GUI)
 
 ========================================================================
 = Details
