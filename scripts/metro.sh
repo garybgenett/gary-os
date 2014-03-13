@@ -44,7 +44,7 @@ fi
 
 declare CONFIG="${HOME}/setup/gentoo"
 declare SET="${CONFIG}/sets/metro"
-declare HASH="$(cat ${CONFIG}/.funtoo)"
+declare HASH="$(cat ${CONFIG}/funtoo)"
 declare DVER="${HASH}.${REVN}"
 #>>>DVER="$(date --iso=d)"
 
