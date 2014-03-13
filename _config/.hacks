@@ -16,6 +16,8 @@ chmod -v 666 /dev/nvidia*
 
 ########################################
 
+chmod -v 4711 /usr/bin/sudo
+
 chmod -v 000 /usr/bin/dbus-daemon
 chmod -v 000 /usr/bin/dbus-launch
 chmod -v 000 /usr/libexec/polkitd

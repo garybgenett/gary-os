@@ -153,8 +153,11 @@ sys-apps/ed
 
 app-arch/cabextract
 app-arch/deb2targz
+app-arch/dpkg
+app-arch/rpm
 app-arch/rpm2targz
 app-crypt/chntpw
+sys-apps/fakeroot
 
 ########################################
 # gentoo
@@ -164,7 +167,7 @@ sys-kernel/gentoo-sources:3.10.25
 sys-kernel/linux-firmware
 
 dev-python/boto
-dev-util/metro
+#>>>dev-util/metro
 
 app-portage/portage-utils
 sys-apps/portage
@@ -300,6 +303,7 @@ sys-apps/flashrom
 ########################################
 # programs
 
+app-emulation/bochs
 app-emulation/libvirt
 app-emulation/lxc
 app-emulation/qemu

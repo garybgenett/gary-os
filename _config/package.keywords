@@ -4,6 +4,7 @@
 
 app-accessibility/at-spi2-atk		~*		# gentoo required
 app-crypt/chntpw			~*		# gentoo required
+app-emulation/bochs			~*		# gentoo required
 app-emulation/lxc			~*		# gentoo required
 app-misc/binwalk			~*		# gentoo required
 app-misc/hello				~*		# gentoo required
@@ -52,8 +53,6 @@ dev-ruby/trollop			~*		# gentoo required
 games-misc/lolcat			~*		# gentoo required
 
 ########################################
-
-dev-util/metro				**		# gentoo required
 
 games-emulation/mekanix			x86		# gentoo required
 
