@@ -119,7 +119,7 @@ if [[ ${1} == -i ]]; then
 		${RSYNC_U} ${SOURCE}/*funtoo*	${TARGET}/_build/
 		${RSYNC_U} ${GITDIR}{,.git}	${TARGET}/usr/
 		(cd				${TARGET}/usr/portage &&
-		${GIT} reset --hard		$(cat ${HOME}/setup/gentoo/.funtoo))
+		${GIT} reset --hard		$(cat ${HOME}/setup/gentoo/funtoo))
 	fi
 	echo -en "${COMMIT}"			>${TARGET}/_build/_commit
 	${RSYNC_U} ${HOME}/setup/gentoo/	${TARGET}/_build/_config
