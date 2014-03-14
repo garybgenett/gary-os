@@ -23,7 +23,7 @@ RELEASE[4]="v1.1"; CMT_HSH[4]="9b653e64164e68873333043b41f8bbf23b0fbd55"
 
 ########################################
 
-declare DOC_DIR="/.g/_data/_builds/${TITLE}"
+declare DOC_DIR="/.g/_data/zactive/coding/${TITLE}"
 declare OUT_DIR="/.g/_data/_builds/.${TITLE}.release"
 declare REL_DIR="/.g/_data/_builds/.${TITLE}"
 
@@ -300,7 +300,7 @@ if [[ ${1} == -! ]]; then
 			${TITLE}.grub)				|| exit 1
 	fi
 
-	${RSYNC_U} ${DOC_DIR}/* ${OUT_DIR}/			|| exit 1
+	${RSYNC_C} ${DOC_DIR}/ ${OUT_DIR}/			|| exit 1
 	${RSYNC_U} ${OUT_DIR}/ ${SFFILE}			|| exit 1
 	${LL} -R ${OUT_DIR}
 
