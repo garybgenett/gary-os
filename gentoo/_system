@@ -279,7 +279,7 @@ if [[ ${1} == -u ]]; then
 		opengl:xorg-x11		\
 		python:python3.3	\
 		unison:2.45		\
-		vi:gvim			\
+		vi:vim			\
 		\
 		package-manager:portage	\
 		profile:1
