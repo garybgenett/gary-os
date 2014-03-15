@@ -167,77 +167,31 @@ function checksum {
 
 ########################################
 
-function sort_by_date {
-	for FILE in $(
-		${GREP} --with-filename "^Date[:][ ]" "${@}" 2>/dev/null |
-		${SED} "s%^(.+)[:]Date[:][ ](.+)$%\1::\2%g" |
-		${SED} "s%[ ]%^%g"
-	); do
-		declare DATE="$(date --iso=s --date="$(
-			echo "${FILE/#*::}" | tr '^' ' '
-		)")"
-		echo -en "${DATE} :: ${FILE/%::*}\n"
-	done |
-		sort -n |
-		${SED} "s%^.+[ ]::[ ]%%g"
-	return 0
-}
-
 if [[ ${1} == -! ]]; then
-	if [[ ! -d ${REL_DIR}/.${TITLE} ]]; then
-		${MKDIR} ${REL_DIR}/.${TITLE}			|| exit 1
-		(cd ${REL_DIR}/.${TITLE} && ${GIT} init)	|| exit 1
-	fi
-
-	for FILE in \
-		metro:${SAV}:_commit^_config.32^_config.64 \
-		setup:/.g/_data/zactive/.setup:gentoo \
-		static:/.g/_data/zactive/.static:.bashrc^scripts/grub.sh^scripts/metro.sh \
-		${TITLE}:${DOC_DIR}:
-	do
-		declare NAM="$(echo "${FILE}" | cut -d: -f1)"
-		declare DIR="$(echo "${FILE}" | cut -d: -f2)"
-		declare FIL="$(echo "${FILE}" | cut -d: -f3 | tr '^' ' ')"
-		${MKDIR} ${REL_DIR}/${NAM}			|| exit 1
-		${RM} ${REL_DIR}/${NAM}.git			|| exit 1
-		${LN} ${DIR}.git ${REL_DIR}/${NAM}.git		|| exit 1
-		(cd ${REL_DIR}/${NAM} && git-logdir -- ${FIL})	|| exit 1
-		${RM} ${REL_DIR}/${NAM}.git			|| exit 1
-	done
-	if [[ -n $(ls ${REL_DIR}/[a-z]*.gitlog/new/* 2>/dev/null) ]]; then
-		${SED} -i \
-			-e "s%^(From[:][ ]).+%\1${AUTHOR}%g" \
-			${REL_DIR}/[a-z]*.gitlog/new/*		|| exit 1
-		${SED} -i \
-			-e "N;N;s%^(Subject[:][ ])[[]git-backup[^[]+[[](.+)[]]%\1(RELEASE:\2)%g" \
-			${REL_DIR}/[a-z]*.gitlog/new/*		|| exit 1
-		${SED} -i \
-			-e "N;N;s%^(From 444e47c253085ed084c4069e53505113b39619da.+Date[:][ ].+)-0800%\1+0000%g" \
-			${REL_DIR}/[a-z]*.gitlog/new/*		|| exit 1
-	fi
-	for FILE in $(
-		sort_by_date ${REL_DIR}/[a-z]*.gitlog/new/*
-	); do
-		(cd ${REL_DIR}/.${TITLE} && ${GIT} am \
-			--ignore-space-change \
-			--ignore-whitespace \
-			--whitespace=nowarn \
-			${FILE}
-		)						|| exit 1
-		${MV} ${FILE} ${FILE//\/new\//\/cur\/}		|| exit 1
-	done
-
-	(cd ${REL_DIR}/.${TITLE} &&
-		NUM=0 &&
+	function git-export-preprocess {
+		${SED} -i "s%^(From[:][ ]).+%\1${AUTHOR}%g"							"${@}" || return 1
+		${SED} -i "N;N;s%^(Subject[:][ ])[[]git-backup[^[]+[[](.+)[]]%\1(RELEASE:\2)%g"			"${@}" || return 1
+		${SED} -i "N;N;s%^(From 444e47c253085ed084c4069e53505113b39619da.+Date[:][ ].+)-0800%\1+0000%g"	"${@}" || return 1
+		return 0
+	}
+	function git-export-postprocess {
+		declare NUM=0
+		declare FILE=
 		for FILE in $(
 			git-list --reverse | ${GREP} "RELEASE" | ${GREP} -o "[a-z0-9]{40}[ ]"
 		); do
-			${GIT} tag --force \
-				${RELEASE[${NUM}]} ${FILE}	|| exit 1
-			NUM="$((${NUM}+1))"			|| exit 1
-		done &&
-		git-clean
-	)							|| exit 1
+			${GIT} tag --force ${RELEASE[${NUM}]} ${FILE}	|| return 1
+			NUM="$((${NUM}+1))"				|| return 1
+		done
+		git-clean						|| return 1
+		return 0
+	}
+	git-export ${TITLE} ${REL_DIR} ${GITHUB} \
+		+git-export-preprocess +git-export-postprocess \
+		metro:${SAV}:_commit^_config.32^_config.64 \
+		setup:/.g/_data/zactive/.setup:gentoo \
+		static:/.g/_data/zactive/.static:.bashrc^scripts/grub.sh^scripts/metro.sh \
+		${TITLE}:${DOC_DIR}:				|| exit 1
 
 	(cd ${REL_DIR}/.${TITLE} &&
 		declare GIT_CFG="git --git-dir=/home/git/p/${TITLE}/code.git config" &&
@@ -246,7 +200,6 @@ if [[ ${1} == -! ]]; then
 		COMMAND+="${GIT_CFG} --list;" &&
 		COMMAND+="exit 0;" &&
 		echo "${COMMAND}" | ssh ${SF_SSH} &&
-		${GIT} push --mirror ${GITHUB} &&
 		${GIT} push --mirror ${SFCODE}
 	)							|| exit 1
 
