@@ -913,6 +913,82 @@ function git-clean {
 
 ########################################
 
+function git-export {
+	declare EXP_NAM="${1}" && shift
+	declare EXP_DIR="${1}" && shift
+	declare EXP_GIT="${1}" && shift
+
+	{ [[ -z ${EXP_NAM} ]] || [[ -z ${EXP_DIR} ]]; } && return 1
+
+	declare EXP_PRE_PROC=""; [[ "${1}" == +*(*) ]] && EXP_PRE_PROC="${1/#+}" && shift
+	declare EXP_PST_PROC=""; [[ "${1}" == +*(*) ]] && EXP_PST_PROC="${1/#+}" && shift
+	[[ -z "${EXP_PRE_PROC}" ]] && EXP_PRE_PROC="echo [NO PRE-PROCESSING]"
+	[[ -z "${EXP_PST_PROC}" ]] && EXP_PST_PROC="echo [NO POST-PROCESSING]"
+
+	declare FILE=
+
+	function sort_by_date {
+		for FILE in $(
+			${GREP} --with-filename "^Date[:][ ]" "${@}" 2>/dev/null |
+			${SED} "s%^(.+)[:]Date[:][ ](.+)$%\1::\2%g" |
+			${SED} "s%[ ]%^%g"
+		); do
+			declare DATE="$(date --iso=s --date="$(
+				echo "${FILE/#*::}" | tr '^' ' '
+			)")"
+			echo -en "${DATE} :: ${FILE/%::*}\n"
+		done |
+			sort -n |
+			${SED} "s%^.+[ ]::[ ]%%g"
+		return 0
+	}
+
+	if [[ ! -d ${EXP_DIR}/.${EXP_NAM} ]]; then
+		${MKDIR} ${EXP_DIR}/.${EXP_NAM}			|| return 1
+		(cd ${EXP_DIR}/.${EXP_NAM} && ${GIT} init)	|| return 1
+	fi
+	for FILE in "${@}"; do
+		declare NAM="$(echo "${FILE}" | cut -d: -f1)"
+		declare DIR="$(echo "${FILE}" | cut -d: -f2)"
+		declare FIL="$(echo "${FILE}" | cut -d: -f3 | tr '^' ' ')"
+		${MKDIR} ${EXP_DIR}/${NAM}			|| return 1
+		${RM} ${EXP_DIR}/${NAM}.git			|| return 1
+		${LN} ${DIR}.git ${EXP_DIR}/${NAM}.git		|| return 1
+		(cd ${EXP_DIR}/${NAM} && git-logdir -- ${FIL})	|| return 1
+		${RM} ${EXP_DIR}/${NAM}.git			|| return 1
+	done
+
+	if [[ -n $(ls ${EXP_DIR}/[a-z]*.gitlog/new/* 2>/dev/null) ]]; then
+		(cd ${EXP_DIR} &&
+			${EXP_PRE_PROC} ${EXP_DIR}/[a-z]*.gitlog/new/*
+		)						|| return 1
+	fi
+	for FILE in $(
+		sort_by_date ${EXP_DIR}/[a-z]*.gitlog/new/*
+	); do
+		(cd ${EXP_DIR}/.${EXP_NAM} && ${GIT} am \
+			--ignore-space-change \
+			--ignore-whitespace \
+			--whitespace=nowarn \
+			${FILE}
+		)						|| return 1
+		${MV} ${FILE} ${FILE//\/new\//\/cur\/}		|| return 1
+	done
+
+	(cd ${EXP_DIR}/.${EXP_NAM} &&
+		${EXP_PST_PROC}
+	)							|| return 1
+	if [[ -n ${EXP_GIT} ]]; then
+		(cd ${EXP_DIR}/.${EXP_NAM} &&
+			${GIT} push --mirror ${EXP_GIT}
+		)						|| return 1
+	fi
+
+	return 0
+}
+
+########################################
+
 function git-logdir {
 	declare DIR="$(realpath "${PWD}")"
 	declare GITDIR="${DIR}.gitlog"
