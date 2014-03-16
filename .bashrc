@@ -509,6 +509,15 @@ function git-patch {
 
 ########################################
 
+function git-perms {
+	${GIT_CMD} diff ${GIT_DIF} ${DIFF_OPTS} -R "${@}" |
+		${GREP} "^(diff|(old|new) mode)" |
+		${GIT_CMD} apply
+	${GIT_STS}
+}
+
+########################################
+
 function git-remove {
 	declare FILTER="git rm -fr --cached --ignore-unmatch ${@}"
 	${GIT} filter-branch --index-filter "${FILTER}" HEAD
