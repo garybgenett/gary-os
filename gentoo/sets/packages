@@ -389,6 +389,7 @@ net-print/foomatic-filters
 media-gfx/sane-backends
 media-gfx/sane-frontends
 media-gfx/xsane
+net-print/hplip
 
 ########################################
 # programs
