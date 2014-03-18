@@ -386,6 +386,10 @@ net-print/foomatic-db
 net-print/foomatic-db-engine
 net-print/foomatic-filters
 
+media-gfx/sane-backends
+media-gfx/sane-frontends
+media-gfx/xsane
+
 ########################################
 # programs
 
