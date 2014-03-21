@@ -1891,6 +1891,19 @@ function sync-dir {
 		fi
 		(cd ${BAS_DIR}/${REP_DST} &&
 			${GIT} pull)
+	elif [[ ${REP_TYP} == hg ]]; then
+		if [[ ! -d ${BAS_DIR}/${REP_DST} ]]; then
+			reporter $(which hg) clone --verbose ${REP_SRC} ${BAS_DIR}/${REP_DST}
+#>>>			${MV} ${BAS_DIR}/${REP_DST}/.hg ${BAS_DIR}/${REP_DST}.hg
+		fi
+#>>>			--repository	${BAS_DIR}/${REP_DST}.hg \
+		declare HG_CMD="reporter $(which hg) \
+			--repository	${BAS_DIR}/${REP_DST} \
+			--cwd		${BAS_DIR}/${REP_DST} \
+			--verbose"
+		(cd ${BAS_DIR}/${REP_DST} &&
+			${HG_CMD} pull &&
+			${HG_CMD} update --clean)
 	elif [[ ${REP_TYP} == svn ]]; then
 		if [[ ! -d ${BAS_DIR}/${REP_DST} ]]; then
 			# http://cournape.wordpress.com/2007/12/18/making-a-local-mirror-of-a-subversion-repository-using-svnsync
