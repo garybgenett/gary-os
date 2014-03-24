@@ -418,6 +418,14 @@ Other than that, GaryOS should be rock-solid.  ;^)
 = Details
 ========================================================================
 
+In this section, I will try to outline the key pieces which make GaryOS
+tick.  The work will still pretty much speak for itself, but some
+explanation of what all the stuff in this repository is will likely be
+beneficial to anyone curious enough to have read this far.
+
+Most of what is needed to use the contents of this repository is
+contained in the "Structure" and "Customizing" sections below.
+
 ------------------------------------
 - Similar Projects
 ------------------------------------
