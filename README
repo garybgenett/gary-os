@@ -553,7 +553,7 @@ Gentoo directory and configuration (scripts):
     * Audit script which validates current Funtoo/Gentoo configuration
       against Portage tools/output.  Reports back all kinds of useful
       information, the most useful of which is a list of USE flags and
-      variables which have been added or removed upsteam.
+      variables which have been added or removed upstream.
     * Generally speaking, it is the first line of defense against stale
       configuration options, unused/unconfigured new options and
       configuration "snow" as a whole.
@@ -637,7 +637,7 @@ Here are the primary directories and what I use them for:
     * Free partition, used for "chroot" builds and testing.
 
 This is far from comprehensive, but should help map things out for
-anyone with enough free time and curiousity.
+anyone with enough free time and curiosity.
 
 In a perfect world, this section could be removed after the scripts were
 cleaned up and documented properly.
