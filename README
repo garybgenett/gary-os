@@ -372,6 +372,12 @@ just plain bad habits:
       code consistent and therefore readable, in my humble opinion, but
       it also adds a lot more characters.  Some say they hate it and
       that it makes their eyes bleed.
+  * Options
+    * There really aren't any.  Most of the configurability is
+      implemented in the form of variables at the top of each script.
+      Where there are command-line options, they are rudimentary and
+      undocumented.  Someday I should add real argument processing and
+      the helpful "usage" output any reasonable user would expect.
   * Cleverness
     * I could use more of it.  In a couple places, I could use a lot
       less.  I'm positive that I've taken the long route in a number of
