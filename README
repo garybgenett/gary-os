@@ -660,7 +660,7 @@ Definition:
     and/or recovery can be done in a read-only manner.
 
 Last tested with:
-  * GaryOS v1.0
+  * GaryOS v1.1
 
 GaryOS is in a forensics mode by default.  Hardware scanning is
 performed, but the hard drives are not mounted or otherwise touched.
@@ -681,7 +681,7 @@ Definition:
   * Configure/install X.Org to provide a GUI.
 
 Last tested with:
-  * GaryOS v1.0, with 8192MB memory
+  * GaryOS v1.1, with 8GB memory
 
 A complete Funtoo/Gentoo environment is available.  In order to
 install/update packages, a couple of missing items need to be put into
@@ -732,7 +732,7 @@ Definition:
   * Install GaryOS to disk as a "stage3" build.
 
 Last tested with:
-  * GaryOS v1.0
+  * GaryOS v1.1
 
 The in-memory environment is a complete Funtoo/Gentoo installation, as
 shown in the "Live Update" section above.  It can be copied directly to
