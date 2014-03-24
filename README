@@ -21,6 +21,7 @@ Download: https://sourceforge.net/projects/gary-os
   * Details
     * Similar Projects
     * Tools
+    * Structure
   * Use Cases
     * Forensics
     * Live Update
@@ -465,6 +466,130 @@ Special thanks to the sites which made worldwide distribution possible:
 GitHub was instrumental in inspiring me to publish this project, but
 SourceForge provided the distribution platform which made it possible to
 reach an international audience overnight.
+
+------------------------------------
+- Structure
+------------------------------------
+
+Here is documented the overall structure of the repository, along with
+details for the individual components.
+
+Top level directory (distribution):
+  * README
+    * This file.  All the documentation for GaryOS.
+  * LICENSE
+    * The license GaryOS is distributed under.
+  * icon.png
+    * Creative "hack" to have an icon for the project.  Icons make it
+      seem like you are "for real", so I had to have one.
+  * screenshot.png
+    * Pretty self-explanatory.  Snapshot of what booting v1.0 looked
+      like, for promotion, reference and posterity.
+
+Top level directory (release):
+  * _commit
+    * Primarily for my tracking, records commit IDs for each of the
+      public and private repositories relevant to the building of
+      GaryOS.  Updated each release.
+  * _config.64, _config.32
+    * Linux kernel configurations used for the 64-bit and 32-bit builds,
+      respectively.  These are extracted from Grml ISOs using
+      "extract-ikconfig" in the "metro.sh" script.  Updated each
+      release.
+
+Top level directory (production):
+  * .bashrc
+    * My personal Bash configuration file, and also the scripting
+      library I use for almost all of my personal scripts.  Several
+      variables and functions are sourced from this file, and it was
+      easier to just include it into this project than to replicate all
+      of the referenced pieces.
+  * gentoo
+    * Contains the entirety of my personal Funtoo/Gentoo configuration,
+      including the scripts and files I use to manage my Funtoo/Gentoo
+      installations.
+  * scripts
+    * All the code used to create GaryOS lives in here.  Exported from
+      my personal scripts directory.
+
+Scripts directory:
+  * grub.sh
+    * Used to produce two different types of Grub images.  One is for
+      dual-booting purposes with other OSes, such as Windows, and the
+      other is to have a Grub "rescue" installation which does not
+      require access to any hard drive partitions for its modules or
+      configuration.
+    * Documented in more detail in the "Windows Dual-Boot" and "Grub
+      Rescue" sections under "Use Cases".
+    * Not critical to GaryOS as a whole.  Mainly to simplify and
+      automate the use cases mentioned.
+  * metro.sh
+    * In essence, this script *IS* GaryOS.
+    * Contains all of the wrapping of Metro used to create "stage3"
+      files using the Funtoo/Gentoo customizations below.
+    * Does the work of extracting "stage3" files and selectively
+      archiving them into "initrd" files.  The "initrd" files are then
+      compiled into the Linux kernel built inside the relevant "stage3".
+    * Also houses the release process for GaryOS, which consists of
+      exporting patches from my personal repositories and consolidating
+      them into the final GaryOS repository.  It also adds release
+      "tags" and publishes GaryOS to GitHub and SourceForge.
+
+Gentoo directory and configuration (scripts):
+  * .colorize
+    * Hackish attempt to add colorization to compile output.  It works, but
+      disrupts the sandbox environment and has caused builds to break.  Not
+      used anymore, but kept for posterity.
+  * .emergent
+    * Audit script which validates current Funtoo/Gentoo configuration
+      against Portage tools/output.  Reports back all kinds of useful
+      information, the most useful of which is a list of USE flags and
+      variables which have been added or removed upsteam.
+    * Generally speaking, it is the first line of defense against stale
+      configuration options, unused/unconfigured new options and
+      configuration "snow" as a whole.
+  * .hacks
+    * An aptly-named script, it performs all kinds of miscellaneous
+      corrections, fixes and customizations which generally keep me
+      happy.
+
+Gentoo directory and configuration (management):
+  * _gentoo
+    * Directory of "okay" files used by ".emergent" script above.
+  * _overlay
+    * Funtoo/Gentoo "overlay" directory.  Used very sparingly, and
+      mostly for fixing broken packages.
+    * Fun side note: I wanted the "gkrellaclock" to look more like
+      a genuine "xclock", so I hacked it into one.  This was my first
+      real experience coding in C.
+
+Gentoo directory and configuration (automation):
+  * _system
+    * This script is the workhorse of my Funtoo/Gentoo system, just as
+      "metro.sh" is the core driver of GaryOS.
+    * Most commonly, run without any arguments to update Portage tree
+      and pre-fetch source files.
+    * Often run with "-u" to completely update the installation, based
+      on recommendations from Funtoo/Gentoo documentation.
+    * Used with "-[0/12]" options for completely automated "chroot"
+      installation.
+
+Gentoo directory and configuration (configuration):
+  * funtoo
+    * Contains the commit ID that the Funtoo Portage repository should
+      be "pinned" to.
+    * Ties Funtoo/Gentoo configuration to a particular version of the
+      Portage tree, which ensures repeatability and stability.
+  * make.conf, package.keywords, package.license, package.mask,
+    package.unmask, package.use
+    * Standard Funtoo/Gentoo Portage configuration files, documented in
+      "man portage".
+    * My personal configuration, most of which is carried over to
+      GaryOS.
+  * sets
+    * User-defined package "sets", also documented in "man portage".
+    * The "metro" set is used to create GaryOS, and the "packages" set
+      is my personal list for a complete workstation installation.
 
 ========================================================================
 = Use Cases
