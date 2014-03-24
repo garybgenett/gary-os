@@ -534,7 +534,7 @@ Instructions for setting up update/install of packages:
        "VIDEO_CARDS" variable should be created and configured.
      * Starting with "-udev", there is a list of negated "-*" options at
        the end of the USE list which are necessary to build GaryOS via
-       Metro.  All of these could/should be removed to get the full
+       Metro.  All of these can/should be removed to get the full
        non-Metro configuration.
   4. Use all "portage" commands as usual.
      * e.g. emerge openbox rxvt-unicode xdm xorg-server
@@ -629,7 +629,7 @@ Overview of the output:
       Rescue" section below.
   * rescue_example.raw
     * Hard disk image file example of installation of Grub "rescue"
-    * environment.
+      environment.
 
 Instructions for Windows bootloader dual-boot:
   1. The script assumes a default installation, with a small boot
