@@ -6,7 +6,7 @@
 * Latest: GaryOS v1.1
   ([64-bit](http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v1.1.kernel))
   ([32-bit](http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v1.1.kernel))
-  ([Release Notes](#2014-03-13-v1-1-95ad4fd257697618bae7402d4bc3a27499035d30-4))
+  ([Release Notes](#2014-03-13-v11-95ad4fd257697618bae7402d4bc3a27499035d304))
   ([License](LICENSE.md))
 * Homepage: [https://github.com/garybgenett/gary-os](https://github.com/garybgenett/gary-os)
 * Download: [https://sourceforge.net/projects/gary-os](https://sourceforge.net/projects/gary-os)
