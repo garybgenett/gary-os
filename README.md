@@ -98,8 +98,8 @@ as usual:
   * `linux gary-os-[...].kernel mem=4096m`
 
 A minimum of 2-3GB of RAM is required, but a minimum of 4GB is
-recommended.  There are files for both 64-bit and 32-bit processors, but
-only x86 platforms are supported.
+recommended.  There are files for both [64-bit] and [32-bit] processors,
+but only x86 platforms are supported.
 
 Twice during boot, at initial kernel load and initramfs extraction, it
 can appear to hang as the kernel/initramfs is extracted into memory.
