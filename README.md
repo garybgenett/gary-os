@@ -410,7 +410,8 @@ explanation of what all the stuff in this repository is will likely be
 beneficial to anyone curious enough to have read this far.
 
 Most of what is needed to use the contents of this repository is
-contained in the "Structure" and "Customizing" sections below.
+contained in the [Structure](#structure) and [Customizing](#customizing)
+sections below.
 
 ### Similar Projects
 
@@ -510,8 +511,9 @@ details for the individual components.
       other is to have a Grub "rescue" installation which does not
       require access to any hard drive partitions for its modules or
       configuration.
-    * Documented in more detail in the "Windows Dual-Boot" and "Grub
-      Rescue" sections under "Use Cases".
+    * Documented in more detail in the [Windows
+      Dual-Boot](#windows-dual-boot) and [Grub Rescue](#grub-rescue)
+      sections under [Use Cases](#use-cases).
     * Not critical to GaryOS as a whole.  Mainly to simplify and
       automate the use cases mentioned.
   * [metro.sh](https://github.com/garybgenett/gary-os/blob/master/scripts/metro.sh)
@@ -682,9 +684,9 @@ Instructions for setting up update/install of packages:
        version of GaryOS.
   2. Perform minor hacks to get working in a RAMdisk environment.  These
      should **NOT** be done if planning to install to disk per the
-     "Installation" section below.  They essentially disable available
-     space checks, since the "portage" scripts expect to be using
-     a physical disk.  Commands to run:
+     [Installation](#installation) section below.  They essentially
+     disable available space checks, since the "portage" scripts expect
+     to be using a physical disk.  Commands to run:
      * `sed -i "s%has_space = False%has_space = True%g"
        /usr/lib/portage/pym/portage/package/ebuild/fetch.py`
      * `alias emerge="I_KNOW_WHAT_I_AM_DOING=true emerge"`
@@ -710,8 +712,9 @@ Instructions for setting up update/install of packages:
   * GaryOS v1.1
 
 The in-memory environment is a complete Funtoo/Gentoo installation, as
-shown in the "Live Update" section above.  It can be copied directly to
-a new disk/partition and booted as a fresh installation.
+shown in the [Live Update](#live-update) section above.  It can be
+copied directly to a new disk/partition and booted as a fresh
+installation.
 
 Instructions for installing to disk:
   1. Mount formatted disk/partition.
@@ -780,8 +783,8 @@ Overview of the output:
     * Grub menu used by "bootstrap" above.  Can be modified as needed to
       boot other OSes/objects.
   * `rescue.*`
-    * Grub "core.img" rescue environment detailed further in "Grub
-      Rescue" section below.
+    * Grub "core.img" rescue environment detailed further in [Grub
+      Rescue](#grub-rescue) section below.
   * `rescue_example.raw`
     * Hard disk image file example of installation of Grub "rescue"
       environment.
@@ -830,7 +833,7 @@ Administrator to remove the unwanted entries:
     and options as GaryOS, such as PXE, Qemu, etc.
 * Last tested with:
   * Tested in place of GaryOS with both Qemu and PXE.
-    * For details on PXE, see the "PXE Boot" section below.
+    * For details on PXE, see the [PXE Boot](#pxe-boot) section below.
   * Grub: sys-boot/grub-2.00-r7
 * Research and development:
   * [https://www.gnu.org/software/grub/manual/grub.html#BIOS-installation](https://www.gnu.org/software/grub/manual/grub.html#BIOS-installation)
@@ -841,9 +844,9 @@ Administrator to remove the unwanted entries:
 For convenience and supportability, this case has also been automated in
 the `grub.sh` script.  The `gary-os.grub.*` file in the root download
 directory contains an archive of the output of this script.  However,
-for this case the script will need to be run locally.  The "Windows
-Dual-Boot" section above has more details on the `grub.sh` script and
-its usage and output.
+for this case the script will need to be run locally.  The [Windows
+Dual-Boot](#windows-dual-boot) section above has more details on the
+`grub.sh` script and its usage and output.
 
 Instructions for Grub "rescue" image installation to hard disk:
   1. Create an empty working directory:
