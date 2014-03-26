@@ -617,7 +617,7 @@ That said, I am a bit of a perfectionist and want all my code to be easy
 to re-purpose, re-configure and generally support.  All of the scripts
 have been written with variables for all files/directories involved, and
 these variables are placed at the top of each script.  Pretty much
-everything that would be configurable via a commend-line option is
+everything that would be configurable via a command-line option is
 exposed as a variable.
 
 Here are the primary directories and what I use them for:
@@ -838,8 +838,8 @@ Administrator to remove the unwanted entries:
   1. Run `cmd` as Administrator.
   2. Run `bcdedit` to view the bootloader database.  Copy the
      `identifier` field for each GaryOS entry.
-  3. Run `bcdedit /delete [identifier] /cleanup` for each entry.  Note
-     that the `[identifier]` should be replaced with the full string
+  3. Run `bcdedit /delete {identifier} /cleanup` for each entry.  Note
+     that the `{identifier}` should be replaced with the full string
      output in #2 above, including the `{}` markers.
      * e.g. `bcdedit /delete {02a0fce9-68f5-11e3-aa07-e94d28b95f82}
        /cleanup`
