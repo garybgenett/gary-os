@@ -28,7 +28,7 @@
     * [Structure]
     * [Customizing]
   * [Use Cases]
-    * [Forensics]
+    * [Forensics & Recovery]
     * [Live Update]
     * [Installation]
     * [Windows Dual-Boot]
@@ -654,8 +654,8 @@ every release, and contains validation information.
 
 These are also considered the "howto" instructions for each case.
 
-### Forensics
-[Forensics]: #forensics
+### Forensics & Recovery
+[Forensics & Recovery]: #forensics-recovery
 
 * Definition:
   * Boot into a completely "clean" environment, so that diagnostics
