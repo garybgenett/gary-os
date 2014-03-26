@@ -1,40 +1,43 @@
 # Welcome to GaryOS (gary-os)
 ------------------------------------------------------------------------
 
-![GaryOS Icon](icon.png "GaryOS Icon") "The one file that does it all."
+![GaryOS Icon](icon.png "GaryOS Icon")
+"The one file that does it all."
 
-* Latest: GaryOS v1.1
-  ([64-bit](http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v1.1.kernel))
-  ([32-bit](http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v1.1.kernel))
-  ([Release Notes](#2014-03-13-v11-95ad4fd257697618bae7402d4bc3a27499035d304))
-  ([License](LICENSE.md))
+* Latest: GaryOS v1.1 ([64-bit]) ([32-bit]) ([Release Notes]) ([License])
 * Homepage: [https://github.com/garybgenett/gary-os](https://github.com/garybgenett/gary-os)
 * Download: [https://sourceforge.net/projects/gary-os](https://sourceforge.net/projects/gary-os)
 
+[License]: https://github.com/garybgenett/gary-os/blob/master/LICENSE.md
+[Readme]: https://github.com/garybgenett/gary-os/blob/master/README.md
+
 ------------------------------------------------------------------------
 #### Contents
-  * [Overview](#overview)
-    * [Quick Start](#quick-start)
-    * [Version History](#version-history)
-  * [Design](#design)
-    * [Goals](#goals)
-    * [Rationale](#rationale)
-    * [Caveats](#caveats)
-  * [Details](#details)
-    * [Similar Projects](#similar-projects)
-    * [Tools](#tools)
-    * [Structure](#structure)
-    * [Customizing](#customizing)
-  * [Use Cases](#use-cases)
-    * [Forensics](#forensics)
-    * [Live Update](#live-update)
-    * [Installation](#installation)
-    * [Windows Dual-Boot](#windows-dual-boot)
-    * [Grub Rescue](#grub-rescue)
-    * [PXE Boot](#pxe-boot)
+[Contents]: #contents
+
+  * [Overview]
+    * [Quick Start]
+    * [Version History]
+  * [Design]
+    * [Goals]
+    * [Rationale]
+    * [Caveats]
+  * [Details]
+    * [Similar Projects]
+    * [Tools]
+    * [Structure]
+    * [Customizing]
+  * [Use Cases]
+    * [Forensics]
+    * [Live Update]
+    * [Installation]
+    * [Windows Dual-Boot]
+    * [Grub Rescue]
+    * [PXE Boot]
 
 ------------------------------------------------------------------------
 ## Overview
+[Overview]: #overview
 
 GaryOS is an entire GNU/Linux system in a single bootable file.
 
@@ -75,6 +78,7 @@ GaryOS.
 ![GaryOS Screenshot](screenshot.png "GaryOS Screenshot")
 
 ### Quick Start
+[Quick Start]: #quick-start
 
 If you just want to check it out, you can run it inside any
 virtualization program that can boot a Linux kernel directly.  On
@@ -118,6 +122,11 @@ prepared.  Simply configuring and installing Grub will result in
 a ready-to-go Funtoo/Gentoo installation.
 
 ### Version History
+[Version History]: #version-history
+
+[Release Notes]: #2014-03-13-v11-95ad4fd257697618bae7402d4bc3a27499035d304
+[64-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v1.1.kernel
+[32-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v1.1.kernel
 
 ##### 2014-03-13 v1.1 95ad4fd257697618bae7402d4bc3a27499035d30.4
   * 64-bit: [gary-os-generic_64-funtoo-stable-v1.1.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v1.1.kernel)
@@ -177,6 +186,7 @@ a ready-to-go Funtoo/Gentoo installation.
 
 ------------------------------------------------------------------------
 ## Design
+[Design]: #design
 
 GaryOS was not really "designed", per se.  It just kind of happened
 organically.  Any lack of production value to the code is a result of
@@ -213,6 +223,7 @@ projects.  All I've done is tie things together in a way I find novel,
 appealing and useful.
 
 ### Goals
+[Goals]: #goals
 
 While not originally "designed" in the traditional sense, GaryOS does
 have clear structure and requirements.
@@ -245,6 +256,7 @@ Explicit non-goals:
   * Becoming a "live" desktop environment (X.Org GUI)
 
 ### Rationale
+[Rationale]: #rationale
 
 I thought it important to document my thoughts regarding the good deal
 of focus on the "single bootable file" aspect of GaryOS as its primary
@@ -330,6 +342,7 @@ The reader, of course, must make up their own mind about what is best
 for them.
 
 ### Caveats
+[Caveats]: #caveats
 
 Humans are not perfect, and rarely is anything we create.  I'm proud of
 this project, but also want to be clear about its shortcomings.
@@ -403,6 +416,7 @@ Other than that, GaryOS should be rock-solid.  ;^)
 
 ------------------------------------------------------------------------
 ## Details
+[Details]: #details
 
 In this section, I will try to outline the key pieces which make GaryOS
 tick.  The work will still pretty much speak for itself, but some
@@ -410,10 +424,10 @@ explanation of what all the stuff in this repository is will likely be
 beneficial to anyone curious enough to have read this far.
 
 Most of what is needed to use the contents of this repository is
-contained in the [Structure](#structure) and [Customizing](#customizing)
-sections below.
+contained in the [Structure] and [Customizing] sections below.
 
 ### Similar Projects
+[Similar Projects]: #similar-projects
 
 Since the creation of GaryOS, I've discovered the following projects
 during ongoing research:
@@ -429,6 +443,7 @@ still fitting in an initramfs.
 Both projects are pretty damn awesome.
 
 ### Tools
+[Tools]: #tools
 
 All the real heavy-lifting is accomplished using these tools/projects:
   * Metro: [http://www.funtoo.org/Metro_Quick_Start_Tutorial](http://www.funtoo.org/Metro_Quick_Start_Tutorial)
@@ -459,6 +474,7 @@ SourceForge provided the distribution platform which made it possible to
 reach an international audience overnight.
 
 ### Structure
+[Structure]: #structure
 
 Here is documented the overall structure of the repository, along with
 details for the individual components.
@@ -466,14 +482,14 @@ details for the individual components.
 ##### Top level directory
 
 * Distribution:
-  * [README.md](README.md)
+  * [README.md](https://github.com/garybgenett/gary-os/blob/master/README.md)
     * This file.  All the documentation for GaryOS.
-  * [LICENSE.md](LICENSE.md)
+  * [LICENSE.md](https://github.com/garybgenett/gary-os/blob/master/LICENSE.md)
     * The license GaryOS is distributed under.
-  * [icon.png](icon.png)
+  * [icon.png](https://github.com/garybgenett/gary-os/blob/master/icon.png)
     * Creative "hack" to have an icon for the project.  Icons make it
       seem like you are "for real", so I had to have one.
-  * [screenshot.png](screenshot.png)
+  * [screenshot.png](https://github.com/garybgenett/gary-os/blob/master/screenshot.png)
     * Pretty self-explanatory.  Snapshot of what booting v1.0 looked
       like, for promotion, reference and posterity.
 * Release:
@@ -511,9 +527,8 @@ details for the individual components.
       other is to have a Grub "rescue" installation which does not
       require access to any hard drive partitions for its modules or
       configuration.
-    * Documented in more detail in the [Windows
-      Dual-Boot](#windows-dual-boot) and [Grub Rescue](#grub-rescue)
-      sections under [Use Cases](#use-cases).
+    * Documented in more detail in the [Windows Dual-Boot] and [Grub
+      Rescue] sections under [Use Cases].
     * Not critical to GaryOS as a whole.  Mainly to simplify and
       automate the use cases mentioned.
   * [metro.sh](https://github.com/garybgenett/gary-os/blob/master/scripts/metro.sh)
@@ -590,6 +605,7 @@ details for the individual components.
       my personal list for a complete workstation installation.
 
 ### Customizing
+[Customizing]: #customizing
 
 Since these scripts and configurations were originally intended for
 strictly personal use, they have a strong bias towards my directory
@@ -631,6 +647,7 @@ cleaned up and documented properly.
 
 ------------------------------------------------------------------------
 ## Use Cases
+[Use Cases]: #use-cases
 
 Below are the primary use cases considered for GaryOS.  Each is tested
 every release, and contains validation information.
@@ -638,6 +655,7 @@ every release, and contains validation information.
 These are also considered the "howto" instructions for each case.
 
 ### Forensics
+[Forensics]: #forensics
 
 * Definition:
   * Boot into a completely "clean" environment, so that diagnostics
@@ -656,6 +674,7 @@ and interrogation.
 It is a stated goal that forensics mode continue being the default.
 
 ### Live Update
+[Live Update]: #live-update
 
 * Definition:
   * Update/install packages using Funtoo/Gentoo tools.
@@ -684,9 +703,9 @@ Instructions for setting up update/install of packages:
        version of GaryOS.
   2. Perform minor hacks to get working in a RAMdisk environment.  These
      should **NOT** be done if planning to install to disk per the
-     [Installation](#installation) section below.  They essentially
-     disable available space checks, since the "portage" scripts expect
-     to be using a physical disk.  Commands to run:
+     [Installation] section below.  They essentially disable available
+     space checks, since the "portage" scripts expect to be using
+     a physical disk.  Commands to run:
      * `sed -i "s%has_space = False%has_space = True%g"
        /usr/lib/portage/pym/portage/package/ebuild/fetch.py`
      * `alias emerge="I_KNOW_WHAT_I_AM_DOING=true emerge"`
@@ -705,6 +724,7 @@ Instructions for setting up update/install of packages:
      * e.g. `/etc/init.d/xdm start`
 
 ### Installation
+[Installation]: #installation
 
 * Definition:
   * Install GaryOS to disk as a "stage3" build.
@@ -712,9 +732,8 @@ Instructions for setting up update/install of packages:
   * GaryOS v1.1
 
 The in-memory environment is a complete Funtoo/Gentoo installation, as
-shown in the [Live Update](#live-update) section above.  It can be
-copied directly to a new disk/partition and booted as a fresh
-installation.
+shown in the [Live Update] section above.  It can be copied directly to
+a new disk/partition and booted as a fresh installation.
 
 Instructions for installing to disk:
   1. Mount formatted disk/partition.
@@ -744,6 +763,7 @@ Instructions for installing to disk:
   7. **Don't forget to change `hostname` and update `root` password!**
 
 ### Windows Dual-Boot
+[Windows Dual-Boot]: #windows-dual-boot
 
 * Definition:
   * Boot using the native Windows bootloader.
@@ -784,7 +804,7 @@ Overview of the output:
       boot other OSes/objects.
   * `rescue.*`
     * Grub "core.img" rescue environment detailed further in [Grub
-      Rescue](#grub-rescue) section below.
+      Rescue] section below.
   * `rescue_example.raw`
     * Hard disk image file example of installation of Grub "rescue"
       environment.
@@ -825,6 +845,7 @@ Administrator to remove the unwanted entries:
        /cleanup`
 
 ### Grub Rescue
+[Grub Rescue]: #grub-rescue
 
 * Definition:
   * Boot into a mostly complete Grub environment directly from the boot
@@ -833,7 +854,7 @@ Administrator to remove the unwanted entries:
     and options as GaryOS, such as PXE, Qemu, etc.
 * Last tested with:
   * Tested in place of GaryOS with both Qemu and PXE.
-    * For details on PXE, see the [PXE Boot](#pxe-boot) section below.
+    * For details on PXE, see the [PXE Boot] section below.
   * Grub: sys-boot/grub-2.00-r7
 * Research and development:
   * [https://www.gnu.org/software/grub/manual/grub.html#BIOS-installation](https://www.gnu.org/software/grub/manual/grub.html#BIOS-installation)
@@ -845,8 +866,8 @@ For convenience and supportability, this case has also been automated in
 the `grub.sh` script.  The `gary-os.grub.*` file in the root download
 directory contains an archive of the output of this script.  However,
 for this case the script will need to be run locally.  The [Windows
-Dual-Boot](#windows-dual-boot) section above has more details on the
-`grub.sh` script and its usage and output.
+Dual-Boot] section above has more details on the `grub.sh` script and
+its usage and output.
 
 Instructions for Grub "rescue" image installation to hard disk:
   1. Create an empty working directory:
@@ -866,6 +887,7 @@ Instructions for Grub "rescue" image installation to hard disk:
      install another bootloader.
 
 ### PXE Boot
+[PXE Boot]: #pxe-boot
 
 * Definition:
   * Boot from a PXE environment.
