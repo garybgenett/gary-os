@@ -730,8 +730,12 @@ Instructions for setting up update/install of packages:
      [Installation] section below.  They essentially disable available
      space checks, since the "portage" scripts expect to be using
      a physical disk.  Commands to run:
-     * `sed -i "s%has_space = False%has_space = True%g"
-       /usr/lib/portage/pym/portage/package/ebuild/fetch.py`
+     * ...
+
+        ```
+        sed -i "s%has_space = False%has_space = True%g" \
+            /usr/lib/portage/pym/portage/package/ebuild/fetch.py
+        ```
      * `alias emerge="I_KNOW_WHAT_I_AM_DOING=true emerge"`
          * For details, see `"There is NOT at least"` in
            `/usr/portage/eclass/check-reqs.eclass`
@@ -769,13 +773,17 @@ Instructions for installing to disk:
      * e.g. `mkdir /mnt/boot`
      * e.g. `mount /dev/sda1 /mnt/boot`
   3. Copy in-memory filesystem to installation target.
-     * e.g. `rsync -avv
-       --filter=-_/dev/**
-       --filter=-_/mnt/**
-       --filter=-_/proc/**
-       --filter=-_/run/**
-       --filter=-_/sys/**
-       / /mnt`
+     * e.g. ...
+
+        ```
+        rsync -avv \
+            --filter=-_/dev/** \
+            --filter=-_/mnt/** \
+            --filter=-_/proc/** \
+            --filter=-_/run/** \
+            --filter=-_/sys/** \
+            / /mnt
+        ```
   4. Add necessary partition information to `/etc/fstab`, remembering an
      entry for `/boot` if using a separate partition from #2 above.
      * e.g. `vi /mnt/etc/fstab`
