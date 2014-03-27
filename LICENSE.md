@@ -1,12 +1,12 @@
 # GaryOS (gary-os) License
-------------------------------------------------------------------------
+************************************************************************
 
 * Source: [http://opensource.org/licenses/BSD-3-Clause](http://opensource.org/licenses/BSD-3-Clause)
 
 ##### Copyright
 
-	Copyright (c) 2009, Gary B. Genett
-	All rights reserved.
+    Copyright (c) 2009, Gary B. Genett
+    All rights reserved.
 
 ##### License
 
@@ -38,5 +38,5 @@ LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-------------------------------------------------------------------------
+************************************************************************
 ###### End Of File
