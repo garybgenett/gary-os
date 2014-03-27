@@ -1,5 +1,5 @@
 # Welcome to GaryOS (gary-os)
-------------------------------------------------------------------------
+************************************************************************
 
 ![GaryOS Icon](icon.png "GaryOS Icon")
 "The one file that does it all."
@@ -11,7 +11,7 @@
 [License]: https://github.com/garybgenett/gary-os/blob/master/LICENSE.md
 [Readme]: https://github.com/garybgenett/gary-os/blob/master/README.md
 
-------------------------------------------------------------------------
+************************************************************************
 #### Contents
 [Contents]: #contents
 
@@ -35,7 +35,7 @@
     * [Grub Rescue]
     * [PXE Boot]
 
-------------------------------------------------------------------------
+************************************************************************
 ## Overview
 [Overview]: #overview
 
@@ -52,6 +52,7 @@ this scale.  The result is a smaller boot/rescue file that is just as
 comprehensive, yet easier to deploy and manage.
 
 A list of the primary advantages:
+
   * Complete Funtoo/Gentoo system, with toolchain
   * Entire system resides in memory; does not require media after boot
   * Forensics mode is the default; no hard drives are mounted and swap
@@ -62,6 +63,7 @@ A list of the primary advantages:
   * Does not require disposable and fragile CD/DVD media
 
 The main disadvantages:
+
   * Requires bootable media and configured bootloader (PXE, Grub, etc.)
   * Constrained in size; initramfs must compress to less than 500MB
     hard-coded limit in Linux kernel
@@ -129,6 +131,7 @@ a ready-to-go Funtoo/Gentoo installation.
 [32-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v1.1.kernel
 
 ##### 2014-03-13 v1.1 95ad4fd257697618bae7402d4bc3a27499035d30.4
+
   * 64-bit: [gary-os-generic_64-funtoo-stable-v1.1.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v1.1.kernel)
   * 32-bit: [gary-os-generic_32-funtoo-stable-v1.1.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v1.1.kernel)
   * Metro/Grub scripts
@@ -140,6 +143,7 @@ a ready-to-go Funtoo/Gentoo installation.
     * Miscellaneous package changes
 
 ##### 2014-02-28 v1.0 95ad4fd257697618bae7402d4bc3a27499035d30.3
+
   * 64-bit: [gary-os-generic_64-funtoo-stable-v1.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v1.0.kernel)
   * 32-bit: [gary-os-generic_32-funtoo-stable-v1.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v1.0.kernel)
   * Metro script
@@ -154,6 +158,7 @@ a ready-to-go Funtoo/Gentoo installation.
     * Commented packages that broke during 32-bit build
 
 ##### 2014-02-24 v0.3 95ad4fd257697618bae7402d4bc3a27499035d30.2
+
   * 64-bit: [gary-os-core2_64-funtoo-stable-v0.3.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-core2_64-funtoo-stable-v0.3.kernel)
   * Metro script
     * Consolidated kernel/initrd into single kernel/initramfs file
@@ -167,6 +172,7 @@ a ready-to-go Funtoo/Gentoo installation.
     * Added sound and miscellaneous media packages
 
 ##### 2014-02-13 v0.2 95ad4fd257697618bae7402d4bc3a27499035d30.1
+
   * 64-bit kernel: [gary-os-core2_64-funtoo-stable-v0.2.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-core2_64-funtoo-stable-v0.2.kernel)
   * 64-bit initrd: [gary-os-core2_64-funtoo-stable-v0.2.initrd](http://sourceforge.net/projects/gary-os/files/gary-os-core2_64-funtoo-stable-v0.2.initrd)
   * Metro script
@@ -176,6 +182,7 @@ a ready-to-go Funtoo/Gentoo installation.
     * Enabled `gpm` USE flag
 
 ##### 2014-02-09 v0.1 95ad4fd257697618bae7402d4bc3a27499035d30.0
+
   * 64-bit kernel: [gary-os-core2_64-funtoo-stable-v0.1.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-core2_64-funtoo-stable-v0.1.kernel)
   * 32-bit initrd: [gary-os-core2_64-funtoo-stable-v0.1.initrd](http://sourceforge.net/projects/gary-os/files/gary-os-core2_64-funtoo-stable-v0.1.initrd)
   * Metro script
@@ -184,7 +191,7 @@ a ready-to-go Funtoo/Gentoo installation.
     * Active personal configuration at time of build
     * Commented packages that broke
 
-------------------------------------------------------------------------
+************************************************************************
 ## Design
 [Design]: #design
 
@@ -229,6 +236,7 @@ While not originally "designed" in the traditional sense, GaryOS does
 have clear structure and requirements.
 
 Top requirements:
+
   * Bootable from a single kernel file, using initramfs
   * Based on Funtoo/Gentoo, using "stage3" build automation
   * Generic kernel/build configuration; should run on most modern x86
@@ -239,6 +247,7 @@ Top requirements:
   * All-purpose, multi-OS rescue environment
 
 Other objectives:
+
   * Widely deployable; support PXE and native dual-booting with other
     popular OSes, such as Windows and Mac OS X
   * Learning environment for those new to GNU/Linux or Funtoo/Gentoo
@@ -249,6 +258,7 @@ Other objectives:
   * Provide upstream enhancements to "stage3" automation
 
 Explicit non-goals:
+
   * Growing bigger than a single kernel file
   * Customization or deep branding of overall system
   * Development of helper scripts/commands library, or customization of
@@ -288,6 +298,7 @@ marketing-savvy distributions like Ubuntu.
 
 Getting back to a "single bootable file" in comparison to traditional
 ISO-based "live" systems, ISO files have a couple options for use:
+
   1. Write to CD/DVD media, and boot from there
   2. Write directly to USB media, and boot from there
   3. Extract to USB media, and install/configure bootloader manually
@@ -296,6 +307,7 @@ ISO-based "live" systems, ISO files have a couple options for use:
   5. Boot ISO file directly, using "loop" functionality of bootloader
 
 The challenges and issues with each approach:
+
   1. USB drives are a much more convenient and usable boot media than
      CDs/DVDs these days.  They are easier to carry, harder to damage
      and more ubiquitous (modern servers and laptops often don't have
@@ -353,6 +365,7 @@ syntax and style guides used by other projects.  While consistent and
 generally readable, there are a couple specific areas I'd like to
 comment on, in order to avoid the appearance of ignorance, negligence or
 just plain bad habits:
+
   * Comments
     * There are few, if any, of them.  Most of the code is pretty
       self-explanatory, at least to me, but may not be readily
@@ -365,8 +378,8 @@ just plain bad habits:
   * Tabs
     * I use them everywhere.  This is not an issue really, except that
       I've broken two of the ancient spacing rules:
-      1. In some places, I mix spaces and tabs intentionally
-      2. I regularly use tabs for non-leading space
+        1. In some places, I mix spaces and tabs intentionally
+        2. I regularly use tabs for non-leading space
     * Changing the "tab stop" to anything other than "8" will make the
       formatting look even more ugly than it already is.
   * Syntax
@@ -414,7 +427,7 @@ Buyer beware.  You own all the pieces.
 
 Other than that, GaryOS should be rock-solid.  ;^)
 
-------------------------------------------------------------------------
+************************************************************************
 ## Details
 [Details]: #details
 
@@ -431,6 +444,7 @@ contained in the [Structure] and [Customizing] sections below.
 
 Since the creation of GaryOS, I've discovered the following projects
 during ongoing research:
+
   * Better-Initramfs: [https://github.com/slashbeast/better-initramfs](https://github.com/slashbeast/better-initramfs)
   * Aboriginal Linux: [http://landley.net/aboriginal/about.html](http://landley.net/aboriginal/about.html)
 
@@ -446,26 +460,31 @@ Both projects are pretty damn awesome.
 [Tools]: #tools
 
 All the real heavy-lifting is accomplished using these tools/projects:
+
   * Metro: [http://www.funtoo.org/Metro_Quick_Start_Tutorial](http://www.funtoo.org/Metro_Quick_Start_Tutorial)
   * Funtoo: [http://www.funtoo.org](http://www.funtoo.org)
   * Gentoo: [http://www.gentoo.org](http://www.gentoo.org)
   * Linux Initramfs: [http://www.kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt](http://www.kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt)
 
 Inspiration was provided by:
+
   * Buildroot: [http://buildroot.uclibc.org](http://buildroot.uclibc.org)
   * BusyBox: [http://www.busybox.net](http://www.busybox.net)
   * StaticPerl: [http://software.schmorp.de/pkg/App-Staticperl.html](http://software.schmorp.de/pkg/App-Staticperl.html)
 
 Kernel configuration, package lists and acknowledgments to:
+
   * Grml: [http://grml.org](http://grml.org)
   * SystemRescueCd: [http://www.sysresccd.org/SystemRescueCd_Homepage](http://www.sysresccd.org/SystemRescueCd_Homepage)
 
 Homage to those who started it all:
+
   * tomsrtbt: [http://www.toms.net/rb](http://www.toms.net/rb)
   * KNOPPIX: [http://www.knopper.net/knoppix/index-en.html](http://www.knopper.net/knoppix/index-en.html)
   * Debian Live: [http://live.debian.net](http://live.debian.net)
 
 Special thanks to the sites which made worldwide distribution possible:
+
   * SourceForge: [https://sourceforge.net](https://sourceforge.net)
   * GitHub: [https://github.com](https://github.com)
 
@@ -481,128 +500,131 @@ details for the individual components.
 
 ##### Top level directory
 
-* Distribution:
-  * [README.md](https://github.com/garybgenett/gary-os/blob/master/README.md)
-    * This file.  All the documentation for GaryOS.
-  * [LICENSE.md](https://github.com/garybgenett/gary-os/blob/master/LICENSE.md)
-    * The license GaryOS is distributed under.
-  * [icon.png](https://github.com/garybgenett/gary-os/blob/master/icon.png)
-    * Creative "hack" to have an icon for the project.  Icons make it
-      seem like you are "for real", so I had to have one.
-  * [screenshot.png](https://github.com/garybgenett/gary-os/blob/master/screenshot.png)
-    * Pretty self-explanatory.  Snapshot of what booting v1.0 looked
-      like, for promotion, reference and posterity.
-* Release:
-  * [_commit](https://github.com/garybgenett/gary-os/blob/master/_commit)
-    * Primarily for my tracking, records commit IDs for each of the
-      public and private repositories relevant to the building of
-      GaryOS.  Updated each release.
-  * [_config.64](https://github.com/garybgenett/gary-os/blob/master/_config.64),
-    [_config.32](https://github.com/garybgenett/gary-os/blob/master/_config.32)
-    * Linux kernel configurations used for the 64-bit and 32-bit builds,
-      respectively.  These are extracted from Grml ISOs using
-      "extract-ikconfig" in the "metro.sh" script.  Updated each
-      release.
-* Production:
-  * [.bashrc](https://github.com/garybgenett/gary-os/blob/master/.bashrc)
-    * My personal Bash configuration file, and also the scripting
-      library I use for almost all of my personal scripts.  Several
-      variables and functions are sourced from this file, and it was
-      easier to just include it into this project than to replicate all
-      of the referenced pieces.
-  * [gentoo](https://github.com/garybgenett/gary-os/blob/master/gentoo)
-    * Contains the entirety of my personal Funtoo/Gentoo configuration,
-      including the scripts and files I use to manage my Funtoo/Gentoo
-      installations.
-  * [scripts](https://github.com/garybgenett/gary-os/blob/master/scripts)
-    * All the code used to create GaryOS lives in here.  Exported from
-      my personal scripts directory.
+  * Distribution:
+    * [README.md](https://github.com/garybgenett/gary-os/blob/master/README.md)
+        * This file.  All the documentation for GaryOS.
+    * [LICENSE.md](https://github.com/garybgenett/gary-os/blob/master/LICENSE.md)
+        * The license GaryOS is distributed under.
+    * [icon.png](https://github.com/garybgenett/gary-os/blob/master/icon.png)
+        * Creative "hack" to have an icon for the project.  Icons make
+          it seem like you are "for real", so I had to have one.
+    * [screenshot.png](https://github.com/garybgenett/gary-os/blob/master/screenshot.png)
+        * Pretty self-explanatory.  Snapshot of what booting v1.0 looked
+          like, for promotion, reference and posterity.
+  * Release:
+    * [_commit](https://github.com/garybgenett/gary-os/blob/master/_commit)
+        * Primarily for my tracking, records commit IDs for each of the
+          public and private repositories relevant to the building of
+          GaryOS.  Updated each release.
+    * [_config.64](https://github.com/garybgenett/gary-os/blob/master/_config.64),
+      [_config.32](https://github.com/garybgenett/gary-os/blob/master/_config.32)
+        * Linux kernel configurations used for the 64-bit and 32-bit
+          builds, respectively.  These are extracted from Grml ISOs
+          using "extract-ikconfig" in the "metro.sh" script.  Updated
+          each release.
+  * Production:
+    * [.bashrc](https://github.com/garybgenett/gary-os/blob/master/.bashrc)
+        * My personal Bash configuration file, and also the scripting
+          library I use for almost all of my personal scripts.  Several
+          variables and functions are sourced from this file, and it was
+          easier to just include it into this project than to replicate
+          all of the referenced pieces.
+    * [gentoo](https://github.com/garybgenett/gary-os/blob/master/gentoo)
+        * Contains the entirety of my personal Funtoo/Gentoo
+          configuration, including the scripts and files I use to manage
+          my Funtoo/Gentoo installations.
+    * [scripts](https://github.com/garybgenett/gary-os/blob/master/scripts)
+        * All the code used to create GaryOS lives in here.  Exported
+          from my personal scripts directory.
 
 ##### Scripts directory
 
-* As you would expect, there are scripts in this directory:
-  * [grub.sh](https://github.com/garybgenett/gary-os/blob/master/scripts/grub.sh)
-    * Used to produce two different types of Grub images.  One is for
-      dual-booting purposes with other OSes, such as Windows, and the
-      other is to have a Grub "rescue" installation which does not
-      require access to any hard drive partitions for its modules or
-      configuration.
-    * Documented in more detail in the [Windows Dual-Boot] and [Grub
-      Rescue] sections under [Use Cases].
-    * Not critical to GaryOS as a whole.  Mainly to simplify and
-      automate the use cases mentioned.
-  * [metro.sh](https://github.com/garybgenett/gary-os/blob/master/scripts/metro.sh)
-    * In essence, this script **IS** GaryOS.
-    * Contains all of the wrapping of Metro used to create "stage3"
-      files using the Funtoo/Gentoo customizations below.
-    * Does the work of extracting "stage3" files and selectively
-      archiving them into "initrd" files.  The "initrd" files are then
-      compiled into the Linux kernel built inside the relevant "stage3".
-    * Also houses the release process for GaryOS, which consists of
-      exporting patches from my personal repositories and consolidating
-      them into the final GaryOS repository.  It also adds release
-      "tags" and publishes GaryOS to GitHub and SourceForge.
+  * As you would expect, there are scripts in this directory:
+    * [grub.sh](https://github.com/garybgenett/gary-os/blob/master/scripts/grub.sh)
+        * Used to produce two different types of Grub images.  One is
+          for dual-booting purposes with other OSes, such as Windows,
+          and the other is to have a Grub "rescue" installation which
+          does not require access to any hard drive partitions for its
+          modules or configuration.
+        * Documented in more detail in the [Windows Dual-Boot] and [Grub
+          Rescue] sections under [Use Cases].
+        * Not critical to GaryOS as a whole.  Mainly to simplify and
+          automate the use cases mentioned.
+    * [metro.sh](https://github.com/garybgenett/gary-os/blob/master/scripts/metro.sh)
+        * In essence, this script **IS** GaryOS.
+        * Contains all of the wrapping of Metro used to create "stage3"
+          files using the Funtoo/Gentoo customizations below.
+        * Does the work of extracting "stage3" files and selectively
+          archiving them into "initrd" files.  The "initrd" files are
+          then compiled into the Linux kernel built inside the relevant
+          "stage3".
+        * Also houses the release process for GaryOS, which consists of
+          exporting patches from my personal repositories and
+          consolidating them into the final GaryOS repository.  It also
+          adds release "tags" and publishes GaryOS to GitHub and
+          SourceForge.
 
 ##### Gentoo directory and configuration
 
-* Scripts:
-  * [.colorize](https://github.com/garybgenett/gary-os/blob/master/gentoo/.colorize)
-    * Hackish attempt to add colorization to compile output.  It works, but
-      disrupts the sandbox environment and has caused builds to break.  Not
-      used anymore, but kept for posterity.
-  * [.emergent](https://github.com/garybgenett/gary-os/blob/master/gentoo/.emergent)
-    * Audit script which validates current Funtoo/Gentoo configuration
-      against Portage tools/output.  Reports back all kinds of useful
-      information, the most useful of which is a list of USE flags and
-      variables which have been added or removed upstream.
-    * Generally speaking, it is the first line of defense against stale
-      configuration options, unused/unconfigured new options and
-      configuration "snow" as a whole.
-  * [.hacks](https://github.com/garybgenett/gary-os/blob/master/gentoo/.hacks)
-    * An aptly-named script, it performs all kinds of miscellaneous
-      corrections, fixes and customizations which generally keep me
-      happy.
-* Management:
-  * [_gentoo](https://github.com/garybgenett/gary-os/blob/master/gentoo/_gentoo)
-    * Directory of "okay" files used by ".emergent" script above.
-  * [_overlay](https://github.com/garybgenett/gary-os/blob/master/gentoo/_overlay)
-    * Funtoo/Gentoo "overlay" directory.  Used very sparingly, and
-      mostly for fixing broken packages.
-    * Fun side note: I wanted the "gkrellaclock" to look more like
-      a genuine "xclock", so I hacked it into one.  This was my first
-      real experience coding in C.
-* Automation:
-  * [_system](https://github.com/garybgenett/gary-os/blob/master/gentoo/_system)
-    * This script is the workhorse of my Funtoo/Gentoo system, just as
-      "metro.sh" is the core driver of GaryOS.
-    * Most commonly, run without any arguments to update Portage tree
-      and pre-fetch source files.
-    * Often run with `-u` to completely update the installation, based
-      on recommendations from Funtoo/Gentoo documentation.
-    * Used with `-[0/12]` options for completely automated "chroot"
-      installation.
-* Configuration:
-  * [funtoo](https://github.com/garybgenett/gary-os/blob/master/gentoo/funtoo)
-    * Contains the commit ID that the Funtoo Portage repository should
-      be "pinned" to.
-    * Ties Funtoo/Gentoo configuration to a particular version of the
-      Portage tree, which ensures repeatability and stability.
-  * [make.conf](https://github.com/garybgenett/gary-os/blob/master/gentoo/make.conf),
-    [package.keywords](https://github.com/garybgenett/gary-os/blob/master/gentoo/package.keywords),
-    [package.license](https://github.com/garybgenett/gary-os/blob/master/gentoo/package.license),
-    [package.mask](https://github.com/garybgenett/gary-os/blob/master/gentoo/package.mask),
-    [package.unmask](https://github.com/garybgenett/gary-os/blob/master/gentoo/package.unmask),
-    [package.use](https://github.com/garybgenett/gary-os/blob/master/gentoo/package.use)
-    * Standard Funtoo/Gentoo Portage configuration files, documented in
-      `man portage`.
-    * My personal configuration, most of which is carried over to
-      GaryOS.
-  * [sets](https://github.com/garybgenett/gary-os/blob/master/gentoo/sets)
-    * User-defined package "sets", also documented in `man portage`.
-    * [metro](https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/metro):
-      used to create GaryOS.
-    * [packages](https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/packages):
-      my personal list for a complete workstation installation.
+  * Scripts:
+    * [.colorize](https://github.com/garybgenett/gary-os/blob/master/gentoo/.colorize)
+        * Hackish attempt to add colorization to compile output.  It
+          works, but disrupts the sandbox environment and has caused
+          builds to break.  Not used anymore, but kept for posterity.
+    * [.emergent](https://github.com/garybgenett/gary-os/blob/master/gentoo/.emergent)
+        * Audit script which validates current Funtoo/Gentoo
+          configuration against Portage tools/output.  Reports back all
+          kinds of useful information, the most useful of which is
+          a list of USE flags and variables which have been added or
+          removed upstream.
+        * Generally speaking, it is the first line of defense against
+          stale configuration options, unused/unconfigured new options
+          and configuration "snow" as a whole.
+    * [.hacks](https://github.com/garybgenett/gary-os/blob/master/gentoo/.hacks)
+        * An aptly-named script, it performs all kinds of miscellaneous
+          corrections, fixes and customizations which generally keep me
+          happy.
+  * Management:
+    * [_gentoo](https://github.com/garybgenett/gary-os/blob/master/gentoo/_gentoo)
+        * Directory of "okay" files used by ".emergent" script above.
+    * [_overlay](https://github.com/garybgenett/gary-os/blob/master/gentoo/_overlay)
+        * Funtoo/Gentoo "overlay" directory.  Used very sparingly, and
+          mostly for fixing broken packages.
+        * Fun side note: I wanted the "gkrellaclock" to look more like
+          a genuine "xclock", so I hacked it into one.  This was my
+          first real experience coding in C.
+  * Automation:
+    * [_system](https://github.com/garybgenett/gary-os/blob/master/gentoo/_system)
+        * This script is the workhorse of my Funtoo/Gentoo system, just
+          as "metro.sh" is the core driver of GaryOS.
+        * Most commonly, run without any arguments to update Portage
+          tree and pre-fetch source files.
+        * Often run with `-u` to completely update the installation,
+          based on recommendations from Funtoo/Gentoo documentation.
+        * Used with `-[0/12]` options for completely automated "chroot"
+          installation.
+  * Configuration:
+    * [funtoo](https://github.com/garybgenett/gary-os/blob/master/gentoo/funtoo)
+        * Contains the commit ID that the Funtoo Portage repository
+          should be "pinned" to.
+        * Ties Funtoo/Gentoo configuration to a particular version of
+          the Portage tree, which ensures repeatability and stability.
+    * [make.conf](https://github.com/garybgenett/gary-os/blob/master/gentoo/make.conf),
+      [package.keywords](https://github.com/garybgenett/gary-os/blob/master/gentoo/package.keywords),
+      [package.license](https://github.com/garybgenett/gary-os/blob/master/gentoo/package.license),
+      [package.mask](https://github.com/garybgenett/gary-os/blob/master/gentoo/package.mask),
+      [package.unmask](https://github.com/garybgenett/gary-os/blob/master/gentoo/package.unmask),
+      [package.use](https://github.com/garybgenett/gary-os/blob/master/gentoo/package.use)
+        * Standard Funtoo/Gentoo Portage configuration files, documented
+          in `man portage`.
+        * My personal configuration, most of which is carried over to
+          GaryOS.
+    * [sets](https://github.com/garybgenett/gary-os/blob/master/gentoo/sets)
+        * User-defined package "sets", also documented in `man portage`.
+        * [metro](https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/metro):
+          used to create GaryOS.
+        * [packages](https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/packages):
+          my personal list for a complete workstation installation.
 
 ### Customizing
 [Customizing]: #customizing
@@ -621,6 +643,7 @@ everything that would be configurable via a command-line option is
 exposed as a variable.
 
 Here are the primary directories and what I use them for:
+
   * `$HOME/setup/gentoo`
     * Funtoo/Gentoo configuration directory.  Full contents are in the
       "gentoo" directory in this repository.
@@ -645,7 +668,7 @@ anyone with enough free time and curiosity.
 In a perfect world, this section could be removed after the scripts were
 cleaned up and documented properly.
 
-------------------------------------------------------------------------
+************************************************************************
 ## Use Cases
 [Use Cases]: #use-cases
 
@@ -657,11 +680,11 @@ These are also considered the "howto" instructions for each case.
 ### Forensics & Recovery
 [Forensics & Recovery]: #forensics-recovery
 
-* Definition:
-  * Boot into a completely "clean" environment, so that diagnostics
-    and/or recovery can be done in a read-only manner.
-* Last tested with:
-  * GaryOS v1.1
+  * Definition:
+    * Boot into a completely "clean" environment, so that diagnostics
+      and/or recovery can be done in a read-only manner.
+  * Last tested with:
+    * GaryOS v1.1
 
 GaryOS is in a forensics mode by default.  Hardware scanning is
 performed, but the hard drives are not mounted or otherwise touched.
@@ -676,11 +699,11 @@ It is a stated goal that forensics mode continue being the default.
 ### Live Update
 [Live Update]: #live-update
 
-* Definition:
-  * Update/install packages using Funtoo/Gentoo tools.
-  * Configure/install X.Org to provide a GUI.
-* Last tested with:
-  * GaryOS v1.1, with 8GB memory
+  * Definition:
+    * Update/install packages using Funtoo/Gentoo tools.
+    * Configure/install X.Org to provide a GUI.
+  * Last tested with:
+    * GaryOS v1.1, with 8GB memory
 
 A complete Funtoo/Gentoo environment is available.  In order to
 install/update packages, a couple of missing items need to be put into
@@ -688,15 +711,16 @@ place.  A surprising number of packages can be installed without filling
 up the in-memory filesystem.
 
 Instructions for setting up update/install of packages:
+
   1. Install "portage" tree.
      * **Option 1:** Download `portage-*` archive from one of the `v#.#`
        version download directories; preferably from the one which
        matches your version of GaryOS.  This option is best if you plan
        to keep this file on the same media along side the GaryOS kernel
        file(s).  To extract:
-       * `tar -pvvxJ -C /usr -f portage-[...].tar.xz`
+         * `tar -pvvxJ -C /usr -f portage-[...].tar.xz`
      * **Option 2:** Synchronize tree as usual.
-       * `emerge --sync`
+         * `emerge --sync`
      * Generally speaking, "Option 1" is a smaller/faster download than
        "Option 2".  It will also be simpler to update from, since it is
        at the same revision of the tree that was used to build that
@@ -709,8 +733,8 @@ Instructions for setting up update/install of packages:
      * `sed -i "s%has_space = False%has_space = True%g"
        /usr/lib/portage/pym/portage/package/ebuild/fetch.py`
      * `alias emerge="I_KNOW_WHAT_I_AM_DOING=true emerge"`
-       * For details, see `"There is NOT at least"` in
-         `/usr/portage/eclass/check-reqs.eclass`
+         * For details, see `"There is NOT at least"` in
+           `/usr/portage/eclass/check-reqs.eclass`
   3. Make desired edits to `/etc/portage` configuration.
      * In particular, to install X.Org the "X" USE flag should be
        enabled (remove `-X` from the end of the `USE` list) and the
@@ -726,16 +750,17 @@ Instructions for setting up update/install of packages:
 ### Installation
 [Installation]: #installation
 
-* Definition:
-  * Install GaryOS to disk as a "stage3" build.
-* Last tested with:
-  * GaryOS v1.1
+  * Definition:
+    * Install GaryOS to disk as a "stage3" build.
+  * Last tested with:
+    * GaryOS v1.1
 
 The in-memory environment is a complete Funtoo/Gentoo installation, as
 shown in the [Live Update] section above.  It can be copied directly to
 a new disk/partition and booted as a fresh installation.
 
 Instructions for installing to disk:
+
   1. Mount formatted disk/partition.
      * e.g. `mke2fs -t ext4 -jv /dev/sda2`
      * e.g. `mount /dev/sda2 /mnt`
@@ -765,26 +790,27 @@ Instructions for installing to disk:
 ### Windows Dual-Boot
 [Windows Dual-Boot]: #windows-dual-boot
 
-* Definition:
-  * Boot using the native Windows bootloader.
-  * No modifications to the hard drive partitions or boot records.
-  * Do not require any files outside of `C:` in the Windows
-    installation.
-* Last tested with:
-  * MBR/GPT only; EFI not built or tested
-  * Windows 7 Ultimate SP1 64-bit
-  * Grub: sys-boot/grub-2.00-r7
-* Research and development:
-  * [http://lists.gnu.org/archive/html/help-grub/2013-08/msg00005.html](http://lists.gnu.org/archive/html/help-grub/2013-08/msg00005.html)
-    * [http://blog.mudy.info/2010/08/boot-grub2-stage2-directly-from-windows-bootmgr-with-grub4dos-stage1](http://blog.mudy.info/2010/08/boot-grub2-stage2-directly-from-windows-bootmgr-with-grub4dos-stage1)
-  * [https://wiki.archlinux.org/index.php/Windows_and_Arch_Dual_Boot#Using_Windows_boot_loader](https://wiki.archlinux.org/index.php/Windows_and_Arch_Dual_Boot#Using_Windows_boot_loader)
-    * [http://www.iceflatline.com/2009/09/how-to-dual-boot-windows-7-and-linux-using-bcdedit](http://www.iceflatline.com/2009/09/how-to-dual-boot-windows-7-and-linux-using-bcdedit)
+  * Definition:
+    * Boot using the native Windows bootloader.
+    * No modifications to the hard drive partitions or boot records.
+    * Do not require any files outside of `C:` in the Windows
+      installation.
+  * Last tested with:
+    * MBR/GPT only; EFI not built or tested
+    * Windows 7 Ultimate SP1 64-bit
+    * Grub: sys-boot/grub-2.00-r7
+  * Research and development:
+    * [http://lists.gnu.org/archive/html/help-grub/2013-08/msg00005.html](http://lists.gnu.org/archive/html/help-grub/2013-08/msg00005.html)
+        * [http://blog.mudy.info/2010/08/boot-grub2-stage2-directly-from-windows-bootmgr-with-grub4dos-stage1](http://blog.mudy.info/2010/08/boot-grub2-stage2-directly-from-windows-bootmgr-with-grub4dos-stage1)
+    * [https://wiki.archlinux.org/index.php/Windows_and_Arch_Dual_Boot#Using_Windows_boot_loader](https://wiki.archlinux.org/index.php/Windows_and_Arch_Dual_Boot#Using_Windows_boot_loader)
+        * [http://www.iceflatline.com/2009/09/how-to-dual-boot-windows-7-and-linux-using-bcdedit](http://www.iceflatline.com/2009/09/how-to-dual-boot-windows-7-and-linux-using-bcdedit)
 
 For convenience and supportability, this case has been mostly automated
 in the `grub.sh` script.  The `gary-os.grub.*` file in the root download
 directory contains an archive of the output of this script.
 
 Overview of the script:
+
   * When run without arguments, it creates a series of Grub images and
     configuration files in the current directory.
   * When run with a single block device argument, the target device will
@@ -792,6 +818,7 @@ Overview of the script:
     example disk image file.
 
 Overview of the output:
+
   * `bcdedit.bat`
     * Used to install/remove the necessary entries from the Windows
       bootloader database.
@@ -810,6 +837,7 @@ Overview of the output:
       environment.
 
 Instructions for Windows bootloader dual-boot:
+
   1. The script assumes a default installation, with a small boot
      partition as partition 1 and Windows `C:` on partition 2.  All
      other partitions must be 3 or higher.  Configurations that do not
@@ -835,6 +863,7 @@ Instructions for Windows bootloader dual-boot:
 If the `bcdedit.guid.txt` file is lost, or otherwise becomes out of
 date with the bootloader database, use the `bcdedit` command as
 Administrator to remove the unwanted entries:
+
   1. Run `cmd` as Administrator.
   2. Run `bcdedit` to view the bootloader database.  Copy the
      `identifier` field for each GaryOS entry.
@@ -847,20 +876,20 @@ Administrator to remove the unwanted entries:
 ### Grub Rescue
 [Grub Rescue]: #grub-rescue
 
-* Definition:
-  * Boot into a mostly complete Grub environment directly from the boot
-    record without requiring any additional files from disk.
-  * Create a Grub "core.img" which can be booted using identical methods
-    and options as GaryOS, such as PXE, Qemu, etc.
-* Last tested with:
-  * Tested in place of GaryOS with both Qemu and PXE.
-    * For details on PXE, see the [PXE Boot] section below.
-  * Grub: sys-boot/grub-2.00-r7
-* Research and development:
-  * [https://www.gnu.org/software/grub/manual/grub.html#BIOS-installation](https://www.gnu.org/software/grub/manual/grub.html#BIOS-installation)
-    * [https://www.gnu.org/software/grub/manual/grub.html#Images](https://www.gnu.org/software/grub/manual/grub.html#Images)
-  * [http://lukeluo.blogspot.com/2013/06/grub-how-to-4-memdisk-and-loopback.html](http://lukeluo.blogspot.com/2013/06/grub-how-to-4-memdisk-and-loopback.html)
-  * [http://wiki.osdev.org/GRUB_2#Disk_image_instructions](http://wiki.osdev.org/GRUB_2#Disk_image_instructions)
+  * Definition:
+    * Boot into a mostly complete Grub environment directly from the
+      boot record without requiring any additional files from disk.
+    * Create a Grub "core.img" which can be booted using identical
+      methods and options as GaryOS, such as PXE, Qemu, etc.
+  * Last tested with:
+    * Tested in place of GaryOS with both Qemu and PXE.
+        * For details on PXE, see the [PXE Boot] section below.
+    * Grub: sys-boot/grub-2.00-r7
+  * Research and development:
+    * [https://www.gnu.org/software/grub/manual/grub.html#BIOS-installation](https://www.gnu.org/software/grub/manual/grub.html#BIOS-installation)
+        * [https://www.gnu.org/software/grub/manual/grub.html#Images](https://www.gnu.org/software/grub/manual/grub.html#Images)
+    * [http://lukeluo.blogspot.com/2013/06/grub-how-to-4-memdisk-and-loopback.html](http://lukeluo.blogspot.com/2013/06/grub-how-to-4-memdisk-and-loopback.html)
+    * [http://wiki.osdev.org/GRUB_2#Disk_image_instructions](http://wiki.osdev.org/GRUB_2#Disk_image_instructions)
 
 For convenience and supportability, this case has also been automated in
 the `grub.sh` script.  The `gary-os.grub.*` file in the root download
@@ -870,6 +899,7 @@ Dual-Boot] section above has more details on the `grub.sh` script and
 its usage and output.
 
 Instructions for Grub "rescue" image installation to hard disk:
+
   1. Create an empty working directory:
      * e.g. `mkdir /tmp/grub`
   2. Change into the working directory:
@@ -889,22 +919,23 @@ Instructions for Grub "rescue" image installation to hard disk:
 ### PXE Boot
 [PXE Boot]: #pxe-boot
 
-* Definition:
-  * Boot from a PXE environment.
-  * With some modification of the Funtoo/Gentoo configuration and
-    package list, this Metro automation can be used to create a lab
-    workstation or other automated environment where a reboot completely
-    resets each machine involved.
-* Last tested with:
-  * DHCPd: net-misc/dhcp-4.2.5_p1
-  * TFTPd: net-misc/iputils-20121221
-  * iPXE:  sys-firmware/ipxe-1.0.0_p20130624
-* Research and development:
-  * [https://wiki.archlinux.org/index.php/archboot#PXE_booting_.2F_Rescue_system](https://wiki.archlinux.org/index.php/archboot#PXE_booting_.2F_Rescue_system)
+  * Definition:
+    * Boot from a PXE environment.
+    * With some modification of the Funtoo/Gentoo configuration and
+      package list, this Metro automation can be used to create a lab
+      workstation or other automated environment where a reboot
+      completely resets each machine involved.
+  * Last tested with:
+    * DHCPd: net-misc/dhcp-4.2.5_p1
+    * TFTPd: net-misc/iputils-20121221
+    * iPXE:  sys-firmware/ipxe-1.0.0_p20130624
+  * Research and development:
+    * [https://wiki.archlinux.org/index.php/archboot#PXE_booting_.2F_Rescue_system](https://wiki.archlinux.org/index.php/archboot#PXE_booting_.2F_Rescue_system)
 
 Once you have a functioning PXE environment, on a global or per-host
 basis add the following configuration option to `dhcpd.conf`:
+
   * `filename "gary-os-[...].kernel";`
 
-------------------------------------------------------------------------
+************************************************************************
 ###### End Of File
