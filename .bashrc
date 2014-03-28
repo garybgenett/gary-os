@@ -209,6 +209,19 @@ if [[ ${PROMPT} == [+]*(*) ]]; then
 	alias quit="${IMPERSONATE_QUIT} prompt"
 	eval ${IMPERSONATE_TRAP}
 fi
+if [[ ${PROMPT} == task ]]; then
+	function impersonate_command {
+		if [[ -z ${@} ]]; then
+			task
+		elif [[ ${1} == [=] ]]; then
+			zpim-commit tasks
+		else
+			declare PROJECT="${1}" && shift
+			${EDITOR} -c "map = <ESC>:!task _read project:${PROJECT} ${@}<CR>"
+		fi
+		return 0
+	}
+fi
 
 export PS1="\u@\h:\w\\$ "
 export PS1="\
