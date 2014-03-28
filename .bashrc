@@ -166,12 +166,48 @@ else
 	export PROMPT="${PROMPT}"
 	export PROMPT_KEY="( ${PROMPT} )"
 fi
-export PROMPT_COMMAND="echo -en \"${PRE_PROMPT}\""
+export PROMPT_COMMAND="IMPERSONATE_MODE=\"true\"; echo -en \"${PRE_PROMPT}\";"
 if [[ -n ${PROMPT_KEY} ]] &&
    [[ ${BASH_EXECUTION_STRING/%\ *} != rsync  ]] &&
    [[ ${BASH_EXECUTION_STRING/%\ *} != scp    ]] &&
    [[ ${BASH_EXECUTION_STRING/%\ *} != unison ]]; then
 	eval "echo -en \"${PRE_PROMPT}\""
+fi
+
+# http://superuser.com/questions/175799/does-bash-have-a-hook-that-is-run-before-executing-a-command
+# http://hints.macworld.com/dlfiles/preexec.bash.txt
+export IMPERSONATE_MODE="false"
+export IMPERSONATE_QUIT="shopt -u extdebug; trap - DEBUG;"
+export IMPERSONATE_TRAP="shopt -s extdebug; trap impersonate_shell DEBUG;"
+eval ${IMPERSONATE_QUIT}
+if [[ ${PROMPT} == [+]*(*) ]]; then
+	export PROMPT="${PROMPT/#+}"
+	PROMPT_TOKEN_PWD="\[\e[7;37m\](${PROMPT}:\W)${PROMPT_TOKEN_DFL}"
+	HISTFILE="${HOSTNAME}.${USER}.${PROMPT}.$(date +%Y-%m)"
+	HISTFILE="${HOME}/.history/shell/${HISTFILE}"
+	function impersonate_command { return 0; }
+	function impersonate_shell {
+		if [[ -n ${COMP_LINE} ]] ||
+		   (( ${BASH_SUBSHELL} > 0 )) ||
+		   [[ ${BASH_COMMAND} == IMPERSONATE_MODE[=]\"true\" ]] ||
+		   [[ ${BASH_COMMAND} == echo*(*){PROMPT_KEY}*(*) ]] ||
+		   ! ${IMPERSONATE_MODE}
+		then
+			return 0
+		else
+			IMPERSONATE_MODE="false"
+		fi
+		if [[ ${BASH_COMMAND} == [:]*(*) ]]; then
+			${BASH_COMMAND/#:}
+		elif [[ ${BASH_COMMAND} == [.]*(*) ]]; then
+			impersonate_command ${BASH_COMMAND/#.}
+		else
+			${PROMPT} ${BASH_COMMAND}
+		fi
+		return 1
+	}
+	alias quit="${IMPERSONATE_QUIT} prompt"
+	eval ${IMPERSONATE_TRAP}
 fi
 
 export PS1="\u@\h:\w\\$ "
