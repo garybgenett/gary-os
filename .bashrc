@@ -156,26 +156,22 @@ if { [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; } &&
 fi
 
 if [[ ${PROMPT} == simple ]]; then
-	export PROMPT="simple"
-	export PROMPT_KEY=
-	export PROMPT_COMMAND=
-	echo -en "\e]0;\a"	# clear xterm title
+	export PROMPT=
 	PROMPT_TOKEN_PWD="<\W>"
+fi
+if [[ -z ${PROMPT} ]]; then
+	export PROMPT=
+	export PROMPT_KEY=
 else
-	if [[ -z ${PROMPT} ]]; then
-		export PROMPT=
-		export PROMPT_KEY=
-	else
-		export PROMPT="${PROMPT}"
-		export PROMPT_KEY="( ${PROMPT} )"
-	fi
-	export PROMPT_COMMAND="echo -en \"${PRE_PROMPT}\""
-	if [[ -n ${PROMPT_KEY} ]] &&
-	   [[ ${BASH_EXECUTION_STRING/%\ *} != rsync  ]] &&
-	   [[ ${BASH_EXECUTION_STRING/%\ *} != scp    ]] &&
-	   [[ ${BASH_EXECUTION_STRING/%\ *} != unison ]]; then
-		eval "echo -en \"${PRE_PROMPT}\""
-	fi
+	export PROMPT="${PROMPT}"
+	export PROMPT_KEY="( ${PROMPT} )"
+fi
+export PROMPT_COMMAND="echo -en \"${PRE_PROMPT}\""
+if [[ -n ${PROMPT_KEY} ]] &&
+   [[ ${BASH_EXECUTION_STRING/%\ *} != rsync  ]] &&
+   [[ ${BASH_EXECUTION_STRING/%\ *} != scp    ]] &&
+   [[ ${BASH_EXECUTION_STRING/%\ *} != unison ]]; then
+	eval "echo -en \"${PRE_PROMPT}\""
 fi
 
 export PS1="\u@\h:\w\\$ "
