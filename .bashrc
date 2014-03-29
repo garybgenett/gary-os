@@ -1905,7 +1905,7 @@ function shell {
 		shift
 	fi
 	cd
-	prompt -x "${PROMPT_NAME}"
+	[[ ${PROMPT_NAME} != shell-root ]] && prompt -x "${PROMPT_NAME}"
 	eval TERM="${SHELL_TERM}" ${SSH} ${LOG}@${DEST} ${OPTS} "${@}"
 	prompt
 	cd - >/dev/null
