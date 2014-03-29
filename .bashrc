@@ -183,8 +183,10 @@ eval ${IMPERSONATE_QUIT}
 if [[ ${PROMPT} == [+]*(*) ]]; then
 	export PROMPT="${PROMPT/#+}"
 	PROMPT_TOKEN_PWD="\[\e[7;37m\](${PROMPT}:\W)${PROMPT_TOKEN_DFL}"
+	history -a
 	HISTFILE="${HOSTNAME}.${USER}.${PROMPT}.$(date +%Y-%m)"
 	HISTFILE="${HOME}/.history/shell/${HISTFILE}"
+	history -r
 	function impersonate_command { return 0; }
 	function impersonate_shell {
 		if [[ -n ${COMP_LINE} ]] ||
