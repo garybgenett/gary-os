@@ -208,7 +208,7 @@ if [[ ${PROMPT} == [+]*(*) ]]; then
 		fi
 		return 1
 	}
-	alias quit="${IMPERSONATE_QUIT} prompt"
+	alias quit="${IMPERSONATE_QUIT} history -a; prompt; history -r;"
 	eval ${IMPERSONATE_TRAP}
 fi
 if [[ ${PROMPT} == task ]]; then
