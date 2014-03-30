@@ -18,14 +18,13 @@ if [[ ${1} == -v ]]; then
 	declare PKG
 	for PKG in $(
 		${GREP} -v "^[#]" ${HOME}/setup/gentoo/package.keywords |
+		${GREP} -v "^$" |
 		cut -f1 |
 		sort
 	); do
 		echo -en "\n"
-		${GREP} ${PKG} ${CUR}/_gentoo/.emerge |
-			${GREP} --only-matching "${PKG}[^[:space:]]+"
-		${GREP} --with-filename "KEYWORDS" ${NEW}/usr/portage/${PKG}/*.ebuild |
-			${GREP} "[^~]amd64" |
+		${GREP} --only-matching "${PKG}[-][0-9][^[:space:]]*" ${CUR}/_gentoo/.emerge
+		${GREP} --with-filename "KEYWORDS[=].*[^~]amd64" ${NEW}/usr/portage/${PKG}/*.ebuild |
 			${SED} -e "s|^.+/||g" -e "s|:.+$||g"
 	done
 	exit 0
