@@ -100,6 +100,8 @@ media-libs/libdvdcss			~*		# gentoo required
 
 ########################################
 
+app-misc/task				~*
+
 x11-wm/openbox				~*
 
 x11-misc/dmenu				~*
