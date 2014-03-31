@@ -98,10 +98,12 @@ www-client/lynx
 #>>>www-client/w3m
 
 app-misc/screen
+app-misc/tmux
 app-shells/bash
 app-shells/bash-completion
 sys-apps/kbd
 sys-devel/gettext
+sys-libs/gpm
 
 dev-lang/perl
 dev-libs/libpcre
