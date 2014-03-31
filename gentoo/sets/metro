@@ -282,6 +282,7 @@ net-analyzer/tcptrace
 net-analyzer/tcptraceroute
 net-analyzer/traceroute
 net-analyzer/vnstat
+net-dns/avahi
 net-dns/bind-tools
 net-misc/cadaver
 net-misc/iperf
