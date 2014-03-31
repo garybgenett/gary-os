@@ -212,6 +212,7 @@ dev-vcs/cvs2svn
 dev-vcs/cvsps
 dev-vcs/git
 dev-vcs/gitolite
+dev-vcs/mercurial
 dev-vcs/subversion
 
 dev-lang/perl
