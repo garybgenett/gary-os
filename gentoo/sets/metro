@@ -201,6 +201,12 @@ dev-perl/Template-Tiny
 dev-perl/Template-Toolkit
 dev-perl/Template-XML
 
+app-editors/retext
+app-text/pandoc
+dev-haskell/pandoc-citeproc
+dev-haskell/pandoc-types
+dev-perl/Text-Markdown
+
 app-text/docbook-xml-dtd
 app-text/docbook-xsl-ns-stylesheets
 app-text/docbook-xsl-stylesheets
