@@ -384,15 +384,16 @@ net-misc/quagga
 net-misc/radvd
 net-misc/tor
 net-nds/openldap
-net-print/cups
 net-wireless/hostapd
-www-misc/awstats
 
 app-admin/apache-tools
 #>>>www-apache/mod_perl
+www-misc/awstats
 www-servers/apache
 
 app-text/ghostscript-gpl
+net-print/cups
+net-print/cups-filters
 net-print/foomatic-db
 net-print/foomatic-db-engine
 net-print/foomatic-filters
