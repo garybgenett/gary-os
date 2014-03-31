@@ -176,15 +176,16 @@ fi
 
 # http://superuser.com/questions/175799/does-bash-have-a-hook-that-is-run-before-executing-a-command
 # http://hints.macworld.com/dlfiles/preexec.bash.txt
+export IMPERSONATE_NAME=
 export IMPERSONATE_MODE="false"
 export IMPERSONATE_QUIT="shopt -u extdebug; trap - DEBUG;"
 export IMPERSONATE_TRAP="shopt -s extdebug; trap impersonate_shell DEBUG;"
 eval ${IMPERSONATE_QUIT}
 if [[ ${PROMPT} == [+]*(*) ]]; then
-	export PROMPT="${PROMPT/#+}"
-	PROMPT_TOKEN_PWD="\[\e[7;37m\](${PROMPT}:\W)${PROMPT_TOKEN_DFL}"
+	export IMPERSONATE_NAME="${PROMPT/#+}"
+	PROMPT_TOKEN_PWD="\[\e[7;37m\](${IMPERSONATE_NAME}:\W)${PROMPT_TOKEN_DFL}"
 	history -a
-	HISTFILE="${HOSTNAME}.${USER}.${PROMPT}.$(date +%Y-%m)"
+	HISTFILE="${HOSTNAME}.${USER}.${IMPERSONATE_NAME}.$(date +%Y-%m)"
 	HISTFILE="${HOME}/.history/shell/${HISTFILE}"
 	history -r
 	function impersonate_command { return 0; }
@@ -206,25 +207,12 @@ if [[ ${PROMPT} == [+]*(*) ]]; then
 		elif [[ ${BASH_COMMAND} == [.]*(*) ]]; then
 			impersonate_command ${BASH_COMMAND/#.}
 		else
-			${PROMPT} ${BASH_COMMAND}
+			${IMPERSONATE_NAME} ${BASH_COMMAND}
 		fi
 		return 1
 	}
 	alias quit="${IMPERSONATE_QUIT} history -a; prompt; history -r;"
 	eval ${IMPERSONATE_TRAP}
-fi
-if [[ ${PROMPT} == task ]]; then
-	function impersonate_command {
-		if [[ -z ${@} ]]; then
-			task
-		elif [[ ${1} == [=] ]]; then
-			zpim-commit tasks
-		else
-			declare PROJECT="${1}" && shift
-			${EDITOR} -c "map = <ESC>:!task _read project:${PROJECT} ${@}<CR>"
-		fi
-		return 0
-	}
 fi
 
 export PS1="\u@\h:\w\\$ "
@@ -2076,6 +2064,25 @@ function zpim-commit {
 	fi
 	return 0
 }
+
+################################################################################
+# impersonate functions
+################################################################################
+
+if [[ ${IMPERSONATE_NAME} == task ]]; then
+	unalias -a
+	function impersonate_command {
+		if [[ -z ${@} ]]; then
+			task
+		elif [[ ${1} == [=] ]]; then
+			zpim-commit tasks
+		else
+			declare PROJECT="${1}" && shift
+			${EDITOR} -c "map = <ESC>:!task _read project:${PROJECT} ${@}<CR>"
+		fi
+		return 0
+	}
+fi
 
 ################################################################################
 # end of file
