@@ -107,6 +107,8 @@ sys-libs/gpm
 
 dev-lang/perl
 dev-libs/libpcre
+dev-perl/Curses
+dev-perl/Curses-UI
 dev-perl/DateManip
 dev-perl/Expect
 dev-perl/Sys-Virt
