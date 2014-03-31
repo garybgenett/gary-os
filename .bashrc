@@ -2077,9 +2077,29 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		if [[ ${1} == [=] ]]; then
 			shift
 			cat ${SHDW} | perl -e '
+				use strict;
+				use warnings;
+				use JSON::PP;
+				use MIME::Base64;
 				my $tasks = do { local $/; <STDIN> }; $tasks =~ s/\n+//; $tasks = "{\"tasks\":[${tasks}]}";
-				use JSON::PP; my $json = JSON::PP->new; print $json->pretty->encode($json->decode(${tasks}));
-			'
+				my $json = JSON::PP->new; $tasks = $json->decode(${tasks});
+				print $json->pretty->encode(${tasks});
+				my $outfile = ${ARGV[0]};
+				open(OUTFILE, ">", ${outfile}) || die();
+				foreach my $task (@{ $tasks->{"tasks"} }) {
+					print OUTFILE "\n" . (">" x 10) . "[" . $task->{"uuid"} . " :: " . $task->{"description"} . "]" . ("<" x 10) . "\n";
+					foreach my $annotation (@{ $task->{"annotations"} }) {
+						if ($annotation->{"description"} =~ /^notes[:]/) {
+							my $output = $annotation->{"description"};
+							$output =~ s/^notes[:]//g;
+							print OUTFILE decode_base64(${output});
+						};
+					};
+					print OUTFILE "\n";
+				};
+				print OUTFILE "\n" . (">" x 10) . "[end of file]" . ("<" x 10) . "\n";
+				close(OUTFILE) || die();
+			' ${SHDW/%.json/.txt}
 			declare CONTINUE
 			read CONTINUE
 			zpim-commit tasks "${@}"
