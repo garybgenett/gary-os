@@ -322,16 +322,20 @@ app-text/tree
 sys-apps/dstat
 sys-apps/pv
 
+net-analyzer/argus
+net-analyzer/argus-clients
 net-analyzer/arping
 net-analyzer/dnstracer
 net-analyzer/httping
 net-analyzer/iftop
 net-analyzer/iptraf-ng
 net-analyzer/macchanger
+net-analyzer/net-snmp
 net-analyzer/netcat6
 net-analyzer/nethogs
 net-analyzer/ngrep
 net-analyzer/nmap
+net-analyzer/rrdtool
 net-analyzer/snort
 net-analyzer/ssldump
 net-analyzer/tcpdump
