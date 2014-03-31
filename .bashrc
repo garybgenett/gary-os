@@ -2073,11 +2073,6 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 	unalias -a
 	function impersonate_command {
 		declare TDIR="$(task show data.location | ${GREP} "data[.]location" | awk '{print $2;}')"
-		declare OPEN="%{"
-		declare CLOSE="%}"
-		declare NEWLINE="%n"
-		declare QUOTE="%'"
-		declare TAB="%t"
 		if [[ ${1} == [=] ]]; then
 			shift
 			zpim-commit tasks "${@}"
@@ -2093,18 +2088,18 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				return 0
 			fi
 			${GREP} -r "uuid:[\"]${UUID}[\"]" ${TDIR}/{completed,pending}.data |
-				perl -p -e 's/^.*annotation_[0-9]{10}:["][&]open[;]notes[&]close[;][ ]([^"]+)["].*$/\1/g' |
-				perl -p -e "s/${OPEN}/\[/g; s/${CLOSE}/\]/g; s/${NEWLINE}/\n/g; s/${QUOTE}/\"/g; s/${TAB}/\t/g;" \
+				perl -p -e 's/^.*annotation_[0-9]{10}:["]notes[:]([^"]+)["].*$/\1/g' |
+				base64 --wrap=0 --decode --ignore-garbage \
 				>${TDIR}/${UUID}
 			${EDITOR} -c "${EMAP}" ${TDIR}/${UUID}
 			if [[ -s ${TDIR}/${UUID} ]]; then
-				task ${UUID} denotate -- "[notes]"
+				task ${UUID} denotate -- "notes:"
 			fi
 			if [[ -s ${TDIR}/${UUID} ]] && [[ $(cat ${TDIR}/${UUID}) != delete ]]; then
-				task ${UUID} annotate -- "[notes] $(
+				task ${UUID} annotate -- "notes:$(
 					cat ${TDIR}/${UUID} |
 					perl -e 'my $notes = do { local $/; <STDIN> }; $notes =~ s/\n+$//; print "${notes}";' |
-					perl -p -e "s/\[/${OPEN}/g; s/\]/${CLOSE}/g; s/\n/${NEWLINE}/g; s/\"/${QUOTE}/g; s/\t/${TAB}/g;"
+					base64 --wrap=0
 				)"
 			fi
 			${RM} ${TDIR}/${UUID}
