@@ -2072,9 +2072,16 @@ function zpim-commit {
 if [[ ${IMPERSONATE_NAME} == task ]]; then
 	unalias -a
 	function impersonate_command {
-		declare TDIR="$(task show data.location | ${GREP} "data[.]location" | awk '{print $2;}')"
+		declare TDIR="$(task show data.location	| ${GREP} "data[.]location"	| awk '{print $2;}')"
+		declare SHDW="$(task show shadow.file	| ${GREP} "shadow[.]file"	| awk '{print $2;}')"
 		if [[ ${1} == [=] ]]; then
 			shift
+			cat ${SHDW} | perl -e '
+				my $tasks = do { local $/; <STDIN> }; $tasks =~ s/\n+//; $tasks = "{\"tasks\":[${tasks}]}";
+				use JSON::PP; my $json = JSON::PP->new; print $json->pretty->encode($json->decode(${tasks}));
+			'
+			declare CONTINUE
+			read CONTINUE
 			zpim-commit tasks "${@}"
 		elif [[ ${1} == [?] ]]; then
 			shift
