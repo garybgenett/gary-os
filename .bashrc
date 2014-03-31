@@ -2072,13 +2072,15 @@ function zpim-commit {
 if [[ ${IMPERSONATE_NAME} == task ]]; then
 	unalias -a
 	function impersonate_command {
-		if [[ -z ${@} ]]; then
-			task
-		elif [[ ${1} == [=] ]]; then
-			zpim-commit tasks
-		else
+		if [[ ${1} == [=] ]]; then
+			shift
+			zpim-commit tasks "${@}"
+		elif [[ ${1} == [?] ]]; then
+			shift
 			declare PROJECT="${1}" && shift
-			${EDITOR} -c "map = <ESC>:!task _read project:${PROJECT} ${@}<CR>"
+			${EDITOR} -c "map ? <ESC>:!task _read project:${PROJECT} ${@}<CR>"
+		else
+			task limit:12 "${@}"
 		fi
 		return 0
 	}
