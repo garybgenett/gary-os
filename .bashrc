@@ -193,6 +193,8 @@ if [[ ${PROMPT} == [+]*(*) ]]; then
 		   (( ${BASH_SUBSHELL} > 0 )) ||
 		   [[ ${BASH_COMMAND} == IMPERSONATE_MODE[=]\"true\" ]] ||
 		   [[ ${BASH_COMMAND} == echo*(*){PROMPT_KEY}*(*) ]] ||
+		   [[ ${BASH_COMMAND} == shopt*(*) ]] ||
+		   [[ ${BASH_COMMAND} == trap*(*) ]] ||
 		   ! ${IMPERSONATE_MODE}
 		then
 			return 0
