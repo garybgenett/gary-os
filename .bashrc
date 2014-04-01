@@ -2062,6 +2062,7 @@ function zpim-commit {
 		${GIT_ADD} ${FILE}*
 		${GIT_CMT} ${FILE}* --edit --message "Updated \"${FILE}\"."
 	fi
+	${GIT_STS}
 	return 0
 }
 
