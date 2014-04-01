@@ -2087,6 +2087,9 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				my $outfile = ${ARGV[0]};
 				open(OUTFILE, ">", ${outfile}) || die();
 				foreach my $task (@{ $tasks->{"tasks"} }) {
+					if (!defined($task->{"annotations"})) {
+						next;
+					};
 					print OUTFILE "\n" . (">" x 10) . "[" . $task->{"uuid"} . " :: " . $task->{"description"} . "]" . ("<" x 10) . "\n";
 					foreach my $annotation (@{ $task->{"annotations"} }) {
 						if ($annotation->{"description"} =~ /^notes[:]/) {
