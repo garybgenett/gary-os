@@ -2149,7 +2149,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		if [[ ${1} == [=] ]]; then
 			shift
 			task-export-text
-			task-export
+#>>>			task-export
 			declare CONTINUE && read CONTINUE
 			zpim-commit tasks "${@}"
 		elif [[ ${1} == [+] ]]; then
