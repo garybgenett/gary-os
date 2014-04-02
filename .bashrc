@@ -1159,11 +1159,7 @@ function gtasks {
 	else
 		gtasks_export.pl "${@}"	&&
 			read		&&
-			${GIT_CMT}	\
-				.auth	\
-				.token	\
-				tasks*	\
-				--edit --message "Updated \"tasks\"."
+			zpim-commit tasks
 	fi
 	return 0
 }
@@ -2060,8 +2056,12 @@ function zpim-commit {
 	${SED} -i "s/<HR>([[:space:]])/<HR>\n\1/g" bookmarks.html
 	if [[ -n "${@}" ]]; then
 		declare FILE="${1}" && shift
-		${GIT_ADD} ${FILE}*
-		${GIT_CMT} ${FILE}* --edit --message "Updated \"${FILE}\"."
+		declare FILES=
+		if [[ ${FILE} == tasks ]]; then
+			FILES=".auth .token"
+		fi
+		${GIT_ADD} ${FILE}* ${FILES}
+		${GIT_CMT} ${FILE}* ${FILES} --edit --message "Updated \"${FILE}\"."
 	fi
 	${GIT_STS}
 	return 0
@@ -2151,7 +2151,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			task-export-text
 #>>>			task-export
 			declare CONTINUE && read CONTINUE
-			zpim-commit tasks "${@}"
+			zpim-commit tasks
 		elif [[ ${1} == [+] ]]; then
 			shift
 			task-notes "${@}"
