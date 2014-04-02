@@ -2070,6 +2070,17 @@ function zpim-commit {
 # impersonate functions
 ################################################################################
 
+function task-export {
+	cd ${PIMDIR}
+	gtasks_export.pl taskwarrior "_Data"		"(project:_data)"
+	gtasks_export.pl taskwarrior "Agenda"		"(status:pending tags:agenda (due.none: or +DUE))"
+	gtasks_export.pl taskwarrior "Reminders"	"(status:pending due.any: )"
+	cd - >/dev/null
+	return 0
+}
+
+########################################
+
 function task-export-text {
 	declare SHDW="$(task show shadow.file | ${GREP} "shadow[.]file" | awk '{print $2;}')"
 	cat ${SHDW} | perl -e '
@@ -2137,6 +2148,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		if [[ ${1} == [=] ]]; then
 			shift
 			task-export-text
+			task-export
 			declare CONTINUE && read CONTINUE
 			zpim-commit tasks "${@}"
 		elif [[ ${1} == [+] ]]; then
