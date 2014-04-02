@@ -1028,6 +1028,7 @@ function git-export {
 	)							|| return 1
 	if [[ -n ${EXP_GIT} ]]; then
 		(cd ${EXP_DIR}/.${EXP_NAM} &&
+			git-clean &&
 			${GIT} push --mirror ${EXP_GIT}
 		)						|| return 1
 	fi
