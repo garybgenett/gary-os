@@ -183,7 +183,6 @@ if [[ ${1} == -! ]]; then
 			${GIT} tag --force ${RELEASE[${NUM}]} ${FILE}	|| return 1
 			NUM="$((${NUM}+1))"				|| return 1
 		done
-		git-clean						|| return 1
 		return 0
 	}
 	git-export ${TITLE} ${REL_DIR} ${GITHUB} \
