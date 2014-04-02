@@ -2103,42 +2103,49 @@ function task-export-text {
 
 ########################################
 
+function task-notes {
+	declare TDIR="$(task show data.location | ${GREP} "data[.]location" | awk '{print $2;}')"
+	declare UUID="$(task uuid kind:notes "${@}" | tr ',' '\n' | head -n1)"
+	declare EMAP="map ? <ESC>:!task read \"${@}\"<CR>"
+	if [[ -z ${UUID} ]]; then
+		return 1
+	fi
+	${GREP} -r "uuid:[\"]${UUID}[\"]" ${TDIR}/{completed,pending}.data |
+		perl -p -e 's/^.*annotation_[0-9]{10}:["]notes[:]([^"]+)["].*$/\1/g' |
+		base64 --wrap=0 --decode --ignore-garbage \
+		>${TDIR}/${UUID}
+	${EDITOR} -c "${EMAP}" ${TDIR}/${UUID}
+	if [[ -s ${TDIR}/${UUID} ]]; then
+		task ${UUID} denotate -- "notes:"
+	fi
+	if [[ -s ${TDIR}/${UUID} ]] && [[ $(cat ${TDIR}/${UUID}) != "delete" ]]; then
+		task ${UUID} annotate -- "notes:$(
+			cat ${TDIR}/${UUID} |
+			perl -e 'my $notes = do { local $/; <STDIN> }; $notes =~ s/\n+$//; print "${notes}";' |
+			base64 --wrap=0
+		)"
+	fi
+	${RM} ${TDIR}/${UUID}
+	return 0
+}
+
+########################################
+
 if [[ ${IMPERSONATE_NAME} == task ]]; then
 	unalias -a
 	function impersonate_command {
-		declare TDIR="$(task show data.location	| ${GREP} "data[.]location"	| awk '{print $2;}')"
 		if [[ ${1} == [=] ]]; then
 			shift
 			task-export-text
 			declare CONTINUE && read CONTINUE
 			zpim-commit tasks "${@}"
+		elif [[ ${1} == [+] ]]; then
+			shift
+			task-notes "${@}"
 		elif [[ ${1} == [?] ]]; then
 			shift
 			declare PROJECT="${1}" && shift
-			${FUNCNAME} notes project:${PROJECT} "${@}"
-		elif [[ ${1} == notes ]]; then
-			shift
-			declare EMAP="map ? <ESC>:!task read ${@}<CR>"
-			declare UUID="$(task uuid kind:notes "${@}" | tr ',' '\n' | head -n1)"
-			if [[ -z ${UUID} ]]; then
-				return 1
-			fi
-			${GREP} -r "uuid:[\"]${UUID}[\"]" ${TDIR}/{completed,pending}.data |
-				perl -p -e 's/^.*annotation_[0-9]{10}:["]notes[:]([^"]+)["].*$/\1/g' |
-				base64 --wrap=0 --decode --ignore-garbage \
-				>${TDIR}/${UUID}
-			${EDITOR} -c "${EMAP}" ${TDIR}/${UUID}
-			if [[ -s ${TDIR}/${UUID} ]]; then
-				task ${UUID} denotate -- "notes:"
-			fi
-			if [[ -s ${TDIR}/${UUID} ]] && [[ $(cat ${TDIR}/${UUID}) != delete ]]; then
-				task ${UUID} annotate -- "notes:$(
-					cat ${TDIR}/${UUID} |
-					perl -e 'my $notes = do { local $/; <STDIN> }; $notes =~ s/\n+$//; print "${notes}";' |
-					base64 --wrap=0
-				)"
-			fi
-			${RM} ${TDIR}/${UUID}
+			task-notes "(project:${PROJECT} ${@})"
 		else
 			task limit:12 "${@}"
 		fi
