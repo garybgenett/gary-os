@@ -2093,7 +2093,7 @@ function task-export-text {
 		my $json = JSON::PP->new; print $json->pretty->encode(${tasks});
 		my $outfile = ${ARGV[0]};
 		open(OUTFILE, ">", ${outfile}) || die();
-		foreach my $task (@{${tasks}}) {
+		foreach my $task (sort({$a->{"description"} cmp $b->{"description"}} @{${tasks}})) {
 			if (!defined($task->{"annotations"})) {
 				next;
 			};
