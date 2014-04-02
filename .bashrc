@@ -2073,9 +2073,9 @@ function zpim-commit {
 
 function task-export {
 	cd ${PIMDIR}
-	gtasks_export.pl taskwarrior "_Data"		"(project:_data)"
-	gtasks_export.pl taskwarrior "Agenda"		"(status:pending tags:agenda (due.none: or +DUE))"
-	gtasks_export.pl taskwarrior "Reminders"	"(status:pending due.any: )"
+	gtasks_export.pl taskwarrior "_Data"		"(project:_data)"					""
+	gtasks_export.pl taskwarrior "Agenda"		"(status:pending tags:agenda (due.none: or +DUE))"	"due"
+	gtasks_export.pl taskwarrior "Reminders"	"(status:pending due.any: )"				"due"
 	cd - >/dev/null
 	return 0
 }
