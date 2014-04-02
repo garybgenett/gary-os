@@ -2082,17 +2082,16 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				use warnings;
 				use JSON::PP;
 				use MIME::Base64;
-				my $tasks = do { local $/; <STDIN> }; $tasks =~ s/\n+//; $tasks = "{\"tasks\":[${tasks}]}";
-				my $json = JSON::PP->new; $tasks = $json->decode(${tasks});
-				print $json->pretty->encode(${tasks});
+				my $tasks = do { local $/; <STDIN> }; $tasks = decode_json("[${tasks}]");
+				my $json = JSON::PP->new; print $json->pretty->encode(${tasks});
 				my $outfile = ${ARGV[0]};
 				open(OUTFILE, ">", ${outfile}) || die();
-				foreach my $task (@{ $tasks->{"tasks"} }) {
+				foreach my $task (@{${tasks}}) {
 					if (!defined($task->{"annotations"})) {
 						next;
 					};
 					print OUTFILE "\n" . (">" x 10) . "[" . $task->{"uuid"} . " :: " . $task->{"description"} . "]" . ("<" x 10) . "\n";
-					foreach my $annotation (@{ $task->{"annotations"} }) {
+					foreach my $annotation (@{$task->{"annotations"}}) {
 						if ($annotation->{"description"} =~ /^notes[:]/) {
 							my $output = $annotation->{"description"};
 							$output =~ s/^notes[:]//g;
@@ -2116,7 +2115,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			declare EMAP="map ? <ESC>:!task read ${@}<CR>"
 			declare UUID="$(task uuid kind:notes "${@}" | tr ',' '\n' | head -n1)"
 			if [[ -z ${UUID} ]]; then
-				return 0
+				return 1
 			fi
 			${GREP} -r "uuid:[\"]${UUID}[\"]" ${TDIR}/{completed,pending}.data |
 				perl -p -e 's/^.*annotation_[0-9]{10}:["]notes[:]([^"]+)["].*$/\1/g' |
