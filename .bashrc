@@ -2084,32 +2084,33 @@ function task-export {
 
 function task-export-text {
 	declare SHDW="$(task show shadow.file | ${GREP} "shadow[.]file" | awk '{print $2;}')"
-	cat ${SHDW} | perl -e '
+	task export | perl -e '
 		use strict;
 		use warnings;
 		use JSON::PP;
 		use MIME::Base64;
 		my $tasks = do { local $/; <STDIN> }; $tasks = decode_json("[${tasks}]");
-		my $json = JSON::PP->new; print $json->pretty->encode(${tasks});
-		my $outfile = ${ARGV[0]};
-		open(OUTFILE, ">", ${outfile}) || die();
+		open(JSON, ">", ${ARGV[0]} . ".json") || die();
+		open(NOTE, ">", ${ARGV[0]} . ".txt") || die();
+		my $json = JSON::PP->new; print JSON $json->pretty->encode(${tasks});
 		foreach my $task (sort({$a->{"description"} cmp $b->{"description"}} @{${tasks}})) {
 			if (!defined($task->{"annotations"})) {
 				next;
 			};
-			print OUTFILE "\n" . (">" x 10) . "[" . $task->{"uuid"} . " :: " . $task->{"description"} . "]" . ("<" x 10) . "\n";
 			foreach my $annotation (@{$task->{"annotations"}}) {
 				if ($annotation->{"description"} =~ /^notes[:]/) {
 					my $output = $annotation->{"description"};
 					$output =~ s/^notes[:]//g;
-					print OUTFILE decode_base64(${output});
+					print NOTE "\n" . (">" x 10) . "[" . $task->{"uuid"} . " :: " . $task->{"description"} . "]" . ("<" x 10) . "\n";
+					print NOTE decode_base64(${output});
+					print NOTE "\n";
 				};
 			};
-			print OUTFILE "\n";
 		};
-		print OUTFILE "\n" . (">" x 10) . "[end of file]" . ("<" x 10) . "\n";
-		close(OUTFILE) || die();
-	' ${SHDW/%.json/.txt}
+		print NOTE "\n" . (">" x 10) . "[end of file]" . ("<" x 10) . "\n";
+		close(JSON) || die();
+		close(NOTE) || die();
+	' ${SHDW/%.json}
 	return 0
 }
 
