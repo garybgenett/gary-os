@@ -2094,19 +2094,76 @@ function task-export-text {
 		use strict;
 		use warnings;
 		use JSON::PP;
+		use POSIX qw(strftime);
+		use Time::Local qw(timegm);
 		use MIME::Base64;
 		my $root = qx(task show data.location); $root =~ m/(data[.]location)\s+([^\s]+)/; $root = $2;
 		my $data = decode_json("[" . qx(task export) . "]");
 		open(JSON, ">", ${root} . ".json")	|| die();
+		open(TIME, ">", ${root} . ".csv")	|| die();
 		open(NOTE, ">", ${root} . ".txt")	|| die();
 		my $json = JSON::PP->new; print JSON $json->pretty->encode(${data});
+		print TIME "\"[DESC]\",\"[PROJ]\",\"[KIND]\",\"[AREA]\",\"[TAGS]\",";
+		print TIME "\"[.UID]\",";
+		print TIME "\"[.BRN]\",\"[_BRN]\",\"[=BRN]\",";
+		print TIME "\"[.DIE]\",\"[_DIE]\",\"[=DIE]\",";
+		print TIME "\"[=AGE]\",";
+		print TIME "\"[.BEG]\",\"[_BEG]\",\"[=BEG]\",";
+		print TIME "\"[.END]\",\"[_END]\",\"[=END]\",";
+		print TIME "\"[=HRS]\",";
+		print TIME "\n";
+		sub days { return(sprintf("%.9f", shift() / (60*60*24)	)); };
+		sub hour { return(sprintf("%.9f", shift() / (60*60)	)); };
+		sub time_format {
+			my $stamp = shift;
+			$stamp =~ m/^([0-9]{4})([0-9]{2})([0-9]{2})[T]([0-9]{2})([0-9]{2})([0-9]{2})[Z]$/;
+			my($yr,$mo,$dy,$hr,$mn,$sc) = ($1,$2,$3,$4,$5,$6);
+			my $epoch = timegm($sc,$mn,$hr,$dy,($mo-1),$yr);
+			my $ltime = strftime("%Y-%m-%d %H:%M:%S", localtime(${epoch}));
+			return(${epoch}, ${ltime});
+		};
 		foreach my $task (sort({$a->{"description"} cmp $b->{"description"}} @{${data}})) {
 			if (!defined($task->{"annotations"})) {
 				next;
 			};
+			my $started = "0";
 			my $notes = "0";
 			foreach my $annotation (@{$task->{"annotations"}}) {
-				if (($task->{"kind"} eq "notes") && ($annotation->{"description"} =~ m/^[[]notes[]][:]/)) {
+				if (($task->{"kind"} ne "notes") && ($annotation->{"description"} =~ m/^[[]track[]][:][[]begin[]]$/)) {
+					my $tags		= join(" ", @{$task->{"tags"}})			if (exists($task->{"tags"}));
+					my($brn_s, $brn_d)	= &time_format($task->{"entry"})		if (exists($task->{"entry"}));
+					my($die_s, $die_d)	= &time_format($task->{"end"})			if (exists($task->{"end"}));
+					my $t_age		= &days(${die_s} - ${brn_s})			if (${die_s});
+					my($beg_s, $beg_d)	= &time_format($annotation->{"entry"})		if (exists($annotation->{"entry"}));
+					$started = $beg_s;
+					print TIME "\"" . ($task->{"description"}				|| "-") . "\",";
+					print TIME "\"" . ($task->{"project"}					|| "-") . "\",";
+					print TIME "\"" . ($task->{"kind"}					|| "-") . "\",";
+					print TIME "\"" . ($task->{"area"}					|| "-") . "\",";
+					print TIME "\"" . (${tags}						|| "-") . "\",";
+					print TIME "\"" . ($task->{"uuid"}					|| "-") . "\",";
+					print TIME "\"" . ($task->{"entry"}					|| "-") . "\",";
+					print TIME "\"" . (${brn_s}						|| "-") . "\",";
+					print TIME "\"" . (${brn_d}						|| "-") . "\",";
+					print TIME "\"" . ($task->{"end"}					|| "-") . "\",";
+					print TIME "\"" . (${die_s}						|| "-") . "\",";
+					print TIME "\"" . (${die_d}						|| "-") . "\",";
+					print TIME "\"" . (${t_age}						|| "-") . "\",";
+					print TIME "\"" . ($annotation->{"entry"}				|| "-") . "\",";
+					print TIME "\"" . (${beg_s}						|| "-") . "\",";
+					print TIME "\"" . (${beg_d}						|| "-") . "\",";
+				}
+				elsif (($task->{"kind"} ne "notes") && ($annotation->{"description"} =~ m/^[[]track[]][:][[]end[]]$/)) {
+					my($end_s, $end_d)	= &time_format($annotation->{"entry"})		if (exists($annotation->{"entry"}));
+					my $t_hrs		= &hour(${end_s} - ${started})			;
+					$started = "0";
+					print TIME "\"" . ($annotation->{"entry"}				|| "-") . "\",";
+					print TIME "\"" . (${end_s}						|| "-") . "\",";
+					print TIME "\"" . (${end_d}						|| "-") . "\",";
+					print TIME "\"" . (${t_hrs}						|| "-") . "\",";
+					print TIME "\n";
+				}
+				elsif (($task->{"kind"} eq "notes") && ($annotation->{"description"} =~ m/^[[]notes[]][:]/)) {
 					if (${notes}) {
 						use Data::Dumper;
 						print Dumper(${task});
@@ -2125,9 +2182,14 @@ function task-export-text {
 					die("BAD ANNOTATION!");
 				};
 			};
+			if (${started}) {
+				print TIME "\"-\"," x 5;
+				print TIME "\n";
+			};
 		};
 		print NOTE "\n" . (">" x 10) . "[end of file]" . ("<" x 10) . "\n";
 		close(JSON) || die();
+		close(TIME) || die();
 		close(NOTE) || die();
 	' -- "${@}"
 	return 0
