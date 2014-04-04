@@ -2149,9 +2149,8 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 	function impersonate_command {
 		if [[ ${1} == [=] ]]; then
 			shift
-			task-export-text
-#>>>			task-export
-			declare CONTINUE && read CONTINUE
+			task-export-text	|| return 1
+#>>>			task-export		|| return 1
 			zpim-commit tasks
 		elif [[ ${1} == [+] ]]; then
 			shift
