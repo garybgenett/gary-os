@@ -414,6 +414,8 @@ net-print/hplip
 
 app-emulation/bochs
 app-emulation/dosemu
+games-emulation/dosbox
+
 app-emulation/libvirt
 app-emulation/lxc
 app-emulation/qemu
@@ -422,9 +424,11 @@ app-emulation/spice-protocol
 app-emulation/spice-vdagent
 app-emulation/virt-manager
 app-emulation/virt-viewer
-app-emulation/vmware-player
-games-emulation/dosbox
 net-misc/spice-gtk
+
+app-emulation/vmware-modules
+app-emulation/vmware-player
+app-emulation/vmware-tools
 
 app-misc/run-mailcap
 net-misc/urlview
