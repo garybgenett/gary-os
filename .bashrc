@@ -2201,6 +2201,7 @@ function task-notes {
 	declare TDIR="$(task show data.location | ${GREP} "data[.]location" | awk '{print $2;}')"
 	declare UUID="$(task uuid kind:notes "${@}" | tr ',' '\n' | head -n1)"
 	declare EMAP="map ? <ESC>:!task read \"${@}\"<CR>"
+	declare ERUN="map \\ <ESC>:!task "
 	if [[ -z ${UUID} ]]; then
 		return 1
 	fi
@@ -2208,12 +2209,12 @@ function task-notes {
 		perl -p -e 's/^.*annotation_[0-9]{10}:["]notes[:]([^"]+)["].*$/\1/g' |
 		base64 --wrap=0 --decode --ignore-garbage \
 		>${TDIR}/${UUID}
-	${EDITOR} -c "${EMAP}" ${TDIR}/${UUID}
+	${EDITOR} -c "${EMAP}" -c "${ERUN}" ${TDIR}/${UUID}
 	if [[ -s ${TDIR}/${UUID} ]]; then
-		task ${UUID} denotate -- "notes:"
+		task ${UUID} denotate -- "[notes]:"
 	fi
-	if [[ -s ${TDIR}/${UUID} ]] && [[ $(cat ${TDIR}/${UUID}) != "delete" ]]; then
-		task ${UUID} annotate -- "notes:$(
+	if [[ -s ${TDIR}/${UUID} ]] && [[ $(cat ${TDIR}/${UUID}) != "[DELETE]" ]]; then
+		task ${UUID} annotate -- "[notes]:$(
 			cat ${TDIR}/${UUID} |
 			perl -e 'my $notes = do { local $/; <STDIN> }; $notes =~ s/\n+$//; print "${notes}";' |
 			base64 --wrap=0
