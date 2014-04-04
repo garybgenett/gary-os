@@ -78,18 +78,6 @@ net-p2p/rtorrent			~*		# build fail: 0.8.9
 =app-admin/apache-tools-2.4*		~*
 =www-servers/apache-2.4*		~*
 
->=x11-wm/enlightenment-0.17		~*
-dev-libs/e_dbus				~*		# gentoo required
-dev-libs/ecore				~*		# gentoo required
-dev-libs/eet				~*		# gentoo required
-dev-libs/eeze				~*		# gentoo required
-dev-libs/efreet				~*		# gentoo required
-dev-libs/eina				~*		# gentoo required
-dev-libs/eio				~*		# gentoo required
-dev-libs/embryo				~*		# gentoo required
-media-libs/edje				~*		# gentoo required
-media-libs/evas				~*		# gentoo required
-
 =app-emulation/qemu-1.6*		~*
 app-emulation/spice-vdagent		~*		# gentoo required
 sys-firmware/seabios			~*		# gentoo required
@@ -107,6 +95,21 @@ x11-wm/openbox				~*
 x11-misc/dmenu				~*
 x11-terms/st				~*
 x11-wm/dwm				~*
+
+x11-terms/terminology			~*
+x11-wm/enlightenment			~*
+dev-libs/e_dbus				~*		# gentoo required
+dev-libs/ecore				~*		# gentoo required
+dev-libs/eet				~*		# gentoo required
+dev-libs/eeze				~*		# gentoo required
+dev-libs/efl				~*		# gentoo required
+dev-libs/efreet				~*		# gentoo required
+dev-libs/eina				~*		# gentoo required
+dev-libs/eio				~*		# gentoo required
+dev-libs/embryo				~*		# gentoo required
+media-libs/edje				~*		# gentoo required
+media-libs/elementary			~*		# gentoo required
+media-libs/evas				~*		# gentoo required
 
 ################################################################################
 # end of file
