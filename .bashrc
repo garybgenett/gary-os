@@ -2090,34 +2090,46 @@ function task-export {
 ########################################
 
 function task-export-text {
-	declare SHDW="$(task show shadow.file | ${GREP} "shadow[.]file" | awk '{print $2;}')"
-	task export | perl -e '
+	perl -e '
 		use strict;
 		use warnings;
 		use JSON::PP;
 		use MIME::Base64;
-		my $tasks = do { local $/; <STDIN> }; $tasks = decode_json("[${tasks}]");
-		open(JSON, ">", ${ARGV[0]} . ".json") || die();
-		open(NOTE, ">", ${ARGV[0]} . ".txt") || die();
-		my $json = JSON::PP->new; print JSON $json->pretty->encode(${tasks});
-		foreach my $task (sort({$a->{"description"} cmp $b->{"description"}} @{${tasks}})) {
+		my $root = qx(task show data.location); $root =~ m/(data[.]location)\s+([^\s]+)/; $root = $2;
+		my $data = decode_json("[" . qx(task export) . "]");
+		open(JSON, ">", ${root} . ".json")	|| die();
+		open(NOTE, ">", ${root} . ".txt")	|| die();
+		my $json = JSON::PP->new; print JSON $json->pretty->encode(${data});
+		foreach my $task (sort({$a->{"description"} cmp $b->{"description"}} @{${data}})) {
 			if (!defined($task->{"annotations"})) {
 				next;
 			};
+			my $notes = "0";
 			foreach my $annotation (@{$task->{"annotations"}}) {
-				if ($annotation->{"description"} =~ /^notes[:]/) {
+				if (($task->{"kind"} eq "notes") && ($annotation->{"description"} =~ m/^[[]notes[]][:]/)) {
+					if (${notes}) {
+						use Data::Dumper;
+						print Dumper(${task});
+						die("MULTIPLE NOTES!");
+					};
+					$notes = "1";
 					my $output = $annotation->{"description"};
-					$output =~ s/^notes[:]//g;
+					$output =~ s/^[[]notes[]][:]//g;
 					print NOTE "\n" . (">" x 10) . "[" . $task->{"uuid"} . " :: " . $task->{"description"} . "]" . ("<" x 10) . "\n";
 					print NOTE decode_base64(${output});
 					print NOTE "\n";
+				}
+				else {
+					use Data::Dumper;
+					print Dumper(${task});
+					die("BAD ANNOTATION!");
 				};
 			};
 		};
 		print NOTE "\n" . (">" x 10) . "[end of file]" . ("<" x 10) . "\n";
 		close(JSON) || die();
 		close(NOTE) || die();
-	' ${SHDW/%.json}
+	' -- "${@}"
 	return 0
 }
 
