@@ -2198,29 +2198,64 @@ function task-export-text {
 ########################################
 
 function task-notes {
-	declare TDIR="$(task show data.location | ${GREP} "data[.]location" | awk '{print $2;}')"
-	declare UUID="$(task uuid kind:notes "${@}" | tr ',' '\n' | head -n1)"
-	declare EMAP="map ? <ESC>:!task read \"${@}\"<CR>"
-	declare ERUN="map \\ <ESC>:!task "
-	if [[ -z ${UUID} ]]; then
-		return 1
-	fi
-	${GREP} -r "uuid:[\"]${UUID}[\"]" ${TDIR}/{completed,pending}.data |
-		perl -p -e 's/^.*annotation_[0-9]{10}:["]notes[:]([^"]+)["].*$/\1/g' |
-		base64 --wrap=0 --decode --ignore-garbage \
-		>${TDIR}/${UUID}
-	${EDITOR} -c "${EMAP}" -c "${ERUN}" ${TDIR}/${UUID}
-	if [[ -s ${TDIR}/${UUID} ]]; then
-		task ${UUID} denotate -- "[notes]:"
-	fi
-	if [[ -s ${TDIR}/${UUID} ]] && [[ $(cat ${TDIR}/${UUID}) != "[DELETE]" ]]; then
-		task ${UUID} annotate -- "[notes]:$(
-			cat ${TDIR}/${UUID} |
-			perl -e 'my $notes = do { local $/; <STDIN> }; $notes =~ s/\n+$//; print "${notes}";' |
-			base64 --wrap=0
-		)"
-	fi
-	${RM} ${TDIR}/${UUID}
+	perl -e '
+		use strict;
+		use warnings;
+		use JSON::PP;
+		use MIME::Base64;
+		my $args = join(" ", @ARGV);
+		my $root = qx(task show data.location); $root =~ m/(data[.]location)\s+([^\s]+)/; $root = $2;
+		my $data = decode_json("[" . qx(task export kind:notes "${args}") . "]");
+		my $edit = "${ENV{EDITOR}} -c \"map ? <ESC>:!task read \\\"${args}\\\"<CR>\" -c \"map \\ <ESC>:!task \"";
+		my $mark = "[DELETE]";
+		if (!@{$data}) {
+			die("NO MATCHES!");
+		};
+		my $uuids = [];
+		foreach my $task (sort({$a->{"description"} cmp $b->{"description"}} @{${data}})) {
+			my $file = ${root} . "/" . $task->{"uuid"};
+			my $text = "[" . $task->{"description"} . "]";
+			my $notes = "0";
+			foreach my $annotation (@{$task->{"annotations"}}) {
+				if (($task->{"kind"} eq "notes") && ($annotation->{"description"} =~ m/^[[]notes[]][:]/)) {
+					if (${notes}) {
+						use Data::Dumper;
+						print Dumper(${task});
+						die("MULTIPLE NOTES!");
+					};
+					$notes = "1";
+					my $output = $annotation->{"description"};
+					$output =~ s/^[[]notes[]][:]//g;
+					$text = decode_base64(${output});
+				};
+			};
+			push(@{$uuids}, $task->{"uuid"});
+			open(NOTE, ">", ${file}) || die();
+			print NOTE $text;
+			close(NOTE) || die();
+		};
+		chdir(${root}) || die();
+		my $filelist = join(" ", @{$uuids});
+		system("${edit} ${filelist}");
+		foreach my $uuid (@{$uuids}) {
+			my $file = ${root} . "/" . ${uuid};
+			my $text;
+			if (-s ${file}) {
+				open(NOTE, "<", ${file}) || die();
+				$text = do { local $/; <NOTE> }; $text =~ s/\n+$//g;
+				close(NOTE) || die();
+				system("task ${uuid} denotate -- \"[notes]:\"");
+			};
+			if ((-s ${file}) && (${text} ne ${mark})) {
+				my $input = encode_base64(${text}, "");
+				system("task ${uuid} annotate -- \"[notes]:${input}\"");
+			};
+		};
+		chdir(${root}) || die();
+		foreach my $file (@{$uuids}) {
+			unlink(${file}) || warn();
+		};
+	' -- "${@}"
 	return 0
 }
 
