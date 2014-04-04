@@ -1692,7 +1692,7 @@ function prompt {
 		           s/.{7}(\(cached\)).{7}/${WARN_COLOR}\1${MSG_COLOR}/gi;
 		                    s/(-o [^\s]+)/${MSG_COLOR}\1${DEF_COLOR}/gi;
 		                              s/$/${DEF_COLOR}/gi;
-		'
+		' -- "${@}"
 		return ${?}
 	fi
 	if [[ ${1} == -d ]]; then
