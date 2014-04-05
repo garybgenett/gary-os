@@ -2079,10 +2079,10 @@ function task-export {
 			${SED} -n "s/(report[.]${FILTER}[.]filter)[[:space:]]+([^[:space:]]+)/\2/gp"
 		return 0
 	}
-	gtasks_export.pl taskwarrior "_Data"		"$(task-filter "data")"			"description"
-	gtasks_export.pl taskwarrior "_Reminders"	"$(task-filter "export-remind")"	"due"	"9999"
-	gtasks_export.pl taskwarrior "Actions"		"$(task-filter "view")"			"due"	"9999"
-	gtasks_export.pl taskwarrior "Agenda"		"$(task-filter "export-agenda")"	"due"	"9999"
+	gtasks_export.pl taskwarrior "_Data"		"$(task-filter "data")"			"description"	"entry"
+	gtasks_export.pl taskwarrior "_Reminders"	"$(task-filter "export-remind")"	"due,9999"	"description"
+	gtasks_export.pl taskwarrior "Actions"		"$(task-filter "view")"			"due,9999"	"entry"
+	gtasks_export.pl taskwarrior "Agenda"		"$(task-filter "export-agenda")"	"due,9999"	"description"
 	cd - >/dev/null
 	return 0
 }
