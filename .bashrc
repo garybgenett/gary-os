@@ -1262,7 +1262,7 @@ function indexer {
 				my $a = [split(/\0/)];
 				print "@{$a}\n";
 			};
-		' -- "${@}"
+		' -- "${@}" || return 1
 	elif [[ "${1}" == -m ]]; then
 		shift
 		DEBUG="${DEBUG}" perl -e '
@@ -1282,7 +1282,7 @@ function indexer {
 					};
 				};
 			};
-		' -- "${@}"
+		' -- "${@}" || return 1
 	elif [[ "${1}" == -l ]]; then
 		shift
 		DEBUG="${DEBUG}" perl -e '
@@ -1309,7 +1309,7 @@ function indexer {
 			print ">>> Broken symlinks: "	. ($#{$brk_sym} + 1) . "\n"; if (${ENV{DEBUG}} eq "true") { foreach my $out (@{$brk_sym}) { print "@{$out}\n"; }; };
 			print ">>> Symlinks: "		. ($#{$symlink} + 1) . "\n"; if (${ENV{DEBUG}} eq "true") { foreach my $out (@{$symlink}) { print "@{$out}\n"; }; };
 			print ">>> Failures: "		. ($#{$failure} + 1) . "\n"; if (${ENV{DEBUG}} eq "true") { foreach my $out (@{$failure}) { print "@{$out}\n"; }; };
-		' -- "${@}"
+		' -- "${@}" || return 1
 	elif [[ "${1}" == -s ]]; then
 		shift
 		DEBUG="${DEBUG}" perl -e '
@@ -1362,7 +1362,7 @@ function indexer {
 					format_output(0, $sub->[0], $sub->[1]);
 				};
 			};
-		' -- "${@}"
+		' -- "${@}" || return 1
 	elif [[ "${1}" == -v ]]; then
 		shift
 		tr '\0' '\t' | while read -r FILE; do
@@ -1452,7 +1452,7 @@ function indexer {
 				};
 				print "${size}\t${_}\n";
 			};
-		' -- "${@}"
+		' -- "${@}" || return 1
 	elif [[ "${1}" == -! ]]; then
 		shift
 		DEBUG="${DEBUG}" perl -e '
@@ -1465,7 +1465,7 @@ function indexer {
 					print "[$1]: $_\n";
 				};
 			};
-		' -- "${@}"
+		' -- "${@}" || return 1
 	else
 		declare FORKS="true"
 		if [[ "${1}" == -0 ]]; then
@@ -1692,7 +1692,7 @@ function prompt {
 		           s/.{7}(\(cached\)).{7}/${WARN_COLOR}\1${MSG_COLOR}/gi;
 		                    s/(-o [^\s]+)/${MSG_COLOR}\1${DEF_COLOR}/gi;
 		                              s/$/${DEF_COLOR}/gi;
-		' -- "${@}"
+		' -- "${@}" || return 1
 		return ${?}
 	fi
 	if [[ ${1} == -d ]]; then
@@ -2191,7 +2191,7 @@ function task-export-text {
 		close(JSON) || die();
 		close(TIME) || die();
 		close(NOTE) || die();
-	' -- "${@}"
+	' -- "${@}" || return 1
 	return 0
 }
 
@@ -2255,7 +2255,7 @@ function task-notes {
 		foreach my $file (@{$uuids}) {
 			unlink(${file}) || warn();
 		};
-	' -- "${@}"
+	' -- "${@}" || return 1
 	return 0
 }
 
