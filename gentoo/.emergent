@@ -272,12 +272,15 @@ done
 echo -e "\n[emerge output]" >>${OUT_DIR}/+okay
 ${GREP} -v \
 	-e "^$" \
-	-e "^[[]" \
 	-e "^PORTAGE_BZIP2_COMMAND[ ]" \
 	-e "^These are the packages that would be merged" \
 	-e "^Calculating dependencies" \
+	-e "^[.]+[ ]done[!]" \
+	-e "^[[]ebuild" \
 	-e "^Total[:][ ]" \
 	-e "^Fetch Restriction[:][ ]" \
+	-e "^[ ][*][ ]IMPORTANT: [0-9]+ news items need reading for repository" \
+	-e "^[ ][*][ ]Use eselect news to read news items" \
 	${OUT_DIR}/.emerge >>${OUT_DIR}/+okay
 
 exit 0
