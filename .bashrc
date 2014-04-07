@@ -2183,7 +2183,7 @@ function task-export-text {
 				};
 			};
 			if (${started}) {
-				print TIME "\"-\"," x 5;
+				print TIME "\"-\"," x 4;
 				print TIME "\n";
 			};
 		};
