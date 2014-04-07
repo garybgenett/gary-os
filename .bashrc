@@ -2264,7 +2264,14 @@ function task-notes {
 if [[ ${IMPERSONATE_NAME} == task ]]; then
 	unalias -a
 	function impersonate_command {
-		if [[ ${1} == [=] ]]; then
+		if [[ ${1} == "RESET" ]]; then
+			cd ${PIMDIR}
+			${GIT} reset tasks	|| return 1
+			${GIT} checkout tasks	|| return 1
+			sudo chown -vR plastic:plastic tasks
+			sudo chmod -vR 750 tasks
+			cd - >/dev/null
+		elif [[ ${1} == [=] ]]; then
 			shift
 			task-export-text	|| return 1
 #>>>			task-export		|| return 1
