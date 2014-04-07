@@ -2,33 +2,31 @@
 # portage package use file
 ################################################################################
 
-#{NEW} dev-java/icedtea-bin		-X		# gentoo required
-#{NEW} dev-java/icedtea-bin		-nsplugin	# gentoo required
-#{NEW} x11-libs/gdk-pixbuf		-jpeg		# gentoo required
+#{NEW} dev-java/icedtea			-javascript	# gentoo required
+#{NEW} net-libs/libproxy		-webkit		# gentoo required
 
 ################################################################################
 
-app-arch/libarchive			xattr		# gentoo required
 app-text/ghostscript-gpl		cups		# gentoo required
 app-text/poppler			cairo		# gentoo required
-app-text/poppler			lcms		# gentoo required
 app-text/poppler			qt4		# gentoo required
-dev-libs/e_dbus				connman		# gentoo required
-dev-libs/e_dbus				libnotify	# gentoo required
+dev-java/antlr				java		# gentoo required
+dev-libs/nettle				gmp		# gentoo required
+media-libs/gd				fontconfig	# gentoo required
 media-libs/libsdl			joystick	# gentoo required
-net-wireless/wpa_supplicant		dbus		# gentoo required
+media-video/vlc				xcb		# gentoo required
+net-dns/avahi				dbus		# gentoo required
 sys-auth/consolekit			policykit	# gentoo required
 sys-libs/gdbm				berkdb		# gentoo required
 
 ########################################
 
-net-dns/dnsmasq				script		# gentoo required
 net-ftp/proftpd				openssl		# gentoo required
 net-nds/openldap			sasl		# gentoo required
 
-dev-python/PyQt4			webkit		# gentoo required
 media-libs/chromaprint			tools		# gentoo required
 media-libs/mesa				xa		# gentoo required
+net-dns/avahi			mdnsresponder-compat	# gentoo required
 net-misc/spice-gtk			gtk3		# gentoo required
 sys-libs/zlib				minizip		# gentoo required
 
