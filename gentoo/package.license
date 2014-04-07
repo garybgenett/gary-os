@@ -15,7 +15,6 @@ app-misc/run-mailcap			freedist
 app-text/calibre			unRAR
 games-emulation/mekanix			mekanix
 
-games-misc/fortune-mod			fairuse
 games-misc/fortune-mod-calvin		fairuse
 games-misc/fortune-mod-dubya		fairuse
 games-misc/fortune-mod-familyguy	fairuse
