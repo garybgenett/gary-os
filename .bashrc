@@ -2271,6 +2271,13 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			sudo chown -vR plastic:plastic tasks
 			sudo chmod -vR 750 tasks
 			cd - >/dev/null
+		elif [[ ${1} == "repo" ]]; then
+#>>>			task rc.defaultwidth=1 burndown.weekly
+			task rc.defaultwidth=1 ghistory.monthly
+			task rc.defaultwidth=1 history.monthly
+			task projects
+			task tags
+			task udas
 		elif [[ ${1} == [=] ]]; then
 			shift
 			task-export-text	|| return 1
