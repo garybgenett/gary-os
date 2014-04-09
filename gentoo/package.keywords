@@ -71,6 +71,8 @@ games-emulation/mekanix			x86		# gentoo required
 
 >=sys-devel/libtool-2.4.2		~*		# required by: dev-libs/apr-1.5.0-r2
 
+=dev-libs/geoip-1.5.2			~*		# gentoo required: 1.6.0-r1 download checksum mismatch
+
 net-libs/libtorrent			~*		# gentoo required
 net-p2p/rtorrent			~*		# build fail: 0.8.9
 
