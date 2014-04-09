@@ -481,6 +481,7 @@ x11-plugins/pidgin-hotkeys
 x11-plugins/pidgin-sipe
 
 dev-java/icedtea
+dev-java/icedtea-bin
 dev-java/icedtea:6
 dev-java/icedtea:7
 
