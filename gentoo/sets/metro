@@ -117,7 +117,9 @@ dev-perl/WWW-Mechanize
 dev-perl/libwww-perl
 perl-core/CGI
 perl-core/JSON-PP
+perl-core/MIME-Base64
 perl-core/Switch
+perl-core/Time-Local
 sys-devel/libperl
 
 app-crypt/gnupg
