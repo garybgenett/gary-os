@@ -11,7 +11,6 @@ app-text/ghostscript-gpl		cups		# gentoo required
 app-text/poppler			cairo		# gentoo required
 app-text/poppler			qt4		# gentoo required
 dev-java/antlr				java		# gentoo required
-dev-libs/nettle				gmp		# gentoo required
 media-libs/gd				fontconfig	# gentoo required
 media-libs/libsdl			joystick	# gentoo required
 media-video/vlc				xcb		# gentoo required
