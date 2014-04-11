@@ -337,6 +337,11 @@ if [[ ${1} == -/ ]]; then
 	${MKDIR} ${INIT_DST}					|| exit 1
 	tar -pvvxJ -C ${INIT_DST} -f ${INIT_SRC}		|| exit 1
 
+	${RSYNC_U} ${REL_DIR}/.${TITLE}/ \
+		${INIT_DST}/.${TITLE}				|| exit 1
+	${RSYNC_U} ${REL_DIR}/.${TITLE}.git/ \
+		${INIT_DST}/.${TITLE}/.git			|| exit 1
+
 	${LN} sbin/init ${INIT_DST}/init			|| exit 1
 	${SED} -i \
 		-e "s%^([^#].+)$%#\1%g" \
