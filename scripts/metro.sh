@@ -284,16 +284,6 @@ fi
 if [[ ${1} == -1 ]]; then
 	declare INIT_DIR="${PWD}"
 
-	${LN} sbin/init ${INIT_DIR}/init			|| exit 1
-	${SED} -i \
-		-e "s%^([^#].+)$%#\1%g" \
-		${INIT_DIR}/etc/fstab				|| exit 1
-	${SED} -i \
-		-e "s%^(hostname=[\"]?)[^\"]+([\"]?)$%\1${TITLE}\2%g" \
-		${INIT_DIR}/etc/conf.d/hostname			|| exit 1
-	echo -en "${TITLE}\n${TITLE}\n" |
-		chroot ${INIT_DIR} /usr/bin/passwd root		|| exit 1
-
 	${CP} -L ${INIT_DIR}/boot/kernel ${INIT_DIR}.kernel	#>>> || exit 1
 	eval find ./ \
 		$(for FILE in ./usr/src/linux-*; do echo -en "\( -path ${FILE} -prune \) -o "; done) \
@@ -347,7 +337,18 @@ if [[ ${1} == -/ ]]; then
 	${MKDIR} ${INIT_DST}					|| exit 1
 	tar -pvvxJ -C ${INIT_DST} -f ${INIT_SRC}		|| exit 1
 
+	${LN} sbin/init ${INIT_DST}/init			|| exit 1
+	${SED} -i \
+		-e "s%^([^#].+)$%#\1%g" \
+		${INIT_DST}/etc/fstab				|| exit 1
+	${SED} -i \
+		-e "s%^(hostname=[\"]?)[^\"]+([\"]?)$%\1${TITLE}\2%g" \
+		${INIT_DST}/etc/conf.d/hostname			|| exit 1
+	echo -en "${TITLE}\n${TITLE}\n" |
+		chroot ${INIT_DST} /usr/bin/passwd root		|| exit 1
+
 	(cd ${INIT_DST} && echo | ${_SELF} ${BITS} ${REVN} -1)	|| exit 1
+
 	if [[ -f ${INIT_DST}.kernel.initrd ]]; then
 		${MV} ${INIT_DST}.kernel.initrd \
 			${INIT_SRC}.kernel			|| exit 1
