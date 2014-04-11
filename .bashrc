@@ -2291,6 +2291,8 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			declare PROJECT="${1}" && shift
 			task-notes "(project:${PROJECT} ${@})"
 		else
+			(cd ${PIMDIR} && ${GIT_STS} tasks*)
+			task read kind:track
 			task limit:12 "${@}"
 		fi
 		return 0
