@@ -318,6 +318,29 @@ app-forensics/sleuthkit
 sys-apps/flashrom
 
 ########################################
+# servers
+
+dev-db/mysql
+net-dns/bind
+net-fs/samba
+net-ftp/proftpd
+net-ftp/tftp-hpa
+net-mail/dovecot
+net-misc/dhcp
+net-misc/ntp
+net-misc/openvpn
+net-misc/quagga
+net-misc/radvd
+net-misc/tor
+net-nds/openldap			# 32-bit build fail
+net-wireless/hostapd
+
+app-admin/apache-tools
+#>>>www-apache/mod_perl
+www-misc/awstats
+www-servers/apache
+
+########################################
 # programs
 
 app-emulation/bochs
