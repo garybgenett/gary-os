@@ -74,6 +74,8 @@ app-emulation/vmware-tools		vmware_guest_freebsd vmware_guest_linux vmware_guest
 #{MET} app-text/poppler			-cairo		# gentoo required
 #{MET} app-text/poppler			-qt4		# gentoo required
 
+#{MET} dev-libs/openssl			-bindist	# gentoo required
+
 ########################################
 
 #{MET} app-emulation/qemu		-sdl
