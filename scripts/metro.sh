@@ -394,7 +394,7 @@ function makeconf_var {
 
 declare OPTS="	$(makeconf_var EMERGE_DEFAULT_OPTS	| ${SED} "s%[-][-]ask[^[:space:]]*%%g")"
 OPTS+="		$(makeconf_var MAKEOPTS			| ${GREP} -o "[-]j[0-9]+")"
-declare PKGS="$(cat ${SET}				| ${GREP} -v -e "^[#]" -e "^$" | sort | tr '\n' ' ')"
+declare PKGS="$(cat ${SET}				| ${GREP} -v -e "^[#]" -e "^$" | ${SED} "s/[#].+$//g" | sort | tr '\n' ' ')"
 
 declare FEAT="$(makeconf_var FEATURES)"
 declare MKOP="$(makeconf_var MAKEOPTS)"
