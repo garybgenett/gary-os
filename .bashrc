@@ -2099,9 +2099,10 @@ function task-export-text {
 		use MIME::Base64;
 		my $root = qx(task show data.location); $root =~ m/(data[.]location)\s+([^\s]+)/; $root = $2;
 		my $data = decode_json("[" . qx(task export) . "]");
-		open(JSON, ">", ${root} . ".json")	|| die();
-		open(TIME, ">", ${root} . ".csv")	|| die();
-		open(NOTE, ">", ${root} . ".txt")	|| die();
+		open(JSON, ">", ${root} . ".json")		|| die();
+		open(TIME, ">", ${root} . ".csv")		|| die();
+		open(LINE, ">", ${root} . ".timeline.json")	|| die();
+		open(NOTE, ">", ${root} . ".txt")		|| die();
 		my $json = JSON::PP->new; print JSON $json->pretty->encode(${data});
 		print TIME "\"[DESC]\",\"[PROJ]\",\"[KIND]\",\"[AREA]\",\"[TAGS]\",";
 		print TIME "\"[.UID]\",";
@@ -2122,11 +2123,27 @@ function task-export-text {
 			my $ltime = strftime("%Y-%m-%d %H:%M:%S", localtime(${epoch}));
 			return(${epoch}, ${ltime});
 		};
+		my $line = {
+			"dateTimeFormat"	=> "iso8601",
+			"events"		=> [],
+		};
+		my $color = {
+			"_gtd"		=> "red",
+			"computer"	=> "blue",
+			"family"	=> "yellow",
+			"money"		=> "green",
+			"people"	=> "purple",
+			"self"		=> "orange",
+			"travel"	=> "cyan",
+			"work"		=> "pink",
+			"writing"	=> "brown",
+		};
 		foreach my $task (sort({$a->{"description"} cmp $b->{"description"}} @{${data}})) {
 			if (!defined($task->{"annotations"})) {
 				next;
 			};
 			my $started = "0";
+			my $begin = "0";
 			my $notes = "0";
 			foreach my $annotation (@{$task->{"annotations"}}) {
 				if (($task->{"kind"} ne "notes") && ($annotation->{"description"} =~ m/^[[]track[]][:][[]begin[]]$/)) {
@@ -2135,7 +2152,8 @@ function task-export-text {
 					my($die_s, $die_d)	= &time_format($task->{"end"})			if (exists($task->{"end"}));
 					my $t_age		= &days(${die_s} - ${brn_s})			if (${die_s});
 					my($beg_s, $beg_d)	= &time_format($annotation->{"entry"})		if (exists($annotation->{"entry"}));
-					$started = $beg_s;
+					$started		= ${beg_s};
+					$begin			= ${beg_d};
 					print TIME "\"" . ($task->{"description"}				|| "-") . "\",";
 					print TIME "\"" . ($task->{"project"}					|| "-") . "\",";
 					print TIME "\"" . ($task->{"kind"}					|| "-") . "\",";
@@ -2154,14 +2172,35 @@ function task-export-text {
 					print TIME "\"" . (${beg_d}						|| "-") . "\",";
 				}
 				elsif (($task->{"kind"} ne "notes") && ($annotation->{"description"} =~ m/^[[]track[]][:][[]end[]]$/)) {
+					my $tags		= join(" ", @{$task->{"tags"}})			if (exists($task->{"tags"}));
 					my($end_s, $end_d)	= &time_format($annotation->{"entry"})		if (exists($annotation->{"entry"}));
 					my $t_hrs		= &hour(${end_s} - ${started})			;
-					$started = "0";
+					$started		= "0";
 					print TIME "\"" . ($annotation->{"entry"}				|| "-") . "\",";
 					print TIME "\"" . (${end_s}						|| "-") . "\",";
 					print TIME "\"" . (${end_d}						|| "-") . "\",";
 					print TIME "\"" . (${t_hrs}						|| "-") . "\",";
 					print TIME "\n";
+					push(@{$line->{"events"}}, {
+						"title"		=> $task->{"description"},
+						"start"		=> ${begin} . "Z",
+						"end"		=> ${end_d} . "Z",
+						"color"		=> $color->{$task->{"area"}},
+						"textColor"	=> "black",
+						"durationEvent"	=> "true",
+						"caption"	=> ""
+							. "[Title]\t"	. ($task->{"description"}	|| "-") . "\n"
+							. "\n"
+							. "[Project]\t"	. ($task->{"project"}		|| "-") . "\n"
+							. "[Kind]\t"	. ($task->{"kind"}		|| "-") . "\n"
+							. "[Area]\t"	. ($task->{"area"}		|| "-") . "\n"
+							. "[Tags]\t"	. (${tags}			|| "-") . "\n"
+							. "\n"
+							. "[Begin]\t"	. (${begin}			|| "-") . "\n"
+							. "[End]\t"	. (${end_d}			|| "-") . "\n"
+						. "",
+					});
+					$begin			= "0";
 				}
 				elsif (($task->{"kind"} eq "notes") && ($annotation->{"description"} =~ m/^[[]notes[]][:]/)) {
 					if (${notes}) {
@@ -2187,9 +2226,11 @@ function task-export-text {
 				print TIME "\n";
 			};
 		};
+		print LINE $json->pretty->encode(${line});
 		print NOTE "\n" . (">" x 10) . "[end of file]" . ("<" x 10) . "\n";
 		close(JSON) || die();
 		close(TIME) || die();
+		close(LINE) || die();
 		close(NOTE) || die();
 	' -- "${@}" || return 1
 	return 0
