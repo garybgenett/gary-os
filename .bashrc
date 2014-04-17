@@ -2115,6 +2115,10 @@ function task-export-text {
 		print TIME "\"[.END]\",\"[_END]\",\"[=END]\",";
 		print TIME "\"[=HRS]\",";
 		print TIME "\n";
+		my $line = {
+			"dateTimeFormat"	=> "iso8601",
+			"events"		=> [],
+		};
 		sub days { return(sprintf("%.9f", shift() / (60*60*24)	)); };
 		sub hour { return(sprintf("%.9f", shift() / (60*60)	)); };
 		sub time_format {
@@ -2124,10 +2128,6 @@ function task-export-text {
 			my $epoch = timegm($sc,$mn,$hr,$dy,($mo-1),$yr);
 			my $ltime = strftime("%Y-%m-%d %H:%M:%S", localtime(${epoch}));
 			return(${epoch}, ${ltime});
-		};
-		my $line = {
-			"dateTimeFormat"	=> "iso8601",
-			"events"		=> [],
 		};
 		my $text_color = "black";
 		my $line_color = {
@@ -2140,6 +2140,32 @@ function task-export-text {
 			"travel"	=> "cyan",
 			"work"		=> "brown",
 			"writing"	=> "magenta",
+		};
+		sub export_line {
+			my $task	= shift();
+			my $color	= shift();
+			my $beg_d	= shift();
+			my $end_d	= shift();
+			my $tags	= join(" ", @{$task->{"tags"}})			if (exists($task->{"tags"}));
+			push(@{$line->{"events"}}, {
+				"title"		=> $task->{"description"},
+				"start"		=> ${beg_d} . "Z",
+				"end"		=> ${end_d} . "Z",
+				"color"		=> ${color},
+				"textColor"	=> ${text_color},
+				"durationEvent"	=> "true",
+				"caption"	=> ""
+					. "[Title]\t"	. ($task->{"description"}	|| "-") . "\n"
+					. "\n"
+					. "[Project]\t"	. ($task->{"project"}		|| "-") . "\n"
+					. "[Kind]\t"	. ($task->{"kind"}		|| "-") . "\n"
+					. "[Area]\t"	. ($task->{"area"}		|| "-") . "\n"
+					. "[Tags]\t"	. (${tags}			|| "-") . "\n"
+					. "\n"
+					. "[Begin]\t"	. (${beg_d}			|| "-") . "\n"
+					. "[End]\t"	. (${end_d}			|| "-") . "\n"
+				. "",
+			});
 		};
 		foreach my $task (sort({$a->{"description"} cmp $b->{"description"}} @{$data})) {
 			my $started = "0";
@@ -2180,25 +2206,12 @@ function task-export-text {
 					print TIME "\"" . (${end_d}					|| "-") . "\",";
 					print TIME "\"" . (${t_hrs}					|| "-") . "\",";
 					print TIME "\n";
-					push(@{$line->{"events"}}, {
-						"title"		=> $task->{"description"},
-						"start"		=> ${begin} . "Z",
-						"end"		=> ${end_d} . "Z",
-						"color"		=> $line_color->{$task->{"area"}},
-						"textColor"	=> ${text_color},
-						"durationEvent"	=> "true",
-						"caption"	=> ""
-							. "[Title]\t"	. ($task->{"description"}	|| "-") . "\n"
-							. "\n"
-							. "[Project]\t"	. ($task->{"project"}		|| "-") . "\n"
-							. "[Kind]\t"	. ($task->{"kind"}		|| "-") . "\n"
-							. "[Area]\t"	. ($task->{"area"}		|| "-") . "\n"
-							. "[Tags]\t"	. (${tags}			|| "-") . "\n"
-							. "\n"
-							. "[Begin]\t"	. (${begin}			|| "-") . "\n"
-							. "[End]\t"	. (${end_d}			|| "-") . "\n"
-						. "",
-					});
+					&export_line(
+						${task},
+						$line_color->{$task->{"area"}},
+						${begin},
+						${end_d},
+					);
 					$started	= "0";
 					$begin		= "0";
 				}
