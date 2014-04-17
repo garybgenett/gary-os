@@ -2151,8 +2151,6 @@ function task-export-text {
 					my($die_s, $die_d)	= &time_format($task->{"end"})		if (exists($task->{"end"}));
 					my $t_age		= &days(${die_s} - ${brn_s})		if (${die_s});
 					my($beg_s, $beg_d)	= &time_format($annotation->{"entry"})	if (exists($annotation->{"entry"}));
-					$started		= ${beg_s};
-					$begin			= ${beg_d};
 					print TIME "\"" . ($task->{"description"}			|| "-") . "\",";
 					print TIME "\"" . ($task->{"project"}				|| "-") . "\",";
 					print TIME "\"" . ($task->{"kind"}				|| "-") . "\",";
@@ -2169,12 +2167,13 @@ function task-export-text {
 					print TIME "\"" . ($annotation->{"entry"}			|| "-") . "\",";
 					print TIME "\"" . (${beg_s}					|| "-") . "\",";
 					print TIME "\"" . (${beg_d}					|| "-") . "\",";
+					$started	= ${beg_s};
+					$begin		= ${beg_d};
 				}
 				elsif (((!exists($task->{"kind"})) || ($task->{"kind"} ne "notes")) && ($annotation->{"description"} =~ m/^[[]track[]][:][[]end[]]$/)) {
 					my $tags		= join(" ", @{$task->{"tags"}})		if (exists($task->{"tags"}));
 					my($end_s, $end_d)	= &time_format($annotation->{"entry"})	if (exists($annotation->{"entry"}));
 					my $t_hrs		= &hour(${end_s} - ${started})		;
-					$started		= "0";
 					print TIME "\"" . ($annotation->{"entry"}			|| "-") . "\",";
 					print TIME "\"" . (${end_s}					|| "-") . "\",";
 					print TIME "\"" . (${end_d}					|| "-") . "\",";
@@ -2199,7 +2198,8 @@ function task-export-text {
 							. "[End]\t"	. (${end_d}			|| "-") . "\n"
 						. "",
 					});
-					$begin			= "0";
+					$started	= "0";
+					$begin		= "0";
 				}
 				elsif (((exists($task->{"kind"})) && ($task->{"kind"} eq "notes")) && ($annotation->{"description"} =~ m/^[[]notes[]][:]/)) {
 					if (${notes}) {
