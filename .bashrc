@@ -2140,9 +2140,6 @@ function task-export-text {
 			"writing"	=> "brown",
 		};
 		foreach my $task (sort({$a->{"description"} cmp $b->{"description"}} @{${data}})) {
-			if (!defined($task->{"annotations"})) {
-				next;
-			};
 			my $started = "0";
 			my $begin = "0";
 			my $notes = "0";
