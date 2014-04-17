@@ -2142,15 +2142,44 @@ function task-export-text {
 			"writing"	=> "magenta",
 		};
 		sub export_line {
+			my $type	= shift();
 			my $task	= shift();
 			my $color	= shift();
 			my $beg_d	= shift();
+			my $fst_d	= shift();
+			my $lst_d	= shift();
 			my $end_d	= shift();
-			my $tags	= join(" ", @{$task->{"tags"}})			if (exists($task->{"tags"}));
-			push(@{$line->{"events"}}, {
-				"title"		=> $task->{"description"},
-				"start"		=> ${beg_d} . "Z",
-				"end"		=> ${end_d} . "Z",
+			my $title	= $task->{"description"}					if (exists($task->{"description"}));
+				$title	= "[" . $task->{"project"} . "] " . $task->{"description"}	if ((exists($task->{"project"})) && ($task->{"project"} ne "_gtd"));
+			my $tags	= join(" ", @{$task->{"tags"}})					if (exists($task->{"tags"}));
+			my $beg_1	= ${beg_d} . "Z"						if (${beg_d});
+			my $beg_2	= ""								;
+			my $end_1	= ""								;
+			my $end_2	= ${end_d} . "Z"						if (${end_d});
+			if (${fst_d}) {
+				if (${fst_d} lt ${beg_d}) {
+					$beg_1	= ${fst_d} . "Z";
+					$beg_2	= ${beg_d} . "Z";
+#>>>				}
+#>>>				elsif (${fst_d} lt ${end_d}) {
+#>>>					$beg_2	= ${fst_d} . "Z";
+				};
+			};
+			if (${lst_d}) {
+				if (${lst_d} gt ${end_d}) {
+					$end_1	= ${end_d} . "Z";
+					$end_2	= ${lst_d} . "Z";
+#>>>				}
+#>>>				elsif (${lst_d} gt ${beg_d}) {
+#>>>					$end_1	= ${lst_d} . "Z";
+				};
+			};
+			push(@{$type->{"events"}}, {
+				"title"		=> ${title},
+				"start"		=> ${beg_1},
+				"latestStart"	=> ${beg_2},
+				"earliestEnd"	=> ${end_1},
+				"end"		=> ${end_2},
 				"color"		=> ${color},
 				"textColor"	=> ${text_color},
 				"durationEvent"	=> "true",
@@ -2163,6 +2192,8 @@ function task-export-text {
 					. "[Tags]\t"	. (${tags}			|| "-") . "\n"
 					. "\n"
 					. "[Begin]\t"	. (${beg_d}			|| "-") . "\n"
+					. "[First]\t"	. (${fst_d}			|| "-") . "\n"
+					. "[Last]\t"	. (${lst_d}			|| "-") . "\n"
 					. "[End]\t"	. (${end_d}			|| "-") . "\n"
 				. "",
 			});
@@ -2207,9 +2238,12 @@ function task-export-text {
 					print TIME "\"" . (${t_hrs}					|| "-") . "\",";
 					print TIME "\n";
 					&export_line(
+						${line},
 						${task},
 						$line_color->{$task->{"area"}},
 						${begin},
+						"",
+						"",
 						${end_d},
 					);
 					$started	= "0";
