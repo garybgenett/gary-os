@@ -2332,7 +2332,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			task-notes "(project:${PROJECT} ${@})"
 		else
 			(cd ${PIMDIR} && ${GIT_STS} tasks*)
-			task read kind:track
+			task read kind:track status:pending
 			task limit:12 "${@}"
 		fi
 		return 0
