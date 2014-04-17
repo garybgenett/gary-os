@@ -2140,7 +2140,7 @@ function task-export-text {
 			"work"		=> "pink",
 			"writing"	=> "brown",
 		};
-		foreach my $task (sort({$a->{"description"} cmp $b->{"description"}} @{${data}})) {
+		foreach my $task (sort({$a->{"description"} cmp $b->{"description"}} @{$data})) {
 			my $started = "0";
 			my $begin = "0";
 			my $notes = "0";
@@ -2252,7 +2252,7 @@ function task-notes {
 			die("NO MATCHES!");
 		};
 		my $uuids = [];
-		foreach my $task (sort({$a->{"description"} cmp $b->{"description"}} @{${data}})) {
+		foreach my $task (sort({$a->{"description"} cmp $b->{"description"}} @{$data})) {
 			my $file = ${root} . "/" . $task->{"uuid"};
 			my $text = "[" . $task->{"description"} . "]";
 			my $notes = "0";
