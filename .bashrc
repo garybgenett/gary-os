@@ -2129,7 +2129,8 @@ function task-export-text {
 			"dateTimeFormat"	=> "iso8601",
 			"events"		=> [],
 		};
-		my $color = {
+		my $text_color = "black";
+		my $line_color = {
 			"_gtd"		=> "red",
 			"computer"	=> "blue",
 			"family"	=> "yellow",
@@ -2137,8 +2138,8 @@ function task-export-text {
 			"people"	=> "purple",
 			"self"		=> "orange",
 			"travel"	=> "cyan",
-			"work"		=> "pink",
-			"writing"	=> "brown",
+			"work"		=> "brown",
+			"writing"	=> "magenta",
 		};
 		foreach my $task (sort({$a->{"description"} cmp $b->{"description"}} @{$data})) {
 			my $started = "0";
@@ -2183,8 +2184,8 @@ function task-export-text {
 						"title"		=> $task->{"description"},
 						"start"		=> ${begin} . "Z",
 						"end"		=> ${end_d} . "Z",
-						"color"		=> $color->{$task->{"area"}},
-						"textColor"	=> "black",
+						"color"		=> $line_color->{$task->{"area"}},
+						"textColor"	=> ${text_color},
 						"durationEvent"	=> "true",
 						"caption"	=> ""
 							. "[Title]\t"	. ($task->{"description"}	|| "-") . "\n"
