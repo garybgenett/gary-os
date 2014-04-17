@@ -2101,10 +2101,11 @@ function task-export-text {
 		my $args = join(" ", @ARGV);
 		my $root = qx(task show data.location); $root =~ m/(data[.]location)\s+([^\s]+)/; $root = $2;
 		my $data = decode_json("[" . qx(task export "${args}") . "]");
-		open(JSON, ">", ${root} . ".json")		|| die();
-		open(TIME, ">", ${root} . ".csv")		|| die();
-		open(LINE, ">", ${root} . ".timeline.json")	|| die();
-		open(NOTE, ">", ${root} . ".txt")		|| die();
+		open(JSON, ">", ${root} . ".json")			|| die();
+		open(TIME, ">", ${root} . ".csv")			|| die();
+		open(PROJ, ">", ${root} . ".timeline.projects.json")	|| die();
+		open(LINE, ">", ${root} . ".timeline.json")		|| die();
+		open(NOTE, ">", ${root} . ".txt")			|| die();
 		my $json = JSON::PP->new; print JSON $json->pretty->encode(${data});
 		print TIME "\"[DESC]\",\"[PROJ]\",\"[KIND]\",\"[AREA]\",\"[TAGS]\",";
 		print TIME "\"[.UID]\",";
@@ -2115,10 +2116,15 @@ function task-export-text {
 		print TIME "\"[.END]\",\"[_END]\",\"[=END]\",";
 		print TIME "\"[=HRS]\",";
 		print TIME "\n";
+		my $proj = {
+			"dateTimeFormat"	=> "iso8601",
+			"events"		=> [],
+		};
 		my $line = {
 			"dateTimeFormat"	=> "iso8601",
 			"events"		=> [],
 		};
+		my $current_time = strftime("%Y-%m-%d %H:%M:%S", localtime(time()));
 		sub days { return(sprintf("%.9f", shift() / (60*60*24)	)); };
 		sub hour { return(sprintf("%.9f", shift() / (60*60)	)); };
 		sub time_format {
@@ -2130,6 +2136,12 @@ function task-export-text {
 			return(${epoch}, ${ltime});
 		};
 		my $text_color = "black";
+		my $proj_color = {
+			"working"	=> "green",
+			"nostart"	=> "yellow",
+			"overdue"	=> "red",
+			"history"	=> "gray",
+		};
 		my $line_color = {
 			"_gtd"		=> "red",
 			"computer"	=> "blue",
@@ -2140,6 +2152,30 @@ function task-export-text {
 			"travel"	=> "cyan",
 			"work"		=> "brown",
 			"writing"	=> "magenta",
+		};
+		sub export_proj {
+			my $task		= shift();
+			my($beg_s, $beg_d)	= &time_format($task->{"entry"})				if (exists($task->{"entry"}));
+			my($end_s, $end_d)	= &time_format($task->{"due"})					if (exists($task->{"due"}));
+			my $fst_d		= ""								;
+			my $lst_d		= ""								;
+			foreach my $annotation (@{$task->{"annotations"}}) { my $z;
+				($z, $fst_d)	= &time_format($annotation->{"entry"})				if ((!${fst_d}) && ($annotation->{"description"} =~ m/^[[]track[]][:][[]begin[]]$/));
+				($z, $lst_d)	= &time_format($annotation->{"entry"})				if ($annotation->{"description"} =~ m/^[[]track[]][:][[]end[]]$/);
+			};
+			my $color		= $proj_color->{"nostart"}					;
+				$color		= $proj_color->{"working"}					if (${fst_d});
+				$color		= $proj_color->{"overdue"}					if (${current_time} gt ${end_d});
+				$color		= $proj_color->{"history"}					if (exists($task->{"end"}));
+			&export_line(
+				${proj},
+				${task},
+				${color},
+				${beg_d},
+				${fst_d},
+				${lst_d},
+				${end_d},
+			);
 		};
 		sub export_line {
 			my $type	= shift();
@@ -2202,6 +2238,9 @@ function task-export-text {
 			my $started = "0";
 			my $begin = "0";
 			my $notes = "0";
+			if ((exists($task->{"due"})) && (!exists($task->{"recur"}))) {
+				&export_proj(${task});
+			};
 			foreach my $annotation (@{$task->{"annotations"}}) {
 				if (((!exists($task->{"kind"})) || ($task->{"kind"} ne "notes")) && ($annotation->{"description"} =~ m/^[[]track[]][:][[]begin[]]$/)) {
 					my $tags		= join(" ", @{$task->{"tags"}})		if (exists($task->{"tags"}));
@@ -2273,10 +2312,12 @@ function task-export-text {
 				print TIME "\n";
 			};
 		};
+		print PROJ $json->pretty->encode(${proj});
 		print LINE $json->pretty->encode(${line});
 		print NOTE "\n" . (">" x 10) . "[end of file]" . ("<" x 10) . "\n";
 		close(JSON) || die();
 		close(TIME) || die();
+		close(PROJ) || die();
 		close(LINE) || die();
 		close(NOTE) || die();
 	' -- "${@}" || return 1
