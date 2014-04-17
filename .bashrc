@@ -2146,39 +2146,39 @@ function task-export-text {
 			my $notes = "0";
 			foreach my $annotation (@{$task->{"annotations"}}) {
 				if (((!exists($task->{"kind"})) || ($task->{"kind"} ne "notes")) && ($annotation->{"description"} =~ m/^[[]track[]][:][[]begin[]]$/)) {
-					my $tags		= join(" ", @{$task->{"tags"}})			if (exists($task->{"tags"}));
-					my($brn_s, $brn_d)	= &time_format($task->{"entry"})		if (exists($task->{"entry"}));
-					my($die_s, $die_d)	= &time_format($task->{"end"})			if (exists($task->{"end"}));
-					my $t_age		= &days(${die_s} - ${brn_s})			if (${die_s});
-					my($beg_s, $beg_d)	= &time_format($annotation->{"entry"})		if (exists($annotation->{"entry"}));
+					my $tags		= join(" ", @{$task->{"tags"}})		if (exists($task->{"tags"}));
+					my($brn_s, $brn_d)	= &time_format($task->{"entry"})	if (exists($task->{"entry"}));
+					my($die_s, $die_d)	= &time_format($task->{"end"})		if (exists($task->{"end"}));
+					my $t_age		= &days(${die_s} - ${brn_s})		if (${die_s});
+					my($beg_s, $beg_d)	= &time_format($annotation->{"entry"})	if (exists($annotation->{"entry"}));
 					$started		= ${beg_s};
 					$begin			= ${beg_d};
-					print TIME "\"" . ($task->{"description"}				|| "-") . "\",";
-					print TIME "\"" . ($task->{"project"}					|| "-") . "\",";
-					print TIME "\"" . ($task->{"kind"}					|| "-") . "\",";
-					print TIME "\"" . ($task->{"area"}					|| "-") . "\",";
-					print TIME "\"" . (${tags}						|| "-") . "\",";
-					print TIME "\"" . ($task->{"uuid"}					|| "-") . "\",";
-					print TIME "\"" . ($task->{"entry"}					|| "-") . "\",";
-					print TIME "\"" . (${brn_s}						|| "-") . "\",";
-					print TIME "\"" . (${brn_d}						|| "-") . "\",";
-					print TIME "\"" . ($task->{"end"}					|| "-") . "\",";
-					print TIME "\"" . (${die_s}						|| "-") . "\",";
-					print TIME "\"" . (${die_d}						|| "-") . "\",";
-					print TIME "\"" . (${t_age}						|| "-") . "\",";
-					print TIME "\"" . ($annotation->{"entry"}				|| "-") . "\",";
-					print TIME "\"" . (${beg_s}						|| "-") . "\",";
-					print TIME "\"" . (${beg_d}						|| "-") . "\",";
+					print TIME "\"" . ($task->{"description"}			|| "-") . "\",";
+					print TIME "\"" . ($task->{"project"}				|| "-") . "\",";
+					print TIME "\"" . ($task->{"kind"}				|| "-") . "\",";
+					print TIME "\"" . ($task->{"area"}				|| "-") . "\",";
+					print TIME "\"" . (${tags}					|| "-") . "\",";
+					print TIME "\"" . ($task->{"uuid"}				|| "-") . "\",";
+					print TIME "\"" . ($task->{"entry"}				|| "-") . "\",";
+					print TIME "\"" . (${brn_s}					|| "-") . "\",";
+					print TIME "\"" . (${brn_d}					|| "-") . "\",";
+					print TIME "\"" . ($task->{"end"}				|| "-") . "\",";
+					print TIME "\"" . (${die_s}					|| "-") . "\",";
+					print TIME "\"" . (${die_d}					|| "-") . "\",";
+					print TIME "\"" . (${t_age}					|| "-") . "\",";
+					print TIME "\"" . ($annotation->{"entry"}			|| "-") . "\",";
+					print TIME "\"" . (${beg_s}					|| "-") . "\",";
+					print TIME "\"" . (${beg_d}					|| "-") . "\",";
 				}
 				elsif (((!exists($task->{"kind"})) || ($task->{"kind"} ne "notes")) && ($annotation->{"description"} =~ m/^[[]track[]][:][[]end[]]$/)) {
-					my $tags		= join(" ", @{$task->{"tags"}})			if (exists($task->{"tags"}));
-					my($end_s, $end_d)	= &time_format($annotation->{"entry"})		if (exists($annotation->{"entry"}));
-					my $t_hrs		= &hour(${end_s} - ${started})			;
+					my $tags		= join(" ", @{$task->{"tags"}})		if (exists($task->{"tags"}));
+					my($end_s, $end_d)	= &time_format($annotation->{"entry"})	if (exists($annotation->{"entry"}));
+					my $t_hrs		= &hour(${end_s} - ${started})		;
 					$started		= "0";
-					print TIME "\"" . ($annotation->{"entry"}				|| "-") . "\",";
-					print TIME "\"" . (${end_s}						|| "-") . "\",";
-					print TIME "\"" . (${end_d}						|| "-") . "\",";
-					print TIME "\"" . (${t_hrs}						|| "-") . "\",";
+					print TIME "\"" . ($annotation->{"entry"}			|| "-") . "\",";
+					print TIME "\"" . (${end_s}					|| "-") . "\",";
+					print TIME "\"" . (${end_d}					|| "-") . "\",";
+					print TIME "\"" . (${t_hrs}					|| "-") . "\",";
 					print TIME "\n";
 					push(@{$line->{"events"}}, {
 						"title"		=> $task->{"description"},
