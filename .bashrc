@@ -2194,19 +2194,21 @@ function task-export-text {
 			my $end_2	= ${end_d} . "Z"						if (${end_d});
 			if (${fst_d}) {
 				if (${fst_d} lt ${beg_d}) {
-					$beg_1	= ${fst_d} . "Z";
-					$beg_2	= ${beg_d} . "Z";
-#>>>				}
-#>>>				elsif (${fst_d} lt ${end_d}) {
-#>>>					$beg_2	= ${fst_d} . "Z";
+#>>> uncomment to show early starts
+#>>>					$beg_1	= ${fst_d} . "Z";
+#>>>					$beg_2	= ${beg_d} . "Z";
+				}
+				elsif (${fst_d} lt ${end_d}) {
+					$beg_2	= ${fst_d} . "Z";
 				};
 			};
 			if (${lst_d}) {
 				if (${lst_d} gt ${end_d}) {
 					$end_1	= ${end_d} . "Z";
 					$end_2	= ${lst_d} . "Z";
-#>>>				}
-#>>>				elsif (${lst_d} gt ${beg_d}) {
+				}
+				elsif (${lst_d} gt ${beg_d}) {
+#>>> uncomment to show early finishes
 #>>>					$end_1	= ${lst_d} . "Z";
 				};
 			};
