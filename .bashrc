@@ -2096,7 +2096,7 @@ function task-export-text {
 		use warnings;
 		use JSON::PP;
 		use POSIX qw(strftime);
-		use Time::Local qw(timegm);
+		use Time::Local qw(timegm timelocal);
 		use MIME::Base64;
 		my $args = join(" ", @ARGV);
 		my $root = qx(task show data.location); $root =~ m/(data[.]location)\s+([^\s]+)/; $root = $2;
@@ -2116,6 +2116,7 @@ function task-export-text {
 		print TIME "\"[.END]\",\"[_END]\",\"[=END]\",";
 		print TIME "\"[=HRS]\",";
 		print TIME "\n";
+		my $proj_dups = {};
 		my $proj = {
 			"dateTimeFormat"	=> "iso8601",
 			"events"		=> [],
@@ -2125,8 +2126,10 @@ function task-export-text {
 			"events"		=> [],
 		};
 		my $current_time = strftime("%Y-%m-%d %H:%M:%S", localtime(time()));
-		sub days { return(sprintf("%.9f", shift() / (60*60*24)	)); };
-		sub hour { return(sprintf("%.9f", shift() / (60*60)	)); };
+		sub lead { return(2* (7*			(60*60*24)	)); };
+		sub plus { return(2* (1*			(60*60*24)	)); };
+		sub days { return(sprintf("%.9f", shift() /	(60*60*24)	)); };
+		sub hour { return(sprintf("%.9f", shift() /	(60*60)		)); };
 		sub time_format {
 			my $stamp = shift;
 			$stamp =~ m/^([0-9]{4})([0-9]{2})([0-9]{2})[T]([0-9]{2})([0-9]{2})([0-9]{2})[Z]$/;
@@ -2134,6 +2137,26 @@ function task-export-text {
 			my $epoch = timegm($sc,$mn,$hr,$dy,($mo-1),$yr);
 			my $ltime = strftime("%Y-%m-%d %H:%M:%S", localtime(${epoch}));
 			return(${epoch}, ${ltime});
+		};
+		sub calculate_due {
+			my $task = shift();
+			my($date, $y) = &time_format(shift());
+			my($born, $z) = &time_format($task->{"entry"});
+			my $result = ${date} - &lead();
+			my $hold = &hold_date(${task});
+			if (${hold}) {
+				$hold =~ m/^([0-9]{4})[-]([0-9]{2})[-]([0-9]{2})[ ]([0-9]{2})[:]([0-9]{2})[:]([0-9]{2})$/;
+				my($yr,$mo,$dy,$hr,$mn,$sc) = ($1,$2,$3,$4,$5,$6);
+				$hold = timelocal($sc,$mn,$hr,$dy,($mo-1),$yr);
+				if (${hold} gt ${born}) {
+					$born = ${hold};
+				};
+			};
+			if (${result} lt (${born} + &plus())) {
+				$result = ${born} + &plus();
+			};
+			$result = strftime("%Y%m%dT%H%M%SZ", gmtime(${result}));
+			return(${result});
 		};
 		my $text_color = "black";
 		my $proj_color = {
@@ -2152,6 +2175,17 @@ function task-export-text {
 			"travel"	=> "cyan",
 			"work"		=> "brown",
 			"writing"	=> "magenta",
+		};
+		sub get_by_uuid {
+			my $uuid = shift();
+			my $task;
+			foreach my $item (@{$data}) {
+				if ($item->{"uuid"} eq ${uuid}) {
+					$task = ${item};
+					last;
+				};
+			};
+			return(${task});
 		};
 		sub hold_date {
 			my $task = shift();
@@ -2177,6 +2211,13 @@ function task-export-text {
 		};
 		sub export_proj {
 			my $task		= shift();
+			if (exists($proj_dups->{$task->{"uuid"}})) {
+				warn("SKIPPING DUPLICATE: " . $task->{"uuid"});
+				return(0);
+			}
+			else {
+				$proj_dups->{$task->{"uuid"}} = ${task};
+			};
 			my($beg_s, $beg_d)	= &time_format($task->{"entry"})				if (exists($task->{"entry"}));
 			my($end_s, $end_d)	= &time_format($task->{"due"})					if (exists($task->{"due"}));
 			my $fst_d		= ""								;
@@ -2198,6 +2239,25 @@ function task-export-text {
 				${lst_d},
 				${end_d},
 			);
+			if (exists($task->{"depends"})) {
+				foreach my $dep (sort(split(",", $task->{"depends"}))) {
+					my $item = &get_by_uuid(${dep});
+					if (!${item}) {
+						warn("UUID NOT INCLUDED: ${dep}");
+					}
+					else {
+						if (!exists($item->{"due"})) {
+							if (!exists($item->{"end"})) {
+								$item->{"due"} = &calculate_due(${item}, $task->{"due"});
+							}
+							else {
+								$item->{"due"} = $item->{"end"};
+							};
+						};
+						&export_proj(${item});
+					};
+				};
+			};
 		};
 		sub export_line {
 			my $type	= shift();
