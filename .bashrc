@@ -2153,6 +2153,28 @@ function task-export-text {
 			"work"		=> "brown",
 			"writing"	=> "magenta",
 		};
+		sub hold_date {
+			my $task = shift();
+			my $result = "";
+			if ((exists($task->{"wait"})) && (exists($task->{"scheduled"}))) {
+				if ($task->{"wait"} gt $task->{"scheduled"}) {
+					$result = $task->{"wait"};
+				}
+				else {
+					$result = $task->{"scheduled"};
+				};
+			}
+			elsif (exists($task->{"wait"})) {
+				$result = $task->{"wait"};
+			}
+			elsif (exists($task->{"scheduled"})) {
+				$result = $task->{"scheduled"};
+			};
+			if (${result}) { my $z;
+				($z, $result) = &time_format(${result});
+			};
+			return(${result});
+		};
 		sub export_proj {
 			my $task		= shift();
 			my($beg_s, $beg_d)	= &time_format($task->{"entry"})				if (exists($task->{"entry"}));
@@ -2188,7 +2210,9 @@ function task-export-text {
 			my $title	= $task->{"description"}					if (exists($task->{"description"}));
 				$title	= "[" . $task->{"project"} . "] " . $task->{"description"}	if ((exists($task->{"project"})) && ($task->{"project"} ne "_gtd"));
 			my $tags	= join(" ", @{$task->{"tags"}})					if (exists($task->{"tags"}));
+			my $hld_d	= &hold_date(${task})						;
 			my $beg_1	= ${beg_d} . "Z"						if (${beg_d});
+				$beg_1	= ${hld_d} . "Z"						if (${hld_d});
 			my $beg_2	= ""								;
 			my $end_1	= ""								;
 			my $end_2	= ${end_d} . "Z"						if (${end_d});
@@ -2230,6 +2254,7 @@ function task-export-text {
 					. "[Tags]\t"	. (${tags}			|| "-") . "\n"
 					. "\n"
 					. "[Begin]\t"	. (${beg_d}			|| "-") . "\n"
+					. "[Hold]\t"	. (${hld_d}			|| "-") . "\n"
 					. "[First]\t"	. (${fst_d}			|| "-") . "\n"
 					. "[Last]\t"	. (${lst_d}			|| "-") . "\n"
 					. "[End]\t"	. (${end_d}			|| "-") . "\n"
