@@ -2125,6 +2125,24 @@ function task-export-text {
 			"dateTimeFormat"	=> "iso8601",
 			"events"		=> [],
 		};
+		my $text_color = "black";
+		my $proj_color = {
+			"working"	=> "green",
+			"nostart"	=> "yellow",
+			"overdue"	=> "red",
+			"history"	=> "gray",
+		};
+		my $line_color = {
+			"_gtd"		=> "red",
+			"computer"	=> "blue",
+			"family"	=> "yellow",
+			"money"		=> "green",
+			"people"	=> "purple",
+			"self"		=> "orange",
+			"travel"	=> "cyan",
+			"work"		=> "brown",
+			"writing"	=> "magenta",
+		};
 		my $current_time = strftime("%Y-%m-%d %H:%M:%S", localtime(time()));
 		sub lead { return(2* (7*			(60*60*24)	)); };
 		sub plus { return(2* (1*			(60*60*24)	)); };
@@ -2157,24 +2175,6 @@ function task-export-text {
 			};
 			$result = strftime("%Y%m%dT%H%M%SZ", gmtime(${result}));
 			return(${result});
-		};
-		my $text_color = "black";
-		my $proj_color = {
-			"working"	=> "green",
-			"nostart"	=> "yellow",
-			"overdue"	=> "red",
-			"history"	=> "gray",
-		};
-		my $line_color = {
-			"_gtd"		=> "red",
-			"computer"	=> "blue",
-			"family"	=> "yellow",
-			"money"		=> "green",
-			"people"	=> "purple",
-			"self"		=> "orange",
-			"travel"	=> "cyan",
-			"work"		=> "brown",
-			"writing"	=> "magenta",
 		};
 		sub get_by_uuid {
 			my $uuid = shift();
