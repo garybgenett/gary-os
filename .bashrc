@@ -2278,12 +2278,12 @@ function task-export-text {
 			my $end_2	= ${end_d} . "Z"						if (${end_d});
 			if (${fst_d}) {
 				if (${fst_d} lt ${beg_d}) {
-#>>> uncomment to show early starts
-#>>>					$beg_1	= ${fst_d} . "Z";
-#>>>					$beg_2	= ${beg_d} . "Z";
+					$beg_1	= ${fst_d} . "Z";
+					$beg_2	= ${beg_d} . "Z";
 				}
 				elsif (${fst_d} lt ${end_d}) {
-					$beg_2	= ${fst_d} . "Z";
+#>>> uncomment to show late starts
+#>>>					$beg_2	= ${fst_d} . "Z";
 				};
 			};
 			if (${lst_d}) {
