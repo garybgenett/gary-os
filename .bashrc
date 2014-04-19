@@ -2130,7 +2130,7 @@ function task-export-text {
 			"working"	=> "green",
 			"nostart"	=> "yellow",
 			"overdue"	=> "red",
-			"history"	=> "gray",
+			"history"	=> "black",
 		};
 		my $line_color = {
 			"_gtd"		=> "red",
@@ -2211,6 +2211,7 @@ function task-export-text {
 		};
 		sub export_proj {
 			my $task		= shift();
+			my $main		= shift();
 			if (exists($proj_dups->{$task->{"uuid"}})) {
 				warn("SKIPPING DUPLICATE: " . $task->{"uuid"});
 				return(0);
@@ -2226,14 +2227,17 @@ function task-export-text {
 				($z, $fst_d)	= &time_format($annotation->{"entry"})				if ((!${fst_d}) && ($annotation->{"description"} =~ m/^[[]track[]][:][[]begin[]]$/));
 				($z, $lst_d)	= &time_format($annotation->{"entry"})				if ($annotation->{"description"} =~ m/^[[]track[]][:][[]end[]]$/);
 			};
-			my $color		= $proj_color->{"nostart"}					;
-				$color		= $proj_color->{"working"}					if (${fst_d});
-				$color		= $proj_color->{"overdue"}					if (${current_time} gt ${end_d});
-				$color		= $proj_color->{"history"}					if (exists($task->{"end"}));
+			my $clr_b		= $proj_color->{"nostart"}					;
+				$clr_b		= $proj_color->{"working"}					if (${fst_d});
+				$clr_b		= $proj_color->{"overdue"}					if (${current_time} gt ${end_d});
+				$clr_b		= $proj_color->{"history"}					if (exists($task->{"end"}));
+			my $clr_t		= ${text_color}							;
+				$clr_t		= "gray"							if (!${main});
 			&export_line(
 				${proj},
 				${task},
-				${color},
+				${clr_b},
+				${clr_t},
 				${beg_d},
 				${fst_d},
 				${lst_d},
@@ -2254,7 +2258,7 @@ function task-export-text {
 								$item->{"due"} = $item->{"end"};
 							};
 						};
-						&export_proj(${item});
+						&export_proj(${item}, 0);
 					};
 				};
 			};
@@ -2262,7 +2266,8 @@ function task-export-text {
 		sub export_line {
 			my $type	= shift();
 			my $task	= shift();
-			my $color	= shift();
+			my $clr_b	= shift();
+			my $clr_t	= shift();
 			my $beg_d	= shift();
 			my $fst_d	= shift();
 			my $lst_d	= shift();
@@ -2302,8 +2307,8 @@ function task-export-text {
 				"latestStart"	=> ${beg_2},
 				"earliestEnd"	=> ${end_1},
 				"end"		=> ${end_2},
-				"color"		=> ${color},
-				"textColor"	=> ${text_color},
+				"color"		=> ${clr_b},
+				"textColor"	=> ${clr_t},
 				"durationEvent"	=> "true",
 				"caption"	=> ""
 					. "[Title]\t"	. ($task->{"description"}	|| "-") . "\n"
@@ -2326,7 +2331,7 @@ function task-export-text {
 			my $begin = "0";
 			my $notes = "0";
 			if ((exists($task->{"due"})) && (!exists($task->{"recur"}))) {
-				&export_proj(${task});
+				&export_proj(${task}, 1);
 			};
 			foreach my $annotation (@{$task->{"annotations"}}) {
 				if (((!exists($task->{"kind"})) || ($task->{"kind"} ne "notes")) && ($annotation->{"description"} =~ m/^[[]track[]][:][[]begin[]]$/)) {
@@ -2367,6 +2372,7 @@ function task-export-text {
 						${line},
 						${task},
 						$line_color->{$task->{"area"}},
+						${text_color},
 						${begin},
 						"",
 						"",
