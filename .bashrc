@@ -2159,21 +2159,37 @@ function task-export-text {
 		sub calculate_due {
 			my $task = shift();
 			my($date, $y) = &time_format(shift());
-			my($born, $z) = &time_format($task->{"entry"});
 			my $result = ${date} - &lead();
 			my $hold = &hold_date(${task});
 			if (${hold}) {
 				$hold =~ m/^([0-9]{4})[-]([0-9]{2})[-]([0-9]{2})[ ]([0-9]{2})[:]([0-9]{2})[:]([0-9]{2})$/;
 				my($yr,$mo,$dy,$hr,$mn,$sc) = ($1,$2,$3,$4,$5,$6);
 				$hold = timelocal($sc,$mn,$hr,$dy,($mo-1),$yr);
-				if (${hold} gt ${born}) {
-					$born = ${hold};
+				if (${result} lt (${hold} + &plus())) {
+					$result = ${hold} + &plus();
 				};
 			};
-			if (${result} lt (${born} + &plus())) {
-				$result = ${born} + &plus();
-			};
 			$result = strftime("%Y%m%dT%H%M%SZ", gmtime(${result}));
+			return(${result});
+		};
+		sub calculate_beg {
+			my $due_l = shift();
+			my $beg_s = shift();
+			my $end_s = shift();
+			my $result;
+			if (${due_l}) {
+				my($due_s, $due_d) = &time_format(${due_l});
+				if (${due_s} gt (${end_s} - &plus())) {
+					$due_s = ${end_s} - &plus();
+				};
+				$result = strftime("%Y-%m-%d %H:%M:%S", localtime(${due_s}));
+			}
+			else {
+				if (${beg_s} gt (${end_s} - &plus())) {
+					$beg_s = ${end_s} - &plus();
+				};
+				$result = strftime("%Y-%m-%d %H:%M:%S", localtime(${beg_s}));
+			};
 			return(${result});
 		};
 		sub get_by_uuid {
@@ -2233,16 +2249,7 @@ function task-export-text {
 				$clr_b		= $proj_color->{"history"}					if (exists($task->{"end"}));
 			my $clr_t		= ${text_color}							;
 				$clr_t		= "gray"							if (!${main});
-			&export_line(
-				${proj},
-				${task},
-				${clr_b},
-				${clr_t},
-				${beg_d},
-				${fst_d},
-				${lst_d},
-				${end_d},
-			);
+			my $due_l;
 			if (exists($task->{"depends"})) {
 				foreach my $dep (sort(split(",", $task->{"depends"}))) {
 					my $item = &get_by_uuid(${dep});
@@ -2258,10 +2265,28 @@ function task-export-text {
 								$item->{"due"} = $item->{"end"};
 							};
 						};
+						if ((!${due_l}) || (${due_l} lt $item->{"due"})) {
+							$due_l = $item->{"due"};
+						};
 						&export_proj(${item}, 0);
 					};
 				};
 			};
+			$beg_d = &calculate_beg(
+				${due_l},
+				${beg_s},
+				${end_s},
+			);
+			&export_line(
+				${proj},
+				${task},
+				${clr_b},
+				${clr_t},
+				${beg_d},
+				${fst_d},
+				${lst_d},
+				${end_d},
+			);
 		};
 		sub export_line {
 			my $type	= shift();
