@@ -2513,6 +2513,8 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 	function impersonate_command {
 		if [[ ${1} == "RESET" ]]; then
 			cd ${PIMDIR}
+			GIT_PAGER= \
+			${GIT} diff tasks	|| return 1
 			${GIT} reset tasks	|| return 1
 			${GIT} checkout tasks	|| return 1
 			sudo chown -vR plastic:plastic tasks
