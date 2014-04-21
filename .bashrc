@@ -1860,6 +1860,7 @@ function shell {
 			if [[ ${HOSTNAME} != spider ]]; then
 				[[ -z $(${PS} 2>/dev/null | ${GREP} "5909[:]") ]] && OPTS="${OPTS} -L 5909:127.0.0.1:5900"
 				[[ -z $(${PS} 2>/dev/null | ${GREP} "6606[:]") ]] && OPTS="${OPTS} -L 6606:127.0.0.1:6666"
+				[[ -z $(${PS} 2>/dev/null | ${GREP} "6608[:]") ]] && OPTS="${OPTS} -L 6608:127.0.0.1:6668"
 			fi
 			;;
 		(you)	DEST="bastion.olympus.f5net.com"
