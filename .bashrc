@@ -2542,7 +2542,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		else
 			(cd ${PIMDIR} && ${GIT_STS} tasks)
 			task read kind:track status:pending
-			task limit:12 "${@}"
+			task view limit:12 "${@}"
 		fi
 		return 0
 	}
