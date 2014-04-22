@@ -2091,6 +2091,78 @@ function task-export {
 
 ########################################
 
+function task-export-report {
+	declare DATE="$(date --iso)"
+	declare REPORT="${1}.${DATE}" && shift
+	declare EMAIL_DEST="${1}" && shift
+	declare EMAIL_MAIL="${1}" && shift
+	declare EMAIL_NAME="${1}" && shift
+	declare EMAIL_SIGN="${1}" && shift
+	task-export-text area:work
+	cat ${PIMDIR}/tasks.timeline.html |
+		perl -pe '
+			use JSON::PP;
+			my $json = JSON::PP->new();
+			my $tracking = $json->encode(decode_json("[" . qx(cat '${PIMDIR}/tasks.timeline.json')		. "]"));
+			my $projects = $json->encode(decode_json("[" . qx(cat '${PIMDIR}/tasks.timeline.projects.json')	. "]"));
+			sub reformat {
+				my $format = shift();
+				$format =~ s|^[[]||g;
+				$format =~ s|\\n|\\\\n|g;
+				$format =~ s|\\t|\\\\t|g;
+				$format =~ s|[]]$||g;
+				return(${format});
+			};
+			$tracking = &reformat(${tracking});
+			$projects = &reformat(${projects});
+			s|.+tasks.timeline.json.+$|		var parsed_e = JSON.parse('\''${tracking}'\''); eventSource.loadJSON(parsed_e, "");|g;
+			s|.+tasks.timeline.projects.json.+$|	var parsed_p = JSON.parse('\''${projects}'\''); projectSource.loadJSON(parsed_p, "");|g;
+		' \
+		>${REPORT}.html
+	if [[ ${EMAIL_MAIL} ]]; then
+		cat >${REPORT}.txt <<END_OF_FILE
+Attached is my weekly status report.  This is an automated message, and should be generated every weekend.
+
+The HTML file should open in any browser, but has been specifically tested in Firefox and Internet Explorer.  Internet access is required to properly view the file, as it uses 3rd party Javascript libraries to render the output.  Your browser may request that you accept running the script / blocked content, which you will need to do.
+
+There are four slider bars in the report, progressing in scope from hourly to daily to weekly to monthly.  The highlighed areas show what portion of the more granular timeframes are being displayed.  Daily time-tracking is shown on the top two bars (hourly and daily) and long-term project tracking is on the lower two bars (weekly and monthly).
+
+Long-term project tracking legend:
+	* Text color coding:
+		* Black text -- final / due items
+		* Gray text -- dependencies / sub-tasks
+	* Bar color coding:
+		* Black -- complete
+		* Green -- in progress (hours have been logged)
+		* Yellow -- not yet started
+		* Red -- overdue
+
+Some important notes:
+	* Mousing over each item will show a pop-up with start and end dates, along with any "hold" dates and the first and last dates logged against the task
+	* The long-term tracking is just a guideline/overview, since not all tasks will take the amout of time allotted
+	* Not all time is accounted for in the hourly time-tracking in this report
+
+Please see me with any comments or questions.
+END_OF_FILE
+	fi
+	if [[ ${EMAIL_SIGN} ]]; then
+		echo -en "\n-- \n${EMAIL_SIGN}\n" >>${REPORT}.txt
+	fi
+	if [[ -n ${EMAIL_DEST} ]] && [[ -n ${EMAIL_MAIL} ]]; then
+		cat ${REPORT}.txt |
+			EMAIL_MAIL="${EMAIL_MAIL}" \
+			EMAIL_NAME="${EMAIL_NAME}" \
+			email -x \
+				-s "Status Report: ${DATE}" \
+				-a ${REPORT}.html \
+				-c ${EMAIL_MAIL} \
+				-- ${EMAIL_DEST}
+	fi
+	return 0
+}
+
+########################################
+
 function task-export-text {
 	perl -e '
 		use strict;
