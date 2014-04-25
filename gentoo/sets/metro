@@ -359,6 +359,7 @@ app-misc/remind
 app-misc/task
 app-misc/wyrd
 app-office/ledger
+dev-db/recutils
 
 mail-client/mailx
 mail-client/mutt
