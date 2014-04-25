@@ -8,6 +8,7 @@ app-emulation/lxc			~*		# gentoo required
 app-misc/binwalk			~*		# gentoo required
 app-misc/ca-certificates		~*		# gentoo required
 app-misc/hello				~*		# gentoo required
+dev-db/recutils				~*		# gentoo required
 dev-lang/luajit				~*		# gentoo required
 dev-libs/apr				~*		# gentoo required
 dev-lua/luarocks			~*		# gentoo required
