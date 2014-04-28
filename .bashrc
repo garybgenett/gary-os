@@ -2581,6 +2581,57 @@ function task-notes {
 
 ########################################
 
+function task-depends {
+	perl -e '
+		use strict;
+		use warnings;
+		use JSON::PP;
+		my $c_ttl = 40; $c_ttl = shift() if ((@{ARGV}) && (${ARGV[0]} =~ /^[0-9]+$/));
+		my $c_uid = 36;
+		my $c_due = 16;
+		my $c_end = 16;
+		my $args = join(" ", @ARGV);
+		my $data = decode_json("[" . qx(task export "${args}") . "]");
+		my $list = {};
+		my $rdep = {};
+		foreach my $task (@{$data}) {
+			$list->{$task->{"uuid"}} = ${task};
+			if (exists($task->{"depends"})) {
+				foreach my $uuid (split(",", $task->{"depends"})) {
+					push(@{$rdep->{$uuid}}, $task->{"uuid"});
+				};
+			}
+		};
+		foreach my $task (@{$data}) {
+			if (!exists($rdep->{$task->{"uuid"}})) {
+				&print_task($task->{"uuid"}, 0);
+			};
+		};
+		sub print_task {
+			my $uuid = shift();
+			my $deep = shift() || 0;
+			my $task = $list->{$uuid};
+			if (!${deep}) {
+				print "\n";
+			};
+			printf("%-${c_ttl}.${c_ttl}s", ((" " x 2) x ${deep}) . "* " . $task->{"description"});
+			print " "; printf("%-${c_uid}.${c_uid}s", $task->{"uuid"});
+			print " "; printf("%-${c_due}.${c_due}s", ($task->{"due"}	|| "-"));
+			print " "; printf("%-${c_end}.${c_end}s", ($task->{"end"}	|| "-"));
+			print " " . ($task->{"project"}					|| "-");
+			print "\n";
+			if (exists($task->{"depends"})) {
+				foreach my $uuid (split(",", $task->{"depends"})) {
+					&print_task(${uuid}, (${deep} + 1));
+				};
+			};
+		};
+	' -- "${@}" || return 1
+	return 0
+}
+
+########################################
+
 if [[ ${IMPERSONATE_NAME} == task ]]; then
 	unalias -a
 	function impersonate_command {
@@ -2602,6 +2653,9 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			task projects
 			task tags
 			task udas
+		elif [[ ${1} == "deps" ]]; then
+			shift
+			task-depends "${@}"	|| return 1
 		elif [[ ${1} == [=] ]]; then
 			shift
 			task-export-text	|| return 1
