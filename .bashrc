@@ -2585,6 +2585,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 	unalias -a
 	function impersonate_command {
 		if [[ ${1} == "RESET" ]]; then
+			shift
 			cd ${PIMDIR}
 			GIT_PAGER= \
 			${GIT} diff tasks	|| return 1
@@ -2594,6 +2595,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			sudo chmod -vR 750 tasks
 			cd - >/dev/null
 		elif [[ ${1} == "repo" ]]; then
+			shift
 #>>>			task rc.defaultwidth=1 burndown.weekly
 			task rc.defaultwidth=1 ghistory.monthly
 			task rc.defaultwidth=1 history.monthly
