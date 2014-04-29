@@ -204,6 +204,7 @@ x11-apps/xrandr
 x11-base/xorg-x11
 x11-misc/arandr
 
+x11-misc/tabbed
 x11-misc/xclip
 x11-misc/xsel
 x11-terms/rxvt
