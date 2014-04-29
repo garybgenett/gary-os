@@ -454,6 +454,7 @@ mail-client/thunderbird
 www-client/chromium
 www-client/firefox
 www-client/midori
+www-client/surf
 
 app-text/acroread
 app-text/qpdf
