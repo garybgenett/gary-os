@@ -374,7 +374,10 @@ export WGET_C="wget \
 	--no-check-certificate \
 	--server-response \
 	--adjust-extension \
-	--timestamping"
+	--timestamping \
+	--random-wait \
+	--tries=3 \
+	--wait=3"
 export WGET_S="${WGET_C} \
 	--force-directories \
 	--no-host-directories \
@@ -384,10 +387,7 @@ export WGET_S="${WGET_C} \
 	--backup-converted"
 export WGET_R="${WGET_S} \
 	--recursive \
-	--level=inf \
-	--random-wait \
-	--tries=3 \
-	--wait=3"
+	--level=inf"
 
 alias wget="${WGET_C}"
 
