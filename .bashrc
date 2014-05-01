@@ -2098,7 +2098,7 @@ function task-export-report {
 	declare EMAIL_MAIL="${1}" && shift
 	declare EMAIL_NAME="${1}" && shift
 	declare EMAIL_SIGN="${1}" && shift
-	task-export-text area:work
+	task-export-text "(area:_gtd or area:work)"
 	cat ${PIMDIR}/tasks.timeline.html |
 		perl -pe '
 			use JSON::PP;
