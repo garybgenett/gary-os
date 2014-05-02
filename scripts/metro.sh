@@ -398,14 +398,15 @@ declare PKGS="$(cat ${SET}				| ${GREP} -v -e "^[#]" -e "^$" | ${SED} "s/[#].+$/
 
 declare FEAT="$(makeconf_var FEATURES)"
 declare MKOP="$(makeconf_var MAKEOPTS)"
-declare USE_="$(makeconf_var USE)			$(makeconf_var METRO_USE)"
+declare USE_="$(makeconf_var METRO_USE)"
+
+USE_+="\nLDFLAGS:			$(makeconf_var METRO_LDFLAGS)"
 
 #>>>USE_+="\nACCEPT_KEYWORDS:		$(makeconf_var ACCEPT_KEYWORDS)"
 USE_+="\nACCEPT_LICENSE:		$(makeconf_var ACCEPT_LICENSE)"
 USE_+="\nEMERGE_DEFAULT_OPTS:		$(makeconf_var EMERGE_DEFAULT_OPTS	| ${SED} "s%[-][-]ask[^[:space:]]*%%g")"
 USE_+="\nLANG:				$(makeconf_var LANG)"
 USE_+="\nLC_ALL:			$(makeconf_var LC_ALL)"
-USE_+="\nLDFLAGS:			$(makeconf_var LDFLAGS)"
 USE_+="\nPORTAGE_IONICE_COMMAND:	$(makeconf_var PORTAGE_IONICE_COMMAND)"
 USE_+="\nPORTAGE_NICENESS:		$(makeconf_var PORTAGE_NICENESS)"
 
