@@ -401,6 +401,8 @@ declare MKOP="$(makeconf_var MAKEOPTS)"
 declare USE_="$(makeconf_var METRO_USE)"
 
 USE_+="\nLDFLAGS:			$(makeconf_var METRO_LDFLAGS)"
+USE_+="\nINPUT_DEVICES:			$(makeconf_var METRO_INPUT_DEVICES)"
+USE_+="\nVIDEO_CARDS:			$(makeconf_var METRO_VIDEO_CARDS)"
 
 #>>>USE_+="\nACCEPT_KEYWORDS:		$(makeconf_var ACCEPT_KEYWORDS)"
 USE_+="\nACCEPT_LICENSE:		$(makeconf_var ACCEPT_LICENSE)"
@@ -435,12 +437,14 @@ for FILE in \
 	CHOST			\
 	EMERGE_DEFAULT_OPTS	\
 	FEATURES		\
+	INPUT_DEVICES		\
 	LANG			\
 	LC_ALL			\
 	LDFLAGS			\
 	MAKEOPTS		\
 	PORTAGE_IONICE_COMMAND	\
-	PORTAGE_NICENESS
+	PORTAGE_NICENESS	\
+	VIDEO_CARDS
 do
 	USE_+="\n${FILE}=\"\$[portage/${FILE}:zap]\""
 	${SED} -i \
