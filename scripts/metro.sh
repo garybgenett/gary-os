@@ -125,6 +125,7 @@ declare SVER="$(
 ########################################
 
 declare KERN="${ISO}/grml${BITS}-full_2013.09.iso"
+declare DWMC="${CONFIG}/savedconfig/x11-wm/dwm"
 
 if [[ -f ${KERN} ]]; then
 	declare MNT="/mnt"				|| exit 1
@@ -137,6 +138,9 @@ if [[ -f ${KERN} ]]; then
 			>${SAV}/_config.${BITS}		|| exit 1
 	fi
 	umount ${KERN}					|| exit 1
+fi
+if [[ ! -f ${DWMC} ]]; then
+	DWMC=						|| exit 1
 fi
 
 KERN="${SAV}/_config.${BITS}"
@@ -472,12 +476,16 @@ do
 	)]\n"
 done
 USE_+="files/linux.config: [\n]\n"
+USE_+="files/dwm.config: [\n]\n"
 
 ${SED} -i \
 	-e "s%^(USE:.+)$%\1\n${USE_}%g" \
 	${DMET}/etc/builds/${TYPE}/build.conf || exit 1
 ${SED} -i \
 	-e "/files[\/]linux[.]config[:]/r ${KERN}" \
+	${DMET}/etc/builds/${TYPE}/build.conf || exit 1
+${SED} -i \
+	-e "/files[\/]dwm[.]config[:]/r ${DWMC}" \
 	${DMET}/etc/builds/${TYPE}/build.conf || exit 1
 
 USE_="\
@@ -486,11 +494,19 @@ then							\n\
 cat > /etc/portage/package.license << \"EOF\"		\n\
 \$[[portage/files/package.license:lax]]			\n\
 EOF\nfi							\n\
+\
 if [ \"\$[portage/files/linux.config?]\" = \"yes\" ]	\n\
 then							\n\
 mkdir /etc/kernels					\n\
 cat > /etc/kernels/.config << \"EOF\"			\n\
 \$[[portage/files/linux.config:lax]]			\n\
+EOF\nfi							\n\
+\
+if [ \"\$[portage/files/dwm.config?]\" = \"yes\" ]	\n\
+then							\n\
+mkdir -p /etc/portage/savedconfig/x11-wm		\n\
+cat > /etc/portage/savedconfig/x11-wm/dwm << \"EOF\"	\n\
+\$[[portage/files/dwm.config:lax]]			\n\
 EOF\nfi							\n\
 "
 
