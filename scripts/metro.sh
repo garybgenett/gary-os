@@ -126,6 +126,7 @@ declare SVER="$(
 
 declare KERN="${ISO}/grml${BITS}-full_2013.09.iso"
 declare DWMC="${CONFIG}/savedconfig/x11-wm/dwm"
+declare PACK=
 
 if [[ -f ${KERN} ]]; then
 	declare MNT="/mnt"				|| exit 1
@@ -144,6 +145,7 @@ if [[ ! -f ${DWMC} ]]; then
 fi
 
 KERN="${SAV}/_config.${BITS}"
+PACK="${SAV}/_packages.${BITS}"
 
 ########################################
 
@@ -191,7 +193,7 @@ if [[ ${1} == -! ]]; then
 	}
 	git-export ${TITLE} ${REL_DIR} ${GITHUB} \
 		+git-export-preprocess +git-export-postprocess \
-		metro:${SAV}:_commit^_config.32^_config.64 \
+		metro:${SAV}:_commit^_config.\*^_packages.\* \
 		setup:/.g/_data/zactive/.setup:gentoo \
 		static:/.g/_data/zactive/.static:.bashrc^scripts/grub.sh^scripts/metro.sh \
 		${TITLE}:${DOC_DIR}:				|| exit 1
@@ -367,6 +369,20 @@ if [[ ${1} == -/ ]]; then
 		${MV} ${INIT_DST}.kernel ${INIT_SRC}.kernel	|| exit 1
 		${MV} ${INIT_DST}.initrd ${INIT_SRC}.initrd	|| exit 1
 	fi
+
+	(cd ${INIT_DST}/var/db/pkg &&
+		for FILE in $(
+			find ./ -mindepth 2 -maxdepth 2 -type d |
+				${SED} "s%^[.][/]%%g" |
+				sort
+		); do
+			(cd ${DTMP}/cache/build/${TYPE}/stage3-${ARCH}-${TYPE}-${DVER}/package &&
+				du -ks ${FILE}.tbz2 |
+				${SED} "s%^(.+${FILE}).+$%\1%g"
+			)					#>>> || exit 1
+		done
+	) 2>&1 | tee ${PACK}					#>>> || exit 1
+
 	${RM} ${INIT_DST}					|| exit 1
 
 	exit 0
