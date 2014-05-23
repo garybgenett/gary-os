@@ -2552,7 +2552,7 @@ function task-notes {
 			};
 			push(@{$uuids}, $task->{"uuid"});
 			open(NOTE, ">", ${file}) || die();
-			print NOTE $text;
+			print NOTE ${text};
 			close(NOTE) || die();
 		};
 		chdir(${root}) || die();
