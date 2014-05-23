@@ -2582,6 +2582,78 @@ function task-notes {
 
 ########################################
 
+function task-track {
+	perl -e '
+		use strict;
+		use warnings;
+		use JSON::PP;
+		use POSIX qw(strftime);
+		use Time::Local qw(timelocal);
+		my $args = join(" ", @ARGV);
+		my $root = qx(task show data.location); $root =~ m/(data[.]location)\s+([^\s]+)/; $root = $2;
+		my $uuid = qx(task uuid "${args}"); chomp(${uuid}); $uuid = [ split(",", ${uuid}) ];
+		if (!@{$uuid}) {
+			die("NO MATCHES!");
+		}
+		elsif ($#{$uuid} >= 1) {
+			use Data::Dumper;
+			print Dumper(${uuid});
+			die("TOO MANY MATCHES!");
+		}
+		else {
+			$uuid = ${$uuid}[0];
+		};
+		my $mark = " => ";
+		my $edit = "${ENV{EDITOR}} -c \"map ? <ESC>:!task read \\\"${args}\\\"<CR>\" -c \"map \\ <ESC>:!task \"";
+		my $data = qx(${ENV{GREP}} "uuid:\\\"${uuid}\\\"" "${root}"/{completed,pending}.data); chomp(${data});
+		my $file = ${data}; $file =~ s/[:].+$//g; $data =~ s/^.+(completed|pending)[.]data[:]//g; $data =~ s/^[[]//g; $data =~ s/[]]$//g;
+		my $text = ${root} . "/" . ${uuid};
+		my $old = ${data};
+		my $new = ${data};
+		my $entries = {};
+		while (${data} =~ m|(annotation_([0-9]{10})[:][^[:space:]]+)|g) {
+			my $ltime = strftime("%Y-%m-%d %H:%M:%S", localtime(${2}));
+			$entries->{$1} = ${ltime};
+		};
+		open(TRACK, ">", ${text}) || die();
+		foreach my $key (sort(keys(${entries}))) {
+			print TRACK $entries->{$key} . ${mark} . ${key} . "\n";
+		};
+		close(TRACK) || die();
+		system("${edit} ${text}");
+		open(TRACK, "<", ${text}) || die();
+		while(<TRACK>) {
+			chomp(my $line = $_);
+			my($val, $key) = split(" => ", ${line});
+			$val =~ m/^([0-9]{4})[-]([0-9]{2})[-]([0-9]{2})[ ]([0-9]{2})[:]([0-9]{2})[:]([0-9]{2})$/;
+			my($yr,$mo,$dy,$hr,$mn,$sc) = ($1,$2,$3,$4,$5,$6);
+			$val = timelocal($sc,$mn,$hr,$dy,($mo-1),$yr);
+			$entries->{$key} = ${val};
+		};
+		close(TRACK) || die();
+		unlink(${text}) || warn();
+		foreach my $key (sort(keys(${entries}))) {
+			my $find = ${key}; $find =~ s/[:].+$//g;
+			my $repl = "annotation_" . $entries->{$key};
+			$new =~ s/${find}/${repl}/g;
+		};
+		if (${new} ne ${old}) {
+			system("${ENV{GREP}} \"uuid:\\\"${uuid}\\\"\" \"${file}\""); print "\n";
+			open(TRACK, "<", ${file}) || die();
+			$data = do { local $/; <TRACK> }; $data =~ s/\n+$//g;
+			close(TRACK) || die();
+			open(TRACK, ">", ${file}) || die();
+			$data =~ s|\Q${old}|${new}|g;
+			print TRACK ${data};
+			close(TRACK) || die();
+			system("${ENV{GREP}} \"uuid:\\\"${uuid}\\\"\" \"${file}\"");
+		};
+	' -- "${@}" || return 1
+	return 0
+}
+
+########################################
+
 function task-depends {
 	perl -e '
 		use strict;
@@ -2669,6 +2741,9 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			shift
 			declare PROJECT="${1}" && shift
 			task-notes "(project:${PROJECT} ${@})"
+		elif [[ ${1} == [,] ]]; then
+			shift
+			task-track "${@}"
 		else
 			(cd ${PIMDIR} && ${GIT_STS} tasks)
 			task read kind:track status:pending
