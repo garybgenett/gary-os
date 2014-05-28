@@ -67,7 +67,7 @@ The main disadvantages:
   * Requires bootable media and configured bootloader (PXE, Grub, etc.)
   * Constrained in size; initramfs must compress to less than 500MB
     hard-coded limit in Linux kernel
-  * Does not have any graphical/usability packages (no X.Org)
+  * Boot time can be a bit longer/slower than other "live" systems
 
 GaryOS enables you to drop a single file on any media, point
 a bootloader at it and go.  Upgrades are as simple as replacing the
@@ -263,7 +263,7 @@ Explicit non-goals:
   * Customization or deep branding of overall system
   * Development of helper scripts/commands library, or customization of
     boot and "init" infrastructure
-  * Becoming a "live" desktop environment (X.Org GUI)
+  * Becoming a complete desktop environment (minimal X.Org GUI only)
 
 ## Rationale
 [Rationale]: #rationale
@@ -624,6 +624,11 @@ details for the individual components.
           in `man portage`.
         * My personal configuration, most of which is carried over to
           GaryOS.
+    * [savedconfig](https://github.com/garybgenett/gary-os/blob/master/gentoo/savedconfig)
+        * Seemingly undocumented storage area for compile-time
+          configuration files.
+        * [dwm](https://github.com/garybgenett/gary-os/blob/master/gentoo/savedconfig/x11-wm/dwm):
+          configuration for "dwm" window manager
     * [sets](https://github.com/garybgenett/gary-os/blob/master/gentoo/sets)
         * User-defined package "sets", also documented in `man portage`.
         * [metro](https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/metro):
@@ -706,7 +711,6 @@ It is a stated goal that forensics mode continue being the default.
 
   * Definition:
     * Update/install packages using Funtoo/Gentoo tools.
-    * Configure/install X.Org to provide a GUI.
   * Last tested with:
     * GaryOS v1.1, with 8GB memory
 
@@ -745,9 +749,10 @@ Instructions for setting up update/install of packages:
          * For details, see `"There is NOT at least"` in
            `/usr/portage/eclass/check-reqs.eclass`
   3. Make desired edits to `/etc/portage` configuration.
-     * In particular, to install X.Org the "X" USE flag should be
-       enabled (remove `-X` from the end of the `USE` list) and the
-       `VIDEO_CARDS` variable should be created and configured.
+     * In particular, to complete configuration of the X.Org GUI the "X"
+       USE flag should be enabled (remove `-X` from the end of the `USE`
+       list) and the `INPUT_DEVICES` and `VIDEO_CARDS` variables should
+       be properly configured.
      * Starting with `-udev`, there is a list of negated `-*` options at
        the end of the `USE` list which are necessary to build GaryOS via
        Metro.  All of these can/should be removed to get the full
