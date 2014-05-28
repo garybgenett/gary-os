@@ -36,7 +36,7 @@
     * [PXE Boot]
 
 ************************************************************************
-## Overview
+# Overview
 [Overview]: #overview
 
 GaryOS is an entire GNU/Linux system in a single bootable file.
@@ -79,7 +79,7 @@ GaryOS.
 
 ![GaryOS Screenshot](screenshot.png "GaryOS Screenshot")
 
-### Quick Start
+## Quick Start
 [Quick Start]: #quick-start
 
 If you just want to check it out, you can run it inside any
@@ -123,7 +123,7 @@ goes one step further, however, since a Linux kernel has already been
 prepared.  Simply configuring and installing Grub will result in
 a ready-to-go Funtoo/Gentoo installation.
 
-### Version History
+## Version History
 [Version History]: #version-history
 
 [Release Notes]: #2014-03-13-v11-95ad4fd257697618bae7402d4bc3a27499035d304
@@ -192,7 +192,7 @@ a ready-to-go Funtoo/Gentoo installation.
     * Commented packages that broke
 
 ************************************************************************
-## Design
+# Design
 [Design]: #design
 
 GaryOS was not really "designed", per se.  It just kind of happened
@@ -229,7 +229,7 @@ That final point is worth re-iterating: GaryOS is 95%+ the work of other
 projects.  All I've done is tie things together in a way I find novel,
 appealing and useful.
 
-### Goals
+## Goals
 [Goals]: #goals
 
 While not originally "designed" in the traditional sense, GaryOS does
@@ -265,7 +265,7 @@ Explicit non-goals:
     boot and "init" infrastructure
   * Becoming a "live" desktop environment (X.Org GUI)
 
-### Rationale
+## Rationale
 [Rationale]: #rationale
 
 I thought it important to document my thoughts regarding the good deal
@@ -353,7 +353,7 @@ this project exists.
 The reader, of course, must make up their own mind about what is best
 for them.
 
-### Caveats
+## Caveats
 [Caveats]: #caveats
 
 Humans are not perfect, and rarely is anything we create.  I'm proud of
@@ -428,7 +428,7 @@ Buyer beware.  You own all the pieces.
 Other than that, GaryOS should be rock-solid.  ;^)
 
 ************************************************************************
-## Details
+# Details
 [Details]: #details
 
 In this section, I will try to outline the key pieces which make GaryOS
@@ -439,7 +439,7 @@ beneficial to anyone curious enough to have read this far.
 Most of what is needed to use the contents of this repository is
 contained in the [Structure] and [Customizing] sections below.
 
-### Similar Projects
+## Similar Projects
 [Similar Projects]: #similar-projects
 
 Since the creation of GaryOS, I've discovered the following projects
@@ -456,7 +456,7 @@ still fitting in an initramfs.
 
 Both projects are pretty damn awesome.
 
-### Tools
+## Tools
 [Tools]: #tools
 
 All the real heavy-lifting is accomplished using these tools/projects:
@@ -492,7 +492,7 @@ GitHub was instrumental in inspiring me to publish this project, but
 SourceForge provided the distribution platform which made it possible to
 reach an international audience overnight.
 
-### Structure
+## Structure
 [Structure]: #structure
 
 Here is documented the overall structure of the repository, along with
@@ -626,7 +626,7 @@ details for the individual components.
         * [packages](https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/packages):
           my personal list for a complete workstation installation.
 
-### Customizing
+## Customizing
 [Customizing]: #customizing
 
 Since these scripts and configurations were originally intended for
@@ -669,7 +669,7 @@ In a perfect world, this section could be removed after the scripts were
 cleaned up and documented properly.
 
 ************************************************************************
-## Use Cases
+# Use Cases
 [Use Cases]: #use-cases
 
 Below are the primary use cases considered for GaryOS.  Each is tested
@@ -677,7 +677,7 @@ every release, and contains validation information.
 
 These are also considered the "howto" instructions for each case.
 
-### Forensics & Recovery
+## Forensics & Recovery
 [Forensics & Recovery]: #forensics-recovery
 
   * Definition:
@@ -696,7 +696,7 @@ and interrogation.
 
 It is a stated goal that forensics mode continue being the default.
 
-### Live Update
+## Live Update
 [Live Update]: #live-update
 
   * Definition:
@@ -751,7 +751,7 @@ Instructions for setting up update/install of packages:
      * e.g. `emerge openbox rxvt-unicode xdm xorg-server`
      * e.g. `/etc/init.d/xdm start`
 
-### Installation
+## Installation
 [Installation]: #installation
 
   * Definition:
@@ -795,7 +795,7 @@ Instructions for installing to disk:
      install "portage" tree and update/install packages as desired.
   7. **Don't forget to change `hostname` and update `root` password!**
 
-### Windows Dual-Boot
+## Windows Dual-Boot
 [Windows Dual-Boot]: #windows-dual-boot
 
   * Definition:
@@ -881,7 +881,7 @@ Administrator to remove the unwanted entries:
      * e.g. `bcdedit /delete {02a0fce9-68f5-11e3-aa07-e94d28b95f82}
        /cleanup`
 
-### Grub Rescue
+## Grub Rescue
 [Grub Rescue]: #grub-rescue
 
   * Definition:
@@ -924,7 +924,7 @@ Instructions for Grub "rescue" image installation to hard disk:
   6. To remove, simply re-install Grub using `grub-install` as usual, or
      install another bootloader.
 
-### PXE Boot
+## PXE Boot
 [PXE Boot]: #pxe-boot
 
   * Definition:
