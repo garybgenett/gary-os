@@ -278,6 +278,7 @@ dev-lua/luarocks
 dev-ruby/rubygems
 
 #>>>dev-lang/v8
+dev-libs/libuv
 net-libs/nodejs
 
 dev-db/sqlite

@@ -11,6 +11,7 @@ app-misc/hello				~*		# gentoo required
 dev-db/recutils				~*		# gentoo required
 dev-lang/luajit				~*		# gentoo required
 dev-libs/apr				~*		# gentoo required
+dev-libs/libuv				~*		# gentoo required
 dev-lua/luarocks			~*		# gentoo required
 games-fps/quakeforge			~*		# gentoo required
 media-gfx/mcomix			~*		# gentoo required
