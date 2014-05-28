@@ -522,6 +522,11 @@ details for the individual components.
           builds, respectively.  These are extracted from Grml ISOs
           using "extract-ikconfig" in the "metro.sh" script.  Updated
           each release.
+    * [_packages.64](https://github.com/garybgenett/gary-os/blob/master/_packages.64),
+      [_packages.32](https://github.com/garybgenett/gary-os/blob/master/_packages.32)
+        * Final package lists for the 64-bit and 32-bit builds,
+          respectively.  These are generated from the "initrd" files in
+          the "metro.sh" script.  Updated each release.
   * Production:
     * [.bashrc](https://github.com/garybgenett/gary-os/blob/master/.bashrc)
         * My personal Bash configuration file, and also the scripting
