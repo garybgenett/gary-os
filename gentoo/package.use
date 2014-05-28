@@ -54,6 +54,7 @@ net-analyzer/tcpdump			-chroot
 
 x11-base/xorg-server			xnest xvfb
 x11-terms/rxvt-unicode			fading-colors focused-urgency font-styles mousewheel perl
+x11-wm/dwm				savedconfig
 
 app-office/libreoffice			java
 app-text/enchant			aspell
