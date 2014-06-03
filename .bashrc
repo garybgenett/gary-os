@@ -2133,10 +2133,11 @@ Long-term project tracking legend:
 		* Black text -- final / due items
 		* Gray text -- dependencies / sub-tasks
 	* Bar color coding:
-		* Black -- complete
 		* Green -- in progress (hours have been logged)
 		* Yellow -- not yet started
 		* Red -- overdue
+		* Black -- complete
+		* White -- skipped / deleted
 
 Some important notes:
 	* Mousing over each item will show a pop-up with start and end dates, along with any "hold" dates and the first and last dates logged against the task
@@ -2205,6 +2206,7 @@ function task-export-text {
 			"nostart"	=> "yellow",
 			"overdue"	=> "red",
 			"history"	=> "black",
+			"deleted"	=> "white",
 		};
 		my $line_color = {
 			"_gtd"		=> "red",
@@ -2321,6 +2323,7 @@ function task-export-text {
 				$clr_b		= $proj_color->{"working"}					if (${fst_d});
 				$clr_b		= $proj_color->{"overdue"}					if (${current_time} gt ${end_d});
 				$clr_b		= $proj_color->{"history"}					if (exists($task->{"end"}));
+				$clr_b		= $proj_color->{"deleted"}					if ($task->{"status"} eq "deleted");
 			my $clr_t		= ${text_color}							;
 				$clr_t		= "gray"							if (!${main});
 			my $due_l;
