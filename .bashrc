@@ -624,11 +624,19 @@ function mirror {
 
 function swint {
 	declare INT="${1}" && shift
+	declare WID="${1}" && shift
+	declare WPW="${1}" && shift
 	${SED} -i "s/eth0/${INT}/g" \
 		${HOME}/scripts/fw.${HOSTNAME} \
 		${HOME}/scripts/ip.${HOSTNAME} \
 		/.runit/_config/dhclient \
 		/.runit/_config/tcpdump
+	if [[ -n ${WID} ]] && [[ -n ${WPW} ]]; then
+		${SED} -i \
+			-e "s/(\tssid=).+$/\1\"${WID}\"/g" \
+			-e "s/(\tpsk=).+$/\1\"${WPW}\"/g" \
+			/.runit/_config/wpa_supplicant
+	fi
 	ip-setup
 }
 
