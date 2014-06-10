@@ -11,6 +11,8 @@ sys-kernel/linux-firmware		freedist
 app-arch/rar				RAR
 app-arch/unrar				unRAR
 
+www-servers/nginx			as-is
+
 app-misc/run-mailcap			freedist
 app-text/calibre			unRAR
 games-emulation/mekanix			mekanix

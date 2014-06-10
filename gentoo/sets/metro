@@ -339,6 +339,7 @@ app-admin/apache-tools
 #>>>www-apache/mod_perl
 www-misc/awstats
 www-servers/apache
+www-servers/nginx
 
 ########################################
 # programs
