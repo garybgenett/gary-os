@@ -42,6 +42,7 @@ net-print/cups				samba
 
 dev-vcs/subversion			-apache2
 www-servers/apache			-threads
+www-servers/nginx			-syslog
 
 ########################################
 
