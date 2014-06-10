@@ -81,8 +81,6 @@ net-p2p/rtorrent			~*		# build fail: 0.8.9
 
 ########################################
 
-=net-wireless/wpa_supplicant-2.1*	~*
-
 =dev-lang/perl-5.16*			~*
 
 =net-misc/unison-2.45*			~*
