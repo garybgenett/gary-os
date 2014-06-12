@@ -432,9 +432,6 @@ USE_+="\nLC_ALL:			$(makeconf_var LC_ALL)"
 USE_+="\nPORTAGE_IONICE_COMMAND:	$(makeconf_var PORTAGE_IONICE_COMMAND)"
 USE_+="\nPORTAGE_NICENESS:		$(makeconf_var PORTAGE_NICENESS)"
 
-USE_+="\nNGINX_MODULES_HTTP:		$(makeconf_var NGINX_MODULES_HTTP)"
-USE_+="\nNGINX_MODULES_MAIL:		$(makeconf_var NGINX_MODULES_MAIL)"
-
 ${SED} -i \
 	-e "s%^(options:).*jobs.*$%\1	${OPTS}%g" \
 	-e "s%^(packages:.*)$%\1\n	${PKGS}%g" \
@@ -465,8 +462,6 @@ for FILE in \
 	LC_ALL			\
 	LDFLAGS			\
 	MAKEOPTS		\
-	NGINX_MODULES_HTTP	\
-	NGINX_MODULES_MAIL	\
 	PORTAGE_IONICE_COMMAND	\
 	PORTAGE_NICENESS	\
 	VIDEO_CARDS
