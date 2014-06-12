@@ -303,7 +303,11 @@ if [[ ${1} == -1 ]]; then
 		'\( -path ./usr/src/debug	-prune \)' -o \
 		-print |
 	cpio -ovH newc >${INIT_DIR}.cpio			|| exit 1
-	gzip -c ${INIT_DIR}.cpio >${INIT_DIR}.initrd		|| exit 1
+	if [[ -z ${METRO_DEBUG} ]]; then
+		gzip -c ${INIT_DIR}.cpio >${INIT_DIR}.initrd	|| exit 1
+	else
+		xz -c ${INIT_DIR}.cpio >${INIT_DIR}.initrd	|| exit 1
+	fi
 
 	if [[ -d ${INIT_DIR}/usr/src/linux ]]; then
 		declare INITRAMFS_CONFIG="\n"
@@ -325,7 +329,9 @@ if [[ ${1} == -1 ]]; then
 			head -n1
 		) ${INIT_DIR}.kernel.initrd			|| exit 1
 	fi
-	${RM} ${INIT_DIR}.cpio					|| exit 1
+	if [[ -z ${METRO_DEBUG} ]]; then
+		${RM} ${INIT_DIR}.cpio				|| exit 1
+	fi
 
 	exit 0
 fi
@@ -363,8 +369,10 @@ if [[ ${1} == -/ ]]; then
 	if [[ -f ${INIT_DST}.kernel.initrd ]]; then
 		${MV} ${INIT_DST}.kernel.initrd \
 			${INIT_SRC}.kernel			|| exit 1
-		${RM} ${INIT_DST}.kernel			|| exit 1
-		${RM} ${INIT_DST}.initrd			|| exit 1
+		if [[ -z ${METRO_DEBUG} ]]; then
+			${RM} ${INIT_DST}.kernel		|| exit 1
+			${RM} ${INIT_DST}.initrd		|| exit 1
+		fi
 	else
 		${MV} ${INIT_DST}.kernel ${INIT_SRC}.kernel	|| exit 1
 		${MV} ${INIT_DST}.initrd ${INIT_SRC}.initrd	|| exit 1
@@ -383,7 +391,9 @@ if [[ ${1} == -/ ]]; then
 		done
 	) 2>&1 | tee ${PACK}					#>>> || exit 1
 
-	${RM} ${INIT_DST}					|| exit 1
+	if [[ -z ${METRO_DEBUG} ]]; then
+		${RM} ${INIT_DST}				|| exit 1
+	fi
 
 	exit 0
 fi
