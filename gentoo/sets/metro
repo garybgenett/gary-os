@@ -148,8 +148,7 @@ sys-apps/texinfo
 app-dicts/aspell-en
 app-text/aspell
 
-#>>>app-editors/gvim
-app-editors/vim
+app-editors/gvim
 app-editors/nano
 app-text/dos2unix
 app-vim/taglist
@@ -191,6 +190,19 @@ app-portage/g-cpan
 app-portage/layman
 app-portage/mirrorselect
 app-portage/ufed
+
+########################################
+# x11
+
+x11-apps/xrandr
+x11-base/xorg-server
+
+x11-misc/tabbed
+x11-misc/xsel
+x11-terms/rxvt-unicode
+
+x11-misc/dmenu
+x11-wm/dwm
 
 ########################################
 # toolkits
@@ -240,6 +252,7 @@ sys-devel/bc
 
 dev-util/ltrace
 dev-util/strace
+dev-util/sysprof
 sys-apps/kexec-tools
 
 sys-apps/hdparm
@@ -287,6 +300,7 @@ net-analyzer/tcptrace
 net-analyzer/tcptraceroute
 net-analyzer/traceroute
 net-analyzer/vnstat
+net-analyzer/wireshark
 net-dns/avahi
 net-dns/bind-tools
 net-misc/cadaver
@@ -369,6 +383,11 @@ mail-mta/msmtp
 net-mail/fetchmail
 net-mail/offlineimap
 net-mail/safecat
+
+www-client/surf
+
+net-misc/rdesktop
+net-misc/tigervnc
 
 net-irc/irssi
 
