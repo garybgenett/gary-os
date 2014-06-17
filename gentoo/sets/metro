@@ -246,7 +246,7 @@ net-analyzer/ngrep
 net-analyzer/nmap
 net-analyzer/rrdtool
 net-analyzer/snort
-net-analyzer/ssldump
+net-analyzer/ssldump			# 32-bit build fail
 net-analyzer/tcpdump
 net-analyzer/tcptrace
 net-analyzer/tcptraceroute
