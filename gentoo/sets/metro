@@ -25,7 +25,6 @@ app-text/iso-codes
 sys-libs/timezone-data
 
 app-crypt/efitools			# 32-bit build fail
-sys-apps/busybox
 sys-boot/efibootmgr
 sys-boot/grub
 sys-boot/os-prober
@@ -107,19 +106,6 @@ sys-libs/gpm
 
 dev-lang/perl
 dev-libs/libpcre
-dev-perl/Curses
-dev-perl/Curses-UI
-dev-perl/DateManip
-dev-perl/Expect
-dev-perl/Sys-Virt
-dev-perl/WWW-Curl
-dev-perl/WWW-Mechanize
-dev-perl/libwww-perl
-perl-core/CGI
-perl-core/JSON-PP
-perl-core/MIME-Base64
-perl-core/Switch
-perl-core/Time-Local
 sys-devel/libperl
 
 app-crypt/gnupg
@@ -178,18 +164,11 @@ app-portage/portage-utils
 sys-apps/portage
 
 app-portage/gentoolkit
-app-portage/gentoolkit-dev
 app-shells/gentoo-bashcomp
 app-vim/gentoo-syntax
 
 app-admin/eselect
-dev-java/java-config
 sys-devel/gcc-config
-
-app-portage/g-cpan
-app-portage/layman
-app-portage/mirrorselect
-app-portage/ufed
 
 ########################################
 # x11
@@ -207,38 +186,13 @@ x11-wm/dwm
 ########################################
 # toolkits
 
-net-misc/unison
-
-dev-perl/Template-DBI
-dev-perl/Template-GD
-dev-perl/Template-Tiny
-dev-perl/Template-Toolkit
-dev-perl/Template-XML
-
-app-text/pandoc
-dev-haskell/pandoc-citeproc
-dev-haskell/pandoc-types
-dev-perl/Text-Markdown
-
-app-text/docbook-xml-dtd
-app-text/docbook-xsl-ns-stylesheets
-app-text/docbook-xsl-stylesheets
-app-text/htmltidy
-app-text/xmlto
-
-dev-vcs/cvs
-dev-vcs/cvs2svn
-dev-vcs/cvsps
 dev-vcs/git
-dev-vcs/gitolite
-dev-vcs/mercurial
 dev-vcs/subversion
 
 dev-lang/perl
 dev-lang/python
 
 dev-db/sqlite
-dev-tcltk/expect
 
 media-libs/alsa-lib
 media-libs/alsa-oss
@@ -279,8 +233,6 @@ app-text/tree
 sys-apps/dstat
 sys-apps/pv
 
-net-analyzer/argus
-net-analyzer/argus-clients
 net-analyzer/arping
 net-analyzer/dnstracer
 net-analyzer/httping
@@ -314,17 +266,7 @@ net-misc/autossh
 net-misc/httptunnel
 net-misc/pipes
 
-net-dialup/lrzsz
-net-dialup/minicom
-net-dialup/ppp
-
-net-fs/curlftpfs
-net-fs/nfs-utils
-net-nds/rpcbind
-sys-fs/mtd-utils
-sys-fs/mtpfs
 sys-fs/ntfs3g
-sys-fs/sshfs-fuse
 
 app-forensics/cmospwd
 app-forensics/foremost
@@ -334,86 +276,27 @@ sys-apps/flashrom
 ########################################
 # servers
 
-dev-db/mysql
-net-dns/bind
-net-fs/samba
-net-ftp/proftpd
-net-ftp/tftp-hpa
-net-mail/dovecot
-net-misc/dhcp
 net-misc/ntp
 net-misc/openvpn
-net-misc/quagga
-net-misc/radvd
-net-misc/tor
-net-nds/openldap
-net-wireless/hostapd
-
-app-admin/apache-tools
-#>>>www-apache/mod_perl
-www-misc/awstats
-www-servers/apache
-www-servers/nginx
 
 ########################################
 # programs
 
-app-emulation/bochs
-
-app-emulation/libvirt
-app-emulation/lxc
-app-emulation/qemu
-app-emulation/spice
-app-emulation/spice-protocol
-
-app-misc/run-mailcap
-net-misc/urlview
-
-app-misc/abook
-app-misc/remind
-app-misc/task
-app-misc/wyrd
-app-office/ledger
-dev-db/recutils
-
-mail-client/mailx
 mail-client/mutt
-mail-filter/procmail
 mail-mta/msmtp
-net-mail/fetchmail
-net-mail/offlineimap
-net-mail/safecat
 
 www-client/surf
 
 net-misc/rdesktop
 net-misc/tigervnc
 
-net-irc/irssi
-
-app-misc/gtypist
-app-misc/hello
-games-misc/typespeed
-
 ########################################
 # media
 
-app-misc/beep
-app-misc/clockywock
-media-sound/aumix
-
 net-p2p/rtorrent
 
-app-cdr/cdrdao
 app-cdr/cdrtools
 app-cdr/dvd+rw-tools
-media-sound/cdparanoia
-media-sound/cdtool
-media-video/dvdbackup
-media-video/lsdvd
-
-media-gfx/exif
-media-gfx/exiv2
 
 ################################################################################
 # end of file
