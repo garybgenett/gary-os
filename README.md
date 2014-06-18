@@ -29,6 +29,7 @@
     * [Customizing]
   * [Use Cases]
     * [Forensics & Recovery]
+    * [Minimal X.Org GUI]
     * [Live Update]
     * [Installation]
     * [Windows Dual-Boot]
@@ -705,6 +706,36 @@ Linux kernel options can further be used to disable hardware scanning
 and interrogation.
 
 It is a stated goal that forensics mode continue being the default.
+
+## Minimal X.Org GUI
+[Minimal X.Org GUI]: #minimal-xorg-gui
+
+  * Definition:
+    * Start up and use the X.Org GUI environment
+  * Last tested with:
+    * GaryOS v2.0
+
+GaryOS boots to CLI (Command-Line Interface) by default.  To enter the
+graphical interface, run `startx dwm`.
+
+By default, the DWM window manager is used.  URxvt is the default
+terminal emulator, and Surf is the default browser.  Both are wrapped
+using the Tabbed utility.
+
+Keyboard shortcuts:
+
+  * Use `ALT-SHIFT-ENTER` to launch terminal emulator.
+  * Use `ALT-CTRL-ENTER` to launch web browser.
+
+More information:
+
+  * Read `man dwm` for help on the window manager.
+  * Read `man tabbed` for help on the tabbing utility.
+  * Read `man urxvt` for help on the terminal emulator.
+  * Read `man surf` for help on the web browser.
+
+Thanks to the [Suckless](http://suckless.org) team for creating such
+lightweight and useful software.
 
 ## Live Update
 [Live Update]: #live-update
