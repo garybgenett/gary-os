@@ -141,6 +141,7 @@ a ready-to-go Funtoo/Gentoo installation.
     * Improved customization of `LDFLAGS` and `USE` variables
     * Better exemption handling for packages which fail to build
     * Fixed initrd build, so that it is more generally useful/applicable
+    * Added documentation repository to commit tracking
     * Included Git repository in root filesystem, for reference
     * Moved Git repository handling to dedicated "git-export" function
     * Renamed example Grub disk image to a better extension
@@ -733,7 +734,7 @@ These are also considered the "howto" instructions for each case.
     * Boot into a completely "clean" environment, so that diagnostics
       and/or recovery can be done in a read-only manner.
   * Last tested with:
-    * GaryOS v1.1
+    * GaryOS v2.0
 
 GaryOS is in a forensics mode by default.  Hardware scanning is
 performed, but the hard drives are not mounted or otherwise touched.
@@ -754,7 +755,7 @@ It is a stated goal that forensics mode continue being the default.
     * GaryOS v2.0
 
 GaryOS boots to CLI (Command-Line Interface) by default.  To enter the
-graphical interface, run `startx dwm`.
+graphical interface, run `XSESSION=dwm startx`.
 
 By default, the DWM window manager is used.  URxvt is the default
 terminal emulator, and Surf is the default browser.  Both are wrapped
@@ -781,7 +782,7 @@ lightweight and useful software.
   * Definition:
     * Update/install packages using Funtoo/Gentoo tools.
   * Last tested with:
-    * GaryOS v1.1, with 8GB memory
+    * GaryOS v2.0, with 8GB memory
 
 A complete Funtoo/Gentoo environment is available.  In order to
 install/update packages, a couple of missing items need to be put into
@@ -818,17 +819,15 @@ Instructions for setting up update/install of packages:
          * For details, see `"There is NOT at least"` in
            `/usr/portage/eclass/check-reqs.eclass`
   3. Make desired edits to `/etc/portage` configuration.
-     * In particular, to complete configuration of the X.Org GUI the "X"
-       USE flag should be enabled (remove `-X` from the end of the `USE`
-       list) and the `INPUT_DEVICES` and `VIDEO_CARDS` variables should
-       be properly configured.
+     * In particular, to complete configuration of the X.Org GUI the
+       `INPUT_DEVICES` and `VIDEO_CARDS` variables should be properly
+       configured.
      * Starting with `-udev`, there is a list of negated `-*` options at
        the end of the `USE` list which are necessary to build GaryOS via
        Metro.  All of these can/should be removed to get the full
        non-Metro configuration.
   4. Use all "portage" commands as usual.
-     * e.g. `emerge openbox rxvt-unicode xdm xorg-server`
-     * e.g. `/etc/init.d/xdm start`
+     * e.g. `emerge firefox`
 
 ## Installation
 [Installation]: #installation
@@ -836,7 +835,7 @@ Instructions for setting up update/install of packages:
   * Definition:
     * Install GaryOS to disk as a "stage3" build.
   * Last tested with:
-    * GaryOS v1.1
+    * GaryOS v2.0
 
 The in-memory environment is a complete Funtoo/Gentoo installation, as
 shown in the [Live Update] section above.  It can be copied directly to
@@ -1013,9 +1012,9 @@ Instructions for Grub "rescue" image installation to hard disk:
       workstation or other automated environment where a reboot
       completely resets each machine involved.
   * Last tested with:
-    * DHCPd: net-misc/dhcp-4.2.5_p1
+    * DHCPd: net-misc/dhcp-4.2.5_p1-r2
     * TFTPd: net-misc/iputils-20121221
-    * iPXE:  sys-firmware/ipxe-1.0.0_p20130624
+    * iPXE: sys-firmware/ipxe-1.0.0_p20130624
   * Research and development:
     * [https://wiki.archlinux.org/index.php/archboot#PXE_booting_.2F_Rescue_system](https://wiki.archlinux.org/index.php/archboot#PXE_booting_.2F_Rescue_system)
 
