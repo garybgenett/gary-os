@@ -73,15 +73,9 @@ app-emulation/vmware-tools		vmware_guest_freebsd vmware_guest_linux vmware_guest
 
 ################################################################################
 
-#{MET} app-text/poppler			-cairo		# gentoo required (reversing above)
 #{MET} app-text/poppler			-qt4		# gentoo required (reversing above)
 
-########################################
-
-#{MET} app-emulation/qemu		-sdl
-
-#{MET} app-emulation/spice		-client
-#{MET} app-emulation/spice		-gui
+#{MET} net-libs/glib-networking		-libproxy	# gentoo required
 
 ################################################################################
 # end of file
