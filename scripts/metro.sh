@@ -364,6 +364,19 @@ if [[ ${1} == -/ ]]; then
 	echo -en "${TITLE}\n${TITLE}\n" |
 		chroot ${INIT_DST} /usr/bin/passwd root		|| exit 1
 
+	(cd ${INIT_DST}/var/db/pkg &&
+		for FILE in $(
+			find ./ -mindepth 2 -maxdepth 2 -type d |
+				${SED} "s%^[.][/]%%g" |
+				sort
+		); do
+			(cd ${DTMP}/cache/build/${TYPE}/stage3-${ARCH}-${TYPE}-${DVER}/package &&
+				du -ks ${FILE}.tbz2 |
+				${SED} "s%^(.+${FILE}).+$%\1%g"
+			)					#>>> || exit 1
+		done
+	) 2>&1 | tee ${PACK}					#>>> || exit 1
+
 	(cd ${INIT_DST} && echo | ${_SELF} ${BITS} ${REVN} -1)	|| exit 1
 
 	if [[ -f ${INIT_DST}.kernel.initrd ]]; then
@@ -377,19 +390,6 @@ if [[ ${1} == -/ ]]; then
 		${MV} ${INIT_DST}.kernel ${INIT_SRC}.kernel	|| exit 1
 		${MV} ${INIT_DST}.initrd ${INIT_SRC}.initrd	|| exit 1
 	fi
-
-	(cd ${INIT_DST}/var/db/pkg &&
-		for FILE in $(
-			find ./ -mindepth 2 -maxdepth 2 -type d |
-				${SED} "s%^[.][/]%%g" |
-				sort
-		); do
-			(cd ${DTMP}/cache/build/${TYPE}/stage3-${ARCH}-${TYPE}-${DVER}/package &&
-				du -ks ${FILE}.tbz2 |
-				${SED} "s%^(.+${FILE}).+$%\1%g"
-			)					#>>> || exit 1
-		done
-	) 2>&1 | tee ${PACK}					#>>> || exit 1
 
 	if [[ -z ${METRO_DEBUG} ]]; then
 		${RM} ${INIT_DST}				|| exit 1
