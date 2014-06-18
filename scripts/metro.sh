@@ -304,11 +304,7 @@ if [[ ${1} == -1 ]]; then
 		'\( -path ./usr/src/debug	-prune \)' -o \
 		-print |
 	cpio -ovH newc >${INIT_DIR}.cpio			|| exit 1
-	if [[ -z ${METRO_DEBUG} ]]; then
-		gzip -c ${INIT_DIR}.cpio >${INIT_DIR}.initrd	|| exit 1
-	else
-		xz -c ${INIT_DIR}.cpio >${INIT_DIR}.initrd	|| exit 1
-	fi
+	xz -c ${INIT_DIR}.cpio >${INIT_DIR}.initrd		|| exit 1
 
 	if [[ -d ${INIT_DIR}/usr/src/linux ]]; then
 		declare INITRAMFS_CONFIG="\n"
