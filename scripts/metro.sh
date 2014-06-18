@@ -298,6 +298,7 @@ if [[ ${1} == -1 ]]; then
 		'\( -path ./usr/portage.git	-prune \)' -o \
 		\
 		'\( -path ./tmp/.ccache		-prune \)' -o \
+		'\( -path ./usr/lib/debug	-prune \)' -o \
 		'\( -path ./usr/lib32/debug	-prune \)' -o \
 		'\( -path ./usr/lib64/debug	-prune \)' -o \
 		'\( -path ./usr/src/debug	-prune \)' -o \
