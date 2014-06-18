@@ -97,13 +97,14 @@ declare METRO_CMD="${DMET}/metro \
 declare COMMIT=
 declare REPO
 for REPO in \
-	.setup	\
-	.static	\
-	metro	\
+	${TITLE}	\
+	.setup		\
+	.static		\
+	metro		\
 	portage
 do
 	COMMIT="${COMMIT}${REPO}: $(
-		cat /.g/_data/zactive/${REPO}.git/refs/heads/master 2>/dev/null;
+		cat /.g/_data/zactive{,/coding}/${REPO}.git/refs/heads/master 2>/dev/null;
 		cat ${BLD}/funtoo/${REPO}.git/refs/heads/{master,funtoo.org} 2>/dev/null;
 	)\n"
 done
