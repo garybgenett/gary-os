@@ -4,7 +4,7 @@
 ![GaryOS Icon](icon.png "GaryOS Icon")
 "The one file that does it all."
 
-* Latest: GaryOS v1.1 ([64-bit]) ([32-bit]) ([Release Notes]) ([License])
+* Latest: GaryOS v2.0 ([64-bit]) ([32-bit]) ([Release Notes]) ([License])
 * Homepage: [https://github.com/garybgenett/gary-os](https://github.com/garybgenett/gary-os)
 * Download: [https://sourceforge.net/projects/gary-os](https://sourceforge.net/projects/gary-os)
 
@@ -127,9 +127,47 @@ a ready-to-go Funtoo/Gentoo installation.
 ## Version History
 [Version History]: #version-history
 
-[Release Notes]: #2014-03-13-v11-95ad4fd257697618bae7402d4bc3a27499035d304
-[64-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v1.1.kernel
-[32-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v1.1.kernel
+[Release Notes]: #2014-06-18-v20-873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d0
+[64-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v2.0.kernel
+[32-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v2.0.kernel
+
+##### 2014-06-18 v2.0 873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d.0
+
+  * 64-bit: [gary-os-generic_64-funtoo-stable-v2.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v2.0.kernel)
+  * 32-bit: [gary-os-generic_32-funtoo-stable-v2.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v2.0.kernel)
+  * Metro/Grub scripts
+    * Added creation of package list files
+    * Added `METRO_DEBUG` variable, for testing
+    * Improved customization of `LDFLAGS` and `USE` variables
+    * Better exemption handling for packages which fail to build
+    * Fixed initrd build, so that it is more generally useful/applicable
+    * Included Git repository in root filesystem, for reference
+    * Moved Git repository handling to dedicated "git-export" function
+    * Renamed example Grub disk image to a better extension
+  * Funtoo/Gentoo configuration
+    * Updated to new Portage commit
+    * Complete review/revamp of USE flags
+    * Added `LDFLAGS` variable options specific to Metro
+    * Cleaned up "_overlay" directory
+    * Improvements to audit/review scripting
+    * Minor configuration updates/improvements
+    * Localized failed package commenting to 32-bit
+    * Revised package list, adding CLI (Command-Line Interface) helpers
+      and X.Org GUI, while pruning packages that are not as generally
+      useful or widely implemented
+      * In particular, removed custom Perl modules, Funtoo/Gentoo
+        developer/specialized packages, document processing utilities,
+        virtualization tools and media software
+      * Previously, the X.Org GUI was a specific non-goal of the
+        project.  However, certain extremely useful packages (such as
+        Wireshark) required it.  The additional screen real-estate is
+        also useful for management of multiple terminals and
+        web-browsing for solutions to issues.  In order to meet these
+        needs, it was decided to incorporate X.Org GUI packages with
+        a minimal window manager footprint.
+      * CLI interface remains the default (see [Minimal X.Org GUI]
+        section for information on loading up and using the graphical
+        environment).
 
 ##### 2014-03-13 v1.1 95ad4fd257697618bae7402d4bc3a27499035d30.4
 
