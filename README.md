@@ -760,7 +760,7 @@ It is a stated goal that forensics mode continue being the default.
     * GaryOS v2.0
 
 GaryOS boots to CLI (Command-Line Interface) by default.  To enter the
-graphical interface, run `XSESSION=dwm startx`.
+graphical interface, run `startx`.
 
 By default, the DWM window manager is used.  URxvt is the default
 terminal emulator, and Surf is the default browser.  Both are wrapped
