@@ -361,6 +361,9 @@ if [[ ${1} == -/ ]]; then
 	${SED} -i \
 		-e "s%^(hostname=[\"]?)[^\"]+([\"]?)$%\1${TITLE}\2%g" \
 		${INIT_DST}/etc/conf.d/hostname			|| exit 1
+	echo -en "XSESSION=\"dwm\"\n" \
+		>${INIT_DST}/etc/env.d/90xsession		|| exit 1
+	chroot ${INIT_DST} /usr/sbin/env-update			|| exit 1
 	echo -en "${TITLE}\n${TITLE}\n" |
 		chroot ${INIT_DST} /usr/bin/passwd root		|| exit 1
 
