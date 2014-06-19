@@ -351,6 +351,8 @@ if [[ ${1} == -/ ]]; then
 		${INIT_DST}/.${TITLE}				|| exit 1
 	${RSYNC_U} ${REL_DIR}/.${TITLE}.git/ \
 		${INIT_DST}/.${TITLE}/.git			|| exit 1
+	${SED} -i "s%^[[:space:]]+worktree.+$%%g" \
+		${INIT_DST}/.${TITLE}/.git/config		|| exit 1
 
 	${LN} sbin/init ${INIT_DST}/init			|| exit 1
 	${SED} -i \
