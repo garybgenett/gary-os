@@ -183,6 +183,8 @@ x11-terms/rxvt-unicode
 x11-misc/dmenu
 x11-wm/dwm
 
+x11-apps/xsetroot
+
 ########################################
 # toolkits
 
