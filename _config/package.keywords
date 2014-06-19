@@ -2,18 +2,22 @@
 # portage package keywords file
 ################################################################################
 
-app-accessibility/at-spi2-atk		~*		# gentoo required
 app-crypt/chntpw			~*		# gentoo required
 app-emulation/bochs			~*		# gentoo required
 app-emulation/lxc			~*		# gentoo required
 app-misc/binwalk			~*		# gentoo required
+app-misc/ca-certificates		~*		# gentoo required
 app-misc/hello				~*		# gentoo required
+dev-db/recutils				~*		# gentoo required
+dev-lang/luajit				~*		# gentoo required
 dev-libs/apr				~*		# gentoo required
+dev-libs/libuv				~*		# gentoo required
 dev-lua/luarocks			~*		# gentoo required
 games-fps/quakeforge			~*		# gentoo required
 media-gfx/mcomix			~*		# gentoo required
 net-analyzer/snort			~*		# gentoo required
 net-analyzer/tcptrace			~*		# gentoo required
+net-libs/daq				~*		# gentoo required
 net-misc/cadaver			~*		# gentoo required
 net-misc/pipes				~*		# gentoo required
 sys-apps/dtc				~*		# gentoo required
@@ -21,32 +25,42 @@ sys-apps/paludis			~*		# gentoo required
 sys-block/whdd				~*		# gentoo required
 sys-devel/bison				~*		# gentoo required
 sys-fs/ext3grep				~*		# gentoo required
-sys-libs/zlib				~*		# gentoo required
 sys-process/nmon			~*		# gentoo required
 www-client/midori			~*		# gentoo required
+x11-misc/tabbed				~*		# gentoo required
 x11-misc/whaw				~*		# gentoo required
-x11-plugins/pidgin-sipe			~*		# gentoo required
+
+app-crypt/efitools			~*		# gentoo required
+sys-boot/gnu-efi			~*		# gentoo required
 
 sys-fs/zfs				~*		# gentoo required
 sys-fs/zfs-kmod				~*		# gentoo required
 sys-kernel/spl				~*		# gentoo required
 
 dev-perl/Template-Tiny			~*		# gentoo required
+dev-perl/Text-Markdown			~*		# gentoo required
 perl-core/Switch			~*		# gentoo required
 
 dev-lang/nqp				~*		# gentoo required
 dev-lang/parrot				~*		# gentoo required
 dev-lang/rakudo				~*		# gentoo required
 
+app-text/pandoc				~*		# gentoo required
+dev-haskell/aeson-pretty		~*		# gentoo required
+dev-haskell/hexpat			~*		# gentoo required
+dev-haskell/highlighting-kate		~*		# gentoo required
+dev-haskell/hs-bibutils			~*		# gentoo required
+dev-haskell/list			~*		# gentoo required
+dev-haskell/pandoc-citeproc		~*		# gentoo required
+dev-haskell/rfc5051			~*		# gentoo required
+dev-haskell/texmath			~*		# gentoo required
+
 app-emulation/vmware-modules		~*		# gentoo required
 app-emulation/vmware-player		~*		# gentoo required
 app-emulation/vmware-tools		~*		# gentoo required
 
-app-admin/eselect-java			~*		# gentoo required
 dev-java/icedtea			~*		# gentoo required
 dev-java/icedtea-web			~*		# gentoo required
-dev-java/java-config			~*		# gentoo required
-sys-apps/baselayout-java		~*		# gentoo required
 
 dev-ruby/paint				~*		# gentoo required
 dev-ruby/trollop			~*		# gentoo required
@@ -58,13 +72,11 @@ games-emulation/mekanix			x86		# gentoo required
 
 ################################################################################
 
-app-crypt/efitools			~*		# gentoo required
-sys-boot/gnu-efi			~*		# build fail: efitools
+>=sys-devel/libtool-2.4.2		~*		# required by: dev-libs/apr-1.5.0-r2
 
-dev-libs/ffcall				~*		# build fail: 1.10
-net-analyzer/ssldump			~*		# build fail: 0.9-r2
+=dev-libs/geoip-1.5.2			~*		# gentoo required: 1.6.0-r1 download checksum mismatch
 
-net-libs/libtorrent			~*		# build fail: rtorrent
+net-libs/libtorrent			~*		# gentoo required
 net-p2p/rtorrent			~*		# build fail: 0.8.9
 
 ########################################
@@ -78,33 +90,38 @@ net-p2p/rtorrent			~*		# build fail: 0.8.9
 =app-admin/apache-tools-2.4*		~*
 =www-servers/apache-2.4*		~*
 
->=x11-wm/enlightenment-0.17		~*
-dev-libs/e_dbus				~*		# gentoo required
-dev-libs/ecore				~*		# gentoo required
-dev-libs/eet				~*		# gentoo required
-dev-libs/eeze				~*		# gentoo required
-dev-libs/efreet				~*		# gentoo required
-dev-libs/eina				~*		# gentoo required
-dev-libs/eio				~*		# gentoo required
-dev-libs/embryo				~*		# gentoo required
-media-libs/edje				~*		# gentoo required
-media-libs/evas				~*		# gentoo required
-
 =app-emulation/qemu-1.6*		~*
 app-emulation/spice-vdagent		~*		# gentoo required
 sys-firmware/seabios			~*		# gentoo required
 
 >=media-libs/libdvdnav-4.2.1		~*
 >=media-libs/libdvdread-4.2.1		~*
-media-libs/libdvdcss			~*		# gentoo required
 
 ########################################
+
+app-misc/task				~*
+www-servers/nginx			~*
 
 x11-wm/openbox				~*
 
 x11-misc/dmenu				~*
 x11-terms/st				~*
 x11-wm/dwm				~*
+
+x11-terms/terminology			~*
+x11-wm/enlightenment			~*
+dev-libs/e_dbus				~*		# gentoo required
+dev-libs/ecore				~*		# gentoo required
+dev-libs/eet				~*		# gentoo required
+dev-libs/eeze				~*		# gentoo required
+dev-libs/efl				~*		# gentoo required
+dev-libs/efreet				~*		# gentoo required
+dev-libs/eina				~*		# gentoo required
+dev-libs/eio				~*		# gentoo required
+dev-libs/embryo				~*		# gentoo required
+media-libs/edje				~*		# gentoo required
+media-libs/elementary			~*		# gentoo required
+media-libs/evas				~*		# gentoo required
 
 ################################################################################
 # end of file
