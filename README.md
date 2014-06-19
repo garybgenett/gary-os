@@ -78,7 +78,9 @@ Rescue media is more likely to be available and up-to-date if it is
 convenient to deploy and manage, which is one of the primary aims of
 GaryOS.
 
-![GaryOS Screenshot](screenshot.png "GaryOS Screenshot")
+![GaryOS CLI Screenshot](screenshot_cli.png "GaryOS CLI Screenshot")
+
+![GaryOS GUI Screenshot](screenshot_gui.png "GaryOS GUI Screenshot")
 
 ## Quick Start
 [Quick Start]: #quick-start
@@ -127,11 +129,11 @@ a ready-to-go Funtoo/Gentoo installation.
 ## Version History
 [Version History]: #version-history
 
-[Release Notes]: #2014-06-18-v20-873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d0
+[Release Notes]: #2014-06-19-v20-873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d0
 [64-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v2.0.kernel
 [32-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v2.0.kernel
 
-##### 2014-06-18 v2.0 873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d.0
+##### 2014-06-19 v2.0 873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d.0
 
   * 64-bit: [gary-os-generic_64-funtoo-stable-v2.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v2.0.kernel)
   * 32-bit: [gary-os-generic_32-funtoo-stable-v2.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v2.0.kernel)
@@ -548,9 +550,12 @@ details for the individual components.
     * [icon.png](https://github.com/garybgenett/gary-os/blob/master/icon.png)
         * Creative "hack" to have an icon for the project.  Icons make
           it seem like you are "for real", so I had to have one.
-    * [screenshot.png](https://github.com/garybgenett/gary-os/blob/master/screenshot.png)
+    * [screenshot_cli.png](https://github.com/garybgenett/gary-os/blob/master/screenshot_cli.png)
         * Pretty self-explanatory.  Snapshot of what booting v1.0 looked
           like, for promotion, reference and posterity.
+    * [screenshot_gui.png](https://github.com/garybgenett/gary-os/blob/master/screenshot_gui.png)
+        * Also self-explanatory.  Snapshot of the what the initial X.Org
+          GUI in v2.0 looked like.
   * Release:
     * [_commit](https://github.com/garybgenett/gary-os/blob/master/_commit)
         * Primarily for my tracking, records commit IDs for each of the
