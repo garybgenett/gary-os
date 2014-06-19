@@ -98,13 +98,17 @@ www-client/lynx
 www-client/w3m
 
 app-misc/screen
+app-misc/tmux
 app-shells/bash
 app-shells/bash-completion
 sys-apps/kbd
 sys-devel/gettext
+sys-libs/gpm
 
 dev-lang/perl
 dev-libs/libpcre
+dev-perl/Curses
+dev-perl/Curses-UI
 dev-perl/DateManip
 dev-perl/Expect
 dev-perl/Sys-Virt
@@ -113,7 +117,9 @@ dev-perl/WWW-Mechanize
 dev-perl/libwww-perl
 perl-core/CGI
 perl-core/JSON-PP
+perl-core/MIME-Base64
 perl-core/Switch
+perl-core/Time-Local
 sys-devel/libperl
 
 app-crypt/gnupg
@@ -198,11 +204,13 @@ x11-apps/xrandr
 x11-base/xorg-x11
 x11-misc/arandr
 
+x11-misc/tabbed
 x11-misc/xclip
 x11-misc/xsel
 x11-terms/rxvt
 x11-terms/rxvt-unicode
 x11-terms/st
+x11-terms/terminology
 x11-terms/xterm
 
 x11-misc/dmenu
@@ -214,6 +222,7 @@ x11-wm/twm
 x11-wm/windowmaker
 
 x11-apps/transset
+x11-apps/xsetroot
 x11-misc/whaw
 x11-misc/wmctrl
 x11-misc/xautolock
@@ -233,6 +242,12 @@ dev-perl/Template-Tiny
 dev-perl/Template-Toolkit
 dev-perl/Template-XML
 
+app-editors/retext
+app-text/pandoc
+dev-haskell/pandoc-citeproc
+dev-haskell/pandoc-types
+dev-perl/Text-Markdown
+
 app-text/asciidoc
 app-text/docbook-xml-dtd
 app-text/docbook-xsl-ns-stylesheets
@@ -248,6 +263,7 @@ dev-vcs/cvs2svn
 dev-vcs/cvsps
 dev-vcs/git
 dev-vcs/gitolite
+dev-vcs/mercurial
 dev-vcs/qgit
 dev-vcs/subversion
 
@@ -263,6 +279,7 @@ dev-lua/luarocks
 dev-ruby/rubygems
 
 #>>>dev-lang/v8
+dev-libs/libuv
 net-libs/nodejs
 
 dev-db/sqlite
@@ -310,16 +327,20 @@ app-text/tree
 sys-apps/dstat
 sys-apps/pv
 
+net-analyzer/argus
+net-analyzer/argus-clients
 net-analyzer/arping
 net-analyzer/dnstracer
 net-analyzer/httping
 net-analyzer/iftop
 net-analyzer/iptraf-ng
 net-analyzer/macchanger
+net-analyzer/net-snmp
 net-analyzer/netcat6
 net-analyzer/nethogs
 net-analyzer/ngrep
 net-analyzer/nmap
+net-analyzer/rrdtool
 net-analyzer/snort
 net-analyzer/ssldump
 net-analyzer/tcpdump
@@ -328,6 +349,7 @@ net-analyzer/tcptraceroute
 net-analyzer/traceroute
 net-analyzer/vnstat
 net-analyzer/wireshark
+net-dns/avahi
 net-dns/bind-tools
 net-misc/cadaver
 net-misc/iperf
@@ -373,24 +395,32 @@ net-misc/quagga
 net-misc/radvd
 net-misc/tor
 net-nds/openldap
-net-print/cups
 net-wireless/hostapd
-www-misc/awstats
 
 app-admin/apache-tools
 #>>>www-apache/mod_perl
+www-misc/awstats
 www-servers/apache
+www-servers/nginx
 
 app-text/ghostscript-gpl
+net-print/cups
+net-print/cups-filters
 net-print/foomatic-db
 net-print/foomatic-db-engine
-net-print/foomatic-filters
+
+media-gfx/sane-backends
+media-gfx/sane-frontends
+media-gfx/xsane
+net-print/hplip
 
 ########################################
 # programs
 
 app-emulation/bochs
 app-emulation/dosemu
+games-emulation/dosbox
+
 app-emulation/libvirt
 app-emulation/lxc
 app-emulation/qemu
@@ -399,9 +429,11 @@ app-emulation/spice-protocol
 app-emulation/spice-vdagent
 app-emulation/virt-manager
 app-emulation/virt-viewer
-app-emulation/vmware-player
-games-emulation/dosbox
 net-misc/spice-gtk
+
+app-emulation/vmware-modules
+app-emulation/vmware-player
+app-emulation/vmware-tools
 
 app-misc/run-mailcap
 net-misc/urlview
@@ -410,6 +442,8 @@ app-misc/abook
 app-misc/remind
 app-misc/task
 app-misc/wyrd
+app-office/ledger
+dev-db/recutils
 
 mail-client/mailx
 mail-client/mutt
@@ -424,6 +458,7 @@ mail-client/thunderbird
 www-client/chromium
 www-client/firefox
 www-client/midori
+www-client/surf
 
 app-text/acroread
 app-text/qpdf
@@ -453,6 +488,7 @@ x11-plugins/pidgin-hotkeys
 x11-plugins/pidgin-sipe
 
 dev-java/icedtea
+dev-java/icedtea-bin
 dev-java/icedtea:6
 dev-java/icedtea:7
 

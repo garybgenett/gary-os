@@ -2,47 +2,47 @@
 # portage package use file
 ################################################################################
 
-#{NEW} dev-java/icedtea-bin		-X		# gentoo required
-#{NEW} dev-java/icedtea-bin		-nsplugin	# gentoo required
-#{NEW} x11-libs/gdk-pixbuf		-jpeg		# gentoo required
+#{NEW} dev-java/icedtea			-javascript	# gentoo required
+#{NEW} net-libs/libproxy		-webkit		# gentoo required
 
 ################################################################################
 
-app-arch/libarchive			xattr		# gentoo required
 app-text/ghostscript-gpl		cups		# gentoo required
 app-text/poppler			cairo		# gentoo required
-app-text/poppler			lcms		# gentoo required
 app-text/poppler			qt4		# gentoo required
-dev-libs/e_dbus				connman		# gentoo required
-dev-libs/e_dbus				libnotify	# gentoo required
+dev-java/antlr				java		# gentoo required
+media-libs/gd				fontconfig	# gentoo required
 media-libs/libsdl			joystick	# gentoo required
-net-wireless/wpa_supplicant		dbus		# gentoo required
+media-video/vlc				xcb		# gentoo required
+net-dns/avahi				dbus		# gentoo required
 sys-auth/consolekit			policykit	# gentoo required
 sys-libs/gdbm				berkdb		# gentoo required
 
 ########################################
 
-net-dns/dnsmasq				script		# gentoo required
 net-ftp/proftpd				openssl		# gentoo required
 net-nds/openldap			sasl		# gentoo required
 
-dev-python/PyQt4			webkit		# gentoo required
 media-libs/chromaprint			tools		# gentoo required
 media-libs/mesa				xa		# gentoo required
+net-dns/avahi			mdnsresponder-compat	# gentoo required
 net-misc/spice-gtk			gtk3		# gentoo required
 sys-libs/zlib				minizip		# gentoo required
 
-################################################################################
+########################################
 
-app-portage/layman			git subversion
-dev-vcs/cvs2svn				git
-dev-vcs/git				subversion
+# temporary fix for "heartbleed" bug:
+# https://www.openssl.org/news/secadv_20140407.txt
+dev-libs/openssl			-tls-heartbeat
+
+################################################################################
 
 net-fs/samba				cups
 net-print/cups				samba
 
 dev-vcs/subversion			-apache2
 www-servers/apache			-threads
+www-servers/nginx			-syslog
 
 ########################################
 
@@ -55,7 +55,9 @@ net-analyzer/tcpdump			-chroot
 
 x11-base/xorg-server			xnest xvfb
 x11-terms/rxvt-unicode			fading-colors focused-urgency font-styles mousewheel perl
+x11-wm/dwm				savedconfig
 
+app-office/libreoffice			java
 app-text/enchant			aspell
 mail-client/mutt			sidebar
 mail-client/thunderbird			-wifi ldap lightning
@@ -71,15 +73,9 @@ app-emulation/vmware-tools		vmware_guest_freebsd vmware_guest_linux vmware_guest
 
 ################################################################################
 
-#{MET} app-text/poppler			-cairo		# gentoo required
-#{MET} app-text/poppler			-qt4		# gentoo required
+#{MET} app-text/poppler			-qt4		# gentoo required (reversing above)
 
-########################################
-
-#{MET} app-emulation/qemu		-sdl
-
-#{MET} app-emulation/spice		-client
-#{MET} app-emulation/spice		-gui
+#{MET} net-libs/glib-networking		-libproxy	# gentoo required
 
 ################################################################################
 # end of file

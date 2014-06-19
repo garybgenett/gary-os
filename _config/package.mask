@@ -3,6 +3,7 @@
 ################################################################################
 
 >=app-emulation/vmware-modules-279.1	# gentoo required: version match
+>=dev-libs/geoip-1.6.0-r1		# download checksum mismatch
 >=net-misc/spice-gtk-0.21		# breaks clipboard sharing
 
 ########################################
