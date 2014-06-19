@@ -222,6 +222,7 @@ x11-wm/twm
 x11-wm/windowmaker
 
 x11-apps/transset
+x11-apps/xsetroot
 x11-misc/whaw
 x11-misc/wmctrl
 x11-misc/xautolock
