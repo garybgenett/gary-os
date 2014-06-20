@@ -1,6 +1,27 @@
 #!/usr/bin/env bash
 source ${HOME}/.bashrc
 ################################################################################
+# release checklist:
+#	* build
+#		* [complete all commits in ".setup", ".static" and "coding"]
+#		* metro.sh -! && (echo | metro.sh 32) && (echo | metro.sh 64)
+#		* qemu-minion.bsh /.g/_data/_builds/_metro/stage3-generic_32-*.kernel 0
+#		* qemu-minion.bsh /.g/_data/_builds/_metro/stage3-generic_64-*.kernel 0
+#		* cd /.g/_data/_builds/_metro && cat _commit
+#			* [verify with "git-list" in each repository]
+#	* commit
+#		* cd /.g/_data/_builds/_metro && git-backup <version>
+#		* [update "$RELEASE" and "$CMT_HSH" in "metro.sh"]
+#		* metro.sh -! && (echo | metro.sh 32) && (echo | metro.sh 64)
+#		* cd /.g/_data/_builds/_metro && git-commit --all --amend --no-edit
+#		* [update/commit "$RELEASE" and "$CMT_HSH" in "metro.sh"]
+#	* release
+#		* ls /.g/_data/_builds/.gary-os/metro.gitlog/cur | tail -n1
+#			* rm <result>
+#		* cd /.g/_data/_builds/.gary-os/.gary-os && git-list
+#			* git reset --hard HEAD^1
+#		* metro.sh -! -!
+################################################################################
 
 declare AUTHOR="Gary B. Genett <me@garybgenett.net>"
 declare LOGIN="garybgenett"
