@@ -2731,9 +2731,10 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			cd - >/dev/null
 		elif [[ ${1} == "repo" ]]; then
 			shift
-#>>>			task rc.defaultwidth=1 burndown.weekly
-			task rc.defaultwidth=1 ghistory.monthly
-			task rc.defaultwidth=1 history.monthly
+			task rc.defaultwidth=80 rc.defaultheight=30 burndown.daily
+			task rc.defaultwidth=80 rc.defaultheight=30 burndown.weekly
+			task rc.defaultwidth=80 rc.defaultheight=30 ghistory.monthly
+			task rc.defaultwidth=80 rc.defaultheight=30 history.monthly
 			task projects
 			task tags
 			task udas
