@@ -136,6 +136,7 @@ app-arch/sharutils
 app-arch/tar
 app-arch/unrar
 app-arch/unzip
+app-arch/upx-ucl
 app-arch/xz-utils
 app-arch/zip
 dev-util/xdelta
