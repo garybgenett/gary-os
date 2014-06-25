@@ -2756,6 +2756,9 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == [,] ]]; then
 			shift
 			task-track "${@}"
+		elif [[ ${1} == [-] ]]; then
+			shift
+			impersonate_command "(limit:none tags.not:agenda description.has:: ${@})"
 		else
 			(cd ${PIMDIR} && ${GIT_STS} tasks)
 			task read kind:track status:pending
