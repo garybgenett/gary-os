@@ -315,6 +315,7 @@ if [[ ${1} == -1 ]]; then
 	declare INIT_DIR="${PWD}"
 
 	${CP} -L ${INIT_DIR}/boot/kernel ${INIT_DIR}.kernel	#>>> || exit 1
+	upx ./bin/* ./sbin/* ./usr/bin/* ./usr/sbin/*		#>>> || exit 1
 	eval find ./ \
 		$(for FILE in ./usr/src/linux-*; do echo -en "\( -path ${FILE} -prune \) -o "; done) \
 		\
