@@ -5,7 +5,7 @@ source ${HOME}/.bashrc
 #	* build
 #		* [complete all commits in ".setup", ".static" and "coding"]
 #			* rm /.g/_data/_build/_metro/funtoo-*/*/*/*/stage3-*
-#		* metro.sh -! && (echo | metro.sh 32) && (echo | metro.sh 64)
+#		* metro.sh -! && (echo | metro.sh 32 0) && (echo | metro.sh 64 0)
 #		* qemu-minion.bsh /.g/_data/_builds/_metro/stage3-generic_32-*.kernel 0
 #		* qemu-minion.bsh /.g/_data/_builds/_metro/stage3-generic_64-*.kernel 0
 #		* cd /.g/_data/_builds/_metro && cat _commit
@@ -13,7 +13,7 @@ source ${HOME}/.bashrc
 #	* commit
 #		* cd /.g/_data/_builds/_metro && git-backup <version>
 #		* [update "$RELEASE" and "$CMT_HSH" in "metro.sh"]
-#		* metro.sh -! && (echo | metro.sh 32) && (echo | metro.sh 64)
+#		* metro.sh -! && (echo | metro.sh 32 0) && (echo | metro.sh 64 0)
 #		* cd /.g/_data/_builds/_metro && git-commit --all --amend --no-edit
 #		* [update/commit "$RELEASE" and "$CMT_HSH" in "metro.sh"]
 #	* release
