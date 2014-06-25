@@ -2,6 +2,7 @@
 # portage package keywords file
 ################################################################################
 
+app-arch/upx-ucl			~*		# gentoo required
 app-crypt/chntpw			~*		# gentoo required
 app-emulation/bochs			~*		# gentoo required
 app-emulation/lxc			~*		# gentoo required
