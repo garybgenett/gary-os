@@ -48,6 +48,7 @@ dev-lang/rakudo				~*		# gentoo required
 
 app-text/pandoc				~*		# gentoo required
 dev-haskell/aeson-pretty		~*		# gentoo required
+dev-haskell/haskell-platform		~*		# gentoo required
 dev-haskell/hexpat			~*		# gentoo required
 dev-haskell/highlighting-kate		~*		# gentoo required
 dev-haskell/hs-bibutils			~*		# gentoo required
