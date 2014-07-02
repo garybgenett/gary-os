@@ -298,6 +298,7 @@ if [[ ${1} == -u ]]; then
 	${SAFE_ENV} emerge ${ASK} --update --deep --newuse \@world	|| exit 1
 	${SAFE_ENV} python-updater					|| exit 1
 	${SAFE_ENV} perl-cleaner --all					|| exit 1
+	${SAFE_ENV} haskell-updater --all				|| exit 1
 	${SAFE_ENV} emerge ${ASK} \@preserved-rebuild			|| exit 1
 	${SAFE_ENV} emerge ${ASK} \@module-rebuild			|| exit 1
 	${SAFE_ENV} emerge ${ASK} --depclean				|| exit 1
