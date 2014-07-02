@@ -245,6 +245,7 @@ dev-perl/Template-XML
 
 app-editors/retext
 app-text/pandoc
+dev-haskell/haskell-platform
 dev-haskell/pandoc-citeproc
 dev-haskell/pandoc-types
 dev-perl/Text-Markdown
