@@ -434,7 +434,6 @@ alias natter="iptables -L -nvx --line-numbers -t nat | ${MORE}"
 
 ########################################
 
-alias adb-vpn="cd /.g/_data/_builds/_android ; _adb.sh forward tcp:8080 tcp:8080 ; _adb.sh forward --list"
 alias cal="cal --monday --three"
 alias clean="_sync clean"
 alias clock="clockywock"
@@ -471,6 +470,25 @@ alias workspace="_sync workspace"
 ################################################################################
 # basic functions
 ################################################################################
+
+function adb {
+	(cd /.g/_data/_builds/_android && ADB_TRACE=1 ./_adb.sh ${@})
+}
+
+########################################
+
+function adb-backup {
+	adb backup -all -apk -obb -noshared -nosystem -f ${@}
+}
+
+########################################
+
+function adb-vpn {
+	adb forward tcp:8080 tcp:8080 ${@}
+	adb forward --list
+}
+
+########################################
 
 function burn {
 	if [[ ${1} == -l ]]; then
