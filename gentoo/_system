@@ -291,7 +291,6 @@ if [[ ${1} == -u ]]; then
 	done
 	cat /dev/null	>/var/lib/portage/world
 	echo "@${_PKG}"	>/var/lib/portage/world_sets
-	declare ECLEAN="eclean --verbose"
 	declare D_CONF="dispatch-conf"
 	[[ -n ${AUTO} ]] && D_CONF="expect -c \"spawn ${D_CONF}; expect use-new {send u\r; exp_continue;};\""
 	${SAFE_ENV} emerge ${ASK} --update --deep --newuse \@system	|| exit 1
@@ -304,8 +303,8 @@ if [[ ${1} == -u ]]; then
 	${SAFE_ENV} emerge ${ASK} --depclean				|| exit 1
 	${SAFE_ENV} revdep-rebuild --ignore				|| exit 1
 	${SAFE_ENV} emaint --fix all					|| exit 1
-	${SAFE_ENV} ${ECLEAN} distfiles					|| exit 1
-	${SAFE_ENV} ${ECLEAN} packages					|| exit 1
+	${SAFE_ENV} eclean --verbose distfiles				|| exit 1
+	${SAFE_ENV} eclean --verbose packages				|| exit 1
 	${SAFE_ENV} ${D_CONF}						|| exit 1
 
 ########################################
