@@ -1688,6 +1688,8 @@ function prompt {
 			CCACHE_DIR="${CCACHE_DIR}" \
 			CCACHE_LOGFILE="${CCACHE_LOGFILE}" \
 			PATH="${PATH}" \
+			CYGWIN="${CYGWIN}" \
+			CYGWIN_ROOT="${CYGWIN_ROOT}" \
 			${CMD} "${@}"
 		return ${?}
 	fi
