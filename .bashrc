@@ -545,7 +545,13 @@ function git-clone {
 ########################################
 
 function git-list {
-	if [[ ${1} == -r ]]; then
+	if [[ ${1} == -l ]]; then
+		shift
+		${FUNCNAME} -r "${@}" |
+			awk '{print $5;}' |
+			sort |
+			uniq
+	elif [[ ${1} == -r ]]; then
 		shift
 		declare HASH
 		for HASH in $(${FUNCNAME} | cut -d' ' -f4); do
