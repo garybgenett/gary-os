@@ -2466,11 +2466,38 @@ function task-export-text {
 			my $started = "0";
 			my $begin = "0";
 			my $notes = "0";
+			if ((exists($task->{"project"})) && ($task->{"project"} eq "_journal")) {
+				my $date = $task->{"description"};
+				$date =~ s/^([0-9]{4}[-][0-9]{2}[-][0-9]{2}).*$/$1/g;
+				$date =~ s/[-]//g;
+				my($date_s, $date_d) = &time_format(${date} . "T230000Z");
+				my $entry = "";
+				my $entries = "0";
+				foreach my $annotation (@{$task->{"annotations"}}) {
+					if (($task->{"kind"} eq "notes") && ($annotation->{"description"} =~ m/^[[]notes[]][:]/)) {
+						if (${entries}) {
+							use Data::Dumper;
+							print Dumper(${task});
+							die("MULTIPLE ENTRIES!");
+						};
+						$entries = "1";
+						my $output = $annotation->{"description"};
+						$output =~ s/^[[]notes[]][:]//g;
+						$entry = decode_base64(${output});
+					};
+				};
+				push(@{$line->{"events"}}, {
+					"title"		=> $task->{"description"},
+					"start"		=> ${date_d},
+					"durationEvent"	=> "false",
+					"caption"	=> ${entry},
+				});
+			};
 			if ((exists($task->{"due"})) && (!exists($task->{"recur"}))) {
 				&export_proj(${task}, 1);
 			};
 			foreach my $annotation (@{$task->{"annotations"}}) {
-				if (((!exists($task->{"kind"})) || ($task->{"kind"} ne "notes")) && ($annotation->{"description"} =~ m/^[[]track[]][:][[]begin[]]$/)) {
+				if (((!exists($task->{"kind"})) || (($task->{"project"} eq "_journal") || ($task->{"kind"} ne "notes"))) && ($annotation->{"description"} =~ m/^[[]track[]][:][[]begin[]]$/)) {
 					my $tags		= join(" ", @{$task->{"tags"}})		if (exists($task->{"tags"}));
 					my($brn_s, $brn_d)	= &time_format($task->{"entry"})	if (exists($task->{"entry"}));
 					my($die_s, $die_d)	= &time_format($task->{"end"})		if (exists($task->{"end"}));
@@ -2495,7 +2522,7 @@ function task-export-text {
 					$started	= ${beg_s};
 					$begin		= ${beg_d};
 				}
-				elsif (((!exists($task->{"kind"})) || ($task->{"kind"} ne "notes")) && ($annotation->{"description"} =~ m/^[[]track[]][:][[]end[]]$/)) {
+				elsif (((!exists($task->{"kind"})) || (($task->{"project"} eq "_journal") || ($task->{"kind"} ne "notes"))) && ($annotation->{"description"} =~ m/^[[]track[]][:][[]end[]]$/)) {
 					my $tags		= join(" ", @{$task->{"tags"}})		if (exists($task->{"tags"}));
 					my($end_s, $end_d)	= &time_format($annotation->{"entry"})	if (exists($annotation->{"entry"}));
 					my $t_hrs		= &hour(${end_s} - ${started})		;
@@ -2550,6 +2577,32 @@ function task-export-text {
 		close(LINE) || die();
 		close(NOTE) || die();
 	' -- "${@}" || return 1
+	return 0
+}
+
+########################################
+
+function task-journal {
+	if [[ -z "${@}" ]]; then
+		return 1
+	fi
+	declare DATE="$(date --iso)"
+	if [[ -n "$(echo "${1}" | ${GREP} "^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$")" ]]; then
+		DATE="${1}"
+		shift
+	fi
+	declare UUIDS="$(task uuid project:_journal "/${DATE}/" | ${SED} "s/,/\n/g")"
+	declare UUID
+	if [[ -z ${UUIDS} ]]; then
+		task add project:_journal kind:notes area:writing -- "${DATE} $(date --date="${DATE}" +%a) {${@}}"
+		${FUNCNAME} "${DATE}"
+	else
+		for UUID in ${UUIDS}; do
+			task "${UUID}" start
+			task-notes "${UUID}"
+			task "${UUID}" stop
+		done
+	fi
 	return 0
 }
 
@@ -2772,6 +2825,9 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			task-export-text	|| return 1
 #>>>			task-export		|| return 1
 			zpim-commit tasks
+		elif [[ ${1} == [_] ]]; then
+			shift
+			task-journal "${@}"
 		elif [[ ${1} == [+] ]]; then
 			shift
 			task-notes "${@}"
