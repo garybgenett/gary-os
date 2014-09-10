@@ -7,6 +7,7 @@
 
 ################################################################################
 
+app-crypt/heimdal			-ssl		# gentoo required
 app-text/ghostscript-gpl		cups		# gentoo required
 app-text/poppler			cairo		# gentoo required
 app-text/poppler			qt4		# gentoo required
@@ -39,7 +40,7 @@ dev-libs/openssl			-tls-heartbeat
 
 ################################################################################
 
-net-fs/samba				cups
+net-fs/samba				client cups
 net-print/cups				samba
 
 dev-vcs/subversion			-apache2
