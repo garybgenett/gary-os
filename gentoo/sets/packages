@@ -542,6 +542,27 @@ app-text/sdcv
 app-text/stardict
 media-gfx/mcomix
 
+media-libs/fluidsynth-dssi
+media-libs/libtimidity
+media-plugins/xsynth-dssi
+media-sound/amsynth
+media-sound/ardour
+media-sound/audacity
+media-sound/fluidsynth
+media-sound/hydrogen
+media-sound/jokosher
+media-sound/linuxsampler
+media-sound/lmms
+media-sound/mixxx
+media-sound/qjackctl
+media-sound/qsynth
+media-sound/qtractor
+media-sound/rosegarden
+media-sound/timidity++
+media-sound/timidity-freepats
+media-sound/xwax
+media-sound/zynaddsubfx
+
 app-misc/golly
 games-misc/fortune-mod
 games-misc/fortune-mod-all
