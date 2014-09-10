@@ -14,6 +14,7 @@ dev-lang/luajit				~*		# gentoo required
 dev-libs/apr				~*		# gentoo required
 dev-libs/libuv				~*		# gentoo required
 dev-lua/luarocks			~*		# gentoo required
+games-action/garden			~*		# gentoo required
 games-fps/quakeforge			~*		# gentoo required
 media-gfx/mcomix			~*		# gentoo required
 net-analyzer/snort			~*		# gentoo required
