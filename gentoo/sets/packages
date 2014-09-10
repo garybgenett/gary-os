@@ -553,6 +553,7 @@ games-board/gnugo
 games-board/xboard
 
 games-action/barrage
+games-action/garden
 games-arcade/lbreakout
 games-arcade/lbreakout2
 games-arcade/netris
