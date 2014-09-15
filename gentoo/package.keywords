@@ -105,6 +105,7 @@ net-p2p/rtorrent			~*		# build fail: 0.8.9
 
 =net-fs/samba-4.1*			~*
 sys-libs/ldb				~*		# gentoo required
+sys-libs/tdb				~*		# gentoo required
 
 =app-admin/apache-tools-2.4*		~*
 =www-servers/apache-2.4*		~*
