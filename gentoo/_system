@@ -132,7 +132,7 @@ if [[ ${1} == -i ]]; then
 	${MKDIR}				${TARGET}/.g/.home
 	${HOME}/scripts/_sync _home _build	${TARGET}/.g/.home
 	${RM}					${TARGET}/.g/.home/.ssh/id_*
-	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/scripts/_sync mount g sda
+	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/scripts/_sync mount g null
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/setup/.setconf
 	if ${NEW}; then
 		if [[ ${_NEW} == "MET" ]]; then
