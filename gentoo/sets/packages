@@ -515,6 +515,7 @@ net-p2p/rtorrent
 app-cdr/cdrdao
 app-cdr/cdrtools
 app-cdr/dvd+rw-tools
+app-misc/regionset
 media-sound/cdparanoia
 media-sound/cdtool
 media-video/dvdbackup
