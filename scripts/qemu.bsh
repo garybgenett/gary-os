@@ -73,7 +73,7 @@ I+=" "; I+="/.g/_data/_target/iso/${FILE}"
 
 I="$(find ${I} 2>/dev/null | sort -n | tail -n1)"
 
-if [[ -n $(file ${I} 2>/dev/null | ${GREP} "ISO[ ]9660") ]]; then
+if [[ -n $(file -L ${I} 2>/dev/null | ${GREP} "ISO[ ]9660") ]]; then
 	QOUT="${I}.qemu"
 	QDSK="-drive id=cdrom0,if=none,file=${I}"
 	QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ide.1,bootindex=1"
