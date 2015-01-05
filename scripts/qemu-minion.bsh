@@ -17,10 +17,10 @@ if [[ -n $(file -L ${FILE} 2>/dev/null | ${GREP} "Linux[ ]kernel[ ].+[ ]boot[ ]e
 	fi
 elif [[ -n $(file -L ${FILE} 2>/dev/null | ${GREP} "DOS[/]MBR[ ]boot[ ]sector") ]]; then
 	QOPT="-drive id=drive0,if=none,file=${FILE}"
-	QOPT+=" "; QOPT+="-device ide-cd,drive=drive0,bus=ide.2,bootindex=0"
+	QOPT+=" "; QOPT+="-device ide-cd,drive=drive0,bus=ide.1,bootindex=0"
 else
 	QOPT="-drive id=drive0,if=none,file=${FILE}"
-	QOPT+=" "; QOPT+="-device ide-hd,drive=drive0,bus=ide.2,bootindex=0"
+	QOPT+=" "; QOPT+="-device ide-hd,drive=drive0,bus=ide.0,bootindex=0"
 fi
 
 ########################################
