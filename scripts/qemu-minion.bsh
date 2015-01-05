@@ -15,7 +15,7 @@ if [[ -n $(file -L ${FILE} 2>/dev/null | ${GREP} "Linux[ ]kernel[ ].+[ ]boot[ ]e
 	if [[ -n $(file -L ${FILE/%.kernel}.initrd 2>/dev/null | ${GREP} "(XZ|gzip)[ ]compressed[ ]data") ]]; then
 		QOPT+=" "; QOPT+="-initrd ${FILE/%.kernel}.initrd"
 	fi
-elif [[ -n $(file -L ${FILE} 2>/dev/null | ${GREP} "ISO[ ]9660") ]]; then
+elif [[ -n $(file -L ${FILE} 2>/dev/null | ${GREP} "DOS[/]MBR[ ]boot[ ]sector") ]]; then
 	QOPT="-drive id=drive0,if=none,file=${FILE}"
 	QOPT+=" "; QOPT+="-device ide-cd,drive=drive0,bus=ide.2,bootindex=0"
 else
