@@ -11,7 +11,7 @@ declare QSYS="${1}"			; shift
 
 declare QOPT=
 QOPT="-drive id=drive0,if=none,file=${FILE}"
-QOPT+=" "; QOPT+="-device ide-hd,drive=drive0,bus=ide.0,bootindex=0"
+QOPT+=" "; QOPT+="-device ide-hd,drive=drive0,bus=ide.2,bootindex=0"
 
 if [[ -n $(
 	file -L ${FILE} 2>/dev/null |
