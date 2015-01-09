@@ -2106,7 +2106,7 @@ function zpim-commit {
 			FILES=".auth .token"
 		fi
 		${GIT_ADD} ${FILE}* ${FILES}
-		${GIT_CMT} ${FILE}* ${FILES} --edit --message "Updated \"${FILE}\"."
+		${GIT_CMT} ${FILE}* ${FILES} --edit --message="Updated \"${FILE}\"."
 	fi
 	${GIT_STS}
 	return 0
