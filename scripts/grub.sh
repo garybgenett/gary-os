@@ -28,6 +28,7 @@ fi
 
 declare GBOOT="(hd0)"
 declare GROOT="(hd0,2)"
+declare GOPTS=""
 
 declare GTYPE="i386-pc"
 declare GMODS="/usr/lib/grub/${GTYPE}"
@@ -46,8 +47,8 @@ declare GMENU="\
 set default=0
 set timeout=10
 insmod linux
-menuentry \"${_PROJ} 64-bit\" { linux ${GROOT}/${_BASE}-64.kernel }
-menuentry \"${_PROJ} 32-bit\" { linux ${GROOT}/${_BASE}-32.kernel }
+menuentry \"${_PROJ} 64-bit\" { linux ${GROOT}/${_BASE}-64.kernel ${GOPTS} }
+menuentry \"${_PROJ} 32-bit\" { linux ${GROOT}/${_BASE}-32.kernel ${GOPTS} }
 insmod chain
 menuentry \"Back to OS\" { chainloader ${GBOOT}+1 }
 # end of file
