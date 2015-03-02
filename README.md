@@ -762,6 +762,14 @@ It is a stated goal that forensics mode continue being the default.
 GaryOS boots to CLI (Command-Line Interface) by default.  To enter the
 graphical interface, run `startx`.
 
+The Linux kernel includes driver modules for many common video cards,
+but to keep the size of GaryOS down the X.Org installation only includes
+the VESA driver (which almost all modern video cards support).  If the
+kernel driver for a video card is loaded at boot, it will prevent X.Org
+from taking over.  If you plan to run the graphical interface, use the
+`nomodeset` kernel option when booting to prevent Linux from loading any
+video card drivers.
+
 By default, the DWM window manager is used.  URxvt is the default
 terminal emulator, and Surf is the default browser.  Both are wrapped
 using the Tabbed utility.
