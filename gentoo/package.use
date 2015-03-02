@@ -2,41 +2,33 @@
 # portage package use file
 ################################################################################
 
-#{NEW} dev-java/icedtea			-javascript	# gentoo required
-#{NEW} net-libs/libproxy		-webkit		# gentoo required
-
-################################################################################
-
-app-crypt/heimdal			-ssl		# gentoo required
 app-text/ghostscript-gpl		cups		# gentoo required
 app-text/poppler			cairo		# gentoo required
 app-text/poppler			qt4		# gentoo required
 dev-java/antlr				java		# gentoo required
 dev-qt/qtgui				accessibility	# gentoo required
 dev-qt/qtsvg				accessibility	# gentoo required
+media-gfx/graphviz			cairo		# gentoo required
 media-libs/gd				fontconfig	# gentoo required
 media-libs/libsdl			joystick	# gentoo required
+media-libs/libsdl			sound		# gentoo required
+media-libs/libsdl2			sound		# gentoo required
 media-video/vlc				xcb		# gentoo required
 net-dns/avahi				dbus		# gentoo required
-sys-auth/consolekit			policykit	# gentoo required
+net-nds/openldap			sasl		# gentoo required
 sys-libs/gdbm				berkdb		# gentoo required
 
 ########################################
 
-net-ftp/proftpd				openssl		# gentoo required
-net-nds/openldap			sasl		# gentoo required
-
+dev-libs/libpcre			pcre16		# gentoo required
 media-libs/chromaprint			tools		# gentoo required
 media-libs/mesa				xa		# gentoo required
 net-dns/avahi			mdnsresponder-compat	# gentoo required
+net-dns/dnsmasq				script		# gentoo required
+net-ftp/proftpd				openssl		# gentoo required
 net-misc/spice-gtk			gtk3		# gentoo required
-sys-libs/zlib				minizip		# gentoo required
-
-########################################
-
-# temporary fix for "heartbleed" bug:
-# https://www.openssl.org/news/secadv_20140407.txt
-dev-libs/openssl			-tls-heartbeat
+net-misc/spice-gtk			usbredir	# gentoo required
+www-client/midori			-introspection	# gentoo required
 
 ################################################################################
 
