@@ -173,9 +173,6 @@ sys-kernel/gentoo-sources
 sys-kernel/gentoo-sources:3.10.25
 sys-kernel/linux-firmware
 
-dev-python/boto
-#>>>dev-util/metro
-
 app-portage/portage-utils
 sys-apps/paludis
 sys-apps/portage
@@ -280,7 +277,6 @@ dev-lisp/clisp
 dev-lua/luarocks
 dev-ruby/rubygems
 
-#>>>dev-lang/v8
 dev-libs/libuv
 net-libs/nodejs
 
@@ -411,7 +407,6 @@ net-nds/openldap
 net-wireless/hostapd
 
 app-admin/apache-tools
-#>>>www-apache/mod_perl
 www-misc/awstats
 www-servers/apache
 www-servers/nginx
