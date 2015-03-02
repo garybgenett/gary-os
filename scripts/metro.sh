@@ -475,10 +475,6 @@ declare FEAT="$(makeconf_var FEATURES)"
 declare MKOP="$(makeconf_var MAKEOPTS)"
 declare USE_="$(makeconf_var METRO_USE)"
 
-USE_+="\nLDFLAGS:			$(makeconf_var METRO_LDFLAGS)"
-USE_+="\nINPUT_DEVICES:			$(makeconf_var METRO_INPUT_DEVICES)"
-USE_+="\nVIDEO_CARDS:			$(makeconf_var METRO_VIDEO_CARDS)"
-
 #>>>USE_+="\nACCEPT_KEYWORDS:		$(makeconf_var ACCEPT_KEYWORDS)"
 USE_+="\nACCEPT_LICENSE:		$(makeconf_var ACCEPT_LICENSE)"
 USE_+="\nEMERGE_DEFAULT_OPTS:		$(makeconf_var EMERGE_DEFAULT_OPTS	| ${SED} "s%[-][-]ask[^[:space:]]*%%g")"
@@ -486,6 +482,13 @@ USE_+="\nLANG:				$(makeconf_var LANG)"
 USE_+="\nLC_ALL:			$(makeconf_var LC_ALL)"
 USE_+="\nPORTAGE_IONICE_COMMAND:	$(makeconf_var PORTAGE_IONICE_COMMAND)"
 USE_+="\nPORTAGE_NICENESS:		$(makeconf_var PORTAGE_NICENESS)"
+
+USE_+="\nINPUT_DEVICES:			$(makeconf_var METRO_INPUT_DEVICES)"
+USE_+="\nVIDEO_CARDS:			$(makeconf_var METRO_VIDEO_CARDS)"
+
+USE_+="\nPYTHON_ABIS:			$(makeconf_var METRO_PYTHON_ABIS)"
+USE_+="\nPYTHON_TARGETS:		$(makeconf_var METRO_PYTHON_TARGETS)"
+USE_+="\nRUBY_TARGETS:			$(makeconf_var METRO_RUBY_TARGETS)"
 
 ${SED} -i \
 	-e "s%^(options:).*jobs.*$%\1	${OPTS}%g" \
@@ -515,10 +518,12 @@ for FILE in \
 	INPUT_DEVICES		\
 	LANG			\
 	LC_ALL			\
-	LDFLAGS			\
 	MAKEOPTS		\
 	PORTAGE_IONICE_COMMAND	\
 	PORTAGE_NICENESS	\
+	PYTHON_ABIS		\
+	PYTHON_TARGETS		\
+	RUBY_TARGETS		\
 	VIDEO_CARDS
 do
 	USE_+="\n${FILE}=\"\$[portage/${FILE}:zap]\""
