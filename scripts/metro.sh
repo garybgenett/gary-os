@@ -411,7 +411,7 @@ if [[ ${1} == -/ ]]; then
 				${SED} "s%^[.][/]%%g" |
 				sort
 		); do
-			(cd ${DTMP}/cache/build/${TYPE}/stage3-${ARCH}-${TYPE}-${DVER}/package &&
+			(cd ${DTMP}/cache/package-cache/${PLAT}/${TYPE}/${ARCH}/remote/stage3 &&
 				du -ks ${FILE}.tbz2 |
 				${SED} "s%^(.+${FILE}).+$%\1%g"
 			)					#>>> || exit 1
@@ -442,6 +442,7 @@ fi
 ################################################################################
 
 ${MKDIR} ${DEST}
+${MKDIR} ${DEST}/${TYPE}/snapshots
 ${RSYNC_U} ${SMET}/ ${DMET}
 
 ${SED} -i \
@@ -499,11 +500,14 @@ USE_+="\nPYTHON_TARGETS:		$(makeconf_var METRO_PYTHON_TARGETS)"
 USE_+="\nRUBY_TARGETS:			$(makeconf_var METRO_RUBY_TARGETS)"
 
 ${SED} -i \
-	-e "s%^(options:).*jobs.*$%\1	${OPTS}%g" \
-	-e "s%^(packages:.*)$%\1\n	${PKGS}%g" \
+	-e "s%^MAKEOPTS:.*$%%g" \
+	-e "s%^options:.*jobs.*$%%g" \
+	${DMET}/metro.conf || exit 1
+
+${SED} -i \
+	-e "s%^(\[section emerge\])$%\1	\noptions: ${OPTS}\npackages: ${PKGS}%g" \
 	\
-	-e "s%^(FEATURES:.*)$%\1	${FEAT}%g" \
-	-e "s%^(MAKEOPTS:).*$%\1	${MKOP}%g" \
+	-e "s%^(FEATURES:.*)$%\1	${FEAT}\nMAKEOPTS: ${MKOP}%g" \
 	-e "s%^(USE:).*$%\1		${USE_}%g" \
 	\
 	-e "s%^(branch/tar:).*$%\1	${HASH}%g" \
@@ -620,6 +624,7 @@ emerge \$eopts grub					|| exit 1\n\
 "
 
 ${SED} -i \
+	-e "s%^export USE=.+$%%g" \
 	-e "s%^(emerge.+system.+)$%${USE_}%g" \
 	${DMET}/targets/gentoo/stage3.spec || exit 1
 
@@ -654,6 +659,7 @@ ${MKDIR} ${DOUT}/.control/{strategy,remote}
 echo -en "remote\n"	>${DOUT}/.control/strategy/build
 echo -en "stage3\n"	>${DOUT}/.control/strategy/seed
 echo -en "${TYPE}\n"	>${DOUT}/.control/remote/build
+echo -en "${PLAT}\n"	>${DOUT}/.control/remote/arch_desc
 echo -en "${SARC}\n"	>${DOUT}/.control/remote/subarch
 ${MKDIR} ${SOUT}/.control/version
 echo -en "${SVER}\n"	>${SOUT}/.control/version/stage3
@@ -684,7 +690,7 @@ ${RSYNC_U} ${CONFIG}/	${SAV}/_config			|| exit 1
 ${RSYNC_U} ${_SELF}	${SAV}/_${SCRIPT}		|| exit 1
 ${RSYNC_U} ${DFIL}/	${SAV}/.distfiles		|| exit 1
 
-FILE="${DTMP}/cache/build/${TYPE}/stage3-${ARCH}-${TYPE}-${DVER}/package"
+FILE="${DTMP}/cache/package-cache/${PLAT}/${TYPE}/${ARCH}/remote/stage3"
 ${RSYNC_U} ${FILE}/	${SAV}/.packages.${ARCH}	|| exit 1
 
 FILE="$(find ${DEST}/${TYPE} -type f 2>/dev/null |
