@@ -70,9 +70,22 @@ app-emulation/vmware-tools		vmware_guest_freebsd vmware_guest_linux vmware_guest
 
 ################################################################################
 
-#{MET} app-text/poppler			-qt4		# gentoo required (reversing above)
+#{NEW} net-libs/glib-networking		-libproxy	# gentoo required
+
+########################################
 
 #{MET} net-libs/glib-networking		-libproxy	# gentoo required
+#{MET} sys-apps/util-linux		-udev		# gentoo required
+#{MET} sys-boot/grub			binfont		# gentoo required
+
+#{MET} app-text/poppler			-qt4		# gentoo required (reversing above)
+
+#{MET} net-analyzer/wireshark		-gtk3		# only need gtk+-2
+#{MET} net-libs/webkit-gtk		-egl		# disable opengl (glut/mesa)
+#{MET} net-libs/webkit-gtk		-opengl		# disable opengl (glut/mesa)
+#{MET} net-libs/webkit-gtk		-webgl		# disable opengl (glut/mesa)
+#{MET} sys-apps/portage			-python3	# only need python-2 [hack: comment until stage3, to avoid build errors]
+#{MET} sys-apps/portage			python2		# only need python-2
 
 ################################################################################
 # end of file
