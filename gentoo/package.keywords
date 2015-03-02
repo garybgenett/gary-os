@@ -62,12 +62,12 @@ app-text/pandoc				~*		# gentoo required
 dev-haskell/*				~*		# gentoo required
 dev-lang/ghc				~*		# gentoo required
 
+dev-java/icedtea			~*		# gentoo required [hack: "java-config --set-system-vm 1" after initial build, before full re-build]
+dev-java/icedtea-web			~*		# gentoo required
+
 app-emulation/vmware-modules		~*		# gentoo required
 app-emulation/vmware-player		~*		# gentoo required
 app-emulation/vmware-tools		~*		# gentoo required
-
-dev-java/icedtea			~*		# gentoo required
-dev-java/icedtea-web			~*		# gentoo required
 
 dev-ruby/paint				~*		# gentoo required
 dev-ruby/trollop			~*		# gentoo required
