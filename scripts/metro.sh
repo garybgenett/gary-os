@@ -102,17 +102,18 @@ export CCACHE_DIR=
 
 declare VERSION_REGEX="([0-9]{4}-[0-9]{2}-[0-9]{2}(T[0-9]{2}-[0-9]{4})?|[a-z0-9]{40}[.][0-9])"
 declare METRO_CMD="${DMET}/metro \
-	--libdir ${DMET} \
 	--verbose \
 	--debug \
 	multi:		yes \
 	multi/mode:	full \
 	path/mirror:	${DEST} \
 	path/distfiles:	${DFIL} \
+	path/install:	${DMET} \
 	path/tmp:	${DTMP} \
 	target/build:	${TYPE} \
 	target/subarch:	${ARCH} \
 	target/version:	${DVER} \
+	${DMET}/metro.conf \
 "
 
 ########################################
@@ -449,8 +450,14 @@ ${SED} -i \
 ${SED} -i \
 	-e "s%^(: ).*mirror.*$%\1${DEST}%g" \
 	-e "s%^(distfiles: ).*$%\1${DFIL}%g" \
+	-e "s%^(install: ).*$%\1${DMET}%g" \
 	-e "s%^(tmp: ).*$%\1${DTMP}%g" \
-	${DMET}/etc/metro.conf || exit 1
+	${DMET}/metro.conf || exit 1
+
+${SED} -i \
+	-e "s%os.path.expanduser\(\"~/.metro\"\)%(\"${DMET}/metro.conf\")%g" \
+	-e "s%libdir\+\"%\"${DMET}%g" \
+	${DMET}/modules/metro_support.py || exit 1
 
 ########################################
 
