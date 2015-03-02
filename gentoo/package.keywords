@@ -110,13 +110,14 @@ net-p2p/rtorrent			~*		# build fail: 0.8.9
 app-emulation/spice-vdagent		~*		# gentoo required
 sys-firmware/seabios			~*		# gentoo required
 
->=media-libs/libdvdnav-4.2.1		~*
->=media-libs/libdvdread-4.2.1		~*
-
 ########################################
 
 app-misc/task				~*
 www-servers/nginx			~*
+
+media-libs/libdvdcss			~*
+media-libs/libdvdnav			~*
+media-libs/libdvdread			~*
 
 x11-wm/openbox				~*
 
