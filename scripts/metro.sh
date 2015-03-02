@@ -230,7 +230,7 @@ if [[ ${1} == -! ]]; then
 		COMMAND+="${GIT_CFG} --unset receive.denynonfastforwards;" &&
 		COMMAND+="${GIT_CFG} --list;" &&
 		COMMAND+="exit 0;" &&
-		echo "${COMMAND}" | ssh ${SF_SSH} &&
+		echo -en "${COMMAND}\n" | ssh ${SF_SSH} &&
 		${GIT} push --mirror ${SFCODE}
 	)							|| exit 1
 
@@ -249,7 +249,7 @@ if [[ ${1} == -! ]]; then
 				${RSYNC_U} ${OUT_DIR}/{portage,stage3}-* ${OUT_DIR}/${RELEASE[${NUM}]}/ &&
 				${RM} ${OUT_DIR}/{portage,stage3}-* &&
 				touch -r $(
-					ls -t ${OUT_DIR}/${RELEASE[${NUM}]}/*.kernel |
+					ls -t ${OUT_DIR}/${RELEASE[${NUM}]}/*.kernel 2>/dev/null |
 					head -n1
 				) ${OUT_DIR}/${RELEASE[${NUM}]}
 			)					|| exit 1
@@ -263,7 +263,7 @@ if [[ ${1} == -! ]]; then
 				${GREP} "^stage3.+[.](kernel|initrd)$"
 			); do
 				declare OUTFILE="$(
-					echo "${FILE}" |
+					echo -en "${FILE}" |
 					${SED} \
 						-e "s%^stage3%${TITLE}%g" \
 						-e "s%[a-z0-9]{40}[.][0-9]${EXTN//./[.]}%${NUM}%g"
@@ -361,7 +361,7 @@ if [[ ${1} == -1 ]]; then
 			${INIT_DIR}/usr/src/linux/.config	|| exit 1
 		(cd ${INIT_DIR}/usr/src/linux && make bzImage)	|| exit 1
 		${CP} -L $(
-			ls -t ${INIT_DIR}/usr/src/linux/arch/*/boot/bzImage |
+			ls -t ${INIT_DIR}/usr/src/linux/arch/*/boot/bzImage 2>/dev/null |
 			head -n1
 		) ${INIT_DIR}.kernel.initrd			|| exit 1
 	fi
@@ -670,7 +670,7 @@ ${RM}			${DTMP}/cache/cloned-repositories/${REPO}.git
 ${LN} ${REPO}/.git	${DTMP}/cache/cloned-repositories/${REPO}.git
 
 for FILE in $(
-	ls -t {${SAV},${ISO}}/stage3-${SARC}-${TYPE}-*${EXTN} |
+	ls -t {${SAV},${ISO}}/stage3-${SARC}-${TYPE}-*${EXTN} 2>/dev/null |
 	${SED} "s%^.+${VERSION_REGEX}.+$%\1%g"
 ); do
 	${MKDIR} ${SOUT}/${FILE}
