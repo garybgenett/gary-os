@@ -246,12 +246,10 @@ dev-perl/Template-XML
 
 app-editors/retext
 app-text/pandoc
-dev-haskell/cabal
-dev-haskell/cabal-install
-dev-haskell/haskell-platform
+dev-haskell/highlighting-kate
 dev-haskell/pandoc-citeproc
 dev-haskell/pandoc-types
-dev-perl/Text-Markdown
+dev-haskell/texmath
 
 app-text/asciidoc
 app-text/docbook-xml-dtd
@@ -286,6 +284,10 @@ dev-ruby/rubygems
 #>>>dev-lang/v8
 dev-libs/libuv
 net-libs/nodejs
+
+dev-haskell/cabal
+dev-haskell/cabal-install
+dev-lang/ghc
 
 dev-db/sqlite
 dev-tcltk/expect
