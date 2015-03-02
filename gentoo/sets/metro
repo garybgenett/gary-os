@@ -182,6 +182,7 @@ x11-misc/dmenu
 x11-wm/dwm
 
 x11-apps/xsetroot
+x11-misc/wmctrl
 
 ########################################
 # toolkits
