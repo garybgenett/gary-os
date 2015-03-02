@@ -269,6 +269,8 @@ net-misc/autossh
 net-misc/httptunnel
 net-misc/pipes
 
+sys-fs/exfat-utils
+sys-fs/fuse-exfat
 sys-fs/ntfs3g
 
 app-forensics/cmospwd
