@@ -62,7 +62,7 @@ x11-wm/dwm				savedconfig
 
 app-office/libreoffice			java
 app-text/enchant			aspell
-mail-client/mutt			sidebar
+mail-client/mutt			gpg sidebar smime smtp
 mail-client/thunderbird			-wifi ldap lightning
 www-client/firefox			-wifi
 
