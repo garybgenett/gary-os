@@ -192,7 +192,6 @@ x11-apps/xsetroot
 dev-vcs/git
 dev-vcs/subversion
 
-dev-lang/perl
 dev-lang/python
 
 dev-db/sqlite
