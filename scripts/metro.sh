@@ -104,6 +104,7 @@ declare VERSION_REGEX="([0-9]{4}-[0-9]{2}-[0-9]{2}(T[0-9]{2}-[0-9]{4})?|[a-z0-9]
 declare METRO_CMD="${DMET}/metro \
 	--verbose \
 	--debug \
+	--debug-flexdata \
 	multi:		yes \
 	multi/mode:	full \
 	path/mirror:	${DEST} \
