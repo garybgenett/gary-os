@@ -41,7 +41,6 @@ sys-devel/bison				~*		# gentoo required
 sys-fs/ext3grep				~*		# gentoo required
 sys-process/nmon			~*		# gentoo required
 www-client/midori			~*		# gentoo required
-x11-misc/tabbed				~*		# gentoo required
 x11-misc/whaw				~*		# gentoo required
 
 app-crypt/efitools			~*		# gentoo required
@@ -139,6 +138,9 @@ dev-libs/embryo				~*		# gentoo required
 media-libs/edje				~*		# gentoo required
 media-libs/elementary			~*		# gentoo required
 media-libs/evas				~*		# gentoo required
+
+www-client/surf				~*
+x11-misc/tabbed				~*
 
 ################################################################################
 # end of file
