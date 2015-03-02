@@ -8,8 +8,6 @@
 
 sys-apps/paludis
 
-=net-fs/samba-4.1*
-
 ########################################
 
 games-roguelike/nethack
