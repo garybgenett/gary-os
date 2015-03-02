@@ -59,16 +59,8 @@ dev-lang/parrot				~*		# gentoo required
 dev-lang/rakudo				~*		# gentoo required
 
 app-text/pandoc				~*		# gentoo required
-dev-haskell/aeson-pretty		~*		# gentoo required
-dev-haskell/cabal-install		~*		# gentoo required
-dev-haskell/haskell-platform		~*		# gentoo required
-dev-haskell/hexpat			~*		# gentoo required
-dev-haskell/highlighting-kate		~*		# gentoo required
-dev-haskell/hs-bibutils			~*		# gentoo required
-dev-haskell/list			~*		# gentoo required
-dev-haskell/pandoc-citeproc		~*		# gentoo required
-dev-haskell/rfc5051			~*		# gentoo required
-dev-haskell/texmath			~*		# gentoo required
+dev-haskell/*				~*		# gentoo required
+dev-lang/ghc				~*		# gentoo required
 
 app-emulation/vmware-modules		~*		# gentoo required
 app-emulation/vmware-player		~*		# gentoo required
