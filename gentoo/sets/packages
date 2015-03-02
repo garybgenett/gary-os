@@ -373,6 +373,8 @@ net-dialup/ppp
 net-fs/curlftpfs
 net-fs/nfs-utils
 net-nds/rpcbind
+sys-fs/exfat-utils
+sys-fs/fuse-exfat
 sys-fs/mtd-utils
 sys-fs/mtpfs
 sys-fs/ntfs3g
