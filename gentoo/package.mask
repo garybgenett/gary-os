@@ -2,9 +2,11 @@
 # portage package mask file
 ################################################################################
 
->=app-emulation/vmware-modules-279.1	# gentoo required: version match
->=dev-libs/geoip-1.6.0-r1		# download checksum mismatch
->=net-misc/spice-gtk-0.21		# breaks clipboard sharing
+# dev-lisp/clisp-2.49-r8
+>=dev-lisp/clisp-2.49			# gentoo required: fix build error
+>=dev-lisp/asdf-3.0.3			# gentoo required
+>=dev-lisp/gentoo-init-1.0		# gentoo required
+>=dev-lisp/uiop-3.0.3			# gentoo required
 
 ########################################
 
