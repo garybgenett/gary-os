@@ -1,14 +1,14 @@
 diff :: games-fps/quake1-data ==================================================
 
 diff -u -U10 -r /usr/portage/games-fps/quake1-data/Manifest games-fps/quake1-data/Manifest
---- /usr/portage/games-fps/quake1-data/Manifest	2014-01-23 15:33:53.000000000 -0800
-+++ games-fps/quake1-data/Manifest	2014-04-09 11:39:30.567144409 -0700
+--- /usr/portage/games-fps/quake1-data/Manifest	2014-04-06 16:59:37.000000000 -0700
++++ games-fps/quake1-data/Manifest	2015-03-02 10:41:10.946938431 -0800
 @@ -0,0 +1,2 @@
-+EBUILD quake1-data-2.40.ebuild 2166 SHA256 ec845ed3810791fbb83d1b5cc4cd39d0df80be902658b4d415ab9377a5466558 SHA512 e7bc9157c81c6230d6b3f00bc23eee7344a00f8d5f16c4704f67a26f0980df9ecab93146369fd8fdc4688bb4beb5ba77019e8f9229602db45d5615da4d948329 WHIRLPOOL 0c1fb67089ddfdc2843b2571ad93ef6c0f4151066aff048553788fec41bb6e7cc3d432087e026c4d319b1fec79a08d2dcb384730bf234fe983e8a810b04b0b56
++EBUILD quake1-data-2.40.ebuild 2189 SHA256 5c8ccb2d832dffaeb01bebf2ddd23559959115157339b06f14ddb55839a9e0e9 SHA512 6ad5faee5cae505abe2ca660390be555aecad4df18634e719f2ca2efd53ad916d90f7312bf2a642c78a61a3d04f764dbb5d561bb8a10c279ebe70ad04e18bdf6 WHIRLPOOL 78f2621b460f253a48aa2f7de40d06a0102c29f2253f78584f26ea0d224024c23d857facf15f91a90734b6e0706b6238c73d96be2e04bfbb5186811cadb6be93
 +MISC metadata.xml 158 SHA256 1423a4fdd4a79b1728a2056d9e300f7e1074253095d82726218d9e9b953888a3 SHA512 d954564236b67b6ab97846b73f74e715e8f1bec2dba6595e9a5046c2e8c3b93f4879c293f9d1d02d99a533bee56156dae3f31a485697128c51af14cdbfdada8a WHIRLPOOL d03e7293d09d794d61c095a423f945b3644355a247f270a73ca8d30b4dfe9c98244297536bfd1a4bd6c14794aa1152eca20fd83bfdf3e1e74d4f676152d35ada
 diff -u -U10 -r /usr/portage/games-fps/quake1-data/quake1-data-2.40.ebuild games-fps/quake1-data/quake1-data-2.40.ebuild
---- /usr/portage/games-fps/quake1-data/quake1-data-2.40.ebuild	2014-01-23 15:33:53.000000000 -0800
-+++ games-fps/quake1-data/quake1-data-2.40.ebuild	2012-10-17 13:52:35.000000000 -0700
+--- /usr/portage/games-fps/quake1-data/quake1-data-2.40.ebuild	2015-03-02 10:37:01.680952101 -0800
++++ games-fps/quake1-data/quake1-data-2.40.ebuild	2015-03-02 10:40:45.770737803 -0800
 @@ -38,21 +38,22 @@
  	export CDROM_NAME_SET=("Existing Install" "Quake CD (1.01)" "Ultimate Quake Collection" "Quake CD (newer)")
  	cdrom_get_cds id1:q101_int.1:Setup/ID1:resource.1
@@ -36,7 +36,7 @@ diff -u -U10 -r /usr/portage/games-fps/quake1-data/quake1-data-2.40.ebuild games
 diff :: x11-plugins/gkrellaclock ===============================================
 
 diff -u -U10 -r /usr/portage/x11-plugins/gkrellaclock/Manifest x11-plugins/gkrellaclock/Manifest
---- /usr/portage/x11-plugins/gkrellaclock/Manifest	2014-01-23 15:33:59.000000000 -0800
+--- /usr/portage/x11-plugins/gkrellaclock/Manifest	2014-04-06 16:59:52.000000000 -0700
 +++ x11-plugins/gkrellaclock/Manifest	2014-04-09 11:39:41.899246557 -0700
 @@ -1 +1,10 @@
 -DIST gkrellaclock-0.3.4.tar.gz 18853 SHA256 5923c5fa6c31ceb1944e57219d893634e503d44dc5e91f3deba46f0d71e787b7
@@ -52,7 +52,7 @@ diff -u -U10 -r /usr/portage/x11-plugins/gkrellaclock/Manifest x11-plugins/gkrel
 +MISC metadata.xml 166 SHA256 5dba9ba575613d6cd1d28f1c9819cee44869bebba3cb8a91294bcca1402f5941 SHA512 85f57124de5c89f57dfd2f9c969701908554ebd07f50a084835ae35d91395fe79c6fa002c040546854009e700e7c65e9345fdb3a616978fab14c08939721f616 WHIRLPOOL 203631ae3c7368dbd852a4ae2d6826d6bbc02a3417f816c84c8b16220aafff00a62e5b3bb46d231e4702fbce62b4a172c8db1aac275b6c8975dc669dfc9bd7a9
 Only in x11-plugins/gkrellaclock: files
 diff -u -U10 -r /usr/portage/x11-plugins/gkrellaclock/gkrellaclock-0.3.4.ebuild x11-plugins/gkrellaclock/gkrellaclock-0.3.4.ebuild
---- /usr/portage/x11-plugins/gkrellaclock/gkrellaclock-0.3.4.ebuild	2014-01-23 15:33:59.000000000 -0800
+--- /usr/portage/x11-plugins/gkrellaclock/gkrellaclock-0.3.4.ebuild	2014-04-06 16:59:52.000000000 -0700
 +++ x11-plugins/gkrellaclock/gkrellaclock-0.3.4.ebuild	2012-04-02 16:26:52.000000000 -0700
 @@ -9,14 +9,15 @@
  DESCRIPTION="Nice analog clock for GKrellM2"
