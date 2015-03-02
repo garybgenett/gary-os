@@ -44,6 +44,9 @@ RELEASE[3]="v1.0"; CMT_HSH[3]="f6885f3482b95fe15a688135c441f8f6391c9529"
 RELEASE[4]="v1.1"; CMT_HSH[4]="9b653e64164e68873333043b41f8bbf23b0fbd55"
 RELEASE[5]="v2.0"; CMT_HSH[5]="deda452a0aab311f243311b48a39b7ac60ab3fd8"
 
+declare FUNTOO_STAGE="2015-01-27"
+declare GRML_DATE="2014.11"
+
 ########################################
 
 declare DOC_DIR="/.g/_data/zactive/coding/${TITLE}"
@@ -100,6 +103,7 @@ declare EXTN=".tar.xz"
 declare SAFE_ENV="prompt -z"
 export CCACHE_DIR=
 
+
 declare VERSION_REGEX="([0-9]{4}-[0-9]{2}-[0-9]{2}(T[0-9]{2}-[0-9]{4})?|[a-z0-9]{40}[.][0-9])"
 declare METRO_CMD="${DMET}/metro \
 	--verbose \
@@ -150,7 +154,7 @@ declare SVER="$(
 
 ########################################
 
-declare KERN="${ISO}/grml${BITS}-full_2013.09.iso"
+declare KERN="${ISO}/grml${BITS}-full_${GRML_DATE}.iso"
 declare DWMC="${CONFIG}/savedconfig/x11-wm/dwm"
 declare PACK=
 
@@ -293,6 +297,10 @@ fi
 
 ################################################################################
 
+echo -en "\n"
+${SAFE_ENV} env
+echo -en "\n"
+
 echo -en "BITS: ${BITS}\n"
 echo -en "REVN: ${REVN}\n"
 echo -en "REPO: ${REPO}\n"
@@ -300,8 +308,13 @@ echo -en "HASH: ${HASH}\n"
 echo -en "SVER: ${SVER}\n"
 echo -en "DVER: ${DVER}\n"
 
-echo -en "\n"
-${SAFE_ENV} env
+if [[ ! -f ${KERN} ]]; then
+	echo -en "\nWARNING: GRML ${GRML_DATE} not found!\n" >&2
+fi
+if [[ ${SVER} != ${FUNTOO_STAGE} ]]; then
+	echo -en "\nWARNING: stage3 ${SVER} is not ${FUNTOO_STAGE}!\n" >&2
+fi
+
 read FILE
 
 ########################################
