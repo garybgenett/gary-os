@@ -238,7 +238,8 @@ net-misc/unison
 
 dev-perl/Template-DBI
 dev-perl/Template-GD
-dev-perl/Template-Latex
+dev-perl/Template-Plugin-Cycle
+dev-perl/Template-Plugin-Latex
 dev-perl/Template-Tiny
 dev-perl/Template-Toolkit
 dev-perl/Template-XML
