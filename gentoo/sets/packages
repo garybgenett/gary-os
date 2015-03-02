@@ -272,7 +272,6 @@ dev-vcs/subversion
 
 dev-lang/lua
 dev-lang/parrot
-dev-lang/perl
 dev-lang/python
 dev-lang/rakudo
 dev-lang/ruby
