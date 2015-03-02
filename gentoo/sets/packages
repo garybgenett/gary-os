@@ -118,9 +118,7 @@ dev-perl/libwww-perl
 perl-core/CGI
 perl-core/JSON-PP
 perl-core/MIME-Base64
-perl-core/Switch
 perl-core/Time-Local
-sys-devel/libperl
 
 app-crypt/gnupg
 dev-libs/openssl
@@ -170,7 +168,7 @@ sys-apps/fakeroot
 
 sys-kernel/genkernel
 sys-kernel/gentoo-sources
-sys-kernel/gentoo-sources:3.10.25
+sys-kernel/gentoo-sources:3.10.65
 sys-kernel/linux-firmware
 
 app-portage/portage-utils
