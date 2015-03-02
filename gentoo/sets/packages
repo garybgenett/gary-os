@@ -481,8 +481,6 @@ x11-misc/x2vnc
 
 app-admin/gkrellm
 x11-plugins/gkrellaclock
-x11-plugins/gkrellmoon
-x11-plugins/gkrellstock
 x11-plugins/gkrellsun
 x11-plugins/gkrellweather
 
