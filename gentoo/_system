@@ -305,7 +305,7 @@ if [[ ${1} == -u ]]; then
 	}
 	${SAFE_ENV} emerge ${ASK} --update --deep --newuse \@system	|| exit 1
 	${SAFE_ENV} emerge ${ASK} --update --deep --newuse \@world	|| exit 1
-	${EXPECT_W} python-updater					|| exit 1
+#>>>	${EXPECT_W} python-updater					|| exit 1
 	${EXPECT_W} perl-cleaner --all					|| exit 1
 	${EXPECT_W} haskell-updater --all				|| exit 1
 	${SAFE_ENV} emerge ${ASK} \@preserved-rebuild			|| exit 1
