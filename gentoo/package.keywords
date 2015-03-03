@@ -99,6 +99,11 @@ media-sound/picard			~*		# gentoo required: build error
 
 ########################################
 
+# net-misc/spice-gtk-0.21
+net-misc/spice-gtk			~*		# runtime failure: https://bugs.gentoo.org/show_bug.cgi?id=486284
+
+################################################################################
+
 =net-misc/unison-2.45*			~*
 
 =dev-vcs/cvs2svn-2.4*			~*
