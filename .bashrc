@@ -410,6 +410,7 @@ alias hg="history | ${GREP}"
 alias cl="clear ; ${LL}"
 alias ztmp="cd /tmp ; clear ; ${LL}"
 alias zpim="cd ${PIMDIR} ; clear ; ${LL}"
+alias zcode="cd /.g/_data/zactive/coding/composer ; clear ; ${LL}"
 alias zwrite="cd /.g/_data/zactive/writing/tresobis ; clear ; ${LL}"
 
 alias s="run-mailcap"
