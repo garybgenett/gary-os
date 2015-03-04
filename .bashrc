@@ -2216,9 +2216,9 @@ function task-export-text {
 		use POSIX qw(strftime);
 		use Time::Local qw(timegm timelocal);
 		use MIME::Base64;
-		my $args = join(" ", @ARGV);
+		my $args = join(" ", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $root = qx(task show data.location); $root =~ m/(data[.]location)\s+([^\s]+)/; $root = $2;
-		my $data = decode_json("[" . qx(task export "${args}") . "]");
+		my $data = qx(task export ${args}); $data =~ s/([^,])\n/$1,/g; $data =~ s/,$//g; $data = decode_json("[" . ${data} . "]");
 		open(JSON, ">", ${root} . ".json")			|| die();
 		open(TIME, ">", ${root} . ".csv")			|| die();
 		open(PROJ, ">", ${root} . ".timeline.projects.json")	|| die();
