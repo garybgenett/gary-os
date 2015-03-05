@@ -2117,6 +2117,25 @@ function zpim-commit {
 # impersonate functions
 ################################################################################
 
+function task-build {
+	declare PROG="task"
+	declare VERS="master"
+	[[ -n ${1} ]] && PROG="${1}" && shift
+	[[ -n ${1} ]] && VERS="${1}" && shift
+	cd /.g/_data/_build/taskwarrior/${PROG}		&&
+		${GIT} checkout --force ${VERS}		&&
+		git reset --hard			&&
+		make clean				&&
+		cmake -DCMAKE_INSTALL_PREFIX=/usr .	&&
+		make -j1				&&
+		make -j1 install			&&
+		${GIT_STS}				&&
+		${PROG} --version
+	return 0
+}
+
+########################################
+
 function task-export {
 	cd ${PIMDIR}
 	function task-filter {
