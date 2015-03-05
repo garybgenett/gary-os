@@ -2182,7 +2182,7 @@ function task-export-report {
 			s|.+tasks.timeline.projects.json.+$|	var parsed_p = JSON.parse('\''${projects}'\''); projectSource.loadJSON(parsed_p, "");|g;
 		' \
 		>${REPORT}.html
-	if [[ ${EMAIL_MAIL} ]]; then
+	if [[ -n ${EMAIL_MAIL} ]]; then
 		cat >${REPORT}.txt <<END_OF_FILE
 Attached is my weekly status report.  This is an automated message, and should be generated every weekend.
 
@@ -2209,7 +2209,7 @@ Some important notes:
 Please see me with any comments or questions.
 END_OF_FILE
 	fi
-	if [[ ${EMAIL_SIGN} ]]; then
+	if [[ -n ${EMAIL_SIGN} ]]; then
 		echo -en "\n-- \n${EMAIL_SIGN}\n" >>${REPORT}.txt
 	fi
 	if [[ -n ${EMAIL_DEST} ]] && [[ -n ${EMAIL_MAIL} ]]; then
