@@ -2619,7 +2619,7 @@ function task-journal {
 		DATE="${1}"
 		shift
 	fi
-	declare UUIDS="$(task uuid project:_journal "/${DATE}/" | ${SED} "s/,/\n/g")"
+	declare UUIDS="$(task uuid project:_journal "${DATE}" | ${SED} "s/,/\n/g")"
 	declare UUID
 	if [[ -z ${UUIDS} ]]; then
 		task add project:_journal kind:notes area:writing -- "${DATE} $(date --date="${DATE}" +%a) {${@}}"
@@ -2642,10 +2642,10 @@ function task-notes {
 		use warnings;
 		use JSON::PP;
 		use MIME::Base64;
-		my $args = join(" ", @ARGV);
-		my $root = qx(task show data.location); $root =~ m/(data[.]location)\s+([^\s]+)/; $root = $2;
-		my $data = decode_json("[" . qx(task export kind:notes "${args}") . "]");
-		my $edit = "${ENV{EDITOR}} -c \"map ? <ESC>:!task read \\\"${args}\\\"<CR>\" -c \"map \\ <ESC>:!task \"";
+		my $args = join(" ", @ARGV); if (${args}) { $args = "\"${args}\""; };
+		my $root = qx(task _get rc.data.location); chomp(${root});
+		my $data = qx(task export kind:notes ${args}); $data =~ s/([^,])\n/$1,/g; $data =~ s/,$//g; $data = decode_json("[" . ${data} . "]");
+		my $edit = ${args}; $edit =~ s/\"/\\\"/g; $edit = "${ENV{EDITOR}} -c \"map ? <ESC>:!task read ${edit}<CR>\" -c \"map \\ <ESC>:!task \"";
 		my $mark = "[DELETE]";
 		if (!@{$data}) {
 			die("NO MATCHES!");
@@ -2707,9 +2707,9 @@ function task-track {
 		use JSON::PP;
 		use POSIX qw(strftime);
 		use Time::Local qw(timelocal);
-		my $args = join(" ", @ARGV);
-		my $root = qx(task show data.location); $root =~ m/(data[.]location)\s+([^\s]+)/; $root = $2;
-		my $uuid = qx(task uuid "${args}"); chomp(${uuid}); $uuid = [ split(",", ${uuid}) ];
+		my $args = join(" ", @ARGV); if (${args}) { $args = "\"${args}\""; };
+		my $root = qx(task _get rc.data.location); chomp(${root});
+		my $uuid = qx(task uuid ${args}); chomp(${uuid}); $uuid = [ split(",", ${uuid}) ];
 		if (!@{$uuid}) {
 			die("NO MATCHES!");
 		}
@@ -2722,7 +2722,7 @@ function task-track {
 			$uuid = ${$uuid}[0];
 		};
 		my $mark = " => ";
-		my $edit = "${ENV{EDITOR}} -c \"map ? <ESC>:!task read \\\"${args}\\\"<CR>\" -c \"map \\ <ESC>:!task \"";
+		my $edit = ${args}; $edit =~ s/\"/\\\"/g; $edit = "${ENV{EDITOR}} -c \"map ? <ESC>:!task read ${edit}<CR>\" -c \"map \\ <ESC>:!task \"";
 		my $data = qx(${ENV{GREP}} "uuid:\\\"${uuid}\\\"" "${root}"/{completed,pending}.data); chomp(${data});
 		my $file = ${data}; $file =~ s/[:].+$//g; $data =~ s/^.+(completed|pending)[.]data[:]//g; $data =~ s/^[[]//g; $data =~ s/[]]$//g;
 		my $text = ${root} . "/" . ${uuid};
@@ -2781,8 +2781,8 @@ function task-depends {
 		my $c_uid = 36;
 		my $c_due = 16;
 		my $c_end = 16;
-		my $args = join(" ", @ARGV);
-		my $data = decode_json("[" . qx(task export "${args}") . "]");
+		my $args = join(" ", @ARGV); if (${args}) { $args = "\"${args}\""; };
+		my $data = qx(task export ${args}); $data =~ s/([^,])\n/$1,/g; $data =~ s/,$//g; $data = decode_json("[" . ${data} . "]");
 		my $list = {};
 		my $rdep = {};
 		foreach my $task (@{$data}) {
