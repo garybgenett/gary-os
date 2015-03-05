@@ -2104,7 +2104,7 @@ function zpim-commit {
 		declare FILE="${1}" && shift
 		declare FILES=
 		if [[ ${FILE} == tasks ]]; then
-			FILES=".auth .token"
+			FILES=".auth .token taskd"
 		fi
 		${GIT_ADD} ${FILE}* ${FILES}
 		${GIT_CMT} ${FILE}* ${FILES} --edit --message="Updated \"${FILE}\"."
