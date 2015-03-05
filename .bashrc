@@ -2224,7 +2224,7 @@ function task-export-text {
 		open(PROJ, ">", ${root} . ".timeline.projects.json")	|| die();
 		open(LINE, ">", ${root} . ".timeline.json")		|| die();
 		open(NOTE, ">", ${root} . ".txt")			|| die();
-		my $json = JSON::PP->new(); print JSON $json->pretty->encode(${data});
+		my $json = JSON::PP->new(); $json->sort_by(sub { $JSON::PP::a cmp $JSON::PP::b; }); print JSON $json->pretty->encode(${data});
 		print TIME "\"[DESC]\",\"[PROJ]\",\"[KIND]\",\"[AREA]\",\"[TAGS]\",";
 		print TIME "\"[.UID]\",";
 		print TIME "\"[.BRN]\",\"[_BRN]\",\"[=BRN]\",";
