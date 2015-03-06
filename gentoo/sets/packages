@@ -80,6 +80,7 @@ net-misc/bridge-utils
 net-misc/dhcpcd
 net-misc/ifenslave
 net-misc/iputils
+net-misc/networkmanager
 net-misc/vconfig
 net-wireless/rfkill
 net-wireless/wireless-tools
