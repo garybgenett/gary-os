@@ -2102,12 +2102,12 @@ function zpim-commit {
 	${SED} -i "s/<HR>([[:space:]])/<HR>\n\1/g" bookmarks.html
 	if [[ -n "${@}" ]]; then
 		declare FILE="${1}" && shift
-		declare FILES=
+		declare LIST=
 		if [[ ${FILE} == tasks ]]; then
-			FILES=".auth .token taskd"
+			LIST=".auth .token taskd"
 		fi
-		${GIT_ADD} ${FILE}* ${FILES}
-		${GIT_CMT} ${FILE}* ${FILES} --edit --message="Updated \"${FILE}\"."
+		${GIT_ADD} ${FILE}* ${LIST}
+		${GIT_CMT} ${FILE}* ${LIST} --edit --message="Updated \"${FILE}\"."
 	fi
 	${GIT_STS}
 	return 0
@@ -2828,13 +2828,18 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 	function impersonate_command {
 		if [[ ${1} == "RESET" ]]; then
 			shift
+			declare LIST="tasks"
+			if [[ ${1} == "ALL" ]]; then
+				shift
+				LIST="${LIST} taskd"
+			fi
 			cd ${PIMDIR}
 			GIT_PAGER= \
-			${GIT} diff tasks	|| return 1
-			${GIT} reset tasks	|| return 1
-			${GIT} checkout tasks	|| return 1
-			sudo chown -vR plastic:plastic tasks
-			sudo chmod -vR 750 tasks
+			${GIT} diff ${LIST}	|| return 1
+			${GIT} reset ${LIST}	|| return 1
+			${GIT} checkout ${LIST}	|| return 1
+			sudo chown -vR plastic:plastic ${LIST}
+			sudo chmod -vR 750 ${LIST}
 			cd - >/dev/null
 		elif [[ ${1} == "repo" ]]; then
 			shift
