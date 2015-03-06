@@ -16,6 +16,7 @@ media-libs/libsdl2			sound		# gentoo required
 media-video/vlc				xcb		# gentoo required
 net-dns/avahi				dbus		# gentoo required
 net-nds/openldap			sasl		# gentoo required
+net-wireless/wpa_supplicant		dbus		# gentoo required
 sys-libs/gdbm				berkdb		# gentoo required
 
 ########################################
@@ -26,6 +27,7 @@ media-libs/mesa				xa		# gentoo required
 net-dns/avahi			mdnsresponder-compat	# gentoo required
 net-dns/dnsmasq				script		# gentoo required
 net-ftp/proftpd				openssl		# gentoo required
+net-misc/networkmanager			-nss		# gentoo required
 net-misc/spice-gtk			gtk3		# gentoo required
 net-misc/spice-gtk			usbredir	# gentoo required
 www-client/midori			-introspection	# gentoo required
@@ -42,6 +44,8 @@ www-servers/nginx			-syslog
 ########################################
 
 sys-boot/grub				-multislot device-mapper libzfs mount
+
+net-misc/networkmanager			-introspection -modemmanager dhcpcd gnutls
 
 sys-apps/paludis			pbins portage prebuilt-documentation search-index visibility
 
