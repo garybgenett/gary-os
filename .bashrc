@@ -2854,13 +2854,17 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			cd - >/dev/null
 		elif [[ ${1} == "repo" ]]; then
 			shift
-			task rc.defaultwidth=80 rc.defaultheight=30	burndown.daily
-			task rc.defaultwidth=80 rc.defaultheight=30	burndown.weekly
-			task rc.defaultwidth=80 rc.defaultheight=30	ghistory.monthly
-			task rc.defaultwidth=80 rc.defaultheight=30	history.monthly
-			task status:pending				projects
-			task status:pending				tags
-			task status:pending				udas
+			declare MARKER='echo -en "\e[1;34m"; printf "~%.0s" {1..120}; echo -en "\e[0;37m\n"'
+			declare SIZES="rc._forcecolor=on rc.defaultwidth=120 rc.defaultheight=40"
+			(
+				task ${SIZES}		burndown.daily		2>&1; eval ${MARKER};
+				task ${SIZES}		burndown.weekly		2>&1; eval ${MARKER};
+				task ${SIZES}		ghistory.monthly	2>&1; eval ${MARKER};
+				task ${SIZES}		history.monthly		2>&1; eval ${MARKER};
+				task status:pending	projects		2>&1; eval ${MARKER};
+				task status:pending	tags			2>&1; eval ${MARKER};
+				task status:pending	udas			2>&1; eval ${MARKER};
+			) | ${MORE}
 		elif [[ ${1} == "deps" ]]; then
 			shift
 			task-depends "${@}"	|| return 1
