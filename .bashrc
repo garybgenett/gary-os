@@ -2857,13 +2857,18 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			declare MARKER='echo -en "\e[1;34m"; printf "~%.0s" {1..120}; echo -en "\e[0;37m\n"'
 			declare SIZES="rc._forcecolor=on rc.defaultwidth=120 rc.defaultheight=40"
 			(
+				task ${SIZES}		logo			2>&1; eval ${MARKER};
+				task			diagnostics		2>&1; eval ${MARKER};
 				task ${SIZES}		burndown.daily		2>&1; eval ${MARKER};
 				task ${SIZES}		burndown.weekly		2>&1; eval ${MARKER};
 				task ${SIZES}		ghistory.monthly	2>&1; eval ${MARKER};
 				task ${SIZES}		history.monthly		2>&1; eval ${MARKER};
+				task ${SIZES}		summary			2>&1; eval ${MARKER};
 				task status:pending	projects		2>&1; eval ${MARKER};
 				task status:pending	tags			2>&1; eval ${MARKER};
 				task status:pending	udas			2>&1; eval ${MARKER};
+				task ${SIZES}		timesheet 2		2>&1; eval ${MARKER};
+				task			stats			2>&1; eval ${MARKER};
 			) | ${MORE}
 		elif [[ ${1} == "deps" ]]; then
 			shift
