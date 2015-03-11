@@ -2122,10 +2122,21 @@ function task-build {
 	declare VERS="master"
 	[[ -n ${1} ]] && PROG="${1}" && shift
 	[[ -n ${1} ]] && VERS="${1}" && shift
+	function task-build-fixes {
+		# the fix for TW-1149 scrambles all the timestamps unncecessarily:
+		#	https://bug.tasktools.org/browse/TW-1149
+		# removing this hackish fix obviates the need for "task-track" below
+		#	(it operates directly on the data files, which breaks "sync")
+		${SED} -i \
+			"s|(^[ ]+when[ ][+][=][ ][(]const[ ]int[)][ ]annotations[.]size[ ][(][)][;])$|//\1|g" \
+			./src/commands/CmdEdit.cpp	|| return 1
+		return 0
+	}
 	cd /.g/_data/_build/taskwarrior/${PROG}		&&
 		${GIT} checkout --force ${VERS}		&&
 		git reset --hard			&&
 		make clean				&&
+		task-build-fixes			&&
 		cmake -DCMAKE_INSTALL_PREFIX=/usr .	&&
 		make -j1				&&
 		make -j1 install			&&
