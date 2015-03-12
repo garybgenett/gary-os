@@ -88,8 +88,7 @@ app-emulation/vmware-tools		vmware_guest_freebsd vmware_guest_linux vmware_guest
 #{MET} net-libs/webkit-gtk		-egl		# disable opengl (glut/mesa)
 #{MET} net-libs/webkit-gtk		-opengl		# disable opengl (glut/mesa)
 #{MET} net-libs/webkit-gtk		-webgl		# disable opengl (glut/mesa)
-#{MET} sys-apps/portage			-python3	# only need python-2 [hack: comment until stage3, to avoid build errors]
-#{MET} sys-apps/portage			python2		# only need python-2
+#{MET} sys-apps/portage			python2		# only want python-2
 
 ################################################################################
 # end of file
