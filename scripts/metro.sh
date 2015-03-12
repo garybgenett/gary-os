@@ -6,16 +6,21 @@ source ${HOME}/.bashrc
 #		* [complete all commits in ".setup", ".static" and "coding"]
 #			* rm /.g/_data/_build/_metro/funtoo-*/*/*/*/stage3-*
 #		* metro.sh -! && (echo | metro.sh 32 0) && (echo | metro.sh 64 0)
-#		* qemu-minion.bsh /.g/_data/_builds/_metro/stage3-generic_32-*.kernel "" -append nomodeset
-#		* qemu-minion.bsh /.g/_data/_builds/_metro/stage3-generic_64-*.kernel "" -append nomodeset
+#			* qemu-minion.bsh /.g/_data/_builds/_metro/stage3-generic_32-*.kernel "" -append nomodeset
+#			* qemu-minion.bsh /.g/_data/_builds/_metro/stage3-generic_64-*.kernel "" -append nomodeset
 #		* cd /.g/_data/_builds/_metro && cat _commit
 #			* [verify with "git-list" in each repository]
+#		* cd /.g/_data/_builds/.gary-os/.gary-os ; vdiff -g v#.#
+#			* [COMMIT] Added "v#.#" release to "Version History" in "README".
+#			* [COMMIT] Tested/validated/updated "Use Cases" with "v#.#" version.
 #	* commit
 #		* cd /.g/_data/_builds/_metro && git-backup <version>
 #		* [update "$RELEASE" and "$CMT_HSH" in "metro.sh"]
 #		* metro.sh -! && (echo | metro.sh 32 0) && (echo | metro.sh 64 0)
 #		* cd /.g/_data/_builds/_metro && git-commit --all --amend --no-edit
+#			* [COMMIT] (RELEASE:########################################.#) (tag: v#.#)
 #		* [update/commit "$RELEASE" and "$CMT_HSH" in "metro.sh"]
+#			* [COMMIT] Added new release to version tags in "metro.sh".
 #	* release
 #		* ls /.g/_data/_builds/.gary-os/metro.gitlog/cur | tail -n1
 #			* rm <result>
