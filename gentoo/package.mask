@@ -18,7 +18,6 @@
 
 ################################################################################
 
-#{MET} >=dev-lang/python-2		# only need python-2 [hack: comment until stage3, to avoid build errors]
 #{MET} >=x11-libs/gtk+-3		# only need gtk+-2
 
 ################################################################################
