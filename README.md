@@ -835,9 +835,9 @@ Instructions for setting up update/install of packages:
      * In particular, to complete configuration of the X.Org GUI the
        `INPUT_DEVICES` and `VIDEO_CARDS` variables should be properly
        configured.
-     * Starting with `-udev`, there is a list of negated `-*` options at
-       the end of the `USE` list which are necessary to build GaryOS via
-       Metro.  All of these can/should be removed to get the full
+     * Starting with `bindist`, there is a list of negated `-*` options
+       at the end of the `USE` list which are necessary to build GaryOS
+       via Metro.  All of these can/should be removed to get the full
        non-Metro configuration.
   4. Use all "portage" commands as usual.
      * e.g. `emerge firefox`
