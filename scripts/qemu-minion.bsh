@@ -25,7 +25,9 @@ fi
 
 ########################################
 
-qemu-img create -f qcow2 /tmp/null.qcow2 100G
+if [[ ! -f /tmp/null.qcow2 ]]; then
+	qemu-img create -f qcow2 /tmp/null.qcow2 100G
+fi
 
 exec qemu.bsh "${QNUM}" "${QMEM}" "/tmp/null.qcow2" "${QSYS}" \
 	${QOPT} \
