@@ -13,8 +13,13 @@ declare _GRUB="${_BASE}.grub"
 declare GDEST="${PWD}"
 
 declare DEBUG="false"
+declare HEADS="10"
 if [[ ${1} == -d ]]; then
 	DEBUG="true"
+	shift
+fi
+if [[ ${1} == +([0-9]) ]]; then
+	HEADS="${1}"
 	shift
 fi
 
@@ -190,7 +195,7 @@ function exit_summary {
 		(cd ${FILE}/boot/grub/${GTYPE} &&
 			du -bs * |
 				sort -nr |
-				head -n10
+				head -n${HEADS}
 		)
 		echo -en "\n"
 		echo -en "# objects for inclusion:\n"
@@ -201,7 +206,7 @@ function exit_summary {
 				${GREP} "[.](lst|mod)$"
 			) |
 				sort -n |
-				head -n10
+				head -n${HEADS}
 		)
 	fi
 
