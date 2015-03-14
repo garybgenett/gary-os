@@ -99,30 +99,55 @@ if not exist %CURDIR%\bcdedit.guid.txt (goto create) else (goto delete)
 declare MODULES="$(
 	ls ${GMODS}/*.{lst,mod} |
 	${GREP} -v \
+		-e "[/]functional_test" \
+		-e "[/]testspeed" \
+		\
+		-e "[/]acpi" \
+		-e "[/]efi" \
+		-e "[/]mpi" \
+		-e "[/]multiboot" \
+		-e "[/]plan9" \
+		-e "[/]pxe" \
+		\
+		-e "[/]part_acorn" \
+		-e "[/]part_amiga" \
+		-e "[/]part_dvh" \
+		-e "[/]part_plan" \
+		-e "[/]part_sun" \
+		\
 		-e "[/]affs" \
 		-e "[/]afs" \
 		-e "[/]bfs" \
 		-e "[/]btrfs" \
+		-e "[/]hfs" \
 		-e "[/]jfs" \
 		-e "[/]minix" \
+		-e "[/]nilfs2" \
 		-e "[/]reiserfs" \
 		-e "[/]sfs" \
 		-e "[/]xfs" \
 		\
-		-e "[/]acpi" \
-		-e "[/]efi" \
-		-e "[/]plan9" \
-		-e "[/]pxe" \
-		\
 		-e "[/]font" \
 		-e "[/]gfx" \
+		-e "[/]png" \
+		-e "[/]progress" \
 		-e "[/]terminfo" \
+		-e "[/]vbe" \
 		-e "[/]video" \
 		\
+		-e "[/]play" \
+		-e "[/]spkmodem" \
+		-e "[/]usbms" \
+		\
+		-e "[/]crypt" \
 		-e "[/]gcry" \
+		-e "[/]truecrypt" \
+		-e "[/]zfscrypt" \
+		\
 		-e "[/]gdb" \
 		-e "[/]legacy" \
 		-e "[/]regex" \
+		-e "[/]trig" \
 )"
 
 #>>> 52768 (FAIL) :: MODULES_BOOT="biosdisk memdisk tar      ntfs          part_msdos       echo        affs btrfs gcry_md5"
