@@ -27,7 +27,7 @@ sys-libs/timezone-data
 app-crypt/efitools			# 32-bit build fail
 sys-boot/boot-update
 sys-boot/efibootmgr
-sys-boot/grub:2
+sys-boot/grub
 sys-boot/os-prober
 sys-boot/syslinux
 sys-process/runit
