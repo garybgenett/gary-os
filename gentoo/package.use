@@ -43,7 +43,7 @@ www-servers/nginx			-syslog
 
 ########################################
 
-sys-boot/grub				-multislot device-mapper libzfs mount
+sys-boot/grub				device-mapper libzfs mount
 
 net-misc/networkmanager			-introspection -modemmanager dhcpcd gnutls
 
@@ -80,7 +80,6 @@ app-emulation/vmware-tools		vmware_guest_freebsd vmware_guest_linux vmware_guest
 
 #{MET} net-libs/glib-networking		-libproxy	# gentoo required
 #{MET} sys-apps/util-linux		-udev		# gentoo required
-#{MET} sys-boot/grub			binfont		# gentoo required
 
 #{MET} app-text/poppler			-qt4		# gentoo required (reversing above)
 
