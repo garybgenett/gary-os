@@ -4,7 +4,7 @@
 ![GaryOS Icon](icon.png "GaryOS Icon")
 "The one file that does it all."
 
-* Latest: GaryOS v2.0 ([64-bit]) ([32-bit]) ([Release Notes]) ([License])
+* Latest: GaryOS v3.0 ([64-bit]) ([32-bit]) ([Release Notes]) ([License])
 * Homepage: [https://github.com/garybgenett/gary-os](https://github.com/garybgenett/gary-os)
 * Download: [https://sourceforge.net/projects/gary-os](https://sourceforge.net/projects/gary-os)
 
@@ -129,9 +129,30 @@ a ready-to-go Funtoo/Gentoo installation.
 ## Version History
 [Version History]: #version-history
 
-[Release Notes]: #2014-06-19-v20-873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d0
-[64-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v2.0.kernel
-[32-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v2.0.kernel
+[Release Notes]: #2015-03-16-v30-21811b59a8484b2a6b73e0c5277f23c50a0141dc0
+[64-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v3.0.kernel
+[32-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v3.0.kernel
+
+##### 2015-03-16 v3.0 21811b59a8484b2a6b73e0c5277f23c50a0141dc.0
+
+  * 64-bit: [gary-os-generic_64-funtoo-stable-v3.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v3.0.kernel)
+  * 32-bit: [gary-os-generic_32-funtoo-stable-v3.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v3.0.kernel)
+  * Metro/Grub scripts
+    * Release checklist in Metro script
+    * General updates for upstream Metro changes/enhancements
+    * Minor configuration updates for LVM, Postfix and Vim
+    * Date variables for Funtoo/Grml upstream files/images
+    * Warnings for non-matching upstream files/images
+    * Miscellaneous syntax clean-up
+    * Additional debugging option in Grub script
+    * Updated list of Grub rescue modules
+    * Grub rescue options variable
+  * Funtoo/Gentoo configuration
+    * Updated to new Portage commit
+    * Minor improvements to audit/review scripting
+    * Fixed `USE` variable, enabling Udev globally
+    * Added additional input drivers, for touch devices
+    * Added helper packages for networking and basic X.Org GUI scripting
 
 ##### 2014-06-19 v2.0 873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d.0
 
