@@ -2127,9 +2127,11 @@ function task-build {
 		#	https://bug.tasktools.org/browse/TW-1149
 		# removing this hackish fix obviates the need for "task-track" below
 		#	(it operates directly on the data files, which breaks "sync")
-		${SED} -i \
-			"s|(^[ ]+when[ ][+][=][ ][(]const[ ]int[)][ ]annotations[.]size[ ][(][)][;])$|//\1|g" \
-			./src/commands/CmdEdit.cpp	|| return 1
+		if [[ -f ./src/commands/CmdEdit.cpp ]]; then
+			${SED} -i \
+				"s|(^[ ]+when[ ][+][=][ ][(]const[ ]int[)][ ]annotations[.]size[ ][(][)][;])$|//\1|g" \
+				./src/commands/CmdEdit.cpp	|| return 1
+		fi
 		return 0
 	}
 	cd /.g/_data/_build/taskwarrior/${PROG}		&&
