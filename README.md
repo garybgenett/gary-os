@@ -29,6 +29,7 @@
     * [Customizing]
   * [Use Cases]
     * [Forensics & Recovery]
+    * [Networking Configuration]
     * [Minimal X.Org GUI]
     * [Live Update]
     * [Installation]
@@ -771,6 +772,46 @@ Linux kernel options can further be used to disable hardware scanning
 and interrogation.
 
 It is a stated goal that forensics mode continue being the default.
+
+## Networking Configuration
+[Networking Configuration]: #networking-configuration
+
+  * Definition:
+    * Configure networking, either wired or wireless
+  * Last tested with:
+    * GaryOS v3.0
+
+No networking configuration or daemons are run by default, but several
+networking packages are installed to ease on-the-fly setup.
+
+For simple DHCP, the `dhcpcd` command can be run directly on the desired
+interface, such as an Ethernet connection:
+
+  * `dhcpcd eth0`
+
+A more formal way of doing this would be to use the OpenRC scripts:
+
+  * `rc-update add dhcpcd default ; rc`
+
+For wireless networking, the NetworkManager package is available to
+simplify the configuration:
+
+  * `rc-update add NetworkManager default ; rc`
+
+Wireless networks can then be scanned and configured:
+
+  * e.g. ...
+
+    ```
+    nmctl device wifi rescan
+    nmctl device wifi list
+    nmctl device wifi connect [ssid] password [password]
+    nmctl device status
+    ```
+
+The Funtoo OpenRC scripts have all sorts of advanced networking features
+and options, covered in depth:
+[http://www.funtoo.org/Networking](http://www.funtoo.org/Networking)
 
 ## Minimal X.Org GUI
 [Minimal X.Org GUI]: #minimal-xorg-gui
