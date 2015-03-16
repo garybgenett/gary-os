@@ -761,7 +761,7 @@ These are also considered the "howto" instructions for each case.
     * Boot into a completely "clean" environment, so that diagnostics
       and/or recovery can be done in a read-only manner.
   * Last tested with:
-    * GaryOS v2.0
+    * GaryOS v3.0
 
 GaryOS is in a forensics mode by default.  Hardware scanning is
 performed, but the hard drives are not mounted or otherwise touched.
@@ -819,7 +819,7 @@ and options, covered in depth:
   * Definition:
     * Start up and use the X.Org GUI environment
   * Last tested with:
-    * GaryOS v2.0
+    * GaryOS v3.0
 
 GaryOS boots to CLI (Command-Line Interface) by default.  To enter the
 graphical interface, run `startx`.
@@ -857,7 +857,7 @@ lightweight and useful software.
   * Definition:
     * Update/install packages using Funtoo/Gentoo tools.
   * Last tested with:
-    * GaryOS v2.0, with 8GB memory
+    * GaryOS v3.0, with 8GB memory
 
 A complete Funtoo/Gentoo environment is available.  In order to
 install/update packages, a couple of missing items need to be put into
@@ -867,18 +867,19 @@ up the in-memory filesystem.
 Instructions for setting up update/install of packages:
 
   1. Install "portage" tree.
-     * **Option 1:** Download `portage-*` archive from one of the `v#.#`
+     * **Option 1:** Synchronize tree as usual.
+         * `emerge --sync`
+     * **Option 2:** Download `portage-*` archive from one of the `v#.#`
        version download directories; preferably from the one which
        matches your version of GaryOS.  This option is best if you plan
        to keep this file on the same media along side the GaryOS kernel
        file(s).  To extract:
          * `tar -pvvxJ -C /usr -f portage-[...].tar.xz`
-     * **Option 2:** Synchronize tree as usual.
-         * `emerge --sync`
      * Generally speaking, "Option 1" is a smaller/faster download than
-       "Option 2".  It will also be simpler to update from, since it is
-       at the same revision of the tree that was used to build that
-       version of GaryOS.
+       "Option 2".  However, "Option 2" has the benefit of offline
+       access, and may be simpler to update from since it is at the same
+       revision of the tree that was used to build that version of
+       GaryOS.
   2. Perform minor hacks to get working in a RAMdisk environment.  These
      should **NOT** be done if planning to install to disk per the
      [Installation] section below.  They essentially disable available
@@ -910,7 +911,7 @@ Instructions for setting up update/install of packages:
   * Definition:
     * Install GaryOS to disk as a "stage3" build.
   * Last tested with:
-    * GaryOS v2.0
+    * GaryOS v3.0
 
 The in-memory environment is a complete Funtoo/Gentoo installation, as
 shown in the [Live Update] section above.  It can be copied directly to
@@ -941,7 +942,7 @@ Instructions for installing to disk:
      entry for `/boot` if using a separate partition from #2 above.
      * e.g. `vi /mnt/etc/fstab`
   5. Update and install Grub, to make the new installation bootable.
-     * e.g. `mount --bind /dev /mnt/dev`
+     * e.g. `for FILE in dev proc sys ; do mount --bind /${FILE} /mnt/${FILE} ; done`
      * e.g. `chroot /mnt grub-install /dev/sda`
      * e.g. `chroot /mnt boot-update`
   6. Reboot into new installation, update `/etc/portage` configuration,
@@ -957,9 +958,10 @@ Instructions for installing to disk:
     * Do not require any files outside of `C:` in the Windows
       installation.
   * Last tested with:
+    * GaryOS v3.0
     * MBR/GPT only; EFI not built or tested
     * Windows 7 Ultimate SP1 64-bit
-    * Grub: sys-boot/grub-2.00-r7
+    * Grub: sys-boot/grub-2.02_beta2-r3
   * Research and development:
     * [http://lists.gnu.org/archive/html/help-grub/2013-08/msg00005.html](http://lists.gnu.org/archive/html/help-grub/2013-08/msg00005.html)
         * [http://blog.mudy.info/2010/08/boot-grub2-stage2-directly-from-windows-bootmgr-with-grub4dos-stage1](http://blog.mudy.info/2010/08/boot-grub2-stage2-directly-from-windows-bootmgr-with-grub4dos-stage1)
@@ -1045,7 +1047,7 @@ Administrator to remove the unwanted entries:
   * Last tested with:
     * Tested in place of GaryOS with both Qemu and PXE.
         * For details on PXE, see the [PXE Boot] section below.
-    * Grub: sys-boot/grub-2.00-r7
+    * Grub: sys-boot/grub-2.02_beta2-r3
   * Research and development:
     * [https://www.gnu.org/software/grub/manual/grub.html#BIOS-installation](https://www.gnu.org/software/grub/manual/grub.html#BIOS-installation)
         * [https://www.gnu.org/software/grub/manual/grub.html#Images](https://www.gnu.org/software/grub/manual/grub.html#Images)
@@ -1087,9 +1089,10 @@ Instructions for Grub "rescue" image installation to hard disk:
       workstation or other automated environment where a reboot
       completely resets each machine involved.
   * Last tested with:
+    * GaryOS v3.0
     * DHCPd: net-misc/dhcp-4.2.5_p1-r2
-    * TFTPd: net-misc/iputils-20121221
-    * iPXE: sys-firmware/ipxe-1.0.0_p20130624
+    * TFTPd: net-misc/iputils-20121221-r2
+    * iPXE: sys-firmware/ipxe-1.0.0_p20130624-r2
   * Research and development:
     * [https://wiki.archlinux.org/index.php/archboot#PXE_booting_.2F_Rescue_system](https://wiki.archlinux.org/index.php/archboot#PXE_booting_.2F_Rescue_system)
 
