@@ -25,6 +25,7 @@ app-text/iso-codes
 sys-libs/timezone-data
 
 app-crypt/efitools			# 32-bit build fail
+sys-boot/boot-update
 sys-boot/efibootmgr
 sys-boot/grub
 sys-boot/os-prober
@@ -33,7 +34,6 @@ sys-process/runit
 
 sys-apps/gptfdisk
 sys-block/parted
-sys-fs/btrfs-progs
 sys-fs/cryptsetup
 sys-fs/dosfstools
 sys-fs/e2fsprogs
@@ -79,6 +79,7 @@ net-misc/bridge-utils
 net-misc/dhcpcd
 net-misc/ifenslave
 net-misc/iputils
+net-misc/networkmanager
 net-misc/vconfig
 net-wireless/rfkill
 net-wireless/wireless-tools
@@ -106,7 +107,6 @@ sys-libs/gpm
 
 dev-lang/perl
 dev-libs/libpcre
-sys-devel/libperl
 
 app-crypt/gnupg
 dev-libs/openssl
@@ -122,6 +122,7 @@ app-arch/sharutils
 app-arch/tar
 app-arch/unrar
 app-arch/unzip
+app-arch/upx-ucl
 app-arch/xz-utils
 app-arch/zip
 dev-util/xdelta
@@ -154,11 +155,8 @@ sys-apps/fakeroot
 # gentoo
 
 sys-kernel/genkernel
-sys-kernel/gentoo-sources:3.10.25
+sys-kernel/gentoo-sources:3.10.65
 sys-kernel/linux-firmware
-
-dev-python/boto
-#>>>dev-util/metro
 
 app-portage/portage-utils
 sys-apps/portage
@@ -184,6 +182,7 @@ x11-misc/dmenu
 x11-wm/dwm
 
 x11-apps/xsetroot
+x11-misc/wmctrl
 
 ########################################
 # toolkits
@@ -191,7 +190,6 @@ x11-apps/xsetroot
 dev-vcs/git
 dev-vcs/subversion
 
-dev-lang/perl
 dev-lang/python
 
 dev-db/sqlite
@@ -248,7 +246,7 @@ net-analyzer/ngrep
 net-analyzer/nmap
 net-analyzer/rrdtool
 net-analyzer/snort
-net-analyzer/ssldump			# 32-bit build fail
+net-analyzer/ssldump
 net-analyzer/tcpdump
 net-analyzer/tcptrace
 net-analyzer/tcptraceroute
@@ -268,6 +266,8 @@ net-misc/autossh
 net-misc/httptunnel
 net-misc/pipes
 
+sys-fs/exfat-utils
+sys-fs/fuse-exfat
 sys-fs/ntfs3g
 
 app-forensics/cmospwd

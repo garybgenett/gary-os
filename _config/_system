@@ -132,7 +132,7 @@ if [[ ${1} == -i ]]; then
 	${MKDIR}				${TARGET}/.g/.home
 	${HOME}/scripts/_sync _home _build	${TARGET}/.g/.home
 	${RM}					${TARGET}/.g/.home/.ssh/id_*
-	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/scripts/_sync mount g sda
+	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/scripts/_sync mount g null
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/setup/.setconf
 	if ${NEW}; then
 		if [[ ${_NEW} == "MET" ]]; then
@@ -291,19 +291,31 @@ if [[ ${1} == -u ]]; then
 	done
 	cat /dev/null	>/var/lib/portage/world
 	echo "@${_PKG}"	>/var/lib/portage/world_sets
-	declare ECLEAN="eclean --verbose"
-	declare D_CONF="dispatch-conf"
-	[[ -n ${AUTO} ]] && D_CONF="expect -c \"spawn ${D_CONF}; expect use-new {send u\r; exp_continue;};\""
+	declare EXPECT_W="expect-wrapper"
+	function expect-wrapper {
+		declare EXPECT_CMD="expect -c \"spawn ${@};"
+		EXPECT_CMD+=" "; EXPECT_CMD+="expect yes/no {send y\\r; exp_continue;};"
+		EXPECT_CMD+=" "; EXPECT_CMD+="expect use-new {send u\\r; exp_continue;};"
+		EXPECT_CMD+="\""
+		if [[ -n ${AUTO} ]]; then
+			${SAFE_ENV} $(echo ${EXPECT_CMD})
+		else
+			${SAFE_ENV} ${@}
+		fi
+	}
 	${SAFE_ENV} emerge ${ASK} --update --deep --newuse \@system	|| exit 1
 	${SAFE_ENV} emerge ${ASK} --update --deep --newuse \@world	|| exit 1
+#>>>	${EXPECT_W} python-updater					|| exit 1
+	${EXPECT_W} perl-cleaner --all					|| exit 1
+	${EXPECT_W} haskell-updater --all				|| exit 1
 	${SAFE_ENV} emerge ${ASK} \@preserved-rebuild			|| exit 1
 	${SAFE_ENV} emerge ${ASK} \@module-rebuild			|| exit 1
 	${SAFE_ENV} emerge ${ASK} --depclean				|| exit 1
 	${SAFE_ENV} revdep-rebuild --ignore				|| exit 1
 	${SAFE_ENV} emaint --fix all					|| exit 1
-	${SAFE_ENV} ${ECLEAN} distfiles					|| exit 1
-	${SAFE_ENV} ${ECLEAN} packages					|| exit 1
-	${SAFE_ENV} ${D_CONF}						|| exit 1
+	${SAFE_ENV} eclean --verbose distfiles				|| exit 1
+	${SAFE_ENV} eclean --verbose packages				|| exit 1
+	${EXPECT_W} dispatch-conf					|| exit 1
 
 ########################################
 
