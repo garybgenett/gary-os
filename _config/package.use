@@ -2,42 +2,39 @@
 # portage package use file
 ################################################################################
 
-#{NEW} dev-java/icedtea			-javascript	# gentoo required
-#{NEW} net-libs/libproxy		-webkit		# gentoo required
-
-################################################################################
-
 app-text/ghostscript-gpl		cups		# gentoo required
 app-text/poppler			cairo		# gentoo required
 app-text/poppler			qt4		# gentoo required
 dev-java/antlr				java		# gentoo required
+dev-qt/qtgui				accessibility	# gentoo required
+dev-qt/qtsvg				accessibility	# gentoo required
+media-gfx/graphviz			cairo		# gentoo required
 media-libs/gd				fontconfig	# gentoo required
 media-libs/libsdl			joystick	# gentoo required
+media-libs/libsdl			sound		# gentoo required
+media-libs/libsdl2			sound		# gentoo required
 media-video/vlc				xcb		# gentoo required
 net-dns/avahi				dbus		# gentoo required
-sys-auth/consolekit			policykit	# gentoo required
+net-nds/openldap			sasl		# gentoo required
+net-wireless/wpa_supplicant		dbus		# gentoo required
 sys-libs/gdbm				berkdb		# gentoo required
 
 ########################################
 
-net-ftp/proftpd				openssl		# gentoo required
-net-nds/openldap			sasl		# gentoo required
-
+dev-libs/libpcre			pcre16		# gentoo required
 media-libs/chromaprint			tools		# gentoo required
 media-libs/mesa				xa		# gentoo required
 net-dns/avahi			mdnsresponder-compat	# gentoo required
+net-dns/dnsmasq				script		# gentoo required
+net-ftp/proftpd				openssl		# gentoo required
+net-misc/networkmanager			-nss		# gentoo required
 net-misc/spice-gtk			gtk3		# gentoo required
-sys-libs/zlib				minizip		# gentoo required
-
-########################################
-
-# temporary fix for "heartbleed" bug:
-# https://www.openssl.org/news/secadv_20140407.txt
-dev-libs/openssl			-tls-heartbeat
+net-misc/spice-gtk			usbredir	# gentoo required
+www-client/midori			-introspection	# gentoo required
 
 ################################################################################
 
-net-fs/samba				cups
+net-fs/samba				client cups
 net-print/cups				samba
 
 dev-vcs/subversion			-apache2
@@ -46,7 +43,9 @@ www-servers/nginx			-syslog
 
 ########################################
 
-sys-boot/grub				-multislot device-mapper libzfs mount
+sys-boot/grub				device-mapper libzfs mount
+
+net-misc/networkmanager			-introspection -modemmanager dhcpcd gnutls
 
 sys-apps/paludis			pbins portage prebuilt-documentation search-index visibility
 
@@ -57,9 +56,11 @@ x11-base/xorg-server			xnest xvfb
 x11-terms/rxvt-unicode			fading-colors focused-urgency font-styles mousewheel perl
 x11-wm/dwm				savedconfig
 
+mail-client/mutt			gpg sidebar smime smtp
+mail-mta/msmtp				-mta
+
 app-office/libreoffice			java
 app-text/enchant			aspell
-mail-client/mutt			sidebar
 mail-client/thunderbird			-wifi ldap lightning
 www-client/firefox			-wifi
 
@@ -73,9 +74,20 @@ app-emulation/vmware-tools		vmware_guest_freebsd vmware_guest_linux vmware_guest
 
 ################################################################################
 
-#{MET} app-text/poppler			-qt4		# gentoo required (reversing above)
+#{NEW} net-libs/glib-networking		-libproxy	# gentoo required
+
+########################################
 
 #{MET} net-libs/glib-networking		-libproxy	# gentoo required
+#{MET} sys-apps/util-linux		-udev		# gentoo required
+
+#{MET} app-text/poppler			-qt4		# gentoo required (reversing above)
+
+#{MET} net-analyzer/wireshark		-gtk3		# only need gtk+-2
+#{MET} net-libs/webkit-gtk		-egl		# disable opengl (glut/mesa)
+#{MET} net-libs/webkit-gtk		-opengl		# disable opengl (glut/mesa)
+#{MET} net-libs/webkit-gtk		-webgl		# disable opengl (glut/mesa)
+#{MET} sys-apps/portage			python2		# only want python-2
 
 ################################################################################
 # end of file
