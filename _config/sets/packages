@@ -26,6 +26,7 @@ sys-libs/timezone-data
 
 app-crypt/efitools
 sys-apps/busybox
+sys-boot/boot-update
 sys-boot/efibootmgr
 sys-boot/grub
 sys-boot/os-prober
@@ -80,6 +81,7 @@ net-misc/bridge-utils
 net-misc/dhcpcd
 net-misc/ifenslave
 net-misc/iputils
+net-misc/networkmanager
 net-misc/vconfig
 net-wireless/rfkill
 net-wireless/wireless-tools
@@ -118,9 +120,7 @@ dev-perl/libwww-perl
 perl-core/CGI
 perl-core/JSON-PP
 perl-core/MIME-Base64
-perl-core/Switch
 perl-core/Time-Local
-sys-devel/libperl
 
 app-crypt/gnupg
 dev-libs/openssl
@@ -136,6 +136,7 @@ app-arch/sharutils
 app-arch/tar
 app-arch/unrar
 app-arch/unzip
+app-arch/upx-ucl
 app-arch/xz-utils
 app-arch/zip
 dev-util/xdelta
@@ -169,11 +170,8 @@ sys-apps/fakeroot
 
 sys-kernel/genkernel
 sys-kernel/gentoo-sources
-sys-kernel/gentoo-sources:3.10.25
+sys-kernel/gentoo-sources:3.10.65
 sys-kernel/linux-firmware
-
-dev-python/boto
-#>>>dev-util/metro
 
 app-portage/portage-utils
 sys-apps/paludis
@@ -237,16 +235,18 @@ net-misc/unison
 
 dev-perl/Template-DBI
 dev-perl/Template-GD
-dev-perl/Template-Latex
+dev-perl/Template-Plugin-Cycle
+dev-perl/Template-Plugin-Latex
 dev-perl/Template-Tiny
 dev-perl/Template-Toolkit
 dev-perl/Template-XML
 
 app-editors/retext
 app-text/pandoc
+dev-haskell/highlighting-kate
 dev-haskell/pandoc-citeproc
 dev-haskell/pandoc-types
-dev-perl/Text-Markdown
+dev-haskell/texmath
 
 app-text/asciidoc
 app-text/docbook-xml-dtd
@@ -269,7 +269,6 @@ dev-vcs/subversion
 
 dev-lang/lua
 dev-lang/parrot
-dev-lang/perl
 dev-lang/python
 dev-lang/rakudo
 dev-lang/ruby
@@ -278,9 +277,17 @@ dev-lisp/clisp
 dev-lua/luarocks
 dev-ruby/rubygems
 
-#>>>dev-lang/v8
 dev-libs/libuv
 net-libs/nodejs
+
+dev-haskell/cabal
+dev-haskell/cabal-install
+dev-lang/ghc
+
+dev-java/icedtea
+dev-java/icedtea-bin
+dev-java/icedtea:6
+dev-java/icedtea:7
 
 dev-db/sqlite
 dev-tcltk/expect
@@ -369,6 +376,8 @@ net-dialup/ppp
 net-fs/curlftpfs
 net-fs/nfs-utils
 net-nds/rpcbind
+sys-fs/exfat-utils
+sys-fs/fuse-exfat
 sys-fs/mtd-utils
 sys-fs/mtpfs
 sys-fs/ntfs3g
@@ -398,7 +407,6 @@ net-nds/openldap
 net-wireless/hostapd
 
 app-admin/apache-tools
-#>>>www-apache/mod_perl
 www-misc/awstats
 www-servers/apache
 www-servers/nginx
@@ -475,8 +483,6 @@ x11-misc/x2vnc
 
 app-admin/gkrellm
 x11-plugins/gkrellaclock
-x11-plugins/gkrellmoon
-x11-plugins/gkrellstock
 x11-plugins/gkrellsun
 x11-plugins/gkrellweather
 
@@ -486,11 +492,6 @@ x11-plugins/pidgin-encryption
 x11-plugins/pidgin-extprefs
 x11-plugins/pidgin-hotkeys
 x11-plugins/pidgin-sipe
-
-dev-java/icedtea
-dev-java/icedtea-bin
-dev-java/icedtea:6
-dev-java/icedtea:7
 
 app-office/libreoffice
 app-office/unoconv
@@ -511,6 +512,7 @@ net-p2p/rtorrent
 app-cdr/cdrdao
 app-cdr/cdrtools
 app-cdr/dvd+rw-tools
+app-misc/regionset
 media-sound/cdparanoia
 media-sound/cdtool
 media-video/dvdbackup
@@ -519,6 +521,7 @@ media-video/lsdvd
 media-gfx/exif
 media-gfx/exiv2
 media-gfx/feh
+media-gfx/gimp
 media-gfx/imagemagick
 media-libs/libjpeg-turbo
 media-libs/openjpeg
@@ -535,8 +538,28 @@ media-video/vlc
 app-text/calibre
 app-text/sdcv
 app-text/stardict
-media-gfx/gimp
 media-gfx/mcomix
+
+media-libs/fluidsynth-dssi
+media-libs/libtimidity
+media-plugins/xsynth-dssi
+media-sound/amsynth
+media-sound/ardour
+media-sound/audacity
+media-sound/fluidsynth
+media-sound/hydrogen
+media-sound/jokosher
+media-sound/linuxsampler
+media-sound/lmms
+media-sound/mixxx
+media-sound/qjackctl
+media-sound/qsynth
+media-sound/qtractor
+media-sound/rosegarden
+media-sound/timidity++
+media-sound/timidity-freepats
+media-sound/xwax
+media-sound/zynaddsubfx
 
 app-misc/golly
 games-misc/fortune-mod
@@ -549,6 +572,7 @@ games-board/gnugo
 games-board/xboard
 
 games-action/barrage
+games-action/garden
 games-arcade/lbreakout
 games-arcade/lbreakout2
 games-arcade/netris
