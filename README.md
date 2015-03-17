@@ -803,10 +803,10 @@ Wireless networks can then be scanned and configured:
   * e.g. ...
 
     ```
-    nmctl device wifi rescan
-    nmctl device wifi list
-    nmctl device wifi connect [ssid] password [password]
-    nmctl device status
+    nmcli device wifi rescan
+    nmcli device wifi list
+    nmcli device wifi connect [ssid] password [password]
+    nmcli device status
     ```
 
 The Funtoo OpenRC scripts have all sorts of advanced networking features
