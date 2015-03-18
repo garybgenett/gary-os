@@ -472,6 +472,7 @@ app-text/acroread
 app-text/qpdf
 app-text/qpdfview
 
+app-misc/xmind
 media-gfx/graphviz
 media-gfx/xfig
 sci-visualization/gnuplot
