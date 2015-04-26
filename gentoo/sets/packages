@@ -147,6 +147,7 @@ sys-apps/man-pages-posix
 sys-apps/texinfo
 
 app-dicts/aspell-en
+app-dicts/aspell-es
 app-text/aspell
 
 app-editors/gvim
