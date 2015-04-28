@@ -11,6 +11,12 @@ declare NC="nc -q 1 127.0.0.1 999${QNUM}"
 
 ########################################
 
+if [[ ${QSYS} == -c ]]; then
+	QSYS="windows_7"
+	qemu-img convert -O vdi ${QSYS}.1_1_system.qcow2 ${QSYS}.1_1_system.vdi
+	exit 0
+fi
+
 if [[ ${QSYS} == -d ]]; then
 	QSYS="windows_7"
 	qemu-img create -f qcow2 -o compat=1.1						${QSYS}.0_1_install.qcow2 100G
