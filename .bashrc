@@ -101,6 +101,10 @@ export CDPATH="${CDPATH}:/.g/_data/zactive"
 export PATH="${HOME}"
 export PATH="${PATH}:${HOME}/commands"
 export PATH="${PATH}:${HOME}/scripts"
+if [[ "${UNAME}" == "Darwin" ]]; then
+	export PATH="${PATH}:/_ports/bin"
+	export PATH="${PATH}:/_ports/libexec/gnubin"
+fi
 export PATH="${PATH}:/usr/local/bin"
 export PATH="${PATH}:/usr/local/sbin"
 export PATH="${PATH}:/usr/bin"
@@ -112,10 +116,6 @@ export PATH="${PATH}:/usr/lib/perl5/core_perl/bin"
 if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
 	export PATH="${PATH}:/c/WINDOWS"
 	export PATH="${PATH}:/c/WINDOWS/system32"
-fi
-if [[ "${UNAME}" == "Darwin" ]]; then
-	export PATH="/_ports/libexec/gnubin:${PATH}"
-	export PATH="/_ports/bin:${PATH}"
 fi
 
 ########################################
