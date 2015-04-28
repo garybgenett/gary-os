@@ -118,6 +118,10 @@ if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
 	export PATH="${PATH}:/c/WINDOWS/system32"
 fi
 
+if [[ "${UNAME}" == "Darwin" ]]; then
+	export MANPATH="/_ports/share/man:${MANPATH}"
+fi
+
 ########################################
 
 # title escapes
