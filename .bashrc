@@ -113,6 +113,10 @@ if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
 	export PATH="${PATH}:/c/WINDOWS"
 	export PATH="${PATH}:/c/WINDOWS/system32"
 fi
+if [[ "${UNAME}" == "Darwin" ]]; then
+	export PATH="/_ports/libexec/gnubin:${PATH}"
+	export PATH="/_ports/bin:${PATH}"
+fi
 
 ########################################
 
