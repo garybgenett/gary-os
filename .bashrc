@@ -245,7 +245,7 @@ export REALTIME="sudo -E nice -n -20 ionice --class 1 --classdata 0"	; alias rea
 export REALTIME="sudo -E nice -n -20 ionice -c 1 -n 0"			; alias realtime="${REALTIME}"
 
 if [[ "${UNAME}" == "Darwin" ]] ||
-  { [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; }; then
+   { [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; }; then
 	export NICELY=
 	export REALTIME=
 fi
@@ -432,6 +432,11 @@ if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
 	alias x="cd / ; clear"
 	alias zdesk="cd \"${USERPROFILE}/Desktop\" ; clear ; ${LL}"
 fi
+if [[ "${UNAME}" == "Darwin" ]]; then
+	alias s="open"
+	alias x="cd / ; clear"
+	alias zdesk="cd \"/Users/plastic/Desktop\" ; clear ; ${LL}"
+fi
 
 ########################################
 
@@ -478,6 +483,9 @@ alias vlc-help="vlc --help --full-help --longhelp --advanced 2>&1 | ${MORE}"
 alias vlc-play="vlc ${HOME}/setup/_misc/playlist.m3u"
 alias web="w3m google.com"
 alias workspace="_sync workspace"
+if [[ "${UNAME}" == "Darwin" ]]; then
+	alias trust="/_install/_mac_osx.txt -s"
+fi
 
 ################################################################################
 # basic functions
