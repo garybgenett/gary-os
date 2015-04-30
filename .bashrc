@@ -143,8 +143,7 @@ if [[ ${HOSTNAME} == spider ]]; then
 	PROMPT_TOKEN_CLR="\[\e[7;32m\]"
 	PROMPT_SCR_COLOR="g"
 elif [[ ${HOSTNAME} == tarantula ]] ||
-     [[ ${HOSTNAME} == phantom.local ]] ||
-     [[ ${HOSTNAME} == laptop.wls.example.net ]]; then
+     [[ ${HOSTNAME} == phantom ]]; then
 	PROMPT_TOKEN_CLR="\[\e[7;36m\]"
 	PROMPT_SCR_COLOR="c"
 elif [[ ${HOSTNAME} == bastion ]]; then
