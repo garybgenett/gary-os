@@ -289,7 +289,7 @@ mail-mta/msmtp
 
 www-client/surf
 
-net-misc/rdesktop
+net-misc/freerdp
 net-misc/tigervnc
 
 ########################################

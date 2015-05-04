@@ -478,6 +478,7 @@ media-gfx/graphviz
 media-gfx/xfig
 sci-visualization/gnuplot
 
+net-misc/freerdp
 net-misc/rdesktop
 net-misc/tigervnc
 x11-misc/x11vnc
