@@ -56,7 +56,7 @@ x11-base/xorg-server			xnest xvfb
 x11-terms/rxvt-unicode			fading-colors focused-urgency font-styles mousewheel perl
 x11-wm/dwm				savedconfig
 
-mail-client/mutt			gpg sidebar smime smtp
+mail-client/mutt			gpg sasl sidebar smime smtp
 mail-mta/msmtp				-mta
 
 app-office/libreoffice			java
