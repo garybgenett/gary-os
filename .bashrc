@@ -1935,7 +1935,7 @@ function shell {
 			;;
 		(net:*)	DEST="${DEST/#net:}"
 			if [[ ${HOSTNAME} != phantom ]]; then
-				[[ -z $(${PS} 2>/dev/null | ${GREP} "5909[:]") ]] && OPTS="${OPTS} -L 5909:127.0.0.1:5900"
+				[[ -z $(${PS} 2>/dev/null | ${GREP} "5910[:]") ]] && OPTS="${OPTS} -L 5910:127.0.0.1:5900"
 			fi
 			LOG="plastic"
 			OPTS="-t \"/_ports/bin/screen -xAR\""
