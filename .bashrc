@@ -1938,7 +1938,7 @@ function shell {
 				[[ -z $(${PS} 2>/dev/null | ${GREP} "5910[:]") ]] && OPTS="${OPTS} -L 5910:127.0.0.1:5900"
 			fi
 			LOG="plastic"
-			OPTS="-t \"/_ports/bin/screen -xAR\""
+			OPTS="${OPTS} -t \"/_ports/bin/screen -xAR\""
 			;;
 		([0-3])	DEST="localhost -p6553${DEST}"
 			LOG="plastic"
