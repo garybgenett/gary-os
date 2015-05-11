@@ -1933,6 +1933,12 @@ function shell {
 				[[ -z $(${PS} 2>/dev/null | ${GREP} "5909[:]") ]] && OPTS="${OPTS} -L 5909:127.0.0.1:5900"
 			fi
 			;;
+		(net:*)	DEST="${DEST/#net:}"
+			if [[ ${HOSTNAME} != phantom ]]; then
+				[[ -z $(${PS} 2>/dev/null | ${GREP} "5909[:]") ]] && OPTS="${OPTS} -L 5909:127.0.0.1:5900"
+			fi
+			LOG="plastic"
+			;;
 		([0-3])	DEST="localhost -p6553${DEST}"
 			LOG="plastic"
 			;;
