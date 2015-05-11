@@ -2942,8 +2942,8 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			impersonate_command "(limit:none tags.not:agenda description.has:: ${@})"
 		else
 			(cd ${PIMDIR} && ${GIT_STS} taskd tasks*)
-			task tags		status:pending
-			task read kind:track	status:pending
+			task tags		status:pending rc.recurrence=yes
+			task read kind:track	status:pending rc.recurrence=yes
 			task view limit:12 "${@}"
 		fi
 		return 0
