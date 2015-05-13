@@ -483,7 +483,7 @@ alias vlc-play="vlc ${HOME}/setup/_misc/playlist.m3u"
 alias web="w3m google.com"
 alias workspace="_sync workspace"
 if [[ "${UNAME}" == "Darwin" ]]; then
-	alias trust="/_install/_mac_osx.txt -s"
+	alias trust="/_install/_mac_osx.txt -r ; /_install/_mac_osx.txt -x ; /_install/_mac_osx.txt -s"
 fi
 
 ################################################################################
