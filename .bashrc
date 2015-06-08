@@ -2838,7 +2838,7 @@ function task-depends {
 				foreach my $uuid (split(",", $task->{"depends"})) {
 					push(@{$rdep->{$uuid}}, $task->{"uuid"});
 				};
-			}
+			};
 		};
 		foreach my $task (@{$data}) {
 			if (!exists($rdep->{$task->{"uuid"}})) {
@@ -2863,6 +2863,39 @@ function task-depends {
 					&print_task(${uuid}, (${deep} + 1));
 				};
 			};
+		};
+	' -- "${@}" || return 1
+	return 0
+}
+
+########################################
+
+function task-recur {
+	perl -e '
+		use strict;
+		use warnings;
+		use JSON::PP;
+		my $args = join(" ", @ARGV); if (${args}) { $args = "\"${args}\""; };
+		my $data = qx(task export ${args}); $data =~ s/([^,])\n/$1,/g; $data =~ s/,$//g; $data = decode_json("[" . ${data} . "]");
+		my $list = {};
+		my $keys = [];
+		foreach my $task (@{$data}) {
+			if (exists($task->{"mask"})) {
+				$list->{$task->{"description"}} = $task;
+			};
+		};
+		while (my($key, $val) = each(%{$list})) {
+			push(@{$keys}, ${key});
+		};
+		foreach my $key (sort(@{$keys})) {
+			my $item = $list->{$key};
+			printf("%-36.36s %-8.8s %-9.9s %-9.9s %s\n",
+				$item->{"uuid"},
+				(exists($item->{"end"}) ? $item->{"end"} : ""),
+				$item->{"status"},
+				$item->{"recur"},
+				$item->{"description"},
+			);
 		};
 	' -- "${@}" || return 1
 	return 0
@@ -2915,6 +2948,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 						modified.after:${SINCE}		\
 						kind.any:			\
 					\) \)					2>&1; eval ${MARKER};
+				task-recur					2>&1; eval ${MARKER};
 				task			stats			2>&1; eval ${MARKER};
 			) | ${MORE}
 		elif [[ ${1} == "deps" ]]; then
