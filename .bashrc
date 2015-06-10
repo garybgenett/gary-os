@@ -2908,6 +2908,15 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 	function impersonate_command {
 		if [[ ${1} == "RESET" ]]; then
 			shift
+			if [[ ${1} == "SYNC" ]]; then
+				shift
+				uuidgen >	${PIMDIR}/tasks/backlog.data
+				task export >	${PIMDIR}/taskd/orgs/local/users/*/tx.data
+				cat		${PIMDIR}/tasks/backlog.data \
+					>>	${PIMDIR}/taskd/orgs/local/users/*/tx.data
+				task sync
+				return 0
+			fi
 			declare LIST="tasks"
 			if [[ ${1} == "ALL" ]]; then
 				shift
