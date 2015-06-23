@@ -450,6 +450,7 @@ net-misc/urlview
 app-misc/abook
 app-misc/remind
 app-misc/task
+app-misc/taskd
 app-misc/wyrd
 app-office/ledger
 dev-db/recutils
