@@ -114,6 +114,7 @@ net-misc/spice-gtk			~*		# runtime failure: https://bugs.gentoo.org/show_bug.cgi
 ########################################
 
 app-misc/task				~*
+app-misc/taskd				~*
 www-servers/nginx			~*
 
 media-libs/libdvdcss			~*
