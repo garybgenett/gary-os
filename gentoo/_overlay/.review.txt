@@ -1,8 +1,32 @@
+diff :: app-misc/task ==========================================================
+
+diff -u -U10 -r /usr/portage/app-misc/task/Manifest app-misc/task/Manifest
+--- /usr/portage/app-misc/task/Manifest	2015-06-23 09:55:59.493788299 -0700
++++ app-misc/task/Manifest	2015-06-23 09:42:59.066668130 -0700
+@@ -1,3 +1,3 @@
+-DIST task-2.1.2.tar.gz 4639841 SHA256 cf5171b54b6d2d2dcd9c559f437cf8a2cb3836c7631edf96a16efbf8b4383e36 SHA512 b9c802503b5580f6c1b965cdee1e39386e818027adba69699071d28dca12c27b37963bb9586b17a764c3430d3405a55febae176b6ef087798660020f2f683b86 WHIRLPOOL cba5aeb279021cb98b9c23c417182f7f2ebd9a05468bd283d10703f2b177c36f9e7c71c2466d4ebaadfa4b9524bd86c202e93be45fa172037c0d1b5e0d51c20a
+-DIST task-2.2.0.tar.gz 1190905 SHA256 39e25dd285e6bc8474337a5868cb2ec55675978fa1f08c802e6da58b4181ee14 SHA512 16ff1ccd037d62fc99ea0a31647714d3ccf8a90948b67d845d55e08e4bf49bb6a7f69f7464f485093abeff0672f17dc5f6d4efd96d2e447316975d185082f862 WHIRLPOOL c790c59a8867249ede33d51a85d33987a51f1031db225267fdac4e50e6f8ac3f94abc8ef80577648a783aa85d4b1297e7e8be55103750e46bb521d1282c8555e
+-DIST task-2.3.0.tar.gz 1238592 SHA256 2b9a289109e691e305b84631622299853134cf195d4c9af962759b640176ac73 SHA512 9a17ec79735800edb6b5b4c6eede6ef62e8374a80a4f566b967e8ee45883e0d3533d4c3643a858f12adf6b9021fb8c9d54cae7620ca4749cf4237f0235e1d483 WHIRLPOOL a160a0df5d6ab27ee6fa608964ea38c950f786519737578406248812b8e13f5dcf03045ecb7d9437b824b1aa76d2124396d381397729270f17796d00ef0aee18
++AUX 0001-task-9999-annotations-edit-fix.patch 2095 SHA256 ed8348b09fe89fab87373a5d7e5dd5936184d1086542b198e9783f9be9b24aca SHA512 d8da6fe5efde2b9506f390d2eac551e2f3c10347ef6e6806805ca7a750a3405b18f9bf2e3d83208a3a1af78f898fc593070e3aa34a5fa848c1784fe46b0d9110 WHIRLPOOL 96532a03aa8dc4f8e2cc6b0ce663e121dbecc61ae6f1401004682a956a9394d1acfdf2b7cc31d06d8f9ded61a1dee0e5b4e076b14c130c0c35e89bcd933073bc
++EBUILD task-9999.ebuild 1400 SHA256 68fe30ab6cf264c045448018b2ebfccda51149028ec0958438b12d633724c708 SHA512 a5b51ac44775b38cc75614adc33fe1c55ccf85efa4a5d425c1d3b45cd99bb54e70314cef22fa2b18be233e692e1cd5a7f21ce883e4ba7940c919729c2d87679a WHIRLPOOL 563ab329fe1fe8e1b183ee5a62090beaa7df0759113e3791506c3c63e351a57337b9b057892ab71b346020647f88f14dd39614ec39acf0e995934944b5b8fa60
++MISC metadata.xml 228 SHA256 1b7e281c5478397754b53aa513c61f0477cdbe9900bb3b795239e5770ee52665 SHA512 a056b549dccf17ee69a41734313bd6d31ec01b17f001589ed40a05612ffdc1b46bb63a8c7931c5109b5dc86756e752fb53226c6fd7fe97d3fb9173318879aeb5 WHIRLPOOL cd9298d522880abd757087ecec3835327043dbd25acecaa0ac30b4e337ee24c6d2f423c666b017406a92cd62c28a2f02aeae69a12fcdbdf41e8344cb5b793b9b
+Only in app-misc/task/files: 0001-task-9999-annotations-edit-fix.patch
+Only in /usr/portage/app-misc/task/files: task-1.9.4-lua-automagic.patch
+Only in /usr/portage/app-misc/task/files: task-2.0.0_beta4-rcdir.patch
+Only in /usr/portage/app-misc/task/files: task-2.3.0-gnutls-automagic.patch
+Only in /usr/portage/app-misc/task/files: task-2.3.0-issue-1473-rcdir-fix.patch
+Only in /usr/portage/app-misc/task: task-2.1.2.ebuild
+Only in /usr/portage/app-misc/task: task-2.2.0.ebuild
+Only in /usr/portage/app-misc/task: task-2.3.0-r1.ebuild
+Only in /usr/portage/app-misc/task: task-2.3.0.ebuild
+Only in app-misc/task: task-9999.ebuild
+diff :: app-misc/taskd =========================================================
+
 diff :: dev-java/icedtea =======================================================
 
 Only in dev-java/icedtea: .rationale
 diff -u -U10 -r /usr/portage/dev-java/icedtea/Manifest dev-java/icedtea/Manifest
---- /usr/portage/dev-java/icedtea/Manifest	2015-03-02 10:36:59.624935714 -0800
+--- /usr/portage/dev-java/icedtea/Manifest	2015-06-23 09:56:00.989802035 -0700
 +++ dev-java/icedtea/Manifest	2015-02-22 16:54:35.601517098 -0800
 @@ -1,16 +1,20 @@
 +AUX fontconfig.Gentoo.properties.src 15602 SHA256 d48a9b43d82f45425464e985955f3f3700738a98c0dc97ab7577230ca11fe647 SHA512 eac3fd310bf0757284a4a0c3c72759a8516bd2d9b8f9d9c7df10ff15fd291833d5adb5429b166175c6f333c883974d56fe7d0339cc16db3a5786a77780217a39 WHIRLPOOL f9f702848c38ef9cca0577f1db5a7c4cd6847e79d205b8e855c14b3a80070328b12fdcd854f5bd2dcf07c7cb9bd2aaf433a770a0752ec01a4e8b308dedf3bf19
@@ -37,17 +61,13 @@ diff -u -U10 -r /usr/portage/dev-java/icedtea/Manifest dev-java/icedtea/Manifest
 +EBUILD icedtea-6.1.13.6.ebuild 11029 SHA256 98c750f62b6f052ec3bb605ab8584f6b3854cdbc31cd183fdf30a82715a27e73 SHA512 95a39a1402a9d17b7d87f3345907182055388e3adc7895c9c2142d088f29e6357f69ee64a3f61ef348e2fb8ae1c917cf2b5b74240ad6800c0dab2781fdcec425 WHIRLPOOL 1807be446ffaa83c5dec70ba8a34071b755a36e01041cbe12ab0d86a715e361e45146d570fbc5dd251a7e0696b2dc871076631e69ddfffe2abed23dacf2b422c
 +EBUILD icedtea-7.2.5.4.ebuild 12637 SHA256 0c7a5a18a4dee892346cc693ebcd274730e3102b486431c1368f823ed757921b SHA512 e3fffe574f88531b37706322f0837c879072172bc4beeba805fdd8f0e8126520e3aedbc0dac81909ab7ca640ab8709b6e92e9017c51fdb434e053277f73586b7 WHIRLPOOL 8c605cb4797a412002bd8c82abc5941c2a99e68b7189c0e14fa392715fd8b4f7d2a0962c75daacf5e6bbd15bd639220f2715b694740b89b9922e5e7aa4f6ef52
 +MISC metadata.xml 1680 SHA256 41523b869d57bd7edfe8c19416a1fb2d95201931d4174883eef2a39843a7cde2 SHA512 5c1a920010ad325807d5ee24bde454e597ff1c2ae391deb76357e5364266da0433f199e9efccf259eb5f67bb1af99a9088e3a784b97cbffe57776f3639b3a89c WHIRLPOOL 5648750285eacaa1f7ba605b947181cc4ca3663c349c09446ee3b36235e4f387b9715af2c8c3afc50219f105f84a124d269ff5c9a347dfa9fbc2ef8fb235421d
-Only in /usr/portage/dev-java/icedtea: icedtea-6.1.12.7.ebuild
-Only in /usr/portage/dev-java/icedtea: icedtea-6.1.13.1.ebuild
 Only in /usr/portage/dev-java/icedtea: icedtea-6.1.13.3.ebuild
 Only in /usr/portage/dev-java/icedtea: icedtea-6.1.13.5-r1.ebuild
 Only in dev-java/icedtea: icedtea-6.1.13.6.ebuild
-Only in /usr/portage/dev-java/icedtea: icedtea-7.2.4.3.ebuild
-Only in /usr/portage/dev-java/icedtea: icedtea-7.2.4.5.ebuild
 Only in /usr/portage/dev-java/icedtea: icedtea-7.2.5.3.ebuild
 Only in dev-java/icedtea: icedtea-7.2.5.4.ebuild
 diff -u -U10 -r /usr/portage/dev-java/icedtea/metadata.xml dev-java/icedtea/metadata.xml
---- /usr/portage/dev-java/icedtea/metadata.xml	2015-03-02 10:36:59.628935749 -0800
+--- /usr/portage/dev-java/icedtea/metadata.xml	2015-06-23 09:56:00.989802035 -0700
 +++ dev-java/icedtea/metadata.xml	2015-02-22 16:37:55.000000000 -0800
 @@ -1,31 +1,30 @@
  <?xml version="1.0" encoding="UTF-8"?>
@@ -89,13 +109,13 @@ diff -u -U10 -r /usr/portage/dev-java/icedtea/metadata.xml dev-java/icedtea/meta
 diff :: games-fps/quake1-data ==================================================
 
 diff -u -U10 -r /usr/portage/games-fps/quake1-data/Manifest games-fps/quake1-data/Manifest
---- /usr/portage/games-fps/quake1-data/Manifest	2014-04-06 16:59:37.000000000 -0700
+--- /usr/portage/games-fps/quake1-data/Manifest	2015-06-23 09:56:03.905828803 -0700
 +++ games-fps/quake1-data/Manifest	2015-03-02 10:41:10.946938431 -0800
 @@ -0,0 +1,2 @@
 +EBUILD quake1-data-2.40.ebuild 2189 SHA256 5c8ccb2d832dffaeb01bebf2ddd23559959115157339b06f14ddb55839a9e0e9 SHA512 6ad5faee5cae505abe2ca660390be555aecad4df18634e719f2ca2efd53ad916d90f7312bf2a642c78a61a3d04f764dbb5d561bb8a10c279ebe70ad04e18bdf6 WHIRLPOOL 78f2621b460f253a48aa2f7de40d06a0102c29f2253f78584f26ea0d224024c23d857facf15f91a90734b6e0706b6238c73d96be2e04bfbb5186811cadb6be93
 +MISC metadata.xml 158 SHA256 1423a4fdd4a79b1728a2056d9e300f7e1074253095d82726218d9e9b953888a3 SHA512 d954564236b67b6ab97846b73f74e715e8f1bec2dba6595e9a5046c2e8c3b93f4879c293f9d1d02d99a533bee56156dae3f31a485697128c51af14cdbfdada8a WHIRLPOOL d03e7293d09d794d61c095a423f945b3644355a247f270a73ca8d30b4dfe9c98244297536bfd1a4bd6c14794aa1152eca20fd83bfdf3e1e74d4f676152d35ada
 diff -u -U10 -r /usr/portage/games-fps/quake1-data/quake1-data-2.40.ebuild games-fps/quake1-data/quake1-data-2.40.ebuild
---- /usr/portage/games-fps/quake1-data/quake1-data-2.40.ebuild	2015-03-02 10:37:01.680952101 -0800
+--- /usr/portage/games-fps/quake1-data/quake1-data-2.40.ebuild	2015-06-23 09:56:03.905828803 -0700
 +++ games-fps/quake1-data/quake1-data-2.40.ebuild	2015-03-02 10:40:45.770737803 -0800
 @@ -38,21 +38,22 @@
  	export CDROM_NAME_SET=("Existing Install" "Quake CD (1.01)" "Ultimate Quake Collection" "Quake CD (newer)")
@@ -124,7 +144,7 @@ diff -u -U10 -r /usr/portage/games-fps/quake1-data/quake1-data-2.40.ebuild games
 diff :: x11-plugins/gkrellaclock ===============================================
 
 diff -u -U10 -r /usr/portage/x11-plugins/gkrellaclock/Manifest x11-plugins/gkrellaclock/Manifest
---- /usr/portage/x11-plugins/gkrellaclock/Manifest	2014-04-06 16:59:52.000000000 -0700
+--- /usr/portage/x11-plugins/gkrellaclock/Manifest	2015-06-23 09:56:38.346144975 -0700
 +++ x11-plugins/gkrellaclock/Manifest	2014-04-09 11:39:41.899246557 -0700
 @@ -1 +1,10 @@
 -DIST gkrellaclock-0.3.4.tar.gz 18853 SHA256 5923c5fa6c31ceb1944e57219d893634e503d44dc5e91f3deba46f0d71e787b7
@@ -140,7 +160,7 @@ diff -u -U10 -r /usr/portage/x11-plugins/gkrellaclock/Manifest x11-plugins/gkrel
 +MISC metadata.xml 166 SHA256 5dba9ba575613d6cd1d28f1c9819cee44869bebba3cb8a91294bcca1402f5941 SHA512 85f57124de5c89f57dfd2f9c969701908554ebd07f50a084835ae35d91395fe79c6fa002c040546854009e700e7c65e9345fdb3a616978fab14c08939721f616 WHIRLPOOL 203631ae3c7368dbd852a4ae2d6826d6bbc02a3417f816c84c8b16220aafff00a62e5b3bb46d231e4702fbce62b4a172c8db1aac275b6c8975dc669dfc9bd7a9
 Only in x11-plugins/gkrellaclock: files
 diff -u -U10 -r /usr/portage/x11-plugins/gkrellaclock/gkrellaclock-0.3.4.ebuild x11-plugins/gkrellaclock/gkrellaclock-0.3.4.ebuild
---- /usr/portage/x11-plugins/gkrellaclock/gkrellaclock-0.3.4.ebuild	2014-04-06 16:59:52.000000000 -0700
+--- /usr/portage/x11-plugins/gkrellaclock/gkrellaclock-0.3.4.ebuild	2015-06-23 09:56:38.346144975 -0700
 +++ x11-plugins/gkrellaclock/gkrellaclock-0.3.4.ebuild	2012-04-02 16:26:52.000000000 -0700
 @@ -9,14 +9,15 @@
  DESCRIPTION="Nice analog clock for GKrellM2"
