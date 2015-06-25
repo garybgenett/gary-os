@@ -2295,6 +2295,7 @@ function task-export-text {
 		use Time::Local qw(timegm timelocal);
 		use MIME::Base64;
 		my $name = shift();
+		my $extn = ".md";
 		my $args = join(" ", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $root = qx(task _get rc.data.location); chomp(${root});
 		my $data = qx(task export ${args}); $data =~ s/([^,])\n/$1,/g; $data =~ s/,$//g; $data = decode_json("[" . ${data} . "]");
@@ -2645,11 +2646,12 @@ function task-export-text {
 					my $description = (($task->{"project"}) ? "(" . $task->{"project"} . ") " : "") . $task->{"description"};
 					$description =~ s|([*_])|\\$1|g;
 					my($z, $modified) = &time_format($annotation->{"entry"});
+					my $base = ${root}; $base =~ s|^.*/||g;
 					my $output = $annotation->{"description"};
 					$output =~ s/^[[]notes[]][:]//g;
 					print NOTE "\n\n" . ${description} . " {#uuid-" . $task->{"uuid"} . "}\n";
 					print NOTE ("=" x 80) . "\n\n";
-					print NOTE "**Updated: " . ${modified} . " | UUID: [" . $task->{"uuid"} . "](#uuid-" . $task->{"uuid"} . ") | [TOC](#TOC)**\n\n";
+					print NOTE "**Updated: " . ${modified} . " | UUID: [" . $task->{"uuid"} . "](#uuid-" . $task->{"uuid"} . ") | [TOC](#TOC) [" . ${extn} . "](./" . ${base} . "/" . $task->{"uuid"} . ${extn} . ")**\n\n";
 					print NOTE decode_base64(${output});
 					print NOTE "\n";
 				}
@@ -2676,8 +2678,8 @@ function task-export-text {
 			my $compose = "make compose"
 				. " -f ${composer}"
 				. " -C ${root}"
-				. " BASE=${root}.md"
-				. " LIST=${root}.md"
+				. " BASE=${root}${extn}"
+				. " LIST=${root}${extn}"
 				. " TYPE=html"
 				. " TOC=6"
 				;
