@@ -2127,7 +2127,7 @@ function zpim-commit {
 	cd ${PIMDIR}
 	chown -vR plastic:plastic ${PIMDIR}
 	chmod -vR 750 ${PIMDIR}
-	chmod -v 755 ${PIMDIR} ${PIMDIR}/tasks.timeline.*
+	chmod -v 755 ${PIMDIR} ${PIMDIR}/tasks.timeline.* ${PIMDIR}/tasks.md*
 	${SED} -i "s/<HR>([[:space:]])/<HR>\n\1/g" bookmarks.html
 	if [[ -n "${@}" ]]; then
 		declare FILE="${1}" && shift
@@ -2208,7 +2208,9 @@ function task-export-report {
 	declare EMAIL_MAIL="${1}" && shift
 	declare EMAIL_NAME="${1}" && shift
 	declare EMAIL_SIGN="${1}" && shift
-	task-export-text "(area:_gtd or area:work)"
+	task-export-text "${EMAIL_NAME}" "(project.not:_data (area:_gtd or area:work))"
+	cat ${PIMDIR}/tasks.md.html \
+		>${REPORT}.projects.html
 	cat ${PIMDIR}/tasks.timeline.html |
 		perl -pe '
 			use JSON::PP;
@@ -2228,12 +2230,20 @@ function task-export-report {
 			s|.+tasks.timeline.json.+$|		var parsed_e = JSON.parse('\''${tracking}'\''); eventSource.loadJSON(parsed_e, "");|g;
 			s|.+tasks.timeline.projects.json.+$|	var parsed_p = JSON.parse('\''${projects}'\''); projectSource.loadJSON(parsed_p, "");|g;
 		' \
-		>${REPORT}.html
+		>${REPORT}.timeline.html
 	if [[ -n ${EMAIL_MAIL} ]]; then
 		cat >${REPORT}.txt <<END_OF_FILE
-Attached is my weekly status report.  This is an automated message, and should be generated every weekend.
+This is my weekly status report.  It is an automated message, and should be generated after every weekend.
 
-The HTML file should open in any browser, but has been specifically tested in Firefox and Internet Explorer.  Internet access is required to properly view the file, as it uses 3rd party Javascript libraries to render the output.  Your browser may request that you accept running the script / blocked content, which you will need to do.
+Attached are two HTML files which should open in any browser (tested in Firefox, Safari and Internet Explorer):
+	* Projects
+		* List of current projects, along with their status and all notes
+		* The projects report is self-explanatory, and does not have any further details in this message
+	* Timeline
+		* Interactive visualization, for projects which have deadlines
+		* The timeline report requires some additional context, which is the remainder of this message
+
+Internet access is required to properly view the timeline file, as it uses 3rd party Javascript libraries to render the output.  Your browser may request that you accept running the script / blocked content, which you will need to do.
 
 There are four slider bars in the report, progressing in scope from hourly to daily to weekly to monthly.  The highlighed areas show what portion of the more granular timeframes are being displayed.  Daily time-tracking is shown on the top two bars (hourly and daily) and long-term project tracking is on the lower two bars (weekly and monthly).
 
@@ -2265,7 +2275,8 @@ END_OF_FILE
 			EMAIL_NAME="${EMAIL_NAME}" \
 			email -x \
 				-s "Status Report: ${DATE}" \
-				-a ${REPORT}.html \
+				-a ${REPORT}.projects.html \
+				-a ${REPORT}.timeline.html \
 				-c ${EMAIL_MAIL} \
 				-- ${EMAIL_DEST}
 	fi
@@ -2275,6 +2286,7 @@ END_OF_FILE
 ########################################
 
 function task-export-text {
+	declare NAME="${1}" && shift
 	perl -e '
 		use strict;
 		use warnings;
@@ -2282,6 +2294,7 @@ function task-export-text {
 		use POSIX qw(strftime);
 		use Time::Local qw(timegm timelocal);
 		use MIME::Base64;
+		my $name = shift();
 		my $args = join(" ", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $root = qx(task _get rc.data.location); chomp(${root});
 		my $data = qx(task export ${args}); $data =~ s/([^,])\n/$1,/g; $data =~ s/,$//g; $data = decode_json("[" . ${data} . "]");
@@ -2289,7 +2302,7 @@ function task-export-text {
 		open(TIME, ">", ${root} . ".csv")			|| die();
 		open(PROJ, ">", ${root} . ".timeline.projects.json")	|| die();
 		open(LINE, ">", ${root} . ".timeline.json")		|| die();
-		open(NOTE, ">", ${root} . ".txt")			|| die();
+		open(NOTE, ">", ${root} . ".md")			|| die();
 		my $json = JSON::PP->new(); $json->sort_by(sub { $JSON::PP::a cmp $JSON::PP::b; }); print JSON $json->pretty->encode(${data});
 		print TIME "\"[DESC]\",\"[PROJ]\",\"[KIND]\",\"[AREA]\",\"[TAGS]\",";
 		print TIME "\"[.UID]\",";
@@ -2300,6 +2313,9 @@ function task-export-text {
 		print TIME "\"[.END]\",\"[_END]\",\"[=END]\",";
 		print TIME "\"[=HRS]\",";
 		print TIME "\n";
+		print NOTE "% Taskwarrior: Project List & Notes\n";
+		print NOTE "% " . ${name} . "\n";
+		print NOTE "% " . localtime() . "\n";
 		my $proj_dups = {};
 		my $proj = {
 			"dateTimeFormat"	=> "iso8601",
@@ -2343,7 +2359,7 @@ function task-export-text {
 		};
 		sub calculate_due {
 			my $task = shift();
-			my($date, $y) = &time_format(shift());
+			my($date, $z) = &time_format(shift());
 			my $result = ${date} - &lead();
 			my $hold = &hold_date(${task});
 			if (${hold}) {
@@ -2626,9 +2642,14 @@ function task-export-text {
 						die("MULTIPLE NOTES!");
 					};
 					$notes = "1";
+					my $description = (($task->{"project"}) ? "(" . $task->{"project"} . ") " : "") . $task->{"description"};
+					$description =~ s|([*_])|\\$1|g;
+					my($z, $modified) = &time_format($annotation->{"entry"});
 					my $output = $annotation->{"description"};
 					$output =~ s/^[[]notes[]][:]//g;
-					print NOTE "\n" . (">" x 10) . "[" . $task->{"uuid"} . " :: " . $task->{"description"} . "]" . ("<" x 10) . "\n";
+					print NOTE "\n\n" . ${description} . " {#uuid-" . $task->{"uuid"} . "}\n";
+					print NOTE ("=" x 80) . "\n\n";
+					print NOTE "**Updated: " . ${modified} . " | UUID: [" . $task->{"uuid"} . "](#uuid-" . $task->{"uuid"} . ") | [TOC](#TOC)**\n\n";
 					print NOTE decode_base64(${output});
 					print NOTE "\n";
 				}
@@ -2645,13 +2666,24 @@ function task-export-text {
 		};
 		print PROJ $json->pretty->encode(${proj});
 		print LINE $json->pretty->encode(${line});
-		print NOTE "\n" . (">" x 10) . "[end of file]" . ("<" x 10) . "\n";
 		close(JSON) || die();
 		close(TIME) || die();
 		close(PROJ) || die();
 		close(LINE) || die();
 		close(NOTE) || die();
-	' -- "${@}" || return 1
+	' -- "${NAME}" "${@}" || return 1
+	if [[ -f /.g/_data/zactive/coding/composer/Makefile ]]; then
+		make compose \
+			-C ${PIMDIR} \
+			-f /.g/_data/zactive/coding/composer/Makefile \
+			COMPOSER_STAMP="tasks.md.composed" \
+			BASE="tasks.md" \
+			LIST="tasks.md" \
+			TYPE="html" \
+			TOC="6" \
+		|| return 1
+		${RM} ${PIMDIR}/tasks.md.composed
+	fi
 	return 0
 }
 
