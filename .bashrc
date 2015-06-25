@@ -2671,19 +2671,20 @@ function task-export-text {
 		close(PROJ) || die();
 		close(LINE) || die();
 		close(NOTE) || die();
+		my $composer = "/.g/_data/zactive/coding/composer/Makefile";
+		if (-f "${composer}") {
+			my $compose = "make compose"
+				. " -f ${composer}"
+				. " -C ${root}"
+				. " BASE=${root}.md"
+				. " LIST=${root}.md"
+				. " TYPE=html"
+				. " TOC=6"
+				;
+			if (system(${compose}) != 0) { die(); };
+			unlink(${root} . "/.composed") || warn();
+		};
 	' -- "${NAME}" "${@}" || return 1
-	if [[ -f /.g/_data/zactive/coding/composer/Makefile ]]; then
-		make compose \
-			-C ${PIMDIR} \
-			-f /.g/_data/zactive/coding/composer/Makefile \
-			COMPOSER_STAMP="tasks.md.composed" \
-			BASE="tasks.md" \
-			LIST="tasks.md" \
-			TYPE="html" \
-			TOC="6" \
-		|| return 1
-		${RM} ${PIMDIR}/tasks.md.composed
-	fi
 	return 0
 }
 
