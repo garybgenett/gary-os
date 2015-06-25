@@ -2722,6 +2722,7 @@ function task-notes {
 		use warnings;
 		use JSON::PP;
 		use MIME::Base64;
+		my $extn = ".md";
 		my $args = join(" ", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $root = qx(task _get rc.data.location); chomp(${root});
 		my $data = qx(task export kind:notes ${args}); $data =~ s/([^,])\n/$1,/g; $data =~ s/,$//g; $data = decode_json("[" . ${data} . "]");
@@ -2732,7 +2733,7 @@ function task-notes {
 		};
 		my $uuids = [];
 		foreach my $task (sort({$a->{"description"} cmp $b->{"description"}} @{$data})) {
-			my $file = ${root} . "/" . $task->{"uuid"};
+			my $file = ${root} . "/" . $task->{"uuid"} . ${extn};
 			my $text = "[" . $task->{"description"} . "]";
 			my $notes = "0";
 			foreach my $annotation (@{$task->{"annotations"}}) {
@@ -2754,10 +2755,10 @@ function task-notes {
 			close(NOTE) || die();
 		};
 		chdir(${root}) || die();
-		my $filelist = join(" ", @{$uuids});
+		my $filelist = join("${extn} ", @{$uuids}) . ${extn};
 		system("${edit} ${filelist}");
 		foreach my $uuid (@{$uuids}) {
-			my $file = ${root} . "/" . ${uuid};
+			my $file = ${root} . "/" . ${uuid} . ${extn};
 			my $text;
 			if (-s ${file}) {
 				open(NOTE, "<", ${file}) || die();
@@ -2772,7 +2773,7 @@ function task-notes {
 		};
 		chdir(${root}) || die();
 		foreach my $file (@{$uuids}) {
-			unlink(${file}) || warn();
+			unlink(${file} . ${extn}) || warn();
 		};
 	' -- "${@}" || return 1
 	return 0
