@@ -2562,7 +2562,12 @@ function task-export-text {
 				my $date = $task->{"description"};
 				$date =~ s/^([0-9]{4}[-][0-9]{2}[-][0-9]{2}).*$/$1/g;
 				$date =~ s/[-]//g;
-				my($date_s, $date_d) = &time_format(${date} . "T230000Z");
+				my $z;
+				if (${date} !~ m/^[0-9]{8}$/) {
+					($z, $date) = ("NULL", strftime("%Y-%m-%d %H:%M:%S", localtime(time())));
+				} else {
+					($z, $date) = &time_format(${date} . "T230000Z");
+				};
 				my $entry = "";
 				my $entries = "0";
 				foreach my $annotation (@{$task->{"annotations"}}) {
@@ -2580,7 +2585,7 @@ function task-export-text {
 				};
 				push(@{$line->{"events"}}, {
 					"title"		=> $task->{"description"},
-					"start"		=> ${date_d},
+					"start"		=> ${date},
 					"durationEvent"	=> "false",
 					"caption"	=> ${entry},
 				});
