@@ -2317,6 +2317,7 @@ function task-export-text {
 		print NOTE "% Taskwarrior: Project List & Notes\n";
 		print NOTE "% " . ${name} . "\n";
 		print NOTE "% " . localtime() . "\n";
+		my $NOTE = {}; $NOTE->{"other"} = {};
 		my $proj_dups = {};
 		my $proj = {
 			"dateTimeFormat"	=> "iso8601",
@@ -2554,6 +2555,32 @@ function task-export-text {
 				. "",
 			});
 		};
+		sub export_note {
+			my $task	= shift();
+			my $annotation	= shift();
+			my $object	= shift();
+			my $description = (($task->{"project"}) ? "(" . $task->{"project"} . ") " : "") . $task->{"description"}; $description =~ s|([*_])|\\$1|g;
+			my $base = ${root}; $base =~ s|^.*/||g;
+			my($z, $modified, $output, $note) = ("", "", "", "");
+			if ($annotation) {
+				($z, $modified) = &time_format($annotation->{"entry"});
+				$modified = "Updated: " . ${modified} . "| ";
+				$output = $annotation->{"description"};
+				$output =~ s/^[[]notes[]][:]//g;
+				$output = "\n" . decode_base64(${output}) . "\n";
+			};
+			$note .= "\n\n" . ${description} . " {#uuid-" . $task->{"uuid"} . "}\n";
+			$note .= ("-" x 40) . "\n\n";
+			$note .= "**" . ${modified} . "UUID: [" . $task->{"uuid"} . "](#uuid-" . $task->{"uuid"} . ") | [TOC](#TOC) [" . ${extn} . "](./" . ${base} . "/" . $task->{"uuid"} . ${extn} . ")**\n";
+			$note .= ${output};
+			if (	(exists($task->{"project"})) &&
+				(($task->{"project"} eq "_data") || ($task->{"project"} eq "_journal"))
+				)					{ $object->{"data"}	.= ${note}; }
+			elsif	($task->{"status"} eq "pending")	{ $object->{"open"}	.= ${note}; }
+			elsif	($task->{"status"} eq "completed")	{ $object->{"completed"}.= ${note}; }
+			elsif	($task->{"status"} eq "deleted")	{ $object->{"deleted"}	.= ${note}; }
+			else						{ die("INVALID STATUS!"); };
+		};
 		foreach my $task (sort({$a->{"description"} cmp $b->{"description"}} @{$data})) {
 			my $started = "0";
 			my $begin = "0";
@@ -2648,23 +2675,16 @@ function task-export-text {
 						die("MULTIPLE NOTES!");
 					};
 					$notes = "1";
-					my $description = (($task->{"project"}) ? "(" . $task->{"project"} . ") " : "") . $task->{"description"};
-					$description =~ s|([*_])|\\$1|g;
-					my($z, $modified) = &time_format($annotation->{"entry"});
-					my $base = ${root}; $base =~ s|^.*/||g;
-					my $output = $annotation->{"description"};
-					$output =~ s/^[[]notes[]][:]//g;
-					print NOTE "\n\n" . ${description} . " {#uuid-" . $task->{"uuid"} . "}\n";
-					print NOTE ("=" x 80) . "\n\n";
-					print NOTE "**Updated: " . ${modified} . " | UUID: [" . $task->{"uuid"} . "](#uuid-" . $task->{"uuid"} . ") | [TOC](#TOC) [" . ${extn} . "](./" . ${base} . "/" . $task->{"uuid"} . ${extn} . ")**\n\n";
-					print NOTE decode_base64(${output});
-					print NOTE "\n";
+					&export_note(${task}, ${annotation}, ${NOTE});
 				}
 				else {
 					use Data::Dumper;
 					print Dumper(${task});
 					die("BAD ANNOTATION!");
 				};
+			};
+			if ((!${notes}) && ((exists($task->{"kind"})) && ($task->{"kind"} eq "notes"))) {
+				&export_note(${task}, "", $NOTE->{"other"});
 			};
 			if (${started}) {
 				print TIME "\"-\"," x 4;
@@ -2673,6 +2693,14 @@ function task-export-text {
 		};
 		print PROJ $json->pretty->encode(${proj});
 		print LINE $json->pretty->encode(${line});
+		if (exists($NOTE->{"data"}))			{ print NOTE "\n\nData"			. " {#list-data}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"data"}				; };
+		if (exists(${$NOTE->{"other"}}{"data"}))	{ print NOTE "\n\nData (Other)"		. " {#list-data-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"data"}		; };
+		if (exists($NOTE->{"open"}))			{ print NOTE "\n\nOpen"			. " {#list-open}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"open"}				; };
+		if (exists(${$NOTE->{"other"}}{"open"}))	{ print NOTE "\n\nOpen (Other)"		. " {#list-open-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"open"}		; };
+		if (exists($NOTE->{"completed"}))		{ print NOTE "\n\nCompleted"		. " {#list-completed}\n"	. ("=" x 80) . "\n"; print NOTE $NOTE->{"completed"}			; };
+		if (exists(${$NOTE->{"other"}}{"completed"}))	{ print NOTE "\n\nCompleted (Other)"	. " {#list-completed-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"completed"}	; };
+		if (exists($NOTE->{"deleted"}))			{ print NOTE "\n\nDeleted"		. " {#list-deleted}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"deleted"}			; };
+		if (exists(${$NOTE->{"other"}}{"deleted"}))	{ print NOTE "\n\nDeleted (Other)"	. " {#list-deleted-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"deleted"}		; };
 		close(JSON) || die();
 		close(TIME) || die();
 		close(PROJ) || die();
