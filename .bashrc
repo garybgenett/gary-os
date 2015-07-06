@@ -2233,7 +2233,7 @@ function task-export-report {
 		>${REPORT}.timeline.html
 	if [[ -n ${EMAIL_MAIL} ]]; then
 		cat >${REPORT}.txt <<END_OF_FILE
-This is my weekly status report.  It is an automated message, and should be generated after every weekend.
+This is my weekly status report.  It is an automated message, and should be generated every weekend.
 
 Attached are two HTML files which should open in any browser (tested in Firefox, Safari and Internet Explorer):
 	* Projects
@@ -2573,13 +2573,12 @@ function task-export-text {
 			$note .= ("-" x 40) . "\n\n";
 			$note .= "**" . ${modified} . "UUID: [" . $task->{"uuid"} . "](#uuid-" . $task->{"uuid"} . ") | [TOC](#TOC) [" . ${extn} . "](./" . ${base} . "/" . $task->{"uuid"} . ${extn} . ")**\n";
 			$note .= ${output};
-			if (	(exists($task->{"project"})) &&
-				(($task->{"project"} eq "_data") || ($task->{"project"} eq "_journal"))
-				)					{ $object->{"data"}	.= ${note}; }
-			elsif	($task->{"status"} eq "pending")	{ $object->{"open"}	.= ${note}; }
-			elsif	($task->{"status"} eq "completed")	{ $object->{"completed"}.= ${note}; }
-			elsif	($task->{"status"} eq "deleted")	{ $object->{"deleted"}	.= ${note}; }
-			else						{ die("INVALID STATUS!"); };
+			if	((exists($task->{"project"})) && ($task->{"project"} eq "_data"))	{ $object->{"data"}	.= ${note}; }
+			elsif	((exists($task->{"project"})) && ($task->{"project"} eq "_journal"))	{ $object->{"journal"}	.= ${note}; }
+			elsif	($task->{"status"} eq "pending")					{ $object->{"open"}	.= ${note}; }
+			elsif	($task->{"status"} eq "completed")					{ $object->{"completed"}.= ${note}; }
+			elsif	($task->{"status"} eq "deleted")					{ $object->{"deleted"}	.= ${note}; }
+			else										{ die("INVALID STATUS!"); };
 		};
 		foreach my $task (sort({$a->{"description"} cmp $b->{"description"}} @{$data})) {
 			my $started = "0";
@@ -2695,6 +2694,8 @@ function task-export-text {
 		print LINE $json->pretty->encode(${line});
 		if (exists($NOTE->{"data"}))			{ print NOTE "\n\nData"			. " {#list-data}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"data"}				; };
 		if (exists(${$NOTE->{"other"}}{"data"}))	{ print NOTE "\n\nData (Other)"		. " {#list-data-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"data"}		; };
+		if (exists($NOTE->{"journal"}))			{ print NOTE "\n\nJournal"		. " {#list-journal}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"journal"}			; };
+		if (exists(${$NOTE->{"other"}}{"journal"}))	{ print NOTE "\n\nJournal (Other)"	. " {#list-journal-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"journal"}		; };
 		if (exists($NOTE->{"open"}))			{ print NOTE "\n\nOpen"			. " {#list-open}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"open"}				; };
 		if (exists(${$NOTE->{"other"}}{"open"}))	{ print NOTE "\n\nOpen (Other)"		. " {#list-open-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"open"}		; };
 		if (exists($NOTE->{"completed"}))		{ print NOTE "\n\nCompleted"		. " {#list-completed}\n"	. ("=" x 80) . "\n"; print NOTE $NOTE->{"completed"}			; };
