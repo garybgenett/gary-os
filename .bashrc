@@ -2208,7 +2208,7 @@ function task-export-report {
 	declare EMAIL_MAIL="${1}" && shift
 	declare EMAIL_NAME="${1}" && shift
 	declare EMAIL_SIGN="${1}" && shift
-	task-export-text "${EMAIL_NAME}" "(project.not:_data (area:_gtd or area:work))"
+	task-export-text "${EMAIL_NAME}" "((project.not:_data or area:work) (area:_gtd or area:work))"
 	cat ${PIMDIR}/tasks.md.html \
 		>${REPORT}.projects.html
 	cat ${PIMDIR}/tasks.timeline.html |
