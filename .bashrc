@@ -3047,13 +3047,13 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == [?] ]]; then
 			shift
 			declare PROJECT="${1}" && shift
-			task-notes "(project:${PROJECT} ${@})"
+			task-notes project:${PROJECT} "${@}"
 		elif [[ ${1} == [,] ]]; then
 			shift
 			task-track "${@}"
 		elif [[ ${1} == [-] ]]; then
 			shift
-			impersonate_command "(limit:none tags.not:agenda description.has:: ${@})"
+			task view project.not:_gtd tags.not:agenda description.has:: "${@}"
 		else
 			(cd ${PIMDIR} && ${GIT_STS} taskd tasks*)
 			task tags		status:pending rc.recurrence=yes
