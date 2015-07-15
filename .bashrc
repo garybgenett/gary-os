@@ -3053,6 +3053,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			task-track "${@}"
 		elif [[ ${1} == [-] ]]; then
 			shift
+			task view project.not:_gtd tags.not:agenda description.has:: "${@}" | awk '{print $3;}' | ${SED} -ne "s/[:]$//gp" | sort | uniq
 			task view project.not:_gtd tags.not:agenda description.has:: "${@}"
 		else
 			(cd ${PIMDIR} && ${GIT_STS} taskd tasks*)
