@@ -2128,7 +2128,10 @@ function zpim-commit {
 	chown -vR plastic:plastic ${PIMDIR}
 	chmod -vR 750 ${PIMDIR}
 	chmod -v 755 ${PIMDIR} ${PIMDIR}/tasks ${PIMDIR}/tasks.md* ${PIMDIR}/tasks.timeline.*
-	${SED} -i "s/<HR>([[:space:]])/<HR>\n\1/g" bookmarks.html
+	${SED} -i \
+		-e "/^[[:space:]]+[<]DD[>]$/d" \
+		-e "s/<HR>([[:space:]])/<HR>\n\1/g" \
+		bookmarks.html
 	if [[ -n "${@}" ]]; then
 		declare FILE="${1}" && shift
 		declare LIST=
