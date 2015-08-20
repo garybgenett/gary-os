@@ -44,6 +44,8 @@ app-text/acroread			Adobe
 dev-java/oracle-jdk-bin			Oracle-BCLA-JavaSE
 dev-java/oracle-jre-bin			Oracle-BCLA-JavaSE
 
+dev-java/concurrent-util		sun-concurrent-util
+
 app-arch/lha				lha
 games-fps/doom3				DOOM3
 
