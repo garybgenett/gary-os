@@ -474,7 +474,6 @@ app-text/acroread
 app-text/qpdf
 app-text/qpdfview
 
-app-misc/xmind
 media-gfx/graphviz
 media-gfx/xfig
 sci-visualization/gnuplot
@@ -496,6 +495,9 @@ x11-plugins/pidgin-encryption
 x11-plugins/pidgin-extprefs
 x11-plugins/pidgin-hotkeys
 x11-plugins/pidgin-sipe
+
+app-misc/freemind
+app-misc/xmind
 
 app-office/libreoffice
 app-office/unoconv
