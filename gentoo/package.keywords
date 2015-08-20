@@ -10,6 +10,9 @@ app-emulation/spice-vdagent		~*		# gentoo required
 app-misc/binwalk			~*		# gentoo required
 app-misc/hello				~*		# gentoo required
 dev-db/recutils				~*		# gentoo required
+dev-java/fop				~*		# gentoo required
+dev-java/glassfish-jms-api		~*		# gentoo required
+dev-java/xmlgraphics-commons		~*		# gentoo required
 dev-libs/serd				~*		# gentoo required
 dev-libs/sord				~*		# gentoo required
 dev-lua/luarocks			~*		# gentoo required
