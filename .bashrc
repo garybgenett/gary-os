@@ -2567,7 +2567,7 @@ function task-export-text {
 			my($z, $modified, $output, $note) = ("", "", "", "");
 			if ($annotation) {
 				($z, $modified) = &time_format($annotation->{"entry"});
-				$modified = "Updated: " . ${modified} . "| ";
+				$modified = "Updated: " . ${modified} . " | ";
 				$output = $annotation->{"description"};
 				$output =~ s/^[[]notes[]][:]//g;
 				$output = "\n" . decode_base64(${output}) . "\n";
