@@ -2248,7 +2248,7 @@ Attached are two HTML files which should open in any browser (tested in Firefox,
 
 Internet access is required to properly view the timeline file, as it uses 3rd party Javascript libraries to render the output.  Your browser may request that you accept running the script / blocked content, which you will need to do.
 
-There are four slider bars in the report, progressing in scope from hourly to daily to weekly to monthly.  The highlighed areas show what portion of the more granular timeframes are being displayed.  Daily time-tracking is shown on the top two bars (hourly and daily) and long-term project tracking is on the lower two bars (weekly and monthly).
+There are four slider bars in the report, progressing in scope from hourly to daily to weekly to monthly.  The highlighted areas show what portion of the more granular timeframes are being displayed.  Daily time-tracking is shown on the top two bars (hourly and daily) and long-term project tracking is on the lower two bars (weekly and monthly).
 
 Long-term project tracking legend:
 	* Text color coding:
@@ -2263,7 +2263,7 @@ Long-term project tracking legend:
 
 Some important notes:
 	* Mousing over each item will show a pop-up with start and end dates, along with any "hold" dates and the first and last dates logged against the task
-	* The long-term tracking is just a guideline/overview, since not all tasks will take the amout of time allotted
+	* The long-term tracking is just a guideline/overview, since not all tasks will take the amount of time allotted
 	* Not all time is accounted for in the hourly time-tracking in this report
 
 Please see me with any comments or questions.
