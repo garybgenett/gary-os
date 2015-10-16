@@ -2979,6 +2979,10 @@ function task-recur {
 if [[ ${IMPERSONATE_NAME} == task ]]; then
 	unalias -a
 	function impersonate_command {
+		declare MARKER='echo -en "\e[1;34m"; printf "~%.0s" {1..120}; echo -en "\e[0;37m\n"'
+		declare SINCE="$(date --date="@$(calc $(date +%s)-$(calc 60*60*24*7))" --iso=s)"
+		declare COLOR="rc._forcecolor=on"
+		declare SIZES="${COLOR} rc.defaultwidth=120 rc.defaultheight=40"
 		if [[ ${1} == "RESET" ]]; then
 			shift
 			if [[ ${1} == "SYNC" ]]; then
@@ -3003,12 +3007,35 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			sudo chown -vR plastic:plastic ${LIST}
 			sudo chmod -vR 750 ${LIST}
 			cd - >/dev/null
+		elif [[ ${1} == "view" ]]; then
+			shift
+			(
+				task ${COLOR} logo						2>&1; eval ${MARKER};
+				task ${COLOR} mind						2>&1; eval ${MARKER};
+				task ${COLOR} read tag:.research		status:pending	2>&1; eval ${MARKER};
+				task ${COLOR} read tag:.waiting			status:pending	2>&1; eval ${MARKER};
+				task ${COLOR} projects				status:pending	2>&1; eval ${MARKER};
+				declare PRO; for PRO in $(task _projects	status:pending	2>&1 | ${GREP} -v "^[._]" | cut -d. -f1 | sort | uniq); do
+					task ${COLOR} read project:${PRO}			2>&1; eval ${MARKER};
+				done;
+				task ${COLOR} read project:			status:pending	2>&1; eval ${MARKER};
+				task ${COLOR} todo						2>&1; eval ${MARKER};
+				task ${COLOR} udas				status:pending	2>&1; eval ${MARKER};
+				declare UDA; for UDA in $(task udas		status:pending	| ${GREP} "^area" | ${SED} "s|[_]gtd||g" | awk '{print $4;}' | tr ',' ' '); do
+					task ${COLOR} read area:${UDA}		status:pending	2>&1; eval ${MARKER};
+				done;
+				task ${COLOR} tags				status:pending	2>&1; eval ${MARKER};
+				declare TAG; for TAG in $(task _tag		status:pending	| ${GREP} -v "^[._]" | ${SED} -e "/(next|nocal|nocolor|nonag)/d"); do
+					task ${COLOR} read tag:${TAG}		status:pending	2>&1; eval ${MARKER};
+				done;
+				task ${COLOR} read project:.someday				2>&1; eval ${MARKER};
+				task ${COLOR} data						2>&1; eval ${MARKER};
+				task ${COLOR} fail						2>&1; eval ${MARKER};
+				task ${COLOR} meta				status:pending	2>&1; eval ${MARKER};
+				impersonate_command repo					2>&1;
+			) | ${MORE}
 		elif [[ ${1} == "repo" ]]; then
 			shift
-			declare MARKER='echo -en "\e[1;34m"; printf "~%.0s" {1..120}; echo -en "\e[0;37m\n"'
-			declare SINCE="$(date --date="@$(calc $(date +%s)-$(calc 60*60*24*7))" --iso=s)"
-			declare COLOR="rc._forcecolor=on"
-			declare SIZES="${COLOR} rc.defaultwidth=120 rc.defaultheight=40"
 			(
 				task ${SIZES}		logo			2>&1; eval ${MARKER};
 				task			diagnostics		2>&1; eval ${MARKER};
