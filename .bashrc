@@ -3015,7 +3015,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				task ${SIZES}		summary			2>&1; eval ${MARKER};
 #>>>				task status:pending	projects		2>&1; eval ${MARKER};
 				task status:pending	tags			2>&1; eval ${MARKER};
-#>>>				task status:pending	udas			2>&1; eval ${MARKER};
+				task status:pending	udas			2>&1; eval ${MARKER};
 				task ${SIZES}		history.monthly		2>&1; eval ${MARKER};
 				task ${SIZES}		ghistory.monthly	2>&1; eval ${MARKER};
 				task ${SIZES}		burndown.weekly		2>&1; eval ${MARKER};
