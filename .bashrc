@@ -2193,11 +2193,11 @@ function task-export {
 	gtasks_export.pl taskwarrior "_Reminders"	"$(task-filter "mind")"			"due,9999"	"description"
 	gtasks_export.pl taskwarrior "Actions"		"$(task-filter "view")"			"due,9999"	"entry"
 	gtasks_export.pl taskwarrior "Agenda"		"$(task-filter "view") tags:agenda"	"due,9999"	"description"
-	gtasks_export.pl taskwarrior "Other"		"$(task-filter "view")			\( \
+	gtasks_export.pl taskwarrior "Other"		"$(task-filter "view")			( \
 								tags:gear			or \
 								tags:home			or \
 								tags:paperwork			or \
-								tags:phone			\)" "due,9999"	"description"
+								tags:phone			)" "due,9999"	"description"
 	cd - >/dev/null
 	return 0
 }
