@@ -2184,7 +2184,8 @@ function task-build {
 function task-export-calendar {
 	cd ${PIMDIR}
 	gcalendar_export.pl \
-		"gary:Z2FyeUB0cmVzb2Jpcy5vcmc" \
+		"default:Z2FyeUB0cmVzb2Jpcy5vcmc" \
+		"personal:dHJlc29iaXMub3JnX2c4djBwa3RzbnQ4NGVvdHM4aGtpanRzanZnQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
 		"orion:dHJlc29iaXMub3JnX2FiZm9wc3UxdHZmNDRiYzBqZTdtZHFzNmNvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
 		"rachel:dHJlc29iaXMub3JnX3RoYTF1cjFnbzJpZDRlZGxkZHRnOW90YzlvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20"
 	sudo chown -vR plastic:plastic calendar*
