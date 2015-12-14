@@ -48,14 +48,14 @@ fi
 if [[ ${QSYS} == -u ]]; then
 	declare I
 	for I in $(echo "info usb" | ${NC} |
-		${GREP} -ai "(hp[ ]scanjet[ ]scanner|lexmark[ ]e120n|usb[ ]pnp[ ]sound[ ]device)" |
+		${GREP} -ai "product[ ](hp[ ]scanjet[ ]scanner|lexmark[ ]e120n|usb[ ]pnp[ ]sound[ ]device|cruzer)" |
 		cut -d' ' -f'4,6' |
 		${SED} -e "s/,//g" -e "s/[ ]/./g"
 	); do
 		echo "usb_del ${I}" | ${NC}
 	done
 	echo "info usb" | ${NC}
-	for I in 03f0:4605 043d:00cc 0d8c:0139
+	for I in 03f0:4605 043d:00cc 0d8c:0139 0781:5530
 	do
 		echo "usb_add host:${I}" | ${NC}
 	done
@@ -68,12 +68,14 @@ fi
 # ID 03f0:4605 Hewlett-Packard ScanJet G4050
 # ID 043d:00cc Lexmark International, Inc. E120(n)
 # ID 0d8c:0139 C-Media Electronics, Inc.
+# ID 0781:5530 SanDisk Corp. Cruzer
 
 exec qemu.bsh "${QNUM}" "${QMEM}" "${FILE}" "${QSYS}" \
 	-rtc base=localtime,clock=host \
 	-device usb-host,bus=xhci0.0,vendorid=0x03f0,productid=0x4605 \
 	-device usb-host,bus=xhci0.0,vendorid=0x043d,productid=0x00cc \
 	-device usb-host,bus=xhci0.0,vendorid=0x0d8c,productid=0x0139 \
+	-device usb-host,bus=xhci0.0,vendorid=0x0781,productid=0x5530 \
 	"${@}"
 
 ################################################################################
