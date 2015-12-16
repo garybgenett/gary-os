@@ -1864,7 +1864,7 @@ function session {
 		   { [[ -z ${CYGWIN} ]] && [[ -z ${CYGWIN_ROOT} ]]; }; then
 			su - root
 		else
-			screen -xAR -S "${NAME}" "${@}" || return 1
+			exec screen -xAR -S "${NAME}" "${@}" || return 1
 		fi
 	fi
 	return 0
