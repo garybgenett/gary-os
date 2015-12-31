@@ -2931,7 +2931,9 @@ function task-depends {
 		};
 		foreach my $task (@{$show}) {
 			if (!exists($rdep->{$task->{"uuid"}})) {
-				&print_task($task->{"uuid"}, 0);
+				if ((exists($task->{"depends"})) && ($task->{"depends"})) {
+					&print_task($task->{"uuid"}, 0);
+				};
 			};
 		};
 		sub print_task {
