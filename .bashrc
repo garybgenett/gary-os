@@ -2917,7 +2917,8 @@ function task-depends {
 		my $c_due = 16;
 		my $c_end = 16;
 		my $args = join(" ", @ARGV); if (${args}) { $args = "\"${args}\""; };
-		my $data = qx(task export ${args}); $data =~ s/([^,])\n/$1,/g; $data =~ s/,$//g; $data = decode_json("[" . ${data} . "]");
+		my $data = qx(task export);		$data =~ s/([^,])\n/$1,/g; $data =~ s/,$//g; $data = decode_json("[" . ${data} . "]");
+		my $show = qx(task export ${args});	$show =~ s/([^,])\n/$1,/g; $show =~ s/,$//g; $show = decode_json("[" . ${show} . "]");
 		my $list = {};
 		my $rdep = {};
 		foreach my $task (@{$data}) {
@@ -2928,7 +2929,7 @@ function task-depends {
 				};
 			};
 		};
-		foreach my $task (@{$data}) {
+		foreach my $task (@{$show}) {
 			if (!exists($rdep->{$task->{"uuid"}})) {
 				&print_task($task->{"uuid"}, 0);
 			};
