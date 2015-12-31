@@ -2940,7 +2940,7 @@ function task-depends {
 			if (!${deep}) {
 				print "\n";
 			};
-			printf("%-${c_ttl}.${c_ttl}s", ((" " x 2) x ${deep}) . "* " . $task->{"description"});
+			printf("%-${c_ttl}.${c_ttl}s", ((" " x 2) x ${deep}) . "* " . ((exists($task->{"kind"})) && "[" . $task->{"kind"} . "] ") . $task->{"description"});
 			print " "; printf("%-${c_uid}.${c_uid}s", $task->{"uuid"});
 			print " "; printf("%-${c_due}.${c_due}s", ($task->{"due"}	|| "-"));
 			print " "; printf("%-${c_end}.${c_end}s", ($task->{"end"}	|| "-"));
