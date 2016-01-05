@@ -2763,6 +2763,7 @@ function task-journal {
 			task "${UUID}" start
 			task-notes "${UUID}"
 			task "${UUID}" stop
+			task "${UUID}" done
 		done
 	fi
 	return 0
