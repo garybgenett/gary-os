@@ -147,6 +147,9 @@ iab @.s ====-==-==T==:==:==-==== ====-==-== <C-R>=strftime("%FT%T%z")<CR> <C-R>=
 " maps
 "#######################################
 
+" non-ascii characters
+map na <ESC>/[^	 A-Za-z0-9`~!@#$%^&*()_=+\[{\]}\\\|;:'",<.>/?-]<CR>
+
 " clean up folding
 map z. <ESC>:set foldlevel=0<CR>zv
 map z1 <ESC>:set foldlevel=0<CR>/\[personal\]<CR>
