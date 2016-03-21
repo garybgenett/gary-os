@@ -106,6 +106,7 @@ declare MODULES="$(
 		-e "[/]efi" \
 		-e "[/]mpi" \
 		-e "[/]multiboot" \
+		-e "[/]net" \
 		-e "[/]plan9" \
 		-e "[/]pxe" \
 		\
