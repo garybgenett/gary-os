@@ -33,10 +33,12 @@ fi
 
 declare GBOOT="(hd0)"
 declare GROOT="(hd0,2)"
+declare GFILE="(hd0,1)/boot/grub/grub.cfg"
 declare GOPTS=""
 
 declare GTYPE="i386-pc"
-declare GMODS="/usr/lib/grub/${GTYPE}"
+declare GRUBD="/usr/lib/grub"
+declare GMODS="${GRUBD}/${GTYPE}"
 
 ################################################################################
 
@@ -44,6 +46,14 @@ declare GLOAD="\
 # load
 echo \"Loading ${_NAME}...\"
 insmod configfile
+# end of file
+"
+
+declare GLOAD_FILE="\
+# load
+echo \"Loading ${_NAME}...\"
+insmod configfile
+configfile ${GFILE}
 # end of file
 "
 
@@ -174,6 +184,11 @@ declare MODULES_CORE="\
 	linux
 "
 
+#>>> http://blog.fpmurphy.com/2010/03/grub2-efi-support.html
+declare MODULES_UEFI="\
+	$(echo -en "${MODULES_CORE}" | ${SED} "s/biosdisk//g")
+"
+
 ########################################
 
 declare BLOCKS_SIZE="512"		# default
@@ -195,6 +210,7 @@ FDISK+="w\n"
 
 ########################################
 
+declare TYPE=
 declare FILE=
 
 ################################################################################
@@ -205,7 +221,7 @@ function exit_summary {
 	)
 	(cd ${GDEST} &&
 		echo -en "\n" &&
-		file *.img &&
+		file *.efi *.img &&
 		echo -en "\n" &&
 		${LL}
 	)
@@ -276,11 +292,30 @@ grub-mkimage -v \
 	-m ${GDEST}/rescue.tar.tar \
 	${MODULES_CORE}					|| { exit_summary; exit 1; }
 
+for TYPE in x86_64-efi i386-efi; do
+	FILE="${GDEST}/grub.${TYPE/%-efi}.tar/boot/grub"
+	${MKDIR} ${FILE}/${TYPE}			|| exit 1
+	${RSYNC_U} ${GRUBD}/${TYPE}/ ${FILE}/${TYPE}	|| exit 1
+	echo -en "${GLOAD_FILE}" >${FILE}/grub.cfg	|| exit 1
+
+	FILE="${GDEST}/grub.${TYPE/%-efi}.tar"
+	(cd ${FILE} && tar -cvv -f ${FILE}.tar *)	|| exit 1
+
+	FILE="${GDEST}/grub.${TYPE/%-efi}"
+	grub-mkimage -v \
+		-C xz \
+		-O ${TYPE} \
+		-d ${GRUBD}/${TYPE} \
+		-o ${FILE}.efi \
+		-m ${FILE}.tar.tar \
+		${MODULES_UEFI}				|| { exit_summary; exit 1; }
+done
+
 FILE="${GDEST}/bootstrap.img"
 cat ${GMODS}/lnxboot.img ${FILE} >${FILE}.lnxboot	|| exit 1
 ${MV} ${FILE}{.lnxboot,}				|| exit 1
 
-${RM} ${GDEST}/rescue.tar.tar				|| exit 1
+${RM} ${GDEST}/*.tar.tar				|| exit 1
 
 ########################################
 
