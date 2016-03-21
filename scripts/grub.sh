@@ -306,7 +306,7 @@ grub-bios-setup --verbose \
 	--core-image="rescue.img" \
 	--directory="${GDEST}" \
 	--skip-fs-probe \
-	${GINST}					|| exit 1
+	${GINST}					|| { exit_summary; exit 1; }
 
 ########################################
 
