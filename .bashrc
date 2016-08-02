@@ -720,7 +720,10 @@ function calendar {
 
 function contacts {
 	declare CONTACTS="contacts"
-	if [[ ${1} == -k ]]; then
+	if [[ ${1} == -b ]]; then
+		shift
+		CONTACTS="contacts-business"
+	elif [[ ${1} == -k ]]; then
 		shift
 		CONTACTS="contacts-keep"
 	elif [[ ${1} == -l ]]; then
