@@ -1931,7 +1931,7 @@ function shell {
 				[[ -z $(${PS} 2>/dev/null | ${GREP} "6608[:]") ]] && OPTS="${OPTS} -L 6608:127.0.0.1:6668"
 			fi
 			;;
-		(you)	DEST="bastion.olympus.f5net.com"
+		(you)	DEST="vpn-client.vpn.example.net"
 			if [[ ${HOSTNAME} != bastion ]]; then
 				[[ -z $(${PS} 2>/dev/null | ${GREP} "5909[:]") ]] && OPTS="${OPTS} -L 5909:127.0.0.1:5900"
 			fi
@@ -2252,8 +2252,7 @@ function task-export-report {
 			s|.+tasks.timeline.projects.json.+$|	var parsed_p = JSON.parse('\''${projects}'\''); projectSource.loadJSON(parsed_p, "");|g;
 		' \
 		>${REPORT}.timeline.html
-	if [[ -n ${EMAIL_MAIL} ]]; then
-		cat >${REPORT}.txt <<END_OF_FILE
+	cat >${REPORT}.txt <<END_OF_FILE
 This is my weekly status report.  It is an automated message, and should be generated every weekend.
 
 Attached are two HTML files which should open in any browser (tested in Firefox, Safari and Internet Explorer):
@@ -2286,7 +2285,6 @@ Some important notes:
 
 Please see me with any comments or questions.
 END_OF_FILE
-	fi
 	if [[ -n ${EMAIL_SIGN} ]]; then
 		echo -en "\n-- \n${EMAIL_SIGN}\n" >>${REPORT}.txt
 	fi
