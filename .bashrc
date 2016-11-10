@@ -317,7 +317,7 @@ export XARGS="xargs --max-procs=2 --max-args=10"				; alias xargs="${XARGS}"
 export XPDF="sudo -H -u plastic DISPLAY=:0 firefox"				; alias xpdf="${XPDF}"
 export XPDF_READ="ACRO_ALLOW_SUDO=set /opt/Adobe/Reader*/bin/acroread"		; alias xpdf-read="${XPDF_READ}"
 
-export RDP="rdesktop -z -n NULL -g 90% -a 24 -r sound:remote"			; alias rdp="${RDP}"
+export RDP="rdesktop -z -n NULL -g 1024x768 -a 24 -r sound:remote"		; alias rdp="${RDP}"
 export VNC="vncviewer -Shared -FullColor"					; alias vnc="${VNC}"
 export X2VNC="x2vnc -west -tunnel -shared -noblank -lockdelay 60 -timeout 60"	; alias x2vnc="${X2VNC}"
 
