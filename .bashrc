@@ -2190,7 +2190,8 @@ function task-export-calendar {
 		"default:Z2FyeUB0cmVzb2Jpcy5vcmc" \
 		"personal:dHJlc29iaXMub3JnX2c4djBwa3RzbnQ4NGVvdHM4aGtpanRzanZnQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
 		"orion:dHJlc29iaXMub3JnX2FiZm9wc3UxdHZmNDRiYzBqZTdtZHFzNmNvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
-		"rachel:dHJlc29iaXMub3JnX3RoYTF1cjFnbzJpZDRlZGxkZHRnOW90YzlvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20"
+		"rachel:dHJlc29iaXMub3JnX3RoYTF1cjFnbzJpZDRlZGxkZHRnOW90YzlvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
+		"zoho:dHJlc29iaXMub3JnXzM3bm92NmZ1NGNucmZtdjB0aDBvaWxmODVnQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20"
 	sudo chown -vR plastic:plastic calendar*
 	sudo chmod -vR 750 calendar*
 	cd - >/dev/null
