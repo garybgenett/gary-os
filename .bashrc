@@ -2880,7 +2880,7 @@ function task-track {
 		open(TRACK, "<", ${text}) || die();
 		while(<TRACK>) {
 			chomp(my $line = $_);
-			my($val, $key) = split(" => ", ${line});
+			my($val, $key) = split(${mark}, ${line});
 			$val =~ m/^([0-9]{4})[-]([0-9]{2})[-]([0-9]{2})[ ]([0-9]{2})[:]([0-9]{2})[:]([0-9]{2})$/;
 			my($yr,$mo,$dy,$hr,$mn,$sc) = ($1,$2,$3,$4,$5,$6);
 			$val = timelocal($sc,$mn,$hr,$dy,($mo-1),$yr);
