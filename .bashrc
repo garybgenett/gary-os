@@ -2208,7 +2208,7 @@ function task-export {
 			${SED} -n "s/(report[.]${FILTER}[.]filter)[[:space:]]+([^[:space:]]+)/\2/gp"
 		return 0
 	}
-	gtasks_export.pl taskwarrior ".Notes"		"$(task-filter "read") kind:notes"	"description"	"entry"
+	gtasks_export.pl taskwarrior ".Notes"		"$(task-filter "read") kind:notes"	"project"	"description"
 	gtasks_export.pl taskwarrior "_Data"		"$(task-filter "data")"			"description"	"entry"
 	gtasks_export.pl taskwarrior "_Reminders"	"$(task-filter "mind")"			"due,9999"	"description"
 	gtasks_export.pl taskwarrior "Actions"		"$(task-filter "view")"			"due,9999"	"entry"
