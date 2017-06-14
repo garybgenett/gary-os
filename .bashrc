@@ -3111,6 +3111,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			shift
 			task view +ACTIVE
 			echo "no" | task $(task id +ACTIVE) stop
+			sleep 1
 			echo "no" | task "${@}" start
 			task view +ACTIVE
 		else
