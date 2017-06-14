@@ -3110,8 +3110,8 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == [/] ]]; then
 			shift
 			task view +ACTIVE
-			task $(task id +ACTIVE) stop
-			task "${@}" start
+			echo "no" | task $(task id +ACTIVE) stop
+			echo "no" | task "${@}" start
 			task view +ACTIVE
 		else
 			(cd ${PIMDIR} && ${GIT_STS} taskd tasks*)
