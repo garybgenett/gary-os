@@ -3107,6 +3107,12 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			shift
 			task view project.not:_gtd tags.not:agenda description.has:: "${@}" | awk '{print $3;}' | ${SED} -ne "s/[:]$//gp" | sort | uniq
 			task view project.not:_gtd tags.not:agenda description.has:: "${@}"
+		elif [[ ${1} == [/] ]]; then
+			shift
+			task view +ACTIVE
+			task $(task id +ACTIVE) stop
+			task "${@}" start
+			task view +ACTIVE
 		else
 			(cd ${PIMDIR} && ${GIT_STS} taskd tasks*)
 			task tags status:pending rc.recurrence=yes
