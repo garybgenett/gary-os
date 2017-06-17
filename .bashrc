@@ -3109,8 +3109,8 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			task view project.not:_gtd tags.not:agenda description.has:: "${@}"
 		elif [[ ${1} == [/] ]]; then
 			shift
-			task view +ACTIVE
 			task read status:pending "${@}"
+			task view +ACTIVE
 			echo "no" | task $(task ids +ACTIVE) stop
 			sleep 1
 			echo "no" | task "${@}" start
