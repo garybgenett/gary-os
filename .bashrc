@@ -3110,6 +3110,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == [/] ]]; then
 			shift
 			task view +ACTIVE
+			task read status:pending "${@}"
 			echo "no" | task $(task ids +ACTIVE) stop
 			sleep 1
 			echo "no" | task "${@}" start
