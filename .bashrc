@@ -2210,14 +2210,14 @@ function task-export {
 	}
 	gtasks_export.pl taskwarrior ".Notes"		"$(task-filter "read") kind:notes"	"project"	"description"
 	gtasks_export.pl taskwarrior "_Data"		"$(task-filter "data")"			"description"	"entry"
-	gtasks_export.pl taskwarrior "_Reminders"	"$(task-filter "mind")"			"due,9999"	"description"
-	gtasks_export.pl taskwarrior "Actions"		"$(task-filter "view")"			"due,9999"	"entry"
-	gtasks_export.pl taskwarrior "Agenda"		"$(task-filter "view") tags:agenda"	"due,9999"	"description"
-	gtasks_export.pl taskwarrior "Other"		"$(task-filter "view")			( \
-								tags:gear			or \
-								tags:home			or \
-								tags:paperwork			or \
-								tags:phone			)" "due,9999"	"description"
+	gtasks_export.pl taskwarrior "_Mind"		"$(task-filter "mind")"			"due,9999"	"description"
+	gtasks_export.pl taskwarrior "_Todo"		"$(task-filter "todo")"			"due,9999"	"description"
+#>>>	for FILE in $(task reports | ${GREP} "[ ]Custom[ ][[]" | cut -d' ' -f1 | sort); do
+#>>>		gtasks_export.pl taskwarrior "_${FILE}"	"$(task-filter "${FILE}")"		"due,9999"	"entry"
+#>>>	done
+	for FILE in $(task tags 2>&1 | grep -iv "(---|tag|task)" | cut -d' ' -f1); do
+		gtasks_export.pl taskwarrior "${FILE}"	"$(task-filter "view") tags:${FILE}"	"due,9999"	"entry"
+	done
 	cd - >/dev/null
 	return 0
 }
