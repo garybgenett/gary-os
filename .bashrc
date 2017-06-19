@@ -2201,6 +2201,7 @@ function task-export-calendar {
 ########################################
 
 function task-export {
+	declare FILE=
 	cd ${PIMDIR}
 	function task-filter {
 		declare FILTER="${1}" && shift
@@ -2999,6 +3000,7 @@ function task-recur {
 ########################################
 
 if [[ ${IMPERSONATE_NAME} == task ]]; then
+	declare FILE=
 	unalias -a
 	function impersonate_command {
 		declare MARKER='echo -en "\e[1;34m"; printf "~%.0s" {1..120}; echo -en "\e[0;37m\n"'
@@ -3109,12 +3111,23 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			task view project.not:_gtd tags.not:agenda description.has:: "${@}"
 		elif [[ ${1} == [/] ]]; then
 			shift
-			task read status:pending "${@}"
-			task view +ACTIVE
-			echo "no" | task $(task ids +ACTIVE) stop
-			sleep 1
-			echo "no" | task "${@}" start
-			task view +ACTIVE
+			FILE="$(task uuid status:pending "${@}")"
+			if (
+				[[ "${@}" == "-" ]]
+			) || (
+				[[ -n "${@}" ]] && [[ -n "${FILE}" ]]
+			); then
+#>>>				if [[ "${@}" != "-" ]] && [[ "${FILE}" == *(*)[,]*(*) ]]; then
+				if [[ "${@}" != "-" ]] && [[ -n "$(echo "${FILE}" | ${GREP} "[,]")" ]]; then
+					task read status:pending "${@}"
+				else
+					task view +ACTIVE
+					echo "no" | task $(task ids +ACTIVE) stop
+					sleep 1
+					echo "no" | task "${@}" start
+					task view +ACTIVE
+				fi
+			fi
 		else
 			(cd ${PIMDIR} && ${GIT_STS} taskd tasks*)
 			task tags status:pending rc.recurrence=yes
