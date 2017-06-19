@@ -3112,6 +3112,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == [/] ]]; then
 			shift
 			FILE="$(task uuid status:pending "${@}")"
+			task view +ACTIVE
 			if (
 				[[ "${@}" == "-" ]]
 			) || (
@@ -3121,7 +3122,6 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				if [[ "${@}" != "-" ]] && [[ -n "$(echo "${FILE}" | ${GREP} "[,]")" ]]; then
 					task read status:pending "${@}"
 				else
-					task view +ACTIVE
 					echo "no" | task $(task ids +ACTIVE) stop
 					sleep 1
 					echo "no" | task "${@}" start
