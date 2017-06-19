@@ -3130,8 +3130,8 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			fi
 		else
 			(cd ${PIMDIR} && ${GIT_STS} taskd tasks*)
-			task tags status:pending rc.recurrence=yes
-			task mark
+			task tags status:pending
+			task mark rc.recurrence=yes
 			task view limit:12 "${@}"
 		fi
 		return 0
