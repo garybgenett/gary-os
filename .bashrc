@@ -2209,7 +2209,7 @@ function task-export {
 			${SED} -n "s/(report[.]${FILTER}[.]filter)[[:space:]]+([^[:space:]]+)/\2/gp"
 		return 0
 	}
-	gtasks_export.pl twimport
+	gtasks_export.pl twimport "+Inbox"
 	gtasks_export.pl twexport "+Notes"		"$(task-filter "read") kind:notes"	"project"	"description"
 	gtasks_export.pl twexport "-Data"		"$(task-filter "data")"			"description"	"entry"
 	gtasks_export.pl twexport "-Mind"		"$(task-filter "mind")"			"due,9999"	"description"
