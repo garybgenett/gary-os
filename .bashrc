@@ -2211,13 +2211,16 @@ function task-export {
 	}
 	gtasks_export.pl twimport
 	gtasks_export.pl twexport "+Notes"		"$(task-filter "read") kind:notes"	"project"	"description"
-	gtasks_export.pl twexport ".Data"		"$(task-filter "data")"			"description"	"entry"
-	gtasks_export.pl twexport ".Mind"		"$(task-filter "mind")"			"due,9999"	"description"
-	gtasks_export.pl twexport ".Todo"		"$(task-filter "todo")"			"due,9999"	"description"
-#>>>	for FILE in $(task reports 2>&1 | ${GREP} "[ ]Custom[ ][[]" | cut -d' ' -f1); do
-#>>>		gtasks_export.pl twexport "_${FILE}"	"$(task-filter "${FILE}")"		"due,9999"	"entry"
+	gtasks_export.pl twexport "-Data"		"$(task-filter "data")"			"description"	"entry"
+	gtasks_export.pl twexport "-Mind"		"$(task-filter "mind")"			"due,9999"	"description"
+	gtasks_export.pl twexport "-Todo"		"$(task-filter "todo")"			"due,9999"	"description"
+#>>>	for FILE in $(task reports 2>&1 | ${GREP} "[ ]Custom[ ][[]" | awk '{print $1;}'); do
+#>>>		gtasks_export.pl twexport ".${FILE}"	"$(task-filter "${FILE}")"		"due,9999"	"entry"
 #>>>	done
-	for FILE in $(task tags 2>&1 | ${GREP} -iv "(^$|---|tag|task)" | cut -d' ' -f1); do
+	for FILE in $(task uda 2>&1 | ${GREP} "^area" | awk '{print $4;}' | tr ',' ' '); do
+		gtasks_export.pl twexport "=${FILE}"	"$(task-filter "view") tags:${FILE}"	"due,9999"	"entry"
+	done
+	for FILE in $(task tags 2>&1 | ${GREP} -iv "(^$|---|tag|task)" | awk '{print $1;}'); do
 		gtasks_export.pl twexport "@${FILE}"	"$(task-filter "view") tags:${FILE}"	"due,9999"	"entry"
 	done
 	cd - >/dev/null
