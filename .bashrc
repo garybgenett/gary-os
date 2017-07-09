@@ -2218,7 +2218,7 @@ function task-export {
 #>>>		gtasks_export.pl twexport ".${FILE}"	"$(task-filter "${FILE}")"		"due,9999"	"entry"
 #>>>	done
 	for FILE in $(task uda 2>&1 | ${GREP} "^area" | awk '{print $4;}' | tr ',' ' '); do
-		gtasks_export.pl twexport "=${FILE}"	"$(task-filter "view") tags:${FILE}"	"due,9999"	"entry"
+		gtasks_export.pl twexport "=${FILE}"	"$(task-filter "view") area:${FILE}"	"due,9999"	"entry"
 	done
 	for FILE in $(task tags 2>&1 | ${GREP} -iv "(^$|---|tag|task)" | awk '{print $1;}'); do
 		gtasks_export.pl twexport "@${FILE}"	"$(task-filter "view") tags:${FILE}"	"due,9999"	"entry"
