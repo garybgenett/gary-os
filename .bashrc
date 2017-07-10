@@ -3127,11 +3127,13 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			); then
 #>>>				if [[ "${@}" != "-" ]] && [[ "${FILE}" == *(*)[,]*(*) ]]; then
 				if [[ "${@}" != "-" ]] && [[ -n "$(echo "${FILE}" | ${GREP} "[,]")" ]]; then
-					task read status:pending "${@}"
+					task read "${FILE}"
 				else
-					echo "no" | task $(task ids +ACTIVE) stop
-					sleep 1
-					echo "no" | task "${@}" start
+					echo "no" | task $(task uuid +ACTIVE) stop rc.bulk=0
+					if [[ "${@}" != "-" ]]; then
+						sleep 1
+						echo "no" | task "${FILE}" start
+					fi
 					task view +ACTIVE
 				fi
 			fi
