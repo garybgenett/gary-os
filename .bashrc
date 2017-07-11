@@ -3012,11 +3012,38 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 	unalias -a
 	function impersonate_command {
 		declare MARKER='echo -en "\e[1;34m"; printf "~%.0s" {1..120}; echo -en "\e[0;37m\n"'
-		declare SINCE="$(date --date="@$(calc $(date +%s)-$(calc 60*60*24*7))" --iso=s)"
+		declare TASKFILE="$(task _get rc.data.location)"
+		declare TASKUUID="$(task uuid project:_data -- .review)"
 		function _task {
 			eval ${MARKER}
 			echo -en "[task ${@}]\n"
 			task rc._forcecolor=on ${@} 2>&1
+		}
+		function _task_parse {
+			declare REPORT="${@}"
+			${SED} -n "/[#][ ]${REPORT}/,/^[#]/p" "$(
+				if [[ -f "${TASKFILE}/${TASKUUID}.md" ]]; then
+					echo -en "${TASKFILE}/${TASKUUID}.md"
+				else
+					echo -en "${TASKFILE}.md"
+				fi
+			)" |
+				${GREP} "(${REPORT}|[\`])" |
+				${SED} \
+					-e "s/^[^\`]+[\`]//g" \
+					-e "s/[\`][^\`]+$//g" \
+					-e "s/[\`][,][ ][\`]/\n/g"
+		}
+		function _task_parse_cmd {
+			${SED} \
+				-e "/^[#]/d" \
+				-e "/^[.](in|view)/d" \
+				-e "s/^([^#+.])/_task \1/g" \
+				-e "s/^[+]ACTIVE[;][ ]//g" \
+				-e "s/^[.]/impersonate_command /g" \
+				-e "s/([ ])(task[ ])/\1_\2/g" \
+				-e "s/^(impersonate_command|task[-])/eval\ \${MARKER}\;\ \1/g" \
+				-e "s/$/;/g"
 		}
 		if [[ ${1} == "RESET" ]]; then
 			shift
@@ -3057,60 +3084,24 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			cd - >/dev/null
 		elif [[ ${1} == "view" ]]; then
 			shift
+			cat /dev/null									 >${TASKFILE}.weekly.txt
+			_task_parse "Weekly[ ]Review"			| ${SED} "s/^/\#\ /g"		>>${TASKFILE}.weekly.txt
+			echo -en "\n"									>>${TASKFILE}.weekly.txt
+			_task_parse "Weekly[ ]Review" | _task_parse_cmd | ${SED} "s/[_](task[ ])/\1/g"	>>${TASKFILE}.weekly.txt
+			echo -en "\n"									>>${TASKFILE}.weekly.txt
+			_task_parse "Weekly[ ]Report"			| ${SED} "s/^/\#\ /g"		>>${TASKFILE}.weekly.txt
+			echo -en "\n"									>>${TASKFILE}.weekly.txt
+			_task_parse "Weekly[ ]Report" | _task_parse_cmd | ${SED} "s/[_](task[ ])/\1/g"	>>${TASKFILE}.weekly.txt
 			(
 				_task logo
-				_task mind
-				_task todo
-				_task read tag:.research		status:pending
-				_task read tag:.waiting			status:pending
-				_task projects
-				_task projects				status:pending
-				for FILE in $(task _projects		status:pending | ${GREP} -v "^[._]" | cut -d. -f1 | sort | uniq); do
-					_task read project:${FILE}
-				done
-				_task read project:			status:pending
-				_task udas
-				_task udas				status:pending
-				for FILE in $(task udas			status:pending | ${GREP} "^kind" | ${SED} "s|[_]gtd||g" | awk '{print $4;}' | tr ',' ' '); do
-					_task read kind:${FILE}		status:pending
-				done
-				for FILE in $(task udas			status:pending | ${GREP} "^area" | ${SED} "s|[_]gtd||g" | awk '{print $4;}' | tr ',' ' '); do
-					_task read area:${FILE}		status:pending
-				done
-				_task tags
-				_task tags				status:pending
-				for FILE in $(task _tags		status:pending | ${GREP} -v "^[._]" | ${SED} "/(next|nocal|nocolor|nonag)/d"); do
-					_task read tag:${FILE}		status:pending
-				done
-				_task read project:.someday
-				_task fail
-				_task data
-				_task meta				status:pending
-				eval ${MARKER}; task-recur
-				eval ${MARKER}; impersonate_command repo
+				eval $(_task_parse "Weekly[ ]Review" | _task_parse_cmd)
 				eval ${MARKER}
 			) | ${MORE}
 		elif [[ ${1} == "repo" ]]; then
 			shift
 			(
 				_task logo
-				_task diagnostics
-				_task summary
-				_task history.monthly	rc.defaultwidth=120 rc.defaultheight=40
-				_task ghistory.monthly	rc.defaultwidth=120 rc.defaultheight=40
-				_task burndown.weekly	rc.defaultwidth=120 rc.defaultheight=40
-				_task burndown.daily	rc.defaultwidth=120 rc.defaultheight=40
-				_task sort				\
-					rc.color.completed=green	\
-					rc.color.deleted=red		\
-					\( \(				\
-						end.after:${SINCE}	\
-					\) or \(			\
-						modified.after:${SINCE}	\
-						kind.any:		\
-					\) \)
-#>>>				_task timesheet 2
-				_task stats
+				eval $(_task_parse "Weekly[ ]Report" | _task_parse_cmd)
 				eval ${MARKER}
 			) | ${MORE}
 		elif [[ ${1} == "deps" ]]; then
