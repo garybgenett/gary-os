@@ -2211,7 +2211,7 @@ function task-export {
 	}
 #>>>	gtasks_export.pl purge "@agenda,@errand" "+GTD,+Inbox"
 	gtasks_export.pl purge "+GTD,+Inbox,@agenda,@errand"
-	gtasks_export.pl twimport "+Inbox"
+#>>>	gtasks_export.pl twimport "+Inbox"
 	gtasks_export.pl twexport "+Notes"		"$(task-filter "read") kind:notes"	"project"	"description"
 	gtasks_export.pl twexport "-Data"		"$(task-filter "data")"			"description"	"entry"
 	gtasks_export.pl twexport "-Fail"		"$(task-filter "fail")"			"description"	"entry"
@@ -3037,6 +3037,19 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			${GIT} checkout ${LIST}	|| return 1
 			sudo chown -vR plastic:plastic ${LIST}
 			sudo chmod -vR 750 ${LIST}
+			cd - >/dev/null
+		elif [[ ${1} == "in" ]]; then
+			shift
+			impersonate_command =
+			cd ${PIMDIR}
+			declare BEG="$(task rc.verbose=nothing ids | ${SED} "s/^1[-]//g")"
+			gtasks_export.pl twimport "+Inbox"
+			declare END="$(task rc.verbose=nothing ids | ${SED} "s/^1[-]//g")"
+			if [[ ${BEG} != ${END} ]]; then
+				declare IDS="$((${BEG}+1))-${END}"
+				echo -en "IDs: ${IDS}\n"
+				task ${IDS} read
+			fi
 			cd - >/dev/null
 		elif [[ ${1} == "view" ]]; then
 			shift
