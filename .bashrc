@@ -3013,8 +3013,11 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 	function impersonate_command {
 		declare MARKER='echo -en "\e[1;34m"; printf "~%.0s" {1..120}; echo -en "\e[0;37m\n"'
 		declare SINCE="$(date --date="@$(calc $(date +%s)-$(calc 60*60*24*7))" --iso=s)"
-		declare COLOR="rc._forcecolor=on"
-		declare SIZES="${COLOR} rc.defaultwidth=120 rc.defaultheight=40"
+		function _task {
+			eval ${MARKER}
+			echo -en "[task ${@}]\n"
+			task rc._forcecolor=on ${@} 2>&1
+		}
 		if [[ ${1} == "RESET" ]]; then
 			shift
 			if [[ ${1} == "SYNC" ]]; then
@@ -3055,55 +3058,60 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == "view" ]]; then
 			shift
 			(
-				task ${COLOR} logo						2>&1; eval ${MARKER};
-				task ${COLOR} mind						2>&1; eval ${MARKER};
-				task ${COLOR} read tag:.research		status:pending	2>&1; eval ${MARKER};
-				task ${COLOR} read tag:.waiting			status:pending	2>&1; eval ${MARKER};
-				task ${COLOR} projects				status:pending	2>&1; eval ${MARKER};
-				declare PRO; for PRO in $(task _projects	status:pending	2>&1 | ${GREP} -v "^[._]" | cut -d. -f1 | sort | uniq); do
-					task ${COLOR} read project:${PRO}			2>&1; eval ${MARKER};
-				done;
-				task ${COLOR} read project:			status:pending	2>&1; eval ${MARKER};
-				task ${COLOR} todo						2>&1; eval ${MARKER};
-				task ${COLOR} udas				status:pending	2>&1; eval ${MARKER};
-				declare UDA; for UDA in $(task udas		status:pending	| ${GREP} "^area" | ${SED} "s|[_]gtd||g" | awk '{print $4;}' | tr ',' ' '); do
-					task ${COLOR} read area:${UDA}		status:pending	2>&1; eval ${MARKER};
-				done;
-				task ${COLOR} tags				status:pending	2>&1; eval ${MARKER};
-				declare TAG; for TAG in $(task _tag		status:pending	| ${GREP} -v "^[._]" | ${SED} -e "/(next|nocal|nocolor|nonag)/d"); do
-					task ${COLOR} read tag:${TAG}		status:pending	2>&1; eval ${MARKER};
-				done;
-				task ${COLOR} read project:.someday				2>&1; eval ${MARKER};
-				task ${COLOR} data						2>&1; eval ${MARKER};
-				task ${COLOR} fail						2>&1; eval ${MARKER};
-				task ${COLOR} meta				status:pending	2>&1; eval ${MARKER};
-				impersonate_command repo					2>&1;
+				_task logo
+				_task mind
+				_task todo
+				_task read tag:.research		status:pending
+				_task read tag:.waiting			status:pending
+				_task projects
+				_task projects				status:pending
+				for FILE in $(task _projects		status:pending | ${GREP} -v "^[._]" | cut -d. -f1 | sort | uniq); do
+					_task read project:${FILE}
+				done
+				_task read project:			status:pending
+				_task udas
+				_task udas				status:pending
+				for FILE in $(task udas			status:pending | ${GREP} "^kind" | ${SED} "s|[_]gtd||g" | awk '{print $4;}' | tr ',' ' '); do
+					_task read kind:${FILE}		status:pending
+				done
+				for FILE in $(task udas			status:pending | ${GREP} "^area" | ${SED} "s|[_]gtd||g" | awk '{print $4;}' | tr ',' ' '); do
+					_task read area:${FILE}		status:pending
+				done
+				_task tags
+				_task tags				status:pending
+				for FILE in $(task _tags		status:pending | ${GREP} -v "^[._]" | ${SED} "/(next|nocal|nocolor|nonag)/d"); do
+					_task read tag:${FILE}		status:pending
+				done
+				_task read project:.someday
+				_task fail
+				_task data
+				_task meta				status:pending
+				eval ${MARKER}; task-recur
+				eval ${MARKER}; impersonate_command repo
+				eval ${MARKER}
 			) | ${MORE}
 		elif [[ ${1} == "repo" ]]; then
 			shift
 			(
-				task ${SIZES}		logo			2>&1; eval ${MARKER};
-				task			diagnostics		2>&1; eval ${MARKER};
-				task ${SIZES}		summary			2>&1; eval ${MARKER};
-#>>>				task status:pending	projects		2>&1; eval ${MARKER};
-				task status:pending	tags			2>&1; eval ${MARKER};
-				task status:pending	udas			2>&1; eval ${MARKER};
-				task ${SIZES}		history.monthly		2>&1; eval ${MARKER};
-				task ${SIZES}		ghistory.monthly	2>&1; eval ${MARKER};
-				task ${SIZES}		burndown.weekly		2>&1; eval ${MARKER};
-				task ${SIZES}		burndown.daily		2>&1; eval ${MARKER};
-#>>>				task ${SIZES}		timesheet 2		2>&1; eval ${MARKER};
-				task ${COLOR}		sort			\
-					rc.color.completed=green		\
-					rc.color.deleted=red			\
-					\( \(					\
-						end.after:${SINCE}		\
-					\) or \(				\
-						modified.after:${SINCE}		\
-						kind.any:			\
-					\) \)					2>&1; eval ${MARKER};
-				task-recur					2>&1; eval ${MARKER};
-				task			stats			2>&1; eval ${MARKER};
+				_task logo
+				_task diagnostics
+				_task summary
+				_task history.monthly	rc.defaultwidth=120 rc.defaultheight=40
+				_task ghistory.monthly	rc.defaultwidth=120 rc.defaultheight=40
+				_task burndown.weekly	rc.defaultwidth=120 rc.defaultheight=40
+				_task burndown.daily	rc.defaultwidth=120 rc.defaultheight=40
+				_task sort				\
+					rc.color.completed=green	\
+					rc.color.deleted=red		\
+					\( \(				\
+						end.after:${SINCE}	\
+					\) or \(			\
+						modified.after:${SINCE}	\
+						kind.any:		\
+					\) \)
+#>>>				_task timesheet 2
+				_task stats
+				eval ${MARKER}
 			) | ${MORE}
 		elif [[ ${1} == "deps" ]]; then
 			shift
