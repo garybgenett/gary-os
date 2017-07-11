@@ -3007,6 +3007,22 @@ function task-recur {
 
 ########################################
 
+function task-duplicates {
+	declare FILE="$(task _get rc.data.location)/completed.data"
+	declare UUID
+	for UUID in $(task diagnostics | grep "Found[ ]duplicate" | awk '{print $3;}'); do
+		echo -en "\n${UUID}\n";
+		${GREP} -n "uuid[:][\"]${UUID}[\"]" ${FILE}
+		echo -en "\n"
+		# http://www.linuxtopia.org/online_books/linux_tool_guides/the_sed_faq/sedfaq4_004.html
+		${SED} -i "0,/uuid[:][\"]${UUID}[\"]/{//d;}" "${FILE}"
+		${GREP} -n "uuid[:][\"]${UUID}[\"]" ${FILE}
+	done
+	return 0
+}
+
+########################################
+
 if [[ ${IMPERSONATE_NAME} == task ]]; then
 	declare FILE=
 	unalias -a
