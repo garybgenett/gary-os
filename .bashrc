@@ -2215,6 +2215,7 @@ function task-export {
 	gtasks_export.pl twexport "+Notes"		"$(task-filter "read") kind:notes"	"project"	"description"
 	gtasks_export.pl twexport "-Data"		"$(task-filter "data")"			"description"	"entry"
 	gtasks_export.pl twexport "-Fail"		"$(task-filter "fail")"			"description"	"entry"
+	gtasks_export.pl twexport "-Mark"		"$(task-filter "mark")"			"project"	"description"
 	gtasks_export.pl twexport "-Mind"		"$(task-filter "mind")"			"due,9999"	"description"
 	gtasks_export.pl twexport "-Todo"		"$(task-filter "todo")"			"due,9999"	"description"
 #>>>	for FILE in $(task reports 2>&1 | ${GREP} "[ ]Custom[ ][[]" | awk '{print $1;}'); do
