@@ -2330,7 +2330,7 @@ function task-export-text {
 		my $extn = ".md";
 		my $args = join(" ", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $root = qx(task _get rc.data.location); chomp(${root});
-		my $data = qx(task export ${args}); $data =~ s/([^,])\n/$1,/g; $data =~ s/,$//g; $data = decode_json("[" . ${data} . "]");
+		my $data = qx(task export ${args}); $data =~ s/\n//g; $data = decode_json(${data});
 		open(JSON, ">", ${root} . ".json")			|| die();
 		open(TIME, ">", ${root} . ".csv")			|| die();
 		open(PROJ, ">", ${root} . ".timeline.projects.json")	|| die();
@@ -2767,7 +2767,7 @@ function task-journal {
 		DATE="${1}"
 		shift
 	fi
-	declare UUIDS="$(task uuid project:_journal "${DATE}" | ${SED} "s/,/\n/g")"
+	declare UUIDS="$(task uuids project:_journal "${DATE}" | ${SED} "s/,/\n/g")"
 	declare UUID
 	if [[ -z ${UUIDS} ]]; then
 		task add project:_journal kind:notes area:writing -- "${DATE} $(date --date="${DATE}" +%a) {${@}}"
@@ -2794,7 +2794,7 @@ function task-notes {
 		my $extn = ".md";
 		my $args = join(" ", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $root = qx(task _get rc.data.location); chomp(${root});
-		my $data = qx(task export kind:notes ${args}); $data =~ s/([^,])\n/$1,/g; $data =~ s/,$//g; $data = decode_json("[" . ${data} . "]");
+		my $data = qx(task export kind:notes ${args}); $data =~ s/\n//g; $data = decode_json(${data});
 		my $edit = ${args}; $edit =~ s/\"/\\\"/g; $edit = "${ENV{EDITOR}} -c \"map ? <ESC>:!task read ${edit}<CR>\" -c \"map \\ <ESC>:!task \"";
 		my $mark = "[DELETE]";
 		if (!@{$data}) {
@@ -2859,7 +2859,7 @@ function task-track {
 		use Time::Local qw(timelocal);
 		my $args = join(" ", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $root = qx(task _get rc.data.location); chomp(${root});
-		my $uuid = qx(task uuid ${args}); chomp(${uuid}); $uuid = [ split(",", ${uuid}) ];
+		my $uuid = qx(task uuids ${args}); chomp(${uuid}); $uuid = [ split(",", ${uuid}) ];
 		if (!@{$uuid}) {
 			die("NO MATCHES!");
 		}
@@ -2932,8 +2932,8 @@ function task-depends {
 		my $c_due = 16;
 		my $c_end = 16;
 		my $args = join(" ", @ARGV); if (${args}) { $args = "\"${args}\""; };
-		my $data = qx(task export);		$data =~ s/([^,])\n/$1,/g; $data =~ s/,$//g; $data = decode_json("[" . ${data} . "]");
-		my $show = qx(task export ${args});	$show =~ s/([^,])\n/$1,/g; $show =~ s/,$//g; $show = decode_json("[" . ${show} . "]");
+		my $data = qx(task export);		$data =~ s/\n//g; $data = decode_json(${data});
+		my $show = qx(task export ${args});	$show =~ s/\n//g; $show = decode_json(${show});
 		my $list = {};
 		my $rdep = {};
 		foreach my $task (@{$data}) {
@@ -2982,7 +2982,7 @@ function task-recur {
 		use warnings;
 		use JSON::PP;
 		my $args = join(" ", @ARGV); if (${args}) { $args = "\"${args}\""; };
-		my $data = qx(task export ${args}); $data =~ s/([^,])\n/$1,/g; $data =~ s/,$//g; $data = decode_json("[" . ${data} . "]");
+		my $data = qx(task export ${args}); $data =~ s/\n//g; $data = decode_json(${data});
 		my $list = {};
 		my $keys = [];
 		foreach my $task (@{$data}) {
@@ -3031,7 +3031,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 	function impersonate_command {
 		declare MARKER='echo -en "\e[1;34m"; printf "~%.0s" {1..120}; echo -en "\e[0;37m\n"'
 		declare TASKFILE="$(task _get rc.data.location)"
-		declare TASKUUID="$(task uuid project:_data -- .review)"
+		declare TASKUUID="$(task uuids project:_data -- .review)"
 		function _task {
 			eval ${MARKER}
 			echo -en "[task ${@}]\n"
@@ -3155,7 +3155,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			task view project.not:_gtd tags.not:agenda tags.not:errand description.has:: "${@}"
 		elif [[ ${1} == [/] ]]; then
 			shift
-			FILE="$(task uuid status:pending "${@}")"
+			FILE="$(task uuids status:pending "${@}")"
 			task view +ACTIVE
 			if (
 				[[ "${@}" == "-" ]]
@@ -3166,7 +3166,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				if [[ "${@}" != "-" ]] && [[ -n "$(echo "${FILE}" | ${GREP} "[,]")" ]]; then
 					task read "${FILE}"
 				else
-					echo "no" | task $(task uuid +ACTIVE) stop rc.bulk=0
+					echo "no" | task $(task uuids +ACTIVE) stop rc.bulk=0
 					if [[ "${@}" != "-" ]]; then
 						sleep 1
 						echo "no" | task "${FILE}" start
