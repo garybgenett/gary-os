@@ -3151,8 +3151,8 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			task-track "${@}"
 		elif [[ ${1} == [-] ]]; then
 			shift
-			task view project.not:_gtd tags.not:agenda tags.not:errand description.has:: "${@}" | awk '{print $3;}' | ${SED} -ne "s/[:]$//gp" | sort | uniq
-			task view project.not:_gtd tags.not:agenda tags.not:errand description.has:: "${@}"
+			task view project.not:_gtd : "${@}" | ${SED} -ne "s/^[^a-z]+([a-z][^:]+)[:].+$/\1/gp" | sort | uniq
+			task view project.not:_gtd : "${@}"
 		elif [[ ${1} == [/] ]]; then
 			shift
 			FILE="$(task uuids status:pending "${@}")"
