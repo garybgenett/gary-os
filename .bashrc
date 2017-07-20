@@ -2167,6 +2167,9 @@ function task-build {
 				"s|(^[ ]+when[ ][+][=][ ][(]const[ ]int[)][ ]annotations[.]size[ ][(][)][;])$|//\1|g" \
 				./src/commands/CmdEdit.cpp	|| return 1
 		fi
+		if [[ -x ./doc/rc/refresh ]]; then
+			(cd ./doc/rc && ./refresh)
+		fi
 		return 0
 	}
 	cd /.g/_data/_build/taskwarrior/${PROG}		&&
