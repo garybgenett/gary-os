@@ -3169,8 +3169,8 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			) || (
 				[[ -n "${@}" ]] && [[ -n "${FILE}" ]]
 			); then
-#>>>				if [[ "${@}" != "-" ]] && [[ "${FILE}" == *(*)[,]*(*) ]]; then
-				if [[ "${@}" != "-" ]] && [[ -n "$(echo "${FILE}" | ${GREP} "[,]")" ]]; then
+#>>>				if [[ "${@}" != "-" ]] && [[ "${FILE}" == *(*)[ ]*(*) ]]; then
+				if [[ "${@}" != "-" ]] && [[ -n "$(echo "${FILE}" | ${GREP} "[ ]")" ]]; then
 					task read "${FILE}"
 				else
 					echo "no" | task $(task uuids +ACTIVE) stop rc.bulk=0
