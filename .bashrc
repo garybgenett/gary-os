@@ -2233,7 +2233,7 @@ function task-export {
 		gtasks_export.pl twexport "=${FILE}"	"$(task-filter "view") area:${FILE}"	"due,9999"	"entry"
 	done
 #>>>	for FILE in $(task tags 2>&1 | ${GREP} -iv "(^$|---|tag|task)" | awk '{print $1;}'); do
-	for FILE in $(task _tags 2>&1 | ${SED} "/(next|nocal|nocolor|nonag)/d"); do
+	for FILE in $(task _tags 2>&1 | ${SED} "/([A-Z]|next|nocal|nocolor|nonag)/d"); do
 		gtasks_export.pl twexport "@${FILE}"	"$(task-filter "view") tags:${FILE}"	"due,9999"	"entry"
 	done
 	cd - >/dev/null
