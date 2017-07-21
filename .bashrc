@@ -2177,7 +2177,11 @@ function task-build {
 		git reset --hard			&&
 		make clean				&&
 		task-build-fixes			&&
-		cmake -DCMAKE_INSTALL_PREFIX=/usr .	&&
+		cmake					\
+			-DCMAKE_INSTALL_PREFIX=/usr	\
+			-DTASK_DOCDIR=share/task	\
+			-DTASK_RCDIR=share/task/rc	\
+			./				&&
 		make -j1				&&
 		make -j1 install			&&
 		${GIT_STS}				&&
