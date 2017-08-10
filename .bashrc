@@ -28,9 +28,8 @@ complete -d -o dirnames cd
 ########################################
 
 if [[ "${-/i}" != "${-}" ]] &&
-   [[ -x /usr/bin/fortune ]] &&
-   [[ -x /usr/bin/lolcat ]]; then
-	fortune -ac all | lolcat --force
+   [[ -x /usr/bin/fortune ]]; then
+	fortune -ac all
 fi
 
 ########################################
