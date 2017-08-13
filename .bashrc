@@ -2002,6 +2002,10 @@ function sync-dir {
 		fi
 		(cd ${BAS_DIR}/${REP_DST} &&
 			${GIT} pull)
+		if [[ -f ${BAS_DIR}/${REP_DST}/.gitmodules ]]; then
+			(cd ${BAS_DIR}/${REP_DST} &&
+				${GIT} submodule update --force --init --recursive --remote --rebase)
+		fi
 	elif [[ ${REP_TYP} == hg ]]; then
 		if [[ ! -d ${BAS_DIR}/${REP_DST} ]]; then
 			reporter $(which hg) clone --verbose ${REP_SRC} ${BAS_DIR}/${REP_DST}
