@@ -2251,7 +2251,7 @@ function task-export-report {
 	declare EMAIL_MAIL="${1}" && shift
 	declare EMAIL_NAME="${1}" && shift
 	declare EMAIL_SIGN="${1}" && shift
-	task-export-text "${EMAIL_NAME}" "((project.not:_data or area:work) (area:_gtd or area:work))"
+	task-export-text "${EMAIL_NAME}" "((project.not:_data area:_gtd) or (area:work.em))"
 	cat ${PIMDIR}/tasks.md.html \
 		>${REPORT}.projects.html
 	cat ${PIMDIR}/tasks.timeline.html |
@@ -2384,7 +2384,8 @@ function task-export-text {
 			"people"	=> "purple",
 			"self"		=> "orange",
 			"travel"	=> "cyan",
-			"work"		=> "brown",
+			"work.em"	=> "brown",
+			"work.f5"	=> "brown",
 			"writing"	=> "magenta",
 		};
 		my $current_time = strftime("%Y-%m-%d %H:%M:%S", localtime(time()));
