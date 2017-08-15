@@ -831,7 +831,7 @@ function edit {
 function email {
 	declare TMPDIR="${HOME}/Desktop"
 	declare MUTTRC="${HOME}/.muttrc"
-	declare MUTT_X="/tmp/muttrc"
+	declare MUTT_X="/tmp/_mutt_mail"
 	if [[ ${1} == -a ]]; then
 		shift
 		MUTTRC="${MUTTRC}.all"
