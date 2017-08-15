@@ -2386,6 +2386,7 @@ function task-export-text {
 			"dateTimeFormat"	=> "iso8601",
 			"events"		=> [],
 		};
+		#>>> https://www.w3schools.com/colors/colors_groups.asp
 		my $text_color = "black";
 		my $proj_color = {
 			"working"	=> "green",
