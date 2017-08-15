@@ -2247,11 +2247,12 @@ function task-export {
 function task-export-report {
 	declare DATE="$(date --iso)"
 	declare REPORT="${1}.${DATE}" && shift
+	declare TASKS_LIST="${1}" && shift
 	declare EMAIL_DEST="${1}" && shift
 	declare EMAIL_MAIL="${1}" && shift
 	declare EMAIL_NAME="${1}" && shift
 	declare EMAIL_SIGN="${1}" && shift
-	task-export-text "${EMAIL_NAME}" "((project.not:_data area:_gtd) or (area:work.em))"
+	task-export-text "${EMAIL_NAME}" "${TASKS_LIST}"
 	cat ${PIMDIR}/tasks.md.html \
 		>${REPORT}.projects.html
 	cat ${PIMDIR}/tasks.timeline.html |
