@@ -752,7 +752,7 @@ function contacts {
 				--infile ./${FILE} \
 				--informat abook \
 				--outfile ./${EXP_DIR}/${FILE/%\.adb}.vcf \
-				--outformat gcrd
+				--outformat vcard
 		done
 		sudo -H -u \#1000 dos2unix ./${EXP_DIR}/*.{ldif,vcf}
 		chmod -R 750 ./${EXP_DIR}
