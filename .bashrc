@@ -831,6 +831,7 @@ function edit {
 function email {
 	declare TMPDIR="${HOME}/Desktop"
 	declare MUTTRC="${HOME}/.muttrc"
+	declare MUTT_X="/tmp/muttrc"
 	if [[ ${1} == -a ]]; then
 		shift
 		MUTTRC="${MUTTRC}.all"
@@ -846,16 +847,31 @@ function email {
 	if [[ ${1} == -x ]]
 	then
 		shift
+		EMAIL_MAIL="${EMAIL_MAIL:-root@garybgenett.net}"
+		EMAIL_NAME="${EMAIL_NAME:-GaryBGenett.net Automation}"
+		declare LINE
+		declare VAR
+		declare VAL
+		echo "source ${MUTTRC}"								>${MUTT_X}
+		${SED} -n "/^alternates.+${EMAIL_MAIL}$/,/^$/p" ${MUTTRC} |
+			${SED} -n "s/^<enter-command>(.+)<return>.+$/\1/gp" |
+			while read LINE; do
+				VAR="$(echo "${LINE}" | ${SED} -n "s/^.+[$](my[_].+)$/\1/gp")"
+				if [[ -n ${VAR} ]]; then
+					VAL="$(${SED} -n "s/^set[ ]${VAR}.+[=](.+)$/\1/gp" ${MUTTRC})"
+					echo "${LINE}" | ${SED} "s|[$]my[_].+$|${VAL}|g"
+				else
+					echo "${LINE}"
+				fi
+			done									>>${MUTT_X}
+		if [[ -n ${EMAIL_MAIL} ]]; then echo "set from = '${EMAIL_MAIL}'"; fi		>>${MUTT_X}
+		if [[ -n ${EMAIL_NAME} ]]; then echo "set realname = '${EMAIL_NAME}'"; fi	>>${MUTT_X}
+		echo "set copy = no"								>>${MUTT_X}
 		${REALTIME} \
 		sudo -H -u \#1000 \
 				TMPDIR="${TMPDIR}" \
 			mutt \
-			-nxF /dev/null \
-			-e "set sendmail = \"msmtp -d -C ${HOME}/.msmtprc\"" \
-			-e "set realname = \"${EMAIL_NAME:-GaryBGenett.net Automation}\"" \
-			-e "set from = \"${EMAIL_MAIL:-root@garybgenett.net}\"" \
-			-e "set use_envelope_from = yes" \
-			-e "set copy = no" \
+			-nxF ${MUTT_X} \
 			"${@}"
 	else
 		if [[ -d "${MAILDIR}" ]]; then
