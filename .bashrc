@@ -2402,6 +2402,7 @@ function task-export-text {
 			"people"	=> "purple",
 			"self"		=> "orange",
 			"travel"	=> "cyan",
+			"work"		=> "brown",
 			"work.em"	=> "brown",
 			"work.f5"	=> "brown",
 			"writing"	=> "magenta",
