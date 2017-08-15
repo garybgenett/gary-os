@@ -2336,6 +2336,7 @@ END_OF_FILE
 				-a ${REPORT}.projects.html \
 				-a ${REPORT}.timeline.html \
 				-c ${EMAIL_MAIL} \
+				"${@}" \
 				-- ${EMAIL_DEST}
 	fi
 	return 0
