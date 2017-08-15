@@ -871,8 +871,11 @@ function email {
 		sudo -H -u \#1000 \
 				TMPDIR="${TMPDIR}" \
 			mutt \
+			-d 2 \
 			-nxF ${MUTT_X} \
 			"${@}"
+		cat ${HOME}/.muttdebug0
+		${RM} ${HOME}/.muttdebug0
 	else
 		if [[ -d "${MAILDIR}" ]]; then
 			declare CRUFT="$(cd ${MAILDIR}; find $(find . -type d | ${GREP} "[/]tmp$") ! -empty	| sort)"
