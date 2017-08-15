@@ -2408,6 +2408,14 @@ function task-export-text {
 			"work.f5"	=> "brown",
 			"writing"	=> "magenta",
 		};
+		my $udas = [ qx(task udas) ];
+		@{$udas} = grep ( /^area/, @{$udas} );
+		$udas->[0] =~ s/^area.+Area\s+([^\s]+).+$/$1/g;
+		foreach my $uda (split( ",", $udas->[0] )) {
+			if (!defined( $line_color->{ $uda } )) {
+				$line_color->{ $uda } = "pink";
+			};
+		};
 		my $current_time = strftime("%Y-%m-%d %H:%M:%S", localtime(time()));
 		sub lead { return(2* (7*			(60*60*24)	)); };
 		sub plus { return(2* (1*			(60*60*24)	)); };
