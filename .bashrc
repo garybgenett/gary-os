@@ -3174,6 +3174,8 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			task-export-text	|| return 1
 #>>>			task-export		|| return 1
 			zpim-commit tasks
+		elif [[ ${1} == [%] ]]; then
+			eval task-export-text \"Test Work Report\" $(${SED} -n "s/^(.+area[:]work.+)[ ][\\]$/\1/gp" ${HOME}/scripts/_sync)
 		elif [[ ${1} == [_] ]]; then
 			shift
 			task-journal "${@}"
