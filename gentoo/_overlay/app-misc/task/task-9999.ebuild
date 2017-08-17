@@ -1,6 +1,6 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-misc/task/task-2.3.0.ebuild,v 1.2 2014/11/28 17:16:35 radhermit Exp $
+# $Id$
 
 EAPI=5
 
@@ -8,31 +8,34 @@ inherit eutils cmake-utils bash-completion-r1 git-r3
 
 DESCRIPTION="Taskwarrior is a command-line todo list manager"
 HOMEPAGE="http://taskwarrior.org/"
-EGIT_REPO_URI="https://git.tasktools.org/scm/tm/${PN}.git"
+EGIT_REPO_URI="https://git.tasktools.org/TM/${PN}.git"
+EGIT_COMMIT="v2.5.1"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~x86 ~x64-macos"
-IUSE="vim-syntax zsh-completion"
+KEYWORDS="amd64 ~arm x86 ~x64-macos"
+IUSE="gnutls vim-syntax zsh-completion"
 
-DEPEND="net-libs/gnutls
-	sys-libs/readline
+DEPEND="sys-libs/readline:0
+	gnutls? ( net-libs/gnutls )
 	elibc_glibc? ( sys-apps/util-linux )"
 RDEPEND="${DEPEND}"
 
 src_prepare() {
 	# use the correct directory locations
-	sed -i -e "s:/usr/local/bin:${EPREFIX}/usr/bin:" \
+	sed -i "s:/usr/local/bin:${EPREFIX}/usr/bin:" \
 		scripts/add-ons/* || die
 
 	# don't automatically install scripts
-	sed -i -e '/scripts/d' CMakeLists.txt || die
+	sed -i '/scripts/d' CMakeLists.txt || die
 
-	epatch "${FILESDIR}"/0001-${P}-annotations-edit-fix.patch
+	# this is for versions 2.4.4 and earlier
+#>>>	epatch "${FILESDIR}"/0001-${P}-annotations-edit-fix.patch
 }
 
 src_configure() {
 	mycmakeargs=(
+		$(cmake-utils_use_use gnutls GNUTLS)
 		-DTASK_DOCDIR=share/doc/${PF}
 		-DTASK_RCDIR=share/${PN}/rc
 	)

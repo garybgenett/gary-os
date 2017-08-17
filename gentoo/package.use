@@ -2,27 +2,34 @@
 # portage package use file
 ################################################################################
 
+=app-text/poppler-0.33.0		qt4		# gentoo required
+app-crypt/heimdal			-ssl		# gentoo required
+app-crypt/heimdal			-threads	# gentoo required
 app-text/ghostscript-gpl		cups		# gentoo required
 app-text/poppler			cairo		# gentoo required
-app-text/poppler			qt4		# gentoo required
+app-text/poppler			qt5		# gentoo required
+app-text/qpdfview			qt5		# gentoo required
 dev-java/antlr				java		# gentoo required
 dev-qt/qtgui				accessibility	# gentoo required
+dev-qt/qtgui				dbus		# gentoo required
+dev-qt/qtgui				xcb		# gentoo required
 dev-qt/qtsvg				accessibility	# gentoo required
-media-gfx/graphviz			cairo		# gentoo required
 media-libs/gd				fontconfig	# gentoo required
 media-libs/libsdl			joystick	# gentoo required
 media-libs/libsdl			sound		# gentoo required
+media-libs/libsdl2			joystick	# gentoo required
 media-libs/libsdl2			sound		# gentoo required
 media-video/vlc				xcb		# gentoo required
 net-dns/avahi				dbus		# gentoo required
 net-nds/openldap			sasl		# gentoo required
 net-wireless/wpa_supplicant		dbus		# gentoo required
+sys-auth/consolekit			policykit	# gentoo required
 sys-libs/gdbm				berkdb		# gentoo required
 
 ########################################
 
 dev-libs/libpcre			pcre16		# gentoo required
-media-libs/chromaprint			tools		# gentoo required
+media-libs/mesa				gles2		# gentoo required
 media-libs/mesa				xa		# gentoo required
 net-dns/avahi			mdnsresponder-compat	# gentoo required
 net-dns/dnsmasq				script		# gentoo required
@@ -31,6 +38,97 @@ net-misc/networkmanager			-nss		# gentoo required
 net-misc/spice-gtk			gtk3		# gentoo required
 net-misc/spice-gtk			usbredir	# gentoo required
 www-client/midori			-introspection	# gentoo required
+x11-libs/libxcb				xkb		# gentoo required
+
+app-accessibility/at-spi2-atk		abi_x86_32	# gentoo required
+app-accessibility/at-spi2-core		abi_x86_32	# gentoo required
+app-arch/bzip2				abi_x86_32	# gentoo required
+app-arch/xz-utils			abi_x86_32	# gentoo required
+dev-libs/atk				abi_x86_32	# gentoo required
+dev-libs/elfutils			abi_x86_32	# gentoo required
+dev-libs/expat				abi_x86_32	# gentoo required
+dev-libs/glib				abi_x86_32	# gentoo required
+dev-libs/gmp				abi_x86_32	# gentoo required
+dev-libs/icu				abi_x86_32	# gentoo required
+dev-libs/libffi				abi_x86_32	# gentoo required
+dev-libs/libpthread-stubs		abi_x86_32	# gentoo required
+dev-libs/libxml2			abi_x86_32	# gentoo required
+dev-libs/lzo				abi_x86_32	# gentoo required
+dev-libs/openssl			abi_x86_32	# gentoo required
+dev-util/pkgconf			abi_x86_32	# gentoo required
+media-gfx/graphite2			abi_x86_32	# gentoo required
+media-libs/fontconfig			abi_x86_32	# gentoo required
+media-libs/freeglut			abi_x86_32	# gentoo required
+media-libs/freetype			abi_x86_32	# gentoo required
+media-libs/glu				abi_x86_32	# gentoo required
+media-libs/harfbuzz			abi_x86_32	# gentoo required
+media-libs/jasper			abi_x86_32	# gentoo required
+media-libs/libjpeg-turbo		abi_x86_32	# gentoo required
+media-libs/libpng			abi_x86_32	# gentoo required
+media-libs/mesa				abi_x86_32	# gentoo required
+media-libs/tiff				abi_x86_32	# gentoo required
+net-dns/libidn				abi_x86_32	# gentoo required
+sys-apps/attr				abi_x86_32	# gentoo required
+sys-apps/dbus				abi_x86_32	# gentoo required
+sys-apps/util-linux			abi_x86_32	# gentoo required
+sys-devel/llvm				abi_x86_32	# gentoo required
+sys-fs/eudev				abi_x86_32	# gentoo required
+sys-libs/gpm				abi_x86_32	# gentoo required
+sys-libs/ncurses			abi_x86_32	# gentoo required
+sys-libs/zlib				abi_x86_32	# gentoo required
+virtual/glu				abi_x86_32	# gentoo required
+virtual/jpeg				abi_x86_32	# gentoo required
+virtual/libffi				abi_x86_32	# gentoo required
+virtual/libiconv			abi_x86_32	# gentoo required
+virtual/libintl				abi_x86_32	# gentoo required
+virtual/libudev				abi_x86_32	# gentoo required
+virtual/opengl				abi_x86_32	# gentoo required
+virtual/pkgconfig			abi_x86_32	# gentoo required
+x11-libs/cairo				abi_x86_32	# gentoo required
+x11-libs/gdk-pixbuf			abi_x86_32	# gentoo required
+x11-libs/gtk+				abi_x86_32	# gentoo required
+x11-libs/libICE				abi_x86_32	# gentoo required
+x11-libs/libSM				abi_x86_32	# gentoo required
+x11-libs/libX11				abi_x86_32	# gentoo required
+x11-libs/libXau				abi_x86_32	# gentoo required
+x11-libs/libXcomposite			abi_x86_32	# gentoo required
+x11-libs/libXcursor			abi_x86_32	# gentoo required
+x11-libs/libXdamage			abi_x86_32	# gentoo required
+x11-libs/libXdmcp			abi_x86_32	# gentoo required
+x11-libs/libXext			abi_x86_32	# gentoo required
+x11-libs/libXfixes			abi_x86_32	# gentoo required
+x11-libs/libXft				abi_x86_32	# gentoo required
+x11-libs/libXi				abi_x86_32	# gentoo required
+x11-libs/libXrandr			abi_x86_32	# gentoo required
+x11-libs/libXrender			abi_x86_32	# gentoo required
+x11-libs/libXt				abi_x86_32	# gentoo required
+x11-libs/libXtst			abi_x86_32	# gentoo required
+x11-libs/libXxf86vm			abi_x86_32	# gentoo required
+x11-libs/libdrm				abi_x86_32	# gentoo required
+x11-libs/libpciaccess			abi_x86_32	# gentoo required
+x11-libs/libxcb				abi_x86_32	# gentoo required
+x11-libs/libxshmfence			abi_x86_32	# gentoo required
+x11-libs/pango				abi_x86_32	# gentoo required
+x11-libs/pangox-compat			abi_x86_32	# gentoo required
+x11-libs/pixman				abi_x86_32	# gentoo required
+x11-proto/compositeproto		abi_x86_32	# gentoo required
+x11-proto/damageproto			abi_x86_32	# gentoo required
+x11-proto/dri2proto			abi_x86_32	# gentoo required
+x11-proto/dri3proto			abi_x86_32	# gentoo required
+x11-proto/fixesproto			abi_x86_32	# gentoo required
+x11-proto/glproto			abi_x86_32	# gentoo required
+x11-proto/inputproto			abi_x86_32	# gentoo required
+x11-proto/kbproto			abi_x86_32	# gentoo required
+x11-proto/presentproto			abi_x86_32	# gentoo required
+x11-proto/randrproto			abi_x86_32	# gentoo required
+x11-proto/recordproto			abi_x86_32	# gentoo required
+x11-proto/renderproto			abi_x86_32	# gentoo required
+x11-proto/xcb-proto			abi_x86_32	# gentoo required
+x11-proto/xextproto			abi_x86_32	# gentoo required
+x11-proto/xf86bigfontproto		abi_x86_32	# gentoo required
+x11-proto/xf86driproto			abi_x86_32	# gentoo required
+x11-proto/xf86vidmodeproto		abi_x86_32	# gentoo required
+x11-proto/xproto			abi_x86_32	# gentoo required
 
 ################################################################################
 
@@ -39,7 +137,6 @@ net-print/cups				samba
 
 dev-vcs/subversion			-apache2
 www-servers/apache			-threads
-www-servers/nginx			-syslog
 
 ########################################
 
@@ -64,17 +161,23 @@ app-text/enchant			aspell
 mail-client/thunderbird			-wifi ldap lightning
 www-client/firefox			-wifi
 
-media-tv/xbmc				projectm -webserver
+media-tv/kodi				projectm rsxs spectrum waveform -webserver
 media-video/vlc				projectm qt4 vlm
 
 app-emulation/libvirt			libvirtd lxc qemu uml virt-network
 app-emulation/qemu			ncurses sdl spice
 app-emulation/spice			client gui
 app-emulation/vmware-tools		vmware_guest_freebsd vmware_guest_linux vmware_guest_windows
+app-emulation/virtualbox		additions extensions headless qt4 sdk vnc
 
 ################################################################################
 
 #{NEW} net-libs/glib-networking		-libproxy	# gentoo required
+#{NEW} sys-libs/ncurses			-gpm		# gentoo required
+
+#{NEW} dev-qt/qtgui			-accessibility	# gentoo required
+#{NEW} dev-qt/qtgui			-dbus		# gentoo required
+#{NEW} dev-qt/qtsvg			-accessibility	# gentoo required
 
 ########################################
 
