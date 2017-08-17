@@ -1,0 +1,32 @@
+# http://forums.funtoo.org/topic/103-samba-419-compile-issue-solved
+
+Checking for system subunit                                                                     : not found
+ERROR: System library subunit of version 0.0.0 not found, and bundling disabled
+ * ERROR: net-fs/samba-4.1.20-r1 failed (configure phase):
+ *   configure failed
+ *
+ * Call stack:
+ *     ebuild.sh, line   93:  Called src_configure
+ *   environment, line 3864:  Called waf-utils_src_configure '--enable-fhs' '--sysconfdir=/etc' '--localstatedir=/var' '--with-modulesdir=/usr/lib64/samba' '--with-pammodulesdir=/lib64/security' '--with-piddir=/var/run/samba' '--disable-rpath' '--disable-rpath-install' '--nopyc' '--nopyo' '--bundled-libraries=NONE' '--builtin-libraries=NONE' '--without-dnsupdate' '--without-acl-support' '--without-ads' '--without-aio-support' '--disable-avahi' '--without-cluster-support' '--enable-cups' '--without-dmapi' '--without-fam' '--enable-gnutls' '--disable-iprint' '--without-ldap' '--with-pam' '--with-pam_smbpass' '--without-quotas' '--with-syslog' '--without-systemd' '--without-winbind'
+ *   environment, line 4798:  Called die
+ * The specific snippet of code:
+ *           CCFLAGS="${CFLAGS}" LINKFLAGS="${CFLAGS} ${LDFLAGS}" "${WAF_BINARY}" "--prefix=${EPREFIX}/usr" "${libdir}" "$@" configure || die "configure failed";
+ *
+ * If you need support, post the output of `emerge --info '=net-fs/samba-4.1.20-r1'`,
+ * the complete build log and the output of `emerge -pqv '=net-fs/samba-4.1.20-r1'`.
+ * The complete build log is located at '/var/tmp/portage/net-fs/samba-4.1.20-r1/temp/build.log'.
+ * The ebuild environment file is located at '/var/tmp/portage/net-fs/samba-4.1.20-r1/temp/environment'.
+ * Working directory: '/var/tmp/portage/net-fs/samba-4.1.20-r1/work/samba-4.1.20'
+ * S: '/var/tmp/portage/net-fs/samba-4.1.20-r1/work/samba-4.1.20'
+
+# diff -r /usr/portage/net-fs/samba ./
+
+[...]
+diff -r /usr/portage/net-fs/samba/samba-4.2.4-r1.ebuild ./samba-4.2.4-r1.ebuild
+119,120c119,120
+< 		--bundled-libraries=NONE
+< 		--builtin-libraries=NONE
+---
+> 		--bundled-libraries=ntdb
+> 		--builtin-libraries=ntdb
+[...]
