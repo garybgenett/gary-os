@@ -1,6 +1,6 @@
 # Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-java/icedtea/icedtea-6.1.13.5-r1.ebuild,v 1.1 2014/11/01 17:59:37 caster Exp $
+# $Id$
 # Build written by Andrew John Hughes (gnu_andrew@member.fsf.org)
 
 # *********************************************************
@@ -9,19 +9,19 @@
 
 EAPI="5"
 
-inherit check-reqs java-pkg-2 java-vm-2 multiprocessing pax-utils prefix versionator virtualx
+inherit check-reqs eutils java-pkg-2 java-vm-2 multiprocessing pax-utils prefix versionator virtualx
 
 ICEDTEA_PKG=${PN}$(replace_version_separator 1 -)
 ICEDTEA_BRANCH=$(get_version_component_range 1-3)
-OPENJDK_BUILD="34"
-OPENJDK_DATE="20_jan_2015"
+OPENJDK_BUILD="36"
+OPENJDK_DATE="22_jul_2015"
 OPENJDK_TARBALL="openjdk-6-src-b${OPENJDK_BUILD}-${OPENJDK_DATE}.tar.xz"
 # Download cacao and jamvm regardless for use with EXTRA_ECONF
 CACAO_TARBALL="68fe50ac34ec.tar.gz"
 JAMVM_TARBALL="jamvm-ec18fb9e49e62dce16c5094ef1527eed619463aa.tar.gz"
 
-CACAO_GENTOO_TARBALL="icedtea-${ICEDTEA_BRANCH}-cacao-${CACAO_TARBALL}"
-JAMVM_GENTOO_TARBALL="icedtea-${ICEDTEA_BRANCH}-${JAMVM_TARBALL}"
+CACAO_GENTOO_TARBALL="icedtea-cacao-${CACAO_TARBALL}"
+JAMVM_GENTOO_TARBALL="icedtea-${JAMVM_TARBALL}"
 
 DESCRIPTION="A harness to build OpenJDK using Free Software build tools and dependencies"
 HOMEPAGE="http://icedtea.classpath.org"
@@ -34,7 +34,8 @@ SRC_URI="
 
 LICENSE="Apache-1.1 Apache-2.0 GPL-1 GPL-2 GPL-2-with-linking-exception LGPL-2 MPL-1.0 MPL-1.1 public-domain W3C"
 SLOT="6"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
+RESTRICT="test"
 
 IUSE="+X +alsa cacao cjk +cups debug doc examples javascript +jbootstrap kerberos +nsplugin
 	+nss pax_kernel pulseaudio selinux +source systemtap test zero +webstart"
@@ -45,7 +46,6 @@ ALSA_COMMON_DEP="
 CUPS_COMMON_DEP="
 	>=net-print/cups-1.2.12"
 X_COMMON_DEP="
-	dev-libs/glib
 	>=media-libs/freetype-2.3.5:2=
 	>=x11-libs/gtk+-2.8:2=
 	>=x11-libs/libX11-1.1.3
@@ -65,7 +65,7 @@ X_DEPEND="
 
 COMMON_DEP="
 	>=media-libs/giflib-4.1.6:=
-	>=media-libs/libpng-1.2:=
+	>=media-libs/libpng-1.2:0=
 	>=sys-libs/zlib-1.2.3:=
 	virtual/jpeg:0=
 	>=media-libs/lcms-2.5
@@ -143,7 +143,7 @@ pkg_setup() {
 	icedtea_check_requirements
 
 	JAVA_PKG_WANT_BUILD_VM="
-		icedtea-6 icedtea-bin-6 icedtea6 icedtea6-bin
+		icedtea-6 icedtea-bin-6
 		gcj-jdk"
 	JAVA_PKG_WANT_SOURCE="1.5"
 	JAVA_PKG_WANT_TARGET="1.5"
@@ -164,33 +164,17 @@ java_prepare() {
 	export LANG="C" LC_ALL="C"
 }
 
-bootstrap_impossible() {
-	# Fill this according to testing what works and what not
-	has "${1}" # icedtea6 icedtea-6 icedtea6-bin icedtea-bin-6
-}
-
 src_configure() {
-	local bootstrap cacao_config config hotspot_port use_cacao use_zero zero_config
+	local cacao_config config hotspot_port use_cacao use_zero zero_config
 	local vm=$(java-pkg_get-current-vm)
 
-	# IcedTea6 can't be built using IcedTea7; its class files are too new
-	# Whether to bootstrap
-	bootstrap="disable"
-	if use jbootstrap; then
-		if bootstrap_impossible "${vm}"; then
-			einfo "Bootstrap with ${vm} is currently not possible and thus disabled, ignoring USE=jbootstrap"
-		else
-			bootstrap="enable"
-		fi
-	fi
-
-	if has "${vm}" gcj-jdk; then
-		# gcj-jdk ensures ecj is present.
+	# gcj-jdk ensures ecj is present.
+	if use jbootstrap || has "${vm}" gcj-jdk; then
 		use jbootstrap || einfo "bootstrap is necessary when building with ${vm}, ignoring USE=\"-jbootstrap\""
-		bootstrap="enable"
+		config+=" --enable-bootstrap"
+	else
+		config+=" --disable-bootstrap"
 	fi
-
-	config+=" --${bootstrap}-bootstrap"
 
 	# Use Zero if requested
 	if use zero; then
@@ -279,7 +263,7 @@ src_test() {
 
 src_install() {
 	local dest="/usr/$(get_libdir)/icedtea${SLOT}"
-	local ddest="${ED}/${dest}"
+	local ddest="${ED}${dest#/}"
 	dodir "${dest}"
 
 	dodoc README NEWS AUTHORS
@@ -300,19 +284,18 @@ src_install() {
 	touch jre/.systemPrefs/.system.lock || die
 	touch jre/.systemPrefs/.systemRootModFile || die
 
-	# doins can't handle symlinks.
+	# doins doesn't preserve executable bits.
 	cp -vRP bin include jre lib man "${ddest}" || die
 
 	dodoc ASSEMBLY_EXCEPTION THIRD_PARTY_README
 
 	if use doc; then
-		# java-pkg_dohtml needed for package-list #302654
-		java-pkg_dohtml -A dtd -r ../docs/* || die
+		docinto html
+		dodoc -r ../docs/*
 	fi
 
 	if use examples; then
-		dodir "${dest}/share"
-		cp -vRP demo sample "${ddest}/share/" || die
+		cp -vRP demo sample "${ddest}" || die
 	fi
 
 	if use source; then

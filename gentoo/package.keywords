@@ -6,54 +6,48 @@ app-arch/upx-ucl			~*		# gentoo required
 app-crypt/chntpw			~*		# gentoo required
 app-crypt/ssdeep			~*		# gentoo required
 app-emulation/bochs			~*		# gentoo required
+app-emulation/spice-protocol		~*		# gentoo required
 app-emulation/spice-vdagent		~*		# gentoo required
 app-misc/binwalk			~*		# gentoo required
 app-misc/hello				~*		# gentoo required
 dev-db/recutils				~*		# gentoo required
-dev-java/fop				~*		# gentoo required
 dev-java/glassfish-jms-api		~*		# gentoo required
-dev-java/xmlgraphics-commons		~*		# gentoo required
-dev-libs/serd				~*		# gentoo required
-dev-libs/sord				~*		# gentoo required
+dev-lang/moarvm				~*		# gentoo required
+dev-libs/openssl			~*		# gentoo required
 dev-lua/luarocks			~*		# gentoo required
-games-fps/quakeforge			~*		# gentoo required
+games-roguelike/nethack			~*		# gentoo required
 media-gfx/mcomix			~*		# gentoo required
-media-libs/gnonlin			~*		# gentoo required
+media-libs/libgig			~*		# gentoo required
 media-libs/libhdhomerun			~*		# gentoo required
-media-libs/lilv				~*		# gentoo required
-media-libs/lv2				~*		# gentoo required
-media-libs/sratom			~*		# gentoo required
+media-libs/libpng			~*		# gentoo required
 media-libs/suil				~*		# gentoo required
 media-sound/ardour			~*		# gentoo required
-media-sound/jokosher			~*		# gentoo required
 media-sound/linuxsampler		~*		# gentoo required
 media-sound/lmms			~*		# gentoo required
 media-sound/oss				~*		# gentoo required
 media-sound/qtractor			~*		# gentoo required
+media-tv/kodi				~*		# gentoo required
 net-misc/cadaver			~*		# gentoo required
 net-misc/pipes				~*		# gentoo required
+net-misc/unison				~*		# gentoo required
 sys-block/whdd				~*		# gentoo required
+sys-boot/refind				~*		# gentoo required
 sys-devel/bison				~*		# gentoo required
 sys-fs/ext3grep				~*		# gentoo required
 sys-process/nmon			~*		# gentoo required
 www-client/midori			~*		# gentoo required
-x11-base/xorg-drivers			~*		# gentoo required
-x11-libs/libXfont			~*		# gentoo required
 x11-misc/whaw				~*		# gentoo required
-x11-proto/fontsproto			~*		# gentoo required
-x11-proto/xproto			~*		# gentoo required
 
 app-crypt/efitools			~*		# gentoo required
 sys-boot/gnu-efi			~*		# gentoo required
-sys-kernel/gentoo-sources		~*		# gentoo required
 
 sys-fs/zfs				~*		# gentoo required
 sys-fs/zfs-kmod				~*		# gentoo required
 sys-kernel/spl				~*		# gentoo required
 
-dev-perl/Template-Tiny			~*		# gentoo required
 dev-perl/Template-Plugin-Cycle		~*		# gentoo required
-perl-core/JSON-PP			~*		# gentoo required
+dev-perl/Template-Tiny			~*		# gentoo required
+perl-core/MIME-Base64			~*		# gentoo required
 
 dev-lang/nqp				~*		# gentoo required
 dev-lang/parrot				~*		# gentoo required
@@ -61,18 +55,28 @@ dev-lang/rakudo				~*		# gentoo required
 
 dev-lang/ruby				~*		# gentoo required
 dev-ruby/json				~*		# gentoo required
+dev-ruby/minitest			~*		# gentoo required
+dev-ruby/power_assert			~*		# gentoo required
 dev-ruby/racc				~*		# gentoo required
 dev-ruby/rake				~*		# gentoo required
 dev-ruby/rdoc				~*		# gentoo required
 dev-ruby/rubygems			~*		# gentoo required
+dev-ruby/test-unit			~*		# gentoo required
 virtual/rubygems			~*		# gentoo required
 
-app-text/pandoc				~*		# gentoo required
-dev-haskell/*				~*		# gentoo required
-dev-lang/ghc				~*		# gentoo required
+=dev-qt/qtcore-4.8.7			~*		# gentoo required
+=dev-qt/qtdbus-4.8.7			~*		# gentoo required
+=dev-qt/qtgui-4.8.7			~*		# gentoo required
+=dev-qt/qtopengl-4.8.7			~*		# gentoo required
+=dev-qt/qtscript-4.8.7			~*		# gentoo required
+=dev-qt/qtsql-4.8.7			~*		# gentoo required
+=dev-qt/qtsvg-4.8.7			~*		# gentoo required
+=dev-qt/qttest-4.8.7			~*		# gentoo required
+=dev-qt/qttranslations-4.8.7		~*		# gentoo required
+=dev-qt/qtwebkit-4.8.7			~*		# gentoo required
+=dev-qt/qtxmlpatterns-4.8.7		~*		# gentoo required
 
-dev-java/icedtea			~*		# gentoo required [hack: "java-config --set-system-vm 1" after initial build, before full re-build]
-dev-java/icedtea-web			~*		# gentoo required
+dev-java/icedtea			~*		# gentoo required
 
 app-emulation/vmware-modules		~*		# gentoo required
 app-emulation/vmware-player		~*		# gentoo required
@@ -82,52 +86,37 @@ dev-ruby/paint				~*		# gentoo required
 dev-ruby/trollop			~*		# gentoo required
 games-misc/lolcat			~*		# gentoo required
 
+games-fps/doom3				~*		# gentoo required
+games-fps/quakeforge			~*		# gentoo required
+
 ########################################
 
 games-emulation/mekanix			x86		# gentoo required
 
 ################################################################################
 
-# sys-block/btrace-1.0.1-r1
-sys-block/btrace			~*		# gentoo required: build error
-
-# x11-drivers/xf86-video-vmware-13.0.1-r1
-x11-drivers/xf86-video-vmware		~*		# gentoo required: build error
-
-# media-gfx/graphviz-2.26.3-r4 :: https://forums.gentoo.org/viewtopic-p-7691872.html
-media-gfx/graphviz			~*		# gentoo required: build error
-
-# media-sound/picard-1.1
-media-sound/picard			~*		# gentoo required: build error
-
-########################################
-
-# net-misc/spice-gtk-0.21
-net-misc/spice-gtk			~*		# runtime failure: https://bugs.gentoo.org/show_bug.cgi?id=486284
-
-################################################################################
-
-=net-misc/unison-2.45*			~*
-
 =dev-vcs/cvs2svn-2.4*			~*
+
+=net-fs/samba-4.2*			~*
+dev-libs/nanomsg			~*		# gentoo required
+net-libs/socket_wrapper			~*		# gentoo required
+sys-libs/ldb				~*		# gentoo required
+sys-libs/nss_wrapper			~*		# gentoo required
+sys-libs/ntdb				~*		# gentoo required
+sys-libs/talloc				~*		# gentoo required
+sys-libs/tdb				~*		# gentoo required
+sys-libs/tevent				~*		# gentoo required
+sys-libs/uid_wrapper			~*		# gentoo required
 
 =app-admin/apache-tools-2.4*		~*
 =www-servers/apache-2.4*		~*
 
 ########################################
 
-app-misc/task				~*
-app-misc/taskd				~*
-www-servers/nginx			~*
-
-media-libs/libdvdcss			~*
-media-libs/libdvdnav			~*
-media-libs/libdvdread			~*
-
 x11-wm/openbox				~*
 
 x11-misc/dmenu				~*
-x11-terms/st				~*
+#>>>x11-terms/st				~*		# blocked by: <sys-libs/ncurses-6.0
 x11-wm/dwm				~*
 
 x11-terms/terminology			~*
@@ -135,8 +124,19 @@ x11-wm/enlightenment			~*
 dev-libs/efl				~*		# gentoo required
 media-libs/elementary			~*		# gentoo required
 
+app-text/pandoc				~*
+
+www-servers/nginx			~*
+
+app-misc/task				~*
+app-misc/taskd				~*
+
 www-client/surf				~*
 x11-misc/tabbed				~*
+
+media-libs/libdvdcss			~*
+media-libs/libdvdnav			~*
+media-libs/libdvdread			~*
 
 ################################################################################
 # end of file

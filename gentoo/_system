@@ -3,7 +3,7 @@ source ${HOME}/.bashrc
 ################################################################################
 
 declare SOURCE="/.g/_data/_target/iso"
-declare GITDIR="/.g/_data/_build/funtoo/portage"
+declare GITDIR="/.g/_data/_build/funtoo/portage.git"
 declare METDIR="/.g/_data/_builds/_metro"
 
 declare TARGET="/.g/_data/_builds/_gentoo"
@@ -117,7 +117,8 @@ if [[ ${1} == -i ]]; then
 #>>>		tar -pvvxJ -C ${TARGET} -f	$(ls -t ${SOURCE}/stage3-*i686*funtoo*.tar.xz		| head -n1)
 		tar -pvvxJ -C ${TARGET} -f	$(ls -t ${SOURCE}/stage3-*core2_64*funtoo*.tar.xz	| head -n1)
 		${RSYNC_U} ${SOURCE}/*funtoo*	${TARGET}/_build/
-		${RSYNC_U} ${GITDIR}{,.git}	${TARGET}/usr/
+		${MKDIR}			${TARGET}/usr/portage{,.git}
+		${RSYNC_U} ${GITDIR}/		${TARGET}/usr/portage.git
 		(cd				${TARGET}/usr/portage &&
 		${GIT} reset --hard		$(cat ${HOME}/setup/gentoo/funtoo))
 	fi
@@ -148,8 +149,10 @@ if [[ ${1} == -i ]]; then
 		${SAFE_ENV}			locale-gen						|| exit 1
 		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} ccache debugedit portage glibc gcc	|| exit 1
 		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} eselect genkernel gentoolkit		|| exit 1
+		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} debian-sources				|| exit 1
 		${SAFE_ENV}			eselect profile set-build 25				|| exit 1	# stable
 		${SAFE_ENV}			eselect profile set-flavor 30				|| exit 1	# desktop
+		${SAFE_ENV}			epro show						|| exit 1
 		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} --emptytree \@system \@world		|| exit 1
 	fi
 	if ${KRN}; then for KRN in $(
@@ -174,6 +177,16 @@ if [[ ${1} == -i ]]; then
 		{ [[ -L				${TARGET}/boot/kernel.old ]] ||
 		${LN} ${KRN}			${TARGET}/boot/kernel.old; }				|| exit 1
 	done; fi
+	declare KERNEL="$(cd ${TARGET}/boot; ls kernel-debian-sources-*		2>/dev/null | sort | tail -n1)"
+	declare INITRD="$(cd ${TARGET}/boot; ls initramfs-debian-sources-*	2>/dev/null | sort | tail -n1)"
+	if [[ -n ${KERNEL} ]]; then
+		${RM}				${TARGET}/boot/_kernel					|| exit 1
+		${LN} ${KERNEL}			${TARGET}/boot/_kernel					|| exit 1
+	fi
+	if [[ -n ${INITRD} ]]; then
+		${RM}				${TARGET}/boot/_initrd					|| exit 1
+		${LN} ${INITRD}			${TARGET}/boot/_initrd					|| exit 1
+	fi
 	if ${CFG}; then
 		cat >>${TARGET}/etc/passwd <<END_OF_FILE
 ---
@@ -265,10 +278,11 @@ if [[ ${1} == -u ]]; then
 	locale-gen
 	gcc-config ${CHOST}-$(equery list gcc | awk '{print $1;}' | cut -d- -f3 | sort -n | tail -n1)
 	gcc-config --list-profiles
-	java-config --set-system-vm $(equery list icedtea | awk '{print $1;}' | cut -d/ -f2 | cut -d. -f-1 | sort -n | tail -n1)
+	java-config --set-system-vm $(equery list icedtea | awk '{print $1;}' | ${GREP} -v "^$" | cut -d/ -f2 | cut -d. -f1 | tail -n1)
 	java-config --list-available-vms
 	eselect profile set-build 25	# stable
 	eselect profile set-flavor 30	# desktop
+	epro show
 	declare SELECT
 	for SELECT in \
 		mesa:--auto		\
@@ -277,8 +291,7 @@ if [[ ${1} == -u ]]; then
 		unison:2.45		\
 		vi:vim			\
 		\
-		package-manager:portage	\
-		profile:1
+		package-manager:portage
 	do
 		declare KEY="$(echo "${SELECT}" | ${SED} "s/^(.+)[:](.+)$/\1/g")"
 		declare VAL="$(echo "${SELECT}" | ${SED} "s/^(.+)[:](.+)$/\2/g")"
@@ -299,19 +312,20 @@ if [[ ${1} == -u ]]; then
 			${SAFE_ENV} ${@}
 		fi
 	}
-	${SAFE_ENV} emerge ${ASK} --update --deep --newuse \@system	|| exit 1
-	${SAFE_ENV} emerge ${ASK} --update --deep --newuse \@world	|| exit 1
-#>>>	${EXPECT_W} python-updater					|| exit 1
-	${EXPECT_W} perl-cleaner --all					|| exit 1
-	${EXPECT_W} haskell-updater --all				|| exit 1
-	${SAFE_ENV} emerge ${ASK} \@preserved-rebuild			|| exit 1
-	${SAFE_ENV} emerge ${ASK} \@module-rebuild			|| exit 1
-	${SAFE_ENV} emerge ${ASK} --depclean				|| exit 1
-	${SAFE_ENV} revdep-rebuild --ignore				|| exit 1
-	${SAFE_ENV} emaint --fix all					|| exit 1
-	${SAFE_ENV} eclean --verbose distfiles				|| exit 1
-	${SAFE_ENV} eclean --verbose packages				|| exit 1
-	${EXPECT_W} dispatch-conf					|| exit 1
+#>>>	${SAFE_ENV} emerge ${ASK} --update --deep --newuse \@system		|| exit 1
+#>>>	${SAFE_ENV} emerge ${ASK} --update --deep --newuse \@world		|| exit 1
+	${SAFE_ENV} emerge ${ASK} --update --deep --newuse \@system \@world	|| exit 1
+#>>>	${EXPECT_W} python-updater						|| exit 1
+	${EXPECT_W} perl-cleaner --all						|| exit 1
+	${EXPECT_W} haskell-updater --all					|| exit 1
+	${SAFE_ENV} emerge ${ASK} \@preserved-rebuild				|| exit 1
+#>>>	${SAFE_ENV} emerge ${ASK} \@module-rebuild				|| exit 1
+	${SAFE_ENV} emerge ${ASK} --depclean					|| exit 1
+	${SAFE_ENV} revdep-rebuild --ignore					|| exit 1
+	${SAFE_ENV} emaint --fix all						|| exit 1
+	${SAFE_ENV} eclean --verbose distfiles					|| exit 1
+	${SAFE_ENV} eclean --verbose packages					|| exit 1
+	${EXPECT_W} dispatch-conf						|| exit 1
 
 ########################################
 
@@ -323,6 +337,7 @@ elif [[ ${1} != -! ]]; then
 		${RM} /usr/portage/.git
 	fi
 	${SAFE_ENV} emerge --emptytree --fetch-all-uri \@system \@world
+	${SAFE_ENV} egencache --update-use-local-desc
 fi
 
 ################################################################################

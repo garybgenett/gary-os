@@ -1,15 +1,57 @@
-# pulled from java overlay on 2015-02-22: layman -a java
+# dev-java/icedtea-6.1.13.5-r1
+# cd /var/lib/layman/java; git checkout 09418131a55c5a5cad853203e200de6539dc0829 dev-java/icedtea/icedtea-6.1.13.8.ebuild
+# ebuild dev-java/icedtea/icedtea-6.1.13.8.ebuild digest
+#
+# do not have original error, due to non-existence of the file now...
 
-# dev-java/icedtea-6.1.13.5-r1 :: https://bugs.gentoo.org/show_bug.cgi?id=534118
-#	http://freebsd.1045724.n5.nabble.com/Error-time-is-more-than-10-years-from-present-1104530400000-when-building-java-openjdk-td5976963.html
-# Error: time is more than 10 years from present: 1104530400000
-# java.lang.RuntimeException: time is more than 10 years from present: 1104530400000
-#         at build.tools.generatecurrencydata.GenerateCurrencyData.makeSpecialCaseEntry(GenerateCurrencyData.java:285)
-#         at build.tools.generatecurrencydata.GenerateCurrencyData.buildMainAndSpecialCaseTables(GenerateCurrencyData.java:225)
-#         at build.tools.generatecurrencydata.GenerateCurrencyData.main(GenerateCurrencyData.java:154)
+ * icedtea6-1.13.5.tar.xz SHA256 SHA512 WHIRLPOOL size ;-) ...           [ ok ]
+>>> Downloading 'http://gentoo.osuosl.org/distfiles/openjdk-6-src-b33-14_oct_2014.tar.xz'
+--2017-07-19 08:25:34--  http://gentoo.osuosl.org/distfiles/openjdk-6-src-b33-14_oct_2014.tar.xz
+Resolving gentoo.osuosl.org (gentoo.osuosl.org)... 140.211.166.134, 2605:bc80:3010::134, 2600:3402:200:227::2, ...
+Connecting to gentoo.osuosl.org (gentoo.osuosl.org)|140.211.166.134|:80... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2017-07-19 08:25:34 ERROR 404: Not Found.
+[...]
+!!! Couldn't download 'openjdk-6-src-b33-14_oct_2014.tar.xz'. Aborting.
+ * Fetch failed for 'dev-java/icedtea-6.1.13.5-r1', Log file:
+ *  '/var/tmp/portage/dev-java/icedtea-6.1.13.5-r1/temp/build.log'
 
-# dev-java/icedtea-7.2.5.3 :: https://bugs.gentoo.org/show_bug.cgi?id=531082
-#	http://forums.gentoo.org/viewtopic-t-1010390.html
-# /var/tmp/portage/dev-java/icedtea-7.2.5.3/work/icedtea-2.5.3/bootstrap/jdk1.6.0/bin/java -XX:-PrintVMOptions -XX:+UnlockDiagnosticVMOptions -XX:-LogVMOutput -Xmx512m -Xms512m -XX:PermSize=32m -XX:MaxPermSize=160m -Xbootclasspath/p:/var/tmp/portage/dev-java/icedtea-7.2.5.3/work/icedtea-2.5.3/openjdk.build-boot/langtools/dist/bootstrap/lib/javac.jar -jar /var/tmp/portage/dev-java/icedtea-7.2.5.3/work/icedtea-2.5.3/openjdk.build-boot/langtools/dist/bootstrap/lib/javac.jar -g -source 6 -target 6 -encoding ascii -Xbootclasspath:/var/tmp/portage/dev-java/icedtea-7.2.5.3/work/icedtea-2.5.3/openjdk.build-boot/classes -sourcepath /var/tmp/portage/dev-java/icedtea-7.2.5.3/work/icedtea-2.5.3/generated.build:../../../src/solaris/classes:../../../src/share/classes -bootclasspath /var/tmp/portage/dev-java/icedtea-7.2.5.3/work/icedtea-2.5.3/openjdk.build-boot/classes:/var/tmp/portage/dev-java/icedtea-7.2.5.3/work/icedtea-2.5.3/bootstrap/jdk1.6.0/jre/lib/rt.jar -d /var/tmp/portage/dev-java/icedtea-7.2.5.3/work/icedtea-2.5.3/openjdk.build-boot/classes @/var/tmp/portage/dev-java/icedtea-7.2.5.3/work/icedtea-2.5.3/openjdk.build-boot/tmp/java/java.lang/java/.classes.list
-# ../../../src/share/classes/java/lang/management/PlatformComponent.java:42: error: Util is not public in sun.management; cannot be accessed from outside package
-# import sun.management.Util;
+# dev-java/icedtea-7.2.5.5
+# cd /var/lib/layman/java; git checkout 09418131a55c5a5cad853203e200de6539dc0829 dev-java/icedtea/icedtea-7.2.6.1.ebuild
+# ebuild dev-java/icedtea/icedtea-7.2.6.1.ebuild digest
+
+[...]
+file /var/tmp/portage/dev-java/icedtea-7.2.5.5/work/icedtea-2.5.5/openjdk.build-boot/bin/java does not have a PT_PAX_FLAGS program header, try conversion
+Makefile:124: recipe for target '/var/tmp/portage/dev-java/icedtea-7.2.5.5/work/icedtea-2.5.5/openjdk.build-boot/classes/javax/management/remote/rmi/RMIConnectionImpl_Stub.class' failed
+gmake[6]: *** [/var/tmp/portage/dev-java/icedtea-7.2.5.5/work/icedtea-2.5.5/openjdk.build-boot/classes/javax/management/remote/rmi/RMIConnectionImpl_Stub.class] Error 1
+gmake[6]: Leaving directory '/var/tmp/portage/dev-java/icedtea-7.2.5.5/work/icedtea-2.5.5/openjdk-boot/jdk/make/com/sun/jmx'
+Makefile:49: recipe for target 'all' failed
+gmake[5]: *** [all] Error 1
+gmake[5]: Leaving directory '/var/tmp/portage/dev-java/icedtea-7.2.5.5/work/icedtea-2.5.5/openjdk-boot/jdk/make/com/sun'
+Makefile:43: recipe for target 'all' failed
+gmake[4]: *** [all] Error 1
+gmake[4]: Leaving directory '/var/tmp/portage/dev-java/icedtea-7.2.5.5/work/icedtea-2.5.5/openjdk-boot/jdk/make/com'
+Makefile:253: recipe for target 'all' failed
+gmake[3]: *** [all] Error 1
+gmake[3]: Leaving directory '/var/tmp/portage/dev-java/icedtea-7.2.5.5/work/icedtea-2.5.5/openjdk-boot/jdk/make'
+make/jdk-rules.gmk:92: recipe for target 'jdk-build' failed
+gmake[2]: *** [jdk-build] Error 2
+gmake[2]: Leaving directory '/var/tmp/portage/dev-java/icedtea-7.2.5.5/work/icedtea-2.5.5/openjdk-boot'
+Makefile:251: recipe for target 'build_product_image' failed
+gmake[1]: *** [build_product_image] Error 2
+gmake[1]: Leaving directory '/var/tmp/portage/dev-java/icedtea-7.2.5.5/work/icedtea-2.5.5/openjdk-boot'
+Makefile:2425: recipe for target 'stamps/icedtea-boot.stamp' failed
+make: *** [stamps/icedtea-boot.stamp] Error 2
+ * ERROR: dev-java/icedtea-7.2.5.5 failed (compile phase):
+ *   emake failed
+ *
+ * If you need support, post the output of `emerge --info '=dev-java/icedtea-7.2.5.5'`,
+ * the complete build log and the output of `emerge -pqv '=dev-java/icedtea-7.2.5.5'`.
+ * The complete build log is located at '/var/tmp/portage/dev-java/icedtea-7.2.5.5/temp/build.log'.
+ * The ebuild environment file is located at '/var/tmp/portage/dev-java/icedtea-7.2.5.5/temp/environment'.
+ * Working directory: '/var/tmp/portage/dev-java/icedtea-7.2.5.5/work/icedtea-2.5.5'
+ * S: '/var/tmp/portage/dev-java/icedtea-7.2.5.5/work/icedtea-2.5.5'
+!!! When you file a bug report, please include the following information:
+GENTOO_VM=icedtea-7  CLASSPATH="" JAVA_HOME=""
+JAVACFLAGS="" COMPILER=""
+and of course, the output of emerge --info =icedtea-7.2.5.5

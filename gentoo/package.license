@@ -36,6 +36,8 @@ games-misc/fortune-mod-strangelove	fairuse
 
 ########################################
 
+app-emulation/virtualbox-extpack-oracle	PUEL
+
 app-emulation/vmware-player		vmware
 app-emulation/vmware-tools		vmware
 

@@ -1,6 +1,6 @@
 # Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-java/icedtea/icedtea-7.2.5.3.ebuild,v 1.1 2014/11/01 21:43:06 caster Exp $
+# $Id$
 # Build written by Andrew John Hughes (gnu_andrew@member.fsf.org)
 
 # *********************************************************
@@ -10,18 +10,20 @@
 EAPI="5"
 SLOT="7"
 
-inherit check-reqs java-pkg-2 java-vm-2 multiprocessing pax-utils prefix versionator virtualx
+inherit check-reqs gnome2-utils java-pkg-2 java-vm-2 multiprocessing pax-utils prefix versionator virtualx
 
-ICEDTEA_VER=$(get_version_component_range 2-)
+ICEDTEA_VER=$(get_version_component_range 2-4)
 ICEDTEA_BRANCH=$(get_version_component_range 2-3)
 ICEDTEA_PKG=icedtea-${ICEDTEA_VER}
-CORBA_TARBALL="3c9f523bf96e.tar.bz2"
-JAXP_TARBALL="ca26767d3375.tar.bz2"
-JAXWS_TARBALL="9a6c90336922.tar.bz2"
-JDK_TARBALL="1e6db4f8b0f3.tar.bz2"
-LANGTOOLS_TARBALL="960cdffa8b3f.tar.bz2"
-OPENJDK_TARBALL="6cf2880aab5e.tar.bz2"
-HOTSPOT_TARBALL="6144ca9b6a72.tar.bz2"
+ICEDTEA_PRE=$(get_version_component_range _)
+CORBA_TARBALL="2545636482d6.tar.bz2"
+JAXP_TARBALL="ffbe529eeac7.tar.bz2"
+JAXWS_TARBALL="b9776fab65b8.tar.bz2"
+JDK_TARBALL="61d3e001dee6.tar.bz2"
+LANGTOOLS_TARBALL="9c6e1de67d7d.tar.bz2"
+OPENJDK_TARBALL="39b2c4354d0a.tar.bz2"
+HOTSPOT_TARBALL="b19bc5aeaa09.tar.bz2"
+
 CACAO_TARBALL="e215e36be9fc.tar.gz"
 JAMVM_TARBALL="jamvm-ec18fb9e49e62dce16c5094ef1527eed619463aa.tar.gz"
 
@@ -32,8 +34,9 @@ JDK_GENTOO_TARBALL="icedtea-${ICEDTEA_BRANCH}-jdk-${JDK_TARBALL}"
 LANGTOOLS_GENTOO_TARBALL="icedtea-${ICEDTEA_BRANCH}-langtools-${LANGTOOLS_TARBALL}"
 OPENJDK_GENTOO_TARBALL="icedtea-${ICEDTEA_BRANCH}-openjdk-${OPENJDK_TARBALL}"
 HOTSPOT_GENTOO_TARBALL="icedtea-${ICEDTEA_BRANCH}-hotspot-${HOTSPOT_TARBALL}"
-CACAO_GENTOO_TARBALL="icedtea-${ICEDTEA_BRANCH}-cacao-${CACAO_TARBALL}"
-JAMVM_GENTOO_TARBALL="icedtea-${ICEDTEA_BRANCH}-${JAMVM_TARBALL}"
+
+CACAO_GENTOO_TARBALL="icedtea-cacao-${CACAO_TARBALL}"
+JAMVM_GENTOO_TARBALL="icedtea-${JAMVM_TARBALL}"
 
 DROP_URL="http://icedtea.classpath.org/download/drops"
 ICEDTEA_URL="${DROP_URL}/icedtea${SLOT}/${ICEDTEA_VER}"
@@ -54,10 +57,11 @@ SRC_URI="
 	${DROP_URL}/jamvm/${JAMVM_TARBALL} -> ${JAMVM_GENTOO_TARBALL}"
 
 LICENSE="Apache-1.1 Apache-2.0 GPL-1 GPL-2 GPL-2-with-linking-exception LGPL-2 MPL-1.0 MPL-1.1 public-domain W3C"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64"
+RESTRICT="test"
 
 IUSE="+X +alsa cacao cjk +cups debug doc examples infinality jamvm javascript +jbootstrap kerberos +nsplugin
-	+nss pax_kernel pulseaudio selinux smartcard +source sunec test zero +webstart"
+	nss pax_kernel pulseaudio sctp selinux smartcard +source +sunec test zero +webstart"
 
 # Ideally the following were optional at build time.
 ALSA_COMMON_DEP="
@@ -66,7 +70,7 @@ CUPS_COMMON_DEP="
 	>=net-print/cups-1.2.12"
 X_COMMON_DEP="
 	>=dev-libs/atk-1.30.0
-	>=dev-libs/glib-2.26
+	>=dev-libs/glib-2.26:2
 	media-libs/fontconfig
 	>=media-libs/freetype-2.5.3:2=[infinality?]
 	>=x11-libs/cairo-1.8.8:=
@@ -91,7 +95,7 @@ X_DEPEND="
 COMMON_DEP="
 	>=media-libs/giflib-4.1.6:=
 	>=media-libs/lcms-2.5
-	>=media-libs/libpng-1.2:=
+	>=media-libs/libpng-1.2:0=
 	>=sys-libs/zlib-1.2.3:=
 	virtual/jpeg:0=
 	javascript? ( dev-java/rhino:1.6 )
@@ -100,9 +104,11 @@ COMMON_DEP="
 	>=dev-util/systemtap-1
 	smartcard? ( sys-apps/pcsc-lite )
 	sunec? ( >=dev-libs/nss-3.16.1-r1 )
+	sctp? ( net-misc/lksctp-tools )
 	!dev-java/icedtea-web:7"
 
 # cups is needed for X. #390945 #390975
+# gsettings-desktop-schemas is needed for native proxy support. #431972
 RDEPEND="${COMMON_DEP}
 	!dev-java/icedtea:0
 	X? (
@@ -119,7 +125,8 @@ RDEPEND="${COMMON_DEP}
 	)
 	alsa? ( ${ALSA_COMMON_DEP} )
 	cups? ( ${CUPS_COMMON_DEP} )
-	selinux? ( sec-policy/selinux-java )"
+	selinux? ( sec-policy/selinux-java )
+	>=gnome-base/gsettings-desktop-schemas-3.12.2"
 
 # Only ant-core-1.8.1 has fixed ant -diagnostics when xerces+xalan are not present.
 # ca-certificates, perl and openssl are used for the cacerts keystore generation
@@ -173,8 +180,8 @@ pkg_setup() {
 	icedtea_check_requirements
 
 	JAVA_PKG_WANT_BUILD_VM="
-		icedtea-7 icedtea-bin-7 icedtea7
-		icedtea-6 icedtea-bin-6 icedtea6 icedtea6-bin
+		icedtea-7 icedtea-bin-7
+		icedtea-6 icedtea-bin-6
 		gcj-jdk"
 	JAVA_PKG_WANT_SOURCE="1.5"
 	JAVA_PKG_WANT_TARGET="1.5"
@@ -196,28 +203,25 @@ java_prepare() {
 }
 
 src_configure() {
-	local bootstrap cacao_config config hotspot_port use_cacao use_zero zero_config
+	local cacao_config config hotspot_port jamvm_config use_jamvm use_zero zero_config
 	local vm=$(java-pkg_get-current-vm)
 
-	# Whether to bootstrap
-	bootstrap="disable"
-	if use jbootstrap; then
-		bootstrap="enable"
-	fi
-
-	if has "${vm}" gcj-jdk; then
-		# gcj-jdk ensures ecj is present.
+	# gcj-jdk ensures ecj is present.
+	if use jbootstrap || has "${vm}" gcj-jdk; then
 		use jbootstrap || einfo "bootstrap is necessary when building with ${vm}, ignoring USE=\"-jbootstrap\""
-		bootstrap="enable"
-		local ecj_jar="$(readlink "${EPREFIX}"/usr/share/eclipse-ecj/ecj.jar)"
-		config+=" --with-ecj-jar=${ecj_jar}"
+		config+=" --enable-bootstrap"
+	else
+		config+=" --disable-bootstrap"
 	fi
-
-	config+=" --${bootstrap}-bootstrap"
 
 	# Use Zero if requested
 	if use zero; then
 		use_zero="yes"
+	fi
+
+	# Use JamVM if requested
+	if use jamvm; then
+		use_jamvm="yes"
 	fi
 
 	# Use CACAO if requested
@@ -241,6 +245,15 @@ src_configure() {
 		fi
 	fi
 
+	# Turn on JamVM if needed (non-HS archs) or requested
+	if test "x${use_jamvm}" = "xyes"; then
+		if test "x${hotspot_port}" = "xyes"; then
+			ewarn 'Enabling JamVM on an architecture with HotSpot support; issues may result.'
+			ewarn 'If so, please rebuild with USE="-jamvm"'
+		fi
+		jamvm_config="--enable-jamvm"
+	fi
+
 	# Turn on CACAO if needed (non-HS archs) or requested
 	if test "x${use_cacao}" = "xyes"; then
 		if test "x${hotspot_port}" = "xyes"; then
@@ -252,6 +265,9 @@ src_configure() {
 
 	# Turn on Zero if needed (non-HS/CACAO archs) or requested
 	if test "x${use_zero}" = "xyes"; then
+		if test "x${hotspot_port}" = "xyes"; then
+			ewarn 'Enabling Zero on an architecture with HotSpot support; performance will be significantly reduced.'
+		fi
 		zero_config="--enable-zero"
 	fi
 
@@ -277,19 +293,25 @@ src_configure() {
 		--with-jamvm-src-zip="${DISTDIR}/${JAMVM_GENTOO_TARBALL}" \
 		--with-jdk-home="$(java-config -O)" \
 		--prefix="${EPREFIX}/usr/$(get_libdir)/icedtea${SLOT}" \
-		--with-pkgversion="Gentoo package ${PF}" \
+		--mandir="${EPREFIX}/usr/$(get_libdir)/icedtea${SLOT}/man" \
+		--docdir="${EPREFIX}/usr/share/doc/${PF}" \
+		--htmldir="${EPREFIX}/usr/share/doc/${PF}/html" \
+		--with-pkgversion="Gentoo ${PF}" \
 		--disable-downloading --disable-Werror \
-		--enable-system-lcms \
+		--disable-hotspot-tests --disable-jdk-tests \
+		--enable-system-lcms --enable-system-gif \
+		--enable-system-jpeg --enable-system-png \
+		--enable-system-zlib \
 		$(use_enable !debug optimizations) \
 		$(use_enable doc docs) \
 		$(use_enable nss) \
-		$(use_enable jamvm) \
 		$(use_enable kerberos system-kerberos) \
 		$(use_with pax_kernel pax "${EPREFIX}/usr/sbin/paxmark.sh") \
 		$(use_enable smartcard system-pcsc) \
+		$(use_enable sctp system-sctp) \
 		$(use_enable sunec) \
 		$(use_enable infinality) \
-		${zero_config} ${cacao_config}
+		${zero_config} ${cacao_config} ${jamvm_config}
 }
 
 src_compile() {
@@ -310,45 +332,22 @@ src_test() {
 }
 
 src_install() {
+	default
+
 	local dest="/usr/$(get_libdir)/icedtea${SLOT}"
-	local ddest="${ED}/${dest}"
-	dodir "${dest}"
-
-	dodoc README NEWS AUTHORS
-	dosym /usr/share/doc/${PF} /usr/share/doc/${PN}${SLOT}
-
-	cd openjdk.build/j2sdk-image || die
+	local ddest="${ED}${dest#/}"
 
 	# Ensures HeadlessGraphicsEnvironment is used.
 	if ! use X; then
 		rm -r jre/lib/$(get_system_arch)/xawt || die
 	fi
 
-	# Don't hide classes
-	rm lib/ct.sym || die
-
-	#402507
-	mkdir jre/.systemPrefs || die
-	touch jre/.systemPrefs/.system.lock || die
-	touch jre/.systemPrefs/.systemRootModFile || die
-
-	# doins can't handle symlinks.
-	cp -vRP bin include jre lib man "${ddest}" || die
-
-	dodoc ASSEMBLY_EXCEPTION THIRD_PARTY_README
-
-	if use doc; then
-		# java-pkg_dohtml needed for package-list #302654
-		java-pkg_dohtml -A dtd -r ../docs/* || die
+	if ! use examples; then
+		rm -rf "${ddest}"/demo "${ddest}"/sample || die
 	fi
 
-	if use examples; then
-		dodir "${dest}/share"
-		cp -vRP demo sample "${ddest}/share/" || die
-	fi
-
-	if use source; then
-		cp src.zip "${ddest}" || die
+	if ! use source; then
+		rm -f "${ddest}"/src.zip || die
 	fi
 
 	# provided by icedtea-web but we need it in JAVA_HOME to work with run-java-tool
@@ -364,9 +363,6 @@ src_install() {
 	# Fix the permissions.
 	find "${ddest}" \! -type l \( -perm /111 -exec chmod 755 {} \; -o -exec chmod 644 {} \; \) || die
 
-	# Needs to be done before generating cacerts
-	java-vm_set-pax-markings "${ddest}"
-
 	# We need to generate keystore - bug #273306
 	einfo "Generating cacerts file from certificates in ${EPREFIX}/usr/share/ca-certificates/"
 	mkdir "${T}/certgen" && cd "${T}/certgen" || die
@@ -380,10 +376,10 @@ src_install() {
 
 	# OpenJDK7 should be able to use fontconfig instead, but wont hurt to
 	# install it anyway. Bug 390663
-	cp "${FILESDIR}"/fontconfig.Gentoo.properties.src "${T}"/fontconfig.Gentoo.properties || die
-	eprefixify "${T}"/fontconfig.Gentoo.properties
+	cp "${FILESDIR}"/fontconfig.Gentoo.properties.src "${T}" || die
+	eprefixify "${T}"/fontconfig.Gentoo.properties.src
 	insinto "${dest}"/jre/lib
-	doins "${T}"/fontconfig.Gentoo.properties
+	doins "${T}"/fontconfig.Gentoo.properties.src
 
 	set_java_env "${FILESDIR}/icedtea.env"
 	if ! use X || ! use alsa || ! use cups; then
@@ -402,4 +398,9 @@ pkg_preinst() {
 		elog "build VM settings in /etc/java-config-2/build/jdk.conf are not changed"
 		elog "and the same holds for any user VM settings. Sorry for the inconvenience."
 	fi
+
+	gnome2_icon_savelist;
 }
+
+pkg_postinst() { gnome2_icon_cache_update; }
+pkg_postrm() { gnome2_icon_cache_update; }

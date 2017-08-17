@@ -6,7 +6,7 @@ sys-apps/paludis
 
 ########################################
 
-games-roguelike/nethack
+=net-fs/samba-4.2*			# make samba 4+ available
 
 games-fps/doom3
 games-fps/doom3-data
