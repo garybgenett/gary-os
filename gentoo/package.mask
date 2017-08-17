@@ -3,18 +3,39 @@
 ################################################################################
 
 # dev-lisp/clisp-2.49-r8
->=dev-lisp/clisp-2.49			# gentoo required: fix build error
+>=dev-lisp/clisp-2.49			# gentoo required: build error
 >=dev-lisp/asdf-3.0.3			# gentoo required
 >=dev-lisp/gentoo-init-1.0		# gentoo required
->=dev-lisp/uiop-3.0.3			# gentoo required
 
-# games-misc/lolcat-42.1.0
-# dev-ruby/paint-0.9.0
->=dev-ruby/paint-0.9			# runtime failure: https://bugs.gentoo.org/show_bug.cgi?id=536268
+# dev-java/oracle-jdk-bin-1.8.0.51
+# dev-java/oracle-jre-bin-1.8.0.51
+>=dev-java/oracle-jdk-bin-1.8		# gentoo required: build error (https://forums.gentoo.org/viewtopic-t-1025908.html)
+>=dev-java/oracle-jre-bin-1.8		# gentoo required: build error (https://forums.gentoo.org/viewtopic-t-1025908.html)
+
+# app-editors/retext-4.1.3
+# dev-python/PyQt4-4.11.4-r1000
+# dev-qt/qtgui-4.8.6-r4
+<dev-qt/qtgui-4.8.7			# gentoo required: dependency resolution
+<dev-qt/qtcore-4.8.7			# gentoo required
+<dev-qt/qtopengl-4.8.7			# gentoo required
+<dev-qt/qtscript-4.8.7			# gentoo required
+<dev-qt/qtsvg-4.8.7			# gentoo required
+<dev-qt/qttranslations-4.8.7		# gentoo required
+<dev-qt/qtwebkit-4.8.7			# gentoo required
+<dev-qt/qtxmlpatterns-4.8.7		# gentoo required
+
+# www-client/firefox-38.2.1
+>=www-client/firefox-38.2.0		# gentoo required: build error [required earlier version is in overlay]
+
+# media-sound/zynaddsubfx-2.4.3
+>=media-sound/zynaddsubfx-2.4.3		# gentoo required: build error
+
+# games-action/garden-1.0.9
+>=games-action/garden-1.0.9		# gentoo required: build error
 
 ########################################
 
->=x11-wm/enlightenment-1.0		# not really e17
+>=x11-wm/enlightenment-1.0		# still legacy e16
 
 ################################################################################
 

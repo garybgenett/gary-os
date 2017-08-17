@@ -30,6 +30,7 @@ sys-boot/boot-update
 sys-boot/efibootmgr
 sys-boot/grub
 sys-boot/os-prober
+sys-boot/refind
 sys-boot/syslinux
 sys-process/runit
 
@@ -44,7 +45,10 @@ sys-fs/ext4magic
 sys-fs/extundelete
 sys-fs/mtools
 sys-fs/squashfs-tools
+
 sys-fs/zfs
+sys-fs/zfs-kmod
+sys-kernel/spl
 
 sys-apps/coreutils
 sys-apps/diffutils
@@ -109,6 +113,7 @@ sys-libs/gpm
 
 dev-lang/perl
 dev-libs/libpcre
+dev-perl/CGI
 dev-perl/Curses
 dev-perl/Curses-UI
 dev-perl/DateManip
@@ -117,10 +122,9 @@ dev-perl/Sys-Virt
 dev-perl/WWW-Curl
 dev-perl/WWW-Mechanize
 dev-perl/libwww-perl
-perl-core/CGI
-perl-core/JSON-PP
 perl-core/MIME-Base64
 perl-core/Time-Local
+virtual/perl-JSON-PP
 
 app-crypt/gnupg
 dev-libs/openssl
@@ -163,15 +167,16 @@ app-arch/deb2targz
 app-arch/dpkg
 app-arch/rpm
 app-arch/rpm2targz
+app-arch/xar
 app-crypt/chntpw
 sys-apps/fakeroot
 
 ########################################
 # gentoo
 
+sys-kernel/debian-sources
 sys-kernel/genkernel
-sys-kernel/gentoo-sources
-sys-kernel/gentoo-sources:3.10.65
+sys-kernel/gentoo-sources:3.10.82
 sys-kernel/linux-firmware
 
 app-portage/portage-utils
@@ -222,6 +227,7 @@ x11-wm/windowmaker
 
 x11-apps/transset
 x11-apps/xsetroot
+x11-misc/redshift
 x11-misc/whaw
 x11-misc/wmctrl
 x11-misc/xautolock
@@ -233,6 +239,7 @@ x11-misc/xvkbd
 # toolkits
 
 net-misc/unison
+net-misc/unison:2.45
 
 dev-perl/Template-DBI
 dev-perl/Template-GD
@@ -287,6 +294,8 @@ dev-lang/ghc
 
 dev-java/icedtea
 dev-java/icedtea-bin
+dev-java/icedtea-bin:6
+dev-java/icedtea-bin:7
 dev-java/icedtea:6
 dev-java/icedtea:7
 
@@ -373,6 +382,7 @@ net-misc/pipes
 net-dialup/lrzsz
 net-dialup/minicom
 net-dialup/ppp
+net-dialup/rp-pppoe
 
 net-fs/curlftpfs
 net-fs/nfs-utils
@@ -394,7 +404,6 @@ sys-apps/flashrom
 
 dev-db/mysql
 net-dns/bind
-net-fs/samba
 net-ftp/proftpd
 net-ftp/tftp-hpa
 net-mail/dovecot
@@ -406,6 +415,10 @@ net-misc/radvd
 net-misc/tor
 net-nds/openldap
 net-wireless/hostapd
+
+dev-libs/libmemcached
+dev-libs/nanomsg
+net-fs/samba
 
 app-admin/apache-tools
 www-misc/awstats
@@ -439,6 +452,11 @@ app-emulation/spice-vdagent
 app-emulation/virt-manager
 app-emulation/virt-viewer
 net-misc/spice-gtk
+
+app-emulation/virtualbox
+app-emulation/virtualbox-additions
+app-emulation/virtualbox-guest-additions
+app-emulation/virtualbox-modules
 
 app-emulation/vmware-modules
 app-emulation/vmware-player
@@ -571,6 +589,7 @@ app-misc/golly
 games-misc/fortune-mod
 games-misc/fortune-mod-all
 games-misc/lolcat
+games-misc/sex
 
 games-board/cgoban
 games-board/gnuchess
@@ -602,7 +621,7 @@ games-fps/prboom
 games-fps/quakeforge
 
 games-util/xboxdrv
-media-tv/xbmc
+media-tv/kodi
 
 ################################################################################
 # end of file

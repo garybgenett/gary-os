@@ -29,6 +29,7 @@ sys-boot/boot-update
 sys-boot/efibootmgr
 sys-boot/grub
 sys-boot/os-prober
+sys-boot/refind
 sys-boot/syslinux
 sys-process/runit
 
@@ -42,7 +43,10 @@ sys-fs/ext4magic
 sys-fs/extundelete
 sys-fs/mtools
 sys-fs/squashfs-tools
+
 sys-fs/zfs
+sys-fs/zfs-kmod
+sys-kernel/spl
 
 sys-apps/coreutils
 sys-apps/diffutils
@@ -148,14 +152,16 @@ app-arch/deb2targz
 app-arch/dpkg
 app-arch/rpm
 app-arch/rpm2targz
+app-arch/xar
 app-crypt/chntpw
 sys-apps/fakeroot
 
 ########################################
 # gentoo
 
+sys-kernel/debian-sources
 sys-kernel/genkernel
-sys-kernel/gentoo-sources:3.10.65
+sys-kernel/gentoo-sources:3.10.82
 sys-kernel/linux-firmware
 
 app-portage/portage-utils
@@ -285,7 +291,6 @@ net-misc/openvpn
 # programs
 
 mail-client/mutt
-mail-mta/msmtp
 
 www-client/surf
 
