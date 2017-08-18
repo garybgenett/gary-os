@@ -134,7 +134,7 @@ if [[ ${1} == -i ]]; then
 	${HOME}/scripts/_sync _home _build	${TARGET}/.g/.home
 	${RM}					${TARGET}/.g/.home/.ssh/id_*
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/scripts/_sync mount g null
-	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/setup/.setconf
+	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/setup/.setconf -r
 	if ${NEW}; then
 		if [[ ${_NEW} == "MET" ]]; then
 			${SED} -i "N;N;N;N;N;s|[\"]\n\nMETRO_USE=[^\n]+\n||g" ${TARGET}/.setup/gentoo/make.conf
