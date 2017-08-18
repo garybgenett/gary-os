@@ -1,12 +1,17 @@
 ################################################################################
-# default-grml64-3.7.9
+# default-grml64-4.9.29
 ################################################################################
+
+General setup
+	Default hostname							CONFIG_DEFAULT_HOSTNAME=gary-os
+	Kernel .config support							CONFIG_IKCONFIG=y
+		Enable access to .config through /proc/config.gz		CONFIG_IKCONFIG_PROC=y
 
 Processor type and features
 	Linux guest support							CONFIG_HYPERVISOR_GUEST=y
 		Enable paravirtualization code					CONFIG_PARAVIRT=y
 		KVM Guest support (including kvmclock)				CONFIG_KVM_GUEST=y
-	Processor family (Core 2/newer Xeon)					CONFIG_MCORE2=y
+	Processor family (Generic-x86-64)					CONFIG_GENERIC_CPU=y
 	Preemption Model -> Preemptible Kernel (Low-Latency Desktop)		CONFIG_PREEMPT=y
 
 Networking support								CONFIG_NET=y
@@ -14,7 +19,10 @@ Networking support								CONFIG_NET=y
 		Network packet filtering framework (Netfilter)			CONFIG_NETFILTER=y
 			IP: Netfilter Configuration
 				IPv4 NAT					CONFIG_NF_NAT_IPV4=m
-				MASQUERADE target support			CONFIG_IP_NF_TARGET_MASQUERADE=m
+				IPv4 masquerade support				CONFIG_IP_NF_TARGET_MASQUERADE=m
+			IPv6: Netfilter Configuration
+				IPv6 NAT					CONFIG_NF_NAT_IPV6=m
+				IPv6 masquerade support				CONFIG_IP6_NF_TARGET_MASQUERADE=m
 
 Device Drivers
 	SCSI device support
@@ -60,7 +68,6 @@ Device Drivers
 		EHCI HCD (USB 2.0) support					CONFIG_USB_EHCI_HCD=y
 		OHCI HCD support						CONFIG_USB_OHCI_HCD=y
 		UHCI HCD (most Intel and VIA) support				CONFIG_USB_UHCI_HCD=y
-		USB Printer support						CONFIG_USB_PRINTER=y
 		USB Mass Storage support					CONFIG_USB_STORAGE=y
 		USB Serial Converter support					CONFIG_USB_SERIAL=y
 			USB Serial Console device support			CONFIG_USB_SERIAL_CONSOLE=y
