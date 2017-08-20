@@ -2808,7 +2808,7 @@ function task-journal {
 		DATE="${1}"
 		shift
 	fi
-	declare UUIDS="$(task uuids project:_journal "${DATE}" | ${SED} "s/,/\n/g")"
+	declare UUIDS="$(task uuids project:_journal -- /${DATE}/)"
 	declare UUID
 	if [[ -z ${UUIDS} ]]; then
 		task add project:_journal kind:notes area:writing -- "${DATE} $(date --date="${DATE}" +%a) {${@}}"
@@ -2900,7 +2900,7 @@ function task-track {
 		use Time::Local qw(timelocal);
 		my $args = join(" ", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $root = qx(task _get rc.data.location); chomp(${root});
-		my $uuid = qx(task uuids ${args}); chomp(${uuid}); $uuid = [ split(",", ${uuid}) ];
+		my $uuid = qx(task uuids ${args}); chomp(${uuid}); $uuid = [ split(" ", ${uuid}) ];
 		if (!@{$uuid}) {
 			die("NO MATCHES!");
 		}
@@ -3072,7 +3072,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 	function impersonate_command {
 		declare MARKER='echo -en "\e[1;34m"; printf "~%.0s" {1..120}; echo -en "\e[0;37m\n"'
 		declare TASKFILE="$(task _get rc.data.location)"
-		declare TASKUUID="$(task uuids project:_data -- .review)"
+		declare TASKUUID="$(task uuids project:_data -- /.review/)"
 		function _task {
 			eval ${MARKER}
 			echo -en "[task ${@}]\n"
