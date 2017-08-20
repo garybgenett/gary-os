@@ -2800,9 +2800,9 @@ function task-export-text {
 ########################################
 
 function task-journal {
-	if [[ -z "${@}" ]]; then
-		return 1
-	fi
+#>>>	if [[ -z "${@}" ]]; then
+#>>>		return 1
+#>>>	fi
 	declare DATE="$(date --iso)"
 	if [[ -n "$(echo "${1}" | ${GREP} "^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$")" ]]; then
 		DATE="${1}"
@@ -3066,6 +3066,31 @@ function task-duplicates {
 
 ########################################
 
+function task-switch {
+	FILE="$(task uuids status:pending "${@}")"
+	task view +ACTIVE
+	if (
+		[[ "${@}" == "-" ]]
+	) || (
+		[[ -n "${@}" ]] && [[ -n "${FILE}" ]]
+	); then
+#>>>		if [[ "${@}" != "-" ]] && [[ "${FILE}" == *(*)[ ]*(*) ]]; then
+		if [[ "${@}" != "-" ]] && [[ -n "$(echo "${FILE}" | ${GREP} "[ ]")" ]]; then
+			task read "${FILE}"
+		else
+			echo "no" | task $(task uuids +ACTIVE) stop rc.bulk=0
+			if [[ "${@}" != "-" ]]; then
+				sleep 1
+				echo "no" | task "${FILE}" start
+			fi
+			task view +ACTIVE
+		fi
+	fi
+	return 0
+}
+
+########################################
+
 if [[ ${IMPERSONATE_NAME} == task ]]; then
 	declare FILE=
 	unalias -a
@@ -3181,7 +3206,9 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			eval task-export-text \"Test Work Report\" $(${SED} -n "s/^(.+area[:]work.+)[ ][\\]$/\1/gp" ${HOME}/scripts/_sync)
 		elif [[ ${1} == [_] ]]; then
 			shift
+			task-switch -
 			task-journal "${@}"
+			task-switch _reporting
 		elif [[ ${1} == [+] ]]; then
 			shift
 			task-notes "${@}"
@@ -3198,25 +3225,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			task view project.not:_gtd : "${@}"
 		elif [[ ${1} == [/] ]]; then
 			shift
-			FILE="$(task uuids status:pending "${@}")"
-			task view +ACTIVE
-			if (
-				[[ "${@}" == "-" ]]
-			) || (
-				[[ -n "${@}" ]] && [[ -n "${FILE}" ]]
-			); then
-#>>>				if [[ "${@}" != "-" ]] && [[ "${FILE}" == *(*)[ ]*(*) ]]; then
-				if [[ "${@}" != "-" ]] && [[ -n "$(echo "${FILE}" | ${GREP} "[ ]")" ]]; then
-					task read "${FILE}"
-				else
-					echo "no" | task $(task uuids +ACTIVE) stop rc.bulk=0
-					if [[ "${@}" != "-" ]]; then
-						sleep 1
-						echo "no" | task "${FILE}" start
-					fi
-					task view +ACTIVE
-				fi
-			fi
+			task-switch "${@}"
 		else
 			(cd ${PIMDIR} && ${GIT_STS} taskd tasks*)
 			task tags status:pending
