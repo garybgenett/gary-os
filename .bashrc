@@ -2815,10 +2815,16 @@ function task-journal {
 		${FUNCNAME} "${DATE}"
 	else
 		for UUID in ${UUIDS}; do
-			task "${UUID}" start
-			task-notes "${UUID}"
-			task "${UUID}" stop
-			task "${UUID}" done
+			task view +ACTIVE
+			task "${UUID}" read
+			declare ENTER=
+			read ENTER
+			if [[ ${ENTER} != n ]]; then
+				task "${UUID}" start
+				task-notes "${UUID}"
+				task "${UUID}" stop
+				task "${UUID}" done
+			fi
 		done
 	fi
 	return 0
@@ -3206,9 +3212,9 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			eval task-export-text \"Test Work Report\" $(${SED} -n "s/^(.+area[:]work.+)[ ][\\]$/\1/gp" ${HOME}/scripts/_sync)
 		elif [[ ${1} == [_] ]]; then
 			shift
-			task-switch -
+#>>>			task-switch -
 			task-journal "${@}"
-			task-switch _reporting
+#>>>			task-switch _reporting
 		elif [[ ${1} == [+] ]]; then
 			shift
 			task-notes "${@}"
