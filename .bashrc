@@ -2152,7 +2152,9 @@ function zpim-commit {
 	cd ${PIMDIR}
 	chown -vR plastic:plastic ${PIMDIR}
 	chmod -vR 750 ${PIMDIR}
-	chmod -v 755 ${PIMDIR} ${PIMDIR}/tasks ${PIMDIR}/tasks.md* ${PIMDIR}/tasks.timeline.*
+	chmod -v 755 ${PIMDIR} \
+		${PIMDIR}/tasks ${PIMDIR}/tasks.md* ${PIMDIR}/tasks.timeline.* \
+		${PIMDIR}/zoho*
 	${SED} -i \
 		-e "/^[[:space:]]+[<]DD[>]$/d" \
 		-e "s/<HR>([[:space:]])/<HR>\n\1/g" \
@@ -2162,6 +2164,9 @@ function zpim-commit {
 		declare LIST=
 		if [[ ${FILE} == tasks ]]; then
 			LIST=".auth .token taskd"
+		fi
+		if [[ ${FILE} == zoho ]]; then
+			LIST=".zoho-auth .zoho-token"
 		fi
 		${GIT_ADD} ${FILE}* ${LIST}
 		${GIT_CMT} ${FILE}* ${LIST} --edit --message="Updated \"${FILE}\"."
@@ -2257,6 +2262,29 @@ function task-export {
 	for FILE in $(task _unique tags); do
 		gtasks_export.pl twexport "@${FILE}"	"$(task-filter "view") tags:${FILE}"	"due,9999"	"entry"
 	done
+	cd - >/dev/null
+	return 0
+}
+
+########################################
+
+function task-export-zoho {
+	declare FILE="${PIMDIR}/zoho.md"
+	if [[ -n ${@} ]]; then
+		FILE="${PIMDIR}/zoho.all.md"
+	fi
+	cd ${PIMDIR}
+	(zohocrm_events.pl "${@}" \
+		":Q:|Customer Tracking: QC, Install, Upsell or Issue" \
+		":X:|Prospect: Major Account / Research" \
+		":M:|Prospect: Multi-Site" \
+		":H:|Prospect: Hot" \
+		":W:|Prospect: Warm" \
+		":C:|Prospect: Cold" \
+		":P:|Prospect: Not Yet Engaged" \
+		| tee ${PIMDIR}/zoho.md
+	) 2>&1	| tee ${PIMDIR}/zoho.all.md
+	task-notes ${FILE} "$(task uuids project:_data -- /.status/)"
 	cd - >/dev/null
 	return 0
 }
@@ -2838,12 +2866,17 @@ function task-notes {
 		use warnings;
 		use JSON::PP;
 		use MIME::Base64;
+		my $automatic;
+		if (-f $ARGV[0]) {
+			$automatic = $ARGV[0];
+			shift();
+		};
 		my $extn = ".md";
 		my $args = join(" ", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $root = qx(task _get rc.data.location); chomp(${root});
 		my $data = qx(task export kind:notes ${args}); $data =~ s/\n//g; $data = decode_json(${data});
 		my $edit = ${args}; $edit =~ s/\"/\\\"/g; $edit = "${ENV{EDITOR}} -c \"map ? <ESC>:!task read ${edit}<CR>\" -c \"map \\ <ESC>:!task \"";
-		my $mark = "[DELETE]";
+		my $mark = "DELETE";
 		if (!@{$data}) {
 			die("NO MATCHES!");
 		};
@@ -2872,7 +2905,14 @@ function task-notes {
 		};
 		chdir(${root}) || die();
 		my $filelist = join("${extn} ", @{$uuids}) . ${extn};
-		system("${edit} ${filelist}");
+		if (${automatic}) {
+			if (! -f ${filelist}) {
+				die("FILE AND FILELIST!");
+			};
+			system("rsync -avv ${automatic} ${filelist}");
+		} else {
+			system("${edit} ${filelist}");
+		};
 		foreach my $uuid (@{$uuids}) {
 			my $file = ${root} . "/" . ${uuid} . ${extn};
 			my $text;
@@ -3209,7 +3249,14 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 #>>>			task-export		|| return 1
 			zpim-commit tasks
 		elif [[ ${1} == [%] ]]; then
+			shift
+			task-export-zoho "${@}"
 			eval task-export-text \"Test Work Report\" $(${SED} -n "s/^(.+area[:]work.+)[ ][\\]$/\1/gp" ${HOME}/scripts/_sync)
+			declare ENTER=
+			read ENTER
+			if [[ ${ENTER} != n ]]; then
+				zpim-commit zoho
+			fi
 		elif [[ ${1} == [_] ]]; then
 			shift
 #>>>			task-switch -
