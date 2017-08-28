@@ -1748,6 +1748,7 @@ function prompt {
 			PATH="${PATH}" \
 			CYGWIN="${CYGWIN}" \
 			CYGWIN_ROOT="${CYGWIN_ROOT}" \
+			${EMERGE_DEFAULT_OPTS+EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS}"} \
 			${CMD} "${@}"
 		return ${?}
 	fi
