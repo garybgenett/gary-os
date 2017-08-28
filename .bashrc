@@ -2202,6 +2202,7 @@ function task-build {
 	cd /.g/_data/_build/taskwarrior/${PROG}		&&
 		${GIT} checkout --force ${VERS}		&&
 		git reset --hard			&&
+		cmake ./				&&
 		make clean				&&
 		task-build-fixes			&&
 		cmake					\
