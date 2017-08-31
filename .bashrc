@@ -3259,7 +3259,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			if [[ -n ${1} ]]; then
 				task-export-zoho "${@}"
 				if zpim-commit zoho; then
-					task-notes ${FILE} "$(task uuids project:_data -- /.status/)"
+					task-notes "${PIMDIR}/zoho.md" "$(task uuids project:_data -- /.status/)"
 				fi
 			fi
 			eval task-export-text \"Test Work Report\" $(${SED} -n "s/^(.+area[:]work.+)[ ][\\]$/\1/gp" ${HOME}/scripts/_sync)
