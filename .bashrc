@@ -2150,6 +2150,7 @@ function vpn {
 ########################################
 
 function zpim-commit {
+	declare RETURN
 	cd ${PIMDIR}
 	chown -vR plastic:plastic ${PIMDIR}
 	chmod -vR 750 ${PIMDIR}
@@ -2171,9 +2172,13 @@ function zpim-commit {
 		fi
 		${GIT_ADD} ${FILE}* ${LIST}
 		${GIT_CMT} ${FILE}* ${LIST} --edit --message="Updated \"${FILE}\"."
+		RETURN="${?}"
 	fi
-	${GIT_STS}
-	return 0
+	if [[ ${RETURN} == 0 ]]; then
+		${GIT_STS}
+	fi
+	cd - >/dev/null
+	return ${RETURN}
 }
 
 ################################################################################
