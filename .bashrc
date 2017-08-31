@@ -2291,7 +2291,6 @@ function task-export-zoho {
 		":P:|Prospect: Not Yet Engaged" \
 		| tee ${PIMDIR}/zoho.md
 	) 2>&1	| tee ${PIMDIR}/zoho.all.md
-	task-notes ${FILE} "$(task uuids project:_data -- /.status/)"
 	cd - >/dev/null
 	return 0
 }
@@ -3257,13 +3256,13 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			zpim-commit tasks
 		elif [[ ${1} == [%] ]]; then
 			shift
-			task-export-zoho "${@}"
-			eval task-export-text \"Test Work Report\" $(${SED} -n "s/^(.+area[:]work.+)[ ][\\]$/\1/gp" ${HOME}/scripts/_sync)
-			declare ENTER=
-			read ENTER
-			if [[ ${ENTER} != n ]]; then
-				zpim-commit zoho
+			if [[ -n ${1} ]]; then
+				task-export-zoho "${@}"
+				if zpim-commit zoho; then
+					task-notes ${FILE} "$(task uuids project:_data -- /.status/)"
+				fi
 			fi
+			eval task-export-text \"Test Work Report\" $(${SED} -n "s/^(.+area[:]work.+)[ ][\\]$/\1/gp" ${HOME}/scripts/_sync)
 		elif [[ ${1} == [_] ]]; then
 			shift
 #>>>			task-switch -
