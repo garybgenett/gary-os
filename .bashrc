@@ -2278,10 +2278,6 @@ function task-export {
 ########################################
 
 function task-export-zoho {
-	declare FILE="${PIMDIR}/zoho.md"
-	if [[ -n ${@} ]]; then
-		FILE="${PIMDIR}/zoho.all.md"
-	fi
 	cd ${PIMDIR}
 	(zohocrm_events.pl "${@}" \
 		":Q:|Customer Tracking: QC, Install, Upsell or Issue" \
