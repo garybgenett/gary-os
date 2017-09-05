@@ -3255,6 +3255,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == [%] ]]; then
 			shift
 			if [[ -n ${1} ]]; then
+				[[ ${1} == 0 ]] && shift
 				task-export-zoho "${@}"
 				if zpim-commit zoho; then
 					task-notes "${PIMDIR}/zoho.md" "$(task uuids project:_data -- /.status/)"
