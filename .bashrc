@@ -2170,7 +2170,7 @@ function zpim-commit {
 			LIST=".auth .token taskd"
 		fi
 		if [[ ${FILE} == zoho ]]; then
-			LIST=".zoho-auth .zoho-token"
+			LIST=".zoho*"
 		fi
 		${GIT_ADD} ${FILE}* ${LIST}
 		${GIT_CMT} ${FILE}* ${LIST} --edit --message="Updated \"${FILE}\"."
@@ -2280,7 +2280,7 @@ function task-export {
 function task-export-zoho {
 	cd ${PIMDIR}
 	(eval zohocrm_events.pl "${@}" \
-		$(cat ${PIMDIR}/zoho-reports) \
+		$(cat ${PIMDIR}/.zoho.reports) \
 		| tee ${PIMDIR}/zoho.md
 	) 2>&1	| tee ${PIMDIR}/zoho.all.md
 	cd - >/dev/null
