@@ -2279,26 +2279,8 @@ function task-export {
 
 function task-export-zoho {
 	cd ${PIMDIR}
-	(zohocrm_events.pl "${@}" \
-		"|1|:Q:|Customer Tracking: QC, Install, Upsell or Issue" \
-		"|1|:X:|Prospect: Major Account / Research" \
-		"|1|:M:|Prospect: Multi-Site" \
-		"|1|:H:|Prospect: Hot" \
-		"|1|:W:|Prospect: Warm" \
-		"|1|:C:|Prospect: Cold" \
-		"|1|:P:|Prospect: Not Yet Engaged" \
-		\
-		"1|1|SCH|Inside Sales: Schedule Appointment" \
-		"1|1|RS|Inside Sales: Reschedule" \
-		"1|1|NS|Inside Sales: No Show" \
-		"1|1|PP|Inside Sales: Proposal" \
-		"1|1|NI|Inside Sales: Not Interested" \
-		\
-		"1|1|BA|Inside Sales: Bad Appointment" \
-		"1|1|FOL|Inside Sales: Follow Up" \
-		"1|1|Exist|Inside Sales: Existing Customer" \
-		"1|1|Eval|Inside Sales: Evaluation" \
-		"1|1|Dup|Inside Sales: Duplicate Lead" \
+	(eval zohocrm_events.pl "${@}" \
+		$(cat ${PIMDIR}/zoho-reports) \
 		| tee ${PIMDIR}/zoho.md
 	) 2>&1	| tee ${PIMDIR}/zoho.all.md
 	cd - >/dev/null
