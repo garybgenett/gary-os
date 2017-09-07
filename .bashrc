@@ -3275,6 +3275,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				${RM} \
 					"${PIMDIR}/.composed" \
 					"${PIMDIR}/zoho.all.md.html"
+				(cd ${PIMDIR} && ${GIT_STS})
 			fi
 		elif [[ ${1} == [_] ]]; then
 			shift
