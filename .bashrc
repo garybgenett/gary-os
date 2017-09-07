@@ -3249,35 +3249,32 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == [%] ]]; then
 			shift
 			if [[ -n ${1} ]]; then
-				[[ ${1} == 0 ]] && shift
+				declare COMMIT="false"; [[ ${1} == 1 ]] && COMMIT="true"
+				[[ ${1} == [0-9] ]] && shift
 				task-export-zoho "${@}"
-				declare CHANGED="false"
-				if [[ -n "$(cd "${PIMDIR}" && GIT_PAGER= ${GIT_CMD} diff zoho.md 2>&1)" ]]; then
-					CHANGED="true"
-				fi
-				if zpim-commit zoho && ${CHANGED}; then
+				declare CHANGED="false"; [[ -n "$(cd "${PIMDIR}" && GIT_PAGER= ${GIT_CMD} diff zoho.md 2>&1)" ]] && CHANGED="true"
+				if ${COMMIT} && zpim-commit zoho && ${CHANGED}; then
 					task-notes "${PIMDIR}/zoho.md" "$(task uuids project:_data -- /.status/)"
 					impersonate_command =
 				fi
-			else
-				eval task-export-text \"Test Work Report\" $(${SED} -n "s/^(.+area[:]work.+)[ ][\\]$/\1/gp" ${HOME}/scripts/_sync)
-				${SED} -i "s|^(</header>)$|\1\n<a href="zoho.all.md">[Complete Zoho Report: Raw]</a>|g"		"${PIMDIR}/tasks.md.html"
-				${SED} -i "s|^(</header>)$|\1\n<a href="zoho.all.md.html">[Complete Zoho Report: HTML]</a>|g"	"${PIMDIR}/tasks.md.html"
-				declare COMPOSER="/.g/_data/zactive/coding/composer/Makefile"
-				if [[ -f "${COMPOSER}" ]]; then
-					make compose			\
-						-f "${COMPOSER}"	\
-						-C "${PIMDIR}"		\
-						BASE="zoho.all.md"	\
-						LIST="zoho.all.md"	\
-						TYPE="html"		\
-						TOC="6"
-					declare ENTER=
-					read ENTER
-					${RM} \
-						"${PIMDIR}/.composed" \
-						"${PIMDIR}/zoho.all.md.html"
-				fi
+			fi
+			eval task-export-text \"Test Work Report\" $(${SED} -n "s/^(.+area[:]work.+)[ ][\\]$/\1/gp" ${HOME}/scripts/_sync)
+			${SED} -i "s|^(</header>)$|\1\n<a href="zoho.all.md">[Complete Zoho Report: Raw]</a>|g"		"${PIMDIR}/tasks.md.html"
+			${SED} -i "s|^(</header>)$|\1\n<a href="zoho.all.md.html">[Complete Zoho Report: HTML]</a>|g"	"${PIMDIR}/tasks.md.html"
+			declare COMPOSER="/.g/_data/zactive/coding/composer/Makefile"
+			if [[ -f "${COMPOSER}" ]]; then
+				make compose			\
+					-f "${COMPOSER}"	\
+					-C "${PIMDIR}"		\
+					BASE="zoho.all.md"	\
+					LIST="zoho.all.md"	\
+					TYPE="html"		\
+					TOC="6"
+				declare ENTER=
+				read ENTER
+				${RM} \
+					"${PIMDIR}/.composed" \
+					"${PIMDIR}/zoho.all.md.html"
 			fi
 		elif [[ ${1} == [_] ]]; then
 			shift
