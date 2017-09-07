@@ -3257,6 +3257,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				fi
 			fi
 			eval task-export-text \"Test Work Report\" $(${SED} -n "s/^(.+area[:]work.+)[ ][\\]$/\1/gp" ${HOME}/scripts/_sync)
+			${SED} -i "s|^(</header>)$|\1\n<a href="zoho.all.md">[Complete Zoho Report]</a>|g" "${PIMDIR}/tasks.md.html"
 		elif [[ ${1} == [_] ]]; then
 			shift
 #>>>			task-switch -
