@@ -3251,8 +3251,9 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			if [[ -n ${1} ]]; then
 				[[ ${1} == 0 ]] && shift
 				task-export-zoho "${@}"
-				if zpim-commit zoho; then
+				if zpim-commit zoho && [[ -n $(cd ${PIMDIR} && GIT_PAGER= ${GIT_CMD} diff zoho.md 2>&1) ]]; then
 					task-notes "${PIMDIR}/zoho.md" "$(task uuids project:_data -- /.status/)"
+					impersonate_command =
 				fi
 			fi
 			eval task-export-text \"Test Work Report\" $(${SED} -n "s/^(.+area[:]work.+)[ ][\\]$/\1/gp" ${HOME}/scripts/_sync)
