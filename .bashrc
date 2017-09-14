@@ -3271,11 +3271,15 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 					TOC="6"
 				declare ENTER=
 				read ENTER
-				${RM} \
-					"${PIMDIR}/.composed" \
-					"${PIMDIR}/zoho.all.md.html"
-				(cd ${PIMDIR} && ${GIT_STS})
 			fi
+			(cd ${PIMDIR} &&
+				${GIT} rm --force --ignore-unmatch \
+					".composed" \
+					"zoho.all.md.html" \
+					&&
+				${GIT} reset zoho* &&
+				${GIT_STS}
+			)
 		elif [[ ${1} == [_] ]]; then
 			shift
 #>>>			task-switch -
