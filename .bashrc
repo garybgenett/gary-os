@@ -3272,11 +3272,10 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				declare ENTER=
 				read ENTER
 			fi
+			declare FILES=".composed zoho.all.md.html"
 			(cd ${PIMDIR} &&
-				${GIT} rm --force --ignore-unmatch \
-					".composed" \
-					"zoho.all.md.html" \
-					&&
+				${RM} ${FILES} &&
+				${GIT} rm --force --ignore-unmatch ${FILES} &&
 				${GIT} reset zoho* &&
 				${GIT_STS}
 			)
