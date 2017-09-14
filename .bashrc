@@ -2387,6 +2387,7 @@ function task-export-text {
 		my $args = join(" ", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $root = qx(task _get rc.data.location); chomp(${root});
 		my $data = qx(task export ${args}); $data =~ s/\n//g; $data = decode_json(${data});
+		my $base = ${root}; $base =~ s|^.*/||g;
 		open(JSON, ">", ${root} . ".json")			|| die();
 		open(TIME, ">", ${root} . ".csv")			|| die();
 		open(PROJ, ">", ${root} . ".timeline.projects.json")	|| die();
@@ -2659,7 +2660,6 @@ function task-export-text {
 			my $annotation	= shift();
 			my $object	= shift();
 			my $description = (($task->{"project"}) ? "(" . $task->{"project"} . ") " : "") . $task->{"description"}; $description =~ s|([*_])|\\$1|g;
-			my $base = ${root}; $base =~ s|^.*/||g;
 			my($z, $modified, $output, $note) = ("", "", "", "");
 			if ($annotation) {
 				($z, $modified) = &time_format($annotation->{"entry"});
@@ -2810,14 +2810,14 @@ function task-export-text {
 		if (-f "${composer}") {
 			my $compose = "make compose"
 				. " -f ${composer}"
-				. " -C ${root}"
-				. " BASE=${root}${extn}"
-				. " LIST=${root}${extn}"
+				. " -C ${ENV{PIMDIR}}"
+				. " BASE=${base}${extn}"
+				. " LIST=${base}${extn}"
 				. " TYPE=html"
 				. " TOC=6"
 				;
 			if (system(${compose}) != 0) { die(); };
-			unlink(${root} . "/.composed") || warn();
+			unlink(${ENV{PIMDIR}} . "/.composed") || warn();
 		};
 	' -- "${NAME}" "${@}" || return 1
 	return 0
