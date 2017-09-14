@@ -50,6 +50,7 @@ export _SELF="$(realpath -- "${0}")"
 export SCRIPT="$(basename -- "${0}")"
 export UNAME="$(uname -s)"
 
+export COMPOSER="/.g/_data/zactive/coding/composer/Makefile"
 export PIMDIR="/.g/_data/zactive/_pim"
 export MAILDIR="${HOME}/Maildir"
 export MAILCAPS="${HOME}/.mailcap"
@@ -2806,10 +2807,9 @@ function task-export-text {
 		close(PROJ) || die();
 		close(LINE) || die();
 		close(NOTE) || die();
-		my $composer = "/.g/_data/zactive/coding/composer/Makefile";
-		if (-f "${composer}") {
+		if (-f "${ENV{COMPOSER}}") {
 			my $compose = "make compose"
-				. " -f ${composer}"
+				. " -f ${ENV{COMPOSER}}"
 				. " -C ${ENV{PIMDIR}}"
 				. " BASE=${base}${extn}"
 				. " LIST=${base}${extn}"
@@ -3261,7 +3261,6 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			eval task-export-text \"Test Work Report\" $(${SED} -n "s/^(.+area[:]work.+)[ ][\\]$/\1/gp" ${HOME}/scripts/_sync)
 			${SED} -i "s|^(</header>)$|\1\n<a href="zoho.all.md">[Complete Zoho Report: Raw]</a>|g"		"${PIMDIR}/tasks.md.html"
 			${SED} -i "s|^(</header>)$|\1\n<a href="zoho.all.md.html">[Complete Zoho Report: HTML]</a>|g"	"${PIMDIR}/tasks.md.html"
-			declare COMPOSER="/.g/_data/zactive/coding/composer/Makefile"
 			if [[ -f "${COMPOSER}" ]]; then
 				make compose			\
 					-f "${COMPOSER}"	\
