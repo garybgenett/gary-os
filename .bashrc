@@ -2808,13 +2808,11 @@ function task-export-text {
 		close(LINE) || die();
 		close(NOTE) || die();
 		if (-f "${ENV{COMPOSER}}") {
-			my $compose = "make compose"
+			my $compose = "make"
 				. " -f ${ENV{COMPOSER}}"
 				. " -C ${ENV{PIMDIR}}"
-				. " BASE=${base}${extn}"
-				. " LIST=${base}${extn}"
-				. " TYPE=html"
 				. " TOC=6"
+				. " ${base}${extn}.html"
 				;
 			if (system(${compose}) != 0) { die(); };
 			unlink(${ENV{PIMDIR}} . "/.composed") || warn();
@@ -3259,20 +3257,25 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				fi
 			fi
 			eval task-export-text \"Test Work Report\" $(${SED} -n "s/^(.+area[:]work.+)[ ][\\]$/\1/gp" ${HOME}/scripts/_sync)
-			${SED} -i "s|^(</header>)$|\1\n<a href="zoho.all.md">[Complete Zoho Report: Raw]</a>|g"		"${PIMDIR}/tasks.md.html"
-			${SED} -i "s|^(</header>)$|\1\n<a href="zoho.all.md.html">[Complete Zoho Report: HTML]</a>|g"	"${PIMDIR}/tasks.md.html"
+			declare HEADER_LINKS
+			HEADER_LINKS="${HEADER_LINKS}<ul>"
+			HEADER_LINKS="${HEADER_LINKS}<li><a href=\\\"zoho.md.html\\\">[Zoho Report: HTML]</a></li>"
+			HEADER_LINKS="${HEADER_LINKS}<li><a href=\\\"zoho.md\\\">[Zoho Report: Raw]</a></li>"
+			HEADER_LINKS="${HEADER_LINKS}<li><a href=\\\"zoho.all.md.html\\\">[Complete Zoho Report: HTML]</a></li>"
+			HEADER_LINKS="${HEADER_LINKS}<li><a href=\\\"zoho.all.md\\\">[Complete Zoho Report: Raw]</a></li>"
+			HEADER_LINKS="${HEADER_LINKS}</ul>"
+			${SED} -i "s|^(</header>)$|\1\n${HEADER_LINKS}|g" "${PIMDIR}/tasks.md.html"
+			declare FILES="zoho.md.html zoho.all.md.html"
 			if [[ -f "${COMPOSER}" ]]; then
-				make compose			\
+				make all			\
 					-f "${COMPOSER}"	\
 					-C "${PIMDIR}"		\
-					BASE="zoho.all.md"	\
-					LIST="zoho.all.md"	\
-					TYPE="html"		\
-					TOC="6"
+					TOC="6"			\
+					COMPOSER_TARGETS="${FILES}"
 				declare ENTER=
 				read ENTER
 			fi
-			declare FILES=".composed zoho.all.md.html"
+			FILES=".composed ${FILES}"
 			(cd ${PIMDIR} &&
 				${RM} ${FILES} &&
 				${GIT} rm --force --ignore-unmatch ${FILES} &&
