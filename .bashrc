@@ -3263,6 +3263,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			HEADER_LINKS="${HEADER_LINKS}<li><a href=\\\"zoho.md\\\">[Zoho Report: Raw]</a></li>"
 			HEADER_LINKS="${HEADER_LINKS}<li><a href=\\\"zoho.all.md.html\\\">[Complete Zoho Report: HTML]</a></li>"
 			HEADER_LINKS="${HEADER_LINKS}<li><a href=\\\"zoho.all.md\\\">[Complete Zoho Report: Raw]</a></li>"
+			HEADER_LINKS="${HEADER_LINKS}<li><a href=\\\"http://10.255.255.254/zactive/data.business/quote.html\\\">[E-Mail Template]</a></li>"
 			HEADER_LINKS="${HEADER_LINKS}</ul>"
 			${SED} -i "s|^(</header>)$|\1\n${HEADER_LINKS}|g" "${PIMDIR}/tasks.md.html"
 			declare FILES="zoho.md.html zoho.all.md.html"
