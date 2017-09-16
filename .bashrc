@@ -3291,7 +3291,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == [+] ]]; then
 			shift
 			task-notes "${@}"
-		elif [[ ${1} == [?] ]]; then
+		elif [[ ${1} == [~] ]]; then
 			shift
 			declare PROJECT="${1}" && shift
 			task-notes project:${PROJECT} "${@}"
