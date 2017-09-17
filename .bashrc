@@ -2453,7 +2453,7 @@ function task-export-text {
 		sub days { return(sprintf("%.9f", shift() /	(60*60*24)	)); };
 		sub hour { return(sprintf("%.9f", shift() /	(60*60)		)); };
 		sub time_format {
-			my $stamp = shift;
+			my $stamp = shift();
 			$stamp =~ m/^([0-9]{4})([0-9]{2})([0-9]{2})[T]([0-9]{2})([0-9]{2})([0-9]{2})[Z]$/;
 			my($yr,$mo,$dy,$hr,$mn,$sc) = ($1,$2,$3,$4,$5,$6);
 			my $epoch = timegm($sc,$mn,$hr,$dy,($mo-1),$yr);
@@ -2668,6 +2668,13 @@ function task-export-text {
 				$output = $annotation->{"description"};
 				$output =~ s/^[[]notes[]][:]//g;
 				$output = "\n" . decode_base64(${output}) . "\n";
+				if (${output} =~ m/^\[TASKLIST\]$/gms) {
+					warn("EXPORTING TASKLIST: " . $task->{"project"});
+					my $tasklist = qx(.bashrc task-depends project:$task->{"project"} project.not:$task->{"project"}.);
+					$tasklist =~ s/^\n*//g;
+					$tasklist =~ s/\n*$//g;
+					$output =~ s/^\[TASKLIST\]$/${tasklist}/gms;
+				};
 			};
 			$note .= "\n\n" . ${description} . " {#uuid-" . $task->{"uuid"} . "}\n";
 			$note .= ("-" x 40) . "\n\n";
