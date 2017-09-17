@@ -181,6 +181,7 @@ if [[ "${SCRIPT}" != ".bashrc" ]]; then
 	export PROMPT_COMMAND="IMPERSONATE_MODE=\"true\"; echo -en \"${PRE_PROMPT}\";"
 fi
 if [[ -n ${PROMPT_KEY} ]] &&
+   [[ "${SCRIPT}" != ".bashrc" ]] &&
    [[ ${BASH_EXECUTION_STRING/%\ *} != rsync  ]] &&
    [[ ${BASH_EXECUTION_STRING/%\ *} != scp    ]] &&
    [[ ${BASH_EXECUTION_STRING/%\ *} != unison ]]; then
