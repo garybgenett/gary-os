@@ -3010,10 +3010,18 @@ function task-depends {
 		use strict;
 		use warnings;
 		use JSON::PP;
-		my $c_ttl = 40; $c_ttl = shift() if ((@{ARGV}) && (${ARGV[0]} =~ /^[0-9]+$/));
+		use POSIX qw(strftime);
+		use Time::Local qw(timegm timelocal);
 		my $c_uid = 36;
-		my $c_due = 16;
-		my $c_end = 16;
+#>>>		my $c_dat = 23;
+		my $c_dat = 14;
+		my $c_pro = 0;
+		foreach my $pro (qx(task _unique project)) {
+			my $len = length(${pro});
+			if (${len} > ${c_pro}) {
+				$c_pro = ${len};
+			};
+		};
 		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $data = qx(task export);		$data =~ s/\n//g; $data = decode_json(${data});
 		my $show = qx(task export ${args});	$show =~ s/\n//g; $show = decode_json(${show});
@@ -3028,11 +3036,29 @@ function task-depends {
 			};
 		};
 		foreach my $task (@{$show}) {
-			if (!exists($rdep->{$task->{"uuid"}})) {
+			if ((!exists($rdep->{$task->{"uuid"}})) || (((exists($task->{"project"})) && ($task->{"project"} =~ /[.]/)) && ((exists($task->{"kind"})) && ($task->{"kind"} eq "notes")))) {
 				if ((exists($task->{"depends"})) && ($task->{"depends"})) {
 					&print_task($task->{"uuid"}, 0);
 				};
 			};
+		};
+		sub time_format {
+			my $stamp = shift();
+			$stamp =~ m/^([0-9]{4})([0-9]{2})([0-9]{2})[T]([0-9]{2})([0-9]{2})([0-9]{2})[Z]$/;
+			my($yr,$mo,$dy,$hr,$mn,$sc) = ($1,$2,$3,$4,$5,$6);
+			my $epoch = timegm($sc,$mn,$hr,$dy,($mo-1),$yr);
+#>>>			my $ltime = strftime("%Y-%m-%d %H:%M:%S", localtime(${epoch}));
+			my $ltime = strftime("%Y-%m-%d", localtime(${epoch}));
+			return(${epoch}, ${ltime});
+		};
+		sub do_time {
+			my $date = shift();
+			my($epoch, $ltime);
+			if ((${date}) && (${date} =~ m/^[0-9TZ]+$/)) {
+				(${epoch}, ${ltime}) = &time_format(${date});
+				$date = ${ltime};
+			};
+			return (${date});
 		};
 		sub print_task {
 			my $uuid = shift();
@@ -3040,13 +3066,35 @@ function task-depends {
 			my $task = $list->{$uuid};
 			if (!${deep}) {
 				print "\n";
+				&print_task("0", "HEADER");
+				print "" . ("|:---" x 5) . "|\n";
+			}
+			elsif(${deep} eq "HEADER") {
+				$deep = "0";
+				$task = {
+					"status"	=> "HEADER",
+					"uuid"		=> "UUID",
+					"project"	=> "Project",
+					"due"		=> "Due",
+					"end"		=> "End",
+					"kind"		=> "Kind",
+					"description"	=> "Description",
+				};
 			};
-			printf("%-${c_ttl}.${c_ttl}s", ((" " x 2) x ${deep}) . "* " . ((exists($task->{"kind"})) && "[" . $task->{"kind"} . "] ") . $task->{"description"});
-			print " "; printf("%-${c_uid}.${c_uid}s", $task->{"uuid"});
-			print " "; printf("%-${c_due}.${c_due}s", ($task->{"due"}	|| "-"));
-			print " "; printf("%-${c_end}.${c_end}s", ($task->{"end"}	|| "-"));
-			print " " . ($task->{"project"}					|| "-");
-			print "\n";
+			print "| "; printf("%-${c_uid}.${c_uid}s", $task->{"uuid"});
+			print " | "; printf("%-${c_pro}.${c_pro}s", $task->{"project"} || "-");
+			my $due = (&do_time($task->{"due"}) || "-");
+			my $end = (&do_time($task->{"end"}) || "-"); if ($task->{"status"} eq "deleted") { $end = "~~" . ${end} . "~~"; };
+			print " | "; printf("%-${c_dat}.${c_dat}s", ${due});
+			print " | "; printf("%-${c_dat}.${c_dat}s", ${end});
+			print " | " . (". " x ${deep}) . ((${deep} > 0) && "${deep} ");
+			my $title = "";
+			if (exists($task->{"kind"}))					{ $title .= "[" . $task->{"kind"} . "] "; };
+			if ($task->{"status"} eq "pending")				{ $title .= $task->{"description"}; }
+			elsif ($task->{"status"} eq "HEADER")				{ $title .= $task->{"description"}; }
+			else								{ $title = "~~" . ${title} . $task->{"description"} . "~~"; };
+			if (exists($task->{"due"}) && ($task->{"status"} ne "HEADER"))	{ $title = "**" . ${title} . "**"; };
+			print ${title} . "\n";
 			if (exists($task->{"depends"})) {
 				foreach my $uuid (split(",", $task->{"depends"})) {
 					&print_task(${uuid}, (${deep} + 1));
