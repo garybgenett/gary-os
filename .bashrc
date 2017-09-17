@@ -177,7 +177,9 @@ else
 	export PROMPT="${PROMPT}"
 	export PROMPT_KEY="( ${PROMPT} )"
 fi
-export PROMPT_COMMAND="IMPERSONATE_MODE=\"true\"; echo -en \"${PRE_PROMPT}\";"
+if [[ "${SCRIPT}" != ".bashrc" ]]; then
+	export PROMPT_COMMAND="IMPERSONATE_MODE=\"true\"; echo -en \"${PRE_PROMPT}\";"
+fi
 if [[ -n ${PROMPT_KEY} ]] &&
    [[ ${BASH_EXECUTION_STRING/%\ *} != rsync  ]] &&
    [[ ${BASH_EXECUTION_STRING/%\ *} != scp    ]] &&
