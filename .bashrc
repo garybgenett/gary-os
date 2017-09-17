@@ -3195,6 +3195,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		declare MARKER='echo -en "\e[1;34m"; printf "~%.0s" {1..120}; echo -en "\e[0;37m\n"'
 		declare TASKFILE="$(task _get rc.data.location)"
 		declare TASKUUID="$(task uuids project:_data -- /.review/)"
+		declare WORKUUID="$(task uuids project:_data -- /.status/)"
 		function _task {
 			eval ${MARKER}
 			echo -en "[task ${@}]\n"
@@ -3307,7 +3308,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				task-export-zoho "${@}"
 				declare CHANGED="false"; [[ -n "$(cd "${PIMDIR}" && GIT_PAGER= ${GIT_CMD} diff zoho.md 2>&1)" ]] && CHANGED="true"
 				if ${COMMIT} && zpim-commit zoho && ${CHANGED}; then
-					task-notes "${PIMDIR}/zoho.md" "$(task uuids project:_data -- /.status/)"
+					task-notes "${PIMDIR}/zoho.md" "${WORKUUID}"
 					impersonate_command =
 				fi
 			fi
