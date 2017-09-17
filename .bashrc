@@ -2678,14 +2678,12 @@ function task-export-text {
 					$tasklist =~ s/\n*$//g;
 					$output =~ s/^\[TASKLIST\]$/${tasklist}/gms;
 				};
-				if (${output} =~ m/^\[TASKCMD([0-9])[ ]([^\n]*)\]$/gms) {
-					my $num = ${1};
-					my $cmd = ${2};
-					warn("EXPORTING TASKCMD[${num}]: ${cmd}");
-					my $taskcmd = qx(task ${cmd});
+				while (${output} =~ m/^\[TASKCMD[ ]([^\n]*)\]$/gms) {
+					warn("EXPORTING TASKCMD[${1}]");
+					my $taskcmd = qx(task ${1});
 					$taskcmd =~ s/^\n*//g;
 					$taskcmd =~ s/\n*$//g;
-					$output =~ s/^\[TASKCMD(${num})[ ]([^\n]*)\]$/${taskcmd}/gms;
+					$output =~ s/^\[TASKCMD[ ]([^\n]*)\]$/${taskcmd}/ms;
 				};
 			};
 			$note .= "\n\n" . ${description} . " {#uuid-" . $task->{"uuid"} . "}\n";
