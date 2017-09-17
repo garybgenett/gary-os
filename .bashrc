@@ -2690,7 +2690,10 @@ function task-export-text {
 			elsif	($task->{"status"} eq "deleted")					{ $object->{"deleted"}	.= ${note}; }
 			else										{ die("INVALID STATUS!"); };
 		};
-		foreach my $task (sort({$a->{"description"} cmp $b->{"description"}} @{$data})) {
+		foreach my $task (sort({
+			(($a->{"project"}	? $a->{"project"}	: "") cmp ($b->{"project"}	? $b->{"project"}	: "")) ||
+			(($a->{"description"}	? $a->{"description"}	: "") cmp ($b->{"description"}	? $b->{"description"}	: ""))
+		} @{$data})) {
 			my $started = "0";
 			my $begin = "0";
 			my $notes = "0";
