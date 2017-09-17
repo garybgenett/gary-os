@@ -2385,7 +2385,7 @@ function task-export-text {
 		use MIME::Base64;
 		my $name = shift();
 		my $extn = ".md";
-		my $args = join(" ", @ARGV); if (${args}) { $args = "\"${args}\""; };
+		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $root = qx(task _get rc.data.location); chomp(${root});
 		my $data = qx(task export ${args}); $data =~ s/\n//g; $data = decode_json(${data});
 		my $base = ${root}; $base =~ s|^.*/||g;
@@ -2868,7 +2868,7 @@ function task-notes {
 			shift();
 		};
 		my $extn = ".md";
-		my $args = join(" ", @ARGV); if (${args}) { $args = "\"${args}\""; };
+		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $root = qx(task _get rc.data.location); chomp(${root});
 		my $data = qx(task export kind:notes ${args}); $data =~ s/\n//g; $data = decode_json(${data});
 		my $edit = ${args}; $edit =~ s/\"/\\\"/g; $edit = "${ENV{EDITOR}} -c \"map ? <ESC>:!task read ${edit}<CR>\" -c \"map \\ <ESC>:!task \"";
@@ -2940,7 +2940,7 @@ function task-track {
 		use JSON::PP;
 		use POSIX qw(strftime);
 		use Time::Local qw(timelocal);
-		my $args = join(" ", @ARGV); if (${args}) { $args = "\"${args}\""; };
+		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $root = qx(task _get rc.data.location); chomp(${root});
 		my $uuid = qx(task uuids ${args}); chomp(${uuid}); $uuid = [ split(" ", ${uuid}) ];
 		if (!@{$uuid}) {
@@ -3014,7 +3014,7 @@ function task-depends {
 		my $c_uid = 36;
 		my $c_due = 16;
 		my $c_end = 16;
-		my $args = join(" ", @ARGV); if (${args}) { $args = "\"${args}\""; };
+		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $data = qx(task export);		$data =~ s/\n//g; $data = decode_json(${data});
 		my $show = qx(task export ${args});	$show =~ s/\n//g; $show = decode_json(${show});
 		my $list = {};
@@ -3064,7 +3064,7 @@ function task-recur {
 		use strict;
 		use warnings;
 		use JSON::PP;
-		my $args = join(" ", @ARGV); if (${args}) { $args = "\"${args}\""; };
+		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $data = qx(task export ${args}); $data =~ s/\n//g; $data = decode_json(${data});
 		my $list = {};
 		my $keys = [];
