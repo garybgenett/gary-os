@@ -2898,7 +2898,10 @@ function task-notes {
 			die("NO MATCHES!");
 		};
 		my $uuids = [];
-		foreach my $task (sort({$a->{"description"} cmp $b->{"description"}} @{$data})) {
+		foreach my $task (sort({
+			(($a->{"project"}	? $a->{"project"}	: "") cmp ($b->{"project"}	? $b->{"project"}	: "")) ||
+			(($a->{"description"}	? $a->{"description"}	: "") cmp ($b->{"description"}	? $b->{"description"}	: ""))
+		} @{$data})) {
 			my $file = ${root} . "/" . $task->{"uuid"} . ${extn};
 			my $text = "[" . $task->{"description"} . "]";
 			my $notes = "0";
@@ -3057,7 +3060,10 @@ function task-depends {
 				};
 			};
 		};
-		foreach my $task (@{$show}) {
+		foreach my $task (sort({
+			(($a->{"project"}	? $a->{"project"}	: "") cmp ($b->{"project"}	? $b->{"project"}	: "")) ||
+			(($a->{"description"}	? $a->{"description"}	: "") cmp ($b->{"description"}	? $b->{"description"}	: ""))
+		} @{$show})) {
 			if ((!exists($rdep->{$task->{"uuid"}})) || (((exists($task->{"project"})) && ($task->{"project"} =~ /[.]/)) && ((exists($task->{"kind"})) && ($task->{"kind"} eq "notes")))) {
 				if ((exists($task->{"depends"})) && ($task->{"depends"})) {
 					&print_task($task->{"uuid"}, 0);
