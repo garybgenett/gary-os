@@ -3038,6 +3038,7 @@ function task-depends {
 		my $c_dat = 14;
 		my $c_pro = 0;
 		foreach my $pro (qx(task _unique project)) {
+			chomp(${pro});
 			my $len = length(${pro});
 			if (${len} > ${c_pro}) {
 				$c_pro = ${len};
