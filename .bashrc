@@ -2671,19 +2671,20 @@ function task-export-text {
 				$output = $annotation->{"description"};
 				$output =~ s/^[[]notes[]][:]//g;
 				$output = "\n" . decode_base64(${output}) . "\n";
-				if (${output} =~ m/^\[TASKLIST\]$/gms) {
-					warn("EXPORTING TASKLIST: " . $task->{"project"});
-					my $tasklist = qx(.bashrc task-depends project:$task->{"project"} project.not:$task->{"project"}.);
+				while (${output} =~ m/^\[TASKLIST[ ]?([^\n]*)?\]$/gms) {
+					my $project = ${1} || $task->{"project"};
+					warn("EXPORTING TASKLIST[${project}]");
+					my $tasklist = qx(.bashrc task-depends project:${project} project.not:${project}.);
 					$tasklist =~ s/^\n*//g;
 					$tasklist =~ s/\n*$//g;
-					$output =~ s/^\[TASKLIST\]$/${tasklist}/gms;
+					$output =~ s/^\[TASKLIST[ ]?([^\n]*)?\]$/${tasklist}/ms;
 				};
-				while (${output} =~ m/^\[TASKCMD[ ]([^\n]*)\]$/gms) {
+				while (${output} =~ m/^\[TASKCMD[ ]?([^\n]*)?\]$/gms) {
 					warn("EXPORTING TASKCMD[${1}]");
 					my $taskcmd = qx(task ${1});
 					$taskcmd =~ s/^\n*//g;
 					$taskcmd =~ s/\n*$//g;
-					$output =~ s/^\[TASKCMD[ ]([^\n]*)\]$/${taskcmd}/ms;
+					$output =~ s/^\[TASKCMD[ ]?([^\n]*)?\]$/${taskcmd}/ms;
 				};
 			};
 			$note .= "\n\n" . ${description} . " {#uuid-" . $task->{"uuid"} . "}\n";
