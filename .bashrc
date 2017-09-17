@@ -3036,15 +3036,21 @@ function task-depends {
 		use JSON::PP;
 		use POSIX qw(strftime);
 		use Time::Local qw(timegm timelocal);
-		my $c_uid = 36;
+#>>>		my $c_uid = 36;
+		my $c_uid = 8;
 #>>>		my $c_dat = 23;
 		my $c_dat = 14;
-		my $c_pro = 0;
-		foreach my $pro (qx(task _unique project)) {
-			chomp(${pro});
-			my $len = length(${pro});
-			if (${len} > ${c_pro}) {
-				$c_pro = ${len};
+		my $c_fld = {
+			"project"	=> "0",
+			"tags"		=> "0",
+		};
+		foreach my $field (keys(%{$c_fld})) {
+			foreach my $value (qx(task _unique ${field})) {
+				chomp(${value});
+				my $len = length(${value});
+				if (${len} > $c_fld->{$field}) {
+					$c_fld->{$field} = ${len};
+				};
 			};
 		};
 		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
@@ -3095,22 +3101,29 @@ function task-depends {
 			if (!${deep}) {
 				print "\n";
 				&print_task("0", "HEADER");
-				print "" . ("|:---" x 5) . "|\n";
+				print "" . ("|:---" x 6) . "|\n";
 			}
 			elsif(${deep} eq "HEADER") {
 				$deep = "0";
 				$task = {
 					"status"	=> "HEADER",
-					"uuid"		=> "UUID",
-					"project"	=> "Project",
-					"due"		=> "Due",
-					"end"		=> "End",
-					"kind"		=> "Kind",
-					"description"	=> "Description",
+					"uuid"		=> "+UUID",
+					"project"	=> "PROJECT",
+					"tags"		=> "TAGS",
+					"due"		=> "+DEAD",
+					"end"		=> "+DIED",
+					"kind"		=> "KIND",
+					"description"	=> "DESCRIPTION",
 				};
 			};
 			print "| "; printf("%-${c_uid}.${c_uid}s", $task->{"uuid"});
-			print " | "; printf("%-${c_pro}.${c_pro}s", $task->{"project"} || "-");
+			print " | "; printf("%-" . $c_fld->{"project"}	. "." . $c_fld->{"project"}	. "s", $task->{"project"} || "-");
+			print " | "; printf("%-" . $c_fld->{"tags"}	. "." . $c_fld->{"tags"}	. "s", (
+				(ref($task->{"tags"}) eq "ARRAY") ?
+				(join(" ", @{$task->{"tags"}}) || "-") :
+				($task->{"tags"} || "-")
+				)
+			);
 			my $due = (&do_time($task->{"due"}) || "-");
 			my $end = (&do_time($task->{"end"}) || "-"); if ($task->{"status"} eq "deleted") { $end = "~~" . ${end} . "~~"; };
 			print " | "; printf("%-${c_dat}.${c_dat}s", ${due});
