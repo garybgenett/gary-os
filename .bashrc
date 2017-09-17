@@ -190,7 +190,7 @@ fi
 
 # http://superuser.com/questions/175799/does-bash-have-a-hook-that-is-run-before-executing-a-command
 # http://hints.macworld.com/dlfiles/preexec.bash.txt
-export IMPERSONATE_NAME=
+export IMPERSONATE_NAME
 export IMPERSONATE_MODE="false"
 export IMPERSONATE_QUIT="shopt -u extdebug; trap - DEBUG;"
 export IMPERSONATE_TRAP="shopt -s extdebug; trap impersonate_shell DEBUG;"
@@ -3263,6 +3263,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 					-e "s/^[.]/impersonate_command /g" \
 					-e "s/([ ])(task[ ])/\1_\2/g" \
 					-e "s/^(impersonate_command|task[-])/eval\ \${MARKER}\;\ \1/g" \
+					-e "s/(impersonate_command|task[-])/IMPERSONATE_NAME=task .bashrc \1/g" \
 					-e "s/$/;/g"
 		}
 		if [[ ${1} == "RESET" ]]; then
