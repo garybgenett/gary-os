@@ -3350,7 +3350,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == [~] ]]; then
 			shift
 			declare PROJECT="${1}" && shift
-			task-notes project:${PROJECT} "${@}"
+			task-notes "project:${PROJECT}" "project.not:${PROJECT}." "${@}"
 		elif [[ ${1} == [,] ]]; then
 			shift
 			task-track "${@}"
