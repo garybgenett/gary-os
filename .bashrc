@@ -2700,8 +2700,8 @@ function task-export-text {
 			else										{ die("INVALID STATUS!"); };
 		};
 		foreach my $task (sort({
-			(($a->{"project"}	? $a->{"project"}	: "") cmp ($b->{"project"}	? $b->{"project"}	: "")) ||
-			(($a->{"description"}	? $a->{"description"}	: "") cmp ($b->{"description"}	? $b->{"description"}	: ""))
+			(($a->{"project"}	|| "") cmp ($b->{"project"}	|| "")) ||
+			(($a->{"description"}	|| "") cmp ($b->{"description"}	|| ""))
 		} @{$data})) {
 			my $started = "0";
 			my $begin = "0";
@@ -2900,8 +2900,8 @@ function task-notes {
 		};
 		my $uuids = [];
 		foreach my $task (sort({
-			(($a->{"project"}	? $a->{"project"}	: "") cmp ($b->{"project"}	? $b->{"project"}	: "")) ||
-			(($a->{"description"}	? $a->{"description"}	: "") cmp ($b->{"description"}	? $b->{"description"}	: ""))
+			(($a->{"project"}	|| "") cmp ($b->{"project"}	|| "")) ||
+			(($a->{"description"}	|| "") cmp ($b->{"description"}	|| ""))
 		} @{$data})) {
 			my $file = ${root} . "/" . $task->{"uuid"} . ${extn};
 			my $text = "[" . $task->{"description"} . "]";
@@ -3069,8 +3069,8 @@ function task-depends {
 			};
 		};
 		foreach my $task (sort({
-			(($a->{"project"}	? $a->{"project"}	: "") cmp ($b->{"project"}	? $b->{"project"}	: "")) ||
-			(($a->{"description"}	? $a->{"description"}	: "") cmp ($b->{"description"}	? $b->{"description"}	: ""))
+			(($a->{"project"}	|| "") cmp ($b->{"project"}	|| "")) ||
+			(($a->{"description"}	|| "") cmp ($b->{"description"}	|| ""))
 		} @{$show})) {
 			if ((
 				(
@@ -3159,12 +3159,12 @@ function task-depends {
 			# report.skim.sort=project+,kind+,priority-,depends+,description+,entry+
 			if (exists($task->{"depends"})) {
 				foreach my $uuid (sort({
-					(($list->{$a}{"project"}	? $list->{$a}{"project"}	: "") cmp ($list->{$b}{"project"}	? $list->{$b}{"project"}	: "")) ||
-					(($list->{$a}{"kind"}		? $list->{$a}{"kind"}		: "") cmp ($list->{$b}{"kind"}		? $list->{$b}{"kind"}		: "")) ||
-					(($list->{$b}{"priority"}	? $list->{$b}{"priority"}	: "") cmp ($list->{$a}{"priority"}	? $list->{$a}{"priority"}	: "")) ||
-					(($list->{$a}{"depends"}	? $list->{$a}{"depends"}	: "") cmp ($list->{$b}{"depends"}	? $list->{$b}{"depends"}	: "")) ||
-					(($list->{$a}{"description"}	? $list->{$a}{"description"}	: "") cmp ($list->{$b}{"description"}	? $list->{$b}{"description"}	: "")) ||
-					(($list->{$a}{"entry"}		? $list->{$a}{"entry"}		: "") cmp ($list->{$b}{"entry"}		? $list->{$b}{"entry"}		: ""))
+					(($list->{$a}{"project"}	|| "") cmp ($list->{$b}{"project"}	|| "")) ||
+					(($list->{$a}{"kind"}		|| "") cmp ($list->{$b}{"kind"}		|| "")) ||
+					(($list->{$b}{"priority"}	|| "") cmp ($list->{$a}{"priority"}	|| "")) ||
+					(($list->{$a}{"depends"}	|| "") cmp ($list->{$b}{"depends"}	|| "")) ||
+					(($list->{$a}{"description"}	|| "") cmp ($list->{$b}{"description"}	|| "")) ||
+					(($list->{$a}{"entry"}		|| "") cmp ($list->{$b}{"entry"}	|| ""))
 				} split(",", $task->{"depends"}))) {
 					&print_task(${uuid}, (${deep} + 1));
 				};
@@ -3197,7 +3197,7 @@ function task-recur {
 			my $item = $list->{$key};
 			printf("%-36.36s %-8.8s %-9.9s %-9.9s %s\n",
 				$item->{"uuid"},
-				(exists($item->{"end"}) ? $item->{"end"} : ""),
+				(exists($item->{"end"}) || ""),
 				$item->{"status"},
 				$item->{"recur"},
 				$item->{"description"},
