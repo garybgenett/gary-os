@@ -3071,10 +3071,20 @@ function task-depends {
 			(($a->{"project"}	? $a->{"project"}	: "") cmp ($b->{"project"}	? $b->{"project"}	: "")) ||
 			(($a->{"description"}	? $a->{"description"}	: "") cmp ($b->{"description"}	? $b->{"description"}	: ""))
 		} @{$show})) {
-			if ((!exists($rdep->{$task->{"uuid"}})) || (((exists($task->{"project"})) && ($task->{"project"} =~ /[.]/)) && ((exists($task->{"kind"})) && ($task->{"kind"} eq "notes")))) {
-				if ((exists($task->{"depends"})) && ($task->{"depends"})) {
-					&print_task($task->{"uuid"}, 0);
-				};
+			if ((
+				(
+					(!exists($rdep->{$task->{"uuid"}}))
+				) || (
+					(exists($task->{"project"})) &&
+					($task->{"project"} =~ /[.]/) &&
+					(exists($task->{"kind"})) &&
+					($task->{"kind"} eq "notes")
+				)
+			) && (
+				(exists($task->{"depends"})) &&
+				($task->{"depends"})
+			)) {
+				&print_task($task->{"uuid"}, 0);
 			};
 		};
 		sub time_format {
@@ -3131,11 +3141,14 @@ function task-depends {
 			print " | "; printf("%-${c_dat}.${c_dat}s", ${end});
 			print " | " . (". " x ${deep}) . ((${deep} > 0) && "${deep} ");
 			my $title = "";
-			if (exists($task->{"kind"}))					{ $title .= "[" . $task->{"kind"} . "] "; };
-			if ($task->{"status"} eq "pending")				{ $title .= $task->{"description"}; }
-			elsif ($task->{"status"} eq "HEADER")				{ $title .= $task->{"description"}; }
-			else								{ $title = "~~" . ${title} . $task->{"description"} . "~~"; };
-			if (exists($task->{"due"}) && ($task->{"status"} ne "HEADER"))	{ $title = "**" . ${title} . "**"; };
+			if (exists($task->{"kind"}))		{ $title .= "[" . $task->{"kind"} . "] "; };
+			if ($task->{"status"} eq "pending")	{ $title .= $task->{"description"}; }
+			elsif ($task->{"status"} eq "HEADER")	{ $title .= $task->{"description"}; }
+			else					{ $title = "~~" . ${title} . $task->{"description"} . "~~"; };
+			if (
+				(exists($task->{"due"})) &&
+				($task->{"status"} ne "HEADER")
+			)					{ $title = "**" . ${title} . "**"; };
 			print ${title} . "\n";
 			if (exists($task->{"depends"})) {
 				foreach my $uuid (split(",", $task->{"depends"})) {
