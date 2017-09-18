@@ -3039,6 +3039,7 @@ function task-depends {
 		use Time::Local qw(timegm timelocal);
 #>>>		my $c_uid = 36;
 		my $c_uid = 8;
+		my $c_pri = 2;
 #>>>		my $c_dat = 23;
 		my $c_dat = 14;
 		my $c_fld = {
@@ -3112,8 +3113,9 @@ function task-depends {
 			if (!${deep}) {
 				print "\n";
 				&print_task("0", "HEADER");
-				print "" . ("|:---" x 6) . "|\n";
+				print "" . ("|:---" x 7) . "|\n";
 			}
+			# report.skim.labels=+UUID,PROJECT,TAGS,+P,+DEAD,+DIED,KIND,DESCRIPTION
 			elsif(${deep} eq "HEADER") {
 				$deep = "0";
 				$task = {
@@ -3121,6 +3123,7 @@ function task-depends {
 					"uuid"		=> "+UUID",
 					"project"	=> "PROJECT",
 					"tags"		=> "TAGS",
+					"priority"	=> "+P",
 					"due"		=> "+DEAD",
 					"end"		=> "+DIED",
 					"kind"		=> "KIND",
@@ -3135,6 +3138,7 @@ function task-depends {
 				($task->{"tags"} || "-")
 				)
 			);
+			print " | "; printf("%-${c_pri}.${c_pri}s", ($task->{"priority"} || "-"));
 			my $due = (&do_time($task->{"due"}) || "-");
 			my $end = (&do_time($task->{"end"}) || "-"); if ($task->{"status"} eq "deleted") { $end = "~~" . ${end} . "~~"; };
 			print " | "; printf("%-${c_dat}.${c_dat}s", ${due});
@@ -3145,10 +3149,12 @@ function task-depends {
 			if ($task->{"status"} eq "pending")	{ $title .= $task->{"description"}; }
 			elsif ($task->{"status"} eq "HEADER")	{ $title .= $task->{"description"}; }
 			else					{ $title = "~~" . ${title} . $task->{"description"} . "~~"; };
-			if (
-				(exists($task->{"due"})) &&
+			if ((
+				(exists($task->{"priority"})) ||
+				(exists($task->{"due"}))
+			) && (
 				($task->{"status"} ne "HEADER")
-			)					{ $title = "**" . ${title} . "**"; };
+			))					{ $title = "**" . ${title} . "**"; };
 			print ${title} . "\n";
 			if (exists($task->{"depends"})) {
 				foreach my $uuid (split(",", $task->{"depends"})) {
