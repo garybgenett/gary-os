@@ -3156,8 +3156,16 @@ function task-depends {
 				($task->{"status"} ne "HEADER")
 			))					{ $title = "**" . ${title} . "**"; };
 			print ${title} . "\n";
+			# report.skim.sort=project+,kind+,priority-,depends+,description+,entry+
 			if (exists($task->{"depends"})) {
-				foreach my $uuid (split(",", $task->{"depends"})) {
+				foreach my $uuid (sort({
+					(($list->{$a}{"project"}	? $list->{$a}{"project"}	: "") cmp ($list->{$b}{"project"}	? $list->{$b}{"project"}	: "")) ||
+					(($list->{$a}{"kind"}		? $list->{$a}{"kind"}		: "") cmp ($list->{$b}{"kind"}		? $list->{$b}{"kind"}		: "")) ||
+					(($list->{$b}{"priority"}	? $list->{$b}{"priority"}	: "") cmp ($list->{$a}{"priority"}	? $list->{$a}{"priority"}	: "")) ||
+					(($list->{$a}{"depends"}	? $list->{$a}{"depends"}	: "") cmp ($list->{$b}{"depends"}	? $list->{$b}{"depends"}	: "")) ||
+					(($list->{$a}{"description"}	? $list->{$a}{"description"}	: "") cmp ($list->{$b}{"description"}	? $list->{$b}{"description"}	: "")) ||
+					(($list->{$a}{"entry"}		? $list->{$a}{"entry"}		: "") cmp ($list->{$b}{"entry"}		? $list->{$b}{"entry"}		: ""))
+				} split(",", $task->{"depends"}))) {
 					&print_task(${uuid}, (${deep} + 1));
 				};
 			};
