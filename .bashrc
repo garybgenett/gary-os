@@ -2675,14 +2675,15 @@ function task-export-text {
 					my $project = ${1} || $task->{"project"};
 					warn("EXPORTING TASKLIST[${project}]");
 					my $tasklist = qx(.bashrc task-depends project:${project} project.not:${project}.);
-					$tasklist =~ s/^\n*//g;
+					$tasklist =~ s/^\n*/<!-- TASKLIST[${project}] -->\n/g;
 					$tasklist =~ s/\n*$//g;
 					$output =~ s/^\[TASKLIST[ ]?([^\n]*)?\]$/${tasklist}/ms;
 				};
 				while (${output} =~ m/^\[TASKCMD[ ]?([^\n]*)?\]$/gms) {
-					warn("EXPORTING TASKCMD[${1}]");
-					my $taskcmd = qx(task ${1});
-					$taskcmd =~ s/^\n*//g;
+					my $command = ${1};
+					warn("EXPORTING TASKCMD[${command}]");
+					my $taskcmd = qx(task ${command});
+					$taskcmd =~ s/^\n*/<!-- TASKCMD[${command}] -->\n/g;
 					$taskcmd =~ s/\n*$//g;
 					$output =~ s/^\[TASKCMD[ ]?([^\n]*)?\]$/${taskcmd}/ms;
 				};
