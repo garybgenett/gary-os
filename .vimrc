@@ -173,7 +173,7 @@ map <F9> <ESC>:%s/[ \t]*$//g<CR>1G
 
 " (un)set automatic formatting
 map <F10> <ESC>:set formatoptions+=a<CR><ESC>:set   spell<CR><ESC>:set   expandtab<CR><ESC>:set shiftwidth=2<CR><ESC>:set tabstop=2<CR><ESC>:set textwidth=80<CR>
-map <F11> <ESC>:set formatoptions-=a<CR><ESC>:set   spell<CR><ESC>:set noexpandtab<CR><ESC>:set shiftwidth=8<CR><ESC>:set tabstop=8<CR><ESC>:set textwidth=0 <CR>
+map <F11> <ESC>:set formatoptions-=a<CR><ESC>:set   spell<CR><ESC>:set   expandtab<CR><ESC>:set shiftwidth=2<CR><ESC>:set tabstop=2<CR><ESC>:set textwidth=0 <CR>
 map <F12> <ESC>:set formatoptions-=a<CR><ESC>:set nospell<CR><ESC>:set noexpandtab<CR><ESC>:set shiftwidth=8<CR><ESC>:set tabstop=8<CR><ESC>:set textwidth=0 <CR>
 
 "###############################################################################
