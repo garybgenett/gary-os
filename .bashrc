@@ -2284,9 +2284,7 @@ function task-export {
 function task-export-zoho {
 	cd ${PIMDIR}
 	eval zohocrm_events.pl "${@}" \
-		$(cat ${PIMDIR}/.zoho.reports) \
-			| tee ${PIMDIR}/zoho.md
-		2>&1	| tee ${PIMDIR}/zoho.all.md
+		$(cat ${PIMDIR}/.zoho.reports)
 	cd - >/dev/null
 	return 0
 }
