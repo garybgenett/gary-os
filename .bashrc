@@ -2283,6 +2283,7 @@ function task-export {
 
 function task-export-zoho {
 	cd ${PIMDIR}
+	cat ${PIMDIR}/.zoho.reports
 	eval zohocrm_events.pl "${@}" \
 		$(cat ${PIMDIR}/.zoho.reports)
 	cd - >/dev/null
