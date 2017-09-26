@@ -2300,6 +2300,10 @@ function task-export-report {
 	declare EMAIL_MAIL="${1}" && shift
 	declare EMAIL_NAME="${1}" && shift
 	declare EMAIL_SIGN="${1}" && shift
+	declare TIMELINE_Y="${1}" && shift
+	if [[ ${TIMELINE_Y} != false ]] && [[ ${TIMELINE_Y} != true ]]; then
+		TIMELINE_Y="false"
+	fi
 	task-export-text "${EMAIL_NAME}" "${TASKS_LIST}"
 	cat ${PIMDIR}/tasks.md.html \
 		>${REPORT}.projects.html
@@ -2323,12 +2327,17 @@ function task-export-report {
 			s|.+tasks.timeline.projects.json.+$|	var parsed_p = JSON.parse('\''${projects}'\''); projectSource.loadJSON(parsed_p, "");|g;
 		' \
 		>${REPORT}.timeline.html
-	cat >${REPORT}.txt <<END_OF_FILE
+cat >${REPORT}.txt <<END_OF_FILE
 This is my weekly status report.  It is an automated message, and should be generated every weekend.
 
-Attached are two HTML files which should open in any browser (tested in Firefox, Safari and Internet Explorer):
+END_OF_FILE
+if ! ${TIMELINE_Y}; then cat >>${REPORT}.txt <<END_OF_FILE
+The attached HTML file should open in any browser, and contains a list of all projects along with their status and all notes.
+END_OF_FILE
+else cat >>${REPORT}.txt <<END_OF_FILE
+Attached are two HTML files which should open in any browser:
 	* Projects
-		* List of current projects, along with their status and all notes
+		* List of all projects, along with their status and all notes
 		* The projects report is self-explanatory, and does not have any further details in this message
 	* Timeline
 		* Interactive visualization, for projects which have deadlines
@@ -2353,6 +2362,9 @@ Some important notes:
 	* Mousing over each item will show a pop-up with start and end dates, along with any "hold" dates and the first and last dates logged against the task
 	* The long-term tracking is just a guideline/overview, since not all tasks will take the amount of time allotted
 	* Not all time is accounted for in the hourly time-tracking in this report
+END_OF_FILE
+fi
+cat >>${REPORT}.txt <<END_OF_FILE
 
 Please see me with any comments or questions.
 END_OF_FILE
@@ -2366,7 +2378,7 @@ END_OF_FILE
 			email -x \
 				-s "Status Report: ${DATE}" \
 				-a ${REPORT}.projects.html \
-				-a ${REPORT}.timeline.html \
+				$(if ${TIMELINE_Y}; then echo "-a ${REPORT}.timeline.html"; fi) \
 				-c ${EMAIL_MAIL} \
 				"${@}" \
 				-- ${EMAIL_DEST}
