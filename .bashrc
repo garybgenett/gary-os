@@ -75,7 +75,7 @@ export HISTIGNORE=
 
 ########################################
 
-export EMERGE_DEFAULT_OPTS="--ask --oneshot"
+export EMERGE_DEFAULT_OPTS="--ask=y --verbose --oneshot"
 
 #>>>export CARCH="i686"
 #>>>export CHOST="i686-pc-linux-gnu"
