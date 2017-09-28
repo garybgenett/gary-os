@@ -2449,6 +2449,7 @@ function task-export-text {
 			"self"		=> "orange",
 			"travel"	=> "cyan",
 			"work"		=> "brown",
+			"work-em"	=> "brown",
 			"work.em"	=> "brown",
 			"work.f5"	=> "brown",
 			"writing"	=> "magenta",
