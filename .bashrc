@@ -449,10 +449,6 @@ alias rsynclook="${GREP} -v '^[.<>][fdDLS][ ]'"
 alias logtail="tail -f /.runit/log/syslogd"
 alias synctail="${GREP} '^ERROR[:][ ]' /.g/_data/+sync/_sync.log ; echo ; tail -f /.g/_data/+sync/_sync.log"
 
-alias filter="iptables -L -nvx --line-numbers | ${MORE}"
-alias mangler="iptables -L -nvx --line-numbers -t mangle | ${MORE}"
-alias natter="iptables -L -nvx --line-numbers -t nat | ${MORE}"
-
 ########################################
 
 alias cal="cal --monday --three"
@@ -525,6 +521,22 @@ function burn {
 		shift
 		cdrecord -v dev=ATAPI -eject "${@}"
 	fi
+}
+
+########################################
+
+function filter {
+	declare TABLE=
+	for TABLE in \
+		filter \
+		nat \
+		mangle \
+		raw \
+		security \
+	; do
+		echo -en "\n----------[ ${TABLE} ]----------\n"
+		iptables -L -nvx --line-numbers -t ${TABLE}
+	done
 }
 
 ########################################
