@@ -2766,7 +2766,7 @@ function task-export-text {
 				&export_proj(${task}, 1);
 			};
 			foreach my $annotation (@{$task->{"annotations"}}) {
-				if (((!exists($task->{"kind"})) || (($task->{"project"} eq "_journal") || ($task->{"kind"} ne "notes"))) && ($annotation->{"description"} =~ m/^[[]track[]][:][[]begin[]]$/)) {
+				if ((((exists($task->{"project"})) && ($task->{"project"} eq "_journal")) || ((!exists($task->{"kind"})) || ($task->{"kind"} eq "track"))) && ($annotation->{"description"} =~ m/^[[]track[]][:][[]begin[]]$/)) {
 					my $tags		= join(" ", @{$task->{"tags"}})		if (exists($task->{"tags"}));
 					my($brn_s, $brn_d)	= &time_format($task->{"entry"})	if (exists($task->{"entry"}));
 					my($die_s, $die_d)	= &time_format($task->{"end"})		if (exists($task->{"end"}));
@@ -2791,7 +2791,7 @@ function task-export-text {
 					$started	= ${beg_s};
 					$begin		= ${beg_d};
 				}
-				elsif (((!exists($task->{"kind"})) || (($task->{"project"} eq "_journal") || ($task->{"kind"} ne "notes"))) && ($annotation->{"description"} =~ m/^[[]track[]][:][[]end[]]$/)) {
+				elsif ((((exists($task->{"project"})) && ($task->{"project"} eq "_journal")) || ((!exists($task->{"kind"})) || ($task->{"kind"} eq "track"))) && ($annotation->{"description"} =~ m/^[[]track[]][:][[]end[]]$/)) {
 					my $tags		= join(" ", @{$task->{"tags"}})		if (exists($task->{"tags"}));
 					my($end_s, $end_d)	= &time_format($annotation->{"entry"})	if (exists($annotation->{"entry"}));
 					my $t_hrs		= &hour(${end_s} - ${started})		;
