@@ -2716,11 +2716,15 @@ function task-export-text {
 			$note .= ("-" x 40) . "\n\n";
 			$note .= "**" . ${modified} . "UUID: [" . $task->{"uuid"} . "](#uuid-" . $task->{"uuid"} . ") | [TOC](#TOC) [/](./" . ${base} . ") [" . ${extn} . "](./" . ${base} . "/" . $task->{"uuid"} . ${extn} . ")**\n";
 			$note .= ${output};
-			if	((exists($task->{"project"})) && ($task->{"project"} eq "_data"))	{ $object->{"data"}	.= ${note}; }
-			elsif	((exists($task->{"project"})) && ($task->{"project"} eq "_journal"))	{ $object->{"journal"}	.= ${note}; }
-			elsif	($task->{"status"} eq "pending")					{ $object->{"open"}	.= ${note}; }
-			elsif	($task->{"status"} eq "completed")					{ $object->{"completed"}.= ${note}; }
-			elsif	($task->{"status"} eq "deleted")					{ $object->{"deleted"}	.= ${note}; }
+			if	((exists($task->{"project"})) && ($task->{"project"} eq ".someday"))	{
+				if ($task->{"status"} eq "pending")					{ $NOTE->{"someday"}		.= ${note}; }
+				else									{ $NOTE->{"other"}{"someday"}	.= ${note}; };
+			}
+			elsif	((exists($task->{"project"})) && ($task->{"project"} eq "_data"))	{ $object->{"data"}		.= ${note}; }
+			elsif	((exists($task->{"project"})) && ($task->{"project"} eq "_journal"))	{ $object->{"journal"}		.= ${note}; }
+			elsif	($task->{"status"} eq "pending")					{ $object->{"open"}		.= ${note}; }
+			elsif	($task->{"status"} eq "completed")					{ $object->{"completed"}	.= ${note}; }
+			elsif	($task->{"status"} eq "deleted")					{ $object->{"deleted"}		.= ${note}; }
 			else										{ die("INVALID STATUS!"); };
 		};
 		foreach my $task (sort({
@@ -2848,6 +2852,8 @@ function task-export-text {
 		if (exists(${$NOTE->{"other"}}{"completed"}))	{ print NOTE "\n\nCompleted (Other)"	. " {#list-completed-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"completed"}	; };
 		if (exists($NOTE->{"deleted"}))			{ print NOTE "\n\nDeleted"		. " {#list-deleted}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"deleted"}			; };
 		if (exists(${$NOTE->{"other"}}{"deleted"}))	{ print NOTE "\n\nDeleted (Other)"	. " {#list-deleted-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"deleted"}		; };
+		if (exists($NOTE->{"someday"}))			{ print NOTE "\n\nSomeday"		. " {#list-someday}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"someday"}			; };
+		if (exists(${$NOTE->{"other"}}{"someday"}))	{ print NOTE "\n\nSomeday (Other)"	. " {#list-someday-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"someday"}		; };
 		close(JSON) || die();
 		close(TIME) || die();
 		close(PROJ) || die();
