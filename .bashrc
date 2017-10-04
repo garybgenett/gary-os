@@ -3449,8 +3449,8 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			task-track "${@}"
 		elif [[ ${1} == [-] ]]; then
 			shift
-			task view project.not:_gtd : "${@}" | ${SED} -ne "s/^[^a-z]+([a-z][^:]+)[:].+$/\1/gp" | sort | uniq
-			task view project.not:_gtd : "${@}"
+			task view project.not:_gtd /:/ "${@}" | ${SED} -ne "s/^[^a-z]+([a-z][^:]+)[:].+$/\1/gp" | sort | uniq
+			task view project.not:_gtd /:/ "${@}"
 		elif [[ ${1} == [/] ]]; then
 			shift
 			task-switch "${@}"
@@ -3458,7 +3458,11 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			(cd ${PIMDIR} && ${GIT_STS} taskd tasks*)
 			task tags status:pending
 			task mark rc.gc=1 rc.recurrence=1
-			task view rc.limit=12 "${@}"
+			if [[ ${1} == [.] ]]; then
+				task view rc.limit=70 area.not:writing area.not:computer tag.not:. "${@}"
+			else
+				task view rc.limit=12 "${@}"
+			fi
 		fi
 		return 0
 	}
