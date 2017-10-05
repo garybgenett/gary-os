@@ -3285,7 +3285,7 @@ function task-copy {
 		use strict;
 		use warnings;
 		use JSON::PP;
-		if ((!$ARGV[1]) && (!$ARGV[2])) {
+		if ((!$ARGV[0]) && (!$ARGV[1])) {
 			exit 0
 		};
 		my $orig = shift();
