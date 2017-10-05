@@ -3280,6 +3280,45 @@ function task-switch {
 
 ########################################
 
+function task-copy {
+	perl -e '
+		use strict;
+		use warnings;
+		use JSON::PP;
+		if ((!$ARGV[1]) && (!$ARGV[2])) {
+			exit 0
+		};
+		my $orig = shift();
+		chomp($orig = qx(task uuids ${orig}));
+		my $data = qx(task export ${orig}); $data =~ s/\n//g; $data = decode_json(${data});
+		$data = @{$data}[0];
+		while (@{ARGV}) {
+			my $field = shift();
+			if (${field} =~ m/^(p(ro(ject)?)?[:])(.*)$/)	{ $data->{"project"}	= ${4}; }
+			elsif (${field} =~ m/^(k(ind)?[:])(.*)$/)	{ $data->{"kind"}	= ${3}; }
+			elsif (${field} =~ m/^(a(rea)?[:])(.*)$/)	{ $data->{"area"}	= ${3}; }
+			elsif (${field} =~ m/^(t(ag(s)?)?[:])(.*)$/)	{ ${$data->{"tags"}}[0]	= ${4}; }
+			elsif (${field} =~ m/^(d(ue)?[:])(.*)$/)	{ $data->{"due"}	= ${3}; }
+			elsif (${field} =~ m/^[-][-]$/)			{ last; };
+		};
+		system("task add"
+			. " " . ($data->{"project"}	? "project:"	. $data->{"project"}		: "")
+			. " " . ($data->{"kind"}	? "kind:"	. $data->{"kind"}		: "")
+			. " " . ($data->{"area"}	? "area:"	. $data->{"area"}		: "")
+			. " " . ($data->{"tags"}	? "tags:"	. join(",", @{$data->{"tags"}})	: "")
+			. " " . ($data->{"due"}		? "due:"	. $data->{"due"}		: "")
+			. " -- " . (@{ARGV}		? join(" ", @{ARGV})				: "")
+		);
+		if (${?} == 0) {
+			chomp(my $done = qx(task rc.verbose=nothing ids));
+			$done =~ s/^1[-]//g;
+			system("task read ${orig} ${done}");
+		};
+	' -- "${@}" || return 1
+	return 0
+}
+
+########################################
 if [[ ${IMPERSONATE_NAME} == task ]]; then
 	declare FILE=
 	unalias -a
@@ -3454,6 +3493,9 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == [/] ]]; then
 			shift
 			task-switch "${@}"
+		elif [[ ${1} == [c] ]]; then
+			shift
+			task-copy "${@}"
 		else
 			(cd ${PIMDIR} && ${GIT_STS} taskd tasks*)
 			task tags status:pending
