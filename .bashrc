@@ -3285,6 +3285,12 @@ function task-copy {
 		use strict;
 		use warnings;
 		use JSON::PP;
+		my $links = [];
+		if (($ARGV[0]) && ($ARGV[0] =~ m/^[+]/)) {
+			my $list = shift();
+			$list =~ s/^[+]//g;
+			@{ $links } = split(/,/, ${list});
+		};
 		if ((!$ARGV[0]) && (!$ARGV[1])) {
 			exit 0
 		};
@@ -3314,7 +3320,10 @@ function task-copy {
 		if (${?} == 0) {
 			chomp(my $done = qx(task rc.verbose=nothing ids));
 			$done =~ s/^1[-]//g;
-			system("task read ${orig} ${done}");
+			foreach my $link (@{$links}) {
+				system("task modify ${link} depends:${done}");
+			};
+			system("task read ${orig} ${done} " . join(" ", @{$links}));
 		};
 	' -- "${@}" || return 1
 	return 0
