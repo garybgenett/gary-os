@@ -3294,12 +3294,13 @@ function task-copy {
 		$data = @{$data}[0];
 		while (@{ARGV}) {
 			my $field = shift();
-			if (${field} =~ m/^(p(ro(ject)?)?[:])(.*)$/)	{ $data->{"project"}	= ${4}; }
-			elsif (${field} =~ m/^(k(ind)?[:])(.*)$/)	{ $data->{"kind"}	= ${3}; }
-			elsif (${field} =~ m/^(a(rea)?[:])(.*)$/)	{ $data->{"area"}	= ${3}; }
-			elsif (${field} =~ m/^(t(ag(s)?)?[:])(.*)$/)	{ ${$data->{"tags"}}[0]	= ${4}; }
-			elsif (${field} =~ m/^(d(ue)?[:])(.*)$/)	{ $data->{"due"}	= ${3}; }
-			elsif (${field} =~ m/^[-][-]$/)			{ last; };
+			if (${field} =~ m/^(p(ro(ject)?)?[:])(.*)$/)		{ $data->{"project"}	= ${4}; }
+			elsif (${field} =~ m/^(k(ind)?[:])(.*)$/)		{ $data->{"kind"}	= ${3}; }
+			elsif (${field} =~ m/^(a(rea)?[:])(.*)$/)		{ $data->{"area"}	= ${3}; }
+			elsif (${field} =~ m/^(t(ag(s)?)?[:])(.*)$/)		{ ${$data->{"tags"}}[0]	= ${4}; }
+			elsif (${field} =~ m/^(d(ue)?[:])(.*)$/)		{ $data->{"due"}	= ${3}; }
+			elsif (${field} =~ m/^(p(ri(ority)?)?[:])(.*)$/)	{ $data->{"priority"}	= ${4}; }
+			elsif (${field} =~ m/^[-][-]$/)				{ last; };
 		};
 		system("task add"
 			. " " . ($data->{"project"}	? "project:"	. $data->{"project"}		: "")
@@ -3307,6 +3308,7 @@ function task-copy {
 			. " " . ($data->{"area"}	? "area:"	. $data->{"area"}		: "")
 			. " " . ($data->{"tags"}	? "tags:"	. join(",", @{$data->{"tags"}})	: "")
 			. " " . ($data->{"due"}		? "due:"	. $data->{"due"}		: "")
+			. " " . ($data->{"priority"}	? "priority:"	. $data->{"priority"}		: "")
 			. " -- " . (@{ARGV}		? join(" ", @{ARGV})				: "")
 		);
 		if (${?} == 0) {
