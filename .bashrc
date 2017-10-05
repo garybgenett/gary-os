@@ -3319,6 +3319,30 @@ function task-copy {
 }
 
 ########################################
+
+function task-insert {
+	declare UNDO="false"
+	if [[ ${1} == -d ]]; then
+		UNDO="true"
+		shift
+	fi
+	if [[ -n ${1} ]] && [[ -n ${2} ]] && [[ -n ${3} ]]; then
+		declare PRNT="$(task uuids ${1})"; shift
+		declare CHLD="$(task uuids ${1})"; shift
+		declare HOST="$(task uuids ${1})"; shift
+		if ! ${UNDO}; then
+			task modify ${HOST} depends:${CHLD}
+			task modify ${PRNT} depends:-${CHLD},${HOST}
+		else
+			task modify ${HOST} depends:-${CHLD}
+			task modify ${PRNT} depends:${CHLD},-${HOST}
+		fi
+	fi
+	return 0
+}
+
+########################################
+
 if [[ ${IMPERSONATE_NAME} == task ]]; then
 	declare FILE=
 	unalias -a
@@ -3496,6 +3520,9 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == [c] ]]; then
 			shift
 			task-copy "${@}"
+		elif [[ ${1} == [i] ]]; then
+			shift
+			task-insert "${@}"
 		else
 			(cd ${PIMDIR} && ${GIT_STS} taskd tasks*)
 			task tags status:pending
