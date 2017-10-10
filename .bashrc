@@ -1294,8 +1294,8 @@ function index-dir {
 		return 0
 	fi
 	echo -en "\n ${FUNCNAME}: ${INDEX_D}\n"
+	echo -en "\n"
 	if ${SINGLE}; then
-		echo -en "\n"
 		(cd ${INDEX_D} && \
 			(	eval find . ${EXCL_PATHS} -print	2>&3; [[ -n "${@}" ]] &&
 				eval find "${@}" -type d -print		2>&3) | ${PV} -N find |
@@ -1307,7 +1307,6 @@ function index-dir {
 		cat /dev/null						>${I_ERROR}
 		(cd ${INDEX_I} && \
 			${RM} $(ls -A | sort -r | tail -n+${INDEX_N})	) 2>>${I_ERROR}
-		echo -en "\n"
 		(cd ${INDEX_D} && \
 			(	eval find . ${EXCL_PATHS} -print	2>&3; [[ -n "${@}" ]] &&
 				eval find "${@}" -type d -print		2>&3) | ${PV} -N find |
