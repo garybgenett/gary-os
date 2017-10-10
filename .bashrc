@@ -3331,6 +3331,27 @@ function task-copy {
 
 ########################################
 
+function task-move {
+	declare PSRC="${1}"; declare PSID="$(task uuids kind:notes project:${1} project.not:${1}.)"; shift
+	declare PDST="${1}"; declare PDID="$(task uuids kind:notes project:${1} project.not:${1}.)"; shift
+	declare ALST=
+	declare RLST=
+	if [[ -n ${PSID} ]] && [[ -n ${PDID} ]]; then
+		for FILE in $(task uuids "${@}"); do
+			ALST="${FILE},${ALST}"
+			RLST="-${FILE},${RLST}"
+		done
+		ALST="${ALST/%,}"
+		RLST="${RLST/%,}"
+		task modify ${@} project:${PDST} rc.bulk=0
+		task modify ${PSID} depends:${RLST}
+		task modify ${PDID} depends:${ALST}
+	fi
+	return 0
+}
+
+########################################
+
 function task-insert {
 	declare UNDO="false"
 	if [[ ${1} == -d ]]; then
@@ -3531,6 +3552,9 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == [c] ]]; then
 			shift
 			task-copy "${@}"
+		elif [[ ${1} == [m] ]]; then
+			shift
+			task-move "${@}"
 		elif [[ ${1} == [i] ]]; then
 			shift
 			task-insert "${@}"
