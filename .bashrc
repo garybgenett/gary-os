@@ -3089,6 +3089,8 @@ function task-depends {
 		my $show = qx(task export ${args});	$show =~ s/\n//g; $show = decode_json(${show});
 		my $list = {};
 		my $rdep = {};
+		my $filt = {};
+		my $fnum = {};
 		my $tnum = {};
 		foreach my $task (@{$data}) {
 			$list->{$task->{"uuid"}} = ${task};
@@ -3097,6 +3099,9 @@ function task-depends {
 					push(@{$rdep->{$uuid}}, $task->{"uuid"});
 				};
 			};
+		};
+		foreach my $task (@{$show}) {
+			$filt->{$task->{"uuid"}} = ${task};
 		};
 		foreach my $task (sort({
 			(($a->{"project"}	|| "") cmp ($b->{"project"}	|| "")) ||
@@ -3199,12 +3204,16 @@ function task-depends {
 					&print_task(${uuid}, (${deep} + 1));
 				};
 			};
+			if ($filt->{$uuid}) {
+				$fnum->{$uuid}++;
+			};
 			$tnum->{$uuid}++;
 		};
 		if (%{$tnum}) {
-			my @count = keys(%{$tnum});
+			my @c_tnum = keys(%{$tnum});
+			my @c_fnum = keys(%{$fnum});
 			print "\n";
-			print "Tasks: $#{count}\n";
+			print "Unique Tasks: $#{c_fnum} matching / $#{c_tnum} total\n";
 		};
 	' -- "${@}" || return 1
 	return 0
