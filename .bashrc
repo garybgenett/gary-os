@@ -3307,6 +3307,9 @@ function task-copy {
 			elsif (${field} =~ m/^(p(ri(ority)?)?[:])(.*)$/)	{ $data->{"priority"}	= ${4}; }
 			elsif (${field} =~ m/^[-][-]$/)				{ last; };
 		};
+		if (@{ARGV}) {
+			$data->{"description"} = join(" ", @{ARGV});
+		};
 		system("task add"
 			. " " . ($data->{"project"}	? "project:"	. $data->{"project"}		: "")
 			. " " . ($data->{"kind"}	? "kind:"	. $data->{"kind"}		: "")
@@ -3314,7 +3317,7 @@ function task-copy {
 			. " " . ($data->{"tags"}	? "tags:"	. join(",", @{$data->{"tags"}})	: "")
 			. " " . ($data->{"due"}		? "due:"	. $data->{"due"}		: "")
 			. " " . ($data->{"priority"}	? "priority:"	. $data->{"priority"}		: "")
-			. " -- " . (@{ARGV}		? join(" ", @{ARGV})				: "")
+			. " -- " . $data->{"description"}
 		);
 		if (${?} == 0) {
 			chomp(my $done = qx(task rc.verbose=nothing ids));
