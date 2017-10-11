@@ -3089,6 +3089,7 @@ function task-depends {
 		my $show = qx(task export ${args});	$show =~ s/\n//g; $show = decode_json(${show});
 		my $list = {};
 		my $rdep = {};
+		my $tnum = {};
 		foreach my $task (@{$data}) {
 			$list->{$task->{"uuid"}} = ${task};
 			if (exists($task->{"depends"})) {
@@ -3198,6 +3199,12 @@ function task-depends {
 					&print_task(${uuid}, (${deep} + 1));
 				};
 			};
+			$tnum->{$uuid}++;
+		};
+		if (%{$tnum}) {
+			my @count = keys(%{$tnum});
+			print "\n";
+			print "Tasks: $#{count}\n";
 		};
 	' -- "${@}" || return 1
 	return 0
