@@ -3226,7 +3226,7 @@ function task-recur {
 			my $item = $list->{$key};
 			printf("%-36.36s %-8.8s %-9.9s %-9.9s %s\n",
 				$item->{"uuid"},
-				(exists($item->{"end"}) || ""),
+				(exists($item->{"end"}) ? $item->{"end"} : ""),
 				$item->{"status"},
 				$item->{"recur"},
 				$item->{"description"},
