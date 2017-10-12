@@ -3204,16 +3204,18 @@ function task-depends {
 					&print_task(${uuid}, (${deep} + 1));
 				};
 			};
-			if ($filt->{$uuid}) {
-				$fnum->{$uuid}++;
+			if (${uuid}) {
+				if ($filt->{$uuid}) {
+					$fnum->{$uuid}++;
+				};
+				$tnum->{$uuid}++;
 			};
-			$tnum->{$uuid}++;
 		};
 		if (%{$tnum}) {
-			my @c_tnum = keys(%{$tnum});
-			my @c_fnum = keys(%{$fnum});
+			my $c_tnum = scalar(keys(%{$tnum}));
+			my $c_fnum = scalar(keys(%{$fnum}));
 			print "\n";
-			print "Unique Tasks: $#{c_fnum} matching / $#{c_tnum} total\n";
+			print "Unique Tasks [${args}]: ${c_fnum} matching / ${c_tnum} total\n";
 		};
 	' -- "${@}" || return 1
 	return 0
