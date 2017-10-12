@@ -3212,8 +3212,8 @@ function task-depends {
 			};
 		};
 		if (%{$tnum}) {
-			my $c_tnum = scalar(keys(%{$tnum}));
 			my $c_fnum = scalar(keys(%{$fnum}));
+			my $c_tnum = scalar(keys(%{$tnum}));
 			print "\n";
 			print "Unique Tasks [${args}]: ${c_fnum} matching / ${c_tnum} total\n";
 		};
