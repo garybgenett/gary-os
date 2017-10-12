@@ -3322,6 +3322,7 @@ function task-copy {
 			elsif (${field} =~ m/^(a(rea)?[:])(.*)$/)		{ $data->{"area"}	= ${3}; }
 			elsif (${field} =~ m/^(t(ag(s)?)?[:])(.*)$/)		{ ${$data->{"tags"}}[0]	= ${4}; }
 			elsif (${field} =~ m/^(d(ue)?[:])(.*)$/)		{ $data->{"due"}	= ${3}; }
+			elsif (${field} =~ m/^(dep(ends)?[:])(.*)$/)		{ $data->{"depends"}	= ${3}; }
 			elsif (${field} =~ m/^(p(ri(ority)?)?[:])(.*)$/)	{ $data->{"priority"}	= ${4}; }
 			elsif (${field} =~ m/^[-][-]$/)				{ last; };
 		};
@@ -3334,6 +3335,7 @@ function task-copy {
 			. " " . ($data->{"area"}	? "area:"	. $data->{"area"}		: "")
 			. " " . ($data->{"tags"}	? "tags:"	. join(",", @{$data->{"tags"}})	: "")
 			. " " . ($data->{"due"}		? "due:"	. $data->{"due"}		: "")
+			. " " . ($data->{"depends"}	? "depends:"	. $data->{"depends"}		: "")
 			. " " . ($data->{"priority"}	? "priority:"	. $data->{"priority"}		: "")
 			. " -- " . $data->{"description"}
 		);
