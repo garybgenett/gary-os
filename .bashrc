@@ -2262,29 +2262,23 @@ function task-export-calendar {
 function task-export {
 	declare FILE=
 	cd ${PIMDIR}
-	function task-filter {
-		declare FILTER="${1}" && shift
-		task show report.${FILTER}.filter |
-			${SED} -n "s/(report[.]${FILTER}[.]filter)[[:space:]]+([^[:space:]]+)/\2/gp"
-		return 0
-	}
 #>>>	gtasks_export.pl purge "@agenda,@errand" "+GTD,+Inbox"
 	gtasks_export.pl purge "+GTD,+Inbox,@agenda,@errand"
 #>>>	gtasks_export.pl twimport "+Inbox"
-	gtasks_export.pl twexport "+Notes"		"$(task-filter "read") kind:notes"	"project"	"description"
-	gtasks_export.pl twexport "-Data"		"$(task-filter "data")"			"description"	"entry"
-	gtasks_export.pl twexport "-Fail"		"$(task-filter "fail")"			"description"	"entry"
-	gtasks_export.pl twexport "-Mark"		"$(task-filter "mark")"			"project"	"description"
-	gtasks_export.pl twexport "-Mind"		"$(task-filter "mind")"			"due,9999"	"description"
-	gtasks_export.pl twexport "-Todo"		"$(task-filter "todo")"			"due,9999"	"description"
+	gtasks_export.pl twexport "+Notes"		"read"	"kind:notes"
+	gtasks_export.pl twexport "-Data"		"data"
+	gtasks_export.pl twexport "-Fail"		"fail"
+	gtasks_export.pl twexport "-Mark"		"mark"
+	gtasks_export.pl twexport "-Mind"		"mind"
+	gtasks_export.pl twexport "-Todo"		"todo"
 #>>>	for FILE in $(task reports 2>&1 | ${GREP} "[ ]Custom[ ][[]" | awk '{print $1;}'); do
-#>>>		gtasks_export.pl twexport ".${FILE}"	"$(task-filter "${FILE}")"		"due,9999"	"entry"
+#>>>		gtasks_export.pl twexport ".${FILE}"	"${FILE}"
 #>>>	done
 	for FILE in $(task uda 2>&1 | ${GREP} "^area" | awk '{print $4;}' | tr ',' ' '); do
-		gtasks_export.pl twexport "=${FILE}"	"$(task-filter "view") area:${FILE}"	"due,9999"	"entry"
+		gtasks_export.pl twexport "=${FILE}"	"view"	"area:${FILE}"
 	done
 	for FILE in $(task _unique tags); do
-		gtasks_export.pl twexport "@${FILE}"	"$(task-filter "view") tags:${FILE}"	"due,9999"	"entry"
+		gtasks_export.pl twexport "@${FILE}"	"view"	"tags:${FILE}"
 	done
 	cd - >/dev/null
 	return 0
