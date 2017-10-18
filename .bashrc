@@ -2262,8 +2262,8 @@ function task-export-calendar {
 function task-export {
 	declare FILE=
 	cd ${PIMDIR}
-#>>>	gtasks_export.pl purge "@agenda,@errand" "+GTD,+Inbox"
-	gtasks_export.pl purge "+GTD,+Inbox,@agenda,@errand"
+#>>>	gtasks_export.pl purge "-Todo,@agenda,@errand" "+GTD,+Inbox"
+	gtasks_export.pl purge "+GTD,+Inbox,-Todo,@agenda,@errand"
 #>>>	gtasks_export.pl twimport "+Inbox"
 	gtasks_export.pl twexport "+Notes"		"read"	"kind:notes"
 	gtasks_export.pl twexport "-Data"		"data"
