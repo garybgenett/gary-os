@@ -2314,8 +2314,8 @@ function task-export-report {
 		>${REPORT}.projects.html
 	cat ${PIMDIR}/tasks.timeline.html |
 		perl -pe '
-			use JSON::PP;
-			my $json = JSON::PP->new();
+			use JSON::XS;
+			my $json = JSON::XS->new();
 			my $tracking = $json->encode(decode_json("[" . qx(cat '${PIMDIR}/tasks.timeline.json')		. "]"));
 			my $projects = $json->encode(decode_json("[" . qx(cat '${PIMDIR}/tasks.timeline.projects.json')	. "]"));
 			sub reformat {
@@ -2398,7 +2398,7 @@ function task-export-text {
 	perl -e '
 		use strict;
 		use warnings;
-		use JSON::PP;
+		use JSON::XS;
 		use POSIX qw(strftime);
 		use Time::Local qw(timegm timelocal);
 		use MIME::Base64;
@@ -2413,7 +2413,7 @@ function task-export-text {
 		open(PROJ, ">", ${root} . ".timeline.projects.json")	|| die();
 		open(LINE, ">", ${root} . ".timeline.json")		|| die();
 		open(NOTE, ">", ${root} . ".md")			|| die();
-		my $json = JSON::PP->new(); $json->sort_by(sub { $JSON::PP::a cmp $JSON::PP::b; }); print JSON $json->pretty->encode(${data});
+		my $json = JSON::XS->new(); print JSON $json->canonical->pretty->encode(${data});
 		print TIME "\"[DESC]\",\"[PROJ]\",\"[KIND]\",\"[AREA]\",\"[TAGS]\",";
 		print TIME "\"[.UID]\",";
 		print TIME "\"[.BRN]\",\"[_BRN]\",\"[=BRN]\",";
@@ -2905,7 +2905,7 @@ function task-notes {
 	perl -e '
 		use strict;
 		use warnings;
-		use JSON::PP;
+		use JSON::XS;
 		use MIME::Base64;
 		my $automatic;
 		if (-f $ARGV[0]) {
@@ -2985,7 +2985,7 @@ function task-track {
 	perl -e '
 		use strict;
 		use warnings;
-		use JSON::PP;
+		use JSON::XS;
 		use POSIX qw(strftime);
 		use Time::Local qw(timelocal);
 		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
@@ -3057,7 +3057,7 @@ function task-depends {
 	perl -e '
 		use strict;
 		use warnings;
-		use JSON::PP;
+		use JSON::XS;
 		use POSIX qw(strftime);
 		use Time::Local qw(timegm timelocal);
 #>>>		my $c_uid = 36;
@@ -3221,7 +3221,7 @@ function task-recur {
 	perl -e '
 		use strict;
 		use warnings;
-		use JSON::PP;
+		use JSON::XS;
 		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $data = qx(task export ${args}); $data =~ s/\n//g; $data = decode_json(${data});
 		my $list = {};
@@ -3295,7 +3295,7 @@ function task-copy {
 	perl -e '
 		use strict;
 		use warnings;
-		use JSON::PP;
+		use JSON::XS;
 		my $links = [];
 		if (($ARGV[0]) && ($ARGV[0] =~ m/^[+]/)) {
 			my $list = shift();
