@@ -3507,11 +3507,16 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == [%] ]]; then
 			shift
 			if [[ -n ${1} ]]; then
-				declare COMMIT="false"; [[ ${1} == 1 ]] && COMMIT="true"
+				declare PLANIT="false"; [[ ${1} == 1 ]] && PLANIT="true"
+				declare COMMIT="false"; [[ ${1} == 2 ]] && COMMIT="true"
 				[[ ${1} == [0-9] ]] && shift
 				task-export-zoho "${@}"
 				declare CHANGED="false"; [[ -n "$(cd "${PIMDIR}" && GIT_PAGER= ${GIT_CMD} diff zoho.md 2>&1)" ]] && CHANGED="true"
-				if ${COMMIT} && zpim-commit zoho && ${CHANGED}; then
+				if ${PLANIT}; then
+					${RSYNC_U} ${PIMDIR}/zoho.today.txt ${PIMDIR}/zoho.today.out
+					${EDITOR} ${PIMDIR}/zoho.today.out
+					${RSYNC_U} ${PIMDIR}/zoho.today.out ${PIMDIR}/zoho.today.txt
+				elif ${COMMIT} && zpim-commit zoho && ${CHANGED}; then
 					task-notes "${PIMDIR}/zoho.md" "${WORKUUID}"
 					impersonate_command =
 				fi
@@ -3554,7 +3559,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == [~] ]]; then
 			shift
 			declare PROJECT="${1}" && shift
-			task-notes "project:${PROJECT}" "project.not:${PROJECT}." "${@}"
+			task-notes "${@}" "project:${PROJECT}" "project.not:${PROJECT}."
 		elif [[ ${1} == [,] ]]; then
 			shift
 			task-track "${@}"
