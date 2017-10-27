@@ -3516,8 +3516,12 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				if ${PLANIT}; then
 					${RSYNC_U} ${PIMDIR}/zoho.today.txt ${PIMDIR}/zoho.today.out
 					${EDITOR} ${PIMDIR}/zoho.today.out
-					${RSYNC_U} ${PIMDIR}/zoho.today.out ${PIMDIR}/zoho.today.txt
-					task-export-zoho "${@}"
+					if [[ -n "$(diff ${PIMDIR}/zoho.today.out ${PIMDIR}/zoho.today.txt)" ]]; then
+						${RSYNC_U} ${PIMDIR}/zoho.today.out ${PIMDIR}/zoho.today.txt
+						task-export-zoho "${@}"
+					else
+						${RM} ${PIMDIR}/zoho.today.out
+					fi
 				fi
 				if ${COMMIT} && zpim-commit zoho && ${CHANGED}; then
 					task-notes "${PIMDIR}/zoho.md" "${WORKUUID}"
