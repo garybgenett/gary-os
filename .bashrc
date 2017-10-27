@@ -427,6 +427,7 @@ alias ztmp="cd /tmp ; clear ; ${LL}"
 alias zpim="cd ${PIMDIR} ; clear ; ${LL}"
 alias zcode="cd /.g/_data/zactive/coding/composer ; clear ; ${LL}"
 alias zwrite="cd /.g/_data/zactive/writing/tresobis ; clear ; ${LL}"
+alias zplan="IMPERSONATE_NAME=task ${HOME}/.bashrc impersonate_command % 2"
 
 alias s="run-mailcap"
 alias x="cd / ; clear"
@@ -3507,8 +3508,8 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == [%] ]]; then
 			shift
 			if [[ -n ${1} ]]; then
-				declare PLANIT="false"; [[ ${1} == 1 ]] && PLANIT="true"
-				declare COMMIT="false"; [[ ${1} == 2 ]] && COMMIT="true"
+				declare COMMIT="false"; [[ ${1} == [12] ]] && COMMIT="true"
+				declare PLANIT="false"; [[ ${1} == 2 ]] && PLANIT="true"
 				[[ ${1} == [0-9] ]] && shift
 				task-export-zoho "${@}"
 				declare CHANGED="false"; [[ -n "$(cd "${PIMDIR}" && GIT_PAGER= ${GIT_CMD} diff zoho.md 2>&1)" ]] && CHANGED="true"
@@ -3516,7 +3517,9 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 					${RSYNC_U} ${PIMDIR}/zoho.today.txt ${PIMDIR}/zoho.today.out
 					${EDITOR} ${PIMDIR}/zoho.today.out
 					${RSYNC_U} ${PIMDIR}/zoho.today.out ${PIMDIR}/zoho.today.txt
-				elif ${COMMIT} && zpim-commit zoho && ${CHANGED}; then
+					task-export-zoho "${@}"
+				fi
+				if ${COMMIT} && zpim-commit zoho && ${CHANGED}; then
 					task-notes "${PIMDIR}/zoho.md" "${WORKUUID}"
 					impersonate_command =
 				fi
