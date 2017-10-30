@@ -2414,6 +2414,7 @@ function task-export-text {
 		open(PROJ, ">", ${root} . ".timeline.projects.json")	|| die();
 		open(LINE, ">", ${root} . ".timeline.json")		|| die();
 		open(NOTE, ">", ${root} . ".md")			|| die();
+		foreach my $task (@{$data}) { delete($task->{"urgency"}); };
 		my $json = JSON::XS->new(); print JSON $json->canonical->pretty->encode(${data});
 		print TIME "\"[DESC]\",\"[PROJ]\",\"[KIND]\",\"[AREA]\",\"[TAGS]\",";
 		print TIME "\"[.UID]\",";
