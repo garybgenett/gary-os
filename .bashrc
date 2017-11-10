@@ -2922,6 +2922,11 @@ function task-notes {
 		my $mark = "DELETE";
 		if (!@{$data}) {
 			die("NO MATCHES!");
+		}
+		elsif ($#{$data} >= 1) {
+			use Data::Dumper;
+			print Dumper(${data});
+			die("TOO MANY MATCHES!");
 		};
 		my $uuids = [];
 		foreach my $task (sort({
