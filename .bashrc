@@ -2451,6 +2451,7 @@ function task-export-text {
 			"_gtd"		=> "red",
 			"computer"	=> "blue",
 			"family"	=> "yellow",
+			"health"	=> "orange",
 			"money"		=> "green",
 			"people"	=> "purple",
 			"self"		=> "orange",
