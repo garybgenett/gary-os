@@ -3231,26 +3231,50 @@ function task-recur {
 		use strict;
 		use warnings;
 		use JSON::XS;
+		use POSIX qw(strftime);
+		use Time::Local qw(timegm timelocal);
 		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $data = qx(task export ${args}); $data =~ s/\n//g; $data = decode_json(${data});
 		my $list = {};
 		my $keys = [];
+		# report.read.labels=ID,B,U,S,D,DESCRIPTION,PROJECT,KIND,AREA,TAGS,A,R,STAT,+P,+BORN,+DEAD,+DIED,+I
+		print "| +UUID | +DIED | STAT | R | DESCRIPTION\n";
+		print "|:---|:---|:---|:---|:---|\n";
 		foreach my $task (@{$data}) {
 			if (exists($task->{"mask"})) {
 				$list->{$task->{"description"}} = $task;
 			};
 		};
+		sub time_format {
+			my $stamp = shift();
+			$stamp =~ m/^([0-9]{4})([0-9]{2})([0-9]{2})[T]([0-9]{2})([0-9]{2})([0-9]{2})[Z]$/;
+			my($yr,$mo,$dy,$hr,$mn,$sc) = ($1,$2,$3,$4,$5,$6);
+			my $epoch = timegm($sc,$mn,$hr,$dy,($mo-1),$yr);
+#>>>			my $ltime = strftime("%Y-%m-%d %H:%M:%S", localtime(${epoch}));
+			my $ltime = strftime("%Y-%m-%d", localtime(${epoch}));
+			return(${epoch}, ${ltime});
+		};
+		sub do_time {
+			my $date = shift();
+			my($epoch, $ltime);
+			if ((${date}) && (${date} =~ m/^[0-9TZ]+$/)) {
+				(${epoch}, ${ltime}) = &time_format(${date});
+				$date = ${ltime};
+			};
+			return (${date});
+		};
 		while (my($key, $val) = each(%{$list})) {
 			push(@{$keys}, ${key});
 		};
+		# report.read.sort=project+,kind+,priority-,depends+,description+,entry+
 		foreach my $key (sort(@{$keys})) {
 			my $item = $list->{$key};
-			printf("%-36.36s %-8.8s %-9.9s %-9.9s %s\n",
-				$item->{"uuid"},
-				(exists($item->{"end"}) ? $item->{"end"} : ""),
-				$item->{"status"},
-				$item->{"recur"},
-				$item->{"description"},
+			printf("%-38.38s %-12.12s %-11.11s %-11.11s %s\n",
+				"| " . $item->{"uuid"},
+				"| " . (&do_time($item->{"end"}) || "-"),
+				"| " . $item->{"status"},
+				"| " . $item->{"recur"},
+				"| " . $item->{"description"},
 			);
 		};
 	' -- "${@}" || return 1
