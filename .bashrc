@@ -3546,9 +3546,11 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				task-export-zoho "${@}"
 				declare CHANGED="false"; [[ -n "$(cd "${PIMDIR}" && GIT_PAGER= ${GIT_CMD} diff zoho.md 2>&1)" ]] && CHANGED="true"
 				if ${PLANIT}; then
-					${RSYNC_U} ${PIMDIR}/zoho.today.txt ${PIMDIR}/zoho.today.out
 					cd ${PIMDIR}
-					${EDITOR} ${PIMDIR}/zoho.today.out
+					${RSYNC_U} ${PIMDIR}/zoho.today.txt ${PIMDIR}/zoho.today.out
+					${EDITOR} \
+						${PIMDIR}/zoho.today.out \
+						${PIMDIR}/zoho.today.tmp
 					cd - >/dev/null
 					if [[ -n "$(diff ${PIMDIR}/zoho.today.out ${PIMDIR}/zoho.today.txt)" ]]; then
 						${RSYNC_U} ${PIMDIR}/zoho.today.out ${PIMDIR}/zoho.today.txt
@@ -3557,6 +3559,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 						${RM} ${PIMDIR}/zoho.today.out
 					fi
 				fi
+				${RM} ${PIMDIR}/zoho.today.tmp
 				if ${COMMIT} && zpim-commit zoho && ${CHANGED}; then
 					task-notes "${PIMDIR}/zoho.md" "${WORKUUID}"
 					impersonate_command =
