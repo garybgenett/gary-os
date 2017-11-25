@@ -3529,9 +3529,6 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				eval $(_task_parse_cmd_bash "Weekly[ ]Report")
 				eval ${MARKER}
 			) | ${MORE}
-		elif [[ ${1} == "deps" ]]; then
-			shift
-			task-depends "${@}"	|| return 1
 		elif [[ ${1} == [=] ]]; then
 			shift
 			task-export-text	|| return 1
@@ -3614,6 +3611,9 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == [/] ]]; then
 			shift
 			task-switch "${@}"
+		elif [[ ${1} == [d] ]]; then
+			shift
+			task-depends "${@}"
 		elif [[ ${1} == [c] ]]; then
 			shift
 			task-copy "${@}"
