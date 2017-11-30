@@ -3,7 +3,7 @@ source ${HOME}/.bashrc
 ################################################################################
 
 declare QNUM="8"
-declare QMEM="4096"
+declare QMEM="$((1024*4))"
 declare FILE="windows.img"
 declare QSYS="${1}"			; shift
 
