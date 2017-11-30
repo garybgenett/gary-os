@@ -3,7 +3,7 @@ source ${HOME}/.bashrc
 ################################################################################
 
 declare QNUM="6"
-declare QMEM="4096"
+declare QMEM="$((1024*4))"
 declare FILE="${1}"			; shift
 declare QSYS="${1}"			; shift
 
