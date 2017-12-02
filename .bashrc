@@ -3628,7 +3628,13 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			task tags status:pending
 			task mark rc.gc=1 rc.recurrence=1
 			if [[ ${1} == [.] ]]; then
-				task view rc.limit=70 area.not:writing area.not:computer tag.not:. "${@}"
+				task view rc.limit=70 \
+					project.not:em.tasks.opsmgr \
+					project.not:em.tasks.track \
+					area.not:computer \
+					area.not:writing \
+					tag.not:.waiting \
+					"${@}"
 			else
 				task view rc.limit=12 "${@}"
 			fi
