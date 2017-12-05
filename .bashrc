@@ -2688,7 +2688,7 @@ function task-export-text {
 			my($z, $modified, $output, $note) = ("", "", "", "");
 			if ($annotation) {
 				($z, $modified) = &time_format($annotation->{"entry"});
-				$modified = "Updated: " . ${modified} . " | ";
+				$modified = "Updated: " . ${modified};
 				$output = $annotation->{"description"};
 				$output =~ s/^[[]notes[]][:]//g;
 				$output = "\n" . decode_base64(${output}) . "\n";
@@ -2711,7 +2711,7 @@ function task-export-text {
 			};
 			$note .= "\n\n" . ${description} . " {#uuid-" . $task->{"uuid"} . "}\n";
 			$note .= ("-" x 40) . "\n\n";
-			$note .= "**" . ${modified} . "UUID: [" . $task->{"uuid"} . "](#uuid-" . $task->{"uuid"} . ") | [TOC](#TOC) [/](./" . ${base} . ") [" . ${extn} . "](./" . ${base} . "/" . $task->{"uuid"} . ${extn} . ")**\n";
+			$note .= "**" . ${modified} . " | UUID: [" . $task->{"uuid"} . "](#uuid-" . $task->{"uuid"} . ") | [TOC](#TOC) [Todo](#todo) [Dir](./" . ${base} . ") [" . ${extn} . "](./" . ${base} . "/" . $task->{"uuid"} . ${extn} . ")**\n";
 			$note .= ${output};
 			if	((exists($task->{"project"})) && ($task->{"project"} eq ".someday"))	{
 				if ($task->{"status"} eq "pending")					{ $NOTE->{"someday"}		.= ${note}; }
