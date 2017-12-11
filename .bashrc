@@ -3558,7 +3558,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				fi
 				${RM} ${PIMDIR}/zoho.today.tmp
 				if ${COMMIT} && zpim-commit zoho && ${CHANGED}; then
-					task-notes "${PIMDIR}/zoho.md" "${WORKUUID}"
+#>>>					task-notes "${PIMDIR}/zoho.md" "${WORKUUID}"
 					impersonate_command =
 				fi
 			fi
