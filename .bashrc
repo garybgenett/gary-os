@@ -2173,8 +2173,8 @@ function zpim-commit {
 	chown -vR plastic:plastic ${PIMDIR}
 	chmod -vR 750 ${PIMDIR}
 	chmod -v 755 ${PIMDIR} \
-		${PIMDIR}/tasks ${PIMDIR}/tasks.md* ${PIMDIR}/tasks.timeline.* \
-		${PIMDIR}/zoho*
+		${PIMDIR}/tasks ${PIMDIR}/tasks*.md* ${PIMDIR}/tasks.timeline.* \
+		${PIMDIR}/zoho ${PIMDIR}/zoho*.md*
 	${SED} -i \
 		-e "/^[[:space:]]+[<]DD[>]$/d" \
 		-e "s/<HR>([[:space:]])/<HR>\n\1/g" \
@@ -3544,13 +3544,13 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				declare CHANGED="false"; [[ -n "$(cd "${PIMDIR}" && GIT_PAGER= ${GIT_CMD} diff zoho.md 2>&1)" ]] && CHANGED="true"
 				if ${PLANIT}; then
 					cd ${PIMDIR}
-					${RSYNC_U} ${PIMDIR}/zoho.today.txt ${PIMDIR}/zoho.today.out
+					${RSYNC_U} ${PIMDIR}/zoho.today.md ${PIMDIR}/zoho.today.out
 					${EDITOR} \
 						${PIMDIR}/zoho.today.out \
 						${PIMDIR}/zoho.today.tmp
 					cd - >/dev/null
-					if [[ -n "$(diff ${PIMDIR}/zoho.today.out ${PIMDIR}/zoho.today.txt)" ]]; then
-						${RSYNC_U} ${PIMDIR}/zoho.today.out ${PIMDIR}/zoho.today.txt
+					if [[ -n "$(diff ${PIMDIR}/zoho.today.out ${PIMDIR}/zoho.today.md)" ]]; then
+						${RSYNC_U} ${PIMDIR}/zoho.today.out ${PIMDIR}/zoho.today.md
 						task-export-zoho "${@}"
 					else
 						${RM} ${PIMDIR}/zoho.today.out
