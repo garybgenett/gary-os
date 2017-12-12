@@ -139,6 +139,7 @@ iab @-t 2038-01-19T03:14:07-0000
 iab @@d <C-R>=strftime("%F")<CR>
 iab @@t <C-R>=strftime("%FT%T%z")<CR>
 iab @@a <C-R>=strftime("%F %T")<CR>
+iab @@j <C-R>=strftime("%F, %a")<CR>
 
 " new items
 iab @.n ====-==-==T==:==:==-==== ====-==-== ====-==-==T==:==:==-==== <C-R>=strftime("%F")<CR> ~ __ +VIM+ ~ +VIM+<ESC>0
