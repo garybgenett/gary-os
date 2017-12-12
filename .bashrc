@@ -3163,7 +3163,7 @@ function task-depends {
 				&print_task("0", "HEADER");
 				print "" . ("|:---" x 7) . "|\n";
 			}
-			# report.skim.labels=+UUID,PROJECT,TAGS,+P,+DEAD,+DIED,KIND,DESCRIPTION
+			# report.skim.labels=+UUID,PROJECT,TAGS,P,+DEAD,+DIED,KIND,DESCRIPTION
 			elsif(${deep} eq "HEADER") {
 				$deep = "0";
 				$task = {
@@ -3171,7 +3171,7 @@ function task-depends {
 					"uuid"		=> "+UUID",
 					"project"	=> "PROJECT",
 					"tags"		=> "TAGS",
-					"priority"	=> "+P",
+					"priority"	=> "P",
 					"due"		=> "+DEAD",
 					"end"		=> "+DIED",
 					"kind"		=> "KIND",
@@ -3247,8 +3247,8 @@ function task-recur {
 		my $data = qx(task export ${args}); $data =~ s/\n//g; $data = decode_json(${data});
 		my $list = {};
 		my $keys = [];
-		# report.read.labels=ID,B,U,S,D,DESCRIPTION,PROJECT,KIND,AREA,TAGS,A,R,STAT,+P,+BORN,+DEAD,+DIED,+I
-		print "| +UUID | +DIED | STAT | R | DESCRIPTION\n";
+		# report.read.labels=ID,B,U,S,D,DESCRIPTION,PROJECT,KIND,AREA,TAGS,A,R,P,+STAT,+BORN,+DEAD,+DIED,+I
+		print "| +UUID | +DIED | +STAT | R | DESCRIPTION\n";
 		print "|:---|:---|:---|:---|:---|\n";
 		foreach my $task (@{$data}) {
 			if (exists($task->{"mask"})) {
