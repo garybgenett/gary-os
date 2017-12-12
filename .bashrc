@@ -2710,11 +2710,13 @@ function task-export-text {
 					$output =~ s/^\[TASKCMD[ ]?([^\n]*)?\]$/${taskcmd}/ms;
 				};
 				while (${output} =~ m/^\[TASKFILE[ ]?([^\n]*)?\]$/gms) {
-					my $taskfile = ${1};
-					warn("EXPORTING TASKFILE[${taskfile}]");
-					open(TASKFILE, "<", ${taskfile}) || die();
-					$taskfile = do { local $/; <TASKFILE> }; $taskfile =~ s/\n+$//g;
+					my $source = ${1};
+					warn("EXPORTING TASKFILE[${source}]");
+					open(TASKFILE, "<", ${source}) || die();
+					my $taskfile = do { local $/; <TASKFILE> }; $taskfile =~ s/\n+$//g;
 					close(TASKFILE) || die();
+					$taskfile =~ s/^\n*/<!-- TASKFILE[${source}] -->\n/g;
+					$taskfile =~ s/\n*$//g;
 					$output =~ s/^\[TASKFILE[ ]?([^\n]*)?\]$/${taskfile}/ms;
 				};
 			};
