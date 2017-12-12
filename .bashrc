@@ -3081,7 +3081,7 @@ function task-depends {
 		use Time::Local qw(timegm timelocal);
 #>>>		my $c_uid = 36;
 		my $c_uid = 8;
-		my $c_pri = 2;
+		my $c_pri = 1;
 #>>>		my $c_dat = 23;
 		my $c_dat = 14;
 		my $c_fld = {
