@@ -3544,19 +3544,19 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				declare CHANGED="false"; [[ -n "$(cd "${PIMDIR}" && GIT_PAGER= ${GIT_CMD} diff zoho.md 2>&1)" ]] && CHANGED="true"
 				if ${PLANIT}; then
 					cd ${PIMDIR}
-					${RSYNC_U} ${PIMDIR}/zoho.today.md ${PIMDIR}/zoho.today.out
+					${RSYNC_U} ${PIMDIR}/zoho.today.md ${PIMDIR}/zoho.today.out.md
 					${EDITOR} \
-						${PIMDIR}/zoho.today.out \
-						${PIMDIR}/zoho.today.tmp
+						${PIMDIR}/zoho.today.out.md \
+						${PIMDIR}/zoho.today.tmp.md
 					cd - >/dev/null
-					if [[ -n "$(diff ${PIMDIR}/zoho.today.out ${PIMDIR}/zoho.today.md)" ]]; then
-						${RSYNC_U} ${PIMDIR}/zoho.today.out ${PIMDIR}/zoho.today.md
+					if [[ -n "$(diff ${PIMDIR}/zoho.today.out.md ${PIMDIR}/zoho.today.md)" ]]; then
+						${RSYNC_U} ${PIMDIR}/zoho.today.out.md ${PIMDIR}/zoho.today.md
 						task-export-zoho "${@}"
 					else
-						${RM} ${PIMDIR}/zoho.today.out
+						${RM} ${PIMDIR}/zoho.today.out.md
 					fi
 				fi
-				${RM} ${PIMDIR}/zoho.today.tmp
+				${RM} ${PIMDIR}/zoho.today.tmp.md
 				if ${COMMIT} && zpim-commit zoho && ${CHANGED}; then
 #>>>					task-notes "${PIMDIR}/zoho.md" "${WORKUUID}"
 					impersonate_command =
