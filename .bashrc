@@ -2396,6 +2396,7 @@ END_OF_FILE
 
 function task-export-text {
 	declare NAME="${1}" && shift
+	cd ${PIMDIR}
 	perl -e '
 		use strict;
 		use warnings;
@@ -2875,6 +2876,7 @@ function task-export-text {
 			unlink(${ENV{PIMDIR}} . "/.composed") || warn();
 		};
 	' -- "${NAME}" "${@}" || return 1
+	cd - >/dev/null
 	return 0
 }
 
