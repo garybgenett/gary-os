@@ -2708,6 +2708,14 @@ function task-export-text {
 					$taskcmd =~ s/\n*$//g;
 					$output =~ s/^\[TASKCMD[ ]?([^\n]*)?\]$/${taskcmd}/ms;
 				};
+				while (${output} =~ m/^\[TASKFILE[ ]?([^\n]*)?\]$/gms) {
+					my $taskfile = ${1};
+					warn("EXPORTING TASKFILE[${taskfile}]");
+					open(TASKFILE, "<", ${taskfile}) || die();
+					$taskfile = do { local $/; <TASKFILE> }; $taskfile =~ s/\n+$//g;
+					close(TASKFILE) || die();
+					$output =~ s/^\[TASKFILE[ ]?([^\n]*)?\]$/${taskfile}/ms;
+				};
 			};
 			$note .= "\n\n" . ${description} . " {#uuid-" . $task->{"uuid"} . "}\n";
 			$note .= ("-" x 40) . "\n\n";
