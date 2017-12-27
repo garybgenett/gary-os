@@ -521,6 +521,9 @@ function burn {
 	elif [[ ${1} == -e ]]; then
 		shift
 		cdrecord -v dev=ATAPI -eject "${@}"
+	elif [[ ${1} == -a ]]; then
+		shift
+		cdparanoia -vwB "${@}"
 	fi
 }
 
