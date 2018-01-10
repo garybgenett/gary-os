@@ -3558,10 +3558,10 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				task-export-zoho "${@}"
 				declare CHANGED="false"; [[ -n "$(cd "${PIMDIR}" && GIT_PAGER= ${GIT_CMD} diff zoho.md 2>&1)" ]] && CHANGED="true"
 				if ${PLANIT}; then
-					cd ${PIMDIR}
 					if [[ ! -f ${PIMDIR}/zoho.today.out.md ]]; then
 						${RSYNC_U} ${PIMDIR}/zoho.today.md ${PIMDIR}/zoho.today.out.md
 					fi
+					cd ${PIMDIR}
 					${EDITOR} \
 						${PIMDIR}/zoho.today.out.md \
 						${PIMDIR}/zoho.today.tmp.md
@@ -3570,6 +3570,8 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 						${RSYNC_U} ${PIMDIR}/zoho.today.out.md ${PIMDIR}/zoho.today.md
 						task-export-zoho "${@}" &&
 							${RM} ${PIMDIR}/zoho.today.out.md
+					else
+						${RM} ${PIMDIR}/zoho.today.out.md
 					fi
 				fi
 				${RM} ${PIMDIR}/zoho.today.tmp.md
