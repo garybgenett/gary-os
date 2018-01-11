@@ -2725,7 +2725,7 @@ function task-export-text {
 			};
 			$note .= "\n\n" . ${description} . " {#uuid-" . $task->{"uuid"} . "}\n";
 			$note .= ("-" x 40) . "\n\n";
-			$note .= "**" . ${modified} . " | UUID: [" . $task->{"uuid"} . "](#uuid-" . $task->{"uuid"} . ") | [TOC](#TOC) [Todo](#todo) [Dir](./" . ${base} . ") [" . ${extn} . "](./" . ${base} . "/" . $task->{"uuid"} . ${extn} . ")**\n";
+			$note .= "**" . ${modified} . " | UUID: [" . $task->{"uuid"} . "](#uuid-" . $task->{"uuid"} . ") | [TOC](#TOC) [GTD](#gtd) [Dir](./" . ${base} . ") [" . ${extn} . "](./" . ${base} . "/" . $task->{"uuid"} . ${extn} . ")**\n";
 			$note .= ${output};
 			if	((exists($task->{"project"})) && ($task->{"project"} eq ".someday"))	{
 				if ($task->{"status"} eq "pending")					{ $NOTE->{"someday"}		.= ${note}; }
