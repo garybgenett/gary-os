@@ -3548,7 +3548,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			shift
 			task-export-text	|| return 1
 #>>>			task-export		|| return 1
-			[[ -n ${1} ]] && zpim-commit tasks
+			zpim-commit tasks
 		elif [[ ${1} == [%] ]]; then
 			shift
 			if [[ -n ${1} ]]; then
