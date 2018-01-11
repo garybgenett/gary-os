@@ -2354,7 +2354,7 @@ Attached are two HTML files which should open in any browser:
 
 Internet access is required to properly view the timeline file, as it uses 3rd party Javascript libraries to render the output.  Your browser may request that you accept running the script / blocked content, which you will need to do.
 
-There are four slider bars in the report, progressing in scope from hourly to daily to weekly to monthly.  The highlighted areas show what portion of the more granular timeframes are being displayed.  Daily time-tracking is shown on the top two bars (hourly and daily) and long-term project tracking is on the lower two bars (weekly and monthly).
+There are four slider bars in the report, progressing in scope from monthly to weekly to daily to hourly.  The highlighted areas show what portion of the more granular timeframes are being displayed.  Long-term project tracking is shown on the top two bars (monthly and weekly), and daily time-tracking is on the bottom two bars (daily and hourly).
 
 Long-term project tracking legend:
 	* Text color coding:
