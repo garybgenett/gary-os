@@ -329,11 +329,12 @@ export X2VNC="x2vnc -west -tunnel -shared -noblank -lockdelay 60 -timeout 60"	; 
 ########################################
 
 export UNISON="${HOME}/.unison"
+export UNISON_LOG="_log"
 
 export UNISON_W="reporter unison \
 	-ui text \
 	-log \
-	-logfile ${UNISON}/_log \
+	-logfile ${UNISON}/${UNISON_LOG} \
 	-times \
 	-perms 0"
 export UNISON_U="${UNISON_W} \
@@ -486,6 +487,7 @@ alias web="w3m google.com"
 alias workspace="_sync workspace"
 if [[ "${UNAME}" == "Darwin" ]]; then
 	alias trust="/_install/_mac_osx.txt -r ; /_install/_mac_osx.txt -x ; /_install/_mac_osx.txt -s"
+	alias workspace="/_install/_mac_osx.txt -w"
 fi
 
 ################################################################################
