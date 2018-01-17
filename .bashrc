@@ -2175,11 +2175,14 @@ function vpn {
 function zpim-commit {
 	declare RETURN
 	cd ${PIMDIR}
-	chown -vR plastic:plastic ${PIMDIR}
-	chmod -vR 750 ${PIMDIR}
-	chmod -v 755 ${PIMDIR} \
-		${PIMDIR}/tasks ${PIMDIR}/tasks*.md* ${PIMDIR}/tasks.timeline.* \
-		${PIMDIR}/zoho ${PIMDIR}/zoho*.md*
+	chown -R plastic:plastic ${PIMDIR}
+	chmod -R 750 ${PIMDIR}
+	chmod 755 \
+		${PIMDIR} \
+		${PIMDIR}/tasks* \
+		${PIMDIR}/zoho* \
+		/.g/_data/zactive/_drive \
+		/.g/_data/zactive/_drive/_notes.txt
 	${SED} -i \
 		-e "/^[[:space:]]+[<]DD[>]$/d" \
 		-e "s/<HR>([[:space:]])/<HR>\n\1/g" \
