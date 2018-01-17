@@ -2175,6 +2175,11 @@ function vpn {
 function zpim-commit {
 	declare RETURN
 	cd ${PIMDIR}
+	chown -vR plastic:plastic ${PIMDIR}
+	chmod -vR 750 ${PIMDIR}
+	chmod -v 755 ${PIMDIR} \
+		${PIMDIR}/tasks ${PIMDIR}/tasks*.md* ${PIMDIR}/tasks.timeline.* \
+		${PIMDIR}/zoho ${PIMDIR}/zoho*.md*
 	${SED} -i \
 		-e "/^[[:space:]]+[<]DD[>]$/d" \
 		-e "s/<HR>([[:space:]])/<HR>\n\1/g" \
@@ -2398,12 +2403,6 @@ END_OF_FILE
 function task-export-text {
 	declare NAME="${1}" && shift
 	cd ${PIMDIR}
-	sudo chmod -v 755 \
-		${PIMDIR} \
-		${PIMDIR}/tasks* \
-		${PIMDIR}/zoho* \
-		/.g/_data/zactive/_drive \
-		/.g/_data/zactive/_drive/_notes.txt
 	perl -e '
 		use strict;
 		use warnings;
