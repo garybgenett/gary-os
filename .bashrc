@@ -1059,7 +1059,7 @@ function git-clean {
 		${GIT} update-ref -d ${REF}						|| return 1
 	done
 	${GIT} reflog expire --verbose --all --expire=all --expire-unreachable=all	|| return 1
-	${GIT} gc --aggressive --prune=all						|| return 1
+	${GIT} gc --prune=all								|| return 1
 	${GIT} fsck --verbose --full --no-reflogs --strict				|| return 1
 	return 0
 }
