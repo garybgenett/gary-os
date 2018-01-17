@@ -2180,9 +2180,7 @@ function zpim-commit {
 	chmod 755 \
 		${PIMDIR} \
 		${PIMDIR}/tasks* \
-		${PIMDIR}/zoho* \
-		/.g/_data/zactive/_drive \
-		/.g/_data/zactive/_drive/_notes.txt
+		${PIMDIR}/zoho*
 	${SED} -i \
 		-e "/^[[:space:]]+[<]DD[>]$/d" \
 		-e "s/<HR>([[:space:]])/<HR>\n\1/g" \
@@ -2406,6 +2404,9 @@ END_OF_FILE
 function task-export-text {
 	declare NAME="${1}" && shift
 	cd ${PIMDIR}
+	sudo chmod 755 \
+		/.g/_data/zactive/_drive \
+		/.g/_data/zactive/_drive/_notes.txt
 	perl -e '
 		use strict;
 		use warnings;
