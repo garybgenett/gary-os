@@ -345,19 +345,6 @@ export UNISON_U="${UNISON_W} \
 export UNISON_F="${UNISON_U} \
 	-fastcheck false"
 
-if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
-	UNISON_U="$(echo "${UNISON_U}" | ${SED} \
-		-e "s/-numericids//g" \
-	)"
-fi
-if [[ "${UNAME}" == "Darwin" ]]; then
-	UNISON_U="$(echo "${UNISON_U}" | ${SED} \
-		-e "s/reporter//g" \
-		-e "s/-numericids//g" \
-		-e "s/-group//g" \
-	)"
-fi
-
 alias unison="${UNISON_U}"
 
 ########################################
@@ -390,19 +377,6 @@ export RSYNC_F="${RSYNC_U} \
 	--checksum"
 export RSYNC_W="${RSYNC_W} \
 	--modify-window=10"
-
-if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
-	RSYNC_U="$(echo "${RSYNC_U}" | ${SED} \
-		-e "s/--numeric-ids//g" \
-	)"
-fi
-if [[ "${UNAME}" == "Darwin" ]]; then
-	RSYNC_U="$(echo "${RSYNC_U}" | ${SED} \
-		-e "s/reporter//g" \
-		-e "s/--numeric-ids//g" \
-		-e "s/--group//g" \
-	)"
-fi
 
 alias rsync="${RSYNC_U}"
 
