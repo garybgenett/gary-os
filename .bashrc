@@ -351,7 +351,11 @@ if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
 	)"
 fi
 if [[ "${UNAME}" == "Darwin" ]]; then
-	UNISON_U="${RSYNC_W}"
+	UNISON_U="$(echo "${UNISON_U}" | ${SED} \
+		-e "s/reporter//g" \
+		-e "s/-numericids//g" \
+		-e "s/-group//g" \
+	)"
 fi
 
 alias unison="${UNISON_U}"
@@ -395,9 +399,7 @@ fi
 if [[ "${UNAME}" == "Darwin" ]]; then
 	RSYNC_U="$(echo "${RSYNC_U}" | ${SED} \
 		-e "s/reporter//g" \
-		-e "s/--perms//g" \
 		-e "s/--numeric-ids//g" \
-		-e "s/--owner//g" \
 		-e "s/--group//g" \
 	)"
 fi
