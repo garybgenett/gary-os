@@ -347,13 +347,13 @@ export UNISON_F="${UNISON_U} \
 
 if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
 	UNISON_U="$(echo "${UNISON_U}" | ${SED} \
-		-e "s/--numericids//g" \
+		-e "s/-numericids//g" \
 	)"
 fi
 if [[ "${UNAME}" == "Darwin" ]]; then
 	UNISON_U="$(echo "${UNISON_U}" | ${SED} \
 		-e "s/reporter//g" \
-		-e "s/--numericids//g" \
+		-e "s/-numericids//g" \
 	)"
 fi
 
