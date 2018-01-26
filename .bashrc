@@ -248,8 +248,8 @@ export NICELY="sudo -E nice -n 19 ionice -c 2 -n 7"			; alias nicely="${NICELY}"
 export REALTIME="sudo -E nice -n -20 ionice --class 1 --classdata 0"	; alias realtime="${REALTIME}"
 export REALTIME="sudo -E nice -n -20 ionice -c 1 -n 0"			; alias realtime="${REALTIME}"
 
-if [[ "${UNAME}" == "Darwin" ]] ||
-   { [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; }; then
+if { [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; } ||
+   [[ "${UNAME}" == "Darwin" ]]; then
 	export NICELY=
 	export REALTIME=
 fi
@@ -345,6 +345,11 @@ export UNISON_U="${UNISON_W} \
 export UNISON_F="${UNISON_U} \
 	-fastcheck false"
 
+if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
+	UNISON_U="$(echo "${UNISON_U}" | ${SED} \
+		-e "s/--numericids//g" \
+	)"
+fi
 if [[ "${UNAME}" == "Darwin" ]]; then
 	UNISON_U="$(echo "${UNISON_U}" | ${SED} \
 		-e "s/reporter//g" \
@@ -385,10 +390,14 @@ export RSYNC_F="${RSYNC_U} \
 export RSYNC_W="${RSYNC_W} \
 	--modify-window=10"
 
+if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
+	RSYNC_U="$(echo "${RSYNC_U}" | ${SED} \
+		-e "s/--numeric-ids//g" \
+	)"
+fi
 if [[ "${UNAME}" == "Darwin" ]]; then
 	RSYNC_U="$(echo "${RSYNC_U}" | ${SED} \
 		-e "s/reporter//g" \
-		-e "s/--one-file-system//g" \
 		-e "s/--numeric-ids//g" \
 	)"
 fi
