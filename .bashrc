@@ -2252,13 +2252,16 @@ function task-build {
 function task-export-calendar {
 	cd ${PIMDIR}
 	gcalendar_export.pl \
-		"gtd:dHJlc29iaXMub3JnXzFmY29nMjNjMWEwOTlhcGdqdTlvN3ZmbTE4QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
-		"default:Z2FyeUB0cmVzb2Jpcy5vcmc" \
-		"personal:dHJlc29iaXMub3JnX2c4djBwa3RzbnQ4NGVvdHM4aGtpanRzanZnQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
-		"orion:dHJlc29iaXMub3JnX2FiZm9wc3UxdHZmNDRiYzBqZTdtZHFzNmNvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
-		"rachel:dHJlc29iaXMub3JnX3RoYTF1cjFnbzJpZDRlZGxkZHRnOW90YzlvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
-		"em:dHJlc29iaXMub3JnX21jdTllc2Jjc2d0MTFrY3QwMjVhaGU3YzdvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
-		"zoho:dHJlc29iaXMub3JnX2RoM2g2NDRqcWdiOXNxdm42ODRobmtoNXEwQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20"
+		"export.gtd:dHJlc29iaXMub3JnXzFmY29nMjNjMWEwOTlhcGdqdTlvN3ZmbTE4QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
+		"export.default:Z2FyeUB0cmVzb2Jpcy5vcmc" \
+		"export.personal:dHJlc29iaXMub3JnX2c4djBwa3RzbnQ4NGVvdHM4aGtpanRzanZnQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
+		"export.orion:dHJlc29iaXMub3JnX2FiZm9wc3UxdHZmNDRiYzBqZTdtZHFzNmNvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
+		"export.rachel:dHJlc29iaXMub3JnX3RoYTF1cjFnbzJpZDRlZGxkZHRnOW90YzlvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
+		"export.em:dHJlc29iaXMub3JnX21jdTllc2Jjc2d0MTFrY3QwMjVhaGU3YzdvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
+		"export.zoho:dHJlc29iaXMub3JnX2RoM2g2NDRqcWdiOXNxdm42ODRobmtoNXEwQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20"
+	${SED} -i \
+		-e "s/^(DTSTAMP[:]).+$/\119700101T000000Z/g" \
+		calendar-export.*.ics
 	sudo chown -vR plastic:plastic calendar*
 	sudo chmod -vR 750 calendar*
 	cd - >/dev/null
