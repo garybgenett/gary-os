@@ -2302,8 +2302,9 @@ function task-export-zoho {
 	cat ${PIMDIR}/.zoho.reports
 	eval zohocrm_events.pl "${@}" \
 		$(cat ${PIMDIR}/.zoho.reports)
+	declare RETURN="${?}"
 	cd - >/dev/null
-	return 0
+	return ${RETURN}
 }
 
 ########################################
@@ -3565,7 +3566,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				declare COMMIT="false"; [[ ${1} == [12] ]] && COMMIT="true"
 				declare PLANIT="false"; [[ ${1} == 2 ]] && PLANIT="true"
 				[[ ${1} == [0-9] ]] && shift
-				task-export-zoho "${@}"
+				task-export-zoho "${@}" || return 1
 				declare CHANGED="false"; [[ -n "$(cd "${PIMDIR}" && GIT_PAGER= ${GIT_CMD} diff zoho.md 2>&1)" ]] && CHANGED="true"
 				if ${PLANIT}; then
 					if [[ ! -f ${PIMDIR}/zoho.today.out.md ]]; then
@@ -3578,8 +3579,10 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 					cd - >/dev/null
 					if [[ -n "$(diff ${PIMDIR}/zoho.today.out.md ${PIMDIR}/zoho.today.md)" ]]; then
 						${RSYNC_U} ${PIMDIR}/zoho.today.out.md ${PIMDIR}/zoho.today.md
-						task-export-zoho "${@}" &&
+						(
+							task-export-zoho "${@}" &&
 							${RM} ${PIMDIR}/zoho.today.out.md
+						) || return 1
 						CHANGED="true"
 					else
 						${RM} ${PIMDIR}/zoho.today.out.md
