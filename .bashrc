@@ -3633,9 +3633,6 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			shift
 			declare PROJECT="${1}" && shift
 			task-notes "${@}" "project:${PROJECT}" "project.not:${PROJECT}."
-		elif [[ ${1} == [,] ]]; then
-			shift
-			task-track "${@}"
 		elif [[ ${1} == [-] ]]; then
 			shift
 			task view project.not:_gtd /:/ "${@}" | ${SED} -ne "s/^[^a-z]+([a-z][^:]+)[:].+$/\1/gp" | sort | uniq
@@ -3656,19 +3653,40 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			shift
 			task-insert "${@}"
 		else
-			(cd ${PIMDIR} && ${GIT_STS} taskd tasks*)
-			task tags status:pending
-			task mark rc.gc=1 rc.recurrence=1
-			if [[ ${1} == [.] ]]; then
-				task view rc.limit=70 \
+			declare COLS="$(tput cols)"
+			declare LINE="$(tput lines)"
+			declare LIMT="$((${LINES}-5))"
+			declare OPTS="
+				rc.gc=1
+				rc.recurrence=1
+				rc.verbose=label,affected
+				rc.detection=0
+				rc.defaultwidth=${COLS}
+				rc.defaultheight=${LINE}
+				rc.limit=${LIMT}
+			"
+#>>>			(cd ${PIMDIR} && ${GIT_STS} taskd tasks*)
+#>>>			task tags status:pending
+#>>>			task mark rc.gc=1 rc.recurrence=1
+			if [[ ${1} == [,] ]]; then
+				shift
+				task view \
+					${OPTS} \
+					"${@}" 2>/dev/null
+			elif [[ ${1} == [.] ]]; then
+				shift
+				task view \
+					${OPTS} \
 					project.not:em.tasks.opsmgr \
 					project.not:em.tasks.track \
 					area.not:computer \
 					area.not:writing \
 					tag.not:.waiting \
-					"${@}"
+					"${@}" 2>/dev/null
 			else
-				task view rc.limit=12 "${@}"
+				task todo \
+					${OPTS} \
+					"${@}" 2>/dev/null
 			fi
 		fi
 		return 0
