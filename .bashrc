@@ -3120,6 +3120,7 @@ function task-depends {
 		my $rdep = {};
 		my $filt = {};
 		my $fnum = {};
+		my $onum = {};
 		my $tnum = {};
 		foreach my $task (@{$data}) {
 			$list->{$task->{"uuid"}} = ${task};
@@ -3208,11 +3209,16 @@ function task-depends {
 			print " | "; printf("%-${c_dat}.${c_dat}s", ${due});
 			print " | "; printf("%-${c_dat}.${c_dat}s", ${end});
 			print " | " . (". " x ${deep}) . ((${deep} > 0) && "${deep} ");
-			my $title = "";
-			if (exists($task->{"kind"}))		{ $title .= "[" . $task->{"kind"} . "] "; };
-			if ($task->{"status"} eq "pending")	{ $title .= $task->{"description"}; }
-			elsif ($task->{"status"} eq "HEADER")	{ $title .= $task->{"description"}; }
-			else					{ $title = "~~" . ${title} . $task->{"description"} . "~~"; };
+			my $title = $task->{"description"};
+			if (exists($task->{"kind"}))		{ $title = "[" . $task->{"kind"} . "] " . ${title}; };
+			if (
+				(!$filt->{$uuid}) &&
+				($task->{"status"} ne "HEADER")
+			)					{ $title = "\`" . ${title} . "\`"; };
+			if (
+				($task->{"status"} ne "HEADER") &&
+				($task->{"status"} ne "pending")
+			)					{ $title = "~~" . ${title} . "~~"; };
 			if ((
 				(exists($task->{"priority"})) ||
 				(exists($task->{"due"}))
@@ -3236,15 +3242,18 @@ function task-depends {
 			if (${uuid}) {
 				if ($filt->{$uuid}) {
 					$fnum->{$uuid}++;
+				} else {
+					$onum->{$uuid}++;
 				};
 				$tnum->{$uuid}++;
 			};
 		};
 		if (%{$tnum}) {
 			my $c_fnum = scalar(keys(%{$fnum}));
+			my $c_onum = scalar(keys(%{$onum}));
 			my $c_tnum = scalar(keys(%{$tnum}));
 			print "\n";
-			print "Unique Tasks [${args}]: ${c_fnum} matching / ${c_tnum} total\n";
+			print "Unique Tasks [${args}]: ${c_fnum} matching + ${c_onum} orphans = ${c_tnum} total\n";
 		};
 	' -- "${@}" || return 1
 	return 0
