@@ -779,7 +779,8 @@ function contacts {
 				--outformat vcard
 		done
 		sudo -H -u \#1000 dos2unix ./${EXP_DIR}/*.{ldif,vcf}
-		chmod -R 750 ./${EXP_DIR}
+		cat $(${LS} ./${EXP_DIR}/*.vcf | ${GREP} -v "[-]keep") >./${EXP_DIR}.vcf
+		chmod -R 750 ./${EXP_DIR}*
 		return 0
 	fi
 	cd ${PIMDIR}
