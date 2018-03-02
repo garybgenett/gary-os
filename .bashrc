@@ -3445,6 +3445,25 @@ function task-insert {
 
 ########################################
 
+function task-flush {
+	declare FILE=
+	for FILE in "${@}"; do
+		declare UUIDS="$(task uuids \
+			project:${FILE} \
+			project.not:${FILE}. \
+			'(status:completed or status:deleted)' \
+		)"
+		if [[ -n "${UUIDS}" ]]; then
+			task read ${UUIDS}
+			task-move ${FILE} ${FILE}.done ${UUIDS}
+			task read ${UUIDS}
+		fi
+	done
+	return 0
+}
+
+################################################################################
+
 if [[ ${IMPERSONATE_NAME} == task ]]; then
 	declare FILE=
 	unalias -a
@@ -3647,6 +3666,13 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == [i] ]]; then
 			shift
 			task-insert "${@}"
+		elif [[ ${1} == [f] ]]; then
+			shift
+			task-flush \
+				em.tasks.admin \
+				em.tasks.opsmgr \
+				em.tasks.track \
+				"${@}"
 		else
 			declare COLS="$(tput cols)"
 			declare LINE="$(tput lines)"
