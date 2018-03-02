@@ -3685,7 +3685,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		else
 			declare COLS="$(tput cols)"
 			declare LINE="$(tput lines)"
-			declare LIMT="$((${LINES}-5))"
+			declare LIMT="$((${LINE}-5))"
 			declare OPTS="
 				rc.gc=1
 				rc.recurrence=1
