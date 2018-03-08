@@ -3614,8 +3614,9 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				fi
 				${RM} ${PIMDIR}/zoho.today.tmp.md
 				if ${COMMIT} && zpim-commit zoho && ${CHANGED}; then
+					true # no operation, because below commented
 #>>>					task-notes "${PIMDIR}/zoho.md" "${WORKUUID}"
-					impersonate_command =
+#>>>					impersonate_command =
 				fi
 			fi
 			eval task-export-text \"Test Work Report\" $(${SED} -n "s/^(.+area[:]work.+)[ ][\\]$/\1/gp" ${HOME}/scripts/_sync)
