@@ -436,11 +436,13 @@ alias zdesk="cd /.g/_data/zactive/_zcache ; clear ; ${LL}"
 if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
 	alias s="cygstart"
 	alias x="cd / ; clear"
-	alias zdesk="cd \"${USERPROFILE}/Desktop\" ; clear ; ${LL}"
+#>>>	alias zdesk="cd \"${USERPROFILE}/Desktop\" ; clear ; ${LL}"
+	alias zdesk="cd \"/h/My Drive\" ; clear ; ${LL}"
 fi
 if [[ "${UNAME}" == "Darwin" ]]; then
 	alias s="open"
 	alias x="cd / ; clear"
+#>>>	alias zdesk="cd \"/Users/plastic/Desktop\" ; clear ; ${LL}"
 	alias zdesk="cd \"/Users/plastic/Google Drive\" ; clear ; ${LL}"
 fi
 
