@@ -3509,7 +3509,6 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		function _task_parse_cmd_bash {
 			_task_parse_cmd "${@}" |
 				${SED} \
-					-e "/^[.](in|view)/d" \
 					-e "s/^([^#+.])/_task \1/g" \
 					-e "s/^[+]ACTIVE[;][ ]//g" \
 					-e "s/^[.]/impersonate_command /g" \
@@ -3560,6 +3559,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			cat /dev/null						 >${TASKFILE}.weekly.txt
 			echo -en "###[ Weekly Review Steps & Commands ]###\n"	>>${TASKFILE}.weekly.txt
 			for FILE in \
+				"System" \
 				"Weekly[ ]Review" \
 				"Weekly[ ]Report" \
 			; do
