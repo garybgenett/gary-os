@@ -2895,6 +2895,17 @@ function task-export-text {
 			unlink(${ENV{PIMDIR}} . "/.composed") || warn();
 		};
 	' -- "${NAME}" "${@}" || return 1
+	${SED} -n "s/^#+ //gp" tasks.md |
+		sort |
+		uniq -c |
+		${SED} \
+			-e "s/^ *//g" \
+			-e "/^1 /d" \
+			-e "s/^[0-9]+ //g" \
+			-e "s/([^A-Za-z0-9])/\\\\\1/g" \
+			|
+		xargs -i -d "\n" \
+			${GREP} -B10 -A10 '^#+ {}' tasks.md
 	cd - >/dev/null
 	return 0
 }
