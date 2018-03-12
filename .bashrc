@@ -2906,6 +2906,7 @@ function task-export-text {
 			|
 		xargs -i -d "\n" \
 			${GREP} -B10 -A10 '^#+ {}' tasks.md
+	${GREP} "#section" tasks.md.html
 	cd - >/dev/null
 	return 0
 }
