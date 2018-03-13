@@ -3488,6 +3488,8 @@ function task-flush {
 
 ################################################################################
 
+alias tw="IMPERSONATE_NAME=task .bashrc impersonate_command"
+
 if [[ ${IMPERSONATE_NAME} == task ]]; then
 	declare FILE=
 	unalias -a
