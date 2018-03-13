@@ -3476,6 +3476,7 @@ function task-flush {
 			project:${FILE} \
 			project.not:${FILE}. \
 			'(status:completed or status:deleted)' \
+			kind.none: \
 		)"
 		if [[ -n "${UUIDS}" ]]; then
 			task read ${UUIDS}
