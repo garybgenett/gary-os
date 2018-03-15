@@ -2961,7 +2961,7 @@ function task-notes {
 		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $root = qx(task _get rc.data.location); chomp(${root});
 		my $data = qx(task export kind:notes ${args}); $data =~ s/\n//g; $data = decode_json(${data});
-		my $edit = ${args}; $edit =~ s/\"/\\\"/g; $edit = "${ENV{EDITOR}} -c \"map ? <ESC>:!task read ${edit}<CR>\" -c \"map \\ <ESC>:!task \"";
+		my $edit = ${args}; $edit =~ s/\"/\\\"/g; $edit = "${ENV{EDITOR}} -c \"map \~ <ESC>:!task read ${edit}<CR>\" -c \"map \\ <ESC>:!task \"";
 		my $mark = "DELETE";
 		if (!@{$data}) {
 			die("NO MATCHES!");
