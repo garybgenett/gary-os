@@ -2261,7 +2261,7 @@ function task-export-calendar {
 		"export.orion:dHJlc29iaXMub3JnX2FiZm9wc3UxdHZmNDRiYzBqZTdtZHFzNmNvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
 		"export.rachel:dHJlc29iaXMub3JnX3RoYTF1cjFnbzJpZDRlZGxkZHRnOW90YzlvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
 		"export.em:dHJlc29iaXMub3JnX21jdTllc2Jjc2d0MTFrY3QwMjVhaGU3YzdvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
-		"export.zoho:dHJlc29iaXMub3JnX2RoM2g2NDRqcWdiOXNxdm42ODRobmtoNXEwQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20"
+		"export.zoho:dHJlc29iaXMub3JnXzVtNmJ2MWxzNGU3bmhobWtwNzZsZnFmZGg4QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20"
 	${SED} -i \
 		-e "s/^(DTSTAMP[:]).+$/\119700101T000000Z/g" \
 		calendar-export.*.ics
