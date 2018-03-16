@@ -2895,6 +2895,7 @@ function task-export-text {
 			unlink(${ENV{PIMDIR}} . "/.composed") || warn();
 		};
 	' -- "${NAME}" "${@}" || return 1
+	${GREP} "[-][-][ ]TASK" tasks.md
 	${SED} -n "s/^#+ //gp" tasks.md |
 		sort |
 		uniq -c |
