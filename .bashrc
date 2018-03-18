@@ -17,8 +17,10 @@ shopt -s histverify
 shopt -s lithist
 
 eval $(dircolors	2>/dev/null)
-setterm -blank 10	2>/dev/null
-setterm -blength 0	2>/dev/null
+if [[ "${-}" == *(*)i*(*) ]]; then
+	setterm -blank 10	2>/dev/null
+	setterm -blength 0	2>/dev/null
+fi
 
 if [[ -f /etc/profile.d/bash-completion.sh ]]; then
 	source /etc/profile.d/bash-completion.sh
