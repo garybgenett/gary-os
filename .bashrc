@@ -2325,10 +2325,9 @@ function task-export-report {
 		TIMELINE_Y="false"
 	fi
 	task-export-text "${EMAIL_NAME}" "${TASKS_LIST}"
-	cat ${PIMDIR}/tasks.md.html \
-		>${REPORT}.projects.html
-	cat ${PIMDIR}/tasks.timeline.html |
-		perl -pe '
+	${CP} ${PIMDIR}/tasks.md.html		${REPORT}.projects.html
+	${CP} ${PIMDIR}/tasks.timeline.html	${REPORT}.timeline.html
+		perl -i -pe '
 			use JSON::XS;
 			my $json = JSON::XS->new();
 			my $tracking = $json->encode(decode_json("[" . qx(cat '${PIMDIR}/tasks.timeline.json')		. "]"));
@@ -2346,7 +2345,7 @@ function task-export-report {
 			s|.+tasks.timeline.json.+$|		var parsed_e = JSON.parse('\''${tracking}'\''); eventSource.loadJSON(parsed_e, "");|g;
 			s|.+tasks.timeline.projects.json.+$|	var parsed_p = JSON.parse('\''${projects}'\''); projectSource.loadJSON(parsed_p, "");|g;
 		' \
-		>${REPORT}.timeline.html
+		${REPORT}.timeline.html
 cat >${REPORT}.txt <<END_OF_FILE
 This is my weekly status report.  It is an automated message, and should be generated every weekend.
 
