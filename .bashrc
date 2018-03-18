@@ -2737,6 +2737,8 @@ function task-export-text {
 					$taskfile =~ s/\n*$//g;
 					$output =~ s/^\[TASKFILE[ ]?([^\n]*)?\]$/${taskfile}/ms;
 				};
+			} else {
+				$modified = "No Notes";
 			};
 			$note .= "\n\n" . ${description} . " {#uuid-" . $task->{"uuid"} . "}\n";
 			$note .= ("-" x 40) . "\n\n";
