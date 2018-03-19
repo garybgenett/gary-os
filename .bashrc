@@ -3291,9 +3291,7 @@ function task-recur {
 		my $data = qx(task export ${args}); $data =~ s/\n//g; $data = decode_json(${data});
 		my $list = {};
 		my $keys = [];
-		# report.read.labels=ID,B,U,S,D,DESCRIPTION,PROJECT,KIND,AREA,TAGS,A,R,P,+STAT,+BORN,+DEAD,+DIED,+I
-		print "| +UUID | +DIED | +STAT | R | DESCRIPTION\n";
-		print "|:---|:---|:---|:---|:---|\n";
+		my $count = {};
 		foreach my $task (@{$data}) {
 			if (exists($task->{"mask"})) {
 				$list->{$task->{"description"}} = $task;
@@ -3320,6 +3318,11 @@ function task-recur {
 		while (my($key, $val) = each(%{$list})) {
 			push(@{$keys}, ${key});
 		};
+		if (@{$keys}) {
+			# report.read.labels=ID,B,U,S,D,DESCRIPTION,PROJECT,KIND,AREA,TAGS,A,R,P,+STAT,+BORN,+DEAD,+DIED,+I
+			print "| +UUID | +DIED | +STAT | R | DESCRIPTION\n";
+			print "|:---|:---|:---|:---|:---|\n";
+		};
 		# report.read.sort=project+,kind+,priority-,depends+,description+,entry+
 		foreach my $key (sort(@{$keys})) {
 			my $item = $list->{$key};
@@ -3330,6 +3333,11 @@ function task-recur {
 				"| " . $item->{"recur"},
 				"| " . $item->{"description"},
 			);
+			$count->{$item->{"uuid"}}++;
+		};
+		if (%{$count}) {
+			print "\n";
+			print "Unique Tasks [${args}]: " . scalar(keys(%{$count})) . " total\n";
 		};
 	' -- "${@}" || return 1
 	return 0
