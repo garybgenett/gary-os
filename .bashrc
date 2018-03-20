@@ -3366,10 +3366,8 @@ function task-recur {
 			);
 			$count->{$item->{"uuid"}}++;
 		};
-		if (%{$count}) {
-			print "\n";
-			print "Tasks [${args}]: " . scalar(keys(%{$count})) . " total\n";
-		};
+		print "\n";
+		print "Tasks [${args}]: " . scalar(keys(%{$count})) . " recurring\n";
 	' -- "${@}" || return 1
 	return 0
 }
