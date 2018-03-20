@@ -3132,6 +3132,17 @@ function task-depends {
 				};
 			};
 		};
+		my $udas = {};
+		foreach my $line (qx(task show uda)) {
+			if ($line =~ m/^uda[.]([^.]+)[.]values\s+(.+)$/) {
+				my $uda = ${1};
+				my $val = ${2};
+				$val =~ s/^,/-,/g;
+				$val =~ s/,,/,-,/g;
+				$val =~ s/,$/,-/g;
+				$udas->{$uda} = [ split(",", ${val}) ];
+			};
+		};
 		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $data = qx(task export);		$data =~ s/\n//g; $data = decode_json(${data});
 		my $show = qx(task export ${args});	$show =~ s/\n//g; $show = decode_json(${show});
@@ -3196,6 +3207,31 @@ function task-depends {
 			};
 			return (${date});
 		};
+		# https://stackoverflow.com/questions/8171528/in-perl-how-can-i-sort-hash-keys-using-a-custom-ordering#48692004
+		sub print_task_sorter_udas {
+			my $uda = shift();
+			my $one = shift();
+			my $two = shift();
+			my $eno;
+			my $owt;
+			my $num = 0;
+			foreach my $test (@{$udas->{$uda}}) {
+				if ((($list->{$one}{$uda}) && ($list->{$one}{$uda} eq ${test})) || ((!defined(${eno})) && (${test} eq "-"))) { $eno = ${num}; };
+				if ((($list->{$two}{$uda}) && ($list->{$two}{$uda} eq ${test})) || ((!defined(${owt})) && (${test} eq "-"))) { $owt = ${num}; };
+				${num}++;
+			};
+			# taskwarrior ranks udas (n..1) instead of (1..n), so (uda+) should be entered ($a, $b) and we will reverse it to ($b, $a), and vice versa
+			return(${owt} <=> ${eno});
+		};
+		# report.skim.sort=project+,kind-,priority-,depends+,description+,entry+
+		sub print_task_sorter {
+			(($list->{$a}{"project"}		|| "") cmp ($list->{$b}{"project"}	|| "")) ||
+			(&print_task_sorter_udas("kind",	${b}, ${a})				) ||
+			(&print_task_sorter_udas("priority",	${b}, ${a})				) ||
+			(($list->{$a}{"depends"}		|| "") cmp ($list->{$b}{"depends"}	|| "")) ||
+			(($list->{$a}{"description"}		|| "") cmp ($list->{$b}{"description"}	|| "")) ||
+			(($list->{$a}{"entry"}			|| "") cmp ($list->{$b}{"entry"}	|| ""))
+		};
 		sub print_task {
 			my $uuid = shift();
 			my $deep = shift() || 0;
@@ -3246,16 +3282,8 @@ function task-depends {
 				($task->{"status"} ne "HEADER")
 			))					{ $title = "**" . ${title} . "**"; };
 			print ${title} . "\n";
-			# report.skim.sort=project+,kind+,priority-,depends+,description+,entry+
-			if (exists($task->{"depends"})) {
-				foreach my $uuid (sort({
-					(($list->{$a}{"project"}	|| "") cmp ($list->{$b}{"project"}	|| "")) ||
-					(($list->{$a}{"kind"}		|| "") cmp ($list->{$b}{"kind"}		|| "")) ||
-					(($list->{$b}{"priority"}	|| "") cmp ($list->{$a}{"priority"}	|| "")) ||
-					(($list->{$a}{"depends"}	|| "") cmp ($list->{$b}{"depends"}	|| "")) ||
-					(($list->{$a}{"description"}	|| "") cmp ($list->{$b}{"description"}	|| "")) ||
-					(($list->{$a}{"entry"}		|| "") cmp ($list->{$b}{"entry"}	|| ""))
-				} split(",", $task->{"depends"}))) {
+			if ($task->{"depends"}) {
+				foreach my $uuid (sort(print_task_sorter split(",", $task->{"depends"}))) {
 					&print_task(${uuid}, (${deep} + 1));
 				};
 			};
