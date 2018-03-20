@@ -3116,11 +3116,11 @@ function task-depends {
 		use Time::Local qw(timegm timelocal);
 #>>>		my $c_uid = 36;
 		my $c_uid = 8;
-		my $c_pri = 1;
 #>>>		my $c_dat = 23;
 		my $c_dat = 14;
 		my $c_fld = {
 			"project"	=> "0",
+			"priority"	=> "0",
 			"tags"		=> "0",
 		};
 		foreach my $field (keys(%{$c_fld})) {
@@ -3222,7 +3222,7 @@ function task-depends {
 				($task->{"tags"} || "-")
 				)
 			);
-			print " | "; printf("%-${c_pri}.${c_pri}s", ($task->{"priority"} || "-"));
+			print " | "; printf("%-" . $c_fld->{"priority"}	. "." . $c_fld->{"priority"}	. "s", $task->{"priority"} || "-");
 			my $due = (&do_time($task->{"due"}) || "-");
 			my $end = (&do_time($task->{"end"}) || "-"); if ($task->{"status"} eq "deleted") { $end = "~~" . ${end} . "~~"; };
 			print " | "; printf("%-${c_dat}.${c_dat}s", ${due});
