@@ -3138,9 +3138,15 @@ function task-depends {
 		my $list = {};
 		my $rdep = {};
 		my $filt = {};
-		my $fnum = {};
-		my $onum = {};
-		my $tnum = {};
+		my $lnum = {};
+		my $dnum = {};
+		my $pnum = {};
+		if (!@{$show}) {
+			exit(0);
+		};
+		print "\n";
+		&print_task("0", "HEADER");
+		print "" . ("|:---" x 7) . "|\n";
 		foreach my $task (@{$data}) {
 			$list->{$task->{"uuid"}} = ${task};
 			if (exists($task->{"depends"})) {
@@ -3194,13 +3200,8 @@ function task-depends {
 			my $uuid = shift();
 			my $deep = shift() || 0;
 			my $task = $list->{$uuid};
-			if (!${deep}) {
-				print "\n";
-				&print_task("0", "HEADER");
-				print "" . ("|:---" x 7) . "|\n";
-			}
 			# report.skim.labels=+UUID,PROJECT,TAGS,P,+DEAD,+DIED,KIND,DESCRIPTION
-			elsif(${deep} eq "HEADER") {
+			if(${deep} eq "HEADER") {
 				$deep = "0";
 				$task = {
 					"status"	=> "HEADER",
@@ -3260,20 +3261,18 @@ function task-depends {
 			};
 			if (${uuid}) {
 				if ($filt->{$uuid}) {
-					$fnum->{$uuid}++;
+					$lnum->{$uuid}++;
 				} else {
-					$onum->{$uuid}++;
+					$dnum->{$uuid}++;
 				};
-				$tnum->{$uuid}++;
+				$pnum->{$uuid}++;
 			};
 		};
-		if (%{$tnum}) {
-			my $c_fnum = scalar(keys(%{$fnum}));
-			my $c_onum = scalar(keys(%{$onum}));
-			my $c_tnum = scalar(keys(%{$tnum}));
-			print "\n";
-			print "Unique Tasks [${args}]: ${c_fnum} matching + ${c_onum} orphans = ${c_tnum} total\n";
-		};
+		my $c_lnum = scalar(keys(%{$lnum}));
+		my $c_dnum = scalar(keys(%{$dnum}));
+		my $c_pnum = scalar(keys(%{$pnum}));
+		print "\n";
+		print "Tasks [${args}]: ${c_lnum} linked + ${c_dnum} depended = ${c_pnum} printed\n";
 	' -- "${@}" || return 1
 	return 0
 }
