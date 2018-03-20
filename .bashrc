@@ -3324,6 +3324,9 @@ function task-depends {
 			};
 		};
 		if (%{$onum}) {
+			if (!${header}) {
+				&print_header();
+			};
 			print "" . ("| - " x 7) . "\n";
 		};
 		foreach my $uuid (sort(print_task_sorter keys(%{$onum}))) {
