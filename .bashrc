@@ -3319,11 +3319,11 @@ function task-recur {
 			push(@{$keys}, ${key});
 		};
 		if (@{$keys}) {
-			# report.read.labels=ID,B,U,S,D,DESCRIPTION,PROJECT,KIND,AREA,TAGS,A,R,P,+STAT,+BORN,+DEAD,+DIED,+I
+			# report.dump.labels=ID,B,U,S,D,DESCRIPTION,PROJECT,KIND,AREA,TAGS,A,R,P,+STAT,+BORN,+WAIT,+HOLD,+REAP,+MOVE,+DEAD,+DIED,+UUID,+PUID,+I,+M
 			print "| +UUID | +DIED | +STAT | R | DESCRIPTION\n";
 			print "|:---|:---|:---|:---|:---|\n";
 		};
-		# report.read.sort=project+,kind+,priority-,depends+,description+,entry+
+		# report.dump.sort=entry+
 		foreach my $key (sort(@{$keys})) {
 			my $item = $list->{$key};
 			printf("%-38.38s %-12.12s %-11.11s %-11.11s %s\n",
@@ -3337,7 +3337,7 @@ function task-recur {
 		};
 		if (%{$count}) {
 			print "\n";
-			print "Unique Tasks [${args}]: " . scalar(keys(%{$count})) . " total\n";
+			print "Tasks [${args}]: " . scalar(keys(%{$count})) . " total\n";
 		};
 	' -- "${@}" || return 1
 	return 0
