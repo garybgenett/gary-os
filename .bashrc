@@ -3152,12 +3152,7 @@ function task-depends {
 		my $lnum = {};
 		my $dnum = {};
 		my $pnum = {};
-		if (!@{$show}) {
-			exit(0);
-		};
-		print "\n";
-		&print_task("0", "HEADER");
-		print "" . ("|:---" x 7) . "|\n";
+		my $header;
 		foreach my $task (@{$data}) {
 			$list->{$task->{"uuid"}} = ${task};
 			if (exists($task->{"depends"})) {
@@ -3232,11 +3227,20 @@ function task-depends {
 			(($list->{$a}{"description"}		|| "") cmp ($list->{$b}{"description"}	|| "")) ||
 			(($list->{$a}{"entry"}			|| "") cmp ($list->{$b}{"entry"}	|| ""))
 		};
+		sub print_header {
+			$header = "1";
+			print "\n";
+			&print_task("0", "HEADER");
+			print "" . ("|:---" x 7) . "|\n";
+		};
 		sub print_task {
 			my $uuid = shift();
 			my $deep = shift() || 0;
 			my $task = $list->{$uuid};
 			# report.skim.labels=+UUID,PROJECT,TAGS,P,+DEAD,+DIED,KIND,DESCRIPTION
+			if (!${header}) {
+				&print_header();
+			};
 			if(${deep} eq "HEADER") {
 				$deep = "0";
 				$task = {
