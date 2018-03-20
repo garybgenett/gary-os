@@ -3152,6 +3152,7 @@ function task-depends {
 		my $lnum = {};
 		my $dnum = {};
 		my $pnum = {};
+		my $onum = {};
 		my $header;
 		foreach my $task (@{$data}) {
 			$list->{$task->{"uuid"}} = ${task};
@@ -3268,7 +3269,15 @@ function task-depends {
 			my $end = (&do_time($task->{"end"}) || "-"); if ($task->{"status"} eq "deleted") { $end = "~~" . ${end} . "~~"; };
 			print " | "; printf("%-${c_dat}.${c_dat}s", ${due});
 			print " | "; printf("%-${c_dat}.${c_dat}s", ${end});
-			print " | " . (". " x ${deep}) . ((${deep} > 0) && "${deep} ");
+			if (${deep} >= 0) {
+				if (${deep} == 0) {	print " | ";
+				} else {		print " | " . (". " x ${deep}) . "${deep} ";
+				};
+			} else {
+				if (${deep} == -1) {	print " | - ";
+				} else {		print " | - " . ("- " x (abs(${deep}) - 1)) . (abs(${deep}) - 1) . " ";
+				};
+			};
 			my $title = $task->{"description"};
 			if (exists($task->{"kind"}))		{ $title = "[" . $task->{"kind"} . "] " . ${title}; };
 			if (
@@ -3286,12 +3295,21 @@ function task-depends {
 				($task->{"status"} ne "HEADER")
 			))					{ $title = "**" . ${title} . "**"; };
 			print ${title} . "\n";
-			if ($task->{"depends"}) {
-				foreach my $uuid (sort(print_task_sorter split(",", $task->{"depends"}))) {
-					&print_task(${uuid}, (${deep} + 1));
+			if (${deep} >= 0) {
+				if ($task->{"depends"}) {
+					foreach my $uuid (sort(print_task_sorter split(",", $task->{"depends"}))) {
+						&print_task(${uuid}, (${deep} + 1));
+					};
+				};
+			} else {
+				foreach my $uuid (sort(print_task_sorter @{$rdep->{$task->{"uuid"}}})) {
+					&print_task(${uuid}, (${deep} - 1));
 				};
 			};
-			if (${uuid}) {
+			if (
+				(${uuid}) &&
+				(${deep} >= 0)
+			) {
 				if ($filt->{$uuid}) {
 					$lnum->{$uuid}++;
 				} else {
@@ -3300,11 +3318,26 @@ function task-depends {
 				$pnum->{$uuid}++;
 			};
 		};
+		foreach my $uuid (keys(%{$filt})) {
+			if (!$pnum->{$uuid}) {
+				$onum->{$uuid}++;
+			};
+		};
+		if (%{$onum}) {
+			print "" . ("| - " x 7) . "\n";
+		};
+		foreach my $uuid (sort(print_task_sorter keys(%{$onum}))) {
+			&print_task(${uuid}, -1);
+		};
 		my $c_lnum = scalar(keys(%{$lnum}));
 		my $c_dnum = scalar(keys(%{$dnum}));
 		my $c_pnum = scalar(keys(%{$pnum}));
+		my $c_onum = scalar(keys(%{$onum}));
 		print "\n";
-		print "Tasks [${args}]: ${c_lnum} linked + ${c_dnum} depended = ${c_pnum} printed\n";
+		print "Tasks [${args}]: ";
+		print "${c_lnum} linked + ${c_dnum} depended = ${c_pnum} printed";
+		print " / ";
+		print "${c_lnum} linked + ${c_onum} orphaned = " . (${c_lnum} + ${c_onum}) . " matched\n";
 	' -- "${@}" || return 1
 	return 0
 }
