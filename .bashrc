@@ -3616,7 +3616,8 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			if [[ ${1} == "SYNC" ]]; then
 				shift
 				uuidgen >	${PIMDIR}/tasks/backlog.data
-				task export >	${PIMDIR}/taskd/orgs/local/users/*/tx.data
+#>>>				task export >	${PIMDIR}/taskd/orgs/local/users/*/tx.data
+				echo -n	>	${PIMDIR}/taskd/orgs/local/users/*/tx.data
 				cat		${PIMDIR}/tasks/backlog.data \
 					>>	${PIMDIR}/taskd/orgs/local/users/*/tx.data
 				task sync
