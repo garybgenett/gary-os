@@ -3328,9 +3328,9 @@ function task-depends {
 				&print_header();
 			};
 			print "" . ("| - " x 7) . "\n";
-		};
-		foreach my $uuid (sort(print_task_sorter keys(%{$onum}))) {
-			&print_task(${uuid}, -1);
+			foreach my $uuid (sort(print_task_sorter keys(%{$onum}))) {
+				&print_task(${uuid}, -1);
+			};
 		};
 		my $c_lnum = scalar(keys(%{$lnum}));
 		my $c_dnum = scalar(keys(%{$dnum}));
