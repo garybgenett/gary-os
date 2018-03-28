@@ -3387,6 +3387,7 @@ function task-recur {
 		};
 		if (@{$keys}) {
 			# report.dump.labels=ID,B,U,S,D,DESCRIPTION,PROJECT,KIND,AREA,TAGS,A,R,P,+STAT,+BORN,+WAIT,+HOLD,+REAP,+MOVE,+DEAD,+DIED,+UUID,+PUID,+I,+M
+			print "\n";
 			print "| +UUID | +DIED | +STAT | R | DESCRIPTION\n";
 			print "|:---|:---|:---|:---|:---|\n";
 		};
