@@ -2794,7 +2794,7 @@ function task-export-text {
 					"caption"	=> ${entry},
 				});
 			};
-			if ((exists($task->{"due"})) && (!exists($task->{"recur"}))) {
+			if ((exists($task->{"due"})) && (!exists($task->{"recur"})) && (exists($task->{"depends"}))) {
 				&export_proj(${task}, 1);
 			};
 			foreach my $annotation (@{$task->{"annotations"}}) {
