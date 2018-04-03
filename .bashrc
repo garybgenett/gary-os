@@ -2281,6 +2281,7 @@ function task-export-drive {
 	gcalendar_export.pl \
 		"d|notes.md:1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e" \
 		${@}
+	${MV} drive-notes.md /.g/_data/zactive/_drive/_notes.md
 	sudo chown -vR plastic:plastic drive*
 	sudo chmod -vR 750 drive*
 	cd - >/dev/null
@@ -2427,6 +2428,9 @@ END_OF_FILE
 function task-export-text {
 	declare NAME="${1}" && shift
 	cd ${PIMDIR}
+	sudo chmod 755 \
+		/.g/_data/zactive/_drive \
+		/.g/_data/zactive/_drive/_notes.md
 	perl -e '
 		use strict;
 		use warnings;
