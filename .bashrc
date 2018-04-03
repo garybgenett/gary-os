@@ -2294,7 +2294,7 @@ function task-export {
 	declare FILE=
 	cd ${PIMDIR}
 #>>>
-	gtasks_export.pl purge "+GTD"
+	gtasks_export.pl purge "" "+GTD"
 	return 0
 #>>>
 #>>>	gtasks_export.pl purge "-Todo,@agenda,@errand" "+GTD,+Inbox"
