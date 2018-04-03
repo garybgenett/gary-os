@@ -2293,6 +2293,10 @@ function task-export-drive {
 function task-export {
 	declare FILE=
 	cd ${PIMDIR}
+#>>>
+	gtasks_export.pl purge "+GTD"
+	return 0
+#>>>
 #>>>	gtasks_export.pl purge "-Todo,@agenda,@errand" "+GTD,+Inbox"
 	gtasks_export.pl purge "+GTD,+Inbox,-Todo,@agenda,@errand"
 #>>>	gtasks_export.pl twimport "+Inbox"
