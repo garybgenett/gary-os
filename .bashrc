@@ -2257,18 +2257,32 @@ function task-build {
 function task-export-calendar {
 	cd ${PIMDIR}
 	gcalendar_export.pl \
-		"export.gtd:dHJlc29iaXMub3JnXzFmY29nMjNjMWEwOTlhcGdqdTlvN3ZmbTE4QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
-		"export.default:Z2FyeUB0cmVzb2Jpcy5vcmc" \
-		"export.personal:dHJlc29iaXMub3JnX2c4djBwa3RzbnQ4NGVvdHM4aGtpanRzanZnQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
-		"export.orion:dHJlc29iaXMub3JnX2FiZm9wc3UxdHZmNDRiYzBqZTdtZHFzNmNvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
-		"export.rachel:dHJlc29iaXMub3JnX3RoYTF1cjFnbzJpZDRlZGxkZHRnOW90YzlvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
-		"export.em:dHJlc29iaXMub3JnX21jdTllc2Jjc2d0MTFrY3QwMjVhaGU3YzdvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
-		"export.zoho:dHJlc29iaXMub3JnX2VocWo0Z3Q2MXU2MGZoZ21vdXRrNHMwc2drQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20"
+		"c|export.gtd:dHJlc29iaXMub3JnXzFmY29nMjNjMWEwOTlhcGdqdTlvN3ZmbTE4QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
+		"c|export.default:Z2FyeUB0cmVzb2Jpcy5vcmc" \
+		"c|export.personal:dHJlc29iaXMub3JnX2c4djBwa3RzbnQ4NGVvdHM4aGtpanRzanZnQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
+		"c|export.orion:dHJlc29iaXMub3JnX2FiZm9wc3UxdHZmNDRiYzBqZTdtZHFzNmNvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
+		"c|export.rachel:dHJlc29iaXMub3JnX3RoYTF1cjFnbzJpZDRlZGxkZHRnOW90YzlvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
+		"c|export.em:dHJlc29iaXMub3JnX21jdTllc2Jjc2d0MTFrY3QwMjVhaGU3YzdvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
+		"c|export.zoho:dHJlc29iaXMub3JnX2VocWo0Z3Q2MXU2MGZoZ21vdXRrNHMwc2drQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
+		${@}
 	${SED} -i \
 		-e "s/^(DTSTAMP[:]).+$/\119700101T000000Z/g" \
 		calendar-export.*.ics
 	sudo chown -vR plastic:plastic calendar*
 	sudo chmod -vR 750 calendar*
+	cd - >/dev/null
+	return 0
+}
+
+########################################
+
+function task-export-drive {
+	cd ${PIMDIR}
+	gcalendar_export.pl \
+		"d|notes.md:1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e" \
+		${@}
+	sudo chown -vR plastic:plastic drive*
+	sudo chmod -vR 750 drive*
 	cd - >/dev/null
 	return 0
 }
@@ -2305,8 +2319,9 @@ function task-export {
 function task-export-zoho {
 	cd ${PIMDIR}
 	cat ${PIMDIR}/.zoho.reports
-	eval zohocrm_events.pl "${@}" \
-		$(cat ${PIMDIR}/.zoho.reports)
+	eval zohocrm_events.pl \
+		$(cat ${PIMDIR}/.zoho.reports) \
+		"${@}"
 	declare RETURN="${?}"
 	cd - >/dev/null
 	return ${RETURN}
@@ -2412,9 +2427,6 @@ END_OF_FILE
 function task-export-text {
 	declare NAME="${1}" && shift
 	cd ${PIMDIR}
-	sudo chmod 755 \
-		/.g/_data/zactive/_drive \
-		/.g/_data/zactive/_drive/_notes.txt
 	perl -e '
 		use strict;
 		use warnings;
