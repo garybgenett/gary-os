@@ -2931,7 +2931,7 @@ function task-export-text {
 		xargs -i -d "\n" \
 			${GREP} -B10 -A10 '^#+ {}' tasks.md
 	${GREP} "#section" tasks.md.html
-	${GRE} -B1 "^[\"][0-9]{8}T[0-9]{6}Z" tasks.csv
+	${GREP} -B1 "^[\"][0-9]{8}T[0-9]{6}Z" tasks.csv
 	cd - >/dev/null
 	return 0
 }
