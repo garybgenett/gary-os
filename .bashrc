@@ -3598,17 +3598,22 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		declare TASKFILE="$(task _get rc.data.location)"
 		declare TASKUUID="$(task uuids project:_data -- /.review/)"
 		declare WORKUUID="$(task uuids project:_data -- /.status/)"
+#>>>		declare TODOUUID="$(task uuids project:_data -- /.today/)"
+		declare TODOUUID="/.g/_data/zactive/_drive/_notes.md"
 		function _task {
 			eval ${MARKER}
 			echo -en "[task ${@}]\n"
 			task rc._forcecolor=1 ${@} 2>&1
 		}
 		function _task_parse {
-			declare REPORT="${@}"
+			declare TWUUID="${1}"; shift
+			declare REPORT="${1}"; shift
 			# https://stackoverflow.com/questions/1251999/how-can-i-replace-a-newline-n-using-sed/1252191#1252191
 			${SED} -n "/[#][ ]${REPORT}/,/^[#]/p" "$(
-				if [[ -f "${TASKFILE}/${TASKUUID}.md" ]]; then
-					echo -en "${TASKFILE}/${TASKUUID}.md"
+				if [[ -f "${TWUUID}" ]]; then
+					echo -en "${TWUUID}"
+				elif [[ -f "${TASKFILE}/${TWUUID}.md" ]]; then
+					echo -en "${TASKFILE}/${TWUUID}.md"
 				else
 					echo -en "${TASKFILE}.md"
 				fi
@@ -3626,9 +3631,10 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			_task_parse_cmd "${@}" |
 				${SED} \
 					-e "s/^([^#+.])/_task \1/g" \
-					-e "s/^[+]ACTIVE[;][ ]//g" \
-					-e "s/^[.]/impersonate_command /g" \
 					-e "s/([ ])(task[ ])/\1_\2/g" \
+					-e "s/^[+]ECHO[[]([^]]*)[]]/eval\ \${MARKER}\;\ echo\ \-en\ \"\\\\n\1\\\\n\\\\n\"/g" \
+					-e "s/^[+]//g" \
+					-e "s/^[.]/impersonate_command /g" \
 					-e "s/^(impersonate_command|task[-])/eval\ \${MARKER}\;\ \1/g" \
 					-e "s/(impersonate_command|task[-])/IMPERSONATE_NAME=task .bashrc \1/g" \
 					-e "s/$/;/g"
@@ -3680,20 +3686,29 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				"Weekly[ ]Review" \
 				"Weekly[ ]Report" \
 			; do
-				echo -en "\n#[ Markdown Source ]\n"				>>${TASKFILE}.weekly.txt; _task_parse		${FILE} | ${SED} "s/^/\#\]/g"		>>${TASKFILE}.weekly.txt
-				echo -en "\n#[ _task_parse_cmd :: impersonate_command ]\n"	>>${TASKFILE}.weekly.txt; _task_parse_cmd	${FILE} | ${SED} "s/^/\#\|/g"		>>${TASKFILE}.weekly.txt
-				echo -en "\n#[ _task_parse_cmd_bash :: bash]\n"			>>${TASKFILE}.weekly.txt; _task_parse_cmd_bash	${FILE} | ${SED} "s/[_](task[ ])/\1/g"	>>${TASKFILE}.weekly.txt
+				echo -en "\n#[ Markdown Source ]\n"				>>${TASKFILE}.weekly.txt; _task_parse		"${TASKUUID}" "${FILE}" | ${SED} "s/^/\#\]/g"		>>${TASKFILE}.weekly.txt
+				echo -en "\n#[ _task_parse_cmd :: impersonate_command ]\n"	>>${TASKFILE}.weekly.txt; _task_parse_cmd	"${TASKUUID}" "${FILE}" | ${SED} "s/^/\#\|/g"		>>${TASKFILE}.weekly.txt
+				echo -en "\n#[ _task_parse_cmd_bash :: bash]\n"			>>${TASKFILE}.weekly.txt; _task_parse_cmd_bash	"${TASKUUID}" "${FILE}" | ${SED} "s/[_](task[ ])/\1/g"	>>${TASKFILE}.weekly.txt
 			done
 			(
 				_task logo
-				eval $(_task_parse_cmd_bash "Weekly[ ]Review")
+				eval $(_task_parse_cmd_bash "${TASKUUID}" "Weekly[ ]Review")
 				eval ${MARKER}
 			) | ${MORE}
 		elif [[ ${1} == "repo" ]]; then
 			shift
 			(
 				_task logo
-				eval $(_task_parse_cmd_bash "Weekly[ ]Report")
+				eval $(_task_parse_cmd_bash "${TASKUUID}" "Weekly[ ]Report")
+				eval ${MARKER}
+			) | ${MORE}
+		elif [[ ${1} == "todo" ]]; then
+			shift
+			(
+				eval ${MARKER}; _task_parse_cmd_bash	"${TODOUUID}" "Priorities"
+				eval ${MARKER}; _task_parse_cmd_bash	"${TODOUUID}" "Projects"
+				eval $(_task_parse_cmd_bash		"${TODOUUID}" "Priorities")
+				eval $(_task_parse_cmd_bash		"${TODOUUID}" "Projects")
 				eval ${MARKER}
 			) | ${MORE}
 		elif [[ ${1} == [=] ]]; then
