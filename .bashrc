@@ -3600,6 +3600,9 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		declare WORKUUID="$(task uuids project:_data -- /.status/)"
 #>>>		declare TODOUUID="$(task uuids project:_data -- /.today/)"
 		declare TODOUUID="/.g/_data/zactive/_drive/_notes.md"
+		# color.active=white on green
+		declare ECHO_CLR="\e[1;4;37;42m"
+		declare ECHO_DFL="\e[0m"
 		function _task {
 			eval ${MARKER}
 			echo -en "[task ${@}]\n"
@@ -3623,16 +3626,16 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			_task_parse "${@}" |
 				${GREP} "[\`]" |
 				${SED} \
-					-e "s/^[^\`]+[\`]//g" \
-					-e "s/[\`][^\`]+$//g" \
+					-e "s/^[^\`]*[\`]//g" \
+					-e "s/[\`][^\`]*$//g" \
 					-e "s/[\`][,][ ][\`]/\n/g"
 		}
 		function _task_parse_cmd_bash {
 			_task_parse_cmd "${@}" |
 				${SED} \
-					-e "s/^([^#+.])/_task \1/g" \
+					-e "s/^([^#=+.])/_task \1/g" \
 					-e "s/([ ])(task[ ])/\1_\2/g" \
-					-e "s/^[+]ECHO[[]([^]]*)[]]/eval\ \${MARKER}\;\ echo\ \-en\ \"\\\\n\1\\\\n\\\\n\"/g" \
+					-e "s/^[=](.*)/eval\ \${MARKER}\;\ echo\ \-en\ \"${ECHO_CLR//\\/\\\\\\}\1${ECHO_DFL//\\/\\\\\\}\\\\n\"/g" \
 					-e "s/^[+]//g" \
 					-e "s/^[.]/impersonate_command /g" \
 					-e "s/^(impersonate_command|task[-])/eval\ \${MARKER}\;\ \1/g" \
@@ -3705,10 +3708,14 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == "todo" ]]; then
 			shift
 			(
-				eval ${MARKER}; _task_parse_cmd_bash	"${TODOUUID}" "Priorities"
-				eval ${MARKER}; _task_parse_cmd_bash	"${TODOUUID}" "Projects"
-				eval $(_task_parse_cmd_bash		"${TODOUUID}" "Priorities")
-				eval $(_task_parse_cmd_bash		"${TODOUUID}" "Projects")
+				for FILE in \
+					"Priorities" \
+					"Projects" \
+					"Notes" \
+				; do
+					eval ${MARKER}; _task_parse_cmd_bash	"${TODOUUID}" "${FILE}"
+					eval $(_task_parse_cmd_bash		"${TODOUUID}" "${FILE}")
+				done
 				eval ${MARKER}
 			) | ${MORE}
 		elif [[ ${1} == [=] ]]; then
