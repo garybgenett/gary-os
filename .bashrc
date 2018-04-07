@@ -3086,7 +3086,7 @@ function task-track {
 			$uuid = ${$uuid}[0];
 		};
 		my $mark = " => ";
-		my $edit = ${args}; $edit =~ s/\"/\\\"/g; $edit = "${ENV{EDITOR}} -c \"map ? <ESC>:!task read ${edit}<CR>\" -c \"map \\ <ESC>:!task \"";
+		my $edit = ${args}; $edit =~ s/\"/\\\"/g; $edit = "${ENV{EDITOR}} -c \"map \~ <ESC>:!task read ${edit}<CR>\" -c \"map \\ <ESC>:!task \"";
 		my $data = qx(${ENV{GREP}} "uuid:\\\"${uuid}\\\"" "${root}"/{completed,pending}.data); chomp(${data});
 		my $file = ${data}; $file =~ s/[:].+$//g; $data =~ s/^.+(completed|pending)[.]data[:]//g; $data =~ s/^[[]//g; $data =~ s/[]]$//g;
 		my $text = ${root} . "/" . ${uuid};
@@ -3596,7 +3596,8 @@ function task-flush {
 
 ################################################################################
 
-alias tw="IMPERSONATE_NAME=task .bashrc impersonate_command"
+export TW="IMPERSONATE_NAME=task .bashrc impersonate_command"
+alias tw="${TW}"
 
 if [[ ${IMPERSONATE_NAME} == task ]]; then
 	declare FILE=
@@ -3733,7 +3734,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			zpim-commit tasks
 		elif [[ ${1} == [@] ]]; then
 			task-export-drive || return 1
-			${EDITOR} ${NOTES_MD}
+			${EDITOR} -c "map ~ <ESC>:!${TW} todo<CR>" -c "map \\ <ESC>:!${TW} " ${NOTES_MD}
 			if [[ -s ${NOTES_MD} ]]; then
 				task-export-drive upload || return 1
 			fi
