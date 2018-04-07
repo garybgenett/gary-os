@@ -53,6 +53,7 @@ export SCRIPT="$(basename -- "${0}")"
 export UNAME="$(uname -s)"
 
 export COMPOSER="/.g/_data/zactive/coding/composer/Makefile"
+export NOTES_MD="/.g/_data/zactive/_drive/_notes.md"
 export PIMDIR="/.g/_data/zactive/_pim"
 export MAILDIR="${HOME}/Maildir"
 export MAILCAPS="${HOME}/.mailcap"
@@ -2194,7 +2195,7 @@ function zpim-commit {
 		declare FILE="${1}" && shift
 		declare LIST=
 		if [[ ${FILE} == tasks ]]; then
-			LIST=".auth .token taskd"
+			LIST=".auth* .token* taskd*"
 		fi
 		if [[ ${FILE} == zoho ]]; then
 			LIST=".zoho*"
@@ -2277,13 +2278,17 @@ function task-export-calendar {
 ########################################
 
 function task-export-drive {
+	declare NOTES="$(basename ${NOTES_MD})"
 	cd ${PIMDIR}
-	gcalendar_export.pl \
-		"d|notes.md:1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e" \
+#>>>	gcalendar_export.pl \
+#>>>		"d|notes.md:1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e" \
+#>>>		${@}
+#>>>	${MV} drive-notes.md /.g/_data/zactive/_drive/_notes.md
+#>>>	sudo chown -vR plastic:plastic drive*
+#>>>	sudo chmod -vR 750 drive*
+	gdrive_export.pl \
+		"${NOTES_MD}:1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e" \
 		${@}
-	${MV} drive-notes.md /.g/_data/zactive/_drive/_notes.md
-	sudo chown -vR plastic:plastic drive*
-	sudo chmod -vR 750 drive*
 	cd - >/dev/null
 	return 0
 }
@@ -2433,8 +2438,8 @@ function task-export-text {
 	declare NAME="${1}" && shift
 	cd ${PIMDIR}
 	sudo chmod 755 \
-		/.g/_data/zactive/_drive \
-		/.g/_data/zactive/_drive/_notes.md
+		$(dirname ${NOTES_MD}) \
+		${NOTES_MD}
 	perl -e '
 		use strict;
 		use warnings;
@@ -3599,7 +3604,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		declare TASKUUID="$(task uuids project:_data -- /.review/)"
 		declare WORKUUID="$(task uuids project:_data -- /.status/)"
 #>>>		declare TODOUUID="$(task uuids project:_data -- /.today/)"
-		declare TODOUUID="/.g/_data/zactive/_drive/_notes.md"
+		declare TODOUUID="${NOTES_MD}"
 		# color.active=white on green
 		declare ECHO_CLR="\e[1;4;37;42m"
 		declare ECHO_DFL="\e[0m"
@@ -3723,6 +3728,10 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			task-export-text	|| return 1
 #>>>			task-export		|| return 1
 			zpim-commit tasks
+		elif [[ ${1} == [@] ]]; then
+			task-export-drive		|| return 1
+			${EDITOR} ${NOTES_MD}
+			task-export-drive upload	|| return 1
 		elif [[ ${1} == [%] ]]; then
 			shift
 			if [[ -n ${1} ]]; then
