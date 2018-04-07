@@ -2280,6 +2280,9 @@ function task-export-calendar {
 function task-export-drive {
 	declare NOTES="$(basename ${NOTES_MD})"
 	cd ${PIMDIR}
+	sudo chmod 755 \
+		$(dirname ${NOTES_MD}) \
+		${NOTES_MD}
 #>>>	gcalendar_export.pl \
 #>>>		"d|notes.md:1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e" \
 #>>>		${@}
