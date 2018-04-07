@@ -3729,9 +3729,11 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 #>>>			task-export		|| return 1
 			zpim-commit tasks
 		elif [[ ${1} == [@] ]]; then
-			task-export-drive		|| return 1
+			task-export-drive || return 1
 			${EDITOR} ${NOTES_MD}
-			task-export-drive upload	|| return 1
+			if [[ -s ${NOTES_MD} ]]; then
+				task-export-drive upload || return 1
+			fi
 		elif [[ ${1} == [%] ]]; then
 			shift
 			if [[ -n ${1} ]]; then
