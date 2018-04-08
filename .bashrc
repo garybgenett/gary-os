@@ -3612,6 +3612,10 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		# color.active=white on green
 		declare ECHO_CLR="\e[1;4;37;42m"
 		declare ECHO_DFL="\e[0m"
+		function _echo {
+			eval ${MARKER}
+			echo -en "${ECHO_CLR}${@}${ECHO_DFL}\n"
+		}
 		function _task {
 			eval ${MARKER}
 			echo -en "[task ${@}]\n"
@@ -3637,14 +3641,15 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				${SED} \
 					-e "s/^[^\`]*[\`]//g" \
 					-e "s/[\`][^\`]*$//g" \
-					-e "s/[\`][,][ ][\`]/\n/g"
+					-e "s/[\`][,][ ][\`]/\n/g" \
+					-e "s/\&/\\\\&/g"
 		}
 		function _task_parse_cmd_bash {
 			_task_parse_cmd "${@}" |
 				${SED} \
 					-e "s/^([^#=+.])/_task \1/g" \
 					-e "s/([ ])(task[ ])/\1_\2/g" \
-					-e "s/^[=](.*)/eval\ \${MARKER}\;\ echo\ \-en\ \"${ECHO_CLR//\\/\\\\\\}\1${ECHO_DFL//\\/\\\\\\}\\\\n\"/g" \
+					-e "s/^[=](.*)/_echo\ \1/g" \
 					-e "s/^[+]//g" \
 					-e "s/^[.]/impersonate_command /g" \
 					-e "s/^(impersonate_command|task[-])/eval\ \${MARKER}\;\ \1/g" \
@@ -3693,6 +3698,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			shift
 			cat /dev/null						 >${TASKFILE}.weekly.txt
 			echo -en "###[ Weekly Review Steps & Commands ]###\n"	>>${TASKFILE}.weekly.txt
+			declare FILE
 			for FILE in \
 				"System" \
 				"Weekly[ ]Review" \
@@ -3716,14 +3722,27 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			) | ${MORE}
 		elif [[ ${1} == "todo" ]]; then
 			shift
+			declare SOURCE
+			declare HEADER[@]
+			declare FILE
+			if [[ -z "${@}" ]]; then
+				SOURCE="${TODOUUID}"
+				HEADER[0]="Priorities"
+				HEADER[1]="Projects"
+				HEADER[2]="Notes"
+			else
+				SOURCE="${1}"; shift
+				declare NUM="0"
+				for FILE in "${@}"; do
+					HEADER[${NUM}]="${FILE}"
+					NUM=$((${NUM}+1))
+				done
+			fi
 			(
-				for FILE in \
-					"Priorities" \
-					"Projects" \
-					"Notes" \
-				; do
-					eval ${MARKER}; _task_parse_cmd_bash	"${TODOUUID}" "${FILE}"
-					eval $(_task_parse_cmd_bash		"${TODOUUID}" "${FILE}")
+				for FILE in "${HEADER[@]}"; do
+					_echo					"\t${FILE}"
+					eval ${MARKER}; _task_parse_cmd_bash	"${SOURCE}" "${FILE}"
+					eval $(_task_parse_cmd_bash		"${SOURCE}" "${FILE}")
 				done
 				eval ${MARKER}
 			) | ${MORE}
