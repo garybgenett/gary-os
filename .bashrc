@@ -488,7 +488,7 @@ alias trust="_sync archive"
 alias vlc="vlc --intf ncurses --audio-visual disable --no-color --fullscreen"
 alias vlc-help="vlc --help --full-help --longhelp --advanced 2>&1 | ${MORE}"
 alias vlc-play="vlc ${HOME}/setup/_misc/playlist.m3u"
-alias web="w3m google.com"
+alias web="w3m https://www.google.com"
 alias workspace="_sync workspace"
 if [[ "${UNAME}" == "Darwin" ]]; then
 	alias trust="/_install/_mac_osx.txt -r ; /_install/_mac_osx.txt -x ; /_install/_mac_osx.txt -s"
