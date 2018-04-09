@@ -2291,7 +2291,7 @@ function task-export-drive {
 #>>>	sudo chmod -vR 750 drive*
 	gdrive_export.pl \
 		"${NOTES_MD}:1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e" \
-		${@}
+		${@} || return 1
 	cd - >/dev/null
 	return 0
 }
