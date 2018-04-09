@@ -2280,6 +2280,7 @@ function task-export-calendar {
 function task-export-drive {
 	declare NOTES="$(basename ${NOTES_MD})"
 	cd ${PIMDIR}
+	sudo chown plastic:plastic ${NOTES_MD}
 	sudo chmod 755 \
 		$(dirname ${NOTES_MD}) \
 		${NOTES_MD}
