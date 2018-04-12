@@ -319,6 +319,8 @@ export GIT_PAT="${GIT_DIF} --attach --binary --keep-subject"
 
 ########################################
 
+export LAST="last --system --fullnames --fulltimes --hostlast --ip"		; alias last="${LAST}"
+
 export PV="pv --cursor --bytes --timer --rate --average-rate"			; alias pv="${PV}"
 export XARGS="xargs --max-procs=2 --max-args=10"				; alias xargs="${XARGS}"
 
