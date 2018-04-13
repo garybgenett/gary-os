@@ -3835,7 +3835,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == [~] ]]; then
 			shift
 			declare PROJECT="${1}" && shift
-			task-notes "${@}" "project:${PROJECT}" "project.not:${PROJECT}."
+			task-notes project:${PROJECT} project.not:${PROJECT}. "${@}"
 		elif [[ ${1} == [-] ]]; then
 			shift
 			task view project.not:_gtd /:/ "${@}" | ${SED} -ne "s/^[^a-z]+([a-z][^:]+)[:].+$/\1/gp" | sort | uniq
@@ -3855,6 +3855,13 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == [i] ]]; then
 			shift
 			task-insert "${@}"
+		elif [[ ${1} == [p] ]]; then
+			shift
+			declare FILE=
+			for FILE in "${@}"; do
+				task read	project:${FILE} project.not:${FILE}.
+				task-depends	project:${FILE} project.not:${FILE}.
+			done
 		elif [[ ${1} == [f] ]]; then
 			shift
 			task-flush \
