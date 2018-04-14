@@ -3386,6 +3386,20 @@ function task-recur {
 		use JSON::XS;
 		use POSIX qw(strftime);
 		use Time::Local qw(timegm timelocal);
+		my $c_fld = {
+			"project"	=> "0",
+			"priority"	=> "0",
+			"tags"		=> "0",
+		};
+		foreach my $field (keys(%{$c_fld})) {
+			foreach my $value (qx(task _unique ${field})) {
+				chomp(${value});
+				my $len = length(${value});
+				if (${len} > $c_fld->{$field}) {
+					$c_fld->{$field} = ${len};
+				};
+			};
+		};
 		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $data = qx(task export ${args}); $data =~ s/\n//g; $data = decode_json(${data});
 		my $list = {};
@@ -3420,19 +3434,19 @@ function task-recur {
 		if (@{$keys}) {
 			# report.dump.labels=ID,B,U,S,D,DESCRIPTION,PROJECT,KIND,AREA,TAGS,A,R,P,+STAT,+BORN,+WAIT,+HOLD,+REAP,+MOVE,+DEAD,+DIED,+UUID,+PUID,+I,+M
 			print "\n";
-			print "| +UUID | +DIED | +STAT | R | DESCRIPTION\n";
-			print "|:---|:---|:---|:---|:---|\n";
+			print "| +UUID | PROJECT | +DIED | +STAT | R | DESCRIPTION\n";
+			print "|:---|:---|:---|:---|:---|:---|\n";
 		};
 		# report.dump.sort=entry+
 		foreach my $key (sort(@{$keys})) {
 			my $item = $list->{$key};
-			printf("%-38.38s %-12.12s %-11.11s %-11.11s %s\n",
-				"| " . $item->{"uuid"},
-				"| " . (&do_time($item->{"end"}) || "-"),
-				"| " . $item->{"status"},
-				"| " . $item->{"recur"},
-				"| " . $item->{"description"},
-			);
+			print "| "; printf("%-8.8s", $item->{"uuid"});
+			print " | "; printf("%-10.10s", &do_time($item->{"end"}) || "-");
+			print " | "; printf("%-9.9s", $item->{"status"});
+			print " | "; printf("%-9.9s", $item->{"recur"});
+			print " | "; printf("%-" . $c_fld->{"project"} . "." . $c_fld->{"project"} . "s", $item->{"project"} || "-");
+			print " | ". $item->{"description"};
+			print "\n";
 			$count->{$item->{"uuid"}}++;
 		};
 		print "\n";
