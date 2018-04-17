@@ -3878,6 +3878,8 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			done
 		elif [[ ${1} == [f] ]]; then
 			shift
+			task status.not:pending priority.any: read
+			task status.not:pending priority.any: modify priority:
 			task-flush \
 				em.tasks.admin \
 				em.tasks.opsmgr \
