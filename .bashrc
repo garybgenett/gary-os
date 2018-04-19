@@ -3635,11 +3635,24 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 #>>>		declare TODOUUID="$(task uuids project:_data -- /.today/)"
 		declare TODOUUID="${NOTES_MD}"
 		# color.active=white on green
-		declare ECHO_CLR="\e[1;4;37;42m"
+		declare ECHO_CLR="\e[1;37;42m"
 		declare ECHO_DFL="\e[0m"
 		function _echo {
+			declare INDENT="1"
+			declare FILLER="-"
+			if [[ ${1} == +([0-9]) ]]; then
+				INDENT="${1}"; shift
+			fi
+			if [[ ${1} == [=]+(*) ]]; then
+				FILLER="${1/#=}"; shift
+			fi
+			declare BEG="$(declare NUM; for NUM in $(eval echo "{1..${INDENT}}");	do echo -en "${FILLER}"; done)"
+			declare END="$(declare NUM; for NUM in {1..120};			do echo -en "${FILLER}"; done)"
 			eval ${MARKER}
-			echo -en "${ECHO_CLR}${@}${ECHO_DFL}\n"
+			echo -en "${ECHO_CLR}"
+			eval printf \"%-120.120s\" \"${BEG} ${@} ${END}\"
+			echo -en "${ECHO_DFL}"
+			echo -en "\n"
 		}
 		function _task {
 			eval ${MARKER}
@@ -3765,7 +3778,8 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			fi
 			(
 				for FILE in "${HEADER[@]}"; do
-					_echo					"\t${FILE}"
+					_echo					"10" "==" "${FILE}"
+					_task					read +ACTIVE
 					eval ${MARKER}; _task_parse_cmd_bash	"${SOURCE}" "${FILE}"
 					eval $(_task_parse_cmd_bash		"${SOURCE}" "${FILE}")
 				done
