@@ -3178,7 +3178,7 @@ function task-depends {
 			};
 		};
 		my $init_deep = "0";
-		if ($ARGV[0] == -1) {
+		if ($ARGV[0] eq "-1") {
 			$init_deep = $ARGV[0];
 			splice(@ARGV, 0, 1);
 		};
