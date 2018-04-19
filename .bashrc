@@ -3177,6 +3177,11 @@ function task-depends {
 				$udas->{$uda} = [ split(",", ${val}) ];
 			};
 		};
+		my $init_deep = "0";
+		if ($ARGV[0] == -1) {
+			$init_deep = $ARGV[0];
+			splice(@ARGV, 0, 1);
+		};
 		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $data = qx(task export);		$data =~ s/\n//g; $data = decode_json(${data});
 		my $show = qx(task export ${args});	$show =~ s/\n//g; $show = decode_json(${show});
@@ -3213,10 +3218,11 @@ function task-depends {
 					($task->{"kind"} eq "notes")
 				)
 			) && (
+				(!${init_deep}) &&
 				(exists($task->{"depends"})) &&
 				($task->{"depends"})
 			)) {
-				&print_task($task->{"uuid"}, 0);
+				&print_task($task->{"uuid"}, ${init_deep});
 			};
 		};
 		sub time_format {
