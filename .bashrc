@@ -54,6 +54,7 @@ export UNAME="$(uname -s)"
 
 export COMPOSER="/.g/_data/zactive/coding/composer/Makefile"
 export NOTES_MD="/.g/_data/zactive/_drive/_notes.md";		export NOTES_MD_ID="1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e"
+export SALES_MD="/.g/_data/zactive/_pim/zoho.today.md";		export SALES_MD_ID="16SwldbmtXWka-aBdKJQsL_EU9yLY-oQU"
 export PIMDIR="/.g/_data/zactive/_pim"
 export MAILDIR="${HOME}/Maildir"
 export MAILCAPS="${HOME}/.mailcap"
@@ -2333,12 +2334,17 @@ function task-export {
 ########################################
 
 function task-export-zoho {
+	declare UPLOAD=
+	if [[ ${1} == "upload" ]]; then
+		UPLOAD="${1}"; shift
+	fi
 	cd ${PIMDIR}
 	cat ${PIMDIR}/.zoho.reports
 	eval zohocrm_events.pl \
 		$(cat ${PIMDIR}/.zoho.reports) \
 		"${@}"
 	declare RETURN="${?}"
+	gdrive_export.pl ${UPLOAD} "${SALES_MD}:${SALES_MD_ID}" || return 1
 	cd - >/dev/null
 	return ${RETURN}
 }
@@ -3806,17 +3812,17 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				declare CHANGED="false"; [[ -n "$(cd "${PIMDIR}" && GIT_PAGER= ${GIT_CMD} diff zoho.md 2>&1)" ]] && CHANGED="true"
 				if ${PLANIT}; then
 					if [[ ! -f ${PIMDIR}/zoho.today.out.md ]]; then
-						${RSYNC_U} ${PIMDIR}/zoho.today.md ${PIMDIR}/zoho.today.out.md
+						${RSYNC_U} ${SALES_MD} ${PIMDIR}/zoho.today.out.md
 					fi
 					cd ${PIMDIR}
 					${EDITOR} \
 						${PIMDIR}/zoho.today.out.md \
 						${PIMDIR}/zoho.today.tmp.md
 					cd - >/dev/null
-					if [[ -n "$(diff ${PIMDIR}/zoho.today.out.md ${PIMDIR}/zoho.today.md)" ]]; then
-						${RSYNC_U} ${PIMDIR}/zoho.today.out.md ${PIMDIR}/zoho.today.md
+					if [[ -n "$(diff ${PIMDIR}/zoho.today.out.md ${SALES_MD})" ]]; then
+						${RSYNC_U} ${PIMDIR}/zoho.today.out.md ${SALES_MD}
 						(
-							task-export-zoho "${@}" &&
+							task-export-zoho upload "${@}" &&
 							${RM} ${PIMDIR}/zoho.today.out.md
 						) || return 1
 						CHANGED="true"
