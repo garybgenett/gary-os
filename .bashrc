@@ -2339,6 +2339,10 @@ function task-export-zoho {
 		UPLOAD="${1}"; shift
 	fi
 	cd ${PIMDIR}
+	gdrive_export.pl ${UPLOAD} "${SALES_MD}:${SALES_MD_ID}" || return 1
+	if [[ ! -f ${PIMDIR}/zoho.today.out.md ]]; then
+		${RSYNC_U} ${SALES_MD} ${PIMDIR}/zoho.today.out.md
+	fi
 	cat ${PIMDIR}/.zoho.reports
 	eval zohocrm_events.pl \
 		$(cat ${PIMDIR}/.zoho.reports) \
@@ -3829,6 +3833,8 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 					else
 						${RM} ${PIMDIR}/zoho.today.out.md
 					fi
+				else
+					${RM} ${PIMDIR}/zoho.today.out.md
 				fi
 				${RM} ${PIMDIR}/zoho.today.tmp.md
 				if ${COMMIT} && zpim-commit zoho && ${CHANGED}; then
