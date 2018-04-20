@@ -54,7 +54,7 @@ export UNAME="$(uname -s)"
 
 export COMPOSER="/.g/_data/zactive/coding/composer/Makefile"
 export NOTES_MD="/.g/_data/zactive/_drive/_notes.md";		export NOTES_MD_ID="1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e"
-export SALES_MD="/.g/_data/zactive/_pim/zoho.today.md";		export SALES_MD_ID="16SwldbmtXWka-aBdKJQsL_EU9yLY-oQU"
+export SALES_MD="/.g/_data/zactive/_pim/zoho.today.md";		export SALES_MD_ID="11rWaP-wb4dZ6v61OgB7f4mpovClfS55-"
 export PIMDIR="/.g/_data/zactive/_pim"
 export MAILDIR="${HOME}/Maildir"
 export MAILCAPS="${HOME}/.mailcap"
