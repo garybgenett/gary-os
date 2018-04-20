@@ -53,7 +53,7 @@ export SCRIPT="$(basename -- "${0}")"
 export UNAME="$(uname -s)"
 
 export COMPOSER="/.g/_data/zactive/coding/composer/Makefile"
-export NOTES_MD="/.g/_data/zactive/_drive/_notes.md"
+export NOTES_MD="/.g/_data/zactive/_drive/_notes.md";		export NOTES_MD_ID="1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e"
 export PIMDIR="/.g/_data/zactive/_pim"
 export MAILDIR="${HOME}/Maildir"
 export MAILCAPS="${HOME}/.mailcap"
@@ -2293,7 +2293,7 @@ function task-export-drive {
 #>>>	sudo chown -vR plastic:plastic drive*
 #>>>	sudo chmod -vR 750 drive*
 	gdrive_export.pl \
-		"${NOTES_MD}:1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e" \
+		"${NOTES_MD}:${NOTES_MD_ID}" \
 		${@} || return 1
 	cd - >/dev/null
 	return 0
