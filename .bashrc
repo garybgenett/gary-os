@@ -3233,6 +3233,10 @@ function task-depends {
 				($task->{"depends"})
 			)) {
 				&print_task($task->{"uuid"}, ${init_deep});
+			}
+			elsif (!${init_deep}) {
+				&print_task($task->{"uuid"}, ${init_deep});
+				$onum->{ $task->{"uuid"} }++;
 			};
 		};
 		sub time_format {
