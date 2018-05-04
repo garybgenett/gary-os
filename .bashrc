@@ -3229,6 +3229,7 @@ function task-depends {
 					($task->{"kind"} eq "notes")
 				)
 			) && (
+				(!${print_all}) &&
 				(exists($task->{"depends"})) &&
 				($task->{"depends"})
 			)) {
