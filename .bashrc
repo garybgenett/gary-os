@@ -3188,8 +3188,9 @@ function task-depends {
 			};
 		};
 		my $init_deep = "0";
-		if ($ARGV[0] eq "-1") {
-			$init_deep = $ARGV[0];
+		my $print_all = "0";
+		if ($ARGV[0] eq "-a") {
+			$print_all = $ARGV[0];
 			splice(@ARGV, 0, 1);
 		};
 		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
@@ -3228,13 +3229,12 @@ function task-depends {
 					($task->{"kind"} eq "notes")
 				)
 			) && (
-				(!${init_deep}) &&
 				(exists($task->{"depends"})) &&
 				($task->{"depends"})
 			)) {
 				&print_task($task->{"uuid"}, ${init_deep});
 			}
-			elsif (!${init_deep}) {
+			elsif (${print_all}) {
 				&print_task($task->{"uuid"}, ${init_deep});
 				$onum->{ $task->{"uuid"} }++;
 			};
