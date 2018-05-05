@@ -2489,6 +2489,7 @@ function task-export-text {
 		print NOTE "% " . ${name} . "\n";
 		print NOTE "% " . localtime() . "\n";
 		my $NOTE = {}; $NOTE->{"other"} = {};
+		my $multi_tag = [];
 		my $proj_dups = {};
 		my $proj = {
 			"dateTimeFormat"	=> "iso8601",
@@ -2617,7 +2618,7 @@ function task-export-text {
 			my $task		= shift();
 			my $main		= shift();
 			if (exists($proj_dups->{$task->{"uuid"}})) {
-				warn("SKIPPING DUPLICATE: " . $task->{"uuid"});
+				warn("SKIPPING DUPLICATE[" . $task->{"uuid"} . " " . $task->{"description"} . "]");
 				return(0);
 			}
 			else {
@@ -2910,6 +2911,9 @@ function task-export-text {
 				print TIME "\"-\"," x 4;
 				print TIME "\n";
 			};
+			if ($#{$task->{"tags"}} > 0) {
+				push(@{$multi_tag}, ${task});
+			};
 		};
 		print PROJ $json->pretty->encode(${proj});
 		print LINE $json->pretty->encode(${line});
@@ -2930,6 +2934,12 @@ function task-export-text {
 		close(PROJ) || die();
 		close(LINE) || die();
 		close(NOTE) || die();
+		foreach my $task (sort({
+			(($a->{"project"}	|| "") cmp ($b->{"project"}	|| "")) ||
+			(($a->{"description"}	|| "") cmp ($b->{"description"}	|| ""))
+		} @{$multi_tag})) {
+			warn("MULTIPLE TAGS[" . $task->{"uuid"} . " " . $task->{"description"} . "](" . join(" ", @{$task->{"tags"}}) . ")");
+		};
 		if (-f "${ENV{COMPOSER}}") {
 			my $compose = "make"
 				. " -f ${ENV{COMPOSER}}"
