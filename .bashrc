@@ -3050,9 +3050,8 @@ function task-notes {
 			};
 			push(@{$uuids}, $task->{"uuid"});
 			if (${printonly}) {
-				print "\n";
 				print "<!-- [ " . $task->{"uuid"} . " :: " . $task->{"description"} . " ] -->";
-				print "\n\n";
+				print "\n";
 				print ${text};
 				print "\n";
 			} else {
@@ -3303,7 +3302,6 @@ function task-depends {
 		};
 		sub print_header {
 			$header = "1";
-			print "\n";
 			&print_task("0", "HEADER");
 			print "" . ("|:---" x 7) . "|\n";
 		};
