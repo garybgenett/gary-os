@@ -3061,36 +3061,35 @@ function task-notes {
 				close(NOTE) || die();
 			};
 		};
-		if (${printonly}) {
-			exit(0);
-		};
-		chdir(${root}) || die();
-		my $filelist = join("${extn} ", @{$uuids}) . ${extn};
-		if (${automatic}) {
-			if (! -f ${filelist}) {
-				die("FILE AND FILELIST!");
+		if (!${printonly}) {
+			chdir(${root}) || die();
+			my $filelist = join("${extn} ", @{$uuids}) . ${extn};
+			if (${automatic}) {
+				if (! -f ${filelist}) {
+					die("FILE AND FILELIST!");
+				};
+				system("rsync -avv ${automatic} ${filelist}");
+			} else {
+				system("${edit} ${filelist}");
 			};
-			system("rsync -avv ${automatic} ${filelist}");
-		} else {
-			system("${edit} ${filelist}");
-		};
-		foreach my $uuid (@{$uuids}) {
-			my $file = ${root} . "/" . ${uuid} . ${extn};
-			my $text;
-			if (-s ${file}) {
-				open(NOTE, "<", ${file}) || die();
-				$text = do { local $/; <NOTE> }; $text =~ s/\n+$//g;
-				close(NOTE) || die();
-				system("task ${uuid} denotate -- \"[notes]:\"");
+			foreach my $uuid (@{$uuids}) {
+				my $file = ${root} . "/" . ${uuid} . ${extn};
+				my $text;
+				if (-s ${file}) {
+					open(NOTE, "<", ${file}) || die();
+					$text = do { local $/; <NOTE> }; $text =~ s/\n+$//g;
+					close(NOTE) || die();
+					system("task ${uuid} denotate -- \"[notes]:\"");
+				};
+				if ((-s ${file}) && (${text} ne ${mark})) {
+					my $input = encode_base64(${text}, "");
+					system("task ${uuid} annotate -- \"[notes]:${input}\"");
+				};
 			};
-			if ((-s ${file}) && (${text} ne ${mark})) {
-				my $input = encode_base64(${text}, "");
-				system("task ${uuid} annotate -- \"[notes]:${input}\"");
+			chdir(${root}) || die();
+			foreach my $file (@{$uuids}) {
+				unlink(${file} . ${extn}) || warn();
 			};
-		};
-		chdir(${root}) || die();
-		foreach my $file (@{$uuids}) {
-			unlink(${file} . ${extn}) || warn();
 		};
 	' -- "${@}" || return 1
 	return 0
