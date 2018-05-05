@@ -3000,9 +3000,14 @@ function task-notes {
 		use warnings;
 		use JSON::XS;
 		use MIME::Base64;
-		my $automatic;
+		my $automatic = "0";
+		my $printonly = "0";
 		if (-f $ARGV[0]) {
 			$automatic = $ARGV[0];
+			shift();
+		}
+		elsif ($ARGV[0] eq "-x") {
+			$printonly = $ARGV[0];
 			shift();
 		};
 		my $extn = ".md";
@@ -3041,9 +3046,17 @@ function task-notes {
 				};
 			};
 			push(@{$uuids}, $task->{"uuid"});
-			open(NOTE, ">", ${file}) || die();
-			print NOTE ${text};
-			close(NOTE) || die();
+			if (${printonly}) {
+				print "<!-- [ " . $task->{"uuid"} . " :: " . $task->{"description"} . " ] -->\n";
+				print ${text} . "\n";
+			} else {
+				open(NOTE, ">", ${file}) || die();
+				print NOTE ${text};
+				close(NOTE) || die();
+			};
+		};
+		if (${printonly}) {
+			exit(0);
 		};
 		chdir(${root}) || die();
 		my $filelist = join("${extn} ", @{$uuids}) . ${extn};
@@ -3191,7 +3204,7 @@ function task-depends {
 		my $print_all = "0";
 		if ($ARGV[0] eq "-a") {
 			$print_all = $ARGV[0];
-			splice(@ARGV, 0, 1);
+			shift();
 		};
 		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $data = qx(task export);		$data =~ s/\n//g; $data = decode_json(${data});
