@@ -3966,6 +3966,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				shift
 				task view \
 					${OPTS} \
+					project.not:em.opsmgr \
 					project.not:em.tasks.opsmgr \
 					project.not:em.tasks.track \
 					area.not:computer \
