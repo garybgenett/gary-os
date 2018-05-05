@@ -3690,7 +3690,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		function _task {
 			eval ${MARKER}
 			echo -en "[task ${@}]\n"
-			task rc._forcecolor=1 ${@} 2>&1
+			task rc._forcecolor=1 "${@}" 2>&1
 		}
 		function _task_parse {
 			declare TWUUID="${1}"; shift
