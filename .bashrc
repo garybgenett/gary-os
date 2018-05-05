@@ -3002,11 +3002,11 @@ function task-notes {
 		use MIME::Base64;
 		my $automatic = "0";
 		my $printonly = "0";
-		if (-f $ARGV[0]) {
+		if (($ARGV[0]) && (-f $ARGV[0])) {
 			$automatic = $ARGV[0];
 			shift();
 		}
-		elsif ($ARGV[0] eq "-x") {
+		elsif (($ARGV[0]) && ($ARGV[0] eq "-x")) {
 			$printonly = $ARGV[0];
 			shift();
 		};
@@ -3207,7 +3207,7 @@ function task-depends {
 		};
 		my $init_deep = "0";
 		my $print_all = "0";
-		if ($ARGV[0] eq "-a") {
+		if (($ARGV[0]) && ($ARGV[0] eq "-a")) {
 			$print_all = $ARGV[0];
 			shift();
 		};
@@ -3551,7 +3551,7 @@ function task-copy {
 			@{ $links } = split(/,/, ${list});
 		};
 		if ((!$ARGV[0]) && (!$ARGV[1])) {
-			exit 0
+			exit(0);
 		};
 		my $orig = shift();
 		chomp($orig = qx(task uuids ${orig}));
