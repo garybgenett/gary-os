@@ -3019,7 +3019,10 @@ function task-notes {
 		if (!@{$data}) {
 			die("NO MATCHES!");
 		}
-		elsif ($#{$data} >= 1) {
+		elsif (
+			(!${printonly}) &&
+			($#{$data} >= 1)
+		) {
 			use Data::Dumper;
 			print Dumper(${data});
 			die("TOO MANY MATCHES!");
@@ -3047,8 +3050,11 @@ function task-notes {
 			};
 			push(@{$uuids}, $task->{"uuid"});
 			if (${printonly}) {
-				print "<!-- [ " . $task->{"uuid"} . " :: " . $task->{"description"} . " ] -->\n";
-				print ${text} . "\n";
+				print "\n";
+				print "<!-- [ " . $task->{"uuid"} . " :: " . $task->{"description"} . " ] -->";
+				print "\n\n";
+				print ${text};
+				print "\n";
 			} else {
 				open(NOTE, ">", ${file}) || die();
 				print NOTE ${text};
