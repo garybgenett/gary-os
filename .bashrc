@@ -2758,7 +2758,7 @@ function task-export-text {
 				while (${output} =~ m/^\[TASKLIST[ ]?([^\n]*)?\]$/gms) {
 					my $project = ${1} || $task->{"project"};
 					warn("EXPORTING TASKLIST[${project}]");
-					my $tasklist = qx(.bashrc task-depends project:${project} project.not:${project}.);
+					my $tasklist = qx(.bashrc task-depends project.is:${project});
 					$tasklist =~ s/^\n*/<!-- TASKLIST[${project}] -->\n/g;
 					$tasklist =~ s/\n*$//g;
 					$output =~ s/^\[TASKLIST[ ]?([^\n]*)?\]$/${tasklist}/ms;
@@ -3604,8 +3604,8 @@ function task-copy {
 ########################################
 
 function task-move {
-	declare PSRC="${1}"; declare PSID="$(task uuids kind:notes project:${1} project.not:${1}.)"; shift
-	declare PDST="${1}"; declare PDID="$(task uuids kind:notes project:${1} project.not:${1}.)"; shift
+	declare PSRC="${1}"; declare PSID="$(task uuids kind:notes project.is:${1})"; shift
+	declare PDST="${1}"; declare PDID="$(task uuids kind:notes project.is:${1})"; shift
 	declare FILE=
 	if [[ -n ${PSID} ]] && [[ -n ${PDID} ]]; then
 		for FILE in $(task uuids "${@}"); do
@@ -3646,8 +3646,7 @@ function task-flush {
 	declare FILE=
 	for FILE in "${@}"; do
 		declare UUIDS="$(task uuids \
-			project:${FILE} \
-			project.not:${FILE}. \
+			project.is:${FILE} \
 			'(status:completed or status:deleted)' \
 			kind.none: \
 		)"
@@ -3874,7 +3873,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 #>>>					impersonate_command =
 				fi
 			fi
-			eval task-export-text \"Test Work Report\" $(${SED} -n "s/^(.+area[:]work.+)[ ][\\]$/\1/gp" ${HOME}/scripts/_sync)
+			eval task-export-text \"Test Work Report\" $(${SED} -n "s/^(.+area[.]is[:]work.+)[ ][\\]$/\1/gp" ${HOME}/scripts/_sync)
 			declare HEADER_LINKS
 			HEADER_LINKS="${HEADER_LINKS}<ul>"
 			HEADER_LINKS="${HEADER_LINKS}<li><a href=\\\"zoho.md.html\\\">[Zoho Report: HTML]</a></li>"
@@ -3914,11 +3913,11 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == [~] ]]; then
 			shift
 			declare PROJECT="${1}" && shift
-			task-notes project:${PROJECT} project.not:${PROJECT}. "${@}"
+			task-notes project.is:${PROJECT} "${@}"
 		elif [[ ${1} == [-] ]]; then
 			shift
-			task view project.not:_gtd /:/ "${@}" | ${SED} -ne "s/^[^a-z]+([a-z][^:]+)[:].+$/\1/gp" | sort | uniq
-			task view project.not:_gtd /:/ "${@}"
+			task view project.isnt:_gtd /:/ "${@}" | ${SED} -ne "s/^[^a-z]+([a-z][^:]+)[:].+$/\1/gp" | sort | uniq
+			task view project.isnt:_gtd /:/ "${@}"
 		elif [[ ${1} == [/] ]]; then
 			shift
 			task-switch "${@}"
@@ -3938,14 +3937,14 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			shift
 			declare FILE=
 			for FILE in "${@}"; do
-				task read	project:${FILE} project.not:${FILE}.
-				task-depends	project:${FILE} project.not:${FILE}.
-				task view	project:${FILE} project.not:${FILE}.
+				task read	project.is:${FILE}
+				task-depends	project.is:${FILE}
+				task view	project.is:${FILE} 
 			done
 		elif [[ ${1} == [f] ]]; then
 			shift
-			task status.not:pending priority.any: read
-			task status.not:pending priority.any: modify priority:
+			task status.isnt:pending priority.any: read
+			task status.isnt:pending priority.any: modify priority:
 			task-flush \
 				em.tasks.admin \
 				em.tasks.opsmgr \
@@ -3976,12 +3975,12 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				shift
 				task view \
 					${OPTS} \
-					project.not:em.opsmgr \
-					project.not:em.tasks.opsmgr \
-					project.not:em.tasks.track \
-					area.not:computer \
-					area.not:writing \
-					tag.not:.waiting \
+					project.isnt:em.opsmgr \
+					project.isnt:em.tasks.opsmgr \
+					project.isnt:em.tasks.track \
+					area.isnt:computer \
+					area.isnt:writing \
+					tag.isnt:.waiting \
 					"${@}" 2>/dev/null
 			else
 				task todo \
