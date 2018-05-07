@@ -3939,7 +3939,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			for FILE in "${@}"; do
 				task read	project.is:${FILE}
 				task-depends	project.is:${FILE}
-				task view	project.is:${FILE} 
+				task view	project.is:${FILE}
 			done
 		elif [[ ${1} == [f] ]]; then
 			shift
