@@ -2306,12 +2306,13 @@ function task-export {
 	declare FILE=
 	cd ${PIMDIR}
 #>>>
-	gtasks_export.pl purge "" "+GTD"
+	gtasks_export.pl purge "+Alerts" "+GTD"
+	gtasks_export.pl twexport "+Alerts"		"mind"	"project.isnt:_gtd"
 	return 0
 #>>>
-#>>>	gtasks_export.pl purge "-Todo,@agenda,@errand" "+GTD,+Inbox"
-	gtasks_export.pl purge "+GTD,+Inbox,-Todo,@agenda,@errand"
 #>>>	gtasks_export.pl twimport "+Inbox"
+#>>>	gtasks_export.pl purge "+Inbox,-Todo,@agenda,@errand" "+GTD"
+	gtasks_export.pl purge "+GTD,+Inbox,-Todo,@agenda,@errand"
 	gtasks_export.pl twexport "+Notes"		"read"	"kind:notes"
 	gtasks_export.pl twexport "-Data"		"data"
 	gtasks_export.pl twexport "-Fail"		"fail"
