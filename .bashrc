@@ -3721,7 +3721,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 					-e "s/^[^\`]*[\`]//g" \
 					-e "s/[\`][^\`]*$//g" \
 					-e "s/[\`][,][ ][\`]/\n/g" \
-					-e "s/([&'"])/\\\\\1/g"
+					-e "s/(['&])/\\\\\1/g"
 		}
 		function _task_parse_cmd_bash {
 			_task_parse_cmd "${@}" |
