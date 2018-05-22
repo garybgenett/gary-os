@@ -1021,10 +1021,11 @@ function git-backup {
 ########################################
 
 function git-check {
-	declare FILE="${1}" && shift
 	declare NEW=".${FUNCNAME}-new"
 	declare OLD=".${FUNCNAME}-old"
+	declare LST=
 	function git-check-out {
+		declare FILE="${1}" && shift
 		touch --reference ${FILE} ${FILE}${NEW}		|| return 1
 		${GIT} checkout ${FILE}				|| return 1
 		chown --reference ${FILE}${NEW} ${FILE}		|| return 1
@@ -1033,18 +1034,21 @@ function git-check {
 		return 0
 	}
 	function git-check-new {
+		declare FILE="${1}" && shift
 		if [[ -n $(diff ${FILE} ${FILE}${NEW} 2>/dev/null) ]]; then
 			vdiff ${FILE} ${FILE}${NEW}		|| return 1
 		fi
 		return 0
 	}
 	function git-check-old {
+		declare FILE="${1}" && shift
 		if [[ -z $(diff ${FILE} ${FILE}${OLD} 2>/dev/null) ]]; then
 			return 1
 		fi
 		return 0
 	}
 	function git-check-end {
+		declare FILE="${1}" && shift
 		if {
 			[[ -f ${FILE}${NEW} ]] &&
 			[[ -z $(diff ${FILE} ${FILE}${NEW} 2>/dev/null) ]];
@@ -1058,18 +1062,30 @@ function git-check {
 		${GIT_STS}					|| return 1
 		return 0
 	}
-	if [[ ! -f ${FILE}${NEW} ]]; then
-		${CP} ${FILE} ${FILE}${NEW}			|| return 1
-		${FUNCNAME}-out					|| return 1
-		${FUNCNAME}-new					|| return 1
-	fi
-	${VI} ${FILE} ${FILE}${NEW}				|| return 1
-	if ${FUNCNAME}-old; then
-		${FUNCNAME}-new					|| return 1
-		${GIT_CMT} ${FILE}				|| { ${FUNCNAME}-end; return 1; };
-		${FUNCNAME}-out					|| return 1
-	fi
-	${FUNCNAME}-end						|| return 1
+	for FILE in "${@}"; do
+		LST="${LST} ${FILE} ${FILE}${NEW}"
+		if [[ ! -f ${FILE}${NEW} ]]; then
+			${CP} ${FILE} ${FILE}${NEW}		|| return 1
+			${FUNCNAME}-out ${FILE}			|| return 1
+			${FUNCNAME}-new ${FILE}			|| return 1
+		fi
+	done
+	${VI} ${LST}						|| return 1
+	for FILE in "${@}"; do
+		if ${FUNCNAME}-old ${FILE}; then
+			${FUNCNAME}-new ${FILE}			|| return 1
+		fi
+	done
+	${GIT_CMT} "${@}"					|| {
+		for FILE in "${@}"; do
+			${FUNCNAME}-end ${FILE}
+		done
+		return 1
+	}
+	for FILE in "${@}"; do
+		${FUNCNAME}-out ${FILE}				|| return 1
+		${FUNCNAME}-end ${FILE}				|| return 1
+	done
 	return 0
 }
 
