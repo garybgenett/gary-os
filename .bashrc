@@ -53,11 +53,13 @@ export SCRIPT="$(basename -- "${0}")"
 export UNAME="$(uname -s)"
 
 export COMPOSER="/.g/_data/zactive/coding/composer/Makefile"
-export NOTES_MD="/.g/_data/zactive/_drive/_notes.md";		export NOTES_MD_ID="1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e"
-export SALES_MD="/.g/_data/zactive/_pim/zoho.today.md";		export SALES_MD_ID="1wQrnTw0I5pDfzlqeuKdBNCNvFH9Ifulz"
 export PIMDIR="/.g/_data/zactive/_pim"
 export MAILDIR="${HOME}/Maildir"
 export MAILCAPS="${HOME}/.mailcap"
+
+export GDRIVE_REMOTE="gdrive"
+export NOTES_MD="/.g/_data/zactive/_drive/_notes.md";		export NOTES_MD_ID="1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e"
+export SALES_MD="/.g/_data/zactive/_pim/zoho.today.md";		export SALES_MD_ID="1wQrnTw0I5pDfzlqeuKdBNCNvFH9Ifulz"
 
 export ACRO_ALLOW_SUDO="set"
 
@@ -385,6 +387,20 @@ export RSYNC_W="${RSYNC_W} \
 	--modify-window=10"
 
 alias rsync="${RSYNC_U}"
+
+########################################
+
+export RCLONE_C="reporter rclone"
+export RCLONE_U="${RCLONE_C} sync \
+	-vv \
+	--one-file-system \
+	--stats=0 \
+	--stats-file-name-length=0 \
+	--delete-during \
+	--track-renames \
+	--copy-links"
+
+alias rclone="${RCLONE_U}"
 
 ########################################
 
@@ -2300,6 +2316,23 @@ function task-export-drive {
 		"${SALES_MD}:${SALES_MD_ID}" \
 		${@} || return 1
 	cd - >/dev/null
+	return 0
+}
+
+########################################
+
+function task-export-drive-sync {
+	${RCLONE_U} \
+		--filter="- /_sync/" \
+		${GDRIVE_REMOTE}:/ \
+		/.g/_data/zactive/_drive
+	${RCLONE_U} \
+		--delete-excluded \
+		--filter="- /_pim/taskd/orgs/local/users/*/tx.data" \
+		--filter="- /_pim/tasks/undo.*" \
+		/.g/_data/zactive/_drive/_sync/ \
+		${GDRIVE_REMOTE}:/_sync
+	${RCLONE_C} about ${GDRIVE_REMOTE}:
 	return 0
 }
 
