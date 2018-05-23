@@ -1848,9 +1848,10 @@ function prompt {
 		return ${?}
 	fi
 	if [[ ${1} == -d ]]; then
+		export DISPLAY=
 		if [[ ${2} == [0-9] ]]; then
 			export DISPLAY=":${2}"
-		else
+		elif [[ ${2} == -x ]]; then
 			export DISPLAY=":0"
 		fi
 		if [[ ${2} == -x ]] || [[ ${3} == -x ]]; then
