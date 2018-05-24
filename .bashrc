@@ -465,7 +465,7 @@ if [[ "${UNAME}" == "Darwin" ]]; then
 	alias s="open"
 	alias x="cd / ; clear"
 #>>>	alias zdesk="cd \"/Users/plastic/Desktop\" ; clear ; ${LL}"
-	alias zdesk="cd \"/Users/plastic/Google Drive\" ; clear ; ${LL}"
+	alias zdesk="cd \"/Volumes/GoogleDrive/My\ Drive\" ; clear ; ${LL}"
 fi
 
 ########################################
