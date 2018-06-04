@@ -150,13 +150,14 @@ declare PROMPT_TOKEN_PWD="\w"
 if [[ ${HOSTNAME} == spider ]]; then
 	PROMPT_TOKEN_CLR="\[\e[7;32m\]"
 	PROMPT_SCR_COLOR="g"
+elif [[ ${HOSTNAME} == shadow ]] ||
+     [[ ${HOSTNAME} == bastion ]]; then
+	PROMPT_TOKEN_CLR="\[\e[7;33m\]"
+	PROMPT_SCR_COLOR="y"
 elif [[ ${HOSTNAME} == tarantula ]] ||
      [[ ${HOSTNAME} == phantom ]]; then
 	PROMPT_TOKEN_CLR="\[\e[7;36m\]"
 	PROMPT_SCR_COLOR="c"
-elif [[ ${HOSTNAME} == bastion ]]; then
-	PROMPT_TOKEN_CLR="\[\e[7;33m\]"
-	PROMPT_SCR_COLOR="y"
 elif [[ ${HOSTNAME} == Arachnid ]]; then
 	PROMPT_TOKEN_CLR="\[\e[7;35m\]"
 	PROMPT_SCR_COLOR="m"
@@ -2016,7 +2017,8 @@ function shell {
 			fi
 			;;
 		(you)	DEST="vpn-client.vpn.example.net"
-			if [[ ${HOSTNAME} != bastion ]]; then
+			if [[ ${HOSTNAME} != shadow ]] &&
+			   [[ ${HOSTNAME} != bastion ]]; then
 				[[ -z $(${PS} 2>/dev/null | ${GREP} "5909[:]") ]] && OPTS="${OPTS} -L 5909:127.0.0.1:5900"
 			fi
 			;;
@@ -2027,10 +2029,10 @@ function shell {
 			LOG="plastic"
 			OPTS="${OPTS} -t \"/_ports/bin/screen -xAR\""
 			;;
-		([0-3])	DEST="localhost -p6553${DEST}"
-			LOG="plastic"
+		(0)	DEST="localhost -p6553${DEST}"
+			LOG="root"
 			;;
-		(4)	DEST="localhost -p6553${DEST}"
+		([1-4])	DEST="localhost -p6553${DEST}"
 			;;
 		(5)	DEST="localhost -p6553${DEST}"
 			OPTS="${OPTS} -o \"BatchMode yes\""
