@@ -580,7 +580,7 @@ function format {
 		mkisofs -iso-level 4 -o "${@}"
 	elif [[ ${1} == -d ]]; then
 		shift
-		mkdosfs -vF 32 "${@}"
+		mkfs.vfat -vF 32 "${@}"
 	elif [[ ${1} == -n ]]; then
 		shift
 		mkntfs -vI "${@}"
