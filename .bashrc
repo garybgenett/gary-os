@@ -2250,8 +2250,100 @@ function zpim-commit {
 }
 
 ################################################################################
-# impersonate functions
+# builds
 ################################################################################
+
+# https://github.com/openrazer/openrazer/wiki/Troubleshooting
+# https://github.com/openrazer/openrazer/wiki/Setting-up-the-keyboard-driver
+# https://github.com/openrazer/openrazer/wiki/Using-the-keyboard-driver
+# https://github.com/openrazer/openrazer/wiki/Using-the-mouse-driver
+function chroma {
+	declare BRIGHT="128"
+	declare COLOR="\x40\x00\x00"
+	declare STEP=; if [[ -n ${1} ]]; then STEP="${1}"; shift; fi
+	declare MODE=; if [[ -n ${1} ]]; then MODE="${1}"; shift; fi
+	declare DRIVER_DIR="/sys/bus/hid/drivers"
+	declare RAZER_KB="1532:0232"
+	declare RAZER_MS="1532:005C"
+	RAZER_KB="$(basename $(ls -d ${DRIVER_DIR}/{hid,razer}*/*:${RAZER_KB}.* 2>/dev/null | tail -n1))"
+	RAZER_MS="$(basename $(ls -d ${DRIVER_DIR}/{hid,razer}*/*:${RAZER_MS}.* 2>/dev/null | head -n1))"
+	echo -en "${RAZER_KB}\n"
+	echo -en "${RAZER_MS}\n"
+	if [[ ${STEP} == "bld" ]]; then
+		cd /.g/_data/_build/razer/python-daemonize			&&
+			python setup.py build					&&
+			python setup.py install					&&
+		cd /.g/_data/_build/razer/openrazer				&&
+			${RM} /usr/share/man/man*/openrazer-daemon*		&&
+			${RM} /usr/share/man/man*/razer.conf*			&&
+			${SED} -i "s|/usr/lib/udev|/lib/udev|g" ./Makefile	&&
+			prompt -z make						&&
+			prompt -z make driver_install				&&
+			prompt -z make setup_dkms				&&
+			prompt -z make udev_install				&&
+			prompt -z make daemon_install				&&
+			prompt -z make python_library_install			&&
+		cd /.g/_data/_build/razer/polychromatic				&&
+			prompt -z make LESSC="lesscpy" install			&&
+		echo -en "\n[${FUNCNAME}: ${STEP}]\n"
+		return 0
+	fi
+	if [[ ${STEP} == "set" ]]; then
+		gpasswd --add root plugdev					&&
+			modprobe razerkbd					&&
+			modprobe razermouse					&&
+			/lib/udev/razer_mount razerkbd ${RAZER_KB}		&&
+			/lib/udev/razer_mount razermouse ${RAZER_MS}		&&
+			${LL} ${DRIVER_DIR}/{hid,razer}*			&&
+		echo -en "\n[${FUNCNAME}: ${STEP} ${MODE}]\n"
+		echo -en "\n"
+		cat								${DRIVER_DIR}/razerkbd/${RAZER_KB}/device_type
+		cat								${DRIVER_DIR}/razerkbd/${RAZER_KB}/firmware_version
+			echo -en "\x03\x00"					>${DRIVER_DIR}/razerkbd/${RAZER_KB}/device_mode
+			echo -en "0"						>${DRIVER_DIR}/razerkbd/${RAZER_KB}/fn_toggle
+			echo -en "0"						>${DRIVER_DIR}/razerkbd/${RAZER_KB}/logo_led_state
+			echo -en "${BRIGHT}"					>${DRIVER_DIR}/razerkbd/${RAZER_KB}/matrix_brightness
+			[[ ${MODE} == "off"	]] && echo -en "1"		>${DRIVER_DIR}/razerkbd/${RAZER_KB}/matrix_effect_none
+			[[ ${MODE} == "wave"	]] && echo -en "1"		>${DRIVER_DIR}/razerkbd/${RAZER_KB}/matrix_effect_wave
+			[[ ${MODE} == "spect"	]] && echo -en "1"		>${DRIVER_DIR}/razerkbd/${RAZER_KB}/matrix_effect_spectrum
+			[[ ${MODE} == "react"	]] && echo -en "\x03${COLOR}"	>${DRIVER_DIR}/razerkbd/${RAZER_KB}/matrix_effect_reactive
+			[[ -z ${MODE}		]] && echo -en "${COLOR}"	>${DRIVER_DIR}/razerkbd/${RAZER_KB}/matrix_effect_static
+		cat								${DRIVER_DIR}/razermouse/${RAZER_MS}/device_type
+		cat								${DRIVER_DIR}/razermouse/${RAZER_MS}/firmware_version
+			echo -en "\x03\x00"					>${DRIVER_DIR}/razermouse/${RAZER_MS}/device_mode
+			echo -en "${BRIGHT}"					>${DRIVER_DIR}/razermouse/${RAZER_MS}/logo_led_brightness
+			[[ ${MODE} == "off"	]] && echo -en "1"		>${DRIVER_DIR}/razermouse/${RAZER_MS}/logo_matrix_effect_none
+			[[ ${MODE} == "wave"	]] && echo -en "1"		>${DRIVER_DIR}/razermouse/${RAZER_MS}/logo_matrix_effect_spectrum
+			[[ ${MODE} == "spect"	]] && echo -en "1"		>${DRIVER_DIR}/razermouse/${RAZER_MS}/logo_matrix_effect_spectrum
+			[[ ${MODE} == "react"	]] && echo -en "\x03${COLOR}"	>${DRIVER_DIR}/razermouse/${RAZER_MS}/logo_matrix_effect_reactive
+			[[ -z ${MODE}		]] && echo -en "\x03${COLOR}"	>${DRIVER_DIR}/razermouse/${RAZER_MS}/logo_matrix_effect_reactive
+			echo -en "${BRIGHT}"					>${DRIVER_DIR}/razermouse/${RAZER_MS}/scroll_led_brightness
+			[[ ${MODE} == "off"	]] && echo -en "1"		>${DRIVER_DIR}/razermouse/${RAZER_MS}/scroll_matrix_effect_none
+			[[ ${MODE} == "wave"	]] && echo -en "1"		>${DRIVER_DIR}/razermouse/${RAZER_MS}/scroll_matrix_effect_spectrum
+			[[ ${MODE} == "spect"	]] && echo -en "1"		>${DRIVER_DIR}/razermouse/${RAZER_MS}/scroll_matrix_effect_spectrum
+			[[ ${MODE} == "react"	]] && echo -en "\x03${COLOR}"	>${DRIVER_DIR}/razermouse/${RAZER_MS}/scroll_matrix_effect_reactive
+			[[ -z ${MODE}		]] && echo -en "${COLOR}"	>${DRIVER_DIR}/razermouse/${RAZER_MS}/scroll_matrix_effect_static
+		return 0
+	fi
+	if [[ ${STEP} == "dmn" ]]; then
+		${FUNCNAME} set
+		cd /.runit/runsvdir/current					&&
+			${RM} ./dbus						&&
+			${LN} ../../services/dbus ./				&&
+		prompt -d -x							&&
+		openrazer-daemon --verbose --foreground --respawn --as-root	&&
+		return 0
+	fi
+	if [[ ${STEP} == "ctl" ]]; then
+		prompt -d -x							&&
+		polychromatic-controller --verbose --debug --print-device-info	&&
+		polychromatic-controller --verbose --debug			&&
+		return 0
+	fi
+	return 0
+}
+
+########################################
 
 function task-build {
 	declare PROG="task"
@@ -2291,7 +2383,9 @@ function task-build {
 	return 0
 }
 
-########################################
+################################################################################
+# impersonate functions
+################################################################################
 
 function task-export-calendar {
 	cd ${PIMDIR}
