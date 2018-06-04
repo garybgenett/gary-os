@@ -25,6 +25,7 @@ Networking support								CONFIG_NET=y
 				IPv6 masquerade support				CONFIG_IP6_NF_TARGET_MASQUERADE=m
 
 Device Drivers
+	NVM Express block device						CONFIG_BLK_DEV_NVME=y
 	SCSI device support
 		SCSI device support						CONFIG_SCSI=y
 		SCSI disk support						CONFIG_BLK_DEV_SD=y
@@ -56,6 +57,8 @@ Device Drivers
 		Serial drivers
 			8250/16550 and compatible serial support		CONFIG_SERIAL_8250=y
 			Console on 8250/16550 and compatible serial port	CONFIG_SERIAL_8250_CONSOLE=y
+	Graphics support
+		Bootup logo							CONFIG_LOGO=n
 	HID support
 		HID bus support							CONFIG_HID=y
 		Generic HID driver						CONFIG_HID_GENERIC=y
