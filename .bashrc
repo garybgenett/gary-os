@@ -473,8 +473,9 @@ fi
 
 alias rsynclook="${GREP} -v '^[.<>][fdDLS][ ]'"
 
-alias logtail="tail -f /.runit/log/syslogd"
-alias synctail="${GREP} '^ERROR[:][ ]' /.g/_data/+sync/_sync.log ; echo ; tail -f /.g/_data/+sync/_sync.log"
+alias dmesgtail="dmesg --kernel --human --decode --ctime --follow"
+alias logtail="tail --follow /.runit/log/syslogd"
+alias synctail="${GREP} '^ERROR[:][ ]' /.g/_data/+sync/_sync.log ; echo ; tail --follow /.g/_data/+sync/_sync.log"
 
 ########################################
 
@@ -2209,7 +2210,7 @@ function vpn {
 		iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 		echo "1" >/proc/sys/net/ipv4/ip_forward
 		/etc/init.d/openvpn restart
-		tail -f /var/log/syslog
+		tail --follow /var/log/syslog
 	fi
 	return 0
 }
