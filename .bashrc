@@ -695,7 +695,10 @@ function pages {
 ########################################
 
 function psg {
-	$(which ps) u -ww -p $(pgrep -d, -f "${@}" | ${SED} "s/[,]$//g")
+	declare PSLIST="$(pgrep -d, -f "${@}" | ${SED} "s/[,]$//g")"
+	if [[ -n "${PSLIST}" ]]; then
+		$(which ps) u -ww -p ${PSLIST}
+	fi
 }
 
 ########################################
