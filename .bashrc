@@ -705,7 +705,12 @@ function psg {
 
 function psk {
 	declare PSNAME="${1}" && shift
-	kill "${@}" $(pgrep -f "${PSNAME}")
+	declare PSLIST="$(pgrep -f "${PSNAME}")"
+	psg ${PSNAME}
+	if [[ -n "${PSLIST}" ]]; then
+		kill "${@}" ${PSLIST}
+	fi
+	psg ${PSNAME}
 }
 
 ########################################
