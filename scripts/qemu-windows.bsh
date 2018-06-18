@@ -65,6 +65,7 @@ fi
 
 ########################################
 
+# ID 03f0:5a2a Hewlett-Packard [Printer/Scanner]
 # ID 03f0:4605 Hewlett-Packard ScanJet G4050
 # ID 043d:00cc Lexmark International, Inc. E120(n)
 # ID 0d8c:0139 C-Media Electronics, Inc.
@@ -75,6 +76,7 @@ fi
 
 exec qemu.bsh "${QNUM}" "${QMEM}" "${FILE}" "${QSYS}" \
 	-rtc base=localtime,clock=host \
+	-device usb-host,bus=xhci0.0,vendorid=0x03f0,productid=0x5a2a \
 	-device usb-host,bus=xhci0.0,vendorid=0x03f0,productid=0x4605 \
 	-device usb-host,bus=xhci0.0,vendorid=0x043d,productid=0x00cc \
 	-device usb-host,bus=xhci0.0,vendorid=0x0d8c,productid=0x0139 \
