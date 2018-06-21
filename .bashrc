@@ -511,6 +511,7 @@ alias vlc-help="vlc-c --help --full-help --longhelp --advanced 2>&1 | ${MORE}"
 alias vlc-play="vlc-c ${HOME}/setup/_misc/playlist.m3u"
 alias web="w3m https://www.google.com"
 alias workspace="_sync workspace"
+alias wpa="ip-setup wpa"
 if [[ "${UNAME}" == "Darwin" ]]; then
 	alias trust="/_install/_mac_osx.txt -r ; /_install/_mac_osx.txt -x ; /_install/_mac_osx.txt -s"
 	alias workspace="/_install/_mac_osx.txt -w"
