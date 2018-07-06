@@ -337,7 +337,7 @@ export X2VNC="x2vnc -west -tunnel -shared -noblank -lockdelay 60 -timeout 60"	; 
 
 ########################################
 
-export UNISON="${HOME}/.unison"
+export UNISON="/.g/_data/+unison"
 export UNISON_LOG="_log"
 
 export UNISON_W="reporter unison \
