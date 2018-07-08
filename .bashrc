@@ -482,7 +482,6 @@ alias synctail="${GREP} '^ERROR[:][ ]' /.g/_data/+sync/_sync.log ; echo ; tail -
 alias cal="cal --monday --three"
 alias clean="_sync clean"
 alias clock="clockywock"
-alias cryptsetup="cryptsetup --hash sha256 --cipher aes-cbc-essiv:sha256 --key-size 256"
 alias dd="dcfldd conv=noerror,notrunc"
 alias dict="sdcv"
 alias diskio="iostat -cdmtN -p sda,sdb,sdc,sdd 1"
@@ -587,6 +586,9 @@ function format {
 	elif [[ ${1} == -n ]]; then
 		shift
 		mkntfs -vI "${@}"
+	elif [[ ${1} == -l ]]; then
+		shift
+		cryptsetup --hash sha256 --cipher aes-cbc-essiv:sha256 --key-size 256 luksFormat "${@}"
 	else
 		mke2fs -t ext4 -jvm 0 "${@}"
 	fi
@@ -1696,8 +1698,13 @@ function maildirmake {
 
 function mount-robust {
 	declare RO=
+	declare UN="false"
 	if [[ ${1} == -0 ]]; then
 		RO="ro,"
+		shift
+	fi
+	if [[ ${1} == -u ]]; then
+		UN="true"
 		shift
 	fi
 	declare CHK_EXT="fsck -t ext4		-V -pC"
@@ -1707,9 +1714,24 @@ function mount-robust {
 	declare MNT_NTF="mount -v -t ntfs-3g	-o ${RO}relatime,errors=remount-ro,shortname=mixed"
 	declare MNT_FAT="mount -v -t vfat	-o ${RO}relatime,errors=remount-ro,shortname=mixed"
 	declare MNT_BND="mount -v --bind"
+	declare UNMOUNT="umount -drv"
 	declare DEV="${1}"
 	declare DIR="${2}"
+	declare LUK="/dev/mapper/$(basename ${DEV})_crypt"
 	declare PNT="$(df ${DEV} 2>&1 | ${GREP} "^${DEV}" | ${SED} "s/^.+[[:space:]]//g")"
+	if ${UN}; then
+		if cryptsetup isLuks ${DEV}; then
+			DEV="${LUK}"
+		fi
+		${UNMOUNT} ${DEV}
+		if [[ -n "$(df ${DEV} 2>/dev/null | ${GREP} "${DEV}")" ]]; then
+			return 1
+		fi
+		if [[ -b ${LUK} ]]; then
+			cryptsetup luksClose ${LUK} || return 1
+		fi
+		return 0
+	fi
 	if [[ -n ${PNT} ]]; then
 		if [[ ${PNT} == "/" ]]; then
 			echo "Root Filesystem: ${DEV}"
@@ -1721,6 +1743,13 @@ function mount-robust {
 		fi
 		${MNT_BND}	${PNT}	${DIR}	|| return 1
 	else
+		if cryptsetup isLuks ${DEV}; then
+			if [[ ! -b ${LUK} ]]; then
+				cryptsetup luksOpen ${DEV} $(basename ${LUK}) || return 1
+				cryptsetup luksDump ${DEV}
+			fi
+			DEV="${LUK}"
+		fi
 		${CHK_EXT}	${DEV}		||
 		${CHK_NTF}	${DEV}		||
 		${CHK_FAT}	${DEV}		|| return 1
