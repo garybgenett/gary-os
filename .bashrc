@@ -31,6 +31,7 @@ complete -d -o dirnames cd
 
 if [[ "${-/i}" != "${-}" ]] &&
    [[ -x /usr/bin/fortune ]]; then
+	echo -en "\n"
 	fortune -ac all
 fi
 
@@ -4186,16 +4187,14 @@ fi
 
 ################################################################################
 
-if [[ "${-/i}" != "${-}" ]]; then
-	if [[ -f /.g/_data/zactive.workspace ]] ||
-	   [[ -f /.g/_data/zactive.workspace.config ]]
-	then
-		echo -en "\n\e[7;34;46m"
-	else
-		echo -en "\n\e[7;34;45m"
-	fi
+if [[ "${-/i}" != "${-}" ]] && {
+   [[ -f /.g/_data/zactive.workspace ]] ||
+   [[ -f /.g/_data/zactive.workspace.config ]];
+}; then
+	echo -en "\n"
+	echo -en "\e[37;44m"
 	${LL} /.g/_data/zactive.workspace*
-	echo -en "\n\e[0m"
+	echo -en "\e[0m"
 fi
 
 ########################################
