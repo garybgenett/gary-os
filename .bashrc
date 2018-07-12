@@ -4186,6 +4186,20 @@ fi
 
 ################################################################################
 
+if [[ "${-/i}" != "${-}" ]]; then
+	if [[ -f /.g/_data/zactive.workspace ]] ||
+	   [[ -f /.g/_data/zactive.workspace.config ]]
+	then
+		echo -en "\n\e[7;34;46m"
+	else
+		echo -en "\n\e[7;34;45m"
+	fi
+	${LL} /.g/_data/zactive.workspace*
+	echo -en "\n\e[0m"
+fi
+
+########################################
+
 if [[ "${SCRIPT}" == ".bashrc" ]]; then
 	"${@}"
 	exit "${?}"
