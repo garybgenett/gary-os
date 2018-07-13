@@ -2057,8 +2057,7 @@ function shell {
 			fi
 			;;
 		(you)	DEST="vpn-client.vpn.example.net"
-			if [[ ${HOSTNAME} != shadow ]] &&
-			   [[ ${HOSTNAME} != bastion ]]; then
+			if [[ ${HOSTNAME} != bastion ]]; then
 				[[ -z $(${PS} 2>/dev/null | ${GREP} "5909[:]") ]] && OPTS="${OPTS} -L 5909:127.0.0.1:5900"
 			fi
 			;;
