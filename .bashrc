@@ -59,7 +59,7 @@ export MAILDIR="${HOME}/Maildir"
 export MAILCAPS="${HOME}/.mailcap"
 
 export GDRIVE_REMOTE="gdrive"
-export NOTES_MD="/.g/_data/zactive/_drive/_notes.md";		export NOTES_MD_ID="1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e"
+export NOTES_MD="/.g/_data/zactive/_pim/tasks.notes.md";	export NOTES_MD_ID="1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e"
 export SALES_MD="/.g/_data/zactive/_pim/zoho.today.md";		export SALES_MD_ID="1wQrnTw0I5pDfzlqeuKdBNCNvFH9Ifulz"
 
 export ACRO_ALLOW_SUDO="set"
