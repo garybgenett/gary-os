@@ -713,6 +713,7 @@ function psk {
 	psg ${PSNAME}
 	if [[ -n "${PSLIST}" ]]; then
 		kill "${@}" ${PSLIST}
+		sleep 1
 	fi
 	psg ${PSNAME}
 }
