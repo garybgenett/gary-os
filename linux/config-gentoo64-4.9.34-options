@@ -3,6 +3,7 @@
 ################################################################################
 
 General setup
+	Kernel compression mode							CONFIG_KERNEL_XZ=y
 	Default hostname							CONFIG_DEFAULT_HOSTNAME=gary-os
 	Kernel .config support							CONFIG_IKCONFIG=y
 		Enable access to .config through /proc/config.gz		CONFIG_IKCONFIG_PROC=y
