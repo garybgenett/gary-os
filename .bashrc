@@ -353,7 +353,7 @@ export UNISON_U="${UNISON_W} \
 	-owner \
 	-group"
 export UNISON_F="${UNISON_U} \
-	-fastcheck false"
+	-fastcheck=false"
 
 alias unison="${UNISON_U}"
 
