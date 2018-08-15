@@ -805,7 +805,7 @@ function contacts {
 			open(ADB, ">", "./contacts-zoho.adb")		|| die();
 			my $contacts = do { local $/; <JSON> };
 			$contacts = decode_json(${contacts});
-			foreach my $key (keys(%{$contacts})) {
+			foreach my $key (sort(keys(%{$contacts}))) {
 				my $item = $contacts->{$key};
 				print ADB "[0]\n";
 				print ADB "name="	. $item->{"Company"}	. " :: " . $item->{"First Name"} . "\n";
