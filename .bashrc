@@ -794,6 +794,34 @@ function contacts {
 	elif [[ ${1} == -p ]]; then
 		shift
 		CONTACTS="contacts-pathfinder"
+	elif [[ ${1} == -z ]]; then
+		shift
+		CONTACTS="contacts-zoho"
+		perl -e '
+			use strict;
+			use warnings;
+			use JSON::XS;
+			open(JSON, "<", "./zoho-export.leads.json")	|| die();
+			open(ADB, ">", "./contacts-zoho.adb")		|| die();
+			my $contacts = do { local $/; <JSON> };
+			$contacts = decode_json(${contacts});
+			foreach my $key (keys(%{$contacts})) {
+				my $item = $contacts->{$key};
+				print ADB "[0]\n";
+				print ADB "name="	. $item->{"Company"}	. " :: " . $item->{"First Name"} . "\n";
+				print ADB "email="	. ($item->{"Email"}	|| "") . "\n";
+				print ADB "info="	. ${key}		. "\n";
+				print ADB "mobile="	. ($item->{"Mobile"}	|| "") . "\n";
+				print ADB "workphone="	. ($item->{"Phone"}	|| "") . "\n";
+				print ADB "address="	. ($item->{"Street"}	|| "") . "\n";
+				print ADB "city="	. ($item->{"City"}	|| "") . "\n";
+				print ADB "state="	. ($item->{"State"}	|| "") . "\n";
+				print ADB "zip="	. ($item->{"Zip Code"}	|| "") . "\n";
+				print ADB "country=USA\n";
+			};
+			close(JSON) || die();
+			close(ADB) || die();
+		' -- "${@}" || return 1
 	elif [[ ${1} == -c ]]; then
 		shift
 		declare EXP_DIR="contacts.export"
@@ -2477,6 +2505,7 @@ function task-export-drive {
 function task-export-drive-sync {
 	${RCLONE_U} \
 		--filter="- /_sync/" \
+		\
 		${GDRIVE_REMOTE}:/ \
 		/.g/_data/zactive/_drive
 	${RCLONE_U} \
