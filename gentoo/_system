@@ -425,6 +425,8 @@ fi
 
 if [[ -z ${AUTO} ]] && [[ ${1} == -u ]]; then
 	eselect news read new
+	echo -en "\n"
+	glsa-check --verbose --cve --test all
 fi
 
 ########################################
