@@ -333,7 +333,7 @@ if [[ ${1} == -w ]]; then
 	for FILE in \
 		mesa:--auto		\
 		opengl:xorg-x11		\
-		python:python3.3	\
+		python:python3.4	\
 		unison:2.45		\
 		vi:vim			\
 		\
