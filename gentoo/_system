@@ -59,11 +59,11 @@ done
 ########################################
 
 declare AUTO=
-declare ASK="--ask y"
+declare ASK="--ask=y"
 if [[ ${1} == -a ]]; then
 	shift
 	AUTO="-a"
-	ASK="--ask n"
+	ASK="--ask=n"
 fi
 
 declare NEW="false"
