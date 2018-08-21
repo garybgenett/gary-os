@@ -180,21 +180,15 @@ if [[ ${1} == -i ]]; then
 	mount_dev_dirs
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/scripts/_sync mount g null
 	if [[ ! -d ${TARGET}/var/git/meta-repo ]]; then
+		HOME=/.g/.home ${SAFE_ENV}	${_SELF} ${TOOR} ${AUTO} -w
 		${MKDIR}			${TARGET}/var/git/meta-repo{,.git}
 		${RSYNC_U} ${GITDIR}/		${TARGET}/var/git/meta-repo.git
 		HOME=/.g/.home ${SAFE_ENV}	${_SELF} ${FUNTOO_VER}
 	fi
-	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/setup/.setconf -r
+	HOME=/.g/.home ${SAFE_ENV}		${_SELF} ${TOOR} ${AUTO} -w
 	if ${BLD}; then
-		${SAFE_ENV}			locale-gen						|| exit 1
-		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} ccache debugedit portage glibc gcc	|| exit 1
-		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} eselect genkernel gentoolkit		|| exit 1
-		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} debian-sources				|| exit 1
-		${SAFE_ENV}			eselect profile set-build 25				|| exit 1	# stable
-		${SAFE_ENV}			eselect profile set-flavor 30				|| exit 1	# desktop
-		${SAFE_ENV}			epro show						|| exit 1
 		if [[ -n ${_NEW} ]]; then
-		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} --emptytree \@system			|| exit 1
+		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} \@system					|| exit 1
 		else
 		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} --emptytree \@system \@world		|| exit 1
 		fi
@@ -202,7 +196,7 @@ if [[ ${1} == -i ]]; then
 	if ${KRN}; then for FILE in ${KERNEL_VER}; do
 		${RM}				${TARGET}/usr/src/linux					|| exit 1
 		${LN} linux-${FILE}-gentoo	${TARGET}/usr/src/linux					|| exit 1
-		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} =gentoo-sources-${FILE}			|| exit 1
+		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} genkernel =gentoo-sources-${FILE}		|| exit 1
 		declare GENKERNEL_OPTS="--loglevel=5 --bootloader=grub --symlink kernel"
 		if [[ -z ${AUTO} ]]; then
 		HOME=/.g/.home ${SAFE_ENV}	genkernel ${GENKERNEL_OPTS} kernel --menuconfig		|| exit 1; else
@@ -314,13 +308,13 @@ fi
 
 ################################################################################
 
-if [[ ${1} == -u ]]; then
+if [[ ${1} == -w ]]; then
 	${RSYNC_U/reporter} ${FUNDIR}/[a-z_]*		/etc/portage/
 	${LN} /etc/portage/_overlay/overlay.conf	/etc/portage/repos.conf/
 	chown -R root:root				/etc/portage
 	chmod -R 755					/etc/portage
 	for FILE in \
-		/etc/portage/make.conf \
+		/etc/portage/make.conf	\
 		/etc/portage/package.*
 	do
 		${SED} -i "s|^[#][{]${_NEW}[}][ ](.+)$|\1|g" ${FILE}
@@ -328,14 +322,14 @@ if [[ ${1} == -u ]]; then
 	done
 	${LL} /_gentoo
 	cat /_gentoo/+okay
+	ego profile build stable	|| exit 1
+	ego profile flavor desktop	|| exit 1
+	ego profile show
 	locale-gen
 	gcc-config ${CHOST}-$(equery list gcc | awk '{print $1;}' | cut -d- -f3 | sort -n | tail -n1)
 	gcc-config --list-profiles
 	java-config --set-system-vm $(equery list icedtea | awk '{print $1;}' | ${GREP} -v "^$" | cut -d/ -f2 | cut -d. -f1 | tail -n1)
 	java-config --list-available-vms
-	eselect profile set-build 25	# stable
-	eselect profile set-flavor 30	# desktop
-	epro show
 	for FILE in \
 		mesa:--auto		\
 		opengl:xorg-x11		\
@@ -354,32 +348,39 @@ if [[ ${1} == -u ]]; then
 	done
 	cat /dev/null	>/var/lib/portage/world
 	echo "@${_PKG}"	>/var/lib/portage/world_sets
-	declare EXPECT_W="expect-wrapper"
-	function expect-wrapper {
-		declare EXPECT_CMD="expect -c \"spawn ${@};"
-		EXPECT_CMD+=" "; EXPECT_CMD+="expect yes/no {send y\\r; exp_continue;};"
-		EXPECT_CMD+=" "; EXPECT_CMD+="expect use-new {send u\\r; exp_continue;};"
-		EXPECT_CMD+="\""
-		if [[ -n ${AUTO} ]]; then
-			${SAFE_ENV} $(echo ${EXPECT_CMD})
-		else
-			${SAFE_ENV} ${@}
-		fi
-	}
-#>>>	${SAFE_ENV} emerge ${ASK} --update --deep --newuse \@system		|| exit 1
-#>>>	${SAFE_ENV} emerge ${ASK} --update --deep --newuse \@world		|| exit 1
-	${SAFE_ENV} emerge ${ASK} --update --deep --newuse \@system \@world	|| exit 1
-#>>>	${EXPECT_W} python-updater						|| exit 1
-	${EXPECT_W} perl-cleaner --all						|| exit 1
-	${EXPECT_W} haskell-updater --all					|| exit 1
+	exit 0
+fi
+
+########################################
+
+function expect_wrapper {
+	declare EXPECT_CMD="expect -c \"spawn ${@};"
+	EXPECT_CMD+=" "; EXPECT_CMD+="set timeout -1;"
+	EXPECT_CMD+=" "; EXPECT_CMD+="expect yes/no {send y\\r; exp_continue;};"
+	EXPECT_CMD+=" "; EXPECT_CMD+="expect use-new {send u\\r; exp_continue;};"
+	EXPECT_CMD+=" "; EXPECT_CMD+="expect eof {close;};"
+	EXPECT_CMD+="\""
+	if [[ -n ${AUTO} ]]; then
+		${SAFE_ENV} ${EXPECT_CMD}
+	else
+		${SAFE_ENV} ${@}
+	fi
+}
+
+if [[ ${1} == -u ]]; then
+	${SAFE_ENV} ${_SELF} ${TOOR} ${AUTO} -w					|| exit 1
+	${SAFE_ENV} emerge ${ASK} --deep --newuse --update \@system \@world	|| exit 1
+	expect_wrapper python-updater						|| exit 1
+	expect_wrapper perl-cleaner --all					|| exit 1
+	expect_wrapper haskell-updater --all					|| exit 1
+	${SAFE_ENV} emerge ${ASK} \@module-rebuild				|| exit 1
 	${SAFE_ENV} emerge ${ASK} \@preserved-rebuild				|| exit 1
-#>>>	${SAFE_ENV} emerge ${ASK} \@module-rebuild				|| exit 1
 	${SAFE_ENV} emerge ${ASK} --depclean					|| exit 1
 	${SAFE_ENV} revdep-rebuild --ignore					|| exit 1
 	${SAFE_ENV} emaint --fix all						|| exit 1
 	${SAFE_ENV} eclean --verbose distfiles					|| exit 1
 	${SAFE_ENV} eclean --verbose packages					|| exit 1
-	${EXPECT_W} dispatch-conf						|| exit 1
+	expect_wrapper dispatch-conf						|| exit 1
 
 ########################################
 
