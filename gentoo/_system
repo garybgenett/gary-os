@@ -120,7 +120,18 @@ function mount_dev_dirs {
 }
 
 if [[ ${1} == -s ]]; then
-	${SAFE_ENV} /usr/bin/env bash -o vi "${@}"
+	shift
+	if [[ ${1} == -t ]]; then
+		shift
+		${_SELF} ${TOOR} -s -e --pretend --emptytree --tree \@system \@world
+	elif [[ ${1} == -e ]]; then
+		shift
+		mount_dev_dirs
+		eval ${_SELF} ${TOOR} -s "\"EMERGE_DEFAULT_OPTS= emerge ${EMERGE_DEFAULT_OPTS_ORIG} ${@}\""
+		mount_dev_dirs -u
+	else
+		${SAFE_ENV} /usr/bin/env bash -o vi ${@:+-c "${@}"}
+	fi
 	exit 0
 fi
 
