@@ -120,7 +120,7 @@ if [[ ${1} == -i ]]; then
 		${MKDIR}			${TARGET}/usr/portage{,.git}
 		${RSYNC_U} ${GITDIR}/		${TARGET}/usr/portage.git
 		(cd				${TARGET}/usr/portage &&
-		${GIT} reset --hard		$(cat ${HOME}/setup/gentoo/funtoo))
+		${GIT} reset --hard		$(tail -n1 ${HOME}/setup/gentoo/funtoo))
 	fi
 	echo -en "${COMMIT}"			>${TARGET}/_build/_commit
 	${RSYNC_U} ${HOME}/setup/gentoo/	${TARGET}/_build/_config
