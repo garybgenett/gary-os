@@ -2,16 +2,59 @@
 source ${HOME}/.bashrc
 ################################################################################
 
-declare FILE
+declare LENGTH="120"
 
 ########################################
 
-for FILE in $(find . -mindepth 2 -maxdepth 2  \( -path ./.working/\* -prune \) -o \( -type d -print \) | ${SED} "s|^[.]/||g" | sort); do
-	perl -e 'printf("%-80.80s", "diff :: ${ARGV[0]} " . "=" x 80); print "\n\n";' ${FILE}
-	diff ${DIFF_OPTS} -r /usr/portage/${FILE} ${FILE}
+declare RESET="false"
+if [[ ${1} == -r ]]; then
+	RESET="true"
+fi
+
+################################################################################
+
+function review_header {
+	perl -e '
+		printf(
+			"%-${ARGV[0]}.${ARGV[0]}s\n",
+			"diff :: ${ARGV[1]} [${ARGV[2]}] " . ("=" x ${ARGV[0]})
+		);
+	' ${@}
+	return 0
+}
+
+########################################
+
+declare FILE
+for FILE in $(
+	find ./ -mindepth 2 -maxdepth 2 \
+		\( -path ./.working/\* -prune \) \
+		-o \( -path ./\*/\*.src -prune \) \
+		-o \( -type d -print \) |
+	${SED} "s|^[.]/||g" |
+	sort
+); do
+	declare EBUILD="$(find ./${FILE}/*.ebuild -type f | tail -n1)"
+	if ${RESET}; then
+		${RSYNC_U} /var/git/meta-repo/kits/*/${FILE}/ ./${FILE}.src	1>&2
+		ebuild ${EBUILD} digest						1>&2
+	fi
+	review_header								${LENGTH} ${FILE} rationale
+	cat ${FILE}/.rationale							2>&1
+	review_header								${LENGTH} ${FILE} source
+	diff ${DIFF_OPTS} -r /var/git/meta-repo/kits/*/${FILE} ./${FILE}.src	2>&1
+	review_header								${LENGTH} ${FILE} target
+	diff ${DIFF_OPTS} -r ./${FILE}.src ./${FILE}				2>&1
+	review_header								${LENGTH} ${FILE} files
+	${GREP} "[\"][\$][{]FILESDIR[}]" ${EBUILD}				2>&1
+	echo									2>&1
+	${LS} -R ./${FILE}							2>&1
 done >${0}.txt
 
-${VIEW} +/=== ${0}.txt
+if ${RESET}; then
+	read RESET
+fi
+${VIEW} +/^diff ${0}.txt
 
 ################################################################################
 # end of file
