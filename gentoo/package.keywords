@@ -53,17 +53,6 @@ dev-lang/nqp				~*		# gentoo required
 dev-lang/parrot				~*		# gentoo required
 dev-lang/rakudo				~*		# gentoo required
 
-dev-lang/ruby				~*		# gentoo required
-dev-ruby/json				~*		# gentoo required
-dev-ruby/minitest			~*		# gentoo required
-dev-ruby/power_assert			~*		# gentoo required
-dev-ruby/racc				~*		# gentoo required
-dev-ruby/rake				~*		# gentoo required
-dev-ruby/rdoc				~*		# gentoo required
-dev-ruby/rubygems			~*		# gentoo required
-dev-ruby/test-unit			~*		# gentoo required
-virtual/rubygems			~*		# gentoo required
-
 =dev-qt/qtcore-4.8.7			~*		# gentoo required
 =dev-qt/qtdbus-4.8.7			~*		# gentoo required
 =dev-qt/qtgui-4.8.7			~*		# gentoo required
@@ -81,10 +70,6 @@ dev-java/icedtea			~*		# gentoo required
 app-emulation/vmware-modules		~*		# gentoo required
 app-emulation/vmware-player		~*		# gentoo required
 app-emulation/vmware-tools		~*		# gentoo required
-
-dev-ruby/paint				~*		# gentoo required
-dev-ruby/trollop			~*		# gentoo required
-games-misc/lolcat			~*		# gentoo required
 
 games-fps/doom3				~*		# gentoo required
 games-fps/quakeforge			~*		# gentoo required
