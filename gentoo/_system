@@ -66,14 +66,9 @@ if [[ ${1} == -a ]]; then
 	ASK="--ask=n"
 fi
 
-declare NEW="false"
 declare BLD="false"
 declare KRN="false"
 declare CFG="false"
-if [[ ${1} == -n ]]; then
-	shift
-	NEW="true"
-fi
 if [[ ${1} == -b ]]; then
 	shift
 	BLD="true"
