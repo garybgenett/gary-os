@@ -19,12 +19,13 @@ if [[ ${1} == -v ]]; then
 	for PKG in $(
 		${GREP} -v "^[#]" ${HOME}/setup/gentoo/package.keywords |
 		${GREP} -v "^$" |
+		${SED} "s|:.+$||g" |
 		cut -f1 |
 		sort
 	); do
 		echo -en "\n"
 		${GREP} --only-matching "${PKG}[-][0-9][^[:space:]]*" ${CUR}/_gentoo/.emerge
-		${GREP} --with-filename "KEYWORDS[=].*[^~]amd64" ${NEW}/usr/portage/${PKG}/*.ebuild |
+		${GREP} --with-filename "KEYWORDS[=].*[^~]amd64" ${NEW}/var/git/meta-repo/kits/*/${PKG}/*.ebuild |
 			${SED} -e "s|^.+/||g" -e "s|:.+$||g"
 	done
 	exit 0
@@ -94,9 +95,13 @@ env - $(which equery) list --duplicates '*'		>${OUT_DIR}/.slots	2>&1
 #>>>	-or \( -path /usr/lib32/debug -prune \) \
 #>>>	-or \( -path /usr/lib64/debug -prune \) \
 #>>>	-or \( -path /usr/portage -prune \) \
+#>>>	-or \( -path /usr/portage.git -prune \) \
 #>>>	-or \( -path /usr/src/debug -prune \) \
 #>>>	-or \( -path /usr/src/linux-\* -prune \) \
+#>>>	-or \( -path /var/cache/portage -prune \) \
 #>>>	-or \( -path /var/db/pkg -prune \) \
+#>>>	-or \( -path /var/git/meta-repo -prune \) \
+#>>>	-or \( -path /var/git/meta-repo.git -prune \) \
 #>>>	-or \( -path /~~\*~~ -prune \) \
 #>>>"
 #>>>(
@@ -149,11 +154,11 @@ cat /dev/null >${OUT_DIR}/_use.enabled
 
 for TOKEN in $(source /etc/portage/make.conf ; echo ${USE}); do
 	if [[ ${TOKEN} == ${TOKEN/#-} ]]; then
-		grep_token "^${TOKEN/#-}[ ][-]" /usr/portage/profiles/use.desc |
+		grep_token "^${TOKEN/#-}[ ][-]" /var/git/meta-repo/kits/*/profiles/use.desc |
 			sort \
 			>>${OUT_DIR}/_use.enabled
 	else
-		grep_token "^${TOKEN/#-}[ ][-]" /usr/portage/profiles/use.desc |
+		grep_token "^${TOKEN/#-}[ ][-]" /var/git/meta-repo/kits/*/profiles/use.desc |
 			sort \
 			>>${OUT_DIR}/_use.disabled
 	fi
@@ -162,7 +167,7 @@ done
 cat /dev/null >${OUT_DIR}/_use.packages
 
 for TOKEN in $(cat ${OUT_DIR}/_packages); do
-	grep_token "^${TOKEN/%-[0-9].*}[:]" /usr/portage/profiles/use.local.desc |
+	grep_token "^${TOKEN/%-[0-9].*}[:]" /var/git/meta-repo/kits/*/profiles/use.local.desc |
 		sort \
 		>>${OUT_DIR}/_use.packages
 done
@@ -238,14 +243,14 @@ cat /dev/null >${OUT_DIR}/use.missing.local
 
 for TOKEN in $(cat ${OUT_DIR}/emerge.use); do
 	if [[ -z $(grep_token "^${TOKEN}$" ${OUT_DIR}/makeconf.use) ]]; then
-		if [[ -n $(grep_token "^${TOKEN}[ ][-]" /usr/portage/profiles/use.desc) ]]; then
-			grep_token "^${TOKEN}[ ][-]" /usr/portage/profiles/use.desc |
+		if [[ -n $(grep_token "^${TOKEN}[ ][-]" /var/git/meta-repo/kits/*/profiles/use.desc) ]]; then
+			grep_token "^${TOKEN}[ ][-]" /var/git/meta-repo/kits/*/profiles/use.desc |
 				sort \
 				>>${OUT_DIR}/use.missing.global
 		else
 			echo -e "\n${TOKEN}" \
 				>>${OUT_DIR}/use.missing.local
-			grep_token "[:]${TOKEN}[ ][-]" /usr/portage/profiles/use.local.desc |
+			grep_token "[:]${TOKEN}[ ][-]" /var/git/meta-repo/kits/*/profiles/use.local.desc |
 				sort \
 				>>${OUT_DIR}/use.missing.local
 		fi
