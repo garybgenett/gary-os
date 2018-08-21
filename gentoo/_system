@@ -384,7 +384,7 @@ fi
 echo -en "\n"
 wc -l /_gentoo/_packages
 wc -l /_gentoo/_packages.db
-diff  /_gentoo/_packages.db /_gentoo/_packages |
+diff  ${DIFF_OPTS} /_gentoo/_packages.db /_gentoo/_packages |
 	${GREP} "^[<>]"
 
 echo -en "\n"
