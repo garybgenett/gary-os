@@ -275,15 +275,14 @@ dev-vcs/mercurial
 dev-vcs/qgit
 dev-vcs/subversion
 
+app-admin/python-updater
 dev-lang/lua
 dev-lang/parrot
 dev-lang/python
 dev-lang/rakudo
-dev-lang/ruby
 dev-lang/tcl
 dev-lisp/clisp
 dev-lua/luarocks
-dev-ruby/rubygems
 
 dev-libs/libuv
 net-libs/nodejs

@@ -196,8 +196,6 @@ x11-misc/wmctrl
 dev-vcs/git
 dev-vcs/subversion
 
-dev-lang/python
-
 dev-db/sqlite
 
 media-libs/alsa-lib
