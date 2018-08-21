@@ -317,8 +317,8 @@ if [[ ${1} == -w ]]; then
 		/etc/portage/make.conf	\
 		/etc/portage/package.*
 	do
-		${SED} -i "s|^[#][{]${_NEW}[}][ ](.+)$|\1|g" ${FILE}
 		${SED} -i "s|^[#][{]${_MET}[}][ ](.+)$|\1|g" ${FILE}
+		${SED} -i "s|^[#][{]${_NEW}[}][ ](.+)$|\1|g" ${FILE}
 	done
 	${LL} /_gentoo
 	cat /_gentoo/+okay
