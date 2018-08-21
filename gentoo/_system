@@ -134,11 +134,23 @@ fi
 
 if [[ ${1} == -l ]]; then
 	shift
-	if [[ -n ${1} ]]; then
+	[[ -z ${1} ]] && exit 1
+	if [[ ${1} == *([0-9]) ]]; then
+		echo -en "https://bugs.gentoo.org/show_bug.cgi?id=${1}"
+	else
 		FILE="$(ls -d /var/git/meta-repo/kits/*/*/${1})"
 		NEXT="$(echo "${FILE}" | ${SED} "s|^/var/git/meta-repo/kits/.+[/]([^/]+[/][^/]+)$|\1|g")"
-		if [[ -n ${FILE} ]]; then
+		if [[ -z ${FILE} ]]; then
+			echo -en "\n"
+			emerge -s ${1}
+		else
+			echo -en "https://packages.gentoo.org/packages/${NEXT}\n"
 			echo -en "https://gentoobrowse.randomdan.homeip.net/package/${NEXT}#bugs\n"
+			${LL} -d {/usr,/var/cache}/portage/distfiles/$(basename ${FILE})*	2>/dev/null
+			${LL} -d {/usr,/var/cache}/portage/packages/${NEXT}*			2>/dev/null
+			echo -en "\n"
+			echo -en "${FILE}\n"
+			${LL} ${FILE}
 		fi
 	fi
 	exit 0
