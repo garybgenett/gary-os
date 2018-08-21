@@ -20,6 +20,7 @@ chmod -v 4711 /usr/bin/sudo
 
 chmod -v 000 /usr/bin/dbus-daemon
 chmod -v 000 /usr/bin/dbus-launch
+chmod -v 000 /usr/bin/pulseaudio
 chmod -v 000 /usr/libexec/polkitd
 chmod -v 000 /usr/libexec/udisks-daemon
 chmod -v 000 /usr/libexec/upowerd
@@ -38,8 +39,12 @@ for MODULE in \
 	/lib/modules/*/kernel/drivers/video/riva/rivafb.ko		\
 	/lib/modules/*/misc/nvidiabl.ko					\
 	/lib/modules/*/video/fglrx.ko					\
-	/lib/modules/*/video/nvidia.ko
+	/lib/modules/*/video/nvidia.ko					\
+	\
+	/etc/modprobe.d/intel-nouveau.conf				\
+	/usr/share/X11/xorg.conf.d/20-intel.conf
 do
+#>>>	equery belongs ${MODULE}
 	mv -fv ${MODULE} ${MODULE}.bak
 done
 
@@ -69,17 +74,17 @@ rm -frv /tftproot
 find /etc/config-archive |
 	sort
 
-find / \
-	\( -path /.g -prune \) \
-	-o \( -path /dev -prune \) \
-	-o \( -path /mnt -prune \) \
-	-o \( -path /proc -prune \) \
-	-o \( -path /sys -prune \) \
-	-o -print |
-	sort |
-	grep -E \
-		-e "[/][.].+[.]swp$" \
-		-e "[/][.][_]cfg.+$"
+#>>>find / \
+#>>>	\( -path /.g -prune \) \
+#>>>	-o \( -path /dev -prune \) \
+#>>>	-o \( -path /mnt -prune \) \
+#>>>	-o \( -path /proc -prune \) \
+#>>>	-o \( -path /sys -prune \) \
+#>>>	-o -print |
+#>>>	sort |
+#>>>	grep -E \
+#>>>		-e "[/][.].+[.]swp$" \
+#>>>		-e "[/][.][_]cfg.+$"
 
 exit 0
 ################################################################################
