@@ -458,10 +458,6 @@ app-emulation/virtualbox-additions
 app-emulation/virtualbox-guest-additions
 app-emulation/virtualbox-modules
 
-app-emulation/vmware-modules
-app-emulation/vmware-player
-app-emulation/vmware-tools
-
 app-misc/run-mailcap
 net-misc/urlview
 
