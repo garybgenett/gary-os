@@ -40,6 +40,9 @@ declare NEXT=
 
 ########################################
 
+declare EMERGE_DEFAULT_OPTS_ORIG="${EMERGE_DEFAULT_OPTS}"
+unset EMERGE_DEFAULT_OPTS
+
 declare FUNTOO_VER="$(tail -n1 ${FUNDIR}/funtoo)"
 declare KERNEL_VER="$(${SED} -n "s|^.+/gentoo-sources:(.+)$|\1|gp" ${FUNDIR}/sets/${_PKG})"
 
@@ -86,7 +89,7 @@ fi
 
 ########################################
 
-declare SAFE_ENV="prompt -z EMERGE_DEFAULT_OPTS="
+declare SAFE_ENV="prompt -z"
 if [[ ${1} == -i ]] || [[ ${1} == -s ]]; then
 	SAFE_ENV="prompt -z chroot ${TARGET}"
 elif [[ ${1} == -u ]]; then
