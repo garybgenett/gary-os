@@ -116,17 +116,17 @@ function mount_dev_dirs {
 
 if [[ ${1} == -s ]]; then
 	shift
+	mount_dev_dirs
 	if [[ ${1} == -t ]]; then
 		shift
 		${_SELF} ${TOOR} -s -e --pretend --emptytree --tree \@system \@world
 	elif [[ ${1} == -e ]]; then
 		shift
-		mount_dev_dirs
 		eval ${_SELF} ${TOOR} -s "\"EMERGE_DEFAULT_OPTS= emerge ${EMERGE_DEFAULT_OPTS_ORIG} ${@}\""
-		mount_dev_dirs -u
 	else
 		${SAFE_ENV} /usr/bin/env bash -o vi ${@:+-c "${@}"}
 	fi
+	mount_dev_dirs -u
 	exit 0
 fi
 
@@ -174,10 +174,10 @@ if [[ ${1} == -i ]]; then
 	echo -en "${COMMIT}"			>${TARGET}/_build/_commit
 	${RSYNC_U} ${FUNDIR}/			${TARGET}/_build/_config
 	${RSYNC_U} ${LINDIR}/			${TARGET}/_build/_kernel
-	mount_dev_dirs
 	${MKDIR}				${TARGET}/.g/.home
 	${HOME}/scripts/_sync _home _build	${TARGET}/.g/.home
 	${RM}					${TARGET}/.g/.home/.ssh/id_*
+	mount_dev_dirs
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/scripts/_sync mount g null
 	if [[ ! -d ${TARGET}/var/git/meta-repo ]]; then
 		${MKDIR}			${TARGET}/var/git/meta-repo{,.git}
