@@ -432,8 +432,10 @@ fi
 echo -en "\n"
 wc -l /_gentoo/_packages
 wc -l /_gentoo/_packages.db
-diff  ${DIFF_OPTS} /_gentoo/_packages.db /_gentoo/_packages |
-	${GREP} "^[<>]"
+
+echo -en "\n"
+diff ${DIFF_OPTS} /_gentoo/_packages.db /_gentoo/_packages |
+	${GREP} "^[-+]"
 
 echo -en "\n"
 ${LL} /_gentoo/+okay*
