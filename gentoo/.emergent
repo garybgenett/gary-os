@@ -271,7 +271,7 @@ cat /dev/null >${OUT_DIR}/+okay
 
 for TOKEN in ${OUT_DIR}/*.OKAY; do
 	echo -e "\n${TOKEN/%\.OKAY}" >>${OUT_DIR}/+okay
-	diff -u ${TOKEN} ${TOKEN/%\.OKAY} >>${OUT_DIR}/+okay
+	diff ${DIFF_OPTS} ${TOKEN} ${TOKEN/%\.OKAY} >>${OUT_DIR}/+okay
 done
 
 echo -e "\n[emerge output]" >>${OUT_DIR}/+okay
