@@ -410,8 +410,8 @@ elif [[ ${1} != -! ]]; then
 			${MV} /var/git/meta-repo/.git /var/git/meta-repo.git
 		fi
 	fi
-	${SAFE_ENV} emerge --ask=n --emptytree --fetch-all-uri \@system \@world
-#>>>	${SAFE_ENV} egencache --update-use-local-desc
+	${SAFE_ENV} emerge --ask=n --emptytree --fetch-all-uri \@system \@world	|| exit 1
+#>>>	${SAFE_ENV} egencache --update-use-local-desc				|| exit 1
 fi
 
 ################################################################################
