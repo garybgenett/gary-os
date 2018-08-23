@@ -98,23 +98,30 @@ sys-libs/uid_wrapper			~*		# gentoo required
 
 ########################################
 
+x11-misc/obconf				~*
 x11-wm/openbox				~*
 
 x11-misc/dmenu				~*
-#>>>x11-terms/st				~*		# blocked by: <sys-libs/ncurses-6.0
+x11-terms/st				~*
 x11-wm/dwm				~*
 
 x11-terms/terminology			~*
-x11-wm/enlightenment			~*
+x11-wm/enlightenment:0			~*
+x11-wm/enlightenment:0.17		~*
 dev-libs/efl				~*		# gentoo required
 media-libs/elementary			~*		# gentoo required
 
-app-text/pandoc				~*
-
-www-servers/nginx			~*
+app-editors/atom			~*
+app-eselect/eselect-electron		~*
+dev-util/electron			~*
 
 app-misc/task				~*
 app-misc/taskd				~*
+app-misc/timew				~*
+
+app-text/pandoc				~*
+mail-client/mutt			~*
+net-misc/rclone				~*
 
 www-client/surf				~*
 x11-misc/tabbed				~*
