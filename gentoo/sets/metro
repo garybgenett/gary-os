@@ -24,14 +24,13 @@ app-misc/ca-certificates
 app-text/iso-codes
 sys-libs/timezone-data
 
-app-crypt/efitools			# 32-bit build fail
+app-crypt/efitools
 sys-boot/boot-update
 sys-boot/efibootmgr
 sys-boot/grub
 sys-boot/os-prober
 sys-boot/refind
 sys-boot/syslinux
-sys-process/runit
 
 sys-apps/gptfdisk
 sys-block/parted
@@ -43,10 +42,6 @@ sys-fs/ext4magic
 sys-fs/extundelete
 sys-fs/mtools
 sys-fs/squashfs-tools
-
-sys-fs/zfs
-sys-fs/zfs-kmod
-sys-kernel/spl
 
 sys-apps/coreutils
 sys-apps/diffutils
@@ -159,7 +154,6 @@ sys-apps/fakeroot
 ########################################
 # gentoo
 
-sys-kernel/debian-sources
 sys-kernel/genkernel
 sys-kernel/gentoo-sources:4.9.34
 sys-kernel/linux-firmware
@@ -181,15 +175,13 @@ sys-devel/gcc-config
 x11-apps/xrandr
 x11-base/xorg-server
 
-x11-misc/tabbed
-x11-misc/xsel
-x11-terms/rxvt-unicode
-
 x11-misc/dmenu
 x11-wm/dwm
 
-x11-apps/xsetroot
-x11-misc/wmctrl
+x11-terms/rxvt-unicode
+
+x11-misc/tabbed
+x11-misc/xsel
 
 ########################################
 # toolkits
@@ -198,10 +190,6 @@ dev-vcs/git
 dev-vcs/subversion
 
 dev-db/sqlite
-
-media-libs/alsa-lib
-media-libs/alsa-oss
-media-sound/alsa-utils
 
 ########################################
 # utilities
