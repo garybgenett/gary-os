@@ -185,12 +185,11 @@ sys-devel/gcc-config
 x11-apps/xrandr
 x11-base/xorg-server
 
-x11-misc/dmenu
-x11-wm/dwm
+x11-misc/obconf
+x11-wm/openbox
 
 x11-terms/rxvt-unicode
 
-x11-misc/tabbed
 x11-misc/xsel
 
 ########################################
@@ -291,7 +290,7 @@ net-vpn/openvpn
 
 mail-client/mutt
 
-www-client/surf
+www-client/firefox
 
 net-misc/freerdp
 net-misc/tigervnc
