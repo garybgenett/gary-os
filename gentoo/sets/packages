@@ -36,7 +36,7 @@ sys-process/runit
 
 sys-apps/gptfdisk
 sys-block/parted
-sys-fs/btrfs-progs
+#>>>sys-fs/btrfs-progs
 sys-fs/cryptsetup
 sys-fs/dosfstools
 sys-fs/e2fsprogs
@@ -46,9 +46,9 @@ sys-fs/extundelete
 sys-fs/mtools
 sys-fs/squashfs-tools
 
-sys-fs/zfs
-sys-fs/zfs-kmod
-sys-kernel/spl
+#>>>sys-fs/zfs
+#>>>sys-fs/zfs-kmod
+#>>>sys-kernel/spl
 
 sys-apps/coreutils
 sys-apps/diffutils
@@ -119,7 +119,6 @@ dev-perl/Curses-UI
 dev-perl/Expect
 dev-perl/JSON
 dev-perl/JSON-XS
-dev-perl/Sys-Virt
 dev-perl/WWW-Curl
 dev-perl/WWW-Mechanize
 dev-perl/libwww-perl
@@ -198,7 +197,6 @@ sys-devel/gcc-config
 app-portage/g-cpan
 app-portage/layman
 app-portage/mirrorselect
-app-portage/ufed
 
 ########################################
 # x11
@@ -212,15 +210,6 @@ x11-base/xorg-server
 x11-base/xorg-x11
 x11-misc/arandr
 
-x11-misc/tabbed
-x11-misc/xclip
-x11-misc/xsel
-x11-terms/rxvt
-x11-terms/rxvt-unicode
-x11-terms/st
-x11-terms/terminology
-x11-terms/xterm
-
 x11-misc/dmenu
 x11-misc/obconf
 x11-wm/dwm
@@ -229,14 +218,22 @@ x11-wm/openbox
 x11-wm/twm
 x11-wm/windowmaker
 
+x11-terms/rxvt-unicode
+x11-terms/st
+x11-terms/terminology
+x11-terms/xterm
+
 x11-apps/transset
 x11-apps/xsetroot
 x11-misc/redshift
+x11-misc/tabbed
 x11-misc/whaw
 x11-misc/wmctrl
 x11-misc/xautolock
+x11-misc/xclip
 x11-misc/xcompmgr
 x11-misc/xlockmore
+x11-misc/xsel
 x11-misc/xvkbd
 
 ########################################
@@ -265,8 +262,9 @@ app-text/docbook-xml-dtd
 app-text/docbook-xsl-ns-stylesheets
 app-text/docbook-xsl-stylesheets
 app-text/htmltidy
-app-text/texlive
 app-text/xmlto
+
+app-text/texlive
 dev-tex/texmfind
 media-gfx/transfig
 
@@ -285,10 +283,9 @@ dev-lang/parrot
 dev-lang/python
 dev-lang/rakudo
 dev-lang/tcl
+dev-libs/libuv
 dev-lisp/clisp
 dev-lua/luarocks
-
-dev-libs/libuv
 net-libs/nodejs
 
 dev-haskell/cabal
@@ -343,8 +340,6 @@ app-text/tree
 sys-apps/dstat
 sys-apps/pv
 
-net-analyzer/argus
-net-analyzer/argus-clients
 net-analyzer/arping
 net-analyzer/dnstracer
 net-analyzer/httping
@@ -403,21 +398,16 @@ sys-apps/flashrom
 
 dev-db/mysql
 net-dns/bind
+net-fs/samba
 net-ftp/proftpd
 net-ftp/tftp-hpa
 net-mail/dovecot
 net-misc/dhcp
 net-misc/ntp
-net-misc/quagga
-net-misc/radvd
 net-misc/tor
 net-nds/openldap
 net-vpn/openvpn
 net-wireless/hostapd
-
-dev-libs/libmemcached
-dev-libs/nanomsg
-net-fs/samba
 
 app-admin/apache-tools
 www-misc/awstats
@@ -430,11 +420,6 @@ net-print/cups-filters
 net-print/foomatic-db
 net-print/foomatic-db-engine
 
-media-gfx/sane-backends
-media-gfx/sane-frontends
-media-gfx/xsane
-net-print/hplip
-
 ########################################
 # programs
 
@@ -442,13 +427,11 @@ app-emulation/bochs
 app-emulation/dosemu
 games-emulation/dosbox
 
-app-emulation/libvirt
 app-emulation/lxc
 app-emulation/qemu
 app-emulation/spice
 app-emulation/spice-protocol
 app-emulation/spice-vdagent
-app-emulation/virt-manager
 app-emulation/virt-viewer
 net-misc/spice-gtk
 
@@ -477,7 +460,6 @@ app-admin/keepassx
 mail-client/thunderbird
 www-client/chromium
 www-client/firefox
-www-client/midori
 www-client/surf
 
 app-text/qpdf
@@ -497,13 +479,6 @@ app-admin/gkrellm
 x11-plugins/gkrellaclock
 x11-plugins/gkrellsun
 x11-plugins/gkrellweather
-
-net-im/pidgin
-net-irc/irssi
-x11-plugins/pidgin-encryption
-x11-plugins/pidgin-extprefs
-x11-plugins/pidgin-hotkeys
-x11-plugins/pidgin-sipe
 
 app-misc/freemind
 app-misc/xmind
@@ -578,8 +553,6 @@ media-sound/zynaddsubfx
 app-misc/golly
 games-misc/fortune-mod
 games-misc/fortune-mod-all
-games-misc/lolcat
-games-misc/sex
 
 games-board/cgoban
 games-board/gnuchess
@@ -609,9 +582,6 @@ games-fps/freedoom
 games-fps/prboom
 #>>>games-fps/quake1-data
 games-fps/quakeforge
-
-games-util/xboxdrv
-media-tv/kodi
 
 ################################################################################
 # end of file
