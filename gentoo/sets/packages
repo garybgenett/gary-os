@@ -25,7 +25,7 @@ app-text/iso-codes
 sys-libs/timezone-data
 
 app-crypt/efitools
-sys-apps/busybox
+#>>>sys-apps/busybox
 sys-boot/boot-update
 sys-boot/efibootmgr
 sys-boot/grub
@@ -116,15 +116,17 @@ dev-libs/libpcre
 dev-perl/CGI
 dev-perl/Curses
 dev-perl/Curses-UI
-dev-perl/DateManip
 dev-perl/Expect
+dev-perl/JSON
+dev-perl/JSON-XS
 dev-perl/Sys-Virt
 dev-perl/WWW-Curl
 dev-perl/WWW-Mechanize
 dev-perl/libwww-perl
-perl-core/MIME-Base64
+perl-core/JSON-PP
+#>>>perl-core/MIME-Base64
 perl-core/Time-Local
-virtual/perl-JSON-PP
+virtual/perl-MIME-Base64
 
 app-crypt/gnupg
 dev-libs/openssl
@@ -176,11 +178,13 @@ sys-apps/fakeroot
 
 sys-kernel/debian-sources
 sys-kernel/genkernel
-sys-kernel/gentoo-sources:3.10.82
+sys-kernel/gentoo-sources
+sys-kernel/gentoo-sources:4.9.34
 sys-kernel/linux-firmware
 
+app-admin/ego
+app-admin/eselect
 app-portage/portage-utils
-sys-apps/paludis
 sys-apps/portage
 
 app-portage/gentoolkit
@@ -188,7 +192,6 @@ app-portage/gentoolkit-dev
 app-shells/gentoo-bashcomp
 app-vim/gentoo-syntax
 
-app-admin/eselect
 dev-java/java-config
 sys-devel/gcc-config
 
@@ -205,6 +208,7 @@ media-libs/libtxc_dxtn
 x11-apps/xdm
 x11-apps/xev
 x11-apps/xrandr
+x11-base/xorg-server
 x11-base/xorg-x11
 x11-misc/arandr
 
@@ -239,7 +243,7 @@ x11-misc/xvkbd
 # toolkits
 
 net-misc/unison
-net-misc/unison:2.45
+net-misc/unison:2.48
 
 dev-perl/Template-DBI
 dev-perl/Template-GD
@@ -292,10 +296,6 @@ dev-haskell/cabal-install
 dev-lang/ghc
 
 dev-java/icedtea
-dev-java/icedtea-bin
-dev-java/icedtea-bin:6
-dev-java/icedtea-bin:7
-dev-java/icedtea:6
 dev-java/icedtea:7
 
 dev-db/sqlite
@@ -320,7 +320,7 @@ dev-util/sysprof
 sys-apps/kexec-tools
 
 sys-apps/hdparm
-sys-block/btrace
+sys-block/blktrace
 sys-fs/mdadm
 
 sys-apps/dcfldd
@@ -375,8 +375,8 @@ net-misc/socat
 net-misc/whois
 
 net-misc/autossh
-net-misc/httptunnel
 net-misc/pipes
+net-vpn/httptunnel
 
 net-dialup/lrzsz
 net-dialup/minicom
@@ -385,13 +385,13 @@ net-dialup/rp-pppoe
 
 net-fs/curlftpfs
 net-fs/nfs-utils
+net-fs/sshfs
 net-nds/rpcbind
 sys-fs/exfat-utils
 sys-fs/fuse-exfat
 sys-fs/mtd-utils
 sys-fs/mtpfs
 sys-fs/ntfs3g
-sys-fs/sshfs-fuse
 
 app-forensics/cmospwd
 app-forensics/foremost
@@ -408,11 +408,11 @@ net-ftp/tftp-hpa
 net-mail/dovecot
 net-misc/dhcp
 net-misc/ntp
-net-misc/openvpn
 net-misc/quagga
 net-misc/radvd
 net-misc/tor
 net-nds/openldap
+net-vpn/openvpn
 net-wireless/hostapd
 
 dev-libs/libmemcached
@@ -457,16 +457,12 @@ app-emulation/virtualbox-additions
 app-emulation/virtualbox-guest-additions
 app-emulation/virtualbox-modules
 
-app-misc/run-mailcap
-net-misc/urlview
-
 app-misc/abook
 app-misc/remind
 app-misc/task
 app-misc/taskd
 app-misc/wyrd
 app-office/ledger
-dev-db/recutils
 
 mail-client/mailx
 mail-client/mutt
@@ -475,6 +471,7 @@ mail-mta/msmtp
 net-mail/fetchmail
 net-mail/offlineimap
 net-mail/safecat
+net-misc/urlview
 
 app-admin/keepassx
 mail-client/thunderbird
@@ -483,7 +480,6 @@ www-client/firefox
 www-client/midori
 www-client/surf
 
-app-text/acroread
 app-text/qpdf
 app-text/qpdfview
 
@@ -567,7 +563,6 @@ media-sound/ardour
 media-sound/audacity
 media-sound/fluidsynth
 media-sound/hydrogen
-media-sound/jokosher
 media-sound/linuxsampler
 media-sound/lmms
 media-sound/mixxx
