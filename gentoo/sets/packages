@@ -26,12 +26,15 @@ sys-libs/timezone-data
 
 app-crypt/efitools
 #>>>sys-apps/busybox
+sys-apps/openrc
+sys-apps/sysvinit
 sys-boot/boot-update
 sys-boot/efibootmgr
 sys-boot/grub
 sys-boot/os-prober
 sys-boot/refind
 sys-boot/syslinux
+sys-power/suspend
 sys-process/runit
 
 sys-apps/gptfdisk
@@ -50,6 +53,7 @@ sys-fs/squashfs-tools
 #>>>sys-fs/zfs-kmod
 #>>>sys-kernel/spl
 
+sys-apps/attr
 sys-apps/coreutils
 sys-apps/diffutils
 sys-apps/file
@@ -87,6 +91,7 @@ net-misc/ifenslave
 net-misc/iputils
 net-misc/networkmanager
 net-misc/vconfig
+net-misc/wicd
 net-wireless/rfkill
 net-wireless/wireless-tools
 net-wireless/wpa_supplicant
@@ -96,6 +101,7 @@ sys-apps/net-tools
 
 net-ftp/lftp
 net-misc/curl
+net-misc/rclone
 net-misc/rsync
 net-misc/wget
 www-client/elinks
@@ -111,6 +117,8 @@ sys-apps/kbd
 sys-devel/gettext
 sys-libs/gpm
 
+app-admin/perl-cleaner
+app-portage/perl-info
 dev-lang/perl
 dev-libs/libpcre
 dev-perl/CGI
@@ -157,6 +165,8 @@ app-text/aspell
 
 app-editors/gvim
 app-editors/nano
+app-editors/nvi
+app-editors/vim
 app-text/dos2unix
 app-vim/taglist
 app-vim/vim-spell-en
@@ -171,6 +181,7 @@ app-arch/rpm2targz
 app-arch/xar
 app-crypt/chntpw
 sys-apps/fakeroot
+sys-apps/fakeroot-ng
 
 ########################################
 # gentoo
@@ -194,6 +205,7 @@ app-vim/gentoo-syntax
 dev-java/java-config
 sys-devel/gcc-config
 
+app-portage/eix
 app-portage/g-cpan
 app-portage/layman
 app-portage/mirrorselect
@@ -214,6 +226,8 @@ x11-misc/dmenu
 x11-misc/obconf
 x11-wm/dwm
 x11-wm/enlightenment
+x11-wm/enlightenment:0
+x11-wm/enlightenment:0.17
 x11-wm/openbox
 x11-wm/twm
 x11-wm/windowmaker
@@ -224,6 +238,7 @@ x11-terms/terminology
 x11-terms/xterm
 
 x11-apps/transset
+x11-apps/xclock
 x11-apps/xsetroot
 x11-misc/redshift
 x11-misc/tabbed
@@ -232,9 +247,11 @@ x11-misc/wmctrl
 x11-misc/xautolock
 x11-misc/xclip
 x11-misc/xcompmgr
+x11-misc/xdialog
 x11-misc/xlockmore
 x11-misc/xsel
 x11-misc/xvkbd
+x11-terms/root-tail
 
 ########################################
 # toolkits
@@ -255,6 +272,8 @@ app-text/pandoc
 dev-haskell/highlighting-kate
 dev-haskell/pandoc-citeproc
 dev-haskell/pandoc-types
+dev-haskell/pretty-show			# gentoo required: missing dependency of dev-haskell/skylighting
+dev-haskell/skylighting			# dev-haskell/highlighting-kate replacement
 dev-haskell/texmath
 
 app-text/asciidoc
@@ -288,6 +307,7 @@ dev-lisp/clisp
 dev-lua/luarocks
 net-libs/nodejs
 
+app-admin/haskell-updater
 dev-haskell/cabal
 dev-haskell/cabal-install
 dev-lang/ghc
@@ -298,12 +318,29 @@ dev-java/icedtea:7
 dev-db/sqlite
 dev-tcltk/expect
 
+x11-libs/gtk+
+x11-themes/gtk-theme-switch
+
 dev-qt/qtcore
 dev-qt/qtgui
 
 media-libs/alsa-lib
 media-libs/alsa-oss
 media-sound/alsa-utils
+media-sound/apulse
+
+media-sound/pavucontrol
+media-sound/pulseaudio
+
+net-wireless/bluez
+net-wireless/bluez-hcidump
+net-wireless/bluez-tools
+
+#>>>polychromatic
+dev-python/dbus-python
+dev-python/lesscpy
+dev-python/pyudev
+dev-python/setproctitle
 
 ########################################
 # utilities
@@ -331,6 +368,7 @@ sys-apps/memtester
 sys-apps/pciutils
 sys-apps/usbutils
 sys-fs/sysfsutils
+sys-power/acpitool
 
 app-admin/procinfo
 app-admin/sysstat
@@ -378,6 +416,7 @@ net-dialup/minicom
 net-dialup/ppp
 net-dialup/rp-pppoe
 
+net-fs/cifs-utils
 net-fs/curlftpfs
 net-fs/nfs-utils
 net-fs/sshfs
@@ -423,8 +462,11 @@ net-print/foomatic-db-engine
 ########################################
 # programs
 
+sci-calculators/qalculate-gtk
+
 app-emulation/bochs
 app-emulation/dosemu
+app-emulation/wine
 games-emulation/dosbox
 
 app-emulation/lxc
@@ -444,6 +486,7 @@ app-misc/abook
 app-misc/remind
 app-misc/task
 app-misc/taskd
+app-misc/timew
 app-misc/wyrd
 app-office/ledger
 
@@ -462,8 +505,10 @@ www-client/chromium
 www-client/firefox
 www-client/surf
 
+app-editors/atom
 app-text/qpdf
 app-text/qpdfview
+media-gfx/wkhtmltopdf
 
 media-gfx/graphviz
 media-gfx/xfig
@@ -502,6 +547,7 @@ net-p2p/rtorrent
 app-cdr/cdrdao
 app-cdr/cdrtools
 app-cdr/dvd+rw-tools
+app-cdr/dvdisaster
 app-misc/regionset
 media-sound/cdparanoia
 media-sound/cdtool
@@ -517,6 +563,7 @@ media-libs/libjpeg-turbo
 media-libs/openjpeg
 media-libs/tiff
 
+media-libs/libprojectm
 media-sound/picard
 media-sound/quodlibet
 media-sound/synaesthesia
@@ -550,6 +597,10 @@ media-sound/timidity-freepats
 media-sound/xwax
 media-sound/zynaddsubfx
 
+media-gfx/blender
+media-video/cinelerra
+media-video/openshot
+
 app-misc/golly
 games-misc/fortune-mod
 games-misc/fortune-mod-all
@@ -574,7 +625,7 @@ games-emulation/nestopia
 games-emulation/stella
 
 app-arch/lha
-#>>>games-fps/doom-data
+games-fps/doom-data
 games-fps/doom3
 #>>>games-fps/doom3-data
 #>>>games-fps/doom3-roe

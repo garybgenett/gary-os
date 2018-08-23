@@ -25,12 +25,15 @@ app-text/iso-codes
 sys-libs/timezone-data
 
 app-crypt/efitools
+sys-apps/openrc
+sys-apps/sysvinit
 sys-boot/boot-update
 sys-boot/efibootmgr
 sys-boot/grub
 sys-boot/os-prober
 sys-boot/refind
 sys-boot/syslinux
+sys-power/suspend
 
 sys-apps/gptfdisk
 sys-block/parted
@@ -43,6 +46,7 @@ sys-fs/extundelete
 sys-fs/mtools
 sys-fs/squashfs-tools
 
+sys-apps/attr
 sys-apps/coreutils
 sys-apps/diffutils
 sys-apps/file
@@ -80,6 +84,7 @@ net-misc/ifenslave
 net-misc/iputils
 net-misc/networkmanager
 net-misc/vconfig
+net-misc/wicd
 net-wireless/rfkill
 net-wireless/wireless-tools
 net-wireless/wpa_supplicant
@@ -89,6 +94,7 @@ sys-apps/net-tools
 
 net-ftp/lftp
 net-misc/curl
+net-misc/rclone
 net-misc/rsync
 net-misc/wget
 www-client/elinks
@@ -136,6 +142,7 @@ app-text/aspell
 
 app-editors/gvim
 app-editors/nano
+app-editors/vim
 app-text/dos2unix
 app-vim/taglist
 app-vim/vim-spell-en
@@ -150,6 +157,7 @@ app-arch/rpm2targz
 app-arch/xar
 app-crypt/chntpw
 sys-apps/fakeroot
+sys-apps/fakeroot-ng
 
 ########################################
 # gentoo
@@ -164,9 +172,11 @@ app-portage/portage-utils
 sys-apps/portage
 
 app-portage/gentoolkit
+app-portage/gentoolkit-dev
 app-shells/gentoo-bashcomp
 app-vim/gentoo-syntax
 
+app-admin/eselect
 sys-devel/gcc-config
 
 ########################################
@@ -190,6 +200,7 @@ dev-vcs/git
 dev-vcs/subversion
 
 dev-db/sqlite
+dev-tcltk/expect
 
 ########################################
 # utilities
@@ -217,6 +228,7 @@ sys-apps/memtester
 sys-apps/pciutils
 sys-apps/usbutils
 sys-fs/sysfsutils
+sys-power/acpitool
 
 app-admin/procinfo
 app-admin/sysstat
