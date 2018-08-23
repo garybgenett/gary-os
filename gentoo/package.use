@@ -304,8 +304,6 @@ sys-boot/grub				device-mapper libzfs mount
 
 net-misc/networkmanager			-introspection -modemmanager dhcpcd gnutls
 
-sys-apps/paludis			pbins portage prebuilt-documentation search-index visibility
-
 dev-libs/openssl			rfc3779
 net-analyzer/tcpdump			-chroot
 

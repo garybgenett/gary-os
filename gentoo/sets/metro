@@ -161,9 +161,11 @@ sys-apps/fakeroot
 
 sys-kernel/debian-sources
 sys-kernel/genkernel
-sys-kernel/gentoo-sources:3.10.82
+sys-kernel/gentoo-sources:4.9.34
 sys-kernel/linux-firmware
 
+app-admin/ego
+app-admin/eselect
 app-portage/portage-utils
 sys-apps/portage
 
@@ -171,7 +173,6 @@ app-portage/gentoolkit
 app-shells/gentoo-bashcomp
 app-vim/gentoo-syntax
 
-app-admin/eselect
 sys-devel/gcc-config
 
 ########################################
@@ -214,7 +215,7 @@ dev-util/sysprof
 sys-apps/kexec-tools
 
 sys-apps/hdparm
-sys-block/btrace
+sys-block/blktrace
 sys-fs/mdadm
 
 sys-apps/dcfldd
@@ -267,8 +268,8 @@ net-misc/socat
 net-misc/whois
 
 net-misc/autossh
-net-misc/httptunnel
 net-misc/pipes
+net-vpn/httptunnel
 
 sys-fs/exfat-utils
 sys-fs/fuse-exfat
@@ -283,7 +284,7 @@ sys-apps/flashrom
 # servers
 
 net-misc/ntp
-net-misc/openvpn
+net-vpn/openvpn
 
 ########################################
 # programs
