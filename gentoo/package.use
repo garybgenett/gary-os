@@ -300,33 +300,42 @@ www-servers/apache			-threads
 
 ########################################
 
-sys-boot/grub				device-mapper libzfs mount
-
-net-misc/networkmanager			-introspection -modemmanager dhcpcd gnutls
+sys-boot/grub				device-mapper mount
 
 dev-libs/openssl			rfc3779
 net-analyzer/tcpdump			-chroot
+net-misc/networkmanager			-introspection -modemmanager -nss dhcpcd gnutls
+net-vpn/openvpn				iproute2
+sys-apps/iproute2			iptables
 
 x11-base/xorg-server			xnest xvfb
 x11-terms/rxvt-unicode			fading-colors focused-urgency font-styles mousewheel perl
 x11-wm/dwm				savedconfig
 
-mail-client/mutt			gpg sasl sidebar smime smtp
-mail-mta/msmtp				-mta
+media-sound/pulseaudio			bluetooth dbus
 
-app-office/libreoffice			java
-app-text/enchant			aspell
-mail-client/thunderbird			-wifi ldap lightning
-www-client/firefox			-wifi
+net-wireless/bluez			debug
 
-media-tv/kodi				projectm rsxs spectrum waveform -webserver
-media-video/vlc				projectm qt4 vlm
+sci-calculators/qalculate		-gnome
+sci-libs/libqalculate			gnuplot readline
+
+app-emulation/wine			-gstreamer -mp3 -opengl -oss
 
 app-emulation/libvirt			libvirtd lxc qemu uml virt-network
 app-emulation/qemu			ncurses sdl spice
 app-emulation/spice			client gui
 app-emulation/vmware-tools		vmware_guest_freebsd vmware_guest_linux vmware_guest_windows
-app-emulation/virtualbox		additions extensions headless qt4 sdk vnc
+app-emulation/virtualbox		qt4 sdk vnc
+
+mail-client/mutt			-tokyocabinet debug gpg hcache sasl sidebar smime smtp
+mail-mta/msmtp				mta
+
+app-office/libreoffice			java
+app-text/enchant			aspell
+mail-client/thunderbird			-crypt -lightning -wifi ldap # installing "enigmail" and "lightning" plugins manually
+www-client/firefox			-wifi
+
+games-fps/doom3				-dedicated
 
 ################################################################################
 
