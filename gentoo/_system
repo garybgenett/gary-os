@@ -334,7 +334,7 @@ if [[ ${1} == -w ]]; then
 		mesa:--auto		\
 		opengl:xorg-x11		\
 		python:python3.4	\
-		unison:2.45		\
+		unison:2.48		\
 		vi:vim			\
 		\
 		$(for NEXT in ${KERNEL_VER}; do

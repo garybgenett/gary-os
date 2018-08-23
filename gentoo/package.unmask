@@ -2,10 +2,6 @@
 # portage package unmask file
 ################################################################################
 
-sys-apps/paludis
-
-########################################
-
 =net-fs/samba-4.2*			# make samba 4+ available
 
 games-fps/doom3
