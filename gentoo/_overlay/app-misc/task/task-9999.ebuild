@@ -10,7 +10,7 @@ inherit cmake-utils bash-completion-r1 git-r3
 DESCRIPTION="Taskwarrior is a command-line todo list manager"
 HOMEPAGE="http://taskwarrior.org/"
 #>>>SRC_URI="http://taskwarrior.org/download/${P}.tar.gz"
-EGIT_REPO_URI="https://git.tasktools.org/TM/${PN}.git"
+EGIT_REPO_URI="git://github.com/GothenburgBitFactory/taskwarrior.git"
 EGIT_COMMIT="v2.5.1"
 #>>>
 
