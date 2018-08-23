@@ -390,28 +390,28 @@ elif [[ ${1} != -! ]]; then
 		if [[ -d /var/git/meta-repo.git ]] && [[ ! -d /var/git/meta-repo/.git ]]; then
 			${MV} /var/git/meta-repo.git /var/git/meta-repo/.git
 		fi
-#>>>		${SAFE_ENV} emerge --ask=n --verbose --sync			|| exit 1
-		${SAFE_ENV} ego sync						|| exit 1
+#>>>		${SAFE_ENV} emerge --ask=n --verbose --sync				|| exit 1
+		${SAFE_ENV} ego sync							|| exit 1
 		if [[ -z ${1} ]]; then
 			(cd /var/git/meta-repo &&
 				${GIT} pull &&
 				${GIT} checkout --force master &&
 				${GIT} submodule update --force --init --recursive --remote --rebase &&
 				${GIT} submodule foreach --recursive "git reset --hard"
-			)							|| exit 1
+			)								|| exit 1
 		else
 			(cd /var/git/meta-repo &&
 				${GIT} reset --hard ${1} &&
 				${GIT} submodule update --force --init --recursive &&
 				${GIT} submodule foreach --recursive "git reset --hard"
-			)							|| exit 1
+			)								|| exit 1
 		fi
 		if [[ -d /var/git/meta-repo/.git ]] && [[ ! -d /var/git/meta-repo.git ]]; then
 			${MV} /var/git/meta-repo/.git /var/git/meta-repo.git
 		fi
 	fi
-	${SAFE_ENV} emerge --ask=n --emptytree --fetch-all-uri \@system \@world	|| exit 1
-#>>>	${SAFE_ENV} egencache --update-use-local-desc				|| exit 1
+	{ ${SAFE_ENV} emerge --ask=n --emptytree --fetch-all-uri \@system \@world	|| exit 1; } 2>&1 | tee /usr/portage/distfiles.log
+#>>>	${SAFE_ENV} egencache --update-use-local-desc					|| exit 1
 fi
 
 ################################################################################
