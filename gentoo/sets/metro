@@ -176,7 +176,6 @@ app-portage/gentoolkit-dev
 app-shells/gentoo-bashcomp
 app-vim/gentoo-syntax
 
-app-admin/eselect
 sys-devel/gcc-config
 
 ########################################
