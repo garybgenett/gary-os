@@ -443,9 +443,9 @@ net-ftp/tftp-hpa
 net-mail/dovecot
 net-misc/dhcp
 net-misc/ntp
-net-misc/tor
 net-nds/openldap
 net-vpn/openvpn
+net-vpn/tor
 net-wireless/hostapd
 
 app-admin/apache-tools
