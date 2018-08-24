@@ -236,7 +236,6 @@ app-text/tree
 sys-apps/dstat
 sys-apps/pv
 
-net-analyzer/arping
 net-analyzer/dnstracer
 net-analyzer/httping
 net-analyzer/iftop
