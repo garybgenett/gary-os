@@ -188,7 +188,7 @@ if [[ ${1} == -i ]]; then
 	HOME=/.g/.home ${SAFE_ENV}		${_SELF} ${TOOR} ${AUTO} -w
 	if ${BLD}; then
 		if [[ -n ${_NEW} ]]; then
-		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} \@system					|| exit 1
+		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} --deep --newuse --update \@system		|| exit 1
 		else
 		HOME=/.g/.home ${SAFE_ENV}	emerge ${ASK} --emptytree \@system \@world		|| exit 1
 		fi
