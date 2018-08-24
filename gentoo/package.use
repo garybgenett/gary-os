@@ -337,6 +337,8 @@ www-client/firefox			-wifi
 
 games-fps/doom3				-dedicated
 
+media-video/vlc				projectm qt4 vlm
+
 ################################################################################
 
 #{NEW} net-libs/glib-networking		-libproxy	# gentoo required
