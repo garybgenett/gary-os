@@ -21,7 +21,7 @@
 #	tar -C /usr -xvvf /.g/lackey_boot/live/gary-os.portage.tar.xz
 #	vi /etc/portage/make.conf /.g/.home/setup/gentoo/make.conf (USE, ACCEPT_KEYWORDS, VIDEO_CARDS)
 #	vi /usr/lib/portage/pym/portage/package/ebuild/fetch.py
-#	emerge sshfs-fuse autossh openssh openssl
+#	emerge sshfs autossh openssh openssl
 #		rsync root@me.garybgenett.net:/.g/_data/_builds/_metro/.distfiles/{autossh,openssh,openssl}* /usr/portage/distfiles/
 #	emerge --sync ; (cd /usr/portage && /usr/bin/git reset --hard $(cat /.g/.home/setup/gentoo/funtoo))
 #	sshfs -o nonempty root@me.garybgenett.net:/usr/portage/packages /usr/portage/packages
@@ -52,29 +52,36 @@
 ########################################
 # x11
 
-x11-base/xorg-drivers
 x11-base/xorg-x11
 
 x11-apps/transset
+x11-apps/xsetroot
 x11-misc/redshift
+x11-misc/wmctrl
 x11-misc/xautolock
 x11-misc/xcompmgr
 x11-misc/xlockmore
 
 ########################################
+# toolkits
+
+media-libs/alsa-lib
+media-libs/alsa-oss
+media-sound/alsa-utils
+media-sound/apulse
+
+########################################
 # utilities
 
-sys-fs/sshfs-fuse
+net-fs/sshfs
 
 ########################################
 # programs
 
 app-emulation/virt-viewer
 
-app-misc/run-mailcap
-net-misc/urlview
-
 mail-client/mutt
+net-misc/urlview
 
 app-admin/keepassx
 mail-client/thunderbird
@@ -86,7 +93,11 @@ net-misc/tigervnc
 ########################################
 # media
 
+media-sound/aumix
+
 media-gfx/feh
+
+media-video/vlc
 
 ################################################################################
 # end of file
