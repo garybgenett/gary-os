@@ -158,10 +158,10 @@ fi
 
 ################################################################################
 
-if [[ ${1} == -0 ]]; then ${_SELF} ${TOOR} -n -a -b -k -i	| prompt -c	; exit 0; fi
-if [[ ${1} == -/ ]]; then ${_SELF} ${TOOR} -a -i		| prompt -c	; exit 0; fi
-if [[ ${1} == -1 ]]; then ${_SELF} ${TOOR} -a -b -i		| prompt -c	; exit 0; fi
-if [[ ${1} == -2 ]]; then ${_SELF} ${TOOR} -c -i				; exit 0; fi
+if [[ ${1} == -0 ]]; then ${_SELF} ${TOOR} -n -a -b -k -i	| tee ${TARGET}.log | prompt -c	; exit 0; fi
+if [[ ${1} == -/ ]]; then ${_SELF} ${TOOR} -a -i		| tee ${TARGET}.log | prompt -c	; exit 0; fi
+if [[ ${1} == -1 ]]; then ${_SELF} ${TOOR} -a -b -i		| tee ${TARGET}.log | prompt -c	; exit 0; fi
+if [[ ${1} == -2 ]]; then ${_SELF} ${TOOR} -c -i						; exit 0; fi
 
 ########################################
 
