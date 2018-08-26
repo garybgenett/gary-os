@@ -39,6 +39,10 @@ for FILE in $(
 		${RSYNC_U} /var/git/meta-repo/kits/*/${FILE}/ ./${FILE}.src	1>&2
 		ebuild ${EBUILD} digest						1>&2
 	fi
+	if [[ ! -f ${FILE}/.rationale ]]; then
+		echo "MISSING: ${FILE}/.rationale"				1>&2
+		exit 1
+	fi
 	review_header								${LENGTH} ${FILE} rationale
 	cat ${FILE}/.rationale							2>&1
 	review_header								${LENGTH} ${FILE} source
