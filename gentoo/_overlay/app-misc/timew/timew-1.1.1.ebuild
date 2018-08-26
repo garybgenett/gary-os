@@ -3,19 +3,19 @@
 
 EAPI=6
 
-#>>>inherit cmake-utils
-#inherit cmake-utils git-r3
+#>>>[app-misc/timew-9999] fatal: unable to access 'https://git.tasktools.org/TM/libshared.git/': Failed to connect to git.tasktools.org port 443: Connection timed out
+#>>>
 inherit cmake-utils
+#inherit cmake-utils git-r3
 #>>>
 
 DESCRIPTION="Tracks your time from the command line, and generates reports"
 #>>>HOMEPAGE="https://taskwarrior.org/news/news.20160821.html"
 HOMEPAGE="https://timewarrior.net/"
-#>>>SRC_URI="https://taskwarrior.org/download/${P}.tar.gz"
-# fails to build, because of "libshared" submodule pull
-#EGIT_REPO_URI="https://git.tasktools.org/TM/${PN}.git"
-#EGIT_COMMIT="v1.0.0"
-SRC_URI="https://taskwarrior.org/download/timew-1.0.0.tar.gz"
+#>>>
+SRC_URI="https://taskwarrior.org/download/${P}.tar.gz"
+#EGIT_REPO_URI="git://github.com/GothenburgBitFactory/timewarrior.git"
+#EGIT_COMMIT="v1.1.1"
 #>>>
 
 LICENSE="MIT"
