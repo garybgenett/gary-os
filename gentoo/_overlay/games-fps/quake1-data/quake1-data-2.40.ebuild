@@ -24,6 +24,9 @@ RDEPEND="!games-fps/quake1-demodata[symlink]"
 S=${WORKDIR}
 
 src_unpack() {
+#>>>
+	if [ -d /tmp/quake ]; then export CD_ROOT="/tmp/quake"; fi
+#>>>
 	export CDROM_NAME_SET=("Existing Install" "Quake CD (1.01)" "Ultimate Quake Collection" "Quake CD (newer)")
 	cdrom_get_cds id1:q101_int.1:Setup/ID1:resource.1
 	if [[ ${CDROM_SET} == "1" ]] ; then

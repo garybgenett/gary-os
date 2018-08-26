@@ -1,2 +1,3 @@
+# automation of interactive ebuild
 # usage: lha [-]<commands>[<options>] [-<options> ...] archive_file [file...]
 # LHa: Error: Checksum error (LHarc file?)
