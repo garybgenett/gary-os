@@ -230,7 +230,7 @@ root:x:0:0::/.g/_data/zactive/.home:/bin/bash
 plastic:x:1000:1000::/.g/_data/zactive/.home:/bin/bash
 user:x:1001:1001::/.g/_data/zactive/.home:/bin/bash
 null:x:666:666::/tmp/.null:/bin/nologin
-lfs-user:x:9999:9999::/.g/_data/_build/_lfs/.lfs/lfs-user:/bin/bash
+lfs-user:x:9999:9999::/.g/_data/_builds/_lfs/.lfs/lfs-user:/bin/bash
 ---
 END_OF_FILE
 		cat >>${TARGET}/etc/shadow <<END_OF_FILE
