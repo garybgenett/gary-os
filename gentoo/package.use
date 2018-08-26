@@ -292,7 +292,7 @@ virtual/rubygems			ruby_targets_ruby22		# gentoo required
 
 ################################################################################
 
-app-emulation/libvirt			libvirtd lxc qemu uml virt-network
+app-emulation/libvirt			libvirtd lxc qemu udev uml virt-network
 app-text/enchant			aspell
 sci-libs/libqalculate			gnuplot readline
 
