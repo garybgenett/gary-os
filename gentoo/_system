@@ -158,10 +158,10 @@ fi
 
 ################################################################################
 
-if [[ ${1} == -0 ]]; then ${_SELF} ${TOOR} -n -a -b -k -i	| tee ${TARGET}.log | prompt -c	; exit 0; fi
-if [[ ${1} == -/ ]]; then ${_SELF} ${TOOR} -a -i		| tee ${TARGET}.log | prompt -c	; exit 0; fi
-if [[ ${1} == -1 ]]; then ${_SELF} ${TOOR} -a -b -i		| tee ${TARGET}.log | prompt -c	; exit 0; fi
-if [[ ${1} == -2 ]]; then ${_SELF} ${TOOR} -c -i						; exit 0; fi
+if [[ ${1} == -0 ]]; then ${_SELF} ${TOOR} -n -a -b -k -i	2>&1 | tee ${TARGET}.log | prompt -c	; exit 0; fi
+if [[ ${1} == -/ ]]; then ${_SELF} ${TOOR} -a -i		2>&1 | tee ${TARGET}.log | prompt -c	; exit 0; fi
+if [[ ${1} == -1 ]]; then ${_SELF} ${TOOR} -a -b -i		2>&1 | tee ${TARGET}.log | prompt -c	; exit 0; fi
+if [[ ${1} == -2 ]]; then ${_SELF} ${TOOR} -c -i							; exit 0; fi
 
 ########################################
 
@@ -410,7 +410,7 @@ elif [[ ${1} != -! ]]; then
 			${MV} /var/git/meta-repo/.git /var/git/meta-repo.git
 		fi
 	fi
-	{ ${SAFE_ENV} emerge --ask=n --emptytree --fetch-all-uri \@system \@world	|| exit 1; } 2>&1 | tee /usr/portage/distfiles.log
+	${SAFE_ENV} emerge --ask=n --emptytree --fetch-all-uri \@system \@world		|| exit 1
 #>>>	${SAFE_ENV} egencache --update-use-local-desc					|| exit 1
 fi
 
