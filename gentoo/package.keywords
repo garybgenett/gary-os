@@ -72,6 +72,8 @@ app-emulation/vmware-player		~*		# gentoo required
 app-emulation/vmware-tools		~*		# gentoo required
 
 games-fps/doom3				~*		# gentoo required
+games-fps/doom3-demo			~*		# gentoo required
+games-fps/ezquake-bin			~*		# gentoo required
 games-fps/quakeforge			~*		# gentoo required
 
 ########################################
