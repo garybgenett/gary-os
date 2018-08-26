@@ -37,6 +37,8 @@
 
 >=x11-wm/enlightenment-1.0		# still legacy e16
 
+>=app-admin/keepassx-2			# stick with v1 for now
+
 ################################################################################
 
 #{MET} >=x11-libs/gtk+-3		# only need gtk+-2
