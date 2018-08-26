@@ -48,7 +48,21 @@ app-emulation/vmware-tools		vmware
 app-text/acroread			Adobe
 
 app-arch/lha				lha
+games-fps/doom-data			freedist
 games-fps/doom3				DOOM3
+games-fps/doom3-cdoom			GameFront
+games-fps/doom3-data			DOOM3
+games-fps/doom3-demo			DOOM3
+games-fps/doom3-ducttape		freedist
+games-fps/doom3-lms			GameFront
+games-fps/doom3-mitm			all-rights-reserved
+games-fps/doom3-roe			DOOM3
+games-fps/doomsday-resources		free-noncomm
+games-fps/quake1-data			all-rights-reserved
+games-fps/quake1-demodata		quake1-demodata
+games-fps/quake1-killer			quake1-killer
+games-fps/quake1-rally			all-rights-reserved
+games-fps/quake1-teamfortress		quake1-teamfortress
 
 ################################################################################
 # end of file
