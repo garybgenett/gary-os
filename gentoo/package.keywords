@@ -98,12 +98,14 @@ sys-libs/uid_wrapper			~*		# gentoo required
 
 ########################################
 
-x11-misc/obconf				~*
-x11-wm/openbox				~*
+net-misc/rclone				~*
 
 x11-misc/dmenu				~*
 x11-terms/st				~*
 x11-wm/dwm				~*
+
+x11-misc/obconf				~*
+x11-wm/openbox				~*
 
 x11-terms/terminology			~*
 x11-wm/enlightenment:0			~*
@@ -111,24 +113,25 @@ x11-wm/enlightenment:0.17		~*
 dev-libs/efl				~*		# gentoo required
 media-libs/elementary			~*		# gentoo required
 
-app-editors/atom			~*
-app-eselect/eselect-electron		~*
-dev-util/electron			~*
+x11-misc/tabbed				~*
+
+app-text/pandoc				~*
+
+media-libs/libdvdcss			~*
+media-libs/libdvdnav			~*
+media-libs/libdvdread			~*
 
 app-misc/task				~*
 app-misc/taskd				~*
 app-misc/timew				~*
 
-app-text/pandoc				~*
 mail-client/mutt			~*
-net-misc/rclone				~*
 
 www-client/surf				~*
-x11-misc/tabbed				~*
 
-media-libs/libdvdcss			~*
-media-libs/libdvdnav			~*
-media-libs/libdvdread			~*
+app-editors/atom			~*
+app-eselect/eselect-electron		~*		# gentoo required
+dev-util/electron			~*		# gentoo required
 
 ################################################################################
 # end of file

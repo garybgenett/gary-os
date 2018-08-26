@@ -33,7 +33,7 @@
 # games-action/garden-1.0.9
 >=games-action/garden-1.0.9		# gentoo required: build error
 
-########################################
+################################################################################
 
 >=x11-wm/enlightenment-1.0		# still legacy e16
 
