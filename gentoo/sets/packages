@@ -25,7 +25,7 @@ app-text/iso-codes
 sys-libs/timezone-data
 
 app-crypt/efitools
-#>>>sys-apps/busybox
+#>>>sys-apps/busybox			# overwrites system utilities
 sys-apps/openrc
 sys-apps/sysvinit
 sys-boot/boot-update
@@ -39,7 +39,7 @@ sys-process/runit
 
 sys-apps/gptfdisk
 sys-block/parted
-#>>>sys-fs/btrfs-progs
+sys-fs/btrfs-progs
 sys-fs/cryptsetup
 sys-fs/dosfstools
 sys-fs/e2fsprogs
@@ -131,7 +131,7 @@ dev-perl/WWW-Curl
 dev-perl/WWW-Mechanize
 dev-perl/libwww-perl
 perl-core/JSON-PP
-#>>>perl-core/MIME-Base64
+#>>>perl-core/MIME-Base64		# gentoo required: [perl-core/MIME-Base64-3.150.0] <perl-core/MIME-Base64-3.150.0 ("<perl-core/MIME-Base64-3.150.0" is blocking virtual/perl-MIME-Base64-3.150.0-r2)
 perl-core/Time-Local
 virtual/perl-MIME-Base64
 
@@ -273,7 +273,7 @@ dev-haskell/highlighting-kate
 dev-haskell/pandoc-citeproc
 dev-haskell/pandoc-types
 dev-haskell/pretty-show			# gentoo required: missing dependency of dev-haskell/skylighting
-dev-haskell/skylighting			# dev-haskell/highlighting-kate replacement
+dev-haskell/skylighting			# gentoo required: dev-haskell/highlighting-kate replacement
 dev-haskell/texmath
 
 app-text/asciidoc
@@ -313,6 +313,7 @@ dev-haskell/cabal-install
 dev-lang/ghc
 
 dev-java/icedtea
+dev-java/icedtea-bin
 dev-java/icedtea:7
 
 dev-db/sqlite
@@ -329,6 +330,10 @@ media-libs/alsa-oss
 media-sound/alsa-utils
 media-sound/apulse
 
+media-libs/libdvdcss
+media-libs/libdvdnav
+media-libs/libdvdread
+
 media-sound/pavucontrol
 media-sound/pulseaudio
 
@@ -336,7 +341,7 @@ net-wireless/bluez
 net-wireless/bluez-hcidump
 net-wireless/bluez-tools
 
-#>>>polychromatic
+# polychromatic dependencies
 dev-python/dbus-python
 dev-python/lesscpy
 dev-python/pyudev
@@ -564,6 +569,7 @@ media-libs/tiff
 
 media-libs/libprojectm
 media-sound/picard
+#>>>media-sound/projectm-pulseaudio	# gentoo required: [media-sound/projectm-pulseaudio-2.1.0] CMake Error at cmake_install.cmake:53 (file): file RPATH_CHANGE could not write new RPATH: to the file: /var/tmp/portage/media-sound/projectm-pulseaudio-2.1.0/image//usr/bin/projectM-pulseaudio The current RUNPATH is: --library=projectM:-L/usr/lib64/qt4:-lQtXml:-lQtOpenGL:-lQtGui:-lQtCore:/usr/lib64/qt4: which does not contain: -lprojectM:-L/usr/lib64/qt4:-lQtXml:-lQtOpenGL:-lQtGui:-lQtCore:/usr/lib64/qt4: as was expected.
 media-sound/quodlibet
 media-sound/synaesthesia
 media-video/ffmpeg
