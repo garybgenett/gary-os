@@ -292,52 +292,40 @@ virtual/rubygems			ruby_targets_ruby22		# gentoo required
 
 ################################################################################
 
-net-fs/samba				client cups
-net-print/cups				samba
-
-dev-vcs/subversion			-apache2
-www-servers/apache			-threads
+app-emulation/libvirt			libvirtd lxc qemu uml virt-network
+app-text/enchant			aspell
+sci-libs/libqalculate			gnuplot readline
 
 ########################################
 
-sys-boot/grub				device-mapper mount
-
+app-emulation/qemu			ncurses sdl spice
+app-emulation/spice			client gui
+app-emulation/virtualbox		qt4 sdk vnc
+app-emulation/vmware-tools		vmware_guest_freebsd vmware_guest_linux vmware_guest_windows
+app-emulation/wine			-gstreamer -mp3 -opengl -oss
+app-office/libreoffice			java
 dev-libs/openssl			rfc3779
+dev-vcs/subversion			-apache2
+games-fps/doom3				-dedicated
+mail-client/mutt			-tokyocabinet debug gpg hcache sasl sidebar smime smtp
+mail-client/thunderbird			-crypt -lightning -wifi ldap	# installing "enigmail" and "lightning" plugins manually
+mail-mta/msmtp				mta
+media-sound/pulseaudio			bluetooth dbus
+media-video/vlc				projectm qt4 vlm
 net-analyzer/tcpdump			-chroot
+net-fs/samba				client cups
 net-misc/networkmanager			-introspection -modemmanager -nss dhcpcd gnutls
+net-print/cups				samba
 net-vpn/openvpn				iproute2
+net-wireless/bluez			debug
+sci-calculators/qalculate		-gnome
 sys-apps/iproute2			iptables
-
+sys-boot/grub				device-mapper mount
+www-client/firefox			-wifi
+www-servers/apache			-threads
 x11-base/xorg-server			xnest xvfb
 x11-terms/rxvt-unicode			fading-colors focused-urgency font-styles mousewheel perl
 x11-wm/dwm				savedconfig
-
-media-sound/pulseaudio			bluetooth dbus
-
-net-wireless/bluez			debug
-
-sci-calculators/qalculate		-gnome
-sci-libs/libqalculate			gnuplot readline
-
-app-emulation/wine			-gstreamer -mp3 -opengl -oss
-
-app-emulation/libvirt			libvirtd lxc qemu uml virt-network
-app-emulation/qemu			ncurses sdl spice
-app-emulation/spice			client gui
-app-emulation/vmware-tools		vmware_guest_freebsd vmware_guest_linux vmware_guest_windows
-app-emulation/virtualbox		qt4 sdk vnc
-
-mail-client/mutt			-tokyocabinet debug gpg hcache sasl sidebar smime smtp
-mail-mta/msmtp				mta
-
-app-office/libreoffice			java
-app-text/enchant			aspell
-mail-client/thunderbird			-crypt -lightning -wifi ldap # installing "enigmail" and "lightning" plugins manually
-www-client/firefox			-wifi
-
-games-fps/doom3				-dedicated
-
-media-video/vlc				projectm qt4 vlm
 
 ################################################################################
 
