@@ -632,12 +632,33 @@ games-emulation/stella
 app-arch/lha
 games-fps/doom-data
 games-fps/doom3
-#>>>games-fps/doom3-data
-#>>>games-fps/doom3-roe
+games-fps/doom3-demo
+games-fps/doom3-ducttape
+games-fps/doomsday
+games-fps/doomsday-resources
+games-fps/ezquake-bin
 games-fps/freedoom
 games-fps/prboom
-#>>>games-fps/quake1-data
+games-fps/quake1-demodata
+games-fps/quake1-killer
+games-fps/quake1-rally
+games-fps/quake1-teamfortress
+games-fps/quake1-textures
 games-fps/quakeforge
+
+# interactive ebuilds, which can be automated using:
+#	TARGET="/.g/_toor" ; for FILE in quake doom3-disk1 doom3-disk2 doom3-disk3 doom3_roe ; do mkdir -v ${TARGET}/tmp/${FILE} ; mount -v -o ro,loop /.g/_data/source/id/${FILE}.iso ${TARGET}/tmp/${FILE} ; done ; mount
+#	TARGET="/.g/_toor" ; for FILE in quake doom3-disk1 doom3-disk2 doom3-disk3 doom3_roe ; do umount -v ${TARGET}/tmp/${FILE} ; done ; mount
+games-fps/doom3-data			# interactive ebuild
+games-fps/doom3-roe			# interactive ebuild
+games-fps/quake1-data			# interactive ebuild
+
+# packages dependent on interactive ebuilds
+games-fps/doom3-mitm			# manual download (depends on games-fps/doom3-roe, and "games-fps/doom3 roe" in "package.use")
+
+# manual download ebuilds
+games-fps/doom3-cdoom			# manual download
+games-fps/doom3-lms			# manual download
 
 ################################################################################
 # end of file

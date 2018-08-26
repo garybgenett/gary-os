@@ -7,7 +7,12 @@
 ################################################################################
 
 games-fps/doom3
+games-fps/doom3-cdoom
 games-fps/doom3-data
+games-fps/doom3-demo
+games-fps/doom3-ducttape
+games-fps/doom3-lms
+games-fps/doom3-mitm
 games-fps/doom3-roe
 
 ################################################################################
