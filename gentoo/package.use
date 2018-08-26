@@ -306,7 +306,6 @@ app-emulation/wine			-gstreamer -mp3 -opengl -oss
 app-office/libreoffice			java
 dev-libs/openssl			rfc3779
 dev-vcs/subversion			-apache2
-games-fps/doom3				-dedicated
 mail-client/mutt			-tokyocabinet debug gpg hcache sasl sidebar smime smtp
 mail-client/thunderbird			-crypt -lightning -wifi ldap	# installing "enigmail" and "lightning" plugins manually
 mail-mta/msmtp				mta
@@ -326,6 +325,14 @@ www-servers/apache			-threads
 x11-base/xorg-server			xnest xvfb
 x11-terms/rxvt-unicode			fading-colors focused-urgency font-styles mousewheel perl
 x11-wm/dwm				savedconfig
+
+games-fps/doom3				roe		# gentoo required: [games-fps/doom3-mitm-20070129] !!! All ebuilds that could satisfy "games-fps/doom3[opengl,roe]" have been masked.
+games-fps/doom3				-dedicated
+games-fps/doom3-cdoom			-dedicated
+games-fps/doom3-data			-dedicated
+games-fps/doom3-ducttape		-dedicated
+games-fps/doom3-lms			-dedicated
+games-fps/doom3-mitm			-dedicated
 
 ################################################################################
 
