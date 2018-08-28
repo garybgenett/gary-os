@@ -167,24 +167,24 @@ if [[ ${1} == -2 ]]; then ${_SELF} ${TOOR} -c -i							; exit 0; fi
 
 if [[ ${1} == -i ]]; then
 	if [[ ! -d ${TARGET}/boot ]]; then
-#>>>		tar -pvvxJ -C ${TARGET} -f	$(ls -t ${SOURCE}/stage3-*i686*funtoo*.tar.xz		| head -n1)
-		tar -pvvxJ -C ${TARGET} -f	$(ls -t ${SOURCE}/stage3-*core2_64*funtoo*.tar.xz	| head -n1)
-		${RSYNC_U} ${SOURCE}/*funtoo*	${TARGET}/_build/
+#>>>		tar -pvvxJ -C ${TARGET} -f	$(ls -t ${SOURCE}/stage3-*i686*funtoo*.tar.xz		| head -n1) || exit 1
+		tar -pvvxJ -C ${TARGET} -f	$(ls -t ${SOURCE}/stage3-*core2_64*funtoo*.tar.xz	| head -n1) || exit 1
+		${RSYNC_U} ${SOURCE}/*funtoo*	${TARGET}/_build/					|| exit 1
 	fi
-	echo -en "${COMMIT}"			>${TARGET}/_build/_commit
-	${RSYNC_U} ${FUNDIR}/			${TARGET}/_build/_config
-	${RSYNC_U} ${LINDIR}/			${TARGET}/_build/_kernel
-	${MKDIR}				${TARGET}/.g/.home
-	${HOME}/scripts/_sync _home _build	${TARGET}/.g/.home
-	${RM}					${TARGET}/.g/.home/.ssh/id_*
+	echo -en "${COMMIT}"			>${TARGET}/_build/_commit				|| exit 1
+	${RSYNC_U} ${FUNDIR}/			${TARGET}/_build/_config				|| exit 1
+	${RSYNC_U} ${LINDIR}/			${TARGET}/_build/_kernel				|| exit 1
+	${MKDIR}				${TARGET}/.g/.home					|| exit 1
+	${HOME}/scripts/_sync _home _build	${TARGET}/.g/.home					|| exit 1
+	${RM}					${TARGET}/.g/.home/.ssh/id_*				|| exit 1
 	mount_dev_dirs
-	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/scripts/_sync mount g null
+	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/scripts/_sync mount g null			|| exit 1
 	if [[ ! -d ${TARGET}/var/git/meta-repo ]]; then
-		${MKDIR}			${TARGET}/var/git/meta-repo{,.git}
-		${RSYNC_U} ${GITDIR}/		${TARGET}/var/git/meta-repo.git
-		${SAFE_ENV}			${_SELF} ${FUNTOO_VER}
+		${MKDIR}			${TARGET}/var/git/meta-repo{,.git}			|| exit 1
+		${RSYNC_U} ${GITDIR}/		${TARGET}/var/git/meta-repo.git				|| exit 1
+		${SAFE_ENV}			${_SELF} ${FUNTOO_VER}					|| exit 1
 	fi
-	${SAFE_ENV}				${_SELF} ${TOOR} ${AUTO} -w
+	${SAFE_ENV}				${_SELF} ${TOOR} ${AUTO} -w				|| exit 1
 	if ${BLD}; then
 		if [[ -n ${_NEW} ]]; then
 			${SAFE_ENV}		${_SELF} ${TOOR} ${AUTO} -f				|| exit 1
