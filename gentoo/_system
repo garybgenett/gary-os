@@ -185,10 +185,10 @@ fi
 
 ################################################################################
 
-if [[ ${1} == -0 ]]; then ${_SELF} ${TOOR} -n -a -b -k -i	2>&1 | tee ${TARGET}.log | prompt -c	; exit 0; fi
-if [[ ${1} == -/ ]]; then ${_SELF} ${TOOR} -a -i		2>&1 | tee ${TARGET}.log | prompt -c	; exit 0; fi
-if [[ ${1} == -1 ]]; then ${_SELF} ${TOOR} -a -b -i		2>&1 | tee ${TARGET}.log | prompt -c	; exit 0; fi
-if [[ ${1} == -2 ]]; then ${_SELF} ${TOOR} -c -i							; exit 0; fi
+if [[ ${1} == -0 ]]; then expect_wrapper -0 ${_SELF} ${TOOR} -n -a -b -k -i	2>&1 | tee ${TARGET}.log | prompt -c	; exit 0; fi
+if [[ ${1} == -/ ]]; then expect_wrapper -0 ${_SELF} ${TOOR} -a -i		2>&1 | tee ${TARGET}.log | prompt -c	; exit 0; fi
+if [[ ${1} == -1 ]]; then expect_wrapper -0 ${_SELF} ${TOOR} -a -b -i		2>&1 | tee ${TARGET}.log | prompt -c	; exit 0; fi
+if [[ ${1} == -2 ]]; then ${_SELF} ${TOOR} -c -i									; exit 0; fi
 
 ########################################
 
