@@ -40,6 +40,8 @@ declare NEXT=
 
 ########################################
 
+unset EMERGE_DEFAULT_OPTS
+
 declare FUNTOO_VER="$(tail -n1 ${FUNDIR}/funtoo)"
 declare KERNEL_VER="$(${SED} -n "s|^.+/gentoo-sources:(.+)$|\1|gp" ${FUNDIR}/sets/${_PKG})"
 
