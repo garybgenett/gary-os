@@ -135,10 +135,10 @@ if [[ ${1} == -s ]]; then
 	mount_dev_dirs
 	if [[ ${1} == -t ]]; then
 		shift
-		${_SELF} ${TOOR} -s -e --pretend --emptytree --tree \@system \@world
+		${_SELF} ${TOOR} -s -e --pretend --emptytree --tree --unordered-display \@system \@world
 	elif [[ ${1} == -e ]]; then
 		shift
-		${SAFE_ENV} emerge "${@}"
+		expect_wrapper emerge ${ASK} "${@}"
 	else
 		${SAFE_ENV} /usr/bin/env bash -o vi ${@:+-c "${@}"}
 	fi
