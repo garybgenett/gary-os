@@ -205,7 +205,7 @@ if [[ ${1} == -i ]]; then
 	${HOME}/scripts/_sync _home _build	${TARGET}/.g/.home					|| exit 1
 	${RM}					${TARGET}/.g/.home/.ssh/id_*				|| exit 1
 	mount_dev_dirs
-	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/scripts/_sync mount g null			|| exit 1
+	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/scripts/_sync mount g null			#>>>|| exit 1
 	if [[ ! -d ${TARGET}/var/git/meta-repo ]]; then
 		${MKDIR}			${TARGET}/var/git/meta-repo{,.git}			|| exit 1
 		${RSYNC_U} ${GITDIR}/		${TARGET}/var/git/meta-repo.git				|| exit 1
