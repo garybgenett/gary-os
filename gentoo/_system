@@ -114,6 +114,33 @@ function mount_dev_dirs {
 	return 0
 }
 
+########################################
+
+function expect_wrapper {
+	declare WRAP="true"
+	if [[ ${1} == -0 ]]; then
+		WRAP="false"
+		shift
+	fi
+	declare EXPECT_CMD="expect -c \"spawn ${@};"
+	EXPECT_CMD+=" "; EXPECT_CMD+="set timeout -1;"
+	EXPECT_CMD+=" "; EXPECT_CMD+="expect yes/no {send y\\r;};"
+	EXPECT_CMD+=" "; EXPECT_CMD+="expect use-new {send u\\r;};"
+	EXPECT_CMD+=" "; EXPECT_CMD+="expect default {};"
+	EXPECT_CMD+="\""
+	if ${WRAP}; then
+		if [[ -n ${AUTO} ]]; then
+			${SAFE_ENV} ${EXPECT_CMD}
+		else
+			${SAFE_ENV} ${@}
+		fi
+	else
+		eval ${EXPECT_CMD}
+	fi
+}
+
+################################################################################
+
 if [[ ${1} == -s ]]; then
 	shift
 	mount_dev_dirs
@@ -355,20 +382,6 @@ if [[ ${1} == -w ]]; then
 fi
 
 ########################################
-
-function expect_wrapper {
-	declare EXPECT_CMD="expect -c \"spawn ${@};"
-	EXPECT_CMD+=" "; EXPECT_CMD+="set timeout -1;"
-	EXPECT_CMD+=" "; EXPECT_CMD+="expect yes/no {send y\\r; exp_continue;};"
-	EXPECT_CMD+=" "; EXPECT_CMD+="expect use-new {send u\\r; exp_continue;};"
-	EXPECT_CMD+=" "; EXPECT_CMD+="expect eof {close;};"
-	EXPECT_CMD+="\""
-	if [[ -n ${AUTO} ]]; then
-		${SAFE_ENV} ${EXPECT_CMD}
-	else
-		${SAFE_ENV} ${@}
-	fi
-}
 
 if [[ ${1} == -u ]]; then
 	${SAFE_ENV} ${_SELF} ${TOOR} ${AUTO} -w					|| exit 1
