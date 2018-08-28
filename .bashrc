@@ -82,7 +82,7 @@ export HISTIGNORE=
 
 ########################################
 
-export EMERGE_DEFAULT_OPTS="--ask=y --verbose --oneshot"
+unset EMERGE_DEFAULT_OPTS
 
 #>>>export CARCH="i686"
 #>>>export CHOST="i686-pc-linux-gnu"
@@ -1872,6 +1872,7 @@ function prompt {
 			HISTSIZE="${HISTSIZE}" \
 			HISTFILESIZE="${HISTFILESIZE}" \
 			HISTTIMEFORMAT="${HISTTIMEFORMAT}" \
+			${EMERGE_DEFAULT_OPTS+EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS}"} \
 			CARCH="${CARCH}" \
 			CHOST="${CHOST}" \
 			CFLAGS="${CFLAGS}" \
@@ -1883,7 +1884,6 @@ function prompt {
 			PATH="${PATH}" \
 			CYGWIN="${CYGWIN}" \
 			CYGWIN_ROOT="${CYGWIN_ROOT}" \
-			${EMERGE_DEFAULT_OPTS+EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS}"} \
 			${CMD} "${@}"
 		return ${?}
 	fi
