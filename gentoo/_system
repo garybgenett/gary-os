@@ -142,7 +142,7 @@ if [[ ${1} == -l ]]; then
 		NEXT="$(echo "${FILE}" | ${SED} "s|^/var/git/meta-repo/kits/.+[/]([^/]+[/][^/]+)$|\1|g")"
 		if [[ -z ${FILE} ]]; then
 			echo -en "\n"
-			emerge -s ${1}
+			emerge --search ${1}
 		else
 			echo -en "https://packages.gentoo.org/packages/${NEXT}\n"
 			echo -en "https://gentoobrowse.randomdan.homeip.net/package/${NEXT}#bugs\n"
@@ -180,7 +180,6 @@ if [[ ${1} == -i ]]; then
 	mount_dev_dirs
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/scripts/_sync mount g null
 	if [[ ! -d ${TARGET}/var/git/meta-repo ]]; then
-		${SAFE_ENV}	${_SELF} ${TOOR} ${AUTO} -w
 		${MKDIR}			${TARGET}/var/git/meta-repo{,.git}
 		${RSYNC_U} ${GITDIR}/		${TARGET}/var/git/meta-repo.git
 		${SAFE_ENV}			${_SELF} ${FUNTOO_VER}
@@ -188,6 +187,7 @@ if [[ ${1} == -i ]]; then
 	${SAFE_ENV}				${_SELF} ${TOOR} ${AUTO} -w
 	if ${BLD}; then
 		if [[ -n ${_NEW} ]]; then
+			${SAFE_ENV}		${_SELF} ${TOOR} ${AUTO} -f				|| exit 1
 			${SAFE_ENV}		emerge ${ASK} --deep --newuse --update \@system		|| exit 1
 		else
 			${SAFE_ENV}		emerge ${ASK} --emptytree \@system \@world		|| exit 1
@@ -199,9 +199,11 @@ if [[ ${1} == -i ]]; then
 		${SAFE_ENV}			emerge ${ASK} genkernel =gentoo-sources-${FILE}		|| exit 1
 		declare GENKERNEL_OPTS="--loglevel=5 --bootloader=grub --symlink kernel"
 		if [[ -z ${AUTO} ]]; then
-		${SAFE_ENV}			genkernel ${GENKERNEL_OPTS} kernel --menuconfig		|| exit 1; else
-		${SAFE_ENV}			genkernel ${GENKERNEL_OPTS} kernel			\
-						--kernel-config=${LINDIR}/config-gentoo64-${FILE}	|| exit 1; fi
+			${SAFE_ENV}		genkernel ${GENKERNEL_OPTS} kernel --menuconfig		|| exit 1
+		else
+			${SAFE_ENV}		genkernel ${GENKERNEL_OPTS} kernel			\
+						--kernel-config=${LINDIR}/config-gentoo64-${FILE}	|| exit 1
+		fi
 #>>>		FILE="kernel-genkernel-x86-${FILE}-gentoo"						|| exit 1
 		FILE="kernel-genkernel-x86_64-${FILE}-gentoo"						|| exit 1
 		${RM}				${TARGET}/boot/_cur					|| exit 1
@@ -293,15 +295,16 @@ END_OF_FILE
 						${TARGET}/etc/sudoers
 		for FILE in			root	\
 						plastic
-		do				echo "password: ${FILE}"
+		do				echo -en "password: ${FILE}\n"
 			until			${SAFE_ENV} passwd ${FILE}
-			do			echo "retry: ${FILE}"
+			do			echo -en "retry: ${FILE}\n"
 			done
 		done
 	fi
-	if [[ -z ${_MET} ]]; then
-	${SAFE_ENV}				${_SELF} ${TOOR} ${AUTO} -f	|| exit 1; fi
 	${SAFE_ENV}				${_SELF} ${TOOR} ${AUTO} -u	|| exit 1
+	if [[ -z ${_MET} ]]; then
+		${SAFE_ENV}			${_SELF} ${TOOR} ${AUTO} -f	|| exit 1
+	fi
 	mount_dev_dirs -u
 	exit 0
 fi
