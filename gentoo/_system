@@ -6,6 +6,9 @@ declare SOURCE="/.g/_data/_target/iso"
 declare GITDIR="/.g/_data/_build/funtoo/meta-repo.git"
 declare METDIR="/.g/_data/_builds/_metro"
 
+declare DSTDIR="usr/portage/distfiles"
+declare PKGDIR="usr/portage/packages"
+
 declare SETDIR="${HOME}/setup"
 declare FUNDIR="${SETDIR}/gentoo"
 declare LINDIR="${SETDIR}/linux"
@@ -168,8 +171,8 @@ if [[ ${1} == -l ]]; then
 		else
 			echo -en "https://packages.gentoo.org/packages/${NEXT}\n"
 			echo -en "https://gentoobrowse.randomdan.homeip.net/package/${NEXT}#bugs\n"
-			${LL} -d {/usr,/var/cache}/portage/distfiles/$(basename ${FILE})*	2>/dev/null
-			${LL} -d {/usr,/var/cache}/portage/packages/${NEXT}*			2>/dev/null
+			${LL} -d /${DSTDIR}/$(basename ${FILE})*	2>/dev/null
+			${LL} -d /${PKGDIR}/${NEXT}*			2>/dev/null
 			echo -en "\n"
 			echo -en "${FILE}\n"
 			${LL} ${FILE}
@@ -431,18 +434,18 @@ elif [[ ${1} != -! ]]; then
 	if [[ -z ${1} ]] || [[ ${1} == -f ]]; then
 		FILE="true"
 		expect_wrapper emerge --ask=n --emptytree --fetch-all-uri		\
-			\@system \@world						2>&1 | tee /usr/portage/distfiles.log
+			\@system \@world						2>&1 | tee /${DSTDIR}.log
 		if [[ ${PIPESTATUS[0]} != 0 ]]; then
 			FILE="false"
 		fi
 		if ! ${FILE}; then
 			echo -en "FILELIST=\"\n"					1>&2
 			${SED} -n "s/^.*Couldn[']t[ ]download[ ][']([^']+)['].*$/\1/gp"	\
-				/usr/portage/distfiles.log | sort --unique		1>&2
+				/${DSTDIR}.log | sort --unique				1>&2
 			echo -en "\"\n"							1>&2
 		fi
-		${RM} /usr/portage/distfiles.log					1>&2
-		for NEXT in /usr/portage/distfiles/*checksum_failure*; do
+		${RM} /${DSTDIR}.log							1>&2
+		for NEXT in /${DSTDIR}/*checksum_failure*; do
 			${RM} ${NEXT}							1>&2
 			FILE="false"
 		done
