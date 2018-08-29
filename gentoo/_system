@@ -86,8 +86,6 @@ fi
 declare SAFE_ENV="prompt -z"
 if [[ ${1} == -i ]] || [[ ${1} == -s ]]; then
 	SAFE_ENV="prompt -z chroot ${TARGET}"
-elif [[ ${1} == -u ]]; then
-	SAFE_ENV="eval prompt -z"
 fi
 
 ################################################################################
@@ -118,9 +116,16 @@ function mount_dev_dirs {
 function expect_wrapper {
 	declare EXPECT_CMD="spawn ${@};"
 	EXPECT_CMD+=" "; EXPECT_CMD+="set timeout -1;"
-	EXPECT_CMD+=" "; EXPECT_CMD+="expect yes/no {send y\\r;};"
-	EXPECT_CMD+=" "; EXPECT_CMD+="expect use-new {send u\\r;};"
-	EXPECT_CMD+=" "; EXPECT_CMD+="expect default {};"
+	EXPECT_CMD+="";
+	EXPECT_CMD+=" "; EXPECT_CMD+="expect"
+	EXPECT_CMD+=" "; EXPECT_CMD+="-nocase yes*/*no*	{send y\\r; exp_continue;}"
+	EXPECT_CMD+=" "; EXPECT_CMD+="-nocase use-new*	{send u\\r; exp_continue;}"
+	EXPECT_CMD+=" "; EXPECT_CMD+="default {}"
+	EXPECT_CMD+=" "; EXPECT_CMD+="eof"
+	EXPECT_CMD+=" "; EXPECT_CMD+=";"
+	EXPECT_CMD+="";
+	EXPECT_CMD+=" "; EXPECT_CMD+="lassign [wait] pid spawnid os_error exit_status;"
+	EXPECT_CMD+=" "; EXPECT_CMD+="if {(\$os_error == 0) && (\$exit_status == 0)} { exit 0; } else { exit 1; };"
 	if [[ -n ${AUTO} ]]; then
 		${SAFE_ENV} expect -c "${EXPECT_CMD}"
 	else
