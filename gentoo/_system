@@ -118,7 +118,7 @@ function mount_dev_dirs {
 ########################################
 
 function expect_wrapper {
-	declare EXPECT_CMD="spawn ${@};"
+	declare EXPECT_CMD="spawn -noecho ${@};"
 	EXPECT_CMD+=" "; EXPECT_CMD+="set timeout -1;"
 	EXPECT_CMD+="";
 	EXPECT_CMD+=" "; EXPECT_CMD+="expect {"
