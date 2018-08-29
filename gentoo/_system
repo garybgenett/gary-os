@@ -209,6 +209,8 @@ if [[ ${1} == -i ]]; then
 	${SAFE_ENV}				${_SELF} ${TOOR} ${AUTO} -w				|| exit 1
 	if ${BLD}; then
 		if [[ -n ${_NEW} ]]; then
+#>>>			expect_wrapper		emerge ${ASK} expect					|| exit 1
+			${SAFE_ENV}		emerge ${ASK} expect					|| exit 1
 			${SAFE_ENV}		${_SELF} ${TOOR} ${AUTO} -f				|| exit 1
 			expect_wrapper		emerge ${ASK} --deep --newuse --update \@system		|| exit 1
 		else
