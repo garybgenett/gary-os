@@ -451,14 +451,14 @@ elif [[ ${1} != -! ]]; then
 			echo -en "${BUILDS}/${DSTDIR}/\${FILE} ${TARGET}/${DSTDIR}/\n"	1>&2
 			echo -en "done\n"						1>&2
 		fi
-		${RM} /${DSTDIR}.log							1>&2
-		for NEXT in /${DSTDIR}/*checksum_failure*; do
+		for NEXT in $(find /${DSTDIR}/*checksum_failure* 2>/dev/null); do
 			${RM} ${NEXT}							1>&2
 			FILE="false"
 		done
 		if ! ${FILE}; then
 			exit 1;
 		fi
+		${RM} /${DSTDIR}.log							1>&2
 	fi
 	if [[ -n ${1} ]]; then
 		exit 0
