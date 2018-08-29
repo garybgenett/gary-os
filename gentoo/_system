@@ -441,9 +441,15 @@ elif [[ ${1} != -! ]]; then
 		fi
 		if ! ${FILE}; then
 			echo -en "FILELIST=\"\n"					1>&2
-			${SED} -n "s/^.*Couldn[']t[ ]download[ ][']([^']+)['].*$/\1/gp"	\
+			${SED} -n \
+				-e "s/^.*Couldn[']t[ ]download[ ][']([^']+).*$/\1/gp"	\
+				-e "s/^.*Please[ ]download[ ]([^ ]+).*$/\1/gp"		\
 				/${DSTDIR}.log | sort --unique				1>&2
 			echo -en "\"\n"							1>&2
+			echo -en "for FILE in \${FILELIST}; do\n"			1>&2
+			echo -en "${RSYNC_U} "						1>&2
+			echo -en "${BUILDS}/${DSTDIR}/\${FILE} ${TARGET}/${DSTDIR}/\n"	1>&2
+			echo -en "done\n"						1>&2
 		fi
 		${RM} /${DSTDIR}.log							1>&2
 		for NEXT in /${DSTDIR}/*checksum_failure*; do
