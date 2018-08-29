@@ -421,7 +421,25 @@ elif [[ ${1} != -! ]]; then
 			${MV} /var/git/meta-repo/.git /var/git/meta-repo.git
 		fi
 	fi
-	expect_wrapper emerge --ask=n --emptytree --fetch-all-uri \@system \@world	|| exit 1
+	FILE="true"
+	expect_wrapper emerge --ask=n --emptytree --fetch-all-uri \@system \@world	2>&1 | tee /usr/portage/distfiles.log
+	if [[ ${PIPESTATUS[0]} != 0 ]]; then
+		FILE="false"
+	fi
+	if ! ${FILE}; then
+		echo -en "FILELIST=\"\n"						1>&2
+		${SED} -n "s/^.*Couldn[']t[ ]download[ ][']([^']+)['].*$/\1/gp"		\
+			/usr/portage/distfiles.log | sort --unique			1>&2
+		echo -en "\"\n"								1>&2
+	fi
+	${RM} /usr/portage/distfiles.log						1>&2
+	for NEXT in /usr/portage/distfiles/*checksum_failure*; do
+		${RM} ${NEXT}								1>&2
+		FILE="false"
+	done
+	if ! ${FILE}; then
+		exit 1;
+	fi
 #>>>	expect_wrapper egencache --update-use-local-desc				|| exit 1
 fi
 
