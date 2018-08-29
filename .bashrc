@@ -408,6 +408,7 @@ alias rclone="${RCLONE_U}"
 
 export WGET_C="wget \
 	--verbose \
+	--progress=bar \
 	--execute robots=off \
 	--user-agent=Mozilla/5.0 \
 	--restrict-file-names=windows \
