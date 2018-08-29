@@ -3,6 +3,7 @@ source ${HOME}/.bashrc
 ################################################################################
 
 declare SOURCE="/.g/_data/_target/iso"
+declare BUILDS="/.g/_data/_builds/_gentoo"
 declare GITDIR="/.g/_data/_build/funtoo/meta-repo.git"
 declare METDIR="/.g/_data/_builds/_metro"
 
@@ -13,7 +14,7 @@ declare SETDIR="${HOME}/setup"
 declare FUNDIR="${SETDIR}/gentoo"
 declare LINDIR="${SETDIR}/linux"
 
-declare TARGET="/.g/_data/_builds/_gentoo"
+declare TARGET="${BUILDS}"
 declare TOOR=
 declare _NEW=
 declare _MET=
