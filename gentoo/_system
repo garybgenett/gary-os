@@ -127,10 +127,11 @@ function expect_wrapper {
 	EXPECT_CMD+=" "; EXPECT_CMD+="lassign [wait] pid spawnid os_error exit_status;"
 	EXPECT_CMD+=" "; EXPECT_CMD+="if {(\$os_error == 0) && (\$exit_status == 0)} { exit 0; } else { exit 1; };"
 	if [[ -n ${AUTO} ]]; then
-		${SAFE_ENV} expect -c "${EXPECT_CMD}"
+		${SAFE_ENV} expect -c "${EXPECT_CMD}"	|| return 1
 	else
-		${SAFE_ENV} "${@}"
+		${SAFE_ENV} "${@}"			|| return 1
 	fi
+	return 0
 }
 
 ################################################################################
@@ -143,9 +144,9 @@ if [[ ${1} == -s ]]; then
 		${_SELF} ${TOOR} -s -e --pretend --emptytree --tree --unordered-display \@system \@world
 	elif [[ ${1} == -e ]]; then
 		shift
-		expect_wrapper emerge ${ASK} "${@}"
+		expect_wrapper emerge ${ASK} "${@}"			|| exit 1
 	else
-		${SAFE_ENV} /usr/bin/env bash -o vi ${@:+-c "${@}"}
+		${SAFE_ENV} /usr/bin/env bash -o vi ${@:+-c "${@}"}	|| exit 1
 	fi
 	mount_dev_dirs -u
 	exit 0
