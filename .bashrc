@@ -415,7 +415,9 @@ export WGET_C="wget \
 	--server-response \
 	--adjust-extension \
 	--timestamping \
-	--tries=3"
+	--timeout=3 \
+	--tries=3 \
+	--waitretry=3"
 export WGET_S="${WGET_C} \
 	--force-directories \
 	--no-host-directories \
