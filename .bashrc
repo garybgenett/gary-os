@@ -1859,9 +1859,8 @@ function prompt {
 	if [[ ${1} == -z ]]; then
 		shift
 		declare CMD="bash --login --noprofile --norc -o vi"
-		if [[ -n ${1} ]]; then
-			CMD="${1}"
-			shift
+		if [[ -n "${@}" ]]; then
+			CMD=
 		fi
 		/usr/bin/env -i \
 			PROMPT_DIRTRIM="1" \
