@@ -89,15 +89,15 @@ unset EMERGE_DEFAULT_OPTS
 export CARCH="x86_64"
 export CHOST="x86_64-pc-linux-gnu"
 
-#>>>export CFLAGS="-march=i686 -mtune=i686 -O2 -ggdb -pipe"
-#>>>export CFLAGS="-march=core2 -mtune=core2 -O2 -ggdb -pipe"
+#>>>export CFLAGS="-march=i686 -mtune=i686 -m32 -O2 -ggdb -pipe"
+#>>>export CFLAGS="-march=core2 -mtune=core2 -m64 -O2 -ggdb -pipe"
 export CFLAGS="-march=core2 -mtune=core2 -O2 -pipe"
 export CXXFLAGS="${CFLAGS}"
 export LDFLAGS="-Wl,--hash-style=gnu -Wl,--as-needed"
 export MAKEFLAGS="-j9"
 
 export CCACHE_DIR="/tmp/.ccache"
-export CCACHE_LOGFILE= #>>>"/tmp/.ccache.log"
+export CCACHE_LOGFILE="" #>>>"/tmp/.ccache.log"
 
 ########################################
 
