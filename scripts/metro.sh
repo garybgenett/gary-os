@@ -230,7 +230,7 @@ if [[ ${1} == -! ]]; then
 	git-export ${TITLE} ${REL_DIR} ${GITHUB} \
 		+git-export-preprocess +git-export-postprocess \
 		metro:${SAV}:_commit^_config.\*^_packages.\* \
-		setup:/.g/_data/zactive/.setup:gentoo \
+		setup:/.g/_data/zactive/.setup:gentoo^linux \
 		static:/.g/_data/zactive/.static:.bashrc^scripts/grub.sh^scripts/metro.sh \
 		${TITLE}:${DOC_DIR}:				|| exit 1
 
