@@ -142,7 +142,7 @@ function expect_wrapper {
 
 if [[ ${1} == -s ]]; then
 	shift
-	mount_dev_dirs
+	mount_dev_dirs							|| exit 1
 	if [[ ${1} == -t ]]; then
 		shift
 		${_SELF} ${TOOR} -s -e --pretend --emptytree --tree --unordered-display \@system \@world
@@ -152,7 +152,7 @@ if [[ ${1} == -s ]]; then
 	else
 		${SAFE_ENV} /usr/bin/env bash -o vi ${@:+-c "${@}"}	|| exit 1
 	fi
-	mount_dev_dirs -u
+	mount_dev_dirs -u						|| exit 1
 	exit 0
 fi
 
@@ -160,8 +160,9 @@ fi
 
 if [[ ${1} == -l ]]; then
 	shift
-	[[ -z ${1} ]] && exit 1
-	if [[ ${1} == *([0-9]) ]]; then
+	if [[ -z ${1} ]]; then
+		exit 1
+	elif [[ ${1} == *([0-9]) ]]; then
 		echo -en "https://bugs.gentoo.org/show_bug.cgi?id=${1}"
 	else
 		FILE="$(ls -d /var/git/meta-repo/kits/*/*/${1})"
