@@ -56,6 +56,12 @@ declare _PKG="${PKGBLD}"
 declare _MET=
 declare _NEW=
 
+if [[ ${1} == -d ]]; then
+	TARGET="${BLDDIR}"
+	TOOR="${1}"
+	_PKG="${PKGBLD}"
+	shift
+fi
 if [[ ${1} == -x ]]; then
 	TARGET="${OUTDIR}"
 	TOOR="${1}"
@@ -228,7 +234,10 @@ function print_info {
 		echo -en "${NOTES}"
 		echo -en ">>> CHROOT <<<"
 		echo -en "${RESET}\n"
-		printf "${PRINTF}" "Chroot Selection [  ] (\$PKGBLD/\$BLDDIR):"	"${PKGBLD}"	"${BLDDIR}"
+		echo -en "${STATE}"
+		echo -en ">>> DEFAULTS: TARGET=\$BLDDIR _PKG=\$PKGBLD <<<"
+		echo -en "${RESET}\n"
+		printf "${PRINTF}" "Chroot Selection [-d] (\$PKGBLD/\$BLDDIR):"	"${PKGBLD}"	"${BLDDIR}"
 		printf "${PRINTF}" "Chroot Selection [-x] (\$PKGOUT/\$OUTDIR):"	"${PKGOUT}"	"${OUTDIR}"
 		printf "${PRINTF}" "Chroot Selection [-t] (\$PKGTOR/\$TORDIR):"	"${PKGTOR}"	"${TORDIR}"
 		printf "${PRINTF}" "Chroot Selection [-m] (\$PKGMET/\$METDIR):"	"${PKGMET}"	"${METDIR}"
