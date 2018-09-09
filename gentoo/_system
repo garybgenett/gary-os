@@ -39,11 +39,12 @@ declare PKGMET="${PKGMET:-metro}"
 
 ################################################################################
 
-#VARIABLES[ETCDIR REPDIR DSTDIR PAKDIR]
+#VARIABLES[ETCDIR REPDIR DSTDIR PAKDIR WRKDIR]
 declare ETCDIR="/etc/portage"
 declare REPDIR="/var/git/meta-repo"
 declare DSTDIR="/usr/portage/distfiles"
 declare PAKDIR="/usr/portage/packages"
+declare WRKDIR="/var/tmp/portage"
 
 ########################################
 
@@ -405,21 +406,21 @@ if [[ ${1} == -l ]]; then
 		exit 0
 	fi
 	shift
-	if [[ ${1} == *([0-9]) ]]; then
+	if [[ -z ${1} ]]; then
+		exit 0
+	elif [[ ${1} == +([0-9]) ]]; then
 		echo -en "https://bugs.gentoo.org/show_bug.cgi?id=${1}"
 	else
-		FILE="$(ls -d ${REPDIR}/kits/*/*/${1} 2>/dev/null)"
+		FILE="$(${LS} -d ${REPDIR}/kits/*/*/${1} 2>/dev/null)"
 		NEXT="$(echo "${FILE}" | ${SED} "s|^${REPDIR}/kits/.+[/]([^/]+[/][^/]+)$|\1|g")"
 		if [[ -z ${FILE} ]]; then
 			${SAFE_ENV} emerge --search "${@}"
 		else
 			echo -en "https://packages.gentoo.org/packages/${NEXT}\n"
 			echo -en "https://gentoobrowse.randomdan.homeip.net/package/${NEXT}#bugs\n"
-			echo -en "\n"
 			${LL} -d ${DSTDIR}/$(basename ${FILE})*
-			echo -en "\n"
 			${LL} -d ${PAKDIR}/${NEXT}*
-			echo -en "\n"
+			${LL} -d ${WRKDIR}/${NEXT}-[0-9]*/temp/build.log
 			echo -en "${FILE}\n"
 			${LL} ${FILE}
 		fi
