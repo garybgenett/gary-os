@@ -6,9 +6,17 @@ declare COMMAND_LINE="${@}"
 
 ########################################
 
+declare DEBUG_OPT="-q"
+declare QUIET_OPT="-g"
+
 declare DEBUG=
-if [[ ${1} == -q ]]; then
+declare QUIET=
+if [[ ${1} == ${DEBUG_OPT} ]]; then
 	DEBUG="${1}"
+	shift
+fi
+if [[ ${1} == ${QUIET_OPT} ]]; then
+	QUIET="${1}"
 	shift
 fi
 
@@ -185,8 +193,10 @@ function clear_environment {
 			${SED} -e "s/^[|]*//g" -e "s/[|]*$//g"
 		))$"
 	); do
-#>>>		echo -en "${FILE}=${!FILE}\n" | ${GREP} "[=].*$"	1>&2
-		echo -en "${FILE}=${!FILE}\n" | ${GREP} "[=].+$"	1>&2
+		if [[ -z "${QUIET}" ]]; then
+#>>>			echo -en "${FILE}=${!FILE}\n" | ${GREP} "[=].*$"	1>&2
+			echo -en "${FILE}=${!FILE}\n" | ${GREP} "[=].+$"	1>&2
+		fi
 		unset ${FILE}						1>&2
 	done
 	return 0
@@ -200,6 +210,9 @@ declare NEXT=
 ################################################################################
 
 function print_info {
+	if [[ -n "${QUIET}" ]]; then
+		return 0
+	fi
 	declare TITLE="\e[1;32m"	# light green
 	declare STATE="\e[0;35m"	# magenta
 	declare HOWTO="\e[0;36m"	# cyan
@@ -232,6 +245,7 @@ function print_info {
 		printf "${PRINTF}" "Build Examination (Review Failures):"	"<output>"	"${SCRIPT} [{chroot}] -p"
 		echo -en "\n"
 		printf "${PRINTF}" "Validation (Usage/Variables Only):"		"<output>"	"${SCRIPT} -q [{chroot}] [{options}]"
+		printf "${PRINTF}" "Suppress Output (Internal Only)"		"<internal>"	"${SCRIPT} -g [{chroot}] [{options}]"
 		echo -en "\n"
 		echo -en "${NOTES}"
 		echo -en ">>> CHROOT <<<"
@@ -273,6 +287,7 @@ function print_info {
 		echo -en "${RESET}\n"
 		starter_var "COMMAND_LINE"
 		starter_var "DEBUG"
+		starter_var "QUIET"
 		echo -en "\n"
 		declare BEG="true"
 		for FILE in OPTIONS VARIABLES; do
@@ -396,6 +411,7 @@ fi
 ########################################
 
 if
+[[ -z "${QUIET}" ]] &&
 [[ -n "${TOOR}" ]] &&
 [[ -d "${TARGET}${ARCDIR}" ]]
 then
@@ -445,7 +461,7 @@ fi
 
 if [[ ${1} == -l ]]; then
 	if [[ -n "${TOOR}" ]]; then
-		${SAFE_ENV} ${MYSELF} "${@}"
+		${SAFE_ENV} ${MYSELF} ${QUIET} "${@}"
 		exit 0
 	fi
 	shift
