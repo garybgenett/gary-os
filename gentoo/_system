@@ -229,6 +229,8 @@ function print_info {
 		printf "${PRINTF}" "Information Lookup (Package Search):"	"<output>"	"${SCRIPT} [{chroot}] -l {search}"
 		printf "${PRINTF}" "Information Lookup (Gentoo Bug URL):"	"<output>"	"${SCRIPT} [{chroot}] -l {bug_id}"
 		echo -en "\n"
+		printf "${PRINTF}" "Build Examination (Review Failures):"	"<output>"	"${SCRIPT} [{chroot}] -p"
+		echo -en "\n"
 		printf "${PRINTF}" "Validation (Usage/Variables Only):"		"<output>"	"${SCRIPT} -q [{chroot}] [{options}]"
 		echo -en "\n"
 		echo -en "${NOTES}"
@@ -469,6 +471,36 @@ if [[ ${1} == -l ]]; then
 	exit 0
 fi
 
+########################################
+
+if [[ ${1} == -p ]]; then
+	if [[ -n "${TOOR}" ]]; then
+		${SAFE_ENV} ${MYSELF} ${QUIET} "${@}"
+		exit 0
+	fi
+	shift
+	${LL} -d ${WRKDIR}
+	${LL} ${WRKDIR}
+	FILE="$(find ${WRKDIR}/[a-z]* -mindepth 1 -maxdepth 1 2>/dev/null | sort --unique)"
+	if [[ -n "${FILE}" ]]; then
+		echo -en "\n"
+		${LL} -d ${FILE}
+		for NEXT in ${FILE}; do
+			NEXT="$(basename ${NEXT} | ${SED} "s/[-][0-9][^/]+$//g")"
+			echo -en "\n[${NEXT}]\n"
+			${_SELF} ${QUIET_OPT} ${TOOR} -l ${NEXT}
+		done
+		echo -en "\n"
+		echo -en "${EDITOR}"
+		for NEXT in ${FILE}; do
+			echo -en " ${NEXT}/temp/build.log"
+		done
+		echo -en "\n"
+		exit 1
+	fi
+	exit 0
+fi
+
 ################################################################################
 
 if [[ ${1} == -0 ]]; then shift; ${_SELF} ${TOOR} -n -a -b -k	-i 2>&1 | tee ${TARGET}.log | prompt -c	; exit 0; fi
@@ -662,6 +694,7 @@ fi
 if [[ ${1} == -u ]]; then
 	${SAFE_ENV} ${_SELF} ${TOOR} ${AUTO} -w					|| exit 1
 	expect_wrapper emerge ${_ASK} --deep --newuse --update \@system \@world	|| exit 1
+	${SAFE_ENV} ${_SELF} ${TOOR} ${AUTO} -p					|| exit 1
 	expect_wrapper python-updater						|| exit 1
 	expect_wrapper perl-cleaner --all					|| exit 1
 	expect_wrapper haskell-updater --all					|| exit 1
