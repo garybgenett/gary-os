@@ -88,10 +88,18 @@ fi
 
 ########################################
 
+declare HOMELY="/.home"		#WORK make note in metro.sh, for initrd build
+declare MYSELF="${HOMELY}/${FUNDIR}/${SCRIPT}"
+
 declare SAFE_ENV="prompt -z"
-if [[ ${1} == -i ]] || [[ ${1} == -s ]]; then
-	SAFE_ENV="prompt -z chroot ${TARGET}"
+if
+{ [[ -n "${DEBUG}" ]] && [[ -n "${TOOR}" ]]; } ||
+{ [[ -n "${TOOR}" ]] && [[ ${1} == -l ]]; } ||
+{ [[ ${1} == -i ]] || [[ ${1} == -s ]]; }
+then
+	SAFE_ENV="prompt -z HOME=${HOMELY} SETDIR=${HOMELY} BLDDIR=/ chroot ${TARGET}"
 fi
+set +x
 
 ########################################
 
@@ -201,6 +209,10 @@ fi
 ########################################
 
 if [[ ${1} == -l ]]; then
+	if [[ -n "${TOOR}" ]]; then
+		${SAFE_ENV} ${MYSELF} "${@}"
+		exit 0
+	fi
 	shift
 	if [[ ${1} == *([0-9]) ]]; then
 		echo -en "https://bugs.gentoo.org/show_bug.cgi?id=${1}"
@@ -208,7 +220,7 @@ if [[ ${1} == -l ]]; then
 		FILE="$(ls -d /var/git/meta-repo/kits/*/*/${1} 2>/dev/null)"
 		NEXT="$(echo "${FILE}" | ${SED} "s|^/var/git/meta-repo/kits/.+[/]([^/]+[/][^/]+)$|\1|g")"
 		if [[ -z ${FILE} ]]; then
-			emerge --search "${@}"
+			${SAFE_ENV} emerge --search "${@}"
 		else
 			echo -en "https://packages.gentoo.org/packages/${NEXT}\n"
 			echo -en "https://gentoobrowse.randomdan.homeip.net/package/${NEXT}#bugs\n"
@@ -243,22 +255,22 @@ if [[ ${1} == -i ]]; then
 	echo -en "${COMMIT}"			>${TARGET}/${ARCDIR}/_commit				|| exit 1
 	${RSYNC_U} ${SETDIR}/${FUNDIR}/		${TARGET}/${ARCDIR}/${FUNDIR}				|| exit 1
 	${RSYNC_U} ${SETDIR}/${LINDIR}/		${TARGET}/${ARCDIR}/${LINDIR}				|| exit 1
-	${MKDIR}				${TARGET}/.g/.home					|| exit 1
-	${HOME}/scripts/_sync _home _build	${TARGET}/.g/.home					|| exit 1
-	${RM}					${TARGET}/.g/.home/.ssh/id_*				|| exit 1
+	${MKDIR}				${TARGET}${HOMELY}					|| exit 1
+	${RSYNC_U} --copy-links ${HOME}/.bashrc	${TARGET}${HOMELY}/					|| exit 1
+	${RSYNC_U} ${SETDIR}/${FUNDIR}/		${TARGET}${HOMELY}/${FUNDIR}				|| exit 1
+	${RSYNC_U} ${SETDIR}/${LINDIR}/		${TARGET}${HOMELY}/${LINDIR}				|| exit 1
 	mount_dev_dirs											|| exit 1
-	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/scripts/_sync mount g null			#>>>|| exit 1
 	if [[ ! -d ${TARGET}/var/git/meta-repo ]]; then
 		${MKDIR}			${TARGET}/var/git/meta-repo{,.git}			|| exit 1
 		${RSYNC_U} ${GITDIR}/		${TARGET}/var/git/meta-repo.git				|| exit 1
-		${SAFE_ENV}			${_SELF} ${FUNTOO}					|| exit 1
+		${SAFE_ENV}			${MYSELF} ${FUNTOO}					|| exit 1
 	fi
-	${SAFE_ENV}				${_SELF} ${TOOR} ${AUTO} -w				|| exit 1
+	${SAFE_ENV}				${MYSELF} ${TOOR} ${AUTO} -w				|| exit 1
 	if ${_BLD}; then
 		if [[ -n ${_NEW} ]]; then
 #>>>			expect_wrapper		emerge ${_ASK} expect					|| exit 1
 			${SAFE_ENV}		emerge ${_ASK} expect					|| exit 1
-			${SAFE_ENV}		${_SELF} ${TOOR} ${AUTO} -f				|| exit 1
+			${SAFE_ENV}		${MYSELF} ${TOOR} ${AUTO} -f				|| exit 1
 			expect_wrapper		emerge ${_ASK} --deep --newuse --update \@system	|| exit 1
 		else
 			expect_wrapper		emerge ${_ASK} --emptytree \@system \@world		|| exit 1
@@ -273,7 +285,7 @@ if [[ ${1} == -i ]]; then
 			expect_wrapper		genkernel ${GENKERNEL_OPTS} kernel --menuconfig		|| exit 1
 		else
 			expect_wrapper		genkernel ${GENKERNEL_OPTS} kernel			\
-						--kernel-config=${LINDIR}/config-gentoo64-${FILE}	|| exit 1
+				--kernel-config=${HOMELY}/${LINDIR}/config-gentoo64-${FILE}		|| exit 1
 		fi
 #>>>		FILE="kernel-genkernel-x86-${FILE}-gentoo"						|| exit 1
 		FILE="kernel-genkernel-x86_64-${FILE}-gentoo"						|| exit 1
@@ -372,10 +384,10 @@ END_OF_FILE
 			done
 		done
 	fi
-	${SAFE_ENV}				${_SELF} ${TOOR} ${AUTO} -u	|| exit 1
 	if [[ -z ${_MET} ]]; then
-		${SAFE_ENV}			${_SELF} ${TOOR} ${AUTO} -f	|| exit 1
+		${SAFE_ENV}			${MYSELF} ${TOOR} ${AUTO} -f	|| exit 1
 	fi
+	${SAFE_ENV}				${MYSELF} ${TOOR} ${AUTO} -u	|| exit 1
 	mount_dev_dirs -u							|| exit 1
 	exit 0
 fi
