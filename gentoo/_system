@@ -141,7 +141,7 @@ done
 ########################################
 
 #VARIABLES[HOME HOMELY SAFE_ENV]
-declare HOMELY="/.home"		#WORK make note in metro.sh, for initrd build
+declare HOMELY="/.home"
 declare MYSELF="${HOMELY}/${FUNDIR}/${SCRIPT}"
 
 FILE="$(
@@ -795,9 +795,9 @@ fi
 ################################################################################
 
 ${SAFE_ENV} ${SETDIR}/${FUNDIR}/.emergent
-if [[ -z ${_MET} ]]; then
-	${SAFE_ENV} ${SETDIR}/${FUNDIR}/.hacks
-fi
+#>>>if [[ -z ${_MET} ]]; then
+#>>>	${SAFE_ENV} ${SETDIR}/${FUNDIR}/.hacks
+#>>>fi
 
 ########################################
 
