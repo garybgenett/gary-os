@@ -2,20 +2,28 @@
 source ${HOME}/.bashrc
 ################################################################################
 
+declare COMMAND_LINE="${@}"
+
+################################################################################
+
+#OPTIONS[SOURCE GITDIR RELDIR]
 declare SOURCE="${SOURCE:-/.g/_data/_target/iso}"
 declare GITDIR="${GITDIR:-/.g/_data/_build/funtoo/meta-repo.git}"
 declare RELDIR="${RELDIR:-/.g/_data/_builds/_metro}"
 
+#OPTIONS[SETDIR ARCDIR FUNDIR LINDIR]
 declare SETDIR="${SETDIR:-/.g/_data/zactive/.setup}"
 declare ARCDIR="${ARCDIR:-_build}"
 declare FUNDIR="${FUNDIR:-gentoo}"
 declare LINDIR="${LINDIR:-linux}"
 
+#>>>#OPTIONS[BLDDIR OUTDIR TORDIR METDIR]
 declare BLDDIR="${BLDDIR:-/.g/_data/_builds/_gentoo}"
 declare OUTDIR="${OUTDIR:-${BLDDIR}.testing}"
 declare TORDIR="${TORDIR:-/.g/_toor}"
 declare METDIR="${METDIR:-${TORDIR}}"
 
+#>>>#OPTIONS[PKGBLD PKGOUT PKGTOR PKGMET]
 declare PKGBLD="${PKGBLD:-packages}"
 declare PKGOUT="${PKGOUT:-${PKGBLD}}"
 declare PKGTOR="${PKGTOR:-${PKGBLD}}"
@@ -23,12 +31,14 @@ declare PKGMET="${PKGMET:-metro}"
 
 ################################################################################
 
+#VARIABLES[ETCDIR DSTDIR PAKDIR]
 declare ETCDIR="/etc/portage"
 declare DSTDIR="/usr/portage/distfiles"
 declare PAKDIR="/usr/portage/packages"
 
 ########################################
 
+#VARIABLES[TARGET TOOR _PKG _NEW _MET]
 declare TARGET="${BLDDIR}"
 declare TOOR=
 declare _PKG="${PKGBLD}"
@@ -62,6 +72,7 @@ fi
 
 ########################################
 
+#VARIABLES[AUTO _ASK _BLD _KRN _CFG]
 declare AUTO=
 declare _ASK="--ask=y"
 declare _BLD="false"
@@ -88,6 +99,7 @@ fi
 
 ########################################
 
+#VARIABLES[HOME HOMELY SAFE_ENV]
 declare HOMELY="/.home"		#WORK make note in metro.sh, for initrd build
 declare MYSELF="${HOMELY}/${FUNDIR}/${SCRIPT}"
 
@@ -103,6 +115,7 @@ set +x
 
 ########################################
 
+#OPTIONS[FUNTOO KERNEL]
 declare FUNTOO="${FUNTOO:-$(tail -n1 ${SETDIR}/${FUNDIR}/funtoo)}"
 declare KERNEL="${KERNEL:-$(${SED} -n "s|^.+/gentoo-sources:(.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG})}"
 
@@ -163,6 +176,120 @@ declare NEXT=
 
 ################################################################################
 
+function print_info {
+	declare TITLE="\e[1;32m"	# light green
+	declare STATE="\e[0;35m"	# magenta
+	declare HOWTO="\e[0;36m"	# cyan
+	declare NOTES="\e[0;33m"	# yellow
+	declare OTHER="\e[1;34m"	# dark blue
+	declare RESET="\e[0;37m"	# light gray
+	if [[ ${1} == "marker" ]]; then
+		echo -en "${OTHER}"
+		printf "~%.0s" {1..80}
+		echo -en "${RESET}\n"
+	elif [[ ${1} == "usage" ]]; then
+		declare PRINTF=
+		PRINTF+="${TITLE}%-45.45s${RESET} "
+		PRINTF+="${STATE}%-15.15s${RESET} "
+		PRINTF+="${HOWTO}%s${RESET}\n"
+		echo -en "${NOTES}"
+		echo -en ">>> USAGE <<<"
+		echo -en "${RESET}\n"
+		printf "${PRINTF}" "Update All Data (Repo/Sources/Metadata):"	"<auto>"	"${SCRIPT}"
+		printf "${PRINTF}" "Update Data (Metadata Only):"		"<auto>"	"${SCRIPT} -!"
+		printf "${PRINTF}" "Update Data (Sources Only):"		"<auto>"	"${SCRIPT} -f"
+		echo -en "\n"
+		printf "${PRINTF}" "Update System (Automatically):"		"<auto>"	"${SCRIPT} -a -u"
+		printf "${PRINTF}" "Update System (Interactively):"		"<interactive>"	"${SCRIPT} -u"
+		echo -en "\n"
+		printf "${PRINTF}" "Information Lookup (Package Data):"		"<output>"	"${SCRIPT} -l {package}"
+		printf "${PRINTF}" "Information Lookup (Package Search):"	"<output>"	"${SCRIPT} -l {search}"
+		printf "${PRINTF}" "Information Lookup (Gentoo Bug URL):"	"<output>"	"${SCRIPT} -l {bug_id}"
+		echo -en "\n"
+		printf "${PRINTF}" "Validation (Usage/Variables Only):"		"<output>"	"${SCRIPT} -q [{options}]"
+		echo -en "\n"
+		echo -en "${NOTES}"
+		echo -en ">>> CHROOT <<<"
+		echo -en "${RESET}\n"
+		printf "${PRINTF}" "Chroot Selection [  ] (\$PKGBLD/\$BLDDIR):"	"${PKGBLD}"	"${BLDDIR}"
+		printf "${PRINTF}" "Chroot Selection [-x] (\$PKGOUT/\$OUTDIR):"	"${PKGOUT}"	"${OUTDIR}"
+		printf "${PRINTF}" "Chroot Selection [-t] (\$PKGTOR/\$TORDIR):"	"${PKGTOR}"	"${TORDIR}"
+		printf "${PRINTF}" "Chroot Selection [-m] (\$PKGMET/\$METDIR):"	"${PKGMET}"	"${METDIR}"
+		echo -en "\n"
+		printf "${PRINTF}" "Chroot Build (Initial):"			"<auto>"	"${SCRIPT} [{chroot}] -0"
+		printf "${PRINTF}" "Chroot Build (Update Only):"		"<auto>"	"${SCRIPT} [{chroot}] -/"
+		printf "${PRINTF}" "Chroot Build (Complete Rebuild):"		"<auto>"	"${SCRIPT} [{chroot}] -1"
+		printf "${PRINTF}" "Chroot Build (Configuration):"		"<interactive>"	"${SCRIPT} [{chroot}] -2"
+		echo -en "\n"
+		printf "${PRINTF}" "Chroot Shell (Bash):"			"<interactive>"	"${SCRIPT} [{chroot}] -s"
+		printf "${PRINTF}" "Chroot Shell (Run Command):"		"<auto>"	"${SCRIPT} [{chroot}] -s {command}"
+		printf "${PRINTF}" "Chroot Emerge Command (Automatically):"	"<auto>"	"${SCRIPT} [{chroot}] -a -s -e {command}"
+		printf "${PRINTF}" "Chroot Emerge Command (Interactively):"	"<interactive>"	"${SCRIPT} [{chroot}] -s -e {command}"
+		printf "${PRINTF}" "Chroot Emerge Tree:"			"<auto>"	"${SCRIPT} [{chroot}] -s -t"
+		echo -en "\n"
+		printf "${PRINTF}" "Chroot Unmount Cleanup:"			"<auto>"	"${SCRIPT} [{chroot}] -z"
+	elif [[ ${1} == "starter" ]]; then
+		function starter_var {
+			declare COLOR="${HOWTO}"
+			declare VAR="${1}"
+			if [[ -z "${!VAR}" ]]; then
+				COLOR="${STATE}"
+			fi
+			declare PRINTF=
+			PRINTF+="${TITLE}%-15.15s${RESET} "
+			PRINTF+="${COLOR}%s${RESET}\n"
+			printf "${PRINTF}" "${VAR}:" "${!VAR:-(unset)}"
+		}
+		echo -en "${NOTES}"
+		echo -en ">>> ARGUMENTS <<<"
+		echo -en "${RESET}\n"
+		starter_var "COMMAND_LINE"
+		starter_var "DEBUG"
+		echo -en "\n"
+		declare BEG="true"
+		for FILE in OPTIONS VARIABLES; do
+			if ${BEG}; then BEG="false"; else echo -en "\n"; fi
+			echo -en "${NOTES}"
+			echo -en ">>> ${FILE} <<<"
+			echo -en "${RESET}\n"
+			declare END="true"
+			${SED} -n "s/^[#]${FILE}[[](.+)[]]$/\1/gp" ${_SELF} | while read -r NEXT; do
+				if ${END}; then END="false"; else echo -en "\n"; fi
+				for FILE in ${NEXT}; do
+					starter_var "${FILE}"
+				done
+			done
+		done
+	elif [[ ${1} == "environment" ]]; then
+		echo -en "${NOTES}"
+		echo -en "Clearing Environment Variables..."
+		echo -en "${RESET}\n"
+	elif [[ ${1} == "update" ]]; then
+		echo -en "${NOTES}"
+		echo -en "Preparing To Update All Data"
+		for FILE in {1..10}; do
+			echo -en "."
+			sleep 1
+		done
+		echo -en "${RESET}\n"
+	elif [[ ${1} == "mount" ]]; then
+		echo -en "${NOTES}"
+		echo -en "Mounting Chroot Directories..."
+		echo -en "${RESET}\n"
+	elif [[ ${1} == "umount" ]]; then
+		echo -en "${NOTES}"
+		echo -en "Unmounting Chroot Directories..."
+		echo -en "${RESET}\n"
+	else
+		echo -en "${NOTES}"
+		echo -en "Somebody Made A Mistake..."
+		echo -en "${RESET}\n"
+	fi
+	return 0
+}
+
+########################################
+
 function expect_wrapper {
 	declare EXPECT_CMD="spawn -noecho ${@};"
 	EXPECT_CMD+=" "; EXPECT_CMD+="set timeout -1;"
@@ -194,13 +321,17 @@ function mount_dev_dirs {
 	DEV_DIRS[3]="/proc"
 	DEV_DIRS[4]="/sys"
 	if [[ -z ${1} ]]; then
+		print_info mount
 		for FILE in ${DEV_DIRS[@]}; do
 			if [[ -z "$(mount | ${GREP} "${FILE} on ${TARGET}${FILE}")" ]]; then
 				mount --verbose --bind ${FILE} ${TARGET}${FILE}	|| return 1
 			fi
 		done
+		print_info marker
 	elif [[ ${1} == -u ]]; then
 		shift
+		print_info marker
+		print_info umount
 		if [[ -z "$(
 			lsof |
 			${GREP} "${TARGET}/" |
@@ -219,7 +350,10 @@ function mount_dev_dirs {
 
 ################################################################################
 
-clear_environment
+print_info marker;	print_info usage
+print_info marker;	print_info starter
+print_info marker;	print_info environment;	clear_environment
+print_info marker
 
 ################################################################################
 
@@ -497,6 +631,9 @@ if [[ ${1} == -u ]]; then
 ########################################
 
 elif [[ ${1} != -! ]]; then
+	if [[ -z ${1} ]]; then
+		print_info update
+	fi
 	if [[ ${1} != -f ]]; then
 		declare GIT="$(which git)"
 		if [[ -d /var/git/meta-repo.git ]] && [[ ! -d /var/git/meta-repo/.git ]]; then
