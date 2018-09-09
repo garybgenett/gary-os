@@ -150,20 +150,37 @@ function mount_dev_dirs {
 	DEV_DIRS[3]="/proc"
 	DEV_DIRS[4]="/sys"
 	if [[ -z ${1} ]]; then
-		mount_dev_dirs -u
 		for FILE in ${DEV_DIRS[@]}; do
-			mount --verbose --bind ${FILE} ${TARGET}${FILE}
+			if [[ -z "$(mount | ${GREP} "${FILE} on ${TARGET}${FILE}")" ]]; then
+				mount --verbose --bind ${FILE} ${TARGET}${FILE}	|| return 1
+			fi
 		done
 	elif [[ ${1} == -u ]]; then
 		shift
-		for FILE in $(eval echo "{$((${#DEV_DIRS[@]}-1))..0}"); do
-			umount --verbose ${TARGET}${DEV_DIRS[${FILE}]}
-		done
+		if [[ -z "$(
+			lsof |
+			${GREP} "${TARGET}/" |
+			${SED} "s/^.*[[:space:]]([^[:space:]]+)$/\1/g" |
+			sort --unique
+		)" ]]; then
+			for FILE in $(eval echo "{$((${#DEV_DIRS[@]}-1))..0}"); do
+				umount --verbose ${TARGET}${DEV_DIRS[${FILE}]}	#>>>|| return 1
+			done
+		fi
+		mount | ${GREP} "${TARGET}/"					1>&2
+		if [[ -n "$(mount | ${GREP} "${TARGET}/")" ]]; then		return 1; fi
 	fi
 	return 0
 }
 
 ################################################################################
+
+if [[ ${1} == -z ]]; then
+	mount_dev_dirs -u	|| exit 1
+	exit 0
+fi
+
+########################################
 
 if [[ ${1} == -s ]]; then
 	shift
@@ -229,7 +246,7 @@ if [[ ${1} == -i ]]; then
 	${MKDIR}				${TARGET}/.g/.home					|| exit 1
 	${HOME}/scripts/_sync _home _build	${TARGET}/.g/.home					|| exit 1
 	${RM}					${TARGET}/.g/.home/.ssh/id_*				|| exit 1
-	mount_dev_dirs
+	mount_dev_dirs											|| exit 1
 	HOME=/.g/.home ${SAFE_ENV}		/.g/.home/scripts/_sync mount g null			#>>>|| exit 1
 	if [[ ! -d ${TARGET}/var/git/meta-repo ]]; then
 		${MKDIR}			${TARGET}/var/git/meta-repo{,.git}			|| exit 1
@@ -359,7 +376,7 @@ END_OF_FILE
 	if [[ -z ${_MET} ]]; then
 		${SAFE_ENV}			${_SELF} ${TOOR} ${AUTO} -f	|| exit 1
 	fi
-	mount_dev_dirs -u
+	mount_dev_dirs -u							|| exit 1
 	exit 0
 fi
 
