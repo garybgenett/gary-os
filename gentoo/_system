@@ -39,8 +39,9 @@ declare PKGMET="${PKGMET:-metro}"
 
 ################################################################################
 
-#VARIABLES[ETCDIR DSTDIR PAKDIR]
+#VARIABLES[ETCDIR REPDIR DSTDIR PAKDIR]
 declare ETCDIR="/etc/portage"
+declare REPDIR="/var/git/meta-repo"
 declare DSTDIR="/usr/portage/distfiles"
 declare PAKDIR="/usr/portage/packages"
 
@@ -407,8 +408,8 @@ if [[ ${1} == -l ]]; then
 	if [[ ${1} == *([0-9]) ]]; then
 		echo -en "https://bugs.gentoo.org/show_bug.cgi?id=${1}"
 	else
-		FILE="$(ls -d /var/git/meta-repo/kits/*/*/${1} 2>/dev/null)"
-		NEXT="$(echo "${FILE}" | ${SED} "s|^/var/git/meta-repo/kits/.+[/]([^/]+[/][^/]+)$|\1|g")"
+		FILE="$(ls -d ${REPDIR}/kits/*/*/${1} 2>/dev/null)"
+		NEXT="$(echo "${FILE}" | ${SED} "s|^${REPDIR}/kits/.+[/]([^/]+[/][^/]+)$|\1|g")"
 		if [[ -z ${FILE} ]]; then
 			${SAFE_ENV} emerge --search "${@}"
 		else
@@ -450,9 +451,9 @@ if [[ ${1} == -i ]]; then
 	${RSYNC_U} ${SETDIR}/${FUNDIR}/		${TARGET}${HOMELY}/${FUNDIR}				|| exit 1
 	${RSYNC_U} ${SETDIR}/${LINDIR}/		${TARGET}${HOMELY}/${LINDIR}				|| exit 1
 	mount_dev_dirs											|| exit 1
-	if [[ ! -d ${TARGET}/var/git/meta-repo ]]; then
-		${MKDIR}			${TARGET}/var/git/meta-repo{,.git}			|| exit 1
-		${RSYNC_U} ${GITDIR}/		${TARGET}/var/git/meta-repo.git				|| exit 1
+	if [[ ! -d ${TARGET}${REPDIR} ]]; then
+		${MKDIR}			${TARGET}${REPDIR}{,.git}				|| exit 1
+		${RSYNC_U} ${GITDIR}/		${TARGET}${REPDIR}.git					|| exit 1
 		${SAFE_ENV}			${MYSELF} ${FUNTOO}					|| exit 1
 	fi
 	${SAFE_ENV}				${MYSELF} ${TOOR} ${AUTO} -w				|| exit 1
@@ -652,29 +653,29 @@ elif [[ ${1} != -! ]]; then
 	fi
 	if [[ ${1} != -f ]]; then
 		declare GIT="$(which git)"
-		if [[ -d /var/git/meta-repo.git ]] && [[ ! -d /var/git/meta-repo/.git ]]; then
-			${MV} /var/git/meta-repo.git /var/git/meta-repo/.git
+		if [[ -d ${REPDIR}.git ]] && [[ ! -d ${REPDIR}/.git ]]; then
+			${MV} ${REPDIR}.git ${REPDIR}/.git
 		fi
 		if [[ -z ${1} ]]; then
 #>>>			expect_wrapper emerge --ask=n --verbose --sync			|| exit 1
 			expect_wrapper ego sync						|| exit 1
-			(cd /var/git/meta-repo &&
+			(cd ${REPDIR} &&
 				${GIT} pull &&
 				${GIT} checkout --force master &&
 				${GIT} submodule update --force --init --recursive --remote --rebase &&
 				${GIT} submodule foreach --recursive "git reset --hard"
 			)								|| exit 1
 		else
-			(cd /var/git/meta-repo &&
+			(cd ${REPDIR} &&
 				${GIT} reset --hard ${1} &&
 				${GIT} submodule update --force --init --recursive &&
 				${GIT} submodule foreach --recursive "git reset --hard"
 			)								|| exit 1
 		fi
-		if [[ -d /var/git/meta-repo/.git ]] && [[ ! -d /var/git/meta-repo.git ]]; then
-			${MV} /var/git/meta-repo/.git /var/git/meta-repo.git
+		if [[ -d ${REPDIR}/.git ]] && [[ ! -d ${REPDIR}.git ]]; then
+			${MV} ${REPDIR}/.git ${REPDIR}.git
 		fi
-		for FILE in /var/git/meta-repo/kits/*kit; do
+		for FILE in ${REPDIR}/kits/*kit; do
 			echo -en "egencache: ${FILE}\n"
 			expect_wrapper egencache --repo "$(basename ${FILE})"		\
 				--update-use-local-desc					|| exit 1

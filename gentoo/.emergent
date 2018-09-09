@@ -3,7 +3,9 @@ source ${HOME}/.bashrc
 ################################################################################
 
 declare GENDIR="${GENDIR:-/_gentoo}"
+
 declare ETCDIR="/etc/portage"
+declare REPDIR="/var/git/meta-repo"
 
 ########################################
 
@@ -36,7 +38,7 @@ if [[ ${1} == -v ]]; then
 	); do
 		echo -en "\n"
 		${GREP} --only-matching "${PKG}[-][0-9][^[:space:]]*" ${CUR}/_gentoo/.emerge
-		${GREP} --with-filename "KEYWORDS[=].*[^~]amd64" ${NEW}/var/git/meta-repo/kits/*/${PKG}/*.ebuild |
+		${GREP} --with-filename "KEYWORDS[=].*[^~]amd64" ${NEW}${REPDIR}/kits/*/${PKG}/*.ebuild |
 			${SED} -e "s|^.+/||g" -e "s|:.+$||g"
 	done
 	exit 0
@@ -104,8 +106,8 @@ env - $(which equery) list --duplicates '*'		>${GENDIR}/.slots	2>&1
 #>>>	-or \( -path /usr/src/linux-\* -prune \) \
 #>>>	-or \( -path /var/cache/portage -prune \) \
 #>>>	-or \( -path /var/db/pkg -prune \) \
-#>>>	-or \( -path /var/git/meta-repo -prune \) \
-#>>>	-or \( -path /var/git/meta-repo.git -prune \) \
+#>>>	-or \( -path ${REPDIR} -prune \) \
+#>>>	-or \( -path ${REPDIR}.git -prune \) \
 #>>>	-or \( -path /~~\*~~ -prune \) \
 #>>>"
 #>>>(
@@ -158,11 +160,11 @@ cat /dev/null >${GENDIR}/_use.enabled
 
 for TOKEN in $(source ${ETCDIR}/make.conf ; echo ${USE}); do
 	if [[ ${TOKEN} == ${TOKEN/#-} ]]; then
-		grep_token "^${TOKEN/#-}[ ][-]" /var/git/meta-repo/kits/*/profiles/use.desc |
+		grep_token "^${TOKEN/#-}[ ][-]" ${REPDIR}/kits/*/profiles/use.desc |
 			sort \
 			>>${GENDIR}/_use.enabled
 	else
-		grep_token "^${TOKEN/#-}[ ][-]" /var/git/meta-repo/kits/*/profiles/use.desc |
+		grep_token "^${TOKEN/#-}[ ][-]" ${REPDIR}/kits/*/profiles/use.desc |
 			sort \
 			>>${GENDIR}/_use.disabled
 	fi
@@ -171,7 +173,7 @@ done
 cat /dev/null >${GENDIR}/_use.packages
 
 for TOKEN in $(cat ${GENDIR}/_packages); do
-	grep_token "^${TOKEN/%-[0-9].*}[:]" /var/git/meta-repo/kits/*/profiles/use.local.desc |
+	grep_token "^${TOKEN/%-[0-9].*}[:]" ${REPDIR}/kits/*/profiles/use.local.desc |
 		sort \
 		>>${GENDIR}/_use.packages
 done
@@ -247,14 +249,14 @@ cat /dev/null >${GENDIR}/use.missing.local
 
 for TOKEN in $(cat ${GENDIR}/emerge.use); do
 	if [[ -z $(grep_token "^${TOKEN}$" ${GENDIR}/makeconf.use) ]]; then
-		if [[ -n $(grep_token "^${TOKEN}[ ][-]" /var/git/meta-repo/kits/*/profiles/use.desc) ]]; then
-			grep_token "^${TOKEN}[ ][-]" /var/git/meta-repo/kits/*/profiles/use.desc |
+		if [[ -n $(grep_token "^${TOKEN}[ ][-]" ${REPDIR}/kits/*/profiles/use.desc) ]]; then
+			grep_token "^${TOKEN}[ ][-]" ${REPDIR}/kits/*/profiles/use.desc |
 				sort \
 				>>${GENDIR}/use.missing.global
 		else
 			echo -e "\n${TOKEN}" \
 				>>${GENDIR}/use.missing.local
-			grep_token "[:]${TOKEN}[ ][-]" /var/git/meta-repo/kits/*/profiles/use.local.desc |
+			grep_token "[:]${TOKEN}[ ][-]" ${REPDIR}/kits/*/profiles/use.local.desc |
 				sort \
 				>>${GENDIR}/use.missing.local
 		fi
