@@ -19,9 +19,10 @@ declare SOURCE="${SOURCE:-/.g/_data/_target/iso}"
 declare GITDIR="${GITDIR:-/.g/_data/_build/funtoo/meta-repo.git}"
 declare RELDIR="${RELDIR:-/.g/_data/_builds/_metro}"
 
-#OPTIONS[SETDIR ARCDIR FUNDIR LINDIR]
+#OPTIONS[SETDIR ARCDIR GENDIR FUNDIR LINDIR]
 declare SETDIR="${SETDIR:-/.g/_data/zactive/.setup}"
 declare ARCDIR="${ARCDIR:-/_build}"
+declare GENDIR="${GENDIR:-/_gentoo}"
 declare FUNDIR="${FUNDIR:-gentoo}"
 declare LINDIR="${LINDIR:-linux}"
 
@@ -730,17 +731,17 @@ fi
 ########################################
 
 echo -en "\n"
-wc -l /_gentoo/_packages
-wc -l /_gentoo/_packages.db
+wc -l ${GENDIR}/_packages
+wc -l ${GENDIR}/_packages.db
 
 echo -en "\n"
-diff ${DIFF_OPTS} /_gentoo/_packages.db /_gentoo/_packages |
+diff ${DIFF_OPTS} ${GENDIR}/_packages.db ${GENDIR}/_packages |
 	${GREP} "^[-+]"
 
 echo -en "\n"
-${LL} /_gentoo
-if [[ -n "$(diff /_gentoo/+okay /_gentoo/+okay.okay 2>/dev/null)" ]]; then
-	cat /_gentoo/+okay
+${LL} ${GENDIR}
+if [[ -n "$(diff ${GENDIR}/+okay ${GENDIR}/+okay.okay 2>/dev/null)" ]]; then
+	cat ${GENDIR}/+okay
 fi
 
 exit 0
