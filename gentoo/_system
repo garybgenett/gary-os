@@ -21,7 +21,7 @@ declare RELDIR="${RELDIR:-/.g/_data/_builds/_metro}"
 
 #OPTIONS[SETDIR ARCDIR FUNDIR LINDIR]
 declare SETDIR="${SETDIR:-/.g/_data/zactive/.setup}"
-declare ARCDIR="${ARCDIR:-_build}"
+declare ARCDIR="${ARCDIR:-/_build}"
 declare FUNDIR="${FUNDIR:-gentoo}"
 declare LINDIR="${LINDIR:-linux}"
 
@@ -109,22 +109,6 @@ fi
 
 ########################################
 
-#VARIABLES[HOME HOMELY SAFE_ENV]
-declare HOMELY="/.home"		#WORK make note in metro.sh, for initrd build
-declare MYSELF="${HOMELY}/${FUNDIR}/${SCRIPT}"
-
-declare SAFE_ENV="prompt -z"
-if
-{ [[ -n "${DEBUG}" ]] && [[ -n "${TOOR}" ]]; } ||
-{ [[ -n "${TOOR}" ]] && [[ ${1} == -l ]]; } ||
-{ [[ ${1} == -i ]] || [[ ${1} == -s ]]; }
-then
-	SAFE_ENV="prompt -z HOME=${HOMELY} SETDIR=${HOMELY} BLDDIR=/ chroot ${TARGET}"
-fi
-set +x
-
-########################################
-
 #OPTIONS[FUNTOO KERNEL]
 declare FUNTOO="${FUNTOO:-$(tail -n1 ${SETDIR}/${FUNDIR}/funtoo)}"
 declare KERNEL="${KERNEL:-$(${SED} -n "s|^.+/gentoo-sources:(.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG})}"
@@ -138,6 +122,21 @@ do
 		cat /.g/_data/zactive/${FILE}.git/refs/heads/master 2>/dev/null
 	)\n"
 done
+
+########################################
+
+#VARIABLES[HOME HOMELY SAFE_ENV]
+declare HOMELY="/.home"		#WORK make note in metro.sh, for initrd build
+declare MYSELF="${HOMELY}/${FUNDIR}/${SCRIPT}"
+
+declare SAFE_ENV="prompt -z"
+if
+{ [[ -n "${DEBUG}" ]] && [[ -n "${TOOR}" ]]; } ||
+{ [[ -n "${TOOR}" ]] && [[ ${1} == -l ]]; } ||
+{ [[ ${1} == -i ]] || [[ ${1} == -s ]]; }
+then
+	SAFE_ENV="prompt -z HOME=${HOMELY} SETDIR=${HOMELY} BLDDIR=/ chroot ${TARGET}"
+fi
 
 ########################################
 
@@ -441,12 +440,12 @@ if [[ ${1} == -i ]]; then
 	if [[ ! -d ${TARGET}/boot ]]; then
 #>>>		tar -pvvxJ -C ${TARGET} -f	$(ls -t ${SOURCE}/stage3-*i686*funtoo*.tar.xz		| head -n1) || exit 1
 		tar -pvvxJ -C ${TARGET} -f	$(ls -t ${SOURCE}/stage3-*core2_64*funtoo*.tar.xz	| head -n1) || exit 1
-		${MKDIR}			${TARGET}/${ARCDIR}					|| exit 1
-		${RSYNC_U} ${SOURCE}/*funtoo*	${TARGET}/${ARCDIR}/					|| exit 1
+		${MKDIR}			${TARGET}${ARCDIR}					|| exit 1
+		${RSYNC_U} ${SOURCE}/*funtoo*	${TARGET}${ARCDIR}/					|| exit 1
 	fi
-	echo -en "${COMMIT}"			>${TARGET}/${ARCDIR}/_commit				|| exit 1
-	${RSYNC_U} ${SETDIR}/${FUNDIR}/		${TARGET}/${ARCDIR}/${FUNDIR}				|| exit 1
-	${RSYNC_U} ${SETDIR}/${LINDIR}/		${TARGET}/${ARCDIR}/${LINDIR}				|| exit 1
+	echo -en "${COMMIT}"			>${TARGET}${ARCDIR}/_commit				|| exit 1
+	${RSYNC_U} ${SETDIR}/${FUNDIR}/		${TARGET}${ARCDIR}/${FUNDIR}				|| exit 1
+	${RSYNC_U} ${SETDIR}/${LINDIR}/		${TARGET}${ARCDIR}/${LINDIR}				|| exit 1
 	${MKDIR}				${TARGET}${HOMELY}					|| exit 1
 	${RSYNC_U} --copy-links ${HOME}/.bashrc	${TARGET}${HOMELY}/					|| exit 1
 	${RSYNC_U} ${SETDIR}/${FUNDIR}/		${TARGET}${HOMELY}/${FUNDIR}				|| exit 1
@@ -598,8 +597,6 @@ if [[ ${1} == -w ]]; then
 		${SED} -i "s|^[#][{]${_MET}[}][ ](.+)$|\1|g" ${FILE}
 		${SED} -i "s|^[#][{]${_NEW}[}][ ](.+)$|\1|g" ${FILE}
 	done
-	${LL} /_gentoo
-	cat /_gentoo/+okay
 	ego profile build stable	|| exit 1
 	ego profile flavor desktop	|| exit 1
 	ego profile show
@@ -741,7 +738,10 @@ diff ${DIFF_OPTS} /_gentoo/_packages.db /_gentoo/_packages |
 	${GREP} "^[-+]"
 
 echo -en "\n"
-${LL} /_gentoo/+okay*
+${LL} /_gentoo
+if [[ -n "$(diff /_gentoo/+okay /_gentoo/+okay.okay 2>/dev/null)" ]]; then
+	cat /_gentoo/+okay
+fi
 
 exit 0
 ################################################################################
