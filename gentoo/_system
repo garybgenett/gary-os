@@ -2,35 +2,55 @@
 source ${HOME}/.bashrc
 ################################################################################
 
-declare SOURCE="/.g/_data/_target/iso"
-declare BUILDS="/.g/_data/_builds/_gentoo"
-declare GITDIR="/.g/_data/_build/funtoo/meta-repo.git"
-declare METDIR="/.g/_data/_builds/_metro"
+declare SOURCE="${SOURCE:-/.g/_data/_target/iso}"
+declare GITDIR="${GITDIR:-/.g/_data/_build/funtoo/meta-repo.git}"
+declare RELDIR="${RELDIR:-/.g/_data/_builds/_metro}"
 
-declare DSTDIR="usr/portage/distfiles"
-declare PKGDIR="usr/portage/packages"
+declare SETDIR="${SETDIR:-/.g/_data/zactive/.setup}"
+declare ARCDIR="${ARCDIR:-_build}"
+declare FUNDIR="${FUNDIR:-gentoo}"
+declare LINDIR="${LINDIR:-linux}"
 
-declare SETDIR="${HOME}/setup"
-declare FUNDIR="${SETDIR}/gentoo"
-declare LINDIR="${SETDIR}/linux"
+declare BLDDIR="${BLDDIR:-/.g/_data/_builds/_gentoo}"
+declare OUTDIR="${OUTDIR:-${BLDDIR}.testing}"
+declare TORDIR="${TORDIR:-/.g/_toor}"
+declare METDIR="${METDIR:-${TORDIR}}"
+
+declare PKGBLD="${PKGBLD:-packages}"
+declare PKGOUT="${PKGOUT:-${PKGBLD}}"
+declare PKGTOR="${PKGTOR:-${PKGBLD}}"
+declare PKGMET="${PKGMET:-metro}"
 
 ################################################################################
 
-declare TARGET="${BUILDS}"
+declare ETCDIR="/etc/portage"
+declare DSTDIR="/usr/portage/distfiles"
+declare PAKDIR="/usr/portage/packages"
+
+########################################
+
+declare TARGET="${BLDDIR}"
 declare TOOR=
-declare _PKG="packages"
+declare _PKG="${PKGBLD}"
 declare _MET=
 declare _NEW=
 
-if [[ ${1} == -t ]]; then
-	TARGET="/.g/_toor"
+if [[ ${1} == -x ]]; then
+	TARGET="${OUTDIR}"
 	TOOR="${1}"
+	_PKG="${PKGOUT}"
+	shift
+fi
+if [[ ${1} == -t ]]; then
+	TARGET="${TORDIR}"
+	TOOR="${1}"
+	_PKG="${PKGTOR}"
 	shift
 fi
 if [[ ${1} == -m ]]; then
-	TARGET="/.g/_toor"
+	TARGET="${METDIR}"
 	TOOR="${1}"
-	_PKG="metro"
+	_PKG="${PKGMET}"
 	_MET="MET"
 	shift
 fi
@@ -43,26 +63,26 @@ fi
 ########################################
 
 declare AUTO=
-declare ASK="--ask=y"
-declare BLD="false"
-declare KRN="false"
-declare CFG="false"
+declare _ASK="--ask=y"
+declare _BLD="false"
+declare _KRN="false"
+declare _CFG="false"
 
 if [[ ${1} == -a ]]; then
 	AUTO="${1}"
-	ASK="--ask=n"
+	_ASK="--ask=n"
 	shift
 fi
 if [[ ${1} == -b ]]; then
-	BLD="true"
+	_BLD="true"
 	shift
 fi
 if [[ ${1} == -k ]]; then
-	KRN="true"
+	_KRN="true"
 	shift
 fi
 if [[ ${1} == -c ]]; then
-	CFG="true"
+	_CFG="true"
 	shift
 fi
 
@@ -75,8 +95,8 @@ fi
 
 ########################################
 
-declare FUNTOO_VER="$(tail -n1 ${FUNDIR}/funtoo)"
-declare KERNEL_VER="$(${SED} -n "s|^.+/gentoo-sources:(.+)$|\1|gp" ${FUNDIR}/sets/${_PKG})"
+declare FUNTOO="${FUNTOO:-$(tail -n1 ${SETDIR}/${FUNDIR}/funtoo)}"
+declare KERNEL="${KERNEL:-$(${SED} -n "s|^.+/gentoo-sources:(.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG})}"
 
 declare COMMIT=
 for FILE in \
@@ -153,7 +173,7 @@ if [[ ${1} == -s ]]; then
 		${_SELF} ${TOOR} -s -e --pretend --emptytree --tree --unordered-display \@system \@world
 	elif [[ ${1} == -e ]]; then
 		shift
-		expect_wrapper emerge ${ASK} "${@}"			|| exit 1
+		expect_wrapper emerge ${_ASK} "${@}"			|| exit 1
 	else
 		${SAFE_ENV} /usr/bin/env bash -o vi ${@:+-c "${@}"}	|| exit 1
 	fi
@@ -176,9 +196,9 @@ if [[ ${1} == -l ]]; then
 			echo -en "https://packages.gentoo.org/packages/${NEXT}\n"
 			echo -en "https://gentoobrowse.randomdan.homeip.net/package/${NEXT}#bugs\n"
 			echo -en "\n"
-			${LL} -d /${DSTDIR}/$(basename ${FILE})*
+			${LL} -d ${DSTDIR}/$(basename ${FILE})*
 			echo -en "\n"
-			${LL} -d /${PKGDIR}/${NEXT}*
+			${LL} -d ${PAKDIR}/${NEXT}*
 			echo -en "\n"
 			echo -en "${FILE}\n"
 			${LL} ${FILE}
@@ -200,11 +220,12 @@ if [[ ${1} == -i ]]; then
 	if [[ ! -d ${TARGET}/boot ]]; then
 #>>>		tar -pvvxJ -C ${TARGET} -f	$(ls -t ${SOURCE}/stage3-*i686*funtoo*.tar.xz		| head -n1) || exit 1
 		tar -pvvxJ -C ${TARGET} -f	$(ls -t ${SOURCE}/stage3-*core2_64*funtoo*.tar.xz	| head -n1) || exit 1
-		${RSYNC_U} ${SOURCE}/*funtoo*	${TARGET}/_build/					|| exit 1
+		${MKDIR}			${TARGET}/${ARCDIR}					|| exit 1
+		${RSYNC_U} ${SOURCE}/*funtoo*	${TARGET}/${ARCDIR}/					|| exit 1
 	fi
-	echo -en "${COMMIT}"			>${TARGET}/_build/_commit				|| exit 1
-	${RSYNC_U} ${FUNDIR}/			${TARGET}/_build/_config				|| exit 1
-	${RSYNC_U} ${LINDIR}/			${TARGET}/_build/_kernel				|| exit 1
+	echo -en "${COMMIT}"			>${TARGET}/${ARCDIR}/_commit				|| exit 1
+	${RSYNC_U} ${SETDIR}/${FUNDIR}/		${TARGET}/${ARCDIR}/${FUNDIR}				|| exit 1
+	${RSYNC_U} ${SETDIR}/${LINDIR}/		${TARGET}/${ARCDIR}/${LINDIR}				|| exit 1
 	${MKDIR}				${TARGET}/.g/.home					|| exit 1
 	${HOME}/scripts/_sync _home _build	${TARGET}/.g/.home					|| exit 1
 	${RM}					${TARGET}/.g/.home/.ssh/id_*				|| exit 1
@@ -213,23 +234,23 @@ if [[ ${1} == -i ]]; then
 	if [[ ! -d ${TARGET}/var/git/meta-repo ]]; then
 		${MKDIR}			${TARGET}/var/git/meta-repo{,.git}			|| exit 1
 		${RSYNC_U} ${GITDIR}/		${TARGET}/var/git/meta-repo.git				|| exit 1
-		${SAFE_ENV}			${_SELF} ${FUNTOO_VER}					|| exit 1
+		${SAFE_ENV}			${_SELF} ${FUNTOO}					|| exit 1
 	fi
 	${SAFE_ENV}				${_SELF} ${TOOR} ${AUTO} -w				|| exit 1
-	if ${BLD}; then
+	if ${_BLD}; then
 		if [[ -n ${_NEW} ]]; then
-#>>>			expect_wrapper		emerge ${ASK} expect					|| exit 1
-			${SAFE_ENV}		emerge ${ASK} expect					|| exit 1
+#>>>			expect_wrapper		emerge ${_ASK} expect					|| exit 1
+			${SAFE_ENV}		emerge ${_ASK} expect					|| exit 1
 			${SAFE_ENV}		${_SELF} ${TOOR} ${AUTO} -f				|| exit 1
-			expect_wrapper		emerge ${ASK} --deep --newuse --update \@system		|| exit 1
+			expect_wrapper		emerge ${_ASK} --deep --newuse --update \@system	|| exit 1
 		else
-			expect_wrapper		emerge ${ASK} --emptytree \@system \@world		|| exit 1
+			expect_wrapper		emerge ${_ASK} --emptytree \@system \@world		|| exit 1
 		fi
 	fi
-	if ${KRN}; then for FILE in ${KERNEL_VER}; do
+	if ${_KRN}; then for FILE in ${KERNEL}; do
 		${RM}				${TARGET}/usr/src/linux					|| exit 1
 		${LN} linux-${FILE}-gentoo	${TARGET}/usr/src/linux					|| exit 1
-		expect_wrapper			emerge ${ASK} genkernel =gentoo-sources-${FILE}		|| exit 1
+		expect_wrapper			emerge ${_ASK} genkernel =gentoo-sources-${FILE}	|| exit 1
 		declare GENKERNEL_OPTS="--loglevel=5 --bootloader=grub --symlink kernel"
 		if [[ -z ${AUTO} ]]; then
 			expect_wrapper		genkernel ${GENKERNEL_OPTS} kernel --menuconfig		|| exit 1
@@ -258,7 +279,7 @@ if [[ ${1} == -i ]]; then
 		${RM}				${TARGET}/boot/_initrd					|| exit 1
 		${LN} ${INITRD}			${TARGET}/boot/_initrd					|| exit 1
 	fi
-	if ${CFG}; then
+	if ${_CFG}; then
 		cat >>${TARGET}/etc/passwd <<END_OF_FILE
 ---
 root:x:0:0::/.g/_data/zactive/.home:/bin/bash
@@ -345,13 +366,13 @@ fi
 ################################################################################
 
 if [[ ${1} == -w ]]; then
-	${RSYNC_U/reporter} ${FUNDIR}/[a-z_]*		/etc/portage/
-	${LN} /etc/portage/_overlay/overlay.conf	/etc/portage/repos.conf/
-	chown -R root:root				/etc/portage
-	chmod -R 755					/etc/portage
+	${RSYNC_U/reporter} ${SETDIR}/${FUNDIR}/[a-z_]*	${ETCDIR}/
+	${LN} ${ETCDIR}/_overlay/overlay.conf		${ETCDIR}/repos.conf/
+	chown -R root:root				${ETCDIR}
+	chmod -R 755					${ETCDIR}
 	for FILE in \
-		/etc/portage/make.conf	\
-		/etc/portage/package.*
+		${ETCDIR}/make.conf	\
+		${ETCDIR}/package.*
 	do
 		${SED} -i "s|^[#][{]${_MET}[}][ ](.+)$|\1|g" ${FILE}
 		${SED} -i "s|^[#][{]${_NEW}[}][ ](.+)$|\1|g" ${FILE}
@@ -362,7 +383,7 @@ if [[ ${1} == -w ]]; then
 	ego profile flavor desktop	|| exit 1
 	ego profile show
 	locale-gen
-	gcc-config ${CHOST}-$(equery list gcc | awk '{print $1;}' | cut -d- -f3 | sort -n | tail -n1)
+	gcc-config $(source ${ETCDIR}/make.conf; echo "${CHOST}")-$(equery list gcc | awk '{print $1;}' | cut -d- -f3 | sort -n | tail -n1)
 	gcc-config --list-profiles
 	java-config --set-system-vm $(equery list icedtea | awk '{print $1;}' | ${GREP} -v "^$" | cut -d/ -f2 | cut -d. -f1 | tail -n1)
 	java-config --list-available-vms
@@ -373,7 +394,7 @@ if [[ ${1} == -w ]]; then
 		unison:2.48		\
 		vi:vim			\
 		\
-		$(for NEXT in ${KERNEL_VER}; do
+		$(for NEXT in ${KERNEL}; do
 			echo "kernel:linux-${NEXT}-gentoo"
 		done)
 	do
@@ -391,13 +412,13 @@ fi
 
 if [[ ${1} == -u ]]; then
 	${SAFE_ENV} ${_SELF} ${TOOR} ${AUTO} -w					|| exit 1
-	expect_wrapper emerge ${ASK} --deep --newuse --update \@system \@world	|| exit 1
+	expect_wrapper emerge ${_ASK} --deep --newuse --update \@system \@world	|| exit 1
 	expect_wrapper python-updater						|| exit 1
 	expect_wrapper perl-cleaner --all					|| exit 1
 	expect_wrapper haskell-updater --all					|| exit 1
-	expect_wrapper emerge ${ASK} \@module-rebuild				|| exit 1
-	expect_wrapper emerge ${ASK} \@preserved-rebuild			|| exit 1
-	expect_wrapper emerge ${ASK} --depclean					|| exit 1
+	expect_wrapper emerge ${_ASK} \@module-rebuild				|| exit 1
+	expect_wrapper emerge ${_ASK} \@preserved-rebuild			|| exit 1
+	expect_wrapper emerge ${_ASK} --depclean				|| exit 1
 	expect_wrapper revdep-rebuild --ignore					|| exit 1
 	expect_wrapper emaint --fix all						|| exit 1
 	expect_wrapper eclean --verbose distfiles				|| exit 1
@@ -440,7 +461,7 @@ elif [[ ${1} != -! ]]; then
 	if [[ -z ${1} ]] || [[ ${1} == -f ]]; then
 		FILE="true"
 		expect_wrapper emerge --ask=n --emptytree --fetch-all-uri		\
-			\@system \@world						2>&1 | tee /${DSTDIR}.log
+			\@system \@world						2>&1 | tee ${DSTDIR}.log
 		if [[ ${PIPESTATUS[0]} != 0 ]]; then
 			FILE="false"
 		fi
@@ -449,21 +470,21 @@ elif [[ ${1} != -! ]]; then
 			${SED} -n \
 				-e "s/^.*Couldn[']t[ ]download[ ][']([^']+).*$/\1/gp"	\
 				-e "s/^.*Please[ ]download[ ]([^ ]+).*$/\1/gp"		\
-				/${DSTDIR}.log | sort --unique				1>&2
+				${DSTDIR}.log | sort --unique				1>&2
 			echo -en "\"\n"							1>&2
 			echo -en "for FILE in \${FILELIST}; do\n"			1>&2
 			echo -en "${RSYNC_U} "						1>&2
-			echo -en "${BUILDS}/${DSTDIR}/\${FILE} ${TARGET}/${DSTDIR}/\n"	1>&2
+			echo -en "${BLDDIR}${DSTDIR}/\${FILE} ${TARGET}${DSTDIR}/\n"	1>&2
 			echo -en "done\n"						1>&2
 		fi
-		for NEXT in $(find /${DSTDIR}/*checksum_failure* 2>/dev/null); do
+		for NEXT in $(find ${DSTDIR}/*checksum_failure* 2>/dev/null); do
 			${RM} ${NEXT}							1>&2
 			FILE="false"
 		done
 		if ! ${FILE}; then
 			exit 1;
 		fi
-		${RM} /${DSTDIR}.log							1>&2
+		${RM} ${DSTDIR}.log							1>&2
 	fi
 	if [[ -n ${1} ]]; then
 		exit 0
@@ -472,9 +493,9 @@ fi
 
 ################################################################################
 
-${SAFE_ENV} ${FUNDIR}/.emergent
+${SAFE_ENV} ${SETDIR}/${FUNDIR}/.emergent
 if [[ -z ${_MET} ]]; then
-	${SAFE_ENV} ${FUNDIR}/.hacks
+	${SAFE_ENV} ${SETDIR}/${FUNDIR}/.hacks
 fi
 
 ########################################
