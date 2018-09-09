@@ -2,13 +2,24 @@
 source ${HOME}/.bashrc
 ################################################################################
 
-declare OUT_DIR="/_gentoo"
-${MKDIR} ${OUT_DIR}
-${RSYNC_C} ${HOME}/setup/gentoo/_gentoo/ ${OUT_DIR}/
+declare GENDIR="${GENDIR:-/_gentoo}"
+declare ETCDIR="/etc/portage"
 
 ########################################
 
 declare TOKEN
+
+################################################################################
+
+${MKDIR} ${GENDIR}
+${RSYNC_C} ${ETCDIR}/_gentoo/ ${GENDIR}/
+
+########################################
+
+function grep_token {
+	TOKEN="${1//+/[+]}"; shift
+	${GREP} "${TOKEN}" "${@}"
+}
 
 ################################################################################
 
@@ -17,7 +28,7 @@ if [[ ${1} == -v ]]; then
 	declare NEW="/.g/_toor"
 	declare PKG
 	for PKG in $(
-		${GREP} -v "^[#]" ${HOME}/setup/gentoo/package.keywords |
+		${GREP} -v "^[#]" ${ETCDIR}/package.keywords |
 		${GREP} -v "^$" |
 		${SED} "s|:.+$||g" |
 		cut -f1 |
@@ -55,18 +66,11 @@ fi
 
 ################################################################################
 
-function grep_token {
-	TOKEN="${1//+/[+]}"; shift
-	${GREP} "${TOKEN}" "${@}"
-}
-
-################################################################################
-
 declare EMERGE_CMD="$(which emerge) --verbose --pretend"
-env - ${EMERGE_CMD} --emptytree \@system \@world	>${OUT_DIR}/.emerge	2>&1
-env - ${EMERGE_CMD} --info				>${OUT_DIR}/.info	2>&1
-env - ${EMERGE_CMD} --list-sets				>${OUT_DIR}/.sets	2>&1
-env - $(which equery) list --duplicates '*'		>${OUT_DIR}/.slots	2>&1
+env - ${EMERGE_CMD} --emptytree \@system \@world	>${GENDIR}/.emerge	2>&1
+env - ${EMERGE_CMD} --info				>${GENDIR}/.info	2>&1
+env - ${EMERGE_CMD} --list-sets				>${GENDIR}/.sets	2>&1
+env - $(which equery) list --duplicates '*'		>${GENDIR}/.slots	2>&1
 
 ########################################
 
@@ -116,73 +120,73 @@ env - $(which equery) list --duplicates '*'		>${OUT_DIR}/.slots	2>&1
 
 ########################################
 
-cat ${OUT_DIR}/.emerge |
+cat ${GENDIR}/.emerge |
 	${SED} -n "s/^[[]ebuild[^]]+[]][ ]([^: ]+)[: ].*$/\1/gp"	|
 	sort								\
-	>${OUT_DIR}/_packages
+	>${GENDIR}/_packages
 
 find /var/db/pkg -mindepth 2 -maxdepth 2 -type d	|
 	${SED} "s|^/var/db/pkg/||g"			|
 	sort						\
-	>${OUT_DIR}/_packages.db
+	>${GENDIR}/_packages.db
 
-cat /dev/null >${OUT_DIR}/_packages.db.added
+cat /dev/null >${GENDIR}/_packages.db.added
 
-for TOKEN in $(cat ${OUT_DIR}/_packages.db); do
-	if [[ -z $(grep_token "^${TOKEN/%-[0-9].*}" ${HOME}/setup/gentoo/sets/packages) ]]; then
-		echo "${TOKEN}" >>${OUT_DIR}/_packages.db.added
+for TOKEN in $(cat ${GENDIR}/_packages.db); do
+	if [[ -z $(grep_token "^${TOKEN/%-[0-9].*}" ${ETCDIR}/sets/packages) ]]; then
+		echo "${TOKEN}" >>${GENDIR}/_packages.db.added
 	fi
 done
 
-#>>>${GREP} -v "^[#]" ${HOME}/setup/gentoo/package.*		|
+#>>>${GREP} -v "^[#]" ${ETCDIR}/package.*			|
 #>>>	${SED} -n "s/^[^:]+[:]([a-z][^[:space:]]+).+$/\1/gp"	|
 #>>>	sort							|
 #>>>	uniq							\
-#>>>	>${OUT_DIR}/_packages.modified
+#>>>	>${GENDIR}/_packages.modified
 
-#>>>${GREP} -v "^[#]" ${HOME}/setup/gentoo/package.*		|
+#>>>${GREP} -v "^[#]" ${ETCDIR}/package.*			|
 #>>>	${GREP} "[#][ ]gentoo[ ]required"			|
 #>>>	${SED} -n "s/^[^:]+[:]([a-z][^[:space:]]+).+$/\1/gp"	|
 #>>>	sort							|
 #>>>	uniq							\
-#>>>	>${OUT_DIR}/_packages.modified.required
+#>>>	>${GENDIR}/_packages.modified.required
 
 ########################################
 
-cat /dev/null >${OUT_DIR}/_use.disabled
-cat /dev/null >${OUT_DIR}/_use.enabled
+cat /dev/null >${GENDIR}/_use.disabled
+cat /dev/null >${GENDIR}/_use.enabled
 
-for TOKEN in $(source /etc/portage/make.conf ; echo ${USE}); do
+for TOKEN in $(source ${ETCDIR}/make.conf ; echo ${USE}); do
 	if [[ ${TOKEN} == ${TOKEN/#-} ]]; then
 		grep_token "^${TOKEN/#-}[ ][-]" /var/git/meta-repo/kits/*/profiles/use.desc |
 			sort \
-			>>${OUT_DIR}/_use.enabled
+			>>${GENDIR}/_use.enabled
 	else
 		grep_token "^${TOKEN/#-}[ ][-]" /var/git/meta-repo/kits/*/profiles/use.desc |
 			sort \
-			>>${OUT_DIR}/_use.disabled
+			>>${GENDIR}/_use.disabled
 	fi
 done
 
-cat /dev/null >${OUT_DIR}/_use.packages
+cat /dev/null >${GENDIR}/_use.packages
 
-for TOKEN in $(cat ${OUT_DIR}/_packages); do
+for TOKEN in $(cat ${GENDIR}/_packages); do
 	grep_token "^${TOKEN/%-[0-9].*}[:]" /var/git/meta-repo/kits/*/profiles/use.local.desc |
 		sort \
-		>>${OUT_DIR}/_use.packages
+		>>${GENDIR}/_use.packages
 done
 
 ########################################
 
-cat ${OUT_DIR}/.emerge |
+cat ${GENDIR}/.emerge |
 	${SED} "s/ ([A-Z0-9_]+=)/\n\1/g"	|
 	${SED} "s/\" [^\"]+$/\"/g"		|
 	${GREP} "^[A-Z0-9_]+="			|
 	sort					|
 	uniq					\
-	>${OUT_DIR}/emerge__tmp
+	>${GENDIR}/emerge__tmp
 
-${GREP} "^USE=" ${OUT_DIR}/emerge__tmp |
+${GREP} "^USE=" ${GENDIR}/emerge__tmp |
 	${SED} "s/^USE=\"//g"	|
 	${SED} "s/\"$//g"	|
 	${SED} "s/[()*%]//g"	|
@@ -191,90 +195,90 @@ ${GREP} "^USE=" ${OUT_DIR}/emerge__tmp |
 	${SED} "s/ /\n/g"	|
 	sort			|
 	uniq			\
-	>${OUT_DIR}/emerge.use
+	>${GENDIR}/emerge.use
 
-${GREP} -v "^USE=" ${OUT_DIR}/emerge__tmp |
+${GREP} -v "^USE=" ${GENDIR}/emerge__tmp |
 	${SED} "s/=.+$//g"	|
 	sort			|
 	uniq			\
-	>${OUT_DIR}/emerge.vars
+	>${GENDIR}/emerge.vars
 
-${RM} ${OUT_DIR}/emerge__tmp >/dev/null 2>&1
+${RM} ${GENDIR}/emerge__tmp >/dev/null 2>&1
 
 ########################################
 
-(source /etc/portage/make.conf ; echo ${USE}) |
+(source ${ETCDIR}/make.conf ; echo ${USE}) |
 	${SED} "s/^-//g"	|
 	${SED} "s/ -/ /g"	|
 	${SED} "s/ /\n/g"	|
 	sort			|
 	uniq			\
-	>${OUT_DIR}/makeconf.use
+	>${GENDIR}/makeconf.use
 
-${GREP} "^[A-Z0-9_]+=" /etc/portage/make.conf |
+${GREP} "^[A-Z0-9_]+=" ${ETCDIR}/make.conf |
 	${GREP} -v "^USE="	|
 	${SED} "s/=.+$//g"	|
 	sort			|
 	uniq			\
-	>${OUT_DIR}/makeconf.vars
+	>${GENDIR}/makeconf.vars
 
 ########################################
 
-cat /dev/null >${OUT_DIR}/use.extra
+cat /dev/null >${GENDIR}/use.extra
 
-for TOKEN in $(cat ${OUT_DIR}/makeconf.use); do
-	if [[ -z $(grep_token "^${TOKEN}$" ${OUT_DIR}/emerge.use) ]]; then
-		echo "${TOKEN}" >>${OUT_DIR}/use.extra
+for TOKEN in $(cat ${GENDIR}/makeconf.use); do
+	if [[ -z $(grep_token "^${TOKEN}$" ${GENDIR}/emerge.use) ]]; then
+		echo "${TOKEN}" >>${GENDIR}/use.extra
 	fi
 done
 
-cat /dev/null >${OUT_DIR}/vars.extra
+cat /dev/null >${GENDIR}/vars.extra
 
-for TOKEN in $(cat ${OUT_DIR}/makeconf.vars); do
-	if [[ -z $(grep_token "^${TOKEN}$" ${OUT_DIR}/emerge.vars) ]]; then
-		echo "${TOKEN}" >>${OUT_DIR}/vars.extra
+for TOKEN in $(cat ${GENDIR}/makeconf.vars); do
+	if [[ -z $(grep_token "^${TOKEN}$" ${GENDIR}/emerge.vars) ]]; then
+		echo "${TOKEN}" >>${GENDIR}/vars.extra
 	fi
 done
 
 ########################################
 
-cat /dev/null >${OUT_DIR}/use.missing.global
-cat /dev/null >${OUT_DIR}/use.missing.local
+cat /dev/null >${GENDIR}/use.missing.global
+cat /dev/null >${GENDIR}/use.missing.local
 
-for TOKEN in $(cat ${OUT_DIR}/emerge.use); do
-	if [[ -z $(grep_token "^${TOKEN}$" ${OUT_DIR}/makeconf.use) ]]; then
+for TOKEN in $(cat ${GENDIR}/emerge.use); do
+	if [[ -z $(grep_token "^${TOKEN}$" ${GENDIR}/makeconf.use) ]]; then
 		if [[ -n $(grep_token "^${TOKEN}[ ][-]" /var/git/meta-repo/kits/*/profiles/use.desc) ]]; then
 			grep_token "^${TOKEN}[ ][-]" /var/git/meta-repo/kits/*/profiles/use.desc |
 				sort \
-				>>${OUT_DIR}/use.missing.global
+				>>${GENDIR}/use.missing.global
 		else
 			echo -e "\n${TOKEN}" \
-				>>${OUT_DIR}/use.missing.local
+				>>${GENDIR}/use.missing.local
 			grep_token "[:]${TOKEN}[ ][-]" /var/git/meta-repo/kits/*/profiles/use.local.desc |
 				sort \
-				>>${OUT_DIR}/use.missing.local
+				>>${GENDIR}/use.missing.local
 		fi
 	fi
 done
 
-cat /dev/null >${OUT_DIR}/vars.missing
+cat /dev/null >${GENDIR}/vars.missing
 
-for TOKEN in $(cat ${OUT_DIR}/emerge.vars); do
-	if [[ -z $(grep_token "^${TOKEN}$" ${OUT_DIR}/makeconf.vars) ]]; then
-		echo "${TOKEN}" >>${OUT_DIR}/vars.missing
+for TOKEN in $(cat ${GENDIR}/emerge.vars); do
+	if [[ -z $(grep_token "^${TOKEN}$" ${GENDIR}/makeconf.vars) ]]; then
+		echo "${TOKEN}" >>${GENDIR}/vars.missing
 	fi
 done
 
 ########################################
 
-cat /dev/null >${OUT_DIR}/+okay
+cat /dev/null >${GENDIR}/+okay
 
-for TOKEN in ${OUT_DIR}/*.OKAY; do
-	echo -e "\n${TOKEN/%\.OKAY}" >>${OUT_DIR}/+okay
-	diff ${DIFF_OPTS} ${TOKEN} ${TOKEN/%\.OKAY} >>${OUT_DIR}/+okay
+for TOKEN in ${GENDIR}/*.OKAY; do
+	echo -e "\n${TOKEN/%\.OKAY}" >>${GENDIR}/+okay
+	diff ${DIFF_OPTS} ${TOKEN} ${TOKEN/%\.OKAY} >>${GENDIR}/+okay
 done
 
-echo -e "\n[emerge output]" >>${OUT_DIR}/+okay
+echo -e "\n[emerge output]" >>${GENDIR}/+okay
 ${GREP} -v \
 	-e "^$" \
 	-e "^PORTAGE_BZIP2_COMMAND[ ]" \
@@ -286,7 +290,7 @@ ${GREP} -v \
 	-e "^Fetch Restriction[:][ ]" \
 	-e "^[ ][*][ ]IMPORTANT: [0-9]+ news items need reading for repository" \
 	-e "^[ ][*][ ]Use eselect news to read news items" \
-	${OUT_DIR}/.emerge >>${OUT_DIR}/+okay
+	${GENDIR}/.emerge >>${GENDIR}/+okay
 
 exit 0
 ################################################################################
