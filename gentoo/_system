@@ -118,7 +118,43 @@ done
 
 ########################################
 
-unset EMERGE_DEFAULT_OPTS
+declare VARSREGEX="[A-Z][A-Z0-9_]+"
+declare MASKREGEX="^[[:space:]]+(${VARSREGEX})([[:space:]].*)?$"
+#>>>man make.conf | ${GREP} "${MASKREGEX}|$"
+#>>>man make.conf | ${GREP} "${MASKREGEX}" | ${GREP} "${VARSREGEX}"
+
+#>>>$(man make.conf | ${SED} -n "s/${MASKREGEX}/\1/gp")
+declare MASKVARS="
+$(man make.conf | ${GREP} "${MASKREGEX}" | ${GREP} --only-matching "${VARSREGEX}")
+CARCH
+"
+declare SKIPVARS="
+DIR
+URI
+"
+declare KEEPVARS="
+${SKIPVARS}
+PATH
+"
+
+function clear_environment {
+	for FILE in $(
+		echo "${MASKVARS}" |
+		${SED} "/^$/d" |
+		sort --field-separator=" " --unique |
+		${GREP} --invert-match "^($(
+			echo "${KEEPVARS}" |
+			${SED} "/^$/d" |
+			tr '\n' '|' |
+			${SED} -e "s/^[|]*//g" -e "s/[|]*$//g"
+		))$"
+	); do
+#>>>		echo -en "${FILE}=${!FILE}\n" | ${GREP} "[=].*$"	1>&2
+		echo -en "${FILE}=${!FILE}\n" | ${GREP} "[=].+$"	1>&2
+		unset ${FILE}						1>&2
+	done
+	return 0
+}
 
 ########################################
 
@@ -180,6 +216,10 @@ function mount_dev_dirs {
 	fi
 	return 0
 }
+
+################################################################################
+
+clear_environment
 
 ################################################################################
 
