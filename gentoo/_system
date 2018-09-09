@@ -4,6 +4,14 @@ source ${HOME}/.bashrc
 
 declare COMMAND_LINE="${@}"
 
+########################################
+
+declare DEBUG=
+if [[ ${1} == -q ]]; then
+	DEBUG="${1}"
+	shift
+fi
+
 ################################################################################
 
 #OPTIONS[SOURCE GITDIR RELDIR]
@@ -354,6 +362,14 @@ print_info marker;	print_info usage
 print_info marker;	print_info starter
 print_info marker;	print_info environment;	clear_environment
 print_info marker
+
+if [[ -n "${DEBUG}" ]]; then
+	if [[ -n "${TOOR}" ]]; then
+		set -x
+		${SAFE_ENV} ${MYSELF} ${DEBUG}
+	fi
+	exit 0
+fi
 
 ################################################################################
 
