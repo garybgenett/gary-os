@@ -372,12 +372,37 @@ print_info marker;	print_info starter
 print_info marker;	print_info environment;	clear_environment
 print_info marker
 
+########################################
+
 if [[ -n "${DEBUG}" ]]; then
 	if [[ -n "${TOOR}" ]]; then
 		set -x
 		${SAFE_ENV} ${MYSELF} ${DEBUG}
 	fi
 	exit 0
+fi
+
+########################################
+
+if
+[[ -n "${TOOR}" ]] &&
+[[ -d "${TARGET}${ARCDIR}" ]]
+then
+	echo -en "${COMMIT}"					>${TARGET}${ARCDIR}/_commit	|| exit 1
+	${RSYNC_U} ${SETDIR}/${FUNDIR}/				${TARGET}${ARCDIR}/${FUNDIR}	|| exit 1
+	${RSYNC_U} ${SETDIR}/${LINDIR}/				${TARGET}${ARCDIR}/${LINDIR}	|| exit 1
+	${MKDIR}						${TARGET}${HOMELY}		|| exit 1
+	if [[ -f ${SETDIR}/.bashrc ]]; then
+		${RSYNC_U} --copy-links ${SETDIR}/.bashrc	${TARGET}${HOMELY}/		|| exit 1
+	else
+		${RSYNC_U} --copy-links ${HOME}/.bashrc		${TARGET}${HOMELY}/		|| exit 1
+	fi
+	${RSYNC_U} ${SETDIR}/${FUNDIR}/				${TARGET}${HOMELY}/${FUNDIR}	|| exit 1
+	${RSYNC_U} ${SETDIR}/${LINDIR}/				${TARGET}${HOMELY}/${LINDIR}	|| exit 1
+	${RSYNC_U} ${SETDIR}/${FUNDIR}/[a-z_]*			${TARGET}${ETCDIR}/		|| exit 1
+	${LN} ${ETCDIR}/_overlay/overlay.conf			${TARGET}${ETCDIR}/repos.conf/	|| exit 1
+	chown -R root:root					${TARGET}${ETCDIR}		|| exit 1
+	chmod -R 755						${TARGET}${ETCDIR}		|| exit 1
 fi
 
 ################################################################################
@@ -451,13 +476,6 @@ if [[ ${1} == -i ]]; then
 		${MKDIR}			${TARGET}${ARCDIR}					|| exit 1
 		${RSYNC_U} ${SOURCE}/*funtoo*	${TARGET}${ARCDIR}/					|| exit 1
 	fi
-	echo -en "${COMMIT}"			>${TARGET}${ARCDIR}/_commit				|| exit 1
-	${RSYNC_U} ${SETDIR}/${FUNDIR}/		${TARGET}${ARCDIR}/${FUNDIR}				|| exit 1
-	${RSYNC_U} ${SETDIR}/${LINDIR}/		${TARGET}${ARCDIR}/${LINDIR}				|| exit 1
-	${MKDIR}				${TARGET}${HOMELY}					|| exit 1
-	${RSYNC_U} --copy-links ${HOME}/.bashrc	${TARGET}${HOMELY}/					|| exit 1
-	${RSYNC_U} ${SETDIR}/${FUNDIR}/		${TARGET}${HOMELY}/${FUNDIR}				|| exit 1
-	${RSYNC_U} ${SETDIR}/${LINDIR}/		${TARGET}${HOMELY}/${LINDIR}				|| exit 1
 	mount_dev_dirs											|| exit 1
 	if [[ ! -d ${TARGET}${REPDIR} ]]; then
 		${MKDIR}			${TARGET}${REPDIR}{,.git}				|| exit 1
@@ -594,10 +612,6 @@ fi
 ################################################################################
 
 if [[ ${1} == -w ]]; then
-	${RSYNC_U/reporter} ${SETDIR}/${FUNDIR}/[a-z_]*	${ETCDIR}/
-	${LN} ${ETCDIR}/_overlay/overlay.conf		${ETCDIR}/repos.conf/
-	chown -R root:root				${ETCDIR}
-	chmod -R 755					${ETCDIR}
 	for FILE in \
 		${ETCDIR}/make.conf	\
 		${ETCDIR}/package.*
