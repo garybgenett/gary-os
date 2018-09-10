@@ -503,10 +503,14 @@ fi
 
 ################################################################################
 
-if [[ ${1} == -0 ]]; then shift; ${_SELF} ${TOOR} -n -a -b -k	-i 2>&1 | tee ${TARGET}${GENDIR}.log | prompt -c	; exit 0; fi
-if [[ ${1} == -/ ]]; then shift; ${_SELF} ${TOOR} -a		-i 2>&1 | tee ${TARGET}${GENDIR}.log | prompt -c	; exit 0; fi
-if [[ ${1} == -1 ]]; then shift; ${_SELF} ${TOOR} -a -b		-i 2>&1 | tee ${TARGET}${GENDIR}.log | prompt -c	; exit 0; fi
-if [[ ${1} == -2 ]]; then shift; ${_SELF} ${TOOR} -c		-i							; exit 0; fi
+if [[ ${1} == -[0/12] ]]; then
+	date --iso=seconds >${TARGET}${GENDIR}.log 2>&1
+fi
+
+if [[ ${1} == -0 ]]; then shift; ${_SELF} ${TOOR} -n -a -b -k	-i 2>&1 | tee --append ${TARGET}${GENDIR}.log | prompt -c	; exit 0; fi
+if [[ ${1} == -/ ]]; then shift; ${_SELF} ${TOOR} -a		-i 2>&1 | tee --append ${TARGET}${GENDIR}.log | prompt -c	; exit 0; fi
+if [[ ${1} == -1 ]]; then shift; ${_SELF} ${TOOR} -a -b		-i 2>&1 | tee --append ${TARGET}${GENDIR}.log | prompt -c	; exit 0; fi
+if [[ ${1} == -2 ]]; then shift; ${_SELF} ${TOOR} -c		-i								; exit 0; fi
 
 ########################################
 
