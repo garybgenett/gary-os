@@ -539,12 +539,12 @@ if [[ ${1} == -i ]]; then
 		${RSYNC_U} ${GITDIR}/		${TARGET}${REPDIR}.git					|| exit 1
 		${SAFE_ENV}			${MYSELF} ${FUNTOO}					|| exit 1
 	fi
-	${SAFE_ENV}				${MYSELF} ${TOOR} ${AUTO} -w				|| exit 1
+	${SAFE_ENV}				${MYSELF} ${AUTO} -w					|| exit 1
 	if ${_BLD}; then
 		if [[ -n ${_NEW} ]]; then
 #>>>			expect_wrapper		emerge ${_ASK} expect					|| exit 1
 			${SAFE_ENV}		emerge ${_ASK} expect					|| exit 1
-			${SAFE_ENV}		${MYSELF} ${TOOR} ${AUTO} -f				|| exit 1
+			${SAFE_ENV}		${MYSELF} ${AUTO} -f					|| exit 1
 			expect_wrapper		emerge ${_ASK} --deep --newuse --update \@system	|| exit 1
 		else
 			expect_wrapper		emerge ${_ASK} --emptytree \@system \@world		|| exit 1
@@ -659,10 +659,10 @@ END_OF_FILE
 		done
 	fi
 	if [[ -z ${_MET} ]]; then
-		${SAFE_ENV}			${MYSELF} ${TOOR} ${AUTO} -f	|| exit 1
+		${SAFE_ENV}			${MYSELF} ${AUTO} -f	|| exit 1
 	fi
-	${SAFE_ENV}				${MYSELF} ${TOOR} ${AUTO} -u	|| exit 1
-	mount_dev_dirs -u							|| exit 1
+	${SAFE_ENV}				${MYSELF} ${AUTO} -u	|| exit 1
+	mount_dev_dirs -u						|| exit 1
 	exit 0
 fi
 
@@ -708,9 +708,9 @@ fi
 ########################################
 
 if [[ ${1} == -u ]]; then
-	${SAFE_ENV} ${_SELF} ${TOOR} ${AUTO} -w					|| exit 1
+	${SAFE_ENV} ${_SELF} ${AUTO} -w						|| exit 1
 	expect_wrapper emerge ${_ASK} --deep --newuse --update \@system \@world	|| exit 1
-	${SAFE_ENV} ${_SELF} ${TOOR} ${AUTO} -p					|| exit 1
+	${SAFE_ENV} ${_SELF} ${AUTO} -p						|| exit 1
 	expect_wrapper python-updater						|| exit 1
 	expect_wrapper perl-cleaner --all					|| exit 1
 	expect_wrapper haskell-updater --all					|| exit 1
