@@ -242,6 +242,7 @@ function print_info {
 		printf "${PRINTF}" "Information Lookup (Package Search):"	"<output>"	"${SCRIPT} [{chroot}] -l {search}"
 		printf "${PRINTF}" "Information Lookup (Gentoo Bug URL):"	"<output>"	"${SCRIPT} [{chroot}] -l {bug_id}"
 		echo -en "\n"
+		printf "${PRINTF}" "Build Configuration (Internal Only):"	"<internal>"	"${SCRIPT} [{chroot}] -w"
 		printf "${PRINTF}" "Build Examination (Review Failures):"	"<output>"	"${SCRIPT} [{chroot}] -p"
 		echo -en "\n"
 		printf "${PRINTF}" "Validation (Usage/Variables Only):"		"<output>"	"${SCRIPT} -q [{chroot}] [{options}]"
@@ -263,6 +264,7 @@ function print_info {
 		printf "${PRINTF}" "Chroot Build (Complete Rebuild):"		"<auto>"	"${SCRIPT} [{chroot}] -1"
 		printf "${PRINTF}" "Chroot Build (Configuration):"		"<interactive>"	"${SCRIPT} [{chroot}] -2"
 		echo -en "\n"
+		printf "${PRINTF}" "Chroot Configuration (Internal Only):"	"<internal>"	"${SCRIPT} [{chroot}] -r"
 		printf "${PRINTF}" "Chroot Shell (Bash):"			"<interactive>"	"${SCRIPT} [{chroot}] -s"
 		printf "${PRINTF}" "Chroot Shell (Run Command):"		"<auto>"	"${SCRIPT} [{chroot}] -s {command}"
 		printf "${PRINTF}" "Chroot Emerge Command (Automatically):"	"<auto>"	"${SCRIPT} [{chroot}] -a -s -e {command}"
@@ -408,30 +410,6 @@ if [[ -n "${DEBUG}" ]]; then
 	exit 0
 fi
 
-########################################
-
-if
-[[ -z "${QUIET}" ]] &&
-[[ -n "${TOOR}" ]] &&
-[[ -d "${TARGET}${ARCDIR}" ]]
-then
-	echo -en "${COMMIT}"					>${TARGET}${ARCDIR}/_commit	|| exit 1
-	${RSYNC_U} ${SETDIR}/${FUNDIR}/				${TARGET}${ARCDIR}/${FUNDIR}	|| exit 1
-	${RSYNC_U} ${SETDIR}/${LINDIR}/				${TARGET}${ARCDIR}/${LINDIR}	|| exit 1
-	${MKDIR}						${TARGET}${HOMELY}		|| exit 1
-	if [[ -f ${SETDIR}/.bashrc ]]; then
-		${RSYNC_U} --copy-links ${SETDIR}/.bashrc	${TARGET}${HOMELY}/		|| exit 1
-	else
-		${RSYNC_U} --copy-links ${HOME}/.bashrc		${TARGET}${HOMELY}/		|| exit 1
-	fi
-	${RSYNC_U} ${SETDIR}/${FUNDIR}/				${TARGET}${HOMELY}/${FUNDIR}	|| exit 1
-	${RSYNC_U} ${SETDIR}/${LINDIR}/				${TARGET}${HOMELY}/${LINDIR}	|| exit 1
-	${RSYNC_U} ${SETDIR}/${FUNDIR}/[a-z_]*			${TARGET}${ETCDIR}/		|| exit 1
-	${LN} ${ETCDIR}/_overlay/overlay.conf			${TARGET}${ETCDIR}/repos.conf/	|| exit 1
-	chown -R root:root					${TARGET}${ETCDIR}		|| exit 1
-	chmod -R 755						${TARGET}${ETCDIR}		|| exit 1
-fi
-
 ################################################################################
 
 if [[ ${1} == -z ]]; then
@@ -526,6 +504,28 @@ if [[ ${1} == -2 ]]; then shift; ${_SELF} ${TOOR} -c		-i							; exit 0; fi
 
 ########################################
 
+if [[ ${1} == -r ]]; then
+	${MKDIR}						${TARGET}${ARCDIR}		|| exit 1
+	echo -en "${COMMIT}"					>${TARGET}${ARCDIR}/_commit	|| exit 1
+	${RSYNC_U} ${SETDIR}/${FUNDIR}/				${TARGET}${ARCDIR}/${FUNDIR}	|| exit 1
+	${RSYNC_U} ${SETDIR}/${LINDIR}/				${TARGET}${ARCDIR}/${LINDIR}	|| exit 1
+	${MKDIR}						${TARGET}${HOMELY}		|| exit 1
+	if [[ -f ${SETDIR}/.bashrc ]]; then
+		${RSYNC_U} --copy-links ${SETDIR}/.bashrc	${TARGET}${HOMELY}/		|| exit 1
+	else
+		${RSYNC_U} --copy-links ${HOME}/.bashrc		${TARGET}${HOMELY}/		|| exit 1
+	fi
+	${RSYNC_U} ${SETDIR}/${FUNDIR}/				${TARGET}${HOMELY}/${FUNDIR}	|| exit 1
+	${RSYNC_U} ${SETDIR}/${LINDIR}/				${TARGET}${HOMELY}/${LINDIR}	|| exit 1
+	${RSYNC_U} ${SETDIR}/${FUNDIR}/[a-z_]*			${TARGET}${ETCDIR}/		|| exit 1
+	${LN} ${ETCDIR}/_overlay/overlay.conf			${TARGET}${ETCDIR}/repos.conf/	|| exit 1
+	chown -R root:root					${TARGET}${ETCDIR}		|| exit 1
+	chmod -R 755						${TARGET}${ETCDIR}		|| exit 1
+	exit 0
+fi
+
+########################################
+
 if [[ ${1} == -i ]]; then
 	if [[ ! -d ${TARGET}/boot ]]; then
 #>>>		tar -pvvxJ -C ${TARGET} -f	$(ls -t ${SOURCE}/stage3-*i686*funtoo*.tar.xz		| head -n1) || exit 1
@@ -539,6 +539,7 @@ if [[ ${1} == -i ]]; then
 		${RSYNC_U} ${GITDIR}/		${TARGET}${REPDIR}.git					|| exit 1
 		${SAFE_ENV}			${MYSELF} ${FUNTOO}					|| exit 1
 	fi
+	${SAFE_ENV}				${MYSELF} ${AUTO} -r					|| exit 1
 	${SAFE_ENV}				${MYSELF} ${AUTO} -w					|| exit 1
 	if ${_BLD}; then
 		if [[ -n ${_NEW} ]]; then
