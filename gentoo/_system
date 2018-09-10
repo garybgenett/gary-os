@@ -519,10 +519,10 @@ fi
 
 ################################################################################
 
-if [[ ${1} == -0 ]]; then shift; ${_SELF} ${TOOR} -n -a -b -k	-i 2>&1 | tee ${TARGET}.log | prompt -c	; exit 0; fi
-if [[ ${1} == -/ ]]; then shift; ${_SELF} ${TOOR} -a		-i 2>&1 | tee ${TARGET}.log | prompt -c	; exit 0; fi
-if [[ ${1} == -1 ]]; then shift; ${_SELF} ${TOOR} -a -b		-i 2>&1 | tee ${TARGET}.log | prompt -c	; exit 0; fi
-if [[ ${1} == -2 ]]; then shift; ${_SELF} ${TOOR} -c		-i					; exit 0; fi
+if [[ ${1} == -0 ]]; then shift; ${_SELF} ${TOOR} -n -a -b -k	-i 2>&1 | tee ${TARGET}${GENDIR}.log | prompt -c	; exit 0; fi
+if [[ ${1} == -/ ]]; then shift; ${_SELF} ${TOOR} -a		-i 2>&1 | tee ${TARGET}${GENDIR}.log | prompt -c	; exit 0; fi
+if [[ ${1} == -1 ]]; then shift; ${_SELF} ${TOOR} -a -b		-i 2>&1 | tee ${TARGET}${GENDIR}.log | prompt -c	; exit 0; fi
+if [[ ${1} == -2 ]]; then shift; ${_SELF} ${TOOR} -c		-i							; exit 0; fi
 
 ########################################
 
@@ -782,10 +782,10 @@ elif [[ ${1} != -! ]]; then
 			${RM} ${NEXT}							1>&2
 			FILE="false"
 		done
+		${RM} ${DSTDIR}.log							1>&2
 		if ! ${FILE}; then
 			exit 1;
 		fi
-		${RM} ${DSTDIR}.log							1>&2
 	fi
 	if [[ -n ${1} ]]; then
 		exit 0
