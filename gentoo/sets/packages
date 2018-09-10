@@ -25,7 +25,7 @@ app-text/iso-codes
 sys-libs/timezone-data
 
 app-crypt/efitools
-#>>>sys-apps/busybox			# overwrites system utilities
+sys-apps/busybox
 sys-apps/openrc
 sys-apps/sysvinit
 sys-boot/boot-update

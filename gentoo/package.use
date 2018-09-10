@@ -23,6 +23,7 @@ media-video/vlc				xcb		# gentoo required
 net-dns/avahi				dbus		# gentoo required
 net-nds/openldap			sasl		# gentoo required
 net-wireless/wpa_supplicant		dbus		# gentoo required
+sys-apps/busybox			-pam		# gentoo required
 sys-auth/consolekit			policykit	# gentoo required
 sys-libs/gdbm				berkdb		# gentoo required
 
@@ -39,6 +40,9 @@ net-misc/spice-gtk			gtk3		# gentoo required
 net-misc/spice-gtk			usbredir	# gentoo required
 www-client/midori			-introspection	# gentoo required
 x11-libs/libxcb				xkb		# gentoo required
+
+dev-libs/gmp				static-libs	# gentoo required
+sys-apps/attr				static-libs	# gentoo required
 
 app-accessibility/at-spi2-atk		abi_x86_32	# gentoo required
 app-accessibility/at-spi2-core		abi_x86_32	# gentoo required
@@ -297,6 +301,9 @@ app-text/enchant			aspell
 sci-libs/libqalculate			gnuplot readline
 
 ########################################
+
+sys-apps/busybox			-make-symlinks debug savedconfig static
+sys-apps/coreutils			multicall static
 
 app-emulation/qemu			ncurses sdl spice
 app-emulation/spice			client gui
