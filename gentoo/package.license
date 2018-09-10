@@ -5,6 +5,8 @@
 app-emulation/emul-linux-x86-medialibs	MPEG-4
 sys-kernel/gentoo-sources		freedist
 sys-kernel/linux-firmware		freedist
+sys-kernel/linux-firmware		linux-firmware
+sys-kernel/linux-firmware		no-source-code
 
 media-libs/faac				MPEG-4
 
@@ -39,13 +41,6 @@ dev-java/oracle-jre-bin			Oracle-BCLA-JavaSE
 app-text/calibre			unRAR
 
 games-emulation/mekanix			mekanix
-
-app-emulation/virtualbox-extpack-oracle	PUEL
-
-app-emulation/vmware-player		vmware
-app-emulation/vmware-tools		vmware
-
-app-text/acroread			Adobe
 
 app-arch/lha				lha
 games-fps/doom-data			freedist
