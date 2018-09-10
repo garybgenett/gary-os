@@ -413,6 +413,7 @@ fi
 ################################################################################
 
 if [[ ${1} == -z ]]; then
+	shift
 	mount_dev_dirs -u	|| exit 1
 	exit 0
 fi
@@ -424,7 +425,12 @@ if [[ ${1} == -s ]]; then
 	mount_dev_dirs							|| exit 1
 	if [[ ${1} == -t ]]; then
 		shift
-		${_SELF} ${TOOR} -s -e --pretend --emptytree --tree --unordered-display \@system \@world
+		expect_wrapper emerge ${_ASK} \
+			--pretend \
+			--emptytree \
+			--tree \
+			--unordered-display \
+			\@system \@world				|| exit 1
 	elif [[ ${1} == -e ]]; then
 		shift
 		expect_wrapper emerge ${_ASK} "${@}"			|| exit 1
@@ -482,7 +488,7 @@ if [[ ${1} == -p ]]; then
 		for NEXT in ${FILE}; do
 			NEXT="$(basename ${NEXT} | ${SED} "s/[-][0-9][^/]+$//g")"
 			echo -en "\n[${NEXT}]\n"
-			${_SELF} ${QUIET_OPT} ${TOOR} -l ${NEXT}
+			${SAFE_ENV} ${_SELF} ${QUIET_OPT} -l ${NEXT}
 		done
 		echo -en "\n"
 		echo -en "${EDITOR}"
@@ -505,6 +511,7 @@ if [[ ${1} == -2 ]]; then shift; ${_SELF} ${TOOR} -c		-i							; exit 0; fi
 ########################################
 
 if [[ ${1} == -r ]]; then
+	shift
 	${MKDIR}						${TARGET}${ARCDIR}		|| exit 1
 	echo -en "${COMMIT}"					>${TARGET}${ARCDIR}/_commit	|| exit 1
 	${RSYNC_U} ${SETDIR}/${FUNDIR}/				${TARGET}${ARCDIR}/${FUNDIR}	|| exit 1
@@ -527,6 +534,7 @@ fi
 ########################################
 
 if [[ ${1} == -i ]]; then
+	shift
 	if [[ ! -d ${TARGET}/boot ]]; then
 #>>>		tar -pvvxJ -C ${TARGET} -f	$(ls -t ${SOURCE}/stage3-*i686*funtoo*.tar.xz		| head -n1) || exit 1
 		tar -pvvxJ -C ${TARGET} -f	$(ls -t ${SOURCE}/stage3-*core2_64*funtoo*.tar.xz	| head -n1) || exit 1
@@ -537,7 +545,7 @@ if [[ ${1} == -i ]]; then
 	if [[ ! -d ${TARGET}${REPDIR} ]]; then
 		${MKDIR}			${TARGET}${REPDIR}{,.git}				|| exit 1
 		${RSYNC_U} ${GITDIR}/		${TARGET}${REPDIR}.git					|| exit 1
-		${SAFE_ENV}			${MYSELF} ${FUNTOO}					|| exit 1
+		${SAFE_ENV}			${MYSELF} ${AUTO} ${FUNTOO}				|| exit 1
 	fi
 	${SAFE_ENV}				${MYSELF} ${AUTO} -r					|| exit 1
 	${SAFE_ENV}				${MYSELF} ${AUTO} -w					|| exit 1
@@ -670,6 +678,7 @@ fi
 ################################################################################
 
 if [[ ${1} == -w ]]; then
+	shift
 	for FILE in \
 		${ETCDIR}/make.conf	\
 		${ETCDIR}/package.*
@@ -709,6 +718,7 @@ fi
 ########################################
 
 if [[ ${1} == -u ]]; then
+	shift
 	${SAFE_ENV} ${_SELF} ${AUTO} -w						|| exit 1
 	expect_wrapper emerge ${_ASK} --deep --newuse --update \@system \@world	|| exit 1
 	${SAFE_ENV} ${_SELF} ${AUTO} -p						|| exit 1
