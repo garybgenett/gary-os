@@ -1,3 +1,48 @@
+#!/usr/bin/env bash
+source ${HOME}/.bashrc
+################################################################################
+
+if [[ -n "${@}" ]]; then
+	export REPO="${1}" && shift
+	declare HASH
+	perl -e '
+		use strict;
+		use warnings;
+		use JSON::XS;
+		my $repo = ${ENV{REPO}};
+		open(INFO, "<", ${repo} . "/metadata/kit-info.json")	|| die();
+		open(SHA1, "<", ${repo} . "/metadata/kit-sha1.json")	|| die();
+		my $info = do { local $/; <INFO> };
+		my $sha1 = do { local $/; <SHA1> };
+		$info = decode_json(${info});
+		$sha1 = decode_json(${sha1});
+		close(INFO)	|| die();
+		close(SHA1)	|| die();
+		my $order = $info->{"kit_order"};
+		my $kits = {};
+		foreach my $kit (@{$order}) {
+			my $head = $info->{"kit_settings"}{$kit}{"default"};
+			my $hash = $sha1->{$kit}{$head};
+			print "${kit} | ${head} | ${hash}\n";
+			$kits->{$kit}{"head"} = ${head};
+			$kits->{$kit}{"hash"} = ${hash};
+		};
+		foreach my $kit (@{$order}) {
+			my $git = "git --git-dir=${repo}/kits/${kit}/.git --work-tree=${repo}/kits/${kit}";
+			if (! -d "${repo}/kits/${kit}/.git") {
+				system("git clone https://github.com/funtoo/${kit}.git ${repo}/kits/${kit}");
+			};
+			system("${git} checkout --force " . $kits->{$kit}{"head"});
+			system("${git} pull");
+			system("${git} reset --hard " . $kits->{$kit}{"hash"});
+		};
+	' -- "${@}" || exit
+fi
+
+exit 0
+################################################################################
+# end of file
+################################################################################
 # http://www.funtoo.org/News:Funtoo-Stable_Going_Away
 # http://www.funtoo.org/News:Kits_are_Go_(Switch_to_Them!)
 #
@@ -10,5 +55,9 @@
 # https://github.com/funtoo/meta-repo
 # https://git-scm.com/book/en/v2/Git-Tools-Submodules
 #
-# 2017-08-16 18:57:35 +0000 f6ea76da416341a94ad5ca88dbf4f947e4e7b531 kit updates  (HEAD -> master, origin/master, origin/HEAD)
+# https://www.funtoo.org/Funtoo_Profiles
+################################################################################
+# 2017-08-16 18:57:35 +0000 f6ea76da416341a94ad5ca88dbf4f947e4e7b531 kit updates
 f6ea76da416341a94ad5ca88dbf4f947e4e7b531
+# 2018-09-08 13:36:35 +0000 776f16598dac814dee59f95a1e21cefe6c612a02 kit updates
+776f16598dac814dee59f95a1e21cefe6c612a02
