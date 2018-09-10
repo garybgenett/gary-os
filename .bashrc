@@ -823,8 +823,8 @@ function contacts {
 				print ADB "zip="	. ($item->{"Zip Code"}	|| "") . "\n";
 				print ADB "country=USA\n";
 			};
-			close(JSON) || die();
-			close(ADB) || die();
+			close(JSON)	|| die();
+			close(ADB)	|| die();
 		' -- "${@}" || return 1
 	elif [[ ${1} == -c ]]; then
 		shift
