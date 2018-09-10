@@ -2,137 +2,96 @@
 # portage package use file
 ################################################################################
 
-=app-text/poppler-0.33.0		qt4		# gentoo required
-app-crypt/heimdal			-ssl		# gentoo required
-app-crypt/heimdal			-threads	# gentoo required
+app-crypt/pinentry			gnome-keyring	# gentoo required
 app-text/ghostscript-gpl		cups		# gentoo required
 app-text/poppler			cairo		# gentoo required
+app-text/poppler			qt4		# gentoo required
 app-text/poppler			qt5		# gentoo required
-app-text/qpdfview			qt5		# gentoo required
-dev-java/antlr				java		# gentoo required
+dev-libs/glib				dbus		# gentoo required
 dev-qt/qtgui				accessibility	# gentoo required
 dev-qt/qtgui				dbus		# gentoo required
 dev-qt/qtgui				xcb		# gentoo required
 dev-qt/qtsvg				accessibility	# gentoo required
+dev-util/sysprof			-gtk		# gentoo required
+media-gfx/graphviz			cairo		# gentoo required
 media-libs/gd				fontconfig	# gentoo required
 media-libs/libsdl			joystick	# gentoo required
 media-libs/libsdl			sound		# gentoo required
 media-libs/libsdl2			joystick	# gentoo required
 media-libs/libsdl2			sound		# gentoo required
+media-plugins/alsa-plugins		pulseaudio	# gentoo required
+media-video/ffmpeg			theora		# gentoo required
+media-video/ffmpeg			x264		# gentoo required
 media-video/vlc				xcb		# gentoo required
 net-dns/avahi				dbus		# gentoo required
 net-nds/openldap			sasl		# gentoo required
 net-wireless/wpa_supplicant		dbus		# gentoo required
 sys-apps/busybox			-pam		# gentoo required
 sys-auth/consolekit			policykit	# gentoo required
+sys-fs/eudev				-gudev		# gentoo required
 sys-libs/gdbm				berkdb		# gentoo required
+
+media-gfx/blender			-ffmpeg		# gentoo required: [media-gfx/blender-2.72b-r4] /var/tmp/portage/media-gfx/blender-2.72b-r4/work/blender-2.72b/intern/audaspace/ffmpeg/AUD_FFMPEGWriter.cpp:205:38: error: ‘avcodec_get_frame_defaults’ was not declared in this scope
+media-sound/aumix			-gpm		# gnetoo required: [media-sound/aumix-2.9.1] mouse.c:(.text+0x46): undefined reference to `Gpm_Wgetch'
 
 ########################################
 
+dev-libs/libgit2			ssh		# gentoo required
 dev-libs/libpcre			pcre16		# gentoo required
-media-libs/mesa				gles2		# gentoo required
-media-libs/mesa				xa		# gentoo required
+dev-python/PyQt5			gui		# gentoo required
+dev-python/PyQt5			network		# gentoo required
+dev-python/PyQt5			printsupport	# gentoo required
+dev-python/PyQt5			widgets		# gentoo required
+dev-qt/qtmultimedia			widgets		# gentoo required
+dev-qt/qtwebkit				printsupport	# gentoo required
+media-video/ffmpeg			openssl		# gentoo required
+media-video/ffmpeg			opus		# gentoo required
 net-dns/avahi			mdnsresponder-compat	# gentoo required
 net-dns/dnsmasq				script		# gentoo required
-net-ftp/proftpd				openssl		# gentoo required
-net-misc/networkmanager			-nss		# gentoo required
 net-misc/spice-gtk			gtk3		# gentoo required
 net-misc/spice-gtk			usbredir	# gentoo required
-www-client/midori			-introspection	# gentoo required
+x11-base/xorg-server			glamor		# gentoo required
 x11-libs/libxcb				xkb		# gentoo required
 
+dev-java/oracle-jdk-bin			-nsplugin	# gentoo required: [dev-java/oracle-jdk-bin-1.8.0.144] "dev-java/oracle-jdk-bin[nsplugin]" is blocking dev-java/icedtea-web-1.6.1-r1
+dev-java/oracle-jre-bin			-nsplugin	# gentoo required: [dev-java/oracle-jre-bin-1.8.0.144] "dev-java/oracle-jre-bin[nsplugin]" is blocking dev-java/icedtea-web-1.6.1-r1
+
+################################################################################
+
 dev-libs/gmp				static-libs	# gentoo required
+dev-libs/libgcrypt			static-libs	# gentoo required
+dev-libs/libgpg-error			static-libs	# gentoo required
+dev-libs/lzo				static-libs	# gentoo required
 sys-apps/attr				static-libs	# gentoo required
+
+########################################
 
 app-accessibility/at-spi2-atk		abi_x86_32	# gentoo required
 app-accessibility/at-spi2-core		abi_x86_32	# gentoo required
-app-arch/bzip2				abi_x86_32	# gentoo required
 app-arch/xz-utils			abi_x86_32	# gentoo required
+app-text/poppler			abi_x86_32	# gentoo required
 dev-libs/atk				abi_x86_32	# gentoo required
-dev-libs/elfutils			abi_x86_32	# gentoo required
-dev-libs/expat				abi_x86_32	# gentoo required
-dev-libs/glib				abi_x86_32	# gentoo required
-dev-libs/gmp				abi_x86_32	# gentoo required
-dev-libs/icu				abi_x86_32	# gentoo required
-dev-libs/libffi				abi_x86_32	# gentoo required
-dev-libs/libpthread-stubs		abi_x86_32	# gentoo required
-dev-libs/libxml2			abi_x86_32	# gentoo required
-dev-libs/lzo				abi_x86_32	# gentoo required
+dev-libs/libgcrypt			abi_x86_32	# gentoo required
+dev-libs/libgpg-error			abi_x86_32	# gentoo required
+dev-libs/libtasn1			abi_x86_32	# gentoo required
+dev-libs/libxslt			abi_x86_32	# gentoo required
 dev-libs/openssl			abi_x86_32	# gentoo required
-dev-util/pkgconf			abi_x86_32	# gentoo required
-media-gfx/graphite2			abi_x86_32	# gentoo required
-media-libs/fontconfig			abi_x86_32	# gentoo required
-media-libs/freeglut			abi_x86_32	# gentoo required
-media-libs/freetype			abi_x86_32	# gentoo required
-media-libs/glu				abi_x86_32	# gentoo required
-media-libs/harfbuzz			abi_x86_32	# gentoo required
-media-libs/jasper			abi_x86_32	# gentoo required
-media-libs/libjpeg-turbo		abi_x86_32	# gentoo required
-media-libs/libpng			abi_x86_32	# gentoo required
-media-libs/mesa				abi_x86_32	# gentoo required
-media-libs/tiff				abi_x86_32	# gentoo required
+media-libs/alsa-lib			abi_x86_32	# gentoo required
+media-libs/lcms				abi_x86_32	# gentoo required
+media-libs/libepoxy			abi_x86_32	# gentoo required
 net-dns/libidn				abi_x86_32	# gentoo required
-sys-apps/attr				abi_x86_32	# gentoo required
+net-libs/gnutls				abi_x86_32	# gentoo required
 sys-apps/dbus				abi_x86_32	# gentoo required
-sys-apps/util-linux			abi_x86_32	# gentoo required
-sys-devel/llvm				abi_x86_32	# gentoo required
-sys-fs/eudev				abi_x86_32	# gentoo required
-sys-libs/gpm				abi_x86_32	# gentoo required
-sys-libs/ncurses			abi_x86_32	# gentoo required
-sys-libs/zlib				abi_x86_32	# gentoo required
-virtual/glu				abi_x86_32	# gentoo required
-virtual/jpeg				abi_x86_32	# gentoo required
-virtual/libffi				abi_x86_32	# gentoo required
-virtual/libiconv			abi_x86_32	# gentoo required
-virtual/libintl				abi_x86_32	# gentoo required
-virtual/libudev				abi_x86_32	# gentoo required
-virtual/opengl				abi_x86_32	# gentoo required
-virtual/pkgconfig			abi_x86_32	# gentoo required
-x11-libs/cairo				abi_x86_32	# gentoo required
-x11-libs/gdk-pixbuf			abi_x86_32	# gentoo required
+sys-devel/gettext			abi_x86_32	# gentoo required
+virtual/libelf				abi_x86_32	# gentoo required
 x11-libs/gtk+				abi_x86_32	# gentoo required
-x11-libs/libICE				abi_x86_32	# gentoo required
-x11-libs/libSM				abi_x86_32	# gentoo required
-x11-libs/libX11				abi_x86_32	# gentoo required
-x11-libs/libXau				abi_x86_32	# gentoo required
 x11-libs/libXcomposite			abi_x86_32	# gentoo required
 x11-libs/libXcursor			abi_x86_32	# gentoo required
-x11-libs/libXdamage			abi_x86_32	# gentoo required
-x11-libs/libXdmcp			abi_x86_32	# gentoo required
-x11-libs/libXext			abi_x86_32	# gentoo required
-x11-libs/libXfixes			abi_x86_32	# gentoo required
-x11-libs/libXft				abi_x86_32	# gentoo required
-x11-libs/libXi				abi_x86_32	# gentoo required
-x11-libs/libXrandr			abi_x86_32	# gentoo required
-x11-libs/libXrender			abi_x86_32	# gentoo required
-x11-libs/libXt				abi_x86_32	# gentoo required
 x11-libs/libXtst			abi_x86_32	# gentoo required
-x11-libs/libXxf86vm			abi_x86_32	# gentoo required
-x11-libs/libdrm				abi_x86_32	# gentoo required
-x11-libs/libpciaccess			abi_x86_32	# gentoo required
-x11-libs/libxcb				abi_x86_32	# gentoo required
-x11-libs/libxshmfence			abi_x86_32	# gentoo required
-x11-libs/pango				abi_x86_32	# gentoo required
-x11-libs/pangox-compat			abi_x86_32	# gentoo required
-x11-libs/pixman				abi_x86_32	# gentoo required
 x11-proto/compositeproto		abi_x86_32	# gentoo required
-x11-proto/damageproto			abi_x86_32	# gentoo required
-x11-proto/dri2proto			abi_x86_32	# gentoo required
-x11-proto/dri3proto			abi_x86_32	# gentoo required
-x11-proto/fixesproto			abi_x86_32	# gentoo required
-x11-proto/glproto			abi_x86_32	# gentoo required
-x11-proto/inputproto			abi_x86_32	# gentoo required
-x11-proto/kbproto			abi_x86_32	# gentoo required
-x11-proto/presentproto			abi_x86_32	# gentoo required
-x11-proto/randrproto			abi_x86_32	# gentoo required
 x11-proto/recordproto			abi_x86_32	# gentoo required
-x11-proto/renderproto			abi_x86_32	# gentoo required
-x11-proto/xcb-proto			abi_x86_32	# gentoo required
-x11-proto/xextproto			abi_x86_32	# gentoo required
-x11-proto/xf86bigfontproto		abi_x86_32	# gentoo required
-x11-proto/xf86driproto			abi_x86_32	# gentoo required
-x11-proto/xf86vidmodeproto		abi_x86_32	# gentoo required
-x11-proto/xproto			abi_x86_32	# gentoo required
+
+dev-libs/icu				abi_x86_64	# gentoo required
 
 ########################################
 
@@ -161,6 +120,7 @@ sys-libs/tdb				python_targets_python2_7	# gentoo required
 sys-libs/tevent				python				# gentoo required
 
 app-arch/rpm				python_targets_python2_7	# gentoo required
+app-editors/atom			python_targets_python2_7	# gentoo required
 app-emulation/qemu			python_targets_python2_7	# gentoo required
 app-emulation/virtualbox		python_targets_python2_7	# gentoo required
 app-misc/golly				python_targets_python2_7	# gentoo required
@@ -170,6 +130,7 @@ app-text/stardict			python_targets_python2_7	# gentoo required
 dev-java/javatoolkit			python_targets_python2_7	# gentoo required
 dev-libs/gobject-introspection		python_targets_python2_7	# gentoo required
 dev-libs/newt				python_targets_python2_7	# gentoo required
+dev-python/Babel			python_targets_python2_7	# gentoo required
 dev-python/PyQt4			python_targets_python2_7	# gentoo required
 dev-python/apsw				python_targets_python2_7	# gentoo required
 dev-python/beautifulsoup		python_targets_python2_7	# gentoo required
@@ -182,6 +143,7 @@ dev-python/extras			python_targets_python2_7	# gentoo required
 dev-python/feedparser			python_targets_python2_7	# gentoo required
 dev-python/html5lib			python_targets_python2_7	# gentoo required
 dev-python/isodate			python_targets_python2_7	# gentoo required
+dev-python/jsmin			python_targets_python2_7	# gentoo required
 dev-python/linecache2			python_targets_python2_7	# gentoo required
 dev-python/lxml				python_targets_python2_7	# gentoo required
 dev-python/m2crypto			python_targets_python2_7	# gentoo required
@@ -200,6 +162,7 @@ dev-python/pygtk			python_targets_python2_7	# gentoo required
 dev-python/pygtksourceview		python_targets_python2_7	# gentoo required
 dev-python/python-dateutil		python_targets_python2_7	# gentoo required
 dev-python/python-discid		python_targets_python2_7	# gentoo required
+dev-python/pytz				python_targets_python2_7	# gentoo required
 dev-python/rdflib			python_targets_python2_7	# gentoo required
 dev-python/simplejson			python_targets_python2_7	# gentoo required
 dev-python/sip				python_targets_python2_7	# gentoo required
@@ -207,12 +170,14 @@ dev-python/subunit			python_targets_python2_7	# gentoo required
 dev-python/testtools			python_targets_python2_7	# gentoo required
 dev-python/traceback2			python_targets_python2_7	# gentoo required
 dev-python/unittest2			python_targets_python2_7	# gentoo required
+dev-python/urwid			python_targets_python2_7	# gentoo required
 dev-util/gtk-doc			python_targets_python2_7	# gentoo required
 dev-util/itstool			python_targets_python2_7	# gentoo required
 dev-util/scons				python_targets_python2_7	# gentoo required
 dev-util/systemtap			python_targets_python2_7	# gentoo required
 dev-vcs/cvs2svn				python_targets_python2_7	# gentoo required
 dev-vcs/mercurial			python_targets_python2_7	# gentoo required
+games-fps/doomsday			python_targets_python2_7	# gentoo required
 gnome-base/gconf			python_targets_python2_7	# gentoo required
 media-gfx/mcomix			python_targets_python2_7	# gentoo required
 media-libs/aubio			python_targets_python2_7	# gentoo required
@@ -220,10 +185,10 @@ media-libs/lensfun			python_targets_python2_7	# gentoo required
 media-libs/mutagen			python_targets_python2_7	# gentoo required
 media-sound/picard			python_targets_python2_7	# gentoo required
 media-sound/quodlibet			python_targets_python2_7	# gentoo required
-media-tv/kodi				python_targets_python2_7	# gentoo required
 net-fs/samba				python_targets_python2_7	# gentoo required
 net-libs/nodejs				python_targets_python2_7	# gentoo required
 net-mail/offlineimap			python_targets_python2_7	# gentoo required
+net-misc/wicd				python_targets_python2_7	# gentoo required
 net-wireless/python-wifi		python_targets_python2_7	# gentoo required
 sys-apps/dstat				python_targets_python2_7	# gentoo required
 sys-devel/llvm				python_targets_python2_7	# gentoo required
@@ -259,9 +224,11 @@ dev-python/appi				python_targets_python3_4	# gentoo required
 dev-python/cffi				python_targets_python3_4	# gentoo required
 dev-python/chardet			python_targets_python3_4	# gentoo required
 dev-python/cryptography			python_targets_python3_4	# gentoo required
+dev-python/dbus-python			python_targets_python3_4	# gentoo required
 dev-python/docutils			python_targets_python3_4	# gentoo required
 dev-python/httplib2			python_targets_python3_4	# gentoo required
 dev-python/idna				python_targets_python3_4	# gentoo required
+dev-python/lesscpy			python_targets_python3_4	# gentoo required
 dev-python/markdown			python_targets_python3_4	# gentoo required
 dev-python/markups			python_targets_python3_4	# gentoo required
 dev-python/mwparserfromhell		python_targets_python3_4	# gentoo required
@@ -275,9 +242,11 @@ dev-python/pyenchant			python_targets_python3_4	# gentoo required
 dev-python/pygments			python_targets_python3_4	# gentoo required
 dev-python/pygobject			python_targets_python3_4	# gentoo required
 dev-python/pyopenssl			python_targets_python3_4	# gentoo required
+dev-python/pyudev			python_targets_python3_4	# gentoo required
 dev-python/pyxdg			python_targets_python3_4	# gentoo required
 dev-python/pyzmq			python_targets_python3_4	# gentoo required
 dev-python/requests			python_targets_python3_4	# gentoo required
+dev-python/setproctitle			python_targets_python3_4	# gentoo required
 dev-python/sip				python_targets_python3_4	# gentoo required
 dev-python/ssl-fetch			python_targets_python3_4	# gentoo required
 dev-python/urllib3			python_targets_python3_4	# gentoo required
@@ -291,8 +260,16 @@ x11-proto/xcb-proto			python_targets_python3_4	# gentoo required
 
 ########################################
 
-virtual/rubygems			ruby_targets_ruby21		# gentoo required
+dev-ruby/rubygems			ruby_targets_ruby22		# gentoo required
 virtual/rubygems			ruby_targets_ruby22		# gentoo required
+
+dev-ruby/json				ruby_targets_ruby22		# gentoo required
+dev-ruby/minitest			ruby_targets_ruby22		# gentoo required
+dev-ruby/power_assert			ruby_targets_ruby22		# gentoo required
+dev-ruby/racc				ruby_targets_ruby22		# gentoo required
+dev-ruby/rake				ruby_targets_ruby22		# gentoo required
+dev-ruby/rdoc				ruby_targets_ruby22		# gentoo required
+dev-ruby/test-unit			ruby_targets_ruby22		# gentoo required
 
 ################################################################################
 
@@ -308,7 +285,6 @@ sys-apps/coreutils			multicall static
 app-emulation/qemu			ncurses sdl spice
 app-emulation/spice			client gui
 app-emulation/virtualbox		qt4 sdk vnc
-app-emulation/vmware-tools		vmware_guest_freebsd vmware_guest_linux vmware_guest_windows
 app-emulation/wine			-gstreamer -mp3 -opengl -oss
 app-office/libreoffice			java
 dev-libs/openssl			rfc3779
@@ -324,7 +300,7 @@ net-misc/networkmanager			-introspection -modemmanager -nss dhcpcd gnutls
 net-print/cups				samba
 net-vpn/openvpn				iproute2
 net-wireless/bluez			debug
-sci-calculators/qalculate		-gnome
+sci-calculators/qalculate-gtk		-gnome
 sys-apps/iproute2			iptables
 sys-boot/grub				device-mapper mount
 www-client/firefox			-wifi
@@ -333,7 +309,7 @@ x11-base/xorg-server			xnest xvfb
 x11-terms/rxvt-unicode			fading-colors focused-urgency font-styles mousewheel perl
 x11-wm/dwm				savedconfig
 
-games-fps/doom3				roe		# gentoo required: [games-fps/doom3-mitm-20070129] !!! All ebuilds that could satisfy "games-fps/doom3[opengl,roe]" have been masked.
+games-fps/doom3				roe	# gentoo required: [games-fps/doom3-mitm-20070129] !!! All ebuilds that could satisfy "games-fps/doom3[opengl,roe]" have been masked.
 games-fps/doom3				-dedicated
 games-fps/doom3-cdoom			-dedicated
 games-fps/doom3-data			-dedicated
@@ -343,12 +319,8 @@ games-fps/doom3-mitm			-dedicated
 
 ################################################################################
 
+#{NEW} app-text/xmlto			-latex		# gentoo required
 #{NEW} net-libs/glib-networking		-libproxy	# gentoo required
-#{NEW} sys-libs/ncurses			-gpm		# gentoo required
-
-#{NEW} dev-qt/qtgui			-accessibility	# gentoo required
-#{NEW} dev-qt/qtgui			-dbus		# gentoo required
-#{NEW} dev-qt/qtsvg			-accessibility	# gentoo required
 
 ########################################
 

@@ -2,7 +2,7 @@
 # portage package unmask file
 ################################################################################
 
-=net-fs/samba-4.2*			# make samba 4+ available
+=x11-drivers/xf86-video-virtualbox-5.1*	# gentoo required: [x11-drivers/xf86-video-virtualbox-5.0.40] /lib/modules/4.9.34-gentoo/build/arch/x86/include/asm/atomic.h:26:63: error: uninitialized const member in 'union atomic_read(const atomic_t*)::<anonymous>'
 
 ################################################################################
 
