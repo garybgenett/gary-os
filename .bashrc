@@ -2164,6 +2164,9 @@ function sync-dir {
 			(cd ${BAS_DIR}/${REP_DST} &&
 				${GIT} submodule update --force --init --recursive --remote --rebase)
 		fi
+		if [[ $(basename ${REP_DST}) == meta-repo ]]; then
+			${HOME}/setup/gentoo/funtoo ${BAS_DIR}/${REP_DST}
+		fi
 	elif [[ ${REP_TYP} == hg ]]; then
 		if [[ ! -d ${BAS_DIR}/${REP_DST} ]]; then
 			reporter $(which hg) clone --verbose ${REP_SRC} ${BAS_DIR}/${REP_DST}
