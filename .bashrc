@@ -2159,6 +2159,7 @@ function sync-dir {
 			git-clone ${REP_SRC} ${BAS_DIR}/${REP_DST}
 		fi
 		(cd ${BAS_DIR}/${REP_DST} &&
+			${GIT} checkout --force &&
 			${GIT} pull)
 		if [[ -f ${BAS_DIR}/${REP_DST}/.gitmodules ]]; then
 			(cd ${BAS_DIR}/${REP_DST} &&
