@@ -349,7 +349,10 @@ function expect_wrapper {
 	EXPECT_CMD+="";
 	EXPECT_CMD+=" "; EXPECT_CMD+="lassign [wait] pid spawnid os_error exit_status;"
 	EXPECT_CMD+=" "; EXPECT_CMD+="if {(\$os_error == 0) && (\$exit_status == 0)} { exit 0; } else { exit 1; };"
-	if [[ -n ${AUTO} ]]; then
+	if [[ -n ${AUTO} ]] && {
+		{ [[ -n "${TOOR}" ]] && [[ -x "${TARGET}/usr/bin/expect" ]]; } ||
+		{ [[ -z "${TOOR}" ]] && [[ -x "/usr/bin/expect" ]]; }
+	}; then
 		${SAFE_ENV} expect -c "${EXPECT_CMD}"	|| return 1
 	else
 		${SAFE_ENV} "${@}"			|| return 1
@@ -554,8 +557,7 @@ if [[ ${1} == -i ]]; then
 	${SAFE_ENV}				${MYSELF} ${QUIET_OPT} ${AUTO} -w			|| exit 1
 	if ${_BLD}; then
 		if [[ -n ${_NEW} ]]; then
-#>>>			expect_wrapper		emerge ${_ASK} expect					|| exit 1
-			${SAFE_ENV}		emerge ${_ASK} expect					|| exit 1
+			expect_wrapper		emerge ${_ASK} expect					|| exit 1
 			${SAFE_ENV}		${MYSELF} ${QUIET_OPT} ${AUTO} -f			|| exit 1
 			expect_wrapper		emerge ${_ASK} --deep --newuse --update \@system	|| exit 1
 		else
