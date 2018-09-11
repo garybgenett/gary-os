@@ -555,7 +555,7 @@ if [[ ${1} == -i ]]; then
 		${RSYNC_U} ${GITDIR}/		${TARGET}${REPDIR}.git					|| exit 1
 		${LN} ../${FILE}.git		${TARGET}${REPDIR}/.git					|| exit 1
 		${SAFE_ENV}			${MYSELF} ${QUIET_OPT} ${AUTO} ${FUNTOO}		|| exit 1
-		${SETDIR}/${FUNDIR}/funtoo	${TARGET}${REPDIR} ${FUNTOO}				|| exit 1
+		${SETDIR}/${FUNDIR}/funtoo.kits	${TARGET}${REPDIR} ${FUNTOO}				|| exit 1
 	fi
 	${SAFE_ENV}				${MYSELF} ${QUIET_OPT} ${AUTO} -w			|| exit 1
 	if ${_BLD}; then
@@ -752,7 +752,7 @@ elif [[ ${1} != -! ]]; then
 		declare GIT="$(which git)"
 #>>>		expect_wrapper emerge --ask=n --verbose --sync				|| exit 1
 		expect_wrapper ego sync							|| exit 1
-		${ETCDIR}/funtoo ${REPDIR} ${1}						|| exit 1
+		${ETCDIR}/funtoo.kits ${REPDIR} ${1}					|| exit 1
 		for FILE in ${REPDIR}/kits/*kit; do
 			echo -en "egencache: ${FILE}\n"
 			expect_wrapper egencache --repo "$(basename ${FILE})"		\
