@@ -550,9 +550,12 @@ if [[ ${1} == -i ]]; then
 #>>>	${SAFE_ENV}				${MYSELF} ${QUIET_OPT} ${AUTO} -r			|| exit 1
 						${_SELF} ${QUIET_OPT} ${TOOR} ${AUTO} -r		|| exit 1
 	if [[ ! -d ${TARGET}${REPDIR} ]]; then
+		FILE="$(basename ${REPDIR})"
 		${MKDIR}			${TARGET}${REPDIR}{,.git}				|| exit 1
 		${RSYNC_U} ${GITDIR}/		${TARGET}${REPDIR}.git					|| exit 1
+		${LN} ../${FILE}.git		${TARGET}${REPDIR}/.git					|| exit 1
 		${SAFE_ENV}			${MYSELF} ${QUIET_OPT} ${AUTO} ${FUNTOO}		|| exit 1
+		${SETDIR}/${FUNDIR}/funtoo	${TARGET}${REPDIR} ${FUNTOO}				|| exit 1
 	fi
 	${SAFE_ENV}				${MYSELF} ${QUIET_OPT} ${AUTO} -w			|| exit 1
 	if ${_BLD}; then
@@ -747,28 +750,9 @@ elif [[ ${1} != -! ]]; then
 	fi
 	if [[ ${1} != -f ]]; then
 		declare GIT="$(which git)"
-		if [[ -d ${REPDIR}.git ]] && [[ ! -d ${REPDIR}/.git ]]; then
-			${MV} ${REPDIR}.git ${REPDIR}/.git
-		fi
-		if [[ -z ${1} ]]; then
-#>>>			expect_wrapper emerge --ask=n --verbose --sync			|| exit 1
-			expect_wrapper ego sync						|| exit 1
-			(cd ${REPDIR} &&
-				${GIT} pull &&
-				${GIT} checkout --force master &&
-				${GIT} submodule update --force --init --recursive --remote --rebase &&
-				${GIT} submodule foreach --recursive "git reset --hard"
-			)								|| exit 1
-		else
-			(cd ${REPDIR} &&
-				${GIT} reset --hard ${1} &&
-				${GIT} submodule update --force --init --recursive &&
-				${GIT} submodule foreach --recursive "git reset --hard"
-			)								|| exit 1
-		fi
-		if [[ -d ${REPDIR}/.git ]] && [[ ! -d ${REPDIR}.git ]]; then
-			${MV} ${REPDIR}/.git ${REPDIR}.git
-		fi
+#>>>		expect_wrapper emerge --ask=n --verbose --sync				|| exit 1
+		expect_wrapper ego sync							|| exit 1
+		${ETCDIR}/funtoo ${REPDIR} ${1}						|| exit 1
 		for FILE in ${REPDIR}/kits/*kit; do
 			echo -en "egencache: ${FILE}\n"
 			expect_wrapper egencache --repo "$(basename ${FILE})"		\
