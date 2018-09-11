@@ -198,6 +198,8 @@ x11-misc/xsel
 dev-vcs/git
 dev-vcs/subversion
 
+dev-lang/python
+
 dev-db/sqlite
 dev-tcltk/expect
 
