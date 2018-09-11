@@ -13,6 +13,18 @@ fi
 
 ################################################################################
 
+if [[ ${1} == -l ]]; then
+	shift
+	declare FILE=
+	for FILE in $(find ./ | sort | ${GREP} "[.]rationale$"); do
+		echo -en "\n[${FILE}]\n"
+		cat ${FILE}
+	done
+	exit 0
+fi
+
+################################################################################
+
 function review_header {
 	perl -e '
 		printf(
