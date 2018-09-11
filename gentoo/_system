@@ -51,8 +51,8 @@ declare PKGMET="${PKGMET:-metro}"
 #VARIABLES[ETCDIR REPDIR DSTDIR PAKDIR WRKDIR]
 declare ETCDIR="/etc/portage"
 declare REPDIR="/var/git/meta-repo"
-declare DSTDIR="/usr/portage/distfiles"
-declare PAKDIR="/usr/portage/packages"
+declare DSTDIR="/var/cache/portage/distfiles"
+declare PAKDIR="/var/cache/portage/packages"
 declare WRKDIR="/var/tmp/portage"
 
 ########################################
