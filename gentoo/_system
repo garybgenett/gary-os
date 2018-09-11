@@ -57,7 +57,7 @@ declare WRKDIR="/var/tmp/portage"
 
 ########################################
 
-#VARIABLES[TARGET TOOR _PKG _NEW _MET]
+#VARIABLES[TARGET TOOR _PKG _MET _NEW]
 declare TARGET="${BLDDIR}"
 declare TOOR=
 declare _PKG="${PKGBLD}"
@@ -494,12 +494,12 @@ if [[ ${1} == -p ]]; then
 			echo -en "\n[${NEXT}]\n"
 			${SAFE_ENV} ${_SELF} ${QUIET_OPT} -l ${NEXT}
 		done
-		echo -en "\n"
-		echo -en "${EDITOR}"
+		echo -en "\n"					1>&2
+		echo -en "FILELIST=\""				1>&2
 		for NEXT in ${FILE}; do
-			echo -en " ${NEXT}/temp/build.log"
+			echo -en " ${NEXT}/temp/build.log"	1>&2
 		done
-		echo -en "\n"
+		echo -en "\"\n"					1>&2
 		exit 1
 	fi
 	exit 0
@@ -547,7 +547,7 @@ if [[ ${1} == -i ]]; then
 		${RSYNC_U} ${SOURCE}/*funtoo*	${TARGET}${ARCDIR}/					|| exit 1
 	fi
 	mount_dev_dirs											|| exit 1
-#>>>	${SAFE_ENV}				${MYSELF} ${QUIET_OPT} ${AUTO} -r			|| exit 1
+#>>>	${SAFE_ENV}				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -r		|| exit 1
 						${_SELF} ${QUIET_OPT} ${TOOR} ${AUTO} -r		|| exit 1
 	if [[ ! -d ${TARGET}${REPDIR} ]]; then
 		FILE="$(basename ${REPDIR})"
@@ -557,7 +557,7 @@ if [[ ${1} == -i ]]; then
 		${SAFE_ENV}			${MYSELF} ${QUIET_OPT} ${AUTO} ${FUNTOO}		|| exit 1
 		${SETDIR}/${FUNDIR}/funtoo.kits	${TARGET}${REPDIR} ${FUNTOO}				|| exit 1
 	fi
-	${SAFE_ENV}				${MYSELF} ${QUIET_OPT} ${AUTO} -w			|| exit 1
+	${SAFE_ENV}				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w		|| exit 1
 	if ${_BLD}; then
 		if [[ -n ${_NEW} ]]; then
 			expect_wrapper		emerge ${_ASK} expect					|| exit 1
@@ -767,16 +767,17 @@ elif [[ ${1} != -! ]]; then
 			FILE="false"
 		fi
 		if ! ${FILE}; then
-			echo -en "FILELIST=\"\n"					1>&2
+			echo -en "\n"							1>&2
+			echo -en "FILELIST=\""						1>&2
 			${SED} -n \
 				-e "s/^.*Couldn[']t[ ]download[ ][']([^']+).*$/\1/gp"	\
+				-e "s/^.*Fetched[ ]file[:][ ]([^ ]+).*$/\1/gp"		\
 				-e "s/^.*Please[ ]download[ ]([^ ]+).*$/\1/gp"		\
-				${DSTDIR}.log | sort --unique				1>&2
+				${DSTDIR}.log						|
+					sort --unique					|
+					tr '\n' ' '					|
+					${SED} "s/[ ]*$//g"				1>&2
 			echo -en "\"\n"							1>&2
-			echo -en "for FILE in \${FILELIST}; do\n"			1>&2
-			echo -en "${RSYNC_U} "						1>&2
-			echo -en "${BLDDIR}${DSTDIR}/\${FILE} ${TARGET}${DSTDIR}/\n"	1>&2
-			echo -en "done\n"						1>&2
 		fi
 		for NEXT in $(find ${DSTDIR}/*checksum_failure* 2>/dev/null); do
 			${RM} ${NEXT}							1>&2
