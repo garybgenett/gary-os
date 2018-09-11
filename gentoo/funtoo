@@ -2,16 +2,35 @@
 source ${HOME}/.bashrc
 ################################################################################
 
+declare GIT_SOURCE="https://github.com/funtoo"
+
+########################################
+
 if [[ -n "${@}" ]]; then
-	export REPO="${1}" && shift
-	declare HASH
+	export REPDIR="${1}" && shift
+	export COMMIT="${1}" && shift
+	if [[ -z "${COMMIT}" ]]; then
+		COMMIT="HEAD"
+	fi
+	declare FILE=
+	if [[ -d	${REPDIR}/.git ]] && [[ ! -d	${REPDIR}.git ]]; then
+		${MV}	${REPDIR}/.git			${REPDIR}.git;
+	fi
+	if [[ -d	${REPDIR}.git ]] && [[ ! -L	${REPDIR}/.git ]]; then
+		${LN}	../$(basename ${REPDIR}).git	${REPDIR}/.git
+	fi
+	(cd ${REPDIR} &&
+		${GIT} checkout --force master &&
+		${GIT} pull &&
+		${GIT} reset --hard ${COMMIT}
+	)
 	perl -e '
 		use strict;
 		use warnings;
 		use JSON::XS;
-		my $repo = ${ENV{REPO}};
-		open(INFO, "<", ${repo} . "/metadata/kit-info.json")	|| die();
-		open(SHA1, "<", ${repo} . "/metadata/kit-sha1.json")	|| die();
+		my $repdir = ${ENV{REPDIR}};
+		open(INFO, "<", ${repdir} . "/metadata/kit-info.json")	|| die();
+		open(SHA1, "<", ${repdir} . "/metadata/kit-sha1.json")	|| die();
 		my $info = do { local $/; <INFO> };
 		my $sha1 = do { local $/; <SHA1> };
 		$info = decode_json(${info});
@@ -19,24 +38,41 @@ if [[ -n "${@}" ]]; then
 		close(INFO)	|| die();
 		close(SHA1)	|| die();
 		my $order = $info->{"kit_order"};
-		my $kits = {};
 		foreach my $kit (@{$order}) {
 			my $head = $info->{"kit_settings"}{$kit}{"default"};
 			my $hash = $sha1->{$kit}{$head};
-			print "${kit} | ${head} | ${hash}\n";
-			$kits->{$kit}{"head"} = ${head};
-			$kits->{$kit}{"hash"} = ${hash};
+			print "${kit}|${head}|${hash}\n";
 		};
-		foreach my $kit (@{$order}) {
-			my $git = "git --git-dir=${repo}/kits/${kit}/.git --work-tree=${repo}/kits/${kit}";
-			if (! -d "${repo}/kits/${kit}/.git") {
-				system("git clone https://github.com/funtoo/${kit}.git ${repo}/kits/${kit}");
-			};
-			system("${git} checkout --force " . $kits->{$kit}{"head"});
-			system("${git} pull");
-			system("${git} reset --hard " . $kits->{$kit}{"hash"});
-		};
-	' -- "${@}" || exit
+	' -- "${@}" |
+	while read -r FILE; do
+		declare RKIT=$(echo "${FILE}" | ${SED} "s/^(.+)[|](.+)[|](.+)$/\1/g")
+		declare HEAD=$(echo "${FILE}" | ${SED} "s/^(.+)[|](.+)[|](.+)$/\2/g")
+		declare HASH=$(echo "${FILE}" | ${SED} "s/^(.+)[|](.+)[|](.+)$/\3/g")
+		declare RGIT="${GIT_CMD} --git-dir=${REPDIR}.git/${SCRIPT}/${RKIT}.git --work-tree=${REPDIR}/kits/${RKIT}";
+		echo -en "\n[${RKIT} :: ${HEAD} == ${HASH}]\n"
+		${MKDIR} ${REPDIR}.git/${SCRIPT}
+		if [[ ! -d "${REPDIR}.git/${SCRIPT}/${RKIT}.git" ]]; then
+			git-clone ${GIT_SOURCE}/${RKIT}.git ${REPDIR}/kits/${RKIT}
+		fi
+		if [[ -d	${REPDIR}/kits/${RKIT}/.git ]] && [[ ! -d			${REPDIR}.git/${SCRIPT}/${RKIT}.git ]]; then
+			${MV}	${REPDIR}/kits/${RKIT}/.git					${REPDIR}.git/${SCRIPT}/${RKIT}.git
+		fi
+		if [[ -d	${REPDIR}/kits/${RKIT}.git ]] && [[ ! -d			${REPDIR}.git/${SCRIPT}/${RKIT}.git ]]; then
+			${MV}	${REPDIR}/kits/${RKIT}.git					${REPDIR}.git/${SCRIPT}/${RKIT}.git
+		fi
+		if [[ -d	${REPDIR}.git/${SCRIPT}/${RKIT}.git ]] && [[ ! -L		${REPDIR}/kits/${RKIT}/.git ]]; then
+			${LN}	../../../$(basename ${REPDIR}).git/${SCRIPT}/${RKIT}.git	${REPDIR}/kits/${RKIT}/.git
+		fi
+		if [[ -d	${REPDIR}.git/${SCRIPT}/${RKIT}.git ]] && [[ ! -L		${REPDIR}/kits/${RKIT}.git ]]; then
+			${LN}	../../$(basename ${REPDIR}).git/${SCRIPT}/${RKIT}.git		${REPDIR}/kits/${RKIT}.git
+		fi
+		(cd ${REPDIR}/kits/${RKIT} &&
+			${RGIT} checkout --force ${HEAD} &&
+			${RGIT} pull &&
+			${RGIT} reset --hard ${HASH}
+		)
+	done
+	chown -R portage:portage ${REPDIR}{,.git}
 fi
 
 exit 0
