@@ -756,7 +756,7 @@ elif [[ ${1} != -! ]]; then
 		for FILE in ${REPDIR}/kits/*kit; do
 			echo -en "egencache: ${FILE}\n"
 			expect_wrapper egencache --repo "$(basename ${FILE})"		\
-				--update-use-local-desc					|| exit 1
+				--update-use-local-desc					#>>>|| exit 1
 		done
 	fi
 	if [[ -z ${1} ]] || [[ ${1} == -f ]]; then
@@ -772,14 +772,17 @@ elif [[ ${1} != -! ]]; then
 			${SED} -n \
 				-e "s/^.*Couldn[']t[ ]download[ ][']([^']+).*$/\1/gp"	\
 				-e "s/^.*Fetched[ ]file[:][ ]([^ ]+).*$/\1/gp"		\
-				-e "s/^.*Please[ ]download[ ]([^ ]+).*$/\1/gp"		\
+				-e "s/^.*and[ ]download[ ]([^ ]+).*$/\1/gp"		\
 				${DSTDIR}.log						|
 					sort --unique					|
 					tr '\n' ' '					|
 					${SED} "s/[ ]*$//g"				1>&2
 			echo -en "\"\n"							1>&2
 		fi
-		for NEXT in $(find ${DSTDIR}/*checksum_failure* 2>/dev/null); do
+		for NEXT in								\
+			$(find ${DSTDIR}/*checksum_failure* 2>/dev/null)		\
+			$(find ${DSTDIR}/.*.portage_lockfile 2>/dev/null)		;
+		do
 			${RM} ${NEXT}							1>&2
 			FILE="false"
 		done
