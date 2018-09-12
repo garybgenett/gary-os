@@ -497,8 +497,9 @@ if [[ ${1} == -p ]]; then
 		echo -en "\n"					1>&2
 		echo -en "FILELIST=\""				1>&2
 		for NEXT in ${FILE}; do
-			echo -en " ${NEXT}/temp/build.log"	1>&2
-		done
+			echo -en "${NEXT}/temp/build.log "
+		done |
+			${SED} "s/[ ]*$//g"			1>&2
 		echo -en "\"\n"					1>&2
 		exit 1
 	fi
