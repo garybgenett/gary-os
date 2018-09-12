@@ -781,8 +781,8 @@ elif [[ ${1} != -! ]]; then
 			echo -en "\"\n"							1>&2
 		fi
 		for NEXT in								\
-			$(find ${DSTDIR}/*checksum_failure* 2>/dev/null)		\
-			$(find ${DSTDIR}/.*.portage_lockfile 2>/dev/null)		;
+			$(find ${DSTDIR}/*checksum_failure*	2>/dev/null | sort)	\
+			$(find ${DSTDIR}/.*.portage_lockfile	2>/dev/null | sort)	;
 		do
 			${RM} ${NEXT}							1>&2
 			FILE="false"
