@@ -723,7 +723,7 @@ if [[ ${1} == -w ]]; then
 	ego profile flavor desktop	|| exit 1
 	ego profile show
 	locale-gen
-	gcc-config $(source ${ETCDIR}/make.conf; echo "${CHOST}")-$(equery list gcc | awk '{print $1;}' | cut -d- -f3 | sort -n | tail -n1)
+	gcc-config $(gcc-config --list-profiles | awk '{print $2;}' | sort -n | tail -n1)
 	gcc-config --list-profiles
 	java-config --set-system-vm $(equery list icedtea | awk '{print $1;}' | ${GREP} -v "^$" | cut -d/ -f2 | cut -d. -f1 | tail -n1)
 	java-config --list-available-vms
