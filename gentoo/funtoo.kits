@@ -15,7 +15,6 @@ if [[ -n "${@}" ]]; then
 	declare FILE=
 	if [[ -d	${REPDIR}/.git ]] && [[ ! -d	${REPDIR}.git ]]; then
 		${MV}	${REPDIR}/.git			${REPDIR}.git;
-	else	${RM}	${REPDIR}/.git
 	fi
 	if [[ -d	${REPDIR}.git ]] && [[ ! -L	${REPDIR}/.git ]]; then
 		${RM}					${REPDIR}/.git
