@@ -1,0 +1,2 @@
+# slirp/cksum.cc:83:12: error: ‘uintptr_t’ was not declared in this scope
+# https://bugs.gentoo.org/638476
