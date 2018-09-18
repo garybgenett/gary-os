@@ -467,6 +467,7 @@ if [[ ${1} == -l ]]; then
 			${SAFE_ENV} emerge --search "${@}"
 		else
 			echo -en "https://packages.gentoo.org/packages/${NEXT}\n"
+			echo -en "https://gitweb.gentoo.org/repo/gentoo.git/log/${NEXT}\n"
 			echo -en "https://gentoobrowse.randomdan.homeip.net/package/${NEXT}#bugs\n"
 			${LL} -d ${DSTDIR}/$(basename ${FILE})*
 			${LL} -d ${PAKDIR}/${NEXT}*
