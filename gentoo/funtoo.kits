@@ -65,11 +65,9 @@ if [[ -n "${@}" ]]; then
 		fi
 		if [[ -d	${REPDIR}/kits/${RKIT}/.git ]] && [[ ! -d			${REPDIR}.git/${SCRIPT}/${RKIT}.git ]]; then
 			${MV}	${REPDIR}/kits/${RKIT}/.git					${REPDIR}.git/${SCRIPT}/${RKIT}.git
-		else	${RM}	${REPDIR}/kits/${RKIT}/.git
 		fi
 		if [[ -d	${REPDIR}/kits/${RKIT}.git ]] && [[ ! -d			${REPDIR}.git/${SCRIPT}/${RKIT}.git ]]; then
 			${MV}	${REPDIR}/kits/${RKIT}.git					${REPDIR}.git/${SCRIPT}/${RKIT}.git
-		else	${RM}	${REPDIR}/kits/${RKIT}.git
 		fi
 		if [[ -d	${REPDIR}.git/${SCRIPT}/${RKIT}.git ]] && [[ ! -L		${REPDIR}/kits/${RKIT}/.git ]]; then
 			${RM}									${REPDIR}/kits/${RKIT}/.git
