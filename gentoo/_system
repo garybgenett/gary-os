@@ -800,7 +800,7 @@ elif [[ ${1} != -! ]]; then
 			${SED} -n \
 				-e "s/^.*Couldn[']t[ ]download[ ][']([^']+).*$/\1/gp"	\
 				-e "s/^.*Fetched[ ]file[:][ ]([^ ]+).*$/\1/gp"		\
-				-e "s/^.*and[ ]download[ ]([^ ]+).*$/\1/gp"		\
+				-e "s/^.*Please[ ]download[ ]([^ ]+).*$/\1/gp"		\
 				${DSTDIR}.log						|
 					sort --unique					|
 					tr '\n' ' '					|
