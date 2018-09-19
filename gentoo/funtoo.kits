@@ -41,9 +41,16 @@ if [[ -n "${@}" ]]; then
 #>>>		print Dumper(${sha1});
 		close(INFO)	|| die();
 		close(SHA1)	|| die();
+		my $release = {};
+		foreach my $rel (sort(keys(%{ $info->{"release_defs"} }))) {
+			$release = $info->{"release_defs"}{$rel};
+		};
 		my $order = $info->{"kit_order"};
 		foreach my $kit (@{$order}) {
 			my $head = $info->{"kit_settings"}{$kit}{"default"};
+			if ($release->{$kit}[0]) {
+				$head = $release->{$kit}[0];
+			};
 #>>>			foreach my $key (sort(keys(%{ $sha1->{$kit} }))) {
 #>>>				$head = ${key};
 #>>>			};
