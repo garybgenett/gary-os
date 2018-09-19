@@ -128,6 +128,7 @@ fi
 #OPTIONS[FUNTOO KERNEL]
 declare FUNTOO="${FUNTOO:-$(tail -n1 ${SETDIR}/${FUNDIR}/funtoo)}"
 declare KERNEL="${KERNEL:-$(${SED} -n "s|^.+/gentoo-sources:(.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG})}"
+declare FUNKIT="funtoo.kits"
 
 declare COMMIT=
 for FILE in \
@@ -576,12 +577,14 @@ if [[ ${1} == -i ]]; then
 #>>>	${SAFE_ENV}				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -r		|| exit 1
 						${_SELF} ${QUIET_OPT} ${TOOR} ${AUTO} -r		|| exit 1
 	if [[ ! -d ${TARGET}${REPDIR} ]]; then
-		FILE="$(basename ${REPDIR})"
+		if [[ -d ${GITDIR} ]]; then
 		${MKDIR}			${TARGET}${REPDIR}{,.git}				|| exit 1
 		${RSYNC_U} ${GITDIR}/		${TARGET}${REPDIR}.git					|| exit 1
-		${SETDIR}/${FUNDIR}/funtoo.kits	${TARGET}${REPDIR} ${FUNTOO}				|| exit 1
+		${SETDIR}/${FUNDIR}/${FUNKIT}	${TARGET}${REPDIR} ${FUNTOO}				|| exit 1
+		fi
 		${SAFE_ENV}			${MYSELF} ${QUIET_OPT} ${AUTO} ${FUNTOO}		|| exit 1
 	fi
+	${SETDIR}/${FUNDIR}/${FUNKIT}		${TARGET}${REPDIR} ${FUNTOO}				|| exit 1
 	${SAFE_ENV}				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w		|| exit 1
 	if ${_BLD}; then
 		if [[ -n ${_NEW} ]]; then
@@ -777,7 +780,7 @@ elif [[ ${1} != -! ]]; then
 		declare GIT="$(which git)"
 #>>>		expect_wrapper emerge --ask=n --verbose --sync				|| exit 1
 		expect_wrapper ego sync							|| exit 1
-		${ETCDIR}/funtoo.kits ${REPDIR} ${1}					|| exit 1
+		${ETCDIR}/${FUNKIT} ${REPDIR} ${1}					|| exit 1
 		for FILE in ${REPDIR}/kits/*kit; do
 			echo -en "egencache: ${FILE}\n"
 			expect_wrapper egencache --repo "$(basename ${FILE})"		\
