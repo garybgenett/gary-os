@@ -722,6 +722,10 @@ if [[ ${1} == -w ]]; then
 		${SED} -i "s|^[#][{]${_MET}[}][ ](.+)$|\1|g" ${FILE}
 		${SED} -i "s|^[#][{]${_NEW}[}][ ](.+)$|\1|g" ${FILE}
 	done
+#>>>	ego profile arch x86-32bit	|| exit 1
+	ego profile arch x86-64bit	|| exit 1
+	ego profile subarch core2_64	|| exit 1
+#>>>	ego profile subarch i686	|| exit 1
 	ego profile build stable	|| exit 1
 	ego profile flavor desktop	|| exit 1
 	ego profile show
