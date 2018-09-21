@@ -92,7 +92,6 @@ net-misc/iputils
 net-misc/networkmanager
 net-misc/vconfig
 net-misc/wicd
-net-wireless/rfkill
 net-wireless/wireless-tools
 net-wireless/wpa_supplicant
 sys-apps/ethtool
@@ -189,16 +188,16 @@ sys-apps/fakeroot-ng
 sys-kernel/debian-sources
 sys-kernel/genkernel
 sys-kernel/gentoo-sources
-sys-kernel/gentoo-sources:4.9.34
+sys-kernel/gentoo-sources:4.9.125
 sys-kernel/linux-firmware
 
 app-admin/ego
 app-admin/eselect
-app-portage/portage-utils
 sys-apps/portage
 
 app-portage/gentoolkit
-app-portage/gentoolkit-dev
+app-portage/pfl
+app-portage/portage-utils
 app-shells/gentoo-bashcomp
 app-vim/gentoo-syntax
 
@@ -284,7 +283,6 @@ app-text/htmltidy
 app-text/xmlto
 
 app-text/texlive
-dev-tex/texmfind
 media-gfx/transfig
 
 dev-vcs/cvs
@@ -296,7 +294,6 @@ dev-vcs/mercurial
 dev-vcs/qgit
 dev-vcs/subversion
 
-app-admin/python-updater
 dev-lang/lua
 dev-lang/parrot
 dev-lang/python
@@ -314,7 +311,7 @@ dev-lang/ghc
 
 dev-java/icedtea
 dev-java/icedtea-bin
-dev-java/icedtea:7
+dev-java/icedtea:8
 
 dev-db/sqlite
 dev-tcltk/expect
@@ -375,7 +372,7 @@ sys-apps/usbutils
 sys-fs/sysfsutils
 sys-power/acpitool
 
-app-admin/procinfo
+app-admin/procinfo-ng
 app-admin/sysstat
 app-misc/binwalk
 app-misc/reptyr
@@ -470,8 +467,8 @@ sci-calculators/qalculate-gtk
 
 app-emulation/bochs
 app-emulation/dosemu
-app-emulation/wine
 games-emulation/dosbox
+virtual/wine
 
 app-emulation/lxc
 app-emulation/qemu
@@ -504,6 +501,7 @@ net-mail/safecat
 net-misc/urlview
 
 app-admin/keepassx
+app-admin/keepassxc
 mail-client/thunderbird
 www-client/chromium
 www-client/firefox
@@ -617,7 +615,6 @@ games-board/xboard
 
 games-action/barrage
 games-action/garden
-games-arcade/lbreakout
 games-arcade/lbreakout2
 games-arcade/netris
 games-puzzle/lmarbles

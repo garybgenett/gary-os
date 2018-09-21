@@ -86,7 +86,6 @@ net-misc/iputils
 net-misc/networkmanager
 net-misc/vconfig
 net-misc/wicd
-net-wireless/rfkill
 net-wireless/wireless-tools
 net-wireless/wpa_supplicant
 sys-apps/ethtool
@@ -164,16 +163,16 @@ sys-apps/fakeroot-ng
 # gentoo
 
 sys-kernel/genkernel
-sys-kernel/gentoo-sources:4.9.34
+sys-kernel/gentoo-sources:4.9.125
 sys-kernel/linux-firmware
 
 app-admin/ego
 app-admin/eselect
-app-portage/portage-utils
 sys-apps/portage
 
 app-portage/gentoolkit
-app-portage/gentoolkit-dev
+app-portage/pfl
+app-portage/portage-utils
 app-shells/gentoo-bashcomp
 app-vim/gentoo-syntax
 
@@ -231,7 +230,7 @@ sys-apps/usbutils
 sys-fs/sysfsutils
 sys-power/acpitool
 
-app-admin/procinfo
+app-admin/procinfo-ng
 app-admin/sysstat
 app-misc/binwalk
 app-misc/reptyr
