@@ -703,9 +703,7 @@ END_OF_FILE
 			done
 		done
 	fi
-	if [[ -z ${_MET} ]]; then
-		${SAFE_ENV}			${MYSELF} ${QUIET_OPT} ${AUTO} -f	|| exit 1
-	fi
+	${SAFE_ENV}				${MYSELF} ${QUIET_OPT} ${AUTO} -f	|| exit 1
 	${SAFE_ENV}				${MYSELF} ${QUIET_OPT} ${AUTO} -u	|| exit 1
 	mount_dev_dirs -u								|| exit 1
 	exit 0
@@ -722,10 +720,14 @@ if [[ ${1} == -w ]]; then
 		${SED} -i "s|^[#][{]${_MET}[}][ ](.+)$|\1|g" ${FILE}
 		${SED} -i "s|^[#][{]${_NEW}[}][ ](.+)$|\1|g" ${FILE}
 	done
+#>>>	NEXT="i686"
+	NEXT="core2_64"
+	if [[ -n ${MET} ]]; then
+		NEXT="generic_64"
+	fi
 #>>>	ego profile arch x86-32bit	|| exit 1
 	ego profile arch x86-64bit	|| exit 1
-	ego profile subarch core2_64	|| exit 1
-#>>>	ego profile subarch i686	|| exit 1
+	ego profile subarch ${NEXT}	|| exit 1
 	ego profile build stable	|| exit 1
 	ego profile flavor desktop	|| exit 1
 	ego profile show
@@ -793,7 +795,11 @@ elif [[ ${1} != -! ]]; then
 	fi
 	if [[ -z ${1} ]] || [[ ${1} == -f ]]; then
 		FILE="true"
-		expect_wrapper emerge --ask=n --emptytree --fetch-all-uri		\
+		NEXT="--fetch-all-uri"
+		if [[ -n ${_MET} ]]; then
+			NEXT="--fetchonly"
+		fi
+		expect_wrapper emerge --ask=n --emptytree ${NEXT}			\
 			\@system \@world						2>&1 | tee ${DSTDIR}.log
 		if [[ ${PIPESTATUS[0]} != 0 ]]; then
 			FILE="false"
