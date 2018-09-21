@@ -6,4 +6,5 @@ prefix - Defines if a Gentoo Prefix offset installation is used
 savedconfig - Use this to restore your config from /etc/portage/savedconfig ${CATEGORY}/${PN}. Make sure your USE flags allow for appropriate dependencies
 static - !!do not set this during bootstrap!! Causes binaries to be statically linked instead of dynamically
 static-libs - Build static versions of dynamic libraries as well
+test - Workaround to pull in packages needed to run with FEATURES=test. Portage-2.1.2 handles this internally, so don't set it in make.conf/package.use anymore
 vanilla - Do not add extra patches which change default behaviour; DO NOT USE THIS ON A GLOBAL SCALE as the severity of the meaning changes drastically

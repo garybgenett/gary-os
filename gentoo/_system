@@ -728,7 +728,8 @@ if [[ ${1} == -w ]]; then
 #>>>	ego profile arch x86-32bit	|| exit 1
 	ego profile arch x86-64bit	|| exit 1
 	ego profile subarch ${NEXT}	|| exit 1
-	ego profile build stable	|| exit 1
+#>>>	ego profile build stable	|| exit 1	# ERROR: build stable is not available. Can't set. Available names: {'current'}
+	ego profile build current	|| exit 1
 	ego profile flavor desktop	|| exit 1
 	ego profile show
 	locale-gen
@@ -764,7 +765,8 @@ if [[ ${1} == -u ]]; then
 	${SAFE_ENV} ${_SELF} ${QUIET_OPT} ${AUTO} -w				|| exit 1
 	expect_wrapper emerge ${_ASK} --deep --newuse --update \@system \@world	|| exit 1
 	${SAFE_ENV} ${_SELF} ${QUIET_OPT} ${AUTO} -p				|| exit 1
-	expect_wrapper python-updater						|| exit 1
+#>>>	https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=b7a4174e075a922a255c0ff4a6ebd4f6d0437c61
+#>>>	expect_wrapper python-updater						|| exit 1
 	expect_wrapper perl-cleaner --all					|| exit 1
 	expect_wrapper haskell-updater --all					|| exit 1
 	expect_wrapper emerge ${_ASK} \@module-rebuild				|| exit 1

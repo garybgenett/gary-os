@@ -2,139 +2,7 @@
 # portage package keywords file
 ################################################################################
 
-app-arch/upx-ucl			~*		# gentoo required
-app-crypt/chntpw			~*		# gentoo required
-app-crypt/efitools			~*		# gentoo required
-app-emulation/bochs			~*		# gentoo required
-app-misc/hello				~*		# gentoo required
-app-text/cmark				~*		# gentoo required
-app-text/stardict			~*		# gentoo required
-dev-db/sqlite				~*		# gentoo required
-dev-java/glassfish-jms-api		~*		# gentoo required
-dev-lang/moarvm				~*		# gentoo required
-dev-lang/rust				~*		# gentoo required
-dev-libs/libtommath			~*		# gentoo required
-dev-libs/libxml2			~*		# gentoo required
-dev-python/appi				~*		# gentoo required
-dev-python/chardet			~*		# gentoo required
-dev-python/lesscpy			~*		# gentoo required
-dev-ruby/did_you_mean			~*		# gentoo required
-dev-ruby/kpeg				~*		# gentoo required
-dev-ruby/net-telnet			~*		# gentoo required
-dev-ruby/xmlrpc				~*		# gentoo required
-dev-util/cargo				~*		# gentoo required
-games-board/xboard			~*		# gentoo required
-games-roguelike/nethack			~*		# gentoo required
-media-fonts/noto			~*		# gentoo required
-media-gfx/wkhtmltopdf			~*		# gentoo required
-media-libs/harfbuzz			~*		# gentoo required
-media-libs/libgig			~*		# gentoo required
-media-libs/libjpeg-turbo		~*		# gentoo required
-media-libs/lv2				~*		# gentoo required
-media-libs/openh264			~*		# gentoo required
-media-libs/suil				~*		# gentoo required
-media-libs/taglib			~*		# gentoo required
-media-plugins/calf			~*		# gentoo required
-media-sound/apulse			~*		# gentoo required
-media-sound/ardour			~*		# gentoo required
-media-sound/linuxsampler		~*		# gentoo required
-media-sound/lmms			~*		# gentoo required
-media-sound/qtractor			~*		# gentoo required
-net-analyzer/snort			~*		# gentoo required
-net-libs/cppzmq				~*		# gentoo required
-net-misc/cadaver			~*		# gentoo required
-net-wireless/bluez-tools		~*		# gentoo required
-sys-apps/fakeroot-ng			~*		# gentoo required
-sys-block/whdd				~*		# gentoo required
-sys-fs/ext3grep				~*		# gentoo required
-sys-libs/ncurses			~*		# gentoo required
-www-client/lynx				~*		# gentoo required
-www-client/midori			~*		# gentoo required
-x11-libs/libXfont2			~*		# gentoo required
-x11-misc/whaw				~*		# gentoo required
-x11-proto/xproto			~*		# gentoo required
-
-dev-lang/perl				~*		# gentoo required
-dev-perl/Template-Plugin-Cycle		~*		# gentoo required
-dev-perl/Template-Tiny			~*		# gentoo required
-perl-core/MIME-Base64			~*		# gentoo required
-virtual/perl-CPAN-Meta			~*		# gentoo required
-virtual/perl-CPAN-Meta-Requirements	~*		# gentoo required
-virtual/perl-CPAN-Meta-YAML		~*		# gentoo required
-virtual/perl-Carp			~*		# gentoo required
-virtual/perl-Compress-Raw-Bzip2		~*		# gentoo required
-virtual/perl-Compress-Raw-Zlib		~*		# gentoo required
-virtual/perl-Data-Dumper		~*		# gentoo required
-virtual/perl-ExtUtils-CBuilder		~*		# gentoo required
-virtual/perl-ExtUtils-MakeMaker		~*		# gentoo required
-virtual/perl-ExtUtils-ParseXS		~*		# gentoo required
-virtual/perl-File-Path			~*		# gentoo required
-virtual/perl-File-Spec			~*		# gentoo required
-virtual/perl-Getopt-Long		~*		# gentoo required
-virtual/perl-IO				~*		# gentoo required
-virtual/perl-IO-Compress		~*		# gentoo required
-virtual/perl-Module-Metadata		~*		# gentoo required
-virtual/perl-Parse-CPAN-Meta		~*		# gentoo required
-virtual/perl-Perl-OSType		~*		# gentoo required
-virtual/perl-Pod-Simple			~*		# gentoo required
-virtual/perl-Scalar-List-Utils		~*		# gentoo required
-virtual/perl-Storable			~*		# gentoo required
-virtual/perl-Term-ANSIColor		~*		# gentoo required
-virtual/perl-Test-Harness		~*		# gentoo required
-virtual/perl-XSLoader			~*		# gentoo required
-virtual/perl-if				~*		# gentoo required
-virtual/perl-libnet			~*		# gentoo required
-virtual/perl-parent			~*		# gentoo required
-virtual/perl-podlators			~*		# gentoo required
-virtual/perl-version			~*		# gentoo required
-
-dev-haskell/aeson-pretty		~*		# gentoo required
-dev-haskell/base-compat			~*		# gentoo required
-dev-haskell/cmark			~*		# gentoo required
-dev-haskell/cryptonite			~*		# gentoo required
-dev-haskell/doctemplates		~*		# gentoo required
-dev-haskell/http-client			~*		# gentoo required
-dev-haskell/http-client-tls		~*		# gentoo required
-dev-haskell/memory			~*		# gentoo required
-dev-haskell/pandoc-types		~*		# gentoo required
-dev-haskell/skylighting			~*		# gentoo required
-dev-haskell/tagsoup			~*		# gentoo required
-dev-haskell/texmath			~*		# gentoo required
-
-dev-lang/nqp				~*		# gentoo required
-dev-lang/parrot				~*		# gentoo required
-dev-lang/rakudo				~*		# gentoo required
-dev-libs/libuv				~*		# gentoo required
-net-libs/nodejs				~*		# gentoo required
-
-dev-java/icedtea			~*		# gentoo required
-
-media-libs/libopenshot			~*		# gentoo required
-media-libs/libopenshot-audio		~*		# gentoo required
-media-video/openshot			~*		# gentoo required
-
-games-fps/doom3				~*		# gentoo required
-games-fps/doom3-demo			~*		# gentoo required
-games-fps/ezquake-bin			~*		# gentoo required
-games-fps/quakeforge			~*		# gentoo required
-
-########################################
-
-=app-crypt/p11-kit-0.23*		~*		# gentoo required: [app-crypt/p11-kit-0.20.7] !!! Couldn't download 'p11-kit-0.20.7.tar.gz'. Aborting.
-=dev-libs/oniguruma-5.9.6*		~*		# gentoo required: [dev-libs/oniguruma-5.9.5] !!! Couldn't download 'onig-5.9.5.tar.gz'. Aborting.
-
-=app-shells/bash-4.4*			~*		# gentoo required: [app-shells/bash-4.3_p48] newins: /var/git/meta-repo/kits/core-kit/app-shells/bash/files/bashrc-r1 does not exist
-=dev-haskell/pandoc-citeproc-0.10*	~*		# gentoo required: [dev-haskell/pandoc-citeproc-0.7.2] src/Text/CSL/Util.hs:268:17: Constructor 'Link' should have 3 arguments, but has been given 2
-=media-video/cinelerra-20150908*	~*		# gentoo required: [media-video/cinelerra-20140710] !!! Couldn't download 'cinelerra-20140710.tar.xz'. Aborting.
-=net-analyzer/tcptrace-6.6.7*		~*		# gentoo required: [net-analyzer/tcptrace-6.6.7-r2] tcpdump.c:(.text+0x34): undefined reference to `pcap_offline_read'
-=net-misc/unison-2.48*			~*		# gentoo required: [net-misc/unison-2.48.3] (Bug 608776) Makefile.OCaml:434: recipe for target 'system.cmx' failed
-
-=app-emulation/virtualbox-guest-additions-5.1*	~*	# gentoo required: =x11-drivers/xf86-video-virtualbox-5.1*
-=x11-drivers/xf86-video-virtualbox-5.1*	~*		# gentoo required: [x11-drivers/xf86-video-virtualbox-5.0.40] /lib/modules/4.9.34-gentoo/build/arch/x86/include/asm/atomic.h:26:63: error: uninitialized const member in 'union atomic_read(const atomic_t*)::<anonymous>'
-
-########################################
-
-games-emulation/mekanix			x86		# gentoo required
+games-emulation/mekanix			**		# gentoo required
 
 ################################################################################
 
@@ -150,8 +18,6 @@ x11-wm/openbox				~*
 x11-terms/terminology			~*
 x11-wm/enlightenment:0			~*
 x11-wm/enlightenment:0.17		~*
-dev-libs/efl				~*		# gentoo required
-media-libs/elementary			~*		# gentoo required
 
 x11-misc/tabbed				~*
 
@@ -170,8 +36,6 @@ mail-client/mutt			~*
 www-client/surf				~*
 
 app-editors/atom			~*
-app-eselect/eselect-electron		~*		# gentoo required
-dev-util/electron			~*		# gentoo required
 
 ################################################################################
 # end of file
