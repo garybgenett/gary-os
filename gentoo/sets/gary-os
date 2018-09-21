@@ -84,6 +84,7 @@ mail-client/mutt
 net-misc/urlview
 
 app-admin/keepassx
+app-admin/keepassxc
 mail-client/thunderbird
 www-client/firefox
 

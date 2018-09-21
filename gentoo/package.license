@@ -2,23 +2,17 @@
 # portage package license file
 ################################################################################
 
-app-emulation/emul-linux-x86-medialibs	MPEG-4
-sys-kernel/gentoo-sources		freedist
-sys-kernel/linux-firmware		freedist
-sys-kernel/linux-firmware		linux-firmware
-sys-kernel/linux-firmware		no-source-code
+sys-kernel/gentoo-sources		linux-firmware
+sys-kernel/linux-firmware		freedist linux-firmware no-source-code
 
 media-libs/faac				MPEG-4
 
 ########################################
 
-media-fonts/corefonts			MSttfEULA
 media-fonts/font-bh-ttf			bh-luxi
 media-fonts/font-bh-type1		bh-luxi
 
 ################################################################################
-
-www-servers/nginx			as-is
 
 games-misc/fortune-mod-calvin		fairuse
 games-misc/fortune-mod-dubya		fairuse
@@ -33,10 +27,6 @@ games-misc/fortune-mod-strangelove	fairuse
 
 app-arch/rar				RAR
 app-arch/unrar				unRAR
-
-dev-java/concurrent-util		sun-concurrent-util
-dev-java/oracle-jdk-bin			Oracle-BCLA-JavaSE
-dev-java/oracle-jre-bin			Oracle-BCLA-JavaSE
 
 app-text/calibre			unRAR
 
