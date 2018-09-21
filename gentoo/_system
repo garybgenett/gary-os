@@ -6,8 +6,8 @@ declare COMMAND_LINE="${@}"
 
 ########################################
 
-declare DEBUG_OPT="-q"
-declare QUIET_OPT="-g"
+declare DEBUG_OPT="-v"
+declare QUIET_OPT="-q"
 
 declare DEBUG=
 declare QUIET=
@@ -249,8 +249,8 @@ function print_info {
 		printf "${PRINTF}" "Build Configuration (Internal Only):"	"<internal>"	"${SCRIPT} [{chroot}] -w"
 		printf "${PRINTF}" "Build Examination (Review Failures):"	"<output>"	"${SCRIPT} [{chroot}] -p"
 		echo -en "\n"
-		printf "${PRINTF}" "Validation (Usage/Variables Only):"		"<output>"	"${SCRIPT} -q [{chroot}] [{options}]"
-		printf "${PRINTF}" "Suppress Output (Internal Only)"		"<internal>"	"${SCRIPT} -g [{chroot}] [{options}]"
+		printf "${PRINTF}" "Validation (Usage/Variables Only):"		"<output>"	"${SCRIPT} -v [{chroot}] [{options}]"
+		printf "${PRINTF}" "Suppress Output (Internal Only)"		"<internal>"	"${SCRIPT} -q [{chroot}] [{options}]"
 		echo -en "\n"
 		echo -en "${NOTES}"
 		echo -en ">>> CHROOT <<<"
@@ -274,7 +274,7 @@ function print_info {
 		printf "${PRINTF}" "Chroot Shell (Run Command):"		"<auto>"	"${SCRIPT} [{chroot}] -s {command}"
 		printf "${PRINTF}" "Chroot Emerge Command (Automatically):"	"<auto>"	"${SCRIPT} [{chroot}] -a -s -e {command}"
 		printf "${PRINTF}" "Chroot Emerge Command (Interactively):"	"<interactive>"	"${SCRIPT} [{chroot}] -s -e {command}"
-		printf "${PRINTF}" "Chroot Emerge Tree:"			"<auto>"	"${SCRIPT} [{chroot}] -s -t"
+		printf "${PRINTF}" "Chroot Emerge Tree (Graph):"		"<output>"	"${SCRIPT} [{chroot}] -s -g"
 		echo -en "\n"
 		printf "${PRINTF}" "Chroot Unmount Cleanup:"			"<auto>"	"${SCRIPT} [{chroot}] -z"
 	elif [[ ${1} == "starter" ]]; then
@@ -431,7 +431,7 @@ fi
 if [[ ${1} == -s ]]; then
 	shift
 	mount_dev_dirs							|| exit 1
-	if [[ ${1} == -t ]]; then
+	if [[ ${1} == -g ]]; then
 		shift
 		expect_wrapper emerge ${_ASK} \
 			--pretend \
