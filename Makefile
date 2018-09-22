@@ -53,7 +53,7 @@ usage:
 	@echo -en "\n"
 	@echo -en "$(STATE)For more options, use the \"_system\" script directly (see below).$(RESET)\n"
 	@$(MARKER)
-	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(CURDIR)/gentoo/_system -q
+	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(CURDIR)/gentoo/_system -v
 
 ########################################
 
