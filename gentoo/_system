@@ -722,7 +722,7 @@ if [[ ${1} == -w ]]; then
 	done
 #>>>	NEXT="i686"
 	NEXT="core2_64"
-	if [[ -n ${MET} ]]; then
+	if [[ -n ${_MET} ]]; then
 		NEXT="generic_64"
 	fi
 #>>>	ego profile arch x86-32bit	|| exit 1
