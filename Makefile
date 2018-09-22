@@ -53,48 +53,48 @@ usage:
 	@echo -en "\n"
 	@echo -en "$(STATE)For more options, use the \"_system\" script directly (see below).$(RESET)\n"
 	@$(MARKER)
-	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(CURDIR)/gentoo/_system -v
+	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(I)/gentoo/_system -v
 
 ########################################
 
 .DEFAULT_GOAL := usage
 .DEFAULT:
-	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(CURDIR)/gentoo/_system -l "$(@)"
+	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(I)/gentoo/_system -l "$(@)"
 
 ################################################################################
 
 .PHONY: update
 update:
-	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(CURDIR)/gentoo/_system
-	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(CURDIR)/gentoo/_system -a -u
+	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(I)/gentoo/_system
+	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(I)/gentoo/_system -a -u
 
 ########################################
 
 .PHONY: init
 init:
-	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(CURDIR)/gentoo/_system $(CHROOT) -0
+	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(I)/gentoo/_system $(CHROOT) -0
 
 .PHONY: doit
 doit:
-	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(CURDIR)/gentoo/_system $(CHROOT) -/
+	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(I)/gentoo/_system $(CHROOT) -/
 
 .PHONY: redo
 redo:
-	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(CURDIR)/gentoo/_system $(CHROOT) -1
+	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(I)/gentoo/_system $(CHROOT) -1
 
 .PHONY: edit
 edit:
-	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(CURDIR)/gentoo/_system $(CHROOT) -2
+	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(I)/gentoo/_system $(CHROOT) -2
 
 ########################################
 
 .PHONY: shell
 shell:
-	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(CURDIR)/gentoo/_system $(CHROOT) -s
+	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(I)/gentoo/_system $(CHROOT) -s
 
 .PHONY: umount
 umount:
-	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(CURDIR)/gentoo/_system $(CHROOT) -z
+	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(I)/gentoo/_system $(CHROOT) -z
 
 ################################################################################
 # End Of File
