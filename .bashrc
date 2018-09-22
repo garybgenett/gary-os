@@ -1109,6 +1109,14 @@ function git-check {
 		${GIT_STS}					|| return 1
 		return 0
 	}
+	if [[ ${1} == -r ]]; then
+		shift
+		for FILE in "${@}"; do
+			if [[ -f ${FILE}${NEW} ]]; then
+				${MV} -i ${FILE}${NEW} ${FILE}
+			fi
+		done
+	fi
 	for FILE in "${@}"; do
 		LST="${LST} ${FILE} ${FILE}${NEW}"
 		if [[ ! -f ${FILE}${NEW} ]]; then
