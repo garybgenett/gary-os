@@ -582,14 +582,14 @@ if [[ ${1} == -i ]]; then
 		${RSYNC_U} ${GITDIR}/		${TARGET}${REPDIR}.git					|| exit 1
 		${SETDIR}/${FUNDIR}/${FUNKIT}	${TARGET}${REPDIR} ${FUNTOO}				|| exit 1
 		fi
-		${SAFE_ENV}			${MYSELF} ${QUIET_OPT} ${AUTO} ${FUNTOO}		|| exit 1
+		${SAFE_ENV}			${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} ${FUNTOO}	|| exit 1
 	fi
 	${SETDIR}/${FUNDIR}/${FUNKIT}		${TARGET}${REPDIR} ${FUNTOO}				|| exit 1
 	${SAFE_ENV}				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w		|| exit 1
 	if ${_BLD}; then
 		if [[ -n ${_NEW} ]]; then
 			expect_wrapper		emerge ${_ASK} expect					|| exit 1
-			${SAFE_ENV}		${MYSELF} ${QUIET_OPT} ${AUTO} -f			|| exit 1
+			${SAFE_ENV}		${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -f		|| exit 1
 			expect_wrapper		emerge ${_ASK} --deep --newuse --update \@system	|| exit 1
 		else
 			expect_wrapper		emerge ${_ASK} --emptytree \@system \@world		|| exit 1
@@ -703,9 +703,9 @@ END_OF_FILE
 			done
 		done
 	fi
-	${SAFE_ENV}				${MYSELF} ${QUIET_OPT} ${AUTO} -f	|| exit 1
-	${SAFE_ENV}				${MYSELF} ${QUIET_OPT} ${AUTO} -u	|| exit 1
-	mount_dev_dirs -u								|| exit 1
+	${SAFE_ENV}				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -f	|| exit 1
+	${SAFE_ENV}				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -u	|| exit 1
+	mount_dev_dirs -u									|| exit 1
 	exit 0
 fi
 
@@ -762,7 +762,7 @@ fi
 
 if [[ ${1} == -u ]]; then
 	shift
-	${SAFE_ENV} ${_SELF} ${QUIET_OPT} ${AUTO} -w				|| exit 1
+	${SAFE_ENV} ${_SELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w			|| exit 1
 	expect_wrapper emerge ${_ASK} --deep --newuse --update \@system \@world	|| exit 1
 	${SAFE_ENV} ${_SELF} ${QUIET_OPT} ${AUTO} -p				|| exit 1
 #>>>	https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=b7a4174e075a922a255c0ff4a6ebd4f6d0437c61
