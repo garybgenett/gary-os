@@ -58,6 +58,7 @@ dev-libs/gmp				static-libs	# gentoo required
 dev-libs/libgcrypt			static-libs	# gentoo required
 dev-libs/libgpg-error			static-libs	# gentoo required
 dev-libs/lzo				static-libs	# gentoo required
+dev-libs/popt				static-libs	# gentoo required
 sys-apps/attr				static-libs	# gentoo required
 
 ########################################
@@ -189,6 +190,12 @@ sci-libs/libqalculate			gnuplot readline
 
 sys-apps/busybox			-make-symlinks debug savedconfig static
 sys-apps/coreutils			multicall static
+
+app-shells/bash				static
+dev-libs/openssl			static-libs
+net-misc/openssh			static -pam -pie
+net-misc/rsync				static
+sys-process/runit			static
 
 app-emulation/qemu			ncurses sdl spice
 app-emulation/spice			client gui
