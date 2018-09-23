@@ -1300,11 +1300,11 @@ function git-save {
 		shift
 	fi
 	if [[ -n ${1} ]]; then
-		AMEND="[${1}]"
+		AMEND="${1}"
 		shift
 	fi
 	${GIT_ADD} ./									|| return 1
-	${GIT_CMT} --all --message="[${MESSAGE} :: $(date --iso=seconds)]${AMEND}"	|| return 1
+	${GIT_CMT} --all --message="[${MESSAGE} :: $(date --iso=seconds)][${AMEND}]"	|| return 1
 	return 0
 }
 
