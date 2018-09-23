@@ -633,6 +633,9 @@ if [[ ${1} == -i ]]; then
 root:x:0:0::/.g/_data/zactive/.home:/bin/bash
 plastic:x:1000:1000::/.g/_data/zactive/.home:/bin/bash
 user:x:1001:1001::/.g/_data/zactive/.home:/bin/bash
+aiden:x:1002:1002::/.g/_data/zactive/archive.kids/aiden:/bin/bash
+orion:x:1003:1003::/.g/_data/zactive/archive.kids/orion:/bin/bash
+ember:x:1004:1004::/.g/_data/zactive/archive.kids/ember:/bin/bash
 null:x:666:666::/tmp/.null:/bin/nologin
 lfs-user:x:9999:9999::/.g/_data/_builds/_lfs/.lfs/lfs-user:/bin/bash
 ---
@@ -642,6 +645,9 @@ END_OF_FILE
 root::::::::
 plastic::::::::
 user:*:::::::
+aiden::::::::
+orion::::::::
+ember::::::::
 null:*:::::::
 lfs-user:*:::::::
 ---
@@ -652,13 +658,16 @@ root:x:0:root,plastic
 wheel:x:10:root,plastic,lfs-user
 plastic:x:1000:root,plastic
 user:x:1001:root,plastic,user
+aiden:x:1002:root,plastic,aiden
+orion:x:1003:root,plastic,orion
+ember:x:1004:root,plastic,ember
 null:x:666:root,plastic,null
 lfs-user:x:9999:root,plastic,lfs-user
 ---
-audio:x:---:root,plastic,null
-cdrom:x:---:root,plastic,null
-video:x:---:root,plastic,null
-games:x:---:root,plastic,null
+audio:x:---:root,plastic,user,aiden,orion,ember,null
+cdrom:x:---:root,plastic,user,aiden,orion,ember,null
+video:x:---:root,plastic,user,aiden,orion,ember,null
+games:x:---:root,plastic,user,aiden,orion,ember,null
 ---
 END_OF_FILE
 		cat >>${TARGET}/etc/gshadow <<END_OF_FILE
@@ -667,13 +676,16 @@ root:::root,plastic
 wheel:::root,plastic,lfs-user
 plastic:::root,plastic
 user:::root,plastic,user
+aiden:::root,plastic,aiden
+orion:::root,plastic,orion
+ember:::root,plastic,ember
 null:::root,plastic,null
 lfs-user:::root,plastic,lfs-user
 ---
-audio:::root,plastic,null
-cdrom:::root,plastic,null
-video:::root,plastic,null
-games:::root,plastic,null
+audio:::root,plastic,user,aiden,orion,ember,null
+cdrom:::root,plastic,user,aiden,orion,ember,null
+video:::root,plastic,user,aiden,orion,ember,null
+games:::root,plastic,user,aiden,orion,ember,null
 ---
 END_OF_FILE
 		cat >>${TARGET}/etc/pam.d/su <<END_OF_FILE
@@ -696,8 +708,11 @@ END_OF_FILE
 						${TARGET}/etc/pam.d/su	\
 						${TARGET}/etc/sudoers
 		for FILE in			root	\
-						plastic
-		do				echo -en "password: ${FILE}\n"
+						plastic	\
+						aiden	\
+						orion	\
+						ember	\
+		; do				echo -en "password: ${FILE}\n"
 			until			${SAFE_ENV} passwd ${FILE}
 			do			echo -en "retry: ${FILE}\n"
 			done
