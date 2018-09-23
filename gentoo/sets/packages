@@ -231,6 +231,10 @@ x11-wm/openbox
 x11-wm/twm
 x11-wm/windowmaker
 
+app-editors/leafpad
+lxde-base/lxde-meta
+lxde-base/lxdm
+
 x11-terms/rxvt-unicode
 x11-terms/st
 x11-terms/terminology
