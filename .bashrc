@@ -2530,6 +2530,9 @@ function task-export-drive-sync {
 		/.g/_data/zactive/_drive/_sync/ \
 		${GDRIVE_REMOTE}:/_sync
 	${RCLONE_C} about ${GDRIVE_REMOTE}:
+	${LL} \
+		/.g/_data/zactive/_drive/_sync \
+		$(find -H -L /.g/_data/zactive/_drive/_sync -type l 2>/dev/null)
 	return 0
 }
 
