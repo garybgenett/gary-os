@@ -145,6 +145,29 @@ done
 
 ########################################
 
+#>>>athlon64 build: TORDIR=/.g/_data/_builds/_gentoo.amd64 _CPU="1" ESUB="amd64-k8" GARC="athlon64" GSUB="athlon64" ${HOME}/setup/gentoo/_system -t -0
+
+#OPTIONS[_CPU EARC ESUB GARC GSUB GOPT]
+declare _CPU="${_CPU:-}"
+#>>>declare EARC="${EARC:-x86-32bit}"
+declare EARC="${EARC:-x86-64bit}"
+#>>>declare ESUB="${EARC:-i686}"
+declare ESUB="${ESUB:-core2_64}"
+declare GARC="${GARC:-core2}"
+declare GSUB="${GSUB:-core2}"
+declare GOPT="${GOPT:--O2}"
+
+if [[ -n ${_MET} ]]; then
+	_CPU="1"
+	EARC="x86-64bit"
+	ESUB="generic_64"
+	GARC="x86-64"
+	GSUB="generic"
+	GOPT="-Os -s"
+fi
+
+########################################
+
 #VARIABLES[HOME HOMELY SAFE_ENV CHROOT]
 declare HOMELY="/.home"
 declare MYSELF="${ARCDIR}/${FUNDIR}/${SCRIPT}"
@@ -738,15 +761,15 @@ if [[ ${1} == -w ]]; then
 	do
 		if [[ -n ${_MET} ]]; then ${SED} -i "s|^[#][{]MET[}][ ](.+)$|\1|g" ${FILE}; fi
 		if [[ -n ${_NEW} ]]; then ${SED} -i "s|^[#][{]NEW[}][ ](.+)$|\1|g" ${FILE}; fi
+		if [[ -n ${_CPU} ]]; then ${SED} -i "s|^[#][{]CPU[}][ ](.+)$|\1|g" ${FILE}; fi
 	done
-#>>>	NEXT="i686"
-	NEXT="core2_64"
-	if [[ -n ${_MET} ]]; then
-		NEXT="generic_64"
+	if [[ -n ${_CPU} ]]; then
+		${SED} -i "s|[#][{]GARC[}]|${GARC}|g" ${ETCDIR}/make.conf
+		${SED} -i "s|[#][{]GSUB[}]|${GSUB}|g" ${ETCDIR}/make.conf
+		${SED} -i "s|[#][{]GOPT[}]|${GOPT}|g" ${ETCDIR}/make.conf
 	fi
-#>>>	ego profile arch x86-32bit	|| exit 1
-	ego profile arch x86-64bit	|| exit 1
-	ego profile subarch ${NEXT}	|| exit 1
+	ego profile arch ${EARC}	|| exit 1
+	ego profile subarch ${ESUB}	|| exit 1
 #>>>	ego profile build stable	|| exit 1	# ERROR: build stable is not available. Can't set. Available names: {'current'}
 	ego profile build current	|| exit 1
 	ego profile flavor desktop	|| exit 1
