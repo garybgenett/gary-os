@@ -145,7 +145,7 @@ done
 
 ########################################
 
-#VARIABLES[HOME HOMELY SAFE_ENV]
+#VARIABLES[HOME HOMELY SAFE_ENV CHROOT]
 declare HOMELY="/.home"
 declare MYSELF="${ARCDIR}/${FUNDIR}/${SCRIPT}"
 
@@ -156,6 +156,7 @@ FILE="$(
 	done
 )"
 SAFE_ENV="prompt -z${FILE}"
+CHROOT=
 if
 { [[ -n "${DEBUG}" ]] && [[ -n "${TOOR}" ]]; } ||
 { [[ -n "${TOOR}" ]] && [[ ${1} == -l ]]; } ||
@@ -164,6 +165,7 @@ if
 { [[ ${1} == -i ]] || [[ ${1} == -s ]]; }
 then
 	SAFE_ENV="prompt -z${FILE} HOME=${HOMELY} SETDIR=${ARCDIR} BLDDIR=/ chroot ${TARGET}"
+	CHROOT="1"
 fi
 
 ########################################
@@ -356,8 +358,8 @@ function expect_wrapper {
 	EXPECT_CMD+=" "; EXPECT_CMD+="lassign [wait] pid spawnid os_error exit_status;"
 	EXPECT_CMD+=" "; EXPECT_CMD+="if {(\$os_error == 0) && (\$exit_status == 0)} { exit 0; } else { exit 1; };"
 	if [[ -n ${AUTO} ]] && {
-		{ [[ -n "${TOOR}" ]] && [[ -x "${TARGET}/usr/bin/expect" ]]; } ||
-		{ [[ -z "${TOOR}" ]] && [[ -x "/usr/bin/expect" ]]; }
+		{ [[ -n "${CHROOT}" ]] && [[ -x "${TARGET}/usr/bin/expect" ]]; } ||
+		{ [[ -z "${CHROOT}" ]] && [[ -x "/usr/bin/expect" ]]; }
 	}; then
 		${SAFE_ENV} expect -c "${EXPECT_CMD}"	|| return 1
 	else
