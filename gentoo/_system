@@ -89,12 +89,12 @@ if [[ ${1} == -m ]]; then
 	TARGET="${METDIR}"
 	TOOR="${1}"
 	_PKG="${PKGMET}"
-	_MET="MET"
+	_MET="1"
 	shift
 fi
 if [[ ${1} == -n ]]; then
 	TOOR="${TOOR} ${1}"
-	_NEW="NEW"
+	_NEW="1"
 	shift
 fi
 
@@ -734,8 +734,8 @@ if [[ ${1} == -w ]]; then
 		${ETCDIR}/make.conf	\
 		${ETCDIR}/package.*
 	do
-		${SED} -i "s|^[#][{]${_MET}[}][ ](.+)$|\1|g" ${FILE}
-		${SED} -i "s|^[#][{]${_NEW}[}][ ](.+)$|\1|g" ${FILE}
+		if [[ -n ${_MET} ]]; then ${SED} -i "s|^[#][{]MET[}][ ](.+)$|\1|g" ${FILE}; fi
+		if [[ -n ${_NEW} ]]; then ${SED} -i "s|^[#][{]NEW[}][ ](.+)$|\1|g" ${FILE}; fi
 	done
 #>>>	NEXT="i686"
 	NEXT="core2_64"
