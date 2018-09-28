@@ -783,9 +783,15 @@ if [[ ${1} == -u ]]; then
 	expect_wrapper emerge ${_ASK} --deep --newuse --update \@system \@world	|| exit 1
 	${SAFE_ENV} ${_SELF} ${QUIET_OPT} ${AUTO} -p				|| exit 1
 #>>>	https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=b7a4174e075a922a255c0ff4a6ebd4f6d0437c61
-#>>>	expect_wrapper python-updater						|| exit 1
-	expect_wrapper perl-cleaner --all					|| exit 1
-	expect_wrapper haskell-updater --all					|| exit 1
+#>>>	if [[ -n "$(which python-updater 2>/dev/null)" ]]; then
+#>>>		expect_wrapper python-updater					|| exit 1
+#>>>	fi
+	if [[ -n "$(which perl-cleaner 2>/dev/null)" ]]; then
+		expect_wrapper perl-cleaner --all				|| exit 1
+	fi
+	if [[ -n "$(which haskell-updater 2>/dev/null)" ]]; then
+		expect_wrapper haskell-updater --all				|| exit 1
+	fi
 	expect_wrapper emerge ${_ASK} \@module-rebuild				|| exit 1
 	expect_wrapper emerge ${_ASK} \@preserved-rebuild			|| exit 1
 	expect_wrapper emerge ${_ASK} --depclean				|| exit 1
