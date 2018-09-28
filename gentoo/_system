@@ -6,6 +6,8 @@ declare COMMAND_LINE="${@}"
 
 ########################################
 
+#>>>${GREP} -o "[=][=][ ][-][a-z]" ${HOME}/setup/gentoo/_system | sort
+
 declare DEBUG_OPT="-v"
 declare QUIET_OPT="-q"
 
