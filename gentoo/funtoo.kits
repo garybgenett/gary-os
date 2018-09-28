@@ -4,6 +4,8 @@ source ${HOME}/.bashrc
 
 declare GIT_SOURCE="https://github.com/funtoo"
 
+declare NICELY=
+
 ########################################
 
 if [[ -n "${@}" ]]; then
