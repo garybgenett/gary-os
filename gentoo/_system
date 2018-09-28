@@ -172,14 +172,16 @@ fi
 declare HOMELY="/.home"
 declare MYSELF="${ARCDIR}/${FUNDIR}/${SCRIPT}"
 
-FILE="$(
-	FILE="OPTIONS"
-	for NEXT in $(${SED} -n "s/^.*[#]${FILE}[[](.+)[]]$/\1/gp" ${_SELF}); do
-		echo -en " ${NEXT}=${!NEXT}"
-	done
-)"
-SAFE_ENV="prompt -z${FILE}"
+SAFE_ENV=
 CHROOT=
+for FILE in $(${SED} -n "s/^.*[#]OPTIONS[[](.+)[]]$/\1/gp" ${_SELF}); do
+	SAFE_ENV+=" ${FILE}=\"${!FILE}\""
+done
+SAFE_ENV="${SAFE_ENV/#\ }"
+
+function safe_env {
+	eval prompt -z ${SAFE_ENV} "${@}"
+}
 if
 { [[ -n "${DEBUG}" ]] && [[ -n "${TOOR}" ]]; } ||
 { [[ -n "${TOOR}" ]] && [[ ${1} == -l ]]; } ||
@@ -187,8 +189,10 @@ if
 { [[ -n "${TOOR}" ]] && [[ ${1} == -p ]]; } ||
 { [[ ${1} == -i ]] || [[ ${1} == -s ]]; }
 then
-	SAFE_ENV="prompt -z${FILE} HOME=${HOMELY} SETDIR=${ARCDIR} BLDDIR=/ chroot ${TARGET}"
 	CHROOT="1"
+	function safe_env {
+		eval prompt -z ${SAFE_ENV} HOME=\"${HOMELY}\" SETDIR=\"${ARCDIR}\" BLDDIR=\"/\" chroot \"${TARGET}\" "${@}"
+	}
 fi
 
 ########################################
@@ -372,21 +376,21 @@ function expect_wrapper {
 	EXPECT_CMD+=" "; EXPECT_CMD+="set timeout -1;"
 	EXPECT_CMD+="";
 	EXPECT_CMD+=" "; EXPECT_CMD+="expect"
-	EXPECT_CMD+=" "; EXPECT_CMD+="-nocase yes*/*no*	{send y\\r; exp_continue;}"
-	EXPECT_CMD+=" "; EXPECT_CMD+="-nocase use-new*	{send u\\r; exp_continue;}"
+	EXPECT_CMD+=" "; EXPECT_CMD+="-nocase yes*/*no*	{send y\\\\r; exp_continue;}"
+	EXPECT_CMD+=" "; EXPECT_CMD+="-nocase use-new*	{send u\\\\r; exp_continue;}"
 	EXPECT_CMD+=" "; EXPECT_CMD+="default {}"
 	EXPECT_CMD+=" "; EXPECT_CMD+="eof"
 	EXPECT_CMD+=" "; EXPECT_CMD+=";"
 	EXPECT_CMD+="";
 	EXPECT_CMD+=" "; EXPECT_CMD+="lassign [wait] pid spawnid os_error exit_status;"
-	EXPECT_CMD+=" "; EXPECT_CMD+="if {(\$os_error == 0) && (\$exit_status == 0)} { exit 0; } else { exit 1; };"
+	EXPECT_CMD+=" "; EXPECT_CMD+="if {(\\\$os_error == 0) && (\\\$exit_status == 0)} { exit 0; } else { exit 1; };"
 	if [[ -n ${AUTO} ]] && {
 		{ [[ -n "${CHROOT}" ]] && [[ -x "${TARGET}/usr/bin/expect" ]]; } ||
 		{ [[ -z "${CHROOT}" ]] && [[ -x "/usr/bin/expect" ]]; }
 	}; then
-		${SAFE_ENV} expect -c "${EXPECT_CMD}"	|| return 1
+		safe_env expect -c \"${EXPECT_CMD}\"	|| return 1
 	else
-		${SAFE_ENV} "${@}"			|| return 1
+		safe_env ${@//\"/\\\"}			|| return 1
 	fi
 	return 0
 }
@@ -440,7 +444,7 @@ print_info marker
 if [[ -n "${DEBUG}" ]]; then
 	if [[ -n "${TOOR}" ]]; then
 		set -x
-		${SAFE_ENV} ${MYSELF} ${DEBUG}
+		safe_env ${MYSELF} ${DEBUG}
 	fi
 	exit 0
 fi
@@ -470,7 +474,7 @@ if [[ ${1} == -s ]]; then
 		shift
 		expect_wrapper emerge ${_ASK} "${@}"			|| exit 1
 	else
-		${SAFE_ENV} /usr/bin/env bash -o vi ${@:+-c "${@}"}	|| exit 1
+		safe_env /usr/bin/env bash -o vi ${@:+-c \"${@}\"}	|| exit 1
 	fi
 	mount_dev_dirs -u						|| exit 1
 	exit 0
@@ -480,7 +484,7 @@ fi
 
 if [[ ${1} == -l ]]; then
 	if [[ -n "${TOOR}" ]]; then
-		${SAFE_ENV} ${MYSELF} ${QUIET} "${@}"
+		safe_env ${MYSELF} ${QUIET} \"${@}\"
 		exit 0
 	fi
 	shift
@@ -492,7 +496,7 @@ if [[ ${1} == -l ]]; then
 		FILE="$(${LS} -d ${REPDIR}/kits/*/*/${1} 2>/dev/null)"
 		NEXT="$(echo "${FILE}" | ${SED} "s|^${REPDIR}/kits/.+[/]([^/]+[/][^/]+)$|\1|g")"
 		if [[ -z ${FILE} ]]; then
-			${SAFE_ENV} emerge --search "${@}"
+			safe_env emerge --search \"${@}\"
 		else
 			echo -en "https://packages.gentoo.org/packages/${NEXT}\n"
 			echo -en "https://gitweb.gentoo.org/repo/gentoo.git/log/${NEXT}\n"
@@ -519,7 +523,7 @@ if [[ ${1} == -o ]]; then
 	if [[ -n "${TOOR}" ]]; then
 		${MKDIR}	${TARGET}${ETCDIR}/${OVLDIR}/${NEXT}							|| exit 1
 		${RSYNC_U}	${SETDIR}/${FUNDIR}/${OVLDIR}/${FILE}/		${TARGET}${ETCDIR}/${OVLDIR}/${FILE}	|| exit 1
-		${SAFE_ENV} ${MYSELF} ${QUIET} "${@}"
+		safe_env ${MYSELF} ${QUIET} \"${@}\"
 		${RSYNC_U}	${TARGET}${ETCDIR}/${OVLDIR}/${FILE}/Manifest	${SETDIR}/${FUNDIR}/${OVLDIR}/${FILE}/	|| exit 1
 		exit 0
 	fi
@@ -532,7 +536,7 @@ fi
 
 if [[ ${1} == -p ]]; then
 	if [[ -n "${TOOR}" ]]; then
-		${SAFE_ENV} ${MYSELF} ${QUIET} "${@}"
+		safe_env ${MYSELF} ${QUIET} \"${@}\"
 		exit 0
 	fi
 	shift
@@ -545,7 +549,7 @@ if [[ ${1} == -p ]]; then
 		for NEXT in ${FILE}; do
 			NEXT="$(basename ${NEXT} | ${SED} "s/[-][0-9][^/]+$//g")"
 			echo -en "\n[${NEXT}]\n"
-			${SAFE_ENV} ${_SELF} ${QUIET_OPT} -l ${NEXT}
+			safe_env ${_SELF} ${QUIET_OPT} -l ${NEXT}
 		done
 		echo -en "\n"					1>&2
 		echo -en "FILELIST=\""				1>&2
@@ -601,7 +605,7 @@ if [[ ${1} == -i ]]; then
 		${RSYNC_U} ${SOURCE}/*funtoo*	${TARGET}${ARCDIR}/					|| exit 1
 	fi
 	mount_dev_dirs											|| exit 1
-#>>>	${SAFE_ENV}				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -r		|| exit 1
+#>>>	safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -r		|| exit 1
 						${_SELF} ${QUIET_OPT} ${TOOR} ${AUTO} -r		|| exit 1
 	if [[ ! -d ${TARGET}${REPDIR} ]]; then
 		if [[ -d ${GITDIR} ]]; then
@@ -609,14 +613,14 @@ if [[ ${1} == -i ]]; then
 		${RSYNC_U} ${GITDIR}/		${TARGET}${REPDIR}.git					|| exit 1
 		${SETDIR}/${FUNDIR}/${FUNKIT}	${TARGET}${REPDIR} ${FUNTOO}				|| exit 1
 		fi
-		${SAFE_ENV}			${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} ${FUNTOO}	|| exit 1
+		safe_env			${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} ${FUNTOO}	|| exit 1
 	fi
 	${SETDIR}/${FUNDIR}/${FUNKIT}		${TARGET}${REPDIR} ${FUNTOO}				|| exit 1
-	${SAFE_ENV}				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w		|| exit 1
+	safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w		|| exit 1
 	if ${_BLD}; then
 		if [[ -n ${_NEW} ]]; then
 			expect_wrapper		emerge ${_ASK} expect					|| exit 1
-			${SAFE_ENV}		${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -f		|| exit 1
+			safe_env		${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -f		|| exit 1
 			expect_wrapper		emerge ${_ASK} --deep --newuse --update \@system	|| exit 1
 		else
 			expect_wrapper		emerge ${_ASK} --emptytree \@system \@world		|| exit 1
@@ -740,13 +744,13 @@ END_OF_FILE
 						orion	\
 						ember	\
 		; do				echo -en "password: ${FILE}\n"
-			until			${SAFE_ENV} passwd ${FILE}
+			until			safe_env passwd ${FILE}
 			do			echo -en "retry: ${FILE}\n"
 			done
 		done
 	fi
-	${SAFE_ENV}				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -f	|| exit 1
-	${SAFE_ENV}				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -u	|| exit 1
+	safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -f	|| exit 1
+	safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -u	|| exit 1
 	mount_dev_dirs -u									|| exit 1
 	exit 0
 fi
@@ -804,9 +808,9 @@ fi
 
 if [[ ${1} == -u ]]; then
 	shift
-	${SAFE_ENV} ${_SELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w			|| exit 1
+	safe_env ${_SELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w			|| exit 1
 	expect_wrapper emerge ${_ASK} --deep --newuse --update \@system \@world	|| exit 1
-	${SAFE_ENV} ${_SELF} ${QUIET_OPT} ${AUTO} -p				|| exit 1
+	safe_env ${_SELF} ${QUIET_OPT} ${AUTO} -p				|| exit 1
 #>>>	https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=b7a4174e075a922a255c0ff4a6ebd4f6d0437c61
 #>>>	if [[ -n "$(which python-updater 2>/dev/null)" ]]; then
 #>>>		expect_wrapper python-updater					|| exit 1
@@ -887,9 +891,9 @@ fi
 
 ################################################################################
 
-${SAFE_ENV} ${SETDIR}/${FUNDIR}/.emergent
+safe_env ${SETDIR}/${FUNDIR}/.emergent
 #>>>if [[ -z ${_MET} ]]; then
-#>>>	${SAFE_ENV} ${SETDIR}/${FUNDIR}/.hacks
+#>>>	safe_env ${SETDIR}/${FUNDIR}/.hacks
 #>>>fi
 
 ########################################
