@@ -187,9 +187,6 @@ x11-base/xorg-server
 x11-misc/obconf
 x11-wm/openbox
 
-app-editors/leafpad
-lxde-base/lxde-meta
-
 x11-terms/rxvt-unicode
 
 x11-misc/xsel
