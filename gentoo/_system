@@ -187,6 +187,7 @@ if
 { [[ -n "${TOOR}" ]] && [[ ${1} == -l ]]; } ||
 { [[ -n "${TOOR}" ]] && [[ ${1} == -o ]]; } ||
 { [[ -n "${TOOR}" ]] && [[ ${1} == -p ]]; } ||
+{ [[ -n "${TOOR}" ]] && [[ ${1} == -r ]]; } ||
 { [[ ${1} == -i ]] || [[ ${1} == -s ]]; }
 then
 	CHROOT="1"
@@ -300,7 +301,7 @@ function print_info {
 		printf "${PRINTF}" "Chroot Build (Configuration):"		"<interactive>"	"${SCRIPT} [{chroot}] -2"
 		echo -en "\n"
 		printf "${PRINTF}" "Chroot Configuration (Overlay Helper):"	"<auto>"	"${SCRIPT} [{chroot}] -o {package}"
-		printf "${PRINTF}" "Chroot Configuration (Internal Only):"	"<internal>"	"${SCRIPT} [{chroot}] -r"
+		printf "${PRINTF}" "Chroot Configuration (Internal Only):"	"<internal>"	"${SCRIPT} [{chroot}] -r [-w]"
 		printf "${PRINTF}" "Chroot Shell (Bash):"			"<interactive>"	"${SCRIPT} [{chroot}] -s"
 		printf "${PRINTF}" "Chroot Shell (Run Command):"		"<auto>"	"${SCRIPT} [{chroot}] -s {command}"
 		printf "${PRINTF}" "Chroot Emerge Command (Automatically):"	"<auto>"	"${SCRIPT} [{chroot}] -a -s -e {command}"
@@ -578,19 +579,23 @@ if [[ ${1} == -2 ]]; then shift; ${_SELF} ${TOOR} -c		-i								; exit 0; fi
 
 if [[ ${1} == -r ]]; then
 	shift
-	${MKDIR}						${TARGET}${HOMELY}		|| exit 1
+	${MKDIR}						${TARGET}${HOMELY}				|| exit 1
 	if [[ -f ${SETDIR}/.bashrc ]]
-	then ${RSYNC_U} --copy-links ${SETDIR}/.bashrc		${TARGET}${HOMELY}/		|| exit 1
-	else ${RSYNC_U} --copy-links ${HOME}/.bashrc		${TARGET}${HOMELY}/		|| exit 1
+	then ${RSYNC_U} --copy-links ${SETDIR}/.bashrc		${TARGET}${HOMELY}/				|| exit 1
+	else ${RSYNC_U} --copy-links ${HOME}/.bashrc		${TARGET}${HOMELY}/				|| exit 1
 	fi
-	${MKDIR}						${TARGET}${ARCDIR}		|| exit 1
-	if [[ -n "${COMMIT}" ]]; then echo -en "${COMMIT}"	>${TARGET}${ARCDIR}/_commit	|| exit 1; fi
-	${RSYNC_U} ${SETDIR}/${FUNDIR}/				${TARGET}${ARCDIR}/${FUNDIR}	|| exit 1
-	${RSYNC_U} ${SETDIR}/${LINDIR}/				${TARGET}${ARCDIR}/${LINDIR}	|| exit 1
-	${RSYNC_U} ${SETDIR}/${FUNDIR}/[a-z_]*			${TARGET}${ETCDIR}/		|| exit 1
-	${LN} ${ETCDIR}/${OVLDIR}/overlay.conf			${TARGET}${ETCDIR}/repos.conf/	|| exit 1
-	chown -R root:root					${TARGET}${ETCDIR}		|| exit 1
-	chmod -R 755						${TARGET}${ETCDIR}		|| exit 1
+	${MKDIR}						${TARGET}${ARCDIR}				|| exit 1
+	if [[ -n "${COMMIT}" ]]; then echo -en "${COMMIT}"	>${TARGET}${ARCDIR}/_commit			|| exit 1; fi
+	${RSYNC_U} ${SETDIR}/${FUNDIR}/				${TARGET}${ARCDIR}/${FUNDIR}			|| exit 1
+	${RSYNC_U} ${SETDIR}/${LINDIR}/				${TARGET}${ARCDIR}/${LINDIR}			|| exit 1
+	${RSYNC_U} ${SETDIR}/${FUNDIR}/[a-z_]*			${TARGET}${ETCDIR}/				|| exit 1
+	${LN} ${ETCDIR}/${OVLDIR}/overlay.conf			${TARGET}${ETCDIR}/repos.conf/			|| exit 1
+	chown -R root:root					${TARGET}${ETCDIR}				|| exit 1
+	chmod -R 755						${TARGET}${ETCDIR}				|| exit 1
+	if [[ ${1} == -w ]]; then
+		shift
+		safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w	|| exit 1
+	fi
 	exit 0
 fi
 
