@@ -2495,11 +2495,13 @@ function task-export-calendar {
 function task-export-drive {
 	cd ${PIMDIR}
 	sudo chown plastic:plastic \
-		${NOTES_MD} \
-		${SALES_MD}
+		${NOTES_MD}
+#>>>		${NOTES_MD} \
+#>>>		${SALES_MD}
 	sudo chmod 755 \
-		$(dirname ${NOTES_MD}) ${NOTES_MD} \
-		$(dirname ${SALES_MD}) ${SALES_MD}
+		$(dirname ${NOTES_MD}) ${NOTES_MD}
+#>>>		$(dirname ${NOTES_MD}) ${NOTES_MD} \
+#>>>		$(dirname ${SALES_MD}) ${SALES_MD}
 #>>>	gcalendar_export.pl \
 #>>>		"d|${NOTES_MD}:${NOTES_MD_ID}" \
 #>>>		"d|${SALES_MD}:${SALES_MD_ID}"
@@ -2507,10 +2509,10 @@ function task-export-drive {
 #>>>	${RSYNC_U} /.g/_data/zactive/_drive/_notes.md drive-notes.md
 #>>>	sudo chown -vR plastic:plastic drive*
 #>>>	sudo chmod -vR 750 drive*
-	gdrive_export.pl \
-		"${NOTES_MD}:${NOTES_MD_ID}"
 #>>>		"${NOTES_MD}:${NOTES_MD_ID}" \
 #>>>		"${SALES_MD}:${SALES_MD_ID}" \
+	gdrive_export.pl \
+		"${NOTES_MD}:${NOTES_MD_ID}" \
 		${@} || return 1
 	cd - >/dev/null
 	return 0
@@ -2692,8 +2694,9 @@ function task-export-text {
 	declare NAME="${1}" && shift
 	cd ${PIMDIR}
 	sudo chmod 755 \
-		$(dirname ${NOTES_MD}) ${NOTES_MD} \
-		$(dirname ${SALES_MD}) ${SALES_MD}
+		$(dirname ${NOTES_MD}) ${NOTES_MD}
+#>>>		$(dirname ${NOTES_MD}) ${NOTES_MD} \
+#>>>		$(dirname ${SALES_MD}) ${SALES_MD}
 	perl -e '
 		use strict;
 		use warnings;
@@ -4071,10 +4074,12 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == [@] ]]; then
 			task-export-drive || return 1
 			${EDITOR} -c "map ~ <ESC>:!${TW} todo<CR>" -c "map \\ <ESC>:!${TW} " \
-				${NOTES_MD} \
-				${SALES_MD}
-			if [[ -s ${NOTES_MD} ]] &&
-			   [[ -s ${SALES_MD} ]]; then
+				${NOTES_MD}
+#>>>				${NOTES_MD} \
+#>>>				${SALES_MD}
+			if [[ -s ${NOTES_MD} ]]; then
+#>>>			if [[ -s ${NOTES_MD} ]] &&
+#>>>			   [[ -s ${SALES_MD} ]]; then
 				task-export-drive upload || return 1
 			fi
 		elif [[ ${1} == [%] ]]; then
