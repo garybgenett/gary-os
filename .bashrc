@@ -60,6 +60,7 @@ export MAILCAPS="${HOME}/.mailcap"
 
 export GDRIVE_REMOTE="gdrive"
 export NOTES_MD="/.g/_data/zactive/_pim/tasks.notes.md";	export NOTES_MD_ID="1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e"
+export IDEAS_MD="/.g/_data/zactive/writing/_imagination.md";	export IDEAS_MD_ID="1_p06qeX31eFRTUJ2VKWhdfGUhaQBqF5k"
 export SALES_MD="/.g/_data/zactive/_pim/zoho.today.md";		#>>>export SALES_MD_ID="1wQrnTw0I5pDfzlqeuKdBNCNvFH9Ifulz"
 
 export ACRO_ALLOW_SUDO="set"
@@ -2498,25 +2499,29 @@ function task-export-calendar {
 function task-export-drive {
 	cd ${PIMDIR}
 	sudo chown plastic:plastic \
-		${NOTES_MD}
-#>>>		${NOTES_MD} \
+		${NOTES_MD} \
+		${IDEAS_MD}
 #>>>		${SALES_MD}
 	sudo chmod 755 \
-		$(dirname ${NOTES_MD}) ${NOTES_MD}
-#>>>		$(dirname ${NOTES_MD}) ${NOTES_MD} \
+		$(dirname ${NOTES_MD}) ${NOTES_MD} \
+		$(dirname ${IDEAS_MD}) ${IDEAS_MD}
 #>>>		$(dirname ${SALES_MD}) ${SALES_MD}
 #>>>	gcalendar_export.pl \
 #>>>		"d|${NOTES_MD}:${NOTES_MD_ID}" \
+#>>>		"d|${IDEAS_MD}:${IDEAS_MD_ID}" \
 #>>>		"d|${SALES_MD}:${SALES_MD_ID}"
 #>>>		${@}
 #>>>	${RSYNC_U} /.g/_data/zactive/_drive/_notes.md drive-notes.md
 #>>>	sudo chown -vR plastic:plastic drive*
 #>>>	sudo chmod -vR 750 drive*
 #>>>		"${NOTES_MD}:${NOTES_MD_ID}" \
-#>>>		"${SALES_MD}:${SALES_MD_ID}" \
+#>>>		"${IDEAS_MD}:${IDEAS_MD_ID}" \
+#>>>		"${SALES_MD}:${SALES_MD_ID}"
 	gdrive_export.pl \
 		"${NOTES_MD}:${NOTES_MD_ID}" \
+		"${IDEAS_MD}:${IDEAS_MD_ID}" \
 		${@} || return 1
+#>>>		"${SALES_MD}:${SALES_MD_ID}" \
 	cd - >/dev/null
 	return 0
 }
@@ -2697,8 +2702,8 @@ function task-export-text {
 	declare NAME="${1}" && shift
 	cd ${PIMDIR}
 	sudo chmod 755 \
-		$(dirname ${NOTES_MD}) ${NOTES_MD}
-#>>>		$(dirname ${NOTES_MD}) ${NOTES_MD} \
+		$(dirname ${NOTES_MD}) ${NOTES_MD} \
+		$(dirname ${IDEAS_MD}) ${IDEAS_MD}
 #>>>		$(dirname ${SALES_MD}) ${SALES_MD}
 	perl -e '
 		use strict;
@@ -4077,11 +4082,11 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == [@] ]]; then
 			task-export-drive || return 1
 			${EDITOR} -c "map ~ <ESC>:!${TW} todo<CR>" -c "map \\ <ESC>:!${TW} " \
-				${NOTES_MD}
-#>>>				${NOTES_MD} \
+				${NOTES_MD} \
+				${IDEAS_MD} \
 #>>>				${SALES_MD}
-			if [[ -s ${NOTES_MD} ]]; then
-#>>>			if [[ -s ${NOTES_MD} ]] &&
+			if [[ -s ${NOTES_MD} ]] &&
+			   [[ -s ${IDEAS_MD} ]]; then
 #>>>			   [[ -s ${SALES_MD} ]]; then
 				task-export-drive upload || return 1
 			fi
