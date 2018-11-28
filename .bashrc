@@ -2325,8 +2325,8 @@ function zpim-commit {
 		if [[ ${FILE} == zoho ]]; then
 			LIST=".zoho*"
 		fi
-		${GIT_ADD} ${FILE}* ${LIST}
-		${GIT_CMT} ${FILE}* ${LIST} --edit --message="Updated \"${FILE}\"."
+		${GIT_ADD} ${FILE}* ${LIST} "${@}"
+		${GIT_CMT} ${FILE}* ${LIST} "${@}" --edit --message="Updated \"${FILE}\"."
 		RETURN="${?}"
 	fi
 	if [[ ${RETURN} == 0 ]]; then
