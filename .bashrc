@@ -2482,6 +2482,8 @@ function task-export-calendar {
 		"c|export.personal:dHJlc29iaXMub3JnX2c4djBwa3RzbnQ4NGVvdHM4aGtpanRzanZnQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
 		"c|export.orion:dHJlc29iaXMub3JnX2FiZm9wc3UxdHZmNDRiYzBqZTdtZHFzNmNvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
 		"c|export.rachel:dHJlc29iaXMub3JnX3RoYTF1cjFnbzJpZDRlZGxkZHRnOW90YzlvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
+		"c|export.alt.gmail:Z2FyeS5iLmdlbmV0dEBnbWFpbC5jb20" \
+		"c|export.alt.noname:bm9hZGRyZXNzcmVxdWlyZWRAZ21haWwuY29t" \
 		${@}
 	${SED} -i \
 		-e "s/^(DTSTAMP[:]).+$/\119700101T000000Z/g" \
