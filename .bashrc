@@ -2550,29 +2550,26 @@ function task-export-drive-sync {
 function task-export {
 	declare FILE=
 	cd ${PIMDIR}
-#>>>
-	gtasks_export.pl purge "+Alerts" "+GTD"
-	gtasks_export.pl twexport "+Alerts"		"mind"	"project.isnt:_gtd"
-	return 0
-#>>>
 #>>>	gtasks_export.pl twimport "+Inbox"
-#>>>	gtasks_export.pl purge "+Inbox,-Todo,@agenda,@errand" "+GTD"
-	gtasks_export.pl purge "+GTD,+Inbox,-Todo,@agenda,@errand"
-	gtasks_export.pl twexport "+Notes"		"read"	"kind:notes"
-	gtasks_export.pl twexport "-Data"		"data"
-	gtasks_export.pl twexport "-Fail"		"fail"
-	gtasks_export.pl twexport "-Mark"		"mark"
-	gtasks_export.pl twexport "-Mind"		"mind"
+	gtasks_export.pl purge "+Inbox,@agenda,@errand"	"+GTD"
+#>>>	gtasks_export.pl twexport "+Alerts"		"mind"	"project.isnt:_gtd"
+	gtasks_export.pl twexport "+Notes"		"note"
+#>>>	gtasks_export.pl twexport "-Data"		"data"
+#>>>	gtasks_export.pl twexport "-Fail"		"fail"
+#>>>	gtasks_export.pl twexport "-Mark"		"mark"
+#>>>	gtasks_export.pl twexport "-Mind"		"mind"
 	gtasks_export.pl twexport "-Todo"		"todo"
 #>>>	for FILE in $(task reports 2>&1 | ${GREP} "[ ]Custom[ ][[]" | awk '{print $1;}'); do
 #>>>		gtasks_export.pl twexport ".${FILE}"	"${FILE}"
 #>>>	done
-	for FILE in $(task uda 2>&1 | ${GREP} "^area" | awk '{print $4;}' | tr ',' ' '); do
-		gtasks_export.pl twexport "=${FILE}"	"view"	"area:${FILE}"
-	done
-	for FILE in $(task _unique tags); do
-		gtasks_export.pl twexport "@${FILE}"	"view"	"tags:${FILE}"
-	done
+#>>>	for FILE in $(task uda 2>&1 | ${GREP} "^area" | awk '{print $4;}' | tr ',' ' '); do
+#>>>		gtasks_export.pl twexport "=${FILE}"	"view"	"area:${FILE}"
+#>>>	done
+#>>>	for FILE in $(task _unique tags); do
+#>>>		gtasks_export.pl twexport "@${FILE}"	"view"	"tags:${FILE}"
+#>>>	done
+	gtasks_export.pl twexport "@agenda"		"agenda"
+	gtasks_export.pl twexport "@errand"		"errand"
 	cd - >/dev/null
 	return 0
 }
