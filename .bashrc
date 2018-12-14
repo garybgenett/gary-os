@@ -3921,8 +3921,8 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		declare WORKUUID="$(task uuids project:_data -- /.status/)"
 #>>>		declare TODOUUID="$(task uuids project:_data -- /.today/)"
 		declare TODOUUID="${NOTES_MD}"
-		# color.active=white on green
-		declare ECHO_CLR="\e[1;37;42m"
+		# color.active=white on green -> blue instead, same as marker above
+		declare ECHO_CLR="\e[1;31;44m"
 		declare ECHO_DFL="\e[0m"
 		function _echo {
 			declare INDENT="1"
