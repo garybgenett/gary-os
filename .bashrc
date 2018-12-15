@@ -3941,7 +3941,9 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		}
 		function _task {
 			eval ${MARKER}
-			echo -en "[task ${@}]\n"
+			echo -en "\e[1;34m"
+			echo -en "[task ${@}]"
+			echo -en "\e[0;37m\n"
 			task \
 				rc._forcecolor=1 \
 				rc.verbose=nothing \
