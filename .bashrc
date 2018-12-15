@@ -3942,7 +3942,10 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		function _task {
 			eval ${MARKER}
 			echo -en "[task ${@}]\n"
-			task rc._forcecolor=1 "${@}" 2>&1
+			task \
+				rc._forcecolor=1 \
+				rc.verbose=nothing \
+				"${@}" 2>&1
 		}
 		function _task_parse {
 			declare TWUUID="${1}"; shift
@@ -4063,9 +4066,9 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			fi
 			(
 				for FILE in "${HEADER[@]}"; do
-					_echo					"10" "==" "${FILE}"
+					_echo					"3" "=>" "${FILE}"
 					_task					read +ACTIVE
-					eval ${MARKER}; _task_parse_cmd_bash	"${SOURCE}" "${FILE}"
+#>>>					eval ${MARKER}; _task_parse_cmd_bash	"${SOURCE}" "${FILE}"
 					eval $(_task_parse_cmd_bash		"${SOURCE}" "${FILE}")
 				done
 				eval ${MARKER}
