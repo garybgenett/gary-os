@@ -1281,7 +1281,10 @@ function git-logdir {
 function git-purge {
 	declare DIR="$(realpath "${PWD}")"
 	declare MEM_DIR="/dev/shm"
-	declare PURGE="$(${GIT_CMD} rev-parse "HEAD~$((${1}-1))")" && shift
+	declare PURGE="${1}" && shift
+	if [[ -z "$(echo -en "${PURGE}" | ${GREP} "[0-9a-f]{40}")" ]]; then
+		PURGE="$(${GIT_CMD} rev-parse "HEAD~$((${PURGE}-1))")"
+	fi
 	declare _HEAD="$(${GIT_CMD} rev-parse "HEAD")"
 	if [[ -z ${PURGE} ]] ||
 	   [[ -z ${_HEAD} ]] ||
