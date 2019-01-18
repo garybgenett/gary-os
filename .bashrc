@@ -697,6 +697,17 @@ function ldir {
 
 ########################################
 
+function ln-null {
+	declare FILE
+	find ./ -type l | while read -r FILE; do
+		if [[ ! -e ${FILE} ]]; then
+			echo -en "${FILE}\n"
+		fi
+	done | sort
+}
+
+########################################
+
 function letmeknow {
 	screen -X wall "$(
 		echo -en "[${?}] ["
@@ -2552,7 +2563,7 @@ function task-export-drive-sync {
 	${RCLONE_C} about ${GDRIVE_REMOTE}:
 	${LL} \
 		/.g/_data/zactive/_drive/_sync \
-		$(find -H -L /.g/_data/zactive/_drive/_sync -type l 2>/dev/null)
+		$(find -L /.g/_data/zactive/_drive/_sync -type l 2>/dev/null)
 	return 0
 }
 
