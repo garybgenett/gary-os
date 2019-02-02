@@ -2550,6 +2550,7 @@ function task-export-drive {
 
 function task-export-drive-sync {
 	${RCLONE_U} \
+		--filter="- /_share/" \
 		--filter="- /_sync/" \
 		\
 		${GDRIVE_REMOTE}:/ \
