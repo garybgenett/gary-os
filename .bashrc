@@ -2788,8 +2788,10 @@ function task-export-text {
 			"travel"	=> "cyan",
 			"work"		=> "brown",
 			"work-em"	=> "brown",
+			"work.cn"	=> "brown",
 			"work.em"	=> "brown",
 			"work.f5"	=> "brown",
+			"work.jb"	=> "brown",
 			"writing"	=> "magenta",
 		};
 		my $udas = [ qx(task udas) ];
