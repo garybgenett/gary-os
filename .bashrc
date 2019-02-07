@@ -666,9 +666,17 @@ function git-patch {
 ########################################
 
 function git-perms {
-	${GIT_CMD} diff ${GIT_DIF} ${DIFF_OPTS} -R "${@}" |
-		${GREP} "^(diff|(old|new) mode)" |
-		${GIT_CMD} apply
+	if [[ -n ${@} ]]; then
+		declare USERNAME="${1}" && shift
+		chown -R ${USERNAME}:plastic ./
+		find ./ -type d -exec chmod 755 {} \;
+		find ./ -type f -exec chmod 644 {} \;
+		chmod 755 Makefile ${@}
+	else
+		${GIT_CMD} diff ${GIT_DIF} ${DIFF_OPTS} -R "${@}" |
+			${GREP} "^(diff|(old|new) mode)" |
+			${GIT_CMD} apply
+	fi
 	${GIT_STS}
 }
 
