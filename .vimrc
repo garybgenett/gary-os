@@ -164,8 +164,9 @@ map! <C-J> <C-O>/+VIM+<CR><C-O>c5l
 " convert tab-delimited file to properly formatted csv
 map <F5> <ESC>:%s/^/\"/g<CR>:%s/\t/\"\,\"/g<CR>:%s/$/\"/g<CR>
 
-" (re)set folding, pasting and wrapping
-map <F6> <ESC>:set foldlevel=1<CR>
+" (re)set folding, columns, pasting and wrapping
+map <F5> <ESC>:set foldlevel=1<CR>
+map <F6> <ESC>:set columns=80<CR>
 map <F7> <ESC>:set invpaste<CR>
 map <F8> <ESC>:set invwrap<CR>
 
