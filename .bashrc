@@ -2297,7 +2297,8 @@ function vdiff {
 		declare FOLLOW=
 		declare FILE="${#}"
 		(( ${FILE} > 0 )) && [[ -f ${!FILE} ]] && FOLLOW="--follow"
-		${GIT_CMD} log ${GIT_FMT} ${DIFF} ${FOLLOW} "${@}" >${VDIFF} 2>&1
+		echo -en "# vim: filetype=git\n"			>${VDIFF} 2>&1
+		${GIT_CMD} log ${GIT_FMT} ${DIFF} ${FOLLOW} "${@}"	>>${VDIFF} 2>&1
 	else
 		SEARCH="+/^[-+]"
 		diff ${DIFF_OPTS} "${@}" >${VDIFF}
