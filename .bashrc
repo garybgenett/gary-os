@@ -2286,8 +2286,8 @@ function vdiff {
 		[[ -z ${1} ]]		&& TREE="HEAD"			&& shift
 		[[ ${1} == -c ]]	&& TREE="--cached HEAD"		&& shift
 		[[ ${1} == -i ]]	&& TREE=""			&& shift
-		echo "diff" >${VDIFF}
-		${GIT_CMD} diff ${GIT_DIF} ${DIFF_OPTS} ${TREE} "${@}" >>${VDIFF} 2>&1
+		echo -en "# vim: filetype=git\n"			>${VDIFF} 2>&1
+		${GIT_CMD} diff ${GIT_DIF} ${DIFF_OPTS} ${TREE} "${@}"	>>${VDIFF} 2>&1
 	elif [[ ${1} == -l ]] ||
 	     [[ ${1} == -s ]]; then
 		declare DIFF="${DIFF_OPTS}"
@@ -2301,7 +2301,8 @@ function vdiff {
 		${GIT_CMD} log ${GIT_FMT} ${DIFF} ${FOLLOW} "${@}"	>>${VDIFF} 2>&1
 	else
 		SEARCH="+/^[-+]"
-		diff ${DIFF_OPTS} "${@}" >${VDIFF}
+		echo -en "# vim: filetype=diff\n"	>${VDIFF} 2>&1
+		diff ${DIFF_OPTS} "${@}"		>>${VDIFF} 2>&1
 	fi
 	${VIEW} ${SEARCH} ${VDIFF}
 	${RM} ${VDIFF} >/dev/null 2>&1
