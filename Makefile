@@ -10,6 +10,12 @@ override S	?= $(CURDIR)/sources
 override O	?= $(CURDIR)/build
 override L	?= metro
 
+########################################
+
+.NOTPARALLEL:
+.POSIX:
+.SUFFIXES:
+
 ################################################################################
 
 override TITLE	:= \e[1;32m
@@ -33,7 +39,7 @@ usage:
 	@$(ECHO) "$(STATE)This Makefile is a simple wrapper to the \"_system\" script, and has just a few targets:$(RESET)\n"
 	@$(ECHO) "\n"
 	@$(PRINTF) "Update Current System:"		"make update"
-	@$(PRINTF) "Information Lookup (Package Data):"	"make {package}"
+	@$(PRINTF) "Information Lookup (Package Data):"	"make {package_list}"
 	@$(ECHO) "\n"
 	@$(PRINTF) "Chroot Build (Initial):"		"make init"
 	@$(PRINTF) "Chroot Build (Update Only):"	"make doit"
@@ -64,7 +70,13 @@ usage:
 
 .DEFAULT_GOAL := usage
 .DEFAULT:
-	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(I)/gentoo/_system -l "$(@)"
+	@$(MARKER)
+	@$(ECHO) "$(NOTES)>>> CURRENT SYSTEM PACKAGE LOOKUP: $(@) <<<$(RESET)\n"
+	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(I)/gentoo/_system -q -l "$(@)"
+	@$(ECHO) "\n"
+	@$(ECHO) "$(NOTES)>>> CHROOT SYSTEM PACKAGE LOOKUP: $(@) <<<$(RESET)\n"
+	SETDIR="$(I)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(L)" $(I)/gentoo/_system -q $(CHROOT) -l "$(@)"
+	@$(MARKER)
 
 ################################################################################
 
