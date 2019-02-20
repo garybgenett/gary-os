@@ -135,6 +135,7 @@ declare FUNTOO="${FUNTOO:-$(tail -n1 ${SETDIR}/${FUNDIR}/funtoo)}"
 declare KERNEL="${KERNEL:-$(${SED} -n "s|^.+/gentoo-sources:(.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG})}"
 declare FUNKIT="funtoo.kits"
 
+declare CMTFIL="_commit"
 declare COMMIT=
 for FILE in \
 	.setup	\
@@ -148,7 +149,7 @@ done
 
 ########################################
 
-#>>>athlon64 build: TORDIR=/.g/_data/_builds/_gentoo.amd64 _CPU="1" ESUB="amd64-k8" GARC="athlon64" GSUB="athlon64" ${HOME}/setup/gentoo/_system -t -0
+#>>>athlon64 build: OUTDIR="/.g/_data/_builds/_gentoo.amd64" _CPU="1" ESUB="amd64-k8" GARC="athlon64" GSUB="athlon64" ${HOME}/setup/gentoo/_system -x -0
 
 #OPTIONS[_CPU EARC ESUB GARC GSUB GOPT]
 declare _CPU="${_CPU:-}"
@@ -487,8 +488,9 @@ fi
 ########################################
 
 if [[ ${1} == -l ]]; then
+#>>>	shift
 	if [[ -n "${TOOR}" ]]; then
-		safe_env ${MYSELF} ${QUIET} \"${@}\"
+		safe_env ${MYSELF} ${QUIET} "${@}"
 		exit 0
 	fi
 	shift
@@ -500,7 +502,7 @@ if [[ ${1} == -l ]]; then
 		FILE="$(${LS} -d ${REPDIR}/kits/*/*/${1} 2>/dev/null)"
 		NEXT="$(echo "${FILE}" | ${SED} "s|^${REPDIR}/kits/.+[/]([^/]+[/][^/]+)$|\1|g")"
 		if [[ -z ${FILE} ]]; then
-			safe_env emerge --search \"${@}\"
+			safe_env emerge --search "${@}"
 		else
 			echo -en "https://packages.gentoo.org/packages/${NEXT}\n"
 			echo -en "https://gitweb.gentoo.org/repo/gentoo.git/log/${NEXT}\n"
@@ -518,6 +520,7 @@ fi
 ########################################
 
 if [[ ${1} == -o ]]; then
+#>>>	shift
 	if [[ -n "${TOOR}" ]]; then
 		FILE="${SETDIR}/${FUNDIR}"
 	else	FILE="${ETCDIR}"
@@ -527,20 +530,20 @@ if [[ ${1} == -o ]]; then
 	if [[ -n "${TOOR}" ]]; then
 		${MKDIR}	${TARGET}${ETCDIR}/${OVLDIR}/${NEXT}							|| exit 1
 		${RSYNC_U}	${SETDIR}/${FUNDIR}/${OVLDIR}/${FILE}/		${TARGET}${ETCDIR}/${OVLDIR}/${FILE}	|| exit 1
-		safe_env ${MYSELF} ${QUIET} \"${@}\"
+		safe_env ${MYSELF} ${QUIET} "${@}"
 		${RSYNC_U}	${TARGET}${ETCDIR}/${OVLDIR}/${FILE}/Manifest	${SETDIR}/${FUNDIR}/${OVLDIR}/${FILE}/	|| exit 1
-		exit 0
+	else
+		ebuild		${ETCDIR}/${OVLDIR}/${FILE}/*.ebuild digest						|| exit 1
 	fi
-	shift
-	ebuild			${ETCDIR}/${OVLDIR}/${FILE}/*.ebuild digest						|| exit 1
 	exit 0
 fi
 
 ########################################
 
 if [[ ${1} == -p ]]; then
+#>>>	shift
 	if [[ -n "${TOOR}" ]]; then
-		safe_env ${MYSELF} ${QUIET} \"${@}\"
+		safe_env ${MYSELF} ${QUIET} "${@}"
 		exit 0
 	fi
 	shift
@@ -588,7 +591,7 @@ if [[ ${1} == -r ]]; then
 	else ${RSYNC_U} --copy-links ${HOME}/.bashrc		${TARGET}${HOMELY}/				|| exit 1
 	fi
 	${MKDIR}						${TARGET}${ARCDIR}				|| exit 1
-	if [[ -n "${COMMIT}" ]]; then echo -en "${COMMIT}"	>${TARGET}${ARCDIR}/_commit			|| exit 1; fi
+	if [[ -n "${COMMIT}" ]]; then echo -en "${COMMIT}"	>${TARGET}${ARCDIR}/${CMTFIL}			|| exit 1; fi
 	${RSYNC_U} ${SETDIR}/${FUNDIR}/				${TARGET}${ARCDIR}/${FUNDIR}			|| exit 1
 	${RSYNC_U} ${SETDIR}/${LINDIR}/				${TARGET}${ARCDIR}/${LINDIR}			|| exit 1
 	${RSYNC_U} ${SETDIR}/${FUNDIR}/[a-z_]*			${TARGET}${ETCDIR}/				|| exit 1
@@ -841,10 +844,8 @@ if [[ ${1} == -u ]]; then
 ########################################
 
 elif [[ ${1} != -! ]]; then
-	if [[ -z ${1} ]]; then
-		print_info update
-	fi
 	if [[ ${1} != -f ]]; then
+		print_info update
 		declare GIT="$(which git)"
 #>>>		expect_wrapper emerge --ask=n --verbose --sync				|| exit 1
 		expect_wrapper ego sync							|| exit 1
