@@ -60,12 +60,12 @@ declare WRKDIR="/var/tmp/portage"
 
 ########################################
 
-#VARIABLES[TARGET TOOR _PKG _MET _NEW]
+#VARIABLES[TARGET TOOR _PKG _NEW _MET]
 declare TARGET="${BLDDIR}"
 declare TOOR=
 declare _PKG="${PKGBLD}"
-declare _MET=
 declare _NEW=
+declare _MET=
 
 if [[ ${1} == -d ]]; then
 	TARGET="${BLDDIR}"
@@ -89,13 +89,16 @@ if [[ ${1} == -m ]]; then
 	TARGET="${METDIR}"
 	TOOR="${1}"
 	_PKG="${PKGMET}"
-	_MET="1"
 	shift
 fi
+
 if [[ ${1} == -n ]]; then
 	TOOR="${TOOR} ${1}"
 	_NEW="1"
 	shift
+fi
+if [[ ${_PKG} == "metro" ]]; then
+	_MET="1"
 fi
 
 ########################################
@@ -768,8 +771,8 @@ if [[ ${1} == -w ]]; then
 		${ETCDIR}/make.conf	\
 		${ETCDIR}/package.*
 	do
-		if [[ -n ${_MET} ]]; then ${SED} -i "s|^[#][{]MET[}][ ](.+)$|\1|g" ${FILE}; fi
 		if [[ -n ${_NEW} ]]; then ${SED} -i "s|^[#][{]NEW[}][ ](.+)$|\1|g" ${FILE}; fi
+		if [[ -n ${_MET} ]]; then ${SED} -i "s|^[#][{]MET[}][ ](.+)$|\1|g" ${FILE}; fi
 		if [[ -n ${_CPU} ]]; then ${SED} -i "s|^[#][{]CPU[}][ ](.+)$|\1|g" ${FILE}; fi
 	done
 	if [[ -n ${_CPU} ]]; then
