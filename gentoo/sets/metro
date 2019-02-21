@@ -85,7 +85,6 @@ net-misc/ifenslave
 net-misc/iputils
 net-misc/networkmanager
 net-misc/vconfig
-net-misc/wicd
 net-wireless/wireless-tools
 net-wireless/wpa_supplicant
 sys-apps/ethtool
