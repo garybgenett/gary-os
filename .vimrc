@@ -161,6 +161,9 @@ map z2 <ESC>:set foldlevel=0<CR>/\[work\]<CR>
 map  <C-J> <ESC>/+VIM+<CR>c5l
 map! <C-J> <C-O>/+VIM+<CR><C-O>c5l
 
+" turn swapfile off
+map <F3> <ESC>:set noswapfile<CR>
+
 " convert tab-delimited file to properly formatted csv
 map <F4> <ESC>:%s/^/\"/g<CR>:%s/\t/\"\,\"/g<CR>:%s/$/\"/g<CR>
 
