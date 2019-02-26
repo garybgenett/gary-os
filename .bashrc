@@ -671,7 +671,7 @@ function git-perms {
 		chown -R ${USERNAME}:plastic ./
 		find ./ -type d -exec chmod 755 {} \;
 		find ./ -type f -exec chmod 644 {} \;
-		chmod 755 Makefile ${@}
+		chmod 755 $(find ./ | ${GREP} "Makefile") ${@}
 	else
 		${GIT_CMD} diff ${GIT_DIF} ${DIFF_OPTS} -R "${@}" |
 			${GREP} "^(diff|(old|new) mode)" |
