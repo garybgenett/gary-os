@@ -162,7 +162,7 @@ map  <C-J> <ESC>/+VIM+<CR>c5l
 map! <C-J> <C-O>/+VIM+<CR><C-O>c5l
 
 " convert tab-delimited file to properly formatted csv
-map <F5> <ESC>:%s/^/\"/g<CR>:%s/\t/\"\,\"/g<CR>:%s/$/\"/g<CR>
+map <F4> <ESC>:%s/^/\"/g<CR>:%s/\t/\"\,\"/g<CR>:%s/$/\"/g<CR>
 
 " (re)set folding, columns, pasting and wrapping
 map <F5> <ESC>:set foldlevel=1<CR>
