@@ -3263,7 +3263,7 @@ function task-journal {
 		DATE="${1}"
 		shift
 	fi
-	declare UUIDS="$(task uuids project:_journal -- /${DATE}/)"
+	declare UUIDS="$(task uuids project:_journal description.startswith:${DATE})"
 	declare UUID
 	if [[ -z ${UUIDS} ]]; then
 		task add project:_journal kind:notes area:writing -- "${DATE} $(date --date="${DATE}" +%a) {${@}}"
