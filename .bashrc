@@ -1796,13 +1796,13 @@ function mount-robust {
 	declare DEV="${1}"
 	declare DIR="${2}"
 	declare LUK="/dev/mapper/$(basename ${DEV})_crypt"
-	declare PNT="$(df ${DEV} ${LUK} 2>&1 | ${GREP} "^(${DEV}|${LUK})" | ${SED} "s/^.+[[:space:]]//g")"
+	declare PNT="$(mount | ${SED} -n "s:^(${DEV}|${LUK})[ ]on[ ]([^ ]+)[ ].*$:\2:gp" | head -n1)"
 	if ${UN}; then
 		if cryptsetup isLuks ${DEV}; then
 			DEV="${LUK}"
 		fi
 		${UNMOUNT} ${DEV}
-		if [[ -n "$(df ${DEV} 2>/dev/null | ${GREP} "${DEV}")" ]]; then
+		if [[ -n "$(mount | ${GREP} "^${DEV}")" ]]; then
 			return 1
 		fi
 		if [[ -b ${LUK} ]]; then
@@ -1815,7 +1815,8 @@ function mount-robust {
 			echo "Root Filesystem: ${DEV}"
 		fi
 		if [[ ${PNT} == ${DIR} ]] ||
-		   [[ -n $(mount 2>&1 | ${GREP} "^${PNT} on ${DIR}.+bind[)]$") ]]; then
+		   [[ -n "$(mount | ${GREP} "^${PNT}[ ]on[ ]${DIR}" | tail -n1)" ]] ||
+		   [[ -n "$(mount | ${GREP} "^${DEV}[ ]on[ ]${DIR}" | tail -n1)" ]]; then
 			echo "Already Mounted: ${DEV}"
 			return 0
 		fi
