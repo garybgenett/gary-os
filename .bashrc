@@ -1785,9 +1785,9 @@ function mount-robust {
 		UN="true"
 		shift
 	fi
-	declare CHK_EXT="fsck -t ext4		-V -pC"
-	declare CHK_NTF="fsck -t ntfs-3g	-V"
-	declare CHK_FAT="fsck -t vfat		-V"
+	declare CHK_EXT="fsck -M -t ext4	-V -pC"
+	declare CHK_NTF="fsck -M -t ntfs-3g	-V"
+	declare CHK_FAT="fsck -M -t vfat	-V"
 	declare MNT_EXT="mount -v -t ext4	-o ${RO}relatime,errors=remount-ro"
 	declare MNT_NTF="mount -v -t ntfs-3g	-o ${RO}relatime,errors=remount-ro,shortname=mixed"
 	declare MNT_FAT="mount -v -t vfat	-o ${RO}relatime,errors=remount-ro,shortname=mixed"
@@ -1796,7 +1796,7 @@ function mount-robust {
 	declare DEV="${1}"
 	declare DIR="${2}"
 	declare LUK="/dev/mapper/$(basename ${DEV})_crypt"
-	declare PNT="$(df ${DEV} 2>&1 | ${GREP} "^${DEV}" | ${SED} "s/^.+[[:space:]]//g")"
+	declare PNT="$(df ${DEV} ${LUK} 2>&1 | ${GREP} "^(${DEV}|${LUK})" | ${SED} "s/^.+[[:space:]]//g")"
 	if ${UN}; then
 		if cryptsetup isLuks ${DEV}; then
 			DEV="${LUK}"
