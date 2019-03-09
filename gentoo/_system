@@ -525,12 +525,15 @@ if [[ ${1} == -o ]]; then
 	FILE="$(${LS} -d ${FILE}/${OVLDIR}/*/${2} | ${SED} "s|^${FILE}/${OVLDIR}/||g")"
 	NEXT="$(dirname ${FILE})"
 	if ${DO_CHROOT}; then
-		${MKDIR}	${TARGET}${ETCDIR}/${OVLDIR}/${NEXT}							|| exit 1
-		${RSYNC_U}	${SETDIR}/${FUNDIR}/${OVLDIR}/${FILE}/		${TARGET}${ETCDIR}/${OVLDIR}/${FILE}	|| exit 1
-		safe_env ${MYSELF} ${QUIET_OPT} ${TOOR} "${@}"								|| exit 1
-		${RSYNC_U}	${TARGET}${ETCDIR}/${OVLDIR}/${FILE}/Manifest	${SETDIR}/${FUNDIR}/${OVLDIR}/${FILE}/	|| exit 1
+		${MKDIR}	${TARGET}${ETCDIR}/${OVLDIR}/${NEXT}								|| exit 1
+		${RSYNC_U}	${TARGET}${REPDIR}/kits/*/${FILE}/		${SETDIR}/${FUNDIR}/${OVLDIR}/${FILE}.src	|| exit 1
+		${RSYNC_U}	${SETDIR}/${FUNDIR}/${OVLDIR}/${FILE}/		${TARGET}${ETCDIR}/${OVLDIR}/${FILE}		|| exit 1
+		safe_env ${MYSELF} ${QUIET_OPT} ${TOOR} "${@}"									|| exit 1
+		${RSYNC_U}	${TARGET}${ETCDIR}/${OVLDIR}/${FILE}/Manifest	${SETDIR}/${FUNDIR}/${OVLDIR}/${FILE}/		|| exit 1
+		${RSYNC_U}	${TARGET}${ETCDIR}/${OVLDIR}/.review.txt	${SETDIR}/${FUNDIR}/${OVLDIR}/			|| exit 1
 	else
-		ebuild		${ETCDIR}/${OVLDIR}/${FILE}/*.ebuild digest						|| exit 1
+		ebuild		${ETCDIR}/${OVLDIR}/${FILE}/*.ebuild digest							|| exit 1
+		(cd		${ETCDIR}/${OVLDIR} && ./.review)								|| exit 1
 	fi
 	exit 0
 fi
