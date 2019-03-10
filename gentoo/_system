@@ -525,6 +525,8 @@ if [[ ${1} == -o ]]; then
 	FILE="$(${LS} -d ${FILE}/${OVLDIR}/*/${2} | ${SED} "s|^${FILE}/${OVLDIR}/||g")"
 	NEXT="$(dirname ${FILE})"
 	if ${DO_CHROOT}; then
+#>>>		safe_env ${MYSELF} ${QUIET_OPT} ${TOOR} -r									|| exit 1
+		${_SELF} ${QUIET_OPT} ${TOOR} -r										|| exit 1
 		${MKDIR}	${TARGET}${ETCDIR}/${OVLDIR}/${NEXT}								|| exit 1
 		${RSYNC_U}	${TARGET}${REPDIR}/kits/*/${FILE}/		${SETDIR}/${FUNDIR}/${OVLDIR}/${FILE}.src	|| exit 1
 		${RSYNC_U}	${SETDIR}/${FUNDIR}/${OVLDIR}/${FILE}/		${TARGET}${ETCDIR}/${OVLDIR}/${FILE}		|| exit 1
