@@ -7,8 +7,14 @@ declare LENGTH="120"
 ########################################
 
 declare RESET="false"
+declare RVIEW="false"
 if [[ ${1} == -r ]]; then
 	RESET="true"
+	shift
+fi
+if [[ ${1} == -v ]]; then
+	RVIEW="true"
+	shift
 fi
 
 ################################################################################
@@ -67,10 +73,14 @@ for FILE in $(
 	${LS} -R ./${FILE}							2>&1
 done >${0}.txt
 
-if ${RESET}; then
-	read RESET
+########################################
+
+if ${RESET} && ${RVIEW}; then
+	read FILE
 fi
-#>>>${VIEW} +/^diff ${0}.txt
+if ${RVIEW}; then
+	${VIEW} +/^diff ${0}.txt
+fi
 
 ################################################################################
 # end of file
