@@ -3235,6 +3235,10 @@ function task-export-text {
 			unlink(${ENV{PIMDIR}} . "/.composed") || warn();
 		};
 	' -- "${NAME}" "${@}" || return 1
+	echo -en "\n"		>>tasks.md
+	echo -en "<!--\n"	>>tasks.md
+	task-depends +BLOCKED	>>tasks.md
+	echo -en "-->\n"	>>tasks.md
 	${GREP} "[-][-][ ]TASK" tasks.md
 	${SED} -n "s/^#+ //gp" tasks.md |
 		sort |
