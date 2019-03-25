@@ -115,6 +115,10 @@ if [[ "${UNAME}" == "Darwin" ]]; then
 	export PATH="${PATH}:/_ports/bin"
 	export PATH="${PATH}:/_ports/libexec/gnubin"
 fi
+if [[ -d /data/data/com.termux/files ]]; then
+	export PATH="${PATH}:/data/data/com.termux/files/usr/bin"
+	export PATH="${PATH}:/data/data/com.termux/files/usr/bin/applets"
+fi
 export PATH="${PATH}:/usr/local/bin"
 export PATH="${PATH}:/usr/local/sbin"
 export PATH="${PATH}:/usr/bin"
@@ -173,6 +177,10 @@ ${PROMPT_KEY}[ ${TERM} | ${USER}@${HOSTNAME/%.*} | ${PWD/#$HOME/~} ]\
 if { [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; } &&
    { [[ -z ${PROMPT} ]] || [[ ${PROMPT} == \$P\$G ]]; }; then
 	export PROMPT="cygwin"
+fi
+if [[ -d /data/data/com.termux/files ]] &&
+   [[ -z ${PROMPT} ]]; then
+	export PROMPT="android"
 fi
 
 if [[ ${PROMPT} == simple ]]; then
@@ -258,7 +266,8 @@ export REALTIME="sudo -E nice -n -20 ionice --class 1 --classdata 0"	; alias rea
 export REALTIME="sudo -E nice -n -20 ionice -c 1 -n 0"			; alias realtime="${REALTIME}"
 
 if { [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; } ||
-   [[ "${UNAME}" == "Darwin" ]]; then
+   [[ "${UNAME}" == "Darwin" ]] ||
+   [[ -d /data/data/com.termux/files ]]; then
 	export NICELY=
 	export REALTIME=
 fi
@@ -2107,6 +2116,7 @@ function shell {
 	declare LOG="root"
 	declare OPTS
 	if { [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; } ||
+	   [[ -d /data/data/com.termux/files ]] ||
 	   (( $(id -u) == 0 )); then
 		SSH="${SSH/#sudo -H /}"
 	fi
