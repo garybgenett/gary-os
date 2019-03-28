@@ -2292,10 +2292,15 @@ function sync-dir {
 
 function vdiff {
 	declare VDIFF="$(mktemp /tmp/vdiff.XXX 2>/dev/null)"
+	declare CATIT="false"
+	if [[ ${1} == -c ]]; then
+		CATIT="true"
+		shift
+	fi
 	declare SEARCH=
 	if [[ ${1} == -g ]]; then
 		shift
-		SEARCH="+/^diff"
+		SEARCH="^diff"
 		declare TREE=
 		[[ -z ${1} ]]		&& TREE="HEAD"			&& shift
 		[[ ${1} == -c ]]	&& TREE="--cached HEAD"		&& shift
@@ -2307,18 +2312,22 @@ function vdiff {
 		declare DIFF="${DIFF_OPTS}"
 		[[ ${1} == -s ]] && DIFF=
 		shift
-		SEARCH="+/^commit"
+		SEARCH="^commit"
 		declare FOLLOW=
 		declare FILE="${#}"
 		(( ${FILE} > 0 )) && [[ -f ${!FILE} ]] && FOLLOW="--follow"
 		echo -en "# vim: filetype=git\n"			>${VDIFF} 2>&1
 		${GIT_CMD} log ${GIT_FMT} ${DIFF} ${FOLLOW} "${@}"	>>${VDIFF} 2>&1
 	else
-		SEARCH="+/^[-+]"
+		SEARCH="^[-+]"
 		echo -en "# vim: filetype=diff\n"	>${VDIFF} 2>&1
 		diff ${DIFF_OPTS} "${@}"		>>${VDIFF} 2>&1
 	fi
-	${VIEW} ${SEARCH} ${VDIFF}
+	if ${CATIT}; then
+		cat ${VDIFF} | ${GREP} "${SEARCH}"
+	else
+		${VIEW} "+/${SEARCH}" ${VDIFF}
+	fi
 	${RM} ${VDIFF} >/dev/null 2>&1
 	return 0
 }
