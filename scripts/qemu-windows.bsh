@@ -4,7 +4,7 @@ source ${HOME}/.bashrc
 
 declare QNUM="8"
 declare QMEM="$((1024*4))"
-declare FILE="windows.img"
+declare QFIL="windows.img"
 declare QSYS="${1}"			; shift
 
 declare NC="nc -q 1 127.0.0.1 999${QNUM}"
@@ -25,7 +25,7 @@ if [[ ${QSYS} == -d ]]; then
 	QSYS="windows_10"
 	qemu-img create -f qcow2 -o compat=1.1						${QSYS}.0_install.qcow2 100G
 	qemu-img create -f qcow2 -o compat=1.1,backing_file=${QSYS}.0_install.qcow2	${QSYS}.qcow2
-	${LN} ${QSYS}.0_install.qcow2 ${FILE}
+	${LN} ${QSYS}.0_install.qcow2 ${QFIL}
 #>>>	for QSYS in ${QSYS}*; do
 #>>>		echo -en "\n"
 #>>>		qemu-img info ${QSYS}
@@ -74,7 +74,7 @@ fi
 #>>>	-cdrom /.g/_data/source/microsoft/en_windows_10_*_x64_*.iso \
 #>>>	-boot d \
 
-exec qemu.bsh "${QNUM}" "${QMEM}" "${FILE}" "${QSYS}" \
+exec qemu.bsh "${QNUM}" "${QMEM}" "${QFIL}" "${QSYS}" \
 	-rtc base=localtime,clock=host \
 	-device usb-host,bus=xhci0.0,vendorid=0x03f0,productid=0x5a2a \
 	-device usb-host,bus=xhci0.0,vendorid=0x03f0,productid=0x4605 \
