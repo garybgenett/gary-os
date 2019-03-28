@@ -4,22 +4,22 @@ source ${HOME}/.bashrc
 
 declare QNUM="6"
 declare QMEM="$((1024*4))"
-declare FILE="${1}"			; shift
+declare QFIL="${1}"			; shift
 declare QSYS="${1}"			; shift
 
 ########################################
 
 declare QOPT=
-if [[ -n $(file -L ${FILE} 2>/dev/null | ${GREP} "Linux[ ]kernel[ ].+[ ]boot[ ]executable") ]]; then
-	QOPT="-kernel ${FILE}"
-	if [[ -n $(file -L ${FILE/%.kernel}.initrd 2>/dev/null | ${GREP} "(XZ|gzip)[ ]compressed[ ]data") ]]; then
-		QOPT+=" "; QOPT+="-initrd ${FILE/%.kernel}.initrd"
+if [[ -n $(file -L ${QFIL} 2>/dev/null | ${GREP} "Linux[ ]kernel[ ].+[ ]boot[ ]executable") ]]; then
+	QOPT="-kernel ${QFIL}"
+	if [[ -n $(file -L ${QFIL/%.kernel}.initrd 2>/dev/null | ${GREP} "(XZ|gzip)[ ]compressed[ ]data") ]]; then
+		QOPT+=" "; QOPT+="-initrd ${QFIL/%.kernel}.initrd"
 	fi
-elif [[ -n $(file -L ${FILE} 2>/dev/null | ${GREP} "DOS[/]MBR[ ]boot[ ]sector") ]]; then
-	QOPT="-drive id=drive0,if=none,file=${FILE}"
+elif [[ -n $(file -L ${QFIL} 2>/dev/null | ${GREP} "DOS[/]MBR[ ]boot[ ]sector") ]]; then
+	QOPT="-drive id=drive0,if=none,file=${QFIL}"
 	QOPT+=" "; QOPT+="-device ide-cd,drive=drive0,bus=ide.1,bootindex=0"
 else
-	QOPT="-drive id=drive0,if=none,file=${FILE}"
+	QOPT="-drive id=drive0,if=none,file=${QFIL}"
 	QOPT+=" "; QOPT+="-device ide-hd,drive=drive0,bus=ide.0,bootindex=0"
 fi
 
