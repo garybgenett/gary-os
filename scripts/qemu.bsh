@@ -4,7 +4,7 @@ source ${HOME}/.bashrc
 
 declare QNUM="${1}"			; shift
 declare QMEM="${1}"			; shift
-declare FILE="${1}"			; shift
+declare QFIL="${1}"			; shift
 declare QSYS="${1}"			; shift
 
 ################################################################################
@@ -41,7 +41,14 @@ fi
 
 ########################################
 
-declare QOUT=
+declare QNAM=
+if [[ -n ${QFIL} ]]; then
+	QNAM="$(basename ${QFIL})"
+else
+	QNAM="null"
+fi
+declare QOUT="/tmp/qemu.${QNAM}"
+
 declare QDSK=
 declare QMCH=
 declare QVDA=
@@ -49,6 +56,7 @@ declare QUSB=
 declare QNET=
 
 declare I=
+declare T=
 
 ################################################################################
 
@@ -67,38 +75,38 @@ export QEMU_AUDIO_DRV="alsa"
 
 ########################################
 
-I="${FILE}"
-I+=" "; I+="/.g/_data/_systems/qemu/${FILE}"
-I+=" "; I+="/.g/_data/_target/iso/${FILE}"
+I="${QFIL}"
+I+=" /.g/_data/_systems/qemu/${QFIL}"
+I+=" /.g/_data/_target/iso/${QFIL}"
 
 I="$(find ${I} 2>/dev/null | sort -n | tail -n1)"
 
 if [[ -n $(file -L ${I} 2>/dev/null | ${GREP} "DOS[/]MBR[ ]boot[ ]sector") ]]; then
 	QOUT="${I}.qemu"
 	QDSK="-drive id=cdrom0,if=none,file=${I}"
-	QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ide.1,bootindex=1"
+	QDSK+= "-device ide-cd,drive=cdrom0,bus=ide.1,bootindex=1"
 elif [[ -n ${I} ]]; then
 	QOUT="${I}.qemu"
 	QDSK="-drive id=disk0,if=none,file=${I}"
-	QDSK+=" "; QDSK+="-device ide-hd,drive=disk0,bus=ide.0,bootindex=2"
-	QDSK+=" "; QDSK+="-drive id=cdrom0,if=none"
-	QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ide.1,bootindex=1"
+	QDSK+=" -device ide-hd,drive=disk0,bus=ide.0,bootindex=2"
+	QDSK+=" -drive id=cdrom0,if=none"
+	QDSK+=" -device ide-cd,drive=cdrom0,bus=ide.1,bootindex=1"
 else
 	QOUT="/tmp/qemu.${QNUM}"
-	QDSK="-drive id=cdrom0,if=none"
-	QDSK+=" "; QDSK+="-device ide-cd,drive=cdrom0,bus=ide.1,bootindex=1"
+	QDSK=" -drive id=cdrom0,if=none"
+	QDSK+=" -device ide-cd,drive=cdrom0,bus=ide.1,bootindex=1"
 fi
 
 ########################################
 
 if ${ROOT}; then
 	QMCH="-machine type=pc,accel=kvm"
-	QMCH+=" "; QMCH+="-enable-kvm"
-#>>>	QMCH+=" "; QMCH+="-cpu host"
-	QMCH+=" "; QMCH+="-cpu qemu64"
+	QMCH+=" -enable-kvm"
+#>>>	QMCH+=" -cpu host"
+	QMCH+=" -cpu qemu64"
 else
 	QMCH="-machine type=pc"
-	QMCH+=" "; QMCH+="-cpu qemu64"
+	QMCH+=" -cpu qemu64"
 fi
 
 ########################################
@@ -110,18 +118,18 @@ fi
 # SPICE Device: com.redhat.spice.0
 
 QVDA="-device virtio-serial,id=virtio-serial0"
-QVDA+=" "; QVDA+="-chardev spicevmc,id=spicevmc0,name=vdagent"
-QVDA+=" "; QVDA+="-device virtserialport,chardev=spicevmc0,bus=virtio-serial0.0,nr=1,name=com.redhat.spice.0"
+QVDA+=" -chardev spicevmc,id=spicevmc0,name=vdagent"
+QVDA+=" -device virtserialport,chardev=spicevmc0,bus=virtio-serial0.0,nr=1,name=com.redhat.spice.0"
 
 ########################################
 
 # http://www.kraxel.org/cgit/qemu/tree/docs/usb2.txt
 
 QUSB="-usb"
-QUSB+=" "; QUSB+="-device usb-mouse,bus=usb-bus.0"
-QUSB+=" "; QUSB+="-device usb-tablet,bus=usb-bus.0"
+QUSB+=" -device usb-mouse,bus=usb-bus.0"
+QUSB+=" -device usb-tablet,bus=usb-bus.0"
 
-QUSB+=" "; QUSB+="-device nec-usb-xhci,id=xhci0"
+QUSB+=" -device nec-usb-xhci,id=xhci0"
 
 ########################################
 
@@ -137,28 +145,27 @@ QNET+=",hostfwd=tcp::443${QNUM}-10.0.${QNUM}.254:443"
 QNET+=",hostfwd=tcp::339${QNUM}-10.0.${QNUM}.254:3389"
 
 for I in $(eval echo -en "{0..${NUM_NET}}"); do
-	declare TYPE=
 	if ${NET_TAP}; then
-		TYPE="tap"
-		QNET+=" "; QNET+="-netdev ${TYPE}"
-		QNET+=",id=${TYPE}${I}"
+		T="tap"
+		QNET+=" -netdev ${T}"
+		QNET+=",id=${T}${I}"
 		QNET+=",ifname=qemu${I}_${QNUM}"
 		QNET+=",script=${HOME}/scripts/qemu-network-up.bsh"
 		QNET+=",downscript=${HOME}/scripts/qemu-network-down.bsh"
 	else
-		TYPE="socket"
-		QNET+=" "; QNET+="-netdev ${TYPE}"
-		QNET+=",id=${TYPE}${I}"
+		T="socket"
+		QNET+=" -netdev ${T}"
+		QNET+=",id=${T}${I}"
 		QNET+=",mcast=239.0.0.${I}:10000"
 		QNET+=",localaddr=127.0.0.1"
 	fi
 
 	if ! ${NET_TAP} && [[ ${I} == 0 ]]; then
-		TYPE="user"
+		T="user"
 	fi
-	QNET+=" "; QNET+="-device e1000"
+	QNET+=" -device e1000"
 	QNET+=",id=nic${I}"
-	QNET+=",netdev=${TYPE}${I}"
+	QNET+=",netdev=${T}${I}"
 	QNET+=",mac=52:54:00:10:0${I}:0${QNUM}"
 	if [[ ${I} == 0 ]]; then
 		QNET+=",bootindex=3"
@@ -172,7 +179,7 @@ done
 ################################################################################
 
 eval exec qemu-system-x86_64 \
-	-name ${FILE} \
+	-name ${QNAM} \
 	-nodefaults \
 	-nodefconfig \
 	-no-user-config \
