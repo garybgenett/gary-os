@@ -49,6 +49,7 @@ else
 fi
 declare QOUT="/tmp/qemu.${QNAM}"
 
+declare QNUL="${QOUT}.iso"
 declare QNFL="${QOUT}.qcow2"
 declare QNSZ="100G"
 
@@ -88,8 +89,11 @@ if [[ -z ${QFIL} ]]; then
 fi
 
 QDSK="-device virtio-scsi-pci,id=scsi0,bus=pci.0"
-QDSK+=" -drive id=cdrom0,if=none,format=raw,file=/dev/null"
+QDSK+=" -drive id=cdrom0,if=none,format=raw,file=${QNUL}"
 QDSK+=" -device scsi-cd,drive=cdrom0,bootindex=1"
+if [[ ! -f ${QNUL} ]]; then
+	touch ${QNUL}
+fi
 
 if [[ -n $(file -L ${I} 2>/dev/null | ${GREP} "Linux[ ]kernel[ ].+[ ]boot[ ]executable") ]]; then
 	QKRN="-kernel ${I}"
