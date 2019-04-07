@@ -324,7 +324,7 @@ export SVNSYNC="reporter svnsync"		; alias svnsync="${SVNSYNC}"
 
 export GIT_TRACE="1"
 export GIT_CMD="git"
-export GIT="reporter ${GIT_CMD}"		; alias git="${GIT}"
+export GIT="reporter ${GIT_CMD}"		#>>> ; alias git="${GIT}"
 export GIT_ADD="${GIT} add --verbose --all"	; alias git-add="${GIT_ADD}"
 export GIT_CMT="${GIT} commit --verbose"	; alias git-commit="${GIT_CMT}"
 export GIT_STS="${GIT} status"			; alias git-status="${GIT_STS}"
