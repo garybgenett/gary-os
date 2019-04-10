@@ -84,8 +84,8 @@ I="${QFIL}"
 I+=" /.g/_data/_systems/qemu/${QFIL}"
 I+=" /.g/_data/_target/iso/${QFIL}"
 I="$(find ${I} 2>/dev/null | sort -n | tail -n1)"
-if [[ -n ${QFIL} ]]; then
-	I="$(realpath ${QFIL})"
+if [[ -n ${I} ]]; then
+	I="$(realpath ${I})"
 else
 	I=
 fi
