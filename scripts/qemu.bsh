@@ -47,10 +47,10 @@ if [[ -n ${QFIL} ]]; then
 else
 	QNAM="null"
 fi
-declare QOUT="/tmp/qemu.${QNAM}"
+declare QOUT="/tmp/qemu.${QNAM}.txt"
 
-declare QNUL="${QOUT}.iso"
-declare QNFL="${QOUT}.qcow2"
+declare QNUL="${QOUT/%.txt}.iso"
+declare QNFL="${QOUT/%.txt}.qcow2"
 declare QNSZ="100G"
 
 declare QKRN=
