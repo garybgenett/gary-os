@@ -48,8 +48,9 @@ else
 	QNAM="null"
 fi
 declare QOUT="/tmp/qemu.${QNAM}.txt"
+declare QNUL="/tmp/qemu.null.qcow2"
 
-declare QNUL="${QOUT/%.txt}.iso"
+declare QISO="${QOUT/%.txt}.iso"
 declare QNFL="${QOUT/%.txt}.qcow2"
 declare QNSZ="100G"
 
@@ -91,10 +92,10 @@ else
 fi
 
 QDSK="-device virtio-scsi-pci,id=scsi0,bus=pci.0"
-QDSK+=" -drive id=cdrom0,if=none,format=raw,file=${QNUL}"
+QDSK+=" -drive id=cdrom0,if=none,format=raw,file=${QISO}"
 QDSK+=" -device scsi-cd,drive=cdrom0,bootindex=1"
-if [[ ! -f ${QNUL} ]]; then
-	touch ${QNUL}
+if [[ ! -f ${QISO} ]]; then
+	touch ${QISO}
 fi
 
 if [[ -n $(file -L ${I} 2>/dev/null | ${GREP} "Linux[ ]kernel[ ].+[ ]boot[ ]executable") ]]; then
@@ -119,6 +120,9 @@ QDSK+=" -drive id=drive1,if=none,format=qcow2,file=${QNFL}"
 QDSK+=" -device scsi-hd,drive=drive1,bootindex=3"
 if [[ ! -f ${QNFL} ]]; then
 	qemu-img create -f qcow2 ${QNFL} ${QNSZ}
+fi
+if [[ ! -f ${QNUL} ]]; then
+	${LN} ${QNFL} ${QNUL}
 fi
 
 ########################################
