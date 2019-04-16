@@ -151,7 +151,9 @@ declare MODULES="$(
 		-e "[/]nilfs2" \
 		-e "[/]reiserfs" \
 		-e "[/]sfs" \
+		-e "[/]ufs" \
 		-e "[/]xfs" \
+		-e "[/]zfs" \
 		\
 		-e "[/]font" \
 		-e "[/]gfx" \
