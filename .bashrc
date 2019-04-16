@@ -56,8 +56,10 @@ fi
 # variables
 ################################################################################
 
-export _SELF="$(realpath -- "${0}")"
-export SCRIPT="$(basename -- "${0}")"
+if [[ "${-/i}" != "${-}" ]]; then
+	export _SELF="$(realpath -- "${0}")"
+	export SCRIPT="$(basename -- "${0}")"
+fi
 export UNAME="$(uname -s)"
 
 export COMPOSER="/.g/_data/zactive/coding/composer/Makefile"
