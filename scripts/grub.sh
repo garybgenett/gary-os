@@ -26,16 +26,29 @@ fi
 ########################################
 
 declare GINST="${GDEST}/rescue_example.raw"
+declare GPDEF="2"
+declare GPART="${GPDEF}"
+declare GCUST=
+
 if [[ -b ${1} ]]; then
-	GINST="${1}"
+	GINST="$(echo ${1} | ${SED} "s|^(.+[^0-9])([0-9]+)$|\1|g")"
+	GPART="$(echo ${1} | ${SED} "s|^(.+[^0-9])([0-9]+)$|\2|g")"
+	shift
+	if [[ ${GPART} != +([0-9]) ]]; then
+		GPART="${GPDEF}"
+	fi
+fi
+
+if [[ -f ${1} ]]; then
+	GCUST="$(${SED} "s|[\"]|\\\\\"|g" ${1})"
 	shift
 fi
 
 ################################################################################
 
 declare GBOOT="(hd0)"
-declare GROOT="(hd0,2)"
-declare GFILE="(hd0,1)/boot/grub/grub.cfg"
+declare GROOT="(hd0,${GPART})"
+declare GFILE="(hd0,${GPART})/boot/grub/grub.cfg"
 declare GOPTS=""
 
 declare GTYPE="i386-pc"
@@ -75,7 +88,7 @@ declare GRESC="\
 # rescue
 insmod read
 menuentry \"${_NAME} Rescue Image\" { set; read rescue; }
-# end of file
+${GCUST:-${GMENU}}
 "
 
 ########################################
@@ -274,7 +287,7 @@ unix2dos ${GDEST}/bcdedit.bat					|| exit 1
 FILE="${GDEST}/rescue.tar"
 ${MKDIR} ${FILE}/boot/grub/${GTYPE}				|| exit 1
 ${RSYNC_U} ${MODULES} ${FILE}/boot/grub/${GTYPE}/		|| exit 1
-echo -en "${GRESC}" >${FILE}/boot/grub/grub.cfg			|| exit 1
+${RSYNC_U} ${GDEST}/rescue.cfg ${FILE}/boot/grub/grub.cfg	|| exit 1
 (cd ${FILE} && tar -cvv -f ${FILE}.tar *)			|| exit 1
 
 grub-mkimage -v \
