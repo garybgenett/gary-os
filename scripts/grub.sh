@@ -274,6 +274,10 @@ function exit_summary {
 
 ################################################################################
 
+${RSYNC_U} -L ${_SELF} ${GDEST}/_$(basename ${_SELF})		|| exit 1
+
+########################################
+
 ${RM} ${GDEST}/${GTYPE}						|| exit 1
 ${MKDIR} ${GDEST}/${GTYPE}					|| exit 1
 ${RSYNC_U} ${GMODS}/ ${GDEST}/${GTYPE}/				|| exit 1
