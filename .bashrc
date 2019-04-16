@@ -274,6 +274,9 @@ if { [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; } ||
 	export REALTIME=
 fi
 
+export NICELY=		; unalias nicely
+export REALTIME=	; unalias realtime
+
 ########################################
 
 export MORE="less -rX"						; alias more="${MORE}"
