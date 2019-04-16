@@ -23,13 +23,15 @@ if [[ ${1} == +([0-9]) ]]; then
 	shift
 fi
 
+########################################
+
 declare GINST="${GDEST}/rescue_example.raw"
 if [[ -b ${1} ]]; then
 	GINST="${1}"
 	shift
 fi
 
-########################################
+################################################################################
 
 declare GBOOT="(hd0)"
 declare GROOT="(hd0,2)"
@@ -40,7 +42,7 @@ declare GTYPE="i386-pc"
 declare GRUBD="/usr/lib/grub"
 declare GMODS="${GRUBD}/${GTYPE}"
 
-################################################################################
+########################################
 
 declare GLOAD="\
 # load
@@ -257,23 +259,23 @@ function exit_summary {
 
 ################################################################################
 
-${RM} ${GDEST}/${GTYPE}					|| exit 1
-${MKDIR} ${GDEST}/${GTYPE}				|| exit 1
-${RSYNC_U} ${GMODS}/ ${GDEST}/${GTYPE}/			|| exit 1
+${RM} ${GDEST}/${GTYPE}						|| exit 1
+${MKDIR} ${GDEST}/${GTYPE}					|| exit 1
+${RSYNC_U} ${GMODS}/ ${GDEST}/${GTYPE}/				|| exit 1
 
-echo -en "${GLOAD}"	>${GDEST}/bootstrap.cfg		|| exit 1
-echo -en "${GMENU}"	>${GDEST}/grub.cfg		|| exit 1
-echo -en "${GRESC}"	>${GDEST}/rescue.cfg		|| exit 1
-echo -n "${BCDEDIT}"	>${GDEST}/bcdedit.bat		|| exit 1
-unix2dos ${GDEST}/bcdedit.bat				|| exit 1
+echo -en "${GLOAD}"	>${GDEST}/bootstrap.cfg			|| exit 1
+echo -en "${GMENU}"	>${GDEST}/grub.cfg			|| exit 1
+echo -en "${GRESC}"	>${GDEST}/rescue.cfg			|| exit 1
+echo -n "${BCDEDIT}"	>${GDEST}/bcdedit.bat			|| exit 1
+unix2dos ${GDEST}/bcdedit.bat					|| exit 1
 
 ########################################
 
 FILE="${GDEST}/rescue.tar"
-${MKDIR} ${FILE}/boot/grub/${GTYPE}			|| exit 1
-${RSYNC_U} ${MODULES} ${FILE}/boot/grub/${GTYPE}/	|| exit 1
-echo -en "${GRESC}" >${FILE}/boot/grub/grub.cfg		|| exit 1
-(cd ${FILE} && tar -cvv -f ${FILE}.tar *)		|| exit 1
+${MKDIR} ${FILE}/boot/grub/${GTYPE}				|| exit 1
+${RSYNC_U} ${MODULES} ${FILE}/boot/grub/${GTYPE}/		|| exit 1
+echo -en "${GRESC}" >${FILE}/boot/grub/grub.cfg			|| exit 1
+(cd ${FILE} && tar -cvv -f ${FILE}.tar *)			|| exit 1
 
 grub-mkimage -v \
 	-C xz \
@@ -282,7 +284,7 @@ grub-mkimage -v \
 	-o ${GDEST}/bootstrap.img \
 	-c ${GDEST}/bootstrap.cfg \
 	--prefix="${GROOT}/${_GRUB}" \
-	${MODULES_BOOT}					|| exit 1
+	${MODULES_BOOT}						|| exit 1
 
 grub-mkimage -v \
 	-C xz \
@@ -290,16 +292,16 @@ grub-mkimage -v \
 	-d ${GMODS} \
 	-o ${GDEST}/rescue.img \
 	-m ${GDEST}/rescue.tar.tar \
-	${MODULES_CORE}					|| { exit_summary; exit 1; }
+	${MODULES_CORE}						|| { exit_summary; exit 1; }
 
 for TYPE in x86_64-efi i386-efi; do
 	FILE="${GDEST}/grub.${TYPE/%-efi}.tar/boot/grub"
-	${MKDIR} ${FILE}/${TYPE}			|| exit 1
-	${RSYNC_U} ${GRUBD}/${TYPE}/ ${FILE}/${TYPE}	|| exit 1
-	echo -en "${GLOAD_FILE}" >${FILE}/grub.cfg	|| exit 1
+	${MKDIR} ${FILE}/${TYPE}				|| exit 1
+	${RSYNC_U} ${GRUBD}/${TYPE}/ ${FILE}/${TYPE}		|| exit 1
+	echo -en "${GLOAD_FILE}" >${FILE}/grub.cfg		|| exit 1
 
 	FILE="${GDEST}/grub.${TYPE/%-efi}.tar"
-	(cd ${FILE} && tar -cvv -f ${FILE}.tar *)	|| exit 1
+	(cd ${FILE} && tar -cvv -f ${FILE}.tar *)		|| exit 1
 
 	FILE="${GDEST}/grub.${TYPE/%-efi}"
 	grub-mkimage -v \
@@ -308,14 +310,14 @@ for TYPE in x86_64-efi i386-efi; do
 		-d ${GRUBD}/${TYPE} \
 		-o ${FILE}.efi \
 		-m ${FILE}.tar.tar \
-		${MODULES_UEFI}				|| { exit_summary; exit 1; }
+		${MODULES_UEFI}					|| { exit_summary; exit 1; }
 done
 
 FILE="${GDEST}/bootstrap.img"
-cat ${GMODS}/lnxboot.img ${FILE} >${FILE}.lnxboot	|| exit 1
-${MV} ${FILE}{.lnxboot,}				|| exit 1
+cat ${GMODS}/lnxboot.img ${FILE} >${FILE}.lnxboot		|| exit 1
+${MV} ${FILE}{.lnxboot,}					|| exit 1
 
-${RM} ${GDEST}/*.tar.tar				|| exit 1
+${RM} ${GDEST}/*.tar.tar					|| exit 1
 
 ########################################
 
@@ -324,16 +326,16 @@ if [[ ! -b ${GINST} ]]; then
 		bs=${BLOCKS_SIZE} \
 		count=$(( ${BLOCKS_BOOT} +${BLOCKS_DATA} +1 )) \
 		if=/dev/zero \
-		of=${GINST}				|| exit 1
-	echo -en "${FDISK}" | fdisk ${GINST}		|| exit 1
+		of=${GINST}					|| exit 1
+	echo -en "${FDISK}" | fdisk ${GINST}			|| exit 1
 
 	losetup -d ${LOOPDEV}				#>>> || exit 1
 	losetup -v \
 		-o $(( ${BLOCKS_SIZE}*${BLOCKS_BOOT} )) \
 		--sizelimit $(( ${BLOCKS_SIZE}*${BLOCKS_DATA} )) \
-		${LOOPDEV} ${GINST}			|| exit 1
-	format ${LOOPDEV}				|| exit 1
-	losetup -d ${LOOPDEV}				|| exit 1
+		${LOOPDEV} ${GINST}				|| exit 1
+	format ${LOOPDEV}					|| exit 1
+	losetup -d ${LOOPDEV}					|| exit 1
 fi
 
 grub-bios-setup --verbose \
@@ -341,7 +343,7 @@ grub-bios-setup --verbose \
 	--core-image="rescue.img" \
 	--directory="${GDEST}" \
 	--skip-fs-probe \
-	${GINST}					|| { exit_summary; exit 1; }
+	${GINST}						|| { exit_summary; exit 1; }
 
 ########################################
 
