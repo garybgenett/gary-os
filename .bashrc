@@ -2,6 +2,11 @@
 ################################################################################
 # bash configuration file
 ################################################################################
+#>>> set -e		# exit on any failure
+#>>> set -u		# exit on undeclared variables
+#>>> set -o pipefail	# return value of all commands in a pipe
+#>>> set -x		# command tracing
+################################################################################
 
 umask 022
 unalias -a
