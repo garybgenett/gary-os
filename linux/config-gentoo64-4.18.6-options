@@ -1,1 +1,123 @@
-config-gentoo64-4.9.125-options
+################################################################################
+# default-grml64-4.9.29
+################################################################################
+
+General setup
+	Kernel compression mode							CONFIG_KERNEL_XZ=y
+	Default hostname							CONFIG_DEFAULT_HOSTNAME=gary-os
+	Support for paging of anonymous memory (swap)				CONFIG_SWAP=n
+	Kernel .config support							CONFIG_IKCONFIG=y
+		Enable access to .config through /proc/config.gz		CONFIG_IKCONFIG_PROC=y
+	Support initial ramdisk/ramfs compressed using gzip			CONFIG_RD_GZIP=n
+	Support initial ramdisk/ramfs compressed using bzip2			CONFIG_RD_BZIP2=n
+	Support initial ramdisk/ramfs compressed using LZMA			CONFIG_RD_LZMA=n
+	Support initial ramdisk/ramfs compressed using LZO			CONFIG_RD_LZO=n
+	Support initial ramdisk/ramfs compressed using LZ4			CONFIG_RD_LZ4=n
+
+Processor type and features
+	Linux guest support							CONFIG_HYPERVISOR_GUEST=y
+		Enable paravirtualization code					CONFIG_PARAVIRT=y
+		KVM Guest support (including kvmclock)				CONFIG_KVM_GUEST=y
+#>>>	Processor family (Generic-x86-64)					CONFIG_GENERIC_CPU=y
+	Processor family (Core 2/newer Xeon)					CONFIG_MCORE2=y
+	Preemption Model -> Preemptible Kernel (Low-Latency Desktop)		CONFIG_PREEMPT=y
+	Built-in kernel command line						CONFIG_CMDLINE_BOOL=y
+		Built-in kernel command string					CONFIG_CMDLINE="initcall_debug dyndbg==flmpt earlyprintk=vga"
+
+Power management and ACPI options
+	Hibernation (aka 'suspend to disk')					CONFIG_HIBERNATION=n
+
+Networking support								CONFIG_NET=y
+	Networking options
+		Network packet filtering framework (Netfilter)			CONFIG_NETFILTER=y
+			IP: Netfilter Configuration
+				IPv4 NAT					CONFIG_NF_NAT_IPV4=m
+				IPv4 masquerade support				CONFIG_IP_NF_TARGET_MASQUERADE=m
+			IPv6: Netfilter Configuration
+				IPv6 NAT					CONFIG_NF_NAT_IPV6=m
+				IPv6 masquerade support				CONFIG_IP6_NF_TARGET_MASQUERADE=m
+
+Device Drivers
+	Block devices								CONFIG_BLK_DEV=y
+		Virtio block driver						CONFIG_VIRTIO_BLK=y
+		SCSI passthrough request for the Virtio block driver		CONFIG_VIRTIO_BLK_SCSI=y
+	NVME Support
+		NVM Express block device					CONFIG_BLK_DEV_NVME=y
+	SCSI device support
+		SCSI device support						CONFIG_SCSI=y
+		SCSI disk support						CONFIG_BLK_DEV_SD=y
+		SCSI CDROM support						CONFIG_BLK_DEV_SR=y
+		SCSI low-level drivers						CONFIG_SCSI_LOWLEVEL=y
+			virtio-scsi support					CONFIG_SCSI_VIRTIO=y
+	Serial ATA and Parallel ATA drivers					CONFIG_ATA=y
+		Verbose ATA error reporting					CONFIG_ATA_VERBOSE_ERROR=y
+		ATA ACPI Support						CONFIG_ATA_ACPI=y
+		SATA Port Multiplier support					CONFIG_SATA_PMP=y
+		AHCI SATA support						CONFIG_SATA_AHCI=y
+		Platform AHCI SATA support					CONFIG_SATA_AHCI_PLATFORM=y
+		ACPI firmware driver for PATA					CONFIG_PATA_ACPI=m
+		Generic ATA support						CONFIG_ATA_GENERIC=y
+		Legacy ISA PATA support (Experimental)				CONFIG_PATA_LEGACY=m
+	Multiple devices driver support (RAID and LVM)				CONFIG_MD=y
+		RAID support							CONFIG_BLK_DEV_MD=y
+		Autodetect RAID arrays during kernel boot			CONFIG_MD_AUTODETECT=y
+		Linear (append) mode						CONFIG_MD_LINEAR=y
+		RAID-0 (striping) mode						CONFIG_MD_RAID0=y
+		RAID-1 (mirroring) mode						CONFIG_MD_RAID1=y
+		RAID-10 (mirrored striping) mode				CONFIG_MD_RAID10=y
+		RAID-4/RAID-5/RAID-6 mode					CONFIG_MD_RAID456=y
+		Device mapper support						CONFIG_BLK_DEV_DM=y
+		Crypt target support						CONFIG_DM_CRYP=y
+		Snapshot target							CONFIG_DM_SNAPSHOT=y
+		Thin provisioning target (EXPERIMENTAL)				CONFIG_DM_THIN_PROVISIONING=y
+		Mirror target							CONFIG_DM_MIRROR=y
+		RAID 1/4/5/6/10 target						CONFIG_DM_RAID=y
+	Character devices
+		Serial drivers
+			8250/16550 and compatible serial support		CONFIG_SERIAL_8250=y
+			Console on 8250/16550 and compatible serial port	CONFIG_SERIAL_8250_CONSOLE=y
+	Graphics support
+		Bootup logo							CONFIG_LOGO=n
+	HID support
+		HID bus support							CONFIG_HID=y
+		Generic HID driver						CONFIG_HID_GENERIC=y
+		USB HID support
+			USB HID transport layer					CONFIG_USB_HID=y
+	USB support								CONFIG_USB_SUPPORT=y
+		Support for Host-side USB					CONFIG_USB=y
+		USB announce new devices					CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
+		xHCI HCD (USB 3.0) support					CONFIG_USB_XHCI_HCD=y
+		EHCI HCD (USB 2.0) support					CONFIG_USB_EHCI_HCD=y
+		OHCI HCD support						CONFIG_USB_OHCI_HCD=y
+		UHCI HCD (most Intel and VIA) support				CONFIG_USB_UHCI_HCD=y
+		USB Mass Storage support					CONFIG_USB_STORAGE=y
+		USB Serial Converter support					CONFIG_USB_SERIAL=y
+			USB Serial Console device support			CONFIG_USB_SERIAL_CONSOLE=y
+			USB Generic Serial Driver				CONFIG_USB_SERIAL_GENERIC=y
+	Real Time Clock								CONFIG_RTC_CLASS=y
+	Virtualization drivers							CONFIG_VIRT_DRIVERS=y
+	Virtio drivers								CONFIG_VIRTIO_MENU=y
+		PCI driver for virtio devices					CONFIG_VIRTIO_PCI=y
+
+File systems
+	Second extended fs support						CONFIG_EXT2_FS=y
+		Ext2 extended attributes					CONFIG_EXT2_FS_XATTR=y
+			Ext2 POSIX Access Control Lists				CONFIG_EXT2_FS_POSIX_ACL=y
+			Ext2 Security Labels					CONFIG_EXT2_FS_SECURITY=y
+	Ext3 journalling file system support					CONFIG_EXT3_FS=y
+		Ext3 POSIX Access Control Lists					CONFIG_EXT3_FS_POSIX_ACL=y
+		Ext3 Security Labels						CONFIG_EXT3_FS_SECURITY=y
+	The Extended 4 (ext4) filesystem					CONFIG_EXT4_FS=y
+		Ext4 POSIX Access Control Lists					CONFIG_EXT4_FS_POSIX_ACL=y
+		Ext4 Security Labels						CONFIG_EXT4_FS_SECURITY=y
+		Ext4 Encryption							CONFIG_EXT4_ENCRYPTION=y
+		EXT4 debugging support						CONFIG_EXT4_DEBUG=y
+
+Virtualization									CONFIG_VIRTUALIZATION=y
+	Kernel-based Virtual Machine (KVM) support				CONFIG_KVM=m
+		KVM for Intel processors support				CONFIG_KVM_INTEL=m
+		KVM for AMD processors support					CONFIG_KVM_AMD=m
+
+################################################################################
+# end of file
+################################################################################
