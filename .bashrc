@@ -57,6 +57,9 @@ fi
 ################################################################################
 
 if [[ "${-/i}" != "${-}" ]]; then
+	unset _SELF
+	unset SCRIPT
+else
 	export _SELF="$(realpath -- "${0}")"
 	export SCRIPT="$(basename -- "${0}")"
 fi
