@@ -4792,6 +4792,54 @@ diff :: x11-plugins/gkrellaclock [rationale] ===================================
 # custom patch
 # Error: 'gkrellm_init_plugin': /usr/lib64/gkrellm2/plugins/gkrellaclock.so: undefined symbol: gkrellm_init_plugin
 diff :: x11-plugins/gkrellaclock [source] ==============================================================================
+diff -u -U10 -r /var/git/meta-repo/kits/desktop-kit/x11-plugins/gkrellaclock/Manifest ./x11-plugins/gkrellaclock.src/Manifest
+--- /var/git/meta-repo/kits/desktop-kit/x11-plugins/gkrellaclock/Manifest	2019-04-07 05:45:12.846608882 -0000
++++ ./x11-plugins/gkrellaclock.src/Manifest	2019-03-10 02:10:03.034076438 -0000
+@@ -1 +1 @@
+-DIST gkrellaclock-0.3.4.tar.gz 18853 BLAKE2B b91b4cb9ae42f68d3a3d430f7713170c788515280330a1f785f11d4335e859dbd6f840fb7e47fe8f77676bb55e97dda628fa79d442d4be8a37c69bcea836aa52 SHA512 2e6002bc4d535899cc8b86377d596bcee5e64d05fe4239eaab2de8e387a40b8dee600d9fcd5f30feb68bb3e54bf6b4745d4c7b79ea9fee57b856eeb3dac12524
++DIST gkrellaclock-0.3.4.tar.gz 18853 SHA256 5923c5fa6c31ceb1944e57219d893634e503d44dc5e91f3deba46f0d71e787b7 SHA512 2e6002bc4d535899cc8b86377d596bcee5e64d05fe4239eaab2de8e387a40b8dee600d9fcd5f30feb68bb3e54bf6b4745d4c7b79ea9fee57b856eeb3dac12524 WHIRLPOOL 9b5a3fc46e05c491a9779e055d7994303005ed8dd850c02cd9cb093e651f8216d2d9c0730e7110e4d9e8ebc2360a31ab361c0758b12f121fb9355738fa666d14
+diff -u -U10 -r /var/git/meta-repo/kits/desktop-kit/x11-plugins/gkrellaclock/gkrellaclock-0.3.4-r1.ebuild ./x11-plugins/gkrellaclock.src/gkrellaclock-0.3.4-r1.ebuild
+--- /var/git/meta-repo/kits/desktop-kit/x11-plugins/gkrellaclock/gkrellaclock-0.3.4-r1.ebuild	2019-04-07 05:45:12.846608882 -0000
++++ ./x11-plugins/gkrellaclock.src/gkrellaclock-0.3.4-r1.ebuild	2019-03-10 02:10:03.034076438 -0000
+@@ -1,33 +1,29 @@
+-# Copyright 1999-2018 Gentoo Foundation
++# Copyright 1999-2017 Gentoo Foundation
+ # Distributed under the terms of the GNU General Public License v2
+ 
+ EAPI=6
+ 
+ inherit gkrellm-plugin toolchain-funcs
+ 
+ DESCRIPTION="Nice analog clock for GKrellM2"
+ HOMEPAGE="http://www.gkrellm.net/"
+ SRC_URI="mirror://gentoo/${P}.tar.gz"
+ 
+ LICENSE="GPL-2"
+ SLOT="2"
+ KEYWORDS="alpha amd64 ppc sparc x86"
+ IUSE=""
+ 
+-RDEPEND="app-admin/gkrellm:2[X]"
++RDEPEND="app-admin/gkrellm[X]"
+ DEPEND="${RDEPEND}"
+ 
+-S="${WORKDIR}/${P/a/A}"
+-PATCHES=( "${FILESDIR}"/${PN}-makefile.patch )
++PATCHES=( "${FILESDIR}/${PN}-makefile.patch" )
+ 
+-src_prepare() {
+-	default
++S="${WORKDIR}/${P/a/A}"
+ 
++src_compile() {
+ 	# The tarball contains a pre-compiled x86 object that needs to be
+ 	# removed if we're going to build it properly. See bug 166133.
+ 	rm -f gkrellaclock.o || die 'failed to remove gkrellaclock.o'
+-}
+-
+-src_compile() {
+ 	emake CC="$(tc-getCC)"
+ }
 diff :: x11-plugins/gkrellaclock [target] ==============================================================================
 Only in ./x11-plugins/gkrellaclock: .rationale
 diff -u -U10 -r ./x11-plugins/gkrellaclock.src/Manifest ./x11-plugins/gkrellaclock/Manifest
