@@ -450,10 +450,12 @@ function mount_dev_dirs {
 	DEV_DIRS[3]="/proc"
 	DEV_DIRS[4]="/sys"
 	if [[ -z ${1} ]]; then
+		print_info marker
 		print_info mount
 		for FILE in ${DEV_DIRS[@]}; do
-			if [[ -z "$(mount | ${GREP} "${FILE} on ${TARGET}${FILE}")" ]]; then
-				mount --verbose --bind ${FILE} ${TARGET}${FILE}	|| return 1
+			if [[ -z "$(mount | ${GREP} "^[^[:space:]]+ on ${TARGET}${FILE}")" ]]; then
+				mount --verbose --bind ${FILE} ${TARGET}${FILE} \
+					|| return 1
 			fi
 		done
 		print_info marker
@@ -464,6 +466,7 @@ function mount_dev_dirs {
 		if [[ -z "$(
 			lsof |
 			${GREP} "${TARGET}/" |
+			${GREP} -v "${TARGET}${GENDIR}.log$" |
 			${SED} "s|^.*[[:space:]]([^[:space:]]+)$|\1|g" |
 			sort --unique
 		)" ]]; then
@@ -471,8 +474,9 @@ function mount_dev_dirs {
 				umount --verbose ${TARGET}${DEV_DIRS[${FILE}]}	#>>> || return 1
 			done
 		fi
-		mount | ${GREP} "${TARGET}/"					1>&2
-		if [[ -n "$(mount | ${GREP} "${TARGET}/")" ]]; then		return 1; fi
+		mount | ${GREP} "${TARGET}/"			1>&2
+		[[ -n "$(mount | ${GREP} "${TARGET}/")" ]] &&	return 1
+		print_info marker
 	fi
 	return 0
 }
