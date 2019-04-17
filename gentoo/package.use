@@ -2,6 +2,10 @@
 # portage package use file
 ################################################################################
 
+dev-libs/openssl			-bindist	# gentoo required
+dev-qt/qtnetwork			-bindist	# gentoo required
+net-misc/openssh			-bindist	# gentoo required
+
 app-crypt/pinentry			gnome-keyring	# gentoo required
 app-text/ghostscript-gpl		cups		# gentoo required
 app-text/poppler			cairo		# gentoo required
@@ -20,13 +24,16 @@ media-libs/libsdl2			sound		# gentoo required
 media-plugins/alsa-plugins		pulseaudio	# gentoo required
 media-video/ffmpeg			theora		# gentoo required
 media-video/ffmpeg			x264		# gentoo required
+media-video/vlc				xcb		# gentoo required
 net-dns/avahi				dbus		# gentoo required
 net-nds/openldap			sasl		# gentoo required
 net-wireless/wpa_supplicant		dbus		# gentoo required
 sys-apps/busybox			-pam		# gentoo required
 sys-auth/consolekit			policykit	# gentoo required
+sys-libs/gdbm				berkdb		# gentoo required
 
 media-sound/aumix			-gpm		# gnetoo required: [media-sound/aumix-2.9.1] mouse.c:(.text+0x46): undefined reference to `Gpm_Wgetch'
+x11-misc/xlockmore			-pam		# gentoo required: [x11-misc/xlockmore-5.55] pam_unix(xlock:auth): authentication failure
 
 ########################################
 
@@ -182,13 +189,7 @@ dev-ruby/xmlrpc				ruby_targets_ruby24		# gentoo required
 
 ################################################################################
 
-app-emulation/libvirt			libvirtd lxc qemu udev uml virt-network
-app-text/enchant			aspell
-sci-libs/libqalculate			gnuplot readline
-
-########################################
-
-sys-apps/busybox			-make-symlinks debug savedconfig static
+sys-apps/busybox			-make-symlinks savedconfig static
 sys-apps/coreutils			multicall static
 
 app-shells/bash				static
@@ -197,23 +198,27 @@ net-misc/openssh			static -pam -pie
 net-misc/rsync				static
 sys-process/runit			static
 
+mail-client/thunderbird			-bindist
+www-client/firefox			-bindist
+
 app-emulation/qemu			ncurses sdl spice
 app-emulation/spice			client gui
-app-emulation/virtualbox		qt4 sdk vnc
+app-emulation/virtualbox		qt5 sdk vnc
 app-office/libreoffice			java
 dev-libs/openssl			rfc3779
+net-libs/gnutls				openpgp openssl tls-heartbeat tools
 dev-vcs/subversion			-apache2
-mail-client/mutt			-tokyocabinet debug gpg hcache sasl sidebar smime smtp
+mail-client/mutt			-tokyocabinet gpg hcache sasl sidebar smime smtp
 mail-client/thunderbird			-crypt -lightning -wifi ldap	# installing "enigmail" and "lightning" plugins manually
 mail-mta/msmtp				mta
 media-sound/pulseaudio			bluetooth dbus
-media-video/vlc				projectm qt4 vlm
+media-video/vlc				projectm qt5 vlm
 net-analyzer/tcpdump			-chroot
 net-fs/samba				client cups
 net-misc/networkmanager			-introspection -modemmanager -nss dhcpcd gnutls
 net-print/cups				samba
 net-vpn/openvpn				iproute2
-net-wireless/bluez			debug
+net-wireless/wpa_supplicant		qt5
 sci-calculators/qalculate-gtk		-gnome
 sys-apps/iproute2			iptables
 sys-boot/grub				device-mapper mount
@@ -224,7 +229,13 @@ x11-base/xorg-server			xnest xvfb
 x11-terms/rxvt-unicode			fading-colors focused-urgency font-styles mousewheel perl
 x11-wm/dwm				savedconfig
 
-games-fps/doom3				roe	# gentoo required: [games-fps/doom3-mitm-20070129] !!! All ebuilds that could satisfy "games-fps/doom3[opengl,roe]" have been masked.
+########################################
+
+app-emulation/libvirt			libvirtd lxc qemu udev uml virt-network
+app-text/enchant			aspell
+sci-libs/libqalculate			gnuplot readline
+
+games-fps/doom3				roe		# gentoo required: [games-fps/doom3-mitm-20070129] !!! All ebuilds that could satisfy "games-fps/doom3[opengl,roe]" have been masked.
 games-fps/doom3				-dedicated
 games-fps/doom3-cdoom			-dedicated
 games-fps/doom3-data			-dedicated
@@ -240,16 +251,16 @@ games-fps/doom3-mitm			-dedicated
 
 ########################################
 
-#{GOS} net-libs/glib-networking		-libproxy	# gentoo required
-#{GOS} sys-apps/util-linux		-udev		# gentoo required
+#{GOS} sys-apps/iproute2		-minimal	# gentoo required
+#{GOS} x11-base/xorg-server		-minimal	# gentoo required
 
-#{GOS} app-text/poppler			-qt4		# gentoo required (reversing above)
+#{GOS} app-crypt/pinentry		-gnome-keyring	# requires: gnome-base/gnome-keyring
+#{GOS} dev-util/ninja			-zsh-completion	# requires: app-shells/zsh
+#{GOS} net-wireless/wpa_supplicant	-qt5		# requires: dev-qt/qtcore
 
-#{GOS} net-analyzer/wireshark		-gtk3		# only need gtk+-2
-#{GOS} net-libs/webkit-gtk		-egl		# disable opengl (glut/mesa)
-#{GOS} net-libs/webkit-gtk		-opengl		# disable opengl (glut/mesa)
-#{GOS} net-libs/webkit-gtk		-webgl		# disable opengl (glut/mesa)
-#{GOS} sys-apps/portage			python2		# only want python-2
+#{GOS} dev-libs/beecrypt		-cxx		# requires: dev-libs/icu
+#{GOS} net-dns/avahi			-gtk3		# requires: x11-libs/gtk+
+#{GOS} sys-fs/lvm2			-thin		# requires: sys-block/thin-provisioning-tools -> dev-libs/boost
 
 ################################################################################
 # end of file
