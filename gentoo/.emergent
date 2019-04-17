@@ -254,9 +254,24 @@ for TOKEN in $(cat ${GENDIR}/emerge.use); do
 				sort \
 				>>${GENDIR}/use.missing.global
 		else
-			echo -e "\n${TOKEN}" \
-				>>${GENDIR}/use.missing.local
+#>>>			echo -e "" \
+#>>>				>>${GENDIR}/use.missing.local
+#>>>			echo -e "[${TOKEN}: set]" \
+#>>>				>>${GENDIR}/use.missing.local
+#>>>			(
+#>>>			${SED} -n "s/^([^[:space:]]+)[[:space:]].*[^-](${TOKEN}).*$/\1:\2/gp" ${ETCDIR}/package.use
+#>>>			${SED} -n "s/^([^[:space:]]+)[[:space:]].*([-]${TOKEN}).*$/\1:\2/gp" ${ETCDIR}/package.use
+#>>>			) |
+#>>>			${GREP} -v -e "^[#]" -e "^$" |
+#>>>			sort \
+#>>>				>>${GENDIR}/use.missing.local
+#>>>			echo -e "[${TOKEN}: all]" \
+#>>>				>>${GENDIR}/use.missing.local
+#>>>			grep_token "[:]${TOKEN}[ ][-]" ${REPDIR}/kits/*/profiles/use.local.desc |
+#>>>				sort \
+#>>>				>>${GENDIR}/use.missing.local
 			grep_token "[:]${TOKEN}[ ][-]" ${REPDIR}/kits/*/profiles/use.local.desc |
+				${GREP} -v "$(${SED} -n "s/^([^[:space:]]+)[[:space:]].*(${TOKEN}).*$/\1:\2/gp" ${ETCDIR}/package.use)" |
 				sort \
 				>>${GENDIR}/use.missing.local
 		fi
