@@ -54,18 +54,32 @@
 ########################################
 # x11
 
-x11-base/xorg-x11
+x11-misc/obconf
+x11-wm/openbox
 
 x11-apps/transset
+x11-apps/xclock
+x11-apps/xset
 x11-apps/xsetroot
 x11-misc/redshift
+x11-misc/tabbed
+x11-misc/whaw
 x11-misc/wmctrl
 x11-misc/xautolock
+x11-misc/xbindkeys
+x11-misc/xclip
 x11-misc/xcompmgr
+x11-misc/xdialog
+x11-misc/xdotool
 x11-misc/xlockmore
+x11-misc/xsel
+x11-misc/xvkbd
+x11-terms/root-tail
 
 ########################################
 # toolkits
+
+dev-tcltk/expect
 
 media-libs/alsa-lib
 media-libs/alsa-oss
