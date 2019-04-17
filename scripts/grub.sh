@@ -74,11 +74,12 @@ configfile ${GFILE}
 
 declare GMENU="\
 # menu
-set default=0
-set timeout=10
 insmod linux
-menuentry \"${_PROJ} 64-bit\" { linux ${GROOT}/${_BASE}-64.kernel ${GOPTS} }
-menuentry \"${_PROJ} 32-bit\" { linux ${GROOT}/${_BASE}-32.kernel ${GOPTS} }
+menuentry \"${_PROJ}\" {
+set debug=linux
+linux ${GROOT}/${_BASE}.null.kernel
+linux ${GROOT}/${_BASE}.kernel ${GOPTS}
+}
 insmod chain
 menuentry \"Back to OS\" { chainloader ${GBOOT}+1 }
 # end of file
