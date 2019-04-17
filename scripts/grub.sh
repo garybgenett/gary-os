@@ -275,7 +275,7 @@ function exit_summary {
 
 ################################################################################
 
-${RSYNC_U} -L ${_SELF} ${GDEST}/_$(basename ${_SELF})		|| exit 1
+${RSYNC_U} -L ${_SELF} ${GDEST}/$(basename ${_SELF})		|| exit 1
 
 ########################################
 
