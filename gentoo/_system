@@ -43,19 +43,17 @@ declare NEXT=
 declare SOURCE="${SOURCE:-/.g/_data/_target/iso}"
 declare GITDIR="${GITDIR:-/.g/_data/_build/funtoo/meta-repo.git}"
 
-#OPTIONS[SETDIR ARCDIR GENDIR FUNDIR LINDIR OVLDIR]
+#OPTIONS[SETDIR CFGSCR ARCDIR GENDIR]
 declare SETDIR="${SETDIR:-/.g/_data/zactive/.setup}"
+declare CFGSCR="${CFGSCR:-${SETDIR}/gentoo.config}"
 declare ARCDIR="${ARCDIR:-/_build}"
 declare GENDIR="${GENDIR:-/_gentoo}"
-declare FUNDIR="${FUNDIR:-gentoo}"
-declare LINDIR="${LINDIR:-linux}"
-declare OVLDIR="${OVLDIR:-_overlay}"
 
 #>>>#OPTIONS[BLDDIR OUTDIR TORDIR GOSDIR]
 declare BLDDIR="${BLDDIR:-/.g/_data/_builds/_gentoo}"
-declare OUTDIR="${OUTDIR:-${BLDDIR}.testing}"
+declare OUTDIR="${OUTDIR:-${BLDDIR}.working}"
 declare TORDIR="${TORDIR:-/.g/_toor}"
-declare GOSDIR="${GOSDIR:-${TORDIR}}"
+declare GOSDIR="${GOSDIR:-/.g/_data/_builds/_gary-os.working}"
 
 #>>>#OPTIONS[PKGBLD PKGOUT PKGTOR PKGGOS]
 declare PKGBLD="${PKGBLD:-packages}"
@@ -65,12 +63,30 @@ declare PKGGOS="${PKGGOS:-gary-os}"
 
 ################################################################################
 
-#VARIABLES[ETCDIR REPDIR DSTDIR PAKDIR WRKDIR]
+#SETTINGS[_TITLE _VERSN _RDATE]
+
+#VARIABLES[ETCDIR DSTDIR PAKDIR PDBDIR REPDIR WRKDIR]
 declare ETCDIR="/etc/portage"
-declare REPDIR="/var/git/meta-repo"
 declare DSTDIR="/var/cache/portage/distfiles"
 declare PAKDIR="/var/cache/portage/packages"
+declare PDBDIR="/var/db/pkg"
+declare REPDIR="/var/git/meta-repo"
 declare WRKDIR="/var/tmp/portage"
+
+#VARIABLES[LINDIR FUNDIR]
+declare LINDIR="linux"
+declare FUNDIR="gentoo"
+
+#VARIABLES[FUNKIT LAYDIR AUDITS]
+declare FUNKIT="funtoo.kits"
+declare LAYDIR="_overlay"
+declare AUDITS=".emergent"
+
+#OPTIONS[ARTDIR]
+#VARIABLES[MAKEIT SHIPIT]
+declare ARTDIR="${ARTDIR:-/.g/_data/zactive/coding/gary-os/_artifacts}"
+declare MAKEIT="_release"
+declare SHIPIT="_publish"
 
 ########################################
 
@@ -99,10 +115,10 @@ if [[ ${1} == -t ]]; then
 	_PKG="${PKGTOR}"
 	shift
 fi
-if [[ ${1} == -m ]]; then
-	TARGET="${METDIR}"
+if [[ ${1} == -g ]]; then
+	TARGET="${GOSDIR}"
 	TOOR="${1}"
-	_PKG="${PKGMET}"
+	_PKG="${PKGGOS}"
 	shift
 fi
 
@@ -113,6 +129,7 @@ if [[ ${1} == -n ]]; then
 fi
 if [[ ${_PKG} == _${PKGGOS} ]] || [[ ${_PKG} == ${PKGGOS} ]]; then
 	_GOS="1"
+	CFGSCR=
 fi
 
 ########################################
@@ -144,29 +161,27 @@ fi
 
 ########################################
 
-#OPTIONS[FUNTOO KERNEL]
+#OPTIONS[FUNTOO LINPKG KERNEL PYTHON SELECT]
 declare FUNTOO="${FUNTOO:-$(tail -n1 ${SETDIR}/${FUNDIR}/funtoo)}"
-declare KERNEL="${KERNEL:-$(${SED} -n "s|^.+/gentoo-sources:(.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG})}"
-declare FUNKIT="funtoo.kits"
+declare LINPKG="${LINPKG:-$(${SED} -n "s|^[#][{]LINPKG[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} "s|[ ]*$||g")}"
+declare KERNEL="${KERNEL:-$(${SED} -n "s|^[#][{]KERNEL[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} "s|[ ]*$||g")}"
+declare PYTHON="${PYTHON:-$(${SED} -n "s|^[#][{]PYTHON[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} "s|[ ]*$||g")}"
+declare SELECT="${SELECT:-$(${SED} -n "s|^[#][{]SELECT[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} "s|[ ]*$||g")}"
 
-declare CMTFIL="_commit"
-declare COMMIT=
-for FILE in \
-	.setup	\
-	.static
-do
-	NEXT="$(cat /.g/_data/zactive/${FILE}.git/refs/heads/master 2>/dev/null)"
-	if [[ -n ${NEXT} ]]; then
-		COMMIT="${COMMIT}${FILE}: ${NEXT}\n"
-	fi
-done
+#OPTIONS[RCUPDT WINMGR WMHELP]
+declare RCUPDT="${RCUPDT:-$(${SED} -n "s|^[#][{]RCUPDT[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '|' | ${SED} -e "s|[| ]*$||g" -e "s|[|]|\ \|\ |g")}"
+declare WINMGR="${WINMGR:-$(${SED} -n "s|^[#][{]WINMGR[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '|' | ${SED} -e "s|[| ]*$||g" -e "s|[|]|\ \;\ |g")}"
+declare WMHELP="${WMHELP:-$(${SED} -n "s|^[#][{]WMHELP[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '|' | ${SED} -e "s|[| ]*$||g" -e "s|[|]|\ \\/\/\ |g")}"
+declare WINMGR="${WINMGR:-dwm}"
+declare WMHELP="${WMHELP:-\`date --iso=s\`}"
 
 ########################################
 
-#>>>athlon64 build: OUTDIR="/.g/_data/_builds/_gentoo.amd64" _CPU="1" ESUB="amd64-k8" GARC="athlon64" GSUB="athlon64" ${HOME}/setup/gentoo/_system -x -0
+#>>>athlon64 build: OUTDIR="/.g/_data/_builds/_gentoo.amd64" ESUB="amd64-k8" GARC="athlon64" GSUB="athlon64" ${HOME}/setup/gentoo/_system -x -0
 
 #OPTIONS[_CPU EARC ESUB GARC GSUB GOPT]
-declare _CPU="${_CPU:-}"
+declare _CPU_RESET="CONFIG_MCORE2"
+declare _CPU="${_CPU:-${_CPU_RESET}}"
 #>>>declare EARC="${EARC:-x86-32bit}"
 declare EARC="${EARC:-x86-64bit}"
 #>>>declare ESUB="${EARC:-i686}"
@@ -176,7 +191,7 @@ declare GSUB="${GSUB:-core2}"
 declare GOPT="${GOPT:--O2}"
 
 if [[ -n ${_GOS} ]]; then
-	_CPU="1"
+	_CPU="CONFIG_GENERIC_CPU"
 	EARC="x86-64bit"
 	ESUB="generic_64"
 	GARC="x86-64"
@@ -252,11 +267,6 @@ function clear_environment {
 	done
 	return 0
 }
-
-########################################
-
-declare FILE=
-declare NEXT=
 
 ################################################################################
 
@@ -346,7 +356,7 @@ function print_info {
 		starter_var "QUIET"
 		echo -en "\n"
 		declare BEG="true"
-		for FILE in OPTIONS VARIABLES; do
+		for FILE in SETTINGS OPTIONS VARIABLES; do
 			if ${BEG}; then BEG="false"; else echo -en "\n"; fi
 			echo -en "${NOTES}"
 			echo -en ">>> ${FILE} <<<"
@@ -451,6 +461,20 @@ function mount_dev_dirs {
 		fi
 		mount | ${GREP} "${TARGET}/"					1>&2
 		if [[ -n "$(mount | ${GREP} "${TARGET}/")" ]]; then		return 1; fi
+	fi
+	return 0
+}
+
+########################################
+
+function kernel_cpu {
+	declare FILE="${1}" && shift
+	if [[ ${_CPU_RESET} != ${_CPU} ]]; then
+		${SED} -i \
+			-e "/${_CPU_RESET}/d" \
+			-e "s/^.*(${_CPU})[^_].*$/\1=y/g" \
+			${FILE} \
+			|| return 1
 	fi
 	return 0
 }
@@ -609,19 +633,17 @@ if [[ ${1} == -2 ]]; then shift; ${_SELF} ${TOOR} -c		-i								; exit 0; fi
 
 if [[ ${1} == -r ]]; then
 	shift
+	${MKDIR}						${TARGET}${ARCDIR}				|| exit 1
 	${MKDIR}						${TARGET}${HOMELY}				|| exit 1
 	if [[ -f ${SETDIR}/.bashrc ]]
-	then ${RSYNC_U} --copy-links ${SETDIR}/.bashrc		${TARGET}${HOMELY}/				|| exit 1
-	else ${RSYNC_U} --copy-links ${HOME}/.bashrc		${TARGET}${HOMELY}/				|| exit 1
+		then ${RSYNC_U} --copy-links ${SETDIR}/.bashrc	${TARGET}${HOMELY}/				|| exit 1
+		else ${RSYNC_U} --copy-links ${HOME}/.bashrc	${TARGET}${HOMELY}/				|| exit 1
 	fi
-	${MKDIR}						${TARGET}${ARCDIR}				|| exit 1
-	if [[ -n ${COMMIT} ]]; then echo -en "${COMMIT}"	>${TARGET}${ARCDIR}/${CMTFIL}			|| exit 1; fi
 	${RSYNC_U} ${SETDIR}/${FUNDIR}/				${TARGET}${ARCDIR}/${FUNDIR}			|| exit 1
 	${RSYNC_U} ${SETDIR}/${LINDIR}/				${TARGET}${ARCDIR}/${LINDIR}			|| exit 1
-	${RSYNC_U} ${SETDIR}/${FUNDIR}/[a-z_]*			${TARGET}${ETCDIR}/				|| exit 1
+	${RSYNC_C} ${SETDIR}/${FUNDIR}/[a-z_]*			${TARGET}${ETCDIR}/				|| exit 1
+	${RSYNC_U} ${SETDIR}/${FUNDIR}/${LAYDIR}/		${TARGET}${ETCDIR}/${LAYDIR}			|| exit 1
 	${LN} ${ETCDIR}/${OVLDIR}/overlay.conf			${TARGET}${ETCDIR}/repos.conf/			|| exit 1
-	chown -R root:root					${TARGET}${ETCDIR}				|| exit 1
-	chmod -R 755						${TARGET}${ETCDIR}				|| exit 1
 	if [[ ${1} == -w ]]; then
 		shift
 		safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w	|| exit 1
@@ -674,12 +696,15 @@ if [[ ${1} == -i ]]; then
 		${RM}					${TARGET}/usr/src/linux						|| exit 1
 		${LN} linux-${FILE}-gentoo		${TARGET}/usr/src/linux						|| exit 1
 		expect_wrapper				emerge ${_ASK} genkernel =gentoo-sources-${FILE}		|| exit 1
-		declare GENKERNEL_OPTS="--loglevel=5 --bootloader=grub --symlink kernel"
+		${RSYNC_U}				${SETDIR}/${LINDIR}/config-gentoo64-${FILE}			\
+							${TARGET}${ARCDIR}/config-gentoo64-${FILE}			|| exit 1
+		kernel_cpu 				${TARGET}${ARCDIR}/config-gentoo64-${FILE}			|| exit 1
+		declare GENKERNEL_OPTS="--loglevel=5 --bootloader=grub --install --symlink"
 		if [[ -z ${AUTO} ]]; then
 			expect_wrapper			genkernel ${GENKERNEL_OPTS} kernel --menuconfig			|| exit 1
 		else
 			expect_wrapper			genkernel ${GENKERNEL_OPTS} kernel				\
-				--kernel-config=${ARCDIR}/${LINDIR}/config-gentoo64-${FILE}				|| exit 1
+							--kernel-config=${ARCDIR}/config-gentoo64-${FILE}		|| exit 1
 		fi
 #>>>		FILE="kernel-genkernel-x86-${FILE}-gentoo"								|| exit 1
 		FILE="kernel-genkernel-x86_64-${FILE}-gentoo"								|| exit 1
@@ -705,96 +730,11 @@ if [[ ${1} == -i ]]; then
 		${LN} ${INITRD}				${TARGET}/boot/_initrd						|| exit 1
 	fi
 	if ${_CFG}; then
-		cat >>${TARGET}/etc/passwd <<END_OF_FILE
----
-root:x:0:0::/.g/_data/zactive/.home:/bin/bash
-plastic:x:1000:1000::/.g/_data/zactive/.home:/bin/bash
-user:x:1001:1001::/.g/_data/zactive/.home:/bin/bash
-aiden:x:1002:1002::/.g/_data/zactive/archive.kids/aiden:/bin/bash
-orion:x:1003:1003::/.g/_data/zactive/archive.kids/orion:/bin/bash
-ember:x:1004:1004::/.g/_data/zactive/archive.kids/ember:/bin/bash
-null:x:666:666::/tmp/.null:/bin/nologin
-lfs-user:x:9999:9999::/.g/_data/_builds/_lfs/.lfs/lfs-user:/bin/bash
----
-END_OF_FILE
-		cat >>${TARGET}/etc/shadow <<END_OF_FILE
----
-root::::::::
-plastic::::::::
-user:*:::::::
-aiden::::::::
-orion::::::::
-ember::::::::
-null:*:::::::
-lfs-user:*:::::::
----
-END_OF_FILE
-		cat >>${TARGET}/etc/group <<END_OF_FILE
----
-root:x:0:root,plastic
-wheel:x:10:root,plastic,lfs-user
-plastic:x:1000:root,plastic
-user:x:1001:root,plastic,user
-aiden:x:1002:root,plastic,aiden
-orion:x:1003:root,plastic,orion
-ember:x:1004:root,plastic,ember
-null:x:666:root,plastic,null
-lfs-user:x:9999:root,plastic,lfs-user
----
-audio:x:---:root,plastic,user,aiden,orion,ember,null
-cdrom:x:---:root,plastic,user,aiden,orion,ember,null
-video:x:---:root,plastic,user,aiden,orion,ember,null
-games:x:---:root,plastic,user,aiden,orion,ember,null
----
-END_OF_FILE
-		cat >>${TARGET}/etc/gshadow <<END_OF_FILE
----
-root:::root,plastic
-wheel:::root,plastic,lfs-user
-plastic:::root,plastic
-user:::root,plastic,user
-aiden:::root,plastic,aiden
-orion:::root,plastic,orion
-ember:::root,plastic,ember
-null:::root,plastic,null
-lfs-user:::root,plastic,lfs-user
----
-audio:::root,plastic,user,aiden,orion,ember,null
-cdrom:::root,plastic,user,aiden,orion,ember,null
-video:::root,plastic,user,aiden,orion,ember,null
-games:::root,plastic,user,aiden,orion,ember,null
----
-END_OF_FILE
-		cat >>${TARGET}/etc/pam.d/su <<END_OF_FILE
----
-auth sufficient pam_wheel.so use_uid trust
-auth required pam_wheel.so use_uid
----
-END_OF_FILE
-		cat >>${TARGET}/etc/sudoers <<END_OF_FILE
----
-Defaults exempt_group=wheel
-%wheel ALL=(ALL) ALL
-%wheel ALL=(ALL) NOPASSWD: ALL
----
-END_OF_FILE
-		${EDITOR}			${TARGET}/etc/passwd	\
-						${TARGET}/etc/shadow	\
-						${TARGET}/etc/group	\
-						${TARGET}/etc/gshadow	\
-						${TARGET}/etc/pam.d/su	\
-						${TARGET}/etc/sudoers
-		for FILE in			root	\
-						plastic	\
-						aiden	\
-						orion	\
-						ember	\
-		; do				echo -en "password: ${FILE}\n"
-			until			safe_env passwd ${FILE}
-			do			echo -en "retry: ${FILE}\n"
-			done
-		done
-	fi
+		${MAKEIT}_config											|| EXIT 1
+		if [[ -f ${CFGSCR} ]]; then
+			${RSYNC_U} ${CFGSCR}		${TARGET}/${ARCDIR}/$(basename ${CFGSCR})			|| EXIT 1
+			safe_env			${ARCDIR}/$(basename ${CFGSCR})					|| EXIT 1
+		fi
 	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -f			|| exit 1
 	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -u			|| exit 1
 	mount_dev_dirs -u												|| exit 1
@@ -809,9 +749,8 @@ if [[ ${1} == -w ]]; then
 		${ETCDIR}/make.conf \
 		${ETCDIR}/package.*
 	do
-		[[ -n ${_NEW} ]] && "s|^[#][{]NEW[}][ ](.+)$|\1|g" ${FILE}; fi
-		[[ -n ${_GOS} ]] && "s|^[#][{]GOS[}][ ](.+)$|\1|g" ${FILE}; fi
-		[[ -n ${_CPU} ]] && "s|^[#][{]CPU[}][ ](.+)$|\1|g" ${FILE}; fi
+		[[ -n ${_NEW} ]] && ${SED} -i "s|^[#][{]NEW[}][ ](.+)$|\1|g" ${FILE}
+		[[ -n ${_GOS} ]] && ${SED} -i "s|^[#][{]GOS[}][ ](.+)$|\1|g" ${FILE}
 	done
 	${SED} -i \
 		-e "s|^[#][{]CPU[}][ ]||g" \
@@ -828,18 +767,16 @@ if [[ ${1} == -w ]]; then
 	locale-gen
 	gcc-config $(gcc-config --list-profiles | awk '{print $2;}' | sort -n | tail -n1)
 	gcc-config --list-profiles
-	java-config --set-system-vm icedtea-8
+	java-config --set-system-vm $(java-config --list-available-vm | ${GREP} -o "icedtea[-][0-9]+" | sort -n | tail -n1)
 	java-config --list-available-vms
 	for FILE in \
-		mesa:--auto		\
-		opengl:xorg-x11		\
-		python:python3.6	\
-		unison:2.48		\
-		vi:vim			\
-		\
 		$(for NEXT in ${KERNEL}; do
 			echo "kernel:linux-${NEXT}-gentoo"
-		done)
+		done) \
+		$(for NEXT in ${PYTHON}; do
+			echo "python:${NEXT}"
+		done) \
+		${SELECT}
 	do
 		declare KEY="$(echo "${FILE}" | ${SED} "s|^(.+)[:](.+)$|\1|g")"
 		declare VAL="$(echo "${FILE}" | ${SED} "s|^(.+)[:](.+)$|\2|g")"
@@ -848,6 +785,9 @@ if [[ ${1} == -w ]]; then
 	done
 	cat /dev/null		>/var/lib/portage/world
 	echo "@${_PKG}"		>/var/lib/portage/world_sets
+	$(for NEXT in ${LINPKG}; do
+		echo "${NEXT}"	>>/var/lib/portage/world
+	done)
 	exit 0
 fi
 
@@ -868,7 +808,7 @@ if [[ ${1} == -u ]]; then
 	if [[ -n "$(which haskell-updater 2>/dev/null)" ]]; then
 		expect_wrapper haskell-updater --all				|| exit 1
 	fi
-	expect_wrapper emerge ${_ASK} \@module-rebuild				|| exit 1
+	expect_wrapper emerge ${_ASK} \@module-rebuild --exclude "${LINPKG}"	|| exit 1
 	expect_wrapper emerge ${_ASK} \@preserved-rebuild			|| exit 1
 	expect_wrapper emerge ${_ASK} --depclean				|| exit 1
 	expect_wrapper revdep-rebuild --ignore					|| exit 1
