@@ -2,10 +2,15 @@
 source ${HOME}/.bashrc
 ################################################################################
 
+#NOTE: UPDATE THESE TO MATCH "_SYSTEM" SCRIPT
+
+declare SETDIR="${SETDIR:-/.g/_data/zactive/.setup}"
 declare GENDIR="${GENDIR:-/_gentoo}"
 
 declare ETCDIR="/etc/portage"
 declare REPDIR="/var/git/meta-repo"
+
+declare FUNDIR="gentoo"
 
 ########################################
 
@@ -14,7 +19,7 @@ declare TOKEN
 ################################################################################
 
 ${MKDIR} ${GENDIR}
-${RSYNC_C} ${ETCDIR}/_gentoo/ ${GENDIR}/
+${RSYNC_C} ${SETDIR}/${FUNDIR}${GENDIR}/ ${GENDIR}/
 
 ########################################
 
@@ -27,7 +32,7 @@ function grep_token {
 
 if [[ ${1} == -v ]]; then
 	declare CUR="/.g/_data/_builds/_gentoo"
-	declare NEW="/.g/_toor"
+	declare NEW="/.g/_data/_builds/_gentoo.working"
 	declare PKG
 	for PKG in $(
 		${GREP} -v "^[#]" ${ETCDIR}/package.keywords |
@@ -37,7 +42,7 @@ if [[ ${1} == -v ]]; then
 		sort
 	); do
 		echo -en "\n"
-		${GREP} --only-matching "${PKG}[-][0-9][^[:space:]]*" ${CUR}/_gentoo/.emerge
+		${GREP} --only-matching "${PKG}[-][0-9][^[:space:]]*" ${CUR}${GENDIR}/.emerge
 		${GREP} --with-filename "KEYWORDS[=].*[^~]amd64" ${NEW}${REPDIR}/kits/*/${PKG}/*.ebuild |
 			${SED} -e "s|^.+/||g" -e "s|:.+$||g"
 	done
@@ -68,6 +73,8 @@ fi
 
 ################################################################################
 
+#note: the ".emerge" file is also hard-set in the "_system" script
+
 declare EMERGE_CMD="$(which emerge) --verbose --pretend"
 env - ${EMERGE_CMD} --emptytree \@system \@world	>${GENDIR}/.emerge	2>&1
 env - ${EMERGE_CMD} --info				>${GENDIR}/.info	2>&1
@@ -77,10 +84,10 @@ env - $(which equery) list --duplicates '*'		>${GENDIR}/.slots	2>&1
 ########################################
 
 #>>>declare OPTS="-mindepth 1 -mount \
-#>>>	    \( -path /.g -prune \) \
-#>>>	-or \( -path /.runit -prune \) \
-#>>>	-or \( -path /.setup -prune \) \
-#>>>	-or \( -path /_gentoo -prune \) \
+#>>>	-or \( -path ${GENDIR} -prune \) \
+#>>>	\
+#>>>	-or \( -path ${REPDIR} -prune \) \
+#>>>	-or \( -path ${REPDIR}.git -prune \) \
 #>>>	\
 #>>>	-or \( -path /dev -prune \) \
 #>>>	-or \( -path /lost+found -prune \) \
@@ -106,9 +113,6 @@ env - $(which equery) list --duplicates '*'		>${GENDIR}/.slots	2>&1
 #>>>	-or \( -path /usr/src/linux-\* -prune \) \
 #>>>	-or \( -path /var/cache/portage -prune \) \
 #>>>	-or \( -path /var/db/pkg -prune \) \
-#>>>	-or \( -path ${REPDIR} -prune \) \
-#>>>	-or \( -path ${REPDIR}.git -prune \) \
-#>>>	-or \( -path /~~\*~~ -prune \) \
 #>>>"
 #>>>(
 #>>>	eval find -L / ${OPTS} '-or \( -type l -print \)';
@@ -118,9 +122,11 @@ env - $(which equery) list --duplicates '*'		>${GENDIR}/.slots	2>&1
 #>>>) |
 #>>>	sort |
 #>>>	uniq \
-#>>>	>/_gentoo/_orphans
+#>>>	>${GENDIR}/_orphans
 
 ########################################
+
+#note: the "_packages" file is also hard-set in the "_system" script
 
 cat ${GENDIR}/.emerge |
 	${SED} -n "s/^[[]ebuild[^]]+[]][ ]([^: ]+)[: ].*$/\1/gp"	|
