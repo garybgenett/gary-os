@@ -24,10 +24,9 @@ fi
 
 ################################################################################
 
-#OPTIONS[SOURCE GITDIR RELDIR]
+#OPTIONS[SOURCE GITDIR]
 declare SOURCE="${SOURCE:-/.g/_data/_target/iso}"
 declare GITDIR="${GITDIR:-/.g/_data/_build/funtoo/meta-repo.git}"
-declare RELDIR="${RELDIR:-/.g/_data/_builds/_metro}"
 
 #OPTIONS[SETDIR ARCDIR GENDIR FUNDIR LINDIR OVLDIR]
 declare SETDIR="${SETDIR:-/.g/_data/zactive/.setup}"
@@ -37,17 +36,17 @@ declare FUNDIR="${FUNDIR:-gentoo}"
 declare LINDIR="${LINDIR:-linux}"
 declare OVLDIR="${OVLDIR:-_overlay}"
 
-#>>>#OPTIONS[BLDDIR OUTDIR TORDIR METDIR]
+#>>>#OPTIONS[BLDDIR OUTDIR TORDIR GOSDIR]
 declare BLDDIR="${BLDDIR:-/.g/_data/_builds/_gentoo}"
 declare OUTDIR="${OUTDIR:-${BLDDIR}.testing}"
 declare TORDIR="${TORDIR:-/.g/_toor}"
-declare METDIR="${METDIR:-${TORDIR}}"
+declare GOSDIR="${GOSDIR:-${TORDIR}}"
 
-#>>>#OPTIONS[PKGBLD PKGOUT PKGTOR PKGMET]
+#>>>#OPTIONS[PKGBLD PKGOUT PKGTOR PKGGOS]
 declare PKGBLD="${PKGBLD:-packages}"
 declare PKGOUT="${PKGOUT:-${PKGBLD}}"
 declare PKGTOR="${PKGTOR:-${PKGBLD}}"
-declare PKGMET="${PKGMET:-metro}"
+declare PKGGOS="${PKGGOS:-gary-os}"
 
 ################################################################################
 
@@ -60,12 +59,12 @@ declare WRKDIR="/var/tmp/portage"
 
 ########################################
 
-#VARIABLES[TARGET TOOR _PKG _NEW _MET]
+#VARIABLES[TARGET TOOR _PKG _NEW _GOS]
 declare TARGET="${BLDDIR}"
 declare TOOR=
 declare _PKG="${PKGBLD}"
 declare _NEW=
-declare _MET=
+declare _GOS=
 
 if [[ ${1} == -d ]]; then
 	TARGET="${BLDDIR}"
@@ -97,8 +96,8 @@ if [[ ${1} == -n ]]; then
 	_NEW="1"
 	shift
 fi
-if [[ ${_PKG} == "metro" ]]; then
-	_MET="1"
+if [[ ${_PKG} == "_${PKGGOS}" ]] || [[ ${_PKG} == "${PKGGOS}" ]]; then
+	_GOS="1"
 fi
 
 ########################################
@@ -161,7 +160,7 @@ declare GARC="${GARC:-core2}"
 declare GSUB="${GSUB:-core2}"
 declare GOPT="${GOPT:--O2}"
 
-if [[ -n ${_MET} ]]; then
+if [[ -n ${_GOS} ]]; then
 	_CPU="1"
 	EARC="x86-64bit"
 	ESUB="generic_64"
@@ -294,7 +293,7 @@ function print_info {
 		printf "${PRINTF}" "Chroot Selection [-d] (\$PKGBLD/\$BLDDIR):"	"${PKGBLD}"	"${BLDDIR}"
 		printf "${PRINTF}" "Chroot Selection [-x] (\$PKGOUT/\$OUTDIR):"	"${PKGOUT}"	"${OUTDIR}"
 		printf "${PRINTF}" "Chroot Selection [-t] (\$PKGTOR/\$TORDIR):"	"${PKGTOR}"	"${TORDIR}"
-		printf "${PRINTF}" "Chroot Selection [-m] (\$PKGMET/\$METDIR):"	"${PKGMET}"	"${METDIR}"
+		printf "${PRINTF}" "Chroot Selection [-m] (\$PKGGOS/\$GOSDIR):"	"${PKGGOS}"	"${GOSDIR}"
 		echo -en "\n"
 		printf "${PRINTF}" "Chroot Build (Initial):"			"<auto>"	"${SCRIPT} [{chroot}] -0"
 		printf "${PRINTF}" "Chroot Build (Update Only):"		"<auto>"	"${SCRIPT} [{chroot}] -/"
@@ -777,7 +776,7 @@ if [[ ${1} == -w ]]; then
 		${ETCDIR}/package.*
 	do
 		if [[ -n ${_NEW} ]]; then ${SED} -i "s|^[#][{]NEW[}][ ](.+)$|\1|g" ${FILE}; fi
-		if [[ -n ${_MET} ]]; then ${SED} -i "s|^[#][{]MET[}][ ](.+)$|\1|g" ${FILE}; fi
+		if [[ -n ${_GOS} ]]; then ${SED} -i "s|^[#][{]GOS[}][ ](.+)$|\1|g" ${FILE}; fi
 		if [[ -n ${_CPU} ]]; then ${SED} -i "s|^[#][{]CPU[}][ ](.+)$|\1|g" ${FILE}; fi
 	done
 	if [[ -n ${_CPU} ]]; then
@@ -861,7 +860,7 @@ elif [[ ${1} != -! ]]; then
 	if [[ -z ${1} ]] || [[ ${1} == -f ]]; then
 		FILE="true"
 		NEXT="--fetch-all-uri"
-		if [[ -n ${_MET} ]]; then
+		if [[ -n ${_GOS} ]]; then
 			NEXT="--fetchonly"
 		fi
 		expect_wrapper emerge --ask=n --emptytree ${NEXT}			\
@@ -903,7 +902,7 @@ fi
 ################################################################################
 
 safe_env ${SETDIR}/${FUNDIR}/.emergent
-#>>>if [[ -z ${_MET} ]]; then
+#>>>if [[ -z ${_GOS} ]]; then
 #>>>	safe_env ${SETDIR}/${FUNDIR}/.hacks
 #>>>fi
 

@@ -240,16 +240,16 @@ games-fps/doom3-mitm			-dedicated
 
 ########################################
 
-#{MET} net-libs/glib-networking		-libproxy	# gentoo required
-#{MET} sys-apps/util-linux		-udev		# gentoo required
+#{GOS} net-libs/glib-networking		-libproxy	# gentoo required
+#{GOS} sys-apps/util-linux		-udev		# gentoo required
 
-#{MET} app-text/poppler			-qt4		# gentoo required (reversing above)
+#{GOS} app-text/poppler			-qt4		# gentoo required (reversing above)
 
-#{MET} net-analyzer/wireshark		-gtk3		# only need gtk+-2
-#{MET} net-libs/webkit-gtk		-egl		# disable opengl (glut/mesa)
-#{MET} net-libs/webkit-gtk		-opengl		# disable opengl (glut/mesa)
-#{MET} net-libs/webkit-gtk		-webgl		# disable opengl (glut/mesa)
-#{MET} sys-apps/portage			python2		# only want python-2
+#{GOS} net-analyzer/wireshark		-gtk3		# only need gtk+-2
+#{GOS} net-libs/webkit-gtk		-egl		# disable opengl (glut/mesa)
+#{GOS} net-libs/webkit-gtk		-opengl		# disable opengl (glut/mesa)
+#{GOS} net-libs/webkit-gtk		-webgl		# disable opengl (glut/mesa)
+#{GOS} sys-apps/portage			python2		# only want python-2
 
 ################################################################################
 # end of file
