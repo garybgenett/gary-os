@@ -57,15 +57,19 @@ declare GMODS="${GRUBD}/${GTYPE}"
 
 ########################################
 
+declare G_DBG="set debug=linux"
+
 declare GLOAD="\
 # load
+${G_DBG}
 echo \"Loading ${_NAME}...\"
 insmod configfile
 # end of file
 "
 
 declare GLOAD_FILE="\
-# load
+# load file
+${G_DBG}
 echo \"Loading ${_NAME}...\"
 insmod configfile
 configfile ${GFILE}
@@ -74,9 +78,9 @@ configfile ${GFILE}
 
 declare GMENU="\
 # menu
+${G_DBG}
 insmod linux
 menuentry \"${_PROJ}\" {
-set debug=linux
 linux ${GROOT}/${_BASE}.null.kernel
 linux ${GROOT}/${_BASE}.kernel ${GOPTS}
 }
@@ -87,6 +91,7 @@ menuentry \"Back to OS\" { chainloader ${GBOOT}+1 }
 
 declare GRESC="\
 # rescue
+${G_DBG}
 insmod read
 menuentry \"${_NAME} Rescue Image\" { set; read rescue; }
 ${GCUST:-${GMENU}}
