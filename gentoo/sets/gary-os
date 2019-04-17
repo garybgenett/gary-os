@@ -1,91 +1,294 @@
 ################################################################################
 # portage set configuration file
 ################################################################################
-#
-# [disable 'nomodeset' kernel option]
-#
-# dhcpcd eth0
-# ln -fsv /usr/share/zoneinfo/US/Pacific /etc/localtime
-# ntpdate -v -b pool.ntp.org
-#
-# mkdir -pv /.g/.home ; rm -frv /root ; ln -fsv /.g/.home /root
-# mount /dev/sdX /mnt ; rsync -avv /mnt/.home/ /.g/.home ; umount /mnt
-#	rsync -avv root@me.garybgenett.net:/.g/.home/ /.g/.home
-# passwd
-#
-# [login]
-#	rsync -avv root@me.garybgenett.net:/.g/_data/zactive/.history/shell/gary-os.* /.g/.home/.history/shell/
-# smount lackey sdX
-#
-# mount --bind /.g/lackey_data/_builds/_gentoo/usr/portage /usr/portage
-#	tar -C /usr -xvvf /.g/lackey_boot/live/gary-os.portage.tar.xz
-#	vi /etc/portage/make.conf /.g/.home/setup/gentoo/make.conf (USE, ACCEPT_KEYWORDS, VIDEO_CARDS)
-#	vi /usr/lib/portage/pym/portage/package/ebuild/fetch.py
-#	emerge sshfs autossh openssh openssl
-#		rsync root@me.garybgenett.net:/.g/_data/_builds/_metro/.distfiles/{autossh,openssh,openssl}* /usr/portage/distfiles/
-#	emerge --sync ; (cd /usr/portage && /usr/bin/git reset --hard $(cat /.g/.home/setup/gentoo/funtoo))
-#	sshfs -o nonempty root@me.garybgenett.net:/usr/portage/packages /usr/portage/packages
-# rsync /.g/.home/setup/gentoo/{make,package,sets}* /etc/portage/
-# emerge --update --deep --newuse --usepkg @metro @gary-os
-#	emerge xorg-x11 xorg-server xorg-drivers $(qlist --nocolor --installed x11-drivers) xautolock xlockmore
-# rm -frv /tmp/.ccache
-# umount /usr/portage
-#	umount /usr/portage/packages
-#
-# trust
-# shell -i
-# vpn -a
-# vpn -v
-#
-# smount x sdX
-# rm -frv /.g/.home/.history/screen
-#
-# rm -frv /.g/.home/.thunderbird ; ln -fsv .mozilla/thunderbird /.g/.home/.thunderbird
-# _sync _moz /.g/.home/.mozilla
-#
-# psk _menu ; psk X ; rm -frv /tmp/.{X,ICE}*
-#	prompt -d -x ; xhost + ; xrandr
-# startx &
-#
-################################################################################
+
+########################################
+# toolchain
+
+sys-devel/autoconf
+sys-devel/automake
+sys-devel/binutils
+sys-devel/gcc
+sys-devel/make
+sys-devel/patch
+sys-libs/glibc
+
+dev-util/ccache
+dev-util/debugedit
+sys-devel/gdb
+
+########################################
+# system
+
+app-misc/ca-certificates
+app-text/iso-codes
+sys-libs/timezone-data
+
+app-crypt/efitools
+sys-apps/openrc
+sys-apps/sysvinit
+sys-boot/boot-update
+sys-boot/efibootmgr
+sys-boot/grub
+sys-boot/os-prober
+sys-boot/refind
+sys-boot/syslinux
+sys-power/suspend
+
+sys-apps/gptfdisk
+sys-block/parted
+sys-fs/btrfs-progs
+sys-fs/cryptsetup
+sys-fs/dosfstools
+sys-fs/e2fsprogs
+sys-fs/ext3grep
+sys-fs/ext4magic
+sys-fs/extundelete
+sys-fs/mtools
+sys-fs/squashfs-tools
+
+sys-apps/attr
+sys-apps/coreutils
+sys-apps/diffutils
+sys-apps/file
+sys-apps/findutils
+sys-apps/gawk
+sys-apps/grep
+sys-apps/less
+sys-apps/sed
+sys-apps/util-linux
+sys-apps/which
+
+sys-process/atop
+sys-process/htop
+sys-process/iotop
+sys-process/lsof
+sys-process/nmon
+sys-process/procps
+sys-process/psmisc
+sys-process/schedtool
+
+app-admin/sysklogd
+app-admin/ulogd
+sys-fs/inotify-tools
+
+app-admin/pwgen
+app-admin/sudo
+sys-libs/cracklib
+sys-libs/pam
+
+net-firewall/ebtables
+net-firewall/iptables
+net-misc/bridge-utils
+net-misc/dhcpcd
+net-misc/ifenslave
+net-misc/iputils
+net-misc/networkmanager
+net-misc/vconfig
+net-wireless/wireless-tools
+net-wireless/wpa_supplicant
+sys-apps/ethtool
+sys-apps/iproute2
+sys-apps/net-tools
+
+net-ftp/lftp
+net-misc/curl
+net-misc/rclone
+net-misc/rsync
+net-misc/wget
+www-client/elinks
+www-client/links
+www-client/lynx
+www-client/w3m
+
+app-misc/screen
+app-misc/tmux
+app-shells/bash
+app-shells/bash-completion
+sys-apps/kbd
+sys-devel/gettext
+sys-libs/gpm
+
+dev-lang/perl
+dev-libs/libpcre
+
+app-crypt/gnupg
+dev-libs/openssl
+net-misc/openssh
+
+app-arch/afio
+app-arch/bzip2
+app-arch/cpio
+app-arch/gzip
+app-arch/p7zip
+app-arch/rar
+app-arch/sharutils
+app-arch/tar
+app-arch/unrar
+app-arch/unzip
+app-arch/upx-ucl
+app-arch/xz-utils
+app-arch/zip
+dev-util/xdelta
+
+sys-apps/man-db
+sys-apps/man-pages
+sys-apps/man-pages-posix
+sys-apps/texinfo
+
+app-dicts/aspell-en
+app-text/aspell
+
+app-editors/gvim
+app-editors/nano
+app-editors/vim
+app-text/dos2unix
+app-vim/taglist
+app-vim/vim-spell-en
+dev-util/indent
+sys-apps/ed
+
+app-arch/cabextract
+app-arch/deb2targz
+app-arch/dpkg
+app-arch/rpm
+app-arch/rpm2targz
+app-arch/xar
+app-crypt/chntpw
+sys-apps/fakeroot
+sys-apps/fakeroot-ng
+
+########################################
+# gentoo
+
+sys-kernel/genkernel
+sys-kernel/gentoo-sources:4.9.125
+sys-kernel/linux-firmware
+
+app-admin/ego
+app-admin/eselect
+sys-apps/portage
+
+app-portage/gentoolkit
+app-portage/pfl
+app-portage/portage-utils
+app-shells/gentoo-bashcomp
+app-vim/gentoo-syntax
+
+sys-devel/gcc-config
 
 ########################################
 # x11
 
-x11-base/xorg-x11
+x11-apps/xrandr
+x11-base/xorg-server
 
-x11-apps/transset
-x11-apps/xsetroot
-x11-misc/redshift
-x11-misc/wmctrl
-x11-misc/xautolock
-x11-misc/xcompmgr
-x11-misc/xlockmore
+x11-misc/obconf
+x11-wm/openbox
+
+x11-terms/rxvt-unicode
+
+x11-misc/xsel
 
 ########################################
 # toolkits
 
-media-libs/alsa-lib
-media-libs/alsa-oss
-media-sound/alsa-utils
-media-sound/apulse
+dev-vcs/git
+dev-vcs/subversion
+
+dev-lang/python
+
+dev-db/sqlite
+dev-tcltk/expect
 
 ########################################
 # utilities
 
-net-fs/sshfs
+sci-mathematics/calc
+sys-devel/bc
+
+dev-util/ltrace
+dev-util/strace
+dev-util/sysprof
+sys-apps/kexec-tools
+
+sys-apps/hdparm
+sys-block/blktrace
+sys-fs/mdadm
+
+sys-apps/dcfldd
+sys-block/whdd
+sys-fs/dd-rescue
+sys-fs/ddrescue
+sys-fs/safecopy
+
+sys-apps/lshw
+sys-apps/memtester
+sys-apps/pciutils
+sys-apps/usbutils
+sys-fs/sysfsutils
+sys-power/acpitool
+
+app-admin/procinfo-ng
+app-admin/sysstat
+app-misc/binwalk
+app-misc/reptyr
+app-text/tree
+sys-apps/dstat
+sys-apps/pv
+
+net-analyzer/dnstracer
+net-analyzer/httping
+net-analyzer/iftop
+net-analyzer/iptraf-ng
+net-analyzer/macchanger
+net-analyzer/net-snmp
+net-analyzer/netcat6
+net-analyzer/nethogs
+net-analyzer/ngrep
+net-analyzer/nmap
+net-analyzer/rrdtool
+net-analyzer/snort
+net-analyzer/ssldump
+net-analyzer/tcpdump
+net-analyzer/tcptrace
+net-analyzer/tcptraceroute
+net-analyzer/traceroute
+net-analyzer/vnstat
+net-analyzer/wireshark
+net-dns/avahi
+net-dns/bind-tools
+net-misc/cadaver
+net-misc/iperf
+net-misc/netkit-telnetd
+net-misc/rdate
+net-misc/socat
+net-misc/whois
+
+net-misc/autossh
+net-misc/pipes
+net-vpn/httptunnel
+
+sys-fs/exfat-utils
+sys-fs/fuse-exfat
+sys-fs/ntfs3g
+
+app-forensics/cmospwd
+app-forensics/foremost
+app-forensics/sleuthkit
+sys-apps/flashrom
+
+########################################
+# servers
+
+net-misc/ntp
+net-vpn/openvpn
 
 ########################################
 # programs
 
-app-emulation/virt-viewer
-
 mail-client/mutt
-net-misc/urlview
 
-app-admin/keepassx
-app-admin/keepassxc
-mail-client/thunderbird
 www-client/firefox
 
 net-misc/freerdp
@@ -94,11 +297,10 @@ net-misc/tigervnc
 ########################################
 # media
 
-media-sound/aumix
+net-p2p/rtorrent
 
-media-gfx/feh
-
-media-video/vlc
+app-cdr/cdrtools
+app-cdr/dvd+rw-tools
 
 ################################################################################
 # end of file

@@ -1,0 +1,105 @@
+################################################################################
+# portage set configuration file
+################################################################################
+#
+# [disable 'nomodeset' kernel option]
+#
+# dhcpcd eth0
+# ln -fsv /usr/share/zoneinfo/US/Pacific /etc/localtime
+# ntpdate -v -b pool.ntp.org
+#
+# mkdir -pv /.g/.home ; rm -frv /root ; ln -fsv /.g/.home /root
+# mount /dev/sdX /mnt ; rsync -avv /mnt/.home/ /.g/.home ; umount /mnt
+#	rsync -avv root@me.garybgenett.net:/.g/.home/ /.g/.home
+# passwd
+#
+# [login]
+#	rsync -avv root@me.garybgenett.net:/.g/_data/zactive/.history/shell/gary-os.* /.g/.home/.history/shell/
+# smount lackey sdX
+#
+# mount --bind /.g/lackey_data/_builds/_gentoo/usr/portage /usr/portage
+#	tar -C /usr -xvvf /.g/lackey_boot/live/gary-os.portage.tar.xz
+#	vi /etc/portage/make.conf /.g/.home/setup/gentoo/make.conf (USE, ACCEPT_KEYWORDS, VIDEO_CARDS)
+#	vi /usr/lib/portage/pym/portage/package/ebuild/fetch.py
+#	emerge sshfs autossh openssh openssl
+#		rsync root@me.garybgenett.net:/.g/_data/_builds/_metro/.distfiles/{autossh,openssh,openssl}* /usr/portage/distfiles/
+#	emerge --sync ; (cd /usr/portage && /usr/bin/git reset --hard $(cat /.g/.home/setup/gentoo/funtoo))
+#	sshfs -o nonempty root@me.garybgenett.net:/usr/portage/packages /usr/portage/packages
+# rsync /.g/.home/setup/gentoo/{make,package,sets}* /etc/portage/
+# emerge --update --deep --newuse --usepkg @metro @gary-os
+#	emerge xorg-x11 xorg-server xorg-drivers $(qlist --nocolor --installed x11-drivers) xautolock xlockmore
+# rm -frv /tmp/.ccache
+# umount /usr/portage
+#	umount /usr/portage/packages
+#
+# trust
+# shell -i
+# vpn -a
+# vpn -v
+#
+# smount x sdX
+# rm -frv /.g/.home/.history/screen
+#
+# rm -frv /.g/.home/.thunderbird ; ln -fsv .mozilla/thunderbird /.g/.home/.thunderbird
+# _sync _moz /.g/.home/.mozilla
+#
+# psk _menu ; psk X ; rm -frv /tmp/.{X,ICE}*
+#	prompt -d -x ; xhost + ; xrandr
+# startx &
+#
+################################################################################
+
+########################################
+# x11
+
+x11-base/xorg-x11
+
+x11-apps/transset
+x11-apps/xsetroot
+x11-misc/redshift
+x11-misc/wmctrl
+x11-misc/xautolock
+x11-misc/xcompmgr
+x11-misc/xlockmore
+
+########################################
+# toolkits
+
+media-libs/alsa-lib
+media-libs/alsa-oss
+media-sound/alsa-utils
+media-sound/apulse
+
+########################################
+# utilities
+
+net-fs/sshfs
+
+########################################
+# programs
+
+app-emulation/virt-viewer
+
+mail-client/mutt
+net-misc/urlview
+
+app-admin/keepassx
+app-admin/keepassxc
+mail-client/thunderbird
+www-client/firefox
+
+net-misc/freerdp
+net-misc/tigervnc
+
+########################################
+# media
+
+media-sound/aumix
+
+media-gfx/feh
+
+media-video/vlc
+
+################################################################################
+# end of file
+################################################################################
