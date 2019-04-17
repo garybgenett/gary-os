@@ -1,0 +1,3 @@
+The upstream hasn't done a release in 3+ years but actively commits fixes and improvements to the master branch. There have been commits since
+our snapshot was taken; however, there is no imminent reason to create a new ebuild. We can do this at some point in the future when enough
+improvements are available to make it worth the upgrade.
