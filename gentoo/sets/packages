@@ -34,6 +34,7 @@ sys-boot/grub
 sys-boot/os-prober
 sys-boot/refind
 sys-boot/syslinux
+sys-libs/efivar
 sys-power/suspend
 sys-process/runit
 
@@ -111,6 +112,7 @@ app-misc/screen
 app-misc/tmux
 app-shells/bash
 app-shells/bash-completion
+app-shells/bashdb
 sys-apps/kbd
 sys-devel/gettext
 sys-libs/gpm
@@ -132,6 +134,7 @@ perl-core/JSON-PP
 #>>>perl-core/MIME-Base64		# gentoo required: [perl-core/MIME-Base64-3.150.0] <perl-core/MIME-Base64-3.150.0 ("<perl-core/MIME-Base64-3.150.0" is blocking virtual/perl-MIME-Base64-3.150.0-r2)
 perl-core/Time-Local
 virtual/perl-MIME-Base64
+virtual/perl6
 
 app-crypt/gnupg
 dev-libs/openssl
@@ -141,6 +144,7 @@ app-arch/afio
 app-arch/bzip2
 app-arch/cpio
 app-arch/gzip
+app-arch/lz4
 app-arch/p7zip
 app-arch/rar
 app-arch/sharutils
@@ -168,6 +172,7 @@ app-editors/vim
 app-text/dos2unix
 app-vim/taglist
 app-vim/vim-spell-en
+dev-util/cloc
 dev-util/indent
 sys-apps/ed
 
@@ -184,10 +189,7 @@ sys-apps/fakeroot-ng
 ########################################
 # gentoo
 
-sys-kernel/debian-sources
 sys-kernel/genkernel
-sys-kernel/gentoo-sources
-sys-kernel/gentoo-sources:4.9.125
 sys-kernel/linux-firmware
 
 app-admin/ego
@@ -195,8 +197,6 @@ app-admin/eselect
 sys-apps/portage
 
 app-portage/gentoolkit
-app-portage/pfl
-app-portage/portage-utils
 app-shells/gentoo-bashcomp
 app-vim/gentoo-syntax
 
@@ -207,6 +207,8 @@ app-portage/eix
 app-portage/g-cpan
 app-portage/layman
 app-portage/mirrorselect
+app-portage/pfl
+app-portage/portage-utils
 
 ########################################
 # x11
@@ -216,6 +218,7 @@ media-libs/libtxc_dxtn
 x11-apps/xdm
 x11-apps/xev
 x11-apps/xrandr
+x11-base/xorg-drivers
 x11-base/xorg-server
 x11-base/xorg-x11
 x11-misc/arandr
@@ -241,15 +244,18 @@ x11-terms/xterm
 
 x11-apps/transset
 x11-apps/xclock
+x11-apps/xset
 x11-apps/xsetroot
 x11-misc/redshift
 x11-misc/tabbed
 x11-misc/whaw
 x11-misc/wmctrl
 x11-misc/xautolock
+x11-misc/xbindkeys
 x11-misc/xclip
 x11-misc/xcompmgr
 x11-misc/xdialog
+x11-misc/xdotool
 x11-misc/xlockmore
 x11-misc/xsel
 x11-misc/xvkbd
@@ -260,6 +266,7 @@ x11-terms/root-tail
 
 net-misc/unison
 net-misc/unison:2.48
+net-misc/unison:2.51
 
 dev-perl/Template-DBI
 dev-perl/Template-GD
@@ -341,6 +348,9 @@ net-wireless/bluez
 net-wireless/bluez-hcidump
 net-wireless/bluez-tools
 
+#>>>sys-apps/bolt			# gentoo required: depends on systemd
+sys-apps/thunderbolt-software-user-space
+
 # polychromatic dependencies
 dev-python/dbus-python
 dev-python/lesscpy
@@ -410,6 +420,7 @@ net-misc/netkit-telnetd
 net-misc/rdate
 net-misc/socat
 net-misc/whois
+net-wireless/kismet
 
 net-misc/autossh
 net-misc/pipes
@@ -470,11 +481,13 @@ sci-calculators/qalculate-gtk
 
 app-emulation/bochs
 app-emulation/dosemu
+app-emulation/lxc
 games-emulation/dosbox
 virtual/wine
 
-app-emulation/lxc
+app-emulation/aqemu
 app-emulation/qemu
+app-emulation/qemu-guest-agent
 app-emulation/spice
 app-emulation/spice-protocol
 app-emulation/spice-vdagent
@@ -483,7 +496,7 @@ net-misc/spice-gtk
 
 app-emulation/virtualbox
 app-emulation/virtualbox-additions
-app-emulation/virtualbox-guest-additions
+#>>>app-emulation/virtualbox-guest-additions	# gentoo required: [app-emulation/virtualbox-guest-additions-5.1.36 / sys-kernel/gentoo-sources-4.18.6] /var/tmp/portage/app-emulation/virtualbox-guest-additions-5.1.36/work/vboxsf/utils.c:165:28: error: passing argument 1 of ‘sf_ftime_from_timespec’ from incompatible pointer type [-Werror=incompatible-pointer-types] sf_ftime_from_timespec(&inode->i_atime, &info->AccessTime);
 app-emulation/virtualbox-modules
 
 app-misc/abook
@@ -569,6 +582,7 @@ media-libs/openjpeg
 media-libs/tiff
 
 media-libs/libprojectm
+media-libs/libprojectm-qt
 media-sound/picard
 #>>>media-sound/projectm-pulseaudio	# gentoo required: [media-sound/projectm-pulseaudio-2.1.0] CMake Error at cmake_install.cmake:53 (file): file RPATH_CHANGE could not write new RPATH: to the file: /var/tmp/portage/media-sound/projectm-pulseaudio-2.1.0/image//usr/bin/projectM-pulseaudio The current RUNPATH is: --library=projectM:-L/usr/lib64/qt4:-lQtXml:-lQtOpenGL:-lQtGui:-lQtCore:/usr/lib64/qt4: which does not contain: -lprojectM:-L/usr/lib64/qt4:-lQtXml:-lQtOpenGL:-lQtGui:-lQtCore:/usr/lib64/qt4: as was expected.
 media-sound/quodlibet
