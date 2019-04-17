@@ -5,12 +5,14 @@ static const char *fonts[] = {
 	"monospace:size=10"
 };
 static const char dmenufont[]       = "monospace:size=10";
-static const char normbordercolor[] = "#444444";
-static const char normbgcolor[]     = "#222222";
-static const char normfgcolor[]     = "#bbbbbb";
-static const char selbordercolor[]  = "#005577";
-static const char selbgcolor[]      = "#005577";
-static const char selfgcolor[]      = "#eeeeee";
+static const char urxvt_font[]      = "x:fixed";
+static const char links_fontsize[]  = "16";
+static const char normbordercolor[] = "#444444"; static const char l_normbordercolor[]	= "0x444444";
+static const char normbgcolor[]     = "#222222"; static const char l_normbgcolor[]	= "0x222222";
+static const char normfgcolor[]     = "#bbbbbb"; static const char l_normfgcolor[]	= "0xbbbbbb";
+static const char selbordercolor[]  = "#005577"; static const char l_selbordercolor[]	= "0x005577";
+static const char selbgcolor[]      = "#005577"; static const char l_selbgcolor[]	= "0x005577";
+static const char selfgcolor[]      = "#eeeeee"; static const char l_selfgcolor[]	= "0xeeeeee";
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
@@ -55,14 +57,32 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
-static const char *termcmd[]  = { "tabbed", "-d", "-f", "-r", "2", "-n", "URxvt", "urxvt", "-embed", "''", "-sr", "-bg", normbgcolor, "-fg", normfgcolor, NULL };
-static const char *webcmd[]   = { "tabbed", "-d", "-f", "-r", "2", "-n", "Surf", "surf", "-e", "''", "http://www.duckduckgo.com", NULL };
+static const char *readcmd[]  = { "urxvt", "+sb", "-fn", urxvt_font, "-fb", urxvt_font, "-bg", normbgcolor, "-fg", normfgcolor, "-title", "GaryOS Readme", "-e", "less", "/.gary-os/README.md", NULL };
+static const char *mancmd[]  = { "urxvt", "+sb", "-fn", urxvt_font, "-fb", urxvt_font, "-bg", normbgcolor, "-fg", normfgcolor, "-title", "GaryOS Readme", "-e", "man", "dwm", NULL };
+//>>>static const char *termcmd[]  = { "tabbed", "-d", "-f", "-r", "2", "-n", "URxvt", "urxvt", "-embed", "''", "-sr", "-bg", normbgcolor, "-fg", normfgcolor, NULL };
+//>>>static const char *webcmd[]   = { "tabbed", "-d", "-f", "-r", "2", "-n", "Surf", "surf", "-e", "''", "http://www.duckduckgo.com", NULL };
+static const char *termcmd[]  = { "urxvt", "-sr", "-fn", urxvt_font, "-fb", urxvt_font, "-bg", normbgcolor, "-fg", normfgcolor, NULL };
+static const char *webcmd[]   = { "links", "-g",
+	"-menu-font-size",		links_fontsize,
+	"-html-user-font-size",		links_fontsize,
+	"-html-g-background-color",	l_normbgcolor,
+	"-html-g-text-color",		l_selfgcolor,
+	"-html-g-link-color",		l_selbgcolor,
+	"-scroll-bar-frame-color",	l_selbordercolor,
+	"-scroll-bar-area-color",	l_normbordercolor,
+	"-scroll-bar-bar-color",	l_selbgcolor,
+	"-menu-background-color",	l_normfgcolor,
+	"-menu-foreground-color",	l_selbgcolor,
+	"http://www.duckduckgo.com", NULL
+};
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY|ControlMask,           XK_Return, spawn,          {.v = webcmd } },
+	{ MODKEY,                       XK_Left,   spawn,          {.v = readcmd } },
+	{ MODKEY,                       XK_Right,  spawn,          {.v = mancmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
@@ -103,6 +123,8 @@ static Button buttons[] = {
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
+	{ ClkStatusText,        0,              Button1,        spawn,          {.v = readcmd } },
+	{ ClkStatusText,        0,              Button3,        spawn,          {.v = mancmd } },
 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
