@@ -12,7 +12,7 @@ fi
 
 ################################################################################
 
-declare COMMAND_LINE="${@}"
+declare _OPTS="${@}"
 
 ########################################
 
@@ -31,6 +31,11 @@ if [[ ${1} == ${QUIET_OPT} ]]; then
 	QUIET="${1}"
 	shift
 fi
+
+########################################
+
+declare FILE=
+declare NEXT=
 
 ################################################################################
 
@@ -263,6 +268,7 @@ function print_info {
 	declare STATE="\e[0;35m"	# magenta
 	declare HOWTO="\e[0;36m"	# cyan
 	declare NOTES="\e[0;33m"	# yellow
+	declare ERROR="\e[1;31m"	# red
 	declare OTHER="\e[1;34m"	# dark blue
 	declare RESET="\e[0;37m"	# light gray
 	if [[ ${1} == "marker" ]]; then
@@ -334,7 +340,8 @@ function print_info {
 		echo -en "${NOTES}"
 		echo -en ">>> ARGUMENTS <<<"
 		echo -en "${RESET}\n"
-		starter_var "COMMAND_LINE"
+		starter_var "_SELF"
+		starter_var "_OPTS"
 		starter_var "DEBUG"
 		starter_var "QUIET"
 		echo -en "\n"
@@ -344,6 +351,11 @@ function print_info {
 			echo -en "${NOTES}"
 			echo -en ">>> ${FILE} <<<"
 			echo -en "${RESET}\n"
+			if [[ ${FILE} == OPTIONS ]]; then
+				echo -en "${STATE}"
+				echo -en ">>> THESE MAY BE CHANGED <<<"
+				echo -en "${RESET}\n"
+			fi
 			declare END="true"
 			${SED} -n "s/^[#]${FILE}[[](.+)[]]$/\1/gp" ${_SELF} | while read -r NEXT; do
 				if ${END}; then END="false"; else echo -en "\n"; fi
@@ -373,8 +385,8 @@ function print_info {
 		echo -en "Unmounting Chroot Directories..."
 		echo -en "${RESET}\n"
 	else
-		echo -en "${NOTES}"
-		echo -en "Somebody Made A Mistake..."
+		echo -en "${ERROR}"
+		echo -en ">>> SOMEBODY MADE A MISTAKE! <<<"
 		echo -en "${RESET}\n"
 	fi
 	return 0
