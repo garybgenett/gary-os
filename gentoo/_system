@@ -553,22 +553,114 @@ fi
 
 if [[ ${1} == -s ]]; then
 	shift
-	mount_dev_dirs							|| EXIT 1
-	if [[ ${1} == -g ]]; then
+	mount_dev_dirs					|| EXIT 1
+	if [[ ${1} == -e ]]; then
 		shift
-		expect_wrapper emerge ${_ASK} \
-			--pretend \
-			--emptytree \
-			--tree \
-			--unordered-display \
-			\@system \@world				|| EXIT 1
-	elif [[ ${1} == -e ]]; then
-		shift
-		expect_wrapper emerge ${_ASK} "${@}"			|| EXIT 1
+		expect_wrapper emerge ${_ASK} "${@}"	|| EXIT 1
 	else
-		safe_env /usr/bin/env bash -o vi ${@:+-c \"${@}\"}	|| EXIT 1
+		safe_env bash --norc ${@:+-c \"${@}\"}	|| EXIT 1
 	fi
-	mount_dev_dirs -u						|| EXIT 1
+	mount_dev_dirs -u				|| EXIT 1
+	EXIT 0
+fi
+
+########################################
+
+if [[ ${1} == -y ]]; then
+	shift
+	if [[ ${1} == -j ]]; then
+		shift
+		if [[ ${1} == depends ]] || [[ ${1} == d ]]; then
+			shift
+			safe_env equery depends \
+				--indirect \
+				--depth=3 \
+				"${@}"					|| EXIT 1
+		elif [[ -n ${1} ]]; then
+			safe_env equery \
+				"${@}"					|| EXIT 1
+		else
+			safe_env emerge ${_ASK} \
+				--pretend \
+				--emptytree \
+				--tree \
+				--unordered-display \
+				\@system \@world			|| EXIT 1
+		fi
+		EXIT 0
+	fi
+	function compare_packages {
+		declare NAM="${1}" && shift
+		declare SRC="${1}" && shift
+		declare DST="${1}" && shift
+		echo -en "\n"
+		echo -en ">>> PACKAGES: ${NAM} <<<\n"
+		echo -en ">>> COMPARING (${DST}) AGAINST (${SRC}) FILE <<<\n"
+		echo -en "\n"
+#>>>		for NEXT in $(${SED} "s|^.*[[:space:]]||g" ${DST}); do
+		for NEXT in $(cat ${DST}); do
+			NEXT="$(echo "${NEXT}" | ${SED} "s|[-][0-9].*$||g")"
+			if [[ -z $(${GREP} "${NEXT}" ${SRC}) ]]; then
+				${GREP} "${NEXT}" ${DST}
+			fi
+		done
+		return 0
+	}
+	if ! ${DO_CHROOT}; then
+		echo -en "\n"
+		echo -en ">>> THIS OPTION REQUIRES A CHROOT <<<\n"
+		echo -en "\n"
+		echo -en ">>> IT CAN BE RUN AGAINST ROOT(/) USING THE (-g)(GOSDIR=/) OPTIONS <<<\n"
+		echo -en ">>> YOU ALMOST CERTAINLY WANT TO SPECIFY YOUR OWN PACKAGES FILE TO COMPARE AGAINST <<<\n"
+		echo -en ">>> THIS OPTION IS READ-ONLY SO THERE IS NO POTENTIAL FOR HARM <<<\n"
+		echo -en "\n"
+		EXIT 1
+	fi
+	FILE="${_SAVDIR}${GENDIR}/_packages"
+	if [[ -n ${1} ]] && [[ -f ${1} ]]; then
+		FILE="${1}"
+		shift
+	fi
+	if [[ -f ${FILE} ]] && [[ -f ${TARGET}${GENDIR}/_packages ]]; then
+		#note: the "_packages" file is hard-set in the ".emergent" script
+		compare_packages "ADDED"	${FILE}				${TARGET}${GENDIR}/_packages
+		compare_packages "REMOVED"	${TARGET}${GENDIR}/_packages	${FILE}
+	else
+		echo -en "\n"
+		echo -en ">>> ONE OF (${FILE}) OR (${TARGET}${GENDIR}/_packages) DOES NOT EXIST <<<\n"
+		echo -en ">>> VALID SOURCE ({packages_file}) AND DESTINATION (-g)(GOSDIR=/) FILES ARE REQUIRED <<<\n"
+		echo -en ">>> SKIPPING PACKAGE COMPARISONS <<<\n"
+#>>>		echo -en "\n"
+#>>>		EXIT 1
+	fi
+	#note: the ".emerge" file is also hard-set in the ".emergent" script
+	echo -en "\n>>> USE: GLOBAL <<<\n"
+	for FILE in $(
+		source ${SETDIR}/${FUNDIR}/make.conf
+		echo -en "${USE_GARYOS}"
+	); do
+		echo -en "\n"
+		${GREP} "${FILE/#-}" ${SETDIR}/${FUNDIR}/make.conf
+		${GREP} "${FILE/#-}" ${TARGET}${GENDIR}/.emerge
+	done
+	echo -en "\n>>> USE: PACKAGES <<<\n"
+	for FILE in $(
+		${SED} -n "s|^[#][{]GOS[}][ ]([^[:space:]]+).*$|\1|gp" ${SETDIR}/${FUNDIR}/package.use
+	); do
+		echo -en "\n"
+		${GREP} "${FILE}" ${SETDIR}/${FUNDIR}/package.use
+		${GREP} "${FILE}" ${TARGET}${GENDIR}/.emerge
+	done
+	echo -en "\n>>> ESELECT <<<\n"
+	echo -en "\n"
+	for FILE in \
+		kernel:kernel \
+		python:python \
+		${SELECT}
+	do
+		declare KEY="$(echo "${FILE}" | ${SED} "s|^(.+)[:](.+)$|\1|g")"
+		eselect ${KEY} list
+	done
 	EXIT 0
 fi
 
