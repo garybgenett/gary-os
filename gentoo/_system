@@ -619,13 +619,18 @@ if [[ ${1} == -i ]]; then
 	mount_dev_dirs											|| exit 1
 #>>>	safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -r		|| exit 1
 						${_SELF} ${QUIET_OPT} ${TOOR} ${AUTO} -r		|| exit 1
-	if [[ ! -d ${TARGET}${REPDIR} ]]; then
-		if [[ -d ${GITDIR} ]]; then
-		${MKDIR}			${TARGET}${REPDIR}{,.git}				|| exit 1
-		${RSYNC_U} ${GITDIR}/		${TARGET}${REPDIR}.git					|| exit 1
-		${SETDIR}/${FUNDIR}/${FUNKIT}	${TARGET}${REPDIR} ${FUNTOO}				|| exit 1
+	declare META_FULL="${TARGET}${REPDIR}.git.tar.xz"
+	declare META_ONLY="${TARGET}${REPDIR}.tar.xz"
+	if [[ ! -f ${META_FULL} ]] || [[ ! -f ${META_ONLY} ]]; then
+		if safe_env			${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} ${FUNTOO}
+		then
+			FILE="$(dirname ${TARGET}${REPDIR})"
+			NEXT="$(basename ${REPDIR})"
+			tar -cvv --xz -C ${FILE} -f	${META_FULL}	${NEXT}{,.git}			|| exit 1
+			tar -cvv --xz -C ${FILE} -f	${META_ONLY}	${NEXT}				|| exit 1
+		else
+			${SETDIR}/${FUNDIR}/${FUNKIT}	${TARGET}${REPDIR} ${FUNTOO}			|| exit 1
 		fi
-		safe_env			${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} ${FUNTOO}	|| exit 1
 	fi
 	${SETDIR}/${FUNDIR}/${FUNKIT}		${TARGET}${REPDIR} ${FUNTOO}				|| exit 1
 	safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w		|| exit 1
