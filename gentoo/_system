@@ -699,8 +699,8 @@ if [[ ${1} == -i ]]; then
 	if [[ ! -d ${TARGET}/boot ]]; then
 		${MKDIR}				${TARGET}${ARCDIR}						|| EXIT 1
 		${RSYNC_U} ${SOURCE}/*funtoo*		${TARGET}${ARCDIR}/						|| EXIT 1
-#>>>		tar -pvvx --xz -C ${TARGET} -f		$(ls -t ${TARGET}${ARCDIR}/stage3-*i686*funtoo*.tar.xz		| head -n1) || EXIT 1
-		tar -pvvx --xz -C ${TARGET} -f		$(ls -t ${TARGET}${ARCDIR}/stage3-*core2_64*funtoo*.tar.xz	| head -n1) || EXIT 1
+#>>>		tar -pvvx --xz -C ${TARGET} -f		$(ls -t ${TARGET}${ARCDIR}/stage3-i686-funtoo-*.tar.xz		| head -n1) || EXIT 1
+		tar -pvvx --xz -C ${TARGET} -f		$(ls -t ${TARGET}${ARCDIR}/stage3-generic_64-funtoo-*.tar.xz	| head -n1) || EXIT 1
 	fi
 	mount_dev_dirs													|| EXIT 1
 #>>>	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -r			|| EXIT 1
@@ -722,7 +722,6 @@ if [[ ${1} == -i ]]; then
 			${SETDIR}/${FUNDIR}/${FUNKIT}	${TARGET}${REPDIR} ${FUNTOO}					|| EXIT 1
 		fi
 	fi
-	${SETDIR}/${FUNDIR}/${FUNKIT}			${TARGET}${REPDIR} ${FUNTOO}					|| EXIT 1
 	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w			|| EXIT 1
 	if ${_BLD}; then
 		if [[ -n ${_NEW} ]]; then
@@ -730,7 +729,8 @@ if [[ ${1} == -i ]]; then
 			safe_env			${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -f			|| EXIT 1
 			expect_wrapper			emerge ${_ASK} --deep --newuse --update \@system		|| EXIT 1
 		else
-			expect_wrapper			emerge ${_ASK} --emptytree \@system \@world			|| EXIT 1
+#>>>			expect_wrapper			emerge ${_ASK} --emptytree \@system \@world			|| EXIT 1
+			expect_wrapper			emerge ${_ASK} --emptytree \@system \@${_PKG}			|| EXIT 1
 		fi
 	fi
 	if ${_KRN}; then for FILE in ${KERNEL}; do
@@ -776,6 +776,7 @@ if [[ ${1} == -i ]]; then
 			${RSYNC_U} ${CFGSCR}		${TARGET}/${ARCDIR}/$(basename ${CFGSCR})			|| EXIT 1
 			safe_env			${ARCDIR}/$(basename ${CFGSCR})					|| EXIT 1
 		fi
+	fi
 	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -f			|| EXIT 1
 	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -u			|| EXIT 1
 	mount_dev_dirs -u												|| EXIT 1
@@ -863,7 +864,6 @@ if [[ ${1} == -u ]]; then
 elif [[ ${1} != -! ]]; then
 	if [[ ${1} != -f ]]; then
 		print_info update
-		declare GIT="$(which git)"
 #>>>		expect_wrapper emerge --ask=n --verbose --sync				|| EXIT 1
 		expect_wrapper ego sync							|| EXIT 1
 		${SETDIR}/${FUNDIR}/${FUNKIT} ${REPDIR} ${1}				|| EXIT 1
