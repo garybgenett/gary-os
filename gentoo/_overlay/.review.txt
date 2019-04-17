@@ -2697,6 +2697,65 @@ include-fix.patch
 no-trailing-newline.patch
 urlview-0.9-DESTDIR.patch
 urlview-0.9-tinfo.patch
+diff :: sys-apps/lm_sensors [rationale] ================================================================================
+# download checksum fails
+# https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/libgit2?id=4ff0bb199ba902d5fd730b1c8854294bf1dd22d6
+# https://github.com/libgit2/libgit2/releases/tag/v0.26.6
+# https://github.com/libgit2/libgit2/issues/4343
+diff :: sys-apps/lm_sensors [source] ===================================================================================
+Only in ./sys-apps/lm_sensors.src: lm_sensors-3.4.0_p20180923.ebuild
+Only in ./sys-apps/lm_sensors.src: lm_sensors-3.5.0.ebuild
+diff :: sys-apps/lm_sensors [target] ===================================================================================
+Only in ./sys-apps/lm_sensors: .rationale
+diff -u -U10 -r ./sys-apps/lm_sensors.src/Manifest ./sys-apps/lm_sensors/Manifest
+--- ./sys-apps/lm_sensors.src/Manifest	2019-03-19 18:51:01.378274860 -0000
++++ ./sys-apps/lm_sensors/Manifest	2019-03-19 18:56:51.000000000 -0000
+@@ -1,3 +1,11 @@
+-DIST lm_sensors-3.4.0_p20170901.tar.gz 208487 BLAKE2B b6d2eb6efee25891fbd655738ba25e91d8ec5d97f07e24ee217ab1a59c51a8ab59e042a90ed6fa1de4459992adc740252588419c0f74ce02f9ad7c1f4f9750da SHA512 5c4a750efdff2ef086a5ed1b6a8a03278872ca077255eae91d0696af229f37b09216e2f53d1d6e4602596fd8b978e0b9c27327357621486c5d7b1d39ecd16fea
+-DIST lm_sensors-3.4.0_p20180318.tar.gz 260899 BLAKE2B a859c20ef148f80cc9d5ead61547feb5c26a77447aeedf9273334fc1e5b4075c74d8f786102e33e8fc771968dd605829923f8d3da8293fef168c74b8c55bf32a SHA512 923ee985d8e0b8fdc43b2e4418873ccbeb8433adbf2efe71fcaba1df0c6971d502866abe8ea015d199380e06e3cfd35d945451e5e9f7e64cede35fff37621aee
+-DIST lm_sensors-3.4.0_p20180820.tar.gz 261837 BLAKE2B 5b072a71554fa2ae41dd0fa51b66dcf32874579eef51a94d36b95e92b77629fbdf193a281bde3258af60366df38cacec6da67055f9f4766d863d37673f6a5065 SHA512 99ca718ae0e832fab8cbb3a2ab106f5df2fad9e822df99ee24d73758c64853a05c50464081e84335680a44ad93acaa6d4f0ef21291b7f008f24bcaa292d0fdab
++AUX fancontrol.confd 669 BLAKE2B cc297a5122d54f6104d840548480c6648fb31388a9c78a5e3a96ec91841c67d527a38e452ddaba5801c975fb23d9fab79aea46abbba0781ef2a8d8e9c6f1fed0 SHA512 06ec0b44e753bfa6a5ca461345e5857ac4d824cb3d9dd4955bbe884ff91d0184050476fe6da0ea8b0882243a51466af2d82540474581bd471f13c5977a0ec41a
++AUX fancontrol.initd 603 BLAKE2B d5409d4141996adb8e5e9520075d42f79fcdcc017850c0d3d21cbf5736ea1d7da07921b035cbbb5a2c4a8490ddad3a108073fe154f170507249f3fc8f5e5b920 SHA512 3dad0939d679bfb2732bdbd8ff851298ed86e5fd83719eb5181f8cc3e7d84f7986a79a3438a8c3b6a6e3c8be1a3a9839769292d77e352c0167d4b16dd1f0d086
++AUX fancontrol.service-r1 146 BLAKE2B 666a45c2e55dcf31470167ba9bb78e6205b3fcb47f66ae7b185d6651dba33f8a7699f800ecddaed070a8827d24893cc1971203b691f37515ea74125e889e8965 SHA512 eb1e22045a4adbcba398b77061d33b145614edf960c31aeb3c9a987553d6a0d8de332d4887e52ca2c6d6147d6e1a2b5e8bae41dca5f1c9d4fc2dc522c18459f8
++AUX lm_sensors-3.4.0-sensors-detect-gentoo.patch 12441 BLAKE2B f35efdf0f27b8aa64d5d0f8f088921225b9f991eb999d40f452afba4161ea7a38521346356f00c3136e6fb0d27d6508dd46fef385fb9e317157eb33bce8bdb8d SHA512 740c2fefa3c914fbb977e86b5b57cdbbcd06fc2d348ee42b5c678f164f15fb7a171979e5da5a1779c932ba39a535e37d0f7b7506c43966463115e0042dc9dc81
++AUX lm_sensors.confd 102 BLAKE2B 5d0771a2cac4869caee2d6ae3ac2cc2f60e64720ad587d4a89fa6dca7506325554b06d92cce42fc51b9af9c8715834d6d481f342cd6be57061c5234dfabd26d3 SHA512 a31220f4bf337de7b17158e00c64e662527abe11c5cc9f8401216f757dcde1c220527ad73f375c0de051030119daeba4cef6c5155f077447a9391e273cd65f50
++AUX lm_sensors.initd 334 BLAKE2B 377cea5d1f0c2baf94a2a17dd870ae3ba545bb96453432808360d1ff0ffd92dfcb306364ffa579afdb6b02dda930c7288e5c1b32274893e8541777a62abe8c37 SHA512 5a3f3eb6ae2a97f0a3841a2544579733f6df4a89c3667e1920203a6b0d18f54eb0aa12b1fd0c0bbdc4f6a1535df8444ebeb9d6212cc8be8dc1cf25e204d009a0
++AUX sensord.confd 695 BLAKE2B e435c63a48da41218b793f9beefd5f9d1702aa80a525ca378eeef36654933f0ec2042683e1b13bc48349eebc4d2dde26d20ac7e7681c01ceeb0b3b4e27576d2b SHA512 83c71b9aaae273daff62da31ae45ffa682460e4d4a8fbca54dfa83b1db58d4d042bba08eb62c62f4d8f6647d222ef5a11181a3fb7bedffbb4138ef02f6143535
++AUX sensord.initd 574 BLAKE2B bbc4e39d6b906a0e7539c4521420b9da686722eb6d26d486c29554c2cdc1b8c45d770c5e587f707d4fad0e34e083b2388dda194908a78c89e3ad4606cd61e464 SHA512 69abc9a92bfffae59f17a93e4792fd1f6b64285271693a443e1007adb73f95cb62a8dbf318f407f60fb3e3573d0e7ea11357076f14dbb58a0964f7b0bfe30b4a
++AUX sensord.service-r1 155 BLAKE2B 8a61565976b7d333dfb257d0e57a18140229bedb44fc095446e64de85d829f3d34802d4f762967cc503d527b8f28deaeaf3e0a93b3a4384b9c9b62a8b71d4dfe SHA512 83132636209f3e3717edad28ed230f767ee8bf00eabf3036238f64c370d1e42db1c14d1ed965c650da8aa3a6deb3ce7a0794425491ff7f8ce67e2fde934fc4fb
++DIST lm_sensors-3.5.0.tar.gz 267133 BLAKE2B f8fe8efe19cd17f2c828404bee7b2b285118279f06aaa2ebf831823d6767865a2b19da7bede1f3b43b2664ae3cec41b9e840be24fa673472fe577d38f602da4e SHA512 bea9b2ac01bc43622cafdce0b00ac3bb8cb2d818449c8b332ab51e7ad0022b66bcbf6ca1e99c8500bdc6092c5c1ef985bfe7cff05dbcf015bd3ccf58c00a72e1
++EBUILD lm_sensors-3.5.0.ebuild 6456 BLAKE2B 0fd80c9e515860c592180de91f53987de3554401404d53bd733f901c771e97ac1861a50de2c8b347f821db379ba22c9149c474f80cfd4decc17c5a9ca03e26ea SHA512 3a4e4ad6301fb4675533665a2d815359e7ee766c7c1d12f5b05f23fe16e2aeb1048414d1678b911cc6c202703a3592483effc890c95f39ae69bf3bfb82b7b1b2
+Only in ./sys-apps/lm_sensors.src: lm_sensors-3.4.0_p20170901.ebuild
+Only in ./sys-apps/lm_sensors.src: lm_sensors-3.4.0_p20180318.ebuild
+Only in ./sys-apps/lm_sensors.src: lm_sensors-3.4.0_p20180820.ebuild
+Only in ./sys-apps/lm_sensors.src: lm_sensors-3.4.0_p20180923.ebuild
+Only in ./sys-apps/lm_sensors.src: metadata.xml
+diff :: sys-apps/lm_sensors [files] ====================================================================================
+PATCHES=( "${FILESDIR}"/${PN}-3.4.0-sensors-detect-gentoo.patch )
+	newinitd "${FILESDIR}"/${PN}.initd ${PN}
+	newconfd "${FILESDIR}"/${PN}.confd ${PN}
+	newinitd "${FILESDIR}"/fancontrol.initd fancontrol
+	newconfd "${FILESDIR}"/fancontrol.confd fancontrol
+	systemd_newunit "${FILESDIR}"/fancontrol.service-r1 fancontrol.service
+		newconfd "${FILESDIR}"/sensord.confd sensord
+		newinitd "${FILESDIR}"/sensord.initd sensord
+		systemd_newunit "${FILESDIR}"/sensord.service-r1 sensord.service
+
+./sys-apps/lm_sensors:
+Manifest
+files
+lm_sensors-3.5.0.ebuild
+
+./sys-apps/lm_sensors/files:
+fancontrol.confd
+fancontrol.initd
+fancontrol.service-r1
+lm_sensors-3.4.0-sensors-detect-gentoo.patch
+lm_sensors.confd
+lm_sensors.initd
+sensord.confd
+sensord.initd
+sensord.service-r1
 diff :: www-servers/nginx [rationale] ==================================================================================
 # download links fail
 # https://gitweb.gentoo.org/repo/gentoo.git/tree/www-servers/nginx?id=4ff0bb199ba902d5fd730b1c8854294bf1dd22d6
