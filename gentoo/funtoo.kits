@@ -12,21 +12,15 @@ if [[ -n "${@}" ]]; then
 	export REPDIR="${1}" && shift
 	export COMMIT="${1}" && shift
 	if [[ -z "${COMMIT}" ]]; then
-		COMMIT="HEAD"
+		COMMIT="master"
 	fi
-	declare FILE=
-	if [[ -d	${REPDIR}/.git ]] && [[ ! -d	${REPDIR}.git ]]; then
-		${MV}	${REPDIR}/.git			${REPDIR}.git;
-	fi
-	if [[ -d	${REPDIR}.git ]] && [[ ! -L	${REPDIR}/.git ]]; then
-		${RM}					${REPDIR}/.git
-		${LN}	../$(basename ${REPDIR}).git	${REPDIR}/.git
-	fi
-	(cd ${REPDIR} &&
-		${GIT} checkout --force master &&
-		${GIT} pull &&
-		${GIT} reset --hard ${COMMIT}
-	)
+else
+	exit 1
+fi
+
+################################################################################
+
+function kit_list {
 	perl -e '
 		use strict;
 		use warnings;
@@ -59,40 +53,98 @@ if [[ -n "${@}" ]]; then
 			my $hash = $sha1->{$kit}{$head};
 			print "${kit}|${head}|${hash}\n";
 		};
-	' -- "${@}" |
-	while read -r FILE; do
-		declare RKIT=$(echo "${FILE}" | ${SED} "s/^(.+)[|](.+)[|](.+)$/\1/g")
-		declare HEAD=$(echo "${FILE}" | ${SED} "s/^(.+)[|](.+)[|](.+)$/\2/g")
-		declare HASH=$(echo "${FILE}" | ${SED} "s/^(.+)[|](.+)[|](.+)$/\3/g")
-		declare RGIT="${GIT_CMD} --git-dir=${REPDIR}.git/${SCRIPT}/${RKIT}.git --work-tree=${REPDIR}/kits/${RKIT}";
-		echo -en "\n[${RKIT} :: ${HEAD} == ${HASH}]\n"
-		${MKDIR} ${REPDIR}.git/${SCRIPT}
-		if [[ ! -d "${REPDIR}.git/${SCRIPT}/${RKIT}.git" ]]; then
-			git-clone ${GIT_SOURCE}/${RKIT}.git	${REPDIR}/kits/${RKIT}
-		else	${MKDIR}				${REPDIR}/kits/${RKIT}
-		fi
-		if [[ -d	${REPDIR}/kits/${RKIT}/.git ]] && [[ ! -d			${REPDIR}.git/${SCRIPT}/${RKIT}.git ]]; then
-			${MV}	${REPDIR}/kits/${RKIT}/.git					${REPDIR}.git/${SCRIPT}/${RKIT}.git
-		fi
-		if [[ -d	${REPDIR}/kits/${RKIT}.git ]] && [[ ! -d			${REPDIR}.git/${SCRIPT}/${RKIT}.git ]]; then
-			${MV}	${REPDIR}/kits/${RKIT}.git					${REPDIR}.git/${SCRIPT}/${RKIT}.git
-		fi
-		if [[ -d	${REPDIR}.git/${SCRIPT}/${RKIT}.git ]] && [[ ! -L		${REPDIR}/kits/${RKIT}/.git ]]; then
-			${RM}									${REPDIR}/kits/${RKIT}/.git
-			${LN}	../../../$(basename ${REPDIR}).git/${SCRIPT}/${RKIT}.git	${REPDIR}/kits/${RKIT}/.git
-		fi
-		if [[ -d	${REPDIR}.git/${SCRIPT}/${RKIT}.git ]] && [[ ! -L		${REPDIR}/kits/${RKIT}.git ]]; then
-			${RM}									${REPDIR}/kits/${RKIT}.git
-			${LN}	../../$(basename ${REPDIR}).git/${SCRIPT}/${RKIT}.git		${REPDIR}/kits/${RKIT}.git
-		fi
-		(cd ${REPDIR}/kits/${RKIT} &&
-			${RGIT} checkout --force ${HEAD} &&
-			${RGIT} pull &&
-			${RGIT} reset --hard ${HASH}
-		)
-	done
-	chown -R portage:portage ${REPDIR}{,.git}
+	'
+	return 0
+}
+
+########################################
+
+function fun_git {
+	declare REPO_DIR="${1}" && shift
+	declare REPO_GIT="${1}" && shift
+	declare REPO_HEAD="${1}" && shift
+	declare REPO_HASH="${1}" && shift
+	declare REPO_NAME="$(basename ${REPO_DIR})"
+	declare FUN_OPT="-c branch.autosetuprebase=always -c pull.rebase=true"
+	declare FUN_GIT="${GIT} --git-dir=${REPO_GIT} --work-tree=${REPO_DIR} ${FUN_OPT}"
+	export GIT_PAGER=
+	echo -en "\n[${REPO_NAME} :: ${REPO_HEAD} == ${REPO_HASH}]\n"
+	${MKDIR}											$(dirname ${REPO_DIR})	|| return 1
+	${MKDIR}											$(dirname ${REPO_GIT})	|| return 1
+	if [[ ! -d ${REPO_GIT} ]]; then
+		${RM}											${REPO_DIR}*		|| return 1
+		${MKDIR}										${REPO_DIR}		|| return 1
+		git-clone --verbose ${FUN_OPT} ${GIT_SOURCE}/${REPO_NAME}.git				${REPO_DIR}		|| return 1
+	else
+		${MKDIR}										${REPO_DIR}		|| return 1
+	fi
+	if [[ -d	${REPO_DIR}/.git ]] && [[ ! -d							${REPO_GIT} ]]; then
+		${MV}	${REPO_DIR}/.git								${REPO_GIT}
+	fi
+	if [[ -d	${REPO_DIR}.git ]] && [[ ! -d							${REPO_GIT} ]]; then
+		${MV}	${REPO_DIR}.git									${REPO_GIT}
+	fi
+	if [[ -d	${REPO_GIT} ]] && [[ ! -f							${REPO_DIR}/.git ]]; then
+		${RM}											${REPO_DIR}/.git
+#>>> -L		${LN} --relative ${REPO_GIT}								${REPO_DIR}/.git
+		echo -en "gitdir: $(realpath --relative-to=${REPO_DIR} ${REPO_GIT})\n"			>${REPO_DIR}/.git
+	fi
+	if [[ -d	${REPO_GIT} ]] && [[ ! -f							${REPO_DIR}.git ]]	&& [[ ${REPO_GIT} != ${REPO_DIR}.git ]]; then
+		${RM}											${REPO_DIR}.git
+#>>> -L		${LN} --relative ${REPO_GIT}								${REPO_DIR}.git
+		echo -en "gitdir: $(realpath --relative-to=$(dirname ${REPO_DIR}.git) ${REPO_GIT})\n"	>${REPO_DIR}.git
+	fi
+	${RM} ${REPO_GIT}/rebase*				|| return 1
+	${FUN_GIT} branch --all					|| return 1
+	${FUN_GIT} tag --list					|| return 1
+	${FUN_GIT} fetch --all					|| return 1
+	(
+		${FUN_GIT} reset --hard origin/${REPO_HEAD}	&&
+		${FUN_GIT} checkout --force ${REPO_HEAD}	&&
+								true
+	) || (
+		${FUN_GIT} reset --hard origin/master		&&
+		${FUN_GIT} checkout --force master		&&
+								true
+	)							|| return 1
+	(
+		${FUN_GIT} reset --hard ${REPO_HASH}		||
+		${FUN_GIT} reset --hard ${REPO_HEAD}		||
+		${FUN_GIT} reset --hard master			||
+								false
+	)							|| return 1
+	(cd ${REPO_DIR} && ${FUN_GIT} clean --force -d)		|| return 1
+	${FUN_GIT} branch --all					|| return 1
+	${FUN_GIT} status					|| return 1
+	(cd ${REPO_DIR} && git-list --max-count=1)		|| return 1
+	echo -en "\n[${REPO_NAME} :: complete!]\n"
+	return 0
+}
+
+################################################################################
+
+fun_git \
+	${REPDIR} \
+	${REPDIR}.git \
+	${COMMIT} \
+	${COMMIT} \
+	|| exit 1
+declare KIT_LIST="$(kit_list)"
+if [[ -z ${KIT_LIST} ]]; then
+	exit 1
 fi
+for FILE in ${KIT_LIST}; do
+	declare RKIT=$(echo "${FILE}" | ${SED} "s/^(.+)[|](.+)[|](.+)$/\1/g")
+	declare HEAD=$(echo "${FILE}" | ${SED} "s/^(.+)[|](.+)[|](.+)$/\2/g")
+	declare HASH=$(echo "${FILE}" | ${SED} "s/^(.+)[|](.+)[|](.+)$/\3/g")
+	fun_git \
+		${REPDIR}/kits/${RKIT} \
+		${REPDIR}.git/${SCRIPT}/${RKIT}.git \
+		${HEAD} \
+		${HASH} \
+		|| exit 1
+done
+chown -R portage:portage ${REPDIR}{,.git}
 
 exit 0
 ################################################################################

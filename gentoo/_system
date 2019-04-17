@@ -850,7 +850,7 @@ elif [[ ${1} != -! ]]; then
 		declare GIT="$(which git)"
 #>>>		expect_wrapper emerge --ask=n --verbose --sync				|| exit 1
 		expect_wrapper ego sync							|| exit 1
-		${ETCDIR}/${FUNKIT} ${REPDIR} ${1}					|| exit 1
+		${SETDIR}/${FUNDIR}/${FUNKIT} ${REPDIR} ${1}				|| exit 1
 		for FILE in ${REPDIR}/kits/*kit; do
 			echo -en "egencache: ${FILE}\n"
 			expect_wrapper egencache --repo "$(basename ${FILE})"		\
