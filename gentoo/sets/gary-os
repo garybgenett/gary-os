@@ -24,7 +24,8 @@ app-misc/ca-certificates
 app-text/iso-codes
 sys-libs/timezone-data
 
-app-crypt/efitools
+#>>>app-crypt/efitools			# fails to build as "generic_64"
+sys-apps/busybox
 sys-apps/openrc
 sys-apps/sysvinit
 sys-boot/boot-update
@@ -33,11 +34,13 @@ sys-boot/grub
 sys-boot/os-prober
 sys-boot/refind
 sys-boot/syslinux
+sys-libs/efivar
 sys-power/suspend
+sys-process/runit
 
 sys-apps/gptfdisk
 sys-block/parted
-sys-fs/btrfs-progs
+#>>>sys-fs/btrfs-progs			# requires: app-text/asciidoc
 sys-fs/cryptsetup
 sys-fs/dosfstools
 sys-fs/e2fsprogs
@@ -83,7 +86,7 @@ net-misc/bridge-utils
 net-misc/dhcpcd
 net-misc/ifenslave
 net-misc/iputils
-net-misc/networkmanager
+#>>>net-misc/networkmanager		# requires: too many things
 net-misc/vconfig
 net-wireless/wireless-tools
 net-wireless/wpa_supplicant
@@ -93,7 +96,7 @@ sys-apps/net-tools
 
 net-ftp/lftp
 net-misc/curl
-net-misc/rclone
+#>>>net-misc/rclone			# requires: dev-lang/go
 net-misc/rsync
 net-misc/wget
 www-client/elinks
@@ -105,12 +108,15 @@ app-misc/screen
 app-misc/tmux
 app-shells/bash
 app-shells/bash-completion
+app-shells/bashdb
 sys-apps/kbd
 sys-devel/gettext
 sys-libs/gpm
 
 dev-lang/perl
 dev-libs/libpcre
+dev-perl/JSON
+dev-perl/JSON-XS
 
 app-crypt/gnupg
 dev-libs/openssl
@@ -120,6 +126,7 @@ app-arch/afio
 app-arch/bzip2
 app-arch/cpio
 app-arch/gzip
+app-arch/lz4
 app-arch/p7zip
 app-arch/rar
 app-arch/sharutils
@@ -139,13 +146,15 @@ sys-apps/texinfo
 app-dicts/aspell-en
 app-text/aspell
 
-app-editors/gvim
+#>>>app-editors/gvim			# requires: x11-libs/gtk+
 app-editors/nano
+app-editors/nvi
 app-editors/vim
 app-text/dos2unix
-app-vim/taglist
+#>>>app-vim/taglist			# requires: dev-util/ctags -> dev-python/docutils
 app-vim/vim-spell-en
-dev-util/indent
+dev-util/cloc
+#>>>dev-util/indent			# fails to build as "generic_64"
 sys-apps/ed
 
 app-arch/cabextract
@@ -162,16 +171,13 @@ sys-apps/fakeroot-ng
 # gentoo
 
 sys-kernel/genkernel
-sys-kernel/gentoo-sources:4.9.125
-sys-kernel/linux-firmware
+sys-kernel/linux-firmware		# takes up way too much space, but required
 
 app-admin/ego
 app-admin/eselect
 sys-apps/portage
 
 app-portage/gentoolkit
-app-portage/pfl
-app-portage/portage-utils
 app-shells/gentoo-bashcomp
 app-vim/gentoo-syntax
 
@@ -181,14 +187,17 @@ sys-devel/gcc-config
 # x11
 
 x11-apps/xrandr
+x11-base/xorg-drivers
 x11-base/xorg-server
 
-x11-misc/obconf
-x11-wm/openbox
+x11-misc/dmenu
+x11-wm/dwm
 
 x11-terms/rxvt-unicode
 
-x11-misc/xsel
+x11-apps/xset
+x11-apps/xsetroot
+#>>>x11-misc/tabbed			# was only needed for "www-client/surf"
 
 ########################################
 # toolkits
@@ -199,7 +208,7 @@ dev-vcs/subversion
 dev-lang/python
 
 dev-db/sqlite
-dev-tcltk/expect
+#>>>dev-tcltk/expect			# requires: dev-lang/tcl
 
 ########################################
 # utilities
@@ -209,7 +218,7 @@ sys-devel/bc
 
 dev-util/ltrace
 dev-util/strace
-dev-util/sysprof
+#>>>dev-util/sysprof			# requires: dev-libs/appstream-glib -> x11-libs/gtk+
 sys-apps/kexec-tools
 
 sys-apps/hdparm
@@ -255,7 +264,7 @@ net-analyzer/tcptrace
 net-analyzer/tcptraceroute
 net-analyzer/traceroute
 net-analyzer/vnstat
-net-analyzer/wireshark
+#>>>net-analyzer/wireshark		# requires: x11-libs/gtk+
 net-dns/avahi
 net-dns/bind-tools
 net-misc/cadaver
@@ -264,6 +273,7 @@ net-misc/netkit-telnetd
 net-misc/rdate
 net-misc/socat
 net-misc/whois
+#>>>net-wireless/kismet			# requires: net-misc/networkmanager, net-libs/libmicrohttpd
 
 net-misc/autossh
 net-misc/pipes
@@ -276,7 +286,7 @@ sys-fs/ntfs3g
 app-forensics/cmospwd
 app-forensics/foremost
 app-forensics/sleuthkit
-sys-apps/flashrom
+#>>>sys-apps/flashrom			# requires: dev-embedded/libftdi -> dev-libs/boost
 
 ########################################
 # servers
@@ -287,9 +297,14 @@ net-vpn/openvpn
 ########################################
 # programs
 
+app-emulation/spice-protocol
+app-emulation/spice-vdagent
+
+#>>>app-emulation/virtualbox-guest-additions	# gentoo required: [app-emulation/virtualbox-guest-additions-5.1.36 / sys-kernel/gentoo-sources-4.18.6] /var/tmp/portage/app-emulation/virtualbox-guest-additions-5.1.36/work/vboxsf/utils.c:165:28: error: passing argument 1 of ‘sf_ftime_from_timespec’ from incompatible pointer type [-Werror=incompatible-pointer-types] sf_ftime_from_timespec(&inode->i_atime, &info->AccessTime);
+
 mail-client/mutt
 
-www-client/firefox
+#>>>www-client/surf			# requires: net-libs/webkit-gtk, x11-libs/gtk+
 
 net-misc/freerdp
 net-misc/tigervnc
@@ -297,7 +312,7 @@ net-misc/tigervnc
 ########################################
 # media
 
-net-p2p/rtorrent
+#>>>net-p2p/rtorrent			# requires: dev-libs/libsigc++ -> dev-libs/boost
 
 app-cdr/cdrtools
 app-cdr/dvd+rw-tools
