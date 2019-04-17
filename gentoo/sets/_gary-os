@@ -52,7 +52,28 @@
 @gary-os
 
 ########################################
+# system
+
+#{SELECT} vi:vim
+
+########################################
+# gentoo
+
+#{LINPKG} sys-kernel/gentoo-sources:4.18.6
+
+#{KERNEL} 4.18.6
+
+#{RCUPDT} delete lvm boot
+#{RCUPDT} delete postfix default
+
+########################################
 # x11
+
+#{SELECT} mesa:--auto
+#{SELECT} opengl:xorg-x11
+
+#{WINMGR} openbox
+#{WMHELP} gary-os / \`date --iso=s\`
 
 x11-misc/obconf
 x11-wm/openbox
@@ -78,6 +99,8 @@ x11-terms/root-tail
 
 ########################################
 # toolkits
+
+#{PYTHON} python3.6
 
 dev-tcltk/expect
 
