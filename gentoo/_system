@@ -402,7 +402,7 @@ function print_info {
 			echo -en "${RESET}\n"
 			if [[ ${FILE} == OPTIONS ]]; then
 				echo -en "${STATE}"
-				echo -en ">>> THESE MAY BE CHANGED <<<"
+				echo -en ">>> THESE CAN BE CHANGED <<<"
 				echo -en "${RESET}\n"
 			fi
 			declare END="true"
