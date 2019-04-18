@@ -23,7 +23,9 @@ if [[ ${1} == -l ]]; then
 	shift
 	declare FILE=
 	for FILE in $(find ./ | sort | ${GREP} "[.]rationale$"); do
-		echo -en "\n[${FILE}]\n"
+		echo -en "\n[${FILE}] ($(
+			${LS} ${FILE/%.rationale/.keep} 2>/dev/null
+		))\n"
 		cat ${FILE}
 	done
 	exit 0
