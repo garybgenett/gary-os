@@ -1270,13 +1270,13 @@ function git-export {
 		${RM} ${EXP_DIR}/${NAM}.git			|| return 1
 	done
 
-	if [[ -n $(ls ${EXP_DIR}/[a-z]*.gitlog/new/* 2>/dev/null) ]]; then
+	if [[ -n $(ls ${EXP_DIR}/[_a-z]*.gitlog/new/* 2>/dev/null) ]]; then
 		(cd ${EXP_DIR} &&
-			${EXP_PRE_PROC} ${EXP_DIR}/[a-z]*.gitlog/new/*
+			${EXP_PRE_PROC} ${EXP_DIR}/[_a-z]*.gitlog/new/*
 		)						|| return 1
 	fi
 	for FILE in $(
-		sort_by_date ${EXP_DIR}/[a-z]*.gitlog/new/*
+		sort_by_date ${EXP_DIR}/[_a-z]*.gitlog/new/*
 	); do
 		(cd ${EXP_DIR}/.${EXP_NAM} && git-am ${FILE})	|| return 1
 		${MV} ${FILE} ${FILE//\/new\//\/cur\/}		|| return 1
