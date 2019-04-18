@@ -616,7 +616,7 @@ function _publish_upload {
 		README.md \
 		LICENSE.md \
 	; do
-		${RSYNC_U} -L		${_DOCDIR}/${FILE} ${_OUTDIR}/			|| return 1
+		${RSYNC_U} -L		${_GREPO}/${FILE} ${_OUTDIR}/			|| return 1
 	done
 #>>>	${MKDIR}			${_OUTDIR}/$(basename ${ARTDIR})		|| return 1
 #>>>	${RSYNC_U} -L ${ARTDIR}/	${_OUTDIR}/$(basename ${ARTDIR})		|| return 1
