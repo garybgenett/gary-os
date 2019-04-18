@@ -93,8 +93,8 @@ usage:
 
 .PHONY: update
 update:
-	SETDIR="$(C)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(P)" $(C)/gentoo/_system
-	SETDIR="$(C)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(P)" $(C)/gentoo/_system -a -u
+	SETDIR="$(C)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(P)" $(C)/gentoo/_system $(CHROOT)
+	SETDIR="$(C)" SOURCE="$(S)" OUTDIR="$(O)" PKGOUT="$(P)" $(C)/gentoo/_system $(CHROOT) -a -u
 
 ########################################
 
