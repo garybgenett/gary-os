@@ -44,12 +44,19 @@ if [[ -f ${1} ]]; then
 	shift
 fi
 
+########################################
+
+declare GOPTS=
+if [[ -n ${1} ]]; then
+	GOPTS="${1}"
+	shift
+fi
+
 ################################################################################
 
 declare GBOOT="(hd0)"
 declare GROOT="(hd0,${GPART})"
 declare GFILE="(hd0,${GPART})/boot/grub/grub.cfg"
-declare GOPTS=""
 
 declare GTYPE="i386-pc"
 declare GRUBD="/usr/lib/grub"
