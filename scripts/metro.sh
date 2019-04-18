@@ -29,6 +29,8 @@ source ${HOME}/.bashrc
 #		* metro.sh -! -!
 ################################################################################
 
+#>>> 2017-07-16 00:41:22 -0600 210fb5a0fe6df2518712c92f32a5e541f936078e Fixes for building with kits.
+
 declare AUTHOR="Gary B. Genett <me@garybgenett.net>"
 declare LOGIN="garybgenett"
 declare TITLE="gary-os"
@@ -50,8 +52,8 @@ RELEASE[4]="v1.1"; CMT_HSH[4]="9b653e64164e68873333043b41f8bbf23b0fbd55"
 RELEASE[5]="v2.0"; CMT_HSH[5]="deda452a0aab311f243311b48a39b7ac60ab3fd8"
 RELEASE[6]="v3.0"; CMT_HSH[6]="35141e1e20259d7d1c2f4b143c6ae4505d7d5045"
 
-declare FUNTOO_STAGE="2015-01-27"
-declare GRML_DATE="2014.11"
+declare FUNTOO_STAGE="2017-08-03"
+declare GRML_DATE="2017.05"
 
 ########################################
 
@@ -76,7 +78,7 @@ fi
 
 declare CONFIG="${HOME}/setup/gentoo"
 declare SET="${CONFIG}/sets/metro"
-declare HASH="$(cat ${CONFIG}/funtoo)"
+declare HASH="$(tail -n1 ${CONFIG}/funtoo)"
 declare DVER="${HASH}.${REVN}"
 #>>>DVER="$(date --iso=d)"
 
@@ -89,7 +91,7 @@ declare ISO="/.g/_data/_target/iso"
 declare SMET="${BLD}/funtoo/metro"
 declare SPRT="${BLD}/funtoo/portage"
 
-declare TYPE="funtoo-stable"
+declare TYPE="funtoo-current"
 declare PLAT="x86-${BITS}bit"
 declare ARCH="generic_${BITS}"
 declare SARC="core2_${BITS}"		; [[ ${BITS} == 32 ]] && SARC="i686"
@@ -109,21 +111,21 @@ declare EXTN=".tar.xz"
 declare SAFE_ENV="prompt -z"
 export CCACHE_DIR=
 
-
 declare VERSION_REGEX="([0-9]{4}-[0-9]{2}-[0-9]{2}(T[0-9]{2}-[0-9]{4})?|[a-z0-9]{40}[.][0-9])"
 declare METRO_CMD="${DMET}/metro \
 	--verbose \
 	--debug \
 	--debug-flexdata \
-	multi:		yes \
-	multi/mode:	full \
-	path/mirror:	${DEST} \
-	path/distfiles:	${DFIL} \
-	path/install:	${DMET} \
-	path/tmp:	${DTMP} \
-	target/build:	${TYPE} \
-	target/subarch:	${ARCH} \
-	target/version:	${DVER} \
+	multi:			yes \
+	multi/mode:		full \
+	path/mirror:		${DEST} \
+	path/distfiles:		${DFIL} \
+	path/install:		${DMET} \
+	path/tmp:		${DTMP} \
+	target/build:		${TYPE} \
+	target/arch_desc:	${PLAT} \
+	target/subarch:		${ARCH} \
+	target/version:		${DVER} \
 	${DMET}/metro.conf \
 "
 
@@ -146,10 +148,12 @@ done
 
 ########################################
 
-declare REPO="$(
-	cat ${SMET}/etc/builds/${TYPE}/build.conf 2>/dev/null |
-	${SED} -n "s%^name[:][ ]%%gp"
-)"
+declare REPO="portage"
+#>>>declare REPO="$(
+#>>>	cat ${SMET}/etc/builds/release-build.conf 2>/dev/null |
+#>>>	${SED} -n "s%^name[:][ ]%%gp" |
+#>>>	${SED} "s%[ ]*$%%g"
+#>>>)"
 declare SVER="$(
 	ls -t {${SAV},${ISO},${SOUT}/*}/stage3-${SARC}-${TYPE}-*${EXTN} 2>/dev/null |
 	${SED} "s%^.+${VERSION_REGEX}.+$%\1%g" |
@@ -295,7 +299,9 @@ if [[ ${1} == -! ]]; then
 	fi
 
 	${RSYNC_C} ${DOC_DIR}/ ${OUT_DIR}/			|| exit 1
-	${RSYNC_U} ${OUT_DIR}/ ${SFFILE}			|| exit 1
+	${RSYNC_U} \
+		--filter="-_/.gitignore" \
+		${OUT_DIR}/ ${SFFILE}				|| exit 1
 	${LL} -R ${OUT_DIR}
 
 	exit 0
@@ -335,45 +341,87 @@ fi
 if [[ ${1} == -1 ]]; then
 	declare INIT_DIR="${PWD}"
 
-	${CP} -L ${INIT_DIR}/boot/kernel ${INIT_DIR}.kernel	#>>> || exit 1
+#>>>	${CP} -L ${INIT_DIR}/boot/kernel ${INIT_DIR}.kernel	#>>> || exit 1
 	eval find ./ \
-		$(for FILE in ./usr/src/linux-*; do echo -en "\( -path ${FILE} -prune \) -o "; done) \
+		$(for FILE in ./_ramfs*			; do echo -en "\( -path ${FILE} -prune \) -o "; done) \
+		$(for FILE in ./usr/src/linux-*		; do echo -en "\( -path ${FILE} -prune \) -o "; done) \
+		$(for FILE in ./~~*~~			; do echo -en "\( -path ${FILE} -prune \) -o "; done) \
 		\
-		'\( -path ./usr/portage		-prune \)' -o \
-		'\( -path ./usr/portage.git	-prune \)' -o \
+		'\( -path ./.g				-prune \)' -o \
+		'\( -path ./.home			-prune \)' -o \
+		'\( -path ./_build			-prune \)' -o \
+		'\( -path ./_gentoo			-prune \)' -o \
+		'\( -path ./_gentoo.log			-prune \)' -o \
 		\
-		'\( -path ./tmp/.ccache		-prune \)' -o \
-		'\( -path ./usr/lib/debug	-prune \)' -o \
-		'\( -path ./usr/lib32/debug	-prune \)' -o \
-		'\( -path ./usr/lib64/debug	-prune \)' -o \
-		'\( -path ./usr/src/debug	-prune \)' -o \
+		'\( -path ./dev/**			-prune \)' -o \
+		'\( -path ./proc/**			-prune \)' -o \
+		'\( -path ./sys/**			-prune \)' -o \
+		\
+		'\( -path ./usr/portage			-prune \)' -o \
+		'\( -path ./usr/portage.git		-prune \)' -o \
+		'\( -path ./var/cache/portage		-prune \)' -o \
+		'\( -path ./var/git/meta-repo		-prune \)' -o \
+		'\( -path ./var/git/meta-repo.git	-prune \)' -o \
+		\
+		'\( -path ./usr/lib/debug		-prune \)' -o \
+		'\( -path ./usr/lib32/debug		-prune \)' -o \
+		'\( -path ./usr/lib64/debug		-prune \)' -o \
+		'\( -path ./usr/src/debug		-prune \)' -o \
+		\
+		'\( -path ./tmp/**			-prune \)' -o \
+		'\( -path ./var/tmp/**			-prune \)' -o \
 		-print |
-	cpio -ovH newc >${INIT_DIR}.cpio			|| exit 1
-	xz -cvC crc32 ${INIT_DIR}.cpio >${INIT_DIR}.initrd	|| exit 1
+	cpio -ovH newc >${INIT_DIR}/_ramfs.cpio			|| exit 1
+	${RM} ${INIT_DIR}/_ramfs.cpio.dir &&
+	mkdir ${INIT_DIR}/_ramfs.cpio.dir && (
+		cd ${INIT_DIR}/_ramfs.cpio.dir &&
+		cat ${INIT_DIR}/_ramfs.cpio | cpio -iv
+	)							|| exit 1
+#>>>	xz -cvC crc32 ${INIT_DIR}.cpio >${INIT_DIR}.initrd	|| exit 1
+	xz -cvv -F xz -C crc64 ${INIT_DIR}/_ramfs.cpio >${INIT_DIR}/_ramfs.cpio.xz	|| exit 1
 
 	if [[ -d ${INIT_DIR}/usr/src/linux ]]; then
-		declare INITRAMFS_CONFIG="\n"
-		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_SOURCE=\"${INIT_DIR}.cpio\"\n"
-		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_ROOT_GID=0\n"
-		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_ROOT_UID=0\n"
+		declare INITRAMFS_CONFIG=
+		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_SOURCE=\"${INIT_DIR}/_ramfs.cpio\"\n"
+#>>>
+#		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_ROOT_GID=0\n"
+#		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_ROOT_UID=0\n"
+#		INITRAMFS_CONFIG+="# CONFIG_RD_GZIP is not set\n"
+#		INITRAMFS_CONFIG+="# CONFIG_RD_BZIP2 is not set\n"
+#		INITRAMFS_CONFIG+="CONFIG_RD_LZMA=y"
+#		INITRAMFS_CONFIG+="CONFIG_RD_XZ=y\n"
+#		INITRAMFS_CONFIG+="# CONFIG_RD_LZO is not set\n"
+#		INITRAMFS_CONFIG+="# CONFIG_RD_LZ4 is not set\n"
+#>>>
+#		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_COMPRESSION_NONE=y\n"
 		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_COMPRESSION_XZ=y\n"
-		INITRAMFS_CONFIG+="# CONFIG_INITRAMFS_COMPRESSION_BZIP2 is not set\n"
-		INITRAMFS_CONFIG+="# CONFIG_INITRAMFS_COMPRESSION_GZIP is not set\n"
-		INITRAMFS_CONFIG+="# CONFIG_INITRAMFS_COMPRESSION_LZMA is not set\n"
-		INITRAMFS_CONFIG+="# CONFIG_INITRAMFS_COMPRESSION_LZO is not set\n"
-		INITRAMFS_CONFIG+="# CONFIG_INITRAMFS_COMPRESSION_NONE is not set\n"
-		${SED} -i \
-			-e "s%^CONFIG_INITRAMFS_SOURCE=\"\"$%${INITRAMFS_CONFIG}%g" \
+#		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_COMPRESSION_LZMA=y\n"
+#		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_COMPRESSION=\".xz\"\n"
+#>>>
+
+#>>>		${CP} ${KERN} ${INIT_DIR}/usr/src/linux/.config	|| exit 1
+		${CP} -L ${HOME}/setup/linux/.config \
 			${INIT_DIR}/usr/src/linux/.config	|| exit 1
-		(cd ${INIT_DIR}/usr/src/linux && make bzImage)	|| exit 1
+#>>>			-e "/CONFIG_RD_/d" \
+		${SED} -i \
+			-e "/CONFIG_INIITRAMFS_COMPRESSION/d" \
+			-e "s%^CONFIG_INITRAMFS_SOURCE=.*$%${INITRAMFS_CONFIG}%g" \
+			${INIT_DIR}/usr/src/linux/.config	|| exit 1
+		(cd ${INIT_DIR}/usr/src/linux &&
+			make olddefconfig &&
+			${GREP} "CONFIG_(KERNEL|INITRAMFS|RD)_" ${INIT_DIR}/usr/src/linux/.config &&
+			diff ${DIFF_OPTS} /.g/_data/zactive/.setup/linux/.config ${INIT_DIR}/usr/src/linux/.config
+			make bzImage
+		)						|| exit 1
 		${CP} -L $(
 			ls -t ${INIT_DIR}/usr/src/linux/arch/*/boot/bzImage 2>/dev/null |
 			head -n1
-		) ${INIT_DIR}.kernel.initrd			|| exit 1
+#>>>		) ${INIT_DIR}.kernel.initrd			|| exit 1
+		) ${INIT_DIR}/_ramfs.kernel				|| exit 1
 	fi
-	if [[ -z ${METRO_DEBUG} ]]; then
-		${RM} ${INIT_DIR}.cpio				|| exit 1
-	fi
+#>>>	if [[ -z ${METRO_DEBUG} ]]; then
+#>>>		${RM} ${INIT_DIR}.cpio				|| exit 1
+#>>>	fi
 
 	exit 0
 fi
@@ -381,36 +429,39 @@ fi
 ########################################
 
 if [[ ${1} == -/ ]]; then
-	FILE="$(ls ${SAV}/stage3-${ARCH}-${TYPE}-${DVER}${EXTN} 2>/dev/null)"
-	[[ -z ${FILE} ]] && exit 1
+#>>>	FILE="$(ls ${SAV}/stage3-${ARCH}-${TYPE}-${DVER}${EXTN} 2>/dev/null)"
+#>>>	[[ -z ${FILE} ]] && exit 1
 
-	declare INIT_SRC="${FILE}"
-	declare INIT_DST="${FILE}.dir"
+#>>>	declare INIT_SRC="${FILE}"
+#>>>	declare INIT_DST="${FILE}.dir"
+	declare INIT_DST="${PWD}"
 
-	${RM} ${INIT_DST}					|| exit 1
-	${MKDIR} ${INIT_DST}					|| exit 1
-	tar -pvvxJ -C ${INIT_DST} -f ${INIT_SRC}		|| exit 1
+#>>>	${RM} ${INIT_DST}					|| exit 1
+#>>>	${MKDIR} ${INIT_DST}					|| exit 1
+#>>>	tar -pvvxJ -C ${INIT_DST} -f ${INIT_SRC}		|| exit 1
 
 	${RSYNC_U} ${REL_DIR}/.${TITLE}/ \
+		--filter="-_/.git" \
 		${INIT_DST}/.${TITLE}				|| exit 1
 	${RSYNC_U} ${REL_DIR}/.${TITLE}.git/ \
 		${INIT_DST}/.${TITLE}/.git			|| exit 1
-	${SED} -i "s%^[[:space:]]+worktree.+$%%g" \
+	${SED} -i "/^[[:space:]]+worktree.+$/" \
 		${INIT_DST}/.${TITLE}/.git/config		|| exit 1
 
 	${LN} sbin/init ${INIT_DST}/init			|| exit 1
 	${SED} -i \
 		-e "s%^([^#].+)$%#\1%g" \
 		${INIT_DST}/etc/fstab				|| exit 1
+	${CP} ${DOC_DIR}/issue ${INIT_DST}/etc/issue		|| exit 1
 	${SED} -i \
 		-e "s%^(hostname=[\"]?)[^\"]+([\"]?)$%\1${TITLE}\2%g" \
 		${INIT_DST}/etc/conf.d/hostname			|| exit 1
 	echo -en "XSESSION=\"dwm\"\n" \
 		>${INIT_DST}/etc/env.d/90xsession		|| exit 1
 	chroot ${INIT_DST} /usr/sbin/env-update			|| exit 1
-	chroot ${INIT_DST} rc-update delete lvm boot		|| exit 1
-	chroot ${INIT_DST} rc-update delete postfix default	|| exit 1
-	chroot ${INIT_DST} eselect vi set vim			|| exit 1
+#>>>	chroot ${INIT_DST} rc-update delete lvm boot		|| exit 1
+#>>>	chroot ${INIT_DST} rc-update delete postfix default	|| exit 1
+#>>>	chroot ${INIT_DST} eselect vi set vim			|| exit 1
 	echo -en "${TITLE}\n${TITLE}\n" |
 		chroot ${INIT_DST} /usr/bin/passwd root		|| exit 1
 
@@ -420,30 +471,32 @@ if [[ ${1} == -/ ]]; then
 				${SED} "s%^[.][/]%%g" |
 				sort
 		); do
-			(cd ${DTMP}/cache/package-cache/${PLAT}/${TYPE}/${ARCH}/remote/stage3 &&
+#>>>			(cd ${DTMP}/cache/package-cache/${PLAT}/${TYPE}/${ARCH}/remote/stage3 &&
+			(cd ${INIT_DST}/var/cache/portage/packages &&
 				du -ks ${FILE}.tbz2 |
 				${SED} "s%^(.+${FILE}).+$%\1%g"
 			)					#>>> || exit 1
 		done
-	) 2>&1 | tee ${PACK}					#>>> || exit 1
+	) 2>&1 | tee ${INIT_DST}/_ramfs.cpio.packages.txt	#>>> || exit 1
+#>>>	) 2>&1 | tee ${PACK}					#>>> || exit 1
 
 	(cd ${INIT_DST} && echo | ${_SELF} ${BITS} ${REVN} -1)	|| exit 1
 
-	if [[ -f ${INIT_DST}.kernel.initrd ]]; then
-		${MV} ${INIT_DST}.kernel.initrd \
-			${INIT_SRC}.kernel			|| exit 1
-		if [[ -z ${METRO_DEBUG} ]]; then
-			${RM} ${INIT_DST}.kernel		|| exit 1
-			${RM} ${INIT_DST}.initrd		|| exit 1
-		fi
-	else
-		${MV} ${INIT_DST}.kernel ${INIT_SRC}.kernel	|| exit 1
-		${MV} ${INIT_DST}.initrd ${INIT_SRC}.initrd	|| exit 1
-	fi
+#>>>	if [[ -f ${INIT_DST}.kernel.initrd ]]; then
+#>>>		${MV} ${INIT_DST}.kernel.initrd \
+#>>>			${INIT_SRC}.kernel			|| exit 1
+#>>>		if [[ -z ${METRO_DEBUG} ]]; then
+#>>>			${RM} ${INIT_DST}.kernel		|| exit 1
+#>>>			${RM} ${INIT_DST}.initrd		|| exit 1
+#>>>		fi
+#>>>	else
+#>>>		${MV} ${INIT_DST}.kernel ${INIT_SRC}.kernel	|| exit 1
+#>>>		${MV} ${INIT_DST}.initrd ${INIT_SRC}.initrd	|| exit 1
+#>>>	fi
 
-	if [[ -z ${METRO_DEBUG} ]]; then
-		${RM} ${INIT_DST}				|| exit 1
-	fi
+#>>>	if [[ -z ${METRO_DEBUG} ]]; then
+#>>>		${RM} ${INIT_DST}				|| exit 1
+#>>>	fi
 
 	exit 0
 fi
@@ -455,8 +508,18 @@ ${MKDIR} ${DEST}/${TYPE}/snapshots
 ${RSYNC_U} ${SMET}/ ${DMET}
 
 ${SED} -i \
-	-e "s%^(author:).*$%\1 ${AUTHOR}%g" \
-	${DMET}/etc/builds/${TYPE}/build.conf || exit 1
+	-e "s%^(author[:][ ]).*$%\1${AUTHOR}%g" \
+	-e "s%^(type[:][ ])meta[-]repo$%\1git%g" \
+	${DMET}/etc/builds/common.conf || exit 1
+
+${SED} -i \
+	-e "s%^([[]section[ ]snapshot[/]source[]])$%%g" \
+	-e "s%^(name[:][ ]meta[-]repo).*$%%g" \
+	-e "s%^(name[:][ ]${REPO})$%%g" \
+	-e "s%^(branch[:][ ]funtoo.org)$%%g" \
+	-e "s%^(remote[:][ ]git.+)$%%g" \
+	-e "s%^([[]section[ ]release[]])$%[section snapshot/source]\nname: ${REPO}\nbranch: funtoo.org\nremote: git://github.com/funtoo/ports-2012.git\n\n\1%g" \
+	${DMET}/etc/builds/release-build.conf || exit 1
 
 ${SED} -i \
 	-e "s%^(: ).*mirror.*$%\1${DEST}%g" \
@@ -479,6 +542,7 @@ function makeconf_var {
 		tr '\n' ' '
 }
 
+declare MKOP="	$(makeconf_var MAKEOPTS)"
 declare OPTS="	$(makeconf_var EMERGE_DEFAULT_OPTS	| ${SED} "s%[-][-]ask[^[:space:]]*%%g")"
 OPTS+="		$(makeconf_var MAKEOPTS			| ${GREP} -o "[-]j[0-9]+")"
 
@@ -490,7 +554,6 @@ declare PKGS="$(cat ${SET}				| ${GREP} -v \
 							| sort | tr '\n' ' ')"
 
 declare FEAT="$(makeconf_var FEATURES)"
-declare MKOP="$(makeconf_var MAKEOPTS)"
 declare USE_="$(makeconf_var METRO_USE)"
 
 #>>>USE_+="\nACCEPT_KEYWORDS:		$(makeconf_var ACCEPT_KEYWORDS)"
@@ -505,25 +568,31 @@ USE_+="\nINPUT_DEVICES:			$(makeconf_var METRO_INPUT_DEVICES)"
 USE_+="\nVIDEO_CARDS:			$(makeconf_var METRO_VIDEO_CARDS)"
 
 USE_+="\nPYTHON_ABIS:			$(makeconf_var METRO_PYTHON_ABIS)"
+USE_+="\nPYTHON_SINGLE_ABI:		$(makeconf_var METRO_PYTHON_SINGLE_ABI)"
+USE_+="\nPYTHON_SINGLE_TARGET:		$(makeconf_var METRO_PYTHON_SINGLE_TARGET)"
 USE_+="\nPYTHON_TARGETS:		$(makeconf_var METRO_PYTHON_TARGETS)"
 USE_+="\nRUBY_TARGETS:			$(makeconf_var METRO_RUBY_TARGETS)"
 
 ${SED} -i \
-	-e "s%^MAKEOPTS:.*$%%g" \
-	-e "s%^options:.*jobs.*$%%g" \
+	-e "s%^(MAKEOPTS: ).*$%\1	${MKOP}%g" \
+	-e "s%^(options: ).*jobs.*$%\1	${OPTS}%g" \
+	\
+	-e "s%[ \t]+% %g" \
 	${DMET}/metro.conf || exit 1
 
 ${SED} -i \
-	-e "s%^(\[section emerge\])$%\1	\noptions: ${OPTS}\npackages: ${PKGS}%g" \
+	-e "s%(debian-sources)$%\1	${PKGS}%g" \
+	${DMET}/etc/builds/packages/${PLAT}.conf || exit 1
+
+${SED} -i \
+	-e "s%^(FEATURES:.*)$%\1	${FEAT}%g" \
+	-e "s%^(USE:.*)$%\1		${USE_}%g" \
 	\
-	-e "s%^(FEATURES:.*)$%\1	${FEAT}\nMAKEOPTS: ${MKOP}%g" \
-	-e "s%^(USE:).*$%\1		${USE_}%g" \
+	-e "s%^(branch/tar: ).*$%\1	${HASH}%g" \
+	-e "s%^(options: ).*pull.*$%\1	%g" \
 	\
-	-e "s%^(branch/tar:).*$%\1	${HASH}%g" \
-	-e "s%^(options:).*pull.*$%\1	%g" \
-	\
-	-e "s%\t+% %g" \
-	${DMET}/etc/builds/${TYPE}/build.conf || exit 1
+	-e "s%[ \t]+% %g" \
+	${DMET}/etc/builds/common.conf || exit 1
 
 ${SED} -i \
 	-e "s%^git checkout (.+branch/tar.+)$%git reset --hard \1%g" \
@@ -543,13 +612,15 @@ for FILE in \
 	PORTAGE_IONICE_COMMAND	\
 	PORTAGE_NICENESS	\
 	PYTHON_ABIS		\
+	PYTHON_SINGLE_ABI	\
+	PYTHON_SINGLE_TARGET	\
 	PYTHON_TARGETS		\
 	RUBY_TARGETS		\
 	VIDEO_CARDS
 do
 	USE_+="\n${FILE}=\"\$[portage/${FILE}:zap]\""
 	${SED} -i \
-		-e "s%^(${FILE}=.+)$%%g" \
+		-e "/^${FILE}=.+/d" \
 		${DMET}/targets/gentoo/target/files.spec || exit 1
 done
 
@@ -577,13 +648,11 @@ USE_+="files/dwm.config: [\n]\n"
 
 ${SED} -i \
 	-e "s%^(USE:.+)$%\1\n${USE_}%g" \
-	${DMET}/etc/builds/${TYPE}/build.conf || exit 1
+	${DMET}/etc/builds/common.conf || exit 1
 ${SED} -i \
 	-e "/files[\/]linux[.]config[:]/r ${KERN}" \
-	${DMET}/etc/builds/${TYPE}/build.conf || exit 1
-${SED} -i \
 	-e "/files[\/]dwm[.]config[:]/r ${DWMC}" \
-	${DMET}/etc/builds/${TYPE}/build.conf || exit 1
+	${DMET}/etc/builds/common.conf || exit 1
 
 USE_="\
 if [ \"\$[portage/files/package.license?]\" = \"yes\" ]	\n\
@@ -633,27 +702,29 @@ emerge \$eopts grub					|| exit 1\n\
 "
 
 ${SED} -i \
-	-e "s%^export USE=.+$%%g" \
 	-e "s%^(emerge.+system.+)$%${USE_}%g" \
 	${DMET}/targets/gentoo/stage3.spec || exit 1
 
 ########################################
 
 ${SED} -i \
-	-e "s%^(options:.*)clean/auto(.*)$%\1\2%g" \
-	${DMET}/etc/builds/${TYPE}/build.conf || exit 1
+	-e "s%^(options: .*)clean/auto(.*)$%\1\2%g" \
+	${DMET}/etc/builds/common.conf || exit 1
 
 ${SED} -i \
-	-e "s%^([[:space:]]*emerge -C .*(ccache|genkernel).*)$%echo \"\1\"%g" \
-	-e "s%^([[:space:]]*rm -rf .*linux.*)$%echo \"\1\"%g" \
-	${DMET}/targets/gentoo/steps/kernel.spec \
+	-e "/^emerge -C .+genkernel.+/d" \
+	-e "/^rm -rf .+linux.+/d" \
+	${DMET}/targets/gentoo/steps/kernel.spec || exit 1
+
+${SED} -i \
+	-e "s%^emerge -C .+ccache.+$%echo%g" \
 	${DMET}/targets/gentoo/steps/stage.spec || exit 1
 
 ########################################
 
 ${SED} -i \
-	-e "s%[-]fomit[-]frame[-]pointer%%g" \
-	${DMET}/subarch/${ARCH}.spec || exit 1
+	-e "/^[[:space:]]*cp [$]mkconf .+/d" \
+	${DMET}/targets/gentoo/steps/stage.spec || exit 1
 
 ################################################################################
 
