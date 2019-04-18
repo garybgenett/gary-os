@@ -59,6 +59,10 @@ usage:
 	@$(ECHO) "\n"
 	@$(PRINTF) "Chroot Complete (Unmount Cleanup):"		"make umount"
 	@$(ECHO) "\n"
+	@$(PRINTF) "Initramfs Build (Chroot Create):"		"make release"
+	@$(PRINTF) "Initramfs Build (Live Create):"		"make O=/ release"
+	@$(PRINTF) "Initramfs System (Live Unpack):"		"make O=/ unpack"
+	@$(ECHO) "\n"
 	@$(ECHO) "$(STATE)All of the targets run non-interactively, except \"update\" and \"edit\", along with \"shell\".$(RESET)\n"
 	@$(ECHO) "\n"
 	@$(ECHO) "$(STATE)Use these variables to change the directories and packages:$(RESET)\n"
@@ -141,9 +145,21 @@ edit:
 shell:
 	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system $(CHROOT) -s
 
+########################################
+
 .PHONY: umount
 umount:
 	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system $(CHROOT) -z
+
+########################################
+
+.PHONY: release
+release:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system $(CHROOT) _release_ramfs
+
+.PHONY: unpack
+unpack:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system $(CHROOT) _release_unpack
 
 ################################################################################
 # End Of File
