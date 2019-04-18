@@ -35,6 +35,344 @@ for FILE in \
 	fi
 done
 
+################################################################################
+
+function _release_reset {
+	if [[ ${TARGET} != / ]]; then
+		${RM} ${TARGET}/.${_TITLE}*		|| return 1
+	fi
+	${RM} ${TARGET}/${_FINAL}*			|| return 1
+	${RM} ${TARGET}/${_FINAL}/${_RAMFS}.cpio.xz	|| return 1
+	${RM} ${TARGET}/${_FINAL}/${_RAMFS}.kernel	|| return 1
+	${RM} ${TARGET}/boot/_null.kernel		|| return 1
+	${RM} ${TARGET}/usr/src/linux			|| return 1
+	if [[ ${TARGET} != / ]]; then
+		${RM} ${TARGET}/usr/src/linux.tar.xz	|| return 1
+	fi
+	return 0
+}
+
+########################################
+
+function _release_prep {	#{reset}
+	if [[ ${1} == --reset ]]; then
+		shift
+		_release_reset	|| return 1
+	fi
+	_release_gitdir		|| return 1
+	_release_config		|| return 1
+	_release_linux		|| return 1
+	_release_symlink	|| return 1
+	return 0
+}
+
+########################################
+
+function _release_gitdir {
+	if [[ ${TARGET} == / ]]; then
+#>>>		${RM}				${TARGET}/.${_TITLE}		|| return 1
+		${RM}				${TARGET}/.${_TITLE}.git	|| return 1
+		return 0
+	fi
+	if [[ ! -d ${_GREPO} ]] || [[ ! -d ${_GREPO}.git ]]; then
+#>>>		${RM}				${TARGET}/.${_TITLE}		|| return 1
+		${RM}				${TARGET}/.${_TITLE}.git	|| return 1
+		return 0
+	fi
+	${RSYNC_U} ${_GREPO}/			${TARGET}/.${_TITLE}		|| return 1
+#>>>	${RSYNC_U} ${_GREPO}.git/		${TARGET}/.${_TITLE}.git	|| return 1
+	${RM}					${TARGET}/.${_TITLE}.git	|| return 1
+#>>>	${SED} -i "/worktree[ ][=]/d"		${TARGET}/.${_TITLE}.git/config	|| return 1
+#>>>	${LN} ../.${_TITLE}.git			${TARGET}/.${_TITLE}/.git	|| return 1
+#>>>	echo -en "gitdir: ../.${_TITLE}.git\n"	>${TARGET}/.${_TITLE}/.git	|| return 1
+	return 0
+}
+
+########################################
+
+function release_config_issue {
+	for FILE in ${KERNEL}; do NEXT="${FILE}"; done
+	for FILE in \
+		"GaryOS Version|${_VERSN}" \
+		"Release Date|${_RDATE}" \
+		"Funtoo Commit|${FUNTOO}" \
+		"Linux Kernel|${NEXT}" \
+	; do
+		declare KEY="$(echo "${FILE}" | ${SED} "s|^(.+)[|](.+)$|\1|g")"
+		declare VAL="$(echo "${FILE}" | ${SED} "s|^(.+)[|](.+)$|\2|g")"
+		${SED} -i \
+			-e "s|^(.*${KEY}[:].*[0-9]m).*$|\1 ${VAL}|g" \
+			${ARTDIR}/issue \
+			|| return 1
+	done
+	${RSYNC_U} -L ${ARTDIR}/issue ${TARGET}/etc/issue \
+		|| return 1
+	if [[ ${TARGET} == / ]]; then
+		FILE=" \\\e[1;45;37m"
+		FILE+="PLEASE NOTE THAT THIS BUILD HAS BEEN CUSTOMIZED AND IS NOT AN OFFICIAL VERSION!"
+		FILE+="\\\e[1;40;30m"
+		FILE+="\n\n"
+		${SED} -i \
+			-e "s|^(.+[ ]Thank[ ]you[ ])|${FILE}\1|g" \
+			${TARGET}/etc/issue \
+			|| return 1
+		return 0
+	fi
+	return 0
+}
+
+#NOTE: UPDATE THE TABLE IN "README" WHEN MAKING CHANGES HERE!
+
+function _release_config {
+	release_config_issue												|| return 1
+	if [[ ${TARGET} == / ]]; then
+		return 0
+	fi
+	${LN} sbin/init								${TARGET}/init				|| return 1
+	${SED} -i -e "s|^([^#].+)$|#\1|g"					${TARGET}/etc/fstab			|| return 1
+	${SED} -i -e "s|^(hostname=[\"]?)[^\"]+([\"]?)$|\1${_TITLE}\2|g"	${TARGET}/etc/conf.d/hostname		|| return 1
+	echo -en "setterm -blength 0\n"						>${TARGET}/etc/profile.d/setterm.sh	|| return 1
+	${SED} -i -e "/xset[ ][-]b/d" -e "s|^(exec.*dwm.*)$|xset -b\n\1|g"	${TARGET}/etc/X11/Sessions/dwm		|| return 1
+	${SED} -i -e "s|^(.*xsetroot[ ][-]name[ ]).*$|\1\"${WMHELP}\"|g"	${TARGET}/etc/X11/Sessions/dwm		|| return 1
+	echo -en "XSESSION=\"${WINMGR}\"\n"					>${TARGET}/etc/env.d/90xsession		|| return 1
+	safe_env								/usr/sbin/env-update			|| return 1
+	echo ${RCUPDT} | tr '|' '\n' | while read -r FILE; do
+		safe_env							rc-update ${FILE}			#>>> || return 1
+	done
+	echo -en "${_TITLE}\n${_TITLE}\n" | safe_env				/usr/bin/passwd root			|| return 1
+	return 0
+}
+
+########################################
+
+function _release_linux {
+	if [[ ${TARGET} == / ]]; then
+		if [[ ! -d ${TARGET}/usr/src/linux ]] || [[ -L ${TARGET}/usr/src/linux ]]; then
+			${RM}							${TARGET}/usr/src/linux		|| return 1
+			release_untar						${TARGET}/usr/src/linux		|| return 1
+		fi
+		return 0
+	fi
+	for FILE in ${KERNEL}; do NEXT="config-gentoo64-${FILE}"; FILE="/usr/src/linux-${FILE}-gentoo"; done
+	if [[ ! -d ${TARGET}/usr/src/linux ]] || [[ -L ${TARGET}/usr/src/linux ]]; then
+		${RM}								${TARGET}/usr/src/linux		|| return 1
+#>>>		safe_make -C ${TARGET}${FILE}									\
+#>>>			INSTALL_HDR_PATH="${TARGET}/usr/src/linux"		headers_install			|| return 1
+		${RSYNC_U}											\
+			--delete-excluded									\
+			--filter="-_/.tmp**"									\
+			--filter="-_/usr/initramfs_data.cpio**"							\
+			${TARGET}${FILE}/					${TARGET}/usr/src/linux		|| return 1
+	fi
+#>>>	if [[ ! -f ${TARGET}/boot/_null.kernel ]]; then
+#>>>		safe_make -C ${TARGET}/usr/src/linux				distclean			|| return 1
+#>>>		safe_make -C ${TARGET}/usr/src/linux				allnoconfig bzImage		|| return 1
+#>>>		${RSYNC_U} -L  ${TARGET}/usr/src/linux/arch/x86/boot/bzImage	${TARGET}/boot/_null.kernel	|| return 1
+#>>>	fi
+	if [[ ! -f ${TARGET}/usr/src/linux.tar.xz ]]; then
+		safe_make -C ${TARGET}/usr/src/linux				distclean			|| return 1
+		${RSYNC_U} ${TARGET}${ARCDIR}/${NEXT}				${TARGET}/usr/src/linux/.config	|| return 1
+		safe_make -C ${TARGET}/usr/src/linux				modules_prepare			|| return 1
+		release_tar							${TARGET}/usr/src/linux		|| return 1
+	fi
+	return 0
+}
+
+########################################
+
+function _release_symlink {
+	if [[ ${TARGET} == / ]]; then
+		return 0
+	fi
+	for FILE in ${KERNEL}; do NEXT="config-gentoo64-${FILE}"; FILE="kernel-genkernel-x86_64-${FILE}-gentoo"; done
+	if [[ -n ${COMMIT} ]]
+		#note: also doing this in "_system" script on purpose
+		then echo -en "${COMMIT}"			>${TARGET}/${CMTFIL}						|| return 1
+		else ${RM}					${TARGET}/${CMTFIL}						|| return 1
+	fi
+	${MKDIR} ${TARGET}/${_FINAL}												|| return 1
+	${RM} $(find						${TARGET}/${_FINAL} -maxdepth 1 -type l | sort)			|| return 1
+	${LN} --relative ${TARGET}${DSTDIR}			${TARGET}/${_FINAL}/_$(basename ${DSTDIR})			|| return 1
+	${LN} --relative ${TARGET}${PAKDIR}			${TARGET}/${_FINAL}/_$(basename ${PAKDIR})			|| return 1
+#>>> sort -b -k4
+	${LN} --relative ${TARGET}/${REPDIR}.git.tar.xz		${TARGET}/${_FINAL}/${_RAMFS}.$(basename ${REPDIR}).git.tar.xz	|| return 1
+	${LN} --relative ${TARGET}/${REPDIR}.tar.xz		${TARGET}/${_FINAL}/${_RAMFS}.$(basename ${REPDIR}).tar.xz	|| return 1
+	${LN} --relative ${TARGET}/usr/src/linux.tar.xz		${TARGET}/${_FINAL}/${_RAMFS}.linux.tar.xz			|| return 1
+	${LN} --relative ${TARGET}/boot/${FILE}			${TARGET}/${_FINAL}/${_RAMFS}.null.kernel			|| return 1
+	${LN} --relative ${TARGET}/.${_TITLE}.packages.txt	${TARGET}/${_FINAL}/${_RAMFS}.packages.txt			|| return 1
+#>>>
+	if [[ -f ${TARGET}/boot/_null.kernel ]]; then
+		${LN} --relative ${TARGET}/boot/_null.kernel	${TARGET}/${_FINAL}/${_RAMFS}.null.kernel			|| return 1
+	fi
+	for FILE in ${TARGET}${ARCDIR}/stage3-*.tar.xz; do
+		${LN} --relative ${FILE}			${TARGET}/${_FINAL}/						|| return 1
+	done
+	return 0
+}
+
+########################################
+
+function release_ramfs_packages {
+	${MKDIR} ${TARGET}/${_FINAL}									|| return 1
+	cat /dev/null >${TARGET}/.${_TITLE}.packages.txt						|| return 1
+	NEXT=
+	for FILE in $(
+		cd ${TARGET}${PAKDIR}									&&
+		find ./ -mindepth 2 -maxdepth 2 -type f							|
+			${SED} "s|^[.][/]||g"								|
+			sort -u
+	); do
+		NEXT+=" ${FILE}"
+	done
+	for FILE in ${NEXT}; do
+		declare PKG_DB="$(cd ${TARGET}${PDBDIR} && ${LS} -d ${FILE/%.tbz2}	2>/dev/null)"	|| return 1
+		declare PKG_DU="$(cd ${TARGET}${PAKDIR} && ${DU} -ks ${FILE}		2>/dev/null)"	|| return 1
+		if [[ -n ${PKG_DB} ]]; then
+			echo -en "${PKG_DU} (installed)\n"	| tee -a ${TARGET}/.${_TITLE}.packages.txt	|| return 1
+		else
+			echo -en "${PKG_DU} (packaged)\n"	| tee -a >>${TARGET}/.${_TITLE}.packages.txt	|| return 1
+		fi
+	done
+	return 0
+}
+
+function release_ramfs_cpio {
+	mount_dev_dirs -u		|| return 1
+	${MKDIR} ${TARGET}/${_FINAL}	|| return 1
+	FILE="${TARGET}/${_FINAL}/${_RAMFS}.cpio"
+	if [[ ! -f ${FILE}.xz ]]; then
+		(cd ${TARGET} && find ./ -mindepth 1 \
+			\( -path ./${CMTFIL}		-prune \) -o \
+			\( -path ./${_FINAL}		-prune \) -o \
+			\( -path ./${_RAMFS}		-prune \) -o \
+			\
+			\( -path .${ARCDIR}\*		-prune \) -o \
+			\( -path .${GENDIR}\*		-prune \) -o \
+			\
+			\( -path .${DSTDIR}		-prune \) -o \
+			\( -path .${PAKDIR}		-prune \) -o \
+			\( -path .${REPDIR}		-prune \) -o \
+			\( -path .${REPDIR}.git\*	-prune \) -o \
+			\
+			\( -path ./usr/src/linux	-prune \) -o \
+			\( -path ./usr/src/linux-\*	-prune \) -o \
+			\
+			\( -path ./usr/lib/debug	-prune \) -o \
+			\( -path ./usr/lib32/debug	-prune \) -o \
+			\( -path ./usr/lib64/debug	-prune \) -o \
+			\( -path ./usr/src/debug	-prune \) -o \
+			\
+			\( -path ./proc/\*		-prune \) -o \
+			\( -path ./sys/\*		-prune \) -o \
+			\
+			\( -path ./tmp/\*		-prune \) -o \
+			\( -path ./var/cache/\*		-prune \) -o \
+			\( -path ./var/lock/\*		-prune \) -o \
+			\( -path ./var/log/\*		-prune \) -o \
+			\( -path ./var/tmp/\*		-prune \) -o \
+			\
+			-print
+		)									>${FILE}.txt	|| return 1
+		sort -o ${FILE}.txt							${FILE}.txt	|| return 1
+		cat ${FILE}.txt | cpio -v --create --format newc --directory ${TARGET}	>${FILE}	|| return 1
+		${RM}									${FILE}.dir	|| return 1
+		${MKDIR}								${FILE}.dir	|| return 1
+		cpio -v --extract --file ${FILE} --directory				${FILE}.dir	|| return 1
+		xz -vv --compress --stdout --format xz --check crc64 ${FILE}		>${FILE}.xz	|| return 1
+	fi
+	return 0
+}
+
+function release_ramfs_kernel {
+	for FILE in ${KERNEL}; do NEXT="config-gentoo64-${FILE}"; FILE="/usr/src/linux-${FILE}-gentoo"; done
+	if [[ ${TARGET} == / ]]; then
+		FILE="/usr/src/linux"
+	fi
+	if [[ -d ${TARGET}${FILE} ]] && [[ ! -f ${TARGET}/${_FINAL}/${_RAMFS}.kernel ]]; then
+		#note: treating the block size of the cpio as the in-memory filesystem size, which comes up a few MB short of reality
+		#note: then adding 768MB for buffer and minimum needed memory, and calculating the number of 4096K pages needed in the kernel
+		#note: fortunately, the kernel code does maximizing and rounding to the nearest memory block boundary for us, so all we need to do is provide an integer
+		declare SHMMAX=		# based on a page size of 4096
+		SHMMAX="$(du -bs ${TARGET}/${_FINAL}/${_RAMFS}.cpio | ${SED} "s|[[:space:]].*$||g")"
+		SHMMAX="$(echo "(${SHMMAX} +(2^29)+(2^28))/4096" | bc | ${SED} -r "s|[.].*$||g")"
+#>>>		SHMMAX="917504"		# (3*(2^18))+2^17 = (3.5*(2^30))/4096 = 3.5G
+#>>>		SHMMAX="983040"		# (3*(2^18))+2^17+2^16 = ~3.7G [ (3*(2^18))*4096 = 3G) ] + [ (2^17)*4096 = 512M ] + [ (2^16)*4096 = 256M ]
+#>>>		safe_make -C ${TARGET}${FILE}					distclean					|| return 1
+		[[ ! -f ${TARGET}${FILE}/mm/shmem.c.${_TITLE} ]] || ${MV}	${TARGET}${FILE}/mm/shmem.c{.${_TITLE},}	|| return 1
+		${SED} -i.${_TITLE} "s|totalram_pages[ ][/][ ]2|${SHMMAX}|g"	${TARGET}${FILE}/mm/shmem.c			|| return 1
+		${GREP} --after-context=3 "long[ ]shmem_default_max"		${TARGET}${FILE}/mm/shmem.c			|| return 1
+		diff ${DIFF_OPTS}						${TARGET}${FILE}/mm/shmem.c{.${_TITLE},}	| ${GREP} "^[-+]" #>>> || return 1
+		declare INITRAMFS_CONFIG=
+		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_SOURCE=\"$(realpath ${TARGET}/${_FINAL}/${_RAMFS}.cpio)\"\n"
+#>>>		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_ROOT_GID=0\n"
+#>>>		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_ROOT_UID=0\n"
+#>>>		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_COMPRESSION_NONE=y\n"
+		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_COMPRESSION_XZ=y\n"
+#>>>		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_COMPRESSION=\".xz\"\n"
+		${RSYNC_U} ${TARGET}${ARCDIR}/${NEXT}				${TARGET}${FILE}/.config			|| return 1
+		kernel_cpu 							${TARGET}${FILE}/.config			|| return 1
+		${SED} -i \
+			-e "/CONFIG_INITRAMFS_COMPRESSION/d" \
+			-e "s|^.*(CONFIG_INITRAMFS_SOURCE)[^_].*$|${INITRAMFS_CONFIG}|g" \
+										${TARGET}${FILE}/.config			|| return 1
+		safe_make -C ${TARGET}${FILE}					olddefconfig					|| return 1
+		${RSYNC_U} ${TARGET}${FILE}/.config				${TARGET}${ARCDIR}/${NEXT}.initramfs		|| return 1
+		${GREP} "CONFIG_(KERNEL|INITRAMFS|RD)_"				${TARGET}${ARCDIR}/${NEXT}.initramfs		|| return 1
+		diff ${DIFF_OPTS} ${TARGET}${ARCDIR}/${NEXT}			${TARGET}${ARCDIR}/${NEXT}.initramfs		| ${GREP} "^[-+]" #>>> || return 1
+		${RM}								${TARGET}${FILE}/usr/initramfs_data.cpio*	|| return 1
+		safe_make -C ${TARGET}${FILE}					bzImage						|| return 1
+#>>>		${RSYNC_U} -L ${TARGET}${FILE}/arch/x86/boot/bzImage		{TARGET}/${_FINAL}/${_RAMFS}.kernel		|| return 1
+		${RSYNC_U} -L ${TARGET}${FILE}/arch/x86_64/boot/bzImage		${TARGET}/${_FINAL}/${_RAMFS}.kernel		|| return 1
+	fi
+	return 0
+}
+
+function _release_ramfs {						#{reset}
+	if [[ ${1} == --reset ]]; then
+		shift
+		_release_reset						|| return 1
+	fi
+	_release_prep							|| return 1
+	release_ramfs_packages						|| return 1
+	release_ramfs_cpio						|| return 1
+	release_ramfs_kernel						|| return 1
+	echo -en "\n"; ${LL}						\
+				${TARGET}/				\
+				${TARGET}/${_FINAL}*			\
+									2>/dev/null #>>> || return 1
+	echo -en "\n"; ${DU} -ms --dereference --one-file-system	\
+				${TARGET}${FILE}/usr/initramfs_data.*	\
+				${TARGET}/${_FINAL}/${_RAMFS}*		\
+									2>/dev/null #>>> || return 1
+	return 0
+}
+
+########################################
+
+function release_tar {
+	FILE="${1}" && shift
+	if [[ ! -f ${FILE}.tar.xz ]] && [[ -d ${FILE} ]]; then
+		tar -cvv --xz -C $(dirname ${FILE}) -f ${FILE}.tar.xz $(basename ${FILE}) \
+			|| return 1
+	fi
+	return 0
+}
+
+function release_untar {
+	FILE="${1}" && shift
+	if [[ -f ${FILE}.tar.xz ]] && [[ ! -d ${FILE} ]]; then
+		tar -vvx --xz -C $(dirname ${FILE}) -f ${FILE}.tar.xz \
+			|| return 1
+	fi
+	return 0
+}
+
+function _release_unpack {
+	release_untar ${TARGET}${REPDIR}	|| return 1
+	release_untar ${TARGET}/usr/src/linux	|| return 1
+	return 0
+}
+
 #>>>exit 0
 ################################################################################
 # end of file
