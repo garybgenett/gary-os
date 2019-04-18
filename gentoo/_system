@@ -169,9 +169,9 @@ declare PYTHON="${PYTHON:-$(${SED} -n "s|^[#][{]PYTHON[}][ ](.+)$|\1|gp" ${SETDI
 declare SELECT="${SELECT:-$(${SED} -n "s|^[#][{]SELECT[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} "s|[ ]*$||g")}"
 
 #OPTIONS[RCUPDT WINMGR WMHELP]
-declare RCUPDT="${RCUPDT:-$(${SED} -n "s|^[#][{]RCUPDT[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '|' | ${SED} -e "s|[| ]*$||g" -e "s|[|]|\ \|\ |g")}"
-declare WINMGR="${WINMGR:-$(${SED} -n "s|^[#][{]WINMGR[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '|' | ${SED} -e "s|[| ]*$||g" -e "s|[|]|\ \;\ |g")}"
-declare WMHELP="${WMHELP:-$(${SED} -n "s|^[#][{]WMHELP[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '|' | ${SED} -e "s|[| ]*$||g" -e "s|[|]|\ \\/\/\ |g")}"
+declare RCUPDT="${RCUPDT:-$(${SED} -n "s|^[#][{]RCUPDT[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '!' | ${SED} -e "s|[! ]*$||g" -e "s|[!]|\ \;\ |g")}"
+declare WINMGR="${WINMGR:-$(${SED} -n "s|^[#][{]WINMGR[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '!' | ${SED} -e "s|[! ]*$||g" -e "s|[!]|\ \;\ |g")}"
+declare WMHELP="${WMHELP:-$(${SED} -n "s|^[#][{]WMHELP[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '!' | ${SED} -e "s|[! ]*$||g" -e "s|[!]|\ \\/\/\ |g")}"
 declare WINMGR="${WINMGR:-dwm}"
 declare WMHELP="${WMHELP:-\`date --iso=s\`}"
 
