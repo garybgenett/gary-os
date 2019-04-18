@@ -7,6 +7,9 @@ override GARYOS_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 
 ########################################
 
+ifneq ($(wildcard $(GARYOS_DIR)/.bashrc),)
+export HOME	:= $(GARYOS_DIR)
+endif
 override CHROOT	:= -g
 
 override C	?= $(GARYOS_DIR)
