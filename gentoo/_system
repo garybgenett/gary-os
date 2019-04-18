@@ -1029,6 +1029,7 @@ elif [[ ${1} != -! ]]; then
 #>>>		expect_wrapper emerge --ask=n --verbose --sync				|| EXIT 1
 		expect_wrapper ego sync							|| EXIT 1
 		${SETDIR}/${FUNDIR}/${FUNKIT} ${REPDIR} ${1}				|| EXIT 1
+		expect_wrapper eix-update						|| EXIT 1
 		for FILE in ${REPDIR}/kits/*kit; do
 			echo -en "egencache: ${FILE}\n"
 			expect_wrapper egencache --repo "$(basename ${FILE})"		\
