@@ -98,6 +98,11 @@ update:
 
 ########################################
 
+.PHONY: package_list
+package_list: .DEFAULT
+
+########################################
+
 .PHONY: init
 init:
 	SETDIR="$(C)" SOURCE="$(S)" OUTDIR="$(O)" PKGGOS="$(P)" $(C)/gentoo/_system $(CHROOT) -0
