@@ -1079,26 +1079,38 @@ fi
 
 ################################################################################
 
-safe_env ${SETDIR}/${FUNDIR}/.emergent
+safe_env ${SETDIR}/${FUNDIR}/${AUDITS}
+
 #>>>if [[ -z ${_GOS} ]]; then
 #>>>	safe_env ${SETDIR}/${FUNDIR}/.hacks
 #>>>fi
 
 ########################################
 
-if [[ -z ${AUTO} ]] && [[ ${1} == -u ]]; then
-	eselect news read new
-	echo -en "\n"
-	glsa-check --verbose --cve --test all
-fi
+echo -en "\n"
+${LL} \
+	/tmp \
+	/var/tmp
+
+echo -en "\n"
+${LL} \
+	/boot \
+	/etc/kernels \
+	/lib/modules \
+	/usr/src
+
+echo -en "\n"
+${LL} \
+	/ \
+	/_build
 
 ########################################
 
+#note: the "_packages" file is hard-set in the ".emergent" script
 echo -en "\n"
 wc -l ${GENDIR}/_packages
 wc -l ${GENDIR}/_packages.db
 
-echo -en "\n"
 diff ${DIFF_OPTS} ${GENDIR}/_packages.db ${GENDIR}/_packages |
 	${GREP} "^[-+]"
 
@@ -1106,6 +1118,15 @@ echo -en "\n"
 ${LL} ${GENDIR}
 if [[ -n "$(diff ${GENDIR}/+okay ${GENDIR}/+okay.okay 2>/dev/null)" ]]; then
 	cat ${GENDIR}/+okay
+fi
+
+########################################
+
+if [[ -z ${AUTO} ]] && [[ ${1} == -u ]]; then
+	echo -en "\n"
+	eselect news read new
+	echo -en "\n"
+	glsa-check --verbose --cve --test all
 fi
 
 EXIT 0
