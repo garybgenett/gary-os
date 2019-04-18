@@ -199,8 +199,7 @@ sys-apps/fakeroot-ng
 #{KERNEL} 4.9.125
 #{KERNEL} 4.18.6
 
-#{RCUPDT} delete lvm boot
-#{RCUPDT} delete postfix default
+#{RCUPDT} cat /dev/null
 
 sys-kernel/genkernel
 sys-kernel/linux-firmware
@@ -230,7 +229,7 @@ app-portage/portage-utils
 #{SELECT} opengl:xorg-x11
 
 #{WINMGR} dwm
-#{WMHELP} read[m.lft] man[m.rgt] / term[alt+sft+ret] web[alt+ctl+ret] / \`date --iso=s\`
+#{WMHELP} gary-os / \`date --iso=s\`
 
 app-misc/evtest
 media-libs/libtxc_dxtn
