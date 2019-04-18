@@ -64,9 +64,9 @@
 #{KERNEL} 4.18.6
 
 #{RCUPDT} rc-update del netmount default
-#{RCUPDT} rc-update del sshd default
-#{RCUPDT} echo skipping: rc-update add wpa_supplicant default
-#{RCUPDT} echo skipping: rc-update add dhcpcd default
+#{RCUPDT} rc-update add sshd default
+#{RCUPDT} rc-update add wpa_supplicant default
+#{RCUPDT} rc-update add dhcpcd default
 #{RCUPDT} rc-update show
 
 ########################################
