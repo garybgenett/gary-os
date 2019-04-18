@@ -130,7 +130,7 @@ function release_config_issue {
 			${ARTDIR}/issue \
 			|| return 1
 	done
-	${RSYNC_U} -L ${ARTDIR}/issue ${TARGET}/etc/issue \
+	${RSYNC_C} -L ${ARTDIR}/issue ${TARGET}/etc/issue \
 		|| return 1
 	if [[ ${TARGET} == / ]]; then
 		FILE=" \\\e[1;45;37m"
@@ -157,6 +157,7 @@ function _release_config {
 	${SED} -i -e "s|^([^#].+)$|#\1|g"					${TARGET}/etc/fstab			|| return 1
 	${SED} -i -e "s|^(hostname=[\"]?)[^\"]+([\"]?)$|\1${_TITLE}\2|g"	${TARGET}/etc/conf.d/hostname		|| return 1
 	echo -en "setterm -blength 0\n"						>${TARGET}/etc/profile.d/setterm.sh	|| return 1
+	${RSYNC_C} -L ${ARTDIR}/wpa_supplicant.conf				${TARGET}/etc/wpa_supplicant/		|| return 1
 	${SED} -i -e "/xset[ ][-]b/d" -e "s|^(exec.*dwm.*)$|xset -b\n\1|g"	${TARGET}/etc/X11/Sessions/dwm		|| return 1
 	${SED} -i -e "s|^(.*xsetroot[ ][-]name[ ]).*$|\1\"${WMHELP}\"|g"	${TARGET}/etc/X11/Sessions/dwm		|| return 1
 	echo -en "XSESSION=\"${WINMGR}\"\n"					>${TARGET}/etc/env.d/90xsession		|| return 1
