@@ -22,7 +22,7 @@ declare _GREPO="/.g/_data/_builds/.${_TITLE}/.${_TITLE}"
 
 ########################################
 
-declare CMTFIL=".commit"
+declare CMTFIL="_commit"
 declare COMMIT=
 for FILE in \
 	${_TITLE} \
