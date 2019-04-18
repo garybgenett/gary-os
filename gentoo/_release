@@ -37,6 +37,31 @@ done
 
 ################################################################################
 
+declare _AUTHOR="Gary B. Genett <me@garybgenett.net>"
+declare _LOGIN="garybgenett"
+
+declare _GITHUB="ssh://git@github.com/${_LOGIN}/${_TITLE}.git"
+declare _SFCODE="ssh://${_LOGIN}@git.code.sf.net/p/${_TITLE}/code"
+declare _SFFILE="${_LOGIN}@web.sourceforge.net:/home/frs/project/${_TITLE}"
+declare _SFRSSH="${_LOGIN},${_TITLE}@shell.sourceforge.net create"
+
+declare _DOCDIR="/.g/_data/zactive/coding/${_TITLE}"
+declare _SAVDIR="/.g/_data/_builds/_${_TITLE}"
+declare _RELDIR="$(dirname ${_GREPO})"
+declare _OUTDIR="${_RELDIR}.release"
+
+declare -a RELEASE=
+declare -a CMTHASH=
+RELEASE[0]="v0.1"; CMTHASH[0]="4d1b46b02798a1d3d3421b1c8087d80a80012a53"
+RELEASE[1]="v0.2"; CMTHASH[1]="99c1bafbf1116c1400705803da45e1ac03f3d492"
+RELEASE[2]="v0.3"; CMTHASH[2]="6e968d212ea62a1054e3cafa2436b6a98cf8776b"
+RELEASE[3]="v1.0"; CMTHASH[3]="f6885f3482b95fe15a688135c441f8f6391c9529"
+RELEASE[4]="v1.1"; CMTHASH[4]="9b653e64164e68873333043b41f8bbf23b0fbd55"
+RELEASE[5]="v2.0"; CMTHASH[5]="deda452a0aab311f243311b48a39b7ac60ab3fd8"
+RELEASE[6]="v3.0"; CMTHASH[6]="35141e1e20259d7d1c2f4b143c6ae4505d7d5045"
+
+################################################################################
+
 function _release_reset {
 	if [[ ${TARGET} != / ]]; then
 		${RM} ${TARGET}/.${_TITLE}*		|| return 1
@@ -370,6 +395,235 @@ function release_untar {
 function _release_unpack {
 	release_untar ${TARGET}${REPDIR}	|| return 1
 	release_untar ${TARGET}/usr/src/linux	|| return 1
+	return 0
+}
+
+################################################################################
+
+function _publish_daily {
+	_publish_gitdir	|| return 1
+#>>>	_publish_export	|| return 1
+#>>>	_publish_grub	|| return 1
+	_publish_upload	|| return 1
+	return 0
+}
+
+########################################
+
+function _publish_release {
+	_publish_gitdir	|| return 1
+	_publish_export	|| return 1
+	_publish_grub	|| return 1
+	_publish_upload	|| return 1
+	return 0
+}
+
+########################################
+
+function _publish_gitdir {
+#>>>	if [[ -x $(which task 2>/dev/null) ]]; then
+#>>>		declare FILE="${GIT} --git-dir=${_DOCDIR}.git --work-tree=${_DOCDIR}"
+#>>>		declare NEXT="Automated update of \"TODO.md\" tasks list."
+#>>>		task zoom	project:geek.gary-os >${_DOCDIR}/TODO.md	|| return 1
+#>>>		${FILE} add	TODO.md						#>>> || return 1
+#>>>		${FILE} commit	--message="${NEXT}" TODO.md			#>>> || return 1
+#>>>	fi
+	function git-export-preprocess {
+		${SED} -i "s%^(From[:][ ]).+%\1${_AUTHOR}%g"							"${@}"	|| return 1
+		${SED} -i "N;N;s%^(Subject[:][ ])[[]git-backup[^[]+[[](.+)[]]%\1(RELEASE:\2)%g"			"${@}"	|| return 1
+		${SED} -i "N;N;s%^(From 444e47c253085ed084c4069e53505113b39619da.+Date[:][ ].+)-0800%\1+0000%g"	"${@}"	|| return 1
+		return 0
+	}
+	function git-export-postprocess {
+		NEXT="0"
+		for FILE in $(
+			git-list --reverse | ${GREP} "RELEASE" | ${GREP} -o "[a-z0-9]{40}[ ]"
+		); do
+			${GIT} tag --force ${RELEASE[${NEXT}]} ${FILE}				|| return 1
+			NEXT="$((${NEXT}+1))"							|| return 1
+		done
+		return 0
+	}
+	git-export ${_TITLE} ${_RELDIR} ${_GITHUB}						\
+		+git-export-preprocess +git-export-postprocess					\
+		${_TITLE}:${_DOCDIR}:								\
+		_${_TITLE}:${_SAVDIR}:${CMTFIL}^_commit^_config.\*^_packages.\*			\
+		setup:/.g/_data/zactive/.setup:gentoo^linux					\
+		static:/.g/_data/zactive/.static:.bashrc^scripts/grub.sh^scripts/metro.sh	\
+												|| return 1
+	FILE="git --git-dir=/home/git/p/${_TITLE}/code.git config"
+	NEXT=
+	NEXT+="${FILE} --unset receive.denynonfastforwards;"
+	NEXT+="${FILE} --list;"
+	NEXT+="exit 0;"
+	echo -en "${NEXT}\n" | ssh ${_SFRSSH}							|| return 1
+	${GIT} --git-dir=${_RELDIR}/.${_TITLE}.git --work-tree=${_RELDIR}/.${_TITLE}		\
+		push --mirror ${_SFCODE}							|| return 1
+	return 0
+}
+
+########################################
+
+declare FILELIST="
+	.${_TITLE}-
+	${_TITLE}-
+	portage-
+	stage3-
+"
+
+function publish_export_filelist {
+	declare FILE="${1}" && shift
+	${LS} -d $(
+		for NEXT in ${FILELIST}; do
+			echo -en " ${FILE}/${NEXT}*"
+		done
+	) 2>/dev/null \
+		|| return 1
+	return 0
+}
+
+function publish_export_gitbackup {
+	declare GDIR="${1}" && shift
+	declare HASH="${1}" && shift
+	FILE="$(
+		for NEXT in ${FILELIST}; do
+			(set -o pipefail;
+				$(which git) --git-dir=${GDIR}.git --work-tree=${GDIR}	\
+				ls-tree ${HASH}						\
+					2>/dev/null					\
+					| awk '{print $4;}'				\
+					| ${GREP} "^${NEXT}"				\
+			)								2>/dev/null
+		done
+	)"
+	if [[ -n ${FILE} ]]; then
+		(cd ${_OUTDIR} && git-backup -r ${HASH} ${FILE})			|| return 1
+	fi
+	FILE="$(realpath --canonicalize-missing --relative-to ${GDIR} $(
+		find ${GDIR}/.${_TITLE}-*/ ${GDIR}/${_TITLE}-*/ -mindepth 1 -maxdepth 1	2>/dev/null
+	) 2>/dev/null)"
+	if [[ -n ${FILE} ]]; then
+		(cd ${_OUTDIR} && git-backup -r ${HASH} ${FILE})			|| return 1
+	fi
+	return 0
+}
+
+function publish_export_underscore {
+	FILE="${1}" && shift
+	${RSYNC_U} -L \
+		${_OUTDIR}/.${_TITLE}-*/_$(basename ${FILE})/ \
+		${_OUTDIR}/_$(basename ${FILE}) \
+		|| return 1
+	${RM} $(realpath --canonicalize-missing \
+		${_OUTDIR}/.${_TITLE}-*/_$(basename ${FILE})
+	)
+	return 0
+}
+
+function publish_export_checksum {
+	for FILE in "${@}"; do
+		declare CHECKDIR="$(dirname ${FILE})"
+		declare CHECKFIL="$(basename ${FILE})"
+		declare CHECKSUM="${FILE}.hash.txt"
+		if [[ -f ${CHECKDIR}/${CHECKFIL} ]]; then
+			(set -o pipefail;
+				(cd ${CHECKDIR}					&&
+					sha256sum --tag		${CHECKFIL}	&&
+					md5sum --tag		${CHECKFIL}	&& true
+				) 2>&1 | tee			${CHECKSUM}	&& true
+			)							|| return 1
+			touch -r ${CHECKDIR}/${CHECKFIL}	${CHECKSUM}	|| return 1
+		fi
+	done
+	return 0
+}
+
+function _publish_export {
+	${MKDIR} ${_OUTDIR}										|| return 1
+	${RM} ${_OUTDIR}.git										|| return 1
+	${LN} ${_SAVDIR}.git ${_OUTDIR}.git								|| return 1
+	declare INDEX=
+	for INDEX in $(
+		eval echo -en "{0..$((${#RELEASE[*]}-1))}"
+	); do
+		if [[ -n ${RELEASE[${INDEX}]} ]] && [[ -n ${CMTHASH[${INDEX}]} ]]; then
+			echo -en "\n[ ${RELEASE[${INDEX}]} :: ${CMTHASH[${INDEX}]} ]\n"
+		else
+			continue
+		fi
+		publish_export_gitbackup ${_OUTDIR} ${CMTHASH[${INDEX}]}				|| return 1
+		if [[ -d $(${LS} -d ${_OUTDIR}/.${_TITLE}-* 2>/dev/null) ]]; then
+			if [[ ${RELEASE[${INDEX}]} == ${RELEASE[-1]} ]]; then
+				publish_export_underscore ${DSTDIR}					|| return 1
+				publish_export_underscore ${PAKDIR}					|| return 1
+			fi
+			${RSYNC_U} -L $(publish_export_filelist ${_OUTDIR}/.${_TITLE}-*) ${_OUTDIR}/	|| return 1
+			${RM} $(realpath --canonicalize-missing $(
+				publish_export_filelist ${_OUTDIR}/.${_TITLE}-*
+			))										|| return 1
+			until [[ -z $(find ${_OUTDIR} -type d -empty) ]]; do
+				${RM} $(find ${_OUTDIR} -type d -empty)					|| return 1
+			done
+			${RM} ${_OUTDIR}/.${_TITLE}-*							|| return 1
+		fi
+		(cd ${_OUTDIR} && publish_export_checksum $(publish_export_filelist .))			|| return 1
+		${MKDIR} ${_OUTDIR}/${RELEASE[${INDEX}]}						|| return 1
+		${RSYNC_U} -L $(publish_export_filelist ${_OUTDIR}) ${_OUTDIR}/${RELEASE[${INDEX}]}/	|| return 1
+		${RM} $(publish_export_filelist ${_OUTDIR})						|| return 1
+		touch -r $(
+			${LS} -t ${_OUTDIR}/${RELEASE[${INDEX}]}/*.kernel 2>/dev/null			|
+			head -n1
+		) ${_OUTDIR}/${RELEASE[${INDEX}]}							|| return 1
+	done
+	${RM} ${_OUTDIR}.git										|| return 1
+	${RM} ${_OUTDIR}/+index*									|| return 1
+	${GIT} --git-dir=${_SAVDIR}.git --work-tree=${_SAVDIR} reset					|| return 1
+	for INDEX in ${RELEASE[*]}; do
+		for NEXT in $(
+			${LS} ${_OUTDIR}/${INDEX}/*.{kernel,initrd} 2>/dev/null
+		); do
+			declare OUTFILE="$(
+				echo -en "$(basename ${NEXT})" |
+				${SED} \
+					-e "s%^stage3%${_TITLE}%g" \
+					-e "s%[a-z0-9]{40}[.][0-9][.]tar[.]xz%${INDEX}%g"
+			)"										|| return 1
+			${RSYNC_U} ${NEXT} ${_OUTDIR}/${OUTFILE}					|| return 1
+			publish_export_checksum ${_OUTDIR}/${OUTFILE}					|| return 1
+		done
+	done
+	return 0
+}
+
+########################################
+
+function _publish_grub {
+	FILE="${_OUTDIR}/${_TITLE}.grub"
+	${RM}		${FILE}*				|| return 1
+	${MKDIR}	${FILE}					|| return 1
+	(cd ${FILE} &&	${HOME}/scripts/grub.sh)		|| return 1
+	release_tar	${FILE}					|| return 1
+	${MV}		${FILE}.tar.xz ${FILE}.${_RDATE}.tar.xz	|| return 1
+	${RM}		${FILE}					|| return 1
+	return 0
+}
+
+########################################
+
+function _publish_upload {
+	for FILE in \
+		README.md \
+		LICENSE.md \
+	; do
+		${RSYNC_U} -L		${_DOCDIR}/${FILE} ${_OUTDIR}/			|| return 1
+	done
+#>>>	${MKDIR}			${_OUTDIR}/$(basename ${ARTDIR})		|| return 1
+#>>>	${RSYNC_U} -L ${ARTDIR}/	${_OUTDIR}/$(basename ${ARTDIR})		|| return 1
+	find				${_OUTDIR} -type d -exec chmod 755 {} \;	|| return 1
+	find				${_OUTDIR} -type f -exec chmod 644 {} \;	|| return 1
+	chown -R root:root		${_OUTDIR}					|| return 1
+	${RSYNC_U}			${_OUTDIR}/ ${_SFFILE}				|| return 1
+	${LL} -R			${_OUTDIR}					|| return 1
 	return 0
 }
 
