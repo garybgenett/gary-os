@@ -44,7 +44,7 @@ usage:
 	@$(MARKER)
 	@$(ECHO) "$(NOTES)>>> GARYOS BUILD SYSTEM <<<$(RESET)\n"
 	@$(MARKER)
-	@$(ECHO) "$(STATE)This Makefile is a simple wrapper to the \"_system\" script, and has just a few targets:$(RESET)\n"
+	@$(ECHO) "$(STATE)This Makefile is a helpful wrapper to the \"_system\" script, and has just a few targets:$(RESET)\n"
 	@$(ECHO) "\n"
 	@$(PRINTF) "Update Current System (Interactively):"	"make update"
 	@$(ECHO) "\n"
@@ -63,7 +63,7 @@ usage:
 	@$(PRINTF) "Initramfs Build (Live Create):"		"make O=/ release"
 	@$(PRINTF) "Initramfs System (Live Unpack):"		"make O=/ unpack"
 	@$(ECHO) "\n"
-	@$(ECHO) "$(STATE)All of the targets run non-interactively, except \"update\" and \"edit\", along with \"shell\".$(RESET)\n"
+	@$(ECHO) "$(STATE)All of the targets generally run non-interactively, except \"update\" and \"shell\".$(RESET)\n"
 	@$(ECHO) "\n"
 	@$(ECHO) "$(STATE)Use these variables to change the directories and packages:$(RESET)\n"
 	@$(ECHO) "\n"
@@ -81,11 +81,11 @@ usage:
 	@$(ECHO) "\n"
 	@$(ECHO) "$(HOWTO)make all$(RESET)\n"
 	@$(ECHO) "\n"
-	@$(ECHO) "$(STATE)For more options, use the \"_system\" script directly:$(RESET)\n"
+	@$(ECHO) "$(STATE)For more options and build helper tools, use the \"_system\" script directly:$(RESET)\n"
 	@$(ECHO) "\n"
 	@$(ECHO) "$(HOWTO)make help 2>&1 | less$(RESET)\n"
 	@$(ECHO) "\n"
-	@$(ECHO) "$(STATE)This Makefile is the safest and most reliable way to use the GaryOS build system.$(RESET)\n"
+	@$(ECHO) "$(STATE)However, this Makefile is the safest and most reliable way to use the GaryOS build system.$(RESET)\n"
 	@$(ECHO) "\n"
 	@$(MARKER)
 	@$(ECHO) "$(NOTES)Happy Hacking!$(RESET)\n"
