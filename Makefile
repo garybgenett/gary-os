@@ -7,12 +7,12 @@ override GARYOS_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 
 ########################################
 
-override CHROOT	:= -x
+override CHROOT	:= -g
 
 override C	?= $(GARYOS_DIR)
 override S	?= $(GARYOS_DIR)/sources
 override O	?= $(GARYOS_DIR)/build
-override L	?= metro
+override L	?= gary-os
 
 ########################################
 
