@@ -77,6 +77,10 @@ usage:
 	@$(ECHO) "\n"
 	@$(ECHO) "$(HOWTO)make init C=\"$(C)\" S=\"$(S)\" O=\"$(O)\" A=\"$(A)\" P=\"$(P)\"$(RESET)\n"
 	@$(ECHO) "\n"
+	@$(ECHO) "$(STATE)To do a complete build $(NOTES)(init doit redo edit release)$(STATE) in the current directory using the defaults:$(RESET)\n"
+	@$(ECHO) "\n"
+	@$(ECHO) "$(HOWTO)make all$(RESET)\n"
+	@$(ECHO) "\n"
 	@$(ECHO) "$(STATE)For more options, use the \"_system\" script directly:$(RESET)\n"
 	@$(ECHO) "\n"
 	@$(ECHO) "$(HOWTO)make help 2>&1 | less$(RESET)\n"
@@ -120,6 +124,11 @@ update:
 
 .PHONY: package_list
 package_list: .DEFAULT
+
+########################################
+
+.PHONY: all
+all: init doit redo edit release
 
 ########################################
 
