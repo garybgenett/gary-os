@@ -545,20 +545,28 @@ function EXIT {
 
 ########################################
 
+if [[ -n ${DEBUG} ]]; then
+	if [[ -n ${QUIET} ]] && ${DO_CHROOT}; then
+		set -x
+		safe_env ${MYSELF} ${DEBUG_OPT} ${TOOR} "${@}" || EXIT 1
+#>>>		EXIT 0
+		exit 0
+	fi
+fi
+
 print_info marker;	print_info title
 print_info marker;	print_info usage
 print_info marker;	print_info starter
 print_info marker;	print_info environment;	clear_environment
 print_info marker
 
-########################################
-
 if [[ -n ${DEBUG} ]]; then
-	if ${DO_CHROOT}; then
+	if [[ -z ${QUIET} ]] && ${DO_CHROOT}; then
 		set -x
 		safe_env ${MYSELF} ${DEBUG_OPT} ${TOOR} "${@}" || EXIT 1
 	fi
-	EXIT 0
+#>>>	EXIT 0
+	exit 0
 fi
 
 ################################################################################
