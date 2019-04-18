@@ -25,15 +25,19 @@ fi
 
 ########################################
 
-declare GINST="${GDEST}/rescue_example.raw"
+declare GIDEF="${GDEST}/rescue_example.raw"
+declare GINST="${GIDEF}"
 declare GPDEF="2"
 declare GPART="${GPDEF}"
 declare GCUST=
 
-if [[ -b ${1} ]]; then
+if [[ -b ${1} ]] || [[ ${1} == grub+([0-9]) ]]; then
 	GINST="$(echo ${1} | ${SED} "s|^(.+[^0-9])([0-9]+)$|\1|g")"
 	GPART="$(echo ${1} | ${SED} "s|^(.+[^0-9])([0-9]+)$|\2|g")"
 	shift
+	if [[ ${GINST} == grub ]]; then
+		GINST="${GIDEF}"
+	fi
 	if [[ ${GPART} != +([0-9]) ]]; then
 		GPART="${GPDEF}"
 	fi
