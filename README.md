@@ -1,7 +1,7 @@
 # Welcome to GaryOS (gary-os)
 ************************************************************************
 
-![GaryOS Icon](icon.png "GaryOS Icon")
+![GaryOS Icon](_artifacts/icon.png "GaryOS Icon")
 "The one file that does it all."
 
 * Latest: GaryOS v3.0 ([64-bit]) ([32-bit]) ([Release Notes]) ([License])
@@ -79,9 +79,9 @@ Rescue media is more likely to be available and up-to-date if it is
 convenient to deploy and manage, which is one of the primary aims of
 GaryOS.
 
-![GaryOS CLI Screenshot](screenshot_cli.png "GaryOS CLI Screenshot")
+![GaryOS CLI Screenshot](_artifacts/screenshot_cli.png "GaryOS CLI Screenshot")
 
-![GaryOS GUI Screenshot](screenshot_gui.png "GaryOS GUI Screenshot")
+![GaryOS GUI Screenshot](_artifacts/screenshot_gui.png "GaryOS GUI Screenshot")
 
 ## Quick Start
 [Quick Start]: #quick-start
@@ -569,13 +569,13 @@ details for the individual components.
         * This file.  All the documentation for GaryOS.
     * [LICENSE.md](https://github.com/garybgenett/gary-os/blob/master/LICENSE.md)
         * The license GaryOS is distributed under.
-    * [icon.png](https://github.com/garybgenett/gary-os/blob/master/icon.png)
+    * [icon.png](https://github.com/garybgenett/gary-os/blob/master/_artifacts/icon.png)
         * Creative "hack" to have an icon for the project.  Icons make
           it seem like you are "for real", so I had to have one.
-    * [screenshot_cli.png](https://github.com/garybgenett/gary-os/blob/master/screenshot_cli.png)
+    * [screenshot_cli.png](https://github.com/garybgenett/gary-os/blob/master/_artifacts/screenshot_cli.png)
         * Pretty self-explanatory.  Snapshot of what booting v1.0 looked
           like, for promotion, reference and posterity.
-    * [screenshot_gui.png](https://github.com/garybgenett/gary-os/blob/master/screenshot_gui.png)
+    * [screenshot_gui.png](https://github.com/garybgenett/gary-os/blob/master/_artifacts/screenshot_gui.png)
         * Also self-explanatory.  Snapshot of the what the initial X.Org
           GUI in v2.0 looked like.
   * Release:
