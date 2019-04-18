@@ -239,20 +239,20 @@ function _release_symlink {
 ########################################
 
 function release_ramfs_packages {
-	${MKDIR} ${TARGET}/${_FINAL}									|| return 1
-	cat /dev/null >${TARGET}/.${_TITLE}.packages.txt						|| return 1
+	${MKDIR} ${TARGET}/${_FINAL}										|| return 1
+	cat /dev/null >${TARGET}/.${_TITLE}.packages.txt							|| return 1
 	NEXT=
 	for FILE in $(
-		cd ${TARGET}${PAKDIR}									&&
-		find ./ -mindepth 2 -maxdepth 2 -type f							|
-			${SED} "s|^[.][/]||g"								|
+		cd ${TARGET}${PAKDIR}										&&
+		find ./ -mindepth 2 -maxdepth 2 -type f								|
+			${SED} "s|^[.][/]||g"									|
 			sort -u
 	); do
 		NEXT+=" ${FILE}"
 	done
 	for FILE in ${NEXT}; do
-		declare PKG_DB="$(cd ${TARGET}${PDBDIR} && ${LS} -d ${FILE/%.tbz2}	2>/dev/null)"	|| return 1
-		declare PKG_DU="$(cd ${TARGET}${PAKDIR} && ${DU} -ks ${FILE}		2>/dev/null)"	|| return 1
+		declare PKG_DB="$(cd ${TARGET}${PDBDIR} && ${LS} -d ${FILE/%.tbz2}	2>/dev/null)"		|| return 1
+		declare PKG_DU="$(cd ${TARGET}${PAKDIR} && ${DU} -ks ${FILE}		2>/dev/null)"		|| return 1
 		if [[ -n ${PKG_DB} ]]; then
 			echo -en "${PKG_DU} (installed)\n"	| tee -a ${TARGET}/.${_TITLE}.packages.txt	|| return 1
 		else
