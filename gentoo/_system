@@ -545,9 +545,12 @@ function EXIT {
 
 ########################################
 
+source ${SETDIR}/${FUNDIR}/${MAKEIT} || EXIT 1
+
+########################################
+
 if [[ -n ${DEBUG} ]]; then
 	if [[ -n ${QUIET} ]] && ${DO_CHROOT}; then
-		set -x
 		safe_env ${MYSELF} ${DEBUG_OPT} ${TOOR} "${@}" || EXIT 1
 #>>>		EXIT 0
 		exit 0
@@ -567,6 +570,22 @@ if [[ -n ${DEBUG} ]]; then
 	fi
 #>>>	EXIT 0
 	exit 0
+fi
+
+########################################
+
+if [[ ${1} == ${MAKEIT}+(*) ]]; then
+	if ! ${DO_CHROOT}; then
+		echo -en "\n"
+		echo -en ">>> THIS OPTION REQUIRES A CHROOT <<<\n"
+		echo -en "\n"
+		EXIT 1
+	fi
+	${@} || EXIT 1
+	EXIT 0
+elif [[ ${1} == ${SHIPIT}+(*) ]]; then
+	${@} || EXIT 1
+	EXIT 0
 fi
 
 ################################################################################
@@ -823,6 +842,11 @@ if [[ ${1} == -r ]]; then
 		EXIT 1
 	fi
 	${MKDIR}						${TARGET}${ARCDIR}				|| EXIT 1
+	if [[ -n ${COMMIT} ]]
+		#note: also doing this in "${MAKEIT}" script on purpose
+		then echo -en "${COMMIT}"			>${TARGET}/${CMTFIL}				|| EXIT 1
+		else ${RM}					${TARGET}/${CMTFIL}				|| EXIT 1
+	fi
 	if [[ -f ${SETDIR}/.bashrc ]]
 		then ${RSYNC_U} --copy-links ${SETDIR}/.bashrc	${TARGET}${ARCDIR}/				|| EXIT 1
 		else ${RSYNC_U} --copy-links ${HOME}/.bashrc	${TARGET}${ARCDIR}/				|| EXIT 1
@@ -1111,7 +1135,6 @@ ${LL} \
 echo -en "\n"
 wc -l ${GENDIR}/_packages
 wc -l ${GENDIR}/_packages.db
-
 diff ${DIFF_OPTS} ${GENDIR}/_packages.db ${GENDIR}/_packages |
 	${GREP} "^[-+]"
 
