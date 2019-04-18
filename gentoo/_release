@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+source ${HOME}/.bashrc
+################################################################################
+
+#NOTE: SCRIPT NAME AND FUNCTION NAMES (${MAKEIT}, ${SHIPIT}) MUST MATCH FOR "_SYSTEM" WRAPPING TO WORK!
+#NOTE: UPDATE "#SETTINGS" LINES IN "_SYSTEM" SCRIPT WHEN THESE VAIABLES CHANGE!
+
+declare _TITLE="gary-os"
+declare _VERSN="v4.0"
+declare _RDATE="$(date --iso=date)"
+
+declare _FINAL=".${_TITLE}-${ESUB}"
+declare _RAMFS="${_TITLE}-${ESUB}-${_VERSN}"
+
+declare _GREPO="/.g/_data/_builds/.${_TITLE}/.${_TITLE}"
+
+########################################
+
+#>>>if [[ ${TARGET} == / ]]; then
+#>>>	_TITLE="${_TITLE}-custom"
+#>>>fi
+
+########################################
+
+declare CMTFIL=".commit"
+declare COMMIT=
+for FILE in \
+	${_TITLE} \
+	.setup \
+	.static \
+; do
+	NEXT="$(cat /.g/_data/zactive{,/coding}/${FILE}.git/refs/heads/master 2>/dev/null)"
+	if [[ -n "${NEXT}" ]]; then
+		COMMIT="${COMMIT}${FILE}: ${NEXT}\n"
+	fi
+done
+
+#>>>exit 0
+################################################################################
+# end of file
+################################################################################
