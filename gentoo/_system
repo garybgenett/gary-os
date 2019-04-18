@@ -879,10 +879,26 @@ if [[ ${1} == -i ]]; then
 			expect_wrapper			emerge ${_ASK} --emptytree \@system \@${_PKG}			|| EXIT 1
 		fi
 	fi
+	if ${_KRN}; then
+		${RM}					${TARGET}/boot/*						|| EXIT 1
+		${RM}					${TARGET}/etc/kernels/*						|| EXIT 1
+		${RM}					${TARGET}/lib/modules/*						|| EXIT 1
+		${RM}					${TARGET}/usr/src/linux*					|| EXIT 1
+		expect_wrapper				emerge ${_ASK} genkernel ${LINPKG}				|| EXIT 1
+		declare KERN="$(cd ${TARGET}/boot; ls kernel-debian-sources-*		2>/dev/null | sort | tail -n1)"
+		declare INIT="$(cd ${TARGET}/boot; ls initramfs-debian-sources-*	2>/dev/null | sort | tail -n1)"
+		if [[ -n ${KERN} ]]; then
+			${RM}				${TARGET}/boot/_kernel						|| EXIT 1
+			${LN} ${KERN}			${TARGET}/boot/_kernel						|| EXIT 1
+		fi
+		if [[ -n ${INIT} ]]; then
+			${RM}				${TARGET}/boot/_initrd						|| EXIT 1
+			${LN} ${INIT}			${TARGET}/boot/_initrd						|| EXIT 1
+		fi
+	fi
 	if ${_KRN}; then for FILE in ${KERNEL}; do
 		${RM}					${TARGET}/usr/src/linux						|| EXIT 1
 		${LN} linux-${FILE}-gentoo		${TARGET}/usr/src/linux						|| EXIT 1
-		expect_wrapper				emerge ${_ASK} genkernel =gentoo-sources-${FILE}		|| EXIT 1
 		${RSYNC_U}				${SETDIR}/${LINDIR}/config-gentoo64-${FILE}			\
 							${TARGET}${ARCDIR}/config-gentoo64-${FILE}			|| EXIT 1
 		kernel_cpu 				${TARGET}${ARCDIR}/config-gentoo64-${FILE}			|| EXIT 1
@@ -893,6 +909,8 @@ if [[ ${1} == -i ]]; then
 			expect_wrapper			genkernel ${GENKERNEL_OPTS} kernel				\
 							--kernel-config=${ARCDIR}/config-gentoo64-${FILE}		|| EXIT 1
 		fi
+		${RSYNC_U}				${TARGET}/usr/src/linux/.config					\
+							${TARGET}${ARCDIR}/config-gentoo64-${FILE}			|| EXIT 1
 #>>>		FILE="kernel-genkernel-x86-${FILE}-gentoo"								|| EXIT 1
 		FILE="kernel-genkernel-x86_64-${FILE}-gentoo"								|| EXIT 1
 		if [[ -z ${_GOS} ]]; then
@@ -902,20 +920,10 @@ if [[ ${1} == -i ]]; then
 			${LN} kernel			${TARGET}/boot/_new						|| EXIT 1
 			${RM}				${TARGET}/boot/_old						|| EXIT 1
 			${LN} kernel.old		${TARGET}/boot/_old						|| EXIT 1
-			{ [[ -L				${TARGET}/boot/kernel.old ]] ||
-			${LN} ${FILE}			${TARGET}/boot/kernel.old; }					|| EXIT 1
+			[[ -L				${TARGET}/boot/kernel.old					]] ||
+			${LN} ${FILE}			${TARGET}/boot/kernel.old					|| EXIT 1
 		fi
 	done; fi
-	declare KERNEL="$(cd ${TARGET}/boot; ls kernel-debian-sources-*		2>/dev/null | sort | tail -n1)"
-	declare INITRD="$(cd ${TARGET}/boot; ls initramfs-debian-sources-*	2>/dev/null | sort | tail -n1)"
-	if [[ -n ${KERNEL} ]]; then
-		${RM}					${TARGET}/boot/_kernel						|| EXIT 1
-		${LN} ${KERNEL}				${TARGET}/boot/_kernel						|| EXIT 1
-	fi
-	if [[ -n ${INITRD} ]]; then
-		${RM}					${TARGET}/boot/_initrd						|| EXIT 1
-		${LN} ${INITRD}				${TARGET}/boot/_initrd						|| EXIT 1
-	fi
 	if ${_CFG}; then
 		${MAKEIT}_config											|| EXIT 1
 		if [[ -f ${CFGSCR} ]]; then
