@@ -16,7 +16,7 @@ override C	?= $(GARYOS_DIR)
 override S	?= $(GARYOS_DIR)/sources
 override O	?= $(GARYOS_DIR)/build
 override A	?= $(GARYOS_DIR)/_artifacts
-override L	?= gary-os
+override P	?= gary-os
 
 ########################################
 
