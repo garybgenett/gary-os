@@ -73,11 +73,25 @@ usage:
 	@$(ECHO) "\n"
 	@$(ECHO) "$(HOWTO)make init C=\"$(C)\" S=\"$(S)\" O=\"$(O)\" A=\"$(A)\" P=\"$(P)\"$(RESET)\n"
 	@$(ECHO) "\n"
-	@$(ECHO) "$(STATE)For more options, use the \"_system\" script directly (see below).$(RESET)\n"
+	@$(ECHO) "$(STATE)For more options, use the \"_system\" script directly:$(RESET)\n"
+	@$(ECHO) "\n"
+	@$(ECHO) "$(HOWTO)make help 2>&1 | less$(RESET)\n"
+	@$(ECHO) "\n"
+	@$(ECHO) "$(STATE)This Makefile is the safest and most reliable way to use the GaryOS build system.$(RESET)\n"
+	@$(ECHO) "\n"
 	@$(MARKER)
 	@$(ECHO) "$(NOTES)Happy Hacking!$(RESET)\n"
 	@$(MARKER)
+
+########################################
+
+.PHONY: help
+help: usage
+ifneq ($(wildcard $(O)),)
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system -v -q $(CHROOT)
+else
 	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system -v
+endif
 
 ########################################
 
