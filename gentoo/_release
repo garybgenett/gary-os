@@ -259,6 +259,8 @@ function release_ramfs_packages {
 			echo -en "${PKG_DU} (packaged)\n"	| tee -a >>${TARGET}/.${_TITLE}.packages.txt	|| return 1
 		fi
 	done
+	#note: the "_packages" file is also hard-set in the "release_ramfs_cpio" function
+	${RSYNC_U} ${TARGET}/.${_TITLE}.packages.txt		${TARGET}/_packages				|| return 1
 	return 0
 }
 
@@ -266,11 +268,13 @@ function release_ramfs_cpio {
 	mount_dev_dirs -u		|| return 1
 	${MKDIR} ${TARGET}/${_FINAL}	|| return 1
 	FILE="${TARGET}/${_FINAL}/${_RAMFS}.cpio"
+	#note: the "_packages" file is also hard-set in the "release_ramfs_packages" function
 	if [[ ! -f ${FILE}.xz ]]; then
 		(cd ${TARGET} && find ./ -mindepth 1 \
 			\( -path ./${CMTFIL}		-prune \) -o \
 			\( -path ./${_FINAL}		-prune \) -o \
 			\( -path ./${_RAMFS}		-prune \) -o \
+			\( -path ./_packages		-prune \) -o \
 			\
 			\( -path .${ARCDIR}\*		-prune \) -o \
 			\( -path .${GENDIR}\*		-prune \) -o \
@@ -448,7 +452,7 @@ function _publish_gitdir {
 	git-export ${_TITLE} ${_RELDIR} ${_GITHUB}						\
 		+git-export-preprocess +git-export-postprocess					\
 		${_TITLE}:${_DOCDIR}:								\
-		_${_TITLE}:${_SAVDIR}:${CMTFIL}^_commit^_config.\*^_packages.\*			\
+		_${_TITLE}:${_SAVDIR}:${CMTFIL}^_commit^_config\*^_packages\*			\
 		setup:/.g/_data/zactive/.setup:gentoo^linux					\
 		static:/.g/_data/zactive/.static:.bashrc^scripts/grub.sh^scripts/metro.sh	\
 												|| return 1
