@@ -16,7 +16,7 @@ declare _OPTS="${@}"
 
 ########################################
 
-#>>>${GREP} -o "[=][=][ ][-][a-z]" ${HOME}/setup/gentoo/_system | sort
+#>>> ${GREP} -o "[=][=][ ][-][a-z]" ${HOME}/setup/gentoo/_system | sort
 
 declare DEBUG_OPT="-v"
 declare QUIET_OPT="-q"
@@ -49,13 +49,13 @@ declare CFGSCR="${CFGSCR:-${SETDIR}/gentoo.config}"
 declare ARCDIR="${ARCDIR:-/_build}"
 declare GENDIR="${GENDIR:-/_gentoo}"
 
-#>>>#OPTIONS[BLDDIR OUTDIR TORDIR GOSDIR]
+#>>> #OPTIONS[BLDDIR OUTDIR TORDIR GOSDIR]
 declare BLDDIR="${BLDDIR:-/.g/_data/_builds/_gentoo}"
 declare OUTDIR="${OUTDIR:-${BLDDIR}.working}"
 declare TORDIR="${TORDIR:-/.g/_toor}"
 declare GOSDIR="${GOSDIR:-/.g/_data/_builds/_gary-os.working}"
 
-#>>>#OPTIONS[PKGBLD PKGOUT PKGTOR PKGGOS]
+#>>> #OPTIONS[PKGBLD PKGOUT PKGTOR PKGGOS]
 declare PKGBLD="${PKGBLD:-packages}"
 declare PKGOUT="${PKGOUT:-${PKGBLD}}"
 declare PKGTOR="${PKGTOR:-${PKGBLD}}"
@@ -178,14 +178,14 @@ declare WMHELP="${WMHELP:-\`date --iso=s\`}"
 
 ########################################
 
-#>>>athlon64 build: OUTDIR="/.g/_data/_builds/_gentoo.amd64" ESUB="amd64-k8" GARC="athlon64" GSUB="athlon64" ${HOME}/setup/gentoo/_system -x -0
+#note: athlon64 build = OUTDIR="/.g/_data/_builds/_gentoo.amd64" _CPU="CONFIG_MK8" ESUB="amd64-k8" GARC="athlon64" GSUB="athlon64" ${HOME}/setup/gentoo/_system -x -0
 
 #OPTIONS[_CPU EARC ESUB GARC GSUB GOPT]
 declare _CPU_RESET="CONFIG_MCORE2"
 declare _CPU="${_CPU:-${_CPU_RESET}}"
-#>>>declare EARC="${EARC:-x86-32bit}"
+#>>> declare EARC="${EARC:-x86-32bit}"
 declare EARC="${EARC:-x86-64bit}"
-#>>>declare ESUB="${EARC:-i686}"
+#>>> declare ESUB="${EARC:-i686}"
 declare ESUB="${ESUB:-core2_64}"
 declare GARC="${GARC:-core2}"
 declare GSUB="${GSUB:-core2}"
@@ -240,10 +240,10 @@ function safe_make {
 
 declare VARSREGEX="[A-Z][A-Z0-9_]+"
 declare MASKREGEX="^[[:space:]]+(${VARSREGEX})([[:space:]].*)?$"
-#>>>man make.conf | ${GREP} "${MASKREGEX}|$"
-#>>>man make.conf | ${GREP} "${MASKREGEX}" | ${GREP} "${VARSREGEX}"
+#>>> man make.conf | ${GREP} "${MASKREGEX}|$"
+#>>> man make.conf | ${GREP} "${MASKREGEX}" | ${GREP} "${VARSREGEX}"
 
-#>>>$(man make.conf | ${SED} -n "s|${MASKREGEX}|\1|gp")
+#>>> $(man make.conf | ${SED} -n "s|${MASKREGEX}|\1|gp")
 declare MASKVARS="
 $(man make.conf | ${GREP} "${MASKREGEX}" | ${GREP} --only-matching "${VARSREGEX}")
 CARCH
@@ -1132,9 +1132,9 @@ fi
 
 safe_env ${SETDIR}/${FUNDIR}/${AUDITS}
 
-#>>>if [[ -z ${_GOS} ]]; then
-#>>>	safe_env ${SETDIR}/${FUNDIR}/.hacks
-#>>>fi
+#>>> if [[ -z ${_GOS} ]]; then
+#>>> 	safe_env ${SETDIR}/${FUNDIR}/.hacks
+#>>> fi
 
 ########################################
 
