@@ -59,8 +59,10 @@ usage:
 	@$(ECHO) "\n"
 	@$(PRINTF) "Chroot Complete (Unmount Cleanup):"		"make umount"
 	@$(ECHO) "\n"
+	@$(PRINTF) "Initramfs Build (Chroot Reset):"		"make clean"
 	@$(PRINTF) "Initramfs Build (Chroot Create):"		"make release"
-	@$(PRINTF) "Initramfs Build (Live Create):"		"make O=/ release"
+	@$(PRINTF) "Initramfs System (Live Reset):"		"make O=/ clean"
+	@$(PRINTF) "Initramfs System (Live Create):"		"make O=/ release"
 	@$(PRINTF) "Initramfs System (Live Unpack):"		"make O=/ unpack"
 	@$(ECHO) "\n"
 	@$(ECHO) "$(STATE)All of the targets generally run non-interactively, except \"update\" and \"shell\".$(RESET)\n"
@@ -161,6 +163,10 @@ umount:
 	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system $(CHROOT) -z
 
 ########################################
+
+.PHONY: clean
+clean:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system $(CHROOT) _release_reset
 
 .PHONY: release
 release:
