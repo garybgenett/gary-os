@@ -2,7 +2,7 @@
 source ${HOME}/.bashrc
 ################################################################################
 
-#NOTE: SCRIPT NAME AND FUNCTION NAMES (${MAKEIT}, ${SHIPIT}) MUST MATCH FOR "_SYSTEM" WRAPPING TO WORK!
+#NOTE: SCRIPT NAME AND FUNCTION NAMES (${PREPIT}, ${MAKEIT}, ${SHIPIT}) MUST MATCH FOR "_SYSTEM" WRAPPING TO WORK!
 #NOTE: UPDATE "#SETTINGS" LINES IN "_SYSTEM" SCRIPT WHEN THESE VAIABLES CHANGE!
 
 declare _TITLE="gary-os"
@@ -77,45 +77,24 @@ function _release_reset {
 	return 0
 }
 
-########################################
+################################################################################
 
-function _release_prep {	#{reset}
+function _prepare_build {	#{main} #{reset}
 	if [[ ${1} == --reset ]]; then
 		shift
 		_release_reset	|| return 1
 	fi
-	_release_gitdir		|| return 1
-	_release_config		|| return 1
-	_release_linux		|| return 1
-	_release_symlink	|| return 1
+	_prepare_config		|| return 1
+	_prepare_gitdir		|| return 1
+	_prepare_linux		|| return 1
+	_prepare_packages	|| return 1
+	_prepare_symlink	|| return 1
 	return 0
 }
 
 ########################################
 
-function _release_gitdir {
-	if [[ ${TARGET} == / ]]; then
-#>>>		${RM}				${TARGET}/.${_TITLE}		|| return 1
-		${RM}				${TARGET}/.${_TITLE}.git	|| return 1
-		return 0
-	fi
-	if [[ ! -d ${_GREPO} ]] || [[ ! -d ${_GREPO}.git ]]; then
-#>>>		${RM}				${TARGET}/.${_TITLE}		|| return 1
-		${RM}				${TARGET}/.${_TITLE}.git	|| return 1
-		return 0
-	fi
-	${RSYNC_U} ${_GREPO}/			${TARGET}/.${_TITLE}		|| return 1
-#>>>	${RSYNC_U} ${_GREPO}.git/		${TARGET}/.${_TITLE}.git	|| return 1
-	${RM}					${TARGET}/.${_TITLE}.git	|| return 1
-#>>>	${SED} -i "/worktree[ ][=]/d"		${TARGET}/.${_TITLE}.git/config	|| return 1
-#>>>	${LN} ../.${_TITLE}.git			${TARGET}/.${_TITLE}/.git	|| return 1
-#>>>	echo -en "gitdir: ../.${_TITLE}.git\n"	>${TARGET}/.${_TITLE}/.git	|| return 1
-	return 0
-}
-
-########################################
-
-function release_config_issue {
+function prepare_config_issue {
 	for FILE in ${KERNEL}; do NEXT="${FILE}"; done
 	for FILE in \
 		"GaryOS Version|${_VERSN}" \
@@ -147,9 +126,10 @@ function release_config_issue {
 }
 
 #NOTE: UPDATE THE TABLE IN "README" WHEN MAKING CHANGES HERE!
+#note: this is called statically in the "_system" script
 
-function _release_config {
-	release_config_issue												|| return 1
+function _prepare_config {
+	prepare_config_issue												|| return 1
 	if [[ ${TARGET} == / ]]; then
 		return 0
 	fi
@@ -171,7 +151,29 @@ function _release_config {
 
 ########################################
 
-function _release_linux {
+function _prepare_gitdir {
+	if [[ ${TARGET} == / ]]; then
+#>>>		${RM}				${TARGET}/.${_TITLE}		|| return 1
+		${RM}				${TARGET}/.${_TITLE}.git	|| return 1
+		return 0
+	fi
+	if [[ ! -d ${_GREPO} ]] || [[ ! -d ${_GREPO}.git ]]; then
+#>>>		${RM}				${TARGET}/.${_TITLE}		|| return 1
+		${RM}				${TARGET}/.${_TITLE}.git	|| return 1
+		return 0
+	fi
+	${RSYNC_U} ${_GREPO}/			${TARGET}/.${_TITLE}		|| return 1
+#>>>	${RSYNC_U} ${_GREPO}.git/		${TARGET}/.${_TITLE}.git	|| return 1
+	${RM}					${TARGET}/.${_TITLE}.git	|| return 1
+#>>>	${SED} -i "/worktree[ ][=]/d"		${TARGET}/.${_TITLE}.git/config	|| return 1
+#>>>	${LN} ../.${_TITLE}.git			${TARGET}/.${_TITLE}/.git	|| return 1
+#>>>	echo -en "gitdir: ../.${_TITLE}.git\n"	>${TARGET}/.${_TITLE}/.git	|| return 1
+	return 0
+}
+
+########################################
+
+function _prepare_linux {
 	if [[ ${TARGET} == / ]]; then
 		if [[ ! -d ${TARGET}/usr/src/linux ]] || [[ -L ${TARGET}/usr/src/linux ]]; then
 			${RM}							${TARGET}/usr/src/linux		|| return 1
@@ -206,7 +208,36 @@ function _release_linux {
 
 ########################################
 
-function _release_symlink {
+function _prepare_packages {
+	${MKDIR} ${TARGET}/${_FINAL}										|| return 1
+	cat /dev/null >${TARGET}/.${_TITLE}.packages.txt							|| return 1
+	NEXT=
+	for FILE in $(
+		cd ${TARGET}${PAKDIR}										&&
+		find ./ -mindepth 2 -maxdepth 2 -type f								|
+			${SED} "s|^[.][/]||g"									|
+			sort -u
+	); do
+		NEXT+=" ${FILE}"
+	done
+	for FILE in ${NEXT}; do
+		declare PKG_DB="$(cd ${TARGET}${PDBDIR} && ${LS} -d ${FILE/%.tbz2}	2>/dev/null)"		|| return 1
+		declare PKG_DU="$(cd ${TARGET}${PAKDIR} && ${DU} -ks ${FILE}		2>/dev/null)"		|| return 1
+		if [[ -n ${PKG_DB} ]]; then
+			echo -en "${PKG_DU} (installed)\n"	| tee -a ${TARGET}/.${_TITLE}.packages.txt	|| return 1
+		else
+			echo -en "${PKG_DU} (packaged)\n"	| tee -a >>${TARGET}/.${_TITLE}.packages.txt	|| return 1
+		fi
+	done
+	#note: the "_packages" file is for the repository, and "packages.txt" is for the root filesystem
+	#note: the "_packages" file is also hard-set in the "release_cpio" function
+	${RSYNC_U} ${TARGET}/.${_TITLE}.packages.txt		${TARGET}/_packages				|| return 1
+	return 0
+}
+
+########################################
+
+function _prepare_symlink {
 	if [[ ${TARGET} == / ]]; then
 		return 0
 	fi
@@ -236,39 +267,29 @@ function _release_symlink {
 	return 0
 }
 
-########################################
+################################################################################
 
-function release_ramfs_packages {
-	${MKDIR} ${TARGET}/${_FINAL}										|| return 1
-	cat /dev/null >${TARGET}/.${_TITLE}.packages.txt							|| return 1
-	NEXT=
-	for FILE in $(
-		cd ${TARGET}${PAKDIR}										&&
-		find ./ -mindepth 2 -maxdepth 2 -type f								|
-			${SED} "s|^[.][/]||g"									|
-			sort -u
-	); do
-		NEXT+=" ${FILE}"
-	done
-	for FILE in ${NEXT}; do
-		declare PKG_DB="$(cd ${TARGET}${PDBDIR} && ${LS} -d ${FILE/%.tbz2}	2>/dev/null)"		|| return 1
-		declare PKG_DU="$(cd ${TARGET}${PAKDIR} && ${DU} -ks ${FILE}		2>/dev/null)"		|| return 1
-		if [[ -n ${PKG_DB} ]]; then
-			echo -en "${PKG_DU} (installed)\n"	| tee -a ${TARGET}/.${_TITLE}.packages.txt	|| return 1
-		else
-			echo -en "${PKG_DU} (packaged)\n"	| tee -a >>${TARGET}/.${_TITLE}.packages.txt	|| return 1
-		fi
-	done
-	#note: the "_packages" file is also hard-set in the "release_ramfs_cpio" function
-	${RSYNC_U} ${TARGET}/.${_TITLE}.packages.txt		${TARGET}/_packages				|| return 1
+#note: this is called statically in the "_system" script
+
+function _release_ramfs {	#{main} #{reset}
+	if [[ ${1} == --reset ]]; then
+		shift
+		_release_reset	|| return 1
+	fi
+	_prepare_build		|| return 1
+	_release_cpio		|| return 1
+	_release_kernel		|| return 1
+	_release_report		|| return 1
 	return 0
 }
 
-function release_ramfs_cpio {
+########################################
+
+function _release_cpio {
 	mount_dev_dirs -u		|| return 1
 	${MKDIR} ${TARGET}/${_FINAL}	|| return 1
 	FILE="${TARGET}/${_FINAL}/${_RAMFS}.cpio"
-	#note: the "_packages" file is also hard-set in the "release_ramfs_packages" function
+	#note: the "_packages" file is also hard-set in the "prepare_packages" function
 	if [[ ! -f ${FILE}.xz ]]; then
 		(cd ${TARGET} && find ./ -mindepth 1 \
 			\( -path ./${CMTFIL}		-prune \) -o \
@@ -313,7 +334,9 @@ function release_ramfs_cpio {
 	return 0
 }
 
-function release_ramfs_kernel {
+########################################
+
+function _release_kernel {
 	for FILE in ${KERNEL}; do NEXT="config-gentoo64-${FILE}"; FILE="/usr/src/linux-${FILE}-gentoo"; done
 	if [[ ${TARGET} == / ]]; then
 		FILE="/usr/src/linux"
@@ -357,15 +380,9 @@ function release_ramfs_kernel {
 	return 0
 }
 
-function _release_ramfs {						#{reset}
-	if [[ ${1} == --reset ]]; then
-		shift
-		_release_reset						|| return 1
-	fi
-	_release_prep							|| return 1
-	release_ramfs_packages						|| return 1
-	release_ramfs_cpio						|| return 1
-	release_ramfs_kernel						|| return 1
+########################################
+
+function _release_report {
 	echo -en "\n"; ${LL}						\
 				${TARGET}/				\
 				${TARGET}/${_FINAL}*			\
@@ -397,6 +414,8 @@ function release_untar {
 	return 0
 }
 
+#note: this is called statically in the "_system" script
+
 function _release_unpack {
 	release_untar ${TARGET}${REPDIR}	|| return 1
 	release_untar ${TARGET}/usr/src/linux	|| return 1
@@ -405,21 +424,23 @@ function _release_unpack {
 
 ################################################################################
 
-function _publish_daily {
+function _publish_daily {	#{main}
 	_publish_gitdir	|| return 1
 #>>>	_publish_export	|| return 1
 #>>>	_publish_grub	|| return 1
 	_publish_upload	|| return 1
+	_publish_report	|| return 1
 	return 0
 }
 
 ########################################
 
-function _publish_release {
+function _publish_release {	#{main}
 	_publish_gitdir	|| return 1
 	_publish_export	|| return 1
 	_publish_grub	|| return 1
 	_publish_upload	|| return 1
+	_publish_report	|| return 1
 	return 0
 }
 
@@ -628,7 +649,14 @@ function _publish_upload {
 	find				${_OUTDIR} -type f -exec chmod 644 {} \;	|| return 1
 	chown -R root:root		${_OUTDIR}					|| return 1
 	${RSYNC_U}			${_OUTDIR}/ ${_SFFILE}				|| return 1
-	${LL} -R			${_OUTDIR}					|| return 1
+	return 0
+}
+
+########################################
+
+function _publish_report {
+	${LL} -R ${_OUTDIR} \
+		|| return 1
 	return 0
 }
 
