@@ -83,8 +83,9 @@ declare LAYDIR="_overlay"
 declare AUDITS=".emergent"
 
 #OPTIONS[ARTDIR]
-#VARIABLES[MAKEIT SHIPIT]
+#VARIABLES[PREPIT MAKEIT SHIPIT]
 declare ARTDIR="${ARTDIR:-/.g/_data/zactive/coding/gary-os/_artifacts}"
+declare PREPIT="_prepare"
 declare MAKEIT="_release"
 declare SHIPIT="_publish"
 
@@ -367,13 +368,19 @@ function print_info {
 		echo -en "${NOTES}"
 		echo -en ">>> INITRAMFS <<<"
 		echo -en "${RESET}\n"
+		#note: these need to match the names in the "${MAKEIT}" script
+		printf "${PRINTF}" "Initramfs Build (Chroot Reset):"		"<auto>"	"${SCRIPT} {chroot} ${MAKEIT}_reset"
 		printf "${PRINTF}" "Initramfs Build (Chroot Create):"		"<auto>"	"${SCRIPT} {chroot} ${MAKEIT}_ramfs"
-		printf "${PRINTF}" "Initramfs Build (Live Create):"		"<auto>"	"${SCRIPT} {chroot} ${MAKEIT}_ramfs  <(BLD|OUT|TOR|GOS)DIR=\"/\">"
-		printf "${PRINTF}" "Initramfs System (Live Unpack):"		"<auto>"	"${SCRIPT} {chroot} ${MAKEIT}_unpack <(BLD|OUT|TOR|GOS)DIR=\"/\">"
+		printf "${PRINTF}" "Initramfs System (Live Reset):"		"<auto>"	"(BLD|OUT|TOR|GOS)DIR=/ ${SCRIPT} {chroot} ${MAKEIT}_reset"
+		printf "${PRINTF}" "Initramfs System (Live Create):"		"<auto>"	"(BLD|OUT|TOR|GOS)DIR=/ ${SCRIPT} {chroot} ${MAKEIT}_ramfs"
+		printf "${PRINTF}" "Initramfs System (Live Unpack):"		"<auto>"	"(BLD|OUT|TOR|GOS)DIR=/ ${SCRIPT} {chroot} ${MAKEIT}_unpack"
 		echo -en "\n"
-		printf "${PRINTF}" "Distribution Reset (Internal Only):"	"<internal>"	"${SCRIPT} {chroot} ${MAKEIT}_($(	${SED} -n "s|^function[ ]${MAKEIT}_(.+)[ ][{].*[#][{]reset[}]$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	)) --reset"
-		printf "${PRINTF}" "Distribution Release (Internal Only):"	"<internal>"	"${SCRIPT} {chroot} ${MAKEIT}_($(	${SED} -n "s|^function[ ]${MAKEIT}_(.+)[ ][{].*$|\1|gp"			${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
-		printf "${PRINTF}" "Distribution Publish (Internal Only):"	"<internal>"	"${SCRIPT}          ${SHIPIT}_($(	${SED} -n "s|^function[ ]${SHIPIT}_(.+)[ ][{].*$|\1|gp"			${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
+		printf "${PRINTF}" "Distribution Main (Primary Targets):"	"<auto>"	"${SCRIPT} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#][{]main[}].*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
+		printf "${PRINTF}" "Distribution Main (Reset Option):"		"<auto>"	"${SCRIPT} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#][{]reset[}].*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	)) --reset"
+		echo -en "\n"
+		printf "${PRINTF}" "Distribution Prepare (Internal Only):"	"<internal>"	"${SCRIPT} {chroot} ${PREPIT}_($(	${SED} -n "s|^function[ ]${PREPIT}_(.+)[ ][{].*$|\1|gp"		${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
+		printf "${PRINTF}" "Distribution Release (Internal Only):"	"<internal>"	"${SCRIPT} {chroot} ${MAKEIT}_($(	${SED} -n "s|^function[ ]${MAKEIT}_(.+)[ ][{].*$|\1|gp"		${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
+		printf "${PRINTF}" "Distribution Publish (Internal Only):"	"<internal>"	"${SCRIPT}          ${SHIPIT}_($(	${SED} -n "s|^function[ ]${SHIPIT}_(.+)[ ][{].*$|\1|gp"		${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
 	elif [[ ${1} == "starter" ]]; then
 		function starter_var {
 			declare COLOR="${HOWTO}"
@@ -592,7 +599,7 @@ fi
 
 ########################################
 
-if [[ ${1} == ${MAKEIT}+(*) ]]; then
+if [[ ${1} == ${PREPIT}+(*) ]] || [[ ${1} == ${MAKEIT}+(*) ]]; then
 	if ! ${DO_CHROOT}; then
 		echo -en "\n"
 		echo -en ">>> THIS OPTION REQUIRES A CHROOT <<<\n"
@@ -975,7 +982,8 @@ if [[ ${1} == -i ]]; then
 		fi
 	done; fi
 	if ${_CFG}; then
-		${MAKEIT}_config											|| EXIT 1
+		#note: this needs to match the name in the "${MAKEIT}" script
+		${PREPIT}_config											|| EXIT 1
 		if [[ -f ${CFGSCR} ]]; then
 			${RSYNC_U} ${CFGSCR}		${TARGET}/${ARCDIR}/$(basename ${CFGSCR})			|| EXIT 1
 			safe_env			${ARCDIR}/$(basename ${CFGSCR})					|| EXIT 1
