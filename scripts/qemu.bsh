@@ -107,10 +107,8 @@ elif [[ -n $(file -L ${I} 2>/dev/null | ${GREP} "DOS[/]MBR[ ]boot[ ]sector") ]];
 	QDSK+=" -drive id=cdrom1,if=none,format=raw,file=${I}"
 	QDSK+=" -device scsi-cd,drive=cdrom1,bootindex=2"
 elif [[ -f ${I} ]]; then
-#>>>	QDSK+=" -drive id=drive0,if=none,file=${I}"
-#>>>	QDSK+=" -device scsi-hd,drive=drive0,bootindex=2"
 	QDSK+=" -drive id=drive0,if=none,file=${I}"
-	QDSK+=" -device ide-hd,drive=drive0,bus=ide.1,bootindex=2"
+	QDSK+=" -device scsi-cd,drive=drive0,bootindex=2"
 elif [[ -b ${I} ]]; then
 	QDSK+=" -drive id=drive0,if=none,format=raw,file=${I}"
 	QDSK+=" -device scsi-hd,drive=drive0,bootindex=2"
