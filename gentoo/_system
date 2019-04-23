@@ -385,6 +385,7 @@ function print_info {
 		echo -en "\n"
 		printf "${PRINTF}" "Initramfs Build (Chroot Reset):"		"<auto>"	"${SCRIPT} {chroot} ${MAKEIT}_reset"
 		printf "${PRINTF}" "Initramfs Build (Chroot Create):"		"<auto>"	"${SCRIPT} {chroot} ${MAKEIT}_ramfs"
+		printf "${PRINTF}" "Initramfs Build (Chroot Initrd):"		"<auto>"	"${SCRIPT} {chroot} ${MAKEIT}_initrd"
 		printf "${PRINTF}" "Initramfs System (Live Reset):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${SCRIPT} {chroot} ${MAKEIT}_reset"
 		printf "${PRINTF}" "Initramfs System (Live Create):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${SCRIPT} {chroot} ${MAKEIT}_ramfs"
 		printf "${PRINTF}" "Initramfs System (Live Initrd):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${SCRIPT} {chroot} ${MAKEIT}_initrd"
