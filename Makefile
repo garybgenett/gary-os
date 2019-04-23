@@ -70,6 +70,13 @@ usage:
 	@$(PRINTF) "Initramfs System (Live Unpack):"		"make O=/ unpack"
 	@$(ECHO) "\n"
 	@$(ECHO) "$(STATE)All of the targets generally run non-interactively, except \"update\" and \"shell\".$(RESET)\n"
+ifneq ($(findstring help,$(MAKECMDGOALS)),)
+	@$(ECHO) "\n"
+	@$(ECHO) "$(STATE)There are also \"initramfs\" pass-through targets, for advanced use:$(RESET)\n"
+	@$(ECHO) "\n"
+	@$(PRINTF) "Distribution Prepare (Internal Only):"	"_prepare_*"
+	@$(PRINTF) "Distribution Release (Internal Only):"	"_release_*"
+endif
 	@$(ECHO) "\n"
 	@$(ECHO) "$(STATE)Use these variables to change the directories and packages:$(RESET)\n"
 	@$(ECHO) "\n"
@@ -183,6 +190,16 @@ initrd:
 .PHONY: unpack
 unpack:
 	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) _release_unpack
+
+########################################
+
+.PHONY: _prepare_%
+_prepare_%:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) _prepare_$(*)
+
+.PHONY: _release_%
+_release_%:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) _release_$(*)
 
 ################################################################################
 # End Of File
