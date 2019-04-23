@@ -39,12 +39,15 @@ override PRINTF	:= printf "$(TITLE)%-45.45s$(RESET) $(HOWTO)%s$(RESET)\n"
 
 ########################################
 
+#NOTE: KEEP THIS OUTPUT TO LESS THAN 80 CHARACTERS WIDE
+
 .PHONY: usage
 usage:
 	@$(MARKER)
 	@$(ECHO) "$(NOTES)>>> GARYOS BUILD SYSTEM <<<$(RESET)\n"
 	@$(MARKER)
-	@$(ECHO) "$(STATE)This Makefile is a helpful wrapper to the \"_system\" script, and has just a few targets:$(RESET)\n"
+	@$(ECHO) "\n"
+	@$(ECHO) "$(STATE)This Makefile is a wrapper to the \"_system\" script, and has just a few targets:$(RESET)\n"
 	@$(ECHO) "\n"
 	@$(PRINTF) "Update Current System (Interactively):"	"make update"
 	@$(ECHO) "\n"
@@ -79,18 +82,18 @@ usage:
 	@$(ECHO) "\n"
 	@$(ECHO) "$(HOWTO)make init C=\"$(C)\" S=\"$(S)\" O=\"$(O)\" A=\"$(A)\" P=\"$(P)\"$(RESET)\n"
 	@$(ECHO) "\n"
-	@$(ECHO) "$(STATE)To do a complete build $(NOTES)(init doit redo edit release)$(STATE) in the current directory using the defaults:$(RESET)\n"
+	@$(ECHO) "$(STATE)To do a complete build in the current directory using the defaults:$(RESET)\n"
 	@$(ECHO) "\n"
-	@$(ECHO) "$(HOWTO)make all$(RESET)\n"
+	@$(ECHO) "$(HOWTO)make all $(NOTES)(same as: make init doit redo edit release)$(RESET)\n"
 	@$(ECHO) "\n"
-	@$(ECHO) "$(STATE)For more options and build helper tools, use the \"_system\" script directly:$(RESET)\n"
+	@$(ECHO) "$(STATE)For more options and build tools, use the \"_system\" script directly:$(RESET)\n"
 	@$(ECHO) "\n"
 	@$(ECHO) "$(HOWTO)make help 2>&1 | less$(RESET)\n"
 	@$(ECHO) "\n"
-	@$(ECHO) "$(STATE)However, this Makefile is the safest and most reliable way to use the GaryOS build system.$(RESET)\n"
+	@$(ECHO) "$(STATE)Both methods are supported ways of using the GaryOS build system.$(RESET)\n"
 	@$(ECHO) "\n"
 	@$(MARKER)
-	@$(ECHO) "$(NOTES)Happy Hacking!$(RESET)\n"
+	@$(ECHO) "$(NOTES)>>> HAPPY HACKING! <<<$(RESET)\n"
 	@$(MARKER)
 
 ########################################
