@@ -66,6 +66,7 @@ usage:
 	@$(PRINTF) "Initramfs Build (Chroot Create):"		"make release"
 	@$(PRINTF) "Initramfs System (Live Reset):"		"make O=/ clean"
 	@$(PRINTF) "Initramfs System (Live Create):"		"make O=/ release"
+	@$(PRINTF) "Initramfs System (Live Initrd):"		"make O=/ initrd"
 	@$(PRINTF) "Initramfs System (Live Unpack):"		"make O=/ unpack"
 	@$(ECHO) "\n"
 	@$(ECHO) "$(STATE)All of the targets generally run non-interactively, except \"update\" and \"shell\".$(RESET)\n"
@@ -174,6 +175,10 @@ clean:
 .PHONY: release
 release:
 	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system $(CHROOT) _release_ramfs
+
+.PHONY: initrd
+initrd:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system $(CHROOT) _release_initrd
 
 .PHONY: unpack
 unpack:
