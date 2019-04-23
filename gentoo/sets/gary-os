@@ -48,6 +48,7 @@ sys-fs/ext3grep
 sys-fs/ext4magic
 sys-fs/extundelete
 sys-fs/mtools
+sys-fs/ncdu
 sys-fs/squashfs-tools
 
 sys-apps/attr
