@@ -280,6 +280,11 @@ function clear_environment {
 
 ################################################################################
 
+#NOTE: TEST READABILITY WITHOUT COLORS (MAKEFILE ALSO)
+#NOTE: https://unix.stackexchange.com/questions/58982/disable-colours-on-terminal-and-ssh
+#NOTE: (TERM=ansi-mono ; tput colors ; dircolors -p | grep -x "TERM ${TERM}")
+#NOTE: OR COMMENT COLOR DECLARATIONS
+
 function print_info {
 	if [[ -n ${QUIET} ]]; then
 		return 0
@@ -311,10 +316,16 @@ function print_info {
 		declare PRINTF=
 		PRINTF+="${TITLE}%-45.45s${RESET} "
 		PRINTF+="${STATE}%-15.15s${RESET} "
-		PRINTF+="${HOWTO}%s${RESET}\n"
+		PRINTF+="${HOWTO}%s${RESET}"
+		PRINTF+=" ${STATE}%s${RESET}\n"
+		echo -en "\n"
 		echo -en "${NOTES}"
 		echo -en ">>> USAGE <<<"
 		echo -en "${RESET}\n"
+		echo -en "${STATE}"
+		echo -en ">>> ARGUMENT PROCESSING IS VERY RUDIMENTARY // OPTIONS MUST BE IN THE ORDER SHOWN <<<"
+		echo -en "${RESET}\n"
+		echo -en "\n"
 		printf "${PRINTF}" "Synchronize (Database, Sources, Metadata):"	"<auto>"	"${SCRIPT}"
 		printf "${PRINTF}" "Synchronize (Sources, Metadata):"		"<auto>"	"${SCRIPT} -f"
 		printf "${PRINTF}" "Synchronize (Metadata Only):"		"<auto>"	"${SCRIPT} -!"
@@ -336,18 +347,19 @@ function print_info {
 		echo -en ">>> CHROOT <<<"
 		echo -en "${RESET}\n"
 		echo -en "${STATE}"
-		echo -en ">>> DEFAULTS: TARGET=\$BLDDIR _PKG=\$PKGBLD <<<"
+		echo -en ">>> DEFAULTS: TARGET=\$BLDDIR _PKG=\$BLDPKG <<<"
 		echo -en "${RESET}\n"
-		printf "${PRINTF}" "Chroot Selection [-d] (\$PKGBLD/\$BLDDIR):"	"${PKGBLD}"	"${BLDDIR}"
-		printf "${PRINTF}" "Chroot Selection [-x] (\$PKGOUT/\$OUTDIR):"	"${PKGOUT}"	"${OUTDIR}"
-		printf "${PRINTF}" "Chroot Selection [-t] (\$PKGTOR/\$TORDIR):"	"${PKGTOR}"	"${TORDIR}"
-		printf "${PRINTF}" "Chroot Selection [-g] (\$PKGGOS/\$GOSDIR):"	"${PKGGOS}"	"${GOSDIR}"
 		echo -en "\n"
-		printf "${PRINTF}" "Chroot Build (Initial):"			"<auto>"	"${SCRIPT} {chroot} -0 || -n -a -b -k -i"
-		printf "${PRINTF}" "Chroot Build (Update Only):"		"<auto>"	"${SCRIPT} {chroot} -/ || -a -i"
-		printf "${PRINTF}" "Chroot Build (Complete Rebuild):"		"<auto>"	"${SCRIPT} {chroot} -1 || -a -b -i"
-		printf "${PRINTF}" "Chroot Build (Configuration):"		"<interactive>"	"${SCRIPT} {chroot} -2 || -c -i"
-		printf "${PRINTF}" "Chroot Build (Internal Only):"		"<internal>"	"${SCRIPT} {chroot} [-n|-a|-b|-k|-c] -i"
+		printf "${PRINTF}" "Chroot Selection [-d] (\$BLDPKG/\$BLDDIR):"	"${BLDPKG}"	"${BLDDIR}"
+		printf "${PRINTF}" "Chroot Selection [-x] (\$WRKPKG/\$WRKDIR):"	"${WRKPKG}"	"${WRKDIR}"
+		printf "${PRINTF}" "Chroot Selection [-t] (\$TORPKG/\$TORDIR):"	"${TORPKG}"	"${TORDIR}"
+		printf "${PRINTF}" "Chroot Selection [-g] (\$GOSPKG/\$GOSDIR):"	"${GOSPKG}"	"${GOSDIR}"
+		echo -en "\n"
+		printf "${PRINTF}" "Chroot Build (Initial):"			"<auto>"	"${SCRIPT} {chroot} -0" "<-n -a -b -k -i>"
+		printf "${PRINTF}" "Chroot Build (Update Only):"		"<auto>"	"${SCRIPT} {chroot} -/" "<-a -i>"
+		printf "${PRINTF}" "Chroot Build (Complete Rebuild):"		"<auto>"	"${SCRIPT} {chroot} -1" "<-a -b -i>"
+		printf "${PRINTF}" "Chroot Build (Configuration):"		"<interactive>"	"${SCRIPT} {chroot} -2" "<-c -i>"
+		printf "${PRINTF}" "Chroot Build (Internal Only):"		"<internal>"	"${SCRIPT} {chroot}" "[-n|-a|-b|-k|-c] -i"
 		echo -en "\n"
 		printf "${PRINTF}" "Chroot Validation (Dependency Tree):"	"<output>"	"${SCRIPT} [{chroot}] -y -j"
 		printf "${PRINTF}" "Chroot Validation (Reverse Dependencies):"	"<output>"	"${SCRIPT} [{chroot}] -y -j (d|depends) {package}"
@@ -369,18 +381,22 @@ function print_info {
 		echo -en ">>> INITRAMFS <<<"
 		echo -en "${RESET}\n"
 		#note: these need to match the names in the "${MAKEIT}" script
+		echo -en "\n"
 		printf "${PRINTF}" "Initramfs Build (Chroot Reset):"		"<auto>"	"${SCRIPT} {chroot} ${MAKEIT}_reset"
 		printf "${PRINTF}" "Initramfs Build (Chroot Create):"		"<auto>"	"${SCRIPT} {chroot} ${MAKEIT}_ramfs"
-		printf "${PRINTF}" "Initramfs System (Live Reset):"		"<auto>"	"(BLD|OUT|TOR|GOS)DIR=/ ${SCRIPT} {chroot} ${MAKEIT}_reset"
-		printf "${PRINTF}" "Initramfs System (Live Create):"		"<auto>"	"(BLD|OUT|TOR|GOS)DIR=/ ${SCRIPT} {chroot} ${MAKEIT}_ramfs"
-		printf "${PRINTF}" "Initramfs System (Live Unpack):"		"<auto>"	"(BLD|OUT|TOR|GOS)DIR=/ ${SCRIPT} {chroot} ${MAKEIT}_unpack"
+		printf "${PRINTF}" "Initramfs System (Live Reset):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${SCRIPT} {chroot} ${MAKEIT}_reset"
+		printf "${PRINTF}" "Initramfs System (Live Create):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${SCRIPT} {chroot} ${MAKEIT}_ramfs"
+		printf "${PRINTF}" "Initramfs System (Live Initrd):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${SCRIPT} {chroot} ${MAKEIT}_initrd"
+		printf "${PRINTF}" "Initramfs System (Live Unpack):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${SCRIPT} {chroot} ${MAKEIT}_unpack"
 		echo -en "\n"
-		printf "${PRINTF}" "Distribution Main (Primary Targets):"	"<auto>"	"${SCRIPT} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#][{]main[}].*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
-		printf "${PRINTF}" "Distribution Main (Reset Option):"		"<auto>"	"${SCRIPT} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#][{]reset[}].*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	)) --reset"
+		printf "${PRINTF}" "Distribution Targets (Internal Only):"	"<internal>"	"${SCRIPT} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#][{]main[}].*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
+		printf "${PRINTF}" "Distribution Reset (Internal Only):"	"<internal>"	"${SCRIPT} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#][{]reset[}].*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	)) --reset"
+		printf "${PRINTF}" "Distribution Initrd (Internal Only):"	"<internal>"	"${SCRIPT} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#][{]initrd[}].*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	)) --initrd"
 		echo -en "\n"
 		printf "${PRINTF}" "Distribution Prepare (Internal Only):"	"<internal>"	"${SCRIPT} {chroot} ${PREPIT}_($(	${SED} -n "s|^function[ ]${PREPIT}_(.+)[ ][{].*$|\1|gp"		${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
 		printf "${PRINTF}" "Distribution Release (Internal Only):"	"<internal>"	"${SCRIPT} {chroot} ${MAKEIT}_($(	${SED} -n "s|^function[ ]${MAKEIT}_(.+)[ ][{].*$|\1|gp"		${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
 		printf "${PRINTF}" "Distribution Publish (Internal Only):"	"<internal>"	"${SCRIPT}          ${SHIPIT}_($(	${SED} -n "s|^function[ ]${SHIPIT}_(.+)[ ][{].*$|\1|gp"		${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
+		echo -en "\n"
 	elif [[ ${1} == "starter" ]]; then
 		function starter_var {
 			declare COLOR="${HOWTO}"
@@ -393,9 +409,11 @@ function print_info {
 			PRINTF+="${COLOR}%s${RESET}\n"
 			printf "${PRINTF}" "${VAR}:" "${!VAR:-(unset)}"
 		}
+		echo -en "\n"
 		echo -en "${NOTES}"
 		echo -en ">>> ARGUMENTS <<<"
 		echo -en "${RESET}\n"
+		echo -en "\n"
 		starter_var "_SELF"
 		starter_var "_OPTS"
 		starter_var "DEBUG"
@@ -412,6 +430,7 @@ function print_info {
 				echo -en ">>> THESE CAN BE CHANGED <<<"
 				echo -en "${RESET}\n"
 			fi
+			echo -en "\n"
 			declare END="true"
 			${SED} -n "s|^[#]${FILE}[[](.+)[]]$|\1|gp" ${_SELF} | while read -r NEXT; do
 				if ${END}; then END="false"; else echo -en "\n"; fi
@@ -420,6 +439,7 @@ function print_info {
 				done
 			done
 		done
+		echo -en "\n"
 	elif [[ ${1} == "environment" ]]; then
 		echo -en "${NOTES}"
 		echo -en "Clearing Environment Variables..."
