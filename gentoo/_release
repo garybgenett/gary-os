@@ -404,7 +404,6 @@ function release_kernel_initramfs {
 		-e "/CONFIG_INITRAMFS_COMPRESSION/d" \
 		-e "s|^.*(CONFIG_INITRAMFS_SOURCE)[^_].*$|${INITRAMFS_CONFIG}|g" \
 								${TARGET}${FILE}/.config			|| return 1
-	release_kernel_config											|| return 1
 	if [[ ${TARGET} != / ]]; then
 		${RSYNC_U} ${TARGET}${FILE}/.config		${TARGET}${ARCDIR}/${NEXT}.initramfs		|| return 1
 		${GREP} "CONFIG_(KERNEL|INITRAMFS|RD)_"		${TARGET}${ARCDIR}/${NEXT}.initramfs		|| return 1
@@ -420,8 +419,7 @@ function release_kernel_config {
 	else
 		${RSYNC_U} ${TARGET}${ARCDIR}/${NEXT}	${TARGET}${FILE}/.config	|| return 1
 	fi
-	kernel_cpu 					${TARGET}${FILE}/.config	|| return 1
-	safe_make -C ${TARGET}${FILE}			olddefconfig			|| return 1
+	kernel_cpu					${TARGET}${FILE}/.config	|| return 1
 	return 0
 }
 
@@ -436,17 +434,17 @@ function _release_kernel {	#{initrd}
 		FILE="/usr/src/linux"
 	fi
 	if [[ -d ${TARGET}${FILE} ]] && [[ ! -f ${TARGET}/${_FINAL}/${_RAMFS}.kernel ]]; then
-		release_kernel_shmmax								|| return 1
-		if ${INITRD}; then
-			release_kernel_config							|| return 1
-		else
-			release_kernel_initramfs						|| return 1
+		release_kernel_shmmax							|| return 1
+		release_kernel_config							|| return 1
+		if ! ${INITRD}; then
+			release_kernel_initramfs					|| return 1
 		fi
-		safe_make -C ${TARGET}${FILE}		bzImage					|| return 1
-#>>>		declare BZIMAGE="${TARGET}${FILE}/arch/x86/boot/bzImage"			|| return 1
-		declare BZIMAGE="${TARGET}${FILE}/arch/x86_64/boot/bzImage"			|| return 1
-#>>>		${RSYNC_U} -L ${BZIMAGE}		{TARGET}/${_FINAL}/${_RAMFS}.kernel	|| return 1
-		${RSYNC_U} -L ${BZIMAGE}		${TARGET}/${_FINAL}/${_RAMFS}.kernel	|| return 1
+		safe_make -C ${TARGET}${FILE}	olddefconfig				|| return 1
+		safe_make -C ${TARGET}${FILE}	bzImage					|| return 1
+#>>>		declare BZIMAGE="${TARGET}${FILE}/arch/x86/boot/bzImage"		|| return 1
+		declare BZIMAGE="${TARGET}${FILE}/arch/x86_64/boot/bzImage"		|| return 1
+#>>>		${RSYNC_U} -L ${BZIMAGE}	{TARGET}/${_FINAL}/${_RAMFS}.kernel	|| return 1
+		${RSYNC_U} -L ${BZIMAGE}	${TARGET}/${_FINAL}/${_RAMFS}.kernel	|| return 1
 	fi
 	return 0
 }
