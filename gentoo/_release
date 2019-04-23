@@ -185,7 +185,7 @@ function _prepare_docdir {
 
 function _prepare_linux {
 	if [[ ${TARGET} == / ]]; then
-		if [[ ! -d ${TARGET}/usr/src/linux ]] || [[ -L ${TARGET}/usr/src/linux ]]; then
+		if [[ ! -d ${TARGET}/usr/src/linux ]]; then
 			${RM}							${TARGET}/usr/src/linux		|| return 1
 			release_untar						${TARGET}/usr/src/linux		|| return 1
 		fi
