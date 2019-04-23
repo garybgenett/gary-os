@@ -43,9 +43,8 @@ declare NEXT=
 declare SOURCE="${SOURCE:-/.g/_data/_target/iso}"
 declare GITDIR="${GITDIR:-/.g/_data/_build/funtoo/meta-repo.git}"
 
-#OPTIONS[SETDIR CFGSCR ARCDIR GENDIR]
+#OPTIONS[SETDIR ARCDIR GENDIR]
 declare SETDIR="${SETDIR:-/.g/_data/zactive/.setup}"
-declare CFGSCR="${CFGSCR:-${SETDIR}/gentoo.config}"
 declare ARCDIR="${ARCDIR:-/_build}"
 declare GENDIR="${GENDIR:-/_gentoo}"
 
@@ -82,9 +81,10 @@ declare FUNKIT="funtoo.kits"
 declare LAYDIR="_overlay"
 declare AUDITS=".emergent"
 
-#OPTIONS[ARTDIR]
+#OPTIONS[ARTDIR CFGSCR]
 #VARIABLES[PREPIT MAKEIT SHIPIT]
 declare ARTDIR="${ARTDIR:-/.g/_data/zactive/coding/gary-os/_artifacts}"
+declare CFGSCR="${CFGSCR:-${ARTDIR}/config_script.sh}"
 declare PREPIT="_prepare"
 declare MAKEIT="_release"
 declare SHIPIT="_publish"
@@ -132,7 +132,6 @@ fi
 #note: detection of a gary-os build is done purely on the package set
 if [[ ${_PKG} == _${GOSPKG} ]] || [[ ${_PKG} == ${GOSPKG} ]]; then
 	_GOS="1"
-	CFGSCR=
 fi
 
 ########################################
@@ -1006,7 +1005,7 @@ if [[ ${1} == -i ]]; then
 	if ${_CFG}; then
 		#note: this needs to match the name in the "${MAKEIT}" script
 		${PREPIT}_config											|| EXIT 1
-		if [[ -f ${CFGSCR} ]]; then
+		if [[ -x ${CFGSCR} ]]; then
 			${RSYNC_U} ${CFGSCR}		${TARGET}/${ARCDIR}/$(basename ${CFGSCR})			|| EXIT 1
 			safe_env			${ARCDIR}/$(basename ${CFGSCR})					|| EXIT 1
 		fi
