@@ -67,12 +67,14 @@ function _release_reset {
 	if [[ ${TARGET} != / ]]; then
 		${RM} ${TARGET}/.${_TITLE}*		|| return 1
 	fi
-	${RM} ${TARGET}/${_FINAL}*			|| return 1
+	if [[ -z "$(mount | ${GREP} "^[^[:space:]]+ on ${TARGET}${_FINAL}")" ]]; then
+		${RM} ${TARGET}/${_FINAL}*		|| return 1
+	fi
 	${RM} ${TARGET}/${_FINAL}/${_RAMFS}.cpio.xz	|| return 1
 	${RM} ${TARGET}/${_FINAL}/${_RAMFS}.kernel	|| return 1
 	${RM} ${TARGET}/boot/_null.kernel		|| return 1
-	${RM} ${TARGET}/usr/src/linux			|| return 1
 	if [[ ${TARGET} != / ]]; then
+		${RM} ${TARGET}/usr/src/linux		|| return 1
 		${RM} ${TARGET}/usr/src/linux.tar.xz	|| return 1
 	fi
 	return 0
@@ -217,7 +219,10 @@ function _prepare_linux {
 ########################################
 
 function _prepare_packages {
-	${MKDIR} ${TARGET}/${_FINAL}										|| return 1
+	if [[ ${TARGET} == / ]]; then
+		${RM} ${TARGET}/.${_TITLE}.packages.txt								|| return 1
+		return 0
+	fi
 	cat /dev/null >${TARGET}/.${_TITLE}.packages.txt							|| return 1
 	NEXT=
 	for FILE in $(
@@ -301,7 +306,6 @@ declare XZ="xz -vv --compress --stdout --format xz --check crc32"
 function _release_cpio {
 	mount_dev_dirs -u		|| return 1
 	${MKDIR} ${TARGET}/${_FINAL}	|| return 1
-	FILE="${TARGET}/${_FINAL}/${_RAMFS}.cpio"
 	if [[ ! -f ${FILE}.xz ]]; then
 		#note: the "_packages" file is also hard-set in the "prepare_packages" function
 		(cd ${TARGET} && find ./ -mindepth 1 \
@@ -339,10 +343,12 @@ function _release_cpio {
 		(cd ${TARGET} && ${XARGS} ${DU_S})	| tee ${CPIO_FILE}.txt	#>>> || return 1
 		sort -k4 -o ${CPIO_FILE}.txt		${CPIO_FILE}.txt	|| return 1
 		cat ${CPIO_FILE}.nul | ${CPIO_IN}				|| return 1
-		${RM}					${CPIO_FILE}.dir	|| return 1
-		${MKDIR}				${CPIO_FILE}.dir	|| return 1
-		${CPIO_OUT}							|| return 1
-		${XZ} ${CPIO_FILE}			>${CPIO_FILE}.xz	|| return 1
+		if [[ ${TARGET} != / ]]; then
+			${RM}				${CPIO_FILE}.dir	|| return 1
+			${MKDIR}			${CPIO_FILE}.dir	|| return 1
+			${CPIO_OUT}						|| return 1
+			${XZ} ${CPIO_FILE}		>${CPIO_FILE}.xz	|| return 1
+		fi
 		${RM}					${CPIO_FILE}.nul	|| return 1
 	fi
 	return 0
@@ -388,7 +394,11 @@ function release_kernel_initramfs {
 }
 
 function release_kernel_config {
-	${RSYNC_U} ${TARGET}${ARCDIR}/${NEXT}		${TARGET}${FILE}/.config	|| return 1
+	if [[ ${TARGET} == / ]]; then
+		${RSYNC_U} ${SETDIR}/${LINDIR}/${NEXT}	${TARGET}${FILE}/.config	|| return 1
+	else
+		${RSYNC_U} ${TARGET}${ARCDIR}/${NEXT}	${TARGET}${FILE}/.config	|| return 1
+	fi
 	kernel_cpu 					${TARGET}${FILE}/.config	|| return 1
 	safe_make -C ${TARGET}${FILE}			olddefconfig			|| return 1
 	return 0
