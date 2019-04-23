@@ -403,12 +403,14 @@ function release_kernel_initramfs {
 	${SED} -i \
 		-e "/CONFIG_INITRAMFS_COMPRESSION/d" \
 		-e "s|^.*(CONFIG_INITRAMFS_SOURCE)[^_].*$|${INITRAMFS_CONFIG}|g" \
-							${TARGET}${FILE}/.config			|| return 1
-	release_kernel_config										|| return 1
-	${RSYNC_U} ${TARGET}${FILE}/.config		${TARGET}${ARCDIR}/${NEXT}.initramfs		|| return 1
-	${GREP} "CONFIG_(KERNEL|INITRAMFS|RD)_"		${TARGET}${ARCDIR}/${NEXT}.initramfs		|| return 1
-	diff ${DIFF_OPTS} ${TARGET}${ARCDIR}/${NEXT}	${TARGET}${ARCDIR}/${NEXT}.initramfs		| ${GREP} "^[-+]" #>>> || return 1
-	${RM}						${TARGET}${FILE}/usr/initramfs_data.cpio*	|| return 1
+								${TARGET}${FILE}/.config			|| return 1
+	release_kernel_config											|| return 1
+	if [[ ${TARGET} != / ]]; then
+		${RSYNC_U} ${TARGET}${FILE}/.config		${TARGET}${ARCDIR}/${NEXT}.initramfs		|| return 1
+		${GREP} "CONFIG_(KERNEL|INITRAMFS|RD)_"		${TARGET}${ARCDIR}/${NEXT}.initramfs		|| return 1
+		diff ${DIFF_OPTS} ${TARGET}${ARCDIR}/${NEXT}	${TARGET}${ARCDIR}/${NEXT}.initramfs		| ${GREP} "^[-+]" #>>> || return 1
+	fi
+	${RM}							${TARGET}${FILE}/usr/initramfs_data.cpio*	|| return 1
 	return 0
 }
 
