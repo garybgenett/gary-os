@@ -279,10 +279,8 @@ function _prepare_symlink {
 
 #note: this is called statically in the "_system" script
 function _release_ramfs {	#{main} #{reset}
-	if [[ ${1} == --reset ]]; then
-		shift
-		_release_reset	|| return 1
-	fi
+	declare RESET= ; if [[ ${1} == --reset ]]; then RESET="${1}" && shift; fi
+	_prepare_build ${RESET}	|| return 1
 	_prepare_build		|| return 1
 	_release_cpio		|| return 1
 	_release_kernel		|| return 1
