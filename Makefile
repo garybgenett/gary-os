@@ -64,6 +64,7 @@ usage:
 	@$(ECHO) "\n"
 	@$(PRINTF) "Initramfs Build (Chroot Reset):"		"make clean"
 	@$(PRINTF) "Initramfs Build (Chroot Create):"		"make release"
+	@$(PRINTF) "Initramfs Build (Chroot Initrd):"		"make initrd"
 	@$(PRINTF) "Initramfs System (Live Reset):"		"make O=/ clean"
 	@$(PRINTF) "Initramfs System (Live Create):"		"make O=/ release"
 	@$(PRINTF) "Initramfs System (Live Initrd):"		"make O=/ initrd"
