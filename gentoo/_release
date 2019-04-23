@@ -290,13 +290,20 @@ function _release_ramfs {	#{main} #{reset}
 
 ########################################
 
-#note: this is called statically in the "_system" script
+#note: the "du" command is also used in "release_kernel_shmmax", so just making them all global
+declare CPIO_FILE="${TARGET}/${_FINAL}/${_RAMFS}.cpio"
+declare XARGS="xargs --max-procs 0 --max-args 1 --null	--arg-file ${CPIO_FILE}.nul"
+declare DU_S="${DU} --summarize --apparent-size		--block-size 4096"
+declare CPIO_IN="cpio -v --create --format newc --null	--file ${CPIO_FILE}	--directory ${TARGET}"
+declare CPIO_OUT="cpio -v --extract			--file ${CPIO_FILE}	--directory ${CPIO_FILE}.dir"
+declare XZ="xz -vv --compress --stdout --format xz --check crc32"
+
 function _release_cpio {
 	mount_dev_dirs -u		|| return 1
 	${MKDIR} ${TARGET}/${_FINAL}	|| return 1
 	FILE="${TARGET}/${_FINAL}/${_RAMFS}.cpio"
-	#note: the "_packages" file is also hard-set in the "prepare_packages" function
 	if [[ ! -f ${FILE}.xz ]]; then
+		#note: the "_packages" file is also hard-set in the "prepare_packages" function
 		(cd ${TARGET} && find ./ -mindepth 1 \
 			\( -path ./${CMTFIL}		-prune \) -o \
 			\( -path ./${_FINAL}		-prune \) -o \
@@ -328,14 +335,15 @@ function _release_cpio {
 			\( -path ./var/log/\*		-prune \) -o \
 			\( -path ./var/tmp/\*		-prune \) -o \
 			\
-			-print
-		)									>${FILE}.txt	|| return 1
-		sort -o ${FILE}.txt							${FILE}.txt	|| return 1
-		cat ${FILE}.txt | cpio -v --create --format newc --directory ${TARGET}	>${FILE}	|| return 1
-		${RM}									${FILE}.dir	|| return 1
-		${MKDIR}								${FILE}.dir	|| return 1
-		cpio -v --extract --file ${FILE} --directory				${FILE}.dir	|| return 1
-		xz -vv --compress --stdout --format xz --check crc64 ${FILE}		>${FILE}.xz	|| return 1
+		-print0)				>${CPIO_FILE}.nul	|| return 1
+		(cd ${TARGET} && ${XARGS} ${DU_S})	| tee ${CPIO_FILE}.txt	#>>> || return 1
+		sort -k4 -o ${CPIO_FILE}.txt		${CPIO_FILE}.txt	|| return 1
+		cat ${CPIO_FILE}.nul | ${CPIO_IN}				|| return 1
+		${RM}					${CPIO_FILE}.dir	|| return 1
+		${MKDIR}				${CPIO_FILE}.dir	|| return 1
+		${CPIO_OUT}							|| return 1
+		${XZ} ${CPIO_FILE}			>${CPIO_FILE}.xz	|| return 1
+		${RM}					${CPIO_FILE}.nul	|| return 1
 	fi
 	return 0
 }
@@ -352,7 +360,7 @@ function _release_kernel {
 		#note: then adding 768MB for buffer and minimum needed memory, and calculating the number of 4096K pages needed in the kernel
 		#note: fortunately, the kernel code does maximizing and rounding to the nearest memory block boundary for us, so all we need to do is provide an integer
 		declare SHMMAX=		# based on a page size of 4096
-		SHMMAX="$(du -bs ${TARGET}/${_FINAL}/${_RAMFS}.cpio | ${SED} "s|[[:space:]].*$||g")"
+		SHMMAX="$(${DU_S} ${CPIO_FILE} | ${SED} "s|[[:space:]].*$||g")"
 		SHMMAX="$(echo "(${SHMMAX} +(2^29)+(2^28))/4096" | bc | ${SED} -r "s|[.].*$||g")"
 #>>>		SHMMAX="917504"		# (3*(2^18))+2^17 = (3.5*(2^30))/4096 = 3.5G
 #>>>		SHMMAX="983040"		# (3*(2^18))+2^17+2^16 = ~3.7G [ (3*(2^18))*4096 = 3G) ] + [ (2^17)*4096 = 512M ] + [ (2^16)*4096 = 256M ]
