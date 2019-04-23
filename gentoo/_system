@@ -49,17 +49,17 @@ declare CFGSCR="${CFGSCR:-${SETDIR}/gentoo.config}"
 declare ARCDIR="${ARCDIR:-/_build}"
 declare GENDIR="${GENDIR:-/_gentoo}"
 
-#>>> #OPTIONS[BLDDIR OUTDIR TORDIR GOSDIR]
+#>>> #OPTIONS[BLDDIR WRKDIR TORDIR GOSDIR]
 declare BLDDIR="${BLDDIR:-/.g/_data/_builds/_gentoo}"
-declare OUTDIR="${OUTDIR:-${BLDDIR}.working}"
+declare WRKDIR="${WRKDIR:-${BLDDIR}.working}"
 declare TORDIR="${TORDIR:-/.g/_toor}"
 declare GOSDIR="${GOSDIR:-/.g/_data/_builds/_gary-os.working}"
 
-#>>> #OPTIONS[PKGBLD PKGOUT PKGTOR PKGGOS]
-declare PKGBLD="${PKGBLD:-packages}"
-declare PKGOUT="${PKGOUT:-${PKGBLD}}"
-declare PKGTOR="${PKGTOR:-${PKGBLD}}"
-declare PKGGOS="${PKGGOS:-gary-os}"
+#>>> #OPTIONS[BLDPKG WRKPKG TORPKG GOSPKG]
+declare BLDPKG="${BLDPKG:-packages}"
+declare WRKPKG="${WRKPKG:-${BLDPKG}}"
+declare TORPKG="${TORPKG:-${BLDPKG}}"
+declare GOSPKG="${GOSPKG:-gary-os}"
 
 ################################################################################
 
@@ -94,32 +94,32 @@ declare SHIPIT="_publish"
 #VARIABLES[TARGET TOOR _PKG _NEW _GOS]
 declare TARGET="${BLDDIR}"
 declare TOOR=
-declare _PKG="${PKGBLD}"
+declare _PKG="${BLDPKG}"
 declare _NEW=
 declare _GOS=
 
 if [[ ${1} == -d ]]; then
 	TARGET="${BLDDIR}"
 	TOOR="${1}"
-	_PKG="${PKGBLD}"
+	_PKG="${BLDPKG}"
 	shift
 fi
 if [[ ${1} == -x ]]; then
-	TARGET="${OUTDIR}"
+	TARGET="${WRKDIR}"
 	TOOR="${1}"
-	_PKG="${PKGOUT}"
+	_PKG="${WRKPKG}"
 	shift
 fi
 if [[ ${1} == -t ]]; then
 	TARGET="${TORDIR}"
 	TOOR="${1}"
-	_PKG="${PKGTOR}"
+	_PKG="${TORPKG}"
 	shift
 fi
 if [[ ${1} == -g ]]; then
 	TARGET="${GOSDIR}"
 	TOOR="${1}"
-	_PKG="${PKGGOS}"
+	_PKG="${GOSPKG}"
 	shift
 fi
 
@@ -128,7 +128,9 @@ if [[ ${1} == -n ]]; then
 	_NEW="1"
 	shift
 fi
-if [[ ${_PKG} == _${PKGGOS} ]] || [[ ${_PKG} == ${PKGGOS} ]]; then
+
+#note: detection of a gary-os build is done purely on the package set
+if [[ ${_PKG} == _${GOSPKG} ]] || [[ ${_PKG} == ${GOSPKG} ]]; then
 	_GOS="1"
 	CFGSCR=
 fi
@@ -178,7 +180,7 @@ declare WMHELP="${WMHELP:-\`date --iso=s\`}"
 
 ########################################
 
-#note: athlon64 build = OUTDIR="/.g/_data/_builds/_gentoo.amd64" _CPU="CONFIG_MK8" ESUB="amd64-k8" GARC="athlon64" GSUB="athlon64" ${HOME}/setup/gentoo/_system -x -0
+#note: athlon64 build = WRKDIR="/.g/_data/_builds/_gentoo.amd64" _CPU="CONFIG_MK8" ESUB="amd64-k8" GARC="athlon64" GSUB="athlon64" ${HOME}/setup/gentoo/_system -x -0
 
 #OPTIONS[_CPU EARC ESUB GARC GSUB GOPT]
 declare _CPU_RESET="CONFIG_MCORE2"
