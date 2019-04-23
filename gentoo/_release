@@ -62,6 +62,7 @@ RELEASE[6]="v3.0"; CMTHASH[6]="35141e1e20259d7d1c2f4b143c6ae4505d7d5045"
 
 ################################################################################
 
+#note: this is called statically in the "_system" script
 function _release_reset {
 	if [[ ${TARGET} != / ]]; then
 		${RM} ${TARGET}/.${_TITLE}*		|| return 1
@@ -85,7 +86,7 @@ function _prepare_build {	#{main} #{reset}
 		_release_reset	|| return 1
 	fi
 	_prepare_config		|| return 1
-	_prepare_gitdir		|| return 1
+	_prepare_docdir		|| return 1
 	_prepare_linux		|| return 1
 	_prepare_packages	|| return 1
 	_prepare_symlink	|| return 1
@@ -126,8 +127,8 @@ function prepare_config_issue {
 }
 
 #NOTE: UPDATE THE TABLE IN "README" WHEN MAKING CHANGES HERE!
-#note: this is called statically in the "_system" script
 
+#note: this is called statically in the "_system" script
 function _prepare_config {
 	prepare_config_issue												|| return 1
 	if [[ ${TARGET} == / ]]; then
@@ -158,7 +159,7 @@ function _prepare_config {
 
 ########################################
 
-function _prepare_gitdir {
+function _prepare_docdir {
 	if [[ ${TARGET} == / ]]; then
 #>>>		${RM}				${TARGET}/.${_TITLE}		|| return 1
 		${RM}				${TARGET}/.${_TITLE}.git	|| return 1
@@ -277,7 +278,6 @@ function _prepare_symlink {
 ################################################################################
 
 #note: this is called statically in the "_system" script
-
 function _release_ramfs {	#{main} #{reset}
 	if [[ ${1} == --reset ]]; then
 		shift
@@ -292,6 +292,7 @@ function _release_ramfs {	#{main} #{reset}
 
 ########################################
 
+#note: this is called statically in the "_system" script
 function _release_cpio {
 	mount_dev_dirs -u		|| return 1
 	${MKDIR} ${TARGET}/${_FINAL}	|| return 1
@@ -422,7 +423,6 @@ function release_untar {
 }
 
 #note: this is called statically in the "_system" script
-
 function _release_unpack {
 	release_untar ${TARGET}${REPDIR}	|| return 1
 	release_untar ${TARGET}/usr/src/linux	|| return 1
@@ -455,8 +455,8 @@ function _publish_release {	#{main}
 
 function _publish_gitdir {
 #>>>	if [[ -x $(which task 2>/dev/null) ]]; then
-#>>>		declare FILE="${GIT} --git-dir=${_DOCDIR}.git --work-tree=${_DOCDIR}"
-#>>>		declare NEXT="Automated update of \"TODO.md\" tasks list."
+#>>>		FILE="${GIT} --git-dir=${_DOCDIR}.git --work-tree=${_DOCDIR}"
+#>>>		NEXT="Automated update of \"TODO.md\" tasks list."
 #>>>		task zoom	project:geek.gary-os >${_DOCDIR}/TODO.md	|| return 1
 #>>>		${FILE} add	TODO.md						#>>> || return 1
 #>>>		${FILE} commit	--message="${NEXT}" TODO.md			#>>> || return 1
@@ -505,7 +505,7 @@ declare FILELIST="
 "
 
 function publish_export_filelist {
-	declare FILE="${1}" && shift
+	FILE="${1}" && shift
 	${LS} -d $(
 		for NEXT in ${FILELIST}; do
 			echo -en " ${FILE}/${NEXT}*"
