@@ -102,9 +102,9 @@ usage:
 .PHONY: help
 help: usage
 ifneq ($(wildcard $(O)),)
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system -v -q $(CHROOT)
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -v -q $(CHROOT)
 else
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system -v
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -v
 endif
 
 ########################################
@@ -113,18 +113,18 @@ endif
 .DEFAULT:
 	@$(MARKER)
 	@$(ECHO) "$(NOTES)>>> CURRENT SYSTEM PACKAGE LOOKUP: $(@) <<<$(RESET)\n"
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system -q -l "$(@)"
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -q -l "$(@)"
 	@$(ECHO) "\n"
 	@$(ECHO) "$(NOTES)>>> CHROOT SYSTEM PACKAGE LOOKUP: $(@) <<<$(RESET)\n"
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system -q $(CHROOT) -l "$(@)"
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -q $(CHROOT) -l "$(@)"
 	@$(MARKER)
 
 ################################################################################
 
 .PHONY: update
 update:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system $(CHROOT)
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system $(CHROOT) -u
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT)
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) -u
 
 ########################################
 
@@ -140,49 +140,49 @@ all: init doit redo edit release
 
 .PHONY: init
 init:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system $(CHROOT) -0
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) -0
 
 .PHONY: doit
 doit:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system $(CHROOT) -/
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) -/
 
 .PHONY: redo
 redo:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system $(CHROOT) -1
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) -1
 
 .PHONY: edit
 edit:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system $(CHROOT) -2
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) -2
 
 ########################################
 
 .PHONY: shell
 shell:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system $(CHROOT) -s
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) -s
 
 ########################################
 
 .PHONY: umount
 umount:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system $(CHROOT) -z
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) -z
 
 ########################################
 
 .PHONY: clean
 clean:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system $(CHROOT) _release_reset
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) _release_reset
 
 .PHONY: release
 release:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system $(CHROOT) _release_ramfs
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) _release_ramfs
 
 .PHONY: initrd
 initrd:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system $(CHROOT) _release_initrd
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) _release_initrd
 
 .PHONY: unpack
 unpack:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" PKGGOS="$(P)" $(C)/gentoo/_system $(CHROOT) _release_unpack
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) _release_unpack
 
 ################################################################################
 # End Of File
