@@ -283,13 +283,23 @@ function _prepare_symlink {
 ################################################################################
 
 #note: this is called statically in the "_system" script
-function _release_ramfs {	#{main} #{reset}
+function _release_ramfs {	#{main} #{reset} #{initrd}
 	declare RESET= ; if [[ ${1} == --reset ]]; then RESET="${1}" && shift; fi
-	_prepare_build ${RESET}	|| return 1
-	_prepare_build		|| return 1
-	_release_cpio		|| return 1
-	_release_kernel		|| return 1
-	_release_report		|| return 1
+	declare INITRD= ; if [[ ${1} == --initrd ]]; then INITRD="${1}" && shift; fi
+	_prepare_build ${RESET}		|| return 1
+	_release_cpio ${INITRD}		|| return 1
+	_release_kernel ${INITRD}	|| return 1
+	_release_report			|| return 1
+	return 0
+}
+
+########################################
+
+#note: this is called statically in the "_system" script
+function _release_initrd {	#{main} #{reset}
+	declare RESET= ; if [[ ${1} == --reset ]]; then RESET="${1}" && shift; fi
+	_release_ramfs ${RESET} --initrd \
+		|| return 1
 	return 0
 }
 
@@ -303,10 +313,18 @@ declare CPIO_IN="cpio -v --create --format newc --null	--file ${CPIO_FILE}	--dir
 declare CPIO_OUT="cpio -v --extract			--file ${CPIO_FILE}	--directory ${CPIO_FILE}.dir"
 declare XZ="xz -vv --compress --stdout --format xz --check crc32"
 
-function _release_cpio {
+function _release_cpio {	#{initrd}
+	declare INITRD="false"
+	if [[ ${1} == --initrd ]]; then
+		INITRD="true"
+		shift
+	fi
 	mount_dev_dirs -u		|| return 1
 	${MKDIR} ${TARGET}/${_FINAL}	|| return 1
-	if [[ ! -f ${FILE}.xz ]]; then
+	if {
+		{ [[ ! -f ${CPIO_FILE}.xz ]] && ${INITRD}; } ||
+		{ [[ ! -f ${CPIO_FILE} ]] && ! ${INITRD}; }
+	}; then
 		#note: the "_packages" file is also hard-set in the "prepare_packages" function
 		(cd ${TARGET} && find ./ -mindepth 1 \
 			\( -path ./${CMTFIL}		-prune \) -o \
@@ -338,7 +356,6 @@ function _release_cpio {
 			\( -path ./var/lock/\*		-prune \) -o \
 			\( -path ./var/log/\*		-prune \) -o \
 			\( -path ./var/tmp/\*		-prune \) -o \
-			\
 		-print0)				>${CPIO_FILE}.nul	|| return 1
 		(cd ${TARGET} && ${XARGS} ${DU_S})	| tee ${CPIO_FILE}.txt	#>>> || return 1
 		sort -k4 -o ${CPIO_FILE}.txt		${CPIO_FILE}.txt	|| return 1
@@ -347,6 +364,8 @@ function _release_cpio {
 			${RM}				${CPIO_FILE}.dir	|| return 1
 			${MKDIR}			${CPIO_FILE}.dir	|| return 1
 			${CPIO_OUT}						|| return 1
+		fi
+		if [[ ${TARGET} != / ]] || ${INITRD}; then
 			${XZ} ${CPIO_FILE}		>${CPIO_FILE}.xz	|| return 1
 		fi
 		${RM}					${CPIO_FILE}.nul	|| return 1
@@ -404,14 +423,23 @@ function release_kernel_config {
 	return 0
 }
 
-function _release_kernel {
+function _release_kernel {	#{initrd}
+	declare INITRD="false"
+	if [[ ${1} == --initrd ]]; then
+		INITRD="true"
+		shift
+	fi
 	for FILE in ${KERNEL}; do NEXT="config-gentoo64-${FILE}"; FILE="/usr/src/linux-${FILE}-gentoo"; done
 	if [[ ${TARGET} == / ]]; then
 		FILE="/usr/src/linux"
 	fi
 	if [[ -d ${TARGET}${FILE} ]] && [[ ! -f ${TARGET}/${_FINAL}/${_RAMFS}.kernel ]]; then
 		release_kernel_shmmax								|| return 1
-		release_kernel_initramfs							|| return 1
+		if ${INITRD}; then
+			release_kernel_config							|| return 1
+		else
+			release_kernel_initramfs						|| return 1
+		fi
 		safe_make -C ${TARGET}${FILE}		bzImage					|| return 1
 #>>>		declare BZIMAGE="${TARGET}${FILE}/arch/x86/boot/bzImage"			|| return 1
 		declare BZIMAGE="${TARGET}${FILE}/arch/x86_64/boot/bzImage"			|| return 1
