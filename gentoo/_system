@@ -64,13 +64,13 @@ declare GOSPKG="${GOSPKG:-gary-os}"
 
 #SETTINGS[_TITLE _VERSN _RDATE]
 
-#VARIABLES[ETCDIR DSTDIR PAKDIR PDBDIR REPDIR WRKDIR]
+#VARIABLES[ETCDIR DSTDIR PAKDIR PDBDIR REPDIR TMPDIR]
 declare ETCDIR="/etc/portage"
 declare DSTDIR="/var/cache/portage/distfiles"
 declare PAKDIR="/var/cache/portage/packages"
 declare PDBDIR="/var/db/pkg"
 declare REPDIR="/var/git/meta-repo"
-declare WRKDIR="/var/tmp/portage"
+declare TMPDIR="/var/tmp/portage"
 
 #VARIABLES[LINDIR FUNDIR]
 declare LINDIR="linux"
@@ -825,7 +825,7 @@ if [[ ${1} == -l ]]; then
 			echo -en "https://gentoobrowse.randomdan.homeip.net/package/${NEXT}#bugs\n"
 			${LL} -d ${DSTDIR}/$(basename ${FILE})*
 			${LL} -d ${PAKDIR}/${NEXT}*
-			${LL} -d ${WRKDIR}/${NEXT}-[0-9]*/temp/build.log
+			${LL} -d ${TMPDIR}/${NEXT}-[0-9]*/temp/build.log
 			echo -en "${FILE}\n"
 			${LL} ${FILE}
 		fi
@@ -842,9 +842,9 @@ if [[ ${1} == -p ]]; then
 		EXIT 0
 	fi
 	shift
-	${LL} -d ${WRKDIR}
-	${LL} ${WRKDIR}
-	FILE="$(find ${WRKDIR}/[a-z]* -mindepth 1 -maxdepth 1 2>/dev/null | sort --unique)"
+	${LL} -d ${TMPDIR}
+	${LL} ${TMPDIR}
+	FILE="$(find ${TMPDIR}/[a-z]* -mindepth 1 -maxdepth 1 2>/dev/null | sort --unique)"
 	if [[ -n ${FILE} ]]; then
 		echo -en "\n"
 		${LL} -d ${FILE}
