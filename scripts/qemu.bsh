@@ -7,6 +7,12 @@ declare QMEM="${1}"			; shift
 declare QFIL="${1}"			; shift
 declare QSYS="${1}"			; shift
 
+declare IDE="false"
+if [[ ${1} == IDE ]]; then
+	IDE="true"
+	shift
+fi
+
 ################################################################################
 
 declare NUM_NET="0"
@@ -112,7 +118,11 @@ elif [[ -f ${I} ]]; then
 	QDSK+=" -device scsi-cd,drive=drive0,bootindex=2"
 elif [[ -b ${I} ]]; then
 	QDSK+=" -drive id=drive0,if=none,format=raw,file=${I}"
-	QDSK+=" -device scsi-hd,drive=drive0,bootindex=2"
+	if ${IDE}; then
+		QDSK+=" -device ide-hd,drive=drive0,bootindex=2"
+	else
+		QDSK+=" -device scsi-hd,drive=drive0,bootindex=2"
+	fi
 fi
 
 QDSK+=" -drive id=drive1,if=none,format=qcow2,file=${QNFL}"

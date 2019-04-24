@@ -74,7 +74,7 @@ fi
 #>>>	-cdrom /.g/_data/source/microsoft/en_windows_10_*_x64_*.iso \
 #>>>	-boot d \
 
-exec qemu.bsh "${QNUM}" "${QMEM}" "${QFIL}" "${QSYS}" \
+exec qemu.bsh "${QNUM}" "${QMEM}" "${QFIL}" "${QSYS}" IDE \
 	-rtc base=localtime,clock=host \
 	-device usb-host,bus=xhci0.0,vendorid=0x03f0,productid=0x5a2a \
 	-device usb-host,bus=xhci0.0,vendorid=0x03f0,productid=0x4605 \
