@@ -7,9 +7,9 @@ declare QMEM="${1}"			; shift
 declare QFIL="${1}"			; shift
 declare QSYS="${1}"			; shift
 
-declare IDE="false"
+declare DISK="scsi-hd"
 if [[ ${1} == IDE ]]; then
-	IDE="true"
+	DISK="ide-hd,bus=ide.0"
 	shift
 fi
 
@@ -115,14 +115,10 @@ elif [[ -n $(file -L ${I} 2>/dev/null | ${GREP} "DOS[/]MBR[ ]boot[ ]sector") ]];
 	QDSK+=" -device scsi-cd,drive=cdrom1,bootindex=2"
 elif [[ -f ${I} ]]; then
 	QDSK+=" -drive id=drive0,if=none,file=${I}"
-	QDSK+=" -device scsi-cd,drive=drive0,bootindex=2"
+	QDSK+=" -device ${DISK},drive=drive0,bootindex=2"
 elif [[ -b ${I} ]]; then
 	QDSK+=" -drive id=drive0,if=none,format=raw,file=${I}"
-	if ${IDE}; then
-		QDSK+=" -device ide-hd,drive=drive0,bootindex=2"
-	else
-		QDSK+=" -device scsi-hd,drive=drive0,bootindex=2"
-	fi
+	QDSK+=" -device ${DISK},drive=drive0,bootindex=2"
 fi
 
 QDSK+=" -drive id=drive1,if=none,format=qcow2,file=${QNFL}"
