@@ -2554,6 +2554,9 @@ function task-export-calendar {
 		"c|export.rachel:dHJlc29iaXMub3JnX3RoYTF1cjFnbzJpZDRlZGxkZHRnOW90YzlvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
 		"c|export.other:dHJlc29iaXMub3JnX28zZHBwNWNzbmIzaG1ocGV2czMxZDJrZGlvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
 		${@}
+	${WGET_C} --output-document \
+		${PIMDIR}/calendar-export.doodle.ics \
+		https://doodle.com/ics/mydoodle/j4afu5q0krixfr0gfm1iltcnl1rdpry9.ics
 	${SED} -i \
 		-e "s/^(DTSTAMP[:]).+$/\119700101T000000Z/g" \
 		calendar-export.*.ics
