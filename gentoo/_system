@@ -1015,6 +1015,11 @@ if [[ ${1} == -i ]]; then
 			${RSYNC_U} ${CFGSCR}		${TARGET}/${ARCDIR}/$(basename ${CFGSCR})			|| EXIT 1
 			safe_env			${ARCDIR}/$(basename ${CFGSCR})					|| EXIT 1
 		fi
+		FILE="${SETDIR}/${FUNDIR}.config"
+		if [[ -z ${_GOS} ]] && [[ -x ${FILE} ]]; then
+			${RSYNC_U} ${FILE}		${TARGET}/${ARCDIR}/$(basename ${FILE})				|| EXIT 1
+			safe_env			${ARCDIR}/$(basename ${FILE})					|| EXIT 1
+		fi
 	fi
 	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -f			|| EXIT 1
 	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -u			|| EXIT 1
