@@ -2,51 +2,213 @@
 # portage set configuration file
 ################################################################################
 #
-# [disable 'nomodeset' kernel option]
+# - source /.gary-os/.bashrc
+# - set -e
+# - set -x
 #
-# dhcpcd eth0
-# ln -fsv /usr/share/zoneinfo/US/Pacific /etc/localtime
-# ntpdate -v -b pool.ntp.org
+########################################
 #
-# mkdir -pv /.g/.home ; rm -frv /root ; ln -fsv /.g/.home /root
-# mount /dev/sdX /mnt ; rsync -avv /mnt/.home/ /.g/.home ; umount /mnt
-#	rsync -avv root@me.garybgenett.net:/.g/.home/ /.g/.home
-# passwd
+#note: turn this file into a script by removing "^# - " from the desired command lines
+#note: you almost certainly want to uncomment all of the ones at the top of the file
 #
-# [login]
-#	rsync -avv root@me.garybgenett.net:/.g/_data/zactive/.history/shell/gary-os.* /.g/.home/.history/shell/
-# smount lackey sdX
+# rsync -avv /.gary-os/gentoo/sets/_gary-os /
+# vi -c "set nowrap" /_gary-os
+# HOME=/.gary-os bash /_gary-os
 #
-# mount --bind /.g/lackey_data/_builds/_gentoo/usr/portage /usr/portage
-#	tar -C /usr -xvvf /.g/lackey_boot/live/gary-os.portage.tar.xz
-#	vi /etc/portage/make.conf /.g/.home/setup/gentoo/make.conf (USE, ACCEPT_KEYWORDS, VIDEO_CARDS)
-#	vi /usr/lib/portage/pym/portage/package/ebuild/fetch.py
-#	emerge sshfs autossh openssh openssl
-#		rsync root@me.garybgenett.net:/.g/_data/_builds/_metro/.distfiles/{autossh,openssh,openssl}* /usr/portage/distfiles/
-#	emerge --sync ; (cd /usr/portage && /usr/bin/git reset --hard $(cat /.g/.home/setup/gentoo/funtoo))
-#	sshfs -o nonempty root@me.garybgenett.net:/usr/portage/packages /usr/portage/packages
-# rsync /.g/.home/setup/gentoo/{make,package,sets}* /etc/portage/
-# emerge --update --deep --newuse --usepkg @metro @gary-os
-#	emerge xorg-x11 xorg-server xorg-drivers $(qlist --nocolor --installed x11-drivers) xautolock xlockmore
-# rm -frv /tmp/.ccache
-# umount /usr/portage
-#	umount /usr/portage/packages
+########################################
 #
-# trust
-# shell -i
-# vpn -a
-# vpn -v
+# (source /.gary-os/.bashrc && shell -i)
+# rsync -avv -L --filter="-_/sources" --filter="-_/build" root@me.garybgenett.net:/.g/_data/zactive/.setup/gentoo.gary-os/ /.gary-os
 #
-# smount x sdX
-# rm -frv /.g/.home/.history/screen
+################################################################################
+# beginning of scripting
+################################################################################
 #
-# rm -frv /.g/.home/.thunderbird ; ln -fsv .mozilla/thunderbird /.g/.home/.thunderbird
-# _sync _moz /.g/.home/.mozilla
+# [globals]
+# - declare GARYOS_VER="v4.0"
+# - declare ESUB="generic_64"
+# - declare GOPTS=""
+# - declare USB_SOURCE="sda1"
+# - declare FUSE_DIR="/tmp/.fuse"
+# - declare GRUB_DIR="/tmp/.grub"
+# - declare USB_DIST="gary-os/_distfiles"
+# - declare USB_PACK="gary-os/_packages"
+# - declare SSH_SOURCE="root@me.garybgenett.net"
+# - declare SSH_DIST="/.g/_data/_builds/.gary-os.release/_distfiles"
+# - declare SSH_PACK="/.g/_data/_builds/.gary-os.release/_packages"
+# - declare RUNSV="/.runit/runsvdir/current"
 #
-# psk _menu ; psk X ; rm -frv /tmp/.{X,ICE}*
-#	prompt -d -x ; xhost + ; xrandr
-# startx &
+# [overrides]
+# - declare USB_SOURCE="nvme0n1p1"
+# - declare SSH_DIST="/.g/_data/_builds/_gary-os.working/var/cache/portage/distfiles"
+# - declare SSH_PACK="/.g/_data/_builds/_gary-os.working/var/cache/portage/packages"
+# - declare GOPTS="console=ttyS0,38400"
 #
+# [commands]
+# - mount -o remount,size=8g / && df /
+#
+########################################
+# basic setup
+########################################
+#
+# [network]
+# - rc-update add wpa_supplicant default && rc-service wpa_supplicant start
+# - rc-update add dhcpcd default && rc-service dhcpcd start
+#
+# [remote]
+# - sed -i -r "s|^.*(PermitRootLogin).*$|\1 yes|g" /etc/ssh/sshd_config
+# - rc-update add sshd default && rc-service sshd start
+# - passwd
+#
+# [time]
+# - ln -fsv /usr/share/zoneinfo/US/Pacific /etc/localtime
+# - ntpdate -v -b pool.ntp.org
+#
+# [emerge]
+# * https://wiki.archlinux.org/index.php/Overlay_filesystem
+# <setup>
+# - make -f /.gary-os/Makefile O=/ unpack
+# - modprobe fuse overlay
+# - mkdir -pv ${FUSE_DIR}-{mount,dist{,-over,-work},pack{,-over,-work}} /var/cache/portage/{distfiles,packages}
+# <usb>
+# - mount -o rw /dev/${USB_SOURCE} ${FUSE_DIR}-mount
+# - mount -o ro,bind,nonempty ${FUSE_DIR}-mount/${USB_DIST} ${FUSE_DIR}-dist
+# - mount -o ro,bind,nonempty ${FUSE_DIR}-mount/${USB_PACK} ${FUSE_DIR}-pack
+# <ssh>
+# - prompt -z emerge --ask=n sshfs
+# - sshfs -o ro,nonempty ${SSH_SOURCE}:${SSH_DIST} ${FUSE_DIR}-dist
+# - sshfs -o ro,nonempty ${SSH_SOURCE}:${SSH_PACK} ${FUSE_DIR}-pack
+# <mount>
+# - mount -t overlay overlay -o lowerdir=${FUSE_DIR}-dist,upperdir=${FUSE_DIR}-dist-over,workdir=${FUSE_DIR}-dist-work /var/cache/portage/distfiles
+# - mount -t overlay overlay -o lowerdir=${FUSE_DIR}-pack,upperdir=${FUSE_DIR}-pack-over,workdir=${FUSE_DIR}-pack-work /var/cache/portage/packages
+# - mount
+# <install>
+# - prompt -z emerge --usepkg=y --deep --newuse --update \@_gary-os
+# <umount>
+# - umount ${FUSE_DIR}-{mount,dist{,-over,-work},pack{,-over,-work}} /var/cache/portage/{distfiles,packages} || true
+# - mount
+#
+# [xorg]
+# <setup>
+# - export DISPLAY=:0
+# - vi /etc/env.d/90xsession
+# - env-update
+# <run>
+# - exec -l startx &
+# - sleep 1
+# - xrandr --query
+# - xrandr --output Virtual-0 --mode 1280x1024
+# <qemu>
+# - rc-update add spice-vdagent default && rc-service spice-vdagent start
+# - spice-vdagent
+#
+# [finish]
+# - rc-status
+# - exit 0
+#
+########################################
+# personal setup
+########################################
+#
+# [home]
+# <setup>
+# - export HOME=/.g/.home
+# - cd / && mkdir -pv ${HOME} && rsync -avv /root/ ${HOME} && rm -frv /root && ln -fsv ${HOME} /root && cd -
+# <usb>
+# - rsync -avv ${FUSE_DIR}-mount/.home/ ${HOME}
+# <ssh>
+# - rsync -avv /.gary-os/.bashrc ${HOME}/
+# - mkdir -pv ${HOME}/scripts
+# - rsync -avv root@me.garybgenett.net:/.g/_data/zactive/.static/scripts/_sync ${HOME}/scripts/
+# - _sync _home ${HOME}
+#
+# [auth]
+# - shell -i
+# - rsync -avv root@me.garybgenett.net:/.g/_data/zactive/.static/_secure/.ssh/remote_id* ${HOME}/.ssh/
+#
+# [history]
+# - mkdir -pv ${HOME}/.history/shell
+# - rsync -avv root@me.garybgenett.net:/.g/_data/zactive/.history/shell/gary-os.* ${HOME}/.history/shell/
+#
+# [vpn]
+# - _sync archive
+# - vpn -a || true
+# - vpn -v || true
+#
+# [config]
+# - _sync _moz _clone ${HOME}/.mozilla
+# - rm -frv ${HOME}/.thunderbird && ln -fsv .mozilla/thunderbird ${HOME}/.thunderbird
+#
+# [runit]
+# * https://wiki.gentoo.org/wiki/Runit#openrclaunch
+# - SETUP=${HOME}/setup ${HOME}/setup/.setconf -r
+# - rm -frv ${RUNSV}
+# - mkdir -pv ${RUNSV}
+# - ln -fsv ../../services/autossh		${RUNSV}/
+# - ln -fsv ../../services/dhcpcd		${RUNSV}/
+# - ln -fsv ../../services/klogd		${RUNSV}/
+# - ln -fsv ../../services/ntpd			${RUNSV}/
+# - ln -fsv ../../services/openvpn		${RUNSV}/
+# - ln -fsv ../../services/sshd			${RUNSV}/
+# - ln -fsv ../../services/syslogd		${RUNSV}/
+# - ln -fsv ../../services/wpa_supplicant	${RUNSV}/
+# - sed -i -r "s|/usr/bin/runsvdir|/bin/runsvdir|g"		/etc/init.d/runsvdir
+# - sed -i -r "s|[$][{]?RC_SVCDIR[}]?/sv|${RUNSV}|g"	/etc/init.d/runsvdir
+# - rc-update add runsvdir default && rc-service runsvdir start
+# - vpn -v || true
+#
+# [extra]
+# - [[ -n ${USB_SOURCE} ]] && _sync mount shadow ${USB_SOURCE/%[0-9]}
+#
+# [finish]
+# - rc-status
+# - exit 0
+#
+########################################
+# build a build
+########################################
+#
+# [drive]
+# <setup>
+# - mkdir -pv ${GRUB_DIR}
+# <format>
+# - umount /dev/${USB_SOURCE} || true
+# - (cd ${GRUB_DIR} && /.gary-os/scripts/grub.sh -d5 -fv /dev/${USB_SOURCE} ${GOPTS})
+# - (cd ${GRUB_DIR} && /.gary-os/scripts/grub.sh -d5 -f /dev/${USB_SOURCE} ${GOPTS})
+# - gdisk -l /dev/${USB_SOURCE}
+# <install>
+# - mount /dev/${USB_SOURCE} ${GRUB_DIR} || true
+# - mkdir -pv ${GRUB_DIR}/gary-os.grub
+# - (cd ${GRUB_DIR}/gary-os.grub && /.gary-os/scripts/grub.sh /dev/${USB_SOURCE} ${GOPTS})
+# <umount>
+# - umount /dev/${USB_SOURCE} || true
+# - mount
+#
+# [package]
+# <setup>
+# - mkdir -pv /.gary-os-${ESUB}
+# - mount -o rw /dev/${USB_SOURCE} /.gary-os-${ESUB} || true
+# <link>
+# - rm -frv /.gary-os-${ESUB}/linux /usr/src/linux
+# - make -f /.gary-os/Makefile O=/ unpack
+# - mv -iv /usr/src/linux /.gary-os-${ESUB}/linux
+# - ln -fsv /.gary-os-${ESUB}/linux /usr/src/linux
+# <build>
+# - make -f /.gary-os/Makefile O=/ P=_gary-os release
+# - make -f /.gary-os/Makefile O=/ P=_gary-os initrd
+# <copy>
+# - rsync -avv /.gary-os-${ESUB}/gary-os-${ESUB}-${GARYOS_VER}.kernel /.gary-os-${ESUB}/gary-os.kernel || true
+# - rsync -avv /.gary-os-${ESUB}/gary-os-${ESUB}-${GARYOS_VER}.cpio.xz /.gary-os-${ESUB}/gary-os.initrd || true
+# <umount>
+# - umount /.gary-os-${ESUB} || true
+# - mount
+#
+# [finish]
+# - rc-status
+# - exit 0
+#
+################################################################################
+# end of scripting
 ################################################################################
 
 @gary-os
@@ -83,6 +245,8 @@
 
 #{WINMGR} dwm
 #{WMHELP} gary-os / \`date --iso=s\`
+
+x11-base/xorg-x11
 
 x11-misc/obconf
 x11-wm/openbox
