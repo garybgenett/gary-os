@@ -662,6 +662,8 @@ if [[ ${1} == -s ]]; then
 	mount_dev_dirs					|| EXIT 1
 	if [[ ${1} == -e ]]; then
 		shift
+		#note: ensuring configuration is up-to-date
+		${_SELF} ${QUIET_OPT} ${TOOR} -r	|| EXIT 1
 		expect_wrapper emerge ${_ASK} "${@}"	|| EXIT 1
 	else
 		safe_env bash --norc ${@:+-c "${@}"}	|| EXIT 1
@@ -674,6 +676,8 @@ fi
 
 if [[ ${1} == -y ]]; then
 	shift
+	#note: ensuring configuration is up-to-date
+	${_SELF} ${QUIET_OPT} ${TOOR} -r		|| EXIT 1
 	if [[ ${1} == -j ]]; then
 		shift
 		if [[ ${1} == depends ]] || [[ ${1} == d ]]; then
@@ -681,17 +685,17 @@ if [[ ${1} == -y ]]; then
 			safe_env equery depends \
 				--indirect \
 				--depth=3 \
-				"${@}"					|| EXIT 1
+				"${@}"			|| EXIT 1
 		elif [[ -n ${1} ]]; then
 			safe_env equery \
-				"${@}"					|| EXIT 1
+				"${@}"			|| EXIT 1
 		else
 			safe_env emerge ${_ASK} \
 				--pretend \
 				--emptytree \
 				--tree \
 				--unordered-display \
-				\@system \@world			|| EXIT 1
+				\@system \@world	|| EXIT 1
 		fi
 		EXIT 0
 	fi
@@ -787,6 +791,7 @@ if [[ ${1} == -o ]]; then
 	FILE="$(${LS} -d ${FILE}/${LAYDIR}/*/${2} | ${SED} "s|^${FILE}/${LAYDIR}/||g")"
 	NEXT="$(dirname ${FILE})"
 	if ${DO_CHROOT}; then
+		#note: ensuring configuration is up-to-date
 #>>>		safe_env ${MYSELF} ${QUIET_OPT} ${TOOR} -r									|| EXIT 1
 		${_SELF} ${QUIET_OPT} ${TOOR} -r										|| EXIT 1
 		${MKDIR}	${TARGET}${ETCDIR}/${LAYDIR}/${NEXT}								|| EXIT 1
