@@ -126,8 +126,12 @@ function prepare_config_issue {
 			-e "s|^.+[ ]Additional[ ]information[ ].+$|${FILE}|g" \
 			${TARGET}/etc/issue \
 			|| return 1
-		return 0
 	fi
+	${SED} \
+		-e "s|[\]e[[]([0-9]+[;])?[0-9]+[;][0-9]+m||g" \
+		-e "/^[\][a-z]/d" \
+		/etc/issue >/etc/motd \
+		|| return 1
 	return 0
 }
 
@@ -154,7 +158,7 @@ function _prepare_config {
 		-e "/xset[ ][-]b/d"											\
 		-e "/xsetroot[ ][-]mod/d"										\
 		-e "s|^(exec.*dwm.*)$|${FILE}\1|g"									\
-		${TARGET}/etc/X11/Sessions/dwm										|| return 1
+										${TARGET}/etc/X11/Sessions/dwm		|| return 1
 	${SED} -i -e "s|^(.*xsetroot[ ][-]name[ ]).*$|\1\"${WMHELP}\"|g"	${TARGET}/etc/X11/Sessions/dwm		|| return 1
 	echo -en "XSESSION=\"${WINMGR}\"\n"					>${TARGET}/etc/env.d/90xsession		|| return 1
 	safe_env								/usr/sbin/env-update			|| return 1
