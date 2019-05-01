@@ -4330,14 +4330,15 @@ fi
 
 ################################################################################
 
-if [[ "${-/i}" != "${-}" ]] && {
-   [[ -f /.g/_data/zactive.workspace ]] ||
-   [[ -f /.g/_data/zactive.workspace.config ]];
-}; then
+if [[ "${-/i}" != "${-}" ]]; then
 	echo -en "\n"
 	echo -en "\e[37;44m"
-	${LL} /.g/_data/zactive.workspace*
+	${LL} --directory \
+		/.g/_data/zactive.workspace* \
+		/.g/_toor/.workspace* \
+		2>/dev/null
 	echo -en "\e[0m"
+	echo -en "\n"
 fi
 
 ########################################
