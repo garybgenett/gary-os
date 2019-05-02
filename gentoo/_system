@@ -271,10 +271,10 @@ function clear_environment {
 		))$"
 	); do
 		if [[ -z ${QUIET} ]]; then
-#>>>			echo -en "${FILE}=${!FILE}\n" | ${GREP} "[=].*$"	1>&2
-			echo -en "${FILE}=${!FILE}\n" | ${GREP} "[=].+$"	1>&2
+#>>>			echo -en "${FILE}=${!FILE}\n" | ${GREP} "[=].*$"
+			echo -en "${FILE}=${!FILE}\n" | ${GREP} "[=].+$"
 		fi
-		unset ${FILE}							1>&2
+		unset ${FILE}
 	done
 	return 0
 }
@@ -599,8 +599,7 @@ source ${SETDIR}/${FUNDIR}/${MAKEIT} || EXIT 1
 if [[ -n ${DEBUG} ]]; then
 	if [[ -n ${QUIET} ]] && ${DO_CHROOT}; then
 		safe_env ${MYSELF} ${DEBUG_OPT} ${TOOR} "${@}" || EXIT 1
-#>>>		EXIT 0
-		exit 0
+		EXIT 0
 	fi
 fi
 
@@ -615,8 +614,7 @@ if [[ -n ${DEBUG} ]]; then
 		set -x
 		safe_env ${MYSELF} ${DEBUG_OPT} ${TOOR} "${@}" || EXIT 1
 	fi
-#>>>	EXIT 0
-	exit 0
+	EXIT 0
 fi
 
 ########################################
