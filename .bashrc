@@ -2839,6 +2839,7 @@ function task-export-text {
 			"travel"	=> "cyan",
 			"work"		=> "brown",
 			"work-em"	=> "brown",
+			"work.bz"	=> "brown",
 			"work.cn"	=> "brown",
 			"work.em"	=> "brown",
 			"work.f5"	=> "brown",
