@@ -97,7 +97,7 @@ endif
 	@$(ECHO) "\n"
 	@$(ECHO) "$(STATE)For more options and build tools, use the \"_system\" script directly:$(RESET)\n"
 	@$(ECHO) "\n"
-	@$(ECHO) "$(HOWTO)make help 2>&1 | less$(RESET)\n"
+	@$(ECHO) "$(HOWTO)make help | less$(RESET)\n"
 	@$(ECHO) "\n"
 	@$(ECHO) "$(STATE)Both methods are supported ways of using the GaryOS build system.$(RESET)\n"
 	@$(ECHO) "\n"
