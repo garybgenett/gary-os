@@ -3995,7 +3995,8 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 	declare FILE=
 	unalias -a
 	function impersonate_command {
-		declare MARKER='echo -en "\e[1;34m"; printf "~%.0s" {1..120}; echo -en "\e[0;37m\n"'
+		declare COLWID="120"
+		declare MARKER='echo -en "\e[1;34m"; printf "~%.0s" {1..${COLWID}}; echo -en "\e[0;37m\n"'
 		declare TASKFILE="$(task _get rc.data.location)"
 		declare TASKUUID="$(task uuids project:_data -- /.review/)"
 		declare WORKUUID="$(task uuids project:_data -- /.status/)"
@@ -4013,11 +4014,11 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			if [[ ${1} == [=]+(*) ]]; then
 				FILLER="${1/#=}"; shift
 			fi
-			declare BEG="$(declare NUM; for NUM in $(eval echo "{1..${INDENT}}");	do echo -en "${FILLER}"; done)"
-			declare END="$(declare NUM; for NUM in {1..120};			do echo -en "${FILLER}"; done)"
+			declare BEG="$(declare NUM; for NUM in $(eval echo "{1..${INDENT}}"); do echo -en "${FILLER}"; done)"
+			declare END="$(declare NUM; for NUM in $(eval echo "{1..${COLWID}}"); do echo -en "${FILLER}"; done)"
 			eval ${MARKER}
 			echo -en "${ECHO_CLR}"
-			eval printf \"%-120.120s\" \"${BEG} ${@} ${END}\"
+			eval printf \"%-${COLWID}.${COLWID}s\" \"${BEG} ${@} ${END}\"
 			echo -en "${ECHO_DFL}"
 			echo -en "\n"
 		}
@@ -4029,6 +4030,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			task \
 				rc._forcecolor=1 \
 				rc.verbose=nothing \
+				rc.defaultwidth=${COLWID} \
 				"${@}" 2>&1
 		}
 		function _task_parse {
