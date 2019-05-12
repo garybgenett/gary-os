@@ -4030,6 +4030,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			task \
 				rc._forcecolor=1 \
 				rc.verbose=nothing \
+				rc.detection=0 \
 				rc.defaultwidth=${COLWID} \
 				"${@}" 2>&1
 		}
