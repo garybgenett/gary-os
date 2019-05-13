@@ -3995,8 +3995,8 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 	declare FILE=
 	unalias -a
 	function impersonate_command {
-		declare COLWID="120"
-		declare MARKER='echo -en "\e[1;34m"; printf "~%.0s" {1..${COLWID}}; echo -en "\e[0;37m\n"'
+		declare COLWID="160"
+		declare MARKER='echo -en "\e[1;34m"; eval printf "~%.0s" {1..${COLWID}}; echo -en "\e[0;37m\n"'
 		declare TASKFILE="$(task _get rc.data.location)"
 		declare TASKUUID="$(task uuids project:_data -- /.review/)"
 		declare WORKUUID="$(task uuids project:_data -- /.status/)"
