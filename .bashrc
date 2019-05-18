@@ -2378,8 +2378,8 @@ function vpn {
 function zpim-commit {
 	declare RETURN
 	cd ${PIMDIR}
-	chown -R plastic:plastic ${PIMDIR}
-	chmod -R 750 ${PIMDIR}
+	chown -R plastic:plastic ${PIMDIR}{,.git}
+	chmod -R 750 ${PIMDIR}{,.git}
 	chmod 755 \
 		${PIMDIR} \
 		${PIMDIR}/tasks* \
