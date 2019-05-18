@@ -2366,7 +2366,9 @@ function vpn {
 		iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 		echo "1" >/proc/sys/net/ipv4/ip_forward
 		/etc/init.d/openvpn restart
-		tail --follow /var/log/syslog
+		(tail --follow /var/log/syslog &)
+		read ENTER
+		psk /var/log/syslog
 	fi
 	return 0
 }
