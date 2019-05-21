@@ -802,6 +802,7 @@ function swint {
 		${HOME}/scripts/fw.${HOSTNAME} \
 		${HOME}/scripts/ip.${HOSTNAME} \
 		/.runit/_config/dhclient \
+		/.runit/_config/dhcpcd \
 		/.runit/_config/tcpdump
 	if [[ -n ${WID} ]] && [[ -n ${WPW} ]]; then
 		${SED} -i \
