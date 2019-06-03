@@ -3972,6 +3972,21 @@ function task-insert {
 
 ########################################
 
+function task-project {
+	declare PROJ=
+	for PROJ in "${@}"; do
+		if [[ ${PROJ} == - ]]; then
+			PROJ=" status:pending"
+		fi
+		task read	project.is:${PROJ}
+		task-depends	project.is:${PROJ}
+		task view	project.is:${PROJ}
+	done
+	return 0
+}
+
+########################################
+
 function task-flush {
 	declare FILE=
 	for FILE in "${@}"; do
@@ -4278,12 +4293,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			task-insert "${@}"
 		elif [[ ${1} == [p] ]]; then
 			shift
-			declare FILE=
-			for FILE in "${@}"; do
-				task read	project.is:${FILE}
-				task-depends	project.is:${FILE}
-				task view	project.is:${FILE}
-			done
+			task-project "${@}"
 		elif [[ ${1} == [f] ]]; then
 			shift
 			task status.isnt:pending priority.any: read
