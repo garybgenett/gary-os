@@ -3979,8 +3979,8 @@ function task-project {
 			PROJ=" status:pending"
 		fi
 		task read	project.is:${PROJ}
-		task-depends	project.is:${PROJ}
 		task view	project.is:${PROJ}
+		task-depends	project.is:${PROJ}
 	done
 	return 0
 }
@@ -4083,8 +4083,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 					-e "s/^[=](.*)/_echo\ \1/g" \
 					-e "s/^[+]//g" \
 					-e "s/^[.]/impersonate_command /g" \
-					-e "s/^(impersonate_command|task[-])/eval\ \${MARKER}\;\ \1/g" \
-					-e "s/(impersonate_command|task[-])/IMPERSONATE_NAME=task .bashrc \1/g" \
+					-e "s/(impersonate_command|task[-])/eval\ \${MARKER}\;\ IMPERSONATE_NAME=task .bashrc \1/g" \
 					-e "s/$/;/g"
 		}
 		if [[ ${1} == "RESET" ]]; then
