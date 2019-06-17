@@ -2379,9 +2379,9 @@ function vpn {
 function zpim-commit {
 	declare RETURN
 	cd ${PIMDIR}
-	chown -R plastic:plastic ${PIMDIR}{,.git}
-	chmod -R 750 ${PIMDIR}{,.git}
-	chmod 755 \
+	sudo chown -R plastic:plastic ${PIMDIR}{,.git}
+	sudo chmod -R 750 ${PIMDIR}{,.git}
+	sudo chmod 755 \
 		${PIMDIR} \
 		${PIMDIR}/tasks* \
 		${PIMDIR}/zoho*
