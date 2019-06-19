@@ -76,12 +76,12 @@ fi
 
 exec qemu.bsh "${QNUM}" "${QMEM}" "${QFIL}" "${QSYS}" IDE \
 	-rtc base=localtime,clock=host \
-	-device usb-host,bus=xhci0.0,vendorid=0x03f0,productid=0x5a2a \
-	-device usb-host,bus=xhci0.0,vendorid=0x03f0,productid=0x4605 \
-	-device usb-host,bus=xhci0.0,vendorid=0x043d,productid=0x00cc \
-	-device usb-host,bus=xhci0.0,vendorid=0x0d8c,productid=0x0139 \
-	-device usb-host,bus=xhci0.0,vendorid=0x0781,productid=0x5530 \
 	"${@}"
+#>>>	-device usb-host,bus=xhci0.0,vendorid=0x03f0,productid=0x5a2a \
+#>>>	-device usb-host,bus=xhci0.0,vendorid=0x03f0,productid=0x4605 \
+#>>>	-device usb-host,bus=xhci0.0,vendorid=0x043d,productid=0x00cc \
+#>>>	-device usb-host,bus=xhci0.0,vendorid=0x0d8c,productid=0x0139 \
+#>>>	-device usb-host,bus=xhci0.0,vendorid=0x0781,productid=0x5530 \
 
 ################################################################################
 # end of file
