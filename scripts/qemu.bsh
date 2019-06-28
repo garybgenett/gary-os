@@ -62,10 +62,11 @@ declare QNSZ="100G"
 
 declare QKRN=
 declare QDSK=
+
 declare QMCH=
 declare QVDA=
-declare QUSB=
 declare QNET=
+declare QUSB=
 
 declare I=
 declare T=
@@ -156,16 +157,6 @@ QVDA+=" -device virtserialport,chardev=spicevmc0,bus=virtio-serial0.0,nr=1,name=
 
 ########################################
 
-# http://www.kraxel.org/cgit/qemu/tree/docs/usb2.txt
-
-QUSB="-usb"
-QUSB+=" -device usb-mouse,bus=usb-bus.0"
-QUSB+=" -device usb-tablet,bus=usb-bus.0"
-
-QUSB+=" -device nec-usb-xhci,id=xhci0"
-
-########################################
-
 QNET="-netdev user"
 QNET+=",id=user0"
 QNET+=",net=10.0.0.0/16"
@@ -209,6 +200,16 @@ for I in $(eval echo -en "{0..${NUM_NET}}"); do
 	fi
 done
 
+########################################
+
+# http://www.kraxel.org/cgit/qemu/tree/docs/usb2.txt
+
+QUSB="-usb"
+QUSB+=" -device usb-mouse,bus=usb-bus.0"
+QUSB+=" -device usb-tablet,bus=usb-bus.0"
+
+QUSB+=" -device nec-usb-xhci,id=xhci0"
+
 ################################################################################
 
 eval exec qemu-system-x86_64 \
@@ -216,23 +217,25 @@ eval exec qemu-system-x86_64 \
 	-nodefaults \
 	-nodefconfig \
 	-no-user-config \
-	${QMCH} \
+	\
+	${QMCH} -m ${QMEM} \
 	-monitor telnet:127.0.0.1:999${QNUM},server,nowait \
 	-serial telnet:127.0.0.1:990${QNUM},server,nowait \
 	-rtc base=utc,clock=host \
 	-smp cpus=2,sockets=2,cores=1,threads=1 \
 	-realtime mlock=off \
-	-m ${QMEM} \
-	${QNET} \
 	-display curses \
 	-vnc 127.0.0.1:9${QNUM} \
 	-spice addr=127.0.0.1,port=666${QNUM},disable-ticketing \
 	${QVDA} \
 	-vga qxl \
-	-soundhw all \
+	${QNET} \
 	${QUSB} \
-	${QDSK} \
+	-soundhw all \
+	\
 	${QKRN} \
+	${QDSK} \
+	\
 	"${@}" \
 	-writeconfig "${QOUT}" ${FORK}
 
