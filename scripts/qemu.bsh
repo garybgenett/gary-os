@@ -64,9 +64,12 @@ declare QKRN=
 declare QDSK=
 
 declare QMCH=
+declare QMON=
 declare QVDA=
+declare QVGA=
 declare QNET=
 declare QUSB=
+declare QSND=
 
 declare I=
 declare T=
@@ -143,6 +146,15 @@ else
 	QMCH+=" -cpu qemu64"
 fi
 
+QMCH+=" -rtc base=utc,clock=host"
+QMCH+=" -smp cpus=2,sockets=2,cores=1,threads=1"
+QMCH+=" -realtime mlock=off"
+
+########################################
+
+QMON="-monitor telnet:127.0.0.1:999${QNUM},server,nowait"
+QMON+=" -serial telnet:127.0.0.1:990${QNUM},server,nowait"
+
 ########################################
 
 # http://www.linux-kvm.org/page/SPICE
@@ -151,9 +163,19 @@ fi
 # SPICE Channel: vdagent
 # SPICE Device: com.redhat.spice.0
 
-QVDA="-device virtio-serial,id=virtio-serial0"
+QVDA="-spice addr=127.0.0.1,port=666${QNUM},disable-ticketing"
+QVDA+=" -device virtio-serial,id=virtio-serial0"
 QVDA+=" -chardev spicevmc,id=spicevmc0,name=vdagent"
 QVDA+=" -device virtserialport,chardev=spicevmc0,bus=virtio-serial0.0,nr=1,name=com.redhat.spice.0"
+
+########################################
+
+QVGA="-display curses"
+QVGA+=" -vga qxl"
+QVGA+=" -device qxl,id=qxl0,max_outputs=1"
+QVGA+=" -device qxl,id=qxl1,max_outputs=1"
+QVGA+=" -device qxl,id=qxl2,max_outputs=1"
+QVGA+=" -vnc 127.0.0.1:9${QNUM}"
 
 ########################################
 
@@ -210,6 +232,10 @@ QUSB+=" -device usb-tablet,bus=usb-bus.0"
 
 QUSB+=" -device nec-usb-xhci,id=xhci0"
 
+########################################
+
+QSND="-soundhw all"
+
 ################################################################################
 
 eval exec qemu-system-x86_64 \
@@ -219,22 +245,12 @@ eval exec qemu-system-x86_64 \
 	-no-user-config \
 	\
 	${QMCH} -m ${QMEM} \
-	-monitor telnet:127.0.0.1:999${QNUM},server,nowait \
-	-serial telnet:127.0.0.1:990${QNUM},server,nowait \
-	-rtc base=utc,clock=host \
-	-smp cpus=2,sockets=2,cores=1,threads=1 \
-	-realtime mlock=off \
-	-display curses \
-	-vnc 127.0.0.1:9${QNUM} \
-	-spice addr=127.0.0.1,port=666${QNUM},disable-ticketing \
+	${QMON} \
 	${QVDA} \
-	-vga qxl \
-	-device qxl,id=qxl0,max_outputs=1 \
-	-device qxl,id=qxl1,max_outputs=1 \
-	-device qxl,id=qxl2,max_outputs=1 \
+	${QVGA} \
 	${QNET} \
 	${QUSB} \
-	-soundhw all \
+	${QSND} \
 	\
 	${QKRN} \
 	${QDSK} \
