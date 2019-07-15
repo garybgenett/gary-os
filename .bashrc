@@ -4329,12 +4329,14 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				shift
 				task view \
 					${OPTS} \
-					project.isnt:em.opsmgr \
-					project.isnt:em.tasks.opsmgr \
-					project.isnt:em.tasks.track \
 					area.isnt:computer \
 					area.isnt:writing \
+					tag.isnt:.research \
 					tag.isnt:.waiting \
+					tag.isnt:agenda \
+					tag.isnt:errand \
+					tag.isnt:home \
+					tag.isnt:paperwork \
 					"${@}" 2>/dev/null
 			else
 				task todo \
