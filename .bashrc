@@ -65,7 +65,7 @@ else
 fi
 export UNAME="$(uname -s)"
 
-export COMPOSER="/.g/_data/zactive/coding/composer/Makefile"
+export COMPOSER="/.g/_data/zactive/coding/composer/Makefile";	alias composer="make -f ${COMPOSER}"
 export PIMDIR="/.g/_data/zactive/_pim"
 export MAILDIR="${HOME}/Maildir"
 export MAILCAPS="${HOME}/.mailcap"
