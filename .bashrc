@@ -2849,6 +2849,7 @@ function task-export-text {
 			"work.jb"	=> "brown",
 			"work.me"	=> "brown",
 			"work.tk"	=> "brown",
+			"work.vn"	=> "brown",
 			"writing"	=> "magenta",
 		};
 		my $udas = [ qx(task udas) ];
