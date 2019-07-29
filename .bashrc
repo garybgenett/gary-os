@@ -3815,7 +3815,7 @@ function task-recur {
 		if (@{$keys}) {
 			# report.dump.labels=ID,B,U,S,D,DESCRIPTION,PROJECT,KIND,AREA,TAGS,A,R,P,+STAT,+BORN,+WAIT,+HOLD,+REAP,+MOVE,+DEAD,+DIED,+UUID,+PUID,+I,+M
 			print "\n";
-			print "| +UUID | PROJECT | +DIED | +STAT | R | DESCRIPTION\n";
+			print "| +UUID | PROJECT | +STAT | R | +DIED | DESCRIPTION\n";
 			print "|:---|:---|:---|:---|:---|:---|\n";
 		};
 		# report.dump.sort=entry+
@@ -3823,9 +3823,9 @@ function task-recur {
 			my $item = $list->{$key};
 			print "| "; printf("%-8.8s", $item->{"uuid"});
 			print " | "; printf("%-" . $c_fld->{"project"} . "." . $c_fld->{"project"} . "s", $item->{"project"} || "-");
-			print " | "; printf("%-10.10s", &do_time($item->{"end"}) || "-");
 			print " | "; printf("%-9.9s", $item->{"status"});
 			print " | "; printf("%-9.9s", $item->{"recur"});
+			print " | "; printf("%-10.10s", &do_time($item->{"end"}) || "-");
 			print " | ". $item->{"description"};
 			print "\n";
 			$count->{$item->{"uuid"}}++;
