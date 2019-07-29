@@ -3980,9 +3980,9 @@ function task-project {
 		if [[ ${PROJ} == - ]]; then
 			PROJ=" status:pending"
 		fi
-		task read	project.is:${PROJ}
-		task view	project.is:${PROJ}
-		task-depends	project.is:${PROJ}
+		task read	project.is:${PROJ} -PARENT -CHILD
+		task view	project.is:${PROJ} -PARENT -CHILD
+		task-depends	project.is:${PROJ} -PARENT -CHILD
 	done
 	return 0
 }
