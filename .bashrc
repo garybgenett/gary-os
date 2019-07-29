@@ -4330,14 +4330,15 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				shift
 				task view \
 					${OPTS} \
-					area.isnt:computer \
-					area.isnt:writing \
-					tag.isnt:.research \
-					tag.isnt:.waiting \
-					tag.isnt:agenda \
-					tag.isnt:errand \
-					tag.isnt:home \
-					tag.isnt:paperwork \
+					\( \
+						area.isnt:computer \
+						area.isnt:writing \
+					\) \
+					\( \
+						tags.is:calendar or \
+						tags.is:computer or \
+						tags.is:email \
+					\) \
 					"${@}" 2>/dev/null
 			else
 				task todo \
