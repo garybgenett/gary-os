@@ -3822,10 +3822,10 @@ function task-recur {
 		foreach my $key (sort(@{$keys})) {
 			my $item = $list->{$key};
 			print "| "; printf("%-8.8s", $item->{"uuid"});
+			print " | "; printf("%-" . $c_fld->{"project"} . "." . $c_fld->{"project"} . "s", $item->{"project"} || "-");
 			print " | "; printf("%-10.10s", &do_time($item->{"end"}) || "-");
 			print " | "; printf("%-9.9s", $item->{"status"});
 			print " | "; printf("%-9.9s", $item->{"recur"});
-			print " | "; printf("%-" . $c_fld->{"project"} . "." . $c_fld->{"project"} . "s", $item->{"project"} || "-");
 			print " | ". $item->{"description"};
 			print "\n";
 			$count->{$item->{"uuid"}}++;
