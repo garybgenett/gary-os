@@ -3229,7 +3229,8 @@ function task-export-text {
 				else {
 					use Data::Dumper;
 					print Dumper(${task});
-					die("BAD ANNOTATION!");
+#>>>					die("BAD ANNOTATION!");
+					print("BAD ANNOTATION!");
 				};
 			};
 			if ((!${notes}) && ((exists($task->{"kind"})) && ($task->{"kind"} eq "notes"))) {
@@ -3355,7 +3356,8 @@ function task-notes {
 		my $extn = ".md";
 		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $root = qx(task _get rc.data.location); chomp(${root});
-		my $data = qx(task export kind:notes ${args}); $data =~ s/\n//g; $data = decode_json(${data});
+#>>>		my $data = qx(task export kind:notes ${args}); $data =~ s/\n//g; $data = decode_json(${data});
+		my $data = qx(task export ${args}); $data =~ s/\n//g; $data = decode_json(${data});
 		my $edit = ${args}; $edit =~ s/\"/\\\"/g; $edit = "${ENV{EDITOR}} -c \"map \~ <ESC>:!task read ${edit}<CR>\" -c \"map \\ <ESC>:!task \"";
 		my $mark = "DELETE";
 		if (!@{$data}) {
@@ -3378,7 +3380,8 @@ function task-notes {
 			my $text = "[" . $task->{"description"} . "]";
 			my $notes = "0";
 			foreach my $annotation (@{$task->{"annotations"}}) {
-				if (($task->{"kind"} eq "notes") && ($annotation->{"description"} =~ m/^[[]notes[]][:]/)) {
+#>>>				if (($task->{"kind"} eq "notes") && ($annotation->{"description"} =~ m/^[[]notes[]][:]/)) {
+				if ($annotation->{"description"} =~ m/^[[]notes[]][:]/) {
 					if (${notes}) {
 						use Data::Dumper;
 						print Dumper(${task});
