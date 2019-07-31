@@ -4183,6 +4183,19 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				done
 				eval ${MARKER}
 			) | ${MORE}
+		elif [[ ${1} == "todo-miss" ]]; then
+			shift
+			_task look $(
+				declare ID=
+				for ID in $(
+					eval ${TW} todo |
+						${SED} "s/[[:cntrl:]][[]([0-9]+[;])*[0-9]+m//g" |
+						${GREP} -o "^[[:space:]]{,3}[0-9]+" |
+						sort -nu
+				); do
+					echo -n " id.isnt:${ID}"
+				done
+			)
 		elif [[ ${1} == [=] ]]; then
 			shift
 			task-export-text	|| return 1
