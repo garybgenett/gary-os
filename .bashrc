@@ -4174,28 +4174,31 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 					NUM=$((${NUM}+1))
 				done
 			fi
-			(
+			( (
 				for FILE in "${HEADER[@]}"; do
 					_echo					"3" "=>" "${FILE}"
 					_task					read +ACTIVE
 #>>>					eval ${MARKER}; _task_parse_cmd_bash	"${SOURCE}" "${FILE}"
 					eval $(_task_parse_cmd_bash		"${SOURCE}" "${FILE}")
 				done
-				eval ${MARKER}
-			) | ${MORE}
-		elif [[ ${1} == "todo-miss" ]]; then
-			shift
-			_task look $(
-				declare ID=
-				for ID in $(
-					eval ${TW} todo |
+#>>>				eval ${MARKER}
+			) | tee /tmp/${FUNCNAME}-${IMPERSONATE_NAME}-todo ; (
+				_echo "Remaining"
+				_task look $(
+					declare ID=
+					for ID in $(
+						cat /tmp/${FUNCNAME}-${IMPERSONATE_NAME}-todo |
 						${SED} "s/[[:cntrl:]][[]([0-9]+[;])*[0-9]+m//g" |
 						${GREP} -o "^[[:space:]]{,3}[0-9]+" |
 						sort -nu
-				); do
-					echo -n " id.isnt:${ID}"
-				done
-			)
+					); do
+						echo -n " id.isnt:${ID}"
+					done
+				)
+				_echo "Success!"
+				eval ${MARKER}
+			) ) | ${MORE}
+			${RM} /tmp/${FUNCNAME}-${IMPERSONATE_NAME}-todo
 		elif [[ ${1} == [=] ]]; then
 			shift
 			task-export-text	|| return 1
