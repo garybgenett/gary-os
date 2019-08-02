@@ -3116,10 +3116,11 @@ function task-export-text {
 			$note .= ("-" x 40) . "\n\n";
 			$note .= "**" . ${modified} . " | UUID: [" . $task->{"uuid"} . "](#uuid-" . $task->{"uuid"} . ") | [TOC](#TOC) [GTD](#gtd) [Dir](./" . ${base} . ") [" . ${extn} . "](./" . ${base} . "/" . $task->{"uuid"} . ${extn} . ")**\n";
 			$note .= ${output};
-			if	((exists($task->{"project"})) && ($task->{"project"} eq ".someday"))	{
-				if ($task->{"status"} eq "pending")					{ $NOTE->{"someday"}		.= ${note}; }
-				else									{ $NOTE->{"other"}{"someday"}	.= ${note}; };
-			}
+#>>>			if	((exists($task->{"project"})) && ($task->{"project"} eq ".someday"))	{
+#>>>				if ($task->{"status"} eq "pending")					{ $NOTE->{"someday"}		.= ${note}; }
+#>>>				else									{ $NOTE->{"other"}{"someday"}	.= ${note}; };
+#>>>			}
+			if	((!exists($task->{"kind"})) || ($task->{"kind"} ne "notes"))		{ $object->{"notes"}		.= ${note}; }
 			elsif	((exists($task->{"project"})) && ($task->{"project"} eq "_data"))	{ $object->{"data"}		.= ${note}; }
 			elsif	((exists($task->{"project"})) && ($task->{"project"} eq "_journal"))	{ $object->{"journal"}		.= ${note}; }
 			elsif	($task->{"status"} eq "pending")					{ $object->{"open"}		.= ${note}; }
@@ -3217,7 +3218,8 @@ function task-export-text {
 					$started	= "0";
 					$begin		= "0";
 				}
-				elsif (((exists($task->{"kind"})) && ($task->{"kind"} eq "notes")) && ($annotation->{"description"} =~ m/^[[]notes[]][:]/)) {
+#>>>				elsif (((exists($task->{"kind"})) && ($task->{"kind"} eq "notes")) && ($annotation->{"description"} =~ m/^[[]notes[]][:]/)) {
+				elsif ($annotation->{"description"} =~ m/^[[]notes[]][:]/) {
 					if (${notes}) {
 						use Data::Dumper;
 						print Dumper(${task});
@@ -3233,9 +3235,9 @@ function task-export-text {
 					print("BAD ANNOTATION!");
 				};
 			};
-			if ((!${notes}) && ((exists($task->{"kind"})) && ($task->{"kind"} eq "notes"))) {
-				&export_note(${task}, "", $NOTE->{"other"});
-			};
+#>>>			if ((!${notes}) && ((exists($task->{"kind"})) && ($task->{"kind"} eq "notes"))) {
+#>>>				&export_note(${task}, "", $NOTE->{"other"});
+#>>>			};
 			if (${started}) {
 				print TIME "\"-\"," x 4;
 				print TIME "\n";
@@ -3250,14 +3252,16 @@ function task-export-text {
 		if (exists(${$NOTE->{"other"}}{"data"}))	{ print NOTE "\n\nData (Other)"		. " {#list-data-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"data"}		; };
 		if (exists($NOTE->{"journal"}))			{ print NOTE "\n\nJournal"		. " {#list-journal}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"journal"}			; };
 		if (exists(${$NOTE->{"other"}}{"journal"}))	{ print NOTE "\n\nJournal (Other)"	. " {#list-journal-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"journal"}		; };
+		if (exists($NOTE->{"notes"}))			{ print NOTE "\n\nNotes"		. " {#list-notes}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"notes"}			; };
+		if (exists(${$NOTE->{"other"}}{"notes"}))	{ print NOTE "\n\nNotes (Other)"	. " {#list-notes-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"notes"}		; };
 		if (exists($NOTE->{"open"}))			{ print NOTE "\n\nOpen"			. " {#list-open}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"open"}				; };
 		if (exists(${$NOTE->{"other"}}{"open"}))	{ print NOTE "\n\nOpen (Other)"		. " {#list-open-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"open"}		; };
 		if (exists($NOTE->{"completed"}))		{ print NOTE "\n\nCompleted"		. " {#list-completed}\n"	. ("=" x 80) . "\n"; print NOTE $NOTE->{"completed"}			; };
 		if (exists(${$NOTE->{"other"}}{"completed"}))	{ print NOTE "\n\nCompleted (Other)"	. " {#list-completed-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"completed"}	; };
 		if (exists($NOTE->{"deleted"}))			{ print NOTE "\n\nDeleted"		. " {#list-deleted}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"deleted"}			; };
 		if (exists(${$NOTE->{"other"}}{"deleted"}))	{ print NOTE "\n\nDeleted (Other)"	. " {#list-deleted-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"deleted"}		; };
-		if (exists($NOTE->{"someday"}))			{ print NOTE "\n\nSomeday"		. " {#list-someday}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"someday"}			; };
-		if (exists(${$NOTE->{"other"}}{"someday"}))	{ print NOTE "\n\nSomeday (Other)"	. " {#list-someday-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"someday"}		; };
+#>>>		if (exists($NOTE->{"someday"}))			{ print NOTE "\n\nSomeday"		. " {#list-someday}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"someday"}			; };
+#>>>		if (exists(${$NOTE->{"other"}}{"someday"}))	{ print NOTE "\n\nSomeday (Other)"	. " {#list-someday-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"someday"}		; };
 		close(JSON) || die();
 		close(TIME) || die();
 		close(PROJ) || die();
