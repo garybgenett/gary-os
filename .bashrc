@@ -4171,7 +4171,10 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				HEADER[1]="Projects"
 				HEADER[2]="Notes"
 			else
-				SOURCE="${1}"; shift
+				if [[ -f "${1}" ]]; then
+					SOURCE="${1}"
+					shift
+				fi
 				declare NUM="0"
 				for FILE in "${@}"; do
 					HEADER[${NUM}]="${FILE}"
