@@ -89,6 +89,7 @@ net-firewall/ebtables
 net-firewall/iptables
 net-misc/bridge-utils
 net-misc/dhcpcd
+net-misc/dhcpcd-ui
 net-misc/ifenslave
 net-misc/iputils
 net-misc/networkmanager
