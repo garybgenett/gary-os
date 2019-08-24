@@ -4302,7 +4302,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == [~] ]]; then
 			shift
 			declare PROJECT="${1}" && shift
-			task-notes project.is:${PROJECT} "${@}"
+			task-notes kind:notes project.is:${PROJECT} "${@}"
 		elif [[ ${1} == [-] ]]; then
 			shift
 			task view project.isnt:_gtd /:/ "${@}" | ${SED} -ne "s/^[^a-z]+([a-z][^:]+)[:].+$/\1/gp" | sort | uniq
