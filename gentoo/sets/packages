@@ -548,6 +548,8 @@ www-client/firefox
 www-client/surf
 
 app-editors/atom
+app-text/xournal
+
 app-text/qpdf
 app-text/qpdfview
 media-gfx/wkhtmltopdf
