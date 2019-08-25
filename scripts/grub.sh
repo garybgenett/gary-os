@@ -374,11 +374,11 @@ if [[ ! -b ${GINST} ]]; then
 	losetup -d ${LOOPDEV}					|| exit 1
 fi
 
-grub-bios-setup --verbose \
-	--boot-image="${GTYPE}/boot.img" \
-	--core-image="rescue.img" \
-	--directory="${GDEST}" \
+grub-bios-setup \
+	--verbose \
 	--skip-fs-probe \
+	--directory="${GDEST}" \
+	--core-image="rescue.img" \
 	${GINST}						|| { exit_summary; exit 1; }
 
 ########################################
