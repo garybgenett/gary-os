@@ -613,6 +613,7 @@ if [[ -n ${DEBUG} ]]; then
 	if [[ -z ${QUIET} ]] && ${DO_CHROOT}; then
 		set -x
 		safe_env ${MYSELF} ${DEBUG_OPT} ${TOOR} "${@}" || EXIT 1
+		set +x
 	fi
 	EXIT 0
 fi
