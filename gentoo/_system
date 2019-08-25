@@ -84,7 +84,7 @@ declare AUDITS=".emergent"
 #OPTIONS[ARTDIR CFGSCR]
 #VARIABLES[PREPIT MAKEIT SHIPIT]
 declare ARTDIR="${ARTDIR:-/.g/_data/zactive/coding/gary-os/_artifacts}"
-declare CFGSCR="${CFGSCR:-${ARTDIR}/config_script.sh}"
+declare CFGSCR="${CFGSCR:-${SETDIR}/${FUNDIR}.config}"
 declare PREPIT="_prepare"
 declare MAKEIT="_release"
 declare SHIPIT="_publish"
@@ -1010,13 +1010,9 @@ if [[ ${1} == -i ]]; then
 		#note: this needs to match the name in the "${MAKEIT}" script
 		${PREPIT}_config											|| EXIT 1
 		if [[ -x ${CFGSCR} ]]; then
-			${RSYNC_U} ${CFGSCR}		${TARGET}/${ARCDIR}/$(basename ${CFGSCR})			|| EXIT 1
+			${RSYNC_U} --copy-links		${CFGSCR} \
+							${TARGET}/${ARCDIR}/$(basename ${CFGSCR})			|| EXIT 1
 			safe_env			${ARCDIR}/$(basename ${CFGSCR})					|| EXIT 1
-		fi
-		FILE="${SETDIR}/${FUNDIR}.config"
-		if [[ -z ${_GOS} ]] && [[ -x ${FILE} ]]; then
-			${RSYNC_U} ${FILE}		${TARGET}/${ARCDIR}/$(basename ${FILE})				|| EXIT 1
-			safe_env			${ARCDIR}/$(basename ${FILE})					|| EXIT 1
 		fi
 	fi
 	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -f			|| EXIT 1
