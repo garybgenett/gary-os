@@ -48,28 +48,46 @@ fi
 
 ########################################
 
-declare GINST="${GIDEF}"
-declare GPART="${GPDEF}"
-declare GCUST=
+declare GPEFI="99"; declare GNEFI="ef00"; declare GFEFI="-d"
+declare GPMBR="98"; declare GNMBR="ef02"; #>>> declare GFMBR=""
 
-if [[ -b ${1} ]] || [[ ${1} == grub+([0-9]) ]]; then
-	GINST="$(echo ${1} | ${SED} "s|^(.+[^0-9])([0-9]+)$|\1|g")"
-	GPART="$(echo ${1} | ${SED} "s|^(.+[^0-9])([0-9]+)$|\2|g")"
-	shift
-	if [[ ${GINST} == grub ]]; then
-		GINST="${GIDEF}"
-	fi
-	if [[ ${GPART} != +([0-9]) ]]; then
-		GPART="${GPDEF}"
-	fi
-fi
+########################################
 
-if [[ -f ${1} ]]; then
-	GCUST="$(${SED} "s|[\"]|\\\\\"|g" ${1})"
+declare GFDSK="false"
+declare GFFMT=""
+declare GFNUM="8300"
+if [[ ${1} == -f*(v) ]]; then
+	GFDSK="true"
+	if [[ ${1/#-f} == v ]]; then
+		GFFMT="-d"
+		GFNUM="0700"
+	fi
 	shift
 fi
 
 ########################################
+
+declare GINST="${GIDEF}"
+declare GPART="${GPDEF}"
+if [[ -b $(		echo ${1} | ${SED} "s|[0-9]+$||g") ]] || [[ ${1} == grub+([0-9]) ]]; then
+	GINST="$(	echo ${1} | ${SED} "s|[0-9]+$||g")"
+	GPART="$(	echo ${1} | ${SED} "s|^${GINST}||g")"
+	if [[ ${GINST} == grub ]]; then
+		GINST="${GIDEF}"
+	fi
+	if [[ -n $(echo "${GPART}" | ${SED} "s|[0-9]+||g") ]]; then
+		GPART="${GPDEF}"
+	fi
+	shift
+fi
+
+########################################
+
+declare GCUST=
+if [[ -f ${1} ]]; then
+	GCUST="$(${SED} "s|[\"]|\\\\\"|g" ${1})"
+	shift
+fi
 
 declare GOPTS=
 if [[ -n ${1} ]]; then
@@ -246,22 +264,63 @@ declare MODULES_UEFI="\
 
 ########################################
 
-declare BLOCKS_SIZE="512"		# default
-declare BLOCKS_BOOT="$(( (2**10)*2 ))"	# minimum mbr
-declare BLOCKS_DATA="$(( (2**10)*14 ))"	# minimum ext
+declare BLOCKS_SIZE="512"
+declare BLOCKS_BOOT="$(( (2**10)*4 ))"
+#>>> declare BLOCKS_DATA="$(( (2**20)*2 ))"
+declare BLOCKS_DATA="$(( (2**10)*(2**7) ))"
+#>>> declare BLOCKS_NULL="${BLOCKS_DATA}"
+declare BLOCKS_NULL="0"
 
-declare LOOPDEV="/dev/loop9"
-declare FDISK=
-FDISK+="n\n"
-FDISK+="p\n"
-FDISK+="1\n"
-FDISK+="$(( ${BLOCKS_BOOT} ))\n"
-FDISK+="$(( ${BLOCKS_BOOT} +${BLOCKS_DATA} ))\n"
-FDISK+="\n"
-FDISK+="t\n"
-FDISK+="83\n"
-FDISK+="a\n"
-FDISK+="w\n"
+declare LOOP_DEVICE="/dev/loop9"
+#>>> declare LOOP_BLOCKS="$(( ${BLOCKS_BOOT} + (${BLOCKS_NULL}*2) + (${BLOCKS_DATA}*6) ))"
+declare LOOP_BLOCKS="$(( ${BLOCKS_BOOT} + (${BLOCKS_NULL}*2) + (${BLOCKS_DATA}*3) ))"
+
+declare NEWBLOCK=
+declare GDISK=
+declare GDHYB=
+# reset table
+GDISK+="\n"
+GDISK+="p\n"
+GDISK+="o\n"
+GDISK+="Y\n"
+GDISK+="p\n"
+# efi partition
+GDISK+="n\n"
+GDISK+="${GPEFI}\n"
+NEWBLOCK="${BLOCKS_BOOT}"				; GDISK+="${NEWBLOCK}\n"
+NEWBLOCK="$(( ${NEWBLOCK} + ${BLOCKS_DATA} -1 ))"	; GDISK+="${NEWBLOCK}\n"
+GDISK+="${GNEFI}\n"
+GDISK+="p\n"
+# bios partition
+GDISK+="n\n"
+GDISK+="${GPMBR}\n"
+NEWBLOCK="$(( ${NEWBLOCK} + ${BLOCKS_NULL} +1 ))"	; GDISK+="${NEWBLOCK}\n"
+NEWBLOCK="$(( ${NEWBLOCK} + ${BLOCKS_DATA} -1 ))"	; GDISK+="${NEWBLOCK}\n"
+GDISK+="${GNMBR}\n"
+GDISK+="p\n"
+# data partition
+GDISK+="n\n"
+GDISK+="${GPART/#p}\n"
+NEWBLOCK="$(( ${NEWBLOCK} + ${BLOCKS_NULL} +1 ))"	; GDISK+="${NEWBLOCK}\n"
+NEWBLOCK=""						; GDISK+="${NEWBLOCK}\n"
+GDISK+="${GFNUM}\n"
+GDISK+="p\n"
+# write partition table
+GDISK+="w\n"
+GDISK+="Y\n"
+# hybrid mbr
+GDHYB+="r\n"
+GDHYB+="h\n"
+GDHYB+="${GPMBR} ${GPART/#p}\n"
+GDHYB+="n\n"
+GDHYB+="\n"
+GDHYB+="n\n"
+GDHYB+="\n"
+GDHYB+="y\n"
+GDHYB+="n\n"
+GDHYB+="o\n"
+GDHYB+="w\n"
+GDHYB+="Y\n"
 
 ########################################
 
@@ -282,7 +341,7 @@ function exit_summary {
 	echo -en "${HEADER}\n"
 
 	(cd $(dirname ${GINST}) &&
-		fdisk -l $(basename ${GINST})
+		gdisk -l $(basename ${GINST})
 	)
 	(cd ${GDEST} &&
 		echo -en "\n" &&
@@ -392,22 +451,38 @@ ${RM} ${GDEST}/*.tar.tar					|| exit 1
 
 ########################################
 
-if [[ ! -b ${GINST} ]]; then
-	dcfldd \
-		bs=${BLOCKS_SIZE} \
-		count=$(( ${BLOCKS_BOOT} +${BLOCKS_DATA} +1 )) \
-		if=/dev/zero \
-		of=${GINST}					|| exit 1
-	echo -en "${FDISK}" | fdisk ${GINST}			|| exit 1
+function partition_disk {
+	declare DEV="${1}"
+	shift
+	echo -en "${GDISK}" | gdisk ${DEV}	|| return 1
+	echo -en "${GDHYB}" | gdisk ${DEV}	|| return 1
+	yes | format ${GFEFI} ${DEV}${GPEFI}	|| return 1
+	yes | format ${GFFMT} ${DEV}${GPART}	|| return 1
+	return 0
+}
 
-	losetup -d ${LOOPDEV}				#>>> || exit 1
-	losetup -v \
-		-o $(( ${BLOCKS_SIZE}*${BLOCKS_BOOT} )) \
-		--sizelimit $(( ${BLOCKS_SIZE}*${BLOCKS_DATA} )) \
-		${LOOPDEV} ${GINST}				|| exit 1
-	format ${LOOPDEV}					|| exit 1
-	losetup -d ${LOOPDEV}					|| exit 1
+if [[ -b ${GINST} ]]; then
+	if ${GFDSK}; then
+		partition_disk ${GINST}		|| exit 1
+	fi
+else
+	GPEFI="p${GPEFI}"
+	GPMBR="p${GPMBR}"
+	GPART="p${GPART}"
+	dd \
+		status=progress \
+		bs=${BLOCKS_SIZE} \
+		count=${LOOP_BLOCKS} \
+		conv=notrunc \
+		if=/dev/zero \
+		of=${GINST}			|| exit 1
+	losetup -d ${LOOP_DEVICE}		#>>> || exit 1
+	losetup -v -P ${LOOP_DEVICE} ${GINST}	|| exit 1
+	partition_disk ${LOOP_DEVICE}		|| exit 1
+	GINST="${LOOP_DEVICE}"
 fi
+
+########################################
 
 grub-bios-setup \
 	--verbose \
