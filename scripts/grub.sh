@@ -37,12 +37,12 @@ fi
 
 declare DEBUG="false"
 declare HEADS="${HEDEF}"
-if [[ ${1} == -d ]]; then
+if [[ ${1} == -d*([0-9]) ]]; then
+	HEADS="${1/#-d}"
 	DEBUG="true"
-	shift
-fi
-if [[ ${1} == +([0-9]) ]]; then
-	HEADS="${1}"
+	if [[ -z ${HEADS} ]]; then
+		HEADS="${HEDEF}"
+	fi
 	shift
 fi
 
@@ -292,10 +292,6 @@ function exit_summary {
 	)
 
 	if ${DEBUG}; then
-		echo -en "\n"
-		echo -en "# MAX BOOT: 512*103,  52736 (guess)\n"
-		echo -en "# MAX CORE: 0x78000, 491520 (grub-mkimage)\n"
-
 		FILE="${GDEST}/rescue.tar"
 		echo -en "\n"
 		echo -en "# objects for removal:\n"
