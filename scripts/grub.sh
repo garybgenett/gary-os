@@ -25,12 +25,18 @@ if [[ ! -d ${GDEST} ]]; then
 fi
 shift
 
+declare HEDEF="10"
+declare GIDEF="${GDEST}/disk_image.raw"
+declare GPDEF="2"
+
 if [[ ! -d ${GDEST} ]]; then
 	exit 0
 fi
 
+########################################
+
 declare DEBUG="false"
-declare HEADS="10"
+declare HEADS="${HEDEF}"
 if [[ ${1} == -d ]]; then
 	DEBUG="true"
 	shift
@@ -42,9 +48,7 @@ fi
 
 ########################################
 
-declare GIDEF="${GDEST}/rescue_example.raw"
 declare GINST="${GIDEF}"
-declare GPDEF="2"
 declare GPART="${GPDEF}"
 declare GCUST=
 
