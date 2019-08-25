@@ -173,8 +173,8 @@ function _prepare_config {
 		return 0
 	fi
 	${LN} sbin/init								${TARGET}/init				|| return 1
-	${SED} -i -e "s|^([^#].+)$|#\1|g"					${TARGET}/etc/fstab			|| return 1
-	${SED} -i -e "s|^(hostname=[\"]?)[^\"]+([\"]?)$|\1${_TITLE}\2|g"	${TARGET}/etc/conf.d/hostname		|| return 1
+	${SED} -i "s|^([^#].+)$|#\1|g"						${TARGET}/etc/fstab			|| return 1
+	${SED} -i "s|^(hostname=[\"]?)[^\"]+([\"]?)$|\1${_TITLE}\2|g"		${TARGET}/etc/conf.d/hostname		|| return 1
 	echo -en "setterm -blength 0\n"						>${TARGET}/etc/profile.d/setterm.sh	|| return 1
 	${RSYNC_C} -L ${ARTDIR}/wpa_supplicant.conf				${TARGET}/etc/wpa_supplicant/		|| return 1
 	${SED} -i "s|^.*(PermitRootLogin).*$|\1 yes|g"				${TARGET}/etc/ssh/sshd_config		|| return 1
@@ -186,7 +186,7 @@ function _prepare_config {
 		-e "/xsetroot[ ][-]mod/d"										\
 		-e "s|^(exec.*dwm.*)$|${FILE}\1|g"									\
 										${TARGET}/etc/X11/Sessions/dwm		|| return 1
-	${SED} -i -e "s|^(.*xsetroot[ ][-]name[ ]).*$|\1\"${WMHELP}\"|g"	${TARGET}/etc/X11/Sessions/dwm		|| return 1
+	${SED} -i "s|^(.*xsetroot[ ][-]name[ ]).*$|\1\"${WMHELP}\"|g"		${TARGET}/etc/X11/Sessions/dwm		|| return 1
 	echo -en "XSESSION=\"${WINMGR}\"\n"					>${TARGET}/etc/env.d/90xsession		|| return 1
 	safe_env								/usr/sbin/env-update			|| return 1
 	echo -en "${_TITLE}\n${_TITLE}\n" | safe_env				/usr/bin/passwd root			|| return 1
