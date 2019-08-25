@@ -8,6 +8,15 @@ declare _NAME="${_PROJ} Grub"
 declare _BASE="gary-os"
 declare _GRUB="${_BASE}.grub"
 
+########################################
+
+declare HEADER="$(printf "~%.0s" {1..80})"
+
+declare _OPTS="${@}"
+echo -en "${HEADER}\n"
+echo -en "ARGUMENTS: ${_OPTS}\n"
+echo -en "${HEADER}\n"
+
 ################################################################################
 
 declare GDEST="${PWD}"
@@ -250,6 +259,10 @@ declare FILE=
 ################################################################################
 
 function exit_summary {
+	echo -en "${HEADER}\n"
+	echo -en "EXIT OUTPUT\n"
+	echo -en "${HEADER}\n"
+
 	(cd $(dirname ${GINST}) &&
 		fdisk -l $(basename ${GINST})
 	)
@@ -285,6 +298,14 @@ function exit_summary {
 				head -n${HEADS}
 		)
 	fi
+
+	echo -en "${HEADER}\n"
+	if [[ ${EXIT} == 0 ]]; then
+		echo -en "SUCCESS!\n"
+	else
+		echo -en "FAILED!\n"
+	fi
+	echo -en "${HEADER}\n"
 
 	return 0
 }
