@@ -573,7 +573,7 @@ function EXIT {
 			EXIT="1" && shift
 		else
 			EXIT="${1}" && shift
-			mount_dev_dirs -u || EXIT -1
+			mount_dev_dirs -u #>>> || EXIT -1
 		fi
 		if [[ -z ${QUIET} ]]; then
 			print_info marker
@@ -641,9 +641,9 @@ if [[ ${1} == -z ]]; then
 		echo -en "\n"
 		echo -en ">>> THIS OPTION REQUIRES A CHROOT <<<\n"
 		echo -en "\n"
-		EXIT -1
+		EXIT 1
 	fi
-	mount_dev_dirs -u || EXIT -1
+	mount_dev_dirs -u || EXIT 1
 	EXIT 0
 fi
 
