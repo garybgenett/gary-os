@@ -267,6 +267,12 @@ declare FILE=
 ################################################################################
 
 function exit_summary {
+	EXIT="0"
+	if [[ ${1} == +([0-9]) ]]; then
+		EXIT="${1}"
+		shift
+	fi
+
 	echo -en "${HEADER}\n"
 	echo -en "EXIT OUTPUT\n"
 	echo -en "${HEADER}\n"
@@ -315,7 +321,7 @@ function exit_summary {
 	fi
 	echo -en "${HEADER}\n"
 
-	return 0
+	exit ${EXIT}
 }
 
 ################################################################################
@@ -349,7 +355,7 @@ grub-mkimage -v \
 	-o ${GDEST}/bootstrap.img \
 	-c ${GDEST}/bootstrap.cfg \
 	--prefix="${GROOT}/${_GRUB}" \
-	${MODULES_BOOT}						|| exit 1
+	${MODULES_BOOT}						|| exit_summary 1
 
 grub-mkimage -v \
 	-C xz \
@@ -357,7 +363,7 @@ grub-mkimage -v \
 	-d ${GMODS} \
 	-o ${GDEST}/rescue.img \
 	-m ${GDEST}/rescue.tar.tar \
-	${MODULES_CORE}						|| { exit_summary; exit 1; }
+	${MODULES_CORE}						|| exit_summary 1
 
 for TYPE in x86_64-efi i386-efi; do
 	FILE="${GDEST}/grub.${TYPE/%-efi}.tar/boot/grub"
@@ -375,7 +381,7 @@ for TYPE in x86_64-efi i386-efi; do
 		-d ${GRUBD}/${TYPE} \
 		-o ${FILE}.efi \
 		-m ${FILE}.tar.tar \
-		${MODULES_UEFI}					|| { exit_summary; exit 1; }
+		${MODULES_UEFI}					|| exit_summary 1
 done
 
 FILE="${GDEST}/bootstrap.img"
@@ -408,11 +414,11 @@ grub-bios-setup \
 	--skip-fs-probe \
 	--directory="${GDEST}" \
 	--core-image="rescue.img" \
-	${GINST}						|| { exit_summary; exit 1; }
+	${GINST}						|| exit_summary 1
 
 ########################################
 
-exit_summary
+exit_summary 0
 
 exit 0
 ################################################################################
