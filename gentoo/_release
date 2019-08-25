@@ -62,6 +62,28 @@ RELEASE[6]="v3.0"; CMTHASH[6]="35141e1e20259d7d1c2f4b143c6ae4505d7d5045"
 
 ################################################################################
 
+function common_tar {
+	FILE="${1}" && shift
+	if [[ ! -f ${FILE}.tar.xz ]] && [[ -d ${FILE} ]]; then
+		tar -cvv --xz -C $(dirname ${FILE}) -f ${FILE}.tar.xz $(basename ${FILE}) \
+			|| return 1
+	fi
+	return 0
+}
+
+########################################
+
+function common_untar {
+	FILE="${1}" && shift
+	if [[ -f ${FILE}.tar.xz ]] && [[ ! -d ${FILE} ]]; then
+		tar -vvx --xz -C $(dirname ${FILE}) -f ${FILE}.tar.xz \
+			|| return 1
+	fi
+	return 0
+}
+
+################################################################################
+
 #note: this is called statically in the "_system" script
 function _release_reset {
 	if [[ ${TARGET} != / ]]; then
@@ -198,7 +220,7 @@ function _prepare_linux {
 	if [[ ${TARGET} == / ]]; then
 		if [[ ! -d ${TARGET}/usr/src/linux ]]; then
 			${RM}							${TARGET}/usr/src/linux		|| return 1
-			release_untar						${TARGET}/usr/src/linux		|| return 1
+			common_untar						${TARGET}/usr/src/linux		|| return 1
 		fi
 		return 0
 	fi
@@ -222,7 +244,7 @@ function _prepare_linux {
 		safe_make -C ${TARGET}/usr/src/linux				distclean			|| return 1
 		${RSYNC_U} ${TARGET}${ARCDIR}/${NEXT}				${TARGET}/usr/src/linux/.config	|| return 1
 		safe_make -C ${TARGET}/usr/src/linux				modules_prepare			|| return 1
-		release_tar							${TARGET}/usr/src/linux		|| return 1
+		common_tar							${TARGET}/usr/src/linux		|| return 1
 	fi
 	return 0
 }
@@ -476,28 +498,10 @@ function _release_report {
 
 ########################################
 
-function release_tar {
-	FILE="${1}" && shift
-	if [[ ! -f ${FILE}.tar.xz ]] && [[ -d ${FILE} ]]; then
-		tar -cvv --xz -C $(dirname ${FILE}) -f ${FILE}.tar.xz $(basename ${FILE}) \
-			|| return 1
-	fi
-	return 0
-}
-
-function release_untar {
-	FILE="${1}" && shift
-	if [[ -f ${FILE}.tar.xz ]] && [[ ! -d ${FILE} ]]; then
-		tar -vvx --xz -C $(dirname ${FILE}) -f ${FILE}.tar.xz \
-			|| return 1
-	fi
-	return 0
-}
-
 #note: this is called statically in the "_system" script
 function _release_unpack {
-	release_untar ${TARGET}${REPDIR}	|| return 1
-	release_untar ${TARGET}/usr/src/linux	|| return 1
+	common_untar ${TARGET}${REPDIR}		|| return 1
+	common_untar ${TARGET}/usr/src/linux	|| return 1
 	return 0
 }
 
@@ -707,7 +711,7 @@ function _publish_grub {
 	${RM}		${FILE}*				|| return 1
 	${MKDIR}	${FILE}					|| return 1
 	(cd ${FILE} &&	${HOME}/scripts/grub.sh)		|| return 1
-	release_tar	${FILE}					|| return 1
+	common_tar	${FILE}					|| return 1
 	${MV}		${FILE}.tar.xz ${FILE}.${_RDATE}.tar.xz	|| return 1
 	${RM}		${FILE}					|| return 1
 	return 0
