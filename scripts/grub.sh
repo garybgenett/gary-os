@@ -19,7 +19,15 @@ echo -en "${HEADER}\n"
 
 ################################################################################
 
-declare GDEST="${PWD}"
+declare GDEST="$(realpath ${1} 2>/dev/null)"
+if [[ ! -d ${GDEST} ]]; then
+	GDEST="(null)"
+fi
+shift
+
+if [[ ! -d ${GDEST} ]]; then
+	exit 0
+fi
 
 declare DEBUG="false"
 declare HEADS="10"
