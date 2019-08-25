@@ -359,7 +359,7 @@ function print_info {
 		printf "${PRINTF}" "Chroot Build (Initial):"			"<auto>"	"${SCRIPT} {chroot} -0" "<-n -a -b -k -i>"
 		printf "${PRINTF}" "Chroot Build (Update Only):"		"<auto>"	"${SCRIPT} {chroot} -/" "<-a -i>"
 		printf "${PRINTF}" "Chroot Build (Complete Rebuild):"		"<auto>"	"${SCRIPT} {chroot} -1" "<-a -b -i>"
-		printf "${PRINTF}" "Chroot Build (Configuration):"		"<interactive>"	"${SCRIPT} {chroot} -2" "<-c -i>"
+		printf "${PRINTF}" "Chroot Build (Configuration):"		"<custom>"	"${SCRIPT} {chroot} -2" "<-c -i>"
 		printf "${PRINTF}" "Chroot Build (Internal Only):"		"<internal>"	"${SCRIPT} {chroot}" "[-n|-a|-b|-k|-c] -i"
 		echo -en "\n"
 		printf "${PRINTF}" "Chroot Validation (Dependency Tree):"	"<output>"	"${SCRIPT} [{chroot}] -y -j"
@@ -1008,7 +1008,7 @@ if [[ ${1} == -i ]]; then
 	done; fi
 	if ${_CFG}; then
 		#note: this needs to match the name in the "${MAKEIT}" script
-		${PREPIT}_config											|| EXIT 1
+		${PREPIT}_build --reset											|| EXIT 1
 		if [[ -x ${CFGSCR} ]]; then
 			${RSYNC_U} --copy-links		${CFGSCR} \
 							${TARGET}/${ARCDIR}/$(basename ${CFGSCR})			|| EXIT 1
