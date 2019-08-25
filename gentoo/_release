@@ -141,10 +141,10 @@ function prepare_config_issue {
 	[[ ${_PKG} != ${GOSPKG} ]] ||
 	[[ ${TARGET} == / ]]
 	then
-		FILE=" \\\e[1;45;37m"
+		FILE="\n"
+		FILE+=" \\\e[1;45;37m"
 		FILE+="PLEASE NOTE THAT THIS BUILD HAS BEEN CUSTOMIZED AND IS NOT AN OFFICIAL VERSION"
 		FILE+="\\\e[1;40;30m"
-		FILE+="\n"
 		${SED} -i \
 			-e "s|^.+Some helpful notes.+$|${FILE}|g" \
 			-e "/Login username/d" \
@@ -156,7 +156,7 @@ function prepare_config_issue {
 	${SED} \
 		-e "s|[\]e[[]([0-9]+[;])?[0-9]+[;][0-9]+m||g" \
 		-e "/^[\][a-z]/d" \
-		/etc/issue >/etc/motd \
+		${TARGET}/etc/issue >${TARGET}/etc/motd \
 		|| return 1
 	return 0
 }
