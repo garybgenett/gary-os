@@ -29,6 +29,7 @@
 # - declare GARYOS_VER="v4.0"
 # - declare ESUB="generic_64"
 # - declare GOPTS=""
+# - declare GOSPKG="_gary-os"
 # - declare USB_SOURCE="sda1"
 # - declare FUSE_DIR="/tmp/.fuse"
 # - declare GRUB_DIR="/tmp/.grub"
@@ -87,7 +88,7 @@
 # - mount -t overlay overlay -o lowerdir=${FUSE_DIR}-pack,upperdir=${FUSE_DIR}-pack-over,workdir=${FUSE_DIR}-pack-work /var/cache/portage/packages
 # - mount
 # <install>
-# - prompt -z emerge --usepkg=y --deep --newuse --update \@_gary-os
+# - prompt -z emerge --usepkg=y --deep --newuse --update \@${GOSPKG}
 # <umount>
 # - umount ${FUSE_DIR}-{mount,dist{,-over,-work},pack{,-over,-work}} /var/cache/portage/{distfiles,packages} || true
 # - mount
@@ -200,8 +201,8 @@
 # - mv -iv /usr/src/linux /.gary-os-${ESUB}/linux
 # - ln -fsv /.gary-os-${ESUB}/linux /usr/src/linux
 # <build>
-# - make -f /.gary-os/Makefile O=/ P=_gary-os release
-# - make -f /.gary-os/Makefile O=/ P=_gary-os initrd
+# - make -f /.gary-os/Makefile O=/ P=${GOSPKG} release
+# - make -f /.gary-os/Makefile O=/ P=${GOSPKG} initrd
 # <copy>
 # - rsync -avv /.gary-os-${ESUB}/gary-os-${ESUB}-${GARYOS_VER}.kernel /.gary-os-${ESUB}/gary-os.kernel || true
 # - rsync -avv /.gary-os-${ESUB}/gary-os-${ESUB}-${GARYOS_VER}.cpio.xz /.gary-os-${ESUB}/gary-os.initrd || true
