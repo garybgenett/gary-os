@@ -145,15 +145,6 @@ insmod configfile
 # end of file
 "
 
-declare GLOAD_FILE="\
-# load file
-${G_DBG}
-echo \"Loading ${_NAME}...\"
-insmod configfile
-configfile ${GFILE}
-# end of file
-"
-
 declare GMENU="\
 # menu
 ${G_DBG}
@@ -478,7 +469,7 @@ for TYPE in ${GEFIS}; do
 	FILE="${GDEST}/${TYPE/%-efi}.tar/boot/grub"
 	${MKDIR} ${FILE}/${TYPE}			|| exit 1
 	${RSYNC_U} ${GRUBD}/${TYPE}/ ${FILE}/${TYPE}	|| exit 1
-	echo -en "${GLOAD_FILE}" >${FILE}/grub.cfg	|| exit 1
+	${RSYNC_U} ${GDEST}/rescue.cfg ${FILE}/grub.cfg	|| exit 1
 	FILE="${GDEST}/${TYPE/%-efi}.tar"
 	(cd ${FILE} && tar -cvv -f ${FILE}.tar *)	|| exit 1
 	FILE="${GDEST}/${TYPE/%-efi}"
