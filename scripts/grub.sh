@@ -505,6 +505,8 @@ grub-bios-setup \
 
 ########################################
 
+losetup -d ${LOOP_DEVICE} #>>> || exit 1
+
 exit_summary 0
 
 exit 0
