@@ -96,15 +96,19 @@ fi
 
 declare GINST="${GIDEF}"
 declare GPART="${GPDEF}"
-if [[ -b $(		echo ${1} | ${SED} "s|[0-9]+$||g") ]] || [[ ${1} == grub+([0-9]) ]]; then
-	GINST="$(	echo ${1} | ${SED} "s|[0-9]+$||g")"
+declare GPROP=
+declare GPSEP=
+if [[ -b $(		echo ${1} | ${SED} "s|[p]?[0-9]+$||g") ]] || [[ ${1} == grub+([0-9]) ]]; then
+	GINST="$(	echo ${1} | ${SED} "s|[p]?[0-9]+$||g")"
 	GPART="$(	echo ${1} | ${SED} "s|^${GINST}||g")"
 	if [[ ${GINST} == grub ]]; then
 		GINST="${GIDEF}"
 	fi
-	if [[ -n $(echo "${GPART}" | ${SED} "s|[0-9]+||g") ]]; then
+	if [[ -z ${GPART} ]]; then
 		GPART="${GPDEF}"
 	fi
+	GPROP="$(echo "${GPART}" | ${SED} "s|^([p]?)([0-9]+)$|\2|g")"
+	GPSEP="$(echo "${GPART}" | ${SED} "s|^([p]?)([0-9]+)$|\1|g")"
 	shift
 fi
 
@@ -125,8 +129,8 @@ fi
 ################################################################################
 
 declare GBOOT="(hd0)"
-declare GROOT="(hd0,${GPART})"
-declare GFILE="(hd0,${GPART})/boot/grub/grub.cfg"
+declare GROOT="(hd0,${GPROP})"
+declare GFILE="(hd0,${GPROP})/boot/grub/grub.cfg"
 
 declare GTYPE="i386-pc"
 declare GEFIS="x86_64-efi" #>>> i386-efi"
@@ -333,7 +337,7 @@ GDISK+="${GNMBR}\n"
 GDISK+="p\n"
 # data partition
 GDISK+="n\n"
-GDISK+="${GPART/#p}\n"
+GDISK+="${GPROP}\n"
 NEWBLOCK="$(( ${NEWBLOCK} + ${BLOCKS_NULL} +1 ))"	; GDISK+="${NEWBLOCK}\n"
 NEWBLOCK=""						; GDISK+="${NEWBLOCK}\n"
 GDISK+="${GFNUM}\n"
@@ -344,7 +348,7 @@ GDISK+="Y\n"
 # hybrid mbr
 GDHYB+="r\n"
 GDHYB+="h\n"
-GDHYB+="${GPMBR} ${GPART/#p}\n"
+GDHYB+="${GPMBR} ${GPROP}\n"
 GDHYB+="n\n"
 GDHYB+="\n"
 GDHYB+="n\n"
@@ -489,16 +493,16 @@ ${RM} ${GDEST}/*.tar.tar				|| exit 1
 function partition_disk {
 	declare DEV="${1}"
 	shift
-	echo -en "${GDISK}" | gdisk ${DEV}	|| return 1
-	echo -en "${GDHYB}" | gdisk ${DEV}	|| return 1
-	yes | format ${GFEFI} ${DEV}${GPEFI}	|| return 1
-	yes | format ${GFFMT} ${DEV}${GPART}	|| return 1
+	echo -en "${GDISK}" | gdisk ${DEV}		|| return 1
+	echo -en "${GDHYB}" | gdisk ${DEV}		|| return 1
+	yes | format ${GFEFI} ${DEV}${GPSEP}${GPEFI}	|| return 1
+	yes | format ${GFFMT} ${DEV}${GPART}		|| return 1
 	return 0
 }
 
 if [[ -b ${GINST} ]]; then
 	if ${GFDSK}; then
-		partition_disk ${GINST}		|| exit 1
+		partition_disk ${GINST}			|| exit 1
 	fi
 else
 	GPEFI="p${GPEFI}"
@@ -510,10 +514,10 @@ else
 		count=${LOOP_BLOCKS} \
 		conv=notrunc \
 		if=/dev/zero \
-		of=${GINST}			|| exit 1
-	losetup -d ${LOOP_DEVICE}		#>>> || exit 1
-	losetup -v -P ${LOOP_DEVICE} ${GINST}	|| exit 1
-	partition_disk ${LOOP_DEVICE}		|| exit 1
+		of=${GINST}				|| exit 1
+	losetup -d ${LOOP_DEVICE}			#>>> || exit 1
+	losetup -v -P ${LOOP_DEVICE} ${GINST}		|| exit 1
+	partition_disk ${LOOP_DEVICE}			|| exit 1
 	GINST="${LOOP_DEVICE}"
 fi
 
@@ -542,7 +546,7 @@ ${MV} ${FILE}/${SCRIPT} ${GDEST}/_${GTYPE}.boot			|| exit 1
 mount-robust -u ${GINST}${GPART}				|| exit 1
 ${RM} ${GDEST}/.mount						|| exit 1
 
-if [[ -b ${GINST}${GPEFI} ]]; then
+if [[ -b ${GINST}${GPSEP}${GPEFI} ]]; then
 	function efi_cp {
 		declare SRC="${1}"; shift
 		declare DST="${1}"; shift
@@ -554,9 +558,8 @@ if [[ -b ${GINST}${GPEFI} ]]; then
 		fi
 		return 0
 	}
-
 	${MKDIR} ${GDEST}/.mount-efi						|| exit 1
-	mount-robust ${GINST}${GPEFI} ${GDEST}/.mount-efi			|| exit 1
+	mount-robust ${GINST}${GPSEP}${GPEFI} ${GDEST}/.mount-efi		|| exit 1
 	FILE="${GDEST}/.mount-efi/EFI/BOOT"					|| exit 1
 	${MKDIR} ${FILE}							|| exit 1
 	for TYPE in ${GEFIS}; do
@@ -573,7 +576,7 @@ if [[ -b ${GINST}${GPEFI} ]]; then
 			${GINST}						|| exit_summary 1
 		efi_cp ${FILE} ${GDEST}/.mount-efi/EFI/BOOT			|| exit 1
 		${MV} ${GDEST}/.mount-efi/${SCRIPT} ${GDEST}/_${TYPE}.boot	|| exit 1
-		mount-robust -u ${GINST}${GPEFI}				|| exit 1
+		mount-robust -u ${GINST}${GPSEP}${GPEFI}			|| exit 1
 	done
 	${RM} ${GDEST}/.mount-efi						|| exit 1
 fi
