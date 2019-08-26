@@ -19,6 +19,7 @@
 #
 # (source /.gary-os/.bashrc && shell -i)
 # rsync -avv -L --filter="-_/sources" --filter="-_/build" root@me.garybgenett.net:/.g/_data/zactive/.setup/gentoo.gary-os/ /.gary-os
+# rsync /.gary-os/gentoo/sets/ /etc/portage/sets
 #
 ################################################################################
 # beginning of scripting
