@@ -3863,7 +3863,8 @@ function task-duplicates {
 ########################################
 
 function task-switch {
-	FILE="$(task uuids status:pending "${@}")"
+	declare FILTER="status:pending kind.isnt:notes +ANNOTATED"
+	FILE="$(task uuids ${FILTER} "${@}")"
 	task view +ACTIVE
 	if (
 		[[ "${@}" == "-" ]]
@@ -3872,9 +3873,7 @@ function task-switch {
 	); then
 #>>>		if [[ "${@}" != "-" ]] && [[ "${FILE}" == *(*)[ ]*(*) ]]; then
 		if [[ "${@}" != "-" ]] && [[ -n "$(echo "${FILE}" | ${GREP} "[ ]")" ]]; then
-#>>>			task read "${FILE}"
-			task mark "${FILE}"
-			task docs kind.isnt:notes "${FILE}"
+			task read "${FILE}"
 		else
 			echo "no" | task $(task uuids +ACTIVE) stop rc.bulk=0
 			if [[ "${@}" != "-" ]]; then
