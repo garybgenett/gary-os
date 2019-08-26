@@ -60,7 +60,6 @@
 # - openrc
 #
 # [remote]
-# - sed -i -r "s|^.*(PermitRootLogin).*$|\1 yes|g" /etc/ssh/sshd_config
 # - rc-update add sshd default
 # - openrc
 # - passwd
