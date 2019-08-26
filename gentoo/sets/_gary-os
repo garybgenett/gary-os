@@ -39,6 +39,7 @@
 # - declare SSH_SOURCE="root@me.garybgenett.net"
 # - declare SSH_DIST="/.g/_data/_builds/.gary-os.release/_distfiles"
 # - declare SSH_PACK="/.g/_data/_builds/.gary-os.release/_packages"
+# - declare SSH_COPY="/.g/_data/_builds/_gary-os/.gary-os-${ESUB}"
 # - declare RUNSV="/.runit/runsvdir/current"
 #
 # [overrides]
@@ -46,6 +47,7 @@
 # - declare USB_SOURCE="${USB_DEVICE}p1"
 # - declare SSH_DIST="/.g/_data/_builds/_gary-os.working/var/cache/portage/distfiles"
 # - declare SSH_PACK="/.g/_data/_builds/_gary-os.working/var/cache/portage/packages"
+# - declare SSH_COPY="/.g/_data/_builds/_gary-os.working/.gary-os-${ESUB}"
 # - declare GOPTS="console=ttyS0,38400"
 #
 # [commands]
@@ -82,8 +84,8 @@
 # - mount -o ro,bind,nonempty ${FUSE_DIR}-mount/${USB_PACK} ${FUSE_DIR}-pack
 # <ssh>
 # - prompt -z emerge --ask=n sshfs
-# - sshfs -o ro,nonempty ${SSH_SOURCE}:${SSH_DIST} ${FUSE_DIR}-dist
-# - sshfs -o ro,nonempty ${SSH_SOURCE}:${SSH_PACK} ${FUSE_DIR}-pack
+# - sshfs -o ro,nonempty ${SSH_SOURCE}:${SSH_DIST}/ ${FUSE_DIR}-dist
+# - sshfs -o ro,nonempty ${SSH_SOURCE}:${SSH_PACK}/ ${FUSE_DIR}-pack
 # <mount>
 # - mount -o rw -t overlay overlay -o lowerdir=${FUSE_DIR}-dist,upperdir=${FUSE_DIR}-dist-over,workdir=${FUSE_DIR}-dist-work /var/cache/portage/distfiles
 # - mount -o rw -t overlay overlay -o lowerdir=${FUSE_DIR}-pack,upperdir=${FUSE_DIR}-pack-over,workdir=${FUSE_DIR}-pack-work /var/cache/portage/packages
