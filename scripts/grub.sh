@@ -496,12 +496,28 @@ fi
 
 ########################################
 
+FILE="${GDEST}/.mount"
+${MKDIR} ${FILE}						|| exit 1
+mount-robust ${GINST}${GPART} ${FILE}				|| exit 1
+${RSYNC_U} ${GDEST}/rescue.img ${GDEST}/_${GTYPE}/core.img	|| exit 1
+grub-install \
+	--verbose \
+	--removable \
+	--skip-fs-probe \
+	--target="${GTYPE}" \
+	--directory="${GDEST}/_${GTYPE}" \
+	--boot-directory="${FILE}/${SCRIPT}" \
+	${GINST}						|| exit_summary 1
+${RSYNC_U} ${GDEST}/rescue.img ${FILE}/${SCRIPT}/grub/${GTYPE}/	|| exit 1
 grub-bios-setup \
 	--verbose \
 	--skip-fs-probe \
-	--directory="${GDEST}" \
+	--directory="${FILE}/${SCRIPT}/grub/${GTYPE}" \
 	--core-image="rescue.img" \
 	${GINST}						|| exit_summary 1
+${MV} ${FILE}/${SCRIPT} ${GDEST}/_${GTYPE}.boot			|| exit 1
+mount-robust -u ${GINST}${GPART}				|| exit 1
+${RM} ${GDEST}/.mount						|| exit 1
 
 ########################################
 
