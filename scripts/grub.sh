@@ -179,90 +179,102 @@ if not exist %CURDIR%\bcdedit.guid.txt (goto create) else (goto delete)
 
 ########################################
 
-declare MODULES="$(
+declare MODULES_LIST="$(
 	ls ${GMODS}/*.{lst,mod} |
 	${GREP} -v \
-		-e "[/]functional_test" \
-		-e "[/]testspeed" \
-		\
+		-e "[/]915resolution" \
 		-e "[/]acpi" \
-		-e "[/]efi" \
-		-e "[/]mpi" \
-		-e "[/]multiboot" \
+		-e "[/]adler" \
+		-e "[/]affs" \
+		-e "[/]afs" \
+		-e "[/]ahci" \
+		-e "[/]all_video" \
+		-e "[/]backtrace" \
+		-e "[/]bfs" \
+		-e "[/]bsd" \
+		-e "[/]btrfs" \
+		-e "[/]cbfs" \
+		-e "[/]font" \
+		-e "[/]freedos" \
+		-e "[/]gcry" \
+		-e "[/]geli" \
+		-e "[/]gettext" \
+		-e "[/]gfx" \
+		-e "[/]gzio" \
+		-e "[/]hfs" \
+		-e "[/]http" \
+		-e "[/]jfs" \
+		-e "[/]jpeg" \
+		-e "[/]legacy" \
+		-e "[/]linux16" \
+		-e "[/]lsacpi" \
+		-e "[/]lsapm" \
+		-e "[/]mda" \
+		-e "[/]minix" \
+		-e "[/]morse" \
+		-e "[/]named-colors" \
 		-e "[/]net" \
-		-e "[/]plan9" \
-		-e "[/]pxe" \
-		\
+		-e "[/]nilfs2" \
+		-e "[/]odc" \
 		-e "[/]part_acorn" \
 		-e "[/]part_amiga" \
+		-e "[/]part_apple" \
+		-e "[/]part_bsd" \
+		-e "[/]part_dfly" \
 		-e "[/]part_dvh" \
 		-e "[/]part_plan" \
 		-e "[/]part_sun" \
-		\
-		-e "[/]affs" \
-		-e "[/]afs" \
-		-e "[/]bfs" \
-		-e "[/]btrfs" \
-		-e "[/]hfs" \
-		-e "[/]jfs" \
-		-e "[/]minix" \
-		-e "[/]nilfs2" \
-		-e "[/]reiserfs" \
-		-e "[/]sfs" \
-		-e "[/]ufs" \
-		-e "[/]xfs" \
-		-e "[/]zfs" \
-		\
-		-e "[/]font" \
-		-e "[/]gfx" \
-		-e "[/]png" \
-		-e "[/]progress" \
-		-e "[/]terminfo" \
-		-e "[/]vbe" \
-		-e "[/]video" \
-		\
+		-e "[/]part_sunpc" \
+		-e "[/]pata" \
+		-e "[/]pbkdf2" \
+		-e "[/]plan9" \
 		-e "[/]play" \
+		-e "[/]png" \
+		-e "[/]random" \
+		-e "[/]reiserfs" \
+		-e "[/]romfs" \
+		-e "[/]serial" \
+		-e "[/]sfs" \
 		-e "[/]spkmodem" \
-		-e "[/]usbms" \
-		\
-		-e "[/]crypt" \
-		-e "[/]gcry" \
-		-e "[/]truecrypt" \
-		-e "[/]zfscrypt" \
-		\
-		-e "[/]gdb" \
-		-e "[/]legacy" \
-		-e "[/]regex" \
+		-e "[/]squash" \
+		-e "[/]terminfo" \
+		-e "[/]testspeed" \
+		-e "[/]tga" \
 		-e "[/]trig" \
+		-e "[/]truecrypt" \
+		-e "[/]udf" \
+		-e "[/]ufs" \
+		-e "[/]usbserial" \
+		-e "[/]video" \
+		-e "[/]xfs" \
+		-e "[/]xnu" \
+		-e "[/]zfs" \
 )"
 
-#>>> 52768 (FAIL) :: MODULES_BOOT="biosdisk memdisk tar      ntfs          part_msdos       echo        affs btrfs gcry_md5"
-#>>> 52706 (PASS) :: MODULES_BOOT="biosdisk memdisk tar ext2 ntfs part_gpt part_msdos chain echo reboot"
-declare MODULES_BOOT="\
+declare MODULES_CORE="\
 	biosdisk
 	memdisk
 	tar
 	\
+	configfile
+	echo
+	\
+	exfat
 	ext2
 	ntfs
 	part_gpt
 	part_msdos
 	\
 	chain
-	echo
+	linux
 	reboot
 "
 
-declare MODULES_CORE="\
-	${MODULES_BOOT}
-	configfile
-	linux
-"
-
-#>>> http://blog.fpmurphy.com/2010/03/grub2-efi-support.html
-declare MODULES_UEFI="\
-	$(echo -en "${MODULES_CORE}" | ${SED} "s/biosdisk//g")
-"
+declare MODULES_UEFI="$(
+	echo -en "${MODULES_CORE}" |
+	${GREP} -v \
+		-e "biosdisk" \
+)"
 
 ########################################
 
@@ -405,7 +417,7 @@ unix2dos ${GDEST}/bcdedit.bat					|| exit 1
 
 FILE="${GDEST}/rescue.tar"
 ${MKDIR} ${FILE}/boot/grub/${GTYPE}				|| exit 1
-${RSYNC_U} ${MODULES} ${FILE}/boot/grub/${GTYPE}/		|| exit 1
+${RSYNC_U} ${MODULES_LIST} ${FILE}/boot/grub/${GTYPE}/		|| exit 1
 ${RSYNC_U} ${GDEST}/rescue.cfg ${FILE}/boot/grub/grub.cfg	|| exit 1
 (cd ${FILE} && tar -cvv -f ${FILE}.tar *)			|| exit 1
 
@@ -416,7 +428,7 @@ grub-mkimage -v \
 	-o ${GDEST}/bootstrap.img \
 	-c ${GDEST}/bootstrap.cfg \
 	--prefix="${GROOT}/${_GRUB}" \
-	${MODULES_BOOT}						|| exit_summary 1
+	${MODULES_CORE}						|| exit_summary 1
 
 grub-mkimage -v \
 	-C xz \
