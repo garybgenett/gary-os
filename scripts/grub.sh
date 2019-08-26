@@ -29,7 +29,34 @@ declare HEDEF="10"
 declare GIDEF="${GDEST}/disk_image.raw"
 declare GPDEF="2"
 
+function print_usage {
+	cat <<_EOF_
+usage: ${SCRIPT} ...
+
+{directory}		target directory to use for building grub files (must already exist)
+[-d || -d<0-9+>]	show debug information || number of objects to list (default: ${HEDEF})
+[-f || -fv]		format the target block device || use vfat instead of ext4
+[block device]		use target device instead of the example loopfile
+	(loopfile):	${GIDEF}
+	grub<0-9+>	alternate partition number for example loopfile (default: ${GPDEF})
+	/dev/sda	use specified device with standard data partition (default: ${GPDEF})
+	/dev/sda<0-9+>	custom data partition number
+[menu file]		use target file as a custom grub.cfg instead of the default
+[kernel options]	additional custom options to pass to the kernel at boot
+
+All arguments must be used in the order specified.
+
+(...)	informational notes
+{...}	required
+[...]	optional
+||	select one option from the list
+<0-9+>	any numerical value
+_EOF_
+	echo -en "${HEADER}\n"
+}
+
 if [[ ! -d ${GDEST} ]]; then
+	print_usage
 	exit 0
 fi
 
