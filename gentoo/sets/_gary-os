@@ -30,7 +30,8 @@
 # - declare ESUB="generic_64"
 # - declare GOPTS=""
 # - declare GOSPKG="_gary-os"
-# - declare USB_SOURCE="sda1"
+# - declare USB_DEVICE="sda"
+# - declare USB_SOURCE="${USB_DEVICE}1"
 # - declare FUSE_DIR="/tmp/.fuse"
 # - declare GRUB_DIR="/tmp/.grub"
 # - declare USB_DIST="gary-os/_distfiles"
@@ -41,7 +42,8 @@
 # - declare RUNSV="/.runit/runsvdir/current"
 #
 # [overrides]
-# - declare USB_SOURCE="nvme0n1p1"
+# - declare USB_DEVICE="nvme0n1"
+# - declare USB_SOURCE="${USB_DEVICE}p1"
 # - declare SSH_DIST="/.g/_data/_builds/_gary-os.working/var/cache/portage/distfiles"
 # - declare SSH_PACK="/.g/_data/_builds/_gary-os.working/var/cache/portage/packages"
 # - declare GOPTS="console=ttyS0,38400"
@@ -181,7 +183,7 @@
 # - umount /dev/${USB_SOURCE} || true
 # - (cd ${GRUB_DIR} && /.gary-os/scripts/grub.sh -d5 -fv /dev/${USB_SOURCE} ${GOPTS})
 # - (cd ${GRUB_DIR} && /.gary-os/scripts/grub.sh -d5 -f /dev/${USB_SOURCE} ${GOPTS})
-# - gdisk -l /dev/${USB_SOURCE}
+# - gdisk -l /dev/${USB_DEVICE}
 # <install>
 # - mount /dev/${USB_SOURCE} ${GRUB_DIR} || true
 # - mkdir -pv ${GRUB_DIR}/gary-os.grub
