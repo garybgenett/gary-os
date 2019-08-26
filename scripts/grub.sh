@@ -365,20 +365,20 @@ function exit_summary {
 	)
 
 	if ${DEBUG}; then
-		FILE="${GDEST}/rescue.tar"
+		FILE="${GDEST}/rescue.tar/boot/grub/${GTYPE}"
 		echo -en "\n"
 		echo -en "# objects for removal:\n"
-		(cd ${FILE}/boot/grub/${GTYPE} &&
+		(cd ${FILE} &&
 			du -bs * |
 				sort -nr |
 				head -n${HEADS}
 		)
 		echo -en "\n"
 		echo -en "# objects for inclusion:\n"
-		(cd ${GDEST}/${GTYPE} &&
+		(cd ${GMODS} &&
 			du -bs $(
-				diff -qr ${GDEST}/${GTYPE} ${FILE}/boot/grub/${GTYPE} |
-				${SED} -n "s%^Only in ${GDEST}/${GTYPE}[:][[:space:]]*%%gp" |
+				diff -qr ${GMODS} ${FILE} |
+				${SED} -n "s%^Only in ${GMODS}[:][[:space:]]*%%gp" |
 				${GREP} "[.](lst|mod)$"
 			) |
 				sort -n |
@@ -399,27 +399,22 @@ function exit_summary {
 
 ################################################################################
 
-${RSYNC_U} -L ${_SELF} ${GDEST}/$(basename ${_SELF})		|| exit 1
+${RM} ${GDEST}/*					|| exit 1
+
+${MKDIR} ${GDEST}/_${GTYPE}				|| exit 1
+${RSYNC_U} ${GMODS}/ ${GDEST}/_${GTYPE}/		|| exit 1
+
+${RSYNC_U} -L ${_SELF} ${GDEST}/$(basename ${_SELF})	|| exit 1
 
 ########################################
 
-${RM} ${GDEST}/${GTYPE}						|| exit 1
-${MKDIR} ${GDEST}/${GTYPE}					|| exit 1
-${RSYNC_U} ${GMODS}/ ${GDEST}/${GTYPE}/				|| exit 1
-
-echo -en "${GLOAD}"	>${GDEST}/bootstrap.cfg			|| exit 1
-echo -en "${GMENU}"	>${GDEST}/grub.cfg			|| exit 1
-echo -en "${GRESC}"	>${GDEST}/rescue.cfg			|| exit 1
-echo -n "${BCDEDIT}"	>${GDEST}/bcdedit.bat			|| exit 1
-unix2dos ${GDEST}/bcdedit.bat					|| exit 1
+echo -en "${GLOAD}"	>${GDEST}/bootstrap.cfg	|| exit 1
+echo -en "${GMENU}"	>${GDEST}/grub.cfg	|| exit 1
+echo -en "${GRESC}"	>${GDEST}/rescue.cfg	|| exit 1
+echo -n "${BCDEDIT}"	>${GDEST}/bcdedit.bat	|| exit 1
+unix2dos ${GDEST}/bcdedit.bat			|| exit 1
 
 ########################################
-
-FILE="${GDEST}/rescue.tar"
-${MKDIR} ${FILE}/boot/grub/${GTYPE}				|| exit 1
-${RSYNC_U} ${MODULES_LIST} ${FILE}/boot/grub/${GTYPE}/		|| exit 1
-${RSYNC_U} ${GDEST}/rescue.cfg ${FILE}/boot/grub/grub.cfg	|| exit 1
-(cd ${FILE} && tar -cvv -f ${FILE}.tar *)			|| exit 1
 
 grub-mkimage -v \
 	-C xz \
@@ -428,40 +423,43 @@ grub-mkimage -v \
 	-o ${GDEST}/bootstrap.img \
 	-c ${GDEST}/bootstrap.cfg \
 	--prefix="${GROOT}/${_GRUB}" \
-	${MODULES_CORE}						|| exit_summary 1
+	${MODULES_CORE}					|| exit_summary 1
+FILE="${GDEST}/bootstrap.img"
+cat ${GMODS}/lnxboot.img ${FILE} >${FILE}.lnxboot	|| exit 1
+${MV} ${FILE}{.lnxboot,}				|| exit 1
 
+FILE="${GDEST}/rescue.tar/boot/grub"
+${MKDIR} ${FILE}/${GTYPE}				|| exit 1
+${RSYNC_U} ${MODULES_LIST} ${FILE}/${GTYPE}/		|| exit 1
+${RSYNC_U} ${GDEST}/rescue.cfg ${FILE}/grub.cfg		|| exit 1
+FILE="${GDEST}/rescue.tar"
+(cd ${FILE} && tar -cvv -f ${FILE}.tar *)		|| exit 1
 grub-mkimage -v \
 	-C xz \
 	-O ${GTYPE} \
 	-d ${GMODS} \
 	-o ${GDEST}/rescue.img \
 	-m ${GDEST}/rescue.tar.tar \
-	${MODULES_CORE}						|| exit_summary 1
+	${MODULES_CORE}					|| exit_summary 1
 
 for TYPE in x86_64-efi i386-efi; do
-	FILE="${GDEST}/grub.${TYPE/%-efi}.tar/boot/grub"
-	${MKDIR} ${FILE}/${TYPE}				|| exit 1
-	${RSYNC_U} ${GRUBD}/${TYPE}/ ${FILE}/${TYPE}		|| exit 1
-	echo -en "${GLOAD_FILE}" >${FILE}/grub.cfg		|| exit 1
-
-	FILE="${GDEST}/grub.${TYPE/%-efi}.tar"
-	(cd ${FILE} && tar -cvv -f ${FILE}.tar *)		|| exit 1
-
-	FILE="${GDEST}/grub.${TYPE/%-efi}"
+	FILE="${GDEST}/${TYPE/%-efi}.tar/boot/grub"
+	${MKDIR} ${FILE}/${TYPE}			|| exit 1
+	${RSYNC_U} ${GRUBD}/${TYPE}/ ${FILE}/${TYPE}	|| exit 1
+	echo -en "${GLOAD_FILE}" >${FILE}/grub.cfg	|| exit 1
+	FILE="${GDEST}/${TYPE/%-efi}.tar"
+	(cd ${FILE} && tar -cvv -f ${FILE}.tar *)	|| exit 1
+	FILE="${GDEST}/${TYPE/%-efi}"
 	grub-mkimage -v \
 		-C xz \
 		-O ${TYPE} \
 		-d ${GRUBD}/${TYPE} \
 		-o ${FILE}.efi \
 		-m ${FILE}.tar.tar \
-		${MODULES_UEFI}					|| exit_summary 1
+		${MODULES_UEFI}				|| exit_summary 1
 done
 
-FILE="${GDEST}/bootstrap.img"
-cat ${GMODS}/lnxboot.img ${FILE} >${FILE}.lnxboot		|| exit 1
-${MV} ${FILE}{.lnxboot,}					|| exit 1
-
-${RM} ${GDEST}/*.tar.tar					|| exit 1
+${RM} ${GDEST}/*.tar.tar				|| exit 1
 
 ########################################
 
