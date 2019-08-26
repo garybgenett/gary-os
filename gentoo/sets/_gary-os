@@ -184,8 +184,8 @@
 # - mkdir -pv ${GRUB_DIR}
 # <format>
 # - umount /dev/${USB_SOURCE} || [[ -z $(mount | ${GREP} "/dev/${USB_SOURCE}") ]]
-# - (cd ${GRUB_DIR} && /.gary-os/scripts/grub.sh -d5 -fv /dev/${USB_SOURCE} ${GOPTS})
-# - (cd ${GRUB_DIR} && /.gary-os/scripts/grub.sh -d5 -f /dev/${USB_SOURCE} ${GOPTS})
+# - /.gary-os/scripts/grub.sh ${GRUB_DIR} -d5 -fv /dev/${USB_SOURCE} ${GOPTS}
+# - /.gary-os/scripts/grub.sh ${GRUB_DIR} -d5 -f /dev/${USB_SOURCE} ${GOPTS}
 # - gdisk -l /dev/${USB_DEVICE}
 # <install>
 # - mount -o rw /dev/${USB_SOURCE} ${GRUB_DIR} || [[ -n $(mount | ${GREP} "{GRUB_DIR}") ]]
