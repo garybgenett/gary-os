@@ -708,13 +708,14 @@ function _publish_export {
 ########################################
 
 function _publish_grub {
-	FILE="${_OUTDIR}/${_TITLE}.grub"
-	${RM}		${FILE}*				|| return 1
-	${MKDIR}	${FILE}					|| return 1
-	(cd ${FILE} &&	${HOME}/scripts/grub.sh)		|| return 1
-	common_tar	${FILE}					|| return 1
-	${MV}		${FILE}.tar.xz ${FILE}.${_RDATE}.tar.xz	|| return 1
-	${RM}		${FILE}					|| return 1
+#>>>	FILE="${_OUTDIR}/${_TITLE}.grub"
+	FILE="${_OUTDIR}/${_RAMFS}.grub"
+	${RM}			${FILE}*			|| return 1
+	${MKDIR}		${FILE}				|| return 1
+	${HOME}/scripts/grub.sh	${FILE}				|| return 1
+	common_tar		${FILE}				|| return 1
+#>>>	${MV} ${FILE}.tar.xz	${FILE}.${_RDATE}.tar.xz	|| return 1
+	${RM}			${FILE}				|| return 1
 	return 0
 }
 
