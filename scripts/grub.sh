@@ -130,9 +130,11 @@ declare GMENU="\
 # menu
 ${G_DBG}
 insmod linux
-menuentry \"${_PROJ}\" {
+menuentry \"Boot ${_PROJ}\" {
 linux ${GROOT}/${_BASE}.null.kernel
 linux ${GROOT}/${_BASE}.kernel ${GOPTS}
+initrd ${GROOT}/${_BASE}.initrd
+boot
 }
 insmod chain
 menuentry \"Back to OS\" { chainloader ${GBOOT}+1 }
@@ -143,7 +145,7 @@ declare GRESC="\
 # rescue
 ${G_DBG}
 insmod read
-menuentry \"${_NAME} Rescue Image\" { set; read rescue; }
+menuentry \"${_NAME} Rescue\" { set pager=1; set; read rescue; set pager=0; }
 ${GCUST:-${GMENU}}
 "
 
