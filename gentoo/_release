@@ -143,7 +143,7 @@ function prepare_config_issue {
 	then
 		FILE="\n"
 		FILE+=" \\\e[1;45;37m"
-		FILE+="PLEASE NOTE THAT THIS BUILD HAS BEEN CUSTOMIZED AND IS NOT AN OFFICIAL VERSION"
+		FILE+="PLEASE NOTE THAT THIS BUILD HAS BEEN CUSTOMIZED AND IS NOT AN OFFICIAL RELEASE"
 		FILE+="\\\e[1;40;30m"
 		${SED} -i \
 			-e "s|^.+Some helpful notes.+$|${FILE}|g" \
