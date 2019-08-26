@@ -509,6 +509,12 @@ app-emulation/lxc
 games-emulation/dosbox
 virtual/wine
 
+sys-firmware/edk2-ovmf
+sys-firmware/ipxe
+sys-firmware/seabios
+sys-firmware/sgabios
+sys-firmware/vgabios
+
 app-emulation/aqemu
 app-emulation/qemu
 app-emulation/qemu-guest-agent
