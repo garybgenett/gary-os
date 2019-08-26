@@ -102,6 +102,7 @@ declare GROOT="(hd0,${GPART})"
 declare GFILE="(hd0,${GPART})/boot/grub/grub.cfg"
 
 declare GTYPE="i386-pc"
+declare GEFIS="x86_64-efi" #>>> i386-efi"
 declare GRUBD="/usr/lib/grub"
 declare GMODS="${GRUBD}/${GTYPE}"
 
@@ -403,6 +404,10 @@ ${RM} ${GDEST}/*					|| exit 1
 
 ${MKDIR} ${GDEST}/_${GTYPE}				|| exit 1
 ${RSYNC_U} ${GMODS}/ ${GDEST}/_${GTYPE}/		|| exit 1
+for TYPE in ${GEFIS}; do
+	${MKDIR} ${GDEST}/_${TYPE}			|| exit 1
+	${RSYNC_U} ${GRUBD}/${TYPE}/ ${GDEST}/_${TYPE}	|| exit 1
+done
 
 ${RSYNC_U} -L ${_SELF} ${GDEST}/$(basename ${_SELF})	|| exit 1
 
@@ -442,7 +447,7 @@ grub-mkimage -v \
 	-m ${GDEST}/rescue.tar.tar \
 	${MODULES_CORE}					|| exit_summary 1
 
-for TYPE in x86_64-efi i386-efi; do
+for TYPE in ${GEFIS}; do
 	FILE="${GDEST}/${TYPE/%-efi}.tar/boot/grub"
 	${MKDIR} ${FILE}/${TYPE}			|| exit 1
 	${RSYNC_U} ${GRUBD}/${TYPE}/ ${FILE}/${TYPE}	|| exit 1
@@ -518,6 +523,42 @@ grub-bios-setup \
 ${MV} ${FILE}/${SCRIPT} ${GDEST}/_${GTYPE}.boot			|| exit 1
 mount-robust -u ${GINST}${GPART}				|| exit 1
 ${RM} ${GDEST}/.mount						|| exit 1
+
+if [[ -b ${GINST}${GPEFI} ]]; then
+	function efi_cp {
+		declare SRC="${1}"; shift
+		declare DST="${1}"; shift
+		if [[ ${SRC} == ${GDEST}/x86_64.efi ]]; then
+			${RSYNC_C} ${SRC} ${DST}/BOOTX64.EFI	|| return 1
+		fi
+		if [[ ${SRC} == ${GDEST}/i386.efi ]]; then
+			${RSYNC_C} ${SRC} ${DST}/BOOTIA32.EFI	|| return 1
+		fi
+		return 0
+	}
+
+	${MKDIR} ${GDEST}/.mount-efi						|| exit 1
+	mount-robust ${GINST}${GPEFI} ${GDEST}/.mount-efi			|| exit 1
+	FILE="${GDEST}/.mount-efi/EFI/BOOT"					|| exit 1
+	${MKDIR} ${FILE}							|| exit 1
+	for TYPE in ${GEFIS}; do
+		FILE="${GDEST}/${TYPE/%-efi}.efi"
+		${RSYNC_U} ${FILE} ${GDEST}/_${TYPE}/core.efi			|| exit 1
+		grub-install \
+			--verbose \
+			--removable \
+			--skip-fs-probe \
+			--target="${TYPE}" \
+			--directory="${GDEST}/_${TYPE}" \
+			--boot-directory="${GDEST}/.mount-efi/${SCRIPT}" \
+			--efi-directory="${GDEST}/.mount-efi" \
+			${GINST}						|| exit_summary 1
+		efi_cp ${FILE} ${GDEST}/.mount-efi/EFI/BOOT			|| exit 1
+		${MV} ${GDEST}/.mount-efi/${SCRIPT} ${GDEST}/_${TYPE}.boot	|| exit 1
+		mount-robust -u ${GINST}${GPEFI}				|| exit 1
+	done
+	${RM} ${GDEST}/.mount-efi						|| exit 1
+fi
 
 ########################################
 
