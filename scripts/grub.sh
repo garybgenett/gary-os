@@ -443,6 +443,39 @@ unix2dos ${GDEST}/bcdedit.bat			|| exit 1
 
 ########################################
 
+function partition_disk {
+	declare DEV="${1}"
+	shift
+	echo -en "${GDISK}" | gdisk ${DEV}		|| return 1
+	echo -en "${GDHYB}" | gdisk ${DEV}		|| return 1
+	yes | format ${GFEFI} ${DEV}${GPSEP}${GPEFI}	|| return 1
+	yes | format ${GFFMT} ${DEV}${GPART}		|| return 1
+	return 0
+}
+
+if [[ -b ${GINST} ]]; then
+	if ${GFDSK}; then
+		partition_disk ${GINST}			|| exit 1
+	fi
+else
+	GPEFI="p${GPEFI}"
+	GPMBR="p${GPMBR}"
+	GPART="p${GPART}"
+	dd \
+		status=progress \
+		bs=${BLOCKS_SIZE} \
+		count=${LOOP_BLOCKS} \
+		conv=notrunc \
+		if=/dev/zero \
+		of=${GINST}				|| exit 1
+	losetup -d ${LOOP_DEVICE}			#>>> || exit 1
+	losetup -v -P ${LOOP_DEVICE} ${GINST}		|| exit 1
+	partition_disk ${LOOP_DEVICE}			|| exit 1
+	GINST="${LOOP_DEVICE}"
+fi
+
+########################################
+
 grub-mkimage -v \
 	-C xz \
 	-O ${GTYPE} \
@@ -487,39 +520,6 @@ for TYPE in ${GEFIS}; do
 done
 
 ${RM} ${GDEST}/*.tar.tar				|| exit 1
-
-########################################
-
-function partition_disk {
-	declare DEV="${1}"
-	shift
-	echo -en "${GDISK}" | gdisk ${DEV}		|| return 1
-	echo -en "${GDHYB}" | gdisk ${DEV}		|| return 1
-	yes | format ${GFEFI} ${DEV}${GPSEP}${GPEFI}	|| return 1
-	yes | format ${GFFMT} ${DEV}${GPART}		|| return 1
-	return 0
-}
-
-if [[ -b ${GINST} ]]; then
-	if ${GFDSK}; then
-		partition_disk ${GINST}			|| exit 1
-	fi
-else
-	GPEFI="p${GPEFI}"
-	GPMBR="p${GPMBR}"
-	GPART="p${GPART}"
-	dd \
-		status=progress \
-		bs=${BLOCKS_SIZE} \
-		count=${LOOP_BLOCKS} \
-		conv=notrunc \
-		if=/dev/zero \
-		of=${GINST}				|| exit 1
-	losetup -d ${LOOP_DEVICE}			#>>> || exit 1
-	losetup -v -P ${LOOP_DEVICE} ${GINST}		|| exit 1
-	partition_disk ${LOOP_DEVICE}			|| exit 1
-	GINST="${LOOP_DEVICE}"
-fi
 
 ########################################
 
