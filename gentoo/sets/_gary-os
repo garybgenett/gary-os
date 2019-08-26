@@ -49,7 +49,7 @@
 # - declare GOPTS="console=ttyS0,38400"
 #
 # [commands]
-# - mount -o remount,size=8g / && df /
+# - mount -o remount,rw,size=8g / && df /
 #
 ########################################
 # basic setup
@@ -85,13 +85,14 @@
 # - sshfs -o ro,nonempty ${SSH_SOURCE}:${SSH_DIST} ${FUSE_DIR}-dist
 # - sshfs -o ro,nonempty ${SSH_SOURCE}:${SSH_PACK} ${FUSE_DIR}-pack
 # <mount>
-# - mount -t overlay overlay -o lowerdir=${FUSE_DIR}-dist,upperdir=${FUSE_DIR}-dist-over,workdir=${FUSE_DIR}-dist-work /var/cache/portage/distfiles
-# - mount -t overlay overlay -o lowerdir=${FUSE_DIR}-pack,upperdir=${FUSE_DIR}-pack-over,workdir=${FUSE_DIR}-pack-work /var/cache/portage/packages
+# - mount -o rw -t overlay overlay -o lowerdir=${FUSE_DIR}-dist,upperdir=${FUSE_DIR}-dist-over,workdir=${FUSE_DIR}-dist-work /var/cache/portage/distfiles
+# - mount -o rw -t overlay overlay -o lowerdir=${FUSE_DIR}-pack,upperdir=${FUSE_DIR}-pack-over,workdir=${FUSE_DIR}-pack-work /var/cache/portage/packages
 # - mount
 # <install>
 # - prompt -z emerge --usepkg=y --deep --newuse --update \@${GOSPKG}
 # <umount>
-# - umount ${FUSE_DIR}-{mount,dist{,-over,-work},pack{,-over,-work}} /var/cache/portage/{distfiles,packages} || true
+# - umount ${FUSE_DIR}-{mount,dist{,-over,-work},pack{,-over,-work}} /var/cache/portage/{distfiles,packages} || [[ -z $(mount | ${GREP} "${FUSE_DIR}") ]]
+# - rm -rv --one-file-system ${FUSE_DIR}
 # - mount
 #
 # [xorg]
@@ -180,22 +181,23 @@
 # <setup>
 # - mkdir -pv ${GRUB_DIR}
 # <format>
-# - umount /dev/${USB_SOURCE} || true
+# - umount /dev/${USB_SOURCE} || [[ -z $(mount | ${GREP} "/dev/${USB_SOURCE}") ]]
 # - (cd ${GRUB_DIR} && /.gary-os/scripts/grub.sh -d5 -fv /dev/${USB_SOURCE} ${GOPTS})
 # - (cd ${GRUB_DIR} && /.gary-os/scripts/grub.sh -d5 -f /dev/${USB_SOURCE} ${GOPTS})
 # - gdisk -l /dev/${USB_DEVICE}
 # <install>
-# - mount /dev/${USB_SOURCE} ${GRUB_DIR} || true
+# - mount -o rw /dev/${USB_SOURCE} ${GRUB_DIR} || [[ -n $(mount | ${GREP} "{GRUB_DIR}") ]]
 # - mkdir -pv ${GRUB_DIR}/gary-os.grub
 # - (cd ${GRUB_DIR}/gary-os.grub && /.gary-os/scripts/grub.sh /dev/${USB_SOURCE} ${GOPTS})
 # <umount>
-# - umount /dev/${USB_SOURCE} || true
+# - umount ${GRUB_DIR} || [[ -z $(mount | ${GREP} "${GRUB_DIR}") ]]
+# - rm -rv --one-file-system ${GRUB_DIR}
 # - mount
 #
 # [package]
 # <setup>
 # - mkdir -pv /.gary-os-${ESUB}
-# - mount -o rw /dev/${USB_SOURCE} /.gary-os-${ESUB} || true
+# - mount -o rw /dev/${USB_SOURCE} /.gary-os-${ESUB} || [[ -n $(mount | ${GREP} "/.gary-os-${ESUB}") ]]
 # <link>
 # - rm -frv /.gary-os-${ESUB}/linux /usr/src/linux
 # - make -f /.gary-os/Makefile O=/ unpack
@@ -208,7 +210,8 @@
 # - rsync -avv /.gary-os-${ESUB}/gary-os-${ESUB}-${GARYOS_VER}.kernel /.gary-os-${ESUB}/gary-os.kernel || true
 # - rsync -avv /.gary-os-${ESUB}/gary-os-${ESUB}-${GARYOS_VER}.cpio.xz /.gary-os-${ESUB}/gary-os.initrd || true
 # <umount>
-# - umount /.gary-os-${ESUB} || true
+# - umount /.gary-os-${ESUB} || [[ -z $(mount | ${GREP} "/.gary-os-${ESUB}") ]]
+# - rm -rv --one-file-system /.gary-os-${ESUB}
 # - mount
 #
 # [finish]
