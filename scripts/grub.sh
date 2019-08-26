@@ -107,10 +107,10 @@ if [[ -b $(		echo ${1} | ${SED} "s|[p]?[0-9]+$||g") ]] || [[ ${1} == grub+([0-9]
 	if [[ -z ${GPART} ]]; then
 		GPART="${GPDEF}"
 	fi
-	GPROP="$(echo "${GPART}" | ${SED} "s|^([p]?)([0-9]+)$|\2|g")"
-	GPSEP="$(echo "${GPART}" | ${SED} "s|^([p]?)([0-9]+)$|\1|g")"
 	shift
 fi
+GPROP="$(echo "${GPART}" | ${SED} "s|^([p]?)([0-9]+)$|\2|g")"
+GPSEP="$(echo "${GPART}" | ${SED} "s|^([p]?)([0-9]+)$|\1|g")"
 
 ########################################
 
