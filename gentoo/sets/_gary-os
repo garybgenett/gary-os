@@ -142,8 +142,8 @@
 #
 # [vpn]
 # - _sync archive
-# - vpn -a || true
-# - vpn -v || true
+# - vpn -a
+# - vpn -v
 #
 # [config]
 # - _sync _moz _clone ${HOME}/.mozilla
@@ -166,7 +166,7 @@
 # - sed -i -r "s|[$][{]?RC_SVCDIR[}]?/sv|${RUNSV}|g"	/etc/init.d/runsvdir
 # - rc-update add runsvdir default
 # - openrc
-# - vpn -v || true
+# - vpn -v
 #
 # [extra]
 # - [[ -n ${USB_SOURCE} ]] && _sync mount shadow ${USB_SOURCE/%[0-9]}
