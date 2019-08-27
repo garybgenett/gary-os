@@ -326,6 +326,7 @@ export LT="tree -asF -hD --du"					; alias lt="${LT}"
 
 export DU="du -b --time --time-style=long-iso"			; alias du="${DU}"
 export LU="${DU} -ak --max-depth 1"				; alias lu="${LU}"
+export NCDU="ncdu -r -x"					; alias ncdu="${NCDU}"
 
 ########################################
 
