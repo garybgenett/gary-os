@@ -3642,12 +3642,11 @@ function task-depends {
 			# taskwarrior ranks udas (n..1) instead of (1..n), so (uda+) should be entered ($a, $b) and we will reverse it to ($b, $a), and vice versa
 			return(${owt} <=> ${eno});
 		};
-		# report.skim.sort=project+,kind-,priority-,depends+,description+,entry+
+		# report.skim.sort=project+,kind-,depends-,description+,entry+
 		sub print_task_sorter {
 			(($list->{$a}{"project"}		|| "") cmp ($list->{$b}{"project"}	|| "")) ||
 			(&print_task_sorter_udas("kind",	${b}, ${a})				) ||
-			(&print_task_sorter_udas("priority",	${b}, ${a})				) ||
-			(($list->{$a}{"depends"}		|| "") cmp ($list->{$b}{"depends"}	|| "")) ||
+			(($list->{$b}{"depends"}		|| "") cmp ($list->{$a}{"depends"}	|| "")) ||
 			(($list->{$a}{"description"}		|| "") cmp ($list->{$b}{"description"}	|| "")) ||
 			(($list->{$a}{"entry"}			|| "") cmp ($list->{$b}{"entry"}	|| ""))
 		};
