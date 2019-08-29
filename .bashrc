@@ -3991,8 +3991,8 @@ function task-project {
 			PROJ=" status:pending"
 		fi
 		task read	project.is:${PROJ} -PARENT -CHILD
-		task view	project.is:${PROJ} -PARENT -CHILD
 		task-depends	project.is:${PROJ} -PARENT -CHILD
+		task look	project.is:${PROJ} -PARENT -CHILD
 	done
 	return 0
 }
