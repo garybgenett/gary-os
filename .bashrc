@@ -4143,7 +4143,6 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			echo -en "###[ Weekly Review Steps & Commands ]###\n"	>>${TASKFILE}.weekly.txt
 			declare FILE
 			for FILE in \
-				"System" \
 				"Weekly[ ]Review" \
 				"Weekly[ ]Report" \
 			; do
