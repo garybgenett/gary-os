@@ -675,8 +675,10 @@ fi
 
 if [[ ${1} == -y ]]; then
 	shift
-	#note: ensuring configuration is up-to-date
-	${_SELF} ${QUIET_OPT} ${TOOR} -r		|| EXIT 1
+	if ${DO_CHROOT}; then
+		#note: ensuring configuration is up-to-date
+		${_SELF} ${QUIET_OPT} ${TOOR} -r	|| EXIT 1
+	fi
 	if [[ ${1} == -j ]]; then
 		shift
 		if [[ ${1} == depends ]] || [[ ${1} == d ]]; then
