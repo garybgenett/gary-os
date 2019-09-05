@@ -698,23 +698,11 @@ if [[ ${1} == -y ]]; then
 		fi
 		EXIT 0
 	fi
-	function compare_packages {
-		declare NAM="${1}" && shift
-		declare SRC="${1}" && shift
-		declare DST="${1}" && shift
-		echo -en "\n"
-		echo -en ">>> PACKAGES: ${NAM} <<<\n"
-		echo -en ">>> COMPARING (${DST}) AGAINST (${SRC}) FILE <<<\n"
-		echo -en "\n"
-#>>>		for NEXT in $(${SED} "s|^.*[[:space:]]||g" ${DST}); do
-		for NEXT in $(cat ${DST}); do
-			NEXT="$(echo "${NEXT}" | ${SED} "s|[-][0-9].*$||g")"
-			if [[ -z $(${GREP} "${NEXT}" ${SRC}) ]]; then
-				${GREP} "${NEXT}" ${DST}
-			fi
-		done
-		return 0
-	}
+	FILE="${_SAVDIR}${GENDIR}/_packages"
+	if [[ -n ${1} ]] && [[ -f ${1} ]]; then
+		FILE="${1}"
+		shift
+	fi
 	if ! ${DO_CHROOT}; then
 		echo -en "\n"
 		echo -en ">>> THIS OPTION REQUIRES A CHROOT <<<\n"
@@ -725,22 +713,34 @@ if [[ ${1} == -y ]]; then
 		echo -en "\n"
 		EXIT 1
 	fi
-	FILE="${_SAVDIR}${GENDIR}/_packages"
-	if [[ -n ${1} ]] && [[ -f ${1} ]]; then
-		FILE="${1}"
-		shift
-	fi
-	if [[ -f ${FILE} ]] && [[ -f ${TARGET}${GENDIR}/_packages ]]; then
-		#note: the "_packages" file is hard-set in the ".emergent" script
-		compare_packages "ADDED"	${FILE}				${TARGET}${GENDIR}/_packages
-		compare_packages "REMOVED"	${TARGET}${GENDIR}/_packages	${FILE}
-	else
+	if [[ ! -f ${FILE} ]] || [[ ! -f ${TARGET}${GENDIR}/_packages ]]; then
 		echo -en "\n"
 		echo -en ">>> ONE OF (${FILE}) OR (${TARGET}${GENDIR}/_packages) DOES NOT EXIST <<<\n"
 		echo -en ">>> VALID SOURCE ({packages_file}) AND DESTINATION (-g)(GOSDIR=/) FILES ARE REQUIRED <<<\n"
 		echo -en ">>> SKIPPING PACKAGE COMPARISONS <<<\n"
 #>>>		echo -en "\n"
 #>>>		EXIT 1
+	else
+		function compare_packages {
+			declare NAM="${1}" && shift
+			declare SRC="${1}" && shift
+			declare DST="${1}" && shift
+			echo -en "\n"
+			echo -en ">>> PACKAGES: ${NAM} <<<\n"
+			echo -en ">>> COMPARING (${DST}) AGAINST (${SRC}) FILE <<<\n"
+			echo -en "\n"
+#>>>			for NEXT in $(${SED} "s|^.*[[:space:]]||g" ${DST}); do
+			for NEXT in $(cat ${DST}); do
+				NEXT="$(echo "${NEXT}" | ${SED} "s|[-][0-9].*$||g")"
+				if [[ -z $(${GREP} "${NEXT}" ${SRC}) ]]; then
+					${GREP} "${NEXT}" ${DST}
+				fi
+			done
+			return 0
+		}
+		#note: the "_packages" file is hard-set in the ".emergent" script
+		compare_packages "ADDED"	${FILE}				${TARGET}${GENDIR}/_packages
+		compare_packages "REMOVED"	${TARGET}${GENDIR}/_packages	${FILE}
 	fi
 	#note: the ".emerge" file is also hard-set in the ".emergent" script
 	echo -en "\n>>> USE: GLOBAL <<<\n"
