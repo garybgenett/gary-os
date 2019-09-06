@@ -83,7 +83,7 @@ declare AUDITS=".emergent"
 
 #OPTIONS[ARTDIR CFGSCR]
 #VARIABLES[PREPIT MAKEIT SHIPIT]
-declare ARTDIR="${ARTDIR:-/.g/_data/zactive/coding/gary-os/_artifacts}"
+declare ARTDIR="${ARTDIR:-/.g/_data/zactive/coding/gary-os/artifacts}"
 declare CFGSCR="${CFGSCR:-${SETDIR}/${FUNDIR}.config}"
 declare PREPIT="_prepare"
 declare MAKEIT="_release"
