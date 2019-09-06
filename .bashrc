@@ -4164,7 +4164,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 		elif [[ ${1} == "todo" ]]; then
 			shift
 			declare SOURCE
-			declare HEADER[@]
+			declare -a HEADER
 			declare FILE
 			if [[ -z "${@}" ]]; then
 				SOURCE="${TODOUUID}"
