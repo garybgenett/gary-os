@@ -21,12 +21,21 @@ fi
 
 if [[ ${1} == -l ]]; then
 	shift
+	declare FILES=
 	declare FILE=
-	for FILE in $(find ./ | sort | ${GREP} "[.]rationale$"); do
+	for FILE in $(find ./ | sort | ${GREP} "[/][.]rationale$"); do
+		FILE="${FILE/%\/.rationale}"
 		echo -en "\n[${FILE}] ($(
-			${LS} ${FILE/%.rationale/.keep} 2>/dev/null
+			${LS} ${FILE}/.keep 2>/dev/null
 		))\n"
-		cat ${FILE}
+		cat ${FILE}/.rationale
+		if [[ ! -f ${FILE}/.keep ]]; then
+			FILES+=" ${FILE}"
+		fi
+	done
+	echo -en "\n"
+	for FILE in ${FILES}; do
+		echo -en "${FILE}\n"
 	done
 	exit 0
 fi
