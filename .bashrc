@@ -1842,8 +1842,8 @@ function mount-robust {
 			echo "Root Filesystem: ${DEV}"
 		fi
 		if [[ ${PNT} == ${DIR} ]] ||
-		   [[ -n "$(mount | ${GREP} "^${PNT}[ ]on[ ]${DIR}" | tail -n1)" ]] ||
-		   [[ -n "$(mount | ${GREP} "^${DEV}[ ]on[ ]${DIR}" | tail -n1)" ]]; then
+		   [[ -n "$(mount | ${GREP} "^${PNT}[ ]on[ ]${DIR}")" ]] ||
+		   [[ -n "$(mount | ${GREP} "^${DEV}[ ]on[ ]${DIR}")" ]]; then
 			echo "Already Mounted: ${DEV}"
 			return 0
 		fi
