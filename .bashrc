@@ -3069,7 +3069,7 @@ function task-export-text {
 					. "[Hold]\t"	. (${hld_d}			|| "-") . "\n"
 					. "[First]\t"	. (${fst_d}			|| "-") . "\n"
 					. "[Last]\t"	. (${lst_d}			|| "-") . "\n"
-					. "[End]\t"	. (${end_d}			|| "-") . "\n"
+					. "[End]\t\t"	. (${end_d}			|| "-") . "\n"
 				. "",
 			});
 		};
