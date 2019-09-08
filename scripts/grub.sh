@@ -524,9 +524,9 @@ ${RM} ${GDEST}/*.tar.tar				|| exit 1
 ########################################
 
 FILE="${GDEST}/.mount"
-${MKDIR} ${FILE}						|| exit 1
-mount-robust ${GINST}${GPART} ${FILE}				|| exit 1
-${RSYNC_U} ${GDEST}/rescue.img ${GDEST}/_${GTYPE}/core.img	|| exit 1
+${MKDIR} ${FILE}								|| exit 1
+mount-robust ${GINST}${GPART} ${FILE}						|| exit 1
+${RSYNC_U} ${GDEST}/rescue.img ${GDEST}/_${GTYPE}/core.img			|| exit 1
 grub-install \
 	--verbose \
 	--removable \
@@ -534,27 +534,27 @@ grub-install \
 	--target="${GTYPE}" \
 	--directory="${GDEST}/_${GTYPE}" \
 	--boot-directory="${FILE}/${SCRIPT}" \
-	${GINST}						|| exit_summary 1
-${RSYNC_U} ${GDEST}/rescue.img ${FILE}/${SCRIPT}/grub/${GTYPE}/	|| exit 1
+	${GINST}								|| exit_summary 1
+${RSYNC_U} ${GDEST}/rescue.img ${FILE}/${SCRIPT}/grub/${GTYPE}/			|| exit 1
 grub-bios-setup \
 	--verbose \
 	--skip-fs-probe \
 	--directory="${FILE}/${SCRIPT}/grub/${GTYPE}" \
 	--core-image="rescue.img" \
-	${GINST}						|| exit_summary 1
-${MV} ${FILE}/${SCRIPT} ${GDEST}/_${GTYPE}.boot			|| exit 1
-mount-robust -u ${GINST}${GPART}				|| exit 1
-${RM} ${GDEST}/.mount						|| exit 1
+	${GINST}								|| exit_summary 1
+${MV} ${FILE}/${SCRIPT} ${GDEST}/_${GTYPE}.boot					|| exit 1
+mount-robust -u ${GINST}${GPART}						|| exit 1
+${RM} ${GDEST}/.mount								|| exit 1
 
 if [[ -b ${GINST}${GPSEP}${GPEFI} ]]; then
 	function efi_cp {
 		declare SRC="${1}"; shift
 		declare DST="${1}"; shift
 		if [[ ${SRC} == ${GDEST}/x86_64.efi ]]; then
-			${RSYNC_C} ${SRC} ${DST}/BOOTX64.EFI	|| return 1
+			${RSYNC_C} ${SRC} ${DST}/BOOTX64.EFI			|| return 1
 		fi
 		if [[ ${SRC} == ${GDEST}/i386.efi ]]; then
-			${RSYNC_C} ${SRC} ${DST}/BOOTIA32.EFI	|| return 1
+			${RSYNC_C} ${SRC} ${DST}/BOOTIA32.EFI			|| return 1
 		fi
 		return 0
 	}
