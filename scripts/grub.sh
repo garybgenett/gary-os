@@ -332,23 +332,20 @@ declare MODULES_UEFI="$(
 
 declare BLOCKS_SIZE="512"
 declare BLOCKS_BOOT="$(( (2**10)*4 ))"
-#>>> declare BLOCKS_DATA="$(( (2**20)*2 ))"
-declare BLOCKS_DATA="$(( (2**10)*(2**7) ))"
-#>>> declare BLOCKS_NULL="${BLOCKS_DATA}"
-declare BLOCKS_NULL="0"
+declare BLOCKS_DATA="$(( (2**10)*(2**10) *2))"
+#>>> declare BLOCKS_DATA="$(( (2**10)*(2**6) *2))"
+declare BLOCKS_NULL="${BLOCKS_DATA}"
 
 declare LOOP_DEVICE="/dev/loop9"
-#>>> declare LOOP_BLOCKS="$(( ${BLOCKS_BOOT} + (${BLOCKS_NULL}*2) + (${BLOCKS_DATA}*6) ))"
-declare LOOP_BLOCKS="$(( ${BLOCKS_BOOT} + (${BLOCKS_NULL}*2) + (${BLOCKS_DATA}*3) ))"
+declare LOOP_BLOCKS="$(( ${BLOCKS_BOOT} + (${BLOCKS_NULL}*2) + (${BLOCKS_DATA}*2) + (${BLOCKS_DATA}*4) ))"
 
 declare NEWBLOCK=
 declare GDISK=
 declare GDHYB=
 # reset table
-GDISK+="\n"
 GDISK+="p\n"
 GDISK+="o\n"
-GDISK+="Y\n"
+GDISK+="y\n"
 GDISK+="p\n"
 # efi partition
 GDISK+="n\n"
@@ -373,20 +370,21 @@ GDISK+="${GFNUM}\n"
 GDISK+="p\n"
 # write partition table
 GDISK+="w\n"
-GDISK+="Y\n"
+GDISK+="y\n"
 # hybrid mbr
 GDHYB+="r\n"
 GDHYB+="h\n"
-GDHYB+="${GPMBR} ${GPPRT}\n"
+GDHYB+="${GPMBR} ${GPPRT} ${GPEFI}\n"
 GDHYB+="n\n"
-GDHYB+="\n"
-GDHYB+="n\n"
-GDHYB+="\n"
+GDHYB+="${GNMBR}/%[0-9][0-9]}\n"
 GDHYB+="y\n"
+GDHYB+="${GFNUM}/%[0-9][0-9]}\n"
+GDHYB+="n\n"
+GDHYB+="${GNEFI}/%[0-9][0-9]}\n"
 GDHYB+="n\n"
 GDHYB+="o\n"
 GDHYB+="w\n"
-GDHYB+="Y\n"
+GDHYB+="y\n"
 
 ########################################
 
