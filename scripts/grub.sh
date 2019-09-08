@@ -143,38 +143,54 @@ declare GMODS="${GRUBD}/${GTYPE}"
 
 ########################################
 
-declare G_DBG="set debug=linux"
+declare G_SET="\
+# settings
+set debug=linux
+"
+declare G_MOD="\
+# modules
+insmod configfile
+insmod linux
+insmod chain
+"
+declare G_END="\n\
+# end of file"
+#>>> "
 
 declare GLOAD="\
+${G_MOD}
 # load
-${G_DBG}
 echo \"Loading ${_NAME}...\"
-insmod configfile
-# end of file
+${G_END}
 "
-
-declare GMENU="\
+declare GMENU="\n\
 # menu
-${G_DBG}
-insmod linux
-menuentry \"Boot ${_PROJ}\" {
+menuentry \"Default OS\" {
+chainloader ${GBOOT}+1
+}"
+#>>> "
+declare GRESC="\
+${G_SET}
+${G_MOD}
+# rescue
+menuentry \"${_NAME} Rescue\" {
+set pager=1
+set
+set pager=0
+}
+menuentry \"${_PROJ} Rescue\" {
 linux  ${GROOT}/${_BASE}.null.kernel
 linux  ${GROOT}/${_BASE}.kernel ${GOPTS}
 initrd ${GROOT}/${_BASE}.initrd
 boot
 }
-insmod chain
-menuentry \"Back to OS\" { chainloader ${GBOOT}+1 }
-# end of file
+${GMENU}
+${G_END}
 "
 
-declare GRESC="\
-# rescue
-${G_DBG}
-insmod read
-menuentry \"${_NAME} Rescue\" { set pager=1; set; read rescue; set pager=0; }
-${GCUST:-${GMENU}}
-"
+if [[ -n ${GCUST} ]]; then
+	GRESC="${GCUST}"
+fi
 
 ########################################
 
@@ -440,7 +456,7 @@ ${RSYNC_U} -L ${_SELF} ${GDEST}/$(basename ${_SELF})	|| exit 1
 ########################################
 
 echo -en "${GLOAD}"	>${GDEST}/bootstrap.cfg	|| exit 1
-echo -en "${GMENU}"	>${GDEST}/grub.cfg	|| exit 1
+echo -en "${GRESC}"	>${GDEST}/grub.cfg	|| exit 1
 echo -en "${GRESC}"	>${GDEST}/rescue.cfg	|| exit 1
 echo -n "${BCDEDIT}"	>${GDEST}/bcdedit.bat	|| exit 1
 unix2dos ${GDEST}/bcdedit.bat			|| exit 1
