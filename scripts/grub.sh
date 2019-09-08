@@ -26,7 +26,7 @@ fi
 shift
 
 declare HEDEF="10"
-declare GIDEF="${GDEST}/disk_image.raw"
+declare GIDEF="${GDEST}/loopfile.raw"
 declare GPDEF="2"
 
 function print_usage {
