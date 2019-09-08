@@ -154,8 +154,8 @@ declare GMENU="\
 ${G_DBG}
 insmod linux
 menuentry \"Boot ${_PROJ}\" {
-linux ${GROOT}/${_BASE}.null.kernel
-linux ${GROOT}/${_BASE}.kernel ${GOPTS}
+linux  ${GROOT}/${_BASE}.null.kernel
+linux  ${GROOT}/${_BASE}.kernel ${GOPTS}
 initrd ${GROOT}/${_BASE}.initrd
 boot
 }
