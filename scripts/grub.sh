@@ -112,6 +112,10 @@ fi
 GPSEP="$(echo "${GPART}" | ${SED} "s|^([p]?)([0-9]+)$|\1|g")"
 GPPRT="$(echo "${GPART}" | ${SED} "s|^([p]?)([0-9]+)$|\2|g")"
 
+if [[ ! -b ${GINST} ]]; then
+	GPSEP="p"
+fi
+
 ########################################
 
 declare GCUST=
@@ -448,7 +452,7 @@ function partition_disk {
 	shift
 	echo -en "${GDISK}" | gdisk ${DEV}		|| return 1
 	echo -en "${GDHYB}" | gdisk ${DEV}		|| return 1
-	yes | format ${GFFMT} ${DEV}${GPART}		|| return 1
+	yes | format ${GFFMT} ${DEV}${GPSEP}${GPART}	|| return 1
 	yes | format ${GFEFI} ${DEV}${GPSEP}${GPEFI}	|| return 1
 	return 0
 }
@@ -458,9 +462,6 @@ if [[ -b ${GINST} ]]; then
 		partition_disk ${GINST}			|| exit 1
 	fi
 else
-	GPMBR="p${GPMBR}"
-	GPEFI="p${GPEFI}"
-	GPART="p${GPART}"
 	dd \
 		status=progress \
 		bs=${BLOCKS_SIZE} \
@@ -525,7 +526,7 @@ ${RM} ${GDEST}/*.tar.tar				|| exit 1
 
 FILE="${GDEST}/.mount"
 ${MKDIR} ${FILE}								|| exit 1
-mount-robust ${GINST}${GPART} ${FILE}						|| exit 1
+mount-robust ${GINST}${GPSEP}${GPART} ${FILE}					|| exit 1
 ${RSYNC_U} ${GDEST}/rescue.img ${GDEST}/_${GTYPE}/core.img			|| exit 1
 grub-install \
 	--verbose \
@@ -543,7 +544,7 @@ grub-bios-setup \
 	--core-image="rescue.img" \
 	${GINST}								|| exit_summary 1
 ${MV} ${FILE}/${SCRIPT} ${GDEST}/_${GTYPE}.boot					|| exit 1
-mount-robust -u ${GINST}${GPART}						|| exit 1
+mount-robust -u ${GINST}${GPSEP}${GPART}					|| exit 1
 ${RM} ${GDEST}/.mount								|| exit 1
 
 if [[ -b ${GINST}${GPSEP}${GPEFI} ]]; then
