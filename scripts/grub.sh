@@ -36,6 +36,7 @@ usage: ${SCRIPT} ...
 {directory}		target directory to use for building grub files (must already exist)
 [-d || -d<0-9+>]	show debug information || number of objects to list (default: ${HEDEF})
 [-f || -fv]		format the target block device || use vfat instead of ext4
+[-i]			use the installation menu entry as the default (boots automatically)
 [block device]		use target device instead of the example loopfile
 	(loopfile):	${GIDEF}
 	grub<0-9+>	alternate partition number for example loopfile (default: ${GPDEF})
@@ -94,6 +95,14 @@ fi
 
 ########################################
 
+declare GAUTO="false"
+if [[ ${1} == -i ]]; then
+	GAUTO="true"
+	shift
+fi
+
+########################################
+
 declare GINST="${GIDEF}"
 declare GPART="${GPDEF}"
 declare GPSEP=
@@ -146,6 +155,8 @@ declare GMODS="${GRUBD}/${GTYPE}"
 declare G_SET="\
 # settings
 set debug=linux
+$(if ${GAUTO}; then echo "set default=2"; else echo "set default=0"; fi)
+$(if ${GAUTO}; then echo "set timeout=5"; else echo "set timeout=-1"; fi)
 "
 declare G_MOD="\
 # modules
