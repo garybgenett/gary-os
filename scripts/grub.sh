@@ -165,6 +165,15 @@ ${G_END}
 "
 declare GMENU="\n\
 # menu
+menuentry \"${_PROJ} Install Boot\" {
+linux  ${GROOT}/boot/_null.kernel
+linux  ${GROOT}/boot/kernel root=${GINST}${GPSEP}${GPART} ${GOPTS}
+initrd ${GROOT}/boot/initrd
+boot
+}
+menuentry \"${_PROJ} Install Menu\" {
+configfile ${GFILE}
+}
 menuentry \"Default OS\" {
 chainloader ${GBOOT}+1
 }"
