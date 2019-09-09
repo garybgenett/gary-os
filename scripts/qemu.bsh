@@ -23,17 +23,15 @@ fi
 
 ################################################################################
 
-declare NUM_NET="0"
-
 declare FORK="true"
+declare NET_NUM="0"
 declare NET_TAP="true"
 declare INTERFACE="display"
 
 if [[ ${QSYS} == 0 ]]; then
 	FORK="false"
 elif [[ ${QSYS} == 1 ]]; then
-	NUM_NET="5"
-	NET_TAP="true"
+	NET_NUM="5"
 	INTERFACE="console"
 fi
 
@@ -198,7 +196,7 @@ QNET+=",hostfwd=tcp::220${QNUM}-10.0.${QNUM}.254:22"
 QNET+=",hostfwd=tcp::443${QNUM}-10.0.${QNUM}.254:443"
 QNET+=",hostfwd=tcp::339${QNUM}-10.0.${QNUM}.254:3389"
 
-for I in $(eval echo -en "{0..${NUM_NET}}"); do
+for I in $(eval echo -en "{0..${NET_NUM}}"); do
 	if ${NET_TAP}; then
 		T="tap"
 		QNET+=" -netdev ${T}"
