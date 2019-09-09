@@ -7,6 +7,14 @@ declare QMEM="${1}"			; shift
 declare QFIL="${1}"			; shift
 declare QSYS="${1}"			; shift
 
+########################################
+
+declare BIOS="/usr/share/qemu/bios.bin"
+if [[ ${1} == EFI ]]; then
+	BIOS="/usr/share/edk2-ovmf/OVMF.fd"
+	shift
+fi
+
 declare DISK="scsi-hd"
 if [[ ${1} == IDE ]]; then
 	DISK="ide-hd,bus=ide.0"
@@ -244,6 +252,7 @@ eval exec qemu-system-x86_64 \
 	-nodefconfig \
 	-no-user-config \
 	\
+	-bios ${BIOS} \
 	${QMCH} -m ${QMEM} \
 	${QMON} \
 	${QVDA} \
