@@ -42,8 +42,6 @@ else
 	INTERFACE=
 fi
 
-########################################
-
 declare ROOT="false"
 if [[ $(id -u) == 0 ]]; then
 	ROOT="true"
@@ -246,12 +244,14 @@ QSND="-soundhw all"
 
 eval exec qemu-system-x86_64 \
 	-name ${QNAM} \
+	\
 	-nodefaults \
 	-nodefconfig \
 	-no-user-config \
 	\
 	-bios ${BIOS} \
 	${QMCH} -m ${QMEM} \
+	\
 	${QMON} \
 	${QVDA} \
 	${QVGA} \
@@ -262,8 +262,8 @@ eval exec qemu-system-x86_64 \
 	${QKRN} \
 	${QDSK} \
 	\
-	"${@}" \
-	-writeconfig "${QOUT}" ${FORK}
+	-writeconfig "${QOUT}" \
+	"${@}" ${FORK}
 
 ########################################
 
