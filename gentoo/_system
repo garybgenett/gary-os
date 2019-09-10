@@ -551,12 +551,12 @@ function mount_dev_dirs {
 ########################################
 
 function kernel_cpu {
-	declare FILE="${1}" && shift
+	declare CFG_FILE="${1}" && shift
 	if [[ ${_CPU_RESET} != ${_CPU} ]]; then
 		${SED} -i \
 			-e "/${_CPU_RESET}/d" \
 			-e "s/^.*(${_CPU})[^_].*$/\1=y/g" \
-			${FILE} \
+			${CFG_FILE} \
 			|| return 1
 	fi
 	return 0
