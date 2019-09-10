@@ -217,10 +217,11 @@ fi
 declare BCDEDIT="\
 @echo off
 set CURDIR=%~dp0
-if not exist %CURDIR%\bcdedit.guid.txt (goto create) else (goto delete)
+set BCDFILE=\"%CURDIR%bcdedit.guid.txt\"
+if not exist %BCDFILE% (goto create) else (goto delete)
 :create
-	for /f \"usebackq tokens=3\" %%I in (\`bcdedit.exe /create /d \"${_NAME}\" /application bootsector\`) do set GUID=%%I
-	echo %GUID% >%CURDIR%\bcdedit.guid.txt
+	for /f \"usebackq tokens=3\" %%I in (\`bcdedit.exe /create /d \"${_NAME}\" /application bootsector\`) do (set GUID=%%I)
+	echo %GUID% >%BCDFILE%
 	echo %GUID%
 	bcdedit.exe /set %GUID% device partition=c:
 	bcdedit.exe /set %GUID% path \\${_GRUB}\\bootstrap.img
@@ -228,8 +229,8 @@ if not exist %CURDIR%\bcdedit.guid.txt (goto create) else (goto delete)
 	bcdedit.exe /timeout 10
 	goto end
 :delete
-	set /p GUID=<%CURDIR%\bcdedit.guid.txt
-	del %CURDIR%\bcdedit.guid.txt
+	set /p GUID=<%BCDFILE%
+	del %BCDFILE%
 	echo %GUID%
 	bcdedit.exe /delete %GUID% /cleanup
 	bcdedit.exe /deletevalue {bootmgr} timeout
