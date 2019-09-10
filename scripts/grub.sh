@@ -26,7 +26,7 @@ fi
 shift
 
 declare HEDEF="10"
-declare GIDEF="${GDEST}/loopfile.raw"
+declare GIDEF="${GDEST}/loopfile.img"
 declare GPDEF="2"
 
 function print_usage {
@@ -343,12 +343,19 @@ declare MODULES_UEFI="$(
 
 declare BLOCKS_SIZE="512"
 declare BLOCKS_BOOT="$(( (2**10)*4 ))"
-declare BLOCKS_DATA="$(( (2**10)*(2**10) *2))"
-#>>> declare BLOCKS_DATA="$(( (2**10)*(2**6) *2))"
-declare BLOCKS_NULL="${BLOCKS_DATA}"
+declare BLOCKS_DATA="$(( (2**10)*(2**6) *2))"
+if ! ${DEBUG}; then
+	BLOCKS_DATA="$(( (2**10)*(2**10) *2))"
+fi
+#>>> declare BLOCKS_NULL="${BLOCKS_DATA}"
+declare BLOCKS_NULL="0"
 
 declare LOOP_DEVICE="/dev/loop9"
-declare LOOP_BLOCKS="$(( ${BLOCKS_BOOT} + (${BLOCKS_NULL}*2) + (${BLOCKS_DATA}*2) + (${BLOCKS_DATA}*4) ))"
+declare LOOP_BLOCKS="$(( ${BLOCKS_BOOT} + (${BLOCKS_NULL}*2) + (${BLOCKS_DATA}*2) + (${BLOCKS_DATA}*1) ))"
+if ! ${DEBUG}; then
+#>>>	LOOP_BLOCKS="$(( ${BLOCKS_BOOT} + (${BLOCKS_NULL}*2) + (${BLOCKS_DATA}*2) + (${BLOCKS_DATA}*4) ))"
+	LOOP_BLOCKS="$(( ${BLOCKS_BOOT} + (${BLOCKS_NULL}*2) + (${BLOCKS_DATA}*2) + (${BLOCKS_DATA}*2) ))"
+fi
 
 declare NEWBLOCK=
 declare GDISK=
@@ -500,7 +507,7 @@ else
 		status=progress \
 		bs=${BLOCKS_SIZE} \
 		count=${LOOP_BLOCKS} \
-		conv=notrunc \
+		conv=sparse \
 		if=/dev/zero \
 		of=${GINST}				|| exit 1
 	losetup -d ${LOOP_DEVICE}			#>>> || exit 1
