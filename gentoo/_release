@@ -77,11 +77,25 @@ RELEASE[6]="v3.0"; CMTHASH[6]="35141e1e20259d7d1c2f4b143c6ae4505d7d5045"
 
 ################################################################################
 
+function common_exists {
+	declare SRC_FUNC="${1}" && shift
+	echo -en "\n"
+	echo -en ">>> THE REQUESTED FILES (${SRC_FUNC}) SEEM TO ALREADY EXIST <<<\n"
+	echo -en ">>> NECESSARY DIRECTORIES OR FILES COULD ALSO BE MISSING <<<\n"
+	echo -en "\n"
+	${LL} -d "${@}"
+	echo -en "\n"
+}
+
+########################################
+
 function common_tar {
 	declare SRC_FILE="${1}" && shift
-	if [[ ! -f ${SRC_FILE}.tar.xz ]] && [[ -d ${SRC_FILE} ]]; then
+	if [[ ! -f ${SRC_FILE}.tar.xz ]] && [[ -d ${SRC_FILE} ]] && [[ ! -L ${SRC_FILE} ]]; then
 		tar -cvv --xz -C $(dirname ${SRC_FILE}) -f ${SRC_FILE}.tar.xz $(basename ${SRC_FILE}) \
 			|| return 1
+	else
+		common_exists ${FUNCNAME} ${SRC_FILE}.tar.xz ${SRC_FILE}
 	fi
 	return 0
 }
@@ -90,9 +104,11 @@ function common_tar {
 
 function common_untar {
 	declare SRC_FILE="${1}" && shift
-	if [[ -f ${SRC_FILE}.tar.xz ]] && [[ ! -d ${SRC_FILE} ]]; then
+	if [[ -f ${SRC_FILE}.tar.xz ]] && [[ ! -d ${SRC_FILE} ]] && [[ ! -L ${SRC_FILE}.tar.xz ]]; then
 		tar -vvx --xz -C $(dirname ${SRC_FILE}) -f ${SRC_FILE}.tar.xz \
 			|| return 1
+	else
+		common_exists ${FUNCNAME} ${SRC_FILE}.tar.xz ${SRC_FILE}
 	fi
 	return 0
 }
@@ -462,6 +478,8 @@ function _release_cpio {	#{initrd}
 			${XZ} ${CPIO_FILE}		>${CPIO_FILE}.xz	|| return 1
 		fi
 		${RM}					${CPIO_FILE}.nul	|| return 1
+	else
+		common_exists ${FUNCNAME} ${CPIO_FILE}*
 	fi
 	return 0
 }
@@ -538,6 +556,8 @@ function _release_kernel {	#{initrd}
 #>>>		declare BZIMAGE="${TARGET}${LDIR}/arch/x86/boot/bzImage"		|| return 1
 		declare BZIMAGE="${TARGET}${LDIR}/arch/x86_64/boot/bzImage"		|| return 1
 		${RSYNC_U} -L ${BZIMAGE}	${TARGET}/${_FINAL}/${_RAMFS}.kernel	|| return 1
+	else
+		common_exists ${FUNCNAME} ${TARGET}${LDIR} ${TARGET}/${_FINAL}/${_RAMFS}.kernel
 	fi
 	return 0
 }
