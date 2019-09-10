@@ -1816,9 +1816,11 @@ function mount-robust {
 		shift
 	fi
 	declare CHK_EXT="fsck -M -t ext4	-V -pC"
+	declare CHK_XFT="fsck -M -t exfat	-V"
 	declare CHK_NTF="fsck -M -t ntfs-3g	-V"
 	declare CHK_FAT="fsck -M -t vfat	-V"
 	declare MNT_EXT="mount -v -t ext4	-o ${RO}relatime,errors=remount-ro"
+	declare MNT_XFT="mount -v -t exfat	-o ${RO}relatime,errors=remount-ro,shortname=mixed"
 	declare MNT_NTF="mount -v -t ntfs-3g	-o ${RO}relatime,errors=remount-ro,shortname=mixed"
 	declare MNT_FAT="mount -v -t vfat	-o ${RO}relatime,errors=remount-ro,shortname=mixed"
 	declare MNT_BND="mount -v --bind"
@@ -1860,9 +1862,11 @@ function mount-robust {
 			DEV="${LUK}"
 		fi
 		${CHK_EXT}	${DEV}		||
+		${CHK_XFT}	${DEV}		||
 		${CHK_NTF}	${DEV}		||
 		${CHK_FAT}	${DEV}		|| return 1
 		${MNT_EXT}	${DEV}	${DIR}	||
+		${MNT_XFT}	${DEV}	${DIR}	||
 		${MNT_NTF}	${DEV}	${DIR}	||
 		${MNT_FAT}	${DEV}	${DIR}	|| return 1
 	fi
