@@ -687,6 +687,7 @@ if [[ ${1} == -y ]]; then
 	fi
 	if [[ ${1} == -j ]]; then
 		shift
+		mount_dev_dirs				|| EXIT 1
 		if [[ ${1} == depends ]] || [[ ${1} == d ]]; then
 			shift
 			safe_env equery depends \
@@ -704,6 +705,7 @@ if [[ ${1} == -y ]]; then
 				--unordered-display \
 				\@system \@world	|| EXIT 1
 		fi
+		mount_dev_dirs -u			|| EXIT 1
 		EXIT 0
 	fi
 	FILE="${_SAVDIR}${GENDIR}/_packages"
@@ -711,7 +713,7 @@ if [[ ${1} == -y ]]; then
 		echo -en "\n"
 		echo -en ">>> YOU ALMOST CERTAINLY WANT TO SPECIFY YOUR OWN PACKAGES FILE TO COMPARE AGAINST <<<\n"
 		echo -en ">>> THIS OPTION IS READ-ONLY SO THERE IS NO POTENTIAL FOR HARM <<<\n"
-		echo -en "\n"
+#>>>		echo -en "\n"
 	else
 		FILE="${1}"
 		shift
