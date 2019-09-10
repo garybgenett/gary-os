@@ -231,8 +231,9 @@
 # - make -f /.gary-os/Makefile O=/ P=${GOSPKG} release
 # - make -f /.gary-os/Makefile O=/ P=${GOSPKG} initrd
 # <copy>
-# - rsync -avv /.gary-os-${ESUB}/gary-os-${ESUB}-${GARYOS_VER}.kernel /.gary-os-${ESUB}/gary-os.kernel || true
-# - rsync -avv /.gary-os-${ESUB}/gary-os-${ESUB}-${GARYOS_VER}.cpio.xz /.gary-os-${ESUB}/gary-os.initrd || true
+# - rsync -avv -L /.gary-os-${ESUB}/gary-os-${ESUB}-${GARYOS_VER}.null.kernel /.gary-os-${ESUB}/gary-os.null.kernel || true
+# - rsync -avv -L /.gary-os-${ESUB}/gary-os-${ESUB}-${GARYOS_VER}.kernel /.gary-os-${ESUB}/gary-os.kernel || true
+# - rsync -avv -L /.gary-os-${ESUB}/gary-os-${ESUB}-${GARYOS_VER}.cpio.xz /.gary-os-${ESUB}/gary-os.initrd || true
 # <umount>
 # - umount /.gary-os-${ESUB} || [[ -z $(mount | ${GREP} "/.gary-os-${ESUB}") ]]
 # - rm -rv --one-file-system /.gary-os-${ESUB}
