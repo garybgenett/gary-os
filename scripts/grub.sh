@@ -156,46 +156,17 @@ declare GMODS="${GRUBD}/${GTYPE}"
 
 ########################################
 
-declare G_SET="\
+declare GMENU="\
 # settings
 set debug=linux
 $(if ${GAUTO}; then echo "set default=2";		else echo "set default=0"; fi)
 $(if ${GAUTO}; then echo "set timeout=${TIMEOUT}";	else echo "set timeout=-1"; fi)
-"
-declare G_MOD="\
+
 # modules
 insmod configfile
 insmod linux
 insmod chain
-"
-declare G_END="\n\
-# end of file"
-#>>> "
 
-declare GLOAD="\
-${G_MOD}
-# load
-echo \"Loading ${_NAME}...\"
-${G_END}
-"
-declare GMENU="\n\
-# menu
-menuentry \"${_PROJ} Install Boot\" {
-linux  ${GROOT}/boot/_null.kernel
-linux  ${GROOT}/boot/kernel root=${GINST}${GPSEP}${GPART} ${GOPTS}
-initrd ${GROOT}/boot/initrd
-boot
-}
-menuentry \"${_PROJ} Install Menu\" {
-configfile ${GFILE}
-}
-menuentry \"Default OS\" {
-chainloader ${GBOOT}+1
-}"
-#>>> "
-declare GRESC="\
-${G_SET}
-${G_MOD}
 # rescue
 menuentry \"${_NAME} Rescue\" {
 set pager=1
@@ -208,12 +179,26 @@ linux  ${GROOT}/${_BASE}.kernel ${GOPTS}
 initrd ${GROOT}/${_BASE}.initrd
 boot
 }
-${GMENU}
-${G_END}
+
+# menu
+menuentry \"${_PROJ} Install Boot\" {
+linux  ${GROOT}/boot/_null.kernel
+linux  ${GROOT}/boot/kernel root=${GINST}${GPSEP}${GPART} ${GOPTS}
+initrd ${GROOT}/boot/initrd
+boot
+}
+menuentry \"${_PROJ} Install Menu\" {
+configfile ${GFILE}
+}
+menuentry \"Default OS\" {
+chainloader ${GBOOT}+1
+}
+
+# end of file
 "
 
 if [[ -n ${GCUST} ]]; then
-	GRESC="${GCUST}"
+	GMENU="${GCUST}"
 fi
 
 ########################################
@@ -487,9 +472,10 @@ ${RSYNC_U} -L ${_SELF} ${GDEST}/$(basename ${_SELF})	|| exit 1
 
 ########################################
 
-#>>> echo -en "${GLOAD}"	>${GDEST}/bootstrap.cfg	|| exit 1
-echo -en "${GRESC}"	>${GDEST}/grub.cfg	|| exit 1
-echo -en "${GRESC}"	>${GDEST}/rescue.cfg	|| exit 1
+#>>> echo -en "${GMENU}"	>${GDEST}/grub.cfg	|| exit 1
+echo -en "${GMENU}"	>${GDEST}/rescue.cfg	|| exit 1
+
+#>>> echo -en "${GMENU}"	>${GDEST}/bootstrap.cfg	|| exit 1
 #>>> echo -n "${BCDEDIT}"	>${GDEST}/bcdedit.bat	|| exit 1
 #>>> unix2dos ${GDEST}/bcdedit.bat			|| exit 1
 
