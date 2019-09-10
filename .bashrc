@@ -623,14 +623,17 @@ function format {
 	elif [[ ${1} == -d ]]; then
 		shift
 		mkfs.vfat -vF 32 "${@}"
+	elif [[ ${1} == -f ]]; then
+		shift
+		mkfs.exfat "${@}"
 	elif [[ ${1} == -n ]]; then
 		shift
-		mkntfs -vI "${@}"
+		mkfs.ntfs -vI "${@}"
 	elif [[ ${1} == -l ]]; then
 		shift
 		cryptsetup --hash sha256 --cipher aes-cbc-essiv:sha256 --key-size 256 luksFormat "${@}"
 	else
-		mke2fs -t ext4 -jvm 0 "${@}"
+		mkfs.ext4 -jvm 0 "${@}"
 	fi
 }
 
