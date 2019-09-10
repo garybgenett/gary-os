@@ -48,7 +48,6 @@ sys-fs/ext3grep
 sys-fs/ext4magic
 sys-fs/extundelete
 sys-fs/mtools
-sys-fs/ncdu
 sys-fs/squashfs-tools
 
 #>>>sys-fs/zfs
@@ -401,6 +400,7 @@ sys-apps/dcfldd
 sys-block/whdd
 sys-fs/dd-rescue
 sys-fs/ddrescue
+sys-fs/ncdu
 sys-fs/safecopy
 
 sys-apps/lshw
