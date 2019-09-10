@@ -274,7 +274,7 @@ net-analyzer/httping
 net-analyzer/iftop
 net-analyzer/iptraf-ng
 net-analyzer/macchanger
-net-analyzer/net-snmp
+#>>>net-analyzer/net-snmp		# requires: dev-perl/Tk
 net-analyzer/netcat6
 net-analyzer/nethogs
 net-analyzer/ngrep
@@ -330,7 +330,7 @@ mail-client/mutt
 #>>>www-client/surf			# requires: net-libs/webkit-gtk, x11-libs/gtk+
 
 net-misc/freerdp
-net-misc/tigervnc
+#>>>net-misc/tigervnc			# requires: x11-libs/fltk	#{minimal}
 
 ########################################
 # media
