@@ -133,7 +133,8 @@ elif [[ -b ${I} ]]; then
 fi
 
 QDSK+=" -drive id=drive1,if=none,format=qcow2,file=${QNFL}"
-QDSK+=" -device scsi-hd,drive=drive1,bootindex=3"
+#>>> QDSK+=" -device scsi-hd,drive=drive1,bootindex=3"
+QDSK+=" -device usb-storage,drive=drive1,bootindex=3"
 if [[ ! -f ${QNFL} ]]; then
 	qemu-img create -f qcow2 ${QNFL} ${QNSZ}
 fi
