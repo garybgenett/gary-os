@@ -17,6 +17,10 @@ echo -en "${HEADER}\n"
 echo -en "ARGUMENTS: ${_OPTS}\n"
 echo -en "${HEADER}\n"
 
+########################################
+
+declare TIMEOUT="5"
+
 ################################################################################
 
 declare GDEST="$(realpath ${1} 2>/dev/null)"
@@ -155,8 +159,8 @@ declare GMODS="${GRUBD}/${GTYPE}"
 declare G_SET="\
 # settings
 set debug=linux
-$(if ${GAUTO}; then echo "set default=2"; else echo "set default=0"; fi)
-$(if ${GAUTO}; then echo "set timeout=5"; else echo "set timeout=-1"; fi)
+$(if ${GAUTO}; then echo "set default=2";		else echo "set default=0"; fi)
+$(if ${GAUTO}; then echo "set timeout=${TIMEOUT}";	else echo "set timeout=-1"; fi)
 "
 declare G_MOD="\
 # modules
@@ -228,7 +232,7 @@ if not exist %BCDFILE% (goto create) else (goto delete)
 	bcdedit.exe /set %GUID% path \\${_GRUB}\\bootstrap.img
 ::>>>	bcdedit.exe /set %GUID% path \\${_GRUB}\\x86_64.efi
 	bcdedit.exe /displayorder %GUID% /addlast
-	bcdedit.exe /timeout 10
+	bcdedit.exe /timeout ${TIMEOUT}
 	goto end
 :delete
 	set /p GUID=<%BCDFILE%
