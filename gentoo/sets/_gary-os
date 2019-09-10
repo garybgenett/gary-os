@@ -221,11 +221,12 @@
 # - mkdir -pv /.gary-os-${ESUB}
 # - mount -o rw /dev/${USB_SOURCE} /.gary-os-${ESUB} || [[ -n $(mount | ${GREP} "/.gary-os-${ESUB}") ]]
 # <setup>
-# - rm -frv /.gary-os-${ESUB}/linux /usr/src/linux
 # - make -f /.gary-os/Makefile O=/ P=${GOSPKG} unpack
-# - mv -iv /usr/src/linux /.gary-os-${ESUB}/linux
-# - ln -fsv /.gary-os-${ESUB}/linux /usr/src/linux
+# - mkdir -pv /.gary-os-${ESUB}
+# - [[ ! -d /.gary-os-${ESUB}/linux ]] && rm -frv /.gary-os-${ESUB}/linux && rsync -avv -L /usr/src/linux/ /.gary-os-${ESUB}/linux
+# - [[ -d /.gary-os-${ESUB}/linux ]] && rm -frv /usr/src/linux && ln -fsv /.gary-os-${ESUB}/linux /usr/src/linux
 # <build>
+# - make -f /.gary-os/Makefile O=/ P=${GOSPKG} clean
 # - make -f /.gary-os/Makefile O=/ P=${GOSPKG} release
 # - make -f /.gary-os/Makefile O=/ P=${GOSPKG} initrd
 # <copy>
