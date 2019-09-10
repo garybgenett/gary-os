@@ -59,6 +59,7 @@
 # - declare SSH_PACK="/.g/_data/_builds/.gary-os.release/_packages"
 # - declare SSH_COPY="/.g/_data/_builds/_gary-os/.gary-os-${ESUB}"
 # - declare RUNSV="/.runit/runsvdir/current"
+# - declare INST="/.install"	# see "_release_install" in "_release" script
 #
 # [overrides]
 # - declare USB_DEVICE="nvme0n1"
@@ -235,6 +236,18 @@
 # <umount>
 # - umount /.gary-os-${ESUB} || [[ -z $(mount | ${GREP} "/.gary-os-${ESUB}") ]]
 # - rm -rv --one-file-system /.gary-os-${ESUB}
+# - mount
+#
+# [replicate]
+# <setup>
+# - mkdir -pv ${INST}
+# - mount -o rw /dev/${USB_SOURCE} ${INST} || [[ -n $(mount | ${GREP} "${INST}") ]]
+# <install>
+# - make -f /.gary-os/Makefile O=/ P=${GOSPKG} install
+# - rm -frv ${INST}/_gary-os
+# <umount>
+# - umount ${INST} || [[ -z $(mount | ${GREP} "${INST}") ]]
+# - rm -rv --one-file-system ${INST}
 # - mount
 #
 # [finish]
