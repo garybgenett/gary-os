@@ -439,7 +439,7 @@ function exit_summary {
 		(cd ${GMODS} &&
 			du -bs $(
 				diff -qr ${GMODS} ${FILE} |
-				${SED} -n "s%^Only in ${GMODS}[:][[:space:]]*%%gp" |
+				${SED} -n "s|^Only in ${GMODS}[:][[:space:]]*||gp" |
 				${GREP} "[.](lst|mod)$"
 			) |
 				sort -n |
