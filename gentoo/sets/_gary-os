@@ -69,7 +69,7 @@
 # - declare GOPTS="console=ttyS0,38400"
 #
 # [commands]
-# - mount -o remount,rw,size=8g / && df /
+# - mount -o remount,rw,size=6g / && df /
 #
 ########################################
 # basic setup
@@ -215,10 +215,12 @@
 # - mount
 #
 # [package]
-# <setup>
+# <memory>
+# - mount -o remount,rw,size=20g / && df /
+# <disk>
 # - mkdir -pv /.gary-os-${ESUB}
 # - mount -o rw /dev/${USB_SOURCE} /.gary-os-${ESUB} || [[ -n $(mount | ${GREP} "/.gary-os-${ESUB}") ]]
-# <link>
+# <setup>
 # - rm -frv /.gary-os-${ESUB}/linux /usr/src/linux
 # - make -f /.gary-os/Makefile O=/ unpack
 # - mv -iv /usr/src/linux /.gary-os-${ESUB}/linux
