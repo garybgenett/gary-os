@@ -714,6 +714,8 @@ function _publish_gitdir {
 	STATIC_FILES+=".bashrc"
 	STATIC_FILES+="^scripts/grub.sh"
 	STATIC_FILES+="^scripts/metro.sh"
+	STATIC_FILES+="^scripts/qemu.bsh"
+	STATIC_FILES+="^scripts/qemu-network\*"
 	eval git-export ${_TITLE} ${_RELDIR} ${_GITHUB}					\
 		+git-export-preprocess +git-export-postprocess				\
 		${_TITLE}:${_DOCDIR}:${DOC_FILES}					\
