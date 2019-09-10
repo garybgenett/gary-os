@@ -206,17 +206,17 @@ sys-devel/gcc-config
 #{WINMGR} dwm
 #{WMHELP} read[m.lft] man[m.rgt] / term[alt+sft+ret] web[alt+ctl+ret] / \`date --iso=s\`
 
-x11-apps/xrandr
-x11-base/xorg-drivers
-x11-base/xorg-server
+x11-apps/xrandr				#{minimal}
+x11-base/xorg-drivers			#{minimal}
+x11-base/xorg-server			#{minimal}
 
-x11-misc/dmenu
-x11-wm/dwm
+x11-misc/dmenu				#{minimal}
+x11-wm/dwm				#{minimal}
 
-x11-terms/rxvt-unicode
+x11-terms/rxvt-unicode			#{minimal}
 
-x11-apps/xset
-x11-apps/xsetroot
+x11-apps/xset				#{minimal}
+x11-apps/xsetroot			#{minimal}
 #>>>x11-misc/tabbed			# was only needed for "www-client/surf"
 
 ########################################
@@ -320,8 +320,8 @@ net-vpn/openvpn
 ########################################
 # programs
 
-app-emulation/spice-protocol
-app-emulation/spice-vdagent
+app-emulation/spice-protocol		#{minimal}
+app-emulation/spice-vdagent		#{minimal}
 
 #>>>app-emulation/virtualbox-guest-additions	# gentoo required: [app-emulation/virtualbox-guest-additions-5.1.36 / sys-kernel/gentoo-sources-4.18.6] /var/tmp/portage/app-emulation/virtualbox-guest-additions-5.1.36/work/vboxsf/utils.c:165:28: error: passing argument 1 of ‘sf_ftime_from_timespec’ from incompatible pointer type [-Werror=incompatible-pointer-types] sf_ftime_from_timespec(&inode->i_atime, &info->AccessTime);
 
@@ -329,7 +329,7 @@ mail-client/mutt
 
 #>>>www-client/surf			# requires: net-libs/webkit-gtk, x11-libs/gtk+
 
-net-misc/freerdp
+net-misc/freerdp			#{minimal}
 #>>>net-misc/tigervnc			# requires: x11-libs/fltk	#{minimal}
 
 ########################################
