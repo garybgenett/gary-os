@@ -12,11 +12,11 @@ fi
 
 ################################################################################
 
+#>>> ${GREP} -o "[!=][=][ ][-][^[:space:]]+" ${HOME}/setup/gentoo/_system | sort
+
 declare _OPTS="${@}"
 
 ########################################
-
-#>>> ${GREP} -o "[=][=][ ][-][a-z]" ${HOME}/setup/gentoo/_system | sort
 
 declare DEBUG_OPT="-v"
 declare QUIET_OPT="-q"
