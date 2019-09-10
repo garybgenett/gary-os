@@ -118,17 +118,17 @@ function common_untar {
 #note: this is called statically in the "_system" script
 function _release_reset {
 	if [[ ${TARGET} != / ]]; then
-		${RM} ${TARGET}/.${_TITLE}*		|| return 1
+		${RM} ${TARGET}/[._]${_TITLE}*		|| return 1
 	fi
-	if [[ -z "$(mount | ${GREP} "^[^[:space:]]+ on ${TARGET}${_FINAL}")" ]]; then
+	if [[ -z "$(mount | ${GREP} "^[^[:space:]]+ on ${TARGET}[/]?${_FINAL}")" ]]; then
 		${RM} ${TARGET}/${_FINAL}*		|| return 1
 	fi
-	${RM} ${TARGET}/${_FINAL}/${_RAMFS}.cpio.xz	|| return 1
-	${RM} ${TARGET}/${_FINAL}/${_RAMFS}.kernel	|| return 1
+	${RM} ${TARGET}/${_FINAL}/${_RAMFS}*		|| return 1
 	${RM} ${TARGET}/boot/_null.kernel		|| return 1
 	if [[ ${TARGET} != / ]]; then
 		${RM} ${TARGET}/usr/src/linux		|| return 1
 		${RM} ${TARGET}/usr/src/linux.tar.xz	|| return 1
+		${LN} ${KBAS} ${TARGET}/usr/src/linux	|| return 1
 	fi
 #>>>	_prepare_config --reset				|| return 1
 	return 0
