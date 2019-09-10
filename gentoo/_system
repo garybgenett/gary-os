@@ -1001,8 +1001,9 @@ if [[ ${1} == -i ]]; then
 		fi
 	done; fi
 	if ${_CFG}; then
-		#note: this needs to match the name in the "${MAKEIT}" script
-		${PREPIT}_build --reset											|| EXIT 1
+		#note: these need to match the names in the "${MAKEIT}" script
+		${MAKEIT}_reset												|| EXIT 1
+		${PREPIT}_config --reset										|| EXIT 1
 		if [[ -x ${CFGSCR} ]]; then
 			${RSYNC_U} --copy-links		${CFGSCR} \
 							${TARGET}/${ARCDIR}/$(basename ${CFGSCR})			|| EXIT 1
