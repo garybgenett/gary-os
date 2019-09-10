@@ -115,8 +115,10 @@ function common_untar {
 
 ################################################################################
 
+#NOTE: CONSULT THE "SYSTEM INSTALLATION" TABLE IN "README" FOR THIS SECTION
+
 #note: this is called statically in the "_system" script
-function _release_reset {
+function _release_reset {	#{main}
 	if [[ ${TARGET} != / ]]; then
 		${RM} ${TARGET}/[._]${_TITLE}*		|| return 1
 	fi
@@ -136,7 +138,7 @@ function _release_reset {
 
 ################################################################################
 
-function _prepare_build {	#{main} #{reset}
+function _prepare_build {	#{reset}
 	if [[ ${1} == --reset ]]; then
 		shift
 		_release_reset	|| return 1
@@ -225,6 +227,7 @@ function prepare_config_restore {
 
 #NOTE: UPDATE THE "SYSTEM INSTALLATION" TABLE IN "README" WHEN MAKING CHANGES HERE
 
+#note: this is called statically in the "_system" script
 function _prepare_config {	#{reset}
 	declare RESET= ; if [[ ${1} == --reset ]]; then RESET="${1}" && shift; fi
 	# note: these are from "prepare_config_issue" above
@@ -391,7 +394,6 @@ function _prepare_symlink {
 
 ################################################################################
 
-#note: this is called statically in the "_system" script
 function _release_ramfs {	#{main} #{reset} #{initrd}
 	declare RESET= ; if [[ ${1} == --reset ]]; then RESET="${1}" && shift; fi
 	declare INITRD= ; if [[ ${1} == --initrd ]]; then INITRD="${1}" && shift; fi
@@ -404,7 +406,6 @@ function _release_ramfs {	#{main} #{reset} #{initrd}
 
 ########################################
 
-#note: this is called statically in the "_system" script
 function _release_initrd {	#{main} #{reset}
 	declare RESET= ; if [[ ${1} == --reset ]]; then RESET="${1}" && shift; fi
 	_release_ramfs ${RESET} --initrd \
@@ -578,8 +579,7 @@ function _release_report {
 
 ########################################
 
-#note: this is called statically in the "_system" script
-function _release_unpack {
+function _release_unpack {	#{main}
 	common_untar ${TARGET}${REPDIR}		|| return 1
 	common_untar ${TARGET}/usr/src/linux	|| return 1
 	return 0
