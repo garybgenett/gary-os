@@ -30,6 +30,12 @@ if [[ ${1} == USB ]]; then
 	shift
 fi
 
+declare INDX="3"
+if [[ ${1} == BOOT ]]; then
+	INDX="0"
+	shift
+fi
+
 ################################################################################
 
 declare FORK="true"
@@ -139,7 +145,7 @@ elif [[ -b ${I} ]]; then
 fi
 
 QDSK+=" -drive id=drive1,if=none,format=qcow2,file=${QNFL}"
-QDSK+=" -device ${EXTR},drive=drive1,bootindex=3"
+QDSK+=" -device ${EXTR},drive=drive1,bootindex=${INDX}"
 if [[ ! -f ${QNFL} ]]; then
 	qemu-img create -f qcow2 ${QNFL} ${QNSZ}
 fi
