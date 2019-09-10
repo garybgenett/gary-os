@@ -588,6 +588,71 @@ function _release_unpack {	#{main}
 	return 0
 }
 
+########################################
+
+#NOTE: CONSULT THE "SYSTEM INSTALLATION" TABLE IN "README" FOR THIS SECTION
+
+function release_install_root {
+	declare INSTDIR="${1}"
+	declare INSTALL="${2}"
+#>>>		--one-file-system \
+	${RSYNC_U} \
+		--filter="-_/[._]${_TITLE}*" \
+		--filter="-_/${INSTDIR}" \
+		--filter="-_/dev/*" \
+		--filter="-_/mnt/*" \
+		--filter="-_/proc/*" \
+		--filter="-_/run/*" \
+		--filter="-_/sys/*" \
+		${TARGET}/ ${INSTALL}			|| return 1
+	TARGET="${INSTALL}" _release_unpack		|| return 1
+	${RM} ${INSTALL}/[._]${_TITLE}*			|| return 1
+#>>>	${RM} ${INSTALL}${REPDIR}*.tar.xz		|| return 1
+#>>>	${RM} ${INSTALL}/usr/src/linux.tar.xz		|| return 1
+#>>>	TARGET="${INSTALL}" _prepare_config --reset	|| return 1
+	TARGET="${INSTALL}" _prepare_config		|| return 1
+#>>>
+	return 0
+}
+
+function release_install_boot {
+	declare INSTDIR="${1}"
+	declare INSTALL="${2}"
+	declare DEVICE="$(findmnt --noheadings --output SOURCE --target ${INSTALL}/boot)"
+	${MKDIR}							${INSTALL}/dev			|| return 1
+	mount -t devtmpfs none						${INSTALL}/dev			#>>> || return 1
+	${MKDIR}							${INSTALL}/proc			|| return 1
+	mount -t proc none						${INSTALL}/proc			#>>> || return 1
+	${RSYNC_U} /usr/lib/grub/i386-pc/				${INSTALL}/boot/grub		|| return 1
+	chroot ${INSTALL} boot-update --verbose								|| return 1
+	umount								${INSTALL}/dev			|| return 1
+	umount								${INSTALL}/proc			|| return 1
+	${SED} -i \
+		-e "s|([[:space:]])[/](kernel\|init)|\1/boot/\2|g" \
+		-e "s|(real_root=)[^[:space:]]+|\1${DEVICE} root=${DEVICE}|g" \
+									${INSTALL}/boot/grub/grub.cfg	|| return 1
+	${SED} -i \
+		-e "s|^([^#].+)$|#\1|g" \
+		-e "s|^(.+)([[:space:]][/][[:space:]])|${DEVICE}\2|g" \
+									${INSTALL}/etc/fstab		|| return 1
+	return 0
+}
+
+function _release_install {	#{main}
+	declare INSTDIR=".install"
+	declare INSTALL="${TARGET}${INSTDIR}"
+	if [[ ! -d ${INSTALL} ]]; then
+		echo -en "\n"
+		echo -en ">>> THIS OPTION REQUIRES THAT THE (${INSTALL}) INSTALL DIRECTORY EXISTS <<<\n"
+		echo -en "\n"
+		return 1
+	fi
+	release_install_root ${INSTDIR} ${INSTALL}	|| return 1
+	release_install_boot ${INSTDIR} ${INSTALL}	|| return 1
+	${LL} ${INSTDIR}				|| return 1
+	return 0
+}
+
 ################################################################################
 
 function _publish_daily {	#{main}
