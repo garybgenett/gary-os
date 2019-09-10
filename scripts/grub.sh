@@ -35,7 +35,7 @@ usage: ${SCRIPT} ...
 
 {directory}		target directory to use for building grub files (must already exist)
 [-d || -d<0-9+>]	show debug information || number of objects to list (default: ${HEDEF})
-[-f || -fv]		format the target block device || use vfat instead of ext4
+[-f || -fx]		format the target block device || use ext4 instead of exfat
 [-i]			use the installation menu entry as the default (boots automatically)
 [block device]		use target device instead of the example loopfile
 	(loopfile):	${GIDEF}
@@ -82,13 +82,13 @@ declare GPMBR="98"; declare GNMBR="ef02"; #>>> declare GFMBR=""
 ########################################
 
 declare GFDSK="false"
-declare GFFMT=""
-declare GFNUM="8300"
-if [[ ${1} == -f*(v) ]]; then
+declare GFFMT="-f"
+declare GFNUM="0700"
+if [[ ${1} == -f*(x) ]]; then
 	GFDSK="true"
-	if [[ ${1/#-f} == v ]]; then
-		GFFMT="-d"
-		GFNUM="0700"
+	if [[ ${1/#-f} == x ]]; then
+		GFFMT=""
+		GFNUM="8300"
 	fi
 	shift
 fi
