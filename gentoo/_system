@@ -582,7 +582,9 @@ trap "EXIT 1" SIGHUP SIGINT SIGKILL SIGTERM
 function EXIT {
 	declare EXIT="0"
 	if [[ ${1} != 0 ]]; then
-		if [[ ${1} == -1 ]]; then
+		if [[ ${1} == -0 ]]; then
+			EXIT="0" && shift
+		elif [[ ${1} == -1 ]]; then
 			EXIT="1" && shift
 		else
 			EXIT="${1}" && shift
@@ -637,11 +639,14 @@ if [[ ${1} == ${PREPIT}+(*) ]] || [[ ${1} == ${MAKEIT}+(*) ]]; then
 	if ! ${DO_CHROOT}; then
 		requires_chroot "${@}"
 	fi
-	${@} || EXIT 1
-	EXIT 0
+	${@} || EXIT -1
+	EXIT -0
 elif [[ ${1} == ${SHIPIT}+(*) ]]; then
-	${@} || EXIT 1
-	EXIT 0
+	if ! ${DO_CHROOT}; then
+		requires_chroot "${@}"
+	fi
+	${@} || EXIT -1
+	EXIT -0
 fi
 
 ################################################################################
