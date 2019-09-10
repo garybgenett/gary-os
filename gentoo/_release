@@ -22,6 +22,21 @@ declare _GREPO="/.g/_data/_builds/.${_TITLE}/.${_TITLE}"
 
 ########################################
 
+declare KVER=
+declare KCFG=
+declare KBAS=
+declare KDIR=
+declare KFIL=
+for FILE in ${KERNEL}; do
+	KVER="${FILE}"
+	KCFG="config-gentoo64-${KVER}"
+	KBAS="linux-${KVER}-gentoo"
+	KDIR="/usr/src/${KBAS}"
+	KFIL="/boot/kernel-genkernel-x86_64-${KVER}-gentoo"
+done
+
+########################################
+
 declare CMTFIL="_commit"
 declare COMMIT=
 for FILE in \
@@ -121,12 +136,11 @@ function _prepare_build {	#{main} #{reset}
 ########################################
 
 function prepare_config_issue {
-	for FILE in ${KERNEL}; do NEXT="${FILE}"; done
 	for FILE in \
 		"GaryOS Version|${_VERSN}" \
 		"Release Date|${_RDATE}" \
 		"Funtoo Commit|${FUNTOO}" \
-		"Linux Kernel|${NEXT}" \
+		"Linux Kernel|${KVER}" \
 	; do
 		declare KEY="$(echo "${FILE}" | ${SED} "s|^(.+)[|](.+)$|\1|g")"
 		declare VAL="$(echo "${FILE}" | ${SED} "s|^(.+)[|](.+)$|\2|g")"
@@ -272,25 +286,24 @@ function _prepare_linux {
 		fi
 		return 0
 	fi
-	for FILE in ${KERNEL}; do NEXT="config-gentoo64-${FILE}"; FILE="/usr/src/linux-${FILE}-gentoo"; done
 	if [[ ! -d ${TARGET}/usr/src/linux ]] || [[ -L ${TARGET}/usr/src/linux ]]; then
 		${RM}								${TARGET}/usr/src/linux		|| return 1
-#>>>		safe_make -C ${TARGET}${FILE}									\
+#>>>		safe_make -C ${TARGET}${KDIR}									\
 #>>>			INSTALL_HDR_PATH="${TARGET}/usr/src/linux"		headers_install			|| return 1
 		${RSYNC_U}											\
 			--delete-excluded									\
 			--filter="-_/.tmp**"									\
 			--filter="-_/usr/initramfs_data.cpio**"							\
-			${TARGET}${FILE}/					${TARGET}/usr/src/linux		|| return 1
+			${TARGET}${KDIR}/					${TARGET}/usr/src/linux		|| return 1
 	fi
 #>>>	if [[ ! -f ${TARGET}/boot/_null.kernel ]]; then
 #>>>		safe_make -C ${TARGET}/usr/src/linux				distclean			|| return 1
 #>>>		safe_make -C ${TARGET}/usr/src/linux				allnoconfig bzImage		|| return 1
-#>>>		${RSYNC_U} -L  ${TARGET}/usr/src/linux/arch/x86/boot/bzImage	${TARGET}/boot/_null.kernel	|| return 1
+#>>>		${RSYNC_U} -L ${TARGET}/usr/src/linux/arch/x86/boot/bzImage	${TARGET}/boot/_null.kernel	|| return 1
 #>>>	fi
 	if [[ ! -f ${TARGET}/usr/src/linux.tar.xz ]]; then
 		safe_make -C ${TARGET}/usr/src/linux				distclean			|| return 1
-		${RSYNC_U} ${TARGET}${ARCDIR}/${NEXT}				${TARGET}/usr/src/linux/.config	|| return 1
+		${RSYNC_U} ${TARGET}${ARCDIR}/${KCFG}				${TARGET}/usr/src/linux/.config	|| return 1
 		safe_make -C ${TARGET}/usr/src/linux				modules_prepare			|| return 1
 		common_tar							${TARGET}/usr/src/linux		|| return 1
 	fi
@@ -335,7 +348,6 @@ function _prepare_symlink {
 	if [[ ${TARGET} == / ]]; then
 		return 0
 	fi
-	for FILE in ${KERNEL}; do NEXT="config-gentoo64-${FILE}"; FILE="kernel-genkernel-x86_64-${FILE}-gentoo"; done
 	if [[ -n ${COMMIT} ]]
 		#note: also doing this in "_system" script on purpose
 		then echo -en "${COMMIT}"			>${TARGET}/${CMTFIL}						|| return 1
@@ -349,7 +361,7 @@ function _prepare_symlink {
 	${LN} --relative ${TARGET}/${REPDIR}.git.tar.xz		${TARGET}/${_FINAL}/${_RAMFS}.$(basename ${REPDIR}).git.tar.xz	|| return 1
 	${LN} --relative ${TARGET}/${REPDIR}.tar.xz		${TARGET}/${_FINAL}/${_RAMFS}.$(basename ${REPDIR}).tar.xz	|| return 1
 	${LN} --relative ${TARGET}/usr/src/linux.tar.xz		${TARGET}/${_FINAL}/${_RAMFS}.linux.tar.xz			|| return 1
-	${LN} --relative ${TARGET}/boot/${FILE}			${TARGET}/${_FINAL}/${_RAMFS}.null.kernel			|| return 1
+	${LN} --relative ${TARGET}/boot/${KFIL}			${TARGET}/${_FINAL}/${_RAMFS}.null.kernel			|| return 1
 	${LN} --relative ${TARGET}/.${_TITLE}.packages.txt	${TARGET}/${_FINAL}/${_RAMFS}.packages.txt			|| return 1
 #>>>
 	if [[ -f ${TARGET}/boot/_null.kernel ]]; then
@@ -456,7 +468,17 @@ function _release_cpio {	#{initrd}
 
 ########################################
 
+function release_kernel_config {
+	declare LDIR="${1}" && shift
+	if [[ ${TARGET} == / ]]; then	${RSYNC_U} ${SETDIR}/${LINDIR}/${KCFG}	${TARGET}${LDIR}/.config	|| return 1
+	else				${RSYNC_U} ${TARGET}${ARCDIR}/${KCFG}	${TARGET}${LDIR}/.config	|| return 1
+	fi
+	kernel_cpu								${TARGET}${LDIR}/.config	|| return 1
+	return 0
+}
+
 function release_kernel_shmmax {
+	declare LDIR="${1}" && shift
 	#note: treating the block size of the cpio as the in-memory filesystem size, which comes up a few MB short of reality
 	#note: then adding 768MB for buffer and free disk space, and calculating the number of 4096K pages needed in the kernel
 	#note: fortunately, the kernel code does maximizing and rounding to the nearest memory block boundary for us, so all we need to do is provide an integer
@@ -465,15 +487,16 @@ function release_kernel_shmmax {
 	SHMMAX="$(echo "${SHMMAX} +(((2^29)+(2^28))/4096)" | bc | ${SED} -r "s|[.].*$||g")"
 #>>>	SHMMAX="917504"		# (3*(2^18))+2^17 = (3.5*(2^30))/4096 = 3.5G
 #>>>	SHMMAX="983040"		# (3*(2^18))+2^17+2^16 = ~3.7G [ (3*(2^18))*4096 = 3G) ] + [ (2^17)*4096 = 512M ] + [ (2^16)*4096 = 256M ]
-#>>>	safe_make -C ${TARGET}${FILE}					distclean					|| return 1
-	[[ ! -f ${TARGET}${FILE}/mm/shmem.c.${_TITLE} ]] || ${MV}	${TARGET}${FILE}/mm/shmem.c{.${_TITLE},}	|| return 1
-	${SED} -i.${_TITLE} "s|totalram_pages[ ][/][ ]2|${SHMMAX}|g"	${TARGET}${FILE}/mm/shmem.c			|| return 1
-	${GREP} --after-context=3 "long[ ]shmem_default_max"		${TARGET}${FILE}/mm/shmem.c			|| return 1
-	diff ${DIFF_OPTS}						${TARGET}${FILE}/mm/shmem.c{.${_TITLE},}	| ${GREP} "^[-+]" #>>> || return 1
+#>>>	safe_make -C ${TARGET}${LDIR}					distclean					|| return 1
+	[[ ! -f ${TARGET}${LDIR}/mm/shmem.c.${_TITLE} ]] || ${MV}	${TARGET}${LDIR}/mm/shmem.c{.${_TITLE},}	|| return 1
+	${SED} -i.${_TITLE} "s|totalram_pages[ ][/][ ]2|${SHMMAX}|g"	${TARGET}${LDIR}/mm/shmem.c			|| return 1
+	${GREP} --after-context=3 "long[ ]shmem_default_max"		${TARGET}${LDIR}/mm/shmem.c			|| return 1
+	diff ${DIFF_OPTS}						${TARGET}${LDIR}/mm/shmem.c{.${_TITLE},}	| ${GREP} "^[-+]" #>>> || return 1
 	return 0
 }
 
 function release_kernel_initramfs {
+	declare LDIR="${1}" && shift
 	declare INITRAMFS_CONFIG=
 	INITRAMFS_CONFIG+="CONFIG_INITRAMFS_SOURCE=\"$(realpath ${CPIO_FILE})\"\n"
 #>>>	INITRAMFS_CONFIG+="CONFIG_INITRAMFS_ROOT_GID=0\n"
@@ -484,23 +507,13 @@ function release_kernel_initramfs {
 	${SED} -i \
 		-e "/CONFIG_INITRAMFS_COMPRESSION/d" \
 		-e "s|^.*(CONFIG_INITRAMFS_SOURCE)[^_].*$|${INITRAMFS_CONFIG}|g" \
-								${TARGET}${FILE}/.config			|| return 1
+								${TARGET}${LDIR}/.config			|| return 1
 	if [[ ${TARGET} != / ]]; then
-		${RSYNC_U} ${TARGET}${FILE}/.config		${TARGET}${ARCDIR}/${NEXT}.initramfs		|| return 1
+		${RSYNC_U} ${TARGET}${LDIR}/.config		${TARGET}${ARCDIR}/${NEXT}.initramfs		|| return 1
 		${GREP} "CONFIG_(KERNEL|INITRAMFS|RD)_"		${TARGET}${ARCDIR}/${NEXT}.initramfs		|| return 1
 		diff ${DIFF_OPTS} ${TARGET}${ARCDIR}/${NEXT}	${TARGET}${ARCDIR}/${NEXT}.initramfs		| ${GREP} "^[-+]" #>>> || return 1
 	fi
-	${RM}							${TARGET}${FILE}/usr/initramfs_data.cpio*	|| return 1
-	return 0
-}
-
-function release_kernel_config {
-	if [[ ${TARGET} == / ]]; then
-		${RSYNC_U} ${SETDIR}/${LINDIR}/${NEXT}	${TARGET}${FILE}/.config	|| return 1
-	else
-		${RSYNC_U} ${TARGET}${ARCDIR}/${NEXT}	${TARGET}${FILE}/.config	|| return 1
-	fi
-	kernel_cpu					${TARGET}${FILE}/.config	|| return 1
+	${RM}							${TARGET}${LDIR}/usr/initramfs_data.cpio*	|| return 1
 	return 0
 }
 
@@ -510,21 +523,20 @@ function _release_kernel {	#{initrd}
 		INITRD="true"
 		shift
 	fi
-	for FILE in ${KERNEL}; do NEXT="config-gentoo64-${FILE}"; FILE="/usr/src/linux-${FILE}-gentoo"; done
+	declare LDIR="${KDIR}"
 	if [[ ${TARGET} == / ]]; then
-		FILE="/usr/src/linux"
+		LDIR="/usr/src/linux"
 	fi
-	if [[ -d ${TARGET}${FILE} ]] && [[ ! -f ${TARGET}/${_FINAL}/${_RAMFS}.kernel ]]; then
-		release_kernel_shmmax							|| return 1
-		release_kernel_config							|| return 1
+	if [[ -d ${TARGET}${LDIR} ]] && [[ ! -f ${TARGET}/${_FINAL}/${_RAMFS}.kernel ]]; then
+		release_kernel_config ${LDIR}						|| return 1
+		release_kernel_shmmax ${LDIR}						|| return 1
 		if ! ${INITRD}; then
-			release_kernel_initramfs					|| return 1
+			release_kernel_initramfs ${LDIR}				|| return 1
 		fi
-		safe_make -C ${TARGET}${FILE}	olddefconfig				|| return 1
-		safe_make -C ${TARGET}${FILE}	bzImage					|| return 1
-#>>>		declare BZIMAGE="${TARGET}${FILE}/arch/x86/boot/bzImage"		|| return 1
-		declare BZIMAGE="${TARGET}${FILE}/arch/x86_64/boot/bzImage"		|| return 1
-#>>>		${RSYNC_U} -L ${BZIMAGE}	{TARGET}/${_FINAL}/${_RAMFS}.kernel	|| return 1
+		safe_make -C ${TARGET}${LDIR}	olddefconfig				|| return 1
+		safe_make -C ${TARGET}${LDIR}	bzImage					|| return 1
+#>>>		declare BZIMAGE="${TARGET}${LDIR}/arch/x86/boot/bzImage"		|| return 1
+		declare BZIMAGE="${TARGET}${LDIR}/arch/x86_64/boot/bzImage"		|| return 1
 		${RSYNC_U} -L ${BZIMAGE}	${TARGET}/${_FINAL}/${_RAMFS}.kernel	|| return 1
 	fi
 	return 0
@@ -533,14 +545,14 @@ function _release_kernel {	#{initrd}
 ########################################
 
 function _release_report {
-	echo -en "\n"; ${LL}						\
-				${TARGET}/				\
-				${TARGET}/${_FINAL}*			\
-									2>/dev/null #>>> || return 1
-	echo -en "\n"; ${DU} -ms --dereference --one-file-system	\
-				${TARGET}${FILE}/usr/initramfs_data.*	\
-				${TARGET}/${_FINAL}/${_RAMFS}*		\
-									2>/dev/null #>>> || return 1
+	echo -en "\n"; ${LL}							\
+				${TARGET}/					\
+				${TARGET}/${_FINAL}*				\
+										2>/dev/null #>>> || return 1
+	echo -en "\n"; ${DU} -ms --dereference --one-file-system		\
+				${TARGET}/usr/src/linux/usr/initramfs_data.*	\
+				${TARGET}/${_FINAL}/${_RAMFS}*			\
+										2>/dev/null #>>> || return 1
 	return 0
 }
 
