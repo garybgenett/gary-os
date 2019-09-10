@@ -244,6 +244,7 @@ x11-base/xorg-x11
 x11-misc/arandr
 
 x11-misc/dmenu
+x11-misc/menumaker
 x11-misc/obconf
 x11-wm/dwm
 x11-wm/enlightenment
