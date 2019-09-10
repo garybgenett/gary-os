@@ -312,7 +312,7 @@ ${GREP} -v \
 	-e "^Total[:][ ]" \
 	-e "^Fetch Restriction[:][ ]" \
 	-e "^[ ][*][ ]IMPORTANT: [0-9]+ news items need reading for repository" \
-	-e "^[ ][*][ ]Use eselect news to read news items" \
+	-e "^[ ][*][ ]Use eselect news read to view new items" \
 	${GENDIR}/.emerge >>${GENDIR}/+okay
 
 exit 0
