@@ -459,6 +459,7 @@ function _release_cpio {	#{initrd}
 			\( -path ./usr/src/debug	-prune \) -o \
 			\
 			\( -path ./proc/\*		-prune \) -o \
+			\( -path ./run/\*		-prune \) -o \
 			\( -path ./sys/\*		-prune \) -o \
 			\
 			\( -path ./tmp/\*		-prune \) -o \
@@ -470,6 +471,7 @@ function _release_cpio {	#{initrd}
 		(cd ${TARGET} && ${XARGS} ${DU_S})	| tee ${CPIO_FILE}.txt	#>>> || return 1
 		sort -k4 -o ${CPIO_FILE}.txt		${CPIO_FILE}.txt	|| return 1
 		cat ${CPIO_FILE}.nul | ${CPIO_IN}				|| return 1
+		${RM}					${CPIO_FILE}.nul	|| return 1
 		if [[ ${TARGET} != / ]]; then
 			${RM}				${CPIO_FILE}.dir	|| return 1
 			${MKDIR}			${CPIO_FILE}.dir	|| return 1
@@ -478,7 +480,6 @@ function _release_cpio {	#{initrd}
 		if [[ ${TARGET} != / ]] || ${INITRD}; then
 			${XZ} ${CPIO_FILE}		>${CPIO_FILE}.xz	|| return 1
 		fi
-		${RM}					${CPIO_FILE}.nul	|| return 1
 	else
 		common_exists ${FUNCNAME} ${CPIO_FILE}*
 	fi
