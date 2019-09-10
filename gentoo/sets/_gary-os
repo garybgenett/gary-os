@@ -52,8 +52,8 @@
 # - declare USB_SOURCE="${USB_DEVICE}1"
 # - declare FUSE_DIR="/tmp/.fuse"
 # - declare GRUB_DIR="/tmp/.grub"
-# - declare USB_DIST="gary-os/_distfiles"
-# - declare USB_PACK="gary-os/_packages"
+# - declare USB_DIST="/gary-os/_distfiles"
+# - declare USB_PACK="/gary-os/_packages"
 # - declare SSH_SOURCE="root@me.garybgenett.net"
 # - declare SSH_DIST="/.g/_data/_builds/.gary-os.release/_distfiles"
 # - declare SSH_PACK="/.g/_data/_builds/.gary-os.release/_packages"
@@ -93,13 +93,13 @@
 # [emerge]
 # * https://wiki.archlinux.org/index.php/Overlay_filesystem
 # <setup>
-# - make -f /.gary-os/Makefile O=/ unpack
 # - modprobe fuse overlay
+# - make -f /.gary-os/Makefile O=/ P=${GOSPKG} unpack
 # - mkdir -pv ${FUSE_DIR}-{mount,dist{,-over,-work},pack{,-over,-work}} /var/cache/portage/{distfiles,packages}
 # <usb>
 # - mount -o rw /dev/${USB_SOURCE} ${FUSE_DIR}-mount
-# - mount -o ro,bind,nonempty ${FUSE_DIR}-mount/${USB_DIST} ${FUSE_DIR}-dist
-# - mount -o ro,bind,nonempty ${FUSE_DIR}-mount/${USB_PACK} ${FUSE_DIR}-pack
+# - mount -o ro,bind,nonempty ${FUSE_DIR}-mount${USB_DIST} ${FUSE_DIR}-dist
+# - mount -o ro,bind,nonempty ${FUSE_DIR}-mount${USB_PACK} ${FUSE_DIR}-pack
 # <ssh>
 # - prompt -z emerge --ask=n sshfs
 # - sshfs -o ro,nonempty ${SSH_SOURCE}:${SSH_DIST}/ ${FUSE_DIR}-dist
@@ -222,7 +222,7 @@
 # - mount -o rw /dev/${USB_SOURCE} /.gary-os-${ESUB} || [[ -n $(mount | ${GREP} "/.gary-os-${ESUB}") ]]
 # <setup>
 # - rm -frv /.gary-os-${ESUB}/linux /usr/src/linux
-# - make -f /.gary-os/Makefile O=/ unpack
+# - make -f /.gary-os/Makefile O=/ P=${GOSPKG} unpack
 # - mv -iv /usr/src/linux /.gary-os-${ESUB}/linux
 # - ln -fsv /.gary-os-${ESUB}/linux /usr/src/linux
 # <build>
