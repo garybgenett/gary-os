@@ -7,6 +7,8 @@
 # - set -x
 #
 ########################################
+# automation
+########################################
 #
 #note: turn this file into a script by removing "^# - " from the desired command lines
 #note: you almost certainly want to uncomment all of the ones at the top of the file
@@ -16,10 +18,26 @@
 # HOME=/.gary-os bash /_gary-os
 #
 ########################################
+# personal automation
+########################################
 #
+# rc-update add dhcpcd default
+# rc-update add sshd default
+# openrc
+#
+# :set foldcolumn=0
+#
+# cp ~/.ssh/known_hosts{.bak,} && \
+# shell 10.0.6.254
+#
+# set -o vi
+# alias ll="ls -la"
 # (source /.gary-os/.bashrc && shell -i)
-# rsync -avv -L --filter="-_/sources" --filter="-_/build" root@me.garybgenett.net:/.g/_data/zactive/.setup/gentoo.gary-os/ /.gary-os
-# rsync /.gary-os/gentoo/sets/ /etc/portage/sets
+#
+# rsync -avv -L --filter="-_/sources" --filter="-_/build" root@me.garybgenett.net:/.g/_data/zactive/.setup/gentoo.gary-os/ /.gary-os && \
+# rsync -avv /.gary-os/gentoo/sets/ /etc/portage/sets && \
+# rsync -avv /.gary-os/gentoo/sets/_gary-os / && \
+# HOME=/.gary-os bash /_gary-os
 #
 ################################################################################
 # beginning of scripting
