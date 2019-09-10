@@ -581,10 +581,8 @@ trap "EXIT 1" SIGHUP SIGINT SIGKILL SIGTERM
 
 function EXIT {
 	declare EXIT="0"
-	if [[ ${1} != 0 ]]; then
-		if [[ ${1} == -0 ]]; then
-			EXIT="0" && shift
-		elif [[ ${1} == -1 ]]; then
+	if [[ ${1} != 0 ]] && [[ ${1} != -0 ]]; then
+		if [[ ${1} == -1 ]]; then
 			EXIT="1" && shift
 		else
 			EXIT="${1}" && shift
@@ -596,6 +594,9 @@ function EXIT {
 			print_info marker
 		fi
 	else
+		if [[ ${1} == -0 ]]; then
+			EXIT="0" && shift
+		fi
 		if [[ -z ${QUIET} ]]; then
 			print_info marker
 			print_info success
