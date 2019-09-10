@@ -230,10 +230,19 @@
 # - make -f /.gary-os/Makefile O=/ P=${GOSPKG} clean
 # - make -f /.gary-os/Makefile O=/ P=${GOSPKG} release
 # - make -f /.gary-os/Makefile O=/ P=${GOSPKG} initrd
+# <minimal>
+# - (GOSPKG="gary-os" && sed -ir "/[#][{]minimal[}]/d" /etc/portage/sets/${GOSPKG})
+# - prompt -z emerge --ask=n --depclean
+# - rm -frv /var/git/meta-repo*
+# - rm -frv /usr/src/linux.tar.xz
+# - (GOSPKG="gary-os" && make -f /.gary-os/Makefile O=/ P=${GOSPKG} clean)
+# - (GOSPKG="gary-os" && make -f /.gary-os/Makefile O=/ P=${GOSPKG} _release_cpio _release_kernel _release_report) #>>> = release - _prepare_build
 # <copy>
 # - rsync -avv -L /.gary-os-${ESUB}/gary-os-${ESUB}-${GARYOS_VER}.null.kernel /.gary-os-${ESUB}/gary-os.null.kernel || true
 # - rsync -avv -L /.gary-os-${ESUB}/gary-os-${ESUB}-${GARYOS_VER}.kernel /.gary-os-${ESUB}/gary-os.kernel || true
 # - rsync -avv -L /.gary-os-${ESUB}/gary-os-${ESUB}-${GARYOS_VER}.cpio.xz /.gary-os-${ESUB}/gary-os.initrd || true
+# - rsync -avv -L /.gary-os-${ESUB}/gary-os-${ESUB}-${GARYOS_VER}.kernel ${SSH_SOURCE}:${SSH_COPY}/gary-os-${ESUB}-${GARYOS_VER}.minimal.kernel || true
+# - rsync -avv -L /.gary-os-${ESUB}/gary-os-${ESUB}-${GARYOS_VER}.cpio.xz ${SSH_SOURCE}:${SSH_COPY}/gary-os-${ESUB}-${GARYOS_VER}.minimal.initrd || true
 # <umount>
 # - umount /.gary-os-${ESUB} || [[ -z $(mount | ${GREP} "/.gary-os-${ESUB}") ]]
 # - rm -rv --one-file-system /.gary-os-${ESUB}
