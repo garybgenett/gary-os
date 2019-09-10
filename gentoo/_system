@@ -390,6 +390,7 @@ function print_info {
 		printf "${PRINTF}" "Initramfs System (Live Create):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${SCRIPT} {chroot} ${MAKEIT}_ramfs"
 		printf "${PRINTF}" "Initramfs System (Live Initrd):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${SCRIPT} {chroot} ${MAKEIT}_initrd"
 		printf "${PRINTF}" "Initramfs System (Live Unpack):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${SCRIPT} {chroot} ${MAKEIT}_unpack"
+		printf "${PRINTF}" "Initramfs System (Live Install):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${SCRIPT} {chroot} ${MAKEIT}_install"
 		echo -en "\n"
 		printf "${PRINTF}" "Distribution Targets (Internal Only):"	"<internal>"	"${SCRIPT} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#][{]main[}].*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
 		printf "${PRINTF}" "Distribution Reset (Internal Only):"	"<internal>"	"${SCRIPT} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#][{]reset[}].*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	)) --reset"
