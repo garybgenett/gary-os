@@ -69,6 +69,7 @@ usage:
 	@$(PRINTF) "Initramfs System (Live Create):"		"make O=/ release"
 	@$(PRINTF) "Initramfs System (Live Initrd):"		"make O=/ initrd"
 	@$(PRINTF) "Initramfs System (Live Unpack):"		"make O=/ unpack"
+	@$(PRINTF) "Initramfs System (Live Install):"		"make O=/ install"
 	@$(ECHO) "\n"
 	@$(ECHO) "$(STATE)All of the targets generally run non-interactively, except \"update\" and \"shell\".$(RESET)\n"
 ifneq ($(findstring help,$(MAKECMDGOALS)),)
@@ -191,6 +192,10 @@ initrd:
 .PHONY: unpack
 unpack:
 	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) _release_unpack
+
+.PHONY: install
+install:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) _release_install
 
 ########################################
 
