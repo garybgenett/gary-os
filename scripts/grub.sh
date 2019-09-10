@@ -221,10 +221,12 @@ set BCDFILE=\"%CURDIR%bcdedit.guid.txt\"
 if not exist %BCDFILE% (goto create) else (goto delete)
 :create
 	for /f \"usebackq tokens=3\" %%I in (\`bcdedit.exe /create /d \"${_NAME}\" /application bootsector\`) do (set GUID=%%I)
+::>>>	for /f \"usebackq tokens=3\" %%I in (\`bcdedit.exe /create /d \"${_NAME}\" /inherit fwbootmgr\`) do (set GUID=%%I)
 	echo %GUID% >%BCDFILE%
 	echo %GUID%
 	bcdedit.exe /set %GUID% device partition=c:
 	bcdedit.exe /set %GUID% path \\${_GRUB}\\bootstrap.img
+::>>>	bcdedit.exe /set %GUID% path \\${_GRUB}\\x86_64.efi
 	bcdedit.exe /displayorder %GUID% /addlast
 	bcdedit.exe /timeout 10
 	goto end
