@@ -487,11 +487,11 @@ ${RSYNC_U} -L ${_SELF} ${GDEST}/$(basename ${_SELF})	|| exit 1
 
 ########################################
 
-echo -en "${GLOAD}"	>${GDEST}/bootstrap.cfg	|| exit 1
+#>>> echo -en "${GLOAD}"	>${GDEST}/bootstrap.cfg	|| exit 1
 echo -en "${GRESC}"	>${GDEST}/grub.cfg	|| exit 1
 echo -en "${GRESC}"	>${GDEST}/rescue.cfg	|| exit 1
-echo -n "${BCDEDIT}"	>${GDEST}/bcdedit.bat	|| exit 1
-unix2dos ${GDEST}/bcdedit.bat			|| exit 1
+#>>> echo -n "${BCDEDIT}"	>${GDEST}/bcdedit.bat	|| exit 1
+#>>> unix2dos ${GDEST}/bcdedit.bat			|| exit 1
 
 ########################################
 
@@ -525,17 +525,17 @@ fi
 
 ########################################
 
-grub-mkimage -v \
-	-C xz \
-	-O ${GTYPE} \
-	-d ${GMODS} \
-	-o ${GDEST}/bootstrap.img \
-	-c ${GDEST}/bootstrap.cfg \
-	--prefix="${GROOT}/${_GRUB}" \
-	${MODULES_CORE}					|| exit_summary 1
-FILE="${GDEST}/bootstrap.img"
-cat ${GMODS}/lnxboot.img ${FILE} >${FILE}.lnxboot	|| exit 1
-${MV} ${FILE}{.lnxboot,}				|| exit 1
+#>>> grub-mkimage -v \
+#>>> 	-C xz \
+#>>> 	-O ${GTYPE} \
+#>>> 	-d ${GMODS} \
+#>>> 	-o ${GDEST}/bootstrap.img \
+#>>> 	-c ${GDEST}/bootstrap.cfg \
+#>>> 	--prefix="${GROOT}/${_GRUB}" \
+#>>> 	${MODULES_CORE}					|| exit_summary 1
+#>>> FILE="${GDEST}/bootstrap.img"
+#>>> cat ${GMODS}/lnxboot.img ${FILE} >${FILE}.lnxboot	|| exit 1
+#>>> ${MV} ${FILE}{.lnxboot,}				|| exit 1
 
 FILE="${GDEST}/rescue.tar/boot/grub"
 ${MKDIR} ${FILE}/${GTYPE}				|| exit 1
