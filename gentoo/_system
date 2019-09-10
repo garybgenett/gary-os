@@ -919,7 +919,7 @@ if [[ ${1} == -i ]]; then
 	fi
 	if [[ ! -d ${TARGET}/boot ]]; then
 		${MKDIR}				${TARGET}${ARCDIR}						|| EXIT 1
-		${RSYNC_U} ${SOURCE}/*funtoo*		${TARGET}${ARCDIR}/						|| EXIT 1
+		${RSYNC_U} ${SOURCE}/stage3-*-funtoo-*	${TARGET}${ARCDIR}/						|| EXIT 1
 #>>>		tar -pvvx --xz -C ${TARGET} -f		$(ls -t ${TARGET}${ARCDIR}/stage3-i686-funtoo-*.tar.xz		| head -n1) || EXIT 1
 		tar -pvvx --xz -C ${TARGET} -f		$(ls -t ${TARGET}${ARCDIR}/stage3-generic_64-funtoo-*.tar.xz	| head -n1) || EXIT 1
 	fi
