@@ -122,7 +122,9 @@ function _release_reset {	#{main}
 	if [[ ${TARGET} != / ]]; then
 		${RM} ${TARGET}/[._]${_TITLE}*		|| return 1
 	fi
-	if [[ -z "$(mount | ${GREP} "^[^[:space:]]+ on ${TARGET}[/]?${_FINAL}")" ]]; then
+	if {	mount-robust -u ${TARGET}		&&
+		mount-robust -u ${TARGET}/${_FINAL}	;
+	}; then
 		${RM} ${TARGET}/${_FINAL}*		|| return 1
 	fi
 	${RM} ${TARGET}/${_FINAL}/${_RAMFS}*		|| return 1
@@ -619,22 +621,18 @@ function release_install_boot {
 	declare INSTDIR="${1}"
 	declare INSTALL="${2}"
 	declare DEVICE="$(findmnt --noheadings --output SOURCE --target ${INSTALL}/boot)"
-	${MKDIR}							${INSTALL}/dev			|| return 1
-	mount -t devtmpfs none						${INSTALL}/dev			#>>> || return 1
-	${MKDIR}							${INSTALL}/proc			|| return 1
-	mount -t proc none						${INSTALL}/proc			#>>> || return 1
-	${RSYNC_U} /usr/lib/grub/i386-pc/				${INSTALL}/boot/grub		|| return 1
-	chroot ${INSTALL} boot-update --verbose								|| return 1
-	umount								${INSTALL}/dev			|| return 1
-	umount								${INSTALL}/proc			|| return 1
+	mount-robust --dev			${INSTALL}			|| return 1
+	${RSYNC_U} /usr/lib/grub/i386-pc/	${INSTALL}/boot/grub		|| return 1
+	chroot ${INSTALL} boot-update --verbose					|| return 1
+	mount-robust -u --dev			${INSTALL}			|| return 1
 	${SED} -i \
 		-e "s|([[:space:]])[/](kernel\|init)|\1/boot/\2|g" \
 		-e "s|(real_root=)[^[:space:]]+|\1${DEVICE} root=${DEVICE}|g" \
-									${INSTALL}/boot/grub/grub.cfg	|| return 1
+						${INSTALL}/boot/grub/grub.cfg	|| return 1
 	${SED} -i \
 		-e "s|^([^#].+)$|#\1|g" \
 		-e "s|^(.+)([[:space:]][/][[:space:]])|${DEVICE}\2|g" \
-									${INSTALL}/etc/fstab		|| return 1
+						${INSTALL}/etc/fstab		|| return 1
 	return 0
 }
 
