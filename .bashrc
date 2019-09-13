@@ -1805,70 +1805,193 @@ function maildirmake {
 ########################################
 
 function mount-robust {
-	declare RO=
+	echo -en "[Robust Mount: ${@}]\n"
+	declare DEBUG="false"
+	declare TEST="false"
 	declare UN="false"
-	if [[ ${1} == -0 ]]; then
-		RO="ro,"
+	declare RO=
+	if [[ ${1} == DEBUG ]]; then
+		DEBUG="true"
+		shift
+	fi
+	if [[ ${1} == TEST ]]; then
+		TEST="true"
 		shift
 	fi
 	if [[ ${1} == -u ]]; then
 		UN="true"
 		shift
 	fi
-	declare CHK_EXT="fsck -M -t ext4	-V -pC"
-	declare CHK_XFT="fsck -M -t exfat	-V"
-	declare CHK_NTF="fsck -M -t ntfs-3g	-V"
-	declare CHK_FAT="fsck -M -t vfat	-V"
-	declare MNT_EXT="mount -v -t ext4	-o ${RO}relatime,errors=remount-ro"
-	declare MNT_XFT="mount -v -t exfat	-o ${RO}relatime,errors=remount-ro,shortname=mixed"
-	declare MNT_NTF="mount -v -t ntfs-3g	-o ${RO}relatime,errors=remount-ro,shortname=mixed"
-	declare MNT_FAT="mount -v -t vfat	-o ${RO}relatime,errors=remount-ro,shortname=mixed"
-	declare MNT_BND="mount -v --bind"
-	declare UNMOUNT="umount -drv"
-	declare DEV="${1}"
-	declare DIR="${2}"
-	declare LUK="/dev/mapper/$(basename ${DEV})_crypt"
-	declare PNT="$(mount | ${SED} -n "s:^(${DEV}|${LUK})[ ]on[ ]([^ ]+)[ ].*$:\2:gp" | head -n1)"
-	if ${UN}; then
-		if cryptsetup isLuks ${DEV}; then
-			DEV="${LUK}"
-		fi
-		${UNMOUNT} ${DEV}
-		if [[ -n "$(mount | ${GREP} "^${DEV}")" ]]; then
+	if [[ ${1} == -0 ]]; then
+		RO="ro,"
+		shift
+	fi
+	declare DEV="${1}" && shift
+	declare DIR="${1}" && shift
+	if [[ ${DEV} == --dev ]]; then
+		declare DEV_DIRS=
+		DEV_DIRS[0]="/dev"
+		DEV_DIRS[1]="/dev/pts"
+		DEV_DIRS[2]="/dev/shm"
+		DEV_DIRS[3]="/proc"
+		DEV_DIRS[4]="/sys"
+		if [[ ! -d ${DIR} ]]; then
+			echo -en "Target Is Not A Directory!\n"
+			if [[ -n ${DIR} ]]; then
+				${LL} -d ${DIR}
+			fi
 			return 1
 		fi
-		if [[ -b ${LUK} ]]; then
-			cryptsetup luksClose ${LUK} || return 1
+		declare DEV_DIR=
+		if ! ${UN} ]]; then
+			${MKDIR} ${DIR}${DEV_DIR}
+			for DEV_DIR in ${DEV_DIRS[@]}; do
+				${FUNCNAME} ${DEV_DIR} ${DIR}${DEV_DIR}		|| return 1
+			done
+		else
+			for DEV_DIR in $(eval echo "{$((${#DEV_DIRS[@]}-1))..0}"); do
+				${FUNCNAME} -u ${DIR}${DEV_DIRS[${DEV_DIR}]}	|| return 1
+			done
 		fi
 		return 0
 	fi
-	if [[ -n ${PNT} ]]; then
-		if [[ ${PNT} == "/" ]]; then
-			echo "Root Filesystem: ${DEV}"
+	if ! ${TEST} && {
+		{ [[ ! -b ${DEV} ]] && [[ ! -d ${DEV} ]]; } ||
+		{ [[ ! -d ${DIR} ]] && ! ${UN}; }
+	}; then
+		echo -en "Invalid Arguments!\n"
+		return 1
+	fi
+	declare IS_LUKS="false"
+	declare LUKS_DEV="${DEV}"
+	if cryptsetup isLuks ${DEV} 2>/dev/null; then
+		if ! ${TEST}; then
+			DEV="/dev/mapper/$(basename ${DEV} 2>/dev/null)_crypt"
 		fi
-		if [[ ${PNT} == ${DIR} ]] ||
-		   [[ -n "$(mount | ${GREP} "^${PNT}[ ]on[ ]${DIR}")" ]] ||
-		   [[ -n "$(mount | ${GREP} "^${DEV}[ ]on[ ]${DIR}")" ]]; then
-			echo "Already Mounted: ${DEV}"
-			return 0
+		echo -en "(LUKS: ${DEV})\n"
+		IS_LUKS="true"
+	fi
+	declare FINDMNT="findmnt --noheadings --first-only"
+	declare DEV_SRC="$(${FINDMNT} --output SOURCE --source ${DEV} 2>/dev/null | tail -n1)"; declare	DEV_TGT="$(${FINDMNT} --output TARGET --source ${DEV} 2>/dev/null | tail -n1)"
+	declare DIR_SRC="$(${FINDMNT} --output SOURCE --target ${DIR} 2>/dev/null | tail -n1)"; declare	DIR_TGT="$(${FINDMNT} --output TARGET --target ${DIR} 2>/dev/null | tail -n1)"
+	if [[ -d ${DEV} ]]; then
+			DEV_SRC="$(${FINDMNT} --output SOURCE --target ${DEV} 2>/dev/null | tail -n1)";	DEV_TGT="$(${FINDMNT} --output TARGET --target ${DEV} 2>/dev/null | tail -n1)"
+	fi
+	declare IS_ROOT="false"
+	if {
+		{ ! ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV_TGT} == / ]];	} ||
+		{ ! ${UN} &&	[[ -d ${DIR} ]] && [[ ${DIR} == / ]];		} ||
+		{ ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV_TGT} == / ]];	} ||
+		{ ${UN} &&	[[ -d ${DEV} ]] && [[ ${DEV} == / ]];		};
+	}; then
+		echo -en "(Root Filesystem)\n"
+		IS_ROOT="true"
+	fi
+	declare IS_MOUNT="false"
+	if {
+		{ ! ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV} == ${DEV_SRC} ]];	} ||
+		{ ! ${UN} &&	[[ -d ${DIR} ]] && [[ ${DIR} == ${DIR_TGT} ]];	} ||
+		{ ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV} == ${DEV_SRC} ]];	} ||
+		{ ${UN} &&	[[ -d ${DEV} ]] && [[ ${DEV} == ${DEV_TGT} ]];	};
+	}; then
+		echo -en "(Mounted Filesystem)\n"
+		IS_MOUNT="true"
+	fi
+	if ${DEBUG}; then
+		echo -en "[Device Source: ${DEV_SRC}]\n"
+		echo -en "[Device Target: ${DEV_TGT}]\n"
+		echo -en "[Directory Source: ${DIR_SRC}]\n"
+		echo -en "[Directory Target: ${DIR_TGT}]\n"
+	fi
+	if ${TEST}; then
+#>>>		declare DO_DEBUG="DEBUG"
+		declare TEST_SRC="/tmp/.${FUNCNAME}/source"
+		declare TEST_TGT="/tmp/.${FUNCNAME}/target"
+		if [[ -z ${@} ]]; then
+			declare PRINTF="%-20.20s %-30.30s %-30.30s %-30.30s %s\n"
+			printf "${PRINTF}" "TEST"			"${FUNCNAME} TEST SRC_DEV"	"SRC_DIR"		"TGT_DIR"	"NOTES"
+			printf "${PRINTF}" "normal"			"${FUNCNAME} TEST /dev/sdc3"	"${TEST_SRC}"		"${TEST_TGT}"
+			printf "${PRINTF}" "mounted source"		"${FUNCNAME} TEST /dev/sdc3"	"${TEST_SRC}"		"${TEST_TGT}"	"mount /dev/sdc3 ${TEST_SRC}"
+			printf "${PRINTF}" "mounted target"		"${FUNCNAME} TEST /dev/sdc3"	"${TEST_SRC}"		"${TEST_TGT}"	"mount /dev/sdc2 ${TEST_TGT}"
+			printf "${PRINTF}" "root source"		"${FUNCNAME} TEST /dev/sda2"	"/"			"${TEST_TGT}"	"DANGEROUS"
+			printf "${PRINTF}" "root target"		"${FUNCNAME} TEST /dev/sdc2"	"/.g/clone_root"	"/"		"DANGEROUS"
+			printf "${PRINTF}" "bad source"			"${FUNCNAME} TEST /dev/sdz"	"/null"			"${TEST_TGT}"
+			printf "${PRINTF}" "bad target"			"${FUNCNAME} TEST /dev/sdc3"	"${TEST_SRC}"		"/null"
+			printf "${PRINTF}" "luks"			"${FUNCNAME} TEST /dev/sdc4"	"${TEST_SRC}"		"${TEST_TGT}"
+			${MKDIR} ${TEST_SRC} ${TEST_TGT}
+			return 1
 		fi
-		${MNT_BND}	${PNT}	${DIR}	|| return 1
-	else
-		if cryptsetup isLuks ${DEV}; then
-			if [[ ! -b ${LUK} ]]; then
-				cryptsetup luksOpen ${DEV} $(basename ${LUK}) || return 1
-				cryptsetup luksDump ${DEV}
+		echo -en "\n"
+		mount
+		echo -en "\nDEVICE MOUNT:\n";				${FUNCNAME} ${DO_DEBUG} ${DEV} ${1}	|| echo -en "FAILED!\n"
+		echo -en "\nDEVICE UMOUNT:\n";				${FUNCNAME} ${DO_DEBUG} -u ${DEV}	|| echo -en "FAILED!\n"
+		echo -en "\nDIRECTORY MOUNT:\n";			${FUNCNAME} ${DO_DEBUG} ${DIR} ${1}	|| echo -en "FAILED!\n"
+		echo -en "\nDIRECTORY UMOUNT:\n";			${FUNCNAME} ${DO_DEBUG} -u ${1}		|| echo -en "FAILED!\n"
+		if [[ -b ${DEV} ]]; then
+			echo -en "\nPROCESS MOUNT:\n";			${FUNCNAME} ${DO_DEBUG} ${DEV} ${1}	|| echo -en "FAILED!\n"; (cd ${1} && $(which sleep) 10) &
+			echo -en "\nPROCESS UMOUNT (DEVICE):\n";	${FUNCNAME} ${DO_DEBUG} -u ${DEV}	|| echo -en "FAILED!\n"; sleep 5
+			echo -en "\nPROCESS UMOUNT (DIRECTORY):\n";	${FUNCNAME} ${DO_DEBUG} -u ${1}		|| echo -en "FAILED!\n"; sleep 5
+			echo -en "\nPROCESS UMOUNT:\n";			${FUNCNAME} ${DO_DEBUG} -u ${1}		|| echo -en "FAILED!\n"
+		fi
+		echo -en "\n"
+		mount
+		return 1
+	fi
+	if ${UN}; then
+		if ${IS_ROOT}; then
+			echo -en "Will Not Unmount Root Filesystem!\n"
+			return 1
+		fi
+		if ${IS_MOUNT}; then
+			declare TRUE_DIR="${DEV}"
+			if [[ -b ${DEV} ]]; then
+				TRUE_DIR="${DEV_TGT}"
 			fi
-			DEV="${LUK}"
+			declare PROCESS="$(lsof | ${GREP} "[[:space:]]${TRUE_DIR}([/].+)?$")"
+			if [[ -n ${PROCESS} ]]; then
+				echo -en "Processes Still Running In Mount!\n"
+				echo -en "${PROCESS}\n"
+				return 1
+			fi
+			echo -en "Unmounting...\n"
+			if ! ${DEBUG}; then
+				umount -drv ${DEV} || return 1
+			fi
+			if [[ $(${FINDMNT} --output TARGET --target ${TRUE_DIR} 2>/dev/null) == ${TRUE_DIR} ]]; then
+				echo -en "Directory Is Still Mounted!\n"
+				return 1
+			fi
 		fi
-		${CHK_EXT}	${DEV}		||
-		${CHK_XFT}	${DEV}		||
-		${CHK_NTF}	${DEV}		||
-		${CHK_FAT}	${DEV}		|| return 1
-		${MNT_EXT}	${DEV}	${DIR}	||
-		${MNT_XFT}	${DEV}	${DIR}	||
-		${MNT_NTF}	${DEV}	${DIR}	||
-		${MNT_FAT}	${DEV}	${DIR}	|| return 1
+		if ${IS_LUKS} && [[ -b ${DEV} ]]; then
+			echo -en "Closing Encryption...\n"
+			if ! ${DEBUG}; then
+				cryptsetup luksClose ${DEV} || return 1
+			fi
+		fi
+	else
+		if ${IS_LUKS} && [[ ! -b ${DEV} ]]; then
+			echo -en "Opening Encrypton...\n"
+			if ! ${DEBUG}; then
+				cryptsetup luksOpen ${LUKS_DEV} $(basename ${DEV})	|| return 1
+				cryptsetup luksDump ${LUKS_DEV}				|| return 1
+			fi
+		fi
+		if ! ${IS_MOUNT}; then
+			echo -en "Mounting...\n"
+			if ${DEBUG}; then
+				return 0
+			fi
+			declare TYP="$(lsblk --noheadings --fs --output FSTYPE			${DEV} 2>/dev/null)"
+			if [[ ${TYP} == "ext4"		]]; then fsck -MV -t ${TYP} -pC	${DEV} || return 1; fi
+			if [[ ${TYP} == "exfat"		]]; then fsck -MV -t ${TYP}	${DEV} || return 1; fi
+			if [[ ${TYP} == "ntfs-3g"	]]; then fsck -MV -t ${TYP}	${DEV} || return 1; fi
+			if [[ ${TYP} == "vfat"		]]; then fsck -MV -t ${TYP}	${DEV} || return 1; fi
+			if [[ -d ${DEV}			]]; then mount -v --bind							${DEV} ${DIR} || return 1; fi
+			if [[ ${TYP} == "ext4"		]]; then mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro			${DEV} ${DIR} || return 1; fi
+			if [[ ${TYP} == "exfat"		]]; then mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro,shortname=mixed	${DEV} ${DIR} || return 1; fi
+			if [[ ${TYP} == "ntfs-3g"	]]; then mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro,shortname=mixed	${DEV} ${DIR} || return 1; fi
+			if [[ ${TYP} == "vfat"		]]; then mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro,shortname=mixed	${DEV} ${DIR} || return 1; fi
+		fi
 	fi
 	return 0
 }
