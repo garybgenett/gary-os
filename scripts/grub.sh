@@ -86,6 +86,7 @@ declare GPMBR="98"; declare GNMBR="ef02"; #>>> declare GFMBR=""
 ########################################
 
 declare GFDSK="false"
+#>>> declare GFFMT="-f"
 declare GFFMT="-f"
 declare GFNUM="0700"
 if [[ ${1} == -f*(x) ]]; then
