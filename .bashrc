@@ -1826,8 +1826,8 @@ function mount-robust {
 		RO="ro,"
 		shift
 	fi
-	declare DEV="${1}" && shift
-	declare DIR="${1}" && shift
+	declare DEV="${1}" && { shift || true; }
+	declare DIR="${1}" && { shift || true; }
 	if [[ ${DEV} == --dev ]]; then
 		declare DEV_DIRS=
 		DEV_DIRS[0]="/dev"
