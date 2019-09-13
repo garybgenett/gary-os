@@ -2143,7 +2143,7 @@ function prompt {
 	else
 		export PROMPT=
 	fi
-	source ${HOME}/.bashrc >/dev/null
+	source ${HOME}/.bashrc >/dev/null || return 1
 	return 0
 }
 
