@@ -1810,24 +1810,14 @@ function mount-robust {
 	declare TEST="false"
 	declare UN="false"
 	declare RO=
-	if [[ ${1} == DEBUG ]]; then
-		DEBUG="true"
-		shift
-	fi
-	if [[ ${1} == TEST ]]; then
-		TEST="true"
-		shift
-	fi
-	if [[ ${1} == -u ]]; then
-		UN="true"
-		shift
-	fi
-	if [[ ${1} == -0 ]]; then
-		RO="ro,"
-		shift
-	fi
-	declare DEV="${1}" && { shift || true; }
-	declare DIR="${1}" && { shift || true; }
+	declare DEV=
+	declare DIR=
+	if [[ ${1} == DEBUG ]]; then	DEBUG="true";	shift; fi
+	if [[ ${1} == TEST ]]; then	TEST="true";	shift; fi
+	if [[ ${1} == -u ]]; then	UN="true";	shift; fi
+	if [[ ${1} == -0 ]]; then	RO="ro,";	shift; fi
+	if [[ -n ${1} ]]; then		DEV="${1}";	shift; fi
+	if [[ -n ${1} ]]; then		DIR="${1}";	shift; fi
 	if [[ ${DEV} == --dev ]]; then
 		declare DEV_DIRS=
 		DEV_DIRS[0]="/dev"
@@ -1860,7 +1850,7 @@ function mount-robust {
 		{ [[ ! -d ${DIR} ]] && ! ${UN}; }
 	}; then
 		echo -en "Invalid Arguments!\n"
-		return 1
+#>>>		return 1
 	fi
 	declare IS_LUKS="false"
 	declare LUKS_DEV="${DEV}"
