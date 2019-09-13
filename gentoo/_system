@@ -520,24 +520,13 @@ function expect_wrapper {
 ########################################
 
 function mount_dev_dirs {
-	declare DEV_DIRS=
-	DEV_DIRS[0]="/dev"
-	DEV_DIRS[1]="/dev/pts"
-	DEV_DIRS[2]="/dev/shm"
-	DEV_DIRS[3]="/proc"
-	DEV_DIRS[4]="/sys"
 	if ! ${DO_CHROOT} || [[ ${TARGET} == / ]]; then
 		return 0
 	fi
 	if [[ -z ${1} ]]; then
 		print_info marker
 		print_info mount
-		for FILE in ${DEV_DIRS[@]}; do
-			if [[ -z "$(mount | ${GREP} "^[^[:space:]]+ on ${TARGET}${FILE}")" ]]; then
-				mount --verbose --bind ${FILE} ${TARGET}${FILE} \
-					|| return 1
-			fi
-		done
+		mount-robust --dev ${TARGET}		|| return 1
 		print_info marker
 	elif [[ ${1} == -u ]]; then
 		shift
@@ -546,16 +535,10 @@ function mount_dev_dirs {
 		if [[ -z "$(
 			lsof |
 			${GREP} "${TARGET}/" |
-			${GREP} -v "${TARGET}${GENDIR}.log$" |
-			${SED} "s|^.*[[:space:]]([^[:space:]]+)$|\1|g" |
-			sort --unique
+			${GREP} -v "${TARGET}${GENDIR}.log$"
 		)" ]]; then
-			for FILE in $(eval echo "{$((${#DEV_DIRS[@]}-1))..0}"); do
-				umount --verbose ${TARGET}${DEV_DIRS[${FILE}]}	#>>> || return 1
-			done
+			mount-robust -u --dev ${TARGET}	|| return 1
 		fi
-		mount | ${GREP} "${TARGET}/"			1>&2
-		[[ -n "$(mount | ${GREP} "${TARGET}/")" ]] &&	return 1
 		print_info marker
 	fi
 	return 0
