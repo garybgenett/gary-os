@@ -202,7 +202,7 @@
 # <setup>
 # - modprobe fuse
 # - mkdir -pv ${GRUB_DIR}
-# - umount /dev/${USB_SOURCE} || [[ -z $(mount | ${GREP} "/dev/${USB_SOURCE}") ]]
+# - mount-robust -u /dev/${USB_SOURCE}
 # <format>
 # - /.gary-os/scripts/grub.sh ${GRUB_DIR} -d5 -f /dev/${USB_SOURCE} ${GOPTS}
 # - /.gary-os/scripts/grub.sh ${GRUB_DIR} -d5 -fx /dev/${USB_SOURCE} ${GOPTS}
@@ -211,16 +211,15 @@
 # - /.gary-os/scripts/grub.sh ${GRUB_DIR} /dev/${USB_SOURCE} ${GOPTS}
 # - /.gary-os/scripts/grub.sh ${GRUB_DIR} -i /dev/${USB_SOURCE} ${GOPTS}
 # <umount>
-# - umount ${GRUB_DIR} || [[ -z $(mount | ${GREP} "${GRUB_DIR}") ]]
+# - mount-robust -u /dev/${USB_SOURCE}
 # - rm -rv --one-file-system ${GRUB_DIR}
-# - mount
 #
 # [package]
 # <memory>
 # - mount -o remount,rw,size=20g / && df /
 # <disk>
 # - mkdir -pv /.gary-os-${ESUB}
-# - mount -o rw /dev/${USB_SOURCE} /.gary-os-${ESUB} || [[ -n $(mount | ${GREP} "/.gary-os-${ESUB}") ]]
+# - mount-robust /dev/${USB_SOURCE} /.gary-os-${ESUB}
 # <setup>
 # - make -f /.gary-os/Makefile O=/ P=${GOSPKG} unpack
 # - mkdir -pv /.gary-os-${ESUB}
@@ -244,21 +243,19 @@
 # - rsync -avv -L /.gary-os-${ESUB}/gary-os-${ESUB}-${GARYOS_VER}.kernel ${SSH_SOURCE}:${SSH_COPY}/gary-os-${ESUB}-${GARYOS_VER}.minimal.kernel || true
 # - rsync -avv -L /.gary-os-${ESUB}/gary-os-${ESUB}-${GARYOS_VER}.cpio.xz ${SSH_SOURCE}:${SSH_COPY}/gary-os-${ESUB}-${GARYOS_VER}.minimal.initrd || true
 # <umount>
-# - umount /.gary-os-${ESUB} || [[ -z $(mount | ${GREP} "/.gary-os-${ESUB}") ]]
+# - mount-robust -u /.gary-os-${ESUB}
 # - rm -rv --one-file-system /.gary-os-${ESUB}
-# - mount
 #
 # [replicate]
 # <setup>
 # - mkdir -pv ${INST}
-# - mount -o rw /dev/${USB_SOURCE} ${INST} || [[ -n $(mount | ${GREP} "${INST}") ]]
+# - mount-robust /dev/${USB_SOURCE} ${INST}
 # <install>
 # - make -f /.gary-os/Makefile O=/ P=${GOSPKG} install
 # - rm -frv ${INST}/_gary-os
 # <umount>
-# - umount ${INST} || [[ -z $(mount | ${GREP} "${INST}") ]]
+# - mount-robust -u ${INST}
 # - rm -rv --one-file-system ${INST}
-# - mount
 #
 # [finish]
 # - rc-status
