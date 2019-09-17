@@ -2664,6 +2664,20 @@ function task-build {
 	return 0
 }
 
+########################################
+
+# https://github.com/koush/vysor.io/issues/242
+function vysor {
+	prompt -d -x
+	cd /.g/_data/_build/other/vysor-app	&&
+		${GIT} checkout --force master	&&
+		git reset --hard		&&
+		npm install npm@latest --global	&&
+		npm install			&&
+		./node_modules/.bin/electron . --app-id=gidgenkbbabolejbgbpnhbimgjbffefm
+	return 0
+}
+
 ################################################################################
 # impersonate functions
 ################################################################################
