@@ -1863,7 +1863,7 @@ function mount-robust {
 		echo -en "- (LUKS: ${DEV})\n"
 		IS_LUKS="true"
 	fi
-	declare FINDMNT="findmnt --noheadings --first-only"
+	declare FINDMNT="findmnt --noheadings" #>>> --first-only"
 	declare DEV_SRC="$(${FINDMNT} --output SOURCE --source ${DEV} 2>/dev/null | tail -n1)"; declare	DEV_TGT="$(${FINDMNT} --output TARGET --source ${DEV} 2>/dev/null | tail -n1)"
 	declare DIR_SRC="$(${FINDMNT} --output SOURCE --target ${DIR} 2>/dev/null | tail -n1)"; declare	DIR_TGT="$(${FINDMNT} --output TARGET --target ${DIR} 2>/dev/null | tail -n1)"
 	if [[ -d ${DEV} ]]; then
@@ -1871,23 +1871,37 @@ function mount-robust {
 	fi
 	declare IS_ROOT="false"
 	if {
-		{ ! ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV_TGT} == / ]];	} ||
+#>>>		{ ! ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV_TGT} == / ]];	} ||
 		{ ! ${UN} &&	[[ -d ${DIR} ]] && [[ ${DIR} == / ]];		} ||
 		{ ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV_TGT} == / ]];	} ||
 		{ ${UN} &&	[[ -d ${DEV} ]] && [[ ${DEV} == / ]];		};
 	}; then
 		echo -en "- (Root Filesystem)\n"
 		IS_ROOT="true"
+#>>>
+	elif {
+		{ ! ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV_TGT} == / ]];	}
+	}; then
+		echo -en "- <Remounting Root Device!>\n"
+#>>>		IS_ROOT="true"
+#>>>
 	fi
 	declare IS_MOUNT="false"
 	if {
-		{ ! ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV} == ${DEV_SRC} ]];	} ||
+#>>>		{ ! ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV} == ${DEV_SRC} ]];	} ||
 		{ ! ${UN} &&	[[ -d ${DIR} ]] && [[ ${DIR} == ${DIR_TGT} ]];	} ||
 		{ ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV} == ${DEV_SRC} ]];	} ||
 		{ ${UN} &&	[[ -d ${DEV} ]] && [[ ${DEV} == ${DEV_TGT} ]];	};
 	}; then
 		echo -en "- (Mounted Filesystem)\n"
 		IS_MOUNT="true"
+#>>>
+	elif {
+		{ ! ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV} == ${DEV_SRC} ]];	}
+	}; then
+		echo -en "- <Remounting Mounted Device!>\n"
+#>>>		IS_MOUNT="true"
+#>>>
 	fi
 	if ${DEBUG}; then
 		echo -en "- [Device Source: ${DEV_SRC}]\n"
