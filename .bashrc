@@ -1989,12 +1989,12 @@ function mount-robust {
 			fi
 			declare TYP="$(lsblk --noheadings --fs --output FSTYPE			${DEV} 2>/dev/null)"
 			if [[ ${TYP} == "ext4"		]]; then fsck -MV -t ${TYP} -pC	${DEV} || return 1; fi
-			if [[ ${TYP} == "exfat"		]]; then fsck -MV -t ${TYP}	${DEV} || return 1; fi
+			if [[ ${TYP} == "exfat"		]]; then fsck.${TYP}		${DEV} || return 1; fi
 			if [[ ${TYP} == "ntfs-3g"	]]; then fsck -MV -t ${TYP}	${DEV} || return 1; fi
 			if [[ ${TYP} == "vfat"		]]; then fsck -MV -t ${TYP}	${DEV} || return 1; fi
 			if [[ -d ${DEV}			]]; then mount -v --bind							${DEV} ${DIR} || return 1; fi
 			if [[ ${TYP} == "ext4"		]]; then mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro			${DEV} ${DIR} || return 1; fi
-			if [[ ${TYP} == "exfat"		]]; then mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro,shortname=mixed	${DEV} ${DIR} || return 1; fi
+			if [[ ${TYP} == "exfat"		]]; then mount -v -t ${TYP} -o ${RO}relatime					${DEV} ${DIR} || return 1; fi
 			if [[ ${TYP} == "ntfs-3g"	]]; then mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro,shortname=mixed	${DEV} ${DIR} || return 1; fi
 			if [[ ${TYP} == "vfat"		]]; then mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro,shortname=mixed	${DEV} ${DIR} || return 1; fi
 		fi
