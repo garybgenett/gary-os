@@ -1805,7 +1805,7 @@ function maildirmake {
 ########################################
 
 function mount-robust {
-	echo -en "[Robust Mount: ${@}]\n"
+	echo -en "=== [Robust Mount: ${@}]\n"
 	declare DEBUG="false"
 	declare TEST="false"
 	declare UN="false"
@@ -1826,7 +1826,7 @@ function mount-robust {
 		DEV_DIRS[3]="/proc"
 		DEV_DIRS[4]="/sys"
 		if [[ ! -d ${DIR} ]]; then
-			echo -en "Target Is Not A Directory!\n"
+			echo -en "- <Target Is Not A Directory!>\n"
 			if [[ -n ${DIR} ]]; then
 				${LL} -d ${DIR}
 			fi
@@ -1849,7 +1849,7 @@ function mount-robust {
 		{ [[ ! -b ${DEV} ]] && [[ ! -d ${DEV} ]]; } ||
 		{ [[ ! -d ${DIR} ]] && ! ${UN}; }
 	}; then
-		echo -en "Invalid Arguments!\n"
+		echo -en "- <Invalid Arguments!>\n"
 #>>>		return 1
 	fi
 	declare IS_LUKS="false"
@@ -1858,7 +1858,7 @@ function mount-robust {
 		if ! ${TEST}; then
 			DEV="/dev/mapper/$(basename ${DEV} 2>/dev/null)_crypt"
 		fi
-		echo -en "(LUKS: ${DEV})\n"
+		echo -en "- (LUKS: ${DEV})\n"
 		IS_LUKS="true"
 	fi
 	declare FINDMNT="findmnt --noheadings --first-only"
@@ -1874,7 +1874,7 @@ function mount-robust {
 		{ ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV_TGT} == / ]];	} ||
 		{ ${UN} &&	[[ -d ${DEV} ]] && [[ ${DEV} == / ]];		};
 	}; then
-		echo -en "(Root Filesystem)\n"
+		echo -en "- (Root Filesystem)\n"
 		IS_ROOT="true"
 	fi
 	declare IS_MOUNT="false"
@@ -1884,14 +1884,14 @@ function mount-robust {
 		{ ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV} == ${DEV_SRC} ]];	} ||
 		{ ${UN} &&	[[ -d ${DEV} ]] && [[ ${DEV} == ${DEV_TGT} ]];	};
 	}; then
-		echo -en "(Mounted Filesystem)\n"
+		echo -en "- (Mounted Filesystem)\n"
 		IS_MOUNT="true"
 	fi
 	if ${DEBUG}; then
-		echo -en "[Device Source: ${DEV_SRC}]\n"
-		echo -en "[Device Target: ${DEV_TGT}]\n"
-		echo -en "[Directory Source: ${DIR_SRC}]\n"
-		echo -en "[Directory Target: ${DIR_TGT}]\n"
+		echo -en "- [Device Source: ${DEV_SRC}]\n"
+		echo -en "- [Device Target: ${DEV_TGT}]\n"
+		echo -en "- [Directory Source: ${DIR_SRC}]\n"
+		echo -en "- [Directory Target: ${DIR_TGT}]\n"
 	fi
 	if ${TEST}; then
 #>>>		declare DO_DEBUG="DEBUG"
@@ -1929,7 +1929,7 @@ function mount-robust {
 	fi
 	if ${UN}; then
 		if ${IS_ROOT}; then
-			echo -en "Will Not Unmount Root Filesystem!\n"
+			echo -en "- <Will Not Unmount Root Filesystem!>\n"
 			return 1
 		fi
 		if ${IS_MOUNT}; then
@@ -1939,35 +1939,35 @@ function mount-robust {
 			fi
 			declare PROCESS="$(lsof | ${GREP} "[[:space:]]${TRUE_DIR}([/].+)?$")"
 			if [[ -n ${PROCESS} ]]; then
-				echo -en "Processes Still Running In Mount!\n"
+				echo -en "- <Processes Still Running In Mount!>\n"
 				echo -en "${PROCESS}\n"
 				return 1
 			fi
-			echo -en "Unmounting...\n"
+			echo -en "- Unmounting...\n"
 			if ! ${DEBUG}; then
 				umount -drv ${DEV} || return 1
 			fi
 			if [[ $(${FINDMNT} --output TARGET --target ${TRUE_DIR} 2>/dev/null) == ${TRUE_DIR} ]]; then
-				echo -en "Directory Is Still Mounted!\n"
+				echo -en "- <Directory Is Still Mounted!>\n"
 				return 1
 			fi
 		fi
 		if ${IS_LUKS} && [[ -b ${DEV} ]]; then
-			echo -en "Closing Encryption...\n"
+			echo -en "- Closing Encryption...\n"
 			if ! ${DEBUG}; then
 				cryptsetup luksClose ${DEV} || return 1
 			fi
 		fi
 	else
 		if ${IS_LUKS} && [[ ! -b ${DEV} ]]; then
-			echo -en "Opening Encrypton...\n"
+			echo -en "- Opening Encrypton...\n"
 			if ! ${DEBUG}; then
 				cryptsetup luksOpen ${LUKS_DEV} $(basename ${DEV})	|| return 1
 				cryptsetup luksDump ${LUKS_DEV}				|| return 1
 			fi
 		fi
 		if ! ${IS_MOUNT}; then
-			echo -en "Mounting...\n"
+			echo -en "- Mounting...\n"
 			if ${DEBUG}; then
 				return 0
 			fi
