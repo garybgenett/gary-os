@@ -1850,7 +1850,9 @@ function mount-robust {
 		{ [[ ! -d ${DIR} ]] && ! ${UN}; }
 	}; then
 		echo -en "- <Invalid Arguments!>\n"
-#>>>		return 1
+		if ! ${DEBUG}; then
+			return 1
+		fi
 	fi
 	declare IS_LUKS="false"
 	declare LUKS_DEV="${DEV}"
@@ -1894,7 +1896,7 @@ function mount-robust {
 		echo -en "- [Directory Target: ${DIR_TGT}]\n"
 	fi
 	if ${TEST}; then
-#>>>		declare DO_DEBUG="DEBUG"
+		declare DO_DEBUG="DEBUG"
 		declare TEST_SRC="/tmp/.${FUNCNAME}/source"
 		declare TEST_TGT="/tmp/.${FUNCNAME}/target"
 		if [[ -z ${@} ]]; then
