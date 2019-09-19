@@ -560,7 +560,7 @@ fi
 # basic functions
 ################################################################################
 
-function adb {
+function adb-run {
 	(cd /.g/_data/_builds/_android && ADB_TRACE=1 ./_adb.sh ${@})
 }
 
@@ -2684,11 +2684,13 @@ function task-build {
 
 # https://github.com/koush/vysor.io/issues/242
 function vysor {
+	declare VERS="master"
+	[[ -n ${1} ]] && VERS="${1}" && shift
 	prompt -d -x
 	cd /.g/_data/_build/other/vysor-app	&&
-		${GIT} checkout --force master	&&
+		${GIT} checkout --force ${VERS}	&&
 		git reset --hard		&&
-		npm install npm@latest --global	&&
+#>>>		npm install npm@latest --global	&&
 		npm install			&&
 		./node_modules/.bin/electron . --app-id=gidgenkbbabolejbgbpnhbimgjbffefm
 	return 0
