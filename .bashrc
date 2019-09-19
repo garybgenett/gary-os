@@ -2642,6 +2642,30 @@ function chroma {
 
 ########################################
 
+# https://github.com/Genymobile/scrcpy
+function scrcpy {
+	declare VERS="master"
+	[[ -n ${1} ]] && VERS="${1}" && shift
+#>>>	prompt -d -x
+	declare SDK_TMP="/tmp/.android"
+#>>>	export ANDROID_SDK_ROOT="/opt/android-studio"
+	export ANDROID_SDK_ROOT="${SDK_TMP}"
+	if [[ ${VERS} == build ]] || [[ ${1} == build ]]; then
+		${MKDIR} ${SDK_TMP} && android-studio
+		cd /.g/_data/_build/other/scrcpy				&&
+			${GIT} checkout --force ${VERS}				&&
+			git reset --hard					&&
+			meson x --buildtype release --strip -Db_lto=true	&&
+			chown -R plastic ${SDK_TMP}				&&
+			chown -R plastic /.g/_data/_build/other/scrcpy		&&
+			(cd x && su plastic -c ninja)
+	fi
+	cd /.g/_data/_build/other/scrcpy && ./run x
+	return 0
+}
+
+########################################
+
 function task-build {
 	declare PROG="task"
 	declare VERS="master"
