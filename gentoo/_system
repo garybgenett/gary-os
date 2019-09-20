@@ -1018,6 +1018,7 @@ if [[ ${1} == -i ]]; then
 	done; fi
 	if ${_CFG}; then
 		#note: these need to match the names in the "${MAKEIT}" script
+		#note: compare with the "${MAKEIT}_install" function in the "${MAKEIT}" script
 		${MAKEIT}_reset												|| EXIT 1
 		${PREPIT}_config --reset										|| EXIT 1
 		if [[ -x ${CFGSCR} ]]; then
