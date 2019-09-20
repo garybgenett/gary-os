@@ -200,7 +200,6 @@
 #
 # [grub]
 # <setup>
-# - modprobe fuse
 # - mkdir -pv ${GRUB_DIR}
 # - mount-robust -u /dev/${USB_SOURCE}
 # <format>
