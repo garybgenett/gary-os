@@ -32,7 +32,6 @@ sys-boot/boot-update
 sys-boot/efibootmgr
 sys-boot/grub
 sys-boot/os-prober
-sys-boot/refind
 sys-boot/syslinux
 sys-libs/efivar
 sys-power/suspend
@@ -40,7 +39,6 @@ sys-process/runit
 
 sys-apps/gptfdisk
 sys-block/parted
-#>>>sys-fs/btrfs-progs			# requires: app-text/asciidoc
 sys-fs/cryptsetup
 sys-fs/dosfstools
 sys-fs/e2fsprogs
@@ -86,7 +84,6 @@ net-misc/bridge-utils
 net-misc/dhcpcd
 net-misc/ifenslave
 net-misc/iputils
-#>>>net-misc/networkmanager		# requires: too many things
 net-misc/vconfig
 net-wireless/wireless-tools
 net-wireless/wpa_supplicant
@@ -105,7 +102,6 @@ www-client/lynx
 www-client/w3m
 
 app-misc/screen
-app-misc/tmux
 app-shells/bash
 app-shells/bash-completion
 app-shells/bashdb
@@ -134,6 +130,7 @@ app-arch/tar
 app-arch/unrar
 app-arch/unzip
 app-arch/upx-ucl
+app-arch/xar
 app-arch/xz-utils
 app-arch/zip
 dev-util/xdelta
@@ -164,8 +161,7 @@ app-arch/deb2targz
 app-arch/dpkg
 app-arch/rpm
 app-arch/rpm2targz
-app-arch/xar
-app-crypt/chntpw
+
 sys-apps/fakeroot
 sys-apps/fakeroot-ng
 
@@ -274,7 +270,6 @@ net-analyzer/httping
 net-analyzer/iftop
 net-analyzer/iptraf-ng
 net-analyzer/macchanger
-net-analyzer/net-snmp
 net-analyzer/netcat6
 net-analyzer/nethogs
 net-analyzer/ngrep
@@ -309,6 +304,7 @@ sys-fs/ntfs3g
 app-forensics/cmospwd
 app-forensics/foremost
 app-forensics/sleuthkit
+
 #>>>sys-apps/flashrom			# requires: dev-embedded/libftdi -> dev-libs/boost
 
 ########################################
@@ -334,8 +330,6 @@ net-misc/tigervnc			#{minimal}
 
 ########################################
 # media
-
-#>>>net-p2p/rtorrent			# requires: dev-libs/libsigc++ -> dev-libs/boost
 
 app-cdr/cdrtools
 app-cdr/dvd+rw-tools
