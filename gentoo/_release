@@ -120,17 +120,17 @@ function common_untar {
 
 #note: this is called statically in the "_system" script
 function _release_reset {	#{main}
+	declare FINDMNT="findmnt --noheadings --target"
 	if [[ ${TARGET} != / ]]; then
-		${RM} ${TARGET}/[._]${_TITLE}*		|| return 1
+		${RM} ${TARGET}/{.,_}${_TITLE}*		|| return 1
 	fi
-	if {	mount-robust -u ${TARGET}		&&
-		mount-robust -u ${TARGET}/${_FINAL}	;
-	}; then
+	if [[ -z $(${FINDMNT} ${TARGET}/${_FINAL}) ]]; then
 		${RM} ${TARGET}/${_FINAL}*		|| return 1
+	else
+		${RM} ${TARGET}/${_FINAL}/${_RAMFS}*	|| return 1
 	fi
-	${RM} ${TARGET}/${_FINAL}/${_RAMFS}*		|| return 1
-	${RM} ${TARGET}/boot/_null.kernel		|| return 1
 	if [[ ${TARGET} != / ]] && [[ ${TARGET} != ${_GINST} ]]; then
+		${RM} ${TARGET}/boot/_null.kernel	|| return 1
 		${RM} ${TARGET}/usr/src/linux		|| return 1
 		${RM} ${TARGET}/usr/src/linux.tar.xz	|| return 1
 		${LN} ${KBAS} ${TARGET}/usr/src/linux	|| return 1
