@@ -57,6 +57,7 @@ media-libs/libsdl2			haptic		# gentoo required
 media-libs/libvpx			svc		# gentoo required
 net-dns/avahi			mdnsresponder-compat	# gentoo required
 net-dns/dnsmasq				script		# gentoo required
+sys-libs/ncurses			tinfo		# gentoo required
 x11-base/xorg-server			glamor		# gentoo required
 x11-libs/libxcb				xkb		# gentoo required
 
