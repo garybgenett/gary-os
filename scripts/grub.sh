@@ -46,7 +46,6 @@ usage: ${SCRIPT} ...
 	grub<0-9+>	alternate partition number for example loopfile (default: ${GPDEF})
 	/dev/sda	use specified device with standard data partition (default: ${GPDEF})
 	/dev/sda<0-9+>	custom data partition number
-[menu file]		use target file as a custom grub.cfg instead of the default
 [kernel options]	additional custom options to pass to the kernel at boot
 
 All arguments must be used in the order specified.
@@ -132,12 +131,6 @@ fi
 
 ########################################
 
-declare GCUST=
-if [[ -f ${1} ]]; then
-	GCUST="$(${SED} "s|[\"]|\\\\\"|g" ${1})"
-	shift
-fi
-
 declare GOPTS=
 if [[ -n ${1} ]]; then
 	GOPTS="${1}"
@@ -197,10 +190,6 @@ chainloader ${GBOOT}+1
 
 # end of file
 "
-
-if [[ -n ${GCUST} ]]; then
-	GMENU="${GCUST}"
-fi
 
 ########################################
 
