@@ -30,7 +30,7 @@ shift
 
 declare HEDEF="10"
 declare GIDEF="${GDEST}/loopfile.img"
-declare GPDEF="2"
+declare GPDEF="1"
 
 function print_usage {
 	cat <<_EOF_
@@ -100,7 +100,6 @@ fi
 declare GINST="${GIDEF}"
 declare GPART="${GPDEF}"
 declare GPSEP=
-declare GPPRT=
 if [[ -b $(		echo ${1} | ${SED} "s|[p]?[0-9]+$||g") ]] || [[ ${1} == grub+([0-9]) ]]; then
 	GINST="$(	echo ${1} | ${SED} "s|[p]?[0-9]+$||g")"
 	GPART="$(	echo ${1} | ${SED} "s|^${GINST}||g")"
@@ -113,7 +112,7 @@ if [[ -b $(		echo ${1} | ${SED} "s|[p]?[0-9]+$||g") ]] || [[ ${1} == grub+([0-9]
 	shift
 fi
 GPSEP="$(echo "${GPART}" | ${SED} "s|^([p]?)([0-9]+)$|\1|g")"
-GPPRT="$(echo "${GPART}" | ${SED} "s|^([p]?)([0-9]+)$|\2|g")"
+GPART="$(echo "${GPART}" | ${SED} "s|^([p]?)([0-9]+)$|\2|g")"
 
 if [[ ! -b ${GINST} ]]; then
 	GPSEP="p"
@@ -129,8 +128,8 @@ fi
 
 ################################################################################
 
-declare GROOT="(hd0,${GPPRT})"
-declare GFILE="(hd0,${GPPRT})/boot/grub/grub.cfg"
+declare GROOT="(hd0,${GPART})"
+declare GFILE="(hd0,${GPART})/boot/grub/grub.cfg"
 
 declare GEFIS="x86_64-efi" #>>> i386-efi"
 declare GTYPE="i386-pc"
@@ -354,7 +353,7 @@ GDISK+="${GNMBR}\n"
 GDISK+="p\n"
 # data partition
 GDISK+="n\n"
-GDISK+="${GPPRT}\n"
+GDISK+="${GPART}\n"
 NEWBLOCK="$(( ${NEWBLOCK} + ${BLOCKS_NULL} +1 ))"	; GDISK+="${NEWBLOCK}\n"
 NEWBLOCK=""						; GDISK+="${NEWBLOCK}\n"
 GDISK+="${GFNUM}\n"
@@ -365,7 +364,7 @@ GDISK+="y\n"
 # hybrid mbr
 GDHYB+="r\n"
 GDHYB+="h\n"
-GDHYB+="${GPMBR} ${GPPRT} ${GPEFI}\n"
+GDHYB+="${GPMBR} ${GPART} ${GPEFI}\n"
 GDHYB+="n\n"
 GDHYB+="${GNMBR}/%[0-9][0-9]}\n"
 GDHYB+="y\n"
