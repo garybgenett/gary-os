@@ -410,7 +410,7 @@ function _prepare_symlink {
 	${LN} --relative ${TARGET}/${REPDIR}.git.tar.xz		${TARGET}/${_FINAL}/${_RAMFS}.$(basename ${REPDIR}).git.tar.xz	|| return 1
 	${LN} --relative ${TARGET}/${REPDIR}.tar.xz		${TARGET}/${_FINAL}/${_RAMFS}.$(basename ${REPDIR}).tar.xz	|| return 1
 	${LN} --relative ${TARGET}/usr/src/linux.tar.xz		${TARGET}/${_FINAL}/${_RAMFS}.linux.tar.xz			|| return 1
-	${LN} --relative ${TARGET}/boot/${KFIL}			${TARGET}/${_FINAL}/${_RAMFS}.null.kernel			|| return 1
+	${LN} --relative ${TARGET}${KFIL}			${TARGET}/${_FINAL}/${_RAMFS}.null.kernel			|| return 1
 	${LN} --relative ${TARGET}/.${_TITLE}.packages.txt	${TARGET}/${_FINAL}/${_RAMFS}.packages.txt			|| return 1
 #>>>
 	if [[ -f ${TARGET}/boot/_null.kernel ]]; then
@@ -561,9 +561,9 @@ function release_kernel_initramfs {
 		-e "s|^.*(CONFIG_INITRAMFS_SOURCE)[^_].*$|${INITRAMFS_CONFIG}|g" \
 								${TARGET}${LDIR}/.config			|| return 1
 	if [[ ${TARGET} != / ]]; then
-		${RSYNC_U} ${TARGET}${LDIR}/.config		${TARGET}${ARCDIR}/${NEXT}.initramfs		|| return 1
-		${GREP} "CONFIG_(KERNEL|INITRAMFS|RD)_"		${TARGET}${ARCDIR}/${NEXT}.initramfs		|| return 1
-		diff ${DIFF_OPTS} ${TARGET}${ARCDIR}/${NEXT}	${TARGET}${ARCDIR}/${NEXT}.initramfs		| ${GREP} "^[-+]" #>>> || return 1
+		${RSYNC_U} ${TARGET}${LDIR}/.config		${TARGET}${ARCDIR}/${KCFG}.initramfs		|| return 1
+		${GREP} "CONFIG_(KERNEL|INITRAMFS|RD)_"		${TARGET}${ARCDIR}/${KCFG}.initramfs		|| return 1
+		diff ${DIFF_OPTS} ${TARGET}${ARCDIR}/${KCFG}	${TARGET}${ARCDIR}/${KCFG}.initramfs		| ${GREP} "^[-+]" #>>> || return 1
 	fi
 	${RM}							${TARGET}${LDIR}/usr/initramfs_data.cpio*	|| return 1
 	return 0
