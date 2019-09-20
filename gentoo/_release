@@ -530,11 +530,12 @@ function release_kernel_config {
 function release_kernel_shmmax {
 	declare LDIR="${1}" && shift
 	#note: treating the block size of the cpio as the in-memory filesystem size, which comes up a few MB short of reality
-	#note: then adding 768MB for buffer and free disk space, and calculating the number of 4096K pages needed in the kernel
+	#note: then adding 768-1024MB for buffer and free disk space, and calculating the number of 4096K pages needed in the kernel
 	#note: fortunately, the kernel code does maximizing and rounding to the nearest memory block boundary for us, so all we need to do is provide an integer
 	declare SHMMAX=
 	SHMMAX="$(${DU_S} ${CPIO_FILE} | ${SED} "s|[[:space:]].*$||g")"
-	SHMMAX="$(echo "${SHMMAX} +(((2^29)+(2^28))/4096)" | bc | ${SED} -r "s|[.].*$||g")"
+#>>>	SHMMAX="$(echo "${SHMMAX} +(((2^29)+(2^28))/4096)" | bc | ${SED} -r "s|[.].*$||g")"
+	SHMMAX="$(echo "${SHMMAX} +((2^30)/4096)" | bc | ${SED} -r "s|[.].*$||g")"
 #>>>	SHMMAX="917504"		# (3*(2^18))+2^17 = (3.5*(2^30))/4096 = 3.5G
 #>>>	SHMMAX="983040"		# (3*(2^18))+2^17+2^16 = ~3.7G [ (3*(2^18))*4096 = 3G) ] + [ (2^17)*4096 = 512M ] + [ (2^16)*4096 = 256M ]
 #>>>	safe_make -C ${TARGET}${LDIR}					distclean					|| return 1
