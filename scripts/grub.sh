@@ -128,52 +128,93 @@ fi
 
 ################################################################################
 
-declare GROOT="(hd0,${GPART})"
-declare GFILE="(hd0,${GPART})/boot/grub/grub.cfg"
-
+declare GROOT="hd0,${GPART}"
 declare GEFIS="x86_64-efi" #>>> i386-efi"
 declare GTYPE="i386-pc"
+
 declare GRUBD="/usr/lib/grub"
 declare GMODS="${GRUBD}/${GTYPE}"
+declare GFILE="/boot/grub/grub.cfg"
 
 ########################################
 
 declare GMENU="\
 # settings
+
 set debug=linux
 set default=0
 set timeout=-1
 
 # modules
+
+insmod search
 insmod configfile
 insmod linux
 insmod chain
 
 # rescue
+
 menuentry \"${_NAME} Rescue\" {
-set pager=1
-set
-set pager=0
-}
-menuentry \"${_PROJ} Rescue\" {
-linux  ${GROOT}/${_BASE}.null.kernel
-linux  ${GROOT}/${_BASE}.kernel ${GOPTS}
-initrd ${GROOT}/${_BASE}.initrd
-boot
+	set pager=1
+	set
+	set pager=0
 }
 
-# menu
-menuentry \"${_PROJ} Install Boot\" {
-linux  ${GROOT}/boot/_null.kernel
-linux  ${GROOT}/boot/kernel root=${GINST}${GPSEP}${GPART} ${GOPTS}
-initrd ${GROOT}/boot/initrd
-boot
+set garyos_rescue=
+search --file --set garyos_rescue /${_BASE}.kernel
+if [ -n \"\${garyos_rescue}\" ]; then
+	set default=1
+	set timeout=${TIMEOUT}
+else
+	set garyos_rescue=\"${GROOT}\"
+fi
+menuentry \"${_PROJ} Rescue\" {
+	linux  (\${garyos_rescue})/${_BASE}.null.kernel
+	linux  (\${garyos_rescue})/${_BASE}.kernel ${GOPTS}
+	initrd (\${garyos_rescue})/${_BASE}.initrd
+	boot
 }
+
+# install
+
+set garyos_menu=
+set garyos_install=
+search --file --set garyos_menu ${GFILE}
+search --file --set garyos_install /boot/kernel
+
+if [ -n \"\${garyos_menu}\" \"\${garyos_menu}\" != \"memdisk\" ]; then
+	set default=2
+	set timeout=${TIMEOUT}
+else
+	set garyos_menu=\"${GROOT}\"
+fi
+if [ -n \"\${garyos_install}\" ]; then
+#>>>	set default=3
+	set default=2
+	set timeout=${TIMEOUT}
+else
+	set garyos_install=\"${GROOT}\"
+fi
+
 menuentry \"${_PROJ} Install Menu\" {
-configfile ${GFILE}
+#>>>	configfile (\${garyos_menu})${GFILE}
+	configfile (\${garyos_install})${GFILE}
 }
-menuentry \"Default OS\" {
-chainloader (hd0)+1
+menuentry \"${_PROJ} Install Boot\" {
+	linux  (\${garyos_install})/boot/_null.kernel
+	linux  (\${garyos_install})/boot/kernel root=${GINST}${GPSEP}${GPART} ${GOPTS}
+	initrd (\${garyos_install})/boot/initrd
+	boot
+}
+
+# chainload
+
+menuentry \"Boot Primary\" {
+	chainloader (hd0)+1
+}
+
+menuentry \"Boot Secondary\" {
+	chainloader (hd1)+1
 }
 
 # end of file
