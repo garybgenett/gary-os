@@ -203,14 +203,13 @@
 # - mkdir -pv ${GRUB_DIR}
 # - mount-robust -u /dev/${USB_SOURCE}
 # <format>
-# - /.gary-os/scripts/grub.sh ${GRUB_DIR} -d5 -f /dev/${USB_SOURCE} ${_GOPTS}
-# - /.gary-os/scripts/grub.sh ${GRUB_DIR} -d5 -fx /dev/${USB_SOURCE} ${_GOPTS}
+# - /.gary-os/scripts/grub.sh ${GRUB_DIR} -f /dev/${USB_SOURCE} ${_GOPTS}
+# - /.gary-os/scripts/grub.sh ${GRUB_DIR} -fx /dev/${USB_SOURCE} ${_GOPTS}
 # - gdisk -l /dev/${USB_DEVICE}
 # <install>
 # - /.gary-os/scripts/grub.sh ${GRUB_DIR} /dev/${USB_SOURCE} ${_GOPTS}
-# - /.gary-os/scripts/grub.sh ${GRUB_DIR} -i /dev/${USB_SOURCE} ${_GOPTS}
 # <umount>
-# - mount-robust -u /dev/${USB_SOURCE}
+# - mount-robust -u ${GRUB_DIR}
 # - rm -rv --one-file-system ${GRUB_DIR}
 #
 # [package]
