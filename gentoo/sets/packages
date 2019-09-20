@@ -32,7 +32,6 @@ sys-boot/boot-update
 sys-boot/efibootmgr
 sys-boot/grub
 sys-boot/os-prober
-sys-boot/refind
 sys-boot/syslinux
 sys-libs/efivar
 sys-power/suspend
@@ -40,7 +39,6 @@ sys-process/runit
 
 sys-apps/gptfdisk
 sys-block/parted
-sys-fs/btrfs-progs
 sys-fs/cryptsetup
 sys-fs/dosfstools
 sys-fs/e2fsprogs
@@ -49,10 +47,6 @@ sys-fs/ext4magic
 sys-fs/extundelete
 sys-fs/mtools
 sys-fs/squashfs-tools
-
-#>>>sys-fs/zfs
-#>>>sys-fs/zfs-kmod
-#>>>sys-kernel/spl
 
 sys-apps/attr
 sys-apps/coreutils
@@ -88,10 +82,8 @@ net-firewall/ebtables
 net-firewall/iptables
 net-misc/bridge-utils
 net-misc/dhcpcd
-net-misc/dhcpcd-ui
 net-misc/ifenslave
 net-misc/iputils
-net-misc/networkmanager
 net-misc/vconfig
 net-wireless/wireless-tools
 net-wireless/wpa_supplicant
@@ -110,7 +102,7 @@ www-client/lynx
 www-client/w3m
 
 app-misc/screen
-app-misc/tmux
+#>>>app-misc/tmux
 app-shells/bash
 app-shells/bash-completion
 app-shells/bashdb
@@ -153,6 +145,7 @@ app-arch/tar
 app-arch/unrar
 app-arch/unzip
 app-arch/upx-ucl
+app-arch/xar
 app-arch/xz-utils
 app-arch/zip
 dev-util/xdelta
@@ -184,8 +177,7 @@ app-arch/deb2targz
 app-arch/dpkg
 app-arch/rpm
 app-arch/rpm2targz
-app-arch/xar
-app-crypt/chntpw
+
 sys-apps/fakeroot
 sys-apps/fakeroot-ng
 
@@ -246,20 +238,20 @@ x11-misc/dmenu
 x11-misc/menumaker
 x11-misc/obconf
 x11-wm/dwm
-x11-wm/enlightenment
-x11-wm/enlightenment:0
-x11-wm/enlightenment:0.17
+#>>>x11-wm/enlightenment
+#>>>x11-wm/enlightenment:0
+#>>>x11-wm/enlightenment:0.17
 x11-wm/openbox
 x11-wm/twm
-x11-wm/windowmaker
+#>>>x11-wm/windowmaker
 
-app-editors/leafpad
-lxde-base/lxde-meta
-lxde-base/lxdm
+#>>>app-editors/leafpad
+#>>>lxde-base/lxde-meta
+#>>>lxde-base/lxdm
 
 x11-terms/rxvt-unicode
-x11-terms/st
-x11-terms/terminology
+#>>>x11-terms/st
+#>>>x11-terms/terminology
 x11-terms/xterm
 
 x11-apps/transset
@@ -290,13 +282,13 @@ net-misc/unison
 net-misc/unison:2.48
 net-misc/unison:2.51
 
-dev-perl/Template-DBI
-dev-perl/Template-GD
-dev-perl/Template-Plugin-Cycle
-dev-perl/Template-Plugin-Latex
-dev-perl/Template-Tiny
-dev-perl/Template-Toolkit
-dev-perl/Template-XML
+#>>>dev-perl/Template-DBI
+#>>>dev-perl/Template-GD
+#>>>dev-perl/Template-Plugin-Cycle
+#>>>dev-perl/Template-Plugin-Latex
+#>>>dev-perl/Template-Tiny
+#>>>dev-perl/Template-Toolkit
+#>>>dev-perl/Template-XML
 
 app-editors/retext
 app-text/pandoc
@@ -307,12 +299,12 @@ dev-haskell/pretty-show			# gentoo required: missing dependency of dev-haskell/s
 dev-haskell/skylighting			# gentoo required: dev-haskell/highlighting-kate replacement
 dev-haskell/texmath
 
-app-text/asciidoc
-app-text/docbook-xml-dtd
-app-text/docbook-xsl-ns-stylesheets
-app-text/docbook-xsl-stylesheets
-app-text/htmltidy
-app-text/xmlto
+#>>>app-text/asciidoc
+#>>>app-text/docbook-xml-dtd
+#>>>app-text/docbook-xsl-ns-stylesheets
+#>>>app-text/docbook-xsl-stylesheets
+#>>>app-text/htmltidy
+#>>>app-text/xmlto
 
 app-text/texlive
 media-gfx/transfig
@@ -350,11 +342,11 @@ dev-java/icedtea:8
 dev-db/sqlite
 dev-tcltk/expect
 
-x11-libs/gtk+
+#>>>x11-libs/gtk+
 x11-themes/gtk-theme-switch
 
-dev-qt/qtcore
-dev-qt/qtgui
+#>>>dev-qt/qtcore
+#>>>dev-qt/qtgui
 
 media-libs/alsa-lib
 media-libs/alsa-oss
@@ -425,7 +417,6 @@ net-analyzer/httping
 net-analyzer/iftop
 net-analyzer/iptraf-ng
 net-analyzer/macchanger
-net-analyzer/net-snmp
 net-analyzer/netcat6
 net-analyzer/nethogs
 net-analyzer/ngrep
@@ -453,10 +444,10 @@ net-misc/autossh
 net-misc/pipes
 net-vpn/httptunnel
 
-net-dialup/lrzsz
-net-dialup/minicom
-net-dialup/ppp
-net-dialup/rp-pppoe
+#>>>net-dialup/lrzsz
+#>>>net-dialup/minicom
+#>>>net-dialup/ppp
+#>>>net-dialup/rp-pppoe
 
 net-fs/cifs-utils
 net-fs/curlftpfs
@@ -482,7 +473,7 @@ sys-fs/mtpfs
 ########################################
 # servers
 
-dev-db/mysql
+#>>>dev-db/mysql
 net-dns/bind
 net-fs/samba
 net-ftp/proftpd
@@ -490,32 +481,32 @@ net-ftp/tftp-hpa
 net-mail/dovecot
 net-misc/dhcp
 net-misc/ntp
-net-nds/openldap
+#>>>net-nds/openldap
 net-vpn/openvpn
 net-vpn/tor
 net-wireless/hostapd
 
 app-admin/apache-tools
-www-misc/awstats
+#>>>www-misc/awstats
 www-servers/apache
-www-servers/nginx
+#>>>www-servers/nginx
 
-app-text/ghostscript-gpl
-net-print/cups
-net-print/cups-filters
-net-print/foomatic-db
-net-print/foomatic-db-engine
+#>>>app-text/ghostscript-gpl
+#>>>net-print/cups
+#>>>net-print/cups-filters
+#>>>net-print/foomatic-db
+#>>>net-print/foomatic-db-engine
 
 ########################################
 # programs
 
 sci-calculators/qalculate-gtk
 
-app-emulation/bochs
-app-emulation/dosemu
-app-emulation/lxc
+#>>>app-emulation/bochs
+#>>>app-emulation/dosemu
+#>>>app-emulation/lxc
 games-emulation/dosbox
-virtual/wine
+#>>>virtual/wine
 
 sys-firmware/edk2-ovmf
 sys-firmware/ipxe
@@ -523,14 +514,14 @@ sys-firmware/seabios
 sys-firmware/sgabios
 sys-firmware/vgabios
 
-app-emulation/aqemu
+#>>>app-emulation/aqemu
 app-emulation/qemu
 app-emulation/qemu-guest-agent
 app-emulation/spice
 app-emulation/spice-protocol
 app-emulation/spice-vdagent
 app-emulation/virt-viewer
-net-misc/spice-gtk
+#>>>net-misc/spice-gtk
 
 app-emulation/virtualbox
 app-emulation/virtualbox-additions
@@ -561,13 +552,13 @@ www-client/chromium
 www-client/firefox
 www-client/surf
 
-app-editors/atom
+#>>>app-editors/atom
 app-text/xournal
 media-gfx/cellwriter
 
 app-text/qpdf
 app-text/qpdfview
-media-gfx/wkhtmltopdf
+#>>>media-gfx/wkhtmltopdf
 
 media-gfx/graphviz
 media-gfx/xfig
@@ -585,7 +576,7 @@ x11-plugins/gkrellsun
 x11-plugins/gkrellweather
 
 app-misc/freemind
-app-misc/xmind
+#>>>app-misc/xmind
 
 app-office/libreoffice
 app-office/unoconv
@@ -622,11 +613,10 @@ media-libs/libjpeg-turbo
 media-libs/openjpeg
 media-libs/tiff
 
-media-libs/libprojectm
-media-libs/libprojectm-qt
+#>>>media-libs/libprojectm
+#>>>media-libs/libprojectm-qt
 media-sound/picard
 #>>>media-sound/projectm-pulseaudio	# gentoo required: [media-sound/projectm-pulseaudio-2.1.0] CMake Error at cmake_install.cmake:53 (file): file RPATH_CHANGE could not write new RPATH: to the file: /var/tmp/portage/media-sound/projectm-pulseaudio-2.1.0/image//usr/bin/projectM-pulseaudio The current RUNPATH is: --library=projectM:-L/usr/lib64/qt4:-lQtXml:-lQtOpenGL:-lQtGui:-lQtCore:/usr/lib64/qt4: which does not contain: -lprojectM:-L/usr/lib64/qt4:-lQtXml:-lQtOpenGL:-lQtGui:-lQtCore:/usr/lib64/qt4: as was expected.
-media-sound/quodlibet
 media-sound/synaesthesia
 media-video/ffmpeg
 media-video/mediainfo
