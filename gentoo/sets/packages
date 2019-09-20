@@ -465,14 +465,19 @@ net-fs/sshfs
 net-nds/rpcbind
 sys-fs/exfat-utils
 sys-fs/fuse-exfat
-sys-fs/mtd-utils
-sys-fs/mtpfs
 sys-fs/ntfs3g
 
 app-forensics/cmospwd
 app-forensics/foremost
 app-forensics/sleuthkit
+
+app-mobilephone/heimdall
+dev-java/android-util
+dev-util/android-studio
+dev-util/android-tools
 sys-apps/flashrom
+sys-fs/mtd-utils
+sys-fs/mtpfs
 
 ########################################
 # servers
