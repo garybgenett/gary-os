@@ -37,6 +37,7 @@ x11-misc/xlockmore			-pam		# gentoo required: [x11-misc/xlockmore-5.55] pam_unix
 
 ########################################
 
+dev-libs/libdbusmenu			gtk3		# gentoo required
 dev-libs/libpcre2			pcre16		# gentoo required
 dev-libs/xmlsec				gcrypt		# gentoo required
 dev-libs/xmlsec				nss		# gentoo required

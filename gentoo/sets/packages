@@ -375,7 +375,9 @@ net-wireless/bluez-tools
 #>>>sys-apps/bolt			# gentoo required: depends on systemd
 sys-apps/thunderbolt-software-user-space
 
-# polychromatic dependencies
+app-misc/openrazer
+app-misc/polychromatic
+# polychromatic dependencies (repository build)
 dev-python/dbus-python
 dev-python/lesscpy
 dev-python/pyudev
