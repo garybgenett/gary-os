@@ -45,6 +45,7 @@
 #
 # [globals]
 # - declare __VERSN="v4.0"
+# - declare __GINST="/.install"
 # - declare _ESUB="generic_64"
 # - declare _GOSPKG="_gary-os"
 # - declare _GOPTS=""
@@ -59,7 +60,6 @@
 # - declare SSH_PACK="/.g/_data/_builds/.gary-os.release/_packages"
 # - declare SSH_COPY="/.g/_data/_builds/_gary-os/.gary-os-${_ESUB}"
 # - declare RUNSV="/.runit/runsvdir/current"
-# - declare INST="/.install"	# see "_release_install" in "_release" script
 #
 # [overrides]
 # - declare _GOPTS="console=ttyS0,38400"
@@ -247,14 +247,14 @@
 #
 # [replicate]
 # <setup>
-# - mkdir -pv ${INST}
-# - mount-robust /dev/${USB_SOURCE} ${INST}
+# - mkdir -pv ${__GINST}
+# - mount-robust /dev/${USB_SOURCE} ${__GINST}
 # <install>
 # - make -f /.gary-os/Makefile O=/ P=${_GOSPKG} install
-# - rm -frv ${INST}/_gary-os
+# - rm -frv ${__GINST}/_gary-os
 # <umount>
-# - mount-robust -u ${INST}
-# - rm -rv --one-file-system ${INST}
+# - mount-robust -u ${__GINST}
+# - rm -rv --one-file-system ${__GINST}
 #
 # [finish]
 # - rc-status
