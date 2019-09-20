@@ -345,11 +345,11 @@ function _prepare_linux {
 			--filter="-_/usr/initramfs_data.cpio**"							\
 			${TARGET}${KDIR}/					${TARGET}/usr/src/linux		|| return 1
 	fi
-#>>>	if [[ ! -f ${TARGET}/boot/_null.kernel ]]; then
-#>>>		safe_make -C ${TARGET}/usr/src/linux				distclean			|| return 1
-#>>>		safe_make -C ${TARGET}/usr/src/linux				allnoconfig bzImage		|| return 1
-#>>>		${RSYNC_U} -L ${TARGET}/usr/src/linux/arch/x86/boot/bzImage	${TARGET}/boot/_null.kernel	|| return 1
-#>>>	fi
+	if [[ ! -f ${TARGET}/boot/_null.kernel ]]; then
+		safe_make -C ${TARGET}/usr/src/linux				distclean			|| return 1
+		safe_make -C ${TARGET}/usr/src/linux				allnoconfig bzImage		|| return 1
+		${RSYNC_U} -L ${TARGET}/usr/src/linux/arch/x86/boot/bzImage	${TARGET}/boot/_null.kernel	|| return 1
+	fi
 	if [[ ! -f ${TARGET}/usr/src/linux.tar.xz ]]; then
 		safe_make -C ${TARGET}/usr/src/linux				distclean			|| return 1
 		${RSYNC_U} ${TARGET}${ARCDIR}/${KCFG}				${TARGET}/usr/src/linux/.config	|| return 1
