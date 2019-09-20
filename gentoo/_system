@@ -834,7 +834,9 @@ if [[ ${1} == -l ]]; then
 		FILE="$(${LS} -d ${REPDIR}/kits/*/*/${1} 2>/dev/null)"
 		NEXT="$(echo "${FILE}" | ${SED} "s|^${REPDIR}/kits/.+[/]([^/]+[/][^/]+)$|\1|g")"
 		if [[ -z ${FILE} ]]; then
+			mount_dev_dirs		|| EXIT 1
 			safe_env emerge --search "${@}"
+			mount_dev_dirs -u	|| EXIT 1
 		else
 			echo -en "https://packages.gentoo.org/packages/${NEXT}\n"
 			echo -en "https://gitweb.gentoo.org/repo/gentoo.git/log/${NEXT}\n"
