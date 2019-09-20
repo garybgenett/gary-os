@@ -44,10 +44,10 @@
 ################################################################################
 #
 # [globals]
-# - declare GARYOS_VER="v4.0"
-# - declare ESUB="generic_64"
-# - declare GOPTS=""
-# - declare GOSPKG="_gary-os"
+# - declare __VERSN="v4.0"
+# - declare _ESUB="generic_64"
+# - declare _GOSPKG="_gary-os"
+# - declare _GOPTS=""
 # - declare USB_DEVICE="sda"
 # - declare USB_SOURCE="${USB_DEVICE}1"
 # - declare FUSE_DIR="/tmp/.fuse"
@@ -57,17 +57,17 @@
 # - declare SSH_SOURCE="root@me.garybgenett.net"
 # - declare SSH_DIST="/.g/_data/_builds/.gary-os.release/_distfiles"
 # - declare SSH_PACK="/.g/_data/_builds/.gary-os.release/_packages"
-# - declare SSH_COPY="/.g/_data/_builds/_gary-os/.gary-os-${ESUB}"
+# - declare SSH_COPY="/.g/_data/_builds/_gary-os/.gary-os-${_ESUB}"
 # - declare RUNSV="/.runit/runsvdir/current"
 # - declare INST="/.install"	# see "_release_install" in "_release" script
 #
 # [overrides]
+# - declare _GOPTS="console=ttyS0,38400"
 # - declare USB_DEVICE="nvme0n1"
 # - declare USB_SOURCE="${USB_DEVICE}p1"
 # - declare SSH_DIST="/.g/_data/_builds/_gary-os.working/var/cache/portage/distfiles"
 # - declare SSH_PACK="/.g/_data/_builds/_gary-os.working/var/cache/portage/packages"
-# - declare SSH_COPY="/.g/_data/_builds/_gary-os.working/.gary-os-${ESUB}"
-# - declare GOPTS="console=ttyS0,38400"
+# - declare SSH_COPY="/.g/_data/_builds/_gary-os.working/.gary-os-${_ESUB}"
 #
 # [commands]
 # - mount -o remount,rw,size=6g / && df /
@@ -95,7 +95,7 @@
 # * https://wiki.archlinux.org/index.php/Overlay_filesystem
 # <setup>
 # - modprobe fuse overlay
-# - make -f /.gary-os/Makefile O=/ P=${GOSPKG} unpack
+# - make -f /.gary-os/Makefile O=/ P=${_GOSPKG} unpack
 # - mkdir -pv ${FUSE_DIR}-{mount,dist{,-over,-work},pack{,-over,-work}} /var/cache/portage/{distfiles,packages}
 # <usb>
 # - mount -o rw /dev/${USB_SOURCE} ${FUSE_DIR}-mount
@@ -110,7 +110,7 @@
 # - mount -o rw -t overlay overlay -o lowerdir=${FUSE_DIR}-pack,upperdir=${FUSE_DIR}-pack-over,workdir=${FUSE_DIR}-pack-work /var/cache/portage/packages
 # - mount
 # <install>
-# - prompt -z emerge --usepkg=y --deep --newuse --update \@${GOSPKG}
+# - prompt -z emerge --usepkg=y --deep --newuse --update \@${_GOSPKG}
 # <umount>
 # - umount ${FUSE_DIR}-{mount,dist{,-over,-work},pack{,-over,-work}} /var/cache/portage/{distfiles,packages} || [[ -z $(mount | ${GREP} "${FUSE_DIR}") ]]
 # - rm -rv --one-file-system ${FUSE_DIR}
@@ -203,12 +203,12 @@
 # - mkdir -pv ${GRUB_DIR}
 # - mount-robust -u /dev/${USB_SOURCE}
 # <format>
-# - /.gary-os/scripts/grub.sh ${GRUB_DIR} -d5 -f /dev/${USB_SOURCE} ${GOPTS}
-# - /.gary-os/scripts/grub.sh ${GRUB_DIR} -d5 -fx /dev/${USB_SOURCE} ${GOPTS}
+# - /.gary-os/scripts/grub.sh ${GRUB_DIR} -d5 -f /dev/${USB_SOURCE} ${_GOPTS}
+# - /.gary-os/scripts/grub.sh ${GRUB_DIR} -d5 -fx /dev/${USB_SOURCE} ${_GOPTS}
 # - gdisk -l /dev/${USB_DEVICE}
 # <install>
-# - /.gary-os/scripts/grub.sh ${GRUB_DIR} /dev/${USB_SOURCE} ${GOPTS}
-# - /.gary-os/scripts/grub.sh ${GRUB_DIR} -i /dev/${USB_SOURCE} ${GOPTS}
+# - /.gary-os/scripts/grub.sh ${GRUB_DIR} /dev/${USB_SOURCE} ${_GOPTS}
+# - /.gary-os/scripts/grub.sh ${GRUB_DIR} -i /dev/${USB_SOURCE} ${_GOPTS}
 # <umount>
 # - mount-robust -u /dev/${USB_SOURCE}
 # - rm -rv --one-file-system ${GRUB_DIR}
@@ -217,40 +217,40 @@
 # <memory>
 # - mount -o remount,rw,size=20g / && df /
 # <disk>
-# - mkdir -pv /.gary-os-${ESUB}
-# - mount-robust /dev/${USB_SOURCE} /.gary-os-${ESUB}
+# - mkdir -pv /.gary-os-${_ESUB}
+# - mount-robust /dev/${USB_SOURCE} /.gary-os-${_ESUB}
 # <setup>
-# - make -f /.gary-os/Makefile O=/ P=${GOSPKG} unpack
-# - mkdir -pv /.gary-os-${ESUB}
-# - [[ ! -d /.gary-os-${ESUB}/linux ]] && rm -frv /.gary-os-${ESUB}/linux && rsync -avv -L /usr/src/linux/ /.gary-os-${ESUB}/linux
-# - [[ -d /.gary-os-${ESUB}/linux ]] && rm -frv /usr/src/linux && ln -fsv /.gary-os-${ESUB}/linux /usr/src/linux
+# - make -f /.gary-os/Makefile O=/ P=${_GOSPKG} unpack
+# - mkdir -pv /.gary-os-${_ESUB}
+# - [[ ! -d /.gary-os-${_ESUB}/linux ]] && rm -frv /.gary-os-${_ESUB}/linux && rsync -avv -L /usr/src/linux/ /.gary-os-${_ESUB}/linux
+# - [[ -d /.gary-os-${_ESUB}/linux ]] && rm -frv /usr/src/linux && ln -fsv /.gary-os-${_ESUB}/linux /usr/src/linux
 # <build>
-# - make -f /.gary-os/Makefile O=/ P=${GOSPKG} clean
-# - make -f /.gary-os/Makefile O=/ P=${GOSPKG} release
-# - make -f /.gary-os/Makefile O=/ P=${GOSPKG} initrd
+# - make -f /.gary-os/Makefile O=/ P=${_GOSPKG} clean
+# - make -f /.gary-os/Makefile O=/ P=${_GOSPKG} release
+# - make -f /.gary-os/Makefile O=/ P=${_GOSPKG} initrd
 # <minimal>
-# - (GOSPKG="gary-os" && sed -ir "/[#][{]minimal[}]/d" /etc/portage/sets/${GOSPKG})
+# - (GOSPKG="gary-os" && sed -ir "/[#][{]minimal[}]/d" /etc/portage/sets/${_GOSPKG})
 # - prompt -z emerge --ask=n --depclean
 # - rm -frv /var/git/meta-repo*
 # - rm -frv /usr/src/linux.tar.xz
-# - (GOSPKG="gary-os" && make -f /.gary-os/Makefile O=/ P=${GOSPKG} clean)
-# - (GOSPKG="gary-os" && make -f /.gary-os/Makefile O=/ P=${GOSPKG} _release_cpio _release_kernel _release_report) #>>> = release - _prepare_build
+# - (GOSPKG="gary-os" && make -f /.gary-os/Makefile O=/ P=${_GOSPKG} clean)
+# - (GOSPKG="gary-os" && make -f /.gary-os/Makefile O=/ P=${_GOSPKG} _release_cpio _release_kernel _release_report) #>>> = release - _prepare_build
 # <copy>
-# - rsync -avv -L /.gary-os-${ESUB}/gary-os-${ESUB}-${GARYOS_VER}.null.kernel /.gary-os-${ESUB}/gary-os.null.kernel || true
-# - rsync -avv -L /.gary-os-${ESUB}/gary-os-${ESUB}-${GARYOS_VER}.kernel /.gary-os-${ESUB}/gary-os.kernel || true
-# - rsync -avv -L /.gary-os-${ESUB}/gary-os-${ESUB}-${GARYOS_VER}.cpio.xz /.gary-os-${ESUB}/gary-os.initrd || true
-# - rsync -avv -L /.gary-os-${ESUB}/gary-os-${ESUB}-${GARYOS_VER}.kernel ${SSH_SOURCE}:${SSH_COPY}/gary-os-${ESUB}-${GARYOS_VER}.minimal.kernel || true
-# - rsync -avv -L /.gary-os-${ESUB}/gary-os-${ESUB}-${GARYOS_VER}.cpio.xz ${SSH_SOURCE}:${SSH_COPY}/gary-os-${ESUB}-${GARYOS_VER}.minimal.initrd || true
+# - rsync -avv -L /.gary-os-${_ESUB}/gary-os-${_ESUB}-${__VERSN}.null.kernel /.gary-os-${_ESUB}/gary-os.null.kernel || true
+# - rsync -avv -L /.gary-os-${_ESUB}/gary-os-${_ESUB}-${__VERSN}.kernel /.gary-os-${_ESUB}/gary-os.kernel || true
+# - rsync -avv -L /.gary-os-${_ESUB}/gary-os-${_ESUB}-${__VERSN}.cpio.xz /.gary-os-${_ESUB}/gary-os.initrd || true
+# - rsync -avv -L /.gary-os-${_ESUB}/gary-os-${_ESUB}-${__VERSN}.kernel ${SSH_SOURCE}:${SSH_COPY}/gary-os-${_ESUB}-${__VERSN}.minimal.kernel || true
+# - rsync -avv -L /.gary-os-${_ESUB}/gary-os-${_ESUB}-${__VERSN}.cpio.xz ${SSH_SOURCE}:${SSH_COPY}/gary-os-${_ESUB}-${__VERSN}.minimal.initrd || true
 # <umount>
-# - mount-robust -u /.gary-os-${ESUB}
-# - rm -rv --one-file-system /.gary-os-${ESUB}
+# - mount-robust -u /.gary-os-${_ESUB}
+# - rm -rv --one-file-system /.gary-os-${_ESUB}
 #
 # [replicate]
 # <setup>
 # - mkdir -pv ${INST}
 # - mount-robust /dev/${USB_SOURCE} ${INST}
 # <install>
-# - make -f /.gary-os/Makefile O=/ P=${GOSPKG} install
+# - make -f /.gary-os/Makefile O=/ P=${_GOSPKG} install
 # - rm -frv ${INST}/_gary-os
 # <umount>
 # - mount-robust -u ${INST}
