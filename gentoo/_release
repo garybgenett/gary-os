@@ -177,9 +177,11 @@ function prepare_config_issue {
 	[[ ${TARGET} == / ]]
 	then
 		FILE=" "
-		FILE+="\\\e[1;45;37m"
+#>>>		FILE+="\\\e[1;45;37m"
+		FILE+="\\\e[0;35m"
 		FILE+="PLEASE NOTE THAT THIS BUILD HAS BEEN CUSTOMIZED AND IS NOT AN OFFICIAL RELEASE"
-		FILE+="\\\e[1;40;30m"
+#>>>		FILE+="\\\e[1;40;30m"
+		FILE+="\\\e[0;37m"
 		${SED} -i "/Some helpful notes/,/More information/c\\${FILE}" \
 			${TARGET}/etc/issue \
 			|| return 1
