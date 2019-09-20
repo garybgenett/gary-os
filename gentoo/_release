@@ -520,12 +520,10 @@ function _release_cpio {	#{initrd}
 
 function release_kernel_config {
 	declare LDIR="${1}" && shift
-	[[ -f ${TARGET}${LDIR}/arch/x86/Makefile.${_TITLE} ]] && { ${MV}	${TARGET}${LDIR}/arch/x86/Makefile{.${_TITLE},}	|| return 1 ;}
-	${SED} -i.${_TITLE} "/ln -fsn.*\/x86\/boot\/bzImage/d"			${TARGET}${LDIR}/arch/x86/Makefile		|| return 1
-	if [[ ${TARGET} == / ]]; then	${RSYNC_U} ${SETDIR}/${LINDIR}/${KCFG}	${TARGET}${LDIR}/.config			|| return 1
-	else				${RSYNC_U} ${TARGET}${ARCDIR}/${KCFG}	${TARGET}${LDIR}/.config			|| return 1
+	if [[ ${TARGET} == / ]]; then	${RSYNC_U} ${SETDIR}/${LINDIR}/${KCFG}	${TARGET}${LDIR}/.config	|| return 1
+	else				${RSYNC_U} ${TARGET}${ARCDIR}/${KCFG}	${TARGET}${LDIR}/.config	|| return 1
 	fi
-	kernel_cpu								${TARGET}${LDIR}/.config			|| return 1
+	kernel_cpu								${TARGET}${LDIR}/.config	|| return 1
 	return 0
 }
 
@@ -585,11 +583,15 @@ function _release_kernel {	#{initrd}
 		if ! ${INITRD}; then
 			release_kernel_initramfs ${LDIR}						|| return 1
 		fi
-		safe_make -C ${TARGET}${LDIR}	olddefconfig						|| return 1
-		safe_make -C ${TARGET}${LDIR}	bzImage							|| return 1
 		declare BZIMAGE="${TARGET}${LDIR}/arch/x86/boot/bzImage"				|| return 1
 #>>>		declare BZIMAGE="${TARGET}${LDIR}/arch/x86_64/boot/bzImage"				|| return 1
-		${RSYNC_U} -L ${BZIMAGE}	${TARGET}/${_FINAL}/${_RAMFS}.kernel			|| return 1
+		declare BZ_MAKE="${TARGET}${LDIR}/arch/x86/Makefile"					|| return 1
+		declare BZ_SEDR=".+ln -fsn.+/x86/boot/bzImage.+"					|| return 1
+		[[ -f ${BZ_MAKE}.${_TITLE} ]] && { ${MV}	${BZ_MAKE}{.${_TITLE},}			|| return 1 ;}
+		${SED} -i.${_TITLE} "s|^(${BZ_SEDR})$|\#\1|g"	${BZ_MAKE}				|| return 1
+		safe_make -C ${TARGET}${LDIR}			olddefconfig				|| return 1
+		safe_make -C ${TARGET}${LDIR}			bzImage					|| return 1
+		${RSYNC_U} -L ${BZIMAGE}			${TARGET}/${_FINAL}/${_RAMFS}.kernel	|| return 1
 	else
 		common_exists ${FUNCNAME} ${TARGET}${LDIR} ${TARGET}/${_FINAL}/${_RAMFS}.kernel		|| return 1
 	fi
