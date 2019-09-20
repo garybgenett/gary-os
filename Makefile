@@ -52,6 +52,8 @@ usage:
 	@$(PRINTF) "Update Current System (Interactively):"	"make update"
 	@$(ECHO) "\n"
 	@$(PRINTF) "Information Lookup (Package Data):"		"make {package_list}"
+	@$(PRINTF) "Information Lookup (Package Search):"	"make {search_list}"
+	@$(PRINTF) "Information Lookup (Gentoo Bug URL):"	"make {bug_id}"
 	@$(ECHO) "\n"
 	@$(PRINTF) "Chroot Build (Initial):"			"make init"
 	@$(PRINTF) "Chroot Build (Update Only):"		"make doit"
