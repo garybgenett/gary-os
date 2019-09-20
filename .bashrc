@@ -1987,7 +1987,10 @@ function mount-robust {
 			if ${DEBUG}; then
 				return 0
 			fi
-			declare TYP="$(lsblk --noheadings --fs --output FSTYPE			${DEV} 2>/dev/null)"
+			declare TYP="$(lsblk --noheadings --fs --output FSTYPE ${DEV} 2>/dev/null)"
+			if [[ ${TYP} == "exfat" ]]; then
+				modprobe fuse || return 1
+			fi
 			if [[ ${TYP} == "ext4"		]]; then fsck -MV -t ${TYP} -pC	${DEV} || return 1; fi
 			if [[ ${TYP} == "exfat"		]]; then fsck.${TYP}		${DEV} || return 1; fi
 			if [[ ${TYP} == "ntfs-3g"	]]; then fsck -MV -t ${TYP}	${DEV} || return 1; fi
