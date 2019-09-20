@@ -6,7 +6,6 @@ declare _PROJ="GaryOS"
 declare _NAME="${_PROJ} Grub"
 
 declare _BASE="gary-os"
-declare _GRUB="${_BASE}.grub"
 
 ########################################
 
@@ -130,7 +129,6 @@ fi
 
 ################################################################################
 
-declare GBOOT="(hd0)"
 declare GROOT="(hd0,${GPPRT})"
 declare GFILE="(hd0,${GPPRT})/boot/grub/grub.cfg"
 
@@ -176,13 +174,15 @@ menuentry \"${_PROJ} Install Menu\" {
 configfile ${GFILE}
 }
 menuentry \"Default OS\" {
-chainloader ${GBOOT}+1
+chainloader (hd0)+1
 }
 
 # end of file
 "
 
 ########################################
+
+declare _GRUB="${_BASE}.grub"
 
 declare BCDEDIT="\
 @echo off
