@@ -14,15 +14,15 @@ fi
 
 #>>> ${GREP} -o "[!=][=][ ][-][^[:space:]]+" ${HOME}/setup/gentoo/_system | sort
 
-declare _OPTS="${@}"
+export _OPTS="${@}"
 
 ########################################
 
-declare DEBUG_OPT="-v"
-declare QUIET_OPT="-q"
+export DEBUG_OPT="-v"
+export QUIET_OPT="-q"
 
-declare DEBUG=
-declare QUIET=
+export DEBUG=
+export QUIET=
 if [[ ${1} == ${DEBUG_OPT} ]]; then
 	DEBUG="${1}"
 	shift
@@ -40,63 +40,63 @@ declare NEXT=
 ################################################################################
 
 #OPTIONS[SOURCE GITDIR]
-declare SOURCE="${SOURCE:-/.g/_data/_target/iso}"
-declare GITDIR="${GITDIR:-/.g/_data/_build/funtoo/meta-repo.git}"
+export SOURCE="${SOURCE:-/.g/_data/_target/iso}"
+export GITDIR="${GITDIR:-/.g/_data/_build/funtoo/meta-repo.git}"
 
 #OPTIONS[SETDIR ARCDIR GENDIR]
-declare SETDIR="${SETDIR:-/.g/_data/zactive/.setup}"
-declare ARCDIR="${ARCDIR:-/_build}"
-declare GENDIR="${GENDIR:-/_gentoo}"
+export SETDIR="${SETDIR:-/.g/_data/zactive/.setup}"
+export ARCDIR="${ARCDIR:-/_build}"
+export GENDIR="${GENDIR:-/_gentoo}"
 
 #>>> #OPTIONS[BLDDIR WRKDIR TORDIR GOSDIR]
-declare BLDDIR="${BLDDIR:-/.g/_data/_builds/_gentoo}"
-declare WRKDIR="${WRKDIR:-${BLDDIR}.working}"
-declare TORDIR="${TORDIR:-/.g/_toor}"
-declare GOSDIR="${GOSDIR:-/.g/_data/_builds/_gary-os.working}"
+export BLDDIR="${BLDDIR:-/.g/_data/_builds/_gentoo}"
+export WRKDIR="${WRKDIR:-${BLDDIR}.working}"
+export TORDIR="${TORDIR:-/.g/_toor}"
+export GOSDIR="${GOSDIR:-/.g/_data/_builds/_gary-os.working}"
 
 #>>> #OPTIONS[BLDPKG WRKPKG TORPKG GOSPKG]
-declare BLDPKG="${BLDPKG:-packages}"
-declare WRKPKG="${WRKPKG:-${BLDPKG}}"
-declare TORPKG="${TORPKG:-${BLDPKG}}"
-declare GOSPKG="${GOSPKG:-gary-os}"
+export BLDPKG="${BLDPKG:-packages}"
+export WRKPKG="${WRKPKG:-${BLDPKG}}"
+export TORPKG="${TORPKG:-${BLDPKG}}"
+export GOSPKG="${GOSPKG:-gary-os}"
 
 ################################################################################
 
 #SETTINGS[_TITLE _VERSN _RDATE]
 
 #VARIABLES[ETCDIR DSTDIR PAKDIR PDBDIR REPDIR TMPDIR]
-declare ETCDIR="/etc/portage"
-declare DSTDIR="/var/cache/portage/distfiles"
-declare PAKDIR="/var/cache/portage/packages"
-declare PDBDIR="/var/db/pkg"
-declare REPDIR="/var/git/meta-repo"
-declare TMPDIR="/var/tmp/portage"
+export ETCDIR="/etc/portage"
+export DSTDIR="/var/cache/portage/distfiles"
+export PAKDIR="/var/cache/portage/packages"
+export PDBDIR="/var/db/pkg"
+export REPDIR="/var/git/meta-repo"
+export TMPDIR="/var/tmp/portage"
 
 #VARIABLES[LINDIR FUNDIR]
-declare LINDIR="linux"
-declare FUNDIR="gentoo"
+export LINDIR="linux"
+export FUNDIR="gentoo"
 
 #VARIABLES[FUNKIT LAYDIR AUDITS]
-declare FUNKIT="funtoo.kits"
-declare LAYDIR="_overlay"
-declare AUDITS=".emergent"
+export FUNKIT="funtoo.kits"
+export LAYDIR="_overlay"
+export AUDITS=".emergent"
 
 #OPTIONS[ARTDIR CFGSCR]
 #VARIABLES[PREPIT MAKEIT SHIPIT]
-declare ARTDIR="${ARTDIR:-/.g/_data/zactive/coding/gary-os/artifacts}"
-declare CFGSCR="${CFGSCR:-${SETDIR}/${FUNDIR}.config}"
-declare PREPIT="_prepare"
-declare MAKEIT="_release"
-declare SHIPIT="_publish"
+export ARTDIR="${ARTDIR:-/.g/_data/zactive/coding/gary-os/artifacts}"
+export CFGSCR="${CFGSCR:-${SETDIR}/${FUNDIR}.config}"
+export PREPIT="_prepare"
+export MAKEIT="_release"
+export SHIPIT="_publish"
 
 ########################################
 
 #VARIABLES[TARGET TOOR _PKG _NEW _GOS]
-declare TARGET="${BLDDIR}"
-declare TOOR=
-declare _PKG="${BLDPKG}"
-declare _NEW=
-declare _GOS=
+export TARGET="${BLDDIR}"
+export TOOR=
+export _PKG="${BLDPKG}"
+export _NEW=
+export _GOS=
 
 if [[ ${1} == -d ]]; then
 	TARGET="${BLDDIR}"
@@ -137,11 +137,11 @@ fi
 ########################################
 
 #VARIABLES[AUTO _ASK _BLD _KRN _CFG]
-declare AUTO=
-declare _ASK="--ask=y"
-declare _BLD="false"
-declare _KRN="false"
-declare _CFG="false"
+export AUTO=
+export _ASK="--ask=y"
+export _BLD="false"
+export _KRN="false"
+export _CFG="false"
 
 if [[ ${1} == -a ]]; then
 	AUTO="${1}"
@@ -164,33 +164,33 @@ fi
 ########################################
 
 #OPTIONS[FUNTOO LINPKG KERNEL PYTHON SELECT]
-declare FUNTOO="${FUNTOO:-$(tail -n1 ${SETDIR}/${FUNDIR}/funtoo)}"
-declare LINPKG="${LINPKG:-$(${SED} -n "s|^[#][{]LINPKG[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} "s|[ ]*$||g")}"
-declare KERNEL="${KERNEL:-$(${SED} -n "s|^[#][{]KERNEL[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} "s|[ ]*$||g")}"
-declare PYTHON="${PYTHON:-$(${SED} -n "s|^[#][{]PYTHON[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} "s|[ ]*$||g")}"
-declare SELECT="${SELECT:-$(${SED} -n "s|^[#][{]SELECT[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} "s|[ ]*$||g")}"
+export FUNTOO="${FUNTOO:-$(tail -n1 ${SETDIR}/${FUNDIR}/funtoo)}"
+export LINPKG="${LINPKG:-$(${SED} -n "s|^[#][{]LINPKG[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} "s|[ ]*$||g")}"
+export KERNEL="${KERNEL:-$(${SED} -n "s|^[#][{]KERNEL[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} "s|[ ]*$||g")}"
+export PYTHON="${PYTHON:-$(${SED} -n "s|^[#][{]PYTHON[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} "s|[ ]*$||g")}"
+export SELECT="${SELECT:-$(${SED} -n "s|^[#][{]SELECT[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} "s|[ ]*$||g")}"
 
 #OPTIONS[RCUPDT WINMGR WMHELP]
-declare RCUPDT="${RCUPDT:-$(${SED} -n "s|^[#][{]RCUPDT[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '!' | ${SED} -e "s|[! ]*$||g" -e "s|[!]|\ \;\ |g")}"
-declare WINMGR="${WINMGR:-$(${SED} -n "s|^[#][{]WINMGR[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '!' | ${SED} -e "s|[! ]*$||g" -e "s|[!]|\ \;\ |g")}"
-declare WMHELP="${WMHELP:-$(${SED} -n "s|^[#][{]WMHELP[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '!' | ${SED} -e "s|[! ]*$||g" -e "s|[!]|\ \\/\/\ |g")}"
-declare WINMGR="${WINMGR:-dwm}"
-declare WMHELP="${WMHELP:-\`date --iso=s\`}"
+export RCUPDT="${RCUPDT:-$(${SED} -n "s|^[#][{]RCUPDT[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '!' | ${SED} -e "s|[! ]*$||g" -e "s|[!]|\ \;\ |g")}"
+export WINMGR="${WINMGR:-$(${SED} -n "s|^[#][{]WINMGR[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '!' | ${SED} -e "s|[! ]*$||g" -e "s|[!]|\ \;\ |g")}"
+export WMHELP="${WMHELP:-$(${SED} -n "s|^[#][{]WMHELP[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '!' | ${SED} -e "s|[! ]*$||g" -e "s|[!]|\ \\/\/\ |g")}"
+export WINMGR="${WINMGR:-dwm}"
+export WMHELP="${WMHELP:-\`date --iso=s\`}"
 
 ########################################
 
 #note: athlon64 build = WRKDIR="/.g/_data/_builds/_gentoo.amd64" _CPU="CONFIG_MK8" ESUB="amd64-k8" GARC="athlon64" GSUB="athlon64" ${HOME}/setup/gentoo/_system -x -0
 
 #OPTIONS[_CPU EARC ESUB GARC GSUB GOPT]
-declare _CPU_RESET="CONFIG_MCORE2"
-declare _CPU="${_CPU:-${_CPU_RESET}}"
-#>>> declare EARC="${EARC:-x86-32bit}"
-declare EARC="${EARC:-x86-64bit}"
-#>>> declare ESUB="${EARC:-i686}"
-declare ESUB="${ESUB:-core2_64}"
-declare GARC="${GARC:-core2}"
-declare GSUB="${GSUB:-core2}"
-declare GOPT="${GOPT:--O2}"
+export _CPU_RESET="CONFIG_MCORE2"
+export _CPU="${_CPU:-${_CPU_RESET}}"
+#>>> export EARC="${EARC:-x86-32bit}"
+export EARC="${EARC:-x86-64bit}"
+#>>> export ESUB="${EARC:-i686}"
+export ESUB="${ESUB:-core2_64}"
+export GARC="${GARC:-core2}"
+export GSUB="${GSUB:-core2}"
+export GOPT="${GOPT:--O2}"
 
 if [[ -n ${_GOS} ]]; then
 	_CPU="CONFIG_GENERIC_CPU"
@@ -204,12 +204,12 @@ fi
 ########################################
 
 #VARIABLES[HOME IS_CHROOT DO_CHROOT SAFE_ENV]
-declare MYSELF="${ARCDIR}/${FUNDIR}/${SCRIPT}"
+export MYSELF="${ARCDIR}/${FUNDIR}/${SCRIPT}"
 
-declare IS_CHROOT="${IS_CHROOT:-false}"
+export IS_CHROOT="${IS_CHROOT:-false}"
 declare DO_CHROOT="false"
 if ! ${IS_CHROOT} && [[ -n ${TOOR} ]]; then
-	declare DO_CHROOT="true"
+	DO_CHROOT="true"
 fi
 
 declare SAFE_ENV=
@@ -344,6 +344,8 @@ function print_info {
 		echo -en "\n"
 		printf "${PRINTF}" "Validation (Usage & Variables Only):"	"<output>"	"${SCRIPT} ${DEBUG_OPT} [{chroot}] [{options}]"
 		printf "${PRINTF}" "Suppress Output (Internal Only)"		"<internal>"	"${SCRIPT} ${QUIET_OPT} [{chroot}] [{options}]"
+		echo -en "\n"
+		printf "${PRINTF}" "Source Script (Configuration):"		"<custom>"	"${SCRIPT} {source_script}" "<$(basename ${CFGSCR})>"
 		echo -en "\n"
 		echo -en "${NOTES}"
 		echo -en ">>> CHROOT <<<"
@@ -640,6 +642,13 @@ then
 		requires_chroot "${@}"
 	fi
 	${@} || EXIT -1
+	EXIT -0
+fi
+
+########################################
+
+if [[ -x ${1} ]]; then
+	source "${@}" || EXIT -1
 	EXIT -0
 fi
 
@@ -1011,9 +1020,11 @@ if [[ ${1} == -i ]]; then
 		${PREPIT}_config --reset										|| EXIT 1
 		if [[ -x ${CFGSCR} ]]; then
 			${RSYNC_U} --copy-links		${CFGSCR} \
-							${TARGET}/${ARCDIR}/$(basename ${CFGSCR})			|| EXIT 1
-			safe_env			${ARCDIR}/$(basename ${CFGSCR})					|| EXIT 1
+							${TARGET}${ARCDIR}/$(basename ${CFGSCR})			|| EXIT 1
+			safe_env			${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} \
+							${ARCDIR}/$(basename ${CFGSCR})					|| EXIT 1
 		fi
+		EXIT 0
 	fi
 	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -f			|| EXIT 1
 	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -u			|| EXIT 1
