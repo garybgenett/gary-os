@@ -259,10 +259,10 @@ function prepare_config_restore {
 #note: this is called statically in the "_system" script
 function _prepare_config {	#{reset}
 	declare RESET= ; if [[ ${1} == --reset ]]; then RESET="${1}" && shift; fi
-	# note: these are from "prepare_config_issue" above
+	#note: these are from "prepare_config_issue" above
 	prepare_config_restore ${RESET} sys-apps/baselayout			/etc/issue				|| return 1
 	prepare_config_restore ${RESET} ""					/etc/motd				|| return 1
-	# note: these are all directly below
+	#note: these are all directly below
 	prepare_config_restore ${RESET} ""					/init					|| return 1
 	prepare_config_restore ${RESET} sys-apps/baselayout			/etc/fstab				fstab			|| return 1
 	prepare_config_restore ${RESET} sys-apps/openrc				/etc/conf.d/hostname			|| return 1
@@ -274,13 +274,10 @@ function _prepare_config {	#{reset}
 	if [[ -n ${RESET} ]]; then
 		return 0
 	fi
-	prepare_config_issue												|| return 1
 	echo ${RCUPDT} | tr ';' '\n' | while read -r FILE; do
 		safe_env							${FILE}					#>>> || return 1
 	done
-	if [[ ${TARGET} == / ]]; then
-		return 0
-	fi
+	prepare_config_issue												|| return 1
 	${LN} sbin/init								${TARGET}/init				|| return 1
 	${SED} -i "s|^([^#].+)$|#\1|g"						${TARGET}/etc/fstab			|| return 1
 	${SED} -i "s|^(hostname=[\"]?)[^\"]+([\"]?)$|\1${_TITLE}\2|g"		${TARGET}/etc/conf.d/hostname		|| return 1
