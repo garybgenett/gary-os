@@ -527,18 +527,29 @@ function mount_dev_dirs {
 	if [[ -z ${1} ]]; then
 		print_info marker
 		print_info mount
-		mount-robust --dev ${TARGET}		|| return 1
+		mount-robust --dev $(realpath ${TARGET})		|| return 1
 		print_info marker
 	elif [[ ${1} == -u ]]; then
 		shift
 		print_info marker
 		print_info umount
-		if [[ -z "$(
+		declare LSOF="$(
 			lsof |
 			${GREP} "${TARGET}/" |
 			${GREP} -v "${TARGET}${GENDIR}.log$"
-		)" ]]; then
-			mount-robust -u --dev ${TARGET}	|| return 1
+		)"
+		if [[ -n ${LSOF} ]]; then
+			echo -en "\n"
+			echo -en ">>> THERE ARE STILL PROCESES IN THE CHROOT <<<\n"
+			echo -en ">>> SKIPPING UNMOUNT <<<\n"
+			echo -en "\n"
+			echo "${LSOF}"
+			echo -en "\n"
+			mount | ${GREP} "${TARGET}"
+			echo -en "\n"
+#>>>			return 1
+		else
+			mount-robust -u --dev $(realpath ${TARGET})	|| return 1
 		fi
 		print_info marker
 	fi
