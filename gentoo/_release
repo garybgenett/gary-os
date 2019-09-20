@@ -200,7 +200,13 @@ function prepare_config_restore {
 	declare PFIL="${1}" && shift
 	declare PSRC="${1}" && shift
 	FILE="$(ls ${TARGET}${PAKDIR}/${PACK}-[.0-9]*.tbz2 2>/dev/null | sort | tail -n1)"
-	if [[ -n ${PACK} ]] && [[ -f ${FILE} ]]; then
+	if {
+		[[ -n ${PACK} ]] &&
+		[[ -f ${FILE} ]]
+	}; then
+		echo -en "\n"
+		echo -en ">>> RESTORING (${PFIL}) FROM (${PACK}) PACKAGE FILE <<<\n"
+		echo -en "\n"
 		NEXT=".${PFIL}"
 		if [[ -n ${PSRC} ]]; then
 			NEXT="$(tar -t --bzip2 --wildcards -f ${FILE} "*/${PSRC}" | sort | tail -n1)"
@@ -218,9 +224,28 @@ function prepare_config_restore {
 			fi
 		fi
 		${RSYNC_U} ${TARGET}${PFIL} ${TARGET}${PFIL}.${_TITLE}		|| return 1
-	elif [[ -n ${PACK} ]]; then
+	elif {
+		[[ -f ${PFIL}.${_TITLE} ]]
+	}; then
+		echo -en "\n"
+		echo -en ">>> RESTORING (${PFIL}) FROM (${PFIL}.${_TITLE}) BACKUP FILE <<<\n"
+		echo -en "\n"
 		${RSYNC_U} ${TARGET}${PFIL}.${_TITLE} ${TARGET}${PFIL}		|| return 1
+	elif {
+		[[ -n $(${GREP} "^${PACK}$" ${TARGET}${ETCDIR}/sets/${_PKG}) ]] ||
+		[[ -n $(safe_env equery list '*' 2>&1 | ${GREP} "^${PACK}-[0-9]") ]]
+	}; then
+		echo -en "\n"
+		echo -en ">>> NO (${PACK}) PACKAGE FILE OR (${PFIL}.${_TITLE}) BACKUP FILE <<<\n"
+		echo -en ">>> BUT THERE IS A (${PACK}) ENTRY IN THE (${_PKG}) SET OR IT IS INSTALLED <<<\n"
+		echo -en ">>> LEAVING (${PFIL}) ALONE <<<\n"
+		echo -en "\n"
 	else
+		echo -en "\n"
+		echo -en ">>> NO (${PACK}) PACKAGE FILE OR (${PFIL}.${_TITLE}) BACKUP FILE <<<\n"
+		echo -en ">>> NO (${PACK}) ENTRY IN THE (${_PKG}) SET AND IT IS NOT INSTALLED <<<\n"
+		echo -en ">>> REMOVING (${PFIL}) FILE <<<\n"
+		echo -en "\n"
 		${RM} ${TARGET}${PFIL}						|| return 1
 	fi
 	if [[ -n ${RESET} ]]; then
