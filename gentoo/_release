@@ -86,6 +86,7 @@ function common_exists {
 	echo -en "\n"
 	${LL} -d "${@}"
 	echo -en "\n"
+	return 0
 }
 
 ########################################
@@ -96,7 +97,8 @@ function common_tar {
 		tar -cvv --xz -C $(dirname ${SRC_FILE}) -f ${SRC_FILE}.tar.xz $(basename ${SRC_FILE}) \
 			|| return 1
 	else
-		common_exists ${FUNCNAME} ${SRC_FILE}.tar.xz ${SRC_FILE}
+		common_exists ${FUNCNAME} ${SRC_FILE}.tar.xz ${SRC_FILE} \
+			|| return 1
 	fi
 	return 0
 }
@@ -109,7 +111,8 @@ function common_untar {
 		tar -vvx --xz -C $(dirname ${SRC_FILE}) -f ${SRC_FILE}.tar.xz \
 			|| return 1
 	else
-		common_exists ${FUNCNAME} ${SRC_FILE}.tar.xz ${SRC_FILE}
+		common_exists ${FUNCNAME} ${SRC_FILE}.tar.xz ${SRC_FILE} \
+			|| return 1
 	fi
 	return 0
 }
@@ -508,7 +511,7 @@ function _release_cpio {	#{initrd}
 			${XZ} ${CPIO_FILE}		>${CPIO_FILE}.xz	|| return 1
 		fi
 	else
-		common_exists ${FUNCNAME} ${CPIO_FILE}*
+		common_exists ${FUNCNAME} ${CPIO_FILE}*				|| return 1
 	fi
 	return 0
 }
@@ -577,18 +580,18 @@ function _release_kernel {	#{initrd}
 		LDIR="/usr/src/linux"
 	fi
 	if [[ -d ${TARGET}${LDIR} ]] && [[ ! -f ${TARGET}/${_FINAL}/${_RAMFS}.kernel ]]; then
-		release_kernel_config ${LDIR}						|| return 1
-		release_kernel_shmmax ${LDIR}						|| return 1
+		release_kernel_config ${LDIR}								|| return 1
+		release_kernel_shmmax ${LDIR}								|| return 1
 		if ! ${INITRD}; then
-			release_kernel_initramfs ${LDIR}				|| return 1
+			release_kernel_initramfs ${LDIR}						|| return 1
 		fi
-		safe_make -C ${TARGET}${LDIR}	olddefconfig				|| return 1
-		safe_make -C ${TARGET}${LDIR}	bzImage					|| return 1
-		declare BZIMAGE="${TARGET}${LDIR}/arch/x86/boot/bzImage"		|| return 1
-#>>>		declare BZIMAGE="${TARGET}${LDIR}/arch/x86_64/boot/bzImage"		|| return 1
-		${RSYNC_U} -L ${BZIMAGE}	${TARGET}/${_FINAL}/${_RAMFS}.kernel	|| return 1
+		safe_make -C ${TARGET}${LDIR}	olddefconfig						|| return 1
+		safe_make -C ${TARGET}${LDIR}	bzImage							|| return 1
+		declare BZIMAGE="${TARGET}${LDIR}/arch/x86/boot/bzImage"				|| return 1
+#>>>		declare BZIMAGE="${TARGET}${LDIR}/arch/x86_64/boot/bzImage"				|| return 1
+		${RSYNC_U} -L ${BZIMAGE}	${TARGET}/${_FINAL}/${_RAMFS}.kernel			|| return 1
 	else
-		common_exists ${FUNCNAME} ${TARGET}${LDIR} ${TARGET}/${_FINAL}/${_RAMFS}.kernel
+		common_exists ${FUNCNAME} ${TARGET}${LDIR} ${TARGET}/${_FINAL}/${_RAMFS}.kernel		|| return 1
 	fi
 	return 0
 }
