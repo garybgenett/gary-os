@@ -1811,12 +1811,14 @@ function mount-robust {
 	declare DEBUG="false"
 	declare TEST="false"
 	declare UN="false"
+	declare OV="false"
 	declare RO=
 	declare DEV=
 	declare DIR=
 	if [[ ${1} == DEBUG ]]; then	DEBUG="true";	shift; fi
 	if [[ ${1} == TEST ]]; then	TEST="true";	shift; fi
 	if [[ ${1} == -u ]]; then	UN="true";	shift; fi
+	if [[ ${1} == -o ]]; then	OV="true";	shift; fi
 	if [[ ${1} == -0 ]]; then	RO="ro,";	shift; fi
 	if [[ -n ${1} ]]; then		DEV="${1}";	shift; fi
 	if [[ -n ${1} ]]; then		DIR="${1}";	shift; fi
@@ -1849,6 +1851,7 @@ function mount-robust {
 	fi
 	if ! ${TEST} && {
 		{ [[ ! -b ${DEV} ]] && [[ ! -d ${DEV} ]]; } ||
+		{ [[ ! -d ${DEV} ]] && ${OV}; } ||
 		{ [[ ! -d ${DIR} ]] && ! ${UN}; }
 	}; then
 		echo -en "- <Invalid Arguments!>\n"
@@ -1989,18 +1992,24 @@ function mount-robust {
 				return 0
 			fi
 			declare TYP="$(${LSBLK} --fs --output FSTYPE ${DEV} 2>/dev/null | tail -n1)"
-			if [[ ${TYP} == exfat ]]; then
-				modprobe fuse || return 1
+			declare OVERLAY="lowerdir=${DEV},upperdir=${DEV}.overlay,workdir=${DEV}.working"
+			if ${OV}; then
+				modprobe fuse overlay	|| return 1
+				${MKDIR} ${DEV}.overlay ${DEV}.working
+			elif [[ ${TYP} == exfat ]]; then
+				modprobe fuse		|| return 1
 			fi
 			if [[ ${TYP} == ext4	]]; then fsck -MV -t ${TYP} -pC	${DEV} || return 1; fi
 			if [[ ${TYP} == exfat	]]; then fsck.${TYP}		${DEV} || return 1; fi
 			if [[ ${TYP} == ntfs-3g	]]; then fsck -MV -t ${TYP}	${DEV} || return 1; fi
 			if [[ ${TYP} == vfat	]]; then fsck -MV -t ${TYP}	${DEV} || return 1; fi
 			if [[ -d ${DEV}		]]; then mount -v --bind							"${@}" ${DEV} ${DIR} || return 1; fi
+			if [[ ${DEV} == overlay	]]; then mount -v -t ${TYP} -o ${RO}${OVERLAY}					"${@}"        ${DIR} || return 1; fi
 			if [[ ${TYP} == ext4	]]; then mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro			"${@}" ${DEV} ${DIR} || return 1; fi
 			if [[ ${TYP} == exfat	]]; then mount -v -t ${TYP} -o ${RO}relatime					"${@}" ${DEV} ${DIR} || return 1; fi
 			if [[ ${TYP} == ntfs-3g	]]; then mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro,shortname=mixed	"${@}" ${DEV} ${DIR} || return 1; fi
 			if [[ ${TYP} == vfat	]]; then mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro,shortname=mixed	"${@}" ${DEV} ${DIR} || return 1; fi
+			${RM} ${DEV}.overlay ${DEV}.working
 		fi
 	fi
 	return 0
