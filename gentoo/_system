@@ -2,12 +2,23 @@
 source ${HOME}/.bashrc
 ################################################################################
 
-if [[ -z ${_SELF} ]] || [[ -z ${SCRIPT} ]]; then
+if [[ -z ${_BASHED} ]]; then
 	echo -en "\n"
 	echo -en ">>> THE GARYOS BASHRC FILE MUST BE IN YOUR HOME DIRECTORY <<<\n"
 	echo -en ">>> OR YOU CAN SET THE HOME VARIABLE TO THE LOCATION WHERE IT IS <<<\n"
 	echo -en "\n"
 	exit 1
+fi
+
+########################################
+
+declare _TRUE_SELF="${_SELF}"
+declare _TRUE_SCRIPT="${SCRIPT}"
+declare _BASH_SOURCED="false"; $(return >/dev/null 2>&1)
+if [[ ${?} == 0 ]]; then
+	_TRUE_SELF="${BASH_SOURCE}"
+	_TRUE_SCRIPT="$(basename -- "${BASH_SOURCE}")"
+	_BASH_SOURCED="true"
 fi
 
 ################################################################################
@@ -63,6 +74,8 @@ export GOSPKG="${GOSPKG:-gary-os}"
 ################################################################################
 
 #SETTINGS[_TITLE _VERSN _RDATE]
+#SETTINGS[_FINAL _RAMFS _GINST]
+#SETTINGS[_GREPO]
 
 #VARIABLES[ETCDIR DSTDIR PAKDIR PDBDIR REPDIR TMPDIR]
 export ETCDIR="/etc/portage"
@@ -93,34 +106,30 @@ export SHIPIT="_publish"
 
 #VARIABLES[TARGET TOOR _PKG _NEW _GOS]
 export TARGET="${BLDDIR}"
-export TOOR=
+export TOOR="${TOOR}"
 export _PKG="${BLDPKG}"
 export _NEW=
 export _GOS=
 
-if [[ ${1} == -d ]]; then
+if [[ ${1} == -[dxtg] ]]; then
+	TOOR="${1}"
+	shift
+fi
+if [[ ${TOOR} == -d ]]; then
 	TARGET="${BLDDIR}"
-	TOOR="${1}"
 	_PKG="${BLDPKG}"
-	shift
 fi
-if [[ ${1} == -x ]]; then
+if [[ ${TOOR} == -x ]]; then
 	TARGET="${WRKDIR}"
-	TOOR="${1}"
 	_PKG="${WRKPKG}"
-	shift
 fi
-if [[ ${1} == -t ]]; then
+if [[ ${TOOR} == -t ]]; then
 	TARGET="${TORDIR}"
-	TOOR="${1}"
 	_PKG="${TORPKG}"
-	shift
 fi
-if [[ ${1} == -g ]]; then
+if [[ ${TOOR} == -g ]]; then
 	TARGET="${GOSDIR}"
-	TOOR="${1}"
 	_PKG="${GOSPKG}"
-	shift
 fi
 
 if [[ ${1} == -n ]]; then
@@ -204,17 +213,17 @@ fi
 
 ########################################
 
-#VARIABLES[HOME IS_CHROOT DO_CHROOT SAFE_ENV]
-export MYSELF="${ARCDIR}/${FUNDIR}/${SCRIPT}"
+#VARIABLES[HOME MYSELF IS_CHROOT DO_CHROOT SAFE_ENV]
+export MYSELF="${ARCDIR}/${FUNDIR}/$(basename -- "${_TRUE_SCRIPT}")"
 
 export IS_CHROOT="${IS_CHROOT:-false}"
-declare DO_CHROOT="false"
+export DO_CHROOT="false"
 if ! ${IS_CHROOT} && [[ -n ${TOOR} ]]; then
 	DO_CHROOT="true"
 fi
 
-declare SAFE_ENV=
-for FILE in $(${SED} -n "s|^.*[#]OPTIONS[[](.+)[]]$|\1|gp" ${_SELF}); do
+export SAFE_ENV=
+for FILE in $(${SED} -n "s|^.*[#]OPTIONS[[](.+)[]]$|\1|gp" ${_TRUE_SELF}); do
 	SAFE_ENV+=" ${FILE}=\"${!FILE}\""
 done
 SAFE_ENV="${SAFE_ENV/#\ }"
@@ -424,6 +433,7 @@ function print_info {
 		echo -en ">>> GLOBALS <<<"
 		echo -en "${RESET}\n"
 		echo -en "\n"
+		starter_var "_TRUE_SELF"
 		starter_var "_SELF"
 		starter_var "_OPTS"
 		starter_var "DEBUG"; #>>> starter_var "DEBUG_OPT"
@@ -442,7 +452,7 @@ function print_info {
 			fi
 			echo -en "\n"
 			declare END="true"
-			${SED} -n "s|^[#]${FILE}[[](.+)[]]$|\1|gp" ${_SELF} | while read -r NEXT; do
+			${SED} -n "s|^[#]${FILE}[[](.+)[]]$|\1|gp" ${_TRUE_SELF} | while read -r NEXT; do
 				if ${END}; then END="false"; else echo -en "\n"; fi
 				for FILE in ${NEXT}; do
 					starter_var "${FILE}"
@@ -610,6 +620,12 @@ function EXIT {
 ########################################
 
 source ${SETDIR}/${FUNDIR}/${MAKEIT} || EXIT 1
+
+########################################
+
+if ${_BASH_SOURCED}; then
+	return 0
+fi
 
 ########################################
 
