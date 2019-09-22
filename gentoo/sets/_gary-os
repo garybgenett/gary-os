@@ -297,8 +297,8 @@
 #{SELECT} mesa:--auto
 #{SELECT} opengl:xorg-x11
 
-#{WINMGR} dwm
-#{WMHELP} gary-os / \`date --iso=s\`
+#{WINMGR}
+#{WMHELP}
 
 x11-base/xorg-x11
 
