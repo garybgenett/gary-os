@@ -23,6 +23,8 @@ declare _GREPO="/.g/_data/_builds/.${_TITLE}/.${_TITLE}"
 
 ########################################
 
+declare LDIR="/usr/src/linux"
+
 declare KVER=
 declare KCFG=
 declare KBAS=
@@ -134,9 +136,9 @@ function _release_reset {	#{main}
 	fi
 	if [[ ${TARGET} != / ]] && [[ ${TARGET} != ${_GINST} ]]; then
 		${RM} ${TARGET}/boot/_null.kernel	|| return 1
-		${RM} ${TARGET}/usr/src/linux		|| return 1
-		${RM} ${TARGET}/usr/src/linux.tar.xz	|| return 1
-		${LN} ${KBAS} ${TARGET}/usr/src/linux	|| return 1
+		${RM} ${TARGET}${LDIR}			|| return 1
+		${RM} ${TARGET}${LDIR}.tar.xz		|| return 1
+		${LN} ${KBAS} ${TARGET}${LDIR}		|| return 1
 	fi
 #>>>	_prepare_config --reset				|| return 1
 	return 0
@@ -329,32 +331,32 @@ function _prepare_docdir {
 
 function _prepare_linux {
 	if [[ ${TARGET} == / ]]; then
-		if [[ ! -d ${TARGET}/usr/src/linux ]]; then
-			${RM}						${TARGET}/usr/src/linux		|| return 1
-			common_untar					${TARGET}/usr/src/linux		|| return 1
+		if [[ ! -d ${TARGET}${LDIR} ]]; then
+			${RM}						${TARGET}${LDIR}		|| return 1
+			common_untar					${TARGET}${LDIR}		|| return 1
 		fi
 		return 0
 	fi
-	if [[ ! -d ${TARGET}/usr/src/linux ]] || [[ -L ${TARGET}/usr/src/linux ]]; then
-		${RM}							${TARGET}/usr/src/linux		|| return 1
+	if [[ ! -d ${TARGET}${LDIR} ]] || [[ -L ${TARGET}${LDIR} ]]; then
+		${RM}							${TARGET}${LDIR}		|| return 1
 #>>>		safe_make -C ${TARGET}${KDIR}								\
-#>>>			INSTALL_HDR_PATH="${TARGET}/usr/src/linux"	headers_install			|| return 1
+#>>>			INSTALL_HDR_PATH="${TARGET}${LDIR}"		headers_install			|| return 1
 		${RSYNC_U}										\
 			--delete-excluded								\
 			--filter="-_/.tmp**"								\
 			--filter="-_/usr/initramfs_data.cpio**"						\
-			${TARGET}${KDIR}/				${TARGET}/usr/src/linux		|| return 1
+			${TARGET}${KDIR}/				${TARGET}${LDIR}		|| return 1
 	fi
 	if [[ ! -f ${TARGET}/boot/_null.kernel ]]; then
-		safe_make -C ${TARGET}/usr/src/linux			distclean			|| return 1
-		safe_make -C ${TARGET}/usr/src/linux			allnoconfig bzImage		|| return 1
-		${RSYNC_U} -L ${TARGET}/usr/src/linux/arch/x86/boot/bzImage	${TARGET}/boot/_null.kernel	|| return 1
+		safe_make -C ${TARGET}${LDIR}				distclean			|| return 1
+		safe_make -C ${TARGET}${LDIR}				allnoconfig bzImage		|| return 1
+		${RSYNC_U} -L ${TARGET}${LDIR}/arch/x86/boot/bzImage	${TARGET}/boot/_null.kernel	|| return 1
 	fi
-	if [[ ! -f ${TARGET}/usr/src/linux.tar.xz ]]; then
-		safe_make -C ${TARGET}/usr/src/linux			distclean			|| return 1
-		${RSYNC_U} ${TARGET}${ARCDIR}/${KCFG}			${TARGET}/usr/src/linux/.config	|| return 1
-		safe_make -C ${TARGET}/usr/src/linux			modules_prepare			|| return 1
-		common_tar						${TARGET}/usr/src/linux		|| return 1
+	if [[ ! -f ${TARGET}${LDIR}.tar.xz ]]; then
+		safe_make -C ${TARGET}${LDIR}				distclean			|| return 1
+		${RSYNC_U} ${TARGET}${ARCDIR}/${KCFG}			${TARGET}${LDIR}/.config	|| return 1
+		safe_make -C ${TARGET}${LDIR}				modules_prepare			|| return 1
+		common_tar						${TARGET}${LDIR}		|| return 1
 	fi
 	return 0
 }
@@ -409,7 +411,7 @@ function _prepare_symlink {
 #>>> sort -b -k4
 	${LN} --relative ${TARGET}/${REPDIR}.git.tar.xz		${TARGET}/${_FINAL}/${_RAMFS}.$(basename ${REPDIR}).git.tar.xz	|| return 1
 	${LN} --relative ${TARGET}/${REPDIR}.tar.xz		${TARGET}/${_FINAL}/${_RAMFS}.$(basename ${REPDIR}).tar.xz	|| return 1
-	${LN} --relative ${TARGET}/usr/src/linux.tar.xz		${TARGET}/${_FINAL}/${_RAMFS}.linux.tar.xz	|| return 1
+	${LN} --relative ${TARGET}${LDIR}.tar.xz		${TARGET}/${_FINAL}/${_RAMFS}.linux.tar.xz	|| return 1
 	${LN} --relative ${TARGET}${KFIL}			${TARGET}/${_FINAL}/${_RAMFS}.null.kernel	|| return 1
 	${LN} --relative ${TARGET}/.${_TITLE}.packages.txt	${TARGET}/${_FINAL}/${_RAMFS}.packages.txt	|| return 1
 #>>>
@@ -480,8 +482,8 @@ function _release_cpio {	#{initrd}
 			\( -path .${REPDIR}			-prune \) -o \
 			\( -path .${REPDIR}.git\*		-prune \) -o \
 			\
-			\( -path ./usr/src/linux		-prune \) -o \
-			\( -path ./usr/src/linux-\*		-prune \) -o \
+			\( -path .${LDIR}			-prune \) -o \
+			\( -path .${LDIR}-\*			-prune \) -o \
 			\
 			\( -path ./usr/lib/debug		-prune \) -o \
 			\( -path ./usr/lib32/debug		-prune \) -o \
@@ -574,27 +576,27 @@ function _release_kernel {	#{initrd}
 		INITRD="true"
 		shift
 	fi
-	declare LDIR="${KDIR}"
+	declare DODIR="${KDIR}"
 	if [[ ${TARGET} == / ]]; then
-		LDIR="/usr/src/linux"
+		DODIR="${LDIR}"
 	fi
-	if [[ -d ${TARGET}${LDIR} ]] && [[ ! -f ${TARGET}/${_FINAL}/${_RAMFS}.kernel ]]; then
-		release_kernel_config ${LDIR}						|| return 1
-		release_kernel_shmmax ${LDIR}						|| return 1
+	if [[ -d ${TARGET}${DODIR} ]] && [[ ! -f ${TARGET}/${_FINAL}/${_RAMFS}.kernel ]]; then
+		release_kernel_config ${DODIR}						|| return 1
+		release_kernel_shmmax ${DODIR}						|| return 1
 		if ! ${INITRD}; then
-			release_kernel_initramfs ${LDIR}				|| return 1
+			release_kernel_initramfs ${DODIR}				|| return 1
 		fi
-		declare BZIMAGE="${TARGET}${LDIR}/arch/x86/boot/bzImage"		|| return 1
-#>>>		declare BZIMAGE="${TARGET}${LDIR}/arch/x86_64/boot/bzImage"		|| return 1
-		declare BZ_MAKE="${TARGET}${LDIR}/arch/x86/Makefile"			|| return 1
+		declare BZIMAGE="${TARGET}${DODIR}/arch/x86/boot/bzImage"		|| return 1
+#>>>		declare BZIMAGE="${TARGET}${DODIR}/arch/x86_64/boot/bzImage"		|| return 1
+		declare BZ_MAKE="${TARGET}${DODIR}/arch/x86/Makefile"			|| return 1
 		declare BZ_SEDR=".+ln -fsn.+/x86/boot/bzImage.+"			|| return 1
 		[[ -f ${BZ_MAKE}.${_TITLE} ]] && { ${MV}	${BZ_MAKE}{.${_TITLE},}	|| return 1 ;}
 		${SED} -i.${_TITLE} "s|^(${BZ_SEDR})$|\#\1|g"	${BZ_MAKE}		|| return 1
-		safe_make -C ${TARGET}${LDIR}			olddefconfig		|| return 1
-		safe_make -C ${TARGET}${LDIR}			bzImage			|| return 1
+		safe_make -C ${TARGET}${DODIR}			olddefconfig		|| return 1
+		safe_make -C ${TARGET}${DODIR}			bzImage			|| return 1
 		${RSYNC_U} -L ${BZIMAGE}			${TARGET}/${_FINAL}/${_RAMFS}.kernel	|| return 1
 	else
-		common_exists ${FUNCNAME} ${TARGET}${LDIR} ${TARGET}/${_FINAL}/${_RAMFS}.kernel		|| return 1
+		common_exists ${FUNCNAME} ${TARGET}${DODIR} ${TARGET}/${_FINAL}/${_RAMFS}.kernel	|| return 1
 	fi
 	return 0
 }
@@ -607,7 +609,7 @@ function _release_report {
 				${TARGET}/${_FINAL}*			\
 									2>/dev/null #>>> || return 1
 	echo -en "\n"; ${DU} -ms --dereference --one-file-system	\
-				${TARGET}/usr/src/linux/usr/initramfs_data.*	\
+				${TARGET}${LDIR}/usr/initramfs_data.*	\
 				${TARGET}/${_FINAL}/${_RAMFS}*		\
 									2>/dev/null #>>> || return 1
 	return 0
@@ -616,8 +618,8 @@ function _release_report {
 ########################################
 
 function _release_unpack {	#{main}
-	common_untar ${TARGET}${REPDIR}		|| return 1
-	common_untar ${TARGET}/usr/src/linux	|| return 1
+	common_untar ${TARGET}${REPDIR}	|| return 1
+	common_untar ${TARGET}${LDIR}	|| return 1
 	return 0
 }
 
@@ -644,7 +646,7 @@ function release_install_root {
 #>>>	TARGET="${_GINST}" _prepare_config		|| return 1
 	${RM} ${_GINST}/[._]${_TITLE}*			|| return 1
 #>>>	${RM} ${_GINST}${REPDIR}*.tar.xz		|| return 1
-#>>>	${RM} ${_GINST}/usr/src/linux.tar.xz		|| return 1
+#>>>	${RM} ${_GINST}${LDIR}.tar.xz			|| return 1
 	return 0
 }
 
