@@ -43,16 +43,20 @@
 # beginning of scripting
 ################################################################################
 #
+# [directories]
+# - declare SAVE_DIR="/${_TITLE}.archive"
+# - declare FUSE_DST="${SAVE_DIR}/distfiles"
+# - declare FUSE_PAK="${SAVE_DIR}/packages"
+# - declare GRUB_DIR="${SAVE_DIR}/grub"
+# - declare LINX_DIR="${SAVE_DIR}/linux"
+#
 # [globals]
 # - declare __VERSN="v4.0"
 # - declare __GINST="/.install"
 # - declare _ESUB="generic_64"
 # - declare _GOSPKG="_gary-os"
 # - declare _GOPTS=""
-# - declare USB_DEVICE="sda"
-# - declare USB_SOURCE="${USB_DEVICE}1"
-# - declare FUSE_DIR="/tmp/.fuse"
-# - declare GRUB_DIR="/tmp/.grub"
+# - declare USB_SOURCE="/dev/sda1"
 # - declare USB_DIST="/gary-os/_distfiles"
 # - declare USB_PACK="/gary-os/_packages"
 # - declare SSH_SOURCE="root@me.garybgenett.net"
@@ -63,14 +67,20 @@
 #
 # [overrides]
 # - declare _GOPTS="console=ttyS0,38400"
-# - declare USB_DEVICE="nvme0n1"
-# - declare USB_SOURCE="${USB_DEVICE}p1"
+# - declare USB_SOURCE="/dev/nvme0n1p1"
 # - declare SSH_DIST="/.g/_data/_builds/_gary-os.working/var/cache/portage/distfiles"
 # - declare SSH_PACK="/.g/_data/_builds/_gary-os.working/var/cache/portage/packages"
 # - declare SSH_COPY="/.g/_data/_builds/_gary-os.working/.gary-os-${_ESUB}"
 #
-# [commands]
+# [unpack]
 # - mount -o remount,rw,size=6g / && df /
+# - make -f /.gary-os/Makefile O=/ P=${_GOSPKG} unpack
+#
+# [mount]
+# - mount-robust ${USB_SOURCE} ${__GINST}
+# - ${MKDIR} ${__GINST}${SAVE_DIR}
+# - ${RM} /.gary-os-${_ESUB} && ${LN} ${__GINST} /.gary-os-${_ESUB}
+# - ${RM} ${SAVE_DIR} && ${LN} ${__GINST}${SAVE_DIR} ${SAVE_DIR}
 #
 ########################################
 # basic setup
@@ -94,27 +104,24 @@
 # [emerge]
 # * https://wiki.archlinux.org/index.php/Overlay_filesystem
 # <setup>
-# - modprobe fuse overlay
-# - make -f /.gary-os/Makefile O=/ P=${_GOSPKG} unpack
-# - ${MKDIR} ${FUSE_DIR}-{mount,dist{,-over,-work},pack{,-over,-work}} /var/cache/portage/{distfiles,packages}
+# - ${MKDIR} ${FUSE_DST} ${FUSE_PAK} /var/cache/portage/{distfiles,packages}
 # <usb>
-# - mount -o rw /dev/${USB_SOURCE} ${FUSE_DIR}-mount
-# - mount -o ro,bind,nonempty ${FUSE_DIR}-mount${USB_DIST} ${FUSE_DIR}-dist
-# - mount -o ro,bind,nonempty ${FUSE_DIR}-mount${USB_PACK} ${FUSE_DIR}-pack
+# - mount-robust -0 ${_GINST}${USB_DIST} ${FUSE_DST}
+# - mount-robust -0 ${_GINST}${USB_PACK} ${FUSE_PAK}
 # <ssh>
 # - prompt -z emerge --ask=n sshfs
-# - sshfs -o ro,nonempty ${SSH_SOURCE}:${SSH_DIST}/ ${FUSE_DIR}-dist
-# - sshfs -o ro,nonempty ${SSH_SOURCE}:${SSH_PACK}/ ${FUSE_DIR}-pack
+# - sshfs -o ro ${SSH_SOURCE}:${SSH_DIST}/ ${FUSE_DST}
+# - sshfs -o ro ${SSH_SOURCE}:${SSH_PACK}/ ${FUSE_PAK}
 # <mount>
-# - mount -o rw -t overlay overlay -o lowerdir=${FUSE_DIR}-dist,upperdir=${FUSE_DIR}-dist-over,workdir=${FUSE_DIR}-dist-work /var/cache/portage/distfiles
-# - mount -o rw -t overlay overlay -o lowerdir=${FUSE_DIR}-pack,upperdir=${FUSE_DIR}-pack-over,workdir=${FUSE_DIR}-pack-work /var/cache/portage/packages
-# - mount
+# - mount-robust -o ${FUSE_DST} /var/cache/portage/distfiles
+# - mount-robust -o ${FUSE_PAK} /var/cache/portage/packages
 # <install>
 # - prompt -z emerge --usepkg=y --deep --newuse --update \@${_GOSPKG}
 # <umount>
-# - umount ${FUSE_DIR}-{mount,dist{,-over,-work},pack{,-over,-work}} /var/cache/portage/{distfiles,packages} || [[ -z $(mount | ${GREP} "${FUSE_DIR}") ]]
-# - rm -rv --one-file-system ${FUSE_DIR}
-# - mount
+# - mount-robust -u /var/cache/portage/distfiles
+# - mount-robust -u /var/cache/portage/packages
+# - mount-robust -u ${FUSE_DST}
+# - mount-robust -u ${FUSE_PAK}
 #
 # [xorg]
 # <setup>
@@ -140,10 +147,10 @@
 # - export HOME=/.g/.home
 # - cd / && ${MKDIR} ${HOME} && ${RSYNC_U} /root/ ${HOME} && ${RM} /root && ${LN} ${HOME} /root && cd -
 # <usb>
-# - ${RSYNC_U} ${FUSE_DIR}-mount/.home/ ${HOME}
+# - ${RSYNC_U} ${__GINST}/.home/ ${HOME}
 # <ssh>
-# - ${RSYNC_U} /.gary-os/.bashrc ${HOME}/
 # - ${MKDIR} ${HOME}/scripts
+# - ${RSYNC_U} ${SSH_SOURCE}:/.g/_data/zactive/.static/.bashrc ${HOME}/
 # - ${RSYNC_U} ${SSH_SOURCE}:/.g/_data/zactive/.static/scripts/_sync ${HOME}/scripts/
 # - _sync _home ${HOME}
 #
@@ -183,35 +190,27 @@
 # - vpn -v
 #
 # [extra]
-# - [[ -n ${USB_SOURCE} ]] && _sync mount shadow ${USB_SOURCE/%[0-9]}
+# - _sync mount shadow $(echo "${USB_SOURCE}" | ${SED} -e "s|^.+[/]||g" -e "s|[p]?[0-9]+$||g")
 #
 ########################################
 # build a build
 ########################################
 #
 # [grub]
-# <setup>
-# - ${MKDIR} ${GRUB_DIR}
-# - mount-robust -u /dev/${USB_SOURCE}
 # <format>
+# - mount-robust -u ${USB_SOURCE}
+# - ${MKDIR} ${GRUB_DIR}
 # - /.gary-os/scripts/grub.sh ${GRUB_DIR} -f /dev/${USB_SOURCE} ${_GOPTS}
 # - /.gary-os/scripts/grub.sh ${GRUB_DIR} -fx /dev/${USB_SOURCE} ${_GOPTS}
-# - gdisk -l /dev/${USB_DEVICE}
+# - mount-robust ${USB_SOURCE} ${__GINST}
 # <install>
+# - ${MKDIR} ${GRUB_DIR}
 # - /.gary-os/scripts/grub.sh ${GRUB_DIR} /dev/${USB_SOURCE} ${_GOPTS}
-# <umount>
-# - mount-robust -u ${GRUB_DIR}
-# - rm -rv --one-file-system ${GRUB_DIR}
 #
 # [package]
 # <memory>
 # - mount -o remount,rw,size=20g / && df /
 # <disk>
-# - ${MKDIR} /.gary-os-${_ESUB}
-# - mount-robust /dev/${USB_SOURCE} /.gary-os-${_ESUB}
-# <setup>
-# - make -f /.gary-os/Makefile O=/ P=${_GOSPKG} unpack
-# - ${MKDIR} /.gary-os-${_ESUB}
 # - [[ ! -d /.gary-os-${_ESUB}/linux ]] && ${RM} /.gary-os-${_ESUB}/linux && ${RSYNC_U} -L /usr/src/linux/ /.gary-os-${_ESUB}/linux
 # - [[ -d /.gary-os-${_ESUB}/linux ]] && ${RM} /usr/src/linux && ${LN} /.gary-os-${_ESUB}/linux /usr/src/linux
 # <build>
@@ -231,25 +230,17 @@
 # - ${RSYNC_U} -L /.gary-os-${_ESUB}/gary-os-${_ESUB}-${__VERSN}.cpio.xz /.gary-os-${_ESUB}/gary-os.initrd || true
 # - ${RSYNC_U} -L /.gary-os-${_ESUB}/gary-os-${_ESUB}-${__VERSN}.kernel ${SSH_SOURCE}:${SSH_COPY}/gary-os-${_ESUB}-${__VERSN}.minimal.kernel || true
 # - ${RSYNC_U} -L /.gary-os-${_ESUB}/gary-os-${_ESUB}-${__VERSN}.cpio.xz ${SSH_SOURCE}:${SSH_COPY}/gary-os-${_ESUB}-${__VERSN}.minimal.initrd || true
-# <umount>
-# - mount-robust -u /.gary-os-${_ESUB}
-# - rm -rv --one-file-system /.gary-os-${_ESUB}
 #
-# [replicate]
-# <setup>
-# - ${MKDIR} ${__GINST}
-# - mount-robust /dev/${USB_SOURCE} ${__GINST}
-# <install>
+# [install]
 # - make -f /.gary-os/Makefile O=/ P=${_GOSPKG} install
-# - ${RM} ${__GINST}/_gary-os
-# <umount>
-# - mount-robust -u ${__GINST}
-# - rm -rv --one-file-system ${__GINST}
 #
 ########################################
 # complete
 ########################################
 #
+# - mount-robust -u ${USB_SOURCE}
+# - mount-robust -u ${__GINST}
+# - ${RM} /.gary-os-${_ESUB}
 # - exit 0
 #
 ################################################################################
