@@ -5,15 +5,15 @@ source ${HOME}/.bashrc
 #NOTE: SCRIPT NAME AND FUNCTION NAMES (${PREPIT}, ${MAKEIT}, ${SHIPIT}) MUST MATCH FOR "_SYSTEM" WRAPPING TO WORK
 #NOTE: UPDATE "#SETTINGS" LINES IN "_SYSTEM" SCRIPT WHEN THESE VAIABLES CHANGE
 
-declare _TITLE="gary-os"
-declare _VERSN="v4.0"
-declare _RDATE="$(date --iso=date)"
+export _TITLE="gary-os"
+export _VERSN="v4.0"
+export _RDATE="$(date --iso=date)"
 
-declare _FINAL="${TARGET/%\/}/.${_TITLE}-${ESUB}"
-declare _RAMFS="${_FINAL}/${_TITLE}-${ESUB}-${_VERSN}"
-declare _GINST="${TARGET/%\/}/.install"
+export _FINAL="${TARGET/%\/}/.${_TITLE}-${ESUB}"
+export _RAMFS="${_FINAL}/${_TITLE}-${ESUB}-${_VERSN}"
+export _GINST="${TARGET/%\/}/.install"
 
-declare _GREPO="/.g/_data/_builds/.${_TITLE}/.${_TITLE}"
+export _GREPO="/.g/_data/_builds/.${_TITLE}/.${_TITLE}"
 
 ########################################
 
