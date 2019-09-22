@@ -180,6 +180,9 @@ sys-apps/fakeroot-ng
 #{RCUPDT} rc-update del sshd default		|| true
 #{RCUPDT} rc-update show
 
+#{FSSKIP} /lib64/firmware/netronome
+#{FSSKIP} /usr/lib64/gcc/*-pc-linux-gnu/*/debug
+
 sys-kernel/genkernel
 sys-kernel/linux-firmware		# takes up way too much space, but required
 
