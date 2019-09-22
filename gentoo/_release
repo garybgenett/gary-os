@@ -466,7 +466,7 @@ function _release_cpio {	#{initrd}
 		{ [[ ! -f ${CPIO_FILE} ]] && ! ${INITRD}; }
 	}; then
 		#note: the "_packages" file is also hard-set in the "prepare_packages" function
-		(cd ${TARGET} && find ./ -mindepth 1 \
+		(cd ${TARGET} && find ./ -mindepth 1 -xdev \
 			\( -path ./${CMTFIL}		-prune \) -o \
 			\( -path ./${_FINAL}		-prune \) -o \
 			\( -path ./${_RAMFS}		-prune \) -o \
