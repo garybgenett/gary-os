@@ -9,8 +9,8 @@ declare _TITLE="gary-os"
 declare _VERSN="v4.0"
 declare _RDATE="$(date --iso=date)"
 
-declare _FINAL=".${_TITLE}-${ESUB}"
-declare _RAMFS="${_TITLE}-${ESUB}-${_VERSN}"
+declare _FINAL="${TARGET/%\/}/.${_TITLE}-${ESUB}"
+declare _RAMFS="${_FINAL}/${_TITLE}-${ESUB}-${_VERSN}"
 declare _GINST="${TARGET/%\/}/.install"
 
 declare _GREPO="/.g/_data/_builds/.${_TITLE}/.${_TITLE}"
@@ -129,12 +129,12 @@ function _release_reset {	#{main}
 	if [[ ${TARGET} != / ]]; then
 		${RM} ${TARGET}/{.,_}${_TITLE}*		|| return 1
 	fi
-	if [[ -z $(${FINDMNT} ${TARGET}/${_FINAL}) ]]; then
-		${RM} ${TARGET}/${_FINAL}*		|| return 1
+	if [[ -z $(${FINDMNT} ${_FINAL}) ]]; then
+		${RM} ${_FINAL}*			|| return 1
 	else
-		${RM} ${TARGET}/${_FINAL}/${_RAMFS}*	|| return 1
+		${RM} ${_RAMFS}*			|| return 1
 	fi
-	if [[ ${TARGET} != / ]] && [[ ${TARGET} != ${_GINST} ]]; then
+	if [[ ${TARGET} != / ]]; then
 		${RM} ${TARGET}/boot/_null.kernel	|| return 1
 		${RM} ${TARGET}${LDIR}			|| return 1
 		${RM} ${TARGET}${LDIR}.tar.xz		|| return 1
@@ -404,22 +404,22 @@ function _prepare_symlink {
 		then echo -en "${COMMIT}"			>${TARGET}/${CMTFIL}				|| return 1
 		else ${RM}					${TARGET}/${CMTFIL}				|| return 1
 	fi
-	${MKDIR} ${TARGET}/${_FINAL}										|| return 1
-	${RM} $(find						${TARGET}/${_FINAL} -maxdepth 1 -type l | sort)	|| return 1
-	${LN} --relative ${TARGET}${DSTDIR}			${TARGET}/${_FINAL}/_$(basename ${DSTDIR})	|| return 1
-	${LN} --relative ${TARGET}${PAKDIR}			${TARGET}/${_FINAL}/_$(basename ${PAKDIR})	|| return 1
+	${MKDIR} ${_FINAL}											|| return 1
+	${RM} $(find						${_FINAL} -maxdepth 1 -type l | sort)		|| return 1
+	${LN} --relative ${TARGET}${DSTDIR}			${_FINAL}/_$(basename ${DSTDIR})		|| return 1
+	${LN} --relative ${TARGET}${PAKDIR}			${_FINAL}/_$(basename ${PAKDIR})		|| return 1
 #>>> sort -b -k4
-	${LN} --relative ${TARGET}/${REPDIR}.git.tar.xz		${TARGET}/${_FINAL}/${_RAMFS}.$(basename ${REPDIR}).git.tar.xz	|| return 1
-	${LN} --relative ${TARGET}/${REPDIR}.tar.xz		${TARGET}/${_FINAL}/${_RAMFS}.$(basename ${REPDIR}).tar.xz	|| return 1
-	${LN} --relative ${TARGET}${LDIR}.tar.xz		${TARGET}/${_FINAL}/${_RAMFS}.linux.tar.xz	|| return 1
-	${LN} --relative ${TARGET}${KFIL}			${TARGET}/${_FINAL}/${_RAMFS}.null.kernel	|| return 1
-	${LN} --relative ${TARGET}/.${_TITLE}.packages.txt	${TARGET}/${_FINAL}/${_RAMFS}.packages.txt	|| return 1
+	${LN} --relative ${TARGET}/${REPDIR}.git.tar.xz		${_RAMFS}.$(basename ${REPDIR}).git.tar.xz	|| return 1
+	${LN} --relative ${TARGET}/${REPDIR}.tar.xz		${_RAMFS}.$(basename ${REPDIR}).tar.xz		|| return 1
+	${LN} --relative ${TARGET}${LDIR}.tar.xz		${_RAMFS}.linux.tar.xz				|| return 1
+	${LN} --relative ${TARGET}${KFIL}			${_RAMFS}.null.kernel				|| return 1
+	${LN} --relative ${TARGET}/.${_TITLE}.packages.txt	${_RAMFS}.packages.txt				|| return 1
 #>>>
 	if [[ -f ${TARGET}/boot/_null.kernel ]]; then
-		${LN} --relative ${TARGET}/boot/_null.kernel	${TARGET}/${_FINAL}/${_RAMFS}.null.kernel	|| return 1
+		${LN} --relative ${TARGET}/boot/_null.kernel	${_RAMFS}.null.kernel				|| return 1
 	fi
 	for FILE in ${TARGET}${ARCDIR}/stage3-*.tar.xz; do
-		${LN} --relative ${FILE}			${TARGET}/${_FINAL}/				|| return 1
+		${LN} --relative ${FILE}			${_FINAL}/					|| return 1
 	done
 	return 0
 }
@@ -448,7 +448,7 @@ function _release_initrd {	#{main} #{reset}
 ########################################
 
 #note: the "du" command is also used in "release_kernel_shmmax", so just making them all global
-declare CPIO_FILE="${TARGET}/${_FINAL}/${_RAMFS}.cpio"
+declare CPIO_FILE="${_RAMFS}.cpio"
 declare XARGS="xargs --max-procs 0 --max-args 1 --null	--arg-file ${CPIO_FILE}.nul"
 declare DU_S="${DU} --summarize --apparent-size		--block-size 4096"
 declare CPIO_IN="cpio -v --create --format newc --null	--file ${CPIO_FILE}	--directory ${TARGET}"
@@ -461,8 +461,8 @@ function _release_cpio {	#{initrd}
 		INITRD="true"
 		shift
 	fi
-	mount_dev_dirs -u		|| return 1
-	${MKDIR} ${TARGET}/${_FINAL}	|| return 1
+	mount_dev_dirs -u	|| return 1
+	${MKDIR} ${_FINAL}	|| return 1
 	if {
 		{ [[ ! -f ${CPIO_FILE}.xz ]] && ${INITRD}; } ||
 		{ [[ ! -f ${CPIO_FILE} ]] && ! ${INITRD}; }
@@ -470,8 +470,8 @@ function _release_cpio {	#{initrd}
 		#note: the "_packages" file is also hard-set in the "prepare_packages" function
 		(cd ${TARGET} && find ./ -mindepth 1 -xdev \
 			\( -path ./${CMTFIL}			-prune \) -o \
-			\( -path ./${_FINAL}			-prune \) -o \
-			\( -path ./${_RAMFS}			-prune \) -o \
+			\( -path ./${_FINAL/#${TARGET}\/}	-prune \) -o \
+			\( -path ./${_RAMFS/#${TARGET}\/}	-prune \) -o \
 			\( -path ./_packages			-prune \) -o \
 			\
 			\( -path .${ARCDIR}\*			-prune \) -o \
@@ -580,7 +580,7 @@ function _release_kernel {	#{initrd}
 	if [[ ${TARGET} == / ]]; then
 		DODIR="${LDIR}"
 	fi
-	if [[ -d ${TARGET}${DODIR} ]] && [[ ! -f ${TARGET}/${_FINAL}/${_RAMFS}.kernel ]]; then
+	if [[ -d ${TARGET}${DODIR} ]] && [[ ! -f ${_RAMFS}.kernel ]]; then
 		release_kernel_config ${DODIR}						|| return 1
 		release_kernel_shmmax ${DODIR}						|| return 1
 		if ! ${INITRD}; then
@@ -594,9 +594,9 @@ function _release_kernel {	#{initrd}
 		${SED} -i.${_TITLE} "s|^(${BZ_SEDR})$|\#\1|g"	${BZ_MAKE}		|| return 1
 		safe_make -C ${TARGET}${DODIR}			olddefconfig		|| return 1
 		safe_make -C ${TARGET}${DODIR}			bzImage			|| return 1
-		${RSYNC_U} -L ${BZIMAGE}			${TARGET}/${_FINAL}/${_RAMFS}.kernel	|| return 1
+		${RSYNC_U} -L ${BZIMAGE}			${_RAMFS}.kernel	|| return 1
 	else
-		common_exists ${FUNCNAME} ${TARGET}${DODIR} ${TARGET}/${_FINAL}/${_RAMFS}.kernel	|| return 1
+		common_exists ${FUNCNAME} ${TARGET}${DODIR} ${_RAMFS}.kernel		|| return 1
 	fi
 	return 0
 }
@@ -606,11 +606,11 @@ function _release_kernel {	#{initrd}
 function _release_report {
 	echo -en "\n"; ${LL}						\
 				${TARGET}/				\
-				${TARGET}/${_FINAL}*			\
+				${_FINAL}*				\
 									2>/dev/null #>>> || return 1
 	echo -en "\n"; ${DU} -ms --dereference --one-file-system	\
 				${TARGET}${LDIR}/usr/initramfs_data.*	\
-				${TARGET}/${_FINAL}/${_RAMFS}*		\
+				${_RAMFS}*				\
 									2>/dev/null #>>> || return 1
 	return 0
 }
@@ -902,7 +902,7 @@ declare RUFUS_URL="https://github.com/pbatard/rufus/releases/download/v3.7/rufus
 
 function _publish_grub {
 #>>>	FILE="${_OUTDIR}/${_TITLE}.grub"
-	FILE="${_OUTDIR}/${_RAMFS}.grub"
+	FILE="${_OUTDIR}/${_RAMFS/#${_FINAL}\/}.grub"
 	${RM}			${FILE}*			|| return 1
 	${MKDIR}		${FILE}				|| return 1
 	${HOME}/scripts/grub.sh	${FILE}				|| return 1
