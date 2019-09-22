@@ -1806,6 +1806,8 @@ function maildirmake {
 
 function mount-robust {
 	echo -en "=== [Robust Mount: ${@}]\n"
+	declare FINDMNT="findmnt --noheadings" #>>> --first-only"
+	declare LSBLK="lsblk --noheadings"
 	declare DEBUG="false"
 	declare TEST="false"
 	declare UN="false"
@@ -1863,7 +1865,6 @@ function mount-robust {
 		echo -en "- (LUKS: ${DEV})\n"
 		IS_LUKS="true"
 	fi
-	declare FINDMNT="findmnt --noheadings" #>>> --first-only"
 	declare DEV_SRC="$(${FINDMNT} --output SOURCE --source ${DEV} 2>/dev/null | tail -n1)"; declare	DEV_TGT="$(${FINDMNT} --output TARGET --source ${DEV} 2>/dev/null | tail -n1)"
 	declare DIR_SRC="$(${FINDMNT} --output SOURCE --target ${DIR} 2>/dev/null | tail -n1)"; declare	DIR_TGT="$(${FINDMNT} --output TARGET --target ${DIR} 2>/dev/null | tail -n1)"
 	if [[ -d ${DEV} ]]; then
@@ -1963,7 +1964,7 @@ function mount-robust {
 			if ! ${DEBUG}; then
 				umount -drv ${DEV} || return 1
 			fi
-			if [[ $(${FINDMNT} --output TARGET --target ${TRUE_DIR} 2>/dev/null) == ${TRUE_DIR} ]]; then
+			if [[ $(${FINDMNT} --output TARGET --target ${TRUE_DIR} 2>/dev/null | tail -n1) == ${TRUE_DIR} ]]; then
 				echo -en "- <Directory Is Still Mounted!>\n"
 				return 1
 			fi
@@ -1987,19 +1988,19 @@ function mount-robust {
 			if ${DEBUG}; then
 				return 0
 			fi
-			declare TYP="$(lsblk --noheadings --fs --output FSTYPE ${DEV} 2>/dev/null)"
-			if [[ ${TYP} == "exfat" ]]; then
+			declare TYP="$(${LSBLK} --fs --output FSTYPE ${DEV} 2>/dev/null | tail -n1)"
+			if [[ ${TYP} == exfat ]]; then
 				modprobe fuse || return 1
 			fi
-			if [[ ${TYP} == "ext4"		]]; then fsck -MV -t ${TYP} -pC	${DEV} || return 1; fi
-			if [[ ${TYP} == "exfat"		]]; then fsck.${TYP}		${DEV} || return 1; fi
-			if [[ ${TYP} == "ntfs-3g"	]]; then fsck -MV -t ${TYP}	${DEV} || return 1; fi
-			if [[ ${TYP} == "vfat"		]]; then fsck -MV -t ${TYP}	${DEV} || return 1; fi
-			if [[ -d ${DEV}			]]; then mount -v --bind							${DEV} ${DIR} || return 1; fi
-			if [[ ${TYP} == "ext4"		]]; then mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro			${DEV} ${DIR} || return 1; fi
-			if [[ ${TYP} == "exfat"		]]; then mount -v -t ${TYP} -o ${RO}relatime					${DEV} ${DIR} || return 1; fi
-			if [[ ${TYP} == "ntfs-3g"	]]; then mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro,shortname=mixed	${DEV} ${DIR} || return 1; fi
-			if [[ ${TYP} == "vfat"		]]; then mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro,shortname=mixed	${DEV} ${DIR} || return 1; fi
+			if [[ ${TYP} == ext4	]]; then fsck -MV -t ${TYP} -pC	${DEV} || return 1; fi
+			if [[ ${TYP} == exfat	]]; then fsck.${TYP}		${DEV} || return 1; fi
+			if [[ ${TYP} == ntfs-3g	]]; then fsck -MV -t ${TYP}	${DEV} || return 1; fi
+			if [[ ${TYP} == vfat	]]; then fsck -MV -t ${TYP}	${DEV} || return 1; fi
+			if [[ -d ${DEV}		]]; then mount -v --bind							${DEV} ${DIR} || return 1; fi
+			if [[ ${TYP} == ext4	]]; then mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro			${DEV} ${DIR} || return 1; fi
+			if [[ ${TYP} == exfat	]]; then mount -v -t ${TYP} -o ${RO}relatime					${DEV} ${DIR} || return 1; fi
+			if [[ ${TYP} == ntfs-3g	]]; then mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro,shortname=mixed	${DEV} ${DIR} || return 1; fi
+			if [[ ${TYP} == vfat	]]; then mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro,shortname=mixed	${DEV} ${DIR} || return 1; fi
 		fi
 	fi
 	return 0
