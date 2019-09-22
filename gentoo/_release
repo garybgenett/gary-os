@@ -632,6 +632,7 @@ function release_install_root {
 	${RSYNC_U} \
 		--one-file-system \
 		--filter="-_/[._]${_TITLE}*" \
+		--filter="-_/${_TITLE}*" \
 		--filter="-_/${_GINST/#${TARGET}\/}" \
 		--filter="-_/dev/*" \
 		--filter="-_/mnt/*" \
@@ -644,7 +645,8 @@ function release_install_root {
 	TARGET="${_GINST}" _release_unpack		|| return 1
 	TARGET="${_GINST}" _prepare_config --reset	|| return 1
 #>>>	TARGET="${_GINST}" _prepare_config		|| return 1
-	${RM} ${_GINST}/[._]${_TITLE}*			|| return 1
+#>>>	${RM} ${_GINST}/{.,_}${_TITLE}*			|| return 1
+#>>>	${RM} ${_GINST}/${_TITLE}*			|| return 1
 #>>>	${RM} ${_GINST}${REPDIR}*.tar.xz		|| return 1
 #>>>	${RM} ${_GINST}${LDIR}.tar.xz			|| return 1
 	return 0
