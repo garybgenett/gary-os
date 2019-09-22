@@ -56,6 +56,7 @@ fi
 # variables
 ################################################################################
 
+export _BASHED="true"
 if [[ "${-/i}" != "${-}" ]]; then
 	unset _SELF
 	unset SCRIPT
