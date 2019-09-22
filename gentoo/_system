@@ -21,14 +21,14 @@ export _OPTS="${@}"
 export DEBUG_OPT="-v"
 export QUIET_OPT="-q"
 
-export DEBUG=
-export QUIET=
+export DEBUG="false"
+export QUIET="false"
 if [[ ${1} == ${DEBUG_OPT} ]]; then
-	DEBUG="${1}"
+	DEBUG="true"
 	shift
 fi
 if [[ ${1} == ${QUIET_OPT} ]]; then
-	QUIET="${1}"
+	QUIET="true"
 	shift
 fi
 
@@ -129,7 +129,7 @@ if [[ ${1} == -n ]]; then
 	shift
 fi
 
-#note: detection of a gary-os build is done purely on the package set
+#note: detection of a "gary-os" build is based purely on the package set
 if [[ ${_PKG} == _${GOSPKG} ]] || [[ ${_PKG} == ${GOSPKG} ]]; then
 	_GOS="1"
 fi
@@ -221,11 +221,13 @@ SAFE_ENV="${SAFE_ENV/#\ }"
 
 if ${DO_CHROOT}; then
 	function safe_env {
-		eval prompt -z IS_CHROOT=\"true\" ${SAFE_ENV} HOME=\"${ARCDIR}\" SETDIR=\"${ARCDIR}\" chroot \"${TARGET}\" '"${@}"'
+		eval prompt -z IS_CHROOT=\"true\" ${SAFE_ENV} HOME=\"${ARCDIR}\" SETDIR=\"${ARCDIR}\" chroot \"${TARGET}\" '"${@}"' || return 1
+		return 0
 	}
 else
 	function safe_env {
-		eval prompt -z IS_CHROOT=\"${IS_CHROOT}\" ${SAFE_ENV} '"${@}"'
+		eval prompt -z IS_CHROOT=\"${IS_CHROOT}\" ${SAFE_ENV} '"${@}"' || return 1
+		return 0
 	}
 fi
 
@@ -234,8 +236,9 @@ function safe_make {
 	if ${DO_CHROOT}; then
 		MAKE_CONF="${TARGET}${ETCDIR}/make.conf"
 	fi
-	source ${MAKE_CONF}
-	eval prompt -z ${SAFE_ENV} make '"${@}"'
+	source ${MAKE_CONF}				|| return 1
+	eval prompt -z ${SAFE_ENV} make '"${@}"'	|| return 1
+	return 0
 }
 
 ########################################
@@ -271,7 +274,7 @@ function clear_environment {
 			${SED} -e "s|^[|]*||g" -e "s|[|]*$||g"
 		))$"
 	); do
-		if [[ -z ${QUIET} ]]; then
+		if ! ${QUIET}; then
 #>>>			echo -en "${FILE}=${!FILE}\n" | ${GREP} "[=].*$"
 			echo -en "${FILE}=${!FILE}\n" | ${GREP} "[=].+$"
 		fi
@@ -288,7 +291,7 @@ function clear_environment {
 #NOTE: OR COMMENT COLOR DECLARATIONS
 
 function print_info {
-	if [[ -n ${QUIET} ]]; then
+	if ${QUIET}; then
 		return 0
 	fi
 	declare TITLE="\e[1;32m"	# light green
@@ -344,7 +347,7 @@ function print_info {
 		printf "${PRINTF}" "Build Configuration Files (Internal Only):"	"<internal>"	"${SCRIPT} -W"
 		echo -en "\n"
 		printf "${PRINTF}" "Validation (Usage & Variables Only):"	"<output>"	"${SCRIPT} ${DEBUG_OPT} [{chroot}] [{options}]"
-		printf "${PRINTF}" "Suppress Output (Internal Only)"		"<internal>"	"${SCRIPT} ${QUIET_OPT} [{chroot}] [{options}]"
+		printf "${PRINTF}" "Suppress Output (Internal Only)"		"<internal>"	"${SCRIPT} [${DEBUG_OPT}] ${QUIET_OPT} [{chroot}] [{options}]"
 		echo -en "\n"
 		printf "${PRINTF}" "Source Script (Configuration):"		"<custom>"	"${SCRIPT} {source_script}" "<$(basename ${CFGSCR})>"
 		echo -en "\n"
@@ -418,13 +421,13 @@ function print_info {
 		}
 		echo -en "\n"
 		echo -en "${NOTES}"
-		echo -en ">>> ARGUMENTS <<<"
+		echo -en ">>> GLOBALS <<<"
 		echo -en "${RESET}\n"
 		echo -en "\n"
 		starter_var "_SELF"
 		starter_var "_OPTS"
-		starter_var "DEBUG"
-		starter_var "QUIET"
+		starter_var "DEBUG"; #>>> starter_var "DEBUG_OPT"
+		starter_var "QUIET"; #>>> starter_var "QUIET_OPT"
 		echo -en "\n"
 		declare BEG="true"
 		for FILE in SETTINGS OPTIONS VARIABLES; do
@@ -586,7 +589,7 @@ function EXIT {
 			EXIT="${1}" && shift
 			mount_dev_dirs -u #>>> || EXIT -1
 		fi
-		if [[ -z ${QUIET} ]]; then
+		if ! ${QUIET}; then
 			print_info marker
 			print_info error
 			print_info marker
@@ -595,7 +598,7 @@ function EXIT {
 		if [[ ${1} == -0 ]]; then
 			EXIT="0" && shift
 		fi
-		if [[ -z ${QUIET} ]]; then
+		if ! ${QUIET}; then
 			print_info marker
 			print_info success
 			print_info marker
@@ -610,8 +613,11 @@ source ${SETDIR}/${FUNDIR}/${MAKEIT} || EXIT 1
 
 ########################################
 
-if [[ -n ${DEBUG} ]]; then
-	if [[ -n ${QUIET} ]] && ${DO_CHROOT}; then
+if ${DEBUG}; then
+	if ${QUIET} && ${DO_CHROOT}; then
+		if [[ ! -x ${TARGET}${MYSELF} ]]; then
+			requires_chroot "${@}"
+		fi
 		safe_env ${MYSELF} ${DEBUG_OPT} ${TOOR} "${@}" || EXIT 1
 		EXIT 0
 	fi
@@ -623,8 +629,11 @@ print_info marker;	print_info starter
 print_info marker;	print_info environment;	clear_environment
 print_info marker
 
-if [[ -n ${DEBUG} ]]; then
-	if [[ -z ${QUIET} ]] && ${DO_CHROOT}; then
+if ${DEBUG}; then
+	if ! ${QUIET} && ${DO_CHROOT}; then
+		if [[ ! -x ${TARGET}${MYSELF} ]]; then
+			requires_chroot "${@}"
+		fi
 		set -x
 		safe_env ${MYSELF} ${DEBUG_OPT} ${TOOR} "${@}" || EXIT 1
 		set +x
