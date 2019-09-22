@@ -2646,20 +2646,21 @@ function chroma {
 ########################################
 
 # https://github.com/Genymobile/scrcpy
+# 2019-08-14 22:24:26 +0200 da5b0ec0d59a9da591507cbb7b5d19f55b76c35c Improve FAQ
 function scrcpy {
 	declare VERS="master"
 	[[ -n ${1} ]] && VERS="${1}" && shift
 #>>>	prompt -d -x
-	declare SDK_TMP="/tmp/.android"
 #>>>	export ANDROID_SDK_ROOT="/opt/android-studio"
-	export ANDROID_SDK_ROOT="${SDK_TMP}"
+	export ANDROID_SDK_ROOT="/.g/_data/source/android-studio"
+#>>>	export ANDROID_SDK_ROOT="/tmp/.android"
 	if [[ ${VERS} == build ]] || [[ ${1} == build ]]; then
-		${MKDIR} ${SDK_TMP} && android-studio
+		${MKDIR} ${ANDROID_SDK_ROOT} && android-studio
 		cd /.g/_data/_build/other/scrcpy				&&
 			${GIT} checkout --force ${VERS}				&&
 			git reset --hard					&&
 			meson x --buildtype release --strip -Db_lto=true	&&
-			chown -R plastic ${SDK_TMP}				&&
+			chown -R plastic ${ANDROID_SDK_ROOT}			&&
 			chown -R plastic /.g/_data/_build/other/scrcpy		&&
 			(cd x && su plastic -c ninja)
 	fi
