@@ -291,6 +291,9 @@
 
 #{RCUPDT} rc-update show
 
+#{FSSKIP} /lib64/firmware/netronome
+#{FSSKIP} /usr/lib64/gcc/*-pc-linux-gnu/*/debug
+
 ########################################
 # x11
 
