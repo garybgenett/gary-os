@@ -194,6 +194,8 @@ sys-apps/fakeroot-ng
 
 #{RCUPDT}
 
+#{FSSKIP}
+
 sys-kernel/genkernel
 sys-kernel/linux-firmware
 
