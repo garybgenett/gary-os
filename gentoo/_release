@@ -409,8 +409,8 @@ function _prepare_symlink {
 	${LN} --relative ${TARGET}${DSTDIR}			${_FINAL}/_$(basename ${DSTDIR})		|| return 1
 	${LN} --relative ${TARGET}${PAKDIR}			${_FINAL}/_$(basename ${PAKDIR})		|| return 1
 #>>> sort -b -k4
-	${LN} --relative ${TARGET}/${REPDIR}.git.tar.xz		${_RAMFS}.$(basename ${REPDIR}).git.tar.xz	|| return 1
-	${LN} --relative ${TARGET}/${REPDIR}.tar.xz		${_RAMFS}.$(basename ${REPDIR}).tar.xz		|| return 1
+	${LN} --relative ${TARGET}${REPDIR}.git.tar.xz		${_RAMFS}.$(basename ${REPDIR}).git.tar.xz	|| return 1
+	${LN} --relative ${TARGET}${REPDIR}.tar.xz		${_RAMFS}.$(basename ${REPDIR}).tar.xz		|| return 1
 	${LN} --relative ${TARGET}${LDIR}.tar.xz		${_RAMFS}.linux.tar.xz				|| return 1
 	${LN} --relative ${TARGET}${KFIL}			${_RAMFS}.null.kernel				|| return 1
 	${LN} --relative ${TARGET}/.${_TITLE}.packages.txt	${_RAMFS}.packages.txt				|| return 1
