@@ -280,8 +280,8 @@ function _prepare_config {	#{reset}
 	if [[ -n ${RESET} ]]; then
 		return 0
 	fi
-	echo ${RCUPDT} | tr ';' '\n' | while read -r FILE; do
-		safe_env							${FILE}					#>>> || return 1
+	echo "${RCUPDT}" | tr ';' '\n' | while read -r FILE; do
+		eval safe_env							${FILE}					|| return 1
 	done
 	prepare_config_issue												|| return 1
 	${LN} sbin/init								${TARGET}/init				|| return 1

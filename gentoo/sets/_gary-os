@@ -277,12 +277,13 @@
 
 #{KERNEL} 4.18.6
 
-#{RCUPDT} rc-update del netmount default
-#{RCUPDT} rc-update add gpm default
-#{RCUPDT} rc-update add sysklogd default
-#{RCUPDT} rc-update add wpa_supplicant default
-#{RCUPDT} rc-update add dhcpcd default
-#{RCUPDT} rc-update add sshd default
+#{RCUPDT} rc-update del netmount default	|| true
+#{RCUPDT} rc-update add gpm default		|| true
+#{RCUPDT} rc-update add sysklogd default	|| true
+#{RCUPDT} rc-update add wpa_supplicant default	|| true
+#{RCUPDT} rc-update add dhcpcd default		|| true
+#{RCUPDT} rc-update add sshd default		|| true
+#{RCUPDT} rc-update show
 
 #{RCUPDT} ln -fsv /usr/share/zoneinfo/US/Pacific /etc/localtime
 #{RCUPDT} rc-update add spice-vdagent default
