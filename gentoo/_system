@@ -170,8 +170,9 @@ export KERNEL="${KERNEL:-$(${SED} -n "s|^[#][{]KERNEL[}][ ](.+)$|\1|gp" ${SETDIR
 export PYTHON="${PYTHON:-$(${SED} -n "s|^[#][{]PYTHON[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[ ]*$||g")}"
 export SELECT="${SELECT:-$(${SED} -n "s|^[#][{]SELECT[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[ ]*$||g")}"
 
-#OPTIONS[RCUPDT WINMGR WMHELP]
+#OPTIONS[RCUPDT FSSKIP WINMGR WMHELP]
 export RCUPDT="${RCUPDT:-$(${SED} -n "s|^[#][{]RCUPDT[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '!' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[! ]*$||g" -e "s|[!]|\ \;\ |g")}"
+export FSSKIP="${FSSKIP:-$(${SED} -n "s|^[#][{]FSSKIP[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '!' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[! ]*$||g" -e "s|[!]|\ \;\ |g")}"
 export WINMGR="${WINMGR:-$(${SED} -n "s|^[#][{]WINMGR[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '!' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[! ]*$||g" -e "s|[!]|\ \;\ |g")}"
 export WMHELP="${WMHELP:-$(${SED} -n "s|^[#][{]WMHELP[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '!' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[! ]*$||g" -e "s|[!]|\ \;\ |g")}"
 export WINMGR="${WINMGR:-dwm}"

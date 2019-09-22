@@ -506,6 +506,7 @@ function _release_cpio {	#{initrd}
 			\\\( -path ./usr/lib64/debug		-prune \\\) -o \
 			\\\( -path ./usr/src/debug		-prune \\\) -o \
 			\
+			$(echo "${FSSKIP}" | tr ';' '\n' | while read -r FILE; do	echo "\\( -path .${FILE} -prune \\) -o"; done) \
 			$(for FILE in ${SKIP_DIRS}; do					echo "\\( -path .${FILE}/\\* -prune \\) -o"; done) \
 		-print0)					>${CPIO_FILE}.nul	|| return 1
 		(cd ${TARGET} && ${XARGS} ${DU_S})		| tee ${CPIO_FILE}.txt	#>>> || return 1
