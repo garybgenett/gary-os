@@ -192,7 +192,7 @@ sys-apps/fakeroot-ng
 #{KERNEL} 4.9.125
 #{KERNEL} 4.18.6
 
-#{RCUPDT} true
+#{RCUPDT}
 
 sys-kernel/genkernel
 sys-kernel/linux-firmware
