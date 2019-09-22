@@ -455,6 +455,22 @@ declare CPIO_IN="cpio -v --create --format newc --null	--file ${CPIO_FILE}	--dir
 declare CPIO_OUT="cpio -v --extract			--file ${CPIO_FILE}	--directory ${CPIO_FILE}.dir"
 declare XZ="xz -vv --compress --stdout --format xz --check crc32"
 
+#note: this is also used in "release_install_root", so making it global
+declare SKIP_DIRS="
+/dev
+/mnt
+/proc
+/run
+/sys
+\
+/tmp
+/var/cache
+/var/lock
+/var/log
+/var/run
+/var/tmp
+"
+
 function _release_cpio {	#{initrd}
 	declare INITRD="false"
 	if [[ ${1} == --initrd ]]; then
@@ -468,37 +484,29 @@ function _release_cpio {	#{initrd}
 		{ [[ ! -f ${CPIO_FILE} ]] && ! ${INITRD}; }
 	}; then
 		#note: the "_packages" file is also hard-set in the "prepare_packages" function
-		(cd ${TARGET} && find ./ -mindepth 1 -xdev \
-			\( -path ./${CMTFIL}			-prune \) -o \
-			\( -path ./${_FINAL/#${TARGET}\/}	-prune \) -o \
-			\( -path ./${_RAMFS/#${TARGET}\/}	-prune \) -o \
-			\( -path ./_packages			-prune \) -o \
+		(cd ${TARGET} && eval find ./ -mindepth 1 -xdev \
+			\\\( -path ./${CMTFIL}			-prune \\\) -o \
+			\\\( -path ./${_FINAL/#${TARGET}\/}	-prune \\\) -o \
+			\\\( -path ./${_RAMFS/#${TARGET}\/}	-prune \\\) -o \
+			\\\( -path ./_packages			-prune \\\) -o \
 			\
-			\( -path .${ARCDIR}\*			-prune \) -o \
-			\( -path .${GENDIR}\*			-prune \) -o \
+			\\\( -path .${ARCDIR}\\\*		-prune \\\) -o \
+			\\\( -path .${GENDIR}\\\*		-prune \\\) -o \
 			\
-			\( -path .${DSTDIR}			-prune \) -o \
-			\( -path .${PAKDIR}			-prune \) -o \
-			\( -path .${REPDIR}			-prune \) -o \
-			\( -path .${REPDIR}.git\*		-prune \) -o \
+			\\\( -path .${DSTDIR}			-prune \\\) -o \
+			\\\( -path .${PAKDIR}			-prune \\\) -o \
+			\\\( -path .${REPDIR}			-prune \\\) -o \
+			\\\( -path .${REPDIR}.git\\\*		-prune \\\) -o \
 			\
-			\( -path .${LDIR}			-prune \) -o \
-			\( -path .${LDIR}-\*			-prune \) -o \
+			\\\( -path .${LDIR}			-prune \\\) -o \
+			\\\( -path .${LDIR}-\\\*		-prune \\\) -o \
 			\
-			\( -path ./usr/lib/debug		-prune \) -o \
-			\( -path ./usr/lib32/debug		-prune \) -o \
-			\( -path ./usr/lib64/debug		-prune \) -o \
-			\( -path ./usr/src/debug		-prune \) -o \
+			\\\( -path ./usr/lib/debug		-prune \\\) -o \
+			\\\( -path ./usr/lib32/debug		-prune \\\) -o \
+			\\\( -path ./usr/lib64/debug		-prune \\\) -o \
+			\\\( -path ./usr/src/debug		-prune \\\) -o \
 			\
-			\( -path ./proc/\*			-prune \) -o \
-			\( -path ./run/\*			-prune \) -o \
-			\( -path ./sys/\*			-prune \) -o \
-			\
-			\( -path ./tmp/\*			-prune \) -o \
-			\( -path ./var/cache/\*			-prune \) -o \
-			\( -path ./var/lock/\*			-prune \) -o \
-			\( -path ./var/log/\*			-prune \) -o \
-			\( -path ./var/tmp/\*			-prune \) -o \
+			$(for FILE in ${SKIP_DIRS}; do					echo "\\( -path .${FILE}/\\* -prune \\) -o"; done) \
 		-print0)					>${CPIO_FILE}.nul	|| return 1
 		(cd ${TARGET} && ${XARGS} ${DU_S})		| tee ${CPIO_FILE}.txt	#>>> || return 1
 		sort -k4 -o ${CPIO_FILE}.txt			${CPIO_FILE}.txt	|| return 1
@@ -629,16 +637,12 @@ function _release_unpack {	#{main}
 
 #note: compare with the "${_CFG}" function in the "_system" script
 function release_install_root {
-	${RSYNC_U} \
+	eval ${RSYNC_U} \
 		--one-file-system \
 		--filter="-_/[._]${_TITLE}*" \
 		--filter="-_/${_TITLE}*" \
 		--filter="-_/${_GINST/#${TARGET}\/}" \
-		--filter="-_/dev/*" \
-		--filter="-_/mnt/*" \
-		--filter="-_/proc/*" \
-		--filter="-_/run/*" \
-		--filter="-_/sys/*" \
+		$(for FILE in ${SKIP_DIRS}; do echo "--filter=\"-_${FILE}/*\""; done) \
 		${TARGET}/* ${_GINST}/			|| return 1
 #>>>		${TARGET}/ ${_GINST}			|| return 1
 	TARGET="${_GINST}" _release_reset		|| return 1
