@@ -330,31 +330,31 @@ function _prepare_docdir {
 function _prepare_linux {
 	if [[ ${TARGET} == / ]]; then
 		if [[ ! -d ${TARGET}/usr/src/linux ]]; then
-			${RM}							${TARGET}/usr/src/linux		|| return 1
-			common_untar						${TARGET}/usr/src/linux		|| return 1
+			${RM}						${TARGET}/usr/src/linux		|| return 1
+			common_untar					${TARGET}/usr/src/linux		|| return 1
 		fi
 		return 0
 	fi
 	if [[ ! -d ${TARGET}/usr/src/linux ]] || [[ -L ${TARGET}/usr/src/linux ]]; then
-		${RM}								${TARGET}/usr/src/linux		|| return 1
-#>>>		safe_make -C ${TARGET}${KDIR}									\
-#>>>			INSTALL_HDR_PATH="${TARGET}/usr/src/linux"		headers_install			|| return 1
-		${RSYNC_U}											\
-			--delete-excluded									\
-			--filter="-_/.tmp**"									\
-			--filter="-_/usr/initramfs_data.cpio**"							\
-			${TARGET}${KDIR}/					${TARGET}/usr/src/linux		|| return 1
+		${RM}							${TARGET}/usr/src/linux		|| return 1
+#>>>		safe_make -C ${TARGET}${KDIR}								\
+#>>>			INSTALL_HDR_PATH="${TARGET}/usr/src/linux"	headers_install			|| return 1
+		${RSYNC_U}										\
+			--delete-excluded								\
+			--filter="-_/.tmp**"								\
+			--filter="-_/usr/initramfs_data.cpio**"						\
+			${TARGET}${KDIR}/				${TARGET}/usr/src/linux		|| return 1
 	fi
 	if [[ ! -f ${TARGET}/boot/_null.kernel ]]; then
-		safe_make -C ${TARGET}/usr/src/linux				distclean			|| return 1
-		safe_make -C ${TARGET}/usr/src/linux				allnoconfig bzImage		|| return 1
+		safe_make -C ${TARGET}/usr/src/linux			distclean			|| return 1
+		safe_make -C ${TARGET}/usr/src/linux			allnoconfig bzImage		|| return 1
 		${RSYNC_U} -L ${TARGET}/usr/src/linux/arch/x86/boot/bzImage	${TARGET}/boot/_null.kernel	|| return 1
 	fi
 	if [[ ! -f ${TARGET}/usr/src/linux.tar.xz ]]; then
-		safe_make -C ${TARGET}/usr/src/linux				distclean			|| return 1
-		${RSYNC_U} ${TARGET}${ARCDIR}/${KCFG}				${TARGET}/usr/src/linux/.config	|| return 1
-		safe_make -C ${TARGET}/usr/src/linux				modules_prepare			|| return 1
-		common_tar							${TARGET}/usr/src/linux		|| return 1
+		safe_make -C ${TARGET}/usr/src/linux			distclean			|| return 1
+		${RSYNC_U} ${TARGET}${ARCDIR}/${KCFG}			${TARGET}/usr/src/linux/.config	|| return 1
+		safe_make -C ${TARGET}/usr/src/linux			modules_prepare			|| return 1
+		common_tar						${TARGET}/usr/src/linux		|| return 1
 	fi
 	return 0
 }
@@ -399,25 +399,25 @@ function _prepare_symlink {
 	fi
 	if [[ -n ${COMMIT} ]]
 		#note: also doing this in "_system" script on purpose
-		then echo -en "${COMMIT}"			>${TARGET}/${CMTFIL}						|| return 1
-		else ${RM}					${TARGET}/${CMTFIL}						|| return 1
+		then echo -en "${COMMIT}"			>${TARGET}/${CMTFIL}				|| return 1
+		else ${RM}					${TARGET}/${CMTFIL}				|| return 1
 	fi
-	${MKDIR} ${TARGET}/${_FINAL}												|| return 1
-	${RM} $(find						${TARGET}/${_FINAL} -maxdepth 1 -type l | sort)			|| return 1
-	${LN} --relative ${TARGET}${DSTDIR}			${TARGET}/${_FINAL}/_$(basename ${DSTDIR})			|| return 1
-	${LN} --relative ${TARGET}${PAKDIR}			${TARGET}/${_FINAL}/_$(basename ${PAKDIR})			|| return 1
+	${MKDIR} ${TARGET}/${_FINAL}										|| return 1
+	${RM} $(find						${TARGET}/${_FINAL} -maxdepth 1 -type l | sort)	|| return 1
+	${LN} --relative ${TARGET}${DSTDIR}			${TARGET}/${_FINAL}/_$(basename ${DSTDIR})	|| return 1
+	${LN} --relative ${TARGET}${PAKDIR}			${TARGET}/${_FINAL}/_$(basename ${PAKDIR})	|| return 1
 #>>> sort -b -k4
 	${LN} --relative ${TARGET}/${REPDIR}.git.tar.xz		${TARGET}/${_FINAL}/${_RAMFS}.$(basename ${REPDIR}).git.tar.xz	|| return 1
 	${LN} --relative ${TARGET}/${REPDIR}.tar.xz		${TARGET}/${_FINAL}/${_RAMFS}.$(basename ${REPDIR}).tar.xz	|| return 1
-	${LN} --relative ${TARGET}/usr/src/linux.tar.xz		${TARGET}/${_FINAL}/${_RAMFS}.linux.tar.xz			|| return 1
-	${LN} --relative ${TARGET}${KFIL}			${TARGET}/${_FINAL}/${_RAMFS}.null.kernel			|| return 1
-	${LN} --relative ${TARGET}/.${_TITLE}.packages.txt	${TARGET}/${_FINAL}/${_RAMFS}.packages.txt			|| return 1
+	${LN} --relative ${TARGET}/usr/src/linux.tar.xz		${TARGET}/${_FINAL}/${_RAMFS}.linux.tar.xz	|| return 1
+	${LN} --relative ${TARGET}${KFIL}			${TARGET}/${_FINAL}/${_RAMFS}.null.kernel	|| return 1
+	${LN} --relative ${TARGET}/.${_TITLE}.packages.txt	${TARGET}/${_FINAL}/${_RAMFS}.packages.txt	|| return 1
 #>>>
 	if [[ -f ${TARGET}/boot/_null.kernel ]]; then
-		${LN} --relative ${TARGET}/boot/_null.kernel	${TARGET}/${_FINAL}/${_RAMFS}.null.kernel			|| return 1
+		${LN} --relative ${TARGET}/boot/_null.kernel	${TARGET}/${_FINAL}/${_RAMFS}.null.kernel	|| return 1
 	fi
 	for FILE in ${TARGET}${ARCDIR}/stage3-*.tar.xz; do
-		${LN} --relative ${FILE}			${TARGET}/${_FINAL}/						|| return 1
+		${LN} --relative ${FILE}			${TARGET}/${_FINAL}/				|| return 1
 	done
 	return 0
 }
@@ -467,51 +467,51 @@ function _release_cpio {	#{initrd}
 	}; then
 		#note: the "_packages" file is also hard-set in the "prepare_packages" function
 		(cd ${TARGET} && find ./ -mindepth 1 -xdev \
-			\( -path ./${CMTFIL}		-prune \) -o \
-			\( -path ./${_FINAL}		-prune \) -o \
-			\( -path ./${_RAMFS}		-prune \) -o \
-			\( -path ./_packages		-prune \) -o \
+			\( -path ./${CMTFIL}			-prune \) -o \
+			\( -path ./${_FINAL}			-prune \) -o \
+			\( -path ./${_RAMFS}			-prune \) -o \
+			\( -path ./_packages			-prune \) -o \
 			\
-			\( -path .${ARCDIR}\*		-prune \) -o \
-			\( -path .${GENDIR}\*		-prune \) -o \
+			\( -path .${ARCDIR}\*			-prune \) -o \
+			\( -path .${GENDIR}\*			-prune \) -o \
 			\
-			\( -path .${DSTDIR}		-prune \) -o \
-			\( -path .${PAKDIR}		-prune \) -o \
-			\( -path .${REPDIR}		-prune \) -o \
-			\( -path .${REPDIR}.git\*	-prune \) -o \
+			\( -path .${DSTDIR}			-prune \) -o \
+			\( -path .${PAKDIR}			-prune \) -o \
+			\( -path .${REPDIR}			-prune \) -o \
+			\( -path .${REPDIR}.git\*		-prune \) -o \
 			\
-			\( -path ./usr/src/linux	-prune \) -o \
-			\( -path ./usr/src/linux-\*	-prune \) -o \
+			\( -path ./usr/src/linux		-prune \) -o \
+			\( -path ./usr/src/linux-\*		-prune \) -o \
 			\
-			\( -path ./usr/lib/debug	-prune \) -o \
-			\( -path ./usr/lib32/debug	-prune \) -o \
-			\( -path ./usr/lib64/debug	-prune \) -o \
-			\( -path ./usr/src/debug	-prune \) -o \
+			\( -path ./usr/lib/debug		-prune \) -o \
+			\( -path ./usr/lib32/debug		-prune \) -o \
+			\( -path ./usr/lib64/debug		-prune \) -o \
+			\( -path ./usr/src/debug		-prune \) -o \
 			\
-			\( -path ./proc/\*		-prune \) -o \
-			\( -path ./run/\*		-prune \) -o \
-			\( -path ./sys/\*		-prune \) -o \
+			\( -path ./proc/\*			-prune \) -o \
+			\( -path ./run/\*			-prune \) -o \
+			\( -path ./sys/\*			-prune \) -o \
 			\
-			\( -path ./tmp/\*		-prune \) -o \
-			\( -path ./var/cache/\*		-prune \) -o \
-			\( -path ./var/lock/\*		-prune \) -o \
-			\( -path ./var/log/\*		-prune \) -o \
-			\( -path ./var/tmp/\*		-prune \) -o \
-		-print0)				>${CPIO_FILE}.nul	|| return 1
-		(cd ${TARGET} && ${XARGS} ${DU_S})	| tee ${CPIO_FILE}.txt	#>>> || return 1
-		sort -k4 -o ${CPIO_FILE}.txt		${CPIO_FILE}.txt	|| return 1
-		cat ${CPIO_FILE}.nul | ${CPIO_IN}				|| return 1
-		${RM}					${CPIO_FILE}.nul	|| return 1
+			\( -path ./tmp/\*			-prune \) -o \
+			\( -path ./var/cache/\*			-prune \) -o \
+			\( -path ./var/lock/\*			-prune \) -o \
+			\( -path ./var/log/\*			-prune \) -o \
+			\( -path ./var/tmp/\*			-prune \) -o \
+		-print0)					>${CPIO_FILE}.nul	|| return 1
+		(cd ${TARGET} && ${XARGS} ${DU_S})		| tee ${CPIO_FILE}.txt	#>>> || return 1
+		sort -k4 -o ${CPIO_FILE}.txt			${CPIO_FILE}.txt	|| return 1
+		cat ${CPIO_FILE}.nul | ${CPIO_IN}					|| return 1
+		${RM}						${CPIO_FILE}.nul	|| return 1
 		if [[ ${TARGET} != / ]]; then
-			${RM}				${CPIO_FILE}.dir	|| return 1
-			${MKDIR}			${CPIO_FILE}.dir	|| return 1
-			${CPIO_OUT}						|| return 1
+			${RM}					${CPIO_FILE}.dir	|| return 1
+			${MKDIR}				${CPIO_FILE}.dir	|| return 1
+			${CPIO_OUT}							|| return 1
 		fi
 		if [[ ${TARGET} != / ]] || ${INITRD}; then
-			${XZ} ${CPIO_FILE}		>${CPIO_FILE}.xz	|| return 1
+			${XZ} ${CPIO_FILE}			>${CPIO_FILE}.xz	|| return 1
 		fi
 	else
-		common_exists ${FUNCNAME} ${CPIO_FILE}*				|| return 1
+		common_exists ${FUNCNAME} ${CPIO_FILE}*					|| return 1
 	fi
 	return 0
 }
@@ -579,19 +579,19 @@ function _release_kernel {	#{initrd}
 		LDIR="/usr/src/linux"
 	fi
 	if [[ -d ${TARGET}${LDIR} ]] && [[ ! -f ${TARGET}/${_FINAL}/${_RAMFS}.kernel ]]; then
-		release_kernel_config ${LDIR}								|| return 1
-		release_kernel_shmmax ${LDIR}								|| return 1
+		release_kernel_config ${LDIR}						|| return 1
+		release_kernel_shmmax ${LDIR}						|| return 1
 		if ! ${INITRD}; then
-			release_kernel_initramfs ${LDIR}						|| return 1
+			release_kernel_initramfs ${LDIR}				|| return 1
 		fi
-		declare BZIMAGE="${TARGET}${LDIR}/arch/x86/boot/bzImage"				|| return 1
-#>>>		declare BZIMAGE="${TARGET}${LDIR}/arch/x86_64/boot/bzImage"				|| return 1
-		declare BZ_MAKE="${TARGET}${LDIR}/arch/x86/Makefile"					|| return 1
-		declare BZ_SEDR=".+ln -fsn.+/x86/boot/bzImage.+"					|| return 1
-		[[ -f ${BZ_MAKE}.${_TITLE} ]] && { ${MV}	${BZ_MAKE}{.${_TITLE},}			|| return 1 ;}
-		${SED} -i.${_TITLE} "s|^(${BZ_SEDR})$|\#\1|g"	${BZ_MAKE}				|| return 1
-		safe_make -C ${TARGET}${LDIR}			olddefconfig				|| return 1
-		safe_make -C ${TARGET}${LDIR}			bzImage					|| return 1
+		declare BZIMAGE="${TARGET}${LDIR}/arch/x86/boot/bzImage"		|| return 1
+#>>>		declare BZIMAGE="${TARGET}${LDIR}/arch/x86_64/boot/bzImage"		|| return 1
+		declare BZ_MAKE="${TARGET}${LDIR}/arch/x86/Makefile"			|| return 1
+		declare BZ_SEDR=".+ln -fsn.+/x86/boot/bzImage.+"			|| return 1
+		[[ -f ${BZ_MAKE}.${_TITLE} ]] && { ${MV}	${BZ_MAKE}{.${_TITLE},}	|| return 1 ;}
+		${SED} -i.${_TITLE} "s|^(${BZ_SEDR})$|\#\1|g"	${BZ_MAKE}		|| return 1
+		safe_make -C ${TARGET}${LDIR}			olddefconfig		|| return 1
+		safe_make -C ${TARGET}${LDIR}			bzImage			|| return 1
 		${RSYNC_U} -L ${BZIMAGE}			${TARGET}/${_FINAL}/${_RAMFS}.kernel	|| return 1
 	else
 		common_exists ${FUNCNAME} ${TARGET}${LDIR} ${TARGET}/${_FINAL}/${_RAMFS}.kernel		|| return 1
@@ -602,14 +602,14 @@ function _release_kernel {	#{initrd}
 ########################################
 
 function _release_report {
-	echo -en "\n"; ${LL}							\
-				${TARGET}/					\
-				${TARGET}/${_FINAL}*				\
-										2>/dev/null #>>> || return 1
-	echo -en "\n"; ${DU} -ms --dereference --one-file-system		\
+	echo -en "\n"; ${LL}						\
+				${TARGET}/				\
+				${TARGET}/${_FINAL}*			\
+									2>/dev/null #>>> || return 1
+	echo -en "\n"; ${DU} -ms --dereference --one-file-system	\
 				${TARGET}/usr/src/linux/usr/initramfs_data.*	\
-				${TARGET}/${_FINAL}/${_RAMFS}*			\
-										2>/dev/null #>>> || return 1
+				${TARGET}/${_FINAL}/${_RAMFS}*		\
+									2>/dev/null #>>> || return 1
 	return 0
 }
 
