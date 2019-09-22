@@ -107,7 +107,7 @@ function common_tar {
 
 function common_untar {
 	declare SRC_FILE="${1}" && shift
-	if [[ -f ${SRC_FILE}.tar.xz ]] && [[ ! -d ${SRC_FILE} ]] && [[ ! -L ${SRC_FILE}.tar.xz ]]; then
+	if [[ -f ${SRC_FILE}.tar.xz ]] && [[ ! -d ${SRC_FILE} ]] && [[ ! -L ${SRC_FILE} ]]; then
 		tar -vvx --xz -C $(dirname ${SRC_FILE}) -f ${SRC_FILE}.tar.xz \
 			|| return 1
 	else
