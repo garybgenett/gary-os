@@ -175,7 +175,7 @@ export RCUPDT="${RCUPDT:-$(${SED} -n "s|^[#][{]RCUPDT[}][ ](.+)$|\1|gp" ${SETDIR
 export WINMGR="${WINMGR:-$(${SED} -n "s|^[#][{]WINMGR[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '!' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[! ]*$||g" -e "s|[!]|\ \;\ |g")}"
 export WMHELP="${WMHELP:-$(${SED} -n "s|^[#][{]WMHELP[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '!' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[! ]*$||g" -e "s|[!]|\ \;\ |g")}"
 export WINMGR="${WINMGR:-dwm}"
-export WMHELP="${WMHELP:-\`date --iso=s\`}"
+export WMHELP="${WMHELP:-gary-os / \`date --iso=s\`}"
 
 ########################################
 
