@@ -125,16 +125,16 @@ function common_untar {
 
 #note: this is called statically in the "_system" script
 function _release_reset {	#{main}
-	declare FINDMNT="findmnt --noheadings --target"
+	declare FINDMNT="findmnt --noheadings --output TARGET --target"
 	if [[ ${TARGET} != / ]]; then
 		${RM} ${TARGET}/{.,_}${_TITLE}*		|| return 1
 	fi
-	if [[ -z $(${FINDMNT} ${_FINAL}) ]]; then
+	if [[ $(${FINDMNT} ${_FINAL}) != ${_FINAL} ]] && [[ ! -L ${_FINAL} ]]; then
 		${RM} ${_FINAL}*			|| return 1
 	else
 		${RM} ${_RAMFS}*			|| return 1
 	fi
-	if [[ ${TARGET} != / ]]; then
+	if [[ ${TARGET} != / ]] && [[ ${TARGET} != ${_GINST} ]]; then
 		${RM} ${TARGET}/boot/_null.kernel	|| return 1
 		${RM} ${TARGET}${LDIR}			|| return 1
 		${RM} ${TARGET}${LDIR}.tar.xz		|| return 1
