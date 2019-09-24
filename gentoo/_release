@@ -487,7 +487,7 @@ function _release_cpio {	#{initrd}
 		(cd ${TARGET} && eval find ./ -mindepth 1 -xdev \
 			\\\( -path ./${CMTFIL}			-prune \\\) -o \
 			\\\( -path ./${_FINAL/#${TARGET}\/}	-prune \\\) -o \
-			\\\( -path ./${_RAMFS/#${TARGET}\/}	-prune \\\) -o \
+			\\\( -path ./${_RAMFS/#${TARGET}\/}\\\*	-prune \\\) -o \
 			\\\( -path ./_packages			-prune \\\) -o \
 			\
 			\\\( -path .${ARCDIR}\\\*		-prune \\\) -o \
