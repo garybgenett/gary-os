@@ -1017,7 +1017,7 @@ if [[ ${1} == -i ]]; then
 		${RM}					${TARGET}/boot/*						|| EXIT 1
 		${RM}					${TARGET}/etc/kernels/*						|| EXIT 1
 		${RM}					${TARGET}/lib/modules/*						|| EXIT 1
-		${RM}					${TARGET}/usr/src/linux*					|| EXIT 1
+		${RM}					${TARGET}${LDIR}*						|| EXIT 1
 		expect_wrapper				emerge ${_ASK} genkernel ${LINPKG}				|| EXIT 1
 		declare KERN="$(cd ${TARGET}/boot; ls kernel-debian-sources-*		2>/dev/null | sort | tail -n1)"
 		declare INIT="$(cd ${TARGET}/boot; ls initramfs-debian-sources-*	2>/dev/null | sort | tail -n1)"
@@ -1031,8 +1031,8 @@ if [[ ${1} == -i ]]; then
 		fi
 	fi
 	if ${_KRN}; then for FILE in ${KERNEL}; do
-		${RM}					${TARGET}/usr/src/linux						|| EXIT 1
-		${LN} linux-${FILE}-gentoo		${TARGET}/usr/src/linux						|| EXIT 1
+		${RM}					${TARGET}${LDIR}						|| EXIT 1
+		${LN} linux-${FILE}-gentoo		${TARGET}${LDIR}						|| EXIT 1
 		${RSYNC_U}				${SETDIR}/${LINDIR}/config-gentoo64-${FILE}			\
 							${TARGET}${ARCDIR}/config-gentoo64-${FILE}			|| EXIT 1
 		kernel_cpu 				${TARGET}${ARCDIR}/config-gentoo64-${FILE}			|| EXIT 1
@@ -1043,7 +1043,7 @@ if [[ ${1} == -i ]]; then
 			expect_wrapper			genkernel ${GENKERNEL_OPTS} kernel				\
 							--kernel-config=${ARCDIR}/config-gentoo64-${FILE}		|| EXIT 1
 		fi
-		${RSYNC_U}				${TARGET}/usr/src/linux/.config					\
+		${RSYNC_U}				${TARGET}${LDIR}/.config					\
 							${TARGET}${ARCDIR}/config-gentoo64-${FILE}			|| EXIT 1
 #>>>		FILE="kernel-genkernel-x86-${FILE}-gentoo"								|| EXIT 1
 		FILE="kernel-genkernel-x86_64-${FILE}-gentoo"								|| EXIT 1
