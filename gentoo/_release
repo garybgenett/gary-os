@@ -475,6 +475,55 @@ declare SKIP_DIRS="
 /var/tmp
 "
 
+function release_cpio_nul {
+	(cd ${TARGET} && eval find ./ -mindepth 1 -xdev \
+		\\\( -path ./${CMTFIL}			-prune \\\) -o \
+		\\\( -path ./${_FINAL/#${TARGET}\/}	-prune \\\) -o \
+		\\\( -path ./${_RAMFS/#${TARGET}\/}\\\*	-prune \\\) -o \
+		\\\( -path ./${_RPACK}			-prune \\\) -o \
+		\
+		\\\( -path .${ARCDIR}\\\*		-prune \\\) -o \
+		\\\( -path .${GENDIR}\\\*		-prune \\\) -o \
+		\
+		\\\( -path .${DSTDIR}			-prune \\\) -o \
+		\\\( -path .${PAKDIR}			-prune \\\) -o \
+		\\\( -path .${REPDIR}			-prune \\\) -o \
+		\\\( -path .${REPDIR}.git\\\*		-prune \\\) -o \
+		\
+		\\\( -path .${LDIR}			-prune \\\) -o \
+		\\\( -path .${LDIR}-\\\*		-prune \\\) -o \
+		\
+		\\\( -path ./usr/lib/debug		-prune \\\) -o \
+		\\\( -path ./usr/lib32/debug		-prune \\\) -o \
+		\\\( -path ./usr/lib64/debug		-prune \\\) -o \
+		\\\( -path ./usr/src/debug		-prune \\\) -o \
+		\
+		$(echo "${FSSKIP}" | tr ';' '\n' | while read -r FILE; do	echo "\\( -path .${FILE} -prune \\) -o"; done) \
+		$(for FILE in ${SKIP_DIRS}; do					echo "\\( -path .${FILE}/\\* -prune \\) -o"; done) \
+	-print0)					>${CPIO_FILE}.nul	|| return 1
+	return 0
+}
+
+function release_cpio_file {
+	(cd ${TARGET} && ${XARGS} ${DU_S})	| tee ${CPIO_FILE}.txt	#>>> || return 1
+	sort -k4 -o ${CPIO_FILE}.txt		${CPIO_FILE}.txt	|| return 1
+	cat ${CPIO_FILE}.nul | ${CPIO_IN}				|| return 1
+	${RM}					${CPIO_FILE}.nul	|| return 1
+	return 0
+}
+
+function release_cpio_dir {
+	if [[ ${TARGET} != / ]]; then
+		${RM}			${CPIO_FILE}.dir	|| return 1
+		${MKDIR}		${CPIO_FILE}.dir	|| return 1
+		${CPIO_OUT}					|| return 1
+	fi
+	if [[ ${TARGET} != / ]] || ${INITRD}; then
+		${XZ} ${CPIO_FILE}	>${CPIO_FILE}.xz	|| return 1
+	fi
+	return 0
+}
+
 function _release_cpio {	#{initrd}
 	declare INITRD="false"
 	if [[ ${1} == --initrd ]]; then
@@ -487,45 +536,11 @@ function _release_cpio {	#{initrd}
 		{ [[ ! -f ${CPIO_FILE}.xz ]] && ${INITRD}; } ||
 		{ [[ ! -f ${CPIO_FILE} ]] && ! ${INITRD}; }
 	}; then
-		(cd ${TARGET} && eval find ./ -mindepth 1 -xdev \
-			\\\( -path ./${CMTFIL}			-prune \\\) -o \
-			\\\( -path ./${_FINAL/#${TARGET}\/}	-prune \\\) -o \
-			\\\( -path ./${_RAMFS/#${TARGET}\/}\\\*	-prune \\\) -o \
-			\\\( -path ./${_RPACK}			-prune \\\) -o \
-			\
-			\\\( -path .${ARCDIR}\\\*		-prune \\\) -o \
-			\\\( -path .${GENDIR}\\\*		-prune \\\) -o \
-			\
-			\\\( -path .${DSTDIR}			-prune \\\) -o \
-			\\\( -path .${PAKDIR}			-prune \\\) -o \
-			\\\( -path .${REPDIR}			-prune \\\) -o \
-			\\\( -path .${REPDIR}.git\\\*		-prune \\\) -o \
-			\
-			\\\( -path .${LDIR}			-prune \\\) -o \
-			\\\( -path .${LDIR}-\\\*		-prune \\\) -o \
-			\
-			\\\( -path ./usr/lib/debug		-prune \\\) -o \
-			\\\( -path ./usr/lib32/debug		-prune \\\) -o \
-			\\\( -path ./usr/lib64/debug		-prune \\\) -o \
-			\\\( -path ./usr/src/debug		-prune \\\) -o \
-			\
-			$(echo "${FSSKIP}" | tr ';' '\n' | while read -r FILE; do	echo "\\( -path .${FILE} -prune \\) -o"; done) \
-			$(for FILE in ${SKIP_DIRS}; do					echo "\\( -path .${FILE}/\\* -prune \\) -o"; done) \
-		-print0)					>${CPIO_FILE}.nul	|| return 1
-		(cd ${TARGET} && ${XARGS} ${DU_S})		| tee ${CPIO_FILE}.txt	#>>> || return 1
-		sort -k4 -o ${CPIO_FILE}.txt			${CPIO_FILE}.txt	|| return 1
-		cat ${CPIO_FILE}.nul | ${CPIO_IN}					|| return 1
-		${RM}						${CPIO_FILE}.nul	|| return 1
-		if [[ ${TARGET} != / ]]; then
-			${RM}					${CPIO_FILE}.dir	|| return 1
-			${MKDIR}				${CPIO_FILE}.dir	|| return 1
-			${CPIO_OUT}							|| return 1
-		fi
-		if [[ ${TARGET} != / ]] || ${INITRD}; then
-			${XZ} ${CPIO_FILE}			>${CPIO_FILE}.xz	|| return 1
-		fi
+		release_cpio_nul			|| return 1
+		release_cpio_file			|| return 1
+		release_cpio_dir			|| return 1
 	else
-		common_exists ${FUNCNAME} ${CPIO_FILE}*					|| return 1
+		common_exists ${FUNCNAME} ${CPIO_FILE}*	|| return 1
 	fi
 	return 0
 }
