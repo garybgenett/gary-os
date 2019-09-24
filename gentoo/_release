@@ -88,8 +88,8 @@ RELEASE[6]="v3.0"; CMTHASH[6]="35141e1e20259d7d1c2f4b143c6ae4505d7d5045"
 function common_exists {
 	declare SRC_FUNC="${1}" && shift
 	echo -en "\n"
-	echo -en ">>> THE REQUESTED FILES (${SRC_FUNC}) SEEM TO ALREADY EXIST <<<\n"
-	echo -en ">>> NECESSARY DIRECTORIES OR FILES COULD ALSO BE MISSING <<<\n"
+	echo -en ">>> THE OUTPUT FILES OF (${SRC_FUNC}) SEEM TO ALREADY EXIST <<<\n"
+	echo -en ">>> OR THE REQUIRED DIRECTORIES OR FILES ARE MISSING <<<\n"
 	echo -en "\n"
 	${LL} -d "${@}"
 	echo -en "\n"
