@@ -147,28 +147,40 @@ set timeout=-1
 
 # modules
 
+insmod exfat
+insmod ext2
+
 insmod search
 insmod configfile
 insmod linux
 insmod chain
 
-# rescue
+# titles
 
-menuentry \"${_NAME} Rescue\" {
+menuentry \"${_NAME}\" {
+	set pager=1
+	set
+	set pager=0
+}
+menuentry \"---\" {
 	set pager=1
 	set
 	set pager=0
 }
 
+# kernel
+
 set garyos_rescue=
 search --file --set garyos_rescue /${_BASE}.kernel
+
 if [ -n \"\${garyos_rescue}\" ]; then
-	set default=1
+	set default=2
 	set timeout=${TIMEOUT}
 else
 	set garyos_rescue=\"${GROOT}\"
 fi
-menuentry \"${_PROJ} Rescue\" {
+
+menuentry \"${_PROJ} Boot\" {
 	linux  (\${garyos_rescue})/${_BASE}.null.kernel
 	linux  (\${garyos_rescue})/${_BASE}.kernel ${GOPTS}
 	initrd (\${garyos_rescue})/${_BASE}.initrd
@@ -183,14 +195,14 @@ search --file --set garyos_menu ${GFILE}
 search --file --set garyos_install /boot/kernel
 
 if [ -n \"\${garyos_menu}\" \"\${garyos_menu}\" != \"memdisk\" ]; then
-	set default=2
+	set default=3
 	set timeout=${TIMEOUT}
 else
 	set garyos_menu=\"${GROOT}\"
 fi
 if [ -n \"\${garyos_install}\" ]; then
-#>>>	set default=3
-	set default=2
+#>>>	set default=4
+	set default=3
 	set timeout=${TIMEOUT}
 else
 	set garyos_install=\"${GROOT}\"
@@ -492,7 +504,7 @@ ${RSYNC_U} -L ${_SELF} ${GDEST}/$(basename ${_SELF})	|| exit 1
 ########################################
 
 #>>> echo -en "${GMENU}"	>${GDEST}/grub.cfg	|| exit 1
-echo -en "${GMENU}"	>${GDEST}/rescue.cfg	|| exit 1
+echo -en "${GMENU}"		>${GDEST}/rescue.cfg	|| exit 1
 
 #>>> echo -en "${GMENU}"	>${GDEST}/bootstrap.cfg	|| exit 1
 #>>> echo -n "${BCDEDIT}"	>${GDEST}/bcdedit.bat	|| exit 1
