@@ -17,7 +17,8 @@ let loaded_matchparen			=1
 set viminfo				=
 set printheader				=[\ %<%t\ -\ %N\ ]
 
-set swapfile
+">>>set swapfile
+set noswapfile
 set directory				=.
 ">>>set swapsync				=sync
 set updatecount				=10
