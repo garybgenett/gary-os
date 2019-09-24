@@ -214,6 +214,9 @@ _release_%:
 .PHONY: readme
 readme:
 	@grep -E "^[#*][#* ]"		$(GARYOS_DIR)/README.md
+
+.PHONY: readme-all
+readme-all: readme
 	@$(ECHO) "\n"
 	@grep -E "^[[#*][#*A-Z0-9 ]"	$(GARYOS_DIR)/README.md
 
