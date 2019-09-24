@@ -1046,7 +1046,6 @@ if [[ ${1} == -i ]]; then
 		#note: these need to match the names in the "${MAKEIT}" script
 		#note: compare with the "${MAKEIT}_install" function in the "${MAKEIT}" script
 		${MAKEIT}_reset												|| EXIT 1
-		${PREPIT}_config --reset										|| EXIT 1
 		if [[ -x ${CFGSCR} ]]; then
 			${RSYNC_U} --copy-links		${CFGSCR} \
 							${TARGET}${ARCDIR}/$(basename ${CFGSCR})			|| EXIT 1

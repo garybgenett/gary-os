@@ -124,6 +124,7 @@ function common_untar {
 #NOTE: CONSULT THE "SYSTEM INSTALLATION" TABLE IN "README" FOR THIS SECTION
 
 #note: this is called statically in the "_system" script
+#note: cross-reference with the "release_install" function any time this changes
 function _release_reset {	#{main}
 	declare FINDMNT="findmnt --noheadings --output TARGET --target"
 	if [[ ${TARGET} != / ]]; then
@@ -140,7 +141,7 @@ function _release_reset {	#{main}
 		${RM} ${TARGET}${LDIR}.tar.xz		|| return 1
 		${LN} ${KBAS} ${TARGET}${LDIR}		|| return 1
 	fi
-#>>>	_prepare_config --reset				|| return 1
+	_prepare_config --reset				|| return 1
 	return 0
 }
 
@@ -637,6 +638,7 @@ function _release_unpack {	#{main}
 #NOTE: CONSULT THE "SYSTEM INSTALLATION" TABLE IN "README" FOR THIS SECTION
 
 #note: compare with the "${_CFG}" function in the "_system" script
+#note: cross-reference with the "release_reset" function any time this changes
 function release_install_root {
 	eval ${RSYNC_U} \
 		--one-file-system \
@@ -648,9 +650,6 @@ function release_install_root {
 #>>>		${TARGET}/ ${_GINST}			|| return 1
 	TARGET="${_GINST}" _release_reset		|| return 1
 	TARGET="${_GINST}" _release_unpack		|| return 1
-	TARGET="${_GINST}" _prepare_config --reset	|| return 1
-#>>>	TARGET="${_GINST}" _prepare_config		|| return 1
-#>>>	${RM} ${_GINST}/{.,_}${_TITLE}*			|| return 1
 #>>>	${RM} ${_GINST}/${_TITLE}*			|| return 1
 #>>>	${RM} ${_GINST}${REPDIR}*.tar.xz		|| return 1
 #>>>	${RM} ${_GINST}${LDIR}.tar.xz			|| return 1
