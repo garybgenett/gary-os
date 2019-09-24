@@ -12,12 +12,12 @@ fi
 
 ########################################
 
-declare _TRUE_SELF="${_SELF}"
-declare _TRUE_SCRIPT="${SCRIPT}"
+declare _SOUL="${_SELF}"
+declare _HEART="${SCRIPT}"
 declare _BASH_SOURCED="false"; $(return >/dev/null 2>&1)
 if [[ ${?} == 0 ]]; then
-	_TRUE_SELF="${BASH_SOURCE}"
-	_TRUE_SCRIPT="$(basename -- "${BASH_SOURCE}")"
+	_SOUL="${BASH_SOURCE}"
+	_HEART="$(basename -- "${_SOUL}")"
 	_BASH_SOURCED="true"
 fi
 
@@ -226,7 +226,7 @@ fi
 ########################################
 
 #VARIABLES[HOME MYSELF IS_CHROOT DO_CHROOT SAFE_ENV]
-export MYSELF="${ARCDIR}/${FUNDIR}/$(basename -- "${_TRUE_SCRIPT}")"
+export MYSELF="${ARCDIR}/${FUNDIR}/${_HEART}"
 
 export IS_CHROOT="${IS_CHROOT:-false}"
 export DO_CHROOT="false"
@@ -235,7 +235,7 @@ if ! ${IS_CHROOT} && [[ -n ${TOOR} ]]; then
 fi
 
 export SAFE_ENV=
-for FILE in $(${SED} -n "s|^.*[#]OPTIONS[[](.+)[]]$|\1|gp" ${_TRUE_SELF}); do
+for FILE in $(${SED} -n "s|^.*[#]OPTIONS[[](.+)[]]$|\1|gp" ${_SOUL}); do
 	SAFE_ENV+=" ${FILE}=\"${!FILE}\""
 done
 SAFE_ENV="${SAFE_ENV/#\ }"
@@ -352,25 +352,25 @@ function print_info {
 		echo -en ">>> ARGUMENT PROCESSING IS VERY RUDIMENTARY // OPTIONS MUST BE IN THE ORDER SHOWN <<<"
 		echo -en "${RESET}\n"
 		echo -en "\n"
-		printf "${PRINTF}" "Synchronize (Database, Sources, Metadata):"	"<auto>"	"${SCRIPT} [{commit_id}]" "<${FUNTOO}>"
-		printf "${PRINTF}" "Synchronize (Sources, Metadata):"		"<auto>"	"${SCRIPT} -f"
-		printf "${PRINTF}" "Synchronize (Metadata Only):"		"<auto>"	"${SCRIPT} -!"
+		printf "${PRINTF}" "Synchronize (Database, Sources, Metadata):"	"<auto>"	"${_HEART} [{commit_id}]" "<${FUNTOO}>"
+		printf "${PRINTF}" "Synchronize (Sources, Metadata):"		"<auto>"	"${_HEART} -f"
+		printf "${PRINTF}" "Synchronize (Metadata Only):"		"<auto>"	"${_HEART} -!"
 		echo -en "\n"
-		printf "${PRINTF}" "Update System (Automatically):"		"<auto>"	"${SCRIPT} -a -u"
-		printf "${PRINTF}" "Update System (Interactively):"		"<interactive>"	"${SCRIPT} -u"
+		printf "${PRINTF}" "Update System (Automatically):"		"<auto>"	"${_HEART} -a -u"
+		printf "${PRINTF}" "Update System (Interactively):"		"<interactive>"	"${_HEART} -u"
 		echo -en "\n"
-		printf "${PRINTF}" "Information Lookup (Package Data):"		"<output>"	"${SCRIPT} [{chroot}] -l {package_list}"
-		printf "${PRINTF}" "Information Lookup (Package Search):"	"<output>"	"${SCRIPT} [{chroot}] -l {search_list}"
-		printf "${PRINTF}" "Information Lookup (Gentoo Bug URL):"	"<output>"	"${SCRIPT} [{chroot}] -l {bug_id}"
+		printf "${PRINTF}" "Information Lookup (Package Data):"		"<output>"	"${_HEART} [{chroot}] -l {package_list}"
+		printf "${PRINTF}" "Information Lookup (Package Search):"	"<output>"	"${_HEART} [{chroot}] -l {search_list}"
+		printf "${PRINTF}" "Information Lookup (Gentoo Bug URL):"	"<output>"	"${_HEART} [{chroot}] -l {bug_id}"
 		echo -en "\n"
-		printf "${PRINTF}" "Build Examination (Review Failures):"	"<output>"	"${SCRIPT} [{chroot}] -p"
-		printf "${PRINTF}" "Build Configuration (Internal Only):"	"<internal>"	"${SCRIPT} -w"
-		printf "${PRINTF}" "Build Configuration Files (Internal Only):"	"<internal>"	"${SCRIPT} -W"
+		printf "${PRINTF}" "Build Examination (Review Failures):"	"<output>"	"${_HEART} [{chroot}] -p"
+		printf "${PRINTF}" "Build Configuration (Internal Only):"	"<internal>"	"${_HEART} -w"
+		printf "${PRINTF}" "Build Configuration Files (Internal Only):"	"<internal>"	"${_HEART} -W"
 		echo -en "\n"
-		printf "${PRINTF}" "Validation (Usage & Variables Only):"	"<output>"	"${SCRIPT} ${DEBUG_OPT} [{chroot}] [{options}]"
-		printf "${PRINTF}" "Suppress Output (Internal Only)"		"<internal>"	"${SCRIPT} [${DEBUG_OPT}] ${QUIET_OPT} [{chroot}] [{options}]"
+		printf "${PRINTF}" "Validation (Usage & Variables Only):"	"<output>"	"${_HEART} ${DEBUG_OPT} [{chroot}] [{options}]"
+		printf "${PRINTF}" "Suppress Output (Internal Only)"		"<internal>"	"${_HEART} [${DEBUG_OPT}] ${QUIET_OPT} [{chroot}] [{options}]"
 		echo -en "\n"
-		printf "${PRINTF}" "Source Script (Configuration):"		"<custom>"	"${SCRIPT} {source_script}" "<$(basename ${CFGSCR})>"
+		printf "${PRINTF}" "Source Script (Configuration):"		"<custom>"	"${_HEART} {source_script}" "<$(basename ${CFGSCR})>"
 		echo -en "\n"
 		echo -en "${NOTES}"
 		echo -en ">>> CHROOT <<<"
@@ -384,49 +384,49 @@ function print_info {
 		printf "${PRINTF}" "Chroot Selection [-t] (\$TORPKG/\$TORDIR):"	"${TORPKG}"	"${TORDIR}"
 		printf "${PRINTF}" "Chroot Selection [-g] (\$GOSPKG/\$GOSDIR):"	"${GOSPKG}"	"${GOSDIR}"
 		echo -en "\n"
-		printf "${PRINTF}" "Chroot Build (Initial):"			"<auto>"	"${SCRIPT} {chroot} -0" "<-n -a -b -k -i>"
-		printf "${PRINTF}" "Chroot Build (Update Only):"		"<auto>"	"${SCRIPT} {chroot} -/" "<-a -i>"
-		printf "${PRINTF}" "Chroot Build (Complete Rebuild):"		"<auto>"	"${SCRIPT} {chroot} -1" "<-a -b -i>"
-		printf "${PRINTF}" "Chroot Build (Configuration):"		"<custom>"	"${SCRIPT} {chroot} -2" "<-c -i>"
-		printf "${PRINTF}" "Chroot Build (Internal Only):"		"<internal>"	"${SCRIPT} {chroot} [-n|-a|-b|-k|-c] -i"
+		printf "${PRINTF}" "Chroot Build (Initial):"			"<auto>"	"${_HEART} {chroot} -0" "<-n -a -b -k -i>"
+		printf "${PRINTF}" "Chroot Build (Update Only):"		"<auto>"	"${_HEART} {chroot} -/" "<-a -i>"
+		printf "${PRINTF}" "Chroot Build (Complete Rebuild):"		"<auto>"	"${_HEART} {chroot} -1" "<-a -b -i>"
+		printf "${PRINTF}" "Chroot Build (Configuration):"		"<custom>"	"${_HEART} {chroot} -2" "<-c -i>"
+		printf "${PRINTF}" "Chroot Build (Internal Only):"		"<internal>"	"${_HEART} {chroot} [-n|-a|-b|-k|-c] -i"
 		echo -en "\n"
-		printf "${PRINTF}" "Chroot Validation (Dependency Tree):"	"<output>"	"${SCRIPT} [{chroot}] -y -j"
-		printf "${PRINTF}" "Chroot Validation (Reverse Dependencies):"	"<output>"	"${SCRIPT} [{chroot}] -y -j (d|depends) {package}"
-		printf "${PRINTF}" "Chroot Validation (Equery Wrapper):"	"<output>"	"${SCRIPT} [{chroot}] -y -j (-h|{options})"
-		printf "${PRINTF}" "Chroot Validation (Change Review):"		"<output>"	"${SCRIPT} {chroot} -y [{packages_file}]"
+		printf "${PRINTF}" "Chroot Validation (Dependency Tree):"	"<output>"	"${_HEART} [{chroot}] -y -j"
+		printf "${PRINTF}" "Chroot Validation (Reverse Dependencies):"	"<output>"	"${_HEART} [{chroot}] -y -j (d|depends) {package}"
+		printf "${PRINTF}" "Chroot Validation (Equery Wrapper):"	"<output>"	"${_HEART} [{chroot}] -y -j (-h|{options})"
+		printf "${PRINTF}" "Chroot Validation (Change Review):"		"<output>"	"${_HEART} {chroot} -y [{packages_file}]"
 		echo -en "\n"
-		printf "${PRINTF}" "Chroot Configuration (Overlay Helper):"	"<interactive>"	"${SCRIPT} {chroot} -o {package}"
-		printf "${PRINTF}" "Chroot Configuration (Internal Only):"	"<internal>"	"${SCRIPT} {chroot} -r [-w]"
+		printf "${PRINTF}" "Chroot Configuration (Overlay Helper):"	"<interactive>"	"${_HEART} {chroot} -o {package}"
+		printf "${PRINTF}" "Chroot Configuration (Internal Only):"	"<internal>"	"${_HEART} {chroot} -r [-w]"
 		echo -en "\n"
-		printf "${PRINTF}" "Chroot Shell (Bash):"			"<interactive>"	"${SCRIPT} {chroot} -s"
-		printf "${PRINTF}" "Chroot Shell (Run Command):"		"<auto>"	"${SCRIPT} {chroot} -s {command}"
+		printf "${PRINTF}" "Chroot Shell (Bash):"			"<interactive>"	"${_HEART} {chroot} -s"
+		printf "${PRINTF}" "Chroot Shell (Run Command):"		"<auto>"	"${_HEART} {chroot} -s {command}"
 		echo -en "\n"
-		printf "${PRINTF}" "Chroot Emerge Command (Automatically):"	"<auto>"	"${SCRIPT} {chroot} -a -s -e {command}"
-		printf "${PRINTF}" "Chroot Emerge Command (Interactively):"	"<interactive>"	"${SCRIPT} {chroot} -s -e {command}"
+		printf "${PRINTF}" "Chroot Emerge Command (Automatically):"	"<auto>"	"${_HEART} {chroot} -a -s -e {command}"
+		printf "${PRINTF}" "Chroot Emerge Command (Interactively):"	"<interactive>"	"${_HEART} {chroot} -s -e {command}"
 		echo -en "\n"
-		printf "${PRINTF}" "Chroot Complete (Unmount Cleanup):"		"<auto>"	"${SCRIPT} {chroot} -z"
+		printf "${PRINTF}" "Chroot Complete (Unmount Cleanup):"		"<auto>"	"${_HEART} {chroot} -z"
 		echo -en "\n"
 		echo -en "${NOTES}"
 		echo -en ">>> INITRAMFS <<<"
 		echo -en "${RESET}\n"
 		#note: these need to match the names in the "${MAKEIT}" script
 		echo -en "\n"
-		printf "${PRINTF}" "Initramfs Build (Chroot Reset):"		"<auto>"	"${SCRIPT} {chroot} ${MAKEIT}_reset"
-		printf "${PRINTF}" "Initramfs Build (Chroot Create):"		"<auto>"	"${SCRIPT} {chroot} ${MAKEIT}_ramfs"
-		printf "${PRINTF}" "Initramfs Build (Chroot Initrd):"		"<auto>"	"${SCRIPT} {chroot} ${MAKEIT}_initrd"
-		printf "${PRINTF}" "Initramfs System (Live Reset):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${SCRIPT} {chroot} ${MAKEIT}_reset"
-		printf "${PRINTF}" "Initramfs System (Live Create):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${SCRIPT} {chroot} ${MAKEIT}_ramfs"
-		printf "${PRINTF}" "Initramfs System (Live Initrd):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${SCRIPT} {chroot} ${MAKEIT}_initrd"
-		printf "${PRINTF}" "Initramfs System (Live Unpack):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${SCRIPT} {chroot} ${MAKEIT}_unpack"
-		printf "${PRINTF}" "Initramfs System (Live Install):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${SCRIPT} {chroot} ${MAKEIT}_install"
+		printf "${PRINTF}" "Initramfs Build (Chroot Reset):"		"<auto>"	"${_HEART} {chroot} ${MAKEIT}_reset"
+		printf "${PRINTF}" "Initramfs Build (Chroot Create):"		"<auto>"	"${_HEART} {chroot} ${MAKEIT}_ramfs"
+		printf "${PRINTF}" "Initramfs Build (Chroot Initrd):"		"<auto>"	"${_HEART} {chroot} ${MAKEIT}_initrd"
+		printf "${PRINTF}" "Initramfs System (Live Reset):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${_HEART} {chroot} ${MAKEIT}_reset"
+		printf "${PRINTF}" "Initramfs System (Live Create):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${_HEART} {chroot} ${MAKEIT}_ramfs"
+		printf "${PRINTF}" "Initramfs System (Live Initrd):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${_HEART} {chroot} ${MAKEIT}_initrd"
+		printf "${PRINTF}" "Initramfs System (Live Unpack):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${_HEART} {chroot} ${MAKEIT}_unpack"
+		printf "${PRINTF}" "Initramfs System (Live Install):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${_HEART} {chroot} ${MAKEIT}_install"
 		echo -en "\n"
-		printf "${PRINTF}" "Distribution Targets (Internal Only):"	"<internal>"	"${SCRIPT} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#][{]main[}].*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
-		printf "${PRINTF}" "Distribution Reset (Internal Only):"	"<internal>"	"${SCRIPT} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#][{]reset[}].*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	)) --reset"
-		printf "${PRINTF}" "Distribution Initrd (Internal Only):"	"<internal>"	"${SCRIPT} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#][{]initrd[}].*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	)) --initrd"
+		printf "${PRINTF}" "Distribution Targets (Internal Only):"	"<internal>"	"${_HEART} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#][{]main[}].*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
+		printf "${PRINTF}" "Distribution Reset (Internal Only):"	"<internal>"	"${_HEART} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#][{]reset[}].*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	)) --reset"
+		printf "${PRINTF}" "Distribution Initrd (Internal Only):"	"<internal>"	"${_HEART} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#][{]initrd[}].*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	)) --initrd"
 		echo -en "\n"
-		printf "${PRINTF}" "Distribution Prepare (Internal Only):"	"<internal>"	"${SCRIPT} {chroot} ${PREPIT}_($(	${SED} -n "s|^function[ ]${PREPIT}_(.+)[ ][{].*$|\1|gp"		${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
-		printf "${PRINTF}" "Distribution Release (Internal Only):"	"<internal>"	"${SCRIPT} {chroot} ${MAKEIT}_($(	${SED} -n "s|^function[ ]${MAKEIT}_(.+)[ ][{].*$|\1|gp"		${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
-		printf "${PRINTF}" "Distribution Publish (Internal Only):"	"<internal>"	"${SCRIPT}          ${SHIPIT}_($(	${SED} -n "s|^function[ ]${SHIPIT}_(.+)[ ][{].*$|\1|gp"		${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
+		printf "${PRINTF}" "Distribution Prepare (Internal Only):"	"<internal>"	"${_HEART} {chroot} ${PREPIT}_($(	${SED} -n "s|^function[ ]${PREPIT}_(.+)[ ][{].*$|\1|gp"		${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
+		printf "${PRINTF}" "Distribution Release (Internal Only):"	"<internal>"	"${_HEART} {chroot} ${MAKEIT}_($(	${SED} -n "s|^function[ ]${MAKEIT}_(.+)[ ][{].*$|\1|gp"		${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
+		printf "${PRINTF}" "Distribution Publish (Internal Only):"	"<internal>"	"${_HEART}          ${SHIPIT}_($(	${SED} -n "s|^function[ ]${SHIPIT}_(.+)[ ][{].*$|\1|gp"		${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
 		echo -en "\n"
 	elif [[ ${1} == "starter" ]]; then
 		function starter_var {
@@ -445,8 +445,8 @@ function print_info {
 		echo -en ">>> GLOBALS <<<"
 		echo -en "${RESET}\n"
 		echo -en "\n"
-		starter_var "_TRUE_SELF"
-		starter_var "_SELF"
+		starter_var "_SOUL"
+		if [[ ${_SOUL} != ${_SELF} ]]; then starter_var "_SELF"; fi
 		starter_var "_OPTS"
 		starter_var "DEBUG"; #>>> starter_var "DEBUG_OPT"
 		starter_var "QUIET"; #>>> starter_var "QUIET_OPT"
@@ -464,7 +464,7 @@ function print_info {
 			fi
 			echo -en "\n"
 			declare END="true"
-			${SED} -n "s|^[#]${FILE}[[](.+)[]]$|\1|gp" ${_TRUE_SELF} | while read -r NEXT; do
+			${SED} -n "s|^[#]${FILE}[[](.+)[]]$|\1|gp" ${_SOUL} | while read -r NEXT; do
 				if ${END}; then END="false"; else echo -en "\n"; fi
 				for FILE in ${NEXT}; do
 					starter_var "${FILE}"
@@ -714,7 +714,7 @@ if [[ ${1} == -s ]]; then
 	if [[ ${1} == -e ]]; then
 		shift
 		#note: ensuring configuration is up-to-date
-		${_SELF} ${QUIET_OPT} ${TOOR} -r	|| EXIT 1
+		${_SOUL} ${QUIET_OPT} ${TOOR} -r	|| EXIT 1
 		expect_wrapper emerge ${_ASK} "${@}"	|| EXIT 1
 	else
 		safe_env bash --norc ${@:+-c "${@}"}	|| EXIT 1
@@ -732,7 +732,7 @@ if [[ ${1} == -y ]]; then
 	shift
 	if ${DO_CHROOT}; then
 		#note: ensuring configuration is up-to-date
-		${_SELF} ${QUIET_OPT} ${TOOR} -r	|| EXIT 1
+		${_SOUL} ${QUIET_OPT} ${TOOR} -r	|| EXIT 1
 	fi
 	if [[ ${1} == -j ]]; then
 		shift
@@ -843,7 +843,7 @@ if [[ ${1} == -o ]]; then
 	if ${DO_CHROOT}; then
 		#note: ensuring configuration is up-to-date
 #>>>		safe_env ${MYSELF} ${QUIET_OPT} ${TOOR} -r									|| EXIT 1
-		${_SELF} ${QUIET_OPT} ${TOOR} -r										|| EXIT 1
+		${_SOUL} ${QUIET_OPT} ${TOOR} -r										|| EXIT 1
 		${MKDIR}	${TARGET}${ETCDIR}/${LAYDIR}/${NEXT}								|| EXIT 1
 		${RSYNC_U}	${TARGET}${REPDIR}/kits/*/${FILE}/		${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}.src	|| EXIT 1
 		${RSYNC_U}	${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/		${TARGET}${ETCDIR}/${LAYDIR}/${FILE}		|| EXIT 1
@@ -909,7 +909,7 @@ if [[ ${1} == -p ]]; then
 		for NEXT in ${FILE}; do
 			NEXT="$(basename ${NEXT} | ${SED} "s|[-][0-9][^/]+$||g")"
 			echo -en "\n[${NEXT}]\n"
-			safe_env ${_SELF} ${QUIET_OPT} -l ${NEXT}
+			safe_env ${_SOUL} ${QUIET_OPT} -l ${NEXT}
 		done
 		echo -en "\n"					1>&2
 		echo -en "FILELIST=\""				1>&2
@@ -930,10 +930,10 @@ if [[ ${1} == -[0/12] ]]; then
 	date --iso=seconds >${TARGET}${GENDIR}.log 2>&1
 fi
 
-if [[ ${1} == -0 ]]; then shift; ${_SELF} ${TOOR} -n -a -b -k	-i 2>&1 | tee --append ${TARGET}${GENDIR}.log | prompt -c	; exit ${PIPESTATUS[0]}; fi
-if [[ ${1} == -/ ]]; then shift; ${_SELF} ${TOOR} -a		-i 2>&1 | tee --append ${TARGET}${GENDIR}.log | prompt -c	; exit ${PIPESTATUS[0]}; fi
-if [[ ${1} == -1 ]]; then shift; ${_SELF} ${TOOR} -a -b		-i 2>&1 | tee --append ${TARGET}${GENDIR}.log | prompt -c	; exit ${PIPESTATUS[0]}; fi
-if [[ ${1} == -2 ]]; then shift; ${_SELF} ${TOOR} -c		-i								; exit ${PIPESTATUS[0]}; fi
+if [[ ${1} == -0 ]]; then shift; ${_SOUL} ${TOOR} -n -a -b -k	-i 2>&1 | tee --append ${TARGET}${GENDIR}.log | prompt -c	; exit ${PIPESTATUS[0]}; fi
+if [[ ${1} == -/ ]]; then shift; ${_SOUL} ${TOOR} -a		-i 2>&1 | tee --append ${TARGET}${GENDIR}.log | prompt -c	; exit ${PIPESTATUS[0]}; fi
+if [[ ${1} == -1 ]]; then shift; ${_SOUL} ${TOOR} -a -b		-i 2>&1 | tee --append ${TARGET}${GENDIR}.log | prompt -c	; exit ${PIPESTATUS[0]}; fi
+if [[ ${1} == -2 ]]; then shift; ${_SOUL} ${TOOR} -c		-i								; exit ${PIPESTATUS[0]}; fi
 
 ########################################
 
@@ -981,7 +981,7 @@ if [[ ${1} == -i ]]; then
 	fi
 	mount_dev_dirs													|| EXIT 1
 #>>>	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -r			|| EXIT 1
-							${_SELF} ${QUIET_OPT} ${TOOR} ${AUTO} -r			|| EXIT 1
+							${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -r			|| EXIT 1
 	if [[ ! -d ${TARGET}${REPDIR} ]] && [[ -d ${GITDIR} ]]; then
 		${MKDIR}				${TARGET}${REPDIR}{,.git}					|| EXIT 1
 		${RSYNC_U} ${GITDIR}/			${TARGET}${REPDIR}.git						|| EXIT 1
@@ -1103,7 +1103,7 @@ fi
 
 if [[ ${1} == -w ]]; then
 	shift
-	safe_env ${_SELF} ${QUIET_OPT} ${TOOR} ${AUTO} -W	|| EXIT 1
+	safe_env ${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -W	|| EXIT 1
 	ego profile arch ${EARC}				|| EXIT 1
 	ego profile subarch ${ESUB}				|| EXIT 1
 #>>>	ego profile build stable				|| EXIT 1	# ERROR: build stable is not available. Can't set. Available names: {'current'}
@@ -1136,9 +1136,9 @@ fi
 
 if [[ ${1} == -u ]]; then
 	shift
-	safe_env ${_SELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w			|| EXIT 1
+	safe_env ${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -w			|| EXIT 1
 	expect_wrapper emerge ${_ASK} --deep --newuse --update \@system \@world	|| EXIT 1
-	safe_env ${_SELF} ${QUIET_OPT} ${TOOR} ${AUTO} -p			|| EXIT 1
+	safe_env ${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -p			|| EXIT 1
 #>>>	https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=b7a4174e075a922a255c0ff4a6ebd4f6d0437c61
 #>>>	if [[ -n "$(which python-updater 2>/dev/null)" ]]; then
 #>>>		expect_wrapper python-updater					|| EXIT 1
