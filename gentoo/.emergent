@@ -2,19 +2,13 @@
 source ${HOME}/.bashrc
 ################################################################################
 
-#NOTE: UPDATE THESE TO MATCH "_SYSTEM" SCRIPT
+#NOTE: ASSUMING LOCATION AND NAME OF THE "_SYSTEM" SCRIPT
 
-declare SETDIR="${SETDIR:-/.g/_data/zactive/.setup}"
-declare GENDIR="${GENDIR:-/_gentoo}"
-
-declare ETCDIR="/etc/portage"
-declare REPDIR="/var/git/meta-repo"
-
-declare FUNDIR="gentoo"
+source $(dirname "${_SELF}")/_system
 
 ########################################
 
-declare TOKEN
+declare TOKEN=
 
 ################################################################################
 
@@ -30,9 +24,11 @@ function grep_token {
 
 ################################################################################
 
+#note: the ".working" directory is a hard-set assumption
+
 if [[ ${1} == -v ]]; then
-	declare CUR="/.g/_data/_builds/_gentoo"
-	declare NEW="/.g/_data/_builds/_gentoo.working"
+	declare CUR="${TARGET}"
+	declare NEW="${TARGET}.working"
 	declare PKG
 	for PKG in $(
 		${GREP} -v "^[#]" ${ETCDIR}/package.keywords |
