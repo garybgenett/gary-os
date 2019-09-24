@@ -610,7 +610,9 @@ media-gfx/exif
 media-gfx/exiv2
 media-gfx/feh
 media-gfx/gimp
+media-gfx/gnuclad
 media-gfx/imagemagick
+media-gfx/inkscape
 media-libs/libjpeg-turbo
 media-libs/openjpeg
 media-libs/tiff

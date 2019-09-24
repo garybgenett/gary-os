@@ -52,6 +52,7 @@ dev-qt/qtscript				scripttools	# gentoo required
 dev-qt/qtwebchannel			qml		# gentoo required
 dev-qt/qtwebengine			widgets		# gentoo required
 dev-qt/qtwebkit				printsupport	# gentoo required
+media-gfx/pstoedit			plotutils	# gentoo required
 media-libs/gst-plugins-bad		egl		# gentoo required
 media-libs/libsdl2			haptic		# gentoo required
 media-libs/libvpx			svc		# gentoo required
