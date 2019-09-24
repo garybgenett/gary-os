@@ -280,7 +280,7 @@
 #{RCUPDT} rc-update show
 
 #{FSSKIP} /lib64/firmware/netronome
-#{FSSKIP} /usr/lib64/gcc/*-pc-linux-gnu/*/debug
+#{FSSKIP} /usr/lib64/gcc/x86_64-pc-linux-gnu/*/debug
 
 ########################################
 # x11
