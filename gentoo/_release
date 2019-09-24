@@ -501,12 +501,15 @@ function release_cpio_nul {
 		$(echo "${FSSKIP}" | tr ';' '\n' | while read -r FILE; do	echo "\\( -path .${FILE} -prune \\) -o"; done) \
 		$(for FILE in ${SKIP_DIRS}; do					echo "\\( -path .${FILE}/\\* -prune \\) -o"; done) \
 	-print0)					>${CPIO_FILE}.nul	|| return 1
+	${MKDIR}					${TARGET}/tmp/dev	|| return 1
+	realdev						${TARGET}/tmp/dev	|| return 1
+	(cd ${TARGET}/tmp && find ./dev -print0)	>>${CPIO_FILE}.nul	|| return 1
 	return 0
 }
 
 function release_cpio_file {
 	(cd ${TARGET} && ${XARGS} ${DU_S})	| tee ${CPIO_FILE}.txt	#>>> || return 1
-	sort -k4 -o ${CPIO_FILE}.txt		${CPIO_FILE}.txt	|| return 1
+	sort -k4 -u -o ${CPIO_FILE}.txt		${CPIO_FILE}.txt	|| return 1
 	cat ${CPIO_FILE}.nul | ${CPIO_IN}				|| return 1
 	${RM}					${CPIO_FILE}.nul	|| return 1
 	return 0
@@ -665,6 +668,7 @@ function release_install_root {
 		$(for FILE in ${SKIP_DIRS}; do echo "--filter=\"-_${FILE}/*\""; done) \
 		${TARGET}/* ${_GINST}/			|| return 1
 #>>>		${TARGET}/ ${_GINST}			|| return 1
+	realdev ${_GINST}/dev				|| return 1
 	TARGET="${_GINST}" _release_reset		|| return 1
 	TARGET="${_GINST}" _release_unpack		|| return 1
 #>>>	${RM} ${_GINST}/${_TITLE}*			|| return 1
