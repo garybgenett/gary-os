@@ -229,9 +229,10 @@
 # - (GOSPKG="gary-os" && make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} clean)
 # - (GOSPKG="gary-os" && make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} _release_cpio _release_kernel _release_report) #>>> == release - _prepare_build
 # <copy>
-# - ${RSYNC_U} -L ${_RAMFS}.null.kernel ${_GINST}/gary-os.null.kernel
-# - ${RSYNC_U} -L ${_RAMFS}.kernel ${_GINST}/gary-os.kernel
-# - ${RSYNC_U} -L ${_RAMFS}.cpio.xz ${_GINST}/gary-os.initrd
+# - ${MKDIR} ${_GINST}/gary-os
+# - ${RSYNC_U} -L ${_RAMFS}.null.kernel ${_GINST}/gary-os/gary-os.null.kernel
+# - ${RSYNC_U} -L ${_RAMFS}.kernel ${_GINST}/gary-os/gary-os.kernel
+# - ${RSYNC_U} -L ${_RAMFS}.cpio.xz ${_GINST}/gary-os/gary-os.initrd
 # - ${RSYNC_U} -L ${_RAMFS}.kernel ${SSH_SOURCE}:${SSH_COPY}.minimal.kernel
 # - ${RSYNC_U} -L ${_RAMFS}.cpio.xz ${SSH_SOURCE}:${SSH_COPY}.minimal.initrd
 #
