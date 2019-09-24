@@ -13,6 +13,11 @@ export _FINAL="${TARGET/%\/}/.${_TITLE}-${ESUB}"
 export _RAMFS="${_FINAL}/${_TITLE}-${ESUB}-${_VERSN}"
 export _GINST="${TARGET/%\/}/.install"
 
+#note: the "$_GPACK" extension is for the root filesystem
+#note: the "$_RPACK" file is for the repository
+export _GPACK=".packages.txt"
+export _RPACK="_packages"
+
 export _GREPO="/.g/_data/_builds/.${_TITLE}/.${_TITLE}"
 
 ########################################
@@ -366,10 +371,10 @@ function _prepare_linux {
 
 function _prepare_packages {
 	if [[ ${TARGET} == / ]]; then
-		${RM} ${TARGET}/.${_TITLE}.packages.txt								|| return 1
+		${RM} ${TARGET}/.${_TITLE}${_GPACK}								|| return 1
 		return 0
 	fi
-	cat /dev/null >${TARGET}/.${_TITLE}.packages.txt							|| return 1
+	cat /dev/null >${TARGET}/.${_TITLE}${_GPACK}								|| return 1
 	NEXT=
 	for FILE in $(
 		cd ${TARGET}${PAKDIR}										&&
@@ -383,14 +388,12 @@ function _prepare_packages {
 		declare PKG_DB="$(cd ${TARGET}${PDBDIR} && ${LS} -d ${FILE/%.tbz2}	2>/dev/null)"		|| return 1
 		declare PKG_DU="$(cd ${TARGET}${PAKDIR} && ${DU} -ks ${FILE}		2>/dev/null)"		|| return 1
 		if [[ -n ${PKG_DB} ]]; then
-			echo -en "${PKG_DU} (installed)\n"	| tee -a ${TARGET}/.${_TITLE}.packages.txt	|| return 1
+			echo -en "${PKG_DU} (installed)\n"	| tee -a ${TARGET}/.${_TITLE}${_GPACK}		|| return 1
 		else
-			echo -en "${PKG_DU} (packaged)\n"	| tee -a >>${TARGET}/.${_TITLE}.packages.txt	|| return 1
+			echo -en "${PKG_DU} (packaged)\n"	| tee -a >>${TARGET}/.${_TITLE}${_GPACK}	|| return 1
 		fi
 	done
-	#note: the "_packages" file is for the repository, and "packages.txt" is for the root filesystem
-	#note: the "_packages" file is also hard-set in the "release_cpio" function
-	${RSYNC_U} ${TARGET}/.${_TITLE}.packages.txt		${TARGET}/_packages				|| return 1
+	${RSYNC_U} ${TARGET}/.${_TITLE}${_GPACK}		${TARGET}/${_RPACK}				|| return 1
 	return 0
 }
 
@@ -414,7 +417,7 @@ function _prepare_symlink {
 	${LN} --relative ${TARGET}${REPDIR}.tar.xz		${_RAMFS}.$(basename ${REPDIR}).tar.xz		|| return 1
 	${LN} --relative ${TARGET}${LDIR}.tar.xz		${_RAMFS}.linux.tar.xz				|| return 1
 	${LN} --relative ${TARGET}${KFIL}			${_RAMFS}.null.kernel				|| return 1
-	${LN} --relative ${TARGET}/.${_TITLE}.packages.txt	${_RAMFS}.packages.txt				|| return 1
+	${LN} --relative ${TARGET}/.${_TITLE}${_GPACK}		${_RAMFS}${_GPACK}				|| return 1
 #>>>
 	if [[ -f ${TARGET}/boot/_null.kernel ]]; then
 		${LN} --relative ${TARGET}/boot/_null.kernel	${_RAMFS}.null.kernel				|| return 1
@@ -484,12 +487,11 @@ function _release_cpio {	#{initrd}
 		{ [[ ! -f ${CPIO_FILE}.xz ]] && ${INITRD}; } ||
 		{ [[ ! -f ${CPIO_FILE} ]] && ! ${INITRD}; }
 	}; then
-		#note: the "_packages" file is also hard-set in the "prepare_packages" function
 		(cd ${TARGET} && eval find ./ -mindepth 1 -xdev \
 			\\\( -path ./${CMTFIL}			-prune \\\) -o \
 			\\\( -path ./${_FINAL/#${TARGET}\/}	-prune \\\) -o \
 			\\\( -path ./${_RAMFS/#${TARGET}\/}\\\*	-prune \\\) -o \
-			\\\( -path ./_packages			-prune \\\) -o \
+			\\\( -path ./${_RPACK}			-prune \\\) -o \
 			\
 			\\\( -path .${ARCDIR}\\\*		-prune \\\) -o \
 			\\\( -path .${GENDIR}\\\*		-prune \\\) -o \
@@ -739,6 +741,7 @@ function _publish_gitdir {
 	SAVE_FILES+="${CMTFIL}"
 	SAVE_FILES+="^_commit"
 	SAVE_FILES+="^_config\*"
+	SAVE_FILES+="^${_RPACK}"
 	SAVE_FILES+="^_packages\*"
 	declare SETUP_FILES=
 	SETUP_FILES+="gentoo"
