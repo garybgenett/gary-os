@@ -57,12 +57,12 @@ fi
 ################################################################################
 
 export _BASHED="true"
-if [[ "${-/i}" != "${-}" ]]; then
-	unset _SELF
-	unset SCRIPT
-else
+
+unset _SELF
+unset SCRIPT
+if [[ "${-/i}" == "${-}" ]]; then
 	export _SELF="$(realpath -- "${0}")"
-	export SCRIPT="$(basename -- "${0}")"
+	export SCRIPT="$(basename -- "${_SELF}")"
 fi
 export UNAME="$(uname -s)"
 
