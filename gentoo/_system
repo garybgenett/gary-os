@@ -21,6 +21,10 @@ if [[ ${?} == 0 ]]; then
 	_BASH_SOURCED="true"
 fi
 
+########################################
+
+export _SYSTEMED="true"
+
 ################################################################################
 
 #>>> ${GREP} -o "[!=][=][ ][-][^[:space:]]+" ${HOME}/setup/gentoo/_system | sort
@@ -34,13 +38,15 @@ export QUIET_OPT="-q"
 
 export DEBUG="false"
 export QUIET="false"
-if [[ ${1} == ${DEBUG_OPT} ]]; then
-	DEBUG="true"
-	shift
-fi
-if [[ ${1} == ${QUIET_OPT} ]]; then
-	QUIET="true"
-	shift
+if ! ${_BASH_SOURCED}; then
+	if [[ ${1} == ${DEBUG_OPT} ]]; then
+		DEBUG="true"
+		shift
+	fi
+	if [[ ${1} == ${QUIET_OPT} ]]; then
+		QUIET="true"
+		shift
+	fi
 fi
 
 ########################################
@@ -111,9 +117,11 @@ export _PKG="${BLDPKG}"
 export _NEW=
 export _GOS=
 
-if [[ ${1} == -[dxtg] ]]; then
-	TOOR="${1}"
-	shift
+if ! ${_BASH_SOURCED}; then
+	if [[ ${1} == -[dxtg] ]]; then
+		TOOR="${1}"
+		shift
+	fi
 fi
 if [[ ${TOOR} == -d ]]; then
 	TARGET="${BLDDIR}"
@@ -132,10 +140,12 @@ if [[ ${TOOR} == -g ]]; then
 	_PKG="${GOSPKG}"
 fi
 
-if [[ ${1} == -n ]]; then
-	TOOR="${TOOR} ${1}"
-	_NEW="1"
-	shift
+if ! ${_BASH_SOURCED}; then
+	if [[ ${1} == -n ]]; then
+		TOOR="${TOOR} ${1}"
+		_NEW="1"
+		shift
+	fi
 fi
 
 #note: detection of a "gary-os" build is based purely on the package set
@@ -152,22 +162,24 @@ export _BLD="false"
 export _KRN="false"
 export _CFG="false"
 
-if [[ ${1} == -a ]]; then
-	AUTO="${1}"
-	_ASK="--ask=n"
-	shift
-fi
-if [[ ${1} == -b ]]; then
-	_BLD="true"
-	shift
-fi
-if [[ ${1} == -k ]]; then
-	_KRN="true"
-	shift
-fi
-if [[ ${1} == -c ]]; then
-	_CFG="true"
-	shift
+if ! ${_BASH_SOURCED}; then
+	if [[ ${1} == -a ]]; then
+		AUTO="${1}"
+		_ASK="--ask=n"
+		shift
+	fi
+	if [[ ${1} == -b ]]; then
+		_BLD="true"
+		shift
+	fi
+	if [[ ${1} == -k ]]; then
+		_KRN="true"
+		shift
+	fi
+	if [[ ${1} == -c ]]; then
+		_CFG="true"
+		shift
+	fi
 fi
 
 ########################################
@@ -622,6 +634,8 @@ function EXIT {
 source ${SETDIR}/${FUNDIR}/${MAKEIT} || EXIT 1
 
 ########################################
+
+#NOTE: ALL "^if.*{1}" OPTIONS UP TO THIS POINT NEED TO BE "$_BASH_SOURCED" PROTECTED
 
 if ${_BASH_SOURCED}; then
 	return 0
