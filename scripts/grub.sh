@@ -171,7 +171,7 @@ menuentry \"---\" {
 # kernel
 
 set garyos_rescue=
-search --file --set garyos_rescue /${_BASE}.kernel
+search --file --set garyos_rescue /${_BASE}/${_BASE}.kernel
 
 if [ -n \"\${garyos_rescue}\" ]; then
 	set default=2
@@ -181,9 +181,9 @@ else
 fi
 
 menuentry \"${_PROJ} Boot\" {
-	linux  (\${garyos_rescue})/${_BASE}.null.kernel
-	linux  (\${garyos_rescue})/${_BASE}.kernel ${GOPTS}
-	initrd (\${garyos_rescue})/${_BASE}.initrd
+	linux  (\${garyos_rescue})/${_BASE}/${_BASE}.null.kernel
+	linux  (\${garyos_rescue})/${_BASE}/${_BASE}.kernel ${GOPTS}
+	initrd (\${garyos_rescue})/${_BASE}/${_BASE}.initrd
 	boot
 }
 
