@@ -136,6 +136,8 @@ declare GRUBD="/usr/lib/grub"
 declare GMODS="${GRUBD}/${GTYPE}"
 declare GFILE="/boot/grub/grub.cfg"
 
+declare GCUST="${_BASE}.grub.cfg"
+
 ########################################
 
 declare GMENU="\
@@ -170,16 +172,27 @@ menuentry \"---\" {
 
 # kernel
 
+set garyos_custom=
 set garyos_rescue=
+search --file --set garyos_custom /${_BASE}/${GCUST}
 search --file --set garyos_rescue /${_BASE}/${_BASE}.kernel
 
-if [ -n \"\${garyos_rescue}\" ]; then
+if [ -n \"\${garyos_custom}\" ]; then
 	set default=2
+	set timeout=${TIMEOUT}
+else
+	set garyos_custom=\"${GROOT}\"
+fi
+if [ -n \"\${garyos_rescue}\" ]; then
+	set default=3
 	set timeout=${TIMEOUT}
 else
 	set garyos_rescue=\"${GROOT}\"
 fi
 
+menuentry \"${_PROJ} Menu\" {
+	configfile (\${garyos_custom})/${_BASE}/${GCUST}
+}
 menuentry \"${_PROJ} Boot\" {
 	linux  (\${garyos_rescue})/${_BASE}/${_BASE}.null.kernel
 	linux  (\${garyos_rescue})/${_BASE}/${_BASE}.kernel ${GOPTS}
@@ -195,14 +208,14 @@ search --file --set garyos_menu ${GFILE}
 search --file --set garyos_install /boot/kernel
 
 if [ -n \"\${garyos_menu}\" \"\${garyos_menu}\" != \"memdisk\" ]; then
-	set default=3
+	set default=4
 	set timeout=${TIMEOUT}
 else
 	set garyos_menu=\"${GROOT}\"
 fi
 if [ -n \"\${garyos_install}\" ]; then
-#>>>	set default=4
-	set default=3
+#>>>	set default=5
+	set default=4
 	set timeout=${TIMEOUT}
 else
 	set garyos_install=\"${GROOT}\"
@@ -224,11 +237,20 @@ menuentry \"${_PROJ} Install Boot\" {
 menuentry \"Boot Primary\" {
 	chainloader (hd0)+1
 }
-
 menuentry \"Boot Secondary\" {
 	chainloader (hd1)+1
 }
 
+# end of file
+"
+
+declare GCONF="\
+# custom
+menuentry \"${_NAME} (Custom)\" {
+	set pager=1
+	set
+	set pager=0
+}
 # end of file
 "
 
@@ -522,10 +544,23 @@ function partition_disk {
 	return 0
 }
 
+function custom_menu {
+	declare DEV="${1}"
+	FILE="${GDEST}/.mount-menu"
+	${MKDIR} ${FILE}				|| return 1
+	mount-robust ${DEV}${GPSEP}${GPART} ${FILE}	|| return 1
+	${MKDIR} ${FILE}/${_BASE}			|| return 1
+	echo -en "${GCONF}" >${FILE}/${_BASE}/${GCUST}	|| return 1
+	mount-robust -u ${DEV}${GPSEP}${GPART}		|| return 1
+	${RM} ${FILE}					|| return 1
+	return 0
+}
+
 if [[ -b ${GINST} ]]; then
 	if ${GFDSK}; then
 		partition_disk ${GINST}			|| exit 1
 	fi
+	custom_menu ${GINST}				|| exit 1
 else
 	dd \
 		status=progress \
@@ -537,6 +572,7 @@ else
 	losetup -d ${LOOP_DEVICE}			#>>> || exit 1
 	losetup -v -P ${LOOP_DEVICE} ${GINST}		|| exit 1
 	partition_disk ${LOOP_DEVICE}			|| exit 1
+	custom_menu ${LOOP_DEVICE}			|| exit 1
 	GINST="${LOOP_DEVICE}"
 fi
 
