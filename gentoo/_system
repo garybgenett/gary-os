@@ -370,7 +370,7 @@ function print_info {
 		printf "${PRINTF}" "Validation (Usage & Variables Only):"	"<output>"	"${_HEART} ${DEBUG_OPT} [{chroot}] [{options}]"
 		printf "${PRINTF}" "Suppress Output (Internal Only)"		"<internal>"	"${_HEART} [${DEBUG_OPT}] ${QUIET_OPT} [{chroot}] [{options}]"
 		echo -en "\n"
-		printf "${PRINTF}" "Source Script (Configuration):"		"<custom>"	"${_HEART} {source_script}" "<$(basename ${CFGSCR})>"
+		printf "${PRINTF}" "Run Script (Configuration):"		"<custom>"	"${_HEART} {script} [{options}]" "<$(basename ${CFGSCR}) [${_OPTS}]>"
 		echo -en "\n"
 		echo -en "${NOTES}"
 		echo -en ">>> CHROOT <<<"
@@ -759,6 +759,7 @@ if [[ ${1} == -y ]]; then
 		mount_dev_dirs -u			|| EXIT 1
 		EXIT 0
 	fi
+	#note: the "_packages" file is hard-set in the ".emergent" script
 	FILE="${_SAVDIR}${GENDIR}/_packages"
 	if [[ ! -f ${1} ]]; then
 		echo -en "\n"
@@ -794,7 +795,6 @@ if [[ ${1} == -y ]]; then
 			done
 			return 0
 		}
-		#note: the "_packages" file is hard-set in the ".emergent" script
 		compare_packages "ADDED"	${FILE}				${TARGET}${GENDIR}/_packages
 		compare_packages "REMOVED"	${TARGET}${GENDIR}/_packages	${FILE}
 	fi
@@ -844,7 +844,6 @@ if [[ ${1} == -o ]]; then
 	NEXT="$(dirname ${FILE})"
 	if ${DO_CHROOT}; then
 		#note: ensuring configuration is up-to-date
-#>>>		safe_env ${MYSELF} ${QUIET_OPT} ${TOOR} -r									|| EXIT 1
 		${_SOUL} ${QUIET_OPT} ${TOOR} -r										|| EXIT 1
 		${MKDIR}	${TARGET}${ETCDIR}/${LAYDIR}/${NEXT}								|| EXIT 1
 		${RSYNC_U}	${TARGET}${REPDIR}/kits/*/${FILE}/		${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}.src	|| EXIT 1
@@ -982,7 +981,6 @@ if [[ ${1} == -i ]]; then
 		tar -pvvx --xz -C ${TARGET} -f		$(ls -t ${TARGET}${ARCDIR}/stage3-generic_64-funtoo-*.tar.xz	| head -n1) || EXIT 1
 	fi
 	mount_dev_dirs													|| EXIT 1
-#>>>	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -r			|| EXIT 1
 							${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -r			|| EXIT 1
 	if [[ ! -d ${TARGET}${REPDIR} ]] && [[ -d ${GITDIR} ]]; then
 		${MKDIR}				${TARGET}${REPDIR}{,.git}					|| EXIT 1
@@ -1001,7 +999,6 @@ if [[ ${1} == -i ]]; then
 			${SETDIR}/${FUNDIR}/${FUNKIT}	${TARGET}${REPDIR} ${FUNTOO}					|| EXIT 1
 		fi
 	fi
-#>>>	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -r			|| EXIT 1
 	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w			|| EXIT 1
 	if ${_BLD}; then
 		if [[ -n ${_NEW} ]]; then
