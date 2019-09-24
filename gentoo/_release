@@ -271,7 +271,7 @@ function prepare_config_restore {
 #note: this is called statically in the "_system" script
 function _prepare_config {	#{reset}
 	declare RESET= ; if [[ ${1} == --reset ]]; then RESET="${1}" && shift; fi
-	#note: these are from "prepare_config_issue" above
+	#note: these are from the "prepare_config_issue" function above
 	prepare_config_restore ${RESET} sys-apps/baselayout			/etc/issue				|| return 1
 	prepare_config_restore ${RESET} ""					/etc/motd				|| return 1
 	#note: these are all directly below
@@ -451,7 +451,7 @@ function _release_initrd {	#{main} #{reset}
 
 ########################################
 
-#note: the "du" command is also used in "release_kernel_shmmax", so just making them all global
+#note: the "du" command is also used in the "release_kernel_shmmax" function, so making them all global
 declare CPIO_FILE="${_RAMFS}.cpio"
 declare XARGS="xargs --max-procs 0 --max-args 1 --null	--arg-file ${CPIO_FILE}.nul"
 declare DU_S="${DU} --summarize --apparent-size		--block-size 4096"
@@ -459,7 +459,7 @@ declare CPIO_IN="cpio -v --create --format newc --null	--file ${CPIO_FILE}	--dir
 declare CPIO_OUT="cpio -v --extract			--file ${CPIO_FILE}	--directory ${CPIO_FILE}.dir"
 declare XZ="xz -vv --compress --stdout --format xz --check crc32"
 
-#note: this is also used in "release_install_root", so making it global
+#note: this is also used in the "release_install_root" function, so making it global
 declare SKIP_DIRS="
 /dev
 /mnt
@@ -639,7 +639,7 @@ function _release_unpack {	#{main}
 
 #NOTE: CONSULT THE "SYSTEM INSTALLATION" TABLE IN "README" FOR THIS SECTION
 
-#note: compare with the "${_CFG}" function in the "_system" script
+#note: compare with the "${_CFG}" option in the "_system" script
 #note: cross-reference with the "release_reset" function any time this changes
 function release_install_root {
 	eval ${RSYNC_U} \
