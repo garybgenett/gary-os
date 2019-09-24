@@ -681,14 +681,16 @@ then
 	if ! ${DO_CHROOT}; then
 		requires_chroot "${@}"
 	fi
-	${@} || EXIT -1
+	declare DOIT="${1}"	&& shift
+	${DOIT} "${@}"		|| EXIT -1
 	EXIT -0
 fi
 
 ########################################
 
 if [[ -x ${1} ]]; then
-	source "${@}" || EXIT -1
+	declare DOIT="${1}"	&& shift
+	${DOIT} ${_SOUL} "${@}"	|| EXIT -1
 	EXIT -0
 fi
 
@@ -1064,7 +1066,7 @@ if [[ ${1} == -i ]]; then
 			${RSYNC_U} --copy-links		${CFGSCR} \
 							${TARGET}${ARCDIR}/$(basename ${CFGSCR})			|| EXIT 1
 			safe_env			${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} \
-							${ARCDIR}/$(basename ${CFGSCR})					|| EXIT 1
+							${ARCDIR}/$(basename ${CFGSCR}) "${@}"				|| EXIT 1
 		fi
 		EXIT 0
 	fi
