@@ -58,6 +58,7 @@
 # - declare FUSE_PAK="${SAVE_DIR}/packages"
 # - declare GRUB_DIR="${SAVE_DIR}/grub"
 # - declare LINX_DIR="${SAVE_DIR}/linux"
+# - declare META_DIR="${SAVE_DIR}/meta-repo"
 #
 # [globals]
 # - declare _GOPTS=""
@@ -82,6 +83,7 @@
 # - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} unpack
 #
 # [mount]
+# - ${MKDIR} ${_GINST}
 # - mount-robust ${USB_SOURCE} ${_GINST}
 # - ${MKDIR} ${_GINST}${SAVE_DIR}
 # - ${RM} ${_FINAL} && ${LN} ${_GINST} ${_FINAL}
@@ -215,8 +217,10 @@
 # <memory>
 # - mount -o remount,rw,size=20g / && df /
 # <disk>
-# - [[ ! -d ${LINX_DIR} ]] && ${RM} ${LINX_DIR} && ${MKDIR} ${LINX_DIR} && ${RSYNC_U} -L ${LDIR}/ ${LINX_DIR}
+# - [[ ! -d ${LINX_DIR} ]] && ${RSYNC_U} ${LDIR}.tar.xz $(dirname ${LINX_DIR})/ && common_untar ${LINX_DIR}
+# - [[ ! -d ${META_DIR} ]] && ${RSYNC_U} ${REPDIR}.tar.xz $(dirname ${META_DIR})/ && common_untar ${META_DIR}
 # - [[ -d ${LINX_DIR} ]] && ${RM} ${LDIR} && ${LN} ${LINX_DIR} ${LDIR}
+# - [[ -d ${META_DIR} ]] && ${RM} ${REPDIR} && ${LN} ${META_DIR} ${REPDIR}
 # <build>
 # - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} clean
 # - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} release
