@@ -503,7 +503,9 @@ function release_cpio_nul {
 	-print0)					>${CPIO_FILE}.nul	|| return 1
 	${MKDIR}					${TARGET}/tmp/dev	|| return 1
 	realdev						${TARGET}/tmp/dev	|| return 1
+	realdev						${TARGET}/dev		|| return 1
 	(cd ${TARGET}/tmp && find ./dev -print0)	>>${CPIO_FILE}.nul	|| return 1
+	${RM}						${TARGET}/tmp/dev	|| return 1
 	return 0
 }
 
