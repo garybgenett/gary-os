@@ -1875,6 +1875,10 @@ function mount-robust {
 	if [[ -d ${DEV} ]]; then
 			DEV_SRC="$(${FINDMNT} --output SOURCE --target ${DEV} 2>/dev/null | tail -n1)";	DEV_TGT="$(${FINDMNT} --output TARGET --target ${DEV} 2>/dev/null | tail -n1)"
 	fi
+	declare WORKDIR="$(${FINDMNT} --output OPTIONS --target ${DEV} 2>/dev/null | tail -n1 | ${SED} -n "s|^.*workdir[=]([^,]*).*$|\1|gp")"
+	if [[ -z ${WORKDIR} ]]; then
+		WORKDIR="${DEV}.${FUNCNAME}"
+	fi
 	declare IS_ROOT="false"
 	if {
 #>>>		{ ! ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV_TGT} == / ]];	} ||
@@ -1980,6 +1984,11 @@ function mount-robust {
 				cryptsetup luksClose ${DEV} || return 1
 			fi
 		fi
+		if ! ${DEBUG}; then
+			if [[ -d ${WORKDIR} ]]; then
+				${RM} ${WORKDIR}
+			fi
+		fi
 	else
 		if ${IS_LUKS} && [[ ! -b ${DEV} ]]; then
 			echo -en "- Opening Encrypton...\n"
@@ -1994,25 +2003,35 @@ function mount-robust {
 				return 0
 			fi
 			declare TYP="$(${LSBLK} --fs --output FSTYPE ${DEV} 2>/dev/null | tail -n1)"
-			declare OVERLAY="lowerdir=${DEV},upperdir=${DEV}.overlay,workdir=${DEV}.working"
+			declare OVERLAY=
 			if ${OV}; then
 				modprobe fuse overlay || return 1
-				${MKDIR} ${DEV}.overlay ${DEV}.working
-			elif [[ ${TYP} == exfat ]]; then
+				TYP="overlay overlay"
+				${MKDIR} ${WORKDIR}
+				declare LOWER_DIRS="${DEV}:${DIR}"
+				while [[ -d ${1} ]]; do
+					LOWER_DIRS+=":${1}"
+					shift
+				done
+				OVERLAY="lowerdir=${LOWER_DIRS}"
+				if [[ -z ${RO} ]]; then
+					OVERLAY+=",upperdir=${DEV},workdir=${DEV}.${FUNCNAME}"
+				fi
+			fi
+			if [[ ${TYP} == exfat ]]; then
 				modprobe fuse || return 1
 			fi
 			if [[ ${TYP} == ext4		]]; then fsck -MV -t ${TYP} -pC	${DEV} || return 1; fi
 			if [[ ${TYP} == exfat		]]; then fsck.${TYP}		${DEV} || return 1; fi
 			if [[ ${TYP} == ntfs-3g		]]; then fsck -MV -t ${TYP}	${DEV} || return 1; fi
 			if [[ ${TYP} == vfat		]]; then fsck -MV -t ${TYP}	${DEV} || return 1; fi
-			if [[ -d ${DEV}			]]; then mount -v --bind ${RO:+-o ${RO/%,}}					"${@}" ${DEV} ${DIR} || return 1; fi
-			if [[ -f ${DEV}			]]; then mount -v -o ${RO}loop							"${@}" ${DEV} ${DIR} || return 1; fi
-			if [[ ${DEV} == overlay		]]; then mount -v -t ${TYP} -o ${RO}${OVERLAY}					"${@}"        ${DIR} || return 1; fi
+			if ! ${OV} && [[ -d ${DEV}	]]; then mount -v --bind ${RO:+-o ${RO/%,}}					"${@}" ${DEV} ${DIR} || return 1; fi
+			if ! ${OV} && [[ -f ${DEV}	]]; then mount -v -o ${RO}loop							"${@}" ${DEV} ${DIR} || return 1; fi
+			if ${OV}			]]; then mount -v -t ${TYP} -o ${OVERLAY}					"${@}"        ${DIR} || return 1; fi
 			if [[ ${TYP} == ext4		]]; then mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro			"${@}" ${DEV} ${DIR} || return 1; fi
 			if [[ ${TYP} == exfat		]]; then mount -v -t ${TYP} -o ${RO}relatime					"${@}" ${DEV} ${DIR} || return 1; fi
 			if [[ ${TYP} == ntfs-3g		]]; then mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro,shortname=mixed	"${@}" ${DEV} ${DIR} || return 1; fi
 			if [[ ${TYP} == vfat		]]; then mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro,shortname=mixed	"${@}" ${DEV} ${DIR} || return 1; fi
-			${RM} ${DEV}.overlay ${DEV}.working
 		fi
 	fi
 	return 0
