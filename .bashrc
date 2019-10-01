@@ -1811,16 +1811,16 @@ function mount-robust {
 	declare LSBLK="lsblk --noheadings"
 	declare DEBUG="false"
 	declare TEST="false"
-	declare UN="false"
-	declare OV="false"
 	declare RO=
+	declare OV="false"
+	declare UN="false"
 	declare DEV=
 	declare DIR=
 	if [[ ${1} == DEBUG ]]; then	DEBUG="true";	shift; fi
 	if [[ ${1} == TEST ]]; then	TEST="true";	shift; fi
-	if [[ ${1} == -u ]]; then	UN="true";	shift; fi
-	if [[ ${1} == -o ]]; then	OV="true";	shift; fi
 	if [[ ${1} == -0 ]]; then	RO="ro,";	shift; fi
+	if [[ ${1} == -o ]]; then	OV="true";	shift; fi
+	if [[ ${1} == -u ]]; then	UN="true";	shift; fi
 	if [[ -n ${1} ]]; then		DEV="${1}";	shift; fi
 	if [[ -n ${1} ]]; then		DIR="${1}";	shift; fi
 	if [[ ${DEV} == --dev ]]; then
@@ -1851,7 +1851,8 @@ function mount-robust {
 		return 0
 	fi
 	if ! ${TEST} && {
-		{ [[ ! -b ${DEV} ]] && [[ ! -d ${DEV} ]]; } ||
+		{ [[ ! -b ${DEV} ]] && [[ ! -d ${DEV} ]] && [[ ! -f ${DEV} ]]; } ||
+		{ [[   -f ${DEV} ]] && [[ ! -d ${DIR} ]] && ! ${UN}; };
 		{ [[ ! -d ${DEV} ]] && ${OV}; } ||
 		{ [[ ! -d ${DIR} ]] && ! ${UN}; }
 	}; then
@@ -2004,7 +2005,8 @@ function mount-robust {
 			if [[ ${TYP} == exfat		]]; then fsck.${TYP}		${DEV} || return 1; fi
 			if [[ ${TYP} == ntfs-3g		]]; then fsck -MV -t ${TYP}	${DEV} || return 1; fi
 			if [[ ${TYP} == vfat		]]; then fsck -MV -t ${TYP}	${DEV} || return 1; fi
-			if [[ -d ${DEV}			]]; then mount -v --bind							"${@}" ${DEV} ${DIR} || return 1; fi
+			if [[ -d ${DEV}			]]; then mount -v --bind ${RO:+-o ${RO/%,}}					"${@}" ${DEV} ${DIR} || return 1; fi
+			if [[ -f ${DEV}			]]; then mount -v -o ${RO}loop							"${@}" ${DEV} ${DIR} || return 1; fi
 			if [[ ${DEV} == overlay		]]; then mount -v -t ${TYP} -o ${RO}${OVERLAY}					"${@}"        ${DIR} || return 1; fi
 			if [[ ${TYP} == ext4		]]; then mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro			"${@}" ${DEV} ${DIR} || return 1; fi
 			if [[ ${TYP} == exfat		]]; then mount -v -t ${TYP} -o ${RO}relatime					"${@}" ${DEV} ${DIR} || return 1; fi
