@@ -1,19 +1,18 @@
 # Welcome to GaryOS (gary-os)
-************************************************************************
+
+********************************************************************************
 
 ![GaryOS Icon](artifacts/images/icon.png "GaryOS Icon")
 "The one file that does it all."
 
-* Latest: GaryOS v3.0 ([64-bit]) ([32-bit]) ([Release Notes]) ([License])
-* Homepage: [https://github.com/garybgenett/gary-os](https://github.com/garybgenett/gary-os)
-* Download: [https://sourceforge.net/projects/gary-os](https://sourceforge.net/projects/gary-os)
+  * Latest: GaryOS v3.0 ([64-bit]) ([32-bit]) ([Release Notes]) ([License])
+  * Homepage: [https://github.com/garybgenett/gary-os](https://github.com/garybgenett/gary-os)
+  * Download: [https://sourceforge.net/projects/gary-os](https://sourceforge.net/projects/gary-os)
 
 [License]: https://github.com/garybgenett/gary-os/blob/master/LICENSE.md
 [Readme]: https://github.com/garybgenett/gary-os/blob/master/README.md
 
-************************************************************************
-#### Contents
-[Contents]: #contents
+********************************************************************************
 
   * [Overview]
     * [Quick Start]
@@ -37,8 +36,9 @@
     * [Grub Rescue]
     * [PXE Boot]
 
-************************************************************************
-# Overview
+********************************************************************************
+
+# Overview #####################################################################
 [Overview]: #overview
 
 GaryOS is an entire GNU/Linux system in a single bootable file.
@@ -83,7 +83,7 @@ GaryOS.
 
 ![GaryOS GUI Screenshot](artifacts/images/screenshot_gui.png "GaryOS GUI Screenshot")
 
-## Quick Start
+## Quick Start #################################################################
 [Quick Start]: #quick-start
 
 If you just want to check it out, you can run it inside any
@@ -127,14 +127,14 @@ goes one step further, however, since a Linux kernel has already been
 prepared.  Simply configuring and installing Grub will result in
 a ready-to-go Funtoo/Gentoo installation.
 
-## Version History
+## Version History #############################################################
 [Version History]: #version-history
 
 [Release Notes]: #2015-03-16-v30-21811b59a8484b2a6b73e0c5277f23c50a0141dc0
 [64-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v3.0.kernel
 [32-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v3.0.kernel
 
-##### 2015-03-16 v3.0 21811b59a8484b2a6b73e0c5277f23c50a0141dc.0
+##### 2015-03-16 v3.0 21811b59a8484b2a6b73e0c5277f23c50a0141dc.0 ###############
 
   * 64-bit: [gary-os-generic_64-funtoo-stable-v3.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v3.0.kernel)
   * 32-bit: [gary-os-generic_32-funtoo-stable-v3.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v3.0.kernel)
@@ -155,7 +155,7 @@ a ready-to-go Funtoo/Gentoo installation.
     * Added additional input drivers, for touch devices
     * Added helper packages for networking and basic X.Org GUI scripting
 
-##### 2014-06-19 v2.0 873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d.0
+##### 2014-06-19 v2.0 873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d.0 ###############
 
   * 64-bit: [gary-os-generic_64-funtoo-stable-v2.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v2.0.kernel)
   * 32-bit: [gary-os-generic_32-funtoo-stable-v2.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v2.0.kernel)
@@ -194,7 +194,7 @@ a ready-to-go Funtoo/Gentoo installation.
         section for information on loading up and using the graphical
         environment).
 
-##### 2014-03-13 v1.1 95ad4fd257697618bae7402d4bc3a27499035d30.4
+##### 2014-03-13 v1.1 95ad4fd257697618bae7402d4bc3a27499035d30.4 ###############
 
   * 64-bit: [gary-os-generic_64-funtoo-stable-v1.1.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v1.1.kernel)
   * 32-bit: [gary-os-generic_32-funtoo-stable-v1.1.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v1.1.kernel)
@@ -206,7 +206,7 @@ a ready-to-go Funtoo/Gentoo installation.
   * Funtoo/Gentoo configuration
     * Miscellaneous package changes
 
-##### 2014-02-28 v1.0 95ad4fd257697618bae7402d4bc3a27499035d30.3
+##### 2014-02-28 v1.0 95ad4fd257697618bae7402d4bc3a27499035d30.3 ###############
 
   * 64-bit: [gary-os-generic_64-funtoo-stable-v1.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v1.0.kernel)
   * 32-bit: [gary-os-generic_32-funtoo-stable-v1.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v1.0.kernel)
@@ -221,7 +221,7 @@ a ready-to-go Funtoo/Gentoo installation.
   * Funtoo/Gentoo configuration
     * Commented packages that broke during 32-bit build
 
-##### 2014-02-24 v0.3 95ad4fd257697618bae7402d4bc3a27499035d30.2
+##### 2014-02-24 v0.3 95ad4fd257697618bae7402d4bc3a27499035d30.2 ###############
 
   * 64-bit: [gary-os-core2_64-funtoo-stable-v0.3.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-core2_64-funtoo-stable-v0.3.kernel)
   * Metro script
@@ -235,7 +235,7 @@ a ready-to-go Funtoo/Gentoo installation.
     * Completely removed X, Java and TeX Live / LaTeX
     * Added sound and miscellaneous media packages
 
-##### 2014-02-13 v0.2 95ad4fd257697618bae7402d4bc3a27499035d30.1
+##### 2014-02-13 v0.2 95ad4fd257697618bae7402d4bc3a27499035d30.1 ###############
 
   * 64-bit kernel: [gary-os-core2_64-funtoo-stable-v0.2.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-core2_64-funtoo-stable-v0.2.kernel)
   * 64-bit initrd: [gary-os-core2_64-funtoo-stable-v0.2.initrd](http://sourceforge.net/projects/gary-os/files/gary-os-core2_64-funtoo-stable-v0.2.initrd)
@@ -245,7 +245,7 @@ a ready-to-go Funtoo/Gentoo installation.
     * Added packages from Grml and SystemRescueCD package lists
     * Enabled `gpm` USE flag
 
-##### 2014-02-09 v0.1 95ad4fd257697618bae7402d4bc3a27499035d30.0
+##### 2014-02-09 v0.1 95ad4fd257697618bae7402d4bc3a27499035d30.0 ###############
 
   * 64-bit kernel: [gary-os-core2_64-funtoo-stable-v0.1.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-core2_64-funtoo-stable-v0.1.kernel)
   * 32-bit initrd: [gary-os-core2_64-funtoo-stable-v0.1.initrd](http://sourceforge.net/projects/gary-os/files/gary-os-core2_64-funtoo-stable-v0.1.initrd)
@@ -255,8 +255,9 @@ a ready-to-go Funtoo/Gentoo installation.
     * Active personal configuration at time of build
     * Commented packages that broke
 
-************************************************************************
-# Design
+********************************************************************************
+
+# Design #######################################################################
 [Design]: #design
 
 GaryOS was not really "designed", per se.  It just kind of happened
@@ -293,7 +294,7 @@ That final point is worth re-iterating: GaryOS is 95%+ the work of other
 projects.  All I've done is tie things together in a way I find novel,
 appealing and useful.
 
-## Goals
+## Goals #######################################################################
 [Goals]: #goals
 
 While not originally "designed" in the traditional sense, GaryOS does
@@ -329,7 +330,7 @@ Explicit non-goals:
     boot and "init" infrastructure
   * Becoming a complete desktop environment (minimal X.Org GUI only)
 
-## Rationale
+## Rationale ###################################################################
 [Rationale]: #rationale
 
 I thought it important to document my thoughts regarding the good deal
@@ -417,7 +418,7 @@ this project exists.
 The reader, of course, must make up their own mind about what is best
 for them.
 
-## Caveats
+## Caveats #####################################################################
 [Caveats]: #caveats
 
 Humans are not perfect, and rarely is anything we create.  I'm proud of
@@ -491,8 +492,9 @@ Buyer beware.  You own all the pieces.
 
 Other than that, GaryOS should be rock-solid.  ;^)
 
-************************************************************************
-# Details
+********************************************************************************
+
+# Details ######################################################################
 [Details]: #details
 
 In this section, I will try to outline the key pieces which make GaryOS
@@ -503,7 +505,7 @@ beneficial to anyone curious enough to have read this far.
 Most of what is needed to use the contents of this repository is
 contained in the [Structure] and [Customizing] sections below.
 
-## Similar Projects
+## Similar Projects ############################################################
 [Similar Projects]: #similar-projects
 
 Since the creation of GaryOS, I've discovered the following projects
@@ -520,7 +522,7 @@ still fitting in an initramfs.
 
 Both projects are pretty damn awesome.
 
-## Tools
+## Tools #######################################################################
 [Tools]: #tools
 
 All the real heavy-lifting is accomplished using these tools/projects:
@@ -556,7 +558,7 @@ GitHub was instrumental in inspiring me to publish this project, but
 SourceForge provided the distribution platform which made it possible to
 reach an international audience overnight.
 
-## Structure
+## Structure ###################################################################
 [Structure]: #structure
 
 Here is documented the overall structure of the repository, along with
@@ -703,7 +705,7 @@ details for the individual components.
         * [packages](https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/packages):
           my personal list for a complete workstation installation.
 
-## Customizing
+## Customizing #################################################################
 [Customizing]: #customizing
 
 Since these scripts and configurations were originally intended for
@@ -745,8 +747,9 @@ anyone with enough free time and curiosity.
 In a perfect world, this section could be removed after the scripts were
 cleaned up and documented properly.
 
-************************************************************************
-# Use Cases
+********************************************************************************
+
+# Use Cases ####################################################################
 [Use Cases]: #use-cases
 
 Below are the primary use cases considered for GaryOS.  Each is tested
@@ -754,7 +757,7 @@ every release, and contains validation information.
 
 These are also considered the "howto" instructions for each case.
 
-## Forensics & Recovery
+## Forensics & Recovery ########################################################
 [Forensics & Recovery]: #forensics-recovery
 
   * Definition:
@@ -773,7 +776,7 @@ and interrogation.
 
 It is a stated goal that forensics mode continue being the default.
 
-## Networking Configuration
+## Networking Configuration ####################################################
 [Networking Configuration]: #networking-configuration
 
   * Definition:
@@ -813,7 +816,7 @@ The Funtoo OpenRC scripts have all sorts of advanced networking features
 and options, covered in depth:
 [http://www.funtoo.org/Networking](http://www.funtoo.org/Networking)
 
-## Minimal X.Org GUI
+## Minimal X.Org GUI ###########################################################
 [Minimal X.Org GUI]: #minimal-xorg-gui
 
   * Definition:
@@ -851,7 +854,7 @@ More information:
 Thanks to the [Suckless](http://suckless.org) team for creating such
 lightweight and useful software.
 
-## Live Update
+## Live Update #################################################################
 [Live Update]: #live-update
 
   * Definition:
@@ -905,7 +908,7 @@ Instructions for setting up update/install of packages:
   4. Use all "portage" commands as usual.
      * e.g. `emerge firefox`
 
-## Installation
+## Installation ################################################################
 [Installation]: #installation
 
   * Definition:
@@ -949,7 +952,7 @@ Instructions for installing to disk:
      install "portage" tree and update/install packages as desired.
   7. **Don't forget to change `hostname` and update `root` password!**
 
-## Windows Dual-Boot
+## Windows Dual-Boot ###########################################################
 [Windows Dual-Boot]: #windows-dual-boot
 
   * Definition:
@@ -1036,7 +1039,7 @@ Administrator to remove the unwanted entries:
      * e.g. `bcdedit /delete {02a0fce9-68f5-11e3-aa07-e94d28b95f82}
        /cleanup`
 
-## Grub Rescue
+## Grub Rescue #################################################################
 [Grub Rescue]: #grub-rescue
 
   * Definition:
@@ -1079,7 +1082,7 @@ Instructions for Grub "rescue" image installation to hard disk:
   6. To remove, simply re-install Grub using `grub-install` as usual, or
      install another bootloader.
 
-## PXE Boot
+## PXE Boot ####################################################################
 [PXE Boot]: #pxe-boot
 
   * Definition:
@@ -1101,5 +1104,5 @@ basis add the following configuration option to `dhcpd.conf`:
 
   * `filename "gary-os-[...].kernel";`
 
-************************************************************************
-###### End Of File
+********************************************************************************
+*End Of File*
