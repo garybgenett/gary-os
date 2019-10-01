@@ -518,33 +518,30 @@ function release_cpio_file {
 	return 0
 }
 
-function release_cpio_dir {
+function release_cpio_dir {	#>>> {initrd}
+	declare INITRD= ; if [[ ${1} == --initrd ]]; then INITRD="${1}" && shift; fi
 	if [[ ${TARGET} != / ]]; then
 		${RM}			${CPIO_FILE}.dir	|| return 1
 		${MKDIR}		${CPIO_FILE}.dir	|| return 1
 		${CPIO_OUT}					|| return 1
 	fi
-	if [[ ${TARGET} != / ]] || ${INITRD}; then
+	if [[ ${TARGET} != / ]] || [[ -n ${INITRD} ]]; then
 		${XZ} ${CPIO_FILE}	>${CPIO_FILE}.xz	|| return 1
 	fi
 	return 0
 }
 
 function _release_cpio {	#{initrd}
-	declare INITRD="false"
-	if [[ ${1} == --initrd ]]; then
-		INITRD="true"
-		shift
-	fi
+	declare INITRD= ; if [[ ${1} == --initrd ]]; then INITRD="${1}" && shift; fi
 	mount_dev_dirs -u	|| return 1
 	${MKDIR} ${_FINAL}	|| return 1
 	if {
-		{ [[ ! -f ${CPIO_FILE}.xz ]] && ${INITRD}; } ||
-		{ [[ ! -f ${CPIO_FILE} ]] && ! ${INITRD}; }
+		{ [[ ! -f ${CPIO_FILE}.xz ]]	&& [[ -n ${INITRD} ]]; } ||
+		{ [[ ! -f ${CPIO_FILE} ]]	&& [[ -z ${INITRD} ]]; }
 	}; then
-		release_cpio_nul			|| return 1
-		release_cpio_file			|| return 1
-		release_cpio_dir			|| return 1
+		release_cpio_nul	${INITRD}	|| return 1
+		release_cpio_file	${INITRD}	|| return 1
+		release_cpio_dir	${INITRD}	|| return 1
 	else
 		common_exists ${FUNCNAME} ${CPIO_FILE}*	|| return 1
 	fi
@@ -604,11 +601,7 @@ function release_kernel_initramfs {
 }
 
 function _release_kernel {	#{initrd}
-	declare INITRD="false"
-	if [[ ${1} == --initrd ]]; then
-		INITRD="true"
-		shift
-	fi
+	declare INITRD= ; if [[ ${1} == --initrd ]]; then INITRD="${1}" && shift; fi
 	declare DODIR="${KDIR}"
 	if [[ ${TARGET} == / ]]; then
 		DODIR="${LDIR}"
@@ -616,7 +609,7 @@ function _release_kernel {	#{initrd}
 	if [[ -d ${TARGET}${DODIR} ]] && [[ ! -f ${_RAMFS}.kernel ]]; then
 		release_kernel_config ${DODIR}						|| return 1
 		release_kernel_shmmax ${DODIR}						|| return 1
-		if ! ${INITRD}; then
+		if [[ -z ${INITRD} ]]; then
 			release_kernel_initramfs ${DODIR}				|| return 1
 		fi
 		declare BZIMAGE="${TARGET}${DODIR}/arch/x86/boot/bzImage"		|| return 1
