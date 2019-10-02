@@ -5,7 +5,7 @@
 
 ## Copyright
 
-    Copyright (c) 2009, Gary B. Genett
+    Copyright (c) 2009, 2019, Gary B. Genett
     All rights reserved.
 
 ## License
