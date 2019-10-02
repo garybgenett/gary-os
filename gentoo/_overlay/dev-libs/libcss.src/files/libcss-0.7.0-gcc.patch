@@ -1,0 +1,47 @@
+From a827023bed3815e332a33dc9f061584cbf424313 Mon Sep 17 00:00:00 2001
+From: Michael Drake <tlsa@netsurf-browser.org>
+Date: Sun, 22 Oct 2017 12:18:57 +0000
+Subject: Squash GCC7 -Wimplicit-fallthrough warnings.
+
+---
+diff --git a/src/parse/parse.c b/src/parse/parse.c
+index 68492d4..4cc1c98 100644
+--- a/src/parse/parse.c
++++ b/src/parse/parse.c
+@@ -2098,8 +2098,8 @@ css_error parseMalformedDeclaration(css_parser *parser)
+ 			;
+ 
+ 		state->substate = Go;
+-		/* Fall through */
+ 	}
++	/* Fall through */
+ 	case Go:
+ 		while (1) {
+ 			char want;
+@@ -2296,8 +2296,8 @@ css_error parseMalformedAtRule(css_parser *parser)
+ 			;
+ 
+ 		state->substate = Go;
+-		/* Fall through */
+ 	}
++	/* Fall through */
+ 	case Go:
+ 		while (1) {
+ 			char want;
+diff --git a/src/select/arena_hash.h b/src/select/arena_hash.h
+index 58abcd4..449284f 100644
+--- a/src/select/arena_hash.h
++++ b/src/select/arena_hash.h
+@@ -49,8 +49,8 @@ static inline uint32_t css__arena_hash(const uint8_t *data, size_t len)
+ 
+ 	/* Hash any left over bytes */
+ 	switch (len) {
+-	case 3: h ^= data[2] << 16;
+-	case 2: h ^= data[1] << 8;
++	case 3: h ^= data[2] << 16; /* Fall through */
++	case 2: h ^= data[1] << 8;  /* Fall through */
+ 	case 1: h ^= data[0];
+ 		h *= m;
+ 	}
+--
+cgit v0.9.0.3-65-g4555

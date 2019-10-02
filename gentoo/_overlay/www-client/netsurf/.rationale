@@ -1,0 +1,3 @@
+build-Linux-framebuffer/duktape/character_data.c:239:11: note: in expansion of macro ‘duk_error’
+return duk_error(ctx, DUK_ERR_ERROR, dukky_error_fmt_number_type, 1, "count");
+https://gitweb.gentoo.org/repo/gentoo.git/tree/www-client/netsurf/netsurf-3.8-r2.ebuild?id=5a8f59f7e779dbfdd83930e2fdbe9521346f88a2

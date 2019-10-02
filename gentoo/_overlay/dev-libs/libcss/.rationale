@@ -1,0 +1,4 @@
+emerge: there are no ebuilds to satisfy ">=dev-libs/libcss-0.8".
+(dependency required by "www-client/netsurf-3.8-r2::overlay" [ebuild])
+(dependency required by "netsurf" [argument])
+https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/libcss/libcss-0.8.0-r1.ebuild?id=c660b3597c9b47d7e8697b1efdc8b409eeab1a65

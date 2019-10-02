@@ -1,0 +1,4 @@
+emerge: there are no ebuilds to satisfy ">=dev-libs/libutf8proc-2.2".
+(dependency required by "www-client/netsurf-3.8-r2::overlay" [ebuild])
+(dependency required by "netsurf" [argument])
+https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/libutf8proc/libutf8proc-2.4.0.ebuild?id=0e856edefbd36efffc141a2174e75db9afe1f204

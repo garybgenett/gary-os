@@ -552,6 +552,7 @@ app-admin/keepassxc
 mail-client/thunderbird
 www-client/chromium
 www-client/firefox
+www-client/netsurf
 www-client/surf
 
 #>>>app-editors/atom
