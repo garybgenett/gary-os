@@ -115,8 +115,8 @@ export SHIPIT="_publish"
 export TARGET="${BLDDIR}"
 export TOOR="${TOOR}"
 export _PKG="${BLDPKG}"
-export _NEW=
-export _GOS=
+export _NEW="false"
+export _GOS="false"
 
 if ! ${_BASH_SOURCED}; then
 	if [[ ${1} == -[dxtg] ]]; then
@@ -144,14 +144,14 @@ fi
 if ! ${_BASH_SOURCED}; then
 	if [[ ${1} == -n ]]; then
 		TOOR="${TOOR} ${1}"
-		_NEW="1"
+		_NEW="true"
 		shift
 	fi
 fi
 
 #note: detection of a "gary-os" build is based purely on the package set
 if [[ ${_PKG} == _${GOSPKG} ]] || [[ ${_PKG} == ${GOSPKG} ]]; then
-	_GOS="1"
+	_GOS="true"
 fi
 
 ########################################
@@ -215,7 +215,7 @@ export GARC="${GARC:-core2}"
 export GSUB="${GSUB:-core2}"
 export GOPT="${GOPT:--O2}"
 
-if [[ -n ${_GOS} ]]; then
+if ${_GOS}; then
 	_CPU="CONFIG_GENERIC_CPU"
 	EARC="x86-64bit"
 	ESUB="generic_64"
@@ -1002,7 +1002,7 @@ if [[ ${1} == -i ]]; then
 	fi
 	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w			|| EXIT 1
 	if ${_BLD}; then
-		if [[ -n ${_NEW} ]]; then
+		if ${_NEW}; then
 			expect_wrapper			emerge ${_ASK} expect						|| EXIT 1
 			safe_env			${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -f			|| EXIT 1
 			expect_wrapper			emerge ${_ASK} --deep --newuse --update \@system		|| EXIT 1
@@ -1045,7 +1045,7 @@ if [[ ${1} == -i ]]; then
 							${TARGET}${ARCDIR}/config-gentoo64-${FILE}			|| EXIT 1
 #>>>		FILE="kernel-genkernel-x86-${FILE}-gentoo"								|| EXIT 1
 		FILE="kernel-genkernel-x86_64-${FILE}-gentoo"								|| EXIT 1
-		if [[ -z ${_GOS} ]]; then
+		if ! ${_GOS}; then
 			${RM}				${TARGET}/boot/_cur						|| EXIT 1
 			${LN} ${FILE}			${TARGET}/boot/_cur						|| EXIT 1
 			${RM}				${TARGET}/boot/_new						|| EXIT 1
@@ -1082,8 +1082,8 @@ if [[ ${1} == -W ]]; then
 		${ETCDIR}/make.conf \
 		${ETCDIR}/package.*
 	do
-		[[ -n ${_NEW} ]] && { ${SED} -i "s|^[#][{]NEW[}][ ](.+)$|\1|g" ${FILE}	|| EXIT 1 ;}
-		[[ -n ${_GOS} ]] && { ${SED} -i "s|^[#][{]GOS[}][ ](.+)$|\1|g" ${FILE}	|| EXIT 1 ;}
+		${_NEW} && { ${SED} -i "s|^[#][{]NEW[}][ ](.+)$|\1|g" ${FILE}	|| EXIT 1 ;}
+		${_GOS} && { ${SED} -i "s|^[#][{]GOS[}][ ](.+)$|\1|g" ${FILE}	|| EXIT 1 ;}
 	done
 	${SED} -i \
 		-e "s|^[#][{]CPU[}][ ]||g" \
@@ -1176,7 +1176,7 @@ elif [[ ${1} != -! ]]; then
 	if [[ -z ${1} ]] || [[ ${1} == -f ]]; then
 		FILE="true"
 		NEXT="--fetch-all-uri"
-		if [[ -n ${_GOS} ]]; then
+		if ${_GOS}; then
 			NEXT="--fetchonly"
 		fi
 		expect_wrapper emerge --ask=n --emptytree ${NEXT}			\
@@ -1219,7 +1219,7 @@ fi
 
 safe_env ${SETDIR}/${FUNDIR}/${AUDITS}
 
-#>>> if [[ -z ${_GOS} ]]; then
+#>>> if ! ${_GOS}; then
 #>>> 	safe_env ${SETDIR}/${FUNDIR}/.hacks
 #>>> fi
 
