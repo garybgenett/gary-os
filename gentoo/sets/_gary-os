@@ -83,11 +83,11 @@
 # - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} unpack
 #
 # [mount]
-# - ${MKDIR} ${_GINST}
+# - ${MKDIR} ${_FINAL} ${_GINST} ${SAVE_DIR}
 # - mount-robust ${USB_SOURCE} ${_GINST}
-# - ${MKDIR} ${_GINST}${SAVE_DIR}
 # - ${RM} ${_FINAL} && ${LN} ${_GINST} ${_FINAL}
 # - ${RM} ${SAVE_DIR} && ${LN} ${_GINST}${SAVE_DIR} ${SAVE_DIR}
+# - ${MKDIR} ${_GINST}${SAVE_DIR}
 #
 ########################################
 # basic setup
@@ -231,7 +231,7 @@
 # - ${RM} /var/git/meta-repo*
 # - ${RM} ${LDIR}.tar.xz
 # - (GOSPKG="gary-os" && make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} clean)
-# - (GOSPKG="gary-os" && make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} _release_cpio _release_kernel _release_report) #>>> == release - _prepare_build
+# - (GOSPKG="gary-os" && make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} _release_cpio _release_kernel _release_report) #>>> == release - _prepare_build _release_grub
 # <copy>
 # - ${MKDIR} ${_GINST}/gary-os
 # - ${RSYNC_U} -L ${_RAMFS}.null.kernel ${_GINST}/gary-os/gary-os.null.kernel
