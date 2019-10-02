@@ -326,6 +326,7 @@ app-emulation/spice-vdagent		#{minimal}
 
 mail-client/mutt
 
+www-client/netsurf
 #>>>www-client/surf			# requires: net-libs/webkit-gtk, x11-libs/gtk+
 
 net-misc/freerdp			#{minimal}
