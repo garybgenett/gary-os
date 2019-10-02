@@ -110,24 +110,23 @@
 #
 # [emerge]
 # <setup>
-# - ${MKDIR} ${FUSE_DST} ${FUSE_PAK} /var/cache/portage/{distfiles,packages}
+# - ${MKDIR} /var/cache/portage/{distfiles,packages}
 # <usb>
-# - mount-robust -0 ${_GINST}${USB_DIST} ${FUSE_DST}
-# - mount-robust -0 ${_GINST}${USB_PACK} ${FUSE_PAK}
+# - ${MKDIR} ${_GINST}${USB_DIST} ${_GINST}${USB_PACK}}
+# - mount-robust ${_GINST}${USB_DIST} /var/cache/portage/distfiles
+# - mount-robust ${_GINST}${USB_PACK} /var/cache/portage/packages
 # <ssh>
-# - prompt -z emerge --ask=n sshfs
-# - sshfs -o ro ${SSH_SOURCE}:${SSH_DIST}/ ${FUSE_DST}
-# - sshfs -o ro ${SSH_SOURCE}:${SSH_PACK}/ ${FUSE_PAK}
-# <mount>
+# - ${MKDIR} ${FUSE_DST} ${FUSE_PAK}
 # - mount-robust -o ${FUSE_DST} /var/cache/portage/distfiles
 # - mount-robust -o ${FUSE_PAK} /var/cache/portage/packages
+# - prompt -z emerge --ask=n sshfs
+# - sshfs -o ro,nonempty ${SSH_SOURCE}:${SSH_DIST} /var/cache/portage/distfiles
+# - sshfs -o ro,nonempty ${SSH_SOURCE}:${SSH_PACK} /var/cache/portage/packages
 # <install>
 # - prompt -z emerge --usepkg=y --deep --newuse --update \@${GOSPKG}
 # <umount>
 # - mount-robust -u /var/cache/portage/distfiles
 # - mount-robust -u /var/cache/portage/packages
-# - mount-robust -u ${FUSE_DST}
-# - mount-robust -u ${FUSE_PAK}
 #
 # [xorg]
 # <setup>
