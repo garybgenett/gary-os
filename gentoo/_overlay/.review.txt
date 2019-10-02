@@ -4,10 +4,11 @@ diff :: app-admin/keepassx [rationale] =========================================
 diff :: app-admin/keepassx [source] ====================================================================================
 diff: /var/git/meta-repo/kits/*/app-admin/keepassx: No such file or directory
 diff :: app-admin/keepassx [target] ====================================================================================
+Only in ./app-admin/keepassx: .keep
 Only in ./app-admin/keepassx: .rationale
 diff -u -U10 -r ./app-admin/keepassx.src/Manifest ./app-admin/keepassx/Manifest
---- ./app-admin/keepassx.src/Manifest	2018-09-10 05:29:29.665592527 -0000
-+++ ./app-admin/keepassx/Manifest	2018-09-11 01:18:37.000000000 -0000
+--- ./app-admin/keepassx.src/Manifest	2019-10-02 16:10:05.443898457 -0700
++++ ./app-admin/keepassx/Manifest	2019-10-02 16:22:54.979598891 -0700
 @@ -1,3 +1,3 @@
 -DIST keepassx-0.4.4.tar.gz 1371560 SHA256 3e27068ca85e68705347f0921c6b3c9248d7c5a84c79c0483daf22d141c0adc4 SHA512 2fc93d77f5576a0cce6514b39ee9b319efaa72b475762438eed5601c5e3edb7693a5fbb9c1e741be1e5d3a08849bc54b0cff90fe3a86cf240129febc0cc703d8 WHIRLPOOL 41c987607c8b233292eac5c5d654974caa1ae2a0d277468081ad4a6e9fcd248314239162ba23dc414f0854a5f6ba09e1c1f9d3aa078756438650a0e9151e81d2
 -DIST keepassx-2.0.2.tar.gz 1532353 SHA256 204bdcf49c72078cd6f02b4f29b062923cca9e7b2d3551f2bf352763daa236b8 SHA512 3f661d3b5807c5acafc65310ecd8bd4d0bcd51a0c919e219bba616cb3f54434f8f81ba533ab5ccec00d454838355ff048f4ffbc308442fad4f973d1766b95072 WHIRLPOOL 0d793bb3ce4ba015ea9cabc1625c61bdf0cc7fabfe5be67fe09ea180a5fb3654ef850531bff7e09bdc47107d69bf06f5e94fa308dbb0b8d5f9468b3c02349810
@@ -35,15 +36,15 @@ diff :: app-emulation/bochs [source] ===========================================
 diff :: app-emulation/bochs [target] ===================================================================================
 Only in ./app-emulation/bochs: .rationale
 diff -u -U10 -r ./app-emulation/bochs.src/Manifest ./app-emulation/bochs/Manifest
---- ./app-emulation/bochs.src/Manifest	2018-09-18 21:50:42.721190415 -0000
-+++ ./app-emulation/bochs/Manifest	2018-09-18 21:50:42.725190454 -0000
+--- ./app-emulation/bochs.src/Manifest	2019-04-07 16:48:55.000000000 -0700
++++ ./app-emulation/bochs/Manifest	2019-03-09 18:10:02.686073166 -0800
 @@ -1 +1,3 @@
 +AUX 2.6.9-slirp_h.patch 336 BLAKE2B a0c353d6be541977025bf1d7f6504c6f102a837b6857d63abab9792a09876197e50053c4bdf7b2147ce81a70f211c2a9413cf630e7c18d76b2fe43f1968eba2b SHA512 9e2ace6b3d73ededabd1e33c048b8a57f6618f27e9ba8f64072ab53fb50f5da588d2231808a7d088269722cd29c3b9b8797c90273ad2d1355756b2e57cdb4998
  DIST bochs-2.6.9.tar.gz 5169187 BLAKE2B 49824a96a48294d8d507bc15128103e9c2839515554657d282c7c9533aa299cb6289581e760ea40a6c659adfb7ebdac0d273d2a9e7b598c95b145d65e8cdc977 SHA512 dfecf3a1bad07f06c2f7bb989d146e4a8eaeca493b598d415f5a4aec2a85eb5524ba417422157608c8b0828832611df487c6923c8f4ad98a147ac089fc514c46
 +EBUILD bochs-2.6.9.ebuild 1834 BLAKE2B 1a05b6a0e8ead97de5506491e689dac2d3486fc269f5fb03d6138b37652f552d180ddaa92ccc410c8e4f921cfabb5e0822e425bd08f4bb83bb588290af6cf9cc SHA512 87c7589cedb93e513a911b806bfdc946d4ddb6eac6289bc1201b46b48cb96fa166675389f3bd999a137f5ce748a59c7a21f890f4b3331874d9d07832365f71b3
 diff -u -U10 -r ./app-emulation/bochs.src/bochs-2.6.9.ebuild ./app-emulation/bochs/bochs-2.6.9.ebuild
---- ./app-emulation/bochs.src/bochs-2.6.9.ebuild	2018-09-18 21:50:42.725190454 -0000
-+++ ./app-emulation/bochs/bochs-2.6.9.ebuild	2018-09-18 21:50:42.725190454 -0000
+--- ./app-emulation/bochs.src/bochs-2.6.9.ebuild	2019-04-07 16:48:55.000000000 -0700
++++ ./app-emulation/bochs/bochs-2.6.9.ebuild	2018-09-18 14:50:42.725190454 -0700
 @@ -28,20 +28,26 @@
  	readline? ( sys-libs/readline:= )
  	ncurses? ( sys-libs/ncurses:= )
@@ -111,14 +112,14 @@ diff :: app-misc/task [rationale] ==============================================
 # version
 diff :: app-misc/task [source] =========================================================================================
 diff -u -U10 -r /var/git/meta-repo/kits/nokit/app-misc/task/Manifest ./app-misc/task.src/Manifest
---- /var/git/meta-repo/kits/nokit/app-misc/task/Manifest	2018-09-18 21:59:40.346391728 -0000
-+++ ./app-misc/task.src/Manifest	2017-09-09 06:07:15.035431739 -0000
+--- /var/git/meta-repo/kits/nokit/app-misc/task/Manifest	2019-04-07 16:48:56.000000000 -0700
++++ ./app-misc/task.src/Manifest	2019-10-02 16:22:54.979598891 -0700
 @@ -1 +1 @@
 -DIST task-2.5.1.tar.gz 903428 BLAKE2B afa17364984237ea589921afb4379297b128ea1bb6b0834f875b1b02b38dbfde5e961122fdde00dc5ff29b56226a5ce0f805bd1be8a8194c9e185ab80ad6d6c2 SHA512 ec17e5cefff55ecd2c1cb717801c02683d94030906c8d86450c3c79c0bc5a18d82559a5e9e26a91411a1025a241b78ddbc1de51cafc1a2dd531e8229e5e61c10
 +DIST task-2.5.1.tar.gz 903428 SHA256 d87bcee58106eb8a79b850e9abc153d98b79e00d50eade0d63917154984f2a15 SHA512 ec17e5cefff55ecd2c1cb717801c02683d94030906c8d86450c3c79c0bc5a18d82559a5e9e26a91411a1025a241b78ddbc1de51cafc1a2dd531e8229e5e61c10 WHIRLPOOL e4502a4f545eb5c044943758e3b4710db34c9011ccb58b95e70486c09593620a91cf547100025182867b69c87099cd8614b6bc28e21d5e0c0b88216f6df419ac
 diff -u -U10 -r /var/git/meta-repo/kits/nokit/app-misc/task/task-2.5.1-r1.ebuild ./app-misc/task.src/task-2.5.1-r1.ebuild
---- /var/git/meta-repo/kits/nokit/app-misc/task/task-2.5.1-r1.ebuild	2018-09-18 21:59:40.346391728 -0000
-+++ ./app-misc/task.src/task-2.5.1-r1.ebuild	2017-09-09 06:07:15.035431739 -0000
+--- /var/git/meta-repo/kits/nokit/app-misc/task/task-2.5.1-r1.ebuild	2019-04-07 16:48:56.000000000 -0700
++++ ./app-misc/task.src/task-2.5.1-r1.ebuild	2019-10-02 16:22:54.979598891 -0700
 @@ -1,35 +1,35 @@
  # Copyright 1999-2017 Gentoo Foundation
  # Distributed under the terms of the GNU General Public License v2
@@ -159,10 +160,11 @@ diff -u -U10 -r /var/git/meta-repo/kits/nokit/app-misc/task/task-2.5.1-r1.ebuild
  		-DTASK_DOCDIR=share/doc/${PF}
  		-DTASK_RCDIR=share/${PN}/rc
 diff :: app-misc/task [target] =========================================================================================
+Only in ./app-misc/task: .keep
 Only in ./app-misc/task: .rationale
 diff -u -U10 -r ./app-misc/task.src/Manifest ./app-misc/task/Manifest
---- ./app-misc/task.src/Manifest	2017-09-09 06:07:15.035431739 -0000
-+++ ./app-misc/task/Manifest	2018-08-23 21:16:33.000000000 -0000
+--- ./app-misc/task.src/Manifest	2019-10-02 16:22:54.979598891 -0700
++++ ./app-misc/task/Manifest	2019-10-02 16:22:54.979598891 -0700
 @@ -1 +1,5 @@
 -DIST task-2.5.1.tar.gz 903428 SHA256 d87bcee58106eb8a79b850e9abc153d98b79e00d50eade0d63917154984f2a15 SHA512 ec17e5cefff55ecd2c1cb717801c02683d94030906c8d86450c3c79c0bc5a18d82559a5e9e26a91411a1025a241b78ddbc1de51cafc1a2dd531e8229e5e61c10 WHIRLPOOL e4502a4f545eb5c044943758e3b4710db34c9011ccb58b95e70486c09593620a91cf547100025182867b69c87099cd8614b6bc28e21d5e0c0b88216f6df419ac
 +AUX 0001-TW-1778-Unicode-strings-are-truncated-in-task-descri.patch 660 SHA256 e41cc8b3a147e8edfb1144157b5c81c61bfd59a1002da33b8bbe215f4bd01bbd SHA512 6af9226a73280ca1c5f3f95d11b9c8f10ad4d847df9401643a8294645031cd3141916e4b00a188e25795f4a51f9f55e4caf2ba3280d5c9bd89f44a89411389a5 WHIRLPOOL efa26204c887e98254601595c6aa44de8b5c669112f48cc1ed2b8b5ffbec6f923bf6425a34d70c5fb9025151b9a731a57d823ab74ccf7753a5884505446ac234
@@ -172,8 +174,8 @@ diff -u -U10 -r ./app-misc/task.src/Manifest ./app-misc/task/Manifest
 +MISC metadata.xml 315 SHA256 8bc0aadf644f83e2388841e7ad19f30753cddebb0b3a1c9a6aa5b0468f92c0b0 SHA512 509043e7fa47b91c7e0041325e34d2f96cadddae179e0852420f53ce40f2dcf3a6ee959b31de3a1169277dfedea79c27b07aa14ba5daa774b1cdc13b55edf9b5 WHIRLPOOL 842b029ec28a6e18affcf0c055a95d0487c12e5514758823114577d2ac0b1c04b2fdaaaf5b6a7004e398081a6683fe4e10f1fad99f02b8edd7440cee027f03c2
 Only in ./app-misc/task/files: 0001-task-9999-annotations-edit-fix.patch
 diff -u -U10 -r ./app-misc/task.src/task-2.5.1-r1.ebuild ./app-misc/task/task-2.5.1-r1.ebuild
---- ./app-misc/task.src/task-2.5.1-r1.ebuild	2017-09-09 06:07:15.035431739 -0000
-+++ ./app-misc/task/task-2.5.1-r1.ebuild	2018-08-23 21:16:33.505566759 -0000
+--- ./app-misc/task.src/task-2.5.1-r1.ebuild	2019-10-02 16:22:54.979598891 -0700
++++ ./app-misc/task/task-2.5.1-r1.ebuild	2018-08-23 14:16:33.505566759 -0700
 @@ -1,38 +1,54 @@
  # Copyright 1999-2017 Gentoo Foundation
  # Distributed under the terms of the GNU General Public License v2
@@ -251,18 +253,19 @@ diff :: app-misc/taskd [rationale] =============================================
 # version
 diff :: app-misc/taskd [source] ========================================================================================
 diff -u -U10 -r /var/git/meta-repo/kits/nokit/app-misc/taskd/Manifest ./app-misc/taskd.src/Manifest
---- /var/git/meta-repo/kits/nokit/app-misc/taskd/Manifest	2018-09-18 21:59:40.346391728 -0000
-+++ ./app-misc/taskd.src/Manifest	2017-09-09 06:07:15.035431739 -0000
+--- /var/git/meta-repo/kits/nokit/app-misc/taskd/Manifest	2019-04-07 16:48:56.000000000 -0700
++++ ./app-misc/taskd.src/Manifest	2019-10-02 16:22:54.979598891 -0700
 @@ -1 +1 @@
 -DIST taskd-1.1.0.tar.gz 120115 BLAKE2B 1baabcd29afb2c44c5da19f6cb926546e9beb5716ea1a04d247e62c02b4a4c5bc4bf3347e32e0e417f3b5edf1b78f58d306f1d584340c344a13fd29cdd39dcc7 SHA512 df2349c354258fd1b014b1a9c78f68dc10c9e5a48357e282e8a760cf4e4aaf4d36486796ad094ee2b050e7506195b778e3316c90ef543a2f8242de313daa13aa
 +DIST taskd-1.1.0.tar.gz 120115 SHA256 7b8488e687971ae56729ff4e2e5209ff8806cf8cd57718bfd7e521be130621b4 SHA512 df2349c354258fd1b014b1a9c78f68dc10c9e5a48357e282e8a760cf4e4aaf4d36486796ad094ee2b050e7506195b778e3316c90ef543a2f8242de313daa13aa WHIRLPOOL f3247de0ab1ecfed48e6c4e2f2391d370e77b6fb17a4aee5b0824efb1c0e70b725a6d9a544ffb9611d2dcba9956ec0443b0161ca8310f56a41cdd89b99335591
 Only in ./app-misc/taskd.src: taskd-1.1.0-r1.ebuild
 Only in /var/git/meta-repo/kits/nokit/app-misc/taskd: taskd-1.1.0-r2.ebuild
 diff :: app-misc/taskd [target] ========================================================================================
+Only in ./app-misc/taskd: .keep
 Only in ./app-misc/taskd: .rationale
 diff -u -U10 -r ./app-misc/taskd.src/Manifest ./app-misc/taskd/Manifest
---- ./app-misc/taskd.src/Manifest	2017-09-09 06:07:15.035431739 -0000
-+++ ./app-misc/taskd/Manifest	2018-08-23 21:16:50.000000000 -0000
+--- ./app-misc/taskd.src/Manifest	2019-10-02 16:22:54.979598891 -0700
++++ ./app-misc/taskd/Manifest	2019-10-02 16:22:54.979598891 -0700
 @@ -1 +1,7 @@
 -DIST taskd-1.1.0.tar.gz 120115 SHA256 7b8488e687971ae56729ff4e2e5209ff8806cf8cd57718bfd7e521be130621b4 SHA512 df2349c354258fd1b014b1a9c78f68dc10c9e5a48357e282e8a760cf4e4aaf4d36486796ad094ee2b050e7506195b778e3316c90ef543a2f8242de313daa13aa WHIRLPOOL f3247de0ab1ecfed48e6c4e2f2391d370e77b6fb17a4aee5b0824efb1c0e70b725a6d9a544ffb9611d2dcba9956ec0443b0161ca8310f56a41cdd89b99335591
 +AUX config 392 SHA256 7523f304465ac27a13fc7222dbbee99ff2b5c720a95826c2bd4cb77ca883e4ce SHA512 00d21faa5063f7024885c63c455310b8f06738a03ff0b0c348f2b65166e2253d46148ee3faa2cc2269f5dd1178fc9be5f2566cccf9b2c3545ed311dff840b804 WHIRLPOOL 3d656adf6c768433c3155c9f34f44b5ffc364f80ff9bc2082d977b03c1d87a7104f701ab5463205643269180dc7348b4e36f1b4adeb7cdc56b3cd822250a1f17
@@ -273,8 +276,8 @@ diff -u -U10 -r ./app-misc/taskd.src/Manifest ./app-misc/taskd/Manifest
 +EBUILD taskd-9999.ebuild 2012 SHA256 f8c49e87c0eb68e99844a27f85b12a9794a4992b61553d3c5e80503d5789eca1 SHA512 2f8c0d201799e22f51948391a8166226496b950484df0e160611229a96f144e5a7c2d37b6a3b48f761395fdf1e839b5e2ab46c76bc25c67b7236f141d4ddd835 WHIRLPOOL d6e4ac009e5c17bdbaac2c4b69403671211cbb7a3125a06a38cc931ae65ba26374801ff5bdc01a21c494869e584ef613b906896c4a7b5627dafec6859c44fc1a
 +MISC metadata.xml 246 SHA256 8c6ebbba986310a482981d0b04b95c563bbd468d48a3a78f3a781c42df768685 SHA512 cf3bffaa344cc0785ce4b3a18c5cef7b508e943de589d67485df46802f0c9c1b9bd6d51b7197fc84431180f82b8affae22175ae0bfe7616b57f6874a861f6698 WHIRLPOOL c6b19f5fb30c47dec1cb760524bad2e1ce067dbe71ec345709953c2d448df685845c0c8194986db459dcf0e4efd1722bcb9b80ab5a78a934d11cf2a9ccbbed0c
 diff -u -U10 -r ./app-misc/taskd.src/taskd-1.1.0-r1.ebuild ./app-misc/taskd/taskd-1.1.0-r1.ebuild
---- ./app-misc/taskd.src/taskd-1.1.0-r1.ebuild	2017-09-09 06:07:15.035431739 -0000
-+++ ./app-misc/taskd/taskd-1.1.0-r1.ebuild	2018-08-23 21:16:50.509735493 -0000
+--- ./app-misc/taskd.src/taskd-1.1.0-r1.ebuild	2019-10-02 16:22:54.979598891 -0700
++++ ./app-misc/taskd/taskd-1.1.0-r1.ebuild	2018-08-23 14:16:50.509735493 -0700
 @@ -1,20 +1,25 @@
  # Copyright 1999-2016 Gentoo Foundation
  # Distributed under the terms of the GNU General Public License v2
@@ -327,18 +330,19 @@ diff :: app-misc/timew [rationale] =============================================
 # version
 diff :: app-misc/timew [source] ========================================================================================
 diff -u -U10 -r /var/git/meta-repo/kits/nokit/app-misc/timew/Manifest ./app-misc/timew.src/Manifest
---- /var/git/meta-repo/kits/nokit/app-misc/timew/Manifest	2018-09-18 21:59:40.346391728 -0000
-+++ ./app-misc/timew.src/Manifest	2017-09-09 06:07:15.035431739 -0000
+--- /var/git/meta-repo/kits/nokit/app-misc/timew/Manifest	2019-04-07 16:48:56.000000000 -0700
++++ ./app-misc/timew.src/Manifest	2019-10-02 16:22:54.979598891 -0700
 @@ -1,2 +1 @@
 -DIST timew-1.0.0.tar.gz 140539 BLAKE2B 486c1e99a587597a040e3fb45c15602e56798b5a13ce3f47fb8d73b3995ee270ef2601e49dc4efe3023d1179a111b55c50c92a3feece87d9bad6a26123dc9008 SHA512 0539ff93b2375c154d126c39aa84f21b57b62f51c220c80b2e323a4d6aefd2eda6f87c04112e096222102b019ee3683a78b9ee9d6fbf6736d4a34c529f6152f5
 -DIST timew-1.1.1.tar.gz 166484 BLAKE2B 64b8560220550299c76207873184252b1100d146ac745e46f38790a90294c59e5da95852836433f1d5213a2f1272063a534c20b2963a88fbaa1bcb888e40b70b SHA512 d262227d6dc99994599252c9fc55d32e4caac9d5ff1f223b8637005ed9f4f7fa238bd5cb7392c8e42a468f6246a7afad9b6fdb02af636e53d3bd813cfc3ee110
 +DIST timew-1.0.0.tar.gz 140539 SHA256 ac027910e1e8365bdd218a8b42389b26d017d38d3c96516c408db6d5a44e0bb5 SHA512 0539ff93b2375c154d126c39aa84f21b57b62f51c220c80b2e323a4d6aefd2eda6f87c04112e096222102b019ee3683a78b9ee9d6fbf6736d4a34c529f6152f5 WHIRLPOOL 77ede6c679203071c3da95f708326f626906266547301b9ce2f2c8ae768f6b4082fb32bcc325a22e7295f5894477786960632ff201771b3512d978bf8c379c75
 Only in /var/git/meta-repo/kits/nokit/app-misc/timew: timew-1.1.1.ebuild
 diff :: app-misc/timew [target] ========================================================================================
+Only in ./app-misc/timew: .keep
 Only in ./app-misc/timew: .rationale
 diff -u -U10 -r ./app-misc/timew.src/Manifest ./app-misc/timew/Manifest
---- ./app-misc/timew.src/Manifest	2017-09-09 06:07:15.035431739 -0000
-+++ ./app-misc/timew/Manifest	2018-08-26 06:58:20.283726912 -0000
+--- ./app-misc/timew.src/Manifest	2019-10-02 16:22:54.979598891 -0700
++++ ./app-misc/timew/Manifest	2019-10-02 16:22:54.979598891 -0700
 @@ -1 +1,4 @@
  DIST timew-1.0.0.tar.gz 140539 SHA256 ac027910e1e8365bdd218a8b42389b26d017d38d3c96516c408db6d5a44e0bb5 SHA512 0539ff93b2375c154d126c39aa84f21b57b62f51c220c80b2e323a4d6aefd2eda6f87c04112e096222102b019ee3683a78b9ee9d6fbf6736d4a34c529f6152f5 WHIRLPOOL 77ede6c679203071c3da95f708326f626906266547301b9ce2f2c8ae768f6b4082fb32bcc325a22e7295f5894477786960632ff201771b3512d978bf8c379c75
 +DIST timew-1.1.1.tar.gz 166484 SHA256 1f7d9a62e55fc5a3126433654ccb1fd7d2d135f06f05697f871897c9db77ccc9 SHA512 d262227d6dc99994599252c9fc55d32e4caac9d5ff1f223b8637005ed9f4f7fa238bd5cb7392c8e42a468f6246a7afad9b6fdb02af636e53d3bd813cfc3ee110 WHIRLPOOL debaee02e015ad47eba2201e49572b959a8d6f1922e8ac694b1bbfa761d7773697d1d990ac104a23387f6042d508bb17a5e3e8216f4eef70c4c7f4327dc84d39
@@ -346,8 +350,8 @@ diff -u -U10 -r ./app-misc/timew.src/Manifest ./app-misc/timew/Manifest
 +EBUILD timew-1.1.1.ebuild 860 SHA256 206eaf91a5f3cfd18c28fa3666295d8381de080d4b85cdb0301ca45556fa9ad4 SHA512 c0b98f8c86cc0098edc43b148e9bda9f5dcafb84ce48283d2449850182b100464cb59f237dd291e25fe15df0a046263622349da621b782f50ca371fee3376e72 WHIRLPOOL 2505f5df1eb26cfcd7f902be1b475ebaba1942eea0d563f14d472546df669dc0b558dc1f6387111bdd1bb46a7d9601262c52774becc85973d4b0dd4d4565308f
 Only in ./app-misc/timew.src: metadata.xml
 diff -u -U10 -r ./app-misc/timew.src/timew-1.0.0.ebuild ./app-misc/timew/timew-1.0.0.ebuild
---- ./app-misc/timew.src/timew-1.0.0.ebuild	2017-09-09 06:07:15.035431739 -0000
-+++ ./app-misc/timew/timew-1.0.0.ebuild	2018-08-26 06:57:43.871365793 -0000
+--- ./app-misc/timew.src/timew-1.0.0.ebuild	2019-04-07 16:48:56.000000000 -0700
++++ ./app-misc/timew/timew-1.0.0.ebuild	2018-08-25 23:57:43.871365793 -0700
 @@ -1,20 +1,29 @@
  # Copyright 1999-2017 Gentoo Foundation
  # Distributed under the terms of the GNU General Public License v2
@@ -393,10 +397,11 @@ diff :: app-misc/wyrd [rationale] ==============================================
 diff :: app-misc/wyrd [source] =========================================================================================
 diff: /var/git/meta-repo/kits/*/app-misc/wyrd: No such file or directory
 diff :: app-misc/wyrd [target] =========================================================================================
+Only in ./app-misc/wyrd: .keep
 Only in ./app-misc/wyrd: .rationale
 diff -u -U10 -r ./app-misc/wyrd.src/Manifest ./app-misc/wyrd/Manifest
---- ./app-misc/wyrd.src/Manifest	2018-09-18 21:50:42.733190531 -0000
-+++ ./app-misc/wyrd/Manifest	2018-09-18 21:50:42.737190570 -0000
+--- ./app-misc/wyrd.src/Manifest	2018-09-18 14:50:42.733190531 -0700
++++ ./app-misc/wyrd/Manifest	2018-09-18 14:50:42.737190570 -0700
 @@ -1 +1,2 @@
  DIST wyrd-1.4.6.tar.gz 425829 BLAKE2B f732b0d69ebb200913f51ab5ea1d42f551469ebd4bc4fd22862499a01db6a6a5bfc21caac7b14e7bf247b75b73a64c3d7ed7c9249d0bc4123a6fc1a27d5017db SHA512 fc09c4567ea8d6225638ee6851ddab716665913b7d7b2f6b5a3cc7f2af9144df617e2a95ca78c74874bec3ff355aba028c7c51eafe1426d9ae803ab77ce84477
 +EBUILD wyrd-1.4.6-r1.ebuild 653 BLAKE2B 292c6f86f35e078526610e5303aeef5defd6073b9c404aa0936cb9a16b0686468d1a5eef3fe9d0e4d64e3cfd87980bab49d02b8f0ff91144db4628162adee336 SHA512 791ebbaec3b630cad1a5392319948a39df0a5ad6289e7caea04d8884854d9e02890f9a226c116cc8616a3bc16d0c4ada6a14fcfdb799a11d2ca91cb2fa90c165
@@ -411,8 +416,8 @@ diff :: app-office/libreoffice [rationale] =====================================
 # https://gitweb.gentoo.org/repo/gentoo.git/tree/app-office/libreoffice?id=4ff0bb199ba902d5fd730b1c8854294bf1dd22d6
 diff :: app-office/libreoffice [source] ================================================================================
 diff -u -U10 -r /var/git/meta-repo/kits/kde-kit/app-office/libreoffice/Manifest ./app-office/libreoffice.src/Manifest
---- /var/git/meta-repo/kits/kde-kit/app-office/libreoffice/Manifest	2018-09-18 21:59:13.354130656 -0000
-+++ ./app-office/libreoffice.src/Manifest	2018-08-18 13:15:04.830356794 -0000
+--- /var/git/meta-repo/kits/kde-kit/app-office/libreoffice/Manifest	2019-04-07 18:05:35.000000000 -0700
++++ ./app-office/libreoffice.src/Manifest	2019-10-02 16:22:54.979598891 -0700
 @@ -1,12 +1,12 @@
  DIST 17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip 3519470 BLAKE2B ccfdf6b7f88f22d3ec7898c529c374f13059979450aabdccc9781ca91dd27d0119dfec3d33dda073c2973fa4a8aacae13924c9a67e38a1422c48bfee41b6f3e8 SHA512 a231eba4a1baca11766ef292ab45e302081115477fe23018652882923308856835cf8c9ecba61a5cf22543474ccef3136965d794a90c9e4e9e6dcc21f9af6e1a
  DIST 185d60944ea767075d27247c3162b3bc-unowinreg.dll 12288 BLAKE2B c067f60d0ee325feae4f168ad0f84602708fe724a1d9a9a054ed4991992c1d4637b31083cf569326b8aac1ec598e71ec65fb31ee16233b9c736e97ef062b47d7 SHA512 854b8ae29b57b40ba6bb6ff66e723a0e8dad053fcc2849f0ad763cd8a31352f4aeba9636fd4e3f0f2a0cd985a6f49b4261b9ace68d6be821ed42cfa7a73eb13c
@@ -447,8 +452,8 @@ Only in ./app-office/libreoffice.src: libreoffice-6.0.6.2.ebuild
 Only in /var/git/meta-repo/kits/kde-kit/app-office/libreoffice: libreoffice-6.0.9999.ebuild
 Only in ./app-office/libreoffice.src: libreoffice-6.1.9999.ebuild
 diff -u -U10 -r /var/git/meta-repo/kits/kde-kit/app-office/libreoffice/libreoffice-9999.ebuild ./app-office/libreoffice.src/libreoffice-9999.ebuild
---- /var/git/meta-repo/kits/kde-kit/app-office/libreoffice/libreoffice-9999.ebuild	2018-09-18 21:59:13.358130695 -0000
-+++ ./app-office/libreoffice.src/libreoffice-9999.ebuild	2018-09-01 14:53:31.611639452 -0000
+--- /var/git/meta-repo/kits/kde-kit/app-office/libreoffice/libreoffice-9999.ebuild	2019-04-07 18:05:35.000000000 -0700
++++ ./app-office/libreoffice.src/libreoffice-9999.ebuild	2019-10-02 16:22:54.979598891 -0700
 @@ -1,48 +1,48 @@
  # Copyright 1999-2018 Gentoo Foundation
  # Distributed under the terms of the GNU General Public License v2
@@ -968,8 +973,8 @@ diff -u -U10 -r /var/git/meta-repo/kits/kde-kit/app-office/libreoffice/libreoffi
  	xdg_desktop_database_update
  	xdg_mimeinfo_database_update
 diff -u -U10 -r /var/git/meta-repo/kits/kde-kit/app-office/libreoffice/metadata.xml ./app-office/libreoffice.src/metadata.xml
---- /var/git/meta-repo/kits/kde-kit/app-office/libreoffice/metadata.xml	2018-09-18 21:59:13.358130695 -0000
-+++ ./app-office/libreoffice.src/metadata.xml	2018-07-14 13:27:56.285124056 -0000
+--- /var/git/meta-repo/kits/kde-kit/app-office/libreoffice/metadata.xml	2019-04-07 18:05:35.000000000 -0700
++++ ./app-office/libreoffice.src/metadata.xml	2019-10-02 16:22:54.979598891 -0700
 @@ -5,22 +5,18 @@
      <email>office@gentoo.org</email>
      <name>Gentoo Office project</name>
@@ -996,8 +1001,8 @@ diff -u -U10 -r /var/git/meta-repo/kits/kde-kit/app-office/libreoffice/metadata.
 diff :: app-office/libreoffice [target] ================================================================================
 Only in ./app-office/libreoffice: .rationale
 diff -u -U10 -r ./app-office/libreoffice.src/Manifest ./app-office/libreoffice/Manifest
---- ./app-office/libreoffice.src/Manifest	2018-08-18 13:15:04.830356794 -0000
-+++ ./app-office/libreoffice/Manifest	2018-09-12 02:44:54.850235087 -0000
+--- ./app-office/libreoffice.src/Manifest	2019-10-02 16:22:54.979598891 -0700
++++ ./app-office/libreoffice/Manifest	2019-03-09 18:10:02.814074369 -0800
 @@ -1,12 +1,15 @@
 +AUX libreoffice-5.2.5.1-glibc-2.24.patch 361 BLAKE2B d95ded4f051c77aed22ce99f6273b73ec0893190622f55a3d6d3c3e3e53c59a2f3ce3f645b011c1afa02b727ee803898c65f8feff723955a2fe1a69de6d24480 SHA512 b5ff4c6d3771bcdde21613ad15459120ac1d759b1b3b422b5cba3ee23f7ddf88fde274956f2c91f0a6a37cb36a8d90d8f90bd865e6c2d3ff7c2100e2b469dbd8
 +AUX libreoffice-5.3.4.2-kioclient5.patch 605 BLAKE2B 30961066c080c4d06ca978b7c0ad4b57a3739d6d34a2941f2ea57d3a5c4ab65e3f3c2376243aa88c9c05b1038cf9bfb7605a370d11513bb4553de2d268010519 SHA512 2aa6d1fc96749b79b3291f6e27630c6cf59d2c743f0dd8603867ba8aec2c17f87b70e1dd031365013f7e9ea53c160e9cb3f48af592a587dc05f3ae4cc1b35df6
@@ -1047,8 +1052,8 @@ diff :: app-office/libreoffice-l10n [rationale] ================================
 # https://gitweb.gentoo.org/repo/gentoo.git/tree/app-office/libreoffice-l10n?id=4ff0bb199ba902d5fd730b1c8854294bf1dd22d6
 diff :: app-office/libreoffice-l10n [source] ===========================================================================
 diff -u -U10 -r /var/git/meta-repo/kits/kde-kit/app-office/libreoffice-l10n/Manifest ./app-office/libreoffice-l10n.src/Manifest
---- /var/git/meta-repo/kits/kde-kit/app-office/libreoffice-l10n/Manifest	2018-09-18 21:59:13.354130656 -0000
-+++ ./app-office/libreoffice-l10n.src/Manifest	2018-08-18 13:15:04.830356794 -0000
+--- /var/git/meta-repo/kits/kde-kit/app-office/libreoffice-l10n/Manifest	2019-04-07 18:05:35.000000000 -0700
++++ ./app-office/libreoffice-l10n.src/Manifest	2019-10-02 16:22:54.979598891 -0700
 @@ -1,336 +1,336 @@
 -DIST LibreOffice_5.4.5.1_Linux_x86_rpm_helppack_am.tar.gz 7942048 BLAKE2B d2d3ce1308c3e36d39f7c1a09bb876c38efd0557750b464e678d8e6f0f232eb59db1cf620984d33aba98cf21defb79d882693372fd763c37331dd79aaac8316c SHA512 9bad61d053235f65319348e181a7ebef85dbc5672874db6f8c152daeb5d6bd8da229b8a25bd56a15db12bf99ac037a221a9256c09f99572d20512fb3c2d642c4
 -DIST LibreOffice_5.4.5.1_Linux_x86_rpm_helppack_ast.tar.gz 7872016 BLAKE2B c03fa7a496b1d80d6a78dd45d3cb33fea0e8121910d421a1a76b414e85e4f8da1bf291142f7dc3f0d198906566bf3e79978adf03066cfd8ee0b1b878d4b9a3e9 SHA512 390617b1f18946a9b62537e3cb347ff785f53254e07735af25bf174ab7952d5ff073bbbcbe521509615dd252a0a5fe5039be38d98eebedd8eb82b68c08a8e55c
@@ -1729,8 +1734,8 @@ Only in ./app-office/libreoffice-l10n.src: libreoffice-l10n-6.0.6.2.ebuild
 diff :: app-office/libreoffice-l10n [target] ===========================================================================
 Only in ./app-office/libreoffice-l10n: .rationale
 diff -u -U10 -r ./app-office/libreoffice-l10n.src/Manifest ./app-office/libreoffice-l10n/Manifest
---- ./app-office/libreoffice-l10n.src/Manifest	2018-08-18 13:15:04.830356794 -0000
-+++ ./app-office/libreoffice-l10n/Manifest	2018-09-12 03:30:52.097505860 -0000
+--- ./app-office/libreoffice-l10n.src/Manifest	2019-10-02 16:22:54.979598891 -0700
++++ ./app-office/libreoffice-l10n/Manifest	2018-09-11 20:30:52.097505860 -0700
 @@ -1,178 +1,10 @@
 -DIST LibreOffice_6.0.3.2_Linux_x86_rpm_helppack_am.tar.gz 7989311 BLAKE2B 7ff6325d64d79df5c4a4785895a8124b694dbed8cf531ed0fc430a5eaeea5150d907649108523cb7307e76b8bba6667a1b387c69319a4f97fc89d0d0e1a04e01 SHA512 ed74a073453986b5b1ce9a10c661019f224e5e759a221b1a82dccafee346c686aaabecc76a10ee40f57c06840a5292099671cad6d76cc85ba7e579a13f0b2b1a
 -DIST LibreOffice_6.0.3.2_Linux_x86_rpm_helppack_ast.tar.gz 7905060 BLAKE2B 2276f2fbffb28de02fbbd6aaadca9f7e9e91f6469cabdcaba2774c47b71b4558c0b832d1dae196223b23781e67fb068dd3be37b4bcd4fb1e6cb2d9c35c456e54 SHA512 80d01b4fe97857de7a44cc2df14f2ec835a80ec1ba2b29f75f69590288aa496158654989b32bc678b528366171af4278125bdf0a48aa96539443124bfe443283
@@ -1930,6 +1935,35 @@ diff :: app-office/libreoffice-l10n [files] ====================================
 ./app-office/libreoffice-l10n:
 Manifest
 libreoffice-l10n-6.0.6.2.ebuild
+diff :: dev-libs/libcss [rationale] ====================================================================================
+emerge: there are no ebuilds to satisfy ">=dev-libs/libcss-0.8".
+(dependency required by "www-client/netsurf-3.8-r2::overlay" [ebuild])
+(dependency required by "netsurf" [argument])
+https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/libcss/libcss-0.8.0-r1.ebuild?id=c660b3597c9b47d7e8697b1efdc8b409eeab1a65
+diff :: dev-libs/libcss [source] =======================================================================================
+diff :: dev-libs/libcss [target] =======================================================================================
+Only in ./dev-libs/libcss: .rationale
+diff -u -U10 -r ./dev-libs/libcss.src/Manifest ./dev-libs/libcss/Manifest
+--- ./dev-libs/libcss.src/Manifest	2019-04-07 18:03:55.000000000 -0700
++++ ./dev-libs/libcss/Manifest	2019-10-02 15:19:00.069191201 -0700
+@@ -1,4 +1,2 @@
+-DIST libcss-0.6.1-src.tar.gz 487329 BLAKE2B 4a751158c63aadbd21997ac4b695b9b1959097248a2eb8af452411c7eca6db49e31ef93255d62c2b049efc3ee6850412385c534d311daade218a1d0f65d40417 SHA512 9b72765a4f1e9e0a6eca0892f50d36d84b25354fd6e55fd9da5c541077e466e585093b34f3ff35591d59294b05f1485b224d5f9df41f07535a09b445795ae2b3
+-DIST libcss-0.7.0-src.tar.gz 493022 BLAKE2B 12c4a940d93ecbae20c62f80ad17bb2932d2095e9eea98f35282e6e3e1bb411bf1f96ee38ab47662650437547441c8386a7da6083ee6642628d23c2e7893b6b0 SHA512 937469c87dccc77083e8c864558225ae6299fab7dcffe7670af6507e65cbfc7fcee22b74e58f4c34a89c05e917d3ed31440a92d89c26cf85e36d6ff3281d7712
+-DIST netsurf-buildsystem-1.5.tar.gz 38196 BLAKE2B 298ef39d45b98ae5ef57a22aed9f22bf96dfd6ad5475964c04451eaf28aca7f451b4906002c3e110ffcc951015169f02ffcd85f24e54b46c47b25e048115db1c SHA512 02d85e8f1d2101194a678f7ccf84051390953285a46951d7b327556f8df1a0c416620bd4c7a615e25de438d5d27cfffb69ec5d94eb8379a295dab4c85a96cae4
+-DIST netsurf-buildsystem-1.6.tar.gz 38204 BLAKE2B 58ac4aa2676c019a69b53f5115c82b522aa7db7b2a039a36f227b06b1d031ddc1eed463b09bfd13aeabddc421b2de396b58f2f8f131c261d5633fcd7a85272de SHA512 65ecafb54fc79107cfdb0fbea6acd4cad1fc9f338dde2ed9a48de066e245b7804a16337769c7602c7ab96b0d7544970f533d8c4615913c09b5a9ca4b9386fb28
++DIST libcss-0.8.0-src.tar.gz 516474 BLAKE2B 937adc65f68fecece189e0f06cfd601ae2d76f0b4dcdbcb8a67f3f058c4355c19c12c088fb50ecf1e6bcd8436c867b1845b3da27bb44b5d1a009bd946bf5e53e SHA512 fb52920ce462f442dfafa7b0061fa465e6c04827d26186e8468855c2a40e8f34e6f0689d5eb58cb0b2ee0759d083fcff5c8c583e1d98693755003c352a22a4be
++EBUILD libcss-0.8.0-r1.ebuild 1141 BLAKE2B f1eef7ad41b44f26eebbca5d2d2c8c201aee90879423198c0220356c4b22fb8647fd1d5e48e13bb86def6b30145503813ca00f1017c8dafbbfb81b34e18bcc75 SHA512 9ff1ce8316cb2842dbb22a730a85d23052c8a8dedd4a84b5d2803dbf605ead2c74e1507ee6825c719ef2e6d5da2ea6a5e1ed1b00095c904b669f0d07be226a24
+Only in ./dev-libs/libcss.src: files
+Only in ./dev-libs/libcss.src: libcss-0.6.1.ebuild
+Only in ./dev-libs/libcss.src: libcss-0.7.0-r1.ebuild
+Only in ./dev-libs/libcss.src: libcss-0.7.0.ebuild
+Only in ./dev-libs/libcss: libcss-0.8.0-r1.ebuild
+Only in ./dev-libs/libcss.src: metadata.xml
+diff :: dev-libs/libcss [files] ========================================================================================
+
+./dev-libs/libcss:
+Manifest
+libcss-0.8.0-r1.ebuild
 diff :: dev-libs/libgit2 [rationale] ===================================================================================
 # download checksum fails
 # https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/libgit2?id=4ff0bb199ba902d5fd730b1c8854294bf1dd22d6
@@ -1937,12 +1971,12 @@ diff :: dev-libs/libgit2 [rationale] ===========================================
 # https://github.com/libgit2/libgit2/issues/4343
 diff :: dev-libs/libgit2 [source] ======================================================================================
 diff -u -U10 -r /var/git/meta-repo/kits/dev-kit/dev-libs/libgit2/Manifest ./dev-libs/libgit2.src/Manifest
---- /var/git/meta-repo/kits/dev-kit/dev-libs/libgit2/Manifest	2018-09-18 21:59:30.710298527 -0000
-+++ ./dev-libs/libgit2.src/Manifest	2018-08-11 13:21:09.887325915 -0000
+--- /var/git/meta-repo/kits/dev-kit/dev-libs/libgit2/Manifest	2019-04-07 18:03:55.000000000 -0700
++++ ./dev-libs/libgit2.src/Manifest	2019-10-02 16:22:54.983598931 -0700
 @@ -1,3 +1,2 @@
--DIST libgit2-0.24.6.tar.gz 4178476 SHA256 7b441a96967ff525e790f8b66859faba5c6be4c347124011f536ae9075ebc30c SHA512 ea928629450f6619c17e76cf32e5d76ddd9e00d914b8a0fc2efdcc32ae271637c124a27a8d4c595b8dcf2048551b22f1bc3c5b6394b3022a2f852a06f7ab3396 WHIRLPOOL 210a1d75e56883d8c82cf549f103414cf8365762f585d1c7939f40f73f430199680d01a0092cbb91a1f65446d74f26cd757ded98dd9d504f7064452c3183d1a2
--DIST libgit2-0.25.1.tar.gz 4252130 SHA256 7ae8e699ff7ff9a1fa702249140ee31ea6fd556bf7968e84e38165870667bcb1 SHA512 bbd0d27c95406b548185ce02e2a9288a9dcb8c3b28476ba20f4f4917f6bd67f1ddee80de3054d30b79cdb9d973c3061a15ea7847c79bfa4e0c62e41d5195cb99 WHIRLPOOL dcadeaef13fdd85b0960ca5c6279bc89385c697d8d74f390110db00aae53a9848e2e22b64d954bae46dfb8f71b5115f914f96938fb6ba20667913f9b3f880801
--DIST libgit2-0.26.0.tar.gz 4697149 SHA256 4ac70a2bbdf7a304ad2a9fb2c53ad3c8694be0dbec4f1fce0f3cd0cda14fb3b9 SHA512 988c616c99637f2c1f80c498de34820296b78c0601669475eba9d194490cfd2047131987e63a799599277893e5741f9bcc226ffa594327356047ed563f07d346 WHIRLPOOL 313c2e5be2e3a0171056349892deec6fd1125853b8670edf13a362822ee5b21d8027c8933a5d0a87580f6b11a2922fcd357cff4af571c90ac9646034a0596956
+-DIST libgit2-0.24.6.tar.gz 4178476 BLAKE2B 5bb1bad874581f987e2b10eb6fba8265c2e17c3eb0f05ff4b0db1e4bed81842331b56d7e360cbaae7fed7431cf6e36e2863342bfb76b7df8d33d77958f9304cc SHA512 ea928629450f6619c17e76cf32e5d76ddd9e00d914b8a0fc2efdcc32ae271637c124a27a8d4c595b8dcf2048551b22f1bc3c5b6394b3022a2f852a06f7ab3396
+-DIST libgit2-0.25.1.tar.gz 4252130 BLAKE2B d5e6270ef8967d36094182eafe68673a07c667bec062c48aa036c02ecec493b0b7cc874681faed68be95d8ccb1635a155e77b7afcc489cb0b9e09ecedfdc8f7e SHA512 bbd0d27c95406b548185ce02e2a9288a9dcb8c3b28476ba20f4f4917f6bd67f1ddee80de3054d30b79cdb9d973c3061a15ea7847c79bfa4e0c62e41d5195cb99
+-DIST libgit2-0.26.0.tar.gz 4697149 BLAKE2B 468e679bd7093004fb19a7947102d09bb90c653f3957615ce5468fe4c602f61804877072445a90447d83c70277529d02762cd3f35d0879708ea8355c44fe3456 SHA512 988c616c99637f2c1f80c498de34820296b78c0601669475eba9d194490cfd2047131987e63a799599277893e5741f9bcc226ffa594327356047ed563f07d346
 +DIST libgit2-0.26.6.tar.gz 4734435 BLAKE2B 0831d0a78ba74b6cd989821f0abb6774f8879f18906025ce02d7c0f7f8f3e7f03b30121f79e370b85201e110a6fc4aca2ae2e608b12f01cd527ab42bf597099d SHA512 6a5a167bfe8696294cf188feec2aad898af52f4c05a3a40a55f48ea3168d200a60fc42b3819a22b1bf472be696f5dafef473d457c08bab164cbf654c4de6bda7
 +DIST libgit2-0.27.4.tar.gz 4772254 BLAKE2B 9c0e7b436d8cb07a8f1407d22bcd4c7b161f3ceef9dc4e67f9daec784a1cfb9f8f2e493a78f5ef6b4893e54c1f1b567ae53ead52a992ee10eabe3229195417a1 SHA512 d27db86eb1b9f0d4057f8538ba1985ee76c3ca106e57d417fa9bff79d575f91a07ad28693112b58dc1d61d68116a82e6a145f12276158f2806b6c4964d741f61
 Only in /var/git/meta-repo/kits/dev-kit/dev-libs/libgit2: libgit2-0.24.6.ebuild
@@ -1951,8 +1985,8 @@ Only in /var/git/meta-repo/kits/dev-kit/dev-libs/libgit2: libgit2-0.26.0.ebuild
 Only in ./dev-libs/libgit2.src: libgit2-0.26.6.ebuild
 Only in ./dev-libs/libgit2.src: libgit2-0.27.4.ebuild
 diff -u -U10 -r /var/git/meta-repo/kits/dev-kit/dev-libs/libgit2/libgit2-9999.ebuild ./dev-libs/libgit2.src/libgit2-9999.ebuild
---- /var/git/meta-repo/kits/dev-kit/dev-libs/libgit2/libgit2-9999.ebuild	2018-09-18 21:59:30.710298527 -0000
-+++ ./dev-libs/libgit2.src/libgit2-9999.ebuild	2018-08-11 13:21:09.887325915 -0000
+--- /var/git/meta-repo/kits/dev-kit/dev-libs/libgit2/libgit2-9999.ebuild	2019-04-07 16:47:45.000000000 -0700
++++ ./dev-libs/libgit2.src/libgit2-9999.ebuild	2019-10-02 16:22:54.983598931 -0700
 @@ -1,75 +1,82 @@
 -# Copyright 1999-2017 Gentoo Foundation
 +# Copyright 1999-2018 Gentoo Foundation
@@ -2051,8 +2085,8 @@ diff -u -U10 -r /var/git/meta-repo/kits/dev-kit/dev-libs/libgit2/libgit2-9999.eb
  	fi
  }
 diff -u -U10 -r /var/git/meta-repo/kits/dev-kit/dev-libs/libgit2/metadata.xml ./dev-libs/libgit2.src/metadata.xml
---- /var/git/meta-repo/kits/dev-kit/dev-libs/libgit2/metadata.xml	2018-09-18 21:59:30.710298527 -0000
-+++ ./dev-libs/libgit2.src/metadata.xml	2018-03-17 15:20:01.354506805 -0000
+--- /var/git/meta-repo/kits/dev-kit/dev-libs/libgit2/metadata.xml	2019-04-07 16:47:45.000000000 -0700
++++ ./dev-libs/libgit2.src/metadata.xml	2019-10-02 16:22:54.983598931 -0700
 @@ -8,18 +8,20 @@
  	<maintainer type="project">
  		<email>gnome@gentoo.org</email>
@@ -2077,8 +2111,8 @@ diff -u -U10 -r /var/git/meta-repo/kits/dev-kit/dev-libs/libgit2/metadata.xml ./
 diff :: dev-libs/libgit2 [target] ======================================================================================
 Only in ./dev-libs/libgit2: .rationale
 diff -u -U10 -r ./dev-libs/libgit2.src/Manifest ./dev-libs/libgit2/Manifest
---- ./dev-libs/libgit2.src/Manifest	2018-08-11 13:21:09.887325915 -0000
-+++ ./dev-libs/libgit2/Manifest	2018-09-12 04:47:38.426900916 -0000
+--- ./dev-libs/libgit2.src/Manifest	2019-10-02 16:22:54.983598931 -0700
++++ ./dev-libs/libgit2/Manifest	2019-03-09 18:10:02.822074445 -0800
 @@ -1,2 +1,2 @@
  DIST libgit2-0.26.6.tar.gz 4734435 BLAKE2B 0831d0a78ba74b6cd989821f0abb6774f8879f18906025ce02d7c0f7f8f3e7f03b30121f79e370b85201e110a6fc4aca2ae2e608b12f01cd527ab42bf597099d SHA512 6a5a167bfe8696294cf188feec2aad898af52f4c05a3a40a55f48ea3168d200a60fc42b3819a22b1bf472be696f5dafef473d457c08bab164cbf654c4de6bda7
 -DIST libgit2-0.27.4.tar.gz 4772254 BLAKE2B 9c0e7b436d8cb07a8f1407d22bcd4c7b161f3ceef9dc4e67f9daec784a1cfb9f8f2e493a78f5ef6b4893e54c1f1b567ae53ead52a992ee10eabe3229195417a1 SHA512 d27db86eb1b9f0d4057f8538ba1985ee76c3ca106e57d417fa9bff79d575f91a07ad28693112b58dc1d61d68116a82e6a145f12276158f2806b6c4964d741f61
@@ -2091,24 +2125,146 @@ diff :: dev-libs/libgit2 [files] ===============================================
 ./dev-libs/libgit2:
 Manifest
 libgit2-0.26.6.ebuild
+diff :: dev-libs/libnsfb [rationale] ===================================================================================
+emerge: there are no ebuilds to satisfy ">=dev-libs/libnsfb-0.2".
+(dependency required by "www-client/netsurf-3.8-r2::overlay[fbcon]" [ebuild])
+(dependency required by "netsurf" [argument])
+https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/libnsfb/libnsfb-0.2.0-r1.ebuild?id=0e856edefbd36efffc141a2174e75db9afe1f204
+diff :: dev-libs/libnsfb [source] ======================================================================================
+diff :: dev-libs/libnsfb [target] ======================================================================================
+Only in ./dev-libs/libnsfb: .rationale
+diff -u -U10 -r ./dev-libs/libnsfb.src/Manifest ./dev-libs/libnsfb/Manifest
+--- ./dev-libs/libnsfb.src/Manifest	2019-04-07 18:03:55.000000000 -0700
++++ ./dev-libs/libnsfb/Manifest	2019-10-02 15:51:18.000000000 -0700
+@@ -1,4 +1,3 @@
+-DIST libnsfb-0.1.5-src.tar.gz 82897 BLAKE2B cc1287d8ac9d82f2286c7e4a0046e6bd05e994e3db50480c76f6bbf2fe8c1eae8593c53a0d59618b189979e196b7e23f4b55a7e5d311926b15c44ce623d5299b SHA512 7e1ff83552beb10fa44a05e34315502514c1eb9f160ec53f367d74718915400ac6630748704ffc2d4ea8633f74e0c446931042b6cbb7d9a2828a3cc565c872d4
+-DIST libnsfb-0.1.6-src.tar.gz 83510 BLAKE2B 4d4c5cea7ae0f9a799cbf515f6ccad6bb24008f622871c0f4498bd2f292955d5c1c70fdff406839cc9173b3cdf17c7552563841eec5e1849624c4b25196fc36c SHA512 ed22b593e6475ee023818b8fe8109922b5714624137f71193edbd9d12c73003d5e161aba3cc86aed6c03dee3e247f251b3dc4d34db008d4cbfcae89331f34ee3
+-DIST netsurf-buildsystem-1.4.tar.gz 38067 BLAKE2B cd09909e0565a7e63f16082c653f7dbf8de3e6b4d61aadd213bcd884a7cd3d10d8e22859322ffbe71a7d99823b3789c6e2454ea50cbe75578dc7d6eab324d0f5 SHA512 2c804ad7bef70c987e1d393ee4041bffc9797893b4fd513c90a665027205a1f7eee0a7d86ddaf833a6ee18346d6fe69587190c4e6722afc4ed18ce87783c35fc
+-DIST netsurf-buildsystem-1.6.tar.gz 38204 BLAKE2B 58ac4aa2676c019a69b53f5115c82b522aa7db7b2a039a36f227b06b1d031ddc1eed463b09bfd13aeabddc421b2de396b58f2f8f131c261d5633fcd7a85272de SHA512 65ecafb54fc79107cfdb0fbea6acd4cad1fc9f338dde2ed9a48de066e245b7804a16337769c7602c7ab96b0d7544970f533d8c4615913c09b5a9ca4b9386fb28
++AUX libnsfb-0.1.0-autodetect.patch 734 BLAKE2B bba90c622e559b8238672068792a558ac408954b85cc9798b12163564837e4fb44ec80eca33ca856e5344fafeb862a3eff43bddca27a9ae7603478505982a440 SHA512 72f3af574fadf38a514a6f6d4d24246ad1e76d9c9daa9700f0b37cb465f7afd4e4d7fdde6e53657740db3a6f87f1e8bfaeb1b008c43462d67f224c728af98993
++DIST libnsfb-0.2.0-src.tar.gz 82322 BLAKE2B d805478728015663b4bf9c8de018bda33dcd84a7ace7246c450a7c31cc3358f834ade21ac1df9f0ca0e4dcea1138369cc3cd9ac468ebb484cce139d4bc89441e SHA512 b90eca76c8dcb22e554e13b5bea4268e5c9fc6e4711bafa5acbed92cc83513c3a3965208b3956de250fb3013cc3db6a33922ded471fa7a24bde97f748d2212c5
++EBUILD libnsfb-0.2.0-r1.ebuild 1173 BLAKE2B 77786478bf9c16f0cb9cfd32aa8a2810c0f9b5e5514b40de69f2d8ccf3094ffe514acb1763399bcadf78a0b65a216e4cb982ea69dc291c89b16776872ce5f897 SHA512 fe3cf0b6f40d492d45f1230f0eceb9adacd4ef34d4031bcadc9e2ebf6fd68157016f2bb0e13eefa21b3f0675330129d7756bb109b0e740decb80bb4f714e1e26
+Only in ./dev-libs/libnsfb.src: libnsfb-0.1.5.ebuild
+Only in ./dev-libs/libnsfb.src: libnsfb-0.1.6.ebuild
+Only in ./dev-libs/libnsfb: libnsfb-0.2.0-r1.ebuild
+Only in ./dev-libs/libnsfb.src: metadata.xml
+diff :: dev-libs/libnsfb [files] =======================================================================================
+PATCHES=( "${FILESDIR}"/${PN}-0.1.0-autodetect.patch )
+
+./dev-libs/libnsfb:
+Manifest
+files
+libnsfb-0.2.0-r1.ebuild
+
+./dev-libs/libnsfb/files:
+libnsfb-0.1.0-autodetect.patch
+diff :: dev-libs/libnsutils [rationale] ================================================================================
+emerge: there are no ebuilds to satisfy ">=dev-libs/libnsutils-0.0.5".
+(dependency required by "www-client/netsurf-3.8-r2::overlay" [ebuild])
+(dependency required by "netsurf" [argument])
+https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/libnsutils/libnsutils-0.0.5-r1.ebuild?id=0e856edefbd36efffc141a2174e75db9afe1f204
+diff :: dev-libs/libnsutils [source] ===================================================================================
+diff :: dev-libs/libnsutils [target] ===================================================================================
+Only in ./dev-libs/libnsutils: .rationale
+diff -u -U10 -r ./dev-libs/libnsutils.src/Manifest ./dev-libs/libnsutils/Manifest
+--- ./dev-libs/libnsutils.src/Manifest	2019-04-07 18:03:55.000000000 -0700
++++ ./dev-libs/libnsutils/Manifest	2019-10-02 15:27:53.522552781 -0700
+@@ -1,2 +1,2 @@
+-DIST libnsutils-0.0.3-src.tar.gz 7174 BLAKE2B 4557adc8c0ad7e292040ab9738f7c4fc85e67245642111e4ff79ea35cbd132c0d4006f13acb58cc2b92d4ae9e4b7be47a4f677c099c3e2853c6c8ae88d89815e SHA512 324c4d1d145ecc2643e244b515c72fde41ad31f43983e46ef181eff3f5bd767cab72a0ee73afbabdff8a92c476799ed6cd69326d7d194acd5ac330e2d4cb4122
+-DIST netsurf-buildsystem-1.5.tar.gz 38196 BLAKE2B 298ef39d45b98ae5ef57a22aed9f22bf96dfd6ad5475964c04451eaf28aca7f451b4906002c3e110ffcc951015169f02ffcd85f24e54b46c47b25e048115db1c SHA512 02d85e8f1d2101194a678f7ccf84051390953285a46951d7b327556f8df1a0c416620bd4c7a615e25de438d5d27cfffb69ec5d94eb8379a295dab4c85a96cae4
++DIST libnsutils-0.0.5-src.tar.gz 7653 BLAKE2B 4f7810f436f5ffd33084bc67095f3cb48a7744ef6f9ab0d632cd7b87467ff8bca54809de5a8ea837a00429c951d4e701909bd5f185e1c600a7323393017596cb SHA512 b9611db39adf11aa4e29387614bf55e241c075a223c687f5520e5b6808cc392c847be1a1d74559928e385a93886c4a67158504342384a1b200cf9ce13c00db50
++EBUILD libnsutils-0.0.5-r1.ebuild 657 BLAKE2B 988d672774084cc4982ca32f1cac5557d9c5f1e5eb19972eb5a48855c311c616d4495c4af75992e91a86448a3fe5664a861afaffce7b5c508ad0f4c71d76f61b SHA512 8a865cb43e07729243e512deec4a47d98f3a9fc722ec4e60ff6a9ced797170c83fffb2edaac2203dbaee04ee92e03319a43f9f6446e70d19ae0498f5ad314ff4
+Only in ./dev-libs/libnsutils.src: libnsutils-0.0.3.ebuild
+Only in ./dev-libs/libnsutils: libnsutils-0.0.5-r1.ebuild
+Only in ./dev-libs/libnsutils.src: metadata.xml
+diff :: dev-libs/libnsutils [files] ====================================================================================
+
+./dev-libs/libnsutils:
+Manifest
+libnsutils-0.0.5-r1.ebuild
+diff :: dev-libs/libutf8proc [rationale] ===============================================================================
+emerge: there are no ebuilds to satisfy ">=dev-libs/libutf8proc-2.2".
+(dependency required by "www-client/netsurf-3.8-r2::overlay" [ebuild])
+(dependency required by "netsurf" [argument])
+https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/libutf8proc/libutf8proc-2.4.0.ebuild?id=0e856edefbd36efffc141a2174e75db9afe1f204
+diff :: dev-libs/libutf8proc [source] ==================================================================================
+diff :: dev-libs/libutf8proc [target] ==================================================================================
+Only in ./dev-libs/libutf8proc: .rationale
+diff -u -U10 -r ./dev-libs/libutf8proc.src/Manifest ./dev-libs/libutf8proc/Manifest
+--- ./dev-libs/libutf8proc.src/Manifest	2019-04-07 18:03:55.000000000 -0700
++++ ./dev-libs/libutf8proc/Manifest	2019-10-02 15:56:21.000000000 -0700
+@@ -1,4 +1,4 @@
+-DIST libutf8proc-1.3.1-2-src.tar.gz 144983 BLAKE2B ee9fddecf3b7f0865a63e56e511c251e28a4adb3b9220f313735960fff16356acc0c1b6cf19dd13adb787119a09efe0c4c3f9fd4c34d09ccba0d24a19f01a3c5 SHA512 50db8b324c244061835af8e1fff6d116328e5d40dff62477fdb78ba40b07b85612d610cc616ba165d13d0d933379a2d9629167ec4cbe31120518ae3bbcba3cce
+-DIST libutf8proc-1.3.1-3-src.tar.gz 144985 BLAKE2B 92f21863df1a65a552cefa526a02e460de6e92f510b385d9f65b619176ca6dd429fc3f4d16a1e27bab6547109bfd353dd8e7c5126ac71e8065e8a2928543834a SHA512 c371c7ad6814a362179e70e4cb39bfd64d44a276860116dea441797d8dfc6c3ae1c7f0a981134a71952d8c773845ddaa60eb5b98241eccea488bb59411f1c880
+-DIST netsurf-buildsystem-1.5.tar.gz 38196 BLAKE2B 298ef39d45b98ae5ef57a22aed9f22bf96dfd6ad5475964c04451eaf28aca7f451b4906002c3e110ffcc951015169f02ffcd85f24e54b46c47b25e048115db1c SHA512 02d85e8f1d2101194a678f7ccf84051390953285a46951d7b327556f8df1a0c416620bd4c7a615e25de438d5d27cfffb69ec5d94eb8379a295dab4c85a96cae4
+-DIST netsurf-buildsystem-1.6.tar.gz 38204 BLAKE2B 58ac4aa2676c019a69b53f5115c82b522aa7db7b2a039a36f227b06b1d031ddc1eed463b09bfd13aeabddc421b2de396b58f2f8f131c261d5633fcd7a85272de SHA512 65ecafb54fc79107cfdb0fbea6acd4cad1fc9f338dde2ed9a48de066e245b7804a16337769c7602c7ab96b0d7544970f533d8c4615913c09b5a9ca4b9386fb28
++AUX libutf8proc-2.3.0-no-static.patch 859 BLAKE2B d461d31600b3ff46cdc791f058eb7bf94070579d638948d04c70a026f37334f85fddb691b31b9beaa0d0a8143f376237a017247179ab9067690c3aa4816badfa SHA512 0129963838e450cf0fd89eab811fda59348690ea45ddc132385fba7211f2afa82bb90c91d8532b2f0aef14c54eb26e02b7d39499e2d03e333fc4789279dbf55f
++AUX libutf8proc-2.3.0-tests-nofetch.patch 1229 BLAKE2B 501fb727f371975792546eea70f4b178983eaad5616ddad51b9de8476848d5f507f083d61eae86f2b23a6e4caa8ed871e2d033d920cd802717bcad4ca1dc90e9 SHA512 ec2a51dec3570d0846436ae29ea7776967284abe11c0be77a8a2515017a2588ec9f943e31e0836167b0c614183f30c32b51c2b172a39c4880c5241d32de72ab7
++DIST libutf8proc-2.4.0.tar.gz 154936 BLAKE2B a4fea823806bb784c83504de2ade985d3f0e86aa8d64747f389724ef10122953312e398a7a342cf28f25502693ee507be246338dba37c976998f6a1922cd94c5 SHA512 2bbd056b488cd30faca26618389d8af84edc39ade9b705e147b676bf39eee65b40239d01c32c46dfc2a289d79e869ed1bb3c347365603dcaab2f69e34427441a
++EBUILD libutf8proc-2.4.0.ebuild 1451 BLAKE2B 8a6f1cc2bdca5f2036732f230b5115c048b260446cba58b351fcd02606a928cf4ce566e3ae888bed70e6f98a386b14d2ed679338dec35443d24f0d96cd41c262 SHA512 8758b048b085e8fc0ae96107c4c868e5ffeed99eeb009c3097a8cb926f82e81c42599810df1b2fc0e9c6e8859ac54ad8bf895ec6e8bd7f5fa619cbee5ea21cfc
+Only in ./dev-libs/libutf8proc.src/files: libutf8proc-1.3.1_p2-overrun.patch
+Only in ./dev-libs/libutf8proc/files: libutf8proc-2.3.0-no-static.patch
+Only in ./dev-libs/libutf8proc/files: libutf8proc-2.3.0-tests-nofetch.patch
+Only in ./dev-libs/libutf8proc.src: libutf8proc-1.3.1_p2-r1.ebuild
+Only in ./dev-libs/libutf8proc.src: libutf8proc-1.3.1_p3.ebuild
+Only in ./dev-libs/libutf8proc: libutf8proc-2.4.0.ebuild
+Only in ./dev-libs/libutf8proc.src: metadata.xml
+diff :: dev-libs/libutf8proc [files] ===================================================================================
+	"${FILESDIR}/${PN}-2.3.0-no-static.patch"
+	"${FILESDIR}/${PN}-2.3.0-tests-nofetch.patch"
+
+./dev-libs/libutf8proc:
+Manifest
+files
+libutf8proc-2.4.0.ebuild
+
+./dev-libs/libutf8proc/files:
+libutf8proc-2.3.0-no-static.patch
+libutf8proc-2.3.0-tests-nofetch.patch
+diff :: dev-libs/nsgenbind [rationale] =================================================================================
+emerge: there are no ebuilds to satisfy ">=dev-libs/nsgenbind-0.6".
+(dependency required by "www-client/netsurf-3.8-r2::overlay[javascript]" [ebuild])
+(dependency required by "netsurf" [argument])
+https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/nsgenbind/nsgenbind-0.6-r1.ebuild?id=0e856edefbd36efffc141a2174e75db9afe1f204
+diff :: dev-libs/nsgenbind [source] ====================================================================================
+diff :: dev-libs/nsgenbind [target] ====================================================================================
+Only in ./dev-libs/nsgenbind: .rationale
+diff -u -U10 -r ./dev-libs/nsgenbind.src/Manifest ./dev-libs/nsgenbind/Manifest
+--- ./dev-libs/nsgenbind.src/Manifest	2019-04-07 18:03:55.000000000 -0700
++++ ./dev-libs/nsgenbind/Manifest	2019-10-02 15:35:18.499035780 -0700
+@@ -1,4 +1,2 @@
+-DIST netsurf-buildsystem-1.5.tar.gz 38196 BLAKE2B 298ef39d45b98ae5ef57a22aed9f22bf96dfd6ad5475964c04451eaf28aca7f451b4906002c3e110ffcc951015169f02ffcd85f24e54b46c47b25e048115db1c SHA512 02d85e8f1d2101194a678f7ccf84051390953285a46951d7b327556f8df1a0c416620bd4c7a615e25de438d5d27cfffb69ec5d94eb8379a295dab4c85a96cae4
+-DIST netsurf-buildsystem-1.6.tar.gz 38204 BLAKE2B 58ac4aa2676c019a69b53f5115c82b522aa7db7b2a039a36f227b06b1d031ddc1eed463b09bfd13aeabddc421b2de396b58f2f8f131c261d5633fcd7a85272de SHA512 65ecafb54fc79107cfdb0fbea6acd4cad1fc9f338dde2ed9a48de066e245b7804a16337769c7602c7ab96b0d7544970f533d8c4615913c09b5a9ca4b9386fb28
+-DIST nsgenbind-0.4-src.tar.gz 97489 BLAKE2B e3ba3f5aa73fc2989ab93f237d90a3a6c902a66b64e01af5ca2be68e732771710748da59dbcaa0c47d356084c2096d7cb80e79dc314af1c0be26e3878e68e629 SHA512 14cb5e0ffc309c34b8387f53c2d6221d90fb8584348bd4ec73af3c0e1efc8348f11ea76799b5250ec5a253621ba106df261c0b1f3f93be641bc96b5efa118e8f
+-DIST nsgenbind-0.5-src.tar.gz 106814 BLAKE2B a5de9089ff9c7607fbac8f2ba6f68575884937775355c4100f54dc9d5406eabb63670c0d80bd9180544066da1c691b2125669cf0caf21e602e939878ef4ca1be SHA512 3f3a2df9f005d03be6d36c5c4b2d11010b8cceb137ed7e0302599d526edd8a8c14dc866b971955f2a37c149f9a5bd56bf5eacb3a43ceb396efc178c732cb59bc
++DIST nsgenbind-0.6-src.tar.gz 106862 BLAKE2B 9b40ae6298921736f7d876ae664207eb71102adbe44f4072ea46b08b63cb5cf608df4c96f3ade1c8cca964d8d8b32d68aad25431f6fd455eb8392d8313faa9e9 SHA512 3083b48e48fcf8c7f32b09d040998470d5917469e020c4ccbfb8ffdb7d1252fd27dd02f590f5a2485c6984cdbc005ea87adf0db45077aee0a91f68037c542ffb
++EBUILD nsgenbind-0.6-r1.ebuild 689 BLAKE2B e2992845a2fe26aa5b2cee030abc4889cf487942153409d5887de62befcfb52478d5eb296e63e2f69a525ce337d4d887ca44a3c08ac769de9b63194433f4a70f SHA512 928673eca4f9fd02c5d75acdd12e783c4a73c0d203af02edd331617c8cf76dd6d676cead44d2d204afffb46e3d2ff53f8d9cc3c50146aac3dad9f2300067f243
+Only in ./dev-libs/nsgenbind.src: metadata.xml
+Only in ./dev-libs/nsgenbind.src: nsgenbind-0.4.ebuild
+Only in ./dev-libs/nsgenbind.src: nsgenbind-0.5.ebuild
+Only in ./dev-libs/nsgenbind: nsgenbind-0.6-r1.ebuild
+diff :: dev-libs/nsgenbind [files] =====================================================================================
+
+./dev-libs/nsgenbind:
+Manifest
+nsgenbind-0.6-r1.ebuild
 diff :: dev-util/dialog [rationale] ====================================================================================
 # download no longer available
 # https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-util/dialog?id=4ff0bb199ba902d5fd730b1c8854294bf1dd22d6
 diff :: dev-util/dialog [source] =======================================================================================
 diff -u -U10 -r /var/git/meta-repo/kits/dev-kit/dev-util/dialog/Manifest ./dev-util/dialog.src/Manifest
---- /var/git/meta-repo/kits/dev-kit/dev-util/dialog/Manifest	2018-09-18 21:59:30.846299843 -0000
-+++ ./dev-util/dialog.src/Manifest	2018-06-23 13:03:41.745256347 -0000
+--- /var/git/meta-repo/kits/dev-kit/dev-util/dialog/Manifest	2019-04-07 18:03:55.000000000 -0700
++++ ./dev-util/dialog.src/Manifest	2019-10-02 16:22:54.983598931 -0700
 @@ -1,3 +1,3 @@
--DIST dialog-1.3-20160828.tgz 501960 SHA256 453095abaec288bfbc1ca9faced917e17742cff1ea45ec46210071ac153562f9 SHA512 aa0329578c8b0580e52b1f6aad5c7179bc519c3791cf115b035e28f25e5f48d7a626faa1a322b81365646018a2f8b09f67f4df0629899b50aa5ce7190b022113 WHIRLPOOL 17d107febd1d94380074aac69c4c1e47b9bc565dd39d5009ac82095506686dd6c283c4709ec6aef3f8ec186d21a636924a12ee26c301b5743eaa6b8c64ebe6d1
--DIST dialog-1.3-20170131.tgz 507783 SHA256 81baec14cb7d76951763576ec276210b3a869e768ad5e2e6ee1cc53420ece8c9 SHA512 818b4e9d0d5ee55377b78ccceacf59a78e5e6d6fbc09e24a19e62b4988ff8de32f3364132b9ee88c86e126114eda45c82d86397d5f26fae81a6bda91be979786 WHIRLPOOL 33fdc9f3ebf129560a412ff2bdae3b14648f31925d76bc4085613bcd7b74606c2e63f76b7b86af4c032d82b987ee5bea81b49998f07a0d7d83651189c701aaa6
--DIST dialog-1.3-20170509.tgz 509135 SHA256 2ff1ba74c632b9d13a0d0d2c942295dd4e8909694eeeded7908a467d0bcd4756 SHA512 dd3fe2041a15dd344ea39a1ba111d3b26daca1cda91a4e82f1223385a49cdf3de15f11129366a20c5a24b16b5301f215543850a390d70d0559f98247bbd49a56 WHIRLPOOL 6a98e9737d601ef58499c0a8c38464fb17566bbe3534eedb6184abee14389cea73d33ecc999179edd533ab7515395060eb37e9a402c43072597713d594743798
-+DIST dialog-1.3-20170131.tgz 507783 BLAKE2B a98c436eabc8d06619bd64a8b1d647a0712630f0f89565253636ef2f38333ca6926177aa0c2001305b0c06fc7a1f576cda87da493183402ef9ec3cdc3fa8be23 SHA512 818b4e9d0d5ee55377b78ccceacf59a78e5e6d6fbc09e24a19e62b4988ff8de32f3364132b9ee88c86e126114eda45c82d86397d5f26fae81a6bda91be979786
+-DIST dialog-1.3-20160828.tgz 501960 BLAKE2B a9ec14a56dfa165345b5cc60e2f91b3da6c3be54b5ca8a89798cf4bcc92a95a586b17ad6435cedcc330c9bb001203e6c7b4f3a302d31591fe890c4a2d5b622d0 SHA512 aa0329578c8b0580e52b1f6aad5c7179bc519c3791cf115b035e28f25e5f48d7a626faa1a322b81365646018a2f8b09f67f4df0629899b50aa5ce7190b022113
+ DIST dialog-1.3-20170131.tgz 507783 BLAKE2B a98c436eabc8d06619bd64a8b1d647a0712630f0f89565253636ef2f38333ca6926177aa0c2001305b0c06fc7a1f576cda87da493183402ef9ec3cdc3fa8be23 SHA512 818b4e9d0d5ee55377b78ccceacf59a78e5e6d6fbc09e24a19e62b4988ff8de32f3364132b9ee88c86e126114eda45c82d86397d5f26fae81a6bda91be979786
+-DIST dialog-1.3-20170509.tgz 509135 BLAKE2B 30f443953701f79db86a317d3c1a3a7743685388cf432a4d48e10f0df5181207e0a182f96566cd868d9ee5db8296f362e57f40a8e58c99d3b372eb967bc56ebe SHA512 dd3fe2041a15dd344ea39a1ba111d3b26daca1cda91a4e82f1223385a49cdf3de15f11129366a20c5a24b16b5301f215543850a390d70d0559f98247bbd49a56
 +DIST dialog-1.3-20180621.tgz 529123 BLAKE2B bb085e93a0eaedd1fc517bcfe080f8dbf61bf0b28003b38356d66c324baed7dcd2f76917676a1894e76bf3a7d58d3090c95e45624dae37e3e2e885282ab9c5bb SHA512 1c6d794af50a12294e32b99fd9d3eb9451ac4a2f21c5567848b59c7a316b3058463c41fb8f9eb0bce68edbbe463234a6ec893f7a013ceb953eb5da0effe0d274
 +DIST dialog_1.3-20171209.orig.tar.gz 511503 BLAKE2B db633f882cce8a0ecd1446c26b305f5567bcdc0fb8e073ff3a443fbf56662638685578040ecd21220192c069899998f587aa04db8185074b4c8af957df77c49c SHA512 0355578bc64e2c75a2aae3ae83aff62eae60556a2890d50a72988efa76b82055755922bc1156a92370d773524865e76b8a0ddcde77fb6e6b5774c987fc22dee8
 Only in /var/git/meta-repo/kits/dev-kit/dev-util/dialog: dialog-1.3.20160828.ebuild
 diff -u -U10 -r /var/git/meta-repo/kits/dev-kit/dev-util/dialog/dialog-1.3.20170131.ebuild ./dev-util/dialog.src/dialog-1.3.20170131.ebuild
---- /var/git/meta-repo/kits/dev-kit/dev-util/dialog/dialog-1.3.20170131.ebuild	2018-09-18 21:59:30.846299843 -0000
-+++ ./dev-util/dialog.src/dialog-1.3.20170131.ebuild	2018-06-02 15:52:23.544738977 -0000
+--- /var/git/meta-repo/kits/dev-kit/dev-util/dialog/dialog-1.3.20170131.ebuild	2019-04-07 18:03:55.000000000 -0700
++++ ./dev-util/dialog.src/dialog-1.3.20170131.ebuild	2019-10-02 16:22:54.983598931 -0700
 @@ -1,25 +1,25 @@
 -# Copyright 1999-2017 Gentoo Foundation
 +# Copyright 1999-2018 Gentoo Foundation
@@ -2125,7 +2281,7 @@ diff -u -U10 -r /var/git/meta-repo/kits/dev-kit/dev-util/dialog/dialog-1.3.20170
  
  LICENSE="GPL-2"
  SLOT="0/14"
--KEYWORDS="~alpha amd64 arm ~arm64 hppa ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc x86 ~amd64-fbsd ~sparc-fbsd ~x86-fbsd"
+-KEYWORDS="~alpha amd64 arm ~arm64 hppa ia64 ~m68k ~mips ppc ~ppc64 ~s390 ~sh sparc x86 ~amd64-fbsd ~sparc-fbsd ~x86-fbsd"
 +KEYWORDS="alpha amd64 arm arm64 hppa ia64 m68k ~mips ppc ppc64 s390 sh sparc x86 ~amd64-fbsd ~x86-fbsd"
  IUSE="examples minimal nls static-libs unicode"
  
@@ -2143,8 +2299,8 @@ Only in ./dev-util/dialog.src: dialog-1.3.20180621.ebuild
 diff :: dev-util/dialog [target] =======================================================================================
 Only in ./dev-util/dialog: .rationale
 diff -u -U10 -r ./dev-util/dialog.src/Manifest ./dev-util/dialog/Manifest
---- ./dev-util/dialog.src/Manifest	2018-06-23 13:03:41.745256347 -0000
-+++ ./dev-util/dialog/Manifest	2018-09-12 04:57:36.820783214 -0000
+--- ./dev-util/dialog.src/Manifest	2019-10-02 16:22:54.983598931 -0700
++++ ./dev-util/dialog/Manifest	2019-03-09 18:10:02.834074557 -0800
 @@ -1,3 +1,2 @@
 -DIST dialog-1.3-20170131.tgz 507783 BLAKE2B a98c436eabc8d06619bd64a8b1d647a0712630f0f89565253636ef2f38333ca6926177aa0c2001305b0c06fc7a1f576cda87da493183402ef9ec3cdc3fa8be23 SHA512 818b4e9d0d5ee55377b78ccceacf59a78e5e6d6fbc09e24a19e62b4988ff8de32f3364132b9ee88c86e126114eda45c82d86397d5f26fae81a6bda91be979786
  DIST dialog-1.3-20180621.tgz 529123 BLAKE2B bb085e93a0eaedd1fc517bcfe080f8dbf61bf0b28003b38356d66c324baed7dcd2f76917676a1894e76bf3a7d58d3090c95e45624dae37e3e2e885282ab9c5bb SHA512 1c6d794af50a12294e32b99fd9d3eb9451ac4a2f21c5567848b59c7a316b3058463c41fb8f9eb0bce68edbbe463234a6ec893f7a013ceb953eb5da0effe0d274
@@ -2158,12 +2314,41 @@ diff :: dev-util/dialog [files] ================================================
 ./dev-util/dialog:
 Manifest
 dialog-1.3.20180621.ebuild
+diff :: dev-util/netsurf-buildsystem [rationale] =======================================================================
+emerge: there are no ebuilds to satisfy ">=dev-util/netsurf-buildsystem-1.7-r1".
+(dependency required by "www-client/netsurf-3.8-r2::overlay" [ebuild])
+(dependency required by "netsurf" [argument])
+https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-util/netsurf-buildsystem/netsurf-buildsystem-1.7-r1.ebuild?id=0e856edefbd36efffc141a2174e75db9afe1f204
+diff :: dev-util/netsurf-buildsystem [source] ==========================================================================
+diff: /var/git/meta-repo/kits/*/dev-util/netsurf-buildsystem: No such file or directory
+diff :: dev-util/netsurf-buildsystem [target] ==========================================================================
+Only in ./dev-util/netsurf-buildsystem: .rationale
+diff -u -U10 -r ./dev-util/netsurf-buildsystem.src/Manifest ./dev-util/netsurf-buildsystem/Manifest
+--- ./dev-util/netsurf-buildsystem.src/Manifest	2018-12-01 09:17:08.934912276 -0800
++++ ./dev-util/netsurf-buildsystem/Manifest	2019-10-02 15:45:19.000000000 -0700
+@@ -1 +1,3 @@
++AUX gentoo-helpers-r1.sh 299 BLAKE2B cac826ecdcf18d07b3bcc612f87090bcb26dc166f49794c0634245e48d0d6ebc93007774e436aa669e0b6eff3ed919524101d8c8b7856cb6cc6c94c48b0bc31c SHA512 71c0c7d8a7cf5c0baa71ecd23d075c8b9d244dbeebfe1c89dad3b8891693f1259de59e8c45718a0a45af97e88c0e943fba5888fbb5018a03fdb24689181019ae
+ DIST buildsystem-1.7.tar.gz 38597 BLAKE2B d0981ef282ac0d93d81a1a6a6bee1fc2a0151c962be6ce2900a67843ba8ebc67e00508cded2a7375f6bbe0d45572690f127872936a282de80eb08655ac571603 SHA512 f6a46ac25f41e695ec13d7b2b564250c4cc44a40a688904eb17aa4b547c2df0102cc0effb7a23a2ffa6b9178ae5cf452b63980caf26e06e479168c85803f1e58
++EBUILD netsurf-buildsystem-1.7-r1.ebuild 703 BLAKE2B e899d1dabcffcb2de57ebfc6cf9cc3881293eb6ec8f326ecd0bb2cbb67cfaa259f5f5b0e2171a87cafb3028618053066b4b377b947f8c16e17625ea6658d44da SHA512 0c3ae21fed977aec71868fbcf65592d07e53d54ceceaf0403be67da250c1579aebd1180cfdaebabeeaa2034b5ad3612ef5ae68c41402daecc431ae30da00e9ba
+Only in ./dev-util/netsurf-buildsystem.src/files: gentoo-helpers.sh
+Only in ./dev-util/netsurf-buildsystem.src: metadata.xml
+Only in ./dev-util/netsurf-buildsystem.src: netsurf-buildsystem-1.7.ebuild
+diff :: dev-util/netsurf-buildsystem [files] ===========================================================================
+	newins "${FILESDIR}/gentoo-helpers-r1.sh" gentoo-helpers.sh
+
+./dev-util/netsurf-buildsystem:
+Manifest
+files
+netsurf-buildsystem-1.7-r1.ebuild
+
+./dev-util/netsurf-buildsystem/files:
+gentoo-helpers-r1.sh
 diff :: games-fps/doom3 [rationale] ====================================================================================
 # games-fps/doom3-mitm requires opengl iuse flag
 diff :: games-fps/doom3 [source] =======================================================================================
 diff -u -U10 -r /var/git/meta-repo/kits/games-kit/games-fps/doom3/Manifest ./games-fps/doom3.src/Manifest
---- /var/git/meta-repo/kits/games-kit/games-fps/doom3/Manifest	2018-09-18 21:59:39.466383217 -0000
-+++ ./games-fps/doom3.src/Manifest	2017-09-09 06:07:12.283405316 -0000
+--- /var/git/meta-repo/kits/games-kit/games-fps/doom3/Manifest	2019-04-07 16:48:54.000000000 -0700
++++ ./games-fps/doom3.src/Manifest	2019-10-02 16:22:54.983598931 -0700
 @@ -1,2 +1,2 @@
 -DIST doom3-linux-1.3.1.1304.x86.run 21145838 BLAKE2B ac69b20193b188556143ff57464f81c088dc008abfda98ff49d8a2d802fa06ff383e6bcde4a8a056066e8cd663a07fa01f4f171e30ec5fe9185fd975a13efb60 SHA512 f2a42478d84a6242a7982d1acd726b746596b7a13147acbd920d618223d6f52ab4c49aa7d7f07067674da2881372a181396a0bdd476e3956fb702c76eebb0d02
 -DIST doom3.png 6502 BLAKE2B e467e622bb8955024aaf13dc97e0facc7f83aa344007172890d1982f39d35a643c859663fbdc60424332fe1b4b57711b7ce75fcdda8c77b4b2e8e6b71e9431e2 SHA512 9a2b3831babbf3fa0d354e1a4a779c972676edbcc0b287de9b9f3eb830e0a00d557ba9645fbf0e58e07d5705efb0ef2b7ab96cd92493e2a0afc30c8842c0043b
@@ -2172,15 +2357,15 @@ diff -u -U10 -r /var/git/meta-repo/kits/games-kit/games-fps/doom3/Manifest ./gam
 diff :: games-fps/doom3 [target] =======================================================================================
 Only in ./games-fps/doom3: .rationale
 diff -u -U10 -r ./games-fps/doom3.src/Manifest ./games-fps/doom3/Manifest
---- ./games-fps/doom3.src/Manifest	2017-09-09 06:07:12.283405316 -0000
-+++ ./games-fps/doom3/Manifest	2018-08-26 01:36:46.271231349 -0000
+--- ./games-fps/doom3.src/Manifest	2019-10-02 16:22:54.983598931 -0700
++++ ./games-fps/doom3/Manifest	2019-10-02 16:22:54.983598931 -0700
 @@ -1,2 +1,3 @@
  DIST doom3-linux-1.3.1.1304.x86.run 21145838 SHA256 2f90dff20f2d3c0c47f17b3d6d45c4f0e7d27b986bf6084f21b85180cd1e03b4 SHA512 f2a42478d84a6242a7982d1acd726b746596b7a13147acbd920d618223d6f52ab4c49aa7d7f07067674da2881372a181396a0bdd476e3956fb702c76eebb0d02 WHIRLPOOL e80d54176763c37ba21750dbd57cb02beec8cf3fe7d90916ee4024541966b14e7919fa41624dc9fabb44eb824cabcc862fefdf3e58316302a01042d5ee443382
  DIST doom3.png 6502 SHA256 c9a701498a7b0f923182bf9f11aac8d2193026e509ae3643a5bc118b1a458c6b SHA512 9a2b3831babbf3fa0d354e1a4a779c972676edbcc0b287de9b9f3eb830e0a00d557ba9645fbf0e58e07d5705efb0ef2b7ab96cd92493e2a0afc30c8842c0043b WHIRLPOOL e568cdcf3ea510b9865a4c1f1577713c6a63954a22e572311a321c8c73cf70ca68b76134d45a9f1c77e2d6b464ec29e098b7fe39ce1eb38889f83fc3c9bfc05f
 +EBUILD doom3-1.3.1304-r1.ebuild 2510 SHA256 a57e0386f81484f53f6ebd736f10674d7022a61f566070c4b364faedad5d4c84 SHA512 8d8195e2e00b7e2bb0df16cb86fba3ccbfa189594245b326bea806e6f8a461819f2a97865b78b0ca7d5c95b4ec78e3ef659816b9d195f2367ce3c2e33cc38a68 WHIRLPOOL b9d2adb55d3964ca98e6b702af064cea9a63e18ac25e04e23da7a3d1e31f8512ba58bd10d69766c7ca974788aec98699a3f7322e614810cedde4e33baef7fd2c
 diff -u -U10 -r ./games-fps/doom3.src/doom3-1.3.1304-r1.ebuild ./games-fps/doom3/doom3-1.3.1304-r1.ebuild
---- ./games-fps/doom3.src/doom3-1.3.1304-r1.ebuild	2017-09-09 06:07:12.283405316 -0000
-+++ ./games-fps/doom3/doom3-1.3.1304-r1.ebuild	2018-08-26 01:34:06.441648066 -0000
+--- ./games-fps/doom3.src/doom3-1.3.1304-r1.ebuild	2019-04-07 16:48:54.000000000 -0700
++++ ./games-fps/doom3/doom3-1.3.1304-r1.ebuild	2018-08-25 18:34:06.441648066 -0700
 @@ -7,21 +7,22 @@
  MY_PV="1.3.1.1304"
  
@@ -2215,8 +2400,8 @@ diff :: games-fps/doom3-data [rationale] =======================================
 # automation of interactive ebuild
 diff :: games-fps/doom3-data [source] ==================================================================================
 diff -u -U10 -r /var/git/meta-repo/kits/games-kit/games-fps/doom3-data/doom3-data-1.1.1282-r1.ebuild ./games-fps/doom3-data.src/doom3-data-1.1.1282-r1.ebuild
---- /var/git/meta-repo/kits/games-kit/games-fps/doom3-data/doom3-data-1.1.1282-r1.ebuild	2018-09-18 21:59:39.466383217 -0000
-+++ ./games-fps/doom3-data.src/doom3-data-1.1.1282-r1.ebuild	2017-09-09 06:07:12.279405278 -0000
+--- /var/git/meta-repo/kits/games-kit/games-fps/doom3-data/doom3-data-1.1.1282-r1.ebuild	2019-04-07 16:48:54.000000000 -0700
++++ ./games-fps/doom3-data.src/doom3-data-1.1.1282-r1.ebuild	2019-10-02 16:22:54.983598931 -0700
 @@ -3,21 +3,21 @@
  
  EAPI=5
@@ -2241,11 +2426,12 @@ diff -u -U10 -r /var/git/meta-repo/kits/games-kit/games-fps/doom3-data/doom3-dat
  		Setup/Data/base/pak002.pk4 \
  		Setup/Data/base/pak000.pk4 \
 diff :: games-fps/doom3-data [target] ==================================================================================
+Only in ./games-fps/doom3-data: .keep
 Only in ./games-fps/doom3-data: .rationale
 Only in ./games-fps/doom3-data: Manifest
 diff -u -U10 -r ./games-fps/doom3-data.src/doom3-data-1.1.1282-r1.ebuild ./games-fps/doom3-data/doom3-data-1.1.1282-r1.ebuild
---- ./games-fps/doom3-data.src/doom3-data-1.1.1282-r1.ebuild	2017-09-09 06:07:12.279405278 -0000
-+++ ./games-fps/doom3-data/doom3-data-1.1.1282-r1.ebuild	2018-08-26 04:29:25.486906972 -0000
+--- ./games-fps/doom3-data.src/doom3-data-1.1.1282-r1.ebuild	2019-10-02 16:22:54.983598931 -0700
++++ ./games-fps/doom3-data/doom3-data-1.1.1282-r1.ebuild	2018-08-25 21:29:25.486906972 -0700
 @@ -11,20 +11,25 @@
  LICENSE="DOOM3"
  SLOT="0"
@@ -2282,8 +2468,8 @@ diff :: games-fps/doom3-roe [rationale] ========================================
 # automation of interactive ebuild
 diff :: games-fps/doom3-roe [source] ===================================================================================
 diff -u -U10 -r /var/git/meta-repo/kits/games-kit/games-fps/doom3-roe/doom3-roe-1.ebuild ./games-fps/doom3-roe.src/doom3-roe-1.ebuild
---- /var/git/meta-repo/kits/games-kit/games-fps/doom3-roe/doom3-roe-1.ebuild	2018-09-18 21:59:39.466383217 -0000
-+++ ./games-fps/doom3-roe.src/doom3-roe-1.ebuild	2017-09-09 06:07:12.283405316 -0000
+--- /var/git/meta-repo/kits/games-kit/games-fps/doom3-roe/doom3-roe-1.ebuild	2019-04-07 16:48:54.000000000 -0700
++++ ./games-fps/doom3-roe.src/doom3-roe-1.ebuild	2019-10-02 16:22:54.983598931 -0700
 @@ -3,21 +3,21 @@
  
  EAPI=5
@@ -2308,11 +2494,12 @@ diff -u -U10 -r /var/git/meta-repo/kits/games-kit/games-fps/doom3-roe/doom3-roe-
  Ddir=${D}/${dir}
  
 diff :: games-fps/doom3-roe [target] ===================================================================================
+Only in ./games-fps/doom3-roe: .keep
 Only in ./games-fps/doom3-roe: .rationale
 Only in ./games-fps/doom3-roe: Manifest
 diff -u -U10 -r ./games-fps/doom3-roe.src/doom3-roe-1.ebuild ./games-fps/doom3-roe/doom3-roe-1.ebuild
---- ./games-fps/doom3-roe.src/doom3-roe-1.ebuild	2017-09-09 06:07:12.283405316 -0000
-+++ ./games-fps/doom3-roe/doom3-roe-1.ebuild	2018-08-26 04:32:51.488966343 -0000
+--- ./games-fps/doom3-roe.src/doom3-roe-1.ebuild	2019-10-02 16:22:54.983598931 -0700
++++ ./games-fps/doom3-roe/doom3-roe-1.ebuild	2018-08-25 21:32:51.488966343 -0700
 @@ -15,20 +15,23 @@
  RESTRICT="strip"
  
@@ -2350,10 +2537,11 @@ diff :: games-fps/doomsday-resources [rationale] ===============================
 diff :: games-fps/doomsday-resources [source] ==========================================================================
 diff: /var/git/meta-repo/kits/*/games-fps/doomsday-resources: No such file or directory
 diff :: games-fps/doomsday-resources [target] ==========================================================================
+Only in ./games-fps/doomsday-resources: .keep
 Only in ./games-fps/doomsday-resources: .rationale
 diff -u -U10 -r ./games-fps/doomsday-resources.src/Manifest ./games-fps/doomsday-resources/Manifest
---- ./games-fps/doomsday-resources.src/Manifest	2018-09-18 21:50:42.745190647 -0000
-+++ ./games-fps/doomsday-resources/Manifest	2018-09-18 21:50:42.749190686 -0000
+--- ./games-fps/doomsday-resources.src/Manifest	2018-09-18 14:50:42.745190647 -0700
++++ ./games-fps/doomsday-resources/Manifest	2019-03-09 18:10:02.858074783 -0800
 @@ -1,2 +1,3 @@
  DIST jdoom-details.zip 1379495 BLAKE2B 9ab216895ac44431ce39a89a75c00a4b076edf577cb1489f5d6b7050d69664cdd2b74976dcd43152adbf56b49602a063ca18ab121def79248ce1d1e89cab665c SHA512 94f0c29940795368e9ffdb9fad57f0de65a936a90ad6256effe6fbaa72d1ddf45a016bb72431d1603ade84c01036f84b7dc3e739d04e6c33a41bdf50a9b45dce
  DIST jdoom-resource-pack-1.01.zip 23114845 BLAKE2B 42d514a80ffb15adfd505a96e2ef7152ad1d9a2de111f4f00ffbc4f5da514d3901b8a8f64ce3a85daa51b194d696acbc8dd8f953122fb3019bd7c2c459f5e011 SHA512 ec40f3920338040803b7cb3029e6b52352179fe63a1c56bb74ff398e9eca0ae4c7c058213c812644add70b833c26f9a69844c2ae068cdf7d4c7a4f6c9e277636
@@ -2370,8 +2558,8 @@ diff :: games-fps/quake1-data [rationale] ======================================
 # LHa: Error: Checksum error (LHarc file?)
 diff :: games-fps/quake1-data [source] =================================================================================
 diff -u -U10 -r /var/git/meta-repo/kits/games-kit/games-fps/quake1-data/quake1-data-2.40.ebuild ./games-fps/quake1-data.src/quake1-data-2.40.ebuild
---- /var/git/meta-repo/kits/games-kit/games-fps/quake1-data/quake1-data-2.40.ebuild	2018-09-18 21:59:39.470383255 -0000
-+++ ./games-fps/quake1-data.src/quake1-data-2.40.ebuild	2017-09-09 06:07:12.283405316 -0000
+--- /var/git/meta-repo/kits/games-kit/games-fps/quake1-data/quake1-data-2.40.ebuild	2019-04-07 16:48:54.000000000 -0700
++++ ./games-fps/quake1-data.src/quake1-data-2.40.ebuild	2019-10-02 16:22:54.983598931 -0700
 @@ -8,21 +8,21 @@
  
  EAPI=5
@@ -2396,11 +2584,12 @@ diff -u -U10 -r /var/git/meta-repo/kits/games-kit/games-fps/quake1-data/quake1-d
  	export CDROM_NAME_SET=("Existing Install" "Quake CD (1.01)" "Ultimate Quake Collection" "Quake CD (newer)")
  	cdrom_get_cds id1:q101_int.1:Setup/ID1:resource.1
 diff :: games-fps/quake1-data [target] =================================================================================
+Only in ./games-fps/quake1-data: .keep
 Only in ./games-fps/quake1-data: .rationale
 Only in ./games-fps/quake1-data: Manifest
 diff -u -U10 -r ./games-fps/quake1-data.src/quake1-data-2.40.ebuild ./games-fps/quake1-data/quake1-data-2.40.ebuild
---- ./games-fps/quake1-data.src/quake1-data-2.40.ebuild	2017-09-09 06:07:12.283405316 -0000
-+++ ./games-fps/quake1-data/quake1-data-2.40.ebuild	2018-08-26 04:32:32.728778815 -0000
+--- ./games-fps/quake1-data.src/quake1-data-2.40.ebuild	2019-10-02 16:22:54.983598931 -0700
++++ ./games-fps/quake1-data/quake1-data-2.40.ebuild	2018-08-25 21:32:32.728778815 -0700
 @@ -17,31 +17,37 @@
  SLOT="0"
  KEYWORDS="amd64 x86"
@@ -2451,32 +2640,32 @@ diff :: media-libs/libraw [rationale] ==========================================
 # https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/libraw?id=4ff0bb199ba902d5fd730b1c8854294bf1dd22d6
 diff :: media-libs/libraw [source] =====================================================================================
 diff -u -U10 -r /var/git/meta-repo/kits/media-kit/media-libs/libraw/Manifest ./media-libs/libraw.src/Manifest
---- /var/git/meta-repo/kits/media-kit/media-libs/libraw/Manifest	2018-09-18 21:59:13.990136808 -0000
-+++ ./media-libs/libraw.src/Manifest	2018-07-07 12:46:08.605263803 -0000
-@@ -1,6 +1,10 @@
--DIST LibRaw-0.18.4.tar.gz 1281104 SHA256 eaf4931b46e65861e88bbe704ccf370381e94d63e9a898b889ded4e0cb3b0c97 SHA512 e71db23a70f0cda745ae862f4cb6a0c51c968e4c7399f28e86de8beb894526fa76cd337c1406e2eaee3f287f15e8912d1a0f7217493c6444a491ca3329f63776 WHIRLPOOL c7bfecfe51280088b8be35a226e765b2a3f810d120150a74326b4ee9662f10b170fa8cca7b4ef7191431b7b08df4f83df5dbe6da1811915405b4d2d72b988e38
--DIST LibRaw-0.18.5.tar.gz 1280046 SHA256 fa2a7d14d9dfaf6b368f958a76d79266b3f58c2bc367bebab56e11baa94da178 SHA512 751a1c54507b7408d0d36c3f1fb0e31928f5ae540fae42eb2b57d8fcebcd44134dc452a4f3838dd31dbc8fb3978a6cac6129429a3350f8be5dc44146309aff81 WHIRLPOOL b35227120e140abbd59b6587296fc81e7737a32cce82b8d4b2c240d448c786040302d1737c614168b5e8f797a760a396cfc353929afa7aba48af3f3e70cd1b8d
--DIST LibRaw-demosaic-pack-GPL2-0.18.4.tar.gz 33129 SHA256 8961b0a90d4b1a5d00a13d9ed2f23e8f2c651b4a68c0470e01ba7668cc98145f SHA512 05bef76530f9237e1d1bfe08014f30de328b68319f88d126aaffa8baf3b89615d160bac36a6ad2cc38cab0faeb8c4bf86714dd568e7f01cfd1ee2513ac175a5d WHIRLPOOL 70fd4d7d5503d4edf985be7afe0635d8f54e3680a6be0384c0036480001d2fcb32cd6faa02f6219a5c28192448b2ea50bffae324b83d77509712887d7f02ccf4
--DIST LibRaw-demosaic-pack-GPL2-0.18.5.tar.gz 30449 SHA256 2ae7923868c3e927eee72cf2e4d91384560b7cfe76a386ecf319c069d343c674 SHA512 1599695394717558e61844e32d76bf653741592d81691c9f55bfb72c8c5d485bce4eab3fc0eefd37640254c431bd78706fe04ca547e42566dda789f0b6559af5 WHIRLPOOL 880f95a95d61b9832ef0a5115aeb9d3ca27dd8de893265b86073fc30e22224a3fea125fb0d9a26d9af01cfb1a8aa4d21a93a5574599ffddf2d1b69e9349fa093
--DIST LibRaw-demosaic-pack-GPL3-0.18.4.tar.gz 38622 SHA256 9aa8ad60581b9c6a0ed81d96f897804cac832c7eeb087a38ca61fcd54838966c SHA512 158d951d0e1c35f1ebdde8849f0b51e23332c8b5b13a4b0ab0677a3d4a1682afd6e7c5dec4194072b4588699bf49a023591fa1b05d2a8f4c54cd1a44e65e3ad9 WHIRLPOOL da402afa54a6b3a10f17a3e2ea92475433a8baeb02c9be95d107fbb740f8e3448cba7183ef161ef04613f815af9c97196a7d9d3b14cca643ffabf329df7d9de5
--DIST LibRaw-demosaic-pack-GPL3-0.18.5.tar.gz 38899 SHA256 b0ec998c4884cedd86a0627481a18144f0024a35c7a6fa5ae836182c16975c2b SHA512 c00193b64673e093c33a9d1316448eea4eb7e2b274d5d3bd39cef02b7269e56ce72f9b47831039e00b2feb8344b5266f9c03b5f11212d520809674db253cb028 WHIRLPOOL 78dfc95e23c4570f604262911747f751177e35d489875c1c1de21afeead4f902774e75387fc37b49a7800012fdb8bb872340faf15607e2b206677bb8fd236c6c
+--- /var/git/meta-repo/kits/media-kit/media-libs/libraw/Manifest	2019-04-07 18:05:36.000000000 -0700
++++ ./media-libs/libraw.src/Manifest	2019-10-02 16:22:54.983598931 -0700
+@@ -1,9 +1,10 @@
 +DIST LibRaw-0.18.11.tar.gz 1283643 BLAKE2B cd217a0c40d0f30ff95968c5238ad349d32f6ae44aca3847b32c236e8e82e7ff25ba5d6bb0cffe8d73b288239830982d074a306b682160bfe8c73b0df9fcff09 SHA512 4d114bdb589c96d95f646b1d016cfb9546ea7a53b9f23af1dc5d0e38cb4d1b2aa7270f2d4dbe7c6c323fb7f21403914a0bb75afa7b6204d0a99c72ecf0c812c9
 +DIST LibRaw-0.18.12.tar.gz 1283491 BLAKE2B a0e23bf58ecf331ef52e529be5dd27acf8458d1a6de700b36df6172b7cfde2da62561e29c197bc360237b12c7a427b1d07a0c64862fe1cead461a6989e488218 SHA512 8fcf1e24295457f09a654a14d77869ca401a21e9f4386d91fb0fd5bc9aa20a882bf490a64c183108e645b5fa70401f97868c83837a057cb707f58fa31a417d44
 +DIST LibRaw-0.18.13.tar.gz 1287631 BLAKE2B cb335dd21b897222a80ae7b486d751a080dafe93d9c4ce72ad337bc724707831a70428323027f5f343c4b0ff08820b6f68553436240a85d115eaaa30b6b0c269 SHA512 80e6ca48b00176e7c4dd21d8249c60e71e987c01e719abc3bda8b859645301b9dee4bb365bbcb79cbe0067220d3b966add4757b35d4b6ada0a59bbdb29925254
-+DIST LibRaw-0.18.4.tar.gz 1281104 BLAKE2B dc6c2b594f0897eea509d3122bd7f41bccd89182a5e294b331544ad626631f18637660e1de7ea1c8b5e1c0b59678189d06f9fd12e27016e2ea3ec736cabfbbe4 SHA512 e71db23a70f0cda745ae862f4cb6a0c51c968e4c7399f28e86de8beb894526fa76cd337c1406e2eaee3f287f15e8912d1a0f7217493c6444a491ca3329f63776
+ DIST LibRaw-0.18.4.tar.gz 1281104 BLAKE2B dc6c2b594f0897eea509d3122bd7f41bccd89182a5e294b331544ad626631f18637660e1de7ea1c8b5e1c0b59678189d06f9fd12e27016e2ea3ec736cabfbbe4 SHA512 e71db23a70f0cda745ae862f4cb6a0c51c968e4c7399f28e86de8beb894526fa76cd337c1406e2eaee3f287f15e8912d1a0f7217493c6444a491ca3329f63776
+-DIST LibRaw-0.18.5.tar.gz 1280046 BLAKE2B 167267922a1a8d16e3b13dbf4c8cda3bfa31a9e5d98eb9fc3929eb61df4cf6491a49772d1fd8a18da525709481afa34c7b85c996d02445012ddcadb90bbc0675 SHA512 751a1c54507b7408d0d36c3f1fb0e31928f5ae540fae42eb2b57d8fcebcd44134dc452a4f3838dd31dbc8fb3978a6cac6129429a3350f8be5dc44146309aff81
+-DIST LibRaw-0.18.6.tar.gz 1282212 BLAKE2B db53d22a38535f0b96fd02aa52969206d4003579706a4c2b8ed00c6df0785e062ea92fd9613bfe5e94efc65bb69fefb8661d2afc4b57341800a4176ba264bc83 SHA512 ce916a85dcc8ad50a631e9f0e4532d4cc300624b5c78d233531317f33cdf74363cdbcab1fbef3207e89b77bac5be370ef8ff1b806dbb9ae2c4cc0ec607b53e55
 +DIST LibRaw-0.18.8.tar.gz 1281773 BLAKE2B 755d17ee4c08e26b04d20cc6284f43e1a87d2bc1b41499d175c6ebfc39684732a4407b990115818553c7b815c66bb04ad451d478ed2c084c443871de8ea221e4 SHA512 48871a5e43c89a17962fae426a962d11a6ce40cb8e7d8abc90e98c899dc42b7e1711398c075901ddbc710fe7e916ba6d507bee7e18975779caa8f5d512b1d580
 +DIST LibRaw-0.19.0.tar.gz 1300662 BLAKE2B f182f1fd7d02eaa34f8b8e2336cbc59cd8c3345cddeace2ed305d048d160bf8d6ecdf04129829b3202a16e70d987a5b2a83c036ec95d1b7b6c748dbb5b46271b SHA512 33d0e9a031add901bdd10ffcde6a0f7837a4f4bec0bbbd21ad661e518dadcb1699133f17b3b2f6cd6cefe87ef3017cb7e1b816c4ce3dfebaaf5d9b2ff6b65238
-+DIST LibRaw-demosaic-pack-GPL2-0.18.4.tar.gz 33129 BLAKE2B 724501ae52bf83006dd1e7730f750c65f4a58ca385227a7c9d5c8ab2926ef2fb74a798bd09b78e6f9c1c5cdd39de712ec05a49412087f3b889f3ff76dbb0fbe8 SHA512 05bef76530f9237e1d1bfe08014f30de328b68319f88d126aaffa8baf3b89615d160bac36a6ad2cc38cab0faeb8c4bf86714dd568e7f01cfd1ee2513ac175a5d
+ DIST LibRaw-demosaic-pack-GPL2-0.18.4.tar.gz 33129 BLAKE2B 724501ae52bf83006dd1e7730f750c65f4a58ca385227a7c9d5c8ab2926ef2fb74a798bd09b78e6f9c1c5cdd39de712ec05a49412087f3b889f3ff76dbb0fbe8 SHA512 05bef76530f9237e1d1bfe08014f30de328b68319f88d126aaffa8baf3b89615d160bac36a6ad2cc38cab0faeb8c4bf86714dd568e7f01cfd1ee2513ac175a5d
+-DIST LibRaw-demosaic-pack-GPL2-0.18.5.tar.gz 30449 BLAKE2B 6881852b59bc728eee6f31d5b355ee7583390adcc62446d0f4c9df6efe45b0384e192e9ce8e48815c960af89890a9ee4c3f5a2f0e0f1086bc943c8425b7e5930 SHA512 1599695394717558e61844e32d76bf653741592d81691c9f55bfb72c8c5d485bce4eab3fc0eefd37640254c431bd78706fe04ca547e42566dda789f0b6559af5
+-DIST LibRaw-demosaic-pack-GPL2-0.18.6.tar.gz 32638 BLAKE2B 070a09732a018c3c759fd6417ff9f8b97ba6cf4bafc2efcb24c9d0809fe53565ff74b60c46f640e76a3a95486fc70a08f6059fb311e4f3b3337048665caef38d SHA512 2a4f317c2594825a7a7ad62eb5592ad3d512026dc49b87123ae4f5a05731912fcf4f3e22169acbc1decf6b79aec34a7250d892b686fe824f8bb2c5afa759c7ae
 +DIST LibRaw-demosaic-pack-GPL2-0.18.8.tar.gz 30868 BLAKE2B 30cef85c49e066fa4b1d86ee4d7bfd7bff07897f91edd57aa52428f7ecf2d6e930703e496d4e55e034c6da2f68735f8b20f493a1d7a00d51b0430a4b98e6ee45 SHA512 c34419cec055ea976a348c342f5ec2141e2686b5eb50dd23d7b9fd707eefd86779d331f06b4570dedb1682c33fcd6ac0446b3167ca1f3e3fd2566a0c66c6fd3d
-+DIST LibRaw-demosaic-pack-GPL3-0.18.4.tar.gz 38622 BLAKE2B 268085234335619487f52bf22739c28f077c24d02990e7a56a0a3e5b9a654227762adb366b0be5b3b0a9a1fe2553a798b4d5b120699c93cae16415f4aaf4ea4a SHA512 158d951d0e1c35f1ebdde8849f0b51e23332c8b5b13a4b0ab0677a3d4a1682afd6e7c5dec4194072b4588699bf49a023591fa1b05d2a8f4c54cd1a44e65e3ad9
+ DIST LibRaw-demosaic-pack-GPL3-0.18.4.tar.gz 38622 BLAKE2B 268085234335619487f52bf22739c28f077c24d02990e7a56a0a3e5b9a654227762adb366b0be5b3b0a9a1fe2553a798b4d5b120699c93cae16415f4aaf4ea4a SHA512 158d951d0e1c35f1ebdde8849f0b51e23332c8b5b13a4b0ab0677a3d4a1682afd6e7c5dec4194072b4588699bf49a023591fa1b05d2a8f4c54cd1a44e65e3ad9
+-DIST LibRaw-demosaic-pack-GPL3-0.18.5.tar.gz 38899 BLAKE2B 8ad0e18c0f33d4cd485668cb126ca18677271f4b141c64e0adfe918b3a04e4dbf2b4a11eb810ca6b93e850babf755ed4df1f2d85c9ca8cfbfe78ca3b5a14ac63 SHA512 c00193b64673e093c33a9d1316448eea4eb7e2b274d5d3bd39cef02b7269e56ce72f9b47831039e00b2feb8344b5266f9c03b5f11212d520809674db253cb028
+-DIST LibRaw-demosaic-pack-GPL3-0.18.6.tar.gz 39247 BLAKE2B 73319b2c33c24b570036725585c15bffe9bffb1252a8cf64cd3628dab22cf17e12e7fc87efb5c5ae8581dfcd59d0f9bd7dc41817a2ceb1dd2b1e2b09e76423ce SHA512 53ad72654f407dbb3b591f2d1ff12de1cb273de5339d598e76260ee2e2c4095d70d3b0f30536cbb7eb06d802bcf6cc76e6b870837a3e4dc640f4a14da020a704
 +DIST LibRaw-demosaic-pack-GPL3-0.18.8.tar.gz 39002 BLAKE2B 544a1eab61c825c7f2202107d623a56e1f81ad3e5111b419bf12708e2d8a9903f192c23904ab8fb274636d9262d3d89f02fa5e05a0e70d7834782c2df8ec0548 SHA512 10e8cb6694159d04deb813a88e5c3195eed6e2e438f41533db91b17997af1b9d54f286303447ca6e3d1b377922e388f6fcc8a8370254011e11b85612c914d500
 Only in ./media-libs/libraw.src: files
 Only in ./media-libs/libraw.src: libraw-0.18.11.ebuild
 Only in ./media-libs/libraw.src: libraw-0.18.12.ebuild
 Only in ./media-libs/libraw.src: libraw-0.18.13.ebuild
 diff -u -U10 -r /var/git/meta-repo/kits/media-kit/media-libs/libraw/libraw-0.18.4.ebuild ./media-libs/libraw.src/libraw-0.18.4.ebuild
---- /var/git/meta-repo/kits/media-kit/media-libs/libraw/libraw-0.18.4.ebuild	2018-09-18 21:59:13.990136808 -0000
-+++ ./media-libs/libraw.src/libraw-0.18.4.ebuild	2018-04-07 15:14:26.306905682 -0000
+--- /var/git/meta-repo/kits/media-kit/media-libs/libraw/libraw-0.18.4.ebuild	2019-04-07 16:47:30.000000000 -0700
++++ ./media-libs/libraw.src/libraw-0.18.4.ebuild	2019-10-02 16:22:54.983598931 -0700
 @@ -1,44 +1,48 @@
 -# Copyright 1999-2017 Gentoo Foundation
 +# Copyright 1999-2018 Gentoo Foundation
@@ -2529,13 +2718,14 @@ diff -u -U10 -r /var/git/meta-repo/kits/media-kit/media-libs/libraw/libraw-0.18.
  multilib_src_configure() {
  	local myeconfargs=(
 Only in /var/git/meta-repo/kits/media-kit/media-libs/libraw: libraw-0.18.5.ebuild
+Only in /var/git/meta-repo/kits/media-kit/media-libs/libraw: libraw-0.18.6.ebuild
 Only in ./media-libs/libraw.src: libraw-0.18.8.ebuild
 Only in ./media-libs/libraw.src: libraw-0.19.0.ebuild
 diff :: media-libs/libraw [target] =====================================================================================
 Only in ./media-libs/libraw: .rationale
 diff -u -U10 -r ./media-libs/libraw.src/Manifest ./media-libs/libraw/Manifest
---- ./media-libs/libraw.src/Manifest	2018-07-07 12:46:08.605263803 -0000
-+++ ./media-libs/libraw/Manifest	2018-09-12 02:33:16.279308549 -0000
+--- ./media-libs/libraw.src/Manifest	2019-10-02 16:22:54.983598931 -0700
++++ ./media-libs/libraw/Manifest	2018-09-11 19:33:16.279308549 -0700
 @@ -1,10 +1,4 @@
 -DIST LibRaw-0.18.11.tar.gz 1283643 BLAKE2B cd217a0c40d0f30ff95968c5238ad349d32f6ae44aca3847b32c236e8e82e7ff25ba5d6bb0cffe8d73b288239830982d074a306b682160bfe8c73b0df9fcff09 SHA512 4d114bdb589c96d95f646b1d016cfb9546ea7a53b9f23af1dc5d0e38cb4d1b2aa7270f2d4dbe7c6c323fb7f21403914a0bb75afa7b6204d0a99c72ecf0c812c9
 -DIST LibRaw-0.18.12.tar.gz 1283491 BLAKE2B a0e23bf58ecf331ef52e529be5dd27acf8458d1a6de700b36df6172b7cfde2da62561e29c197bc360237b12c7a427b1d07a0c64862fe1cead461a6989e488218 SHA512 8fcf1e24295457f09a654a14d77869ca401a21e9f4386d91fb0fd5bc9aa20a882bf490a64c183108e645b5fa70401f97868c83837a057cb707f58fa31a417d44
@@ -2566,8 +2756,8 @@ diff :: media-sound/apulse [source] ============================================
 diff :: media-sound/apulse [target] ====================================================================================
 Only in ./media-sound/apulse: .rationale
 diff -u -U10 -r ./media-sound/apulse.src/Manifest ./media-sound/apulse/Manifest
---- ./media-sound/apulse.src/Manifest	2018-09-18 21:50:42.749190686 -0000
-+++ ./media-sound/apulse/Manifest	2018-09-18 21:50:42.749190686 -0000
+--- ./media-sound/apulse.src/Manifest	2019-04-07 18:05:36.000000000 -0700
++++ ./media-sound/apulse/Manifest	2019-10-02 16:22:54.983598931 -0700
 @@ -1,5 +1,3 @@
 +AUX apulse 488 SHA256 b1a3969034615e6e0b44c2be1e48e66fe58ad66f5df7a7e9458d0848972c8878 SHA512 2b1ebb3d574af2469f50a42e324b3367b5e08d3de00076620ce2133226d544ab2507e6d752ff3ed427319978ab5e1a0e73189368666a5c7f5ed61f1294417228 WHIRLPOOL 88fcfb78826e5ebf000e8b566087d7682a1bf7e5791bf67f5f13aca57f34804c143d16e2ae1a1459271732f4e77ad7a8138bb8d7f928714fe207c3e4f96b8a87
  DIST apulse-0.1.10.tar.gz 110272 SHA256 4f8aa9059d07bac1006e920a4a6b875ad63fdde973b83c138507812c00dd5cd6 SHA512 e922448095b7e3c8ae5766fadd5912ad39c1d0d68c73954305d17909b6bafe3a95c7e1ad4d63a4824293e0ba1495c253204343f31330c0ddb4fb419fe1f9eb12 WHIRLPOOL 56db7a62d75babe269f124f296c6000d322c50c1de583e6b274dc97ec456b6786315cc054ab7e09b1bd436ad47b86b58fc291d8e6f8192b6e2deeca14bef349b
@@ -2577,8 +2767,8 @@ diff -u -U10 -r ./media-sound/apulse.src/Manifest ./media-sound/apulse/Manifest
 -DIST apulse-0.1.9.tar.gz 106767 SHA256 75f5099086ae80857e8f9e8167398ab709f9133605891e0245116ca9c4ff4b18 SHA512 8323edebdee7bc927042857aa0587e1887a07da98ff9392ef9d075dc0e35c854b7a632be3e54fdbdac6d61b8baf05ae5fb9d180a5dab4b928be3237fdba5b941 WHIRLPOOL 5785243a5585b784f62467837e321648be1e3411020633f10cab2bca406f73c3a93503594e001e1a43d787882b740e1599ba3054a435e169bac4633377db60b3
 +EBUILD apulse-0.1.10.ebuild 1071 SHA256 e231776392d75ec96d2151050bfa9781025aaecd1fdd3c39b69178cbe6149f92 SHA512 71129c865ebbc84ce914e7897ee6d753005110a3a2a36a84797025b41f8cb5025049a684494724651a3232d28e17be0a2aa24b0c387a074b6ff561c6532e4172 WHIRLPOOL 7404700f06e2cf6bfd049eb02800a1459793b49b17e48c676f062beffd9ba20ff90297b22ae4cba3e70f2185e1a8199a9f45e4f88630a8d158dcb739706d2aa4
 diff -u -U10 -r ./media-sound/apulse.src/apulse-0.1.10.ebuild ./media-sound/apulse/apulse-0.1.10.ebuild
---- ./media-sound/apulse.src/apulse-0.1.10.ebuild	2018-09-18 21:50:42.749190686 -0000
-+++ ./media-sound/apulse/apulse-0.1.10.ebuild	2018-09-18 21:50:42.749190686 -0000
+--- ./media-sound/apulse.src/apulse-0.1.10.ebuild	2019-04-07 18:05:36.000000000 -0700
++++ ./media-sound/apulse/apulse-0.1.10.ebuild	2018-09-18 14:50:42.749190686 -0700
 @@ -8,22 +8,22 @@
  DESCRIPTION="PulseAudio emulation for ALSA"
  HOMEPAGE="https://github.com/i-rinat/apulse"
@@ -2629,8 +2819,8 @@ Only in ./net-misc/dhcpcd.src: dhcpcd-7.1.0.ebuild
 diff :: net-misc/dhcpcd [target] =======================================================================================
 Only in ./net-misc/dhcpcd: .rationale
 diff -u -U10 -r ./net-misc/dhcpcd.src/Manifest ./net-misc/dhcpcd/Manifest
---- ./net-misc/dhcpcd.src/Manifest	2019-03-19 18:51:01.378274860 -0000
-+++ ./net-misc/dhcpcd/Manifest	2019-03-19 18:57:20.000000000 -0000
+--- ./net-misc/dhcpcd.src/Manifest	2019-04-07 18:05:34.000000000 -0700
++++ ./net-misc/dhcpcd/Manifest	2019-03-19 11:57:20.000000000 -0700
 @@ -1,6 +1,4 @@
 -DIST dhcpcd-6.11.3.tar.xz 194892 BLAKE2B 08253879221f2cbccf69caf06ccbde960103fdf4de194f746572f4fa10497ab23dc1a41b6a849fe75f68a1d7a653e5358a7976581da0a92c8f19e2627b921440 SHA512 249185532cb239124f847c28e6bfb3e8a85e818e05a07eb0c6ac6843fbbab8afa8d6ebce4032b3537ccfb7fafb306dd0dc51c0e97f337f12f5071ba499686a70
 -DIST dhcpcd-6.11.5.tar.xz 198080 BLAKE2B 3172fcb1c09c3bb7fcf4896c6e9896744a8f4f6ae0292bfedb3a96ce435a774b42fdc1a1e9d288edc786c544c17c21fd7d3c8c6e6a6832acdad7e1f5edfa8c0b SHA512 a23d5dde66567c4addbc86c8b3fbf2c5d4dba3b463659729778a310306ab0e949be8998154ef15401ac2d289bde2f090d44492bba6a1becd2f01890d4efe7051
@@ -2669,10 +2859,11 @@ diff :: net-misc/urlview [rationale] ===========================================
 diff :: net-misc/urlview [source] ======================================================================================
 diff: /var/git/meta-repo/kits/*/net-misc/urlview: No such file or directory
 diff :: net-misc/urlview [target] ======================================================================================
+Only in ./net-misc/urlview: .keep
 Only in ./net-misc/urlview: .rationale
 diff -u -U10 -r ./net-misc/urlview.src/Manifest ./net-misc/urlview/Manifest
---- ./net-misc/urlview.src/Manifest	2018-09-18 21:50:42.749190686 -0000
-+++ ./net-misc/urlview/Manifest	2018-09-18 21:50:42.753190724 -0000
+--- ./net-misc/urlview.src/Manifest	2018-09-18 14:50:42.749190686 -0700
++++ ./net-misc/urlview/Manifest	2019-03-09 18:10:02.978075911 -0800
 @@ -1 +1,6 @@
 +AUX include-fix.patch 165 BLAKE2B d28e2e8ae317ded8f1228034f93153792594fdba7ece146632fb80d239d2404daec1d6003a97ca629f8c594f6d5cf21266c5632ba1ad22db589adce59965f3dd SHA512 7105a53ffba98beb253bd2ebdb3096875df62561c028c250c8ff172793b54a81ea553223b375aefd4e97a0edf054921f8bab5e8c58d0357cd33c6782e06cf4a8
 +AUX no-trailing-newline.patch 459 BLAKE2B 812ebdacccc62319ee02064991822ae9adb2a176a45e9f53a4a247b289b04d93334a57df06a3bfed2c2c7f7667e2554fad9e854296baa2564acaa2ce8fbedeaf SHA512 e7591e9ba4d691cf642262603ec78bed053595cc7af5baf91d8258900eaf76046cd41da94d7fb3a65c12a34305f27e6c69d01ef1c2ba55e9abdce8f068a11c46
@@ -2708,8 +2899,8 @@ Only in ./sys-apps/lm_sensors.src: lm_sensors-3.5.0.ebuild
 diff :: sys-apps/lm_sensors [target] ===================================================================================
 Only in ./sys-apps/lm_sensors: .rationale
 diff -u -U10 -r ./sys-apps/lm_sensors.src/Manifest ./sys-apps/lm_sensors/Manifest
---- ./sys-apps/lm_sensors.src/Manifest	2019-03-19 18:51:01.378274860 -0000
-+++ ./sys-apps/lm_sensors/Manifest	2019-03-19 18:56:51.000000000 -0000
+--- ./sys-apps/lm_sensors.src/Manifest	2019-04-07 18:05:34.000000000 -0700
++++ ./sys-apps/lm_sensors/Manifest	2019-03-19 11:56:51.000000000 -0700
 @@ -1,3 +1,11 @@
 -DIST lm_sensors-3.4.0_p20170901.tar.gz 208487 BLAKE2B b6d2eb6efee25891fbd655738ba25e91d8ec5d97f07e24ee217ab1a59c51a8ab59e042a90ed6fa1de4459992adc740252588419c0f74ce02f9ad7c1f4f9750da SHA512 5c4a750efdff2ef086a5ed1b6a8a03278872ca077255eae91d0696af229f37b09216e2f53d1d6e4602596fd8b978e0b9c27327357621486c5d7b1d39ecd16fea
 -DIST lm_sensors-3.4.0_p20180318.tar.gz 260899 BLAKE2B a859c20ef148f80cc9d5ead61547feb5c26a77447aeedf9273334fc1e5b4075c74d8f786102e33e8fc771968dd605829923f8d3da8293fef168c74b8c55bf32a SHA512 923ee985d8e0b8fdc43b2e4418873ccbeb8433adbf2efe71fcaba1df0c6971d502866abe8ea015d199380e06e3cfd35d945451e5e9f7e64cede35fff37621aee
@@ -2770,8 +2961,8 @@ Only in ./sys-kernel/linux-firmware.src: linux-firmware-20190118.ebuild
 diff :: sys-kernel/linux-firmware [target] =============================================================================
 Only in ./sys-kernel/linux-firmware: .rationale
 diff -u -U10 -r ./sys-kernel/linux-firmware.src/Manifest ./sys-kernel/linux-firmware/Manifest
---- ./sys-kernel/linux-firmware.src/Manifest	2019-03-20 03:44:25.299805546 -0000
-+++ ./sys-kernel/linux-firmware/Manifest	2019-03-19 18:49:33.401390726 -0000
+--- ./sys-kernel/linux-firmware.src/Manifest	2019-04-07 18:05:34.000000000 -0700
++++ ./sys-kernel/linux-firmware/Manifest	2019-03-19 11:49:33.401390726 -0700
 @@ -1,6 +1,2 @@
 -DIST linux-firmware-20180103.tar.gz 138263360 BLAKE2B b7af0f94bf7111a1f4a10c7403f43dbfe837912ccf3afd4bcc362e483bcf15e02df76a37b112b2545c67bfbb2df031890dead100552e402ffc4727041409d891 SHA512 ed95205c075b47a2f30d9c96181ca0047de017abb1b5904f7c504a0afb8ea673c179980eb92d5690dd1a5cfb29815f224f384b4dcc472f80ddc90af3b2cbd4ce
 -DIST linux-firmware-20180606.tar.gz 152670671 BLAKE2B 7c4fb07451c1c459bd0bf8bec15e3bff41bdb64166decfd7776650c85f0b373c97dfa23330ebb7ddd4bc144bffb57751f3a94bb4a352e5f8ef1dd0b8a3679c81 SHA512 4eb02e11beffde5bf8daff45af78304881e01eb51004ff0758bfff3a4a4cb59f6a2e081b7a3c3e07734a29954f09fa6277f920c2bdab6aeb608065936861c650
@@ -2797,13 +2988,54 @@ diff :: sys-kernel/linux-firmware [files] ======================================
 ./sys-kernel/linux-firmware:
 Manifest
 linux-firmware-20190118.ebuild
+diff :: www-client/netsurf [rationale] =================================================================================
+build-Linux-framebuffer/duktape/character_data.c:239:11: note: in expansion of macro ‘duk_error’
+return duk_error(ctx, DUK_ERR_ERROR, dukky_error_fmt_number_type, 1, "count");
+https://gitweb.gentoo.org/repo/gentoo.git/tree/www-client/netsurf/netsurf-3.8-r2.ebuild?id=5a8f59f7e779dbfdd83930e2fdbe9521346f88a2
+diff :: www-client/netsurf [source] ====================================================================================
+diff :: www-client/netsurf [target] ====================================================================================
+Only in ./www-client/netsurf: .rationale
+diff -u -U10 -r ./www-client/netsurf.src/Manifest ./www-client/netsurf/Manifest
+--- ./www-client/netsurf.src/Manifest	2019-04-07 18:05:44.000000000 -0700
++++ ./www-client/netsurf/Manifest	2019-10-02 16:01:35.000000000 -0700
+@@ -1,3 +1,5 @@
+-DIST netsurf-3.6-src.tar.gz 4129091 BLAKE2B d6b08069e34a8fd4f2010c6b3efbde9d7b13e40d3f3fdceeee92eb9d2bbeb92fac6f0a1ca9ac263ebc1904ad04a42c97a6418da7e095d18eda3be952129ac718 SHA512 6141cd94b2b6c8e56f682599e4929690f6ca668d1f6ff20bad93e30cf3a3b27475146f2b3c9dbc9f1b2e44b729d74c346254959b7def1f8d194e1c6efac3078d
+-DIST netsurf-buildsystem-1.5.tar.gz 38196 BLAKE2B 298ef39d45b98ae5ef57a22aed9f22bf96dfd6ad5475964c04451eaf28aca7f451b4906002c3e110ffcc951015169f02ffcd85f24e54b46c47b25e048115db1c SHA512 02d85e8f1d2101194a678f7ccf84051390953285a46951d7b327556f8df1a0c416620bd4c7a615e25de438d5d27cfffb69ec5d94eb8379a295dab4c85a96cae4
+-DIST netsurf-fb.modes-example.gz 4586 BLAKE2B 89c76fde1ddc79e46f22d9f628f8d75ec57be2a29d31383550137e3b502aa4d8c0a733b755731c916d4d544679a4253323bc343528c5e2c4f145c3318ac1d86d SHA512 753a707dc428212803dd64250bb723a498fdc1c328fdac4df38be533eab3af45f727cdc6b7ced3faaa0e82db182c4eab140b8e81b0d3cfe2152252b89e6d2981
++AUX netsurf-3.6-conditionally-include-image-headers.patch 598 BLAKE2B d55ff86b9b6981671eb9466ce989145ba79b00aa791ae361367362c9938335f561aa828911e44ea25637ff3e6de637180b76649f55df27b4d7d4269652f19f9a SHA512 346e7befaeb337cb33963794303eb18cccd280eaa86aed205fee9b50bcb3cbea8d5c4025b439d7d737036e66a76354871b1765eae7dd11e2d1a71dc3084747c3
++AUX netsurf-3.8-CFLAGS.patch 2544 BLAKE2B 1d71cd9f577b9a909c90117d4ba6933dacc58423e9db3bc060e79baf7c3bfb71b2eb11c82d53495be92098f50923675a6be6eef5458461d8bc0accd22136c7dc SHA512 87e2698a9b58a8871d9a7fb0bc42368974a9fb815adcacb7ee29d73ed5ac6747ccb944a15e41620841ff813dce95feae1e664ba0fcf332bfd6e8b830e82d3810
++AUX netsurf-3.8-pdf-writer.patch 2807 BLAKE2B 93ee86a467a01a2da07269ef32a672b8337d93a91b65fbcbe4c21e05f9f702baa70f79ca2757cf535ad0b4490c00bbc3c9276f6ed392d56e3a766553e2a5ab42 SHA512 40f6c88b5946822699a125a8c6c5eb631990828bd7b4e31be330191a41588d1978083db9fdca2752f8bb0c3af5afe7ed896d8b79b8eaa6f45523da74c36eda07
++DIST netsurf-3.8-src.tar.gz 3945752 BLAKE2B 0f4592e53e95cfedb3c34a16ce9df9baeeaed93afb3bac3d68dab1e3d80e67c0498111c123285f6e828d063574e0e5f0cc3aa337ffab066f2283d06d248a308a SHA512 6f4dfdc546cce3b85d32da0dd816adc9a39410ed42bc28f263f4a1db64b35a889a1784a4116715190e756988dd263976933cfac75c9dcd81af01954487ddcaf6
++EBUILD netsurf-3.8-r2.ebuild 3901 BLAKE2B 05e18fe99ada4d93333c4cc00c7083850423d41e6326b9b40b475b68fa9ad21b65b8fcaa6bba3b9e56bee6ccb6712362f8cfdbfe934b3043ff348145bdf77237 SHA512 38647c20bc9a6dc97ec3168f6b52280fec876bf3eef3ba29c7294f918be05467c628c7288c90ecf4c69c5dfadb7b53b3977ace67f22ccc8321c5c6645ee83707
+Only in ./www-client/netsurf.src/files: netsurf-3.6-CFLAGS.patch
+Only in ./www-client/netsurf.src/files: netsurf-3.6-gstreamer.patch
+Only in ./www-client/netsurf.src/files: netsurf-3.6-pdf-writer.patch
+Only in ./www-client/netsurf/files: netsurf-3.8-CFLAGS.patch
+Only in ./www-client/netsurf/files: netsurf-3.8-pdf-writer.patch
+Only in ./www-client/netsurf.src: metadata.xml
+Only in ./www-client/netsurf.src: netsurf-3.6.ebuild
+Only in ./www-client/netsurf: netsurf-3.8-r2.ebuild
+diff :: www-client/netsurf [files] =====================================================================================
+	"${FILESDIR}"/${PN}-3.8-CFLAGS.patch
+	"${FILESDIR}"/${PN}-3.6-conditionally-include-image-headers.patch
+	"${FILESDIR}"/${PN}-3.8-pdf-writer.patch
+
+./www-client/netsurf:
+Manifest
+files
+netsurf-3.8-r2.ebuild
+
+./www-client/netsurf/files:
+netsurf-3.6-conditionally-include-image-headers.patch
+netsurf-3.8-CFLAGS.patch
+netsurf-3.8-pdf-writer.patch
 diff :: www-servers/nginx [rationale] ==================================================================================
 # download links fail
 # https://gitweb.gentoo.org/repo/gentoo.git/tree/www-servers/nginx?id=4ff0bb199ba902d5fd730b1c8854294bf1dd22d6
 diff :: www-servers/nginx [source] =====================================================================================
 diff -u -U10 -r /var/git/meta-repo/kits/net-kit/www-servers/nginx/Manifest ./www-servers/nginx.src/Manifest
---- /var/git/meta-repo/kits/net-kit/www-servers/nginx/Manifest	2018-09-18 21:59:35.494344799 -0000
-+++ ./www-servers/nginx.src/Manifest	2018-09-01 14:53:31.867641993 -0000
+--- /var/git/meta-repo/kits/net-kit/www-servers/nginx/Manifest	2019-04-07 16:48:51.000000000 -0700
++++ ./www-servers/nginx.src/Manifest	2019-10-02 16:22:55.127600375 -0700
 @@ -1,31 +1,30 @@
 -DIST .tar.gz 616653 BLAKE2B 6985823752755b78b626f597600adf45592ce4c8dc3a513dd43b9f5152c9746a795faa3714124d74814ad88739dd8889de50e764ad2ea808c48570d1e297aeec SHA512 35e1510c9da71c8bdf028f4ac253404550a83bd904f6c5639697d78c76708625bb6deaa858a7d086b5582f71bb46578e8f804887a46ccfbaf5f4de8510cb1511
 -DIST echo-nginx-module-v0.61.tar.gz 53155 BLAKE2B 72565b5d79598b5dcd1c10fa0f718e749894ca5f1232d5aae60c61e268b5904af35fdcd35afcf72de93852af9e0ca58805d77cbc37919fba9012158b5545baab SHA512 c90b81a4e85a8e9beeb5ff591dc91adb25fa4e0b6cb47086b577e5fa36db2368442dd011187675e358781956c364b949bc4d920ca2b534481b21c9987d2a9a3b
@@ -2892,8 +3124,8 @@ Only in /var/git/meta-repo/kits/net-kit/www-servers/nginx: nginx-1.14.0.ebuild
 Only in ./www-servers/nginx.src: nginx-1.15.1-r1.ebuild
 Only in ./www-servers/nginx.src: nginx-1.15.2-r1.ebuild
 diff -u -U10 -r /var/git/meta-repo/kits/net-kit/www-servers/nginx/nginx-1.15.2.ebuild ./www-servers/nginx.src/nginx-1.15.2.ebuild
---- /var/git/meta-repo/kits/net-kit/www-servers/nginx/nginx-1.15.2.ebuild	2018-09-18 21:59:35.494344799 -0000
-+++ ./www-servers/nginx.src/nginx-1.15.2.ebuild	2018-07-28 13:09:19.325879436 -0000
+--- /var/git/meta-repo/kits/net-kit/www-servers/nginx/nginx-1.15.2.ebuild	2019-04-07 16:48:51.000000000 -0700
++++ ./www-servers/nginx.src/nginx-1.15.2.ebuild	2019-10-02 16:22:56.519614326 -0700
 @@ -1,727 +1,1081 @@
 +# Copyright 1999-2018 Gentoo Foundation
  # Distributed under the terms of the GNU General Public License v2
@@ -4551,8 +4783,8 @@ Only in ./www-servers/nginx.src: nginx-1.15.3.ebuild
 diff :: www-servers/nginx [target] =====================================================================================
 Only in ./www-servers/nginx: .rationale
 diff -u -U10 -r ./www-servers/nginx.src/Manifest ./www-servers/nginx/Manifest
---- ./www-servers/nginx.src/Manifest	2018-09-01 14:53:31.867641993 -0000
-+++ ./www-servers/nginx/Manifest	2018-09-12 04:27:15.034892895 -0000
+--- ./www-servers/nginx.src/Manifest	2019-10-02 16:22:55.127600375 -0700
++++ ./www-servers/nginx/Manifest	2018-09-11 21:27:15.034892895 -0700
 @@ -1,30 +1,37 @@
 +AUX http_brotli-detect-brotli-r1.patch 4646 BLAKE2B a00376f57800e21ad3e231ba46535be1e49948c7e36d9770aa91d5c0f73b3c00556dfc0340d068085298d06a0bdaa6eb255c91ebc67513050bc63422ba2fc40a SHA512 4a95601da9a32b708a76880f18d4df5ccebe9736e7a72dc74865fcc82814a13316d8f3fdbf9025b3f3990210c9eb5f512da407aa1be4b88a9aa39253cebec8fb
 +AUX http_cache_purge-1.11.6+.patch 615 BLAKE2B 520a437290dbed718f392bedecdb66c9eae3440c2e5977bede5829f8420905e60c74fac3dad7b22c12d2070ce47430795482d270222ba8d4640af415e4974210 SHA512 a3f45d8121d89a5c41783306577e146990404ff0e3691454e99cd6270ab02dfc7fd8718b3781666373ea6784ed2c06cec0b40315486a6a138185ca1548c04b60
@@ -4636,10 +4868,11 @@ diff :: x11-drivers/xf86-video-intel [rationale] ===============================
 diff :: x11-drivers/xf86-video-intel [source] ==========================================================================
 diff :: x11-drivers/xf86-video-intel [target] ==========================================================================
 Only in ./x11-drivers/xf86-video-intel.src: .audit
+Only in ./x11-drivers/xf86-video-intel: .keep
 Only in ./x11-drivers/xf86-video-intel: .rationale
 diff -u -U10 -r ./x11-drivers/xf86-video-intel.src/Manifest ./x11-drivers/xf86-video-intel/Manifest
---- ./x11-drivers/xf86-video-intel.src/Manifest	2019-04-07 05:43:46.837748206 -0000
-+++ ./x11-drivers/xf86-video-intel/Manifest	2019-04-07 06:11:12.385997018 -0000
+--- ./x11-drivers/xf86-video-intel.src/Manifest	2019-04-07 16:41:39.000000000 -0700
++++ ./x11-drivers/xf86-video-intel/Manifest	2019-04-06 23:11:12.385997018 -0700
 @@ -1,3 +1,4 @@
 -DIST xf86-video-intel-2.99.917_p20160621.tar.xz 941280 BLAKE2B 2b88350f695ea12617954ee7dae40ea6e3585ec99770575badeb21ccf86f5043ac638576aca36a4f5259775eee9f3607bbd6d5ae740cdde1a0dda3b4d73421f4 SHA512 9face5d348a0805b9bdd98fa42a466ad4dcca1050f8abdc114f8475e713ae7315d2ac19ff50756071f305bcca8526fe9be0d448d2d10fab51300d0d2d50fe60a
 +AUX 20-intel.conf 183 BLAKE2B 226a1fe3f9647d2606b53b790fca9bfbfc83f2381daf517fa5d74b5ed3bd653414deee25c440071af12f07cce36c06de451f4714650e423054dacde96a6d4fd4 SHA512 a1d4e4c41b5f9a8f3970311845951aba495a6fb75e26e7997854bd95262b29e0515426f38d7cea174999f7c56f92db124559b8a91376826c239456d734127035
@@ -4659,8 +4892,8 @@ Only in ./x11-drivers/xf86-video-intel.src/files: xf86-video-intel-2.99.917-uxa-
 Only in ./x11-drivers/xf86-video-intel.src: metadata.xml
 Only in ./x11-drivers/xf86-video-intel.src: xf86-video-intel-2.99.917_p20160621-r2.ebuild
 diff -u -U10 -r ./x11-drivers/xf86-video-intel.src/xf86-video-intel-2.99.917_p20170716.ebuild ./x11-drivers/xf86-video-intel/xf86-video-intel-2.99.917_p20170716.ebuild
---- ./x11-drivers/xf86-video-intel.src/xf86-video-intel-2.99.917_p20170716.ebuild	2019-04-07 05:43:46.837748206 -0000
-+++ ./x11-drivers/xf86-video-intel/xf86-video-intel-2.99.917_p20170716.ebuild	2019-04-07 05:53:03.499315425 -0000
+--- ./x11-drivers/xf86-video-intel.src/xf86-video-intel-2.99.917_p20170716.ebuild	2019-04-07 16:41:39.000000000 -0700
++++ ./x11-drivers/xf86-video-intel/xf86-video-intel-2.99.917_p20170716.ebuild	2019-04-06 22:53:03.499315425 -0700
 @@ -54,24 +54,24 @@
  		$(use_enable sna)
  		$(use_enable udev)
@@ -4706,8 +4939,8 @@ diff :: x11-drivers/xf86-video-virtualbox [source] =============================
 diff :: x11-drivers/xf86-video-virtualbox [target] =====================================================================
 Only in ./x11-drivers/xf86-video-virtualbox: .rationale
 diff -u -U10 -r ./x11-drivers/xf86-video-virtualbox.src/Manifest ./x11-drivers/xf86-video-virtualbox/Manifest
---- ./x11-drivers/xf86-video-virtualbox.src/Manifest	2018-09-11 20:30:13.590297981 -0000
-+++ ./x11-drivers/xf86-video-virtualbox/Manifest	2018-09-13 16:16:29.418428556 -0000
+--- ./x11-drivers/xf86-video-virtualbox.src/Manifest	2019-04-07 16:41:39.000000000 -0700
++++ ./x11-drivers/xf86-video-virtualbox/Manifest	2019-03-09 18:10:03.034076438 -0800
 @@ -1,2 +1,11 @@
 +AUX xf86-video-virtualbox-2.2.0-enable-opengl.patch 230 BLAKE2B d70c72c65164d736cc8fb09b5b4ccda4baa3b0ad446ffc11f08b53757d5e57a5cf4e6876dec0a9cc4e5da2574a80ee531831e1c7802e4a48a4cf30c29a002bfb SHA512 a8f4243ef70c72fa4e3dc71a4ab319ee77aac9e077804fa53f53ab338ad44773645af6c658da9d67b45c362632f0ed17edc13887721e013ceda7455bb9a28108
 +AUX xf86-video-virtualbox-3-vboxvideo_drm.makefile 6810 BLAKE2B bd6ab84e8688700aa5c7a28aaa24c93e9ede27a9903f7d9a5f728467e2edbe226d660db4183d4999bd0340c9eef346d3566346cfc5bf38539da1e675e813a766 SHA512 a0ab5b1cbe83dad8f39120dd9d5d301fcf8a7f0840478b5a94088317b0693ec9a457f95aac6abf4070184434d1dc81e4a8b8a202f7a11860fbac71757f05d202
@@ -4732,8 +4965,8 @@ Only in ./x11-drivers/xf86-video-virtualbox.src: xf86-video-virtualbox-5.1.24.eb
 Only in ./x11-drivers/xf86-video-virtualbox.src: xf86-video-virtualbox-5.1.26.ebuild
 Only in ./x11-drivers/xf86-video-virtualbox.src: xf86-video-virtualbox-5.1.30.ebuild
 diff -u -U10 -r ./x11-drivers/xf86-video-virtualbox.src/xf86-video-virtualbox-5.1.36.ebuild ./x11-drivers/xf86-video-virtualbox/xf86-video-virtualbox-5.1.36.ebuild
---- ./x11-drivers/xf86-video-virtualbox.src/xf86-video-virtualbox-5.1.36.ebuild	2018-09-11 20:30:13.594298020 -0000
-+++ ./x11-drivers/xf86-video-virtualbox/xf86-video-virtualbox-5.1.36.ebuild	2018-09-13 16:16:12.914270953 -0000
+--- ./x11-drivers/xf86-video-virtualbox.src/xf86-video-virtualbox-5.1.36.ebuild	2019-04-07 16:41:39.000000000 -0700
++++ ./x11-drivers/xf86-video-virtualbox/xf86-video-virtualbox-5.1.36.ebuild	2018-09-13 09:16:12.914270953 -0700
 @@ -73,20 +73,30 @@
  	cp "${FILESDIR}/${PN}-5-localconfig" LocalConfig.kmk || die
  
@@ -4793,14 +5026,14 @@ diff :: x11-plugins/gkrellaclock [rationale] ===================================
 # Error: 'gkrellm_init_plugin': /usr/lib64/gkrellm2/plugins/gkrellaclock.so: undefined symbol: gkrellm_init_plugin
 diff :: x11-plugins/gkrellaclock [source] ==============================================================================
 diff -u -U10 -r /var/git/meta-repo/kits/desktop-kit/x11-plugins/gkrellaclock/Manifest ./x11-plugins/gkrellaclock.src/Manifest
---- /var/git/meta-repo/kits/desktop-kit/x11-plugins/gkrellaclock/Manifest	2019-04-07 05:45:12.846608882 -0000
-+++ ./x11-plugins/gkrellaclock.src/Manifest	2019-03-10 02:10:03.034076438 -0000
+--- /var/git/meta-repo/kits/desktop-kit/x11-plugins/gkrellaclock/Manifest	2019-04-07 18:04:11.000000000 -0700
++++ ./x11-plugins/gkrellaclock.src/Manifest	2019-10-02 16:22:56.523614366 -0700
 @@ -1 +1 @@
 -DIST gkrellaclock-0.3.4.tar.gz 18853 BLAKE2B b91b4cb9ae42f68d3a3d430f7713170c788515280330a1f785f11d4335e859dbd6f840fb7e47fe8f77676bb55e97dda628fa79d442d4be8a37c69bcea836aa52 SHA512 2e6002bc4d535899cc8b86377d596bcee5e64d05fe4239eaab2de8e387a40b8dee600d9fcd5f30feb68bb3e54bf6b4745d4c7b79ea9fee57b856eeb3dac12524
 +DIST gkrellaclock-0.3.4.tar.gz 18853 SHA256 5923c5fa6c31ceb1944e57219d893634e503d44dc5e91f3deba46f0d71e787b7 SHA512 2e6002bc4d535899cc8b86377d596bcee5e64d05fe4239eaab2de8e387a40b8dee600d9fcd5f30feb68bb3e54bf6b4745d4c7b79ea9fee57b856eeb3dac12524 WHIRLPOOL 9b5a3fc46e05c491a9779e055d7994303005ed8dd850c02cd9cb093e651f8216d2d9c0730e7110e4d9e8ebc2360a31ab361c0758b12f121fb9355738fa666d14
 diff -u -U10 -r /var/git/meta-repo/kits/desktop-kit/x11-plugins/gkrellaclock/gkrellaclock-0.3.4-r1.ebuild ./x11-plugins/gkrellaclock.src/gkrellaclock-0.3.4-r1.ebuild
---- /var/git/meta-repo/kits/desktop-kit/x11-plugins/gkrellaclock/gkrellaclock-0.3.4-r1.ebuild	2019-04-07 05:45:12.846608882 -0000
-+++ ./x11-plugins/gkrellaclock.src/gkrellaclock-0.3.4-r1.ebuild	2019-03-10 02:10:03.034076438 -0000
+--- /var/git/meta-repo/kits/desktop-kit/x11-plugins/gkrellaclock/gkrellaclock-0.3.4-r1.ebuild	2019-04-07 18:04:11.000000000 -0700
++++ ./x11-plugins/gkrellaclock.src/gkrellaclock-0.3.4-r1.ebuild	2019-10-02 16:22:56.523614366 -0700
 @@ -1,33 +1,29 @@
 -# Copyright 1999-2018 Gentoo Foundation
 +# Copyright 1999-2017 Gentoo Foundation
@@ -4841,10 +5074,11 @@ diff -u -U10 -r /var/git/meta-repo/kits/desktop-kit/x11-plugins/gkrellaclock/gkr
  	emake CC="$(tc-getCC)"
  }
 diff :: x11-plugins/gkrellaclock [target] ==============================================================================
+Only in ./x11-plugins/gkrellaclock: .keep
 Only in ./x11-plugins/gkrellaclock: .rationale
 diff -u -U10 -r ./x11-plugins/gkrellaclock.src/Manifest ./x11-plugins/gkrellaclock/Manifest
---- ./x11-plugins/gkrellaclock.src/Manifest	2017-09-09 06:07:10.699390108 -0000
-+++ ./x11-plugins/gkrellaclock/Manifest	2017-08-30 00:25:19.000000000 -0000
+--- ./x11-plugins/gkrellaclock.src/Manifest	2019-10-02 16:22:56.523614366 -0700
++++ ./x11-plugins/gkrellaclock/Manifest	2019-10-02 16:22:56.531614446 -0700
 @@ -1 +1,13 @@
 +AUX _gkrellaclock.c 33385 SHA256 fc39a01a034b03d952b3766dea7d9cff3c8f133e1bcf5e69ba75d03533026a55 SHA512 fc5c8b50ed8785d5581108d594904c098e16b2987b92b60cd695149804060181dabe807bb2d7810968d199ba0293f4bde21dbefee05261e160ba92055ce7458a WHIRLPOOL b059d142ae637d38ec6e4452fa72ddee5c077372fcdce95d0b4a35cad7048ded3ef110b4d87fe66c597e63dd7727e07bb0b88317fc2147d1a208e22050459ee0
 +AUX gkrellaclock-makefile.patch 1521 SHA256 f8f3c4b1720bcc1390bee4328637e4517f6e416ddb9054e376226c581e84d8ad SHA512 7c7284c061f81a33b5e16ce48c45f8cf024890d710d4faa13af999484ca84280e3529253596a2d6b4abc85af0d795f5fda34505c11ff126e83e556d139556f56 WHIRLPOOL 2c9398f173a8f9a30224433bde93cd64dcfe14c3fd2dc125b6b49708d611d8116f1706aa42c3cec3d29fd191f561dbd5bb8e2ee97f04717733f8b0b6cb11a6ce
@@ -4861,8 +5095,8 @@ diff -u -U10 -r ./x11-plugins/gkrellaclock.src/Manifest ./x11-plugins/gkrellaclo
 +MISC metadata.xml 166 SHA256 2caff447f5bd2701d8456ada5cc633c41ef4373fa4bfeabeb73599d40bcc941b SHA512 a56648c974a1d14dd4c18237532773c72057a13ab90c58b5da04f185e3c12a8bd8d5c21fb06053507f31766291a82dc7d87b34cd65fd94cfe2af7295c813ef84 WHIRLPOOL 1ff70497eca6531f0e0614c72a19f4b8e5ff486a58d369f4f0b36308d1d6b01168f9da887740e3b9f536236be251d3fe05f904d27a9233a7cf613416ba882968
 Only in ./x11-plugins/gkrellaclock/files: _gkrellaclock.c
 diff -u -U10 -r ./x11-plugins/gkrellaclock.src/files/gkrellaclock-makefile.patch ./x11-plugins/gkrellaclock/files/gkrellaclock-makefile.patch
---- ./x11-plugins/gkrellaclock.src/files/gkrellaclock-makefile.patch	2017-09-09 06:07:10.699390108 -0000
-+++ ./x11-plugins/gkrellaclock/files/gkrellaclock-makefile.patch	2017-08-30 00:25:19.435654100 -0000
+--- ./x11-plugins/gkrellaclock.src/files/gkrellaclock-makefile.patch	2019-04-07 16:48:48.000000000 -0700
++++ ./x11-plugins/gkrellaclock/files/gkrellaclock-makefile.patch	2017-08-29 17:25:19.435654100 -0700
 @@ -1,33 +1,31 @@
 -diff --git a/Makefile b/Makefile
 -index eb2b8ad..c89fa17 100644
@@ -4923,8 +5157,8 @@ Only in ./x11-plugins/gkrellaclock/files: xclock_size_hack.patch.2012-04-04
 Only in ./x11-plugins/gkrellaclock/files: xclock_size_hack.patch.2012-04-06
 Only in ./x11-plugins/gkrellaclock/files: xclock_size_hack.patch.2017-08-29
 diff -u -U10 -r ./x11-plugins/gkrellaclock.src/gkrellaclock-0.3.4-r1.ebuild ./x11-plugins/gkrellaclock/gkrellaclock-0.3.4-r1.ebuild
---- ./x11-plugins/gkrellaclock.src/gkrellaclock-0.3.4-r1.ebuild	2017-09-09 06:07:10.699390108 -0000
-+++ ./x11-plugins/gkrellaclock/gkrellaclock-0.3.4-r1.ebuild	2017-08-29 23:30:04.458355092 -0000
+--- ./x11-plugins/gkrellaclock.src/gkrellaclock-0.3.4-r1.ebuild	2019-10-02 16:22:56.523614366 -0700
++++ ./x11-plugins/gkrellaclock/gkrellaclock-0.3.4-r1.ebuild	2017-08-29 16:30:04.458355092 -0700
 @@ -10,20 +10,24 @@
  SRC_URI="mirror://gentoo/${P}.tar.gz"
  
