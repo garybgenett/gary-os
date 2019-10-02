@@ -5,7 +5,7 @@
 ![GaryOS Icon](artifacts/images/icon.png "GaryOS Icon")
 "The one file that does it all."
 
-  * Latest: GaryOS v3.0 ([64-bit]) ([32-bit]) ([Release Notes]) ([License])
+  * Latest: GaryOS v3.0 ([64-bit]) ([32-bit]) ([Packages]) ([Notes]) ([License])
   * Homepage: [https://github.com/garybgenett/gary-os](https://github.com/garybgenett/gary-os)
   * Download: [https://sourceforge.net/projects/gary-os](https://sourceforge.net/projects/gary-os)
 
@@ -54,11 +54,11 @@
 
 GaryOS is an entire GNU/Linux system in a single bootable file.
 
-While most boot/rescue systems use an ISO with SquashFS, GaryOS is
-a single binary file consisting of a Linux kernel and a Funtoo/Gentoo
-initramfs.  The file is generated using a customized Funtoo/Gentoo
-configuration with a default Grml Linux kernel configuration via the
-Metro automated build tool.
+While most boot/rescue systems use an ISO with SquashFS, GaryOS is a single
+binary file consisting of a modified Linux kernel configuration and a Funtoo
+(based on Gentoo) initramfs.  The file is generated using a customized Funtoo
+configuration with a default Grml Linux kernel configuration via the Metro
+automated build tool.
 
 There are currently no major projects which take this same approach on
 this scale.  The result is a smaller boot/rescue file that is just as
@@ -66,7 +66,7 @@ comprehensive, yet easier to deploy and manage.
 
 A list of the primary advantages:
 
-  * Complete Funtoo/Gentoo system, with toolchain
+  * Complete Funtoo system, with toolchain
   * Entire system resides in memory; does not require media after boot
   * Forensics mode is the default; no hard drives are mounted and swap
     is disabled
@@ -132,11 +132,11 @@ From there, whatever rescue/administrative work that needs to be done
 can be accomplished, including using `emerge` to install or upgrade
 packages.
 
-The in-memory filesystem is a complete Funtoo/Gentoo installation, and
-can be copied to a partition just like a standard `stage3` file.  GaryOS
-goes one step further, however, since a Linux kernel has already been
-prepared.  Simply configuring and installing Grub will result in
-a ready-to-go Funtoo/Gentoo installation.
+The in-memory filesystem is a complete Funtoo installation, and can be copied
+to a partition just like a standard `stage3` file.  GaryOS goes one step
+further, however, since a Linux kernel has already been prepared.  Simply
+configuring and installing Grub will result in a ready-to-go Funtoo
+installation.
 
 ********************************************************************************
 
@@ -189,21 +189,21 @@ have clear structure and requirements.
 Top requirements:
 
   * Bootable from a single kernel file, using initramfs
-  * Based on Funtoo/Gentoo, using "stage3" build automation
+  * Based on Funtoo using "stage3" build automation
   * Generic kernel/build configuration; should run on most modern x86
     platforms (both 64-bit and 32-bit)
   * Minimal customization of default installation, outside of package
     build tuning (i.e. "portage" configuration)
-  * Make Funtoo/Gentoo installation trivial as a "live" media
+  * Make Funtoo installation trivial as a "live" media
   * All-purpose, multi-OS rescue environment
 
 Other objectives:
 
   * Widely deployable; support PXE and native dual-booting with other
     popular OSes, such as Windows and Mac OS X
-  * Learning environment for those new to GNU/Linux or Funtoo/Gentoo
+  * Learning environment for those new to GNU/Linux or Funtoo
   * Example configuration and scripts for tuning and maintaining
-    a Funtoo/Gentoo system
+    a Funtoo system
   * Maintain DIY (Do It Yourself) approach; favor documentation and
     instructions over helper scripts
   * Provide upstream enhancements to "stage3" automation
@@ -235,17 +235,16 @@ useful Grml.  It is much easier to create a new or forked "live" system
 today than it was a couple years ago.
 
 Personally, I think the real value of GaryOS is as a bootstrap media for
-installing Funtoo/Gentoo, which was really my original focus when
-exploring Metro.  Funtoo/Gentoo can be installed pretty much from any
-system, using a "stage3" and "chroot".  Getting from there to a basic
-system ready to be booted can take a bit of time and effort, though, and
-GaryOS can be a very useful tool for getting to a "half-way mark" of
-sorts.  A functioning bootloader and kernel, along with a good many
-tools already installed, can make getting over the installation hump
-a bit easier.  I've often wondered if the lack of a "ready-to-go"
-Funtoo/Gentoo system has hampered growth of the user-base, as
-inexperienced users gravitate towards more ready-made and
-marketing-savvy distributions like Ubuntu.
+installing Funtoo which was really my original focus when exploring Metro.
+Funtoo can be installed pretty much from any system, using a "stage3" and
+"chroot".  Getting from there to a basic system ready to be booted can take
+a bit of time and effort, though, and GaryOS can be a very useful tool for
+getting to a "half-way mark" of sorts.  A functioning bootloader and kernel,
+along with a good many tools already installed, can make getting over the
+installation hump a bit easier.  I've often wondered if the lack of
+a "ready-to-go" Funtoo system has hampered growth of the user-base, as
+inexperienced users gravitate towards more ready-made and marketing-savvy
+distributions like Ubuntu.
 
 Getting back to a "single bootable file" in comparison to traditional
 ISO-based "live" systems, ISO files have a couple options for use:
@@ -408,8 +407,8 @@ exposed as a variable.
 Here are the primary directories and what I use them for:
 
   * `$HOME/setup/gentoo`
-    * Funtoo/Gentoo configuration directory.  Full contents are in the
-      "gentoo" directory in this repository.
+    * Funtoo configuration directory.  Full contents are in the "gentoo"
+      directory in this repository.
     * Replicated to "/etc/portage" regularly.
   * `/.g/_data/_build`
     * Directory for source repositories and temporary builds.  This is
@@ -477,9 +476,8 @@ details for the individual components.
           easier to just include it into this project than to replicate
           all of the referenced pieces.
     * [gentoo](https://github.com/garybgenett/gary-os/blob/master/gentoo)
-        * Contains the entirety of my personal Funtoo/Gentoo
-          configuration, including the scripts and files I use to manage
-          my Funtoo/Gentoo installations.
+        * Contains the entirety of my personal Funtoo configuration, including
+          the scripts and files I use to manage my Funtoo installations.
     * [scripts](https://github.com/garybgenett/gary-os/blob/master/scripts)
         * All the code used to create GaryOS lives in here.  Exported
           from my personal scripts directory.
@@ -500,7 +498,7 @@ details for the individual components.
     * [metro.sh](https://github.com/garybgenett/gary-os/blob/master/scripts/metro.sh)
         * In essence, this script **IS** GaryOS.
         * Contains all of the wrapping of Metro used to create "stage3"
-          files using the Funtoo/Gentoo customizations below.
+          files using the Funtoo customizations below.
         * Does the work of extracting "stage3" files and selectively
           archiving them into "initrd" files.  The "initrd" files are
           then compiled into the Linux kernel built inside the relevant
@@ -519,11 +517,10 @@ details for the individual components.
           works, but disrupts the sandbox environment and has caused
           builds to break.  Not used anymore, but kept for posterity.
     * [.emergent](https://github.com/garybgenett/gary-os/blob/master/gentoo/.emergent)
-        * Audit script which validates current Funtoo/Gentoo
-          configuration against Portage tools/output.  Reports back all
-          kinds of useful information, the most useful of which is
-          a list of USE flags and variables which have been added or
-          removed upstream.
+        * Audit script which validates current Funtoo configuration against
+          Portage tools/output.  Reports back all kinds of useful information,
+          the most useful of which is a list of USE flags and variables which
+          have been added or removed upstream.
         * Generally speaking, it is the first line of defense against
           stale configuration options, unused/unconfigured new options
           and configuration "snow" as a whole.
@@ -535,35 +532,35 @@ details for the individual components.
     * [_gentoo](https://github.com/garybgenett/gary-os/blob/master/gentoo/_gentoo)
         * Directory of "okay" files used by ".emergent" script above.
     * [_overlay](https://github.com/garybgenett/gary-os/blob/master/gentoo/_overlay)
-        * Funtoo/Gentoo "overlay" directory.  Used very sparingly, and
-          mostly for fixing broken packages.
+        * Funtoo "overlay" directory.  Used very sparingly, and mostly for
+          fixing broken packages.
         * Fun side note: I wanted the "gkrellaclock" to look more like
           a genuine "xclock", so I hacked it into one.  This was my
           first real experience coding in C.
   * Automation:
     * [_system](https://github.com/garybgenett/gary-os/blob/master/gentoo/_system)
-        * This script is the workhorse of my Funtoo/Gentoo system, just
-          as "metro.sh" is the core driver of GaryOS.
+        * This script is the workhorse of my Funtoo system, just as "metro.sh"
+          is the core driver of GaryOS.
         * Most commonly, run without any arguments to update Portage
           tree and pre-fetch source files.
         * Often run with `-u` to completely update the installation,
-          based on recommendations from Funtoo/Gentoo documentation.
+          based on recommendations from Funtoo documentation.
         * Used with `-[0/12]` options for completely automated "chroot"
           installation.
   * Configuration:
     * [funtoo](https://github.com/garybgenett/gary-os/blob/master/gentoo/funtoo)
         * Contains the commit ID that the Funtoo Portage repository
           should be "pinned" to.
-        * Ties Funtoo/Gentoo configuration to a particular version of
-          the Portage tree, which ensures repeatability and stability.
+        * Ties Funtoo configuration to a particular version of the Portage
+          tree, which ensures repeatability and stability.
     * [make.conf](https://github.com/garybgenett/gary-os/blob/master/gentoo/make.conf),
       [package.keywords](https://github.com/garybgenett/gary-os/blob/master/gentoo/package.keywords),
       [package.license](https://github.com/garybgenett/gary-os/blob/master/gentoo/package.license),
       [package.mask](https://github.com/garybgenett/gary-os/blob/master/gentoo/package.mask),
       [package.unmask](https://github.com/garybgenett/gary-os/blob/master/gentoo/package.unmask),
       [package.use](https://github.com/garybgenett/gary-os/blob/master/gentoo/package.use)
-        * Standard Funtoo/Gentoo Portage configuration files, documented
-          in `man portage`.
+        * Standard Funtoo Portage configuration files, documented in `man
+          portage`.
         * My personal configuration, most of which is carried over to
           GaryOS.
     * [savedconfig](https://github.com/garybgenett/gary-os/blob/master/gentoo/savedconfig)
@@ -779,10 +776,10 @@ Administrator to remove the unwanted entries:
 
   * Definition:
     * Boot from a PXE environment.
-    * With some modification of the Funtoo/Gentoo configuration and
-      package list, this Metro automation can be used to create a lab
-      workstation or other automated environment where a reboot
-      completely resets each machine involved.
+    * With some modification of the Funtoo configuration and package list, this
+      Metro automation can be used to create a lab workstation or other
+      automated environment where a reboot completely resets each machine
+      involved.
   * Last tested with:
     * GaryOS v3.0
     * DHCPd: net-misc/dhcp-4.2.5_p1-r2
@@ -903,14 +900,14 @@ lightweight and useful software.
 [Live Update]: #live-update
 
   * Definition:
-    * Update/install packages using Funtoo/Gentoo tools.
+    * Update/install packages using Funtoo tools.
   * Last tested with:
     * GaryOS v3.0, with 8GB memory
 
-A complete Funtoo/Gentoo environment is available.  In order to
-install/update packages, a couple of missing items need to be put into
-place.  A surprising number of packages can be installed without filling
-up the in-memory filesystem.
+A complete Funtoo environment is available.  In order to install/update
+packages, a couple of missing items need to be put into place.  A surprising
+number of packages can be installed without filling up the in-memory
+filesystem.
 
 Instructions for setting up update/install of packages:
 
@@ -961,9 +958,9 @@ Instructions for setting up update/install of packages:
   * Last tested with:
     * GaryOS v3.0
 
-The in-memory environment is a complete Funtoo/Gentoo installation, as
-shown in the [Live Update] section above.  It can be copied directly to
-a new disk/partition and booted as a fresh installation.
+The in-memory environment is a complete Funtoo installation, as shown in the
+[Live Update] section above.  It can be copied directly to a new disk/partition
+and booted as a fresh installation.
 
 Instructions for installing to disk:
 
@@ -1001,17 +998,18 @@ Instructions for installing to disk:
 # Version History ##############################################################
 [Version History]: #version-history
 
-[Release Notes]: #2015-03-16-v30-21811b59a8484b2a6b73e0c5277f23c50a0141dc0
 [64-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v3.0.kernel
 [32-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v3.0.kernel
+[Packages]: https://github.com/garybgenett/gary-os/blob/v3.0/_packages.64
+[Notes]: #2015-03-16-v30-21811b59a8484b2a6b73e0c5277f23c50a0141dc0
 
 ## 2015-03-16 v3.0 21811b59a8484b2a6b73e0c5277f23c50a0141dc.0 ##################
 [2015-03-16 v3.0 21811b59a8484b2a6b73e0c5277f23c50a0141dc.0]: #2015-03-16-v30-21811b59a8484b2a6b73e0c5277f23c50a0141dc0
 
-  * 64-bit: [gary-os-generic_64-funtoo-stable-v3.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v3.0.kernel)
-  * 32-bit: [gary-os-generic_32-funtoo-stable-v3.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v3.0.kernel)
-  * [64-bit packages](https://github.com/garybgenett/gary-os/blob/v3.0/_packages.64)
-  * [32-bit packages](https://github.com/garybgenett/gary-os/blob/v3.0/_packages.32)
+  * 64-bit kernel: [gary-os-generic_64-funtoo-stable-v3.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v3.0.kernel)
+  * 32-bit kernel: [gary-os-generic_32-funtoo-stable-v3.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v3.0.kernel)
+  * 64-bit packages: [https://github.com/garybgenett/gary-os/blob/v3.0/_packages.64](https://github.com/garybgenett/gary-os/blob/v3.0/_packages.64)
+  * 32-bit packages: [https://github.com/garybgenett/gary-os/blob/v3.0/_packages.32](https://github.com/garybgenett/gary-os/blob/v3.0/_packages.32)
   * Metro/Grub scripts
     * Release checklist in Metro script
     * General updates for upstream Metro changes/enhancements
@@ -1022,7 +1020,7 @@ Instructions for installing to disk:
     * Additional debugging option in Grub script
     * Updated list of Grub rescue modules
     * Grub rescue options variable
-  * Funtoo/Gentoo configuration
+  * Funtoo configuration
     * Updated to new Portage commit
     * Minor improvements to audit/review scripting
     * Fixed `USE` variable, enabling Udev globally
@@ -1032,10 +1030,10 @@ Instructions for installing to disk:
 ## 2014-06-19 v2.0 873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d.0 ##################
 [2014-06-19 v2.0 873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d.0]: #2014-06-19-v20-873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d0
 
-  * 64-bit: [gary-os-generic_64-funtoo-stable-v2.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v2.0.kernel)
-  * 32-bit: [gary-os-generic_32-funtoo-stable-v2.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v2.0.kernel)
-  * [64-bit packages](https://github.com/garybgenett/gary-os/blob/v2.0/_packages.64)
-  * [32-bit packages](https://github.com/garybgenett/gary-os/blob/v2.0/_packages.32)
+  * 64-bit kernel: [gary-os-generic_64-funtoo-stable-v2.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v2.0.kernel)
+  * 32-bit kernel: [gary-os-generic_32-funtoo-stable-v2.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v2.0.kernel)
+  * 64-bit packages: [https://github.com/garybgenett/gary-os/blob/v2.0/_packages.64](https://github.com/garybgenett/gary-os/blob/v2.0/_packages.64)
+  * 32-bit packages: [https://github.com/garybgenett/gary-os/blob/v2.0/_packages.32](https://github.com/garybgenett/gary-os/blob/v2.0/_packages.32)
   * Metro/Grub scripts
     * Added creation of package list files
     * Added `METRO_DEBUG` variable, for testing
@@ -1050,14 +1048,14 @@ Instructions for installing to disk:
     * Updated to new Portage commit
     * Complete review/revamp of USE flags
     * Added `LDFLAGS` variable options specific to Metro
-    * Cleaned up "_overlay" directory
+    * Cleaned up "\_overlay" directory
     * Improvements to audit/review scripting
     * Minor configuration updates/improvements
     * Localized failed package commenting to 32-bit
     * Revised package list, adding CLI (Command-Line Interface) helpers
       and X.Org GUI, while pruning packages that are not as generally
       useful or widely implemented
-      * In particular, removed custom Perl modules, Funtoo/Gentoo
+      * In particular, removed custom Perl modules, Funtoo
         developer/specialized packages, document processing utilities,
         virtualization tools and media software
       * Previously, the X.Org GUI was a specific non-goal of the
@@ -1074,21 +1072,21 @@ Instructions for installing to disk:
 ## 2014-03-13 v1.1 95ad4fd257697618bae7402d4bc3a27499035d30.4 ##################
 [2014-03-13 v1.1 95ad4fd257697618bae7402d4bc3a27499035d30.4]: #2014-03-13-v11-95ad4fd257697618bae7402d4bc3a27499035d304
 
-  * 64-bit: [gary-os-generic_64-funtoo-stable-v1.1.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v1.1.kernel)
-  * 32-bit: [gary-os-generic_32-funtoo-stable-v1.1.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v1.1.kernel)
+  * 64-bit kernel: [gary-os-generic_64-funtoo-stable-v1.1.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v1.1.kernel)
+  * 32-bit kernel: [gary-os-generic_32-funtoo-stable-v1.1.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v1.1.kernel)
   * Metro/Grub scripts
     * Added Linux kernel configurations from Grml, to provide more
       comprehensive and flexible hardware/feature support
     * Created Grub script, for rescue and dual-boot
     * Syntax and formatting clean-up
-  * Funtoo/Gentoo configuration
+  * Funtoo configuration
     * Miscellaneous package changes
 
 ## 2014-02-28 v1.0 95ad4fd257697618bae7402d4bc3a27499035d30.3 ##################
 [2014-02-28 v1.0 95ad4fd257697618bae7402d4bc3a27499035d30.3]: #2014-02-28-v10-95ad4fd257697618bae7402d4bc3a27499035d303
 
-  * 64-bit: [gary-os-generic_64-funtoo-stable-v1.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v1.0.kernel)
-  * 32-bit: [gary-os-generic_32-funtoo-stable-v1.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v1.0.kernel)
+  * 64-bit kernel: [gary-os-generic_64-funtoo-stable-v1.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v1.0.kernel)
+  * 32-bit kernel: [gary-os-generic_32-funtoo-stable-v1.0.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v1.0.kernel)
   * Metro script
     * Completed support for both 64-bit and 32-bit builds
     * Switched to `generic` for all builds
@@ -1097,17 +1095,17 @@ Instructions for installing to disk:
     * Re-added `/boot` and `/var/db/pkg` directories, so the initramfs
       can be used as a "stage3" replacement
     * Added release/distribution processing
-  * Funtoo/Gentoo configuration
+  * Funtoo configuration
     * Commented packages that broke during 32-bit build
 
 ## 2014-02-24 v0.3 95ad4fd257697618bae7402d4bc3a27499035d30.2 ##################
 [2014-02-24 v0.3 95ad4fd257697618bae7402d4bc3a27499035d30.2]: #2014-02-24-v03-95ad4fd257697618bae7402d4bc3a27499035d302
 
-  * 64-bit: [gary-os-core2_64-funtoo-stable-v0.3.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-core2_64-funtoo-stable-v0.3.kernel)
+  * 64-bit kernel: [gary-os-core2_64-funtoo-stable-v0.3.kernel](http://sourceforge.net/projects/gary-os/files/gary-os-core2_64-funtoo-stable-v0.3.kernel)
   * Metro script
     * Consolidated kernel/initrd into single kernel/initramfs file
     * Added initial support for both 64-bit and 32-bit builds
-  * Funtoo/Gentoo configuration
+  * Funtoo configuration
     * Updated build/installation script with code to expand Metro
       "stage3" files for testing package builds and fixing breaks
     * Customized package list and USE flags for Metro build, to reduce
@@ -1122,7 +1120,7 @@ Instructions for installing to disk:
   * 64-bit initrd: [gary-os-core2_64-funtoo-stable-v0.2.initrd](http://sourceforge.net/projects/gary-os/files/gary-os-core2_64-funtoo-stable-v0.2.initrd)
   * Metro script
     * Added revision handling
-  * Funtoo/Gentoo configuration
+  * Funtoo configuration
     * Added packages from Grml and SystemRescueCD package lists
     * Enabled `gpm` USE flag
 
@@ -1133,7 +1131,7 @@ Instructions for installing to disk:
   * 32-bit initrd: [gary-os-core2_64-funtoo-stable-v0.1.initrd](http://sourceforge.net/projects/gary-os/files/gary-os-core2_64-funtoo-stable-v0.1.initrd)
   * Metro script
     * Initial proof of concept, with separate kernel/initrd files
-  * Funtoo/Gentoo configuration
+  * Funtoo configuration
     * Active personal configuration at time of build
     * Commented packages that broke
 
