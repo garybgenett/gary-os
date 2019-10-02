@@ -436,7 +436,7 @@ cleaned up and documented properly.
 Here is documented the overall structure of the repository, along with
 details for the individual components.
 
-#### Top level directory
+Top level directory:
 
   * Distribution:
     * [README.md](https://github.com/garybgenett/gary-os/blob/master/README.md)
@@ -482,7 +482,7 @@ details for the individual components.
         * All the code used to create GaryOS lives in here.  Exported
           from my personal scripts directory.
 
-#### Scripts directory
+Scripts directory:
 
   * As you would expect, there are scripts in this directory:
     * [grub.sh](https://github.com/garybgenett/gary-os/blob/master/scripts/grub.sh)
@@ -509,7 +509,7 @@ details for the individual components.
           adds release "tags" and publishes GaryOS to GitHub and
           SourceForge.
 
-#### Gentoo directory and configuration
+Gentoo directory and configuration:
 
   * Scripts:
     * [.colorize](https://github.com/garybgenett/gary-os/blob/master/gentoo/.colorize)
@@ -580,26 +580,26 @@ details for the individual components.
 
 All the real heavy-lifting is accomplished using these tools/projects:
 
-  * Metro: [http://www.funtoo.org/Metro_Quick_Start_Tutorial](http://www.funtoo.org/Metro_Quick_Start_Tutorial)
-  * Funtoo: [http://www.funtoo.org](http://www.funtoo.org)
-  * Gentoo: [http://www.gentoo.org](http://www.gentoo.org)
-  * Linux Initramfs: [http://www.kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt](http://www.kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt)
+  * Metro: [http://funtoo.org/Metro_Quick_Start_Tutorial](http://funtoo.org/Metro_Quick_Start_Tutorial)
+  * Funtoo: [http://funtoo.org](http://funtoo.org)
+  * Gentoo: [http://gentoo.org](http://gentoo.org)
+  * Linux Initramfs: [http://kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt](http://kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt)
 
 Inspiration was provided by:
 
   * Buildroot: [http://buildroot.uclibc.org](http://buildroot.uclibc.org)
-  * BusyBox: [http://www.busybox.net](http://www.busybox.net)
+  * BusyBox: [http://busybox.net](http://busybox.net)
   * StaticPerl: [http://software.schmorp.de/pkg/App-Staticperl.html](http://software.schmorp.de/pkg/App-Staticperl.html)
 
 Kernel configuration, package lists and acknowledgments to:
 
   * Grml: [http://grml.org](http://grml.org)
-  * SystemRescueCd: [http://www.sysresccd.org/SystemRescueCd_Homepage](http://www.sysresccd.org/SystemRescueCd_Homepage)
+  * SystemRescueCd: [http://sysresccd.org/SystemRescueCd_Homepage](http://sysresccd.org/SystemRescueCd_Homepage)
 
 Homage to those who started it all:
 
   * tomsrtbt: [http://www.toms.net/rb](http://www.toms.net/rb)
-  * KNOPPIX: [http://www.knopper.net/knoppix/index-en.html](http://www.knopper.net/knoppix/index-en.html)
+  * KNOPPIX: [http://knopper.net/knoppix/index-en.html](http://knopper.net/knoppix/index-en.html)
   * Debian Live: [http://live.debian.net](http://live.debian.net)
 
 Special thanks to the sites which made worldwide distribution possible:
@@ -654,8 +654,8 @@ These are also considered the "howto" instructions for each case.
         * For details on PXE, see the [PXE Boot] section below.
     * Grub: sys-boot/grub-2.02_beta2-r3
   * Research and development:
-    * [https://www.gnu.org/software/grub/manual/grub.html#BIOS-installation](https://www.gnu.org/software/grub/manual/grub.html#BIOS-installation)
-        * [https://www.gnu.org/software/grub/manual/grub.html#Images](https://www.gnu.org/software/grub/manual/grub.html#Images)
+    * [https://gnu.org/software/grub/manual/grub.html#BIOS-installation](https://gnu.org/software/grub/manual/grub.html#BIOS-installation)
+        * [https://gnu.org/software/grub/manual/grub.html#Images](https://gnu.org/software/grub/manual/grub.html#Images)
     * [http://lukeluo.blogspot.com/2013/06/grub-how-to-4-memdisk-and-loopback.html](http://lukeluo.blogspot.com/2013/06/grub-how-to-4-memdisk-and-loopback.html)
     * [http://wiki.osdev.org/GRUB_2#Disk_image_instructions](http://wiki.osdev.org/GRUB_2#Disk_image_instructions)
 
@@ -701,7 +701,7 @@ Instructions for Grub "rescue" image installation to hard disk:
     * [http://lists.gnu.org/archive/html/help-grub/2013-08/msg00005.html](http://lists.gnu.org/archive/html/help-grub/2013-08/msg00005.html)
         * [http://blog.mudy.info/2010/08/boot-grub2-stage2-directly-from-windows-bootmgr-with-grub4dos-stage1](http://blog.mudy.info/2010/08/boot-grub2-stage2-directly-from-windows-bootmgr-with-grub4dos-stage1)
     * [https://wiki.archlinux.org/index.php/Windows_and_Arch_Dual_Boot#Using_Windows_boot_loader](https://wiki.archlinux.org/index.php/Windows_and_Arch_Dual_Boot#Using_Windows_boot_loader)
-        * [http://www.iceflatline.com/2009/09/how-to-dual-boot-windows-7-and-linux-using-bcdedit](http://www.iceflatline.com/2009/09/how-to-dual-boot-windows-7-and-linux-using-bcdedit)
+        * [http://iceflatline.com/2009/09/how-to-dual-boot-windows-7-and-linux-using-bcdedit](http://iceflatline.com/2009/09/how-to-dual-boot-windows-7-and-linux-using-bcdedit)
 
 For convenience and supportability, this case has been mostly automated
 in the `grub.sh` script.  The `gary-os.grub.*` file in the root download
@@ -853,7 +853,7 @@ Wireless networks can then be scanned and configured:
 
 The Funtoo OpenRC scripts have all sorts of advanced networking features
 and options, covered in depth:
-[http://www.funtoo.org/Networking](http://www.funtoo.org/Networking)
+[http://funtoo.org/Networking](http://funtoo.org/Networking)
 
 ### Graphical Interface ########################################################
 [Graphical Interface]: #graphical-interface
