@@ -213,12 +213,14 @@ _release_%:
 
 .PHONY: readme
 readme:
-	@grep -E "^[#*][#* ]"		$(GARYOS_DIR)/README.md
+	@grep -E "^[#*][#* ]"					$(GARYOS_DIR)/README.md
 
 .PHONY: readme-all
 readme-all: readme
 	@$(ECHO) "\n"
-	@grep -E "^[[#*][#*A-Z0-9 ]"	$(GARYOS_DIR)/README.md
+	@grep -E "^[[:space:]]+[*][ ][[][A-Z0-9].+[]]$$"	$(GARYOS_DIR)/README.md
+	@$(ECHO) "\n"
+	@grep -E "^[[#*][#*A-Z0-9 ]"				$(GARYOS_DIR)/README.md
 
 ################################################################################
 # End Of File
