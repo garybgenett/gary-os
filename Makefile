@@ -72,8 +72,6 @@ usage:
 	@$(PRINTF) "Initramfs System (Live Initrd):"		"$(MAKE) O=/ initrd"
 	@$(PRINTF) "Initramfs System (Live Unpack):"		"$(MAKE) O=/ unpack"
 	@$(PRINTF) "Initramfs System (Live Install):"		"$(MAKE) O=/ install"
-	@$(ECHO) "\n"
-	@$(ECHO) "$(STATE)All of the targets generally run non-interactively, except \"update\" and \"shell\".$(RESET)\n"
 ifneq ($(findstring help,$(MAKECMDGOALS)),)
 	@$(ECHO) "\n"
 	@$(ECHO) "$(STATE)There are also \"initramfs\" pass-through targets, for advanced use:$(RESET)\n"
@@ -81,6 +79,8 @@ ifneq ($(findstring help,$(MAKECMDGOALS)),)
 	@$(PRINTF) "Distribution Prepare (Internal Only):"	"_prepare_*"
 	@$(PRINTF) "Distribution Release (Internal Only):"	"_release_*"
 endif
+	@$(ECHO) "\n"
+	@$(ECHO) "$(STATE)All of the targets generally run non-interactively, except \"update\" and \"shell\".$(RESET)\n"
 	@$(ECHO) "\n"
 	@$(ECHO) "$(STATE)Use these variables to change the directories and packages:$(RESET)\n"
 	@$(ECHO) "\n"
