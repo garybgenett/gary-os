@@ -21,6 +21,7 @@
     * [Quick Start]
     * [Requirements]
     * [Contact & Support]
+    * [Acknowledgements & Reviews]
   * [Information]
     * [Design]
         * [Goals]
@@ -191,6 +192,42 @@ The author will also take you out on the town if you schedule time to geek out
 with him in the Seattle area.
 
 [\_gary-os]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/_gary-os
+
+## Acknowledements & Reviews ###################################################
+[Acknowledgements & Reviews]: #acknowledgements-reviews
+
+GaryOS has maintained a steady stream of downloads since its inception in 2014.
+As of September 2019, it has maintained an average of ~90 downloads a month
+over its lifetime, with notable spikes of ~2K, ~0.6K and ~1.5K in March 2018,
+January 2019 and September 2019, respectively.  Activity is concentrated in the
+U.S. and Europe, but there is clearly a worldwide audience.
+
+  * [https://sourceforge.net/projects/gary-os/files/stats/timeline?dates=2014-02-28+to+2038-01-19](https://sourceforge.net/projects/gary-os/files/stats/timeline?dates=2014-02-28+to+2038-01-19)
+  * [https://sourceforge.net/projects/gary-os/files/stats/map?dates=2014-02-28+to+2038-01-19](https://sourceforge.net/projects/gary-os/files/stats/map?dates=2014-02-28+to+2038-01-19)
+
+Despite the relatively small user base, modest infrastructure, and infrequent
+release schedule, GaryOS has managed to receive some official acknowledgment.
+
+Most notably, it has been included in the official Gentoo family tree:
+
+![Gentoo Ecosystem](artifacts/archive/gentoo-18.01.svg.png "Gentoo Ecosystem")
+
+*Source: [https://github.com/gentoo/gentoo-ecosystem/blob/master/gentoo-18.01.svg](https://github.com/gentoo/gentoo-ecosystem/blob/master/gentoo-18.01.svg)*
+
+It is also listed on the official Funtoo ecosystem page:
+
+[https://funtoo.org/Gentoo_Ecosystem](https://funtoo.org/Gentoo_Ecosystem)
+
+There is a Softpedia review of v2.0 from a few years ago, which is interesting
+because it means somebody took the time to boot it up and play with it:
+
+[https://linux.softpedia.com/get/Linux-Distributions/GaryOS-103629.shtml](https://linux.softpedia.com/get/Linux-Distributions/GaryOS-103629.shtml)
+
+Snapshots of all discovered references to GaryOS are kept in the "[archive]"
+directory.  Please use [Contact & Support] to message the author of any other
+acknowledgements you may find, including you having read this far.
+
+[archive]: https://github.com/garybgenett/gary-os/blob/master/artifacts/archive
 
 ********************************************************************************
 
