@@ -27,6 +27,7 @@
         * [Goals]
         * [Rationale]
         * [Caveats]
+        * [History]
     * [Details]
         * [Customizing]
         * [Structure]
@@ -243,45 +244,14 @@ It is mainly here for completeness.  The most useful information is in the
 ## Design ######################################################################
 [Design]: #design
 
-GaryOS was not really "designed", per se.  It just kind of happened
-organically.  Any lack of production value to the code is a result of
-that.
+GaryOS was not really "designed", per se.  It very much happened organically.
+Any lack of production value to the code is a result of that.
 
-Initially, the goal was just to learn the Metro system so I could roll
-my own "stage3" files.  As I continued to merge in my configuration
-customizations, the difference between a "stage3" and a system that
-could be run "live" began to disappear.
-
-In parallel, explorations of Buildroot/Busybox introduced me to the
-embedded initramfs concept, and gave me the idea to package the guts of
-the "stage3" files from Metro into a Linux kernel for a relatively novel
-"live" OS.
-
-If not for my life partner, Rachel, it all would have stopped there.
-Her prodding to "go for it" pushed me from just thinking about
-publishing this as an opensource project into actually doing it.
-
-I did not name the project GaryOS out of any delusions of grandeur or
-egomania.  Indeed, the name was coined not by me but two very good
-friends of mine, Steve and Colin, who used to (and still do) poke fun at
-the amount of time and effort I spent/spend tuning and customizing my
-computing environment.  They jokingly called my workstation "GaryOS",
-when it was really nothing more than a heavily personalized and
-automated system using the tools and configuration options made
-available by all the projects whose software I use.  Since GaryOS really
-is nothing more than my own "wrapping" on the more mature work of
-others, it seemed fitting to name the project as such in
-a tongue-in-cheek and somewhat self-deprecating manner.
-
-That final point is worth re-iterating: GaryOS is 95%+ the work of other
-projects.  All I've done is tie things together in a way I find novel,
-appealing and useful.
+Despite not having been designed in the traditional sense, GaryOS does have
+clear structure and requirements.
 
 ### Goals ######################################################################
 [Goals]: #goals
-
-While not originally "designed" in the traditional sense, GaryOS does
-have clear structure and requirements.
 
 Top requirements:
 
@@ -473,6 +443,39 @@ project.
 Buyer beware.  You own all the pieces.
 
 Other than that, GaryOS should be rock-solid.  ;^)
+
+### History ####################################################################
+[History]: #history
+
+Initially, the goal was just to learn the Metro system so I could roll
+my own "stage3" files.  As I continued to merge in my configuration
+customizations, the difference between a "stage3" and a system that
+could be run "live" began to disappear.
+
+In parallel, explorations of Buildroot/Busybox introduced me to the
+embedded initramfs concept, and gave me the idea to package the guts of
+the "stage3" files from Metro into a Linux kernel for a relatively novel
+"live" OS.
+
+If not for my life partner, Rachel, it all would have stopped there.
+Her prodding to "go for it" pushed me from just thinking about
+publishing this as an opensource project into actually doing it.
+
+I did not name the project GaryOS out of any delusions of grandeur or
+egomania.  Indeed, the name was coined not by me but two very good
+friends of mine, Steve and Colin, who used to (and still do) poke fun at
+the amount of time and effort I spent/spend tuning and customizing my
+computing environment.  They jokingly called my workstation "GaryOS",
+when it was really nothing more than a heavily personalized and
+automated system using the tools and configuration options made
+available by all the projects whose software I use.  Since GaryOS really
+is nothing more than my own "wrapping" on the more mature work of
+others, it seemed fitting to name the project as such in
+a tongue-in-cheek and somewhat self-deprecating manner.
+
+That final point is worth re-iterating: GaryOS is 95%+ the work of other
+projects.  All I've done is tie things together in a way I find novel,
+appealing and useful.
 
 ## Details #####################################################################
 [Details]: #details
