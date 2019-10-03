@@ -2,7 +2,7 @@
 source ${HOME}/.bashrc
 ################################################################################
 
-if [[ -z ${_BASHED} ]]; then
+if ! ${_BASHED}; then
 	echo -en "\n"
 	echo -en ">>> THE GARYOS BASHRC FILE MUST BE IN YOUR HOME DIRECTORY <<<\n"
 	echo -en ">>> OR YOU CAN SET THE HOME VARIABLE TO THE LOCATION WHERE IT IS <<<\n"
