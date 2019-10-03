@@ -1,0 +1,1292 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<!-- Created with gnuclad 0.2.4 -->
+
+<svg
+  xmlns='http://www.w3.org/2000/svg'
+  xmlns:svg='http://www.w3.org/2000/svg'
+  xmlns:xlink='http://www.w3.org/1999/xlink'
+  xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape'
+  xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd'
+  xmlns:dc='http://purl.org/dc/elements/1.1/'
+  xmlns:cc='http://creativecommons.org/ns#'
+  xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+  version='1.1'
+  width='2620'
+  height='1848'
+>
+
+<title>The Gentoo Ecosystem</title>
+
+<defs>
+
+  <linearGradient id='__yearline' x1='0' y1='0' x2='1' y2='0'>
+    <stop stop-color='#00316e' offset='0' stop-opacity='1' />
+    <stop stop-color='#2c72c7' offset='1' stop-opacity='1' />
+  </linearGradient>
+
+  <linearGradient id='__infobox_fill' x1='0' y1='0' x2='0' y2='1'>
+    <stop stop-color='#b9d5ff' offset='0' stop-opacity='1' />
+    <stop stop-color='#70b3f2' offset='1' stop-opacity='1' />
+  </linearGradient>
+  <linearGradient id='__infobox_stroke' x1='0' y1='0' x2='0' y2='1'>
+    <stop stop-color='#70b3f2' offset='0' stop-opacity='1' />
+    <stop stop-color='#b9d5ff' offset='1' stop-opacity='1' />
+  </linearGradient>
+  <filter id='__infobox_shadow' color-interpolation-filters='sRGB'>
+    <feGaussianBlur stdDeviation='5' />
+  </filter>
+
+
+  <circle id='__connectors_start' cx='0' cy='0' r='4' stroke='none' />
+  <marker id='__connector_0' stroke='none' markerUnits='userSpaceOnUse' style='overflow:visible;'>
+    <use xlink:href='#__connectors_start' fill='#000000'  />
+  </marker>
+  <marker id='__connector_1' stroke='none' markerUnits='userSpaceOnUse' style='overflow:visible;'>
+    <use xlink:href='#__connectors_start' fill='#000000'  />
+  </marker>
+  <marker id='__connector_2' stroke='none' markerUnits='userSpaceOnUse' style='overflow:visible;'>
+    <use xlink:href='#__connectors_start' fill='#000000'  />
+  </marker>
+  <marker id='__connector_3' stroke='none' markerUnits='userSpaceOnUse' style='overflow:visible;'>
+    <use xlink:href='#__connectors_start' fill='#000000'  />
+  </marker>
+  <marker id='__connector_4' stroke='none' markerUnits='userSpaceOnUse' style='overflow:visible;'>
+    <use xlink:href='#__connectors_start' fill='#000000'  />
+  </marker>
+  <marker id='__connector_5' stroke='none' markerUnits='userSpaceOnUse' style='overflow:visible;'>
+    <use xlink:href='#__connectors_start' fill='#000000'  />
+  </marker>
+  <marker id='__connector_6' stroke='none' markerUnits='userSpaceOnUse' style='overflow:visible;'>
+    <use xlink:href='#__connectors_start' fill='#000000'  />
+  </marker>
+<rect id='__fadeout' height='1' width='6' y='-0.5' x='0'/>  <linearGradient id='__fadeout_Ututo' x1='0' y1='0' x2='6' y2='0' gradientUnits='userSpaceOnUse'>
+    <stop stop-color='#ba3232' offset='0' stop-opacity='1' />
+    <stop stop-color='#ba3232' offset='1' stop-opacity='0' />
+  </linearGradient>
+  <marker id='__stop_Ututo' markerWidth='6' markerHeight='1' style='overflow:visible;'>
+    <use xlink:href='#__fadeout' style='fill:url(#__fadeout_Ututo)' />
+  </marker>
+  <linearGradient id='__fadeout_Ututo-e' x1='0' y1='0' x2='6' y2='0' gradientUnits='userSpaceOnUse'>
+    <stop stop-color='#d30110' offset='0' stop-opacity='1' />
+    <stop stop-color='#d30110' offset='1' stop-opacity='0' />
+  </linearGradient>
+  <marker id='__stop_Ututo-e' markerWidth='6' markerHeight='1' style='overflow:visible;'>
+    <use xlink:href='#__fadeout' style='fill:url(#__fadeout_Ututo-e)' />
+  </marker>
+  <linearGradient id='__fadeout_Jollix' x1='0' y1='0' x2='6' y2='0' gradientUnits='userSpaceOnUse'>
+    <stop stop-color='#ffee55' offset='0' stop-opacity='1' />
+    <stop stop-color='#ffee55' offset='1' stop-opacity='0' />
+  </linearGradient>
+  <marker id='__stop_Jollix' markerWidth='6' markerHeight='1' style='overflow:visible;'>
+    <use xlink:href='#__fadeout' style='fill:url(#__fadeout_Jollix)' />
+  </marker>
+  <linearGradient id='__fadeout_Adélie__Linux__(I)' x1='0' y1='0' x2='6' y2='0' gradientUnits='userSpaceOnUse'>
+    <stop stop-color='#334466' offset='0' stop-opacity='1' />
+    <stop stop-color='#334466' offset='1' stop-opacity='0' />
+  </linearGradient>
+  <marker id='__stop_Adélie__Linux__(I)' markerWidth='6' markerHeight='1' style='overflow:visible;'>
+    <use xlink:href='#__fadeout' style='fill:url(#__fadeout_Adélie__Linux__(I))' />
+  </marker>
+  <linearGradient id='__fadeout_Knopperdisk' x1='0' y1='0' x2='6' y2='0' gradientUnits='userSpaceOnUse'>
+    <stop stop-color='#06C000' offset='0' stop-opacity='1' />
+    <stop stop-color='#06C000' offset='1' stop-opacity='0' />
+  </linearGradient>
+  <marker id='__stop_Knopperdisk' markerWidth='6' markerHeight='1' style='overflow:visible;'>
+    <use xlink:href='#__fadeout' style='fill:url(#__fadeout_Knopperdisk)' />
+  </marker>
+  <linearGradient id='__fadeout_Litrix' x1='0' y1='0' x2='6' y2='0' gradientUnits='userSpaceOnUse'>
+    <stop stop-color='#ff0000' offset='0' stop-opacity='1' />
+    <stop stop-color='#ff0000' offset='1' stop-opacity='0' />
+  </linearGradient>
+  <marker id='__stop_Litrix' markerWidth='6' markerHeight='1' style='overflow:visible;'>
+    <use xlink:href='#__fadeout' style='fill:url(#__fadeout_Litrix)' />
+  </marker>
+  <linearGradient id='__fadeout_epiOS' x1='0' y1='0' x2='6' y2='0' gradientUnits='userSpaceOnUse'>
+    <stop stop-color='#2181B0' offset='0' stop-opacity='1' />
+    <stop stop-color='#2181B0' offset='1' stop-opacity='0' />
+  </linearGradient>
+  <marker id='__stop_epiOS' markerWidth='6' markerHeight='1' style='overflow:visible;'>
+    <use xlink:href='#__fadeout' style='fill:url(#__fadeout_epiOS)' />
+  </marker>
+  <linearGradient id='__fadeout_Spike' x1='0' y1='0' x2='6' y2='0' gradientUnits='userSpaceOnUse'>
+    <stop stop-color='#000000' offset='0' stop-opacity='1' />
+    <stop stop-color='#000000' offset='1' stop-opacity='0' />
+  </linearGradient>
+  <marker id='__stop_Spike' markerWidth='6' markerHeight='1' style='overflow:visible;'>
+    <use xlink:href='#__fadeout' style='fill:url(#__fadeout_Spike)' />
+  </marker>
+  <linearGradient id='__fadeout_Kororaa' x1='0' y1='0' x2='6' y2='0' gradientUnits='userSpaceOnUse'>
+    <stop stop-color='#706f7f' offset='0' stop-opacity='1' />
+    <stop stop-color='#706f7f' offset='1' stop-opacity='0' />
+  </linearGradient>
+  <marker id='__stop_Kororaa' markerWidth='6' markerHeight='1' style='overflow:visible;'>
+    <use xlink:href='#__fadeout' style='fill:url(#__fadeout_Kororaa)' />
+  </marker>
+  <linearGradient id='__fadeout_VLOS' x1='0' y1='0' x2='6' y2='0' gradientUnits='userSpaceOnUse'>
+    <stop stop-color='#718969' offset='0' stop-opacity='1' />
+    <stop stop-color='#718969' offset='1' stop-opacity='0' />
+  </linearGradient>
+  <marker id='__stop_VLOS' markerWidth='6' markerHeight='1' style='overflow:visible;'>
+    <use xlink:href='#__fadeout' style='fill:url(#__fadeout_VLOS)' />
+  </marker>
+  <linearGradient id='__fadeout_Fireball' x1='0' y1='0' x2='6' y2='0' gradientUnits='userSpaceOnUse'>
+    <stop stop-color='#FF39C0' offset='0' stop-opacity='1' />
+    <stop stop-color='#FF39C0' offset='1' stop-opacity='0' />
+  </linearGradient>
+  <marker id='__stop_Fireball' markerWidth='6' markerHeight='1' style='overflow:visible;'>
+    <use xlink:href='#__fadeout' style='fill:url(#__fadeout_Fireball)' />
+  </marker>
+  <linearGradient id='__fadeout_Liberté' x1='0' y1='0' x2='6' y2='0' gradientUnits='userSpaceOnUse'>
+    <stop stop-color='#114488' offset='0' stop-opacity='1' />
+    <stop stop-color='#114488' offset='1' stop-opacity='0' />
+  </linearGradient>
+  <marker id='__stop_Liberté' markerWidth='6' markerHeight='1' style='overflow:visible;'>
+    <use xlink:href='#__fadeout' style='fill:url(#__fadeout_Liberté)' />
+  </marker>
+  <linearGradient id='__fadeout_Securix' x1='0' y1='0' x2='6' y2='0' gradientUnits='userSpaceOnUse'>
+    <stop stop-color='#C0FF39' offset='0' stop-opacity='1' />
+    <stop stop-color='#C0FF39' offset='1' stop-opacity='0' />
+  </linearGradient>
+  <marker id='__stop_Securix' markerWidth='6' markerHeight='1' style='overflow:visible;'>
+    <use xlink:href='#__fadeout' style='fill:url(#__fadeout_Securix)' />
+  </marker>
+  <linearGradient id='__fadeout_PixieLive' x1='0' y1='0' x2='6' y2='0' gradientUnits='userSpaceOnUse'>
+    <stop stop-color='#39C0FF' offset='0' stop-opacity='1' />
+    <stop stop-color='#39C0FF' offset='1' stop-opacity='0' />
+  </linearGradient>
+  <marker id='__stop_PixieLive' markerWidth='6' markerHeight='1' style='overflow:visible;'>
+    <use xlink:href='#__fadeout' style='fill:url(#__fadeout_PixieLive)' />
+  </marker>
+  <linearGradient id='__fadeout_Tin__Hat__Linux' x1='0' y1='0' x2='6' y2='0' gradientUnits='userSpaceOnUse'>
+    <stop stop-color='#929292' offset='0' stop-opacity='1' />
+    <stop stop-color='#929292' offset='1' stop-opacity='0' />
+  </linearGradient>
+  <marker id='__stop_Tin__Hat__Linux' markerWidth='6' markerHeight='1' style='overflow:visible;'>
+    <use xlink:href='#__fadeout' style='fill:url(#__fadeout_Tin__Hat__Linux)' />
+  </marker>
+  <linearGradient id='__fadeout_Toorox' x1='0' y1='0' x2='6' y2='0' gradientUnits='userSpaceOnUse'>
+    <stop stop-color='#333333' offset='0' stop-opacity='1' />
+    <stop stop-color='#333333' offset='1' stop-opacity='0' />
+  </linearGradient>
+  <marker id='__stop_Toorox' markerWidth='6' markerHeight='1' style='overflow:visible;'>
+    <use xlink:href='#__fadeout' style='fill:url(#__fadeout_Toorox)' />
+  </marker>
+  <linearGradient id='__fadeout_Papug' x1='0' y1='0' x2='6' y2='0' gradientUnits='userSpaceOnUse'>
+    <stop stop-color='#0082ff' offset='0' stop-opacity='1' />
+    <stop stop-color='#0082ff' offset='1' stop-opacity='0' />
+  </linearGradient>
+  <marker id='__stop_Papug' markerWidth='6' markerHeight='1' style='overflow:visible;'>
+    <use xlink:href='#__fadeout' style='fill:url(#__fadeout_Papug)' />
+  </marker>
+  <linearGradient id='__fadeout_Bintoo' x1='0' y1='0' x2='6' y2='0' gradientUnits='userSpaceOnUse'>
+    <stop stop-color='#89c8e9' offset='0' stop-opacity='1' />
+    <stop stop-color='#89c8e9' offset='1' stop-opacity='0' />
+  </linearGradient>
+  <marker id='__stop_Bintoo' markerWidth='6' markerHeight='1' style='overflow:visible;'>
+    <use xlink:href='#__fadeout' style='fill:url(#__fadeout_Bintoo)' />
+  </marker>
+  <linearGradient id='__fadeout_Pardus' x1='0' y1='0' x2='6' y2='0' gradientUnits='userSpaceOnUse'>
+    <stop stop-color='#FDB500' offset='0' stop-opacity='1' />
+    <stop stop-color='#FDB500' offset='1' stop-opacity='0' />
+  </linearGradient>
+  <marker id='__stop_Pardus' markerWidth='6' markerHeight='1' style='overflow:visible;'>
+    <use xlink:href='#__fadeout' style='fill:url(#__fadeout_Pardus)' />
+  </marker>
+  <linearGradient id='__fadeout_VidaLinux' x1='0' y1='0' x2='6' y2='0' gradientUnits='userSpaceOnUse'>
+    <stop stop-color='#718969' offset='0' stop-opacity='1' />
+    <stop stop-color='#718969' offset='1' stop-opacity='0' />
+  </linearGradient>
+  <marker id='__stop_VidaLinux' markerWidth='6' markerHeight='1' style='overflow:visible;'>
+    <use xlink:href='#__fadeout' style='fill:url(#__fadeout_VidaLinux)' />
+  </marker>
+  <linearGradient id='__fadeout_Navyn__OS' x1='0' y1='0' x2='6' y2='0' gradientUnits='userSpaceOnUse'>
+    <stop stop-color='#224488' offset='0' stop-opacity='1' />
+    <stop stop-color='#224488' offset='1' stop-opacity='0' />
+  </linearGradient>
+  <marker id='__stop_Navyn__OS' markerWidth='6' markerHeight='1' style='overflow:visible;'>
+    <use xlink:href='#__fadeout' style='fill:url(#__fadeout_Navyn__OS)' />
+  </marker>
+  <linearGradient id='__fadeout_Zynot' x1='0' y1='0' x2='6' y2='0' gradientUnits='userSpaceOnUse'>
+    <stop stop-color='#114488' offset='0' stop-opacity='1' />
+    <stop stop-color='#114488' offset='1' stop-opacity='0' />
+  </linearGradient>
+  <marker id='__stop_Zynot' markerWidth='6' markerHeight='1' style='overflow:visible;'>
+    <use xlink:href='#__fadeout' style='fill:url(#__fadeout_Zynot)' />
+  </marker>
+  <linearGradient id='__fadeout_Gentoox' x1='0' y1='0' x2='6' y2='0' gradientUnits='userSpaceOnUse'>
+    <stop stop-color='#0050ff' offset='0' stop-opacity='1' />
+    <stop stop-color='#0050ff' offset='1' stop-opacity='0' />
+  </linearGradient>
+  <marker id='__stop_Gentoox' markerWidth='6' markerHeight='1' style='overflow:visible;'>
+    <use xlink:href='#__fadeout' style='fill:url(#__fadeout_Gentoox)' />
+  </marker>
+  <linearGradient id='__fadeout_Stampede' x1='0' y1='0' x2='6' y2='0' gradientUnits='userSpaceOnUse'>
+    <stop stop-color='#866846' offset='0' stop-opacity='1' />
+    <stop stop-color='#866846' offset='1' stop-opacity='0' />
+  </linearGradient>
+  <marker id='__stop_Stampede' markerWidth='6' markerHeight='1' style='overflow:visible;'>
+    <use xlink:href='#__fadeout' style='fill:url(#__fadeout_Stampede)' />
+  </marker>
+
+<!-- BEGIN additional SVG images - definitions -->
+    <linearGradient
+       id="linearGradient4036">
+      <stop
+         style="stop-color:#7b7bdf;stop-opacity:1;"
+         offset="0"
+         id="stop4038" />
+      <stop
+         style="stop-color:#a6a6e9;stop-opacity:1;"
+         offset="1"
+         id="stop4040" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3933">
+      <stop
+         id="stop3935"
+         offset="0.0000000"
+         style="stop-color:#ffffff;stop-opacity:1.0000000;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0.48660609"
+         id="stop3937" />
+      <stop
+         style="stop-color:#d9d9f6;stop-opacity:1;"
+         offset="0.59311914"
+         id="stop3939" />
+      <stop
+         id="stop3941"
+         offset="1"
+         style="stop-color:#adadeb;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3915">
+      <stop
+         id="stop3917"
+         offset="0.0000000"
+         style="stop-color:#ffffff;stop-opacity:1.0000000;" />
+      <stop
+         id="stop3919"
+         offset="1"
+         style="stop-color:#ffffff;stop-opacity:0;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4049">
+      <stop
+         style="stop-color:#000000;stop-opacity:0.45918366;"
+         offset="0.0000000"
+         id="stop4050" />
+      <stop
+         style="stop-color:#9999e6;stop-opacity:1.0000000;"
+         offset="1.0000000"
+         id="stop4051" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient2797">
+      <stop
+         style="stop-color:#000000;stop-opacity:1.0000000;"
+         offset="0.0000000"
+         id="stop2798" />
+      <stop
+         style="stop-color:#9999e6;stop-opacity:1.0000000;"
+         offset="1.0000000"
+         id="stop2799" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient2791">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1.0000000;"
+         offset="0.0000000"
+         id="stop2792" />
+      <stop
+         id="stop3931"
+         offset="0.30357143"
+         style="stop-color:#ffffff;stop-opacity:1;" />
+      <stop
+         id="stop3921"
+         offset="0.60714287"
+         style="stop-color:#e6e6f9;stop-opacity:1;" />
+      <stop
+         style="stop-color:#9999e6;stop-opacity:1.0000000;"
+         offset="1.0000000"
+         id="stop2793" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient2791-7">
+      <stop
+         id="stop2792-2"
+         offset="0.0000000"
+         style="stop-color:#ffffff;stop-opacity:1.0000000;" />
+      <stop
+         id="stop2793-7"
+         offset="1"
+         style="stop-color:#c0c0c0;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient2797-8">
+      <stop
+         id="stop2798-7"
+         offset="0.0000000"
+         style="stop-color:#000000;stop-opacity:1.0000000;" />
+      <stop
+         id="stop2799-1"
+         offset="1"
+         style="stop-color:#c0c0c0;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4049-5">
+      <stop
+         id="stop4050-0"
+         offset="0.0000000"
+         style="stop-color:#000000;stop-opacity:0.45918366;" />
+      <stop
+         id="stop4051-4"
+         offset="1"
+         style="stop-color:#c0c0c0;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient2791-5">
+      <stop
+         id="stop2792-6"
+         offset="0.0000000"
+         style="stop-color:#ffffff;stop-opacity:1.0000000;" />
+      <stop
+         id="stop2793-3"
+         offset="1"
+         style="stop-color:#c0c0c0;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient2797-6">
+      <stop
+         id="stop2798-73"
+         offset="0.0000000"
+         style="stop-color:#000000;stop-opacity:1.0000000;" />
+      <stop
+         id="stop2799-6"
+         offset="1"
+         style="stop-color:#c0c0c0;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4049-59">
+      <stop
+         id="stop4050-7"
+         offset="0.0000000"
+         style="stop-color:#000000;stop-opacity:0.45918366;" />
+      <stop
+         id="stop4051-7"
+         offset="1"
+         style="stop-color:#c0c0c0;stop-opacity:1;" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3933"
+       id="radialGradient3135"
+       cx="240.19441"
+       cy="350.79166"
+       fx="240.19441"
+       fy="350.79166"
+       r="303.34283"
+       gradientTransform="matrix(0.69099478,1.0116748,-0.81542574,0.5569526,374.42974,-116.469)"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2791"
+       id="radialGradient3137"
+       cx="402.91514"
+       cy="273.53453"
+       fx="402.91515"
+       fy="273.53453"
+       r="77.791385"
+       gradientTransform="scale(1.0948953,0.91332936)"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2797"
+       id="radialGradient3139"
+       cx="363.31471"
+       cy="343.67726"
+       fx="362.55895"
+       fy="342.73846"
+       r="35.682201"
+       gradientTransform="scale(1.1116231,0.89958546)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4049"
+       id="linearGradient3141"
+       x1="192.5567"
+       y1="404.65598"
+       x2="234.90553"
+       y2="331.94254"
+       gradientTransform="scale(1.083205,0.9231863)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4049"
+       id="linearGradient3143"
+       x1="188.64751"
+       y1="785.09646"
+       x2="450.44758"
+       y2="519.51469"
+       gradientTransform="scale(1.3482945,0.74167773)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3915"
+       id="linearGradient3145"
+       x1="508.15967"
+       y1="428.62717"
+       x2="271.03165"
+       y2="659.76666"
+       gradientTransform="scale(1.2005549,0.83294815)"
+       gradientUnits="userSpaceOnUse" />
+    <filter
+       inkscape:collect="always"
+       id="filter3951">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.3094535"
+         id="feGaussianBlur3953" />
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4036"
+       id="linearGradient4042"
+       x1="354.16965"
+       y1="83.331688"
+       x2="314.37476"
+       y2="322.3338"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2797"
+       id="radialGradient4049"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.5036118,-0.05644673,0.04112021,1.0953482,-156.89173,-46.745246)"
+       cx="364.28299"
+       cy="340.96454"
+       fx="364.28299"
+       fy="340.96454"
+       r="35.682201" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2797"
+       id="radialGradient3832"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.5036118,-0.05644673,0.04112021,1.0953482,-329.6866,-176.79092)"
+       cx="364.28299"
+       cy="340.96454"
+       fx="364.28299"
+       fy="340.96454"
+       r="35.682201" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2791"
+       id="radialGradient3840"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.0948953,0,0,0.91332936,-172.79487,-130.04567)"
+       cx="402.91514"
+       cy="273.53453"
+       fx="402.91515"
+       fy="273.53453"
+       r="77.791385" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3933"
+       id="radialGradient3845"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.69099478,1.0116748,-0.81542574,0.5569526,201.63487,-246.51467)"
+       cx="240.19441"
+       cy="350.79166"
+       fx="240.19441"
+       fy="350.79166"
+       r="303.34283" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4036"
+       id="linearGradient3848"
+       gradientUnits="userSpaceOnUse"
+       x1="354.16965"
+       y1="83.331688"
+       x2="314.37476"
+       y2="322.3338"
+       gradientTransform="translate(-172.79487,-130.04567)" />
+
+<!-- END additional SVG images - definitions -->
+
+</defs>
+
+<g inkscape:label='Background' inkscape:groupmode='layer' id='layer_background' >
+  <rect x='0' y='0' width='2620' height='1848' rx='17' ry='17' fill='#fff' />
+</g>
+
+<g inkscape:label='Year Rulers' inkscape:groupmode='layer' id='layer_yearrulers' stroke-width='1' stroke='#f0f0f0'>
+  <line x1='10' y1='0' x2='10' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='18' y1='0' x2='18' y2='1848' />
+    <line x1='26' y1='0' x2='26' y2='1848' />
+    <line x1='35' y1='0' x2='35' y2='1848' />
+    <line x1='43' y1='0' x2='43' y2='1848' />
+    <line x1='51' y1='0' x2='51' y2='1848' />
+    <line x1='60' y1='0' x2='60' y2='1848' />
+    <line x1='68' y1='0' x2='68' y2='1848' />
+    <line x1='76' y1='0' x2='76' y2='1848' />
+    <line x1='85' y1='0' x2='85' y2='1848' />
+    <line x1='93' y1='0' x2='93' y2='1848' />
+    <line x1='101' y1='0' x2='101' y2='1848' />
+  <line x1='110' y1='0' x2='110' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='118' y1='0' x2='118' y2='1848' />
+    <line x1='126' y1='0' x2='126' y2='1848' />
+    <line x1='135' y1='0' x2='135' y2='1848' />
+    <line x1='143' y1='0' x2='143' y2='1848' />
+    <line x1='151' y1='0' x2='151' y2='1848' />
+    <line x1='160' y1='0' x2='160' y2='1848' />
+    <line x1='168' y1='0' x2='168' y2='1848' />
+    <line x1='176' y1='0' x2='176' y2='1848' />
+    <line x1='185' y1='0' x2='185' y2='1848' />
+    <line x1='193' y1='0' x2='193' y2='1848' />
+    <line x1='201' y1='0' x2='201' y2='1848' />
+  <line x1='210' y1='0' x2='210' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='218' y1='0' x2='218' y2='1848' />
+    <line x1='226' y1='0' x2='226' y2='1848' />
+    <line x1='235' y1='0' x2='235' y2='1848' />
+    <line x1='243' y1='0' x2='243' y2='1848' />
+    <line x1='251' y1='0' x2='251' y2='1848' />
+    <line x1='260' y1='0' x2='260' y2='1848' />
+    <line x1='268' y1='0' x2='268' y2='1848' />
+    <line x1='276' y1='0' x2='276' y2='1848' />
+    <line x1='285' y1='0' x2='285' y2='1848' />
+    <line x1='293' y1='0' x2='293' y2='1848' />
+    <line x1='301' y1='0' x2='301' y2='1848' />
+  <line x1='310' y1='0' x2='310' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='318' y1='0' x2='318' y2='1848' />
+    <line x1='326' y1='0' x2='326' y2='1848' />
+    <line x1='335' y1='0' x2='335' y2='1848' />
+    <line x1='343' y1='0' x2='343' y2='1848' />
+    <line x1='351' y1='0' x2='351' y2='1848' />
+    <line x1='360' y1='0' x2='360' y2='1848' />
+    <line x1='368' y1='0' x2='368' y2='1848' />
+    <line x1='376' y1='0' x2='376' y2='1848' />
+    <line x1='385' y1='0' x2='385' y2='1848' />
+    <line x1='393' y1='0' x2='393' y2='1848' />
+    <line x1='401' y1='0' x2='401' y2='1848' />
+  <line x1='410' y1='0' x2='410' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='418' y1='0' x2='418' y2='1848' />
+    <line x1='426' y1='0' x2='426' y2='1848' />
+    <line x1='435' y1='0' x2='435' y2='1848' />
+    <line x1='443' y1='0' x2='443' y2='1848' />
+    <line x1='451' y1='0' x2='451' y2='1848' />
+    <line x1='460' y1='0' x2='460' y2='1848' />
+    <line x1='468' y1='0' x2='468' y2='1848' />
+    <line x1='476' y1='0' x2='476' y2='1848' />
+    <line x1='485' y1='0' x2='485' y2='1848' />
+    <line x1='493' y1='0' x2='493' y2='1848' />
+    <line x1='501' y1='0' x2='501' y2='1848' />
+  <line x1='510' y1='0' x2='510' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='518' y1='0' x2='518' y2='1848' />
+    <line x1='526' y1='0' x2='526' y2='1848' />
+    <line x1='535' y1='0' x2='535' y2='1848' />
+    <line x1='543' y1='0' x2='543' y2='1848' />
+    <line x1='551' y1='0' x2='551' y2='1848' />
+    <line x1='560' y1='0' x2='560' y2='1848' />
+    <line x1='568' y1='0' x2='568' y2='1848' />
+    <line x1='576' y1='0' x2='576' y2='1848' />
+    <line x1='585' y1='0' x2='585' y2='1848' />
+    <line x1='593' y1='0' x2='593' y2='1848' />
+    <line x1='601' y1='0' x2='601' y2='1848' />
+  <line x1='610' y1='0' x2='610' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='618' y1='0' x2='618' y2='1848' />
+    <line x1='626' y1='0' x2='626' y2='1848' />
+    <line x1='635' y1='0' x2='635' y2='1848' />
+    <line x1='643' y1='0' x2='643' y2='1848' />
+    <line x1='651' y1='0' x2='651' y2='1848' />
+    <line x1='660' y1='0' x2='660' y2='1848' />
+    <line x1='668' y1='0' x2='668' y2='1848' />
+    <line x1='676' y1='0' x2='676' y2='1848' />
+    <line x1='685' y1='0' x2='685' y2='1848' />
+    <line x1='693' y1='0' x2='693' y2='1848' />
+    <line x1='701' y1='0' x2='701' y2='1848' />
+  <line x1='710' y1='0' x2='710' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='718' y1='0' x2='718' y2='1848' />
+    <line x1='726' y1='0' x2='726' y2='1848' />
+    <line x1='735' y1='0' x2='735' y2='1848' />
+    <line x1='743' y1='0' x2='743' y2='1848' />
+    <line x1='751' y1='0' x2='751' y2='1848' />
+    <line x1='760' y1='0' x2='760' y2='1848' />
+    <line x1='768' y1='0' x2='768' y2='1848' />
+    <line x1='776' y1='0' x2='776' y2='1848' />
+    <line x1='785' y1='0' x2='785' y2='1848' />
+    <line x1='793' y1='0' x2='793' y2='1848' />
+    <line x1='801' y1='0' x2='801' y2='1848' />
+  <line x1='810' y1='0' x2='810' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='818' y1='0' x2='818' y2='1848' />
+    <line x1='826' y1='0' x2='826' y2='1848' />
+    <line x1='835' y1='0' x2='835' y2='1848' />
+    <line x1='843' y1='0' x2='843' y2='1848' />
+    <line x1='851' y1='0' x2='851' y2='1848' />
+    <line x1='860' y1='0' x2='860' y2='1848' />
+    <line x1='868' y1='0' x2='868' y2='1848' />
+    <line x1='876' y1='0' x2='876' y2='1848' />
+    <line x1='885' y1='0' x2='885' y2='1848' />
+    <line x1='893' y1='0' x2='893' y2='1848' />
+    <line x1='901' y1='0' x2='901' y2='1848' />
+  <line x1='910' y1='0' x2='910' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='918' y1='0' x2='918' y2='1848' />
+    <line x1='926' y1='0' x2='926' y2='1848' />
+    <line x1='935' y1='0' x2='935' y2='1848' />
+    <line x1='943' y1='0' x2='943' y2='1848' />
+    <line x1='951' y1='0' x2='951' y2='1848' />
+    <line x1='960' y1='0' x2='960' y2='1848' />
+    <line x1='968' y1='0' x2='968' y2='1848' />
+    <line x1='976' y1='0' x2='976' y2='1848' />
+    <line x1='985' y1='0' x2='985' y2='1848' />
+    <line x1='993' y1='0' x2='993' y2='1848' />
+    <line x1='1001' y1='0' x2='1001' y2='1848' />
+  <line x1='1010' y1='0' x2='1010' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='1018' y1='0' x2='1018' y2='1848' />
+    <line x1='1026' y1='0' x2='1026' y2='1848' />
+    <line x1='1035' y1='0' x2='1035' y2='1848' />
+    <line x1='1043' y1='0' x2='1043' y2='1848' />
+    <line x1='1051' y1='0' x2='1051' y2='1848' />
+    <line x1='1060' y1='0' x2='1060' y2='1848' />
+    <line x1='1068' y1='0' x2='1068' y2='1848' />
+    <line x1='1076' y1='0' x2='1076' y2='1848' />
+    <line x1='1085' y1='0' x2='1085' y2='1848' />
+    <line x1='1093' y1='0' x2='1093' y2='1848' />
+    <line x1='1101' y1='0' x2='1101' y2='1848' />
+  <line x1='1110' y1='0' x2='1110' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='1118' y1='0' x2='1118' y2='1848' />
+    <line x1='1126' y1='0' x2='1126' y2='1848' />
+    <line x1='1135' y1='0' x2='1135' y2='1848' />
+    <line x1='1143' y1='0' x2='1143' y2='1848' />
+    <line x1='1151' y1='0' x2='1151' y2='1848' />
+    <line x1='1160' y1='0' x2='1160' y2='1848' />
+    <line x1='1168' y1='0' x2='1168' y2='1848' />
+    <line x1='1176' y1='0' x2='1176' y2='1848' />
+    <line x1='1185' y1='0' x2='1185' y2='1848' />
+    <line x1='1193' y1='0' x2='1193' y2='1848' />
+    <line x1='1201' y1='0' x2='1201' y2='1848' />
+  <line x1='1210' y1='0' x2='1210' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='1218' y1='0' x2='1218' y2='1848' />
+    <line x1='1226' y1='0' x2='1226' y2='1848' />
+    <line x1='1235' y1='0' x2='1235' y2='1848' />
+    <line x1='1243' y1='0' x2='1243' y2='1848' />
+    <line x1='1251' y1='0' x2='1251' y2='1848' />
+    <line x1='1260' y1='0' x2='1260' y2='1848' />
+    <line x1='1268' y1='0' x2='1268' y2='1848' />
+    <line x1='1276' y1='0' x2='1276' y2='1848' />
+    <line x1='1285' y1='0' x2='1285' y2='1848' />
+    <line x1='1293' y1='0' x2='1293' y2='1848' />
+    <line x1='1301' y1='0' x2='1301' y2='1848' />
+  <line x1='1310' y1='0' x2='1310' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='1318' y1='0' x2='1318' y2='1848' />
+    <line x1='1326' y1='0' x2='1326' y2='1848' />
+    <line x1='1335' y1='0' x2='1335' y2='1848' />
+    <line x1='1343' y1='0' x2='1343' y2='1848' />
+    <line x1='1351' y1='0' x2='1351' y2='1848' />
+    <line x1='1360' y1='0' x2='1360' y2='1848' />
+    <line x1='1368' y1='0' x2='1368' y2='1848' />
+    <line x1='1376' y1='0' x2='1376' y2='1848' />
+    <line x1='1385' y1='0' x2='1385' y2='1848' />
+    <line x1='1393' y1='0' x2='1393' y2='1848' />
+    <line x1='1401' y1='0' x2='1401' y2='1848' />
+  <line x1='1410' y1='0' x2='1410' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='1418' y1='0' x2='1418' y2='1848' />
+    <line x1='1426' y1='0' x2='1426' y2='1848' />
+    <line x1='1435' y1='0' x2='1435' y2='1848' />
+    <line x1='1443' y1='0' x2='1443' y2='1848' />
+    <line x1='1451' y1='0' x2='1451' y2='1848' />
+    <line x1='1460' y1='0' x2='1460' y2='1848' />
+    <line x1='1468' y1='0' x2='1468' y2='1848' />
+    <line x1='1476' y1='0' x2='1476' y2='1848' />
+    <line x1='1485' y1='0' x2='1485' y2='1848' />
+    <line x1='1493' y1='0' x2='1493' y2='1848' />
+    <line x1='1501' y1='0' x2='1501' y2='1848' />
+  <line x1='1510' y1='0' x2='1510' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='1518' y1='0' x2='1518' y2='1848' />
+    <line x1='1526' y1='0' x2='1526' y2='1848' />
+    <line x1='1535' y1='0' x2='1535' y2='1848' />
+    <line x1='1543' y1='0' x2='1543' y2='1848' />
+    <line x1='1551' y1='0' x2='1551' y2='1848' />
+    <line x1='1560' y1='0' x2='1560' y2='1848' />
+    <line x1='1568' y1='0' x2='1568' y2='1848' />
+    <line x1='1576' y1='0' x2='1576' y2='1848' />
+    <line x1='1585' y1='0' x2='1585' y2='1848' />
+    <line x1='1593' y1='0' x2='1593' y2='1848' />
+    <line x1='1601' y1='0' x2='1601' y2='1848' />
+  <line x1='1610' y1='0' x2='1610' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='1618' y1='0' x2='1618' y2='1848' />
+    <line x1='1626' y1='0' x2='1626' y2='1848' />
+    <line x1='1635' y1='0' x2='1635' y2='1848' />
+    <line x1='1643' y1='0' x2='1643' y2='1848' />
+    <line x1='1651' y1='0' x2='1651' y2='1848' />
+    <line x1='1660' y1='0' x2='1660' y2='1848' />
+    <line x1='1668' y1='0' x2='1668' y2='1848' />
+    <line x1='1676' y1='0' x2='1676' y2='1848' />
+    <line x1='1685' y1='0' x2='1685' y2='1848' />
+    <line x1='1693' y1='0' x2='1693' y2='1848' />
+    <line x1='1701' y1='0' x2='1701' y2='1848' />
+  <line x1='1710' y1='0' x2='1710' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='1718' y1='0' x2='1718' y2='1848' />
+    <line x1='1726' y1='0' x2='1726' y2='1848' />
+    <line x1='1735' y1='0' x2='1735' y2='1848' />
+    <line x1='1743' y1='0' x2='1743' y2='1848' />
+    <line x1='1751' y1='0' x2='1751' y2='1848' />
+    <line x1='1760' y1='0' x2='1760' y2='1848' />
+    <line x1='1768' y1='0' x2='1768' y2='1848' />
+    <line x1='1776' y1='0' x2='1776' y2='1848' />
+    <line x1='1785' y1='0' x2='1785' y2='1848' />
+    <line x1='1793' y1='0' x2='1793' y2='1848' />
+    <line x1='1801' y1='0' x2='1801' y2='1848' />
+  <line x1='1810' y1='0' x2='1810' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='1818' y1='0' x2='1818' y2='1848' />
+    <line x1='1826' y1='0' x2='1826' y2='1848' />
+    <line x1='1835' y1='0' x2='1835' y2='1848' />
+    <line x1='1843' y1='0' x2='1843' y2='1848' />
+    <line x1='1851' y1='0' x2='1851' y2='1848' />
+    <line x1='1860' y1='0' x2='1860' y2='1848' />
+    <line x1='1868' y1='0' x2='1868' y2='1848' />
+    <line x1='1876' y1='0' x2='1876' y2='1848' />
+    <line x1='1885' y1='0' x2='1885' y2='1848' />
+    <line x1='1893' y1='0' x2='1893' y2='1848' />
+    <line x1='1901' y1='0' x2='1901' y2='1848' />
+  <line x1='1910' y1='0' x2='1910' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='1918' y1='0' x2='1918' y2='1848' />
+    <line x1='1926' y1='0' x2='1926' y2='1848' />
+    <line x1='1935' y1='0' x2='1935' y2='1848' />
+    <line x1='1943' y1='0' x2='1943' y2='1848' />
+    <line x1='1951' y1='0' x2='1951' y2='1848' />
+    <line x1='1960' y1='0' x2='1960' y2='1848' />
+    <line x1='1968' y1='0' x2='1968' y2='1848' />
+    <line x1='1976' y1='0' x2='1976' y2='1848' />
+    <line x1='1985' y1='0' x2='1985' y2='1848' />
+    <line x1='1993' y1='0' x2='1993' y2='1848' />
+    <line x1='2001' y1='0' x2='2001' y2='1848' />
+  <line x1='2010' y1='0' x2='2010' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='2018' y1='0' x2='2018' y2='1848' />
+    <line x1='2026' y1='0' x2='2026' y2='1848' />
+    <line x1='2035' y1='0' x2='2035' y2='1848' />
+    <line x1='2043' y1='0' x2='2043' y2='1848' />
+    <line x1='2051' y1='0' x2='2051' y2='1848' />
+    <line x1='2060' y1='0' x2='2060' y2='1848' />
+    <line x1='2068' y1='0' x2='2068' y2='1848' />
+    <line x1='2076' y1='0' x2='2076' y2='1848' />
+    <line x1='2085' y1='0' x2='2085' y2='1848' />
+    <line x1='2093' y1='0' x2='2093' y2='1848' />
+    <line x1='2101' y1='0' x2='2101' y2='1848' />
+  <line x1='2110' y1='0' x2='2110' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='2118' y1='0' x2='2118' y2='1848' />
+    <line x1='2126' y1='0' x2='2126' y2='1848' />
+    <line x1='2135' y1='0' x2='2135' y2='1848' />
+    <line x1='2143' y1='0' x2='2143' y2='1848' />
+    <line x1='2151' y1='0' x2='2151' y2='1848' />
+    <line x1='2160' y1='0' x2='2160' y2='1848' />
+    <line x1='2168' y1='0' x2='2168' y2='1848' />
+    <line x1='2176' y1='0' x2='2176' y2='1848' />
+    <line x1='2185' y1='0' x2='2185' y2='1848' />
+    <line x1='2193' y1='0' x2='2193' y2='1848' />
+    <line x1='2201' y1='0' x2='2201' y2='1848' />
+  <line x1='2210' y1='0' x2='2210' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='2218' y1='0' x2='2218' y2='1848' />
+    <line x1='2226' y1='0' x2='2226' y2='1848' />
+    <line x1='2235' y1='0' x2='2235' y2='1848' />
+    <line x1='2243' y1='0' x2='2243' y2='1848' />
+    <line x1='2251' y1='0' x2='2251' y2='1848' />
+    <line x1='2260' y1='0' x2='2260' y2='1848' />
+    <line x1='2268' y1='0' x2='2268' y2='1848' />
+    <line x1='2276' y1='0' x2='2276' y2='1848' />
+    <line x1='2285' y1='0' x2='2285' y2='1848' />
+    <line x1='2293' y1='0' x2='2293' y2='1848' />
+    <line x1='2301' y1='0' x2='2301' y2='1848' />
+  <line x1='2310' y1='0' x2='2310' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='2318' y1='0' x2='2318' y2='1848' />
+    <line x1='2326' y1='0' x2='2326' y2='1848' />
+    <line x1='2335' y1='0' x2='2335' y2='1848' />
+    <line x1='2343' y1='0' x2='2343' y2='1848' />
+    <line x1='2351' y1='0' x2='2351' y2='1848' />
+    <line x1='2360' y1='0' x2='2360' y2='1848' />
+    <line x1='2368' y1='0' x2='2368' y2='1848' />
+    <line x1='2376' y1='0' x2='2376' y2='1848' />
+    <line x1='2385' y1='0' x2='2385' y2='1848' />
+    <line x1='2393' y1='0' x2='2393' y2='1848' />
+    <line x1='2401' y1='0' x2='2401' y2='1848' />
+  <line x1='2410' y1='0' x2='2410' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='2418' y1='0' x2='2418' y2='1848' />
+    <line x1='2426' y1='0' x2='2426' y2='1848' />
+    <line x1='2435' y1='0' x2='2435' y2='1848' />
+    <line x1='2443' y1='0' x2='2443' y2='1848' />
+    <line x1='2451' y1='0' x2='2451' y2='1848' />
+    <line x1='2460' y1='0' x2='2460' y2='1848' />
+    <line x1='2468' y1='0' x2='2468' y2='1848' />
+    <line x1='2476' y1='0' x2='2476' y2='1848' />
+    <line x1='2485' y1='0' x2='2485' y2='1848' />
+    <line x1='2493' y1='0' x2='2493' y2='1848' />
+    <line x1='2501' y1='0' x2='2501' y2='1848' />
+  <line x1='2510' y1='0' x2='2510' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+    <line x1='2518' y1='0' x2='2518' y2='1848' />
+    <line x1='2526' y1='0' x2='2526' y2='1848' />
+    <line x1='2535' y1='0' x2='2535' y2='1848' />
+    <line x1='2543' y1='0' x2='2543' y2='1848' />
+    <line x1='2551' y1='0' x2='2551' y2='1848' />
+    <line x1='2560' y1='0' x2='2560' y2='1848' />
+    <line x1='2568' y1='0' x2='2568' y2='1848' />
+    <line x1='2576' y1='0' x2='2576' y2='1848' />
+    <line x1='2585' y1='0' x2='2585' y2='1848' />
+    <line x1='2593' y1='0' x2='2593' y2='1848' />
+    <line x1='2601' y1='0' x2='2601' y2='1848' />
+  <line x1='2610' y1='0' x2='2610' y2='1848' stroke-width='2' stroke='#e1e1e1' />
+</g>
+
+<g inkscape:label='Domains' inkscape:groupmode='layer' id='layer_domains' >
+</g>
+
+<g inkscape:label='Connectors' inkscape:groupmode='layer' id='layer_connectors'
+style='opacity:0.6;' >
+  <line x1='926' y1='939' x2='926' y2='91' stroke='#000000' stroke-width='2' stroke-dasharray='2,2' marker-start='url(#__connector_0)' />
+  <line x1='1194' y1='939' x2='1194' y2='193' stroke='#000000' stroke-width='1' stroke-dasharray='1,1' marker-start='url(#__connector_1)' />
+  <line x1='1548' y1='939' x2='1548' y2='227' stroke='#000000' stroke-width='2' stroke-dasharray='2,2' marker-start='url(#__connector_2)' />
+  <line x1='1878' y1='1449' x2='1878' y2='941' stroke='#000000' stroke-width='1' stroke-dasharray='1,1' marker-start='url(#__connector_3)' />
+  <line x1='2139' y1='1449' x2='2139' y2='499' stroke='#000000' stroke-width='2' stroke-dasharray='2,2' marker-start='url(#__connector_4)' />
+  <line x1='693' y1='1653' x2='693' y2='941' stroke='#000000' stroke-width='1' stroke-dasharray='1,1' marker-start='url(#__connector_5)' />
+  <line x1='643' y1='1755' x2='643' y2='941' stroke='#000000' stroke-width='1' stroke-dasharray='1,1' marker-start='url(#__connector_6)' />
+</g>
+
+<g inkscape:label='Lines' inkscape:groupmode='layer' id='layer_lines'
+ style='fill:none;stroke-width:4;' >
+  <path id='__line_Ututo-e' d='M 1076 91 C 1113.5,91 1088.5,125 1126,125 L 1126 125 L 1935 125' stroke='#d30110' style='stroke-width:4;' marker-end='url(#__stop_Ututo-e)' />
+  <path id='__line_Ututo' d='M 785 91 L 1935 91' stroke='#ba3232' style='stroke-width:4;' marker-end='url(#__stop_Ututo)' />
+  <path id='__line_GoboLinux' d='M 1045 193 L 2511 193' stroke='#B0E0F0' style='stroke-width:4;' />
+  <path id='__line_Exherbo' d='M 1548 227 L 2511 227' stroke='#006600' style='stroke-width:4;' />
+  <path id='__line_Jollix' d='M 822 941 C 984.75,941 876.25,295 1039,295 L 1039 295 L 1146 295' stroke='#ffee55' style='stroke-width:4;' marker-end='url(#__stop_Jollix)' />
+  <path id='__line_Adélie__Linux__(I)' d='M 848 941 C 1007,941 901,329 1060,329 L 1060 329 L 1560 329' stroke='#334466' style='stroke-width:4;' marker-end='url(#__stop_Adélie__Linux__(I))' />
+  <path id='__line_Knopperdisk' d='M 970 941 C 1124.5,941 1021.5,363 1176,363 L 1176 363 L 1431 363' stroke='#06C000' style='stroke-width:4;' marker-end='url(#__stop_Knopperdisk)' />
+  <path id='__line_Litrix' d='M 990 941 C 1140,941 1040,397 1190,397 L 1190 397 L 1904 397' stroke='#ff0000' style='stroke-width:4;' marker-end='url(#__stop_Litrix)' />
+  <path id='__line_epiOS' d='M 1033 941 C 1177.75,941 1081.25,431 1226,431 L 1226 431 L 1485 431' stroke='#2181B0' style='stroke-width:4;' marker-end='url(#__stop_epiOS)' />
+  <path id='__line_Spike' d='M 2089 465 C 2126.5,465 2101.5,499 2139,499 L 2139 499 L 2338 499' stroke='#000000' style='stroke-width:4;' marker-end='url(#__stop_Spike)' />
+  <path id='__line_RR4' d='M 1098 941 C 1238.25,941 1144.75,465 1285,465 L 1285 465 L 2511 465' stroke='#e9b689' style='stroke-width:4;' />
+  <path id='__line_Kororaa' d='M 1124 941 C 1259,941 1169,499 1304,499 L 1304 499 L 1494 499' stroke='#706f7f' style='stroke-width:4;' marker-end='url(#__stop_Kororaa)' />
+  <path id='__line_Calculate' d='M 1279 941 C 1408.75,941 1322.25,533 1452,533 L 1452 533 L 2511 533' stroke='#faa61a' style='stroke-width:4;' />
+  <path id='__line_SystemRescueCD' d='M 1361 941 C 1484.75,941 1402.25,567 1526,567 L 1526 567 L 2511 567' stroke='#508fee' style='stroke-width:4;' />
+  <path id='__line_GaryOS' d='M 2070 635 C 2107.5,635 2082.5,601 2120,601 L 2120 601 L 2511 601' stroke='#333333' style='stroke-width:4;' />
+  <path id='__line_VLOS' d='M 1751 635 C 1788.5,635 1763.5,669 1801,669 L 1801 669 L 2001 669' stroke='#718969' style='stroke-width:4;' marker-end='url(#__stop_VLOS)' />
+  <path id='__line_Funtoo' d='M 1426 941 C 1538.5,941 1463.5,635 1576,635 L 1576 635 L 2511 635' stroke='#333399' style='stroke-width:4;' />
+  <path id='__line_Fireball' d='M 1493 941 C 1592,941 1526,703 1625,703 L 1625 703 L 2227 703' stroke='#FF39C0' style='stroke-width:4;' marker-end='url(#__stop_Fireball)' />
+  <path id='__line_Liberté' d='M 1622 941 C 1713.5,941 1652.5,737 1744,737 L 1744 737 L 2101 737' stroke='#114488' style='stroke-width:4;' marker-end='url(#__stop_Liberté)' />
+  <path id='__line_AnikOS' d='M 1737 941 C 1820.25,941 1764.75,771 1848,771 L 1848 771 L 2511 771' stroke='#333333' style='stroke-width:4;' />
+  <path id='__line_Securix' d='M 1774 941 C 1849,941 1799,805 1874,805 L 1874 805 L 2225 805' stroke='#C0FF39' style='stroke-width:4;' marker-end='url(#__stop_Securix)' />
+  <path id='__line_Porteus__Kiosk' d='M 1874 941 C 1938.5,941 1895.5,839 1960,839 L 1960 839 L 2511 839' stroke='#9911FF' style='stroke-width:4;' />
+  <path id='__line_Adélie__Linux' d='M 2299 941 C 2351.5,941 2316.5,873 2369,873 L 2369 873 L 2511 873' stroke='#333333' style='stroke-width:4;' />
+  <path id='__line_CloverOS' d='M 2402 941 C 2439.5,941 2414.5,907 2452,907 L 2452 907 L 2511 907' stroke='#3333FF' style='stroke-width:4;' />
+  <path id='__line_Gentoox' d='M 809 941 C 971.75,941 863.25,1587 1026,1587 L 1026 1587 L 1610 1587' stroke='#0050ff' style='stroke-width:4;' marker-end='url(#__stop_Gentoox)' />
+  <path id='__line_Argent' d='M 2335 941 C 2372.5,941 2347.5,975 2385,975 L 2385 975 L 2511 975' stroke='#994411' style='stroke-width:4;' />
+  <path id='__line_Kogaion' d='M 2131 941 C 2183.5,941 2148.5,1009 2201,1009 L 2201 1009 L 2511 1009' stroke='#EE4444' style='stroke-width:4;' />
+  <path id='__line_exGENT' d='M 1801 941 C 1865.5,941 1822.5,1043 1887,1043 L 1887 1043 L 2511 1043' stroke='#11EE66' style='stroke-width:4;' />
+  <path id='__line_Zentoo' d='M 1764 941 C 1839,941 1789,1077 1864,1077 L 1864 1077 L 2511 1077' stroke='#A0A000' style='stroke-width:4;' />
+  <path id='__line_PixieLive' d='M 1663 941 C 1746.25,941 1690.75,1111 1774,1111 L 1774 1111 L 2094 1111' stroke='#39C0FF' style='stroke-width:4;' marker-end='url(#__stop_PixieLive)' />
+  <path id='__line_CoreOS' d='M 2035 1179 C 2072.5,1179 2047.5,1145 2085,1145 L 2085 1145 L 2511 1145' stroke='#419EDA' style='stroke-width:4;' />
+  <path id='__line_Google__Chrome__OS' d='M 1718 1179 C 1718,1179 1718,1213 1718,1213 L 1718 1213 L 2511 1213' stroke='#224488' style='stroke-width:4;' />
+  <path id='__line_Chromium__OS' d='M 1586 941 C 1685,941 1619,1179 1718,1179 L 1718 1179 L 2511 1179' stroke='#224488' style='stroke-width:4;' />
+  <path id='__line_Engine__Yard__Gentoo' d='M 1460 941 C 1572.5,941 1497.5,1247 1610,1247 L 1610 1247 L 2511 1247' stroke='#FF3333' style='stroke-width:4;' />
+  <path id='__line_Tin__Hat__Linux' d='M 1409 941 C 1527.5,941 1448.5,1281 1567,1281 L 1567 1281 L 2025 1281' stroke='#929292' style='stroke-width:4;' marker-end='url(#__stop_Tin__Hat__Linux)' />
+  <path id='__line_Toorox' d='M 1335 941 C 1458.75,941 1376.25,1315 1500,1315 L 1500 1315 L 2010 1315' stroke='#333333' style='stroke-width:4;' marker-end='url(#__stop_Toorox)' />
+  <path id='__line_Papug' d='M 1220 941 C 1349.75,941 1263.25,1349 1393,1349 L 1393 1349 L 2001 1349' stroke='#0082ff' style='stroke-width:4;' marker-end='url(#__stop_Papug)' />
+  <path id='__line_Bintoo' d='M 1123 941 C 1258,941 1168,1383 1303,1383 L 1303 1383 L 1410 1383' stroke='#89c8e9' style='stroke-width:4;' marker-end='url(#__stop_Bintoo)' />
+  <path id='__line_Pardus' d='M 1056 941 C 1196.25,941 1102.75,1417 1243,1417 L 1243 1417 L 2072 1417' stroke='#FDB500' style='stroke-width:4;' marker-end='url(#__stop_Pardus)' />
+  <path id='__line_Pentoo' d='M 1025 941 C 1169.75,941 1073.25,1451 1218,1451 L 1218 1451 L 2511 1451' stroke='#000100' style='stroke-width:4;' />
+  <path id='__line_VidaLinux' d='M 985 941 C 1135,941 1035,1485 1185,1485 L 1185 1485 L 1701 1485' stroke='#718969' style='stroke-width:4;' marker-end='url(#__stop_VidaLinux)' />
+  <path id='__line_Navyn__OS' d='M 950 941 C 1104.5,941 1001.5,1519 1156,1519 L 1156 1519 L 1213 1519' stroke='#224488' style='stroke-width:4;' marker-end='url(#__stop_Navyn__OS)' />
+  <path id='__line_Zynot' d='M 848 941 C 1007,941 901,1553 1060,1553 L 1060 1553 L 1160 1553' stroke='#114488' style='stroke-width:4;' marker-end='url(#__stop_Zynot)' />
+  <path id='__line_Enoch' d='M 635 941 L 2511 941' stroke='#a0a0f0' style='stroke-width:4;' />
+  <path id='__line_FreeBSD' d='M 93 1655 L 2511 1655' stroke='#ff0000' style='stroke-width:4;' />
+  <path id='__line_Stampede' d='M 451 1723 C 488.5,1723 463.5,1757 501,1757 L 501 1757 L 926 1757' stroke='#866846' style='stroke-width:4;' marker-end='url(#__stop_Stampede)' />
+  <path id='__line_Slackware' d='M 64 1723 L 2511 1723' stroke='#000' style='stroke-width:4;' />
+</g>
+
+<g inkscape:label='Dots' inkscape:groupmode='layer' id='layer_dots'
+ style='stroke:none;' >
+  <circle id='__dot_Ututo-e' cx='1126' cy='125' r='7' fill='#d30110' stroke='none' />
+  <circle id='__dot_Ututo' cx='785' cy='91' r='7' fill='#ba3232' stroke='none' />
+    <circle cx='1251' cy='91' r='5' fill='#ba3232' stroke='none' />
+  <circle id='__dot_GoboLinux' cx='1045' cy='193' r='7' fill='#B0E0F0' stroke='none' />
+  <circle id='__dot_Exherbo' cx='1548' cy='227' r='7' fill='#006600' stroke='none' />
+  <circle id='__dot_Jollix' cx='1039' cy='295' r='7' fill='#ffee55' stroke='none' />
+  <circle id='__dot_Adélie__Linux__(I)' cx='1060' cy='329' r='7' fill='#334466' stroke='none' />
+  <circle id='__dot_Knopperdisk' cx='1176' cy='363' r='7' fill='#06C000' stroke='none' />
+  <circle id='__dot_Litrix' cx='1190' cy='397' r='7' fill='#ff0000' stroke='none' />
+  <circle id='__dot_epiOS' cx='1226' cy='431' r='7' fill='#2181B0' stroke='none' />
+  <circle id='__dot_Spike' cx='2139' cy='499' r='7' fill='#000000' stroke='none' />
+  <circle id='__dot_RR4' cx='1285' cy='465' r='7' fill='#e9b689' stroke='none' />
+    <circle cx='1372' cy='465' r='5' fill='#e9b689' stroke='none' />
+  <circle id='__dot_Kororaa' cx='1304' cy='499' r='7' fill='#706f7f' stroke='none' />
+  <circle id='__dot_Calculate' cx='1452' cy='533' r='7' fill='#faa61a' stroke='none' />
+  <circle id='__dot_SystemRescueCD' cx='1526' cy='567' r='7' fill='#508fee' stroke='none' />
+  <circle id='__dot_GaryOS' cx='2120' cy='601' r='7' fill='#333333' stroke='none' />
+  <circle id='__dot_VLOS' cx='1801' cy='669' r='7' fill='#718969' stroke='none' />
+  <circle id='__dot_Funtoo' cx='1576' cy='635' r='7' fill='#333399' stroke='none' />
+  <circle id='__dot_Fireball' cx='1625' cy='703' r='7' fill='#FF39C0' stroke='none' />
+  <circle id='__dot_Liberté' cx='1744' cy='737' r='7' fill='#114488' stroke='none' />
+  <circle id='__dot_AnikOS' cx='1848' cy='771' r='7' fill='#333333' stroke='none' />
+  <circle id='__dot_Securix' cx='1874' cy='805' r='7' fill='#C0FF39' stroke='none' />
+  <circle id='__dot_Porteus__Kiosk' cx='1960' cy='839' r='7' fill='#9911FF' stroke='none' />
+  <circle id='__dot_Adélie__Linux' cx='2369' cy='873' r='7' fill='#333333' stroke='none' />
+  <circle id='__dot_CloverOS' cx='2452' cy='907' r='7' fill='#3333FF' stroke='none' />
+  <circle id='__dot_Gentoox' cx='1026' cy='1587' r='7' fill='#0050ff' stroke='none' />
+  <circle id='__dot_Argent' cx='2385' cy='975' r='7' fill='#994411' stroke='none' />
+  <circle id='__dot_Kogaion' cx='2201' cy='1009' r='7' fill='#EE4444' stroke='none' />
+  <circle id='__dot_exGENT' cx='1887' cy='1043' r='7' fill='#11EE66' stroke='none' />
+  <circle id='__dot_Zentoo' cx='1864' cy='1077' r='7' fill='#A0A000' stroke='none' />
+  <circle id='__dot_PixieLive' cx='1774' cy='1111' r='7' fill='#39C0FF' stroke='none' />
+  <circle id='__dot_CoreOS' cx='2085' cy='1145' r='7' fill='#419EDA' stroke='none' />
+  <circle id='__dot_Google__Chrome__OS' cx='1718' cy='1213' r='7' fill='#224488' stroke='none' />
+  <circle id='__dot_Chromium__OS' cx='1718' cy='1179' r='7' fill='#224488' stroke='none' />
+  <circle id='__dot_Engine__Yard__Gentoo' cx='1610' cy='1247' r='7' fill='#FF3333' stroke='none' />
+  <circle id='__dot_Tin__Hat__Linux' cx='1567' cy='1281' r='7' fill='#929292' stroke='none' />
+  <circle id='__dot_Toorox' cx='1500' cy='1315' r='7' fill='#333333' stroke='none' />
+  <circle id='__dot_Papug' cx='1393' cy='1349' r='7' fill='#0082ff' stroke='none' />
+  <circle id='__dot_Bintoo' cx='1303' cy='1383' r='7' fill='#89c8e9' stroke='none' />
+  <circle id='__dot_Pardus' cx='1243' cy='1417' r='7' fill='#FDB500' stroke='none' />
+  <circle id='__dot_Pentoo' cx='1218' cy='1451' r='7' fill='#000100' stroke='none' />
+  <circle id='__dot_VidaLinux' cx='1185' cy='1485' r='7' fill='#718969' stroke='none' />
+    <circle cx='1278' cy='1485' r='5' fill='#718969' stroke='none' />
+  <circle id='__dot_Navyn__OS' cx='1156' cy='1519' r='7' fill='#224488' stroke='none' />
+  <circle id='__dot_Zynot' cx='1060' cy='1553' r='7' fill='#114488' stroke='none' />
+  <circle id='__dot_Enoch' cx='635' cy='941' r='7' fill='#a0a0f0' stroke='none' />
+    <circle cx='701' cy='941' r='5' fill='#a0a0f0' stroke='none' />
+    <circle cx='934' cy='941' r='5' fill='#a0a0f0' stroke='none' />
+  <circle id='__dot_FreeBSD' cx='93' cy='1655' r='7' fill='#ff0000' stroke='none' />
+  <circle id='__dot_Stampede' cx='501' cy='1757' r='7' fill='#866846' stroke='none' />
+  <circle id='__dot_Slackware' cx='64' cy='1723' r='7' fill='#000' stroke='none' />
+</g>
+
+<g inkscape:label='Icons' inkscape:groupmode='layer' id='layer_icons'>
+</g>
+
+<g inkscape:label='Labels' inkscape:groupmode='layer' id='layer_labels' 
+ style='font-size:22px;stroke:none;fill:#000;font-family:Liberation Sans, Arial, Helvetica;-inkscape-font-specification:Liberation Sans, Arial, Helvetica;' >
+  <rect x='1130' y='98' width='78' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://www.ututo.org/'><text x='1133' y='117'  >Ututo-e</text></a>
+  <rect x='789' y='64' width='56' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://www.ututo.org/'><text x='792' y='83'  >Ututo</text></a>
+    <rect x='1253' y='64' width='96' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+    <a xlink:href='http://www.ututo.org/'><text x='1256' y='83' >Ututo XS</text></a>
+  <rect x='1049' y='166' width='116' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://gobolinux.org/'><text x='1052' y='185'  >GoboLinux</text></a>
+  <rect x='1552' y='200' width='90' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://exherbo.org/'><text x='1555' y='219'  >Exherbo</text></a>
+  <rect x='1043' y='268' width='54' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://jollix.berlios.de/de/'><text x='1046' y='287'  >Jollix</text></a>
+  <rect x='1064' y='302' width='178' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href=''><text x='1067' y='321'  >Adélie Linux (I)</text></a>
+  <rect x='1180' y='336' width='135' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://knopperdisk.knopper.tk/'><text x='1183' y='355'  >Knopperdisk</text></a>
+  <rect x='1194' y='370' width='51' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://litrixlinux.org'><text x='1197' y='389'  >Litrix</text></a>
+  <rect x='1230' y='404' width='66' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://linux.wikia.com/wiki/EpiOS'><text x='1233' y='423'  >epiOS</text></a>
+  <rect x='2143' y='472' width='60' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://www.spike-pentesting.org'><text x='2146' y='491'  >Spike</text></a>
+  <rect x='1289' y='438' width='48' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://sabayonlinux.org/'><text x='1292' y='457'  >RR4</text></a>
+    <rect x='1374' y='438' width='95' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+    <a xlink:href='http://sabayonlinux.org/'><text x='1377' y='457' >Sabayon</text></a>
+  <rect x='1308' y='472' width='87' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://en.wikipedia.org/wiki/Kororaa'><text x='1311' y='491'  >Kororaa</text></a>
+  <rect x='1456' y='506' width='101' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://www.calculate-linux.org/'><text x='1459' y='525'  >Calculate</text></a>
+  <rect x='1530' y='540' width='194' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://www.sysresccd.org/'><text x='1533' y='559'  >SystemRescueCD</text></a>
+  <rect x='2124' y='574' width='84' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='https://github.com/garybgenett/gary-os'><text x='2127' y='593'  >GaryOS</text></a>
+  <rect x='1805' y='642' width='62' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://os.vidalinux.org/'><text x='1808' y='661'  >VLOS</text></a>
+  <rect x='1580' y='608' width='74' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://www.funtoo.org/'><text x='1583' y='627'  >Funtoo</text></a>
+  <rect x='1629' y='676' width='80' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://fireballiso.sourceforge.net/'><text x='1632' y='695'  >Fireball</text></a>
+  <rect x='1748' y='710' width='87' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://dee.su/liberte'><text x='1751' y='729'  >Liberté</text></a>
+  <rect x='1852' y='744' width='80' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://www.anikos.org/'><text x='1855' y='763'  >AnikOS</text></a>
+  <rect x='1878' y='778' width='81' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='https://www.securix.org/'><text x='1881' y='797'  >Securix</text></a>
+  <rect x='1964' y='812' width='149' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://porteus-kiosk.org/'><text x='1967' y='831'  >Porteus Kiosk</text></a>
+  <rect x='2373' y='846' width='147' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://www.adelielinux.org/'><text x='2376' y='865'  >Adélie Linux</text></a>
+  <rect x='2456' y='880' width='103' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='https://gitgud.io/cloveros/cloveros'><text x='2459' y='899'  >CloverOS</text></a>
+  <rect x='1030' y='1560' width='89' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href=''><text x='1033' y='1579'  >Gentoox</text></a>
+  <rect x='2389' y='948' width='71' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='https://rogentos.ro/'><text x='2392' y='967'  >Argent</text></a>
+  <rect x='2205' y='982' width='90' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='https://rogentos.ro/'><text x='2208' y='1001'  >Kogaion</text></a>
+  <rect x='1891' y='1016' width='89' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://exgent.exton.net/'><text x='1894' y='1035'  >exGENT</text></a>
+  <rect x='1868' y='1050' width='74' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://www.zentoo.org'><text x='1871' y='1069'  >Zentoo</text></a>
+  <rect x='1778' y='1084' width='98' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://pixielive.org/dotclear/index.php?'><text x='1781' y='1103'  >PixieLive</text></a>
+  <rect x='2089' y='1118' width='86' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='https://coreos.com/'><text x='2092' y='1137'  >CoreOS</text></a>
+  <rect x='1722' y='1186' width='212' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://dev.chromium.org/chromium-os'><text x='1725' y='1205'  >Google Chrome OS</text></a>
+  <rect x='1722' y='1152' width='151' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://dev.chromium.org/chromium-os'><text x='1725' y='1171'  >Chromium OS</text></a>
+  <rect x='1614' y='1220' width='221' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='https://www.engineyard.com/'><text x='1617' y='1239'  >Engine Yard Gentoo</text></a>
+  <rect x='1571' y='1254' width='144' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://opensource.dyc.edu/tinhat'><text x='1574' y='1273'  >Tin Hat Linux</text></a>
+  <rect x='1504' y='1288' width='74' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://toorox.de/'><text x='1507' y='1307'  >Toorox</text></a>
+  <rect x='1397' y='1322' width='70' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://www.papuglinux.net/'><text x='1400' y='1341'  >Papug</text></a>
+  <rect x='1307' y='1356' width='69' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://bintoo.sourceforge.net/'><text x='1310' y='1375'  >Bintoo</text></a>
+  <rect x='1247' y='1390' width='77' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://www.pardus.org.tr/'><text x='1250' y='1409'  >Pardus</text></a>
+  <rect x='1222' y='1424' width='76' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://www.pentoo.ch/'><text x='1225' y='1443'  >Pentoo</text></a>
+  <rect x='1189' y='1458' width='107' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://www.vidalinux.com/'><text x='1192' y='1477'  >VidaLinux</text></a>
+    <rect x='1309' y='1458' width='62' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+    <a xlink:href='http://www.vidalinux.com/'><text x='1312' y='1477' >VLOS</text></a>
+  <rect x='1160' y='1492' width='108' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://distrowatch.com/table.php?distribution=navynos'><text x='1163' y='1511'  >Navyn OS</text></a>
+  <rect x='1064' y='1526' width='58' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href=''><text x='1067' y='1545'  >Zynot</text></a>
+  <rect x='639' y='914' width='68' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://www.gentoo.org/'><text x='642' y='933'  >Enoch</text></a>
+    <rect x='720' y='914' width='78' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+    <a xlink:href='http://www.gentoo.org/'><text x='723' y='933' >Gentoo</text></a>
+    <rect x='936' y='914' width='117' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+    <a xlink:href='http://www.gentoo.org'><text x='939' y='933' >Gentoo 1.0</text></a>
+  <rect x='97' y='1628' width='98' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='https://en.wikipedia.org/wiki/FreeBSD'><text x='100' y='1647'  >FreeBSD</text></a>
+  <rect x='505' y='1730' width='109' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://www.stampede.org/'><text x='508' y='1749'  >Stampede</text></a>
+  <rect x='68' y='1696' width='112' height='22' fill='#fff' opacity='0.6'  rx='5' ry='5' />
+  <a xlink:href='http://www.slackware.com/'><text x='71' y='1715'  >Slackware</text></a>
+</g>
+
+<g inkscape:label='Yearlines' inkscape:groupmode='layer' id='layer_yearlines' 
+ style='stroke:none;fill:url(#__yearline);' >
+  <rect x='0' y='0' rx='5' ry='5' width='2620' height='40' />
+  <rect x='0' y='1808' rx='5' ry='5' width='2620' height='40' />
+  <g style='font-size:28px;stroke:none;fill:#fff;font-family:Liberation Sans, Arial, Helvetica;-inkscape-font-specification:Liberation Sans, Arial, Helvetica;text-anchor:middle;' >
+    <text x='60' y='30'><tspan>1993</tspan></text>
+    <text x='60' y='1838'><tspan>1993</tspan></text>
+    <text x='160' y='30'><tspan>1994</tspan></text>
+    <text x='160' y='1838'><tspan>1994</tspan></text>
+    <text x='260' y='30'><tspan>1995</tspan></text>
+    <text x='260' y='1838'><tspan>1995</tspan></text>
+    <text x='360' y='30'><tspan>1996</tspan></text>
+    <text x='360' y='1838'><tspan>1996</tspan></text>
+    <text x='460' y='30'><tspan>1997</tspan></text>
+    <text x='460' y='1838'><tspan>1997</tspan></text>
+    <text x='560' y='30'><tspan>1998</tspan></text>
+    <text x='560' y='1838'><tspan>1998</tspan></text>
+    <text x='660' y='30'><tspan>1999</tspan></text>
+    <text x='660' y='1838'><tspan>1999</tspan></text>
+    <text x='760' y='30'><tspan>2000</tspan></text>
+    <text x='760' y='1838'><tspan>2000</tspan></text>
+    <text x='860' y='30'><tspan>2001</tspan></text>
+    <text x='860' y='1838'><tspan>2001</tspan></text>
+    <text x='960' y='30'><tspan>2002</tspan></text>
+    <text x='960' y='1838'><tspan>2002</tspan></text>
+    <text x='1060' y='30'><tspan>2003</tspan></text>
+    <text x='1060' y='1838'><tspan>2003</tspan></text>
+    <text x='1160' y='30'><tspan>2004</tspan></text>
+    <text x='1160' y='1838'><tspan>2004</tspan></text>
+    <text x='1260' y='30'><tspan>2005</tspan></text>
+    <text x='1260' y='1838'><tspan>2005</tspan></text>
+    <text x='1360' y='30'><tspan>2006</tspan></text>
+    <text x='1360' y='1838'><tspan>2006</tspan></text>
+    <text x='1460' y='30'><tspan>2007</tspan></text>
+    <text x='1460' y='1838'><tspan>2007</tspan></text>
+    <text x='1560' y='30'><tspan>2008</tspan></text>
+    <text x='1560' y='1838'><tspan>2008</tspan></text>
+    <text x='1660' y='30'><tspan>2009</tspan></text>
+    <text x='1660' y='1838'><tspan>2009</tspan></text>
+    <text x='1760' y='30'><tspan>2010</tspan></text>
+    <text x='1760' y='1838'><tspan>2010</tspan></text>
+    <text x='1860' y='30'><tspan>2011</tspan></text>
+    <text x='1860' y='1838'><tspan>2011</tspan></text>
+    <text x='1960' y='30'><tspan>2012</tspan></text>
+    <text x='1960' y='1838'><tspan>2012</tspan></text>
+    <text x='2060' y='30'><tspan>2013</tspan></text>
+    <text x='2060' y='1838'><tspan>2013</tspan></text>
+    <text x='2160' y='30'><tspan>2014</tspan></text>
+    <text x='2160' y='1838'><tspan>2014</tspan></text>
+    <text x='2260' y='30'><tspan>2015</tspan></text>
+    <text x='2260' y='1838'><tspan>2015</tspan></text>
+    <text x='2360' y='30'><tspan>2016</tspan></text>
+    <text x='2360' y='1838'><tspan>2016</tspan></text>
+    <text x='2460' y='30'><tspan>2017</tspan></text>
+    <text x='2460' y='1838'><tspan>2017</tspan></text>
+    <text x='2560' y='30'><tspan>2018</tspan></text>
+    <text x='2560' y='1838'><tspan>2018</tspan></text>
+  </g>
+</g>
+
+<g inkscape:label='Infobox' inkscape:groupmode='layer' id='layer_infobox'
+ style='stroke:none;fill:#000;font-family:Liberation Sans, Arial, Helvetica;-inkscape-font-specification:Liberation Sans, Arial, Helvetica;' >
+  <rect x='30' y='190' width='670' height='180' rx='10' ry='10' fill='#000' filter='url(#__infobox_shadow)' opacity='0.6' />
+  <rect x='30' y='190' width='670' height='180' rx='10' ry='10' fill='url(#__infobox_fill)' stroke='url(#__infobox_stroke)' stroke-width='2' />
+  <text x='44' y='238'><tspan style='font-size:40px;font-weight:bold;'>The Gentoo Ecosystem</tspan></text>
+  <text x='44' y='267'><tspan style='font-size:22px;'>Version 18.01</tspan></text>
+  <text x='44' y='295'><tspan style='font-size:22px;'>D. Robbins, mitzip - <tspan style='font-weight:bold'>funtoo.org</tspan>, A. K. Hüttel - <tspan style='font-weight:bold'>gentoo.org</tspan></tspan></text>
+  <text x='44' y='323'><tspan style='font-size:22px;'>Thanks A. Lundqvist, D. Rodic - <tspan style='font-weight:bold'>futurist.se/gldt</tspan> for gnuclad</tspan></text>
+  <text x='44' y='351'><tspan style='font-size:22px;'>Published under the GNU Free Documentation License</tspan></text>
+</g>
+
+<!-- BEGIN additional images -->
+
+<g inkscape:label='Included PNG Images' inkscape:groupmode='layer' id='layer_included_png'>
+</g>
+
+<g inkscape:label='Included SVG Images' inkscape:groupmode='layer' id='layer_included_svg'>
+  <g transform='translate(30,411)' >
+
+ <g id="connector legend">
+  <g>
+    <rect
+       style="fill:#ffffff;fill-opacity:0.7;fill-rule:nonzero;stroke:#6fb3f2;stroke-width:2"
+       width="359" height="69"
+       x="2" y="2" rx="9" ry="9" />
+  </g>
+  <g>
+    <line x1="20" y1="22" x2="64" y2="22"
+       style="opacity:0.6;stroke:#00f;stroke-width:1;stroke-dasharray:1, 1" />
+    <line x1="20" y1="37" x2="64" y2="37"
+       style="opacity:0.6;stroke:#00f;stroke-width:2;stroke-dasharray:2, 2" />
+    <line x1="20" y1="52" x2="64" y2="52"
+       style="opacity:0.6;stroke:#00f;stroke-width:4;stroke-dasharray:4, 4" />
+  </g>
+  <g style='font-size:12px;stroke:none;fill:#000;font-family:Liberation Sans, Arial, Helvetica;-inkscape-font-specification:Liberation Sans, Arial, Helvetica;' >
+    <text><tspan x="73" y="25.7">Influence, developer switching</tspan>
+    <tspan x="73" y="40.7">Rebasing, substantial code flow, project overtaking</tspan>
+    <tspan x="73" y="55.7">Developer &amp; code sharing, project merging</tspan></text>
+  </g>
+ </g>
+
+  </g>
+  <g transform='translate(630,191)' >
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1"
+     inkscape:cx="19.97278"
+     inkscape:cy="309.06551"
+     inkscape:window-width="1276"
+     inkscape:window-height="761"
+     inkscape:window-x="0"
+     inkscape:window-y="18"
+     showgrid="false"
+     fit-margin-top="10"
+     fit-margin-left="10"
+     fit-margin-right="10"
+     fit-margin-bottom="10"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <metadata
+     id="metadata4">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Gentoo Logo Vector</dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Matteo 'Peach' Pescarin</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:description />
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/2.5/" />
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Daniel Robbins as creator of the original logo</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/2.5/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer1"
+     inkscape:label="Logo"
+     transform="translate(-151.98946,-138.96728)">
+    <g
+       id="g955"
+       transform="matrix(0.5,0,0,0.5,57.34678,66.78899)">
+      <path
+         style="fill:url(#linearGradient3848);fill-opacity:1;fill-rule:evenodd;stroke:none"
+         d="M 200.875,16.125 C 164.49064,16.232807 135.64208,27.308416 121.84375,34.90625 81.2986,57.23184 51.08503,91.48157 41.0625,112.625 c -20.59426,43.38522 -18.71212,64.41241 3.84375,91.6875 17.11978,20.70165 79.625,53.28125 79.625,53.28125 0,0 -53.81866,47.22952 -74.6875,67 -20.86883,19.77048 -37.32736,48.31561 -26.34375,92.25 10.98359,43.93438 45.03125,59.3125 45.03125,59.3125 0,0 44.47342,26.36986 110.375,-2.1875 65.90159,-28.55735 114.78125,-59.3125 114.78125,-59.3125 0,0 97.20187,-66.43343 123.5625,-97.1875 26.36064,-30.75408 62.06914,-60.98007 45.59375,-110.40625 C 446.36835,157.6363 372.78125,91.75 372.78125,91.75 c 0,0 -73.36088,-56.09916 -126.1875,-69.84375 C 230.49542,17.717734 215.11236,16.082815 200.875,16.125 z m 26.875,151.5 c 2.48438,0 5,0.1875 7.25,0.6875 6.29066,1.39792 15.91113,6.65064 21.1875,9.71875 -2.24834,0.8834 -4.91795,1.57926 -8.09375,2.125 -8.18606,1.40672 -21.88308,-3.8654 -32.625,-11.34375 2.76198,-0.49872 7.45896,-1.1875 12.28125,-1.1875 z"
+         transform="translate(172.79487,130.04567)"
+         id="path919"
+         inkscape:connector-curvature="0" />
+      <path
+         style="fill:url(#radialGradient3845);fill-opacity:1;fill-rule:evenodd;stroke:none"
+         d="m 204.03125,25.25 c -0.87015,2.62e-4 -1.72708,0.0055 -2.59375,0.03125 -55.46717,1.64754 -91.71875,28.5625 -91.71875,28.5625 -11.53279,9.88523 -51.63269,39.26231 -60.96875,64.25 -9.40505,25.17235 -4.93544,45.60093 13.1875,58.78125 18.12294,13.18033 75.78125,37.34375 75.78125,37.34375 L 166.28125,228.5 c 0,0 -20.87656,24.71621 -42.84375,43.9375 -21.96719,19.2213 -30.44395,27.95542 -53.15625,51.15625 -13.17508,13.45848 -24.45743,27.48457 -27.59375,53.75 -2.28539,19.13924 2.30981,37.45189 15.03125,48.21875 12.72144,10.76686 30.22588,20.98342 65.1875,14.28125 40.72427,-7.80687 71.53125,-24.71875 71.53125,-24.71875 0,0 92.89963,-46.98158 142.875,-84.875 49.97538,-37.89341 100.625,-94.625 100.625,-94.625 0,0 17.53538,-11.53163 -1.5625,-46.21875 -19.54322,-35.49598 -76.94828,-85.97133 -96.71875,-100.25 C 320.19467,75.100655 258.85099,25.233484 204.03125,25.25 z M 227.75,167.625 c 2.48438,0 5,0.1875 7.25,0.6875 6.29066,1.39792 15.91113,6.65064 21.1875,9.71875 -2.24834,0.8834 -4.91795,1.57926 -8.09375,2.125 -8.18606,1.40672 -21.88308,-3.8654 -32.625,-11.34375 2.76198,-0.49872 7.45896,-1.1875 12.28125,-1.1875 z"
+         transform="translate(172.79487,130.04567)"
+         id="path2165"
+         inkscape:connector-curvature="0" />
+      <path
+         style="fill:url(#radialGradient3840);fill-opacity:0.75;fill-rule:evenodd;stroke:none"
+         d="m 215.71875,106.5625 c -20.31966,0.54918 -39.54918,20.32379 -39,36.25 0.54918,15.92622 20.875,32.96875 20.875,32.96875 0,0 31.2864,26.88422 59.84375,24.6875 28.55736,-2.19672 30.75,-19.75 30.75,-19.75 0,0 6.58709,-23.07788 -10.4375,-41.75 -17.02457,-18.6721 -41.7116,-32.95543 -62.03125,-32.40625 z M 227.75,167.625 c 2.48438,0 5,0.1875 7.25,0.6875 6.29066,1.39792 15.91113,6.65064 21.1875,9.71875 -2.24834,0.8834 -4.91795,1.57926 -8.09375,2.125 -8.18606,1.40672 -21.88308,-3.8654 -32.625,-11.34375 2.76198,-0.49872 7.45896,-1.1875 12.28125,-1.1875 z"
+         transform="translate(172.79487,130.04567)"
+         id="path2166"
+         inkscape:connector-curvature="0" />
+      <path
+         style="fill:url(#radialGradient3832);fill-opacity:0.75;fill-rule:evenodd;stroke:none"
+         d="m 224.5,126.34375 c -18.12294,0.27458 -26.37437,8.4378 -24.71875,23.0625 0.72243,6.38149 7.29895,13.56628 15.6875,19.40625 2.76198,-0.49872 7.45896,-1.1875 12.28125,-1.1875 2.48438,0 5,0.1875 7.25,0.6875 6.28265,1.39614 15.87556,6.649 21.15625,9.71875 0.007,0.004 0.0245,-0.004 0.0312,0 8.45065,-3.32036 10.77611,-9.19378 10.03125,-18.75 -0.90047,-11.55277 -24.145,-33.21209 -41.71875,-32.9375 z m 8.25,51.46875 c 1.28033,0.45954 2.54356,0.87374 3.78125,1.21875 -1.24375,-0.34576 -2.49431,-0.75712 -3.78125,-1.21875 z m 23.1875,0.3125 c -0.37866,0.14463 -0.785,0.27173 -1.1875,0.40625 0.40474,-0.13519 0.80731,-0.26122 1.1875,-0.40625 z m -7.84375,2.03125 c -0.51163,0.0879 -1.04113,0.15067 -1.59375,0.1875 0.55373,-0.0368 1.08124,-0.0994 1.59375,-0.1875 z"
+         transform="translate(172.79487,130.04567)"
+         id="path2167"
+         inkscape:connector-curvature="0" />
+      <path
+         style="fill:url(#linearGradient3141);fill-opacity:0.75;fill-rule:evenodd;stroke:none"
+         d="m 207.81825,281.09986 c 0,0 3.29507,17.57377 25.81146,33.49998 22.51638,15.92622 64.22753,31.93931 86.13869,44.64151 4.19889,2.43415 4.91042,6.04898 -2.97209,13.06009 -7.55417,6.71907 -12.48494,10.97187 -12.48494,10.97187 0,0 -63.08933,-34.93175 -79.84094,-50.68249 -27.07688,-25.45908 -16.65218,-51.49096 -16.65218,-51.49096 z"
+         id="path2168"
+         sodipodi:nodetypes="ccsscsc"
+         inkscape:connector-curvature="0" />
+      <path
+         style="fill:url(#linearGradient3143);fill-opacity:0.75;fill-rule:evenodd;stroke:none"
+         d="m 202.28984,543.29529 c 0,0 20.58737,37.55172 69.23327,37.65681 39.23215,0.0847 76.55506,-11.62851 135.09824,-41.1885 82.88906,-41.85287 146.58187,-92.16386 178.4343,-120.17204 31.85243,-28.00817 49.18028,-50.48357 49.18028,-50.48357 0,0 -18.37703,42.6967 -44.73767,67.95898 -26.36063,25.26227 -91.71304,82.92616 -154.86873,117.52449 -63.15569,34.59834 -106.15746,58.39556 -150.29852,56.23083 -41.87578,-2.05364 -61.6849,-26.57512 -70.47178,-38.10789 -8.78687,-11.53278 -11.56939,-29.41911 -11.56939,-29.41911 z"
+         id="path2169"
+         sodipodi:nodetypes="cssccccscc"
+         inkscape:connector-curvature="0" />
+      <path
+         style="fill:url(#linearGradient3145);fill-opacity:1;fill-rule:evenodd;stroke:none;filter:url(#filter3951)"
+         d="m 315.4575,562.82917 c 0,0 38.44259,-8.23772 111.48351,-48.32784 73.04093,-40.09014 103.48277,-66.84963 125.41795,-85.02452 21.93518,-18.17489 54.25353,-45.05573 64.68794,-57.68687 10.43442,-12.63113 7.49577,-21.39018 3.04751,-23.77266 -3.4232,-1.83346 -13.11663,5.8693 -18.59672,11.93117 -5.48009,6.06187 -46.59776,44.16773 -69.66332,63.9382 -23.06556,19.77047 -87.86877,71.39338 -126.86055,93.90976 -38.99177,22.51637 -89.51632,45.03276 -89.51632,45.03276 z"
+         id="path3421"
+         sodipodi:nodetypes="cczcszccc"
+         inkscape:connector-curvature="0" />
+    </g>
+  </g>
+  </g>
+</g>
+
+<!-- END additional images -->
+
+</svg>
