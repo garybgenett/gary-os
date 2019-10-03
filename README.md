@@ -52,43 +52,36 @@
 # Overview #####################################################################
 [Overview]: #overview
 
-GaryOS is an entire GNU/Linux system in a single bootable file.
+GaryOS is an entire GNU/Linux system in a single bootable file.  It is also
+a build system to produce both the bootable file and entire installations.
 
-While most boot/rescue systems use an ISO with SquashFS, GaryOS is a single
-binary file consisting of a modified Linux kernel configuration and a Funtoo
-(based on Gentoo) initramfs.  The file is generated using a customized Funtoo
-configuration with a default Grml Linux kernel configuration via the Metro
-automated build tool.
+The booted system consists of a Linux kernel and a Funtoo (based on Gentoo)
+initramfs.  It is generated using a customized Funtoo configuration with
+a modified Linux kernel configuration (based on the latest Grml default).  The
+included build system is entirely specialized for the task.  GaryOS can build
+itself from within itself.
 
-There are currently no major projects which take this same approach on
-this scale.  The result is a smaller boot/rescue file that is just as
-comprehensive, yet easier to deploy and manage.
+There are no major projects which take this same approach on this scale.  The
+result is a self-contained file that is more flexible and capable than other
+live systems.
 
-A list of the primary advantages:
+Primary features:
 
-  * Complete Funtoo system, with toolchain
-  * Entire system resides in memory; does not require media after boot
-  * Forensics mode is the default; no hard drives are mounted and swap
-    is disabled
-  * Deployment flexibility; can be seamlessly used anywhere a Linux
-    kernel is supported, such as PXE or Microsoft Windows bootloader
-  * Smaller footprint can easily fit on boot partition or USB media
-  * Does not require disposable and fragile CD/DVD media
+  * Comprehensive: complete and optimized Funtoo system with compile toolchain
+  * Invisible: resides completely in memory and does not need media after boot
+  * Safe: no hard drives are mounted and swap is disabled
+  * Flexible: can be used anywhere a Linux kernel can (USB, PXE, etc.)
+  * Portable: small footprint can easily fit on any partition
+  * Usable: upgrades are as simple as replacing the file
+  * Adaptable: supports source-based package options and custom builds
+  * Complete: bootloader and direct-to-disk install of a ready-to-use system
+  * Fast: everything lives in memory, so all operations happen very rapidly
 
-The main disadvantages:
-
-  * Requires bootable media and configured bootloader (PXE, Grub, etc.)
-  * Constrained in size; initramfs must compress to less than 500MB
-    hard-coded limit in Linux kernel
-  * Boot time can be a bit longer/slower than other "live" systems
-
-GaryOS enables you to drop a single file on any media, point
-a bootloader at it and go.  Upgrades are as simple as replacing the
-file and/or adding another bootloader entry.
-
-Rescue media is more likely to be available and up-to-date if it is
-convenient to deploy and manage, which is one of the primary aims of
-GaryOS.
+The goal of GaryOS is to provide a single, simple file which can be
+conveniently used for system rescue or installation, or as a temporary
+workstation for productivity or learning.  In parallel with this is the
+objective of maintaining a usable build system to create GaryOS or other custom
+systems.
 
 ![GaryOS CLI Screenshot](artifacts/images/screenshot_cli.png "GaryOS CLI Screenshot")
 
