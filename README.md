@@ -161,7 +161,7 @@ just as fast as other live systems, but the lack of output can be unnerving.
 Thus, the final requirement is a tad bit of patience.
 
 ## Contact & Support ###########################################################
-[Contact & Support]: #contact-support
+[Contact & Support]: #contact--support
 
 [Gary B. Genett] is the sole developer and maintainer of GaryOS.  It is
 a personal project with aspirations of recognition as an actual distribution,
@@ -193,8 +193,8 @@ with him in the Seattle area.
 
 [\_gary-os]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/_gary-os
 
-## Acknowledements & Reviews ###################################################
-[Acknowledgements & Reviews]: #acknowledgements-reviews
+## Acknowledgements & Reviews ##################################################
+[Acknowledgements & Reviews]: #acknowledgements--reviews
 
 GaryOS has maintained a steady stream of downloads since its inception in 2014.
 As of September 2019, it has maintained an average of ~90 downloads a month
