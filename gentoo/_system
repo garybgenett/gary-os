@@ -564,15 +564,15 @@ function mount_dev_dirs {
 		print_info umount
 		declare LSOF="$(
 			lsof |
-			${GREP} "${TARGET}/" |
+			${GREP} "${TARGET}" |
 			${GREP} -v "${TARGET}${GENDIR}.log$"
 		)"
 		if [[ -n ${LSOF} ]]; then
 			echo -en "\n"
-			echo -en ">>> THERE ARE STILL PROCESES IN THE CHROOT <<<\n"
+			echo -en ">>> THERE ARE STILL PROCESSES IN THE CHROOT <<<\n"
 			echo -en ">>> SKIPPING UNMOUNT <<<\n"
 			echo -en "\n"
-			echo "${LSOF}"
+			echo "${LSOF}" | ${GREP} "${TARGET}"
 			echo -en "\n"
 			mount | ${GREP} "${TARGET}"
 			echo -en "\n"
