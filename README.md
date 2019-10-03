@@ -90,46 +90,36 @@ systems.
 ## Quick Start #################################################################
 [Quick Start]: #quick-start
 
-If you just want to check it out, you can run it inside any
-virtualization program that can boot a Linux kernel directly.  On
-a GNU/Linux system with Qemu installed, this can be as trivial as:
+GaryOS releases are not stored in the Git repository, due to size.  The first
+step is to download the latest [Kernel].
 
-  * `DISPLAY=:0 qemu -m 4096 -kernel gary-os-[...].kernel`
+The simplest way to try GaryOS is using the [Qemu] virtual machine emulator,
+which runs on all major platforms.  Once installed, you can boot GaryOS
+directly using something like:
 
-To use it "for real", simply point your bootloader (such as Grub) to the
-file on disk.  In Grub, this looks like:
+  * `qemu-system-x86_64 -m 4096 -kernel [...]/gary-os-[...].kernel`
 
-  * `linux gary-os-[...].kernel`
+To use it "for real", follow the brief instructions in the [USB Drive & Grub
+Rescue] or [Windows Dual-Boot] sections, depending on whether your current
+platform is Linux or Windows.  Apple platforms are not supported.
 
-All the standard Linux kernel options/parameters are valid.  For
-example, the amount of memory Linux allocates to itself can be specified
-as usual:
+For advanced users with an existing bootloader (such as Grub), you can add an
+entry pointing to the file on disk.  In Grub, this looks something like:
 
-  * `linux gary-os-[...].kernel mem=4096m`
+  * `linux (hd0,1)/boot/gary-os-[...].kernel`
 
-A minimum of 2-3GB of RAM is required, but a minimum of 4GB is
-recommended.  There are files for both [64-bit] and [32-bit] processors,
-but only x86 platforms are supported.
+All the standard Linux kernel options/parameters are valid.  For example, the
+amount of memory Linux allocates to itself can be specified as usual:
 
-Twice during boot, at initial kernel load and initramfs extraction, it
-can appear to hang as the kernel/initramfs is extracted into memory.
-This is normal, and only takes a few moments each.
+  * `linux (hd0,1)/boot/gary-os-[...].kernel mem=8192m`
 
-Once booted, the entire system resides in memory.  It is a blank slate
-with only two daemons running (Udev and SSH).  It does not touch any
-disks or otherwise do anything you don't tell it to.
+Once booted, the entire system resides in memory, and any media used to boot it
+is no longer necessary.
 
-  * **Log in as `root` with password `gary-os`.**
+  * Log in as `root` with password `gary-os`.
 
-From there, whatever rescue/administrative work that needs to be done
-can be accomplished, including using `emerge` to install or upgrade
-packages.
-
-The in-memory filesystem is a complete Funtoo installation, and can be copied
-to a partition just like a standard `stage3` file.  GaryOS goes one step
-further, however, since a Linux kernel has already been prepared.  Simply
-configuring and installing Grub will result in a ready-to-go Funtoo
-installation.
+After use, the system may simply be powered off.  There is no need to shutdown
+GaryOS, since it will boot completely fresh from the file each time.
 
 ********************************************************************************
 
