@@ -234,6 +234,12 @@ acknowledgements you may find, including you having read this far.
 # Information ##################################################################
 [Information]: #information
 
+This collections of sections covers GaryOS and the repository in greater depth,
+and is not for the faint of heart.
+
+It is mainly here for completeness.  The most useful information is in the
+[Overview] and [Instructions] sections.
+
 ## Design ######################################################################
 [Design]: #design
 
