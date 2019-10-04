@@ -186,14 +186,13 @@ directly at: [gary-os@garybgenett.net]
 GaryOS is very flexible, and both the kernel and build system can be used for
 a wide range of applications.  Other uses of all the GaryOS tooling are
 encouraged, and the author would be glad to hear about any unique or creative
-ways they are employed.  For some ideas, check out the "[\_gary-os]" set file,
-which outlines some of the author's personal uses along with the steps used to
-test and validate GaryOS each release.
+ways they are employed.  For some ideas, check out the
+"[gentoo/sets/\_gary-os]" package set, which outlines some of the author's
+personal uses along with the steps used to test and validate GaryOS each
+release.
 
 The author will also take you out on the town if you schedule time to geek out
 with him in the Seattle area.
-
-[\_gary-os]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/_gary-os
 
 ## Acknowledgements & Reviews ##################################################
 [Acknowledgements & Reviews]: #acknowledgements--reviews
@@ -225,11 +224,12 @@ because it means somebody took the time to boot it up and play with it:
 
 [https://linux.softpedia.com/get/Linux-Distributions/GaryOS-103629.shtml](https://linux.softpedia.com/get/Linux-Distributions/GaryOS-103629.shtml)
 
-Snapshots of all discovered references to GaryOS are kept in the "[archive]"
-directory.  Please use [Contact & Support] to message the author of any other
-acknowledgements you may find, including you having read this far.
+Snapshots of all discovered references to GaryOS are kept in the
+"[artifacts/archive]" directory.  Please use [Contact & Support] to notify the
+author of any other acknowledgements you may find, including you having read
+this far.
 
-[archive]: https://github.com/garybgenett/gary-os/blob/master/artifacts/archive
+<!-- WORK: http://without-systemd.org/wiki/index.php/Linux_distributions_without_systemd/unlisted -->
 
 ## Contributing ################################################################
 [Contributing]: #contributing
@@ -492,147 +492,66 @@ configuration files will also line up with major version numbers.
 ### Structure ##################################################################
 [Structure]: #structure
 
-Here is documented the overall structure of the repository, along with
-details for the individual components.
+Here is an overview of the repository contents:
 
-Top level directory:
+| Directory / File           | Purpose
+| :---                       | :---
+| [README.md]                | This file.  All the documentation for GaryOS.
+| [LICENSE.md]               | The license GaryOS is distributed under.
+| [Makefile]                 | Primary starting point for using the build system using the `make` command.
+| [\_packages]               | Final package list, including sizes and markers for what is installed versus packaged for the build.
+| [\_commit]                 | Solely for author tracking.  Records commit IDs for each of the repositories relevant to the building of GaryOS.
+| **Key directories:**       | --
+| [linux]                    | Archive of Linux kernel configuration files.
+| [gentoo]                   | Entirety of the Funtoo configuration, including the scripts used to build and manage installations.
+| [gentoo/\_overlay]         | Funtoo overlay directory.  Used very sparingly, and mostly for fixing broken packages.
+| [scripts]                  | Ancillary scripts relevant to GaryOS, such as "[scripts/grub.sh]".
+| [artifacts]                | Storage for miscellaneous initramfs files
+| [artifacts/images]         | Icons, screenshots and the like.
+| [artifacts/archive]        | Stash space for files which don't fit elsewhere, including snapshots of [Acknowledgements & Reviews] items.
+| **Core files:**            | --
+| [.bashrc]                  | Custom Bash configuration file.  Included as an essential scripting library.
+| [scripts/grub.sh]          | Generates the Grub archive, which contains BIOS and EFI rescue bootloaders.
+| [gentoo/\_system]          | Heart and soul of the build engine.  Creates new installations, and provides maintenance and inspection tooling.
+| [gentoo/\_release]         | Does all the initramfs work, customizing and packaging the root filesystem and building the kernel.  Also performs the entire release and publishing process.
+| [gentoo/funtoo]            | Contains the commit ID that the Funtoo Portage repository should be "pinned" to.  Ties the Funtoo configuration to a particular version of the Portage tree, which ensures repeatability and stability.
+| [gentoo/funtoo.kits]       | Hackish wrapper to the `meta-repo` Portage repository, to ensure proper "pinning".  *(Needs to be incorporated into "ego" upstream.)*
+| [gentoo.config]            | Example script for post-build customization of an initramfs.
+| [gentoo/.emergent]         | Audit script which validates current Funtoo configuration against Portage tools/output.  Also extracts useful information from the `meta-repo` Portage repository.
+| [dwm]                      | Slightly modified DWM configuration file, to make `startx` more usable.
+| [gentoo/sets/gary-os]      | Package list for initramfs build.  Also contains custom keywords for tailoring the build.
+| [gentoo/sets/\_gary-os]    | Additional packages list, along with scripting instructions/commands for accomplishing various tasks and testing GaryOS.
+| **Just for fun:**          | --
+| [xclock\_size\_hack.patch] | The author wanted "[gkrellaclock]" to look more like a genuine "xclock", so he did it.  First real experience coding in C.  Created in early 2014 and still in active use.
 
-  * Distribution:
-    * [README.md](https://github.com/garybgenett/gary-os/blob/master/README.md)
-        * This file.  All the documentation for GaryOS.
-    * [LICENSE.md](https://github.com/garybgenett/gary-os/blob/master/LICENSE.md)
-        * The license GaryOS is distributed under.
-    * [images/icon.png](https://github.com/garybgenett/gary-os/blob/master/artifacts/images/icon.png)
-        * Creative "hack" to have an icon for the project.  Icons make
-          it seem like you are "for real", so I had to have one.
-    * [images/screenshot_cli.png](https://github.com/garybgenett/gary-os/blob/master/artifacts/images/screenshot_cli.png)
-        * Pretty self-explanatory.  Snapshot of what booting v1.0 looked
-          like, for promotion, reference and posterity.
-    * [images/screenshot_gui.png](https://github.com/garybgenett/gary-os/blob/master/artifacts/images/screenshot_gui.png)
-        * Also self-explanatory.  Snapshot of the what the initial X.Org
-          GUI in v2.0 looked like.
-  * Release:
-    * [_commit](https://github.com/garybgenett/gary-os/blob/master/_commit)
-        * Primarily for my tracking, records commit IDs for each of the
-          public and private repositories relevant to the building of
-          GaryOS.  Updated each release.
-    * [_config.64](https://github.com/garybgenett/gary-os/blob/master/_config.64),
-      [_config.32](https://github.com/garybgenett/gary-os/blob/master/_config.32)
-        * Linux kernel configurations used for the 64-bit and 32-bit
-          builds, respectively.  These are extracted from Grml ISOs
-          using "extract-ikconfig" in the "metro.sh" script.  Updated
-          each release.
-    * [_packages.64](https://github.com/garybgenett/gary-os/blob/master/_packages.64),
-      [_packages.32](https://github.com/garybgenett/gary-os/blob/master/_packages.32)
-        * Final package lists for the 64-bit and 32-bit builds,
-          respectively.  These are generated from the "initrd" files in
-          the "metro.sh" script.  Updated each release.
-  * Production:
-    * [.bashrc](https://github.com/garybgenett/gary-os/blob/master/.bashrc)
-        * My personal Bash configuration file, and also the scripting
-          library I use for almost all of my personal scripts.  Several
-          variables and functions are sourced from this file, and it was
-          easier to just include it into this project than to replicate
-          all of the referenced pieces.
-    * [gentoo](https://github.com/garybgenett/gary-os/blob/master/gentoo)
-        * Contains the entirety of my personal Funtoo configuration, including
-          the scripts and files I use to manage my Funtoo installations.
-    * [scripts](https://github.com/garybgenett/gary-os/blob/master/scripts)
-        * All the code used to create GaryOS lives in here.  Exported
-          from my personal scripts directory.
+[README.md]: https://github.com/garybgenett/gary-os/blob/master/README.md
+[LICENSE.md]: https://github.com/garybgenett/gary-os/blob/master/LICENSE.md
+[Makefile]: https://github.com/garybgenett/gary-os/blob/master/Makefile
+[\_packages]: https://github.com/garybgenett/gary-os/blob/master/_packages
+[\_commit]: https://github.com/garybgenett/gary-os/blob/master/_commit
 
-Scripts directory:
+[linux]: https://github.com/garybgenett/gary-os/blob/master/linux
+[gentoo]: https://github.com/garybgenett/gary-os/blob/master/gentoo
+[gentoo/\_overlay]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_overlay
+[scripts]: https://github.com/garybgenett/gary-os/blob/master/scripts
+[artifacts]: https://github.com/garybgenett/gary-os/blob/master/artifacts
+[artifacts/images]: https://github.com/garybgenett/gary-os/blob/master/artifacts/images
+[artifacts/archive]: https://github.com/garybgenett/gary-os/blob/master/artifacts/archive
 
-  * As you would expect, there are scripts in this directory:
-    * [grub.sh](https://github.com/garybgenett/gary-os/blob/master/scripts/grub.sh)
-        * Used to produce two different types of Grub images.  One is
-          for dual-booting purposes with other OSes, such as Windows,
-          and the other is to have a Grub "rescue" installation which
-          does not require access to any hard drive partitions for its
-          modules or configuration.
-        * Documented in more detail in the [Windows Dual-Boot] and [Grub
-          Rescue] sections under [Use Cases].
-        * Not critical to GaryOS as a whole.  Mainly to simplify and
-          automate the use cases mentioned.
-    * [metro.sh](https://github.com/garybgenett/gary-os/blob/master/scripts/metro.sh)
-        * In essence, this script **IS** GaryOS.
-        * Contains all of the wrapping of Metro used to create "stage3"
-          files using the Funtoo customizations below.
-        * Does the work of extracting "stage3" files and selectively
-          archiving them into "initrd" files.  The "initrd" files are
-          then compiled into the Linux kernel built inside the relevant
-          "stage3".
-        * Also houses the release process for GaryOS, which consists of
-          exporting patches from my personal repositories and
-          consolidating them into the final GaryOS repository.  It also
-          adds release "tags" and publishes GaryOS to GitHub and
-          SourceForge.
+[.bashrc]: https://github.com/garybgenett/gary-os/blob/master/.bashrc
+[scripts/grub.sh]: https://github.com/garybgenett/gary-os/blob/master/scripts/grub.sh
+[gentoo/\_system]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_system
+[gentoo/\_release]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_release
+[gentoo/funtoo]: https://github.com/garybgenett/gary-os/blob/master/gentoo/funtoo
+[gentoo/funtoo.kits]: https://github.com/garybgenett/gary-os/blob/master/gentoo/funtoo.kits
+[gentoo.config]: https://github.com/garybgenett/gary-os/blob/master/gentoo.config
+[gentoo/.emergent]: https://github.com/garybgenett/gary-os/blob/master/gentoo/.emergent
+[dwm]: https://github.com/garybgenett/gary-os/blob/master/gentoo/savedconfig/x11-wm/dwm
+[gentoo/sets/gary-os]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/gary-os
+[gentoo/sets/\_gary-os]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/_gary-os
 
-Gentoo directory and configuration:
-
-  * Scripts:
-    * [.colorize](https://github.com/garybgenett/gary-os/blob/master/gentoo/.colorize)
-        * Hackish attempt to add colorization to compile output.  It
-          works, but disrupts the sandbox environment and has caused
-          builds to break.  Not used anymore, but kept for posterity.
-    * [.emergent](https://github.com/garybgenett/gary-os/blob/master/gentoo/.emergent)
-        * Audit script which validates current Funtoo configuration against
-          Portage tools/output.  Reports back all kinds of useful information,
-          the most useful of which is a list of USE flags and variables which
-          have been added or removed upstream.
-        * Generally speaking, it is the first line of defense against
-          stale configuration options, unused/unconfigured new options
-          and configuration "snow" as a whole.
-    * [.hacks](https://github.com/garybgenett/gary-os/blob/master/gentoo/.hacks)
-        * An aptly-named script, it performs all kinds of miscellaneous
-          corrections, fixes and customizations which generally keep me
-          happy.
-  * Management:
-    * [_gentoo](https://github.com/garybgenett/gary-os/blob/master/gentoo/_gentoo)
-        * Directory of "okay" files used by ".emergent" script above.
-    * [_overlay](https://github.com/garybgenett/gary-os/blob/master/gentoo/_overlay)
-        * Funtoo "overlay" directory.  Used very sparingly, and mostly for
-          fixing broken packages.
-        * Fun side note: I wanted the "gkrellaclock" to look more like
-          a genuine "xclock", so I hacked it into one.  This was my
-          first real experience coding in C.
-  * Automation:
-    * [_system](https://github.com/garybgenett/gary-os/blob/master/gentoo/_system)
-        * This script is the workhorse of my Funtoo system, just as "metro.sh"
-          is the core driver of GaryOS.
-        * Most commonly, run without any arguments to update Portage
-          tree and pre-fetch source files.
-        * Often run with `-u` to completely update the installation,
-          based on recommendations from Funtoo documentation.
-        * Used with `-[0/12]` options for completely automated "chroot"
-          installation.
-  * Configuration:
-    * [funtoo](https://github.com/garybgenett/gary-os/blob/master/gentoo/funtoo)
-        * Contains the commit ID that the Funtoo Portage repository
-          should be "pinned" to.
-        * Ties Funtoo configuration to a particular version of the Portage
-          tree, which ensures repeatability and stability.
-    * [make.conf](https://github.com/garybgenett/gary-os/blob/master/gentoo/make.conf),
-      [package.keywords](https://github.com/garybgenett/gary-os/blob/master/gentoo/package.keywords),
-      [package.license](https://github.com/garybgenett/gary-os/blob/master/gentoo/package.license),
-      [package.mask](https://github.com/garybgenett/gary-os/blob/master/gentoo/package.mask),
-      [package.unmask](https://github.com/garybgenett/gary-os/blob/master/gentoo/package.unmask),
-      [package.use](https://github.com/garybgenett/gary-os/blob/master/gentoo/package.use)
-        * Standard Funtoo Portage configuration files, documented in `man
-          portage`.
-        * My personal configuration, most of which is carried over to
-          GaryOS.
-    * [savedconfig](https://github.com/garybgenett/gary-os/blob/master/gentoo/savedconfig)
-        * Seemingly undocumented storage area for compile-time
-          configuration files.
-        * [dwm](https://github.com/garybgenett/gary-os/blob/master/gentoo/savedconfig/x11-wm/dwm):
-          configuration for "dwm" window manager
-    * [sets](https://github.com/garybgenett/gary-os/blob/master/gentoo/sets)
-        * User-defined package "sets", also documented in `man portage`.
-        * [metro](https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/metro):
-          used to create GaryOS.
-        * [packages](https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/packages):
-          my personal list for a complete workstation installation.
+[gkrellaclock]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_overlay/x11-plugins/gkrellaclock
+[xclock\_size\_hack.patch]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_overlay/x11-plugins/gkrellaclock/files/xclock_size_hack.patch
 
 ### Tools ######################################################################
 [Tools]: #tools
