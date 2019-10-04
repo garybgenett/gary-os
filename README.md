@@ -286,35 +286,32 @@ clear structure and requirements.
 ### Goals ######################################################################
 [Goals]: #goals
 
+Here are the guiding principles that keep GaryOS going in a consistent
+direction, with a consistent purpose.
+
 Top requirements:
 
+  * All-purpose, multi-OS rescue environment, based on Funtoo
+  * Complete system, with all packages installed as they normally would be
+  * As close to default as possible, aside from "portage" package build tuning
+  * Generic 64-bit build, supporting most modern x86 platforms
   * Bootable from a single kernel file, using initramfs
-  * Based on Funtoo using "stage3" build automation
-  * Generic kernel/build configuration; should run on most modern x86
-    platforms (both 64-bit and 32-bit)
-  * Minimal customization of default installation, outside of package
-    build tuning (i.e. "portage" configuration)
-  * Make Funtoo installation trivial as a "live" media
-  * All-purpose, multi-OS rescue environment
+  * Make Funtoo installation trivial as a live media
 
 Other objectives:
 
-  * Widely deployable; support PXE and native dual-booting with other
-    popular OSes, such as Windows and Mac OS X
-  * Learning environment for those new to GNU/Linux or Funtoo
-  * Example configuration and scripts for tuning and maintaining
-    a Funtoo system
-  * Maintain DIY (Do It Yourself) approach; favor documentation and
-    instructions over helper scripts
-  * Provide upstream enhancements to "stage3" automation
+  * Support as many boot methods as possible, such as USB setup and PXE
+  * Example configuration/scripts for tuning and maintaining a Funtoo system
+  * Foster a DIY (Do It Yourself) approach through good documentation
+  * Learning environment for those new to GNU/Linux and/or Funtoo
 
 Explicit non-goals:
 
   * Growing bigger than a single kernel file
   * Customization or deep branding of overall system
-  * Development of helper scripts/commands library, or customization of
-    boot and "init" infrastructure
-  * Becoming a complete desktop environment (minimal X.Org GUI only)
+  * Development of a helper scripts/commands library
+  * Alteration of boot and "init" infrastructure
+  * Becoming a complete desktop environment
 
 ### Rationale ##################################################################
 [Rationale]: #rationale
