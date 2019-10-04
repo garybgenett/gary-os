@@ -26,7 +26,7 @@
   * [Information]
     * [Design]
         * [Goals]
-        * [Rationale]
+        * [Advantages]
         * [Caveats]
         * [History]
     * [Details]
@@ -313,92 +313,48 @@ Explicit non-goals:
   * Alteration of boot and "init" infrastructure
   * Becoming a complete desktop environment
 
-### Rationale ##################################################################
-[Rationale]: #rationale
+### Advantages #################################################################
+[Advantages]: #advantages
 
-I thought it important to document my thoughts regarding the good deal
-of focus on the "single bootable file" aspect of GaryOS as its primary
-differentiator from other "live" systems.
+The number of live systems, for everything from basic rescue to a full
+workstation, is quite staggering.  Many of them are extremely useful and very
+well-established.  So, why create another one?
 
-The number of "live" systems, for everything from basic rescue to a full
-workstation, is quite staggering.  Not all that long ago, building a new
-"live" system required quite a bit of creativity and expertise.
-Projects like KNOPPIX had provided a methodology, but the implementation
-was very specific to the project.  It wasn't until Debian created their
-Debian Live project, to automate creation of their installation media,
-that "live" technology really blossomed.  Subsequently, a number of
-projects using forks of this system emerged, including the perennially
-useful Grml.  It is much easier to create a new or forked "live" system
-today than it was a couple years ago.
+The main differentiators of GaryOS:
 
-Personally, I think the real value of GaryOS is as a bootstrap media for
-installing Funtoo which was really my original focus when exploring Metro.
-Funtoo can be installed pretty much from any system, using a "stage3" and
-"chroot".  Getting from there to a basic system ready to be booted can take
-a bit of time and effort, though, and GaryOS can be a very useful tool for
-getting to a "half-way mark" of sorts.  A functioning bootloader and kernel,
-along with a good many tools already installed, can make getting over the
-installation hump a bit easier.  I've often wondered if the lack of
-a "ready-to-go" Funtoo system has hampered growth of the user-base, as
-inexperienced users gravitate towards more ready-made and marketing-savvy
-distributions like Ubuntu.
+  1. A single kernel file is easier to manage and boot than an ISO file
+  2. It is a source-based Funtoo system, which is much more powerful than
+     binary distributions, like those based on Debian (Grml, Ubuntu, etc.)
+  3. Installation of Gentoo/Funtoo can be a bit of work, and having
+     a ready-made system can make the process much more approachable
 
-Getting back to a "single bootable file" in comparison to traditional
-ISO-based "live" systems, ISO files have a couple options for use:
+ISO files are the standard method of releasing live distributions, and they
+work quite well, overall.  There are a few options for using them:
 
-  1. Write to CD/DVD media, and boot from there
-  2. Write directly to USB media, and boot from there
-  3. Extract to USB media, and install/configure bootloader manually
-  4. Manually extract kernel, initrd and SquashFS to media, and
-     configure bootloader similarly to ISO bootloader (usually ISOLINUX)
-  5. Boot ISO file directly, using "loop" functionality of bootloader
+  1. Write directly to CD/DVD or USB media, each install or upgrade
+  2. Use a bootloader, like Grub, which supports booting ISO images
+  3. Extract the ISO contents to USB media, and configure everything manually
 
-The challenges and issues with each approach:
+They do pose some challenges, however:
 
-  1. USB drives are a much more convenient and usable boot media than
-     CDs/DVDs these days.  They are easier to carry, harder to damage
-     and more ubiquitous (modern servers and laptops often don't have
-     CD/DVD drives, but they all have USB).  CDs/DVDs are also not as
-     re-usable as USB drives.
-  2. Both the options for transferring ISO media to USB are less than
-     ideal.  This is the more convenient case, but requires you to erase
-     the rest of the contents of the drive.
-  3. This case preserves other data on the drive at the expense of
-     complexity.  In both ISO media to USB cases, upgrading the ISO to
-     a new version is not as trivial as it should be.
-  4. I personally use this method, and it works relatively well.
-     However, it took a bit of time and patience to figure out how to
-     make it work, and upgrades still take a bit of diligence each time;
-     file names and locations often change, as do boot options and other
-     key values.
-  5. Grub provides the necessary "loop" functionality, but this works by
-     creating a "fake" CD/DVD-ROM drive that the booting OS can use,
-     essentially requiring a small Grub footprint to stay in memory and
-     for the boot media to stay connected through the entirety of the
-     session.  It also requires the "live" system to support booting in
-     this manner.
+  1. CDs/DVDs are antiquated, and not as ubiquitous as USB drives
+  2. Wiping your USB drive every upgrade makes it more or less single-purpose
+  3. Booting directly from an ISO file uses an emulated CD/DVD "loop" drive
+     that the OS can use, requiring a small portion of bootloader code to stay
+     in memory and for the boot media to stay connected
+  4. Extracting everything onto a USB drive preserves other data on the drive
+     at the expense of complexity, and upgrades are not trivial
 
-The reason ISO files continue to be the standard package for "live"
-systems is capacity and convenience.  Outside of the Linux initramfs
-method employed by GaryOS, there is no better way to package an entire
-system into a single file that is ready to be booted in any number of
-ways.  As covered earlier, using a Linux initramfs limits the size of
-the system that can be packaged.  Thanks to modern compression
-algorithms, GaryOS is able to get a roughly 2GB root filesystem
-delivered.  Most of the ISO systems deliver root filesystems much larger
-than this.
+Some distributions, such as Grml, have tools that automate the process of
+extracting to USB, which makes the process much simpler.  The drawback is that
+these scripts require you to start from a Unix-like system to begin with, and
+ultimately they manage rather than remove the complexity.
 
-I personally continue to employ #4 above to keep a selection of "live"
-systems available on the boot media I carry with me everywhere.  Systems
-like Grml are still what I use when I need an immediate desktop or to
-demonstrate the power and flexibility of GNU/Linux systems.  However,
-for rescue, recovery and installation, GaryOS has become my first pick
-since it has all the tools I need configured the way I want them.  If
-I could only have one file available, it would be GaryOS, which is why
-this project exists.
-
-The reader, of course, must make up their own mind about what is best
-for them.
+The GaryOS philosophy is that no complex steps or scripting should be
+necessary.  It is a single file, and upgrades are a simple matter of replacing
+it.  Once the initial bootloader is configured, it should never need to be
+touched again.  GaryOS should be a resident on the media, and not the purpose
+of it.  No major live distribution takes this approach or makes these claims.
 
 ### Caveats ####################################################################
 [Caveats]: #caveats
