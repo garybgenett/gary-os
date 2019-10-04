@@ -27,7 +27,7 @@
     * [Design]
         * [Goals]
         * [Advantages]
-        * [Caveats]
+        * [Limitations]
         * [History]
     * [Details]
         * [Customizing]
@@ -356,79 +356,44 @@ it.  Once the initial bootloader is configured, it should never need to be
 touched again.  GaryOS should be a resident on the media, and not the purpose
 of it.  No major live distribution takes this approach or makes these claims.
 
-### Caveats ####################################################################
-[Caveats]: #caveats
+### Limitations ################################################################
+[Limitations]: #limitations
 
-Humans are not perfect, and rarely is anything we create.  I'm proud of
-this project, but also want to be clear about its shortcomings.
+Humans are not perfect, and rarely is anything we create.  While there is great
+pride in GaryOS, and the care and attention to detail which goes with it, this
+section is to be clear about its shortcomings.  The author wishes to avoid the
+appearance of ignorance or negligence.
 
-Most notable is the code I've written to produce this.  The coding style
-I use was grown organically, and is not based on any of the well-known
-syntax and style guides used by other projects.  While consistent and
-generally readable, there are a couple specific areas I'd like to
-comment on, in order to avoid the appearance of ignorance, negligence or
-just plain bad habits:
+General notes:
 
-  * Comments
-    * There are few, if any, of them.  Most of the code is pretty
-      self-explanatory, at least to me, but may not be readily
-      digestible by others without documentation of the thought-process.
-  * Columns
-    * I don't try to be POSIX or any other type of compliance when
-      scripting for fun.  Since I work on big monitors, I tend to make
-      my coding/writing terminals **HUGE**.  Reading or modifying on an
-      80x25 terminal will frustrate you as much as it does me.
-  * Tabs
-    * I use them everywhere.  This is not an issue really, except that
-      I've broken two of the ancient spacing rules:
-        1. In some places, I mix spaces and tabs intentionally
-        2. I regularly use tabs for non-leading space
-    * Changing the "tab stop" to anything other than "8" will make the
-      formatting look even more ugly than it already is.
-  * Syntax
-    * I use explicit syntax everywhere, all the time.  This keeps the
-      code consistent and therefore readable, in my humble opinion, but
-      it also adds a lot more characters.  Some say they hate it and
-      that it makes their eyes bleed.
-  * Options
-    * There really aren't any.  Most of the configurability is
-      implemented in the form of variables at the top of each script.
-      Where there are command-line options, they are rudimentary and
-      undocumented.  Someday I should add real argument processing and
-      the helpful "usage" output any reasonable user would expect.
-  * Cleverness
-    * I could use more of it.  In a couple places, I could use a lot
-      less.  I'm positive that I've taken the long route in a number of
-      cases.  There's a ton of "sed" and "piping" everywhere.  Error
-      handling is best-effort.  I probably should have done this all in
-      something more powerful, like Perl.
-  * Salesmanship
-    * I've written much prettier code that I can't or won't share, so
-      this is one of the few public examples of my work at the current
-      time.  Hopefully it doesn't turn away any potential employers.
+  * Lack of progress reporting while booting feels very unpolished
+  * Portage configuration is tuned more for the author than a general audience
 
-Another area of mention is the source code and repository management.
-The configuration and coding history for this project resides in several
-different personal repositories.  The process used to pull the
-individual commits out of each repository and consolidate them together
-into the unified one that's been made public is all documented in the
-"metro.sh" script.  As a matter of fact, the vast majority of that
-script, which began life as a simple wrapper to Metro, is now the code
-used to package and release GaryOS.  The long and short of it is that
-even minor disruptions to my personal repositories (such as a "rebase"),
-or inclusion of other components/scripts into the GaryOS repository,
-will result in a public repository that can not use the "fast-forward"
-feature of Git and requires re-cloning.  I will endeavor to avoid this,
-but the risk does exist.
+Considerations for the build system:
 
-The final concern would be supportability.  This is a mostly personal
-project that I plan to update at least twice a year, but I don't have
-a copious amount of free time with which to support and enhance this
-project.
+  * Argument processing is very rudimentary, almost archaic, and non-unique
+    environment variables are used heavily for configuration
+  * It is essentially just shell scripting, and all that comes with that
 
-Buyer beware.  You own all the pieces.
+General coding style and syntax:
 
-Other than that, GaryOS should be rock-solid.  ;^)
+  * The coding style is organic, and not based on any standard guidelines
+  * Most of the code is self-explanatory, but there are very few comments
+  * Arbitrarily wide number of columns is not POSIX, and requires big monitors
+  * Heavy use of tabs, for non-leading space and also mixed with standard
+    spaces (a "tab stop" of "8" is required for readability)
+
+Supportability:
+
+  * This is a mostly personal project which the author aspires to update at
+    least once a year, but there is not a copious amount of free time with
+    which to support and enhance this project
+  * The history for the components of this project reside in several different
+    personal repositories which are merged together into the public GaryOS Git
+    repository (this process is performed by the "[gentoo/\_release]" script),
+    meaning that even minor disruptions or inclusion of new items will result
+    in a public repository that can not use the "fast-forward" feature of Git
+    and will require re-cloning
 
 ### History ####################################################################
 [History]: #history
