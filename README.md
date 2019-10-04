@@ -31,7 +31,6 @@
         * [History]
     * [Details]
         * [Versioning]
-        * [Customizing]
         * [Structure]
         * [Tools]
         * [Similar Projects]
@@ -468,7 +467,7 @@ explanation of what all the stuff in this repository is will likely be
 beneficial to anyone curious enough to have read this far.
 
 Most of what is needed to use the contents of this repository is
-contained in the [Customizing] and [Structure] sections below.
+contained in the [Structure] section.
 
 ### Versioning #################################################################
 [Versioning]: #versioning
@@ -489,48 +488,6 @@ Major revisions to the GaryOS build system and supporting scripting and
 configuration files will also line up with major version numbers.
 
 [Semantic Versioning]: https://semver.org
-
-### Customizing ################################################################
-[Customizing]: #customizing
-
-Since these scripts and configurations were originally intended for
-strictly personal use, they have a strong bias towards my directory
-structure and processes.  They are admittedly ill-suited to ready use
-under other circumstances.  Releasing the source of GaryOS is tantamount
-to simply showing my work.
-
-That said, I am a bit of a perfectionist and want all my code to be easy
-to re-purpose, re-configure and generally support.  All of the scripts
-have been written with variables for all files/directories involved, and
-these variables are placed at the top of each script.  Pretty much
-everything that would be configurable via a command-line option is
-exposed as a variable.
-
-Here are the primary directories and what I use them for:
-
-  * `$HOME/setup/gentoo`
-    * Funtoo configuration directory.  Full contents are in the "gentoo"
-      directory in this repository.
-    * Replicated to "/etc/portage" regularly.
-  * `/.g/_data/_build`
-    * Directory for source repositories and temporary builds.  This is
-      ultimately a disposable working directory.
-  * `/.g/_data/_builds`
-    * Output of builds which I intend to keep/track.
-  * `/.g/_data/_target/iso`
-    * Where I keep all downloaded binary files.  Typically ISOs, there
-      are also miscellaneous files, like "stage3/portage" archives, and
-      documentation.
-  * `/.g/_data/zactive`
-    * My main data directory.  Most everything I create lives here.
-  * `/.g/_toor`
-    * Free partition, used for "chroot" builds and testing.
-
-This is far from comprehensive, but should help map things out for
-anyone with enough free time and curiosity.
-
-In a perfect world, this section could be removed after the scripts were
-cleaned up and documented properly.
 
 ### Structure ##################################################################
 [Structure]: #structure
