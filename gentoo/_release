@@ -18,8 +18,6 @@ export _GINST="${TARGET/%\/}/.install"
 export _GPACK=".packages.txt"
 export _RPACK="_packages"
 
-export _GREPO="/.g/_data/_builds/.${_TITLE}/.${_TITLE}"
-
 ########################################
 
 #>>> if [[ ${TARGET} == / ]]; then
@@ -68,9 +66,10 @@ declare _SFCODE="ssh://${_LOGIN}@git.code.sf.net/p/${_TITLE}/code"
 declare _SFFILE="${_LOGIN}@web.sourceforge.net:/home/frs/project/${_TITLE}"
 declare _SFRSSH="${_LOGIN},${_TITLE}@shell.sourceforge.net create"
 
+declare _G_REPO="/.g/_data/_builds/.${_TITLE}/.${_TITLE}"
 declare _DOCDIR="/.g/_data/zactive/coding/${_TITLE}"
 declare _SAVDIR="/.g/_data/_builds/_${_TITLE}"
-declare _RELDIR="$(dirname ${_GREPO})"
+declare _RELDIR="$(dirname ${_G_REPO})"
 declare _OUTDIR="${_RELDIR}.release"
 
 declare -a RELEASE=
@@ -319,13 +318,13 @@ function _prepare_docdir {
 		${RM}				${TARGET}/.${_TITLE}.git	|| return 1
 		return 0
 	fi
-	if [[ ! -d ${_GREPO} ]] || [[ ! -d ${_GREPO}.git ]]; then
+	if [[ ! -d ${_G_REPO} ]] || [[ ! -d ${_G_REPO}.git ]]; then
 #>>>		${RM}				${TARGET}/.${_TITLE}		|| return 1
 		${RM}				${TARGET}/.${_TITLE}.git	|| return 1
 		return 0
 	fi
-	${RSYNC_U} ${_GREPO}/			${TARGET}/.${_TITLE}		|| return 1
-#>>>	${RSYNC_U} ${_GREPO}.git/		${TARGET}/.${_TITLE}.git	|| return 1
+	${RSYNC_U} ${_G_REPO}/			${TARGET}/.${_TITLE}		|| return 1
+#>>>	${RSYNC_U} ${_G_REPO}.git/		${TARGET}/.${_TITLE}.git	|| return 1
 	${RM}					${TARGET}/.${_TITLE}.git	|| return 1
 #>>>	${SED} -i "/worktree[ ][=]/d"		${TARGET}/.${_TITLE}.git/config	|| return 1
 #>>>	${LN} ../.${_TITLE}.git			${TARGET}/.${_TITLE}/.git	|| return 1
@@ -949,7 +948,7 @@ function _publish_upload {
 		README.md \
 		LICENSE.md \
 	; do
-		${RSYNC_U} -L		${_GREPO}/${FILE} ${_OUTDIR}/			|| return 1
+		${RSYNC_U} -L		${_G_REPO}/${FILE} ${_OUTDIR}/			|| return 1
 	done
 #>>>	${MKDIR}			${_OUTDIR}/$(basename ${ARTDIR})		|| return 1
 #>>>	${RSYNC_U} -L ${ARTDIR}/	${_OUTDIR}/$(basename ${ARTDIR})		|| return 1
