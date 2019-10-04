@@ -33,7 +33,7 @@
         * [Versioning]
         * [Structure]
         * [Tools]
-        * [Similar Projects]
+        * [Ecosystem]
   * [Instructions]
     * [Booting]
         * [USB Drive & Grub Rescue]
@@ -594,22 +594,56 @@ reach an international audience overnight.
 [SourceForge]: https://sourceforge.net
 [GitHub]: https://github.com
 
-### Similar Projects ###########################################################
-[Similar Projects]: #similar-projects
+### Ecosystem ##################################################################
+[Ecosystem]: #ecosystem
 
-Since the creation of GaryOS, I've discovered the following projects
-during ongoing research:
+Beyond the [Tools] used to create and publish GaryOS, there is a small universe
+of projects that either provided inspiration, see some use within GaryOS, or
+are related projects that need to be pointed out.
 
-  * Better-Initramfs: [https://github.com/slashbeast/better-initramfs](https://github.com/slashbeast/better-initramfs)
-  * Aboriginal Linux: [http://landley.net/aboriginal/about.html](http://landley.net/aboriginal/about.html)
+To start, homage must be paid to those who started it all (at least, these are
+the ones which the author used most over the years, after discovering
+[tomsrtbt] in 1998):
 
-GaryOS shares many of the same goals and attributes/features as these
-projects.  The primary difference being that both these projects strive
-to be minimalist and/or otherwise purely rescue/development focused.
-GaryOS instead tries to be as complete an environment as possible while
-still fitting in an initramfs.
+  * tomsrtbt: [http://www.toms.net/rb](http://www.toms.net/rb)
+  * KNOPPIX: [https://knopper.net/knoppix/index-en.html](https://knopper.net/knoppix/index-en.html)
+  * Debian Live: [https://debian.org/devel/debian-live](https://debian.org/devel/debian-live)
 
-Both projects are pretty damn awesome.
+[tomsrtbt]: http://www.toms.net/rb
+
+Inspiration was provided by:
+
+  * Metro: [https://funtoo.org/Metro_Quick_Start_Tutorial](https://funtoo.org/Metro_Quick_Start_Tutorial)
+  * Buildroot: [https://buildroot.org](https://buildroot.org)
+  * BusyBox: [https://busybox.net](https://busybox.net)
+  * StaticPerl: [http://software.schmorp.de/pkg/App-Staticperl.html](http://software.schmorp.de/pkg/App-Staticperl.html)
+
+[Metro]: https://funtoo.org/Metro_Quick_Start_Tutorial
+[Buildroot]: https://buildroot.uclibc.org
+[BusyBox]: https://busybox.net
+
+There are also a few projects which are relied on for critical or highly visible components, and deserve mention:
+
+  * Vim: [https://www.vim.org](https://www.vim.org)
+  * Qemu: [https://qemu.org](https://qemu.org)
+  * Suckless: [https://suckless.org](https://suckless.org)
+
+[Qemu]: https://qemu.org
+[Suckless]: https://suckless.org
+
+It should be noted, with additional emphasis, the critical role [tomsrtbt]
+played in the course of the author's career, and his sustained mentality
+towards the malleability of [Linux] and its power and flexibility as a "run
+anywhere, anyhow" computing environment.
+
+Finally, last but not least, massive amounts of respect must be paid to [Mr.
+RMS (Richard M. Stallman)].  Regardless of what you may think of him, his
+philosophies, or his antics, his contributions to free and opensource software
+deserve recognition (read more about [Mr. Stallman on Wikipedia]).  We would
+not be here today without him.  Keep going, RMS.  Keep fighting.
+
+[Mr. RMS (Richard M. Stallman)]: https://stallman.org
+[Mr. Stallman on Wikipedia]: https://wikipedia.org/wiki/Richard_Stallman
 
 ********************************************************************************
 
