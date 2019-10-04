@@ -556,38 +556,43 @@ Here is an overview of the repository contents:
 ### Tools ######################################################################
 [Tools]: #tools
 
+This is a list of the primary tools and sites which are used to build and
+distribute GaryOS.  Additional honorable mentions are in [Ecosystem].
+
+First and foremost, the projects which brought opensource into the mainstream
+need to be acknowledged:
+
+  * GNU (GNU's Not Unix): [https://gnu.org](https://gnu.org)
+  * Linux: [https://linuxfoundation.org](https://linuxfoundation.org), [https://kernel.org](https://kernel.org)
+
+[GNU]: https://gnu.org
+[Linux]: https://linuxfoundation.org
+
 All the real heavy-lifting is accomplished using these tools/projects:
 
-  * Metro: [http://funtoo.org/Metro_Quick_Start_Tutorial](http://funtoo.org/Metro_Quick_Start_Tutorial)
-  * Funtoo: [http://funtoo.org](http://funtoo.org)
-  * Gentoo: [http://gentoo.org](http://gentoo.org)
-  * Linux Initramfs: [http://kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt](http://kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt)
+  * Funtoo: [https://funtoo.org](https://funtoo.org)
+  * Gentoo: [https://gentoo.org](https://gentoo.org)
+  * Linux Initramfs: [https://kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt](https://kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt)
+  * Grub: [https://gnu.org/software/grub](https://gnu.org/software/grub)
 
-Inspiration was provided by:
-
-  * Buildroot: [http://buildroot.uclibc.org](http://buildroot.uclibc.org)
-  * BusyBox: [http://busybox.net](http://busybox.net)
-  * StaticPerl: [http://software.schmorp.de/pkg/App-Staticperl.html](http://software.schmorp.de/pkg/App-Staticperl.html)
+[Grub]: https://gnu.org/software/grub
 
 Kernel configuration, package lists and acknowledgments to:
 
-  * Grml: [http://grml.org](http://grml.org)
-  * SystemRescueCd: [http://sysresccd.org/SystemRescueCd_Homepage](http://sysresccd.org/SystemRescueCd_Homepage)
-
-Homage to those who started it all:
-
-  * tomsrtbt: [http://www.toms.net/rb](http://www.toms.net/rb)
-  * KNOPPIX: [http://knopper.net/knoppix/index-en.html](http://knopper.net/knoppix/index-en.html)
-  * Debian Live: [http://live.debian.net](http://live.debian.net)
+  * Grml: [https://grml.org](https://grml.org)
+  * SystemRescueCd: [http://www.system-rescue-cd.org](http://www.system-rescue-cd.org)
 
 Special thanks to the sites which made worldwide distribution possible:
 
   * SourceForge: [https://sourceforge.net](https://sourceforge.net)
   * GitHub: [https://github.com](https://github.com)
 
-GitHub was instrumental in inspiring me to publish this project, but
-SourceForge provided the distribution platform which made it possible to
+[GitHub] was instrumental in inspiring the author to publish this project, but
+[SourceForge] provided the distribution platform which made it possible to
 reach an international audience overnight.
+
+[SourceForge]: https://sourceforge.net
+[GitHub]: https://github.com
 
 ### Similar Projects ###########################################################
 [Similar Projects]: #similar-projects
