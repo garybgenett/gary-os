@@ -9,8 +9,10 @@
   * Homepage: [https://github.com/garybgenett/gary-os](https://github.com/garybgenett/gary-os)
   * Download: [https://sourceforge.net/projects/gary-os](https://sourceforge.net/projects/gary-os)
 
-[License]: https://github.com/garybgenett/gary-os/blob/master/LICENSE.md
+[Homepage]: https://github.com/garybgenett/gary-os
+[Download]: https://sourceforge.net/projects/gary-os/files
 [Readme]: https://github.com/garybgenett/gary-os/blob/master/README.md
+[License]: https://github.com/garybgenett/gary-os/blob/master/LICENSE.md
 
 [Gary B. Genett]: http://www.garybgenett.net/resume.html
 [gary-os@garybgenett.net]: mailto:gary-os@garybgenett.net?subject=GaryOS%20Submission&body=Why%20I%20love%20GaryOS%20so%20much...
