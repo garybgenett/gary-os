@@ -22,6 +22,7 @@
     * [Requirements]
     * [Contact & Support]
     * [Acknowledgements & Reviews]
+    * [Contributing]
   * [Information]
     * [Design]
         * [Goals]
@@ -229,6 +230,38 @@ directory.  Please use [Contact & Support] to message the author of any other
 acknowledgements you may find, including you having read this far.
 
 [archive]: https://github.com/garybgenett/gary-os/blob/master/artifacts/archive
+
+## Contributing ################################################################
+[Contributing]: #contributing
+
+This is very much a personal project, but any contributions are welcome and
+will be publicly acknowledged.  For the time being, the best way is to submit
+patches using the information in [Contact & Support].  Submissions should
+include the commit hash used to create the patch.
+
+For best results, use the `git format-patch` command.  Bonus points for using
+the pre-made function in the "[.bashrc]" file in the repository, like so:
+
+  * `[...]/.bashrc git-patch [...]`
+
+The author is passionate about who you are, your ideas and what you manifest in
+the world.  All other attributes and circumstances are irrelevant
+considerations here.  A multitude of categories and labels have proliferated
+and expanded on equal opportunity statements, and the author is concerned that
+proactive lists inadvertently exclude that which is not listed.  We are just
+human beings, with infinitesimal differences between us on a genetic level, and
+any non-violent divisions, even those based on ideas, are ridiculous.  That is
+my statement.  It may not belong here, but here it is anyway.
+
+These are the two best proactive documents the author could find, the latter of
+which was suggested by [GitHub], which inspired an Internet search to find the
+former:
+
+  * Social Protection & Human Rights Equality and Non-discrimination: [https://socialprotection-humanrights.org/framework/principles/equality-and-non-discrimination](https://socialprotection-humanrights.org/framework/principles/equality-and-non-discrimination)
+  * Contributor Covenant Code of Conduct: [https://contributor-covenant.org/version/1/4/code-of-conduct.html](https://contributor-covenant.org/version/1/4/code-of-conduct.html)
+
+Hopefully that covers all the bases.  Let's all just be kind to one another, so
+we don't even need documents like these.
 
 ********************************************************************************
 
