@@ -30,6 +30,7 @@
         * [Limitations]
         * [History]
     * [Details]
+        * [Versioning]
         * [Customizing]
         * [Structure]
         * [Tools]
@@ -468,6 +469,26 @@ beneficial to anyone curious enough to have read this far.
 
 Most of what is needed to use the contents of this repository is
 contained in the [Customizing] and [Structure] sections below.
+
+### Versioning #################################################################
+[Versioning]: #versioning
+
+Release version numbers are assigned in the spirit of [Semantic Versioning].
+However, GaryOS does not provide any APIs, so the full specification does not
+apply.  As such, the model used is to update the major version number whenever
+the Portage commit is updated.  Minor version numbers are done for updates to
+a particular Portage commit as a new release.
+
+A notable exception was [v1.0].  The reason for this was that was the first
+version released as a single kernel file and meant for general use.  The [v1.1]
+release was a continuation of that work.  Starting with [v2.0], GaryOS will
+adhere to the major/minor system, where each major is a new Portage tree and
+each minor is just an update on that same tree.
+
+Major revisions to the GaryOS build system and supporting scripting and
+configuration files will also line up with major version numbers.
+
+[Semantic Versioning]: https://semver.org
 
 ### Customizing ################################################################
 [Customizing]: #customizing
