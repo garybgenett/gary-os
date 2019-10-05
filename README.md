@@ -625,15 +625,6 @@ in the course of the author's career, and his sustained mentality towards the
 malleability of GNU/Linux and its power and flexibility as a "run anywhere,
 anyhow" computing environment.
 
-Finally, last but not least, massive amounts of respect must be paid to [Mr.
-RMS (Richard M. Stallman)].  Regardless of what you may think of him, his
-philosophies, or his antics, his contributions to free and opensource software
-deserve recognition (read more about [Mr. Stallman on Wikipedia]).  We would
-not be here today without him.  Keep going, RMS.  Keep fighting.
-
-[Mr. RMS (Richard M. Stallman)]: https://stallman.org
-[Mr. Stallman on Wikipedia]: https://wikipedia.org/wiki/Richard_Stallman
-
 ********************************************************************************
 
 # Instructions #################################################################
