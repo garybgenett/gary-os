@@ -77,7 +77,7 @@ live systems.
 
 Primary features:
 
-  * Comprehensive: complete and optimized Funtoo system with compile toolchain
+  * Comprehensive: complete and optimized Funtoo system with GNU toolchain
   * Invisible: resides completely in memory and does not need media after boot
   * Safe: no hard drives are mounted and swap is disabled
   * Flexible: can be used anywhere a Linux kernel can (USB, PXE, etc.)
@@ -256,7 +256,7 @@ any non-violent divisions, even those based on ideas, are ridiculous.  That is
 my statement.  It may not belong here, but here it is anyway.
 
 These are the two best proactive documents the author could find, the latter of
-which was suggested by [GitHub], which inspired an Internet search to find the
+which was suggested by GitHub, which inspired an Internet search to find the
 former:
 
   * Social Protection & Human Rights Equality and Non-discrimination: [https://socialprotection-humanrights.org/framework/principles/equality-and-non-discrimination](https://socialprotection-humanrights.org/framework/principles/equality-and-non-discrimination)
@@ -401,9 +401,9 @@ Supportability:
 ### History ####################################################################
 [History]: #history
 
-The origin of the project was experimentation with the [Metro], [Buildroot] and
-[BusyBox] projects, and [Metro] in particular.  The goal at the time was to use
-[Metro] to build customized "stage3" files.  As development of the concept
+The origin of the project was experimentation with the Metro, Buildroot and
+BusyBox projects, and Metro in particular.  The goal at the time was to use
+Metro to build customized "stage3" files.  As development of the concept
 continued, the difference between a "stage3" and a system that could be run
 live began to disappear.  An inspired moment of "could the custom stage3 be
 used as an initramfs?", and GaryOS was born as a relatively unique live OS.
@@ -431,7 +431,7 @@ and also to complete the efforts towards another actual release of GaryOS.
 With the [v4.0] release, a genuine effort was made to upgrade the project to
 a production-grade distribution.  Despite over 4 years of release inactivity,
 downloads remained consistent, and even experienced a few unexplained spikes.
-The build system was switched from [Metro] to the one being used by the author
+The build system was switched from Metro to the one being used by the author
 for his personal builds, the build system was made much more robust, all the
 scripts were cleaned up and documented as much as possible, and a Makefile
 was written to make the system more usable.  Tuning of the system was done on
@@ -447,7 +447,7 @@ time between stable builds, and continues today towards v5.0.
 The project was not named GaryOS out of any delusions of grandeur or egomania.
 It was coined years before its birth by a pair of good friends who jested at
 the amount of time and effort spent tuning and customizing a computing
-environment.  The author's workstation was jokingly called "GaryOS".
+environment.  The author's workstation was jokingly called "Gary OS".
 
 All the heavily personalized tools, configuration and automation are made
 possible by the dedicated efforts of thousands of developers worldwide who
@@ -565,19 +565,15 @@ First and foremost, the projects which brought opensource into the mainstream
 need to be acknowledged:
 
   * GNU (GNU's Not Unix): [https://gnu.org](https://gnu.org)
+  * GNU/Linux: [https://gnu.org/gnu/linux-and-gnu.html](https://gnu.org/gnu/linux-and-gnu.html)
   * Linux: [https://linuxfoundation.org](https://linuxfoundation.org), [https://kernel.org](https://kernel.org)
-
-[GNU]: https://gnu.org
-[Linux]: https://linuxfoundation.org
 
 All the real heavy-lifting is accomplished using these tools/projects:
 
   * Funtoo: [https://funtoo.org](https://funtoo.org)
   * Gentoo: [https://gentoo.org](https://gentoo.org)
-  * Linux Initramfs: [https://kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt](https://kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt)
+  * Linux initramfs: [https://kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt](https://kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt)
   * Grub: [https://gnu.org/software/grub](https://gnu.org/software/grub)
-
-[Grub]: https://gnu.org/software/grub
 
 Kernel configuration, package lists and acknowledgments to:
 
@@ -589,12 +585,9 @@ Special thanks to the sites which made worldwide distribution possible:
   * SourceForge: [https://sourceforge.net](https://sourceforge.net)
   * GitHub: [https://github.com](https://github.com)
 
-[GitHub] was instrumental in inspiring the author to publish this project, but
-[SourceForge] provided the distribution platform which made it possible to
-reach an international audience overnight.
-
-[SourceForge]: https://sourceforge.net
-[GitHub]: https://github.com
+GitHub was instrumental in inspiring the author to publish this project, but
+SourceForge provided the distribution platform which made it possible to reach
+an international audience overnight.
 
 ### Ecosystem ##################################################################
 [Ecosystem]: #ecosystem
@@ -604,14 +597,12 @@ of projects that either provided inspiration, see some use within GaryOS, or
 are related projects that need to be pointed out.
 
 To start, homage must be paid to those who started it all (at least, these are
-the ones which the author used most over the years, after discovering
-[tomsrtbt] in 1998):
+the ones which the author used most over the years, after discovering tomsrtbt
+in 1998):
 
   * tomsrtbt: [http://www.toms.net/rb](http://www.toms.net/rb)
-  * KNOPPIX: [https://knopper.net/knoppix/index-en.html](https://knopper.net/knoppix/index-en.html)
+  * KNOPPIX: [https://knopper.net/knoppix](https://knopper.net/knoppix)
   * Debian Live: [https://debian.org/devel/debian-live](https://debian.org/devel/debian-live)
-
-[tomsrtbt]: http://www.toms.net/rb
 
 Inspiration was provided by:
 
@@ -619,10 +610,6 @@ Inspiration was provided by:
   * Buildroot: [https://buildroot.org](https://buildroot.org)
   * BusyBox: [https://busybox.net](https://busybox.net)
   * StaticPerl: [http://software.schmorp.de/pkg/App-Staticperl.html](http://software.schmorp.de/pkg/App-Staticperl.html)
-
-[Metro]: https://funtoo.org/Metro_Quick_Start_Tutorial
-[Buildroot]: https://buildroot.uclibc.org
-[BusyBox]: https://busybox.net
 
 There are also a few projects which are relied on for critical or highly visible components, and deserve mention:
 
@@ -633,10 +620,10 @@ There are also a few projects which are relied on for critical or highly visible
 [Qemu]: https://qemu.org
 [Suckless]: https://suckless.org
 
-It should be noted, with additional emphasis, the critical role [tomsrtbt]
-played in the course of the author's career, and his sustained mentality
-towards the malleability of [Linux] and its power and flexibility as a "run
-anywhere, anyhow" computing environment.
+It should be noted, with additional emphasis, the critical role tomsrtbt played
+in the course of the author's career, and his sustained mentality towards the
+malleability of GNU/Linux and its power and flexibility as a "run anywhere,
+anyhow" computing environment.
 
 Finally, last but not least, massive amounts of respect must be paid to [Mr.
 RMS (Richard M. Stallman)].  Regardless of what you may think of him, his
