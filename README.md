@@ -248,16 +248,12 @@ the pre-made function in the "[.bashrc]" file in the repository, like so:
 
 The author is passionate about who you are, your ideas and what you manifest in
 the world.  All other attributes and circumstances are irrelevant
-considerations here.  A multitude of categories and labels have proliferated
-and expanded on equal opportunity statements, and the author is concerned that
-proactive lists inadvertently exclude that which is not listed.  We are just
-human beings, with infinitesimal differences between us on a genetic level, and
-any non-violent divisions, even those based on ideas, are ridiculous.  That is
-my statement.  It may not belong here, but here it is anyway.
+considerations here.  We are all just human beings.
 
-These are the two best proactive documents the author could find, the latter of
-which was suggested by GitHub, which inspired an Internet search to find the
-former:
+It seems to be a current trend that opensource projects are adopting equality
+and conduct statements.  These are the two best documents the author could
+find, the latter of which was suggested by GitHub, which inspired an Internet
+search to find the former:
 
   * Social Protection & Human Rights Equality and Non-discrimination: [https://socialprotection-humanrights.org/framework/principles/equality-and-non-discrimination](https://socialprotection-humanrights.org/framework/principles/equality-and-non-discrimination)
   * Contributor Covenant Code of Conduct: [https://contributor-covenant.org/version/1/4/code-of-conduct.html](https://contributor-covenant.org/version/1/4/code-of-conduct.html)
