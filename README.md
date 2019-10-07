@@ -26,16 +26,8 @@
     * [Acknowledgements & Reviews]
     * [Contributing]
   * [Information]
-    * [Design]
-        * [Goals]
-        * [Advantages]
-        * [Limitations]
-        * [History]
-    * [Details]
-        * [Versioning]
-        * [Structure]
-        * [Tools]
-        * [Ecosystem]
+    * [Design]: [Goals], [Advantages], [Limitations], [History]
+    * [Details]: [Versioning], [Structure], [Tools], [Ecosystem]
   * [Instructions]
     * [Booting]
         * [USB Drive & Grub Rescue]
@@ -121,7 +113,7 @@ entry pointing to the file on disk.  In Grub, this looks something like:
 All the standard Linux kernel options/parameters are valid.  For example, the
 amount of memory Linux allocates to itself can be specified as usual:
 
-  * `linux (hd0,1)/boot/gary-os-[...].kernel mem=8192m`
+  * `linux (hd0,1)/boot/gary-os-[...].kernel mem=4096m`
 
 Once booted, the entire system resides in memory, and any media used to boot it
 is no longer necessary.
@@ -143,10 +135,9 @@ platforms are not supported.
 The booted system requires at least 4GB of RAM.  Some of the advanced features
 and uses require additional memory, and 8GB is recommended.
 
-The GaryOS kernel is roughly ~700-800MB in size, and at least 1GB of storage is
-recommended.  All efforts have been made to make GaryOS as compact as possible.
-However, Linux packages continue to grow in size, such as these required
-packages:
+The GaryOS kernel is roughly ~750MB in size, and at least 1GB of storage is
+recommended.  All efforts have been made to make GaryOS as compact as possible,
+but required Linux packages continue to grow over time, such as these:
 
   * GCC
   * Linux firmware
@@ -252,8 +243,8 @@ considerations here.  We are all just human beings.
 
 It seems to be a current trend that opensource projects are adopting equality
 and conduct statements.  These are the two best documents the author could
-find, the latter of which was suggested by GitHub, which inspired an Internet
-search to find the former:
+find, the latter of which was suggested by GitHub, which in turn inspired an
+Internet search to find the former:
 
   * Social Protection & Human Rights Equality and Non-discrimination: [https://socialprotection-humanrights.org/framework/principles/equality-and-non-discrimination](https://socialprotection-humanrights.org/framework/principles/equality-and-non-discrimination)
   * Contributor Covenant Code of Conduct: [https://contributor-covenant.org/version/1/4/code-of-conduct.html](https://contributor-covenant.org/version/1/4/code-of-conduct.html)
@@ -266,7 +257,7 @@ we don't even need documents like these.
 # Information ##################################################################
 [Information]: #information
 
-This collections of sections covers GaryOS and the repository in greater depth,
+This collection of sections covers GaryOS and the repository in greater depth,
 and is not for the faint of heart.
 
 It is mainly here for completeness.  The most useful information is in the
@@ -279,8 +270,8 @@ GaryOS was not really "designed", per se.  It very much happened organically.
 Any lack of production value to the code is a result of that.
 
 Despite not having been designed in the traditional sense, GaryOS does have
-clear structure and requirements, along with unique advantages and challenges.
-It also has an interesting origin story.
+clear structure and requirements, along with unique advantages and limitations.
+It also has an interesting origin story, like all superheroes.
 
 ### Goals ######################################################################
 [Goals]: #goals
@@ -302,14 +293,14 @@ Other objectives:
   * Support as many boot methods as possible, such as USB setup and PXE
   * Example configuration/scripts for tuning and maintaining a Funtoo system
   * Foster a DIY (Do It Yourself) approach through good documentation
-  * Learning environment for those new to GNU/Linux and/or Funtoo
+  * Learning environment for those new to GNU/Linux or Funtoo
 
 Explicit non-goals:
 
   * Growing bigger than a single kernel file
   * Customization or deep branding of overall system
   * Development of a helper scripts/commands library
-  * Alteration of boot and "init" infrastructure
+  * Alteration of boot or "init" infrastructure
   * Becoming a complete desktop environment
 
 ### Advantages #################################################################
@@ -361,7 +352,7 @@ of it.  No major live distribution takes this approach or makes these claims.
 Humans are not perfect, and rarely is anything we create.  While there is great
 pride in GaryOS, and the care and attention to detail which goes with it, this
 section is to be clear about its shortcomings.  The author wishes to avoid the
-appearance of ignorance or negligence.
+appearance of ignorance or negligence by being thoughtfully forthcoming.
 
 General notes:
 
@@ -459,13 +450,13 @@ may find novel, appealing and useful.
 ## Details #####################################################################
 [Details]: #details
 
-In this section, I will try to outline the key pieces which make GaryOS
-tick.  The work will still pretty much speak for itself, but some
-explanation of what all the stuff in this repository is will likely be
-beneficial to anyone curious enough to have read this far.
+This section outlines the key pieces which make GaryOS tick.  The work will
+still pretty much speak for itself, but some explanation of what all the stuff
+in this repository is will likely be beneficial to anyone curious enough to
+have read this far.
 
-Most of what is needed to use the contents of this repository is
-contained in the [Structure] section.
+Most of what is needed to use the contents of this repository is contained in
+the [Structure] section.
 
 ### Versioning #################################################################
 [Versioning]: #versioning
@@ -476,11 +467,11 @@ apply.  As such, the model used is to update the major version number whenever
 the Portage commit is updated.  Minor version numbers are done for updates to
 a particular Portage commit as a new release.
 
-A notable exception was [v1.0].  The reason for this was that was the first
-version released as a single kernel file and meant for general use.  The [v1.1]
-release was a continuation of that work.  Starting with [v2.0], GaryOS will
-adhere to the major/minor system, where each major is a new Portage tree and
-each minor is just an update on that same tree.
+A notable exception was [v1.0].  The reason being that was the first version
+released as a single kernel file and meant for general use.  The [v1.1] release
+was a continuation of that work.  Starting with [v2.0], GaryOS will adhere to
+the major/minor system, where each major is a new Portage tree and each minor
+is just an update on that same tree.
 
 Major revisions to the GaryOS build system and supporting scripting and
 configuration files will also line up with major version numbers.
@@ -504,12 +495,12 @@ Here is an overview of the repository contents:
 | [gentoo]                   | Entirety of the Funtoo configuration, including the scripts used to build and manage installations.
 | [gentoo/\_overlay]         | Funtoo overlay directory.  Used very sparingly, and mostly for fixing broken packages.
 | [scripts]                  | Ancillary scripts relevant to GaryOS, such as "[scripts/grub.sh]".
-| [artifacts]                | Storage for miscellaneous initramfs files
+| [artifacts]                | Storage for miscellaneous files used in the initramfs build.
 | [artifacts/images]         | Icons, screenshots and the like.
 | [artifacts/archive]        | Stash space for files which don't fit elsewhere, including snapshots of [Acknowledgements & Reviews] items.
 | **Core files:**            | --
 | [.bashrc]                  | Custom Bash configuration file.  Included as an essential scripting library.
-| [scripts/grub.sh]          | Generates the Grub archive, which contains BIOS and EFI rescue bootloaders.
+| [scripts/grub.sh]          | Generates the [Grub] archive, which contains BIOS and EFI rescue bootloaders, along with a prepared disk image.
 | [gentoo/\_system]          | Heart and soul of the build engine.  Creates new installations, and provides maintenance and inspection tooling.
 | [gentoo/\_release]         | Does all the initramfs work, customizing and packaging the root filesystem and building the kernel.  Also performs the entire release and publishing process.
 | [gentoo/funtoo]            | Contains the commit ID that the Funtoo Portage repository should be "pinned" to.  Ties the Funtoo configuration to a particular version of the Portage tree, which ensures repeatability and stability.
@@ -558,7 +549,7 @@ This is a list of the primary tools and sites which are used to build and
 distribute GaryOS.  Additional honorable mentions are in [Ecosystem].
 
 First and foremost, the projects which brought opensource into the mainstream
-need to be acknowledged:
+need to be recognized:
 
   * GNU (GNU's Not Unix): [https://gnu.org](https://gnu.org)
   * GNU/Linux: [https://gnu.org/gnu/linux-and-gnu.html](https://gnu.org/gnu/linux-and-gnu.html)
@@ -607,14 +598,17 @@ Inspiration was provided by:
   * BusyBox: [https://busybox.net](https://busybox.net)
   * StaticPerl: [http://software.schmorp.de/pkg/App-Staticperl.html](http://software.schmorp.de/pkg/App-Staticperl.html)
 
-There are also a few projects which are relied on for critical or highly visible components, and deserve mention:
+There are also a few projects which are relied on for critical tasks or highly
+visible components, and deserve mention:
 
   * Vim: [https://www.vim.org](https://www.vim.org)
   * Qemu: [https://qemu.org](https://qemu.org)
   * Suckless: [https://suckless.org](https://suckless.org)
+  * Links: [http://links.twibright.com](http://links.twibright.com)
 
 [Qemu]: https://qemu.org
 [Suckless]: https://suckless.org
+[Links]: http://links.twibright.com
 
 It should be noted, with additional emphasis, the critical role tomsrtbt played
 in the course of the author's career, and his sustained mentality towards the
