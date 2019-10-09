@@ -2696,7 +2696,7 @@ function scrcpy {
 			chown -R plastic /.g/_data/_build/other/scrcpy		&&
 			(cd x && su plastic -c ninja)
 	fi
-	cd /.g/_data/_build/other/scrcpy && ./run x
+	cd /.g/_data/_build/other/scrcpy && ./run x "${@}"
 	return 0
 }
 
