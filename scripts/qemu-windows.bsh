@@ -76,8 +76,8 @@ fi
 #>>>	-boot d \
 
 exec qemu.bsh "${QNUM}" "${QMEM}" "${QFIL}" "${QSYS}" IDE \
-	-rtc base=localtime,clock=host \
-	"${@}"
+	"${@}" \
+	-rtc base=localtime,clock=host
 #>>>	-device usb-host,bus=xhci0.0,vendorid=0x03f0,productid=0x5a2a \
 #>>>	-device usb-host,bus=xhci0.0,vendorid=0x03f0,productid=0x4605 \
 #>>>	-device usb-host,bus=xhci0.0,vendorid=0x043d,productid=0x00cc \
