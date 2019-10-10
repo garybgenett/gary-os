@@ -1,0 +1,166 @@
+From 5e1c2a735d54ae28b8c2c090bbc1b5093a74cae2 Mon Sep 17 00:00:00 2001
+From: "Gary B. Genett" <me@garybgenett.net>
+Date: Mon, 7 Oct 2019 13:06:40 -0700
+Subject: [PATCH] shmem: add shmem_size option, set filesystem size
+
+Adds a kernel configuration option and command line parameter to
+specify the size of the shmem filesystem.  It is currently hard-coded
+to 50% of memory.  Users should have the option to set this value as
+they see fit.
+
+A specific case where this is necessary would be if the initramfs were
+larger than half of the memory, such as a 2.5GB filesystem with 4GB of
+memory.  Without this option, this causes a kernel panic.  With this
+option, the user may specify something like 75%, which would allow the
+filesystem into memory, while still leaving enough resources to run
+a functioning system.
+
+This patch creates the SHMEM_SIZE configuration option and the
+shmem_size parameter, which may be specified in bytes, human notation
+(1G, 100M, etc.) or percentage (75%).  The default remains unchanged.
+This patch has no impact unless the values are changed.
+
+Signed-off-by: Gary B. Genett <me@garybgenett.net>
+---
+ Documentation/admin-guide/kernel-parameters.rst |  1 +
+ Documentation/admin-guide/kernel-parameters.txt |  5 +++
+ init/Kconfig                                    |  8 ++++
+ mm/shmem.c                                      | 55 ++++++++++++++++++++++++-
+ 4 files changed, 67 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.rst b/Documentation/admin-guide/kernel-parameters.rst
+index b8d0bc07ed0a..7df3222c9c56 100644
+--- a/Documentation/admin-guide/kernel-parameters.rst
++++ b/Documentation/admin-guide/kernel-parameters.rst
+@@ -148,6 +148,7 @@ parameter is applicable::
+ 	APPARMOR AppArmor support is enabled.
+ 	SERIAL	Serial support is enabled.
+ 	SH	SuperH architecture is enabled.
++	SHMEM	Full shmem filesystem is enabled.
+ 	SMP	The kernel is an SMP kernel.
+ 	SPARC	Sparc architecture is enabled.
+ 	SWSUSP	Software suspend (hibernation) is enabled.
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 533ff5c68970..89c87f1f12dc 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -3913,6 +3913,11 @@
+ 	shapers=	[NET]
+ 			Maximal number of shapers.
+ 
++	shmem_size=	[SHMEM]
++			Size of shmem filesystem.  Can be specified as a plain
++			integer, in memory size notation (such as 1024M or 1G),
++			or as a percentage (50%).
++
+ 	simeth=		[IA-64]
+ 	simscsi=
+ 
+diff --git a/init/Kconfig b/init/Kconfig
+index 041f3a022122..fc982e3ca1a9 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1318,6 +1318,14 @@ config SHMEM
+ 	  option replaces shmem and tmpfs with the much simpler ramfs code,
+ 	  which may be appropriate on small systems without swap.
+ 
++config SHMEM_SIZE
++	string "Hard-set the shmem filesystem size"
++	default 0
++	depends on SHMEM
++	help
++	  Size of shmem filesystem.  Can be specified as a plain integer, in
++	  memory size notation (such as 1024M or 1G), or as a percentage (50%).
++
+ config AIO
+ 	bool "Enable AIO support" if EXPERT
+ 	default y
+diff --git a/mm/shmem.c b/mm/shmem.c
+index 2cab84403055..efada838c866 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -92,6 +92,12 @@ static struct vfsmount *shm_mnt;
+ /* Symlink up to this size is kmalloc'ed instead of using a swappable page */
+ #define SHORT_SYMLINK_LEN 128
+ 
++/* Default size of shmem filesystem (defaults to 50% of memory) */
++#define SHMEM_SIZE_DEFAULT ((totalram_pages * PAGE_SIZE) / 2)
++/* Final initialized size of shmem filesystem, and stored parameter value */
++unsigned long shmem_size_final;
++char shmem_size_param[20];
++
+ /*
+  * shmem_fallocate communicates with shmem_fault or shmem_writepage via
+  * inode->i_private (with i_mutex making sure that it has only one user at
+@@ -106,14 +112,56 @@ struct shmem_falloc {
+ };
+ 
+ #ifdef CONFIG_TMPFS
++static void shmem_size_parse(void)
++{
++	char *str, *t;
++
++	sprintf(shmem_size_param, "%s", "0");
++	str = strstr(boot_command_line, "shmem_size=");
++	if (str) {
++		t = strsep(&str, " ");
++		t += 11;
++		sprintf(shmem_size_param, "%s", t);
++	}
++}
++
++static void shmem_size(char *str, char *val)
++{
++	char *rest;
++	unsigned long mem = memparse(val, &rest);
++
++	if (*rest == '%') {
++		mem *= (totalram_pages * PAGE_SIZE);
++		do_div(mem, 100);
++	}
++	if (mem > 0) {
++		pr_info("shmem: found %s value: %s (%ld pages, %ld bytes)\n",
++			str, val, (mem / PAGE_SIZE), mem);
++		shmem_size_final = (mem / PAGE_SIZE);
++	}
++}
++
++static void shmem_size_init(void)
++{
++	char tmp[20];
++
++	sprintf(tmp, "%ld", SHMEM_SIZE_DEFAULT);
++	shmem_size("default", tmp);
++#ifdef CONFIG_SHMEM_SIZE
++	shmem_size("kernel configuration", CONFIG_SHMEM_SIZE);
++#endif
++	shmem_size_parse();
++	shmem_size("kernel parameter", shmem_size_param);
++}
++
+ static unsigned long shmem_default_max_blocks(void)
+ {
+-	return totalram_pages / 2;
++	return shmem_size_final;
+ }
+ 
+ static unsigned long shmem_default_max_inodes(void)
+ {
+-	return min(totalram_pages - totalhigh_pages, totalram_pages / 2);
++	return min(totalram_pages - totalhigh_pages, shmem_size_final);
+ }
+ #endif
+ 
+@@ -3710,6 +3758,9 @@ int __init shmem_init(void)
+ 	if (shmem_inode_cachep)
+ 		return 0;
+ 
++#ifdef CONFIG_TMPFS
++	shmem_size_init();
++#endif
+ 	shmem_init_inodecache();
+ 
+ 	error = register_filesystem(&shmem_fs_type);
+-- 
+2.15.2
+
