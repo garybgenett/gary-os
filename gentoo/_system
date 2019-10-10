@@ -852,7 +852,8 @@ if [[ ${1} == -o ]]; then
 		${RSYNC_U}	${TARGET}${ETCDIR}/${LAYDIR}/${FILE}/Manifest	${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/		|| EXIT 1
 		${RSYNC_U}	${TARGET}${ETCDIR}/${LAYDIR}/.review.txt	${SETDIR}/${FUNDIR}/${LAYDIR}/			|| EXIT 1
 	else
-		ebuild		${ETCDIR}/${LAYDIR}/${FILE}/*.ebuild digest							|| EXIT 1
+		FILE="$(realpath ${ETCDIR}/${LAYDIR}/${FILE}/*.ebuild | sort -n | tail -n1)"
+		ebuild		${FILE} digest											|| EXIT 1
 		(cd		${ETCDIR}/${LAYDIR} && ./.review)								|| EXIT 1
 	fi
 	EXIT 0
