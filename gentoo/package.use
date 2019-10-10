@@ -254,9 +254,6 @@ games-fps/doom3-mitm			-dedicated
 
 ########################################
 
-#{GOS} sys-apps/iproute2		-minimal	# gentoo required
-#{GOS} x11-base/xorg-server		-minimal	# gentoo required
-
 #{GOS} app-crypt/pinentry		-gnome-keyring	# requires: gnome-base/gnome-keyring
 #{GOS} dev-libs/beecrypt		-cxx		# requires: dev-libs/icu
 #{GOS} dev-util/ninja			-zsh-completion	# requires: app-shells/zsh
