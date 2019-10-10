@@ -634,22 +634,21 @@ function _release_kernel {	#{initrd}
 declare RUFUS_URL="https://github.com/pbatard/rufus/releases/download/v3.7/rufus-3.7p.exe"
 
 function _release_grub {
-#>>>	FILE="${_OUTDIR}/${_TITLE}.grub"
-#>>>	FILE="${_OUTDIR}/${_RAMFS/#${_FINAL}\/}.grub"
 	FILE="${_RAMFS}.grub"
-	${RM}			${FILE}*			|| return 1
-	${MKDIR}		${FILE}				|| return 1
-	${HOME}/scripts/grub.sh	${FILE}				|| return 1
-	${WGET_C} -P		${FILE} ${RUFUS_URL}		|| return 1
-	${RM}			${FILE}/_*			|| return 1
-	${RM}			${FILE}/*.tar			|| return 1
-#>>>	${RM}			${FILE}/loopfile.img		|| return 1
-#>>>	common_tar		${FILE}				|| return 1
-	7z d			${FILE}.zip			|| return 1
-	7z a			${FILE}.zip ${FILE}		|| return 1
-#>>>	${MV} ${FILE}.tar.xz	${FILE}.${_RDATE}.tar.xz	|| return 1
-#>>>	${MV} ${FILE}.zip	${FILE}.${_RDATE}.zip		|| return 1
-	${RM}			${FILE}				|| return 1
+	if [[ ! -f ${FILE}.tar.xz ]] && [[ ! -f ${FILE}.zip ]]; then
+		${RM}				${FILE}*		|| return 1
+		${MKDIR}			${FILE}			|| return 1
+		${HOME}/scripts/grub.sh		${FILE}			|| return 1
+		${RM}				${FILE}/_*		|| return 1
+		${RM}				${FILE}/*.tar		|| return 1
+		${WGET_C} -P			${FILE} ${RUFUS_URL}	|| return 1
+#>>>		common_tar			${FILE}			|| return 1
+		7z d				${FILE}.zip		|| return 1
+		7z a				${FILE}.zip ${FILE}	|| return 1
+#>>>		${RM}				${FILE}			|| return 1
+	else
+		common_exists ${FUNCNAME}	${FILE}*		|| return 1
+	fi
 	return 0
 }
 
