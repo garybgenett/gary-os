@@ -1,0 +1,51 @@
+From 77108ae7cccb00037ad4a11031ff895f76ede860 Mon Sep 17 00:00:00 2001
+From: "Gary B. Genett" <me@garybgenett.net>
+Date: Wed, 9 Oct 2019 11:34:28 -0700
+Subject: [PATCH] shmem: make shmem default size a define value
+
+The default size of the shmem filesystem is currently set to 50% of
+memory using a magic token.  This change makes it a define value, so
+that it is clearly denoted as a global value, and to make it easier to
+track down and identify.
+
+No behavior is changed, and no additional processing is created.
+
+Signed-off-by: Gary B. Genett <me@garybgenett.net>
+---
+ mm/shmem.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/mm/shmem.c b/mm/shmem.c
+index cd570cc79c76..bc758cfb4cb6 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -95,6 +95,9 @@ static struct vfsmount *shm_mnt;
+ /* Symlink up to this size is kmalloc'ed instead of using a swappable page */
+ #define SHORT_SYMLINK_LEN 128
+ 
++/* Default size of shmem filesystem */
++#define SHMEM_SIZE_DEFAULT (totalram_pages() / 2)
++
+ /*
+  * shmem_fallocate communicates with shmem_fault or shmem_writepage via
+  * inode->i_private (with i_mutex making sure that it has only one user at
+@@ -125,14 +128,14 @@ struct shmem_options {
+ #ifdef CONFIG_TMPFS
+ static unsigned long shmem_default_max_blocks(void)
+ {
+-	return totalram_pages() / 2;
++	return SHMEM_SIZE_DEFAULT;
+ }
+ 
+ static unsigned long shmem_default_max_inodes(void)
+ {
+ 	unsigned long nr_pages = totalram_pages();
+ 
+-	return min(nr_pages - totalhigh_pages(), nr_pages / 2);
++	return min(nr_pages - totalhigh_pages(), SHMEM_SIZE_DEFAULT);
+ }
+ #endif
+ 
+-- 
+2.15.2
+
