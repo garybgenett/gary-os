@@ -9,6 +9,8 @@
 
 ########################################
 
+>=app-admin/ego-2.7.4			# gentoo required: force skip of overlay
+
 >=app-emulation/virtualbox-guest-additions-5.1.38	# gentoo required: match version with x11-drivers/xf86-video-virtualbox
 >=x11-drivers/xf86-video-virtualbox-5.1.38		# gentoo required: force use of overlay
 
