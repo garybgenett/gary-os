@@ -452,10 +452,10 @@ function _release_initrd {	#{main} #{reset}
 
 ########################################
 
-#note: the "du" command is also used in the "release_kernel_shmmax" function, so making them all global
+#note: the "du" command is also used in the "release_kernel_shmem" function, so making them all global
 declare CPIO_FILE="${_RAMFS}.cpio"
 declare XARGS="xargs --max-procs 0 --max-args 1 --null	--arg-file ${CPIO_FILE}.nul"
-declare DU_S="${DU} --summarize --apparent-size		--block-size 4096"
+declare DU_S="${DU} --summarize --apparent-size		--block-size 1"
 declare CPIO_IN="cpio -v --create --format newc --null	--file ${CPIO_FILE}	--directory ${TARGET}"
 declare CPIO_OUT="cpio -v --extract			--file ${CPIO_FILE}	--directory ${CPIO_FILE}.dir"
 declare XZ="xz -vv --compress --stdout --format xz --check crc32"
@@ -559,20 +559,16 @@ function release_kernel_config {
 	return 0
 }
 
-function release_kernel_shmmax {
+function release_kernel_shmem {
 	declare LDIR="${1}" && shift
-	#note: treating the block size of the cpio as the in-memory filesystem size, which comes up a few MB short of reality
-	#note: then adding 768-1024MB for buffer and free disk space, and calculating the number of 4096K pages needed in the kernel
-	#note: fortunately, the kernel code does maximizing and rounding to the nearest memory block boundary for us, so all we need to do is provide an integer
-	declare SHMMAX=
-	SHMMAX="$(${DU_S} ${CPIO_FILE} | ${SED} "s|[[:space:]].*$||g")"
-#>>>	SHMMAX="$(echo "${SHMMAX} +(((2^29)+(2^28))/4096)" | bc | ${SED} -r "s|[.].*$||g")"
-	SHMMAX="$(echo "${SHMMAX} +((2^30)/4096)" | bc | ${SED} -r "s|[.].*$||g")"
-#>>>	SHMMAX="917504"		# (3*(2^18))+2^17 = (3.5*(2^30))/4096 = 3.5G
-#>>>	SHMMAX="983040"		# (3*(2^18))+2^17+2^16 = ~3.7G [ (3*(2^18))*4096 = 3G) ] + [ (2^17)*4096 = 512M ] + [ (2^16)*4096 = 256M ]
-#>>>	safe_make -C ${TARGET}${LDIR}					distclean					|| return 1
+	#note: treating the size of the cpio as the in-memory filesystem size, adding buffer and free disk space, and then rounding pages
+	declare SHMEM_PAGES="4096"
+	declare SHMEM_MEM="768*(1024^2)"
+	declare SHMEM=
+	SHMEM="$(${DU_S} ${CPIO_FILE} | ${SED} "s|[[:space:]].*$||g")"
+	SHMEM="$(echo "((${SHMEM}+(${SHMEM_MEM}))/${SHMEM_PAGES})" | bc | ${SED} -r "s|[.].*$||g")"
 	[[ -f ${TARGET}${LDIR}/mm/shmem.c.${_TITLE} ]] && { ${MV}	${TARGET}${LDIR}/mm/shmem.c{.${_TITLE},}	|| return 1 ;}
-	${SED} -i.${_TITLE} "s|totalram_pages[ ][/][ ]2|${SHMMAX}|g"	${TARGET}${LDIR}/mm/shmem.c			|| return 1
+	${SED} -i.${_TITLE} "s|totalram_pages[ ][/][ ]2|${SHMEM}|g"	${TARGET}${LDIR}/mm/shmem.c			|| return 1
 	${GREP} --after-context=3 "long[ ]shmem_default_max"		${TARGET}${LDIR}/mm/shmem.c			|| return 1
 	diff ${DIFF_OPTS}						${TARGET}${LDIR}/mm/shmem.c{.${_TITLE},}	| ${GREP} "^[-+]" #>>> || return 1
 	return 0
@@ -613,7 +609,7 @@ function _release_kernel {	#{initrd}
 	fi
 	if [[ -d ${TARGET}${DODIR} ]] && [[ ! -f ${_RAMFS}.kernel ]]; then
 		release_kernel_config ${DODIR}						|| return 1
-		release_kernel_shmmax ${DODIR}						|| return 1
+		release_kernel_shmem ${DODIR}						|| return 1
 		if [[ -z ${INITRD} ]]; then
 			release_kernel_initramfs ${DODIR}				|| return 1
 		fi
