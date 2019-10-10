@@ -19,27 +19,17 @@
 
 ********************************************************************************
 
-  * [Overview]
-    * [Quick Start]
-    * [Requirements]
-    * [Contact & Support]
-    * [Acknowledgements & Reviews]
-    * [Contributing]
+  * [Introduction]
+    * [Overview]
+    * [Release]: [Quick Start], [Requirements], [Contact & Support]
+    * [Project]: [Acknowledgements & Reviews], [Contributing]
   * [Information]
     * [Design]: [Goals], [Advantages], [Limitations], [History]
     * [Details]: [Versioning], [Structure], [Tools], [Ecosystem]
   * [Instructions]
-    * [Booting]
-        * [USB Drive & Grub Rescue]
-        * [Windows Dual-Boot]
-        * [PXE Boot]
-    * [Running]
-        * [Forensics & Recovery]
-        * [Networking Configuration]
-        * [Graphical Interface]
-    * [Building]
-        * [Live Update]
-        * [Hard Drive Install]
+    * [Booting]: [USB Drive & Grub Rescue], [Windows Dual-Boot], [PXE Boot]
+    * [Running]: [Forensics & Recovery], [Networking Configuration], [Graphical Interface]
+    * [Building]: [Live Update], [Hard Drive Install]
   * [Version History]
     * [2015-03-16 v3.0 21811b59a8484b2a6b73e0c5277f23c50a0141dc.0]
     * [2014-06-19 v2.0 873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d.0]
@@ -51,7 +41,10 @@
 
 ********************************************************************************
 
-# Overview #####################################################################
+# Introduction #################################################################
+[Introduction]: #introduction
+
+## Overview ####################################################################
 [Overview]: #overview
 
 GaryOS is an entire GNU/Linux system in a single bootable file.  It is also
@@ -89,7 +82,10 @@ systems.
 
 ![GaryOS GUI Screenshot](artifacts/images/screenshot_gui.png "GaryOS GUI Screenshot")
 
-## Quick Start #################################################################
+## Release #####################################################################
+[Release]: #release
+
+### Quick Start ################################################################
 [Quick Start]: #quick-start
 
 GaryOS releases are not stored in the Git repository, due to size.  The first
@@ -123,7 +119,7 @@ is no longer necessary.
 After use, the system may simply be powered off.  There is no need to shutdown
 GaryOS, since it will boot completely fresh from the file each time.
 
-## Requirements ################################################################
+### Requirements ###############################################################
 [Requirements]: #requirements
 
 A 64-bit x86 CPU is required.  GaryOS is not built for any other platforms.
@@ -155,7 +151,7 @@ infrastructure which does not display any progress.  The actual boot time is
 just as fast as other live systems, but the lack of output can be unnerving.
 Thus, the final requirement is a tad bit of patience.
 
-## Contact & Support ###########################################################
+### Contact & Support ##########################################################
 [Contact & Support]: #contact--support
 
 [Gary B. Genett] is the sole developer and maintainer of GaryOS.  It is
@@ -187,7 +183,10 @@ release.
 The author will also take you out on the town if you schedule time to geek out
 with him in the Seattle area.
 
-## Acknowledgements & Reviews ##################################################
+## Project #####################################################################
+[Project]: #project
+
+### Acknowledgements & Reviews #################################################
 [Acknowledgements & Reviews]: #acknowledgements--reviews
 
 GaryOS has maintained a steady stream of downloads since its inception in 2014.
@@ -224,7 +223,7 @@ this far.
 
 <!-- WORK: http://without-systemd.org/wiki/index.php/Linux_distributions_without_systemd/unlisted -->
 
-## Contributing ################################################################
+### Contributing ###############################################################
 [Contributing]: #contributing
 
 This is very much a personal project, but any contributions are welcome and
@@ -261,7 +260,7 @@ This collection of sections covers GaryOS and the repository in greater depth,
 and is not for the faint of heart.
 
 It is mainly here for completeness.  The most useful information is in the
-[Overview] and [Instructions] sections.
+[Introduction] and [Instructions] sections.
 
 ## Design ######################################################################
 [Design]: #design
