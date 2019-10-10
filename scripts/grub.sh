@@ -398,20 +398,22 @@ declare MODULES_UEFI="$(
 ########################################
 
 declare BLOCKS_SIZE="512"
-declare BLOCKS_BOOT="$(( (2**10)*4 ))"
-declare BLOCKS_DATA="$(( (2**10)*(2**6) *2))"
-if ! ${DEBUG}; then
-	BLOCKS_DATA="$(( (2**10)*(2**10) *2))"
-fi
-#>>> declare BLOCKS_NULL="${BLOCKS_DATA}"
-declare BLOCKS_NULL="0"
+
+declare BCALC_SCALE="9"
+declare GB_BIT_SIZE="$(( ( (10**3)**3 ) ))"
+declare GB_BYTESIZE="$(( ( (2**10)**3 ) ))"
+declare GB_ISACTUAL="$(echo "scale=${BCALC_SCALE} ; ( ${GB_BIT_SIZE} / ${GB_BYTESIZE} ) * ${GB_BIT_SIZE}" | bc | ${SED} "s|[.].*$||g")"
+declare GB_DISKSIZE="$(( ${GB_ISACTUAL} * 4 ))"
+
+declare BLOCKS_ROOM="$(( ( (2**10)*4		) ))"
+declare BLOCKS_GMBR="$(( ( ${GB_BYTESIZE}/8	) / ${BLOCKS_SIZE} ))"
+declare BLOCKS_GEFI="$(( ( ${GB_BYTESIZE}	) / ${BLOCKS_SIZE} ))"
+
+declare BLOCKS_NULL="$(( ( ${GB_BYTESIZE}/16	) / ${BLOCKS_SIZE} ))"
+	BLOCKS_NULL="0"
 
 declare LOOP_DEVICE="/dev/loop9"
-declare LOOP_BLOCKS="$(( ${BLOCKS_BOOT} + (${BLOCKS_NULL}*2) + (${BLOCKS_DATA}*2) + (${BLOCKS_DATA}*1) ))"
-if ! ${DEBUG}; then
-#>>>	LOOP_BLOCKS="$(( ${BLOCKS_BOOT} + (${BLOCKS_NULL}*2) + (${BLOCKS_DATA}*2) + (${BLOCKS_DATA}*4) ))"
-	LOOP_BLOCKS="$(( ${BLOCKS_BOOT} + (${BLOCKS_NULL}*2) + (${BLOCKS_DATA}*2) + (${BLOCKS_DATA}*2) ))"
-fi
+declare LOOP_BLOCKS="$(( ${GB_DISKSIZE} / ${BLOCKS_SIZE} ))"
 
 declare NEWBLOCK=
 declare GDISK=
@@ -425,15 +427,15 @@ GDISK+="p\n"
 # bios partition
 GDISK+="n\n"
 GDISK+="${GPMBR}\n"
-NEWBLOCK="${BLOCKS_BOOT}"				; GDISK+="${NEWBLOCK}\n"
-NEWBLOCK="$(( ${NEWBLOCK} + ${BLOCKS_DATA} -1 ))"	; GDISK+="${NEWBLOCK}\n"
+NEWBLOCK="${BLOCKS_ROOM}"				; GDISK+="${NEWBLOCK}\n"
+NEWBLOCK="$(( ${NEWBLOCK} + ${BLOCKS_GMBR} -1 ))"	; GDISK+="${NEWBLOCK}\n"
 GDISK+="${GNMBR}\n"
 GDISK+="p\n"
 # efi partition
 GDISK+="n\n"
 GDISK+="${GPEFI}\n"
 NEWBLOCK="$(( ${NEWBLOCK} + ${BLOCKS_NULL} +1 ))"	; GDISK+="${NEWBLOCK}\n"
-NEWBLOCK="$(( ${NEWBLOCK} + ${BLOCKS_DATA} -1 ))"	; GDISK+="${NEWBLOCK}\n"
+NEWBLOCK="$(( ${NEWBLOCK} + ${BLOCKS_GEFI} -1 ))"	; GDISK+="${NEWBLOCK}\n"
 GDISK+="${GNEFI}\n"
 GDISK+="p\n"
 # data partition
