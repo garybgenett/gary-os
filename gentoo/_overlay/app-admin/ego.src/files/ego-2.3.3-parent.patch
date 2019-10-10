@@ -1,0 +1,99 @@
+diff -Nuar ego-2.3.3/modules/profile.ego ego-2.3.3-fixed/modules/profile.ego
+--- ego-2.3.3/modules/profile.ego	2017-11-29 22:56:35.000000000 +0000
++++ ego-2.3.3-fixed/modules/profile.ego	2017-12-08 07:56:04.792278257 +0000
+@@ -48,7 +48,7 @@
+ 		list_parser.set_defaults(handler=self.handle_list_action)
+ 
+ 		update_parser = subparsers.add_parser('update', help="Update your profiles (/etc/portage/make.profile/parent)")
+-		update_parser.set_defaults(handler=self.handle_update_action)
++		update_parser.set_defaults(handler=self.handle_write)
+ 
+ 		single_profile_parsers = [
+ 			subparsers.add_parser('arch', help="Change your arch profile"),
+@@ -115,7 +115,7 @@
+ 					Output.log("      %s%26s%s (from %s %s)" % (Color.CYAN, inherited_spec.name, Color.END, parent_name, parent_type))
+ 		Output.log("")
+ 
+-	def handle_update_action(self, **options):
++	def handle_write(self, **options):
+ 		try:
+ 			with open(self.tree.master_parent_file, "w") as outfile:
+ 				self.tree.write(self.config, outfile)
+@@ -245,7 +245,7 @@
+ 		not_added = adds - available_mix_in_shortnames
+ 
+ 		for shortname in adds & available_mix_in_shortnames:
+-			self.tree.append_mixin("gentoo:" + self.catalog.find_path(ProfileType.MIX_IN, shortname))
++			self.tree.append_mixin("core-kit:" + self.catalog.find_path(ProfileType.MIX_IN, shortname))
+ 			self.writeout = True
+ 
+ 		# Do all output here -- our shortList() will reflect the mix-in changes made above. Then put informational messages
+@@ -264,14 +264,12 @@
+ 	def handle(self, **options):
+ 		portdir = os.path.join(self.config.kit_root, "core-kit")
+ 
+-		upgrade_to_core_kit = False
+-
+ 		self.catalog, self.tree = getProfileCatalogAndTree(portdir)
+ 
+ 		# If the profile needs to be written out for any reason, to either update it or fix it, writeout will be set to
+ 		# true.
+ 
+-		self.writeout = upgrade_to_core_kit
++		self.writeout = self.tree.modified
+ 
+ 		handler = options.pop('handler', self.handle_show_action)
+ 		handler(**options)
+@@ -286,9 +284,7 @@
+ 				Output.warning("No %s defined. Please set." % str(profile_type))
+ 
+ 		if self.writeout:
+-			if upgrade_to_core_kit:
+-				Output.warning("Upgrading gentoo repository references to core-kit.")
+-			self.handle_update_action()
++			self.handle_write()
+ 
+ 	def __call__(self, *args):
+ 		# Little trick to force end of arguments when using mix-ins command to
+diff -Nuar ego-2.3.3/modules/sync.ego ego-2.3.3-fixed/modules/sync.ego
+--- ego-2.3.3/modules/sync.ego	2017-11-29 22:56:35.000000000 +0000
++++ ego-2.3.3-fixed/modules/sync.ego	2017-12-08 07:56:40.345723363 +0000
+@@ -89,7 +89,7 @@
+ 		if os.path.islink(self.config.repos_conf_path):
+ 			try:
+ 				os.unlink(self.config.repos_conf_path)
+-				Output.echo(Color.darkcyan("Upgrading %s symlink to directory..." % self.config.repos_conf_path))
++				Output.echo(Color.darkcyan("Upgrading %s symlink to directory...\n" % self.config.repos_conf_path))
+ 			except PermissionError:
+ 				Output.warning("Unable to convert %s to directory; please do so manually." %
+ 				               self.config.repos_conf_path)
+diff -Nuar ego-2.3.3/python/ego/profile.py ego-2.3.3-fixed/python/ego/profile.py
+--- ego-2.3.3/python/ego/profile.py	2017-11-29 22:56:35.000000000 +0000
++++ ego-2.3.3-fixed/python/ego/profile.py	2017-12-08 07:56:04.793278297 +0000
+@@ -212,6 +212,12 @@
+ 		self.tree = tree
+ 		self.cwd = cwd
+ 		self.spec_str = spec_str
++
++		if self.spec_str.startswith("gentoo:"):
++			self.spec_str = "core-kit:" + self.spec_str[7:]
++			self.modified = True
++		else:
++			self.modified = False
+ 		self._resolved_path = None
+ 		self._profile_type = None
+ 
+@@ -323,6 +329,13 @@
+ 	def master_parent_file(self):
+ 		return os.path.join(self.root_parent_dir, "parent")
+ 
++	@property
++	def modified(self):
++		for specifier, odict in self.profile_hier.items():
++			if specifier.modified:
++				return True
++		return False
++
+ 	def write(self, config, outfile):
+ 
+ 		python_kit_branch = config.get_configured_kit("python-kit")

@@ -1,0 +1,104 @@
+From c6917b66147e917f548077cddab2decfeafb381b Mon Sep 17 00:00:00 2001
+From: "Gary B. Genett" <me@garybgenett.net>
+Date: Wed, 9 Oct 2019 01:52:31 -0700
+Subject: [PATCH] Add "commit" option to "ego sync".
+
+Provides a way to update the Portage tree to a specific commit in the
+main meta-repo repository.  For any circumstances where a particular
+version of the tree needs to be replicated for testing or repeatability
+purposes.
+---
+ modules/sync.ego | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+
+diff --git a/modules/sync.ego b/modules/sync.ego
+index dc8c1ef..d6835d8 100644
+--- a/modules/sync.ego
++++ b/modules/sync.ego
+@@ -58,6 +58,7 @@ class Module(EgoModule):
+ 		parser.add_argument('--meta-repo-only', dest="meta_only", action='store_true', help="Do not sync kits, only meta-repo.")
+ 		parser.add_argument('--dest', dest="dest", default=None, help="Manually specify destination of meta-repo")
+ 		parser.add_argument('--config-only', dest="config_only", action='store_true', help="Update /etc/portage/repos.conf files only.")
++		parser.add_argument('--commit', dest="commit", default='default', help="Pin the meta-repo portage tree to a particular commit hash.")
+ 
+ 	def sync_kit(self, kit_name, kit_root, branch, default_branch):
+ 		if branch is None:
+@@ -86,6 +87,9 @@ class Module(EgoModule):
+ 			desired_depth = self.config.kits_depth if self.config.kits_depth != 0 else 1
+ 			desired_sha1 = sha1_data
+ 
++		if (self.options.commit != 'default'):
++			Output.log(Color.cyan("Pinning repository to: %s" % (desired_sha1)))
++
+ 		if not kit.exists():
+ 			retval = kit.clone(self.config.sync_base_url.format(repo=kit_name), branch, depth=desired_depth)
+ 			if retval != 0:
+@@ -93,6 +97,8 @@ class Module(EgoModule):
+ 		else:
+ 			if not kit.is_git_repo():
+ 				Output.fatal("Kit %s exists but does not appear to be a git repository. Can't sync." % kit_name)
++		if (self.options.commit != 'default'):
++			kit.fetchRemote(branch, options=["--unshallow"])
+ 		if not kit.localBranchExists(branch):
+ 			kit.fetchRemote(branch)
+ 		kit.checkout(branch)
+@@ -104,6 +110,8 @@ class Module(EgoModule):
+ 
+ 		try:
+ 			kit_type = self.config.kit_info_metadata["kit_settings"][kit_name]["type"]
++		except KeyError:
++			kit_type = "AUTO"
+ 		except IndexError:
+ 			kit_type = "AUTO"
+ 		if kit_type == "INDY":
+@@ -120,6 +128,13 @@ class Module(EgoModule):
+ 
+ 			sha1_check(sha1, desired_sha1)
+ 
++			if (self.options.commit != 'default'):
++				success = kit.reset(options=["--hard", desired_sha1])
++				if success == 0:
++					return True
++				else:
++					return False
++
+ 			if sha1 == desired_sha1:
+ 				success = True
+ 			else:
+@@ -256,6 +271,8 @@ priority = %s
+ 			if not (self.options.kits_only or self.options.config_only):
+ 				repo = GitHelper(self, self.root)
+ 				Output.log(Color.green("Syncing meta-repo"))
++				if (self.options.commit != 'default'):
++					Output.log(Color.cyan("Pinning repository to: %s" % (self.options.commit)))
+ 				meta_repo_branch = self.config.meta_repo_branch
+ 				if repo.is_git_repo():
+ 				
+@@ -274,6 +291,10 @@ priority = %s
+ 						Output.fatal("Could not clone meta-repo at '%s'." % (self.root,))
+ 				else:
+ 					Output.fatal("Meta-repo exists but does not appear to be a git repository. Can't sync.")
++				if (self.options.commit != 'default'):
++					retval = repo.reset(options=["--hard", self.options.commit])
++					if retval != 0:
++						Output.fatal("There was an error syncing meta-repo.")
+ 			fails = []
+ 
+ 			we_synced = False
+@@ -295,6 +316,13 @@ priority = %s
+ 						Output.warning("Specified %s branch %s has been deprecated." % (kt, branch))
+ 					success = True
+ 					if not self.options.config_only:
++						if (self.options.commit != 'default'):
++							branch = sorted(self.config.kit_sha1_metadata[kt], reverse=True)[0]
++							for br in sorted(self.config.kit_sha1_metadata[kt], reverse=True):
++								pr = self.config.kit_info_metadata["kit_settings"][kt]["stability"][br]
++								if pr == "prime" or pr == "current":
++									branch = br
++									break
+ 						success = self.sync_kit(kt, self.kits_root, branch, default_branch)
+ 						we_synced = True
+ 						if not success:
+-- 
+2.15.2
+

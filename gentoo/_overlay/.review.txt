@@ -1,3 +1,69 @@
+diff :: app-admin/ego [rationale] ======================================================================================
+# custom patch
+# version
+diff :: app-admin/ego [source] =========================================================================================
+diff :: app-admin/ego [target] =========================================================================================
+Only in ./app-admin/ego.src: .audit
+Only in ./app-admin/ego: .rationale
+diff -u -U10 -r ./app-admin/ego.src/Manifest ./app-admin/ego/Manifest
+--- ./app-admin/ego.src/Manifest	2019-04-08 01:05:33.000000000 -0000
++++ ./app-admin/ego/Manifest	2019-10-09 21:28:03.837078591 -0000
+@@ -1,3 +1,5 @@
+-DIST ego-2.4.2.tar.gz 123713 BLAKE2B 22eea4842099ded4746a540031989b2f1f8780bc8478f1772d1b3f43ec1d87d3e34e4ad4e131200588d55af7106be8c7f3c68ffbcb7c450f4b0e6a5e3db85f17 SHA512 78726122f731d21b4ccbfec524754059565a5118e2449d7d9455900259fb66fe959c983eb2573f04643f2255592d47241f80c64113c7773b00956fabf1f5edde
+-DIST ego-2.5.0.2.tar.gz 160622 BLAKE2B c7967b569d557a4a6525c1328ef960fd188e889fcd23246ef3e536c2f6ef7843b993d80ed7be47c92deefdd0bb2bb7a55b7238cce4cfbc9540554af6a5cfdfb8 SHA512 3189d1b4483908bcc662eb44b8a384403fa15eb855b4f34040771f419082436e1c162c7d6a8e0b815e2b9b989187dfa418cb53a416882d792ce3f51d160dec53
+-DIST ego-2.5.0.4.tar.gz 160987 BLAKE2B bb3ae2758335d92f7eed0ad10f6dec2cd763795f9d01958d50aa6db67ea965e5d4501acb79fdceae8c807bd8b9d50d59706e65479b4a8e893c0a05cbf8e09420 SHA512 c92d45e71327aaf527a7d90ccd9adf5cceea8e5f858903a8eb9203f7ed7ef80b23eae8c7de4452b5a3888a6a82096d9e48ec7ca5d6c47d14691a26e0e004b645
++AUX add-commit-option-to-ego-sync.2.7.4-r1.patch 4154 BLAKE2B 058675350828a2cec4d1dde0b6a1874a4062eb0e94e586765e6a1b756ea55a8ccd62e96fd4b685ca991e804570bdf01ac4547676610e348473a4b11d8c527693 SHA512 056be669f15a14effc08634bd70471f8db1f134b2845e2882f9c8be402334a0647abc23d259213b5e79bb8e3c7d7f5dfc5985bd0bf1e62cd381736d04ecb7da1
++AUX ego.conf 174 BLAKE2B 32b2895d7fabaa153514e4edc3eb25759ffbf6b2b3257607445a40408f2195cbf0672920c83fbc09cbf7207618f231dcf2c8f957e1d304728089c589b1c71216 SHA512 774fafd53beb3cbdfebb9aad4b92a4fdee028b2e5fdbbe8edb3bb29c50fb4e2be1bd2ae78a05faf738b55993213130a0820f147efa5bca87f1663096c7e98858
++DIST ego-2.7.4.tar.gz 162693 BLAKE2B 306ef0112f35f3a502c4345ecb326c237b2ea6610729ba4bc769b7edd24bd8c549e1d20d911d8097d79625d8ca65b9cd0a211186369235af032dbbf1d07c9062 SHA512 14ff3477a7ef83268a928cda6a6cbb7fe99622e129ff8e117ce28ba0e3ac9e9b81ac622b1faf52d08422c02e9cb0e92544c73cf35190b954114e73c1b5466aa5
++EBUILD ego-2.7.4-r1.ebuild 1974 BLAKE2B 7bb03a6b33133ada0f2c98e05d9bd2bca1462b3a2a8de751cae03cc3f5798d53364c58282fbbd6b34a720769f6038f2e02a273b75bcadc20b7ea6ca0259510d3 SHA512 4ba78fa0f1d2c11effe5c43c439ef816badff4d5c2eace97b8658b30ecf439c42447bbd78ea3dc339d5b044b6867a31939af0a689db273fec04b44b4a140bb38
++EBUILD ego-9999.ebuild 1974 BLAKE2B 7bb03a6b33133ada0f2c98e05d9bd2bca1462b3a2a8de751cae03cc3f5798d53364c58282fbbd6b34a720769f6038f2e02a273b75bcadc20b7ea6ca0259510d3 SHA512 4ba78fa0f1d2c11effe5c43c439ef816badff4d5c2eace97b8658b30ecf439c42447bbd78ea3dc339d5b044b6867a31939af0a689db273fec04b44b4a140bb38
+Only in ./app-admin/ego.src: ego-2.4.2.ebuild
+Only in ./app-admin/ego.src: ego-2.5.0.2.ebuild
+Only in ./app-admin/ego.src: ego-2.5.0.4.ebuild
+Only in ./app-admin/ego: ego-2.7.4-r1.ebuild
+diff -u -U10 -r ./app-admin/ego.src/ego-9999.ebuild ./app-admin/ego/ego-9999.ebuild
+--- ./app-admin/ego.src/ego-9999.ebuild	2019-04-08 00:32:43.000000000 -0000
++++ ./app-admin/ego/ego-9999.ebuild	2019-10-09 21:22:28.993765470 -0000
+@@ -25,20 +25,24 @@
+ SLOT="0"
+ IUSE="zsh-completion"
+ RESTRICT="mirror"
+ 
+ DEPEND=""
+ RDEPEND="$PYTHON_DEPS
+ dev-python/appi:0/0.2[${PYTHON_USEDEP}]
+ dev-python/requests[${PYTHON_USEDEP}]
+ dev-python/mwparserfromhell[${PYTHON_USEDEP}]"
+ 
++#>>>
++PATCHES=( "${FILESDIR}"/add-commit-option-to-ego-sync.2.7.4-r1.patch )
++#>>>
++
+ src_install() {
+ 	exeinto /usr/share/ego/modules
+ 	doexe $S/modules/*.ego
+ 	insinto /usr/share/ego/modules-info
+ 	doins $S/modules-info/*
+ 	insinto /usr/share/ego/python
+ 	doins -r $S/python/*
+ 	rm -rf $D/usr/share/ego/python/test
+ 	dobin $S/ego
+ 	dosym ego /usr/bin/epro
+Only in ./app-admin/ego/files: add-commit-option-to-ego-sync.2.7.4-r1.patch
+Only in ./app-admin/ego.src/files: ego-2.3.3-parent.patch
+Only in ./app-admin/ego.src: metadata.xml
+diff :: app-admin/ego [files] ==========================================================================================
+PATCHES=( "${FILESDIR}"/add-commit-option-to-ego-sync.2.7.4-r1.patch )
+
+./app-admin/ego:
+Manifest
+ego-2.7.4-r1.ebuild
+ego-9999.ebuild
+files
+
+./app-admin/ego/files:
+add-commit-option-to-ego-sync.2.7.4-r1.patch
+ego.conf
 diff :: app-admin/keepassx [rationale] =================================================================================
 # no longer exists
 # lock version number
