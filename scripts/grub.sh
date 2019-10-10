@@ -24,7 +24,7 @@ declare TIMEOUT="5"
 
 declare GDEST="$(realpath ${1} 2>/dev/null)"
 if [[ ! -d ${GDEST} ]]; then
-	GDEST="(null)"
+	GDEST="[...]"
 fi
 shift
 
@@ -34,11 +34,11 @@ declare GPDEF="1"
 
 function print_usage {
 	cat <<_EOF_
-usage: ${SCRIPT} ...
+usage: ${SCRIPT} {directory} [options]
 
 {directory}		target directory to use for building grub files (must already exist)
 [-d || -d<0-9+>]	show debug information || number of objects to list (default: ${HEDEF})
-[-f || -fx]		format the target block device || use ext4 instead of exfat
+[-f || -fx]		format the target block device || use ext4 instead of vfat/exfat
 [block device]		use target device instead of the example loopfile
 	(loopfile):	${GIDEF}
 	grub<0-9+>	alternate partition number for example loopfile (default: ${GPDEF})
@@ -77,19 +77,19 @@ fi
 
 ########################################
 
-declare GPEFI="99"; declare GNEFI="ef00"; declare GFEFI="-d"
-declare GPMBR="98"; declare GNMBR="ef02"; #>>> declare GFMBR=""
+declare GPEFI="99"; declare GNEFI="ef00"; declare GFEFI="-d"	# vfat
+declare GPMBR="98"; declare GNMBR="ef02"; declare GFMBR="-d"	# vfat
 
 ########################################
 
 declare GFDSK="false"
-#>>> declare GFFMT="-f"
-declare GFFMT="-f"
+#>>> declare GFFMT="-d"			# vfat
+declare GFFMT="-f"			# exfat
 declare GFNUM="0700"
 if [[ ${1} == -f*(x) ]]; then
 	GFDSK="true"
 	if [[ ${1/#-f} == x ]]; then
-		GFFMT=""
+		GFFMT=""		# ext4
 		GFNUM="8300"
 	fi
 	shift
@@ -149,6 +149,7 @@ set timeout=-1
 
 # modules
 
+insmod fat
 insmod exfat
 insmod ext2
 
@@ -195,7 +196,7 @@ menuentry \"${_PROJ} Menu\" {
 }
 menuentry \"${_PROJ} Boot\" {
 	linux  (\${garyos_rescue})/${_BASE}/${_BASE}.null.kernel
-	linux  (\${garyos_rescue})/${_BASE}/${_BASE}.kernel ${GOPTS}
+	linux  (\${garyos_rescue})/${_BASE}/${_BASE}.kernel${GOPTS:+ ${GOPTS}}
 	initrd (\${garyos_rescue})/${_BASE}/${_BASE}.initrd
 	boot
 }
@@ -227,7 +228,7 @@ menuentry \"${_PROJ} Install Menu\" {
 }
 menuentry \"${_PROJ} Install Boot\" {
 	linux  (\${garyos_install})/boot/_null.kernel
-	linux  (\${garyos_install})/boot/kernel root=${GINST}${GPSEP}${GPART} ${GOPTS}
+	linux  (\${garyos_install})/boot/kernel root=${GINST}${GPSEP}${GPART}${GOPTS:+ ${GOPTS}}
 	initrd (\${garyos_install})/boot/initrd
 	boot
 }
@@ -367,6 +368,7 @@ declare MODULES_CORE="\
 	configfile
 	echo
 	\
+	fat
 	exfat
 	ext2
 	ntfs
