@@ -1110,7 +1110,6 @@ if [[ ${1} == -w ]]; then
 	ego profile build current				|| EXIT 1
 	ego profile flavor desktop				|| EXIT 1
 	ego profile show
-	locale-gen
 	gcc-config $(gcc-config --list-profiles | awk '{print $2;}' | sort -n | tail -n1)
 	gcc-config --list-profiles
 	java-config --set-system-vm $(java-config --list-available-vm | ${GREP} -o "icedtea[-][0-9]+" | sort -n | tail -n1)
@@ -1129,6 +1128,9 @@ if [[ ${1} == -w ]]; then
 		eselect ${KEY} set ${VAL}
 		eselect ${KEY} list
 	done
+	ldconfig
+	env-update
+	locale-gen
 	EXIT 0
 fi
 
