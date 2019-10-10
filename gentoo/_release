@@ -591,12 +591,17 @@ function release_kernel_initramfs {
 		-e "/CONFIG_INITRAMFS_COMPRESSION/d" \
 		-e "s|^.*(CONFIG_INITRAMFS_SOURCE)[^_].*$|${INITRAMFS_CONFIG}|g" \
 								${TARGET}${LDIR}/.config			|| return 1
-	if [[ ${TARGET} != / ]]; then
-		${RSYNC_U} ${TARGET}${LDIR}/.config		${TARGET}${ARCDIR}/${KCFG}.initramfs		|| return 1
-		${GREP} "CONFIG_(KERNEL|INITRAMFS|RD)_"		${TARGET}${ARCDIR}/${KCFG}.initramfs		|| return 1
-		diff ${DIFF_OPTS} ${TARGET}${ARCDIR}/${KCFG}	${TARGET}${ARCDIR}/${KCFG}.initramfs		| ${GREP} "^[-+]" #>>> || return 1
-	fi
 	${RM}							${TARGET}${LDIR}/usr/initramfs_data.cpio*	|| return 1
+	return 0
+}
+
+function release_kernel_diff {
+	declare LDIR="${1}" && shift
+	if [[ ${TARGET} != / ]]; then
+		${RSYNC_U} ${TARGET}${LDIR}/.config		${TARGET}${ARCDIR}/${KCFG}.initramfs	|| return 1
+		${GREP} "CONFIG_(SHMEM|KERNEL|INITRAMFS|RD)_"	${TARGET}${ARCDIR}/${KCFG}.initramfs	|| return 1
+		diff ${DIFF_OPTS} ${TARGET}${ARCDIR}/${KCFG}	${TARGET}${ARCDIR}/${KCFG}.initramfs	| ${GREP} "^[-+]" #>>> || return 1
+	fi
 	return 0
 }
 
@@ -612,6 +617,7 @@ function _release_kernel {	#{initrd}
 		if [[ -z ${INITRD} ]]; then
 			release_kernel_initramfs ${DODIR}				|| return 1
 		fi
+		release_kernel_diff ${DODIR}						|| return 1
 		declare BZIMAGE="${TARGET}${DODIR}/arch/x86/boot/bzImage"		|| return 1
 #>>>		declare BZIMAGE="${TARGET}${DODIR}/arch/x86_64/boot/bzImage"		|| return 1
 		declare BZ_MAKE="${TARGET}${DODIR}/arch/x86/Makefile"			|| return 1
