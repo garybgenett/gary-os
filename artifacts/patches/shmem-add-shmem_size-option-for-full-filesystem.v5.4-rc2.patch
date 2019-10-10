@@ -1,0 +1,107 @@
+From 04d8722cad919fc62bc0df11e219ba3ff59bd44f Mon Sep 17 00:00:00 2001
+From: "Gary B. Genett" <me@garybgenett.net>
+Date: Tue, 8 Oct 2019 12:12:46 -0700
+Subject: [PATCH] shmem: add shmem_size option for full filesystem
+
+Adds a kernel configuration option to specify the size of the shmem
+filesystem.  It is currently hard-coded to 50% of memory.  Users should
+have the option to set this value as they see fit.
+
+A specific case where this would be necessary is if the initramfs were
+larger than half of the memory, such as a 2.5GB "live" filesystem on
+a system with 4GB of memory.  Without this option, this causes a kernel
+panic.  With this option, the user may specify the number of pages of
+memory they need for their root filesystem.
+
+This patch creates the SHMEM_SIZE configuration option, which is
+specified as the number of memory pages to use for the shmem
+filesystem.  The default remains unchanged.  This patch has no impact
+unless the values are changed.
+
+The option is marked as expert, and the help text is clear that it
+should only be set if the user knows what they are doing.
+
+Signed-off-by: Gary B. Genett <me@garybgenett.net>
+---
+ init/Kconfig | 11 +++++++++++
+ mm/shmem.c   | 20 ++++++++++++++++++--
+ 2 files changed, 29 insertions(+), 2 deletions(-)
+
+diff --git a/init/Kconfig b/init/Kconfig
+index b4daad2bac23..fcff0f1ea3e8 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1537,6 +1537,17 @@ config SHMEM
+ 	  option replaces shmem and tmpfs with the much simpler ramfs code,
+ 	  which may be appropriate on small systems without swap.
+ 
++config SHMEM_SIZE
++	int "Set the full shmem filesystem size" if EXPERT
++	default 0
++	depends on SHMEM
++	help
++	   Size of full shmem filesystem.  Defaults to 50% of memory,
++	   dynamically.  Must be defined as the number of 4096 byte memory
++	   pages, which will be static regardless of the amount of actual
++	   memory.  Unless you have a special use case, this value should not
++	   be changed.
++
+ config AIO
+ 	bool "Enable AIO support" if EXPERT
+ 	default y
+diff --git a/mm/shmem.c b/mm/shmem.c
+index cd570cc79c76..d5baaf7ac9e8 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -95,6 +95,13 @@ static struct vfsmount *shm_mnt;
+ /* Symlink up to this size is kmalloc'ed instead of using a swappable page */
+ #define SHORT_SYMLINK_LEN 128
+ 
++/* Default size of shmem filesystem (defaults to 50% of memory) */
++#if defined(CONFIG_SHMEM_SIZE) && (CONFIG_SHMEM_SIZE > 0)
++#define SHMEM_SIZE_DEFAULT ((unsigned long)CONFIG_SHMEM_SIZE)
++#else
++#define SHMEM_SIZE_DEFAULT (totalram_pages() / 2)
++#endif
++
+ /*
+  * shmem_fallocate communicates with shmem_fault or shmem_writepage via
+  * inode->i_private (with i_mutex making sure that it has only one user at
+@@ -123,16 +130,22 @@ struct shmem_options {
+ };
+ 
+ #ifdef CONFIG_TMPFS
++static void shmem_size_info(void)
++{
++	pr_info("shmem: setting default size: %lu pages, %lu bytes\n",
++		SHMEM_SIZE_DEFAULT, (SHMEM_SIZE_DEFAULT * PAGE_SIZE));
++}
++
+ static unsigned long shmem_default_max_blocks(void)
+ {
+-	return totalram_pages() / 2;
++	return SHMEM_SIZE_DEFAULT;
+ }
+ 
+ static unsigned long shmem_default_max_inodes(void)
+ {
+ 	unsigned long nr_pages = totalram_pages();
+ 
+-	return min(nr_pages - totalhigh_pages(), nr_pages / 2);
++	return min(nr_pages - totalhigh_pages(), SHMEM_SIZE_DEFAULT);
+ }
+ #endif
+ 
+@@ -3887,6 +3900,9 @@ int __init shmem_init(void)
+ {
+ 	int error;
+ 
++#ifdef CONFIG_TMPFS
++	shmem_size_info();
++#endif
+ 	shmem_init_inodecache();
+ 
+ 	error = register_filesystem(&shmem_fs_type);
+-- 
+2.15.2
+
