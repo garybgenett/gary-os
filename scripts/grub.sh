@@ -78,8 +78,8 @@ fi
 
 ########################################
 
-declare GPEFI="99"; declare GNEFI="ef00"; declare GFEFI="-d"	# vfat
-declare GPMBR="98"; declare GNMBR="ef02"; declare GFMBR="-d"	# vfat
+declare GPMBR="99"; declare GNMBR="ef02"; declare GFMBR="-d"	# vfat
+declare GPEFI="98"; declare GNEFI="ef00"; declare GFEFI="-d"	# vfat
 
 ########################################
 
@@ -415,25 +415,26 @@ fi
 
 declare NEWBLOCK=
 declare GDISK=
+declare GDHYB_READ=
 declare GDHYB=
 # reset table
 GDISK+="p\n"
 GDISK+="o\n"
 GDISK+="y\n"
 GDISK+="p\n"
-# efi partition
-GDISK+="n\n"
-GDISK+="${GPEFI}\n"
-NEWBLOCK="${BLOCKS_BOOT}"				; GDISK+="${NEWBLOCK}\n"
-NEWBLOCK="$(( ${NEWBLOCK} + ${BLOCKS_DATA} -1 ))"	; GDISK+="${NEWBLOCK}\n"
-GDISK+="${GNEFI}\n"
-GDISK+="p\n"
 # bios partition
 GDISK+="n\n"
 GDISK+="${GPMBR}\n"
-NEWBLOCK="$(( ${NEWBLOCK} + ${BLOCKS_NULL} +1 ))"	; GDISK+="${NEWBLOCK}\n"
+NEWBLOCK="${BLOCKS_BOOT}"				; GDISK+="${NEWBLOCK}\n"
 NEWBLOCK="$(( ${NEWBLOCK} + ${BLOCKS_DATA} -1 ))"	; GDISK+="${NEWBLOCK}\n"
 GDISK+="${GNMBR}\n"
+GDISK+="p\n"
+# efi partition
+GDISK+="n\n"
+GDISK+="${GPEFI}\n"
+NEWBLOCK="$(( ${NEWBLOCK} + ${BLOCKS_NULL} +1 ))"	; GDISK+="${NEWBLOCK}\n"
+NEWBLOCK="$(( ${NEWBLOCK} + ${BLOCKS_DATA} -1 ))"	; GDISK+="${NEWBLOCK}\n"
+GDISK+="${GNEFI}\n"
 GDISK+="p\n"
 # data partition
 GDISK+="n\n"
@@ -446,15 +447,17 @@ GDISK+="p\n"
 GDISK+="w\n"
 GDISK+="y\n"
 # hybrid mbr
-GDHYB+="r\n"
+GDHYB_READ+="r\n"
+GDHYB_READ+="o\n"
+GDHYB+="${GDHYB_READ}"
 GDHYB+="h\n"
-GDHYB+="${GPMBR} ${GPART} ${GPEFI}\n"
+GDHYB+="${GPMBR} ${GPEFI} ${GPART}\n"
 GDHYB+="n\n"
 GDHYB+="${GNMBR}/%[0-9][0-9]}\n"
 GDHYB+="y\n"
-GDHYB+="${GFNUM}/%[0-9][0-9]}\n"
-GDHYB+="n\n"
 GDHYB+="${GNEFI}/%[0-9][0-9]}\n"
+GDHYB+="n\n"
+GDHYB+="${GFNUM}/%[0-9][0-9]}\n"
 GDHYB+="n\n"
 GDHYB+="o\n"
 GDHYB+="w\n"
@@ -479,6 +482,7 @@ function exit_summary {
 	echo -en "${HEADER}\n"
 
 	(cd $(dirname ${GINST}) &&
+		echo -en "${GDHYB_READ}q\n" | gdisk $(basename ${GINST}) &&
 		gdisk -l $(basename ${GINST})
 	)
 	(cd ${GDEST} &&
@@ -549,9 +553,10 @@ function partition_disk {
 	declare DEV="${1}"
 	shift
 	echo -en "${GDISK}" | gdisk ${DEV}		|| return 1
-	echo -en "${GDHYB}" | gdisk ${DEV}		|| return 1
-	yes | format ${GFFMT} ${DEV}${GPSEP}${GPART}	|| return 1
+#>>>	echo -en "${GDHYB}" | gdisk ${DEV}		|| return 1
+#>>>	yes | format ${GFMBR} ${DEV}${GPSEP}${GPMBR}	|| return 1
 	yes | format ${GFEFI} ${DEV}${GPSEP}${GPEFI}	|| return 1
+	yes | format ${GFFMT} ${DEV}${GPSEP}${GPART}	|| return 1
 	return 0
 }
 
