@@ -127,10 +127,11 @@ function common_untar {
 
 #NOTE: CONSULT THE "SYSTEM INSTALLATION" TABLE IN "README" FOR THIS SECTION
 
+declare FINDMNT="findmnt --noheadings --output TARGET --target"
+
 #note: this is called statically in the "_system" script
 #note: cross-reference with the "release_install" function any time this changes
 function _release_reset {	#{main}
-	declare FINDMNT="findmnt --noheadings --output TARGET --target"
 	if [[ ${TARGET} != / ]]; then
 		${RM} ${TARGET}/{.,_}${_TITLE}*		|| return 1
 	fi
@@ -532,8 +533,8 @@ function release_cpio_dir {	#>>> {initrd}
 
 function _release_cpio {	#{initrd}
 	declare INITRD= ; if [[ ${1} == --initrd ]]; then INITRD="${1}" && shift; fi
-	mount_dev_dirs -u	|| return 1
-	${MKDIR} ${_FINAL}	|| return 1
+	mount_dev_dirs -u				|| return 1
+	${MKDIR} ${_FINAL}				|| return 1
 	if {
 		{ [[ ! -f ${CPIO_FILE}.xz ]]	&& [[ -n ${INITRD} ]]; } ||
 		{ [[ ! -f ${CPIO_FILE} ]]	&& [[ -z ${INITRD} ]]; }
