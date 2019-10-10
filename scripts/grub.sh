@@ -30,6 +30,7 @@ shift
 
 declare HEDEF="10"
 declare GIDEF="${GDEST}/loopfile.img"
+declare GIBAK="/dev/sda"
 declare GPDEF="1"
 
 function print_usage {
@@ -42,8 +43,8 @@ usage: ${SCRIPT} {directory} [options]
 [block device]		use target device instead of the example loopfile
 	(loopfile):	${GIDEF}
 	grub<0-9+>	alternate partition number for example loopfile (default: ${GPDEF})
-	/dev/sda	use specified device with standard data partition (default: ${GPDEF})
-	/dev/sda<0-9+>	custom data partition number
+	${GIBAK}	use specified device with standard data partition (default: ${GPDEF})
+	${GIBAK}<0-9+>	custom data partition number
 [kernel options]	additional custom options to pass to the kernel at boot
 
 All arguments must be used in the order specified.
@@ -111,6 +112,7 @@ if [[ -b $(		echo ${1} | ${SED} "s|[p]?[0-9]+$||g") ]] || [[ ${1} == grub+([0-9]
 	fi
 	shift
 fi
+declare GINST_DO="${GINST}"
 GPSEP="$(echo "${GPART}" | ${SED} "s|^([p]?)([0-9]+)$|\1|g")"
 GPART="$(echo "${GPART}" | ${SED} "s|^([p]?)([0-9]+)$|\2|g")"
 
@@ -228,7 +230,14 @@ menuentry \"${_PROJ} Install Menu\" {
 }
 menuentry \"${_PROJ} Install Boot\" {
 	linux  (\${garyos_install})/boot/_null.kernel
-	linux  (\${garyos_install})/boot/kernel root=${GINST}${GPSEP}${GPART}${GOPTS:+ ${GOPTS}}
+	linux  (\${garyos_install})/boot/kernel root=$(
+		if [[ ${GINST} == ${GIDEF} ]]; then
+#>>>			echo -en "${GIBAK}${GPSEP}${GPART}"
+			echo -en "${GIBAK}${GPART}"
+		else
+			echo -en "${GINST}${GPSEP}${GPART}"
+		fi
+	)${GOPTS:+ ${GOPTS}}
 	initrd (\${garyos_install})/boot/initrd
 	boot
 }
@@ -558,11 +567,11 @@ function custom_menu {
 	return 0
 }
 
-if [[ -b ${GINST} ]]; then
+if [[ -b ${GINST_DO} ]]; then
 	if ${GFDSK}; then
-		partition_disk ${GINST}			|| exit 1
+		partition_disk ${GINST_DO}		|| exit 1
 	fi
-	custom_menu ${GINST}				|| exit 1
+	custom_menu ${GINST_DO}				|| exit 1
 else
 	dd \
 		status=progress \
@@ -573,9 +582,9 @@ else
 		of=${GINST}				|| exit 1
 	losetup -d ${LOOP_DEVICE}			#>>> || exit 1
 	losetup -v -P ${LOOP_DEVICE} ${GINST}		|| exit 1
-	partition_disk ${LOOP_DEVICE}			|| exit 1
-	custom_menu ${LOOP_DEVICE}			|| exit 1
-	GINST="${LOOP_DEVICE}"
+	GINST_DO="${LOOP_DEVICE}"
+	partition_disk ${GINST_DO}			|| exit 1
+	custom_menu ${GINST_DO}				|| exit 1
 fi
 
 ########################################
@@ -629,7 +638,7 @@ ${RM} ${GDEST}/*.tar.tar				|| exit 1
 
 FILE="${GDEST}/.mount"
 ${MKDIR} ${FILE}								|| exit 1
-mount-robust ${GINST}${GPSEP}${GPART} ${FILE}					|| exit 1
+mount-robust ${GINST_DO}${GPSEP}${GPART} ${FILE}				|| exit 1
 ${RSYNC_U} ${GDEST}/rescue.img ${GDEST}/_${GTYPE}/core.img			|| exit 1
 grub-install \
 	--verbose \
@@ -638,19 +647,19 @@ grub-install \
 	--target="${GTYPE}" \
 	--directory="${GDEST}/_${GTYPE}" \
 	--boot-directory="${FILE}/${SCRIPT}" \
-	${GINST}								|| exit_summary 1
+	${GINST_DO}								|| exit_summary 1
 ${RSYNC_U} ${GDEST}/rescue.img ${FILE}/${SCRIPT}/grub/${GTYPE}/			|| exit 1
 grub-bios-setup \
 	--verbose \
 	--skip-fs-probe \
 	--directory="${FILE}/${SCRIPT}/grub/${GTYPE}" \
 	--core-image="rescue.img" \
-	${GINST}								|| exit_summary 1
+	${GINST_DO}								|| exit_summary 1
 ${MV} ${FILE}/${SCRIPT} ${GDEST}/_${GTYPE}.boot					|| exit 1
-mount-robust -u ${GINST}${GPSEP}${GPART}					|| exit 1
+mount-robust -u ${GINST_DO}${GPSEP}${GPART}					|| exit 1
 ${RM} ${GDEST}/.mount								|| exit 1
 
-if [[ -b ${GINST}${GPSEP}${GPEFI} ]]; then
+if [[ -b ${GINST_DO}${GPSEP}${GPEFI} ]]; then
 	function efi_cp {
 		declare SRC="${1}"; shift
 		declare DST="${1}"; shift
@@ -663,7 +672,7 @@ if [[ -b ${GINST}${GPSEP}${GPEFI} ]]; then
 		return 0
 	}
 	${MKDIR} ${GDEST}/.mount-efi						|| exit 1
-	mount-robust ${GINST}${GPSEP}${GPEFI} ${GDEST}/.mount-efi		|| exit 1
+	mount-robust ${GINST_DO}${GPSEP}${GPEFI} ${GDEST}/.mount-efi		|| exit 1
 	FILE="${GDEST}/.mount-efi/EFI/BOOT"					|| exit 1
 	${MKDIR} ${FILE}							|| exit 1
 	for TYPE in ${GEFIS}; do
@@ -677,10 +686,10 @@ if [[ -b ${GINST}${GPSEP}${GPEFI} ]]; then
 			--directory="${GDEST}/_${TYPE}" \
 			--boot-directory="${GDEST}/.mount-efi/${SCRIPT}" \
 			--efi-directory="${GDEST}/.mount-efi" \
-			${GINST}						|| exit_summary 1
+			${GINST_DO}						|| exit_summary 1
 		efi_cp ${FILE} ${GDEST}/.mount-efi/EFI/BOOT			|| exit 1
 		${MV} ${GDEST}/.mount-efi/${SCRIPT} ${GDEST}/_${TYPE}.boot	|| exit 1
-		mount-robust -u ${GINST}${GPSEP}${GPEFI}			|| exit 1
+		mount-robust -u ${GINST_DO}${GPSEP}${GPEFI}			|| exit 1
 	done
 	${RM} ${GDEST}/.mount-efi						|| exit 1
 fi
