@@ -582,7 +582,7 @@ function release_kernel_shmem {
 	SHMEM="$(${DU_S} ${CPIO_FILE} | ${SED} "s|[[:space:]].*$||g")"
 	SHMEM="$(echo "((${SHMEM}+(${SHMEM_MEM}))/${SHMEM_PAGES})" | bc | ${SED} -r "s|[.].*$||g")"
 	SHMEM="$(echo "(${SHMEM}*${SHMEM_PAGES})" | bc)"
-	echo "CONFIG_SHMEM_SIZE=\"${SHMEM}\"" >>${TARGET}${LDIR}/.config	| return 1
+	echo "CONFIG_SHMEM_SIZE=\"${SHMEM}\"" >>${TARGET}${LDIR}/.config	|| return 1
 	return 0
 }
 
