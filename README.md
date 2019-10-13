@@ -311,7 +311,7 @@ Top requirements:
 
   * All-purpose, multi-OS rescue environment, based on Funtoo
   * Complete system, with all packages installed as they normally would be
-  * As close to default as possible, aside from "portage" package build tuning
+  * As close to default as possible, aside from Portage package build tuning
   * Generic 64-bit build, supporting most modern x86 platforms
   * Bootable from a single kernel file, using initramfs
   * Make Funtoo installation trivial as a live media
@@ -319,6 +319,8 @@ Top requirements:
 Other objectives:
 
   * Support as many boot methods as possible, such as USB setup and PXE
+  * Minimalist, performant Portage configuration, using only what is needed
+  * Avoid non-opensource and binary licenses and packages as much as possible
   * Example configuration/scripts for tuning and maintaining a Funtoo system
   * Foster a DIY (Do It Yourself) approach through good documentation
   * Learning environment for those new to GNU/Linux or Funtoo
