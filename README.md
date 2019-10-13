@@ -189,39 +189,65 @@ with him in the Seattle area.
 ### Acknowledgements & Reviews #################################################
 [Acknowledgements & Reviews]: #acknowledgements--reviews
 
-GaryOS has maintained a steady stream of downloads since its inception in 2014.
-As of September 2019, it has maintained an average of ~90 downloads a month
-over its lifetime, with notable spikes of ~2K, ~0.6K and ~1.5K in March 2018,
-January 2019 and September 2019, respectively.  Activity is concentrated in the
-U.S. and Europe, but there is clearly a worldwide audience.
-
-  * [https://sourceforge.net/projects/gary-os/files/stats/timeline?dates=2014-02-28+to+2038-01-19](https://sourceforge.net/projects/gary-os/files/stats/timeline?dates=2014-02-28+to+2038-01-19)
-  * [https://sourceforge.net/projects/gary-os/files/stats/map?dates=2014-02-28+to+2038-01-19](https://sourceforge.net/projects/gary-os/files/stats/map?dates=2014-02-28+to+2038-01-19)
+GaryOS has maintained a [steady stream of overall downloads] since its
+inception in 2014.  Activity is concentrated in the U.S. and Europe, but there
+is clearly a worldwide audience, with interest coming from [countries all over
+the world].  Current [v4.0 downloads] are being tracked since [v4.0] was
+released in October 2019.  As of September 2019, GaryOS maintained an average
+of 10-15 [v3.0 downloads] a month since the [v3.0] release in March 2015.
+There are notable spikes in the overall downloads of ~2K, ~0.6K and ~1.5K in
+March 2018, January 2019 and September 2019, respectively, which were most
+likely fetches of supporting files.  The SourceForge statistics are not
+granular enough to investigate.
 
 Despite the relatively small user base, modest infrastructure, and infrequent
 release schedule, GaryOS has managed to receive some official acknowledgment.
+Most notably, it has been included in the [Gentoo family tree] and listed on
+the [Funtoo ecosystem page].
 
-Most notably, it has been included in the official Gentoo family tree:
+![Gentoo Ecosystem](artifacts/archive/gentoo-18_01_svg.png "Gentoo Ecosystem")
+*Source: <https://github.com/gentoo/gentoo-ecosystem/blob/master/gentoo-18.01.svg>*
 
-![Gentoo Ecosystem](artifacts/archive/gentoo-18.01.svg.png "Gentoo Ecosystem")
+No entries in the [Wikipedia list of Linux distributions] or on [DistroWatch] yet...
 
-*Source: [https://github.com/gentoo/gentoo-ecosystem/blob/master/gentoo-18.01.svg](https://github.com/gentoo/gentoo-ecosystem/blob/master/gentoo-18.01.svg)*
+There is a [Softpedia review] of [v3.0] from a few years ago (written the day
+after it was released), which is interesting because they took the time to boot
+it up and play with it, and make some comments of their own beyond doing
+a copy/paste of the README text.
 
-It is also listed on the official Funtoo ecosystem page:
+An [Internet search for "GaryOS"] yields a few more random mentions.  It is on
+the [Wikipedia list of Gentoo-derived distributions].  By virtue of being based
+on Gentoo/Funtoo, it proudly makes the list of [non-systemd distributions].
 
-[https://funtoo.org/Gentoo_Ecosystem](https://funtoo.org/Gentoo_Ecosystem)
-
-There is a Softpedia review of v2.0 from a few years ago, which is interesting
-because it means somebody took the time to boot it up and play with it:
-
-[https://linux.softpedia.com/get/Linux-Distributions/GaryOS-103629.shtml](https://linux.softpedia.com/get/Linux-Distributions/GaryOS-103629.shtml)
+An extremely random find is a [guide to ntscript tutorial] which uses "GaryOS"
+in the examples, based on that author's name.  While entertaining, there are
+some very disagreeable comments made in that article.  It is only mentioned
+here to make a clear statement on it if anyone else comes across it.
 
 Snapshots of all discovered references to GaryOS are kept in the
 "[artifacts/archive]" directory.  Please use [Contact & Support] to notify the
 author of any other acknowledgements you may find, including you having read
 this far.
 
-<!-- WORK: http://without-systemd.org/wiki/index.php/Linux_distributions_without_systemd/unlisted -->
+[steady stream of overall downloads]: https://sourceforge.net/projects/gary-os/files/stats/timeline?dates=2014-02-28+to+2038-01-19
+[countries all over the world]: https://sourceforge.net/projects/gary-os/files/stats/map?dates=2014-02-28+to+2038-01-19
+[v4.0 downloads]: https://sourceforge.net/projects/gary-os/files/gary-os-generic_64-v4.0.kernel/stats/timeline?dates=2014-02-28+to+2038-01-19
+[v3.0 downloads]: https://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v3.0.kernel/stats/timeline?dates=2014-02-28+to+2038-01-19
+[v2.0 downloads]: https://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v2.0.kernel/stats/timeline?dates=2014-02-28+to+2038-01-19
+[v1.1 downloads]: https://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v1.1.kernel/stats/timeline?dates=2014-02-28+to+2038-01-19
+[v1.0 downloads]: https://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v1.0.kernel/stats/timeline?dates=2014-02-28+to+2038-01-19
+
+[Gentoo family tree]: https://github.com/gentoo/gentoo-ecosystem
+[Funtoo ecosystem page]: https://funtoo.org/Gentoo_Ecosystem
+[Wikipedia list of Linux distributions]: https://en.wikipedia.org/wiki/List_of_Linux_distributions
+[DistroWatch]: https://distrowatch.com/table.php?distribution=funtoo
+[Softpedia review]: https://linux.softpedia.com/get/Linux-Distributions/GaryOS-103629.shtml
+[Internet search for "GaryOS"]: https://duckduckgo.com/?q=GaryOS
+[Wikipedia list of Gentoo-derived distributions]: https://en.wikipedia.org/wiki/Gentoo_Linux#Derived_distributions
+[non-systemd distributions]: https://sysdfree.wordpress.com/2019/03/09/135
+[guide to ntscript tutorial]: https://forums.yogstation.net/index.php?threads/garys-guide-to-ntscript.14759
+
+<!-- http://without-systemd.org/wiki/index.php/Linux_distributions_without_systemd/unlisted -->
 
 ### Contributing ###############################################################
 [Contributing]: #contributing
