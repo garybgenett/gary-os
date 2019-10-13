@@ -6,11 +6,11 @@
 "The one file that does it all."
 
   * Latest: GaryOS v3.0 ([64-bit]) ([32-bit]) ([Packages]) ([Notes]) ([License])
-  * Homepage: [https://github.com/garybgenett/gary-os](https://github.com/garybgenett/gary-os)
-  * Download: [https://sourceforge.net/projects/gary-os](https://sourceforge.net/projects/gary-os)
+  * Homepage: <https://github.com/garybgenett/gary-os>
+  * Download: <https://sourceforge.net/projects/gary-os>
 
 [Homepage]: https://github.com/garybgenett/gary-os
-[Download]: https://sourceforge.net/projects/gary-os/files
+[Download]: https://sourceforge.net/projects/gary-os
 [Readme]: https://github.com/garybgenett/gary-os/blob/master/README.md
 [License]: https://github.com/garybgenett/gary-os/blob/master/LICENSE.md
 
@@ -271,11 +271,14 @@ and conduct statements.  These are the two best documents the author could
 find, the latter of which was suggested by GitHub, which in turn inspired an
 Internet search to find the former:
 
-  * Social Protection & Human Rights Equality and Non-discrimination: [https://socialprotection-humanrights.org/framework/principles/equality-and-non-discrimination](https://socialprotection-humanrights.org/framework/principles/equality-and-non-discrimination)
-  * Contributor Covenant Code of Conduct: [https://contributor-covenant.org/version/1/4/code-of-conduct.html](https://contributor-covenant.org/version/1/4/code-of-conduct.html)
+  * [Social Protection & Human Rights Equality and Non-discrimination]
+  * [Contributor Covenant Code of Conduct]
 
 Hopefully that covers all the bases.  Let's all just be kind to one another, so
 we don't even need documents like these.
+
+[Social Protection & Human Rights Equality and Non-discrimination]: https://socialprotection-humanrights.org/framework/principles/equality-and-non-discrimination
+[Contributor Covenant Code of Conduct]: https://contributor-covenant.org/version/1/4/code-of-conduct.html
 
 ********************************************************************************
 
@@ -576,26 +579,26 @@ distribute GaryOS.  Additional honorable mentions are in [Ecosystem].
 First and foremost, the projects which brought opensource into the mainstream
 need to be recognized:
 
-  * GNU (GNU's Not Unix): [https://gnu.org](https://gnu.org)
-  * GNU/Linux: [https://gnu.org/gnu/linux-and-gnu.html](https://gnu.org/gnu/linux-and-gnu.html)
-  * Linux: [https://linuxfoundation.org](https://linuxfoundation.org), [https://kernel.org](https://kernel.org)
+  * GNU (GNU's Not Unix): <https://gnu.org>
+  * GNU/Linux: <https://gnu.org/gnu/linux-and-gnu.html>
+  * Linux: <https://linuxfoundation.org>
 
 All the real heavy-lifting is accomplished using these tools/projects:
 
-  * Funtoo: [https://funtoo.org](https://funtoo.org)
-  * Gentoo: [https://gentoo.org](https://gentoo.org)
-  * Linux initramfs: [https://kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt](https://kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt)
-  * Grub: [https://gnu.org/software/grub](https://gnu.org/software/grub)
+  * Funtoo: <https://funtoo.org>
+  * Gentoo: <https://gentoo.org>
+  * Linux initramfs: <https://kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt>
+  * Grub: <https://gnu.org/software/grub>
 
 Kernel configuration, package lists and acknowledgments to:
 
-  * Grml: [https://grml.org](https://grml.org)
-  * SystemRescueCd: [http://www.system-rescue-cd.org](http://www.system-rescue-cd.org)
+  * Grml: <https://grml.org>
+  * SystemRescueCd: <http://www.system-rescue-cd.org>
 
 Special thanks to the sites which made worldwide distribution possible:
 
-  * SourceForge: [https://sourceforge.net](https://sourceforge.net)
-  * GitHub: [https://github.com](https://github.com)
+  * SourceForge: <https://sourceforge.net>
+  * GitHub: <https://github.com>
 
 GitHub was instrumental in inspiring the author to publish this project, but
 SourceForge provided the distribution platform which made it possible to reach
@@ -612,24 +615,24 @@ To start, homage must be paid to those who started it all (at least, these are
 the ones which the author used most over the years, after discovering tomsrtbt
 in 1998):
 
-  * tomsrtbt: [http://www.toms.net/rb](http://www.toms.net/rb)
-  * KNOPPIX: [https://knopper.net/knoppix](https://knopper.net/knoppix)
-  * Debian Live: [https://debian.org/devel/debian-live](https://debian.org/devel/debian-live)
+  * tomsrtbt: <http://www.toms.net/rb>
+  * KNOPPIX: <https://knopper.net/knoppix>
+  * Debian Live: <https://debian.org/devel/debian-live>
 
 Inspiration was provided by:
 
-  * Metro: [https://funtoo.org/Metro_Quick_Start_Tutorial](https://funtoo.org/Metro_Quick_Start_Tutorial)
-  * Buildroot: [https://buildroot.org](https://buildroot.org)
-  * BusyBox: [https://busybox.net](https://busybox.net)
-  * StaticPerl: [http://software.schmorp.de/pkg/App-Staticperl.html](http://software.schmorp.de/pkg/App-Staticperl.html)
+  * Metro: <https://funtoo.org/Metro_Quick_Start_Tutorial>
+  * Buildroot: <https://buildroot.org>
+  * BusyBox: <https://busybox.net>
+  * StaticPerl: <http://software.schmorp.de/pkg/App-Staticperl.html>
 
 There are also a few projects which are relied on for critical tasks or highly
 visible components, and deserve mention:
 
-  * Vim: [https://www.vim.org](https://www.vim.org)
-  * Qemu: [https://qemu.org](https://qemu.org)
-  * Suckless: [https://suckless.org](https://suckless.org)
-  * Links: [http://links.twibright.com](http://links.twibright.com)
+  * Vim: <https://www.vim.org>
+  * Qemu: <https://qemu.org>
+  * Suckless: <https://suckless.org>
+  * Links: <http://links.twibright.com>
 
 [Qemu]: https://qemu.org
 [Suckless]: https://suckless.org
@@ -666,10 +669,10 @@ These are also considered the "howto" instructions for each case.
         * For details on PXE, see the [PXE Boot] section below.
     * Grub: sys-boot/grub-2.02_beta2-r3
   * Research and development:
-    * [https://gnu.org/software/grub/manual/grub.html#BIOS-installation](https://gnu.org/software/grub/manual/grub.html#BIOS-installation)
-        * [https://gnu.org/software/grub/manual/grub.html#Images](https://gnu.org/software/grub/manual/grub.html#Images)
-    * [http://lukeluo.blogspot.com/2013/06/grub-how-to-4-memdisk-and-loopback.html](http://lukeluo.blogspot.com/2013/06/grub-how-to-4-memdisk-and-loopback.html)
-    * [http://wiki.osdev.org/GRUB_2#Disk_image_instructions](http://wiki.osdev.org/GRUB_2#Disk_image_instructions)
+    * <https://gnu.org/software/grub/manual/grub.html#BIOS-installation>
+        * <https://gnu.org/software/grub/manual/grub.html#Images>
+    * <http://lukeluo.blogspot.com/2013/06/grub-how-to-4-memdisk-and-loopback.html>
+    * <http://wiki.osdev.org/GRUB_2#Disk_image_instructions>
 
 For convenience and supportability, this case has also been automated in
 the `grub.sh` script.  The `gary-os.grub.*` file in the root download
@@ -710,10 +713,10 @@ Instructions for Grub "rescue" image installation to hard disk:
     * Windows 7 Ultimate SP1 64-bit
     * Grub: sys-boot/grub-2.02_beta2-r3
   * Research and development:
-    * [http://lists.gnu.org/archive/html/help-grub/2013-08/msg00005.html](http://lists.gnu.org/archive/html/help-grub/2013-08/msg00005.html)
-        * [http://blog.mudy.info/2010/08/boot-grub2-stage2-directly-from-windows-bootmgr-with-grub4dos-stage1](http://blog.mudy.info/2010/08/boot-grub2-stage2-directly-from-windows-bootmgr-with-grub4dos-stage1)
-    * [https://wiki.archlinux.org/index.php/Windows_and_Arch_Dual_Boot#Using_Windows_boot_loader](https://wiki.archlinux.org/index.php/Windows_and_Arch_Dual_Boot#Using_Windows_boot_loader)
-        * [http://iceflatline.com/2009/09/how-to-dual-boot-windows-7-and-linux-using-bcdedit](http://iceflatline.com/2009/09/how-to-dual-boot-windows-7-and-linux-using-bcdedit)
+    * <http://lists.gnu.org/archive/html/help-grub/2013-08/msg00005.html>
+        * <http://blog.mudy.info/2010/08/boot-grub2-stage2-directly-from-windows-bootmgr-with-grub4dos-stage1>
+    * <https://wiki.archlinux.org/index.php/Windows_and_Arch_Dual_Boot#Using_Windows_boot_loader>
+        * <http://iceflatline.com/2009/09/how-to-dual-boot-windows-7-and-linux-using-bcdedit>
 
 For convenience and supportability, this case has been mostly automated
 in the `grub.sh` script.  The `gary-os.grub.*` file in the root download
@@ -798,7 +801,7 @@ Administrator to remove the unwanted entries:
     * TFTPd: net-misc/iputils-20121221-r2
     * iPXE: sys-firmware/ipxe-1.0.0_p20130624-r2
   * Research and development:
-    * [https://wiki.archlinux.org/index.php/archboot#PXE_booting_.2F_Rescue_system](https://wiki.archlinux.org/index.php/archboot#PXE_booting_.2F_Rescue_system)
+    * <https://wiki.archlinux.org/index.php/archboot#PXE_booting_.2F_Rescue_system>
 
 Once you have a functioning PXE environment, on a global or per-host
 basis add the following configuration option to `dhcpd.conf`:
@@ -865,7 +868,7 @@ Wireless networks can then be scanned and configured:
 
 The Funtoo OpenRC scripts have all sorts of advanced networking features
 and options, covered in depth:
-[http://funtoo.org/Networking](http://funtoo.org/Networking)
+<http://funtoo.org/Networking>
 
 ### Graphical Interface ########################################################
 [Graphical Interface]: #graphical-interface
@@ -1019,13 +1022,10 @@ Instructions for installing to disk:
 [2015-03-16 v3.0 21811b59a8484b2a6b73e0c5277f23c50a0141dc.0]: #2015-03-16-v30-21811b59a8484b2a6b73e0c5277f23c50a0141dc0
 [v3.0]: #2015-03-16-v30-21811b59a8484b2a6b73e0c5277f23c50a0141dc0
 
-  * Files
-    * 64-bit kernel: [gary-os-generic_64-funtoo-stable-v3.0.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v3.0.kernel)
-    * 32-bit kernel: [gary-os-generic_32-funtoo-stable-v3.0.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v3.0.kernel)
+  * Files: [Readme](https://github.com/garybgenett/gary-os/blob/v3.0/README.md), [Packages (64-bit)](https://github.com/garybgenett/gary-os/blob/v3.0/_packages.64), [Packages (32-bit)](https://github.com/garybgenett/gary-os/blob/v3.0/_packages.32)
+    * Kernel (64-bit): [gary-os-generic_64-funtoo-stable-v3.0.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v3.0.kernel)
+    * Kernel (32-bit): [gary-os-generic_32-funtoo-stable-v3.0.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v3.0.kernel)
     * Grub: [grub.sh](https://github.com/garybgenett/gary-os/blob/v3.0/scripts/grub.sh)
-    * 64-bit packages: [https://github.com/garybgenett/gary-os/blob/v3.0/_packages.64](https://github.com/garybgenett/gary-os/blob/v3.0/_packages.64)
-    * 32-bit packages: [https://github.com/garybgenett/gary-os/blob/v3.0/_packages.32](https://github.com/garybgenett/gary-os/blob/v3.0/_packages.32)
-    * Readme: [https://github.com/garybgenett/gary-os/blob/v3.0/README.md](https://github.com/garybgenett/gary-os/blob/v3.0/README.md)
     * Source Stage3: [stage3-core2_64-funtoo-stable-2015-01-27.tar.xz](https://sourceforge.net/projects/gary-os/files/v3.0/stage3-core2_64-funtoo-stable-2015-01-27.tar.xz)
     * Source Portage: [portage-21811b59a8484b2a6b73e0c5277f23c50a0141dc.0.tar.xz](https://sourceforge.net/projects/gary-os/files/v3.0/portage-21811b59a8484b2a6b73e0c5277f23c50a0141dc.0.tar.xz)
   * Metro/Grub scripts
@@ -1049,13 +1049,10 @@ Instructions for installing to disk:
 [2014-06-19 v2.0 873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d.0]: #2014-06-19-v20-873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d0
 [v2.0]: #2014-06-19-v20-873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d0
 
-  * Files
+  * Files: [Readme](https://github.com/garybgenett/gary-os/blob/v2.0/README.md), [Packages (64-bit)](https://github.com/garybgenett/gary-os/blob/v2.0/_packages.64), [Packages (32-bit)](https://github.com/garybgenett/gary-os/blob/v2.0/_packages.32)
     * 64-bit kernel: [gary-os-generic_64-funtoo-stable-v2.0.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v2.0.kernel)
     * 32-bit kernel: [gary-os-generic_32-funtoo-stable-v2.0.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v2.0.kernel)
     * Grub: [grub.sh](https://github.com/garybgenett/gary-os/blob/v2.0/scripts/grub.sh)
-    * 64-bit packages: [https://github.com/garybgenett/gary-os/blob/v2.0/_packages.64](https://github.com/garybgenett/gary-os/blob/v2.0/_packages.64)
-    * 32-bit packages: [https://github.com/garybgenett/gary-os/blob/v2.0/_packages.32](https://github.com/garybgenett/gary-os/blob/v2.0/_packages.32)
-    * Readme: [https://github.com/garybgenett/gary-os/blob/v2.0/README.md](https://github.com/garybgenett/gary-os/blob/v2.0/README.md)
     * Source Stage3: [stage3-core2_64-funtoo-stable-2014-01-13.tar.xz](https://sourceforge.net/projects/gary-os/files/v2.0/stage3-core2_64-funtoo-stable-2014-01-13.tar.xz)
     * Source Portage: [portage-873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d.0.tar.xz](https://sourceforge.net/projects/gary-os/files/v2.0/portage-873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d.0.tar.xz)
   * Metro/Grub scripts
@@ -1089,7 +1086,7 @@ Instructions for installing to disk:
         web-browsing for solutions to issues.  In order to meet these
         needs, it was decided to incorporate X.Org GUI packages with
         a minimal window manager footprint.
-      * CLI interface remains the default (see [Minimal X.Org GUI]
+      * CLI interface remains the default (see [Graphical Interface]
         section for information on loading up and using the graphical
         environment).
 
@@ -1097,11 +1094,10 @@ Instructions for installing to disk:
 [2014-03-13 v1.1 95ad4fd257697618bae7402d4bc3a27499035d30.4]: #2014-03-13-v11-95ad4fd257697618bae7402d4bc3a27499035d304
 [v1.1]: #2014-03-13-v11-95ad4fd257697618bae7402d4bc3a27499035d304
 
-  * Files
+  * Files: [Readme](https://github.com/garybgenett/gary-os/blob/v1.1/README)
     * 64-bit kernel: [gary-os-generic_64-funtoo-stable-v1.1.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v1.1.kernel)
     * 32-bit kernel: [gary-os-generic_32-funtoo-stable-v1.1.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v1.1.kernel)
     * Grub: [grub.sh](https://github.com/garybgenett/gary-os/blob/v1.1/scripts/grub.sh)
-    * Readme: [https://github.com/garybgenett/gary-os/blob/v1.1/README](https://github.com/garybgenett/gary-os/blob/v1.1/README)
     * Source Stage3: [stage3-core2_64-funtoo-stable-2014-01-13.tar.xz](https://sourceforge.net/projects/gary-os/files/v1.1/stage3-core2_64-funtoo-stable-2014-01-13.tar.xz)
     * Source Portage: [portage-95ad4fd257697618bae7402d4bc3a27499035d30.4.tar.xz](https://sourceforge.net/projects/gary-os/files/v1.1/portage-95ad4fd257697618bae7402d4bc3a27499035d30.4.tar.xz)
   * Metro/Grub scripts
@@ -1116,10 +1112,9 @@ Instructions for installing to disk:
 [2014-02-28 v1.0 95ad4fd257697618bae7402d4bc3a27499035d30.3]: #2014-02-28-v10-95ad4fd257697618bae7402d4bc3a27499035d303
 [v1.0]: #2014-02-28-v10-95ad4fd257697618bae7402d4bc3a27499035d303
 
-  * Files
+  * Files: [Readme](https://github.com/garybgenett/gary-os/blob/v1.0/README)
     * 64-bit kernel: [gary-os-generic_64-funtoo-stable-v1.0.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v1.0.kernel)
     * 32-bit kernel: [gary-os-generic_32-funtoo-stable-v1.0.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v1.0.kernel)
-    * Readme: [https://github.com/garybgenett/gary-os/blob/v1.0/README](https://github.com/garybgenett/gary-os/blob/v1.0/README)
     * Source Stage3: [stage3-core2_64-funtoo-stable-2014-01-13.tar.xz](https://sourceforge.net/projects/gary-os/files/v1.0/stage3-core2_64-funtoo-stable-2014-01-13.tar.xz)
     * Source Portage: [portage-95ad4fd257697618bae7402d4bc3a27499035d30.3.tar.xz](https://sourceforge.net/projects/gary-os/files/v1.0/portage-95ad4fd257697618bae7402d4bc3a27499035d30.3.tar.xz)
   * Metro script
