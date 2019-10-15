@@ -39,6 +39,7 @@ sys-process/runit
 
 sys-apps/gptfdisk
 sys-block/parted
+sys-fs/btrfs-progs
 sys-fs/cryptsetup
 sys-fs/dosfstools
 sys-fs/e2fsprogs
