@@ -51,7 +51,7 @@ GaryOS is an entire GNU/Linux system in a single bootable file.  It is also
 a build system to produce both the bootable file and entire installations.
 
 The booted system consists of a Linux kernel and a Funtoo (based on Gentoo)
-initramfs.  It is generated using a customized Funtoo configuration with
+initramfs.  It is generated using a customized Portage configuration with
 a modified Linux kernel configuration (based on the latest Grml default).  The
 included build system is entirely specialized for the task.  GaryOS can build
 itself from within itself.
@@ -717,12 +717,12 @@ need to be recognized:
 
   * GNU (GNU's Not Unix): <https://gnu.org>
   * GNU/Linux: <https://gnu.org/gnu/linux-and-gnu.html>
-  * Linux: <https://linuxfoundation.org>
+  * Linux: <https://linuxfoundation.org> -- <https://kernel.org>
 
 All the real heavy-lifting is accomplished using these tools/projects:
 
-  * Funtoo: <https://funtoo.org>
-  * Gentoo: <https://gentoo.org>
+  * Funtoo & Ego: <https://funtoo.org> -- <https://funtoo.org/Package:Ego>
+  * Gentoo & Portage: <https://gentoo.org> -- <https://wiki.gentoo.org/wiki/Portage>
   * Linux initramfs: <https://kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt>
   * Grub: <https://gnu.org/software/grub>
 
@@ -766,13 +766,18 @@ There are also a few projects which are relied on for critical tasks or highly
 visible components, and deserve mention:
 
   * Vim: <https://www.vim.org>
+  * Git: <https://git-scm.com>
   * Qemu: <https://qemu.org>
   * Suckless: <https://suckless.org>
   * Links: <http://links.twibright.com>
+  * Rufus: <https://rufus.ie>
 
+[Vim]: https://www.vim.org
+[Git]: https://git-scm.com
 [Qemu]: https://qemu.org
 [Suckless]: https://suckless.org
 [Links]: http://links.twibright.com
+[Rufus]: https://rufus.ie
 
 It should be noted, with additional emphasis, the critical role tomsrtbt played
 in the course of the author's career, and his sustained mentality towards the
