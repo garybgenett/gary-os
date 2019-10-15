@@ -22,7 +22,7 @@
   * [Introduction]
     * [Overview]
     * [Release]: [Quick Start], [Requirements], [Contact & Support]
-    * [Project]: [Acknowledgements & Reviews], [Contributions], [Contributing]
+    * [Project]: [Acknowledgements & Reviews], [Contributions], [Contributing], [Licensing & Disclaimer]
   * [Information]
     * [Design]: [Goals], [Advantages], [Limitations], [History]
     * [Details]: [Versioning], [Structure], [Tools], [Ecosystem]
@@ -347,6 +347,59 @@ we don't even need documents like these.
 
 [Social Protection & Human Rights Equality and Non-discrimination]: https://socialprotection-humanrights.org/framework/principles/equality-and-non-discrimination
 [Contributor Covenant Code of Conduct]: https://contributor-covenant.org/version/1/4/code-of-conduct.html
+
+### Licensing & Disclaimer #####################################################
+[Licensing & Disclaimer]: #licensing--disclaimer
+
+Starting with [v4.0], GaryOS is released under the [GNU GPL v3.0].  It was
+originally released under a [BSD-style license].
+
+The author and contributors do not offer any warranty, and you take all
+responsibility for your use of this software.
+
+**Licensing**
+
+The author shares the same passion as the GNU project for a completely open
+society based on open computing platforms.  The GPL license is a very profound
+statement to those ends.
+
+However, there is also the philosophy that BSD-style licenses are yet more
+permissive, and support innovation in the for-profit markets of our current
+world.  The author's intent was to support this philosophy.
+
+The switch was made for three reasons:
+
+  1. After reviewing and considering closely the implications of each license,
+     the decision was made to essentially switch the support in philosphy.  With
+     intellectual property protections for source code, instead of copyrights as
+     written works, in addition to software patents and the legal enforcement of
+     both, the author reverted back to the "free and open society" mindset which
+     first inspired his entry into the opensource world and GNU/Linux.
+  2. With the [v4.0] release, patches were provided publicly to GPL licensed
+     projects (see the [Contributions] section), namely the Linux kernel and
+     the Funtoo distribution.  A compatible license was necessary for these
+     components, and it was easier to just switch the overall license.
+  3. Since the majority of the project is based on interpreted scripting
+     languages, which are not compiled source, a BSD license no longer made
+     sense.  It is also highly unlikely that any proprietary software will
+     incorporate any aspect of this project.
+
+For further details, see the current [License] and/or the licenses for each
+release in the [Version History] section.
+
+**Disclaimer**
+
+Please note that both these licenses include disclaimer of warranty and
+limitation of liability statements.  The statements in the licenses are the
+final word on those subjects, but are summarized here as: use this software at
+your own risk, because if it breaks you own all the pieces.  This is unlikely,
+but the author and any contributors need to indemnify themselves.
+
+Similar to the [Contributing] section, Hopefully we can dispense with the need
+for documents and statements like these someday.
+
+[GNU GPL v3.0]: https://www.gnu.org/licenses/gpl-3.0.html
+[BSD-style license]: http://opensource.org/licenses/BSD-3-Clause
 
 ********************************************************************************
 
@@ -1107,7 +1160,7 @@ Instructions for installing to disk:
 [2015-03-16 v3.0 21811b59a8484b2a6b73e0c5277f23c50a0141dc.0]: #2015-03-16-v30-21811b59a8484b2a6b73e0c5277f23c50a0141dc0
 [v3.0]: #2015-03-16-v30-21811b59a8484b2a6b73e0c5277f23c50a0141dc0
 
-  * Files: [Readme](https://github.com/garybgenett/gary-os/blob/v3.0/README.md), [Packages (64-bit)](https://github.com/garybgenett/gary-os/blob/v3.0/_packages.64), [Packages (32-bit)](https://github.com/garybgenett/gary-os/blob/v3.0/_packages.32)
+  * Files: [Readme](https://github.com/garybgenett/gary-os/blob/v3.0/README.md), [License](https://github.com/garybgenett/gary-os/blob/v3.0/LICENSE.md), [Packages (64-bit)](https://github.com/garybgenett/gary-os/blob/v3.0/_packages.64), [Packages (32-bit)](https://github.com/garybgenett/gary-os/blob/v3.0/_packages.32)
     * Kernel (64-bit): [gary-os-generic_64-funtoo-stable-v3.0.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v3.0.kernel)
     * Kernel (32-bit): [gary-os-generic_32-funtoo-stable-v3.0.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v3.0.kernel)
     * Grub: [grub.sh](https://github.com/garybgenett/gary-os/blob/v3.0/scripts/grub.sh)
@@ -1134,7 +1187,7 @@ Instructions for installing to disk:
 [2014-06-19 v2.0 873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d.0]: #2014-06-19-v20-873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d0
 [v2.0]: #2014-06-19-v20-873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d0
 
-  * Files: [Readme](https://github.com/garybgenett/gary-os/blob/v2.0/README.md), [Packages (64-bit)](https://github.com/garybgenett/gary-os/blob/v2.0/_packages.64), [Packages (32-bit)](https://github.com/garybgenett/gary-os/blob/v2.0/_packages.32)
+  * Files: [Readme](https://github.com/garybgenett/gary-os/blob/v2.0/README.md), [License](https://github.com/garybgenett/gary-os/blob/v2.0/LICENSE.md) , [Packages (64-bit)](https://github.com/garybgenett/gary-os/blob/v2.0/_packages.64), [Packages (32-bit)](https://github.com/garybgenett/gary-os/blob/v2.0/_packages.32)
     * 64-bit kernel: [gary-os-generic_64-funtoo-stable-v2.0.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v2.0.kernel)
     * 32-bit kernel: [gary-os-generic_32-funtoo-stable-v2.0.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v2.0.kernel)
     * Grub: [grub.sh](https://github.com/garybgenett/gary-os/blob/v2.0/scripts/grub.sh)
@@ -1179,7 +1232,7 @@ Instructions for installing to disk:
 [2014-03-13 v1.1 95ad4fd257697618bae7402d4bc3a27499035d30.4]: #2014-03-13-v11-95ad4fd257697618bae7402d4bc3a27499035d304
 [v1.1]: #2014-03-13-v11-95ad4fd257697618bae7402d4bc3a27499035d304
 
-  * Files: [Readme](https://github.com/garybgenett/gary-os/blob/v1.1/README)
+  * Files: [Readme](https://github.com/garybgenett/gary-os/blob/v1.1/README), [License](https://github.com/garybgenett/gary-os/blob/v1.1/LICENSE)
     * 64-bit kernel: [gary-os-generic_64-funtoo-stable-v1.1.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v1.1.kernel)
     * 32-bit kernel: [gary-os-generic_32-funtoo-stable-v1.1.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v1.1.kernel)
     * Grub: [grub.sh](https://github.com/garybgenett/gary-os/blob/v1.1/scripts/grub.sh)
