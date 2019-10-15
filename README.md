@@ -22,7 +22,7 @@
   * [Introduction]
     * [Overview]
     * [Release]: [Quick Start], [Requirements], [Contact & Support]
-    * [Project]: [Acknowledgements & Reviews], [Contributing]
+    * [Project]: [Acknowledgements & Reviews], [Contributions], [Contributing]
   * [Information]
     * [Design]: [Goals], [Advantages], [Limitations], [History]
     * [Details]: [Versioning], [Structure], [Tools], [Ecosystem]
@@ -249,6 +249,74 @@ this far.
 
 <!-- http://without-systemd.org/wiki/index.php/Linux_distributions_without_systemd/unlisted -->
 
+### Contributions ##############################################################
+[Contributions]: #contributions
+
+As much as possible, and in addition to GaryOS itself, this project tries to
+give back to the community in whatever ways it can.  So far, this has
+manifested as a few tiny patches to upstream projects.
+
+**Linux Initramfs**
+
+The "shmem" subsystem in the Linux kernel is what manages the "tmpfs"
+infrastructure used for in-memory filesystems, including initramfs.  Initial
+creation of the shmem filesystem reserves half of the available memory.  On
+a 4GB system, this is not enough room for GaryOS to boot.  In the [early
+history of the "gentoo/\_release" script], there was a minor hack to the kernel
+source to make this work the way that was needed.  For the completion of the
+[v4.0] release, this was formalized as a kernel patch which also added
+a configuration option and a boot parameter.  This was submitted to the Linux
+"mm" development team in the following mailing list threads:
+
+  * [Initial complete patch] -- [shmem-add-shmem_size-option-set-filesystem-size.v5.4-rc2.patch]
+  * [Secondary patch, configuration option only] -- [shmem-add-shmem_size-option-for-full-filesystem.v5.4-rc2.patch]
+  * [Final patch, default global variable only] -- [shmem-make-shmem-default-size-a-define-value.v5.4-rc2.patch]
+
+All three were ultimately rejected, for good reason.  The
+[shmem\_size\_hack.patch] continues to be used in GaryOS, due to the added
+functionality, and is mentioned in the [Structure] and [Live Update] sections.
+
+**Funtoo Ego**
+
+Ego is the tool used by Funtoo to keep the "meta-repo" Portage tree up to date.
+While Portage uses a monolithic directory tree, Ego uses a collection of Git
+repositories pulled together using a "kits" infrastructure.  The
+[gentoo/funtoo.kits] script was written to properly "pin" the final tree to
+a particular commit, for stability and reproducibility.  Also for the [v4.0]
+release, this hack was coded directly into the Ego tool:
+
+  * [add-commit-option-to-ego-sync.2.7.4-r1.patch]
+
+This was submitted upstream, but was not usable in [v4.0] because of
+a mis-match in the filesystem and Ego versions.  Thus, the
+[ego\_commit\_hack.patch] is in the GaryOS "\_overlay" directory, but is not
+yet in production use.  This will hopefully change in [v5.0], with the updated
+Portage commit.
+
+**Suckless DWM**
+
+Tangentially related to GaryOS are the [DWM multimon patches] that the author
+created to make multiple monitors easier to use in the DWM window manager.  The
+[Suckless] team accepts these patches on their website, but due to their
+minimalist philosophy, contributions of this type are not committed into the
+main repository, leaving users to use whatever set of patches suits them.
+
+GaryOS does use DWM as the window manager for the [Graphical Interface], and
+a slightly modified [dwm] configuration file is used for that.  It extends the
+default DWM color scheme to the URxvt terminal and Links web browser, and also
+makes Links the browser that is launched.  The default configuration is
+otherwise unmodified, and no patches are used.
+
+[early history of the "gentoo/\_release" script]: https://github.com/garybgenett/gary-os/commits/master/gentoo/_release
+[Initial complete patch]: https://marc.info/?l=linux-mm&m=157048756423988
+[Secondary patch, configuration option only]: https://marc.info/?l=linux-mm&m=157056583814243
+[Final patch, default global variable only]: https://marc.info/?l=linux-mm&m=157064677005638
+[DWM multimon patches]: http://dwm.suckless.org/patches/historical/multimon
+
+<!-- https://kernel.org/doc/html/latest/process/submitting-patches.html -->
+<!-- https://kernel.org/doc/html/latest/process/submit-checklist.html -->
+<!-- https://funtoo.org/Development_Guide -->
+
 ### Contributing ###############################################################
 [Contributing]: #contributing
 
@@ -459,7 +527,7 @@ less "hackish".
 
 At that point in time, upgrades were still taking a year or more to complete.
 With the updated build system and release process, work began to decrease the
-time between stable builds, and continues today towards v5.0.
+time between stable builds, and continues today towards [v5.0].
 
 The project was not named GaryOS out of any delusions of grandeur or egomania.
 It was coined years before its birth by a pair of good friends who jested at
@@ -535,7 +603,7 @@ Here is an overview of the repository contents, in order of relative importance:
 | [gentoo/\_system]          | Heart and soul of the build engine.  Creates new installations, and provides maintenance and inspection tooling.
 | [gentoo/\_release]         | Does all the initramfs work, customizing and packaging the root filesystem and building the kernel.  Also performs the entire release and publishing process.
 | [gentoo/funtoo]            | Contains the commit ID that the Funtoo Portage repository should be "pinned" to.  Ties the Funtoo configuration to a particular version of the Portage tree, which ensures repeatability and stability.
-| [gentoo/funtoo.kits]       | Hackish wrapper to the `meta-repo` Portage repository, to ensure proper "pinning".  *(Submitted as [ego\_commit\_hack.patch] to Funtoo.  See [Contributions] section.)*
+| [gentoo/funtoo.kits]       | Hackish wrapper to the `meta-repo` Portage repository, to ensure proper "pinning".  *(The [ego\_commit\_hack.patch] is a replacement, but currently usused due to a version conflict.  See [Contributions] section.)*
 | [gentoo.config]            | Example script for post-build customization of an initramfs.
 | [gentoo/.emergent]         | Audit script which validates current Funtoo configuration against Portage tools/output.  Also extracts useful information from the `meta-repo` Portage repository.
 | [dwm]                      | Slightly modified DWM configuration file, to make `startx` more usable.
@@ -572,7 +640,8 @@ Here is an overview of the repository contents, in order of relative importance:
 [gentoo/sets/gary-os]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/gary-os
 [gentoo/sets/\_gary-os]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/_gary-os
 
-[ego\_commit\_hack.patch]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/add-commit-option-to-ego-sync.2.7.4-r1.patch
+[ego\_commit\_hack.patch]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_overlay/app-admin/ego/files/add-commit-option-to-ego-sync.2.7.4-r1.patch
+[Ego "commit" patch]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/add-commit-option-to-ego-sync.2.7.4-r1.patch
 [add-commit-option-to-ego-sync.2.7.4-r1.patch]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/add-commit-option-to-ego-sync.2.7.4-r1.patch
 
 [shmem\_size\_hack.patch]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/shmem-add-shmem_size-option-set-filesystem-size.v4.18-rc6.patch
@@ -1031,6 +1100,8 @@ Instructions for installing to disk:
 [32-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v3.0.kernel
 [Packages]: https://github.com/garybgenett/gary-os/blob/v3.0/_packages.64
 [Notes]: #2015-03-16-v30-21811b59a8484b2a6b73e0c5277f23c50a0141dc0
+
+[v5.0]: https://github.com/garybgenett/gary-os/commits/master
 
 ## 2015-03-16 v3.0 21811b59a8484b2a6b73e0c5277f23c50a0141dc.0 ##################
 [2015-03-16 v3.0 21811b59a8484b2a6b73e0c5277f23c50a0141dc.0]: #2015-03-16-v30-21811b59a8484b2a6b73e0c5277f23c50a0141dc0
