@@ -200,7 +200,7 @@ menuentry \"${_PROJ} Boot\" {
 	linux  (\${garyos_rescue})/${_BASE}/${_BASE}.null.kernel
 	linux  (\${garyos_rescue})/${_BASE}/${_BASE}.kernel${GOPTS:+ ${GOPTS}}
 	initrd (\${garyos_rescue})/${_BASE}/${_BASE}.initrd
-	boot
+#>>>	boot
 }
 
 # install
@@ -239,7 +239,7 @@ menuentry \"${_PROJ} Install Boot\" {
 		fi
 	)${GOPTS:+ ${GOPTS}}
 	initrd (\${garyos_install})/boot/initrd
-	boot
+#>>>	boot
 }
 
 # chainload
