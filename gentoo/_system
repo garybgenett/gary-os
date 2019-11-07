@@ -139,6 +139,9 @@ if [[ ${TOOR} == -g ]]; then
 	TARGET="${GOSDIR}"
 	_PKG="${GOSPKG}"
 fi
+if [[ -e ${TARGET} ]]; then
+	TARGET="$(realpath ${TARGET})"
+fi
 
 if ! ${_BASH_SOURCED}; then
 	if [[ ${1} == -n ]]; then
@@ -549,13 +552,13 @@ function expect_wrapper {
 ########################################
 
 function mount_dev_dirs {
-	if ! ${DO_CHROOT} || [[ ${TARGET} == / ]]; then
+	if ! ${DO_CHROOT} || [[ ! -e ${TARGET} ]] || [[ ${TARGET} == / ]]; then
 		return 0
 	fi
 	if [[ -z ${1} ]]; then
 		print_info marker
 		print_info mount
-		mount-robust --dev $(realpath ${TARGET})		|| return 1
+		mount-robust --dev ${TARGET}		|| return 1
 		print_info marker
 	elif [[ ${1} == -u ]]; then
 		shift
@@ -575,9 +578,10 @@ function mount_dev_dirs {
 			echo -en "\n"
 			mount | ${GREP} "${TARGET}"
 			echo -en "\n"
+#>>>			print_info marker
 #>>>			return 1
 		else
-			mount-robust -u --dev $(realpath ${TARGET})	|| return 1
+			mount-robust -u --dev ${TARGET}	|| return 1
 		fi
 		print_info marker
 	fi
@@ -609,7 +613,7 @@ function EXIT {
 			EXIT="1" && shift
 		else
 			EXIT="${1}" && shift
-			mount_dev_dirs -u #>>> || EXIT -1
+			mount_dev_dirs -u || EXIT -1
 		fi
 		if ! ${QUIET}; then
 			print_info marker
@@ -643,14 +647,9 @@ fi
 
 ########################################
 
+declare DEBUG_QUIET="${QUIET}"
 if ${DEBUG}; then
-	if ${QUIET} && ${DO_CHROOT}; then
-		if [[ ! -x ${TARGET}${MYSELF} ]]; then
-			requires_chroot "${@}"
-		fi
-		safe_env ${MYSELF} ${DEBUG_OPT} ${TOOR} "${@}" || EXIT 1
-		EXIT 0
-	fi
+	QUIET="false"
 fi
 
 print_info marker;	print_info title
@@ -660,8 +659,10 @@ print_info marker;	print_info environment;	clear_environment
 print_info marker
 
 if ${DEBUG}; then
-	if ! ${QUIET} && ${DO_CHROOT}; then
-		if [[ ! -x ${TARGET}${MYSELF} ]]; then
+	if ${DO_CHROOT} && ! ${DEBUG_QUIET}; then
+		if [[ ! -e ${TARGET} ]] || [[ ! -x ${TARGET}${MYSELF} ]]; then
+			echo -en "\n"
+			${LL} ${TARGET}${MYSELF}
 			requires_chroot "${@}"
 		fi
 		set -x
@@ -669,6 +670,19 @@ if ${DEBUG}; then
 		set +x
 	fi
 	EXIT 0
+fi
+
+########################################
+
+if ${DO_CHROOT} && {
+	{ [[ -L ${TARGET} ]] && [[ ! -d ${TARGET} ]]; } ||
+	{ [[ -e ${TARGET} ]] && [[ ! -d ${TARGET} ]]; } ||
+	[[ ! -d ${SOURCE} ]];
+}; then
+	echo -en "\n"
+	${LL} -d ${SOURCE}
+	${LL} -d ${TARGET}
+	requires_chroot "${@}"
 fi
 
 ########################################
@@ -690,7 +704,7 @@ fi
 
 if [[ -x ${1} ]]; then
 	declare DOIT="${1}"	&& shift
-	${DOIT} ${_SOUL} "${@}"	|| EXIT -1
+	${DOIT} "${@}"		|| EXIT -1
 	EXIT -0
 fi
 
