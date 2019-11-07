@@ -219,27 +219,21 @@ menuentry \"${_PROJ} Boot Initrd\" {
 
 # install
 
-set garyos_menu=
 set garyos_install=
-search --file --set garyos_menu ${GFILE}
 search --file --set garyos_install /boot/kernel
 
-if [ -n \"\${garyos_menu}\" \"\${garyos_menu}\" != \"memdisk\" ]; then
-	set default=5
-	set timeout=${TIMEOUT}
-else
-	set garyos_menu=\"${GROOT}\"
-fi
 if [ -n \"\${garyos_install}\" ]; then
-#>>>	set default=6
-	set default=5
+	if [ -f \"(\${garyos_install})${GFILE}\" ]; then
+		set default=5
+	else
+		set default=6
+	fi
 	set timeout=${TIMEOUT}
 else
 	set garyos_install=\"${GROOT}\"
 fi
 
 menuentry \"${_PROJ} Install Menu\" {
-#>>>	configfile (\${garyos_menu})${GFILE}
 	configfile (\${garyos_install})${GFILE}
 }
 menuentry \"${_PROJ} Install Boot\" {
