@@ -177,8 +177,10 @@ menuentry \"---\" {
 
 set garyos_custom=
 set garyos_rescue=
+set garyos_initrd=
 search --file --set garyos_custom /${_BASE}/${GCUST}
 search --file --set garyos_rescue /${_BASE}/${_BASE}.kernel
+search --file --set garyos_initrd /${_BASE}/${_BASE}.initrd
 
 if [ -n \"\${garyos_custom}\" ]; then
 	set default=2
@@ -192,6 +194,12 @@ if [ -n \"\${garyos_rescue}\" ]; then
 else
 	set garyos_rescue=\"${GROOT}\"
 fi
+if [ -n \"\${garyos_initrd}\" ]; then
+	set default=4
+	set timeout=${TIMEOUT}
+else
+	set garyos_initrd=\"${GROOT}\"
+fi
 
 menuentry \"${_PROJ} Menu\" {
 	configfile (\${garyos_custom})/${_BASE}/${GCUST}
@@ -201,7 +209,11 @@ menuentry \"${_PROJ} Boot\" {
 		linux (\${garyos_rescue})/${_BASE}/${_BASE}.boot.kernel${GOPTS:+ ${GOPTS}}
 	fi
 	linux (\${garyos_rescue})/${_BASE}/${_BASE}.kernel${GOPTS:+ ${GOPTS}}
-	initrd (\${garyos_rescue})/${_BASE}/${_BASE}.initrd
+#>>>	boot
+}
+menuentry \"${_PROJ} Boot Initrd\" {
+	linux (\${garyos_initrd})/${_BASE}/${_BASE}.boot.kernel${GOPTS:+ ${GOPTS}}
+	initrd (\${garyos_initrd})/${_BASE}/${_BASE}.initrd
 #>>>	boot
 }
 
@@ -213,14 +225,14 @@ search --file --set garyos_menu ${GFILE}
 search --file --set garyos_install /boot/kernel
 
 if [ -n \"\${garyos_menu}\" \"\${garyos_menu}\" != \"memdisk\" ]; then
-	set default=4
+	set default=5
 	set timeout=${TIMEOUT}
 else
 	set garyos_menu=\"${GROOT}\"
 fi
 if [ -n \"\${garyos_install}\" ]; then
-#>>>	set default=5
-	set default=4
+#>>>	set default=6
+	set default=5
 	set timeout=${TIMEOUT}
 else
 	set garyos_install=\"${GROOT}\"
