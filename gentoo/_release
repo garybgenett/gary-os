@@ -337,26 +337,23 @@ function _prepare_docdir {
 function _prepare_linux {
 	if [[ ${TARGET} == / ]]; then
 		if [[ ! -d ${TARGET}${LDIR} ]]; then
-			${RM}						${TARGET}${LDIR}		|| return 1
-			common_untar					${TARGET}${LDIR}		|| return 1
+			${RM}				${TARGET}${LDIR}		|| return 1
+			common_untar			${TARGET}${LDIR}		|| return 1
 		fi
 		return 0
 	fi
-	if [[ ! -d ${TARGET}${LDIR} ]] || [[ -L ${TARGET}${LDIR} ]]; then
-		${RM}							${TARGET}${LDIR}		|| return 1
-#>>>		safe_make -C ${TARGET}${KDIR}								\
-#>>>			INSTALL_HDR_PATH="${TARGET}${LDIR}"		headers_install			|| return 1
-		${RSYNC_U}										\
-			--delete-excluded								\
-			--filter="-_/.tmp**"								\
-			--filter="-_/usr/initramfs_data.cpio**"						\
-			${TARGET}${KDIR}/				${TARGET}${LDIR}		|| return 1
-	fi
 	if [[ ! -f ${TARGET}${LDIR}.tar.xz ]]; then
-		safe_make -C ${TARGET}${LDIR}				distclean			|| return 1
-		${RSYNC_U} ${TARGET}${ARCDIR}/${KCFG}			${TARGET}${LDIR}/.config	|| return 1
-		safe_make -C ${TARGET}${LDIR}				modules_prepare			|| return 1
-		common_tar						${TARGET}${LDIR}		|| return 1
+		${RM}					${TARGET}${LDIR}{,.${_TITLE}}	|| return 1
+		${MKDIR}				${TARGET}${LDIR}.${_TITLE}	|| return 1
+		tar -vvx --bzip2							\
+			-C ${TARGET}${LDIR}.${_TITLE}					\
+			-f ${TARGET}${PAKDIR}/*/gentoo-sources-${KVER}.tbz2		|| return 1
+		${MV} ${TARGET}${LDIR}.${_TITLE}${KDIR}	${TARGET}${LDIR}		|| return 1
+		${RM}					${TARGET}${LDIR}.${_TITLE}	|| return 1
+		safe_make -C ${TARGET}${LDIR}		distclean			|| return 1
+		${RSYNC_U} ${TARGET}${ARCDIR}/${KCFG}	${TARGET}${LDIR}/.config	|| return 1
+		safe_make -C ${TARGET}${LDIR}		modules_prepare			|| return 1
+		common_tar				${TARGET}${LDIR}		|| return 1
 	fi
 	return 0
 }
