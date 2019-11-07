@@ -197,8 +197,10 @@ menuentry \"${_PROJ} Menu\" {
 	configfile (\${garyos_custom})/${_BASE}/${GCUST}
 }
 menuentry \"${_PROJ} Boot\" {
-	linux  (\${garyos_rescue})/${_BASE}/${_BASE}.null.kernel
-	linux  (\${garyos_rescue})/${_BASE}/${_BASE}.kernel${GOPTS:+ ${GOPTS}}
+	if [ -f (\${garyos_rescue})/${_BASE}/${_BASE}.boot.kernel ]; then
+		linux (\${garyos_rescue})/${_BASE}/${_BASE}.boot.kernel${GOPTS:+ ${GOPTS}}
+	fi
+	linux (\${garyos_rescue})/${_BASE}/${_BASE}.kernel${GOPTS:+ ${GOPTS}}
 	initrd (\${garyos_rescue})/${_BASE}/${_BASE}.initrd
 #>>>	boot
 }
@@ -229,8 +231,7 @@ menuentry \"${_PROJ} Install Menu\" {
 	configfile (\${garyos_install})${GFILE}
 }
 menuentry \"${_PROJ} Install Boot\" {
-	linux  (\${garyos_install})/boot/_null.kernel
-	linux  (\${garyos_install})/boot/kernel root=$(
+	linux (\${garyos_install})/boot/kernel root=$(
 		if [[ ${GINST} == ${GIDEF} ]]; then
 #>>>			echo -en "${GIBAK}${GPSEP}${GPART}"
 			echo -en "${GIBAK}${GPART}"
