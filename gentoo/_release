@@ -491,8 +491,8 @@ function release_cpio_nul {
 		\\\( -path ./usr/lib64/debug		-prune \\\) -o \
 		\\\( -path ./usr/src/debug		-prune \\\) -o \
 		\
-		$(echo "${FSSKIP}" | tr ';' '\n' | while read -r FILE; do	echo "\\( -path .${FILE} -prune \\) -o"; done) \
-		$(for FILE in ${SKIP_DIRS}; do					echo "\\( -path .${FILE}/\\* -prune \\) -o"; done) \
+		$(echo "${FSSKIP}" | tr ';' '\n' | while read -r FILE; do	echo "\\( -path .${FILE//\*/\\\*} -prune \\) -o"; done) \
+		$(for FILE in ${SKIP_DIRS}; do					echo "\\( -path .${FILE//\*/\\\*}/\\* -prune \\) -o"; done) \
 	-print0)					>${CPIO_FILE}.nul	|| return 1
 	${MKDIR}					${TARGET}/tmp/dev	|| return 1
 	realdev						${TARGET}/tmp/dev	|| return 1
