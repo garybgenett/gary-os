@@ -144,8 +144,8 @@ function _release_reset {	#{main}
 		${RM} ${TARGET}${LDIR}			|| return 1
 		${RM} ${TARGET}${LDIR}.tar.xz		|| return 1
 		${LN} ${KBAS} ${TARGET}${LDIR}		|| return 1
+		_prepare_config --reset			|| return 1
 	fi
-	_prepare_config --reset				|| return 1
 	return 0
 }
 
