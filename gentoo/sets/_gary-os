@@ -35,7 +35,6 @@
 # (source /.gary-os/.bashrc && shell -i)
 #
 # rsync -avv -L --filter="-_/sources" --filter="-_/build" root@me.garybgenett.net:/.g/_data/zactive/.setup/gentoo.gary-os/ /.gary-os && \
-# rsync -avv /.gary-os/gentoo/sets/ /etc/portage/sets && \
 # rsync -avv /.gary-os/gentoo/sets/_gary-os / && \
 # HOME=/.gary-os bash /_gary-os
 #
@@ -124,7 +123,7 @@
 # - sshfs -o ro,nonempty ${SSH_SOURCE}:${SSH_DIST} /var/cache/portage/distfiles
 # - sshfs -o ro,nonempty ${SSH_SOURCE}:${SSH_PACK} /var/cache/portage/packages
 # <install>
-# - prompt -z emerge --usepkg=y --deep --newuse --update \@${GOSPKG}
+# - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} QUICK_RUN="true" doit
 # <umount>
 # - mount-robust -u /var/cache/portage/distfiles
 # - mount-robust -u /var/cache/portage/packages
@@ -226,7 +225,7 @@
 # - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} release
 # - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} initrd
 # <minimal>
-# - (GOSPKG="gary-os" && make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} tiny)
+# - (GOSPKG="gary-os" && make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} QUICK_RUN="true" tiny)
 # - ${RM} ${REPDIR}.tar.xz
 # - ${RM} ${LDIR}.tar.xz
 # - (GOSPKG="gary-os" && make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} clean)
