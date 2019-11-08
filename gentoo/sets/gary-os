@@ -181,8 +181,11 @@ sys-apps/fakeroot-ng
 #{RCUPDT} rc-update del sshd default		|| true
 #{RCUPDT} rc-update show
 
+#{FSSKIP} /lib64/firmware/liquidio
 #{FSSKIP} /lib64/firmware/netronome
-#{FSSKIP} /usr/lib64/gcc/x86_64-pc-linux-gnu/*/debug
+#{FSSKIP} /lib64/firmware/qed
+#{FSSKIP} /usr/lib64/gcc/x86_64-pc-linux-gnu/7.3.1/debug
+#{FSSKIP} /usr/lib64/python*/test
 
 sys-kernel/genkernel
 sys-kernel/linux-firmware		# takes up way too much space, but required
