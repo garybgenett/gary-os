@@ -254,6 +254,8 @@ games-fps/doom3-mitm			-dedicated
 
 ########################################
 
+#{GOS} x11-drivers/xf86-video-qxl	python_targets_python2_7	# gentoo required
+
 #{GOS} app-crypt/pinentry		-gnome-keyring	# requires: gnome-base/gnome-keyring
 #{GOS} dev-libs/beecrypt		-cxx		# requires: dev-libs/icu
 #{GOS} dev-util/ninja			-zsh-completion	# requires: app-shells/zsh
