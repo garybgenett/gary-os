@@ -35,7 +35,7 @@ override RESET	:= \e[0;37m
 
 override ECHO	:= echo -en
 override MARKER	:= $(ECHO) "$(OTHER)"; printf "~%.0s" {1..80}; $(ECHO) "$(RESET)\n"
-override PRINTF	:= printf "$(TITLE)%-45.45s$(RESET) $(HOWTO)%s$(RESET)\n"
+override PRINTF	:= printf "$(TITLE)%-45.45s$(RESET) $(HOWTO)%s$(RESET) $(STATE)%s$(RESET)\n"
 
 ########################################
 
@@ -56,7 +56,7 @@ usage:
 	@$(PRINTF) "Information Lookup (Gentoo Bug URL):"	"$(MAKE) {bug_ids}"
 	@$(ECHO) "\n"
 	@$(PRINTF) "Chroot Build (Initial):"			"$(MAKE) init"
-	@$(PRINTF) "Chroot Build (Update Only):"		"$(MAKE) doit"
+	@$(PRINTF) "Chroot Build (Update Only):"		"$(MAKE) doit" "<tiny>"
 	@$(PRINTF) "Chroot Build (Complete Rebuild):"		"$(MAKE) redo"
 	@$(PRINTF) "Chroot Build (Configuration):"		"$(MAKE) edit"
 	@$(ECHO) "\n"
@@ -142,6 +142,10 @@ package_list: .DEFAULT
 
 .PHONY: all
 all: init doit redo edit release
+
+.PHONY: tiny
+tiny:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) -m -/
 
 ########################################
 
