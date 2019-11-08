@@ -95,8 +95,9 @@ export TMPDIR="/var/tmp/portage"
 export LINDIR="linux"
 export FUNDIR="gentoo"
 
-#VARIABLES[FUNKIT LAYDIR AUDITS]
-export FUNKIT="funtoo.kits"
+#VARIABLES[FUNCMT FUNKIT LAYDIR AUDITS]
+export FUNCMT="_funtoo"
+export FUNKIT="${FUNCMT}.kits"
 export LAYDIR="overlay"
 export AUDITS=".emergent"
 
@@ -188,7 +189,7 @@ fi
 ########################################
 
 #OPTIONS[FUNTOO LINPKG KERNEL PYTHON SELECT]
-export FUNTOO="${FUNTOO:-$(tail -n1 ${SETDIR}/${FUNDIR}/funtoo)}"
+export FUNTOO="${FUNTOO:-$(tail -n1 ${SETDIR}/${FUNDIR}/${FUNCMT})}"
 export LINPKG="${LINPKG:-$(${SED} -n "s|^[#][{]LINPKG[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[ ]*$||g")}"
 export KERNEL="${KERNEL:-$(${SED} -n "s|^[#][{]KERNEL[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[ ]*$||g")}"
 export PYTHON="${PYTHON:-$(${SED} -n "s|^[#][{]PYTHON[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[ ]*$||g")}"
