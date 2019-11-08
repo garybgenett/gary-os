@@ -226,9 +226,8 @@
 # - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} release
 # - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} initrd
 # <minimal>
-# - (GOSPKG="gary-os" && ${SED} -i "/[#][{]minimal[}]/d" /etc/portage/sets/${GOSPKG})
-# - prompt -z emerge --ask=n --depclean
-# - ${RM} /var/git/meta-repo*
+# - (GOSPKG="gary-os" && make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} tiny)
+# - ${RM} ${REPDIR}.tar.xz
 # - ${RM} ${LDIR}.tar.xz
 # - (GOSPKG="gary-os" && make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} clean)
 # - (GOSPKG="gary-os" && make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} _release_cpio _release_kernel _release_report) #>>> == release - _prepare_build _release_grub
