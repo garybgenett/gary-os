@@ -10,6 +10,7 @@ app-crypt/pinentry			gnome-keyring	# gentoo required
 app-text/ghostscript-gpl		cups		# gentoo required
 app-text/poppler			cairo		# gentoo required
 app-text/poppler			qt5		# gentoo required
+dev-libs/boost				nls		# gentoo required
 dev-libs/glib				dbus		# gentoo required
 dev-qt/qtgui				accessibility	# gentoo required
 dev-qt/qtgui				dbus		# gentoo required
@@ -58,7 +59,6 @@ media-libs/libsdl2			haptic		# gentoo required
 media-libs/libvpx			svc		# gentoo required
 net-dns/avahi			mdnsresponder-compat	# gentoo required
 net-dns/dnsmasq				script		# gentoo required
-sys-libs/ncurses			tinfo		# gentoo required
 x11-base/xorg-server			glamor		# gentoo required
 x11-libs/libxcb				xkb		# gentoo required
 
