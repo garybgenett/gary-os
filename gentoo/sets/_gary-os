@@ -77,11 +77,11 @@
 # - declare SSH_PACK="/.g/_data/_builds/_gary-os.working/var/cache/portage/packages"
 # - declare SSH_COPY="/.g/_data/_builds/_gary-os.working/${_RAMFS/#${TARGET}\/}"
 #
-# [unpack]
+# [prepare]
+# <unpack>
 # - mount -o remount,rw,size=6g / && df /
 # - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} unpack
-#
-# [mount]
+# <mount>
 # - ${MKDIR} ${_FINAL} ${_GINST} ${SAVE_DIR}
 # - mount-robust ${USB_SOURCE} ${_GINST}
 # - ${RM} ${_FINAL} && ${LN} ${_GINST} ${_FINAL}
@@ -116,17 +116,15 @@
 # - mount-robust ${_GINST}${USB_DIST} /var/cache/portage/distfiles
 # - mount-robust ${_GINST}${USB_PACK} /var/cache/portage/packages
 # <ssh>
-# - ${MKDIR} ${FUSE_DST} ${FUSE_PAK}
-# - mount-robust -o ${FUSE_DST} /var/cache/portage/distfiles
-# - mount-robust -o ${FUSE_PAK} /var/cache/portage/packages
 # - prompt -z emerge --ask=n sshfs
-# - sshfs -o ro,nonempty ${SSH_SOURCE}:${SSH_DIST} /var/cache/portage/distfiles
-# - sshfs -o ro,nonempty ${SSH_SOURCE}:${SSH_PACK} /var/cache/portage/packages
+# - ${MKDIR} ${FUSE_DST}.ssh ${FUSE_PAK}.ssh
+# - ${MKDIR} ${FUSE_DST} ${FUSE_PAK}
+# - sshfs -o ro ${SSH_SOURCE}:${SSH_DIST} ${FUSE_DST}.ssh || true
+# - sshfs -o ro ${SSH_SOURCE}:${SSH_PACK} ${FUSE_PAK}.ssh || true
+# - mount-robust -o ${FUSE_DST} /var/cache/portage/distfiles ${FUSE_DST}.ssh
+# - mount-robust -o ${FUSE_PAK} /var/cache/portage/packages ${FUSE_PAK}.ssh
 # <install>
 # - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} QUICK_RUN="true" doit
-# <umount>
-# - mount-robust -u /var/cache/portage/distfiles
-# - mount-robust -u /var/cache/portage/packages
 #
 # [xorg]
 # <setup>
@@ -245,8 +243,17 @@
 # complete
 ########################################
 #
+# [umount]
+# <emerge>
+# - mount-robust -u /var/cache/portage/distfiles
+# - mount-robust -u /var/cache/portage/packages
+# - mount-robust -u $(realpath ${FUSE_DST}.ssh)
+# - mount-robust -u $(realpath ${FUSE_PAK}.ssh)
+# <prepare>
 # - mount-robust -u ${USB_SOURCE}
 # - mount-robust -u ${_GINST}
+#
+# [cleanup]
 # - ${RM} ${_FINAL}
 # - exit 0
 #
