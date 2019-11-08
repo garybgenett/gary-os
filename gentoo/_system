@@ -97,7 +97,7 @@ export FUNDIR="gentoo"
 
 #VARIABLES[FUNKIT LAYDIR AUDITS]
 export FUNKIT="funtoo.kits"
-export LAYDIR="_overlay"
+export LAYDIR="overlay"
 export AUDITS=".emergent"
 
 #OPTIONS[ARTDIR CFGSCR]
