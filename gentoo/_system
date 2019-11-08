@@ -677,11 +677,9 @@ fi
 
 if ${DO_CHROOT} && {
 	{ [[ -L ${TARGET} ]] && [[ ! -d ${TARGET} ]]; } ||
-	{ [[ -e ${TARGET} ]] && [[ ! -d ${TARGET} ]]; } ||
-	[[ ! -d ${SOURCE} ]];
+	{ [[ -e ${TARGET} ]] && [[ ! -d ${TARGET} ]]; }
 }; then
 	echo -en "\n"
-	${LL} -d ${SOURCE}
 	${LL} -d ${TARGET}
 	requires_chroot "${@}"
 fi
@@ -986,7 +984,9 @@ fi
 ########################################
 
 if [[ ${1} == -i ]]; then
-	if ! ${DO_CHROOT}; then
+	if ! ${DO_CHROOT} || [[ ! -d ${SOURCE} ]]; then
+		echo -en "\n"
+		${LL} -d ${SOURCE}
 		requires_chroot "${@}"
 	fi
 	shift
