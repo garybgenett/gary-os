@@ -111,10 +111,11 @@ export SHIPIT="_publish"
 
 ########################################
 
-#VARIABLES[TARGET TOOR _PKG _NEW _GOS]
+#VARIABLES[TARGET TOOR _PKG _MIN _NEW _GOS]
 export TARGET="${BLDDIR}"
 export TOOR="${TOOR}"
 export _PKG="${BLDPKG}"
+export _MIN="false"
 export _NEW="false"
 export _GOS="false"
 
@@ -145,6 +146,11 @@ if [[ -e ${TARGET} ]]; then
 fi
 
 if ! ${_BASH_SOURCED}; then
+	if [[ ${1} == -m ]]; then
+		TOOR="${TOOR} ${1}"
+		_MIN="true"
+		shift
+	fi
 	if [[ ${1} == -n ]]; then
 		TOOR="${TOOR} ${1}"
 		_NEW="true"
@@ -392,7 +398,7 @@ function print_info {
 		printf "${PRINTF}" "Chroot Build (Update Only):"		"<auto>"	"${_HEART} {chroot} -/" "<-a -i>"
 		printf "${PRINTF}" "Chroot Build (Complete Rebuild):"		"<auto>"	"${_HEART} {chroot} -1" "<-a -b -i>"
 		printf "${PRINTF}" "Chroot Build (Configuration):"		"<custom>"	"${_HEART} {chroot} -2" "<-c -i>"
-		printf "${PRINTF}" "Chroot Build (Internal Only):"		"<internal>"	"${_HEART} {chroot} [-n|-a|-b|-k|-c] -i"
+		printf "${PRINTF}" "Chroot Build (Internal Only):"		"<internal>"	"${_HEART} {chroot} [-m|-n|-a|-b|-k|-c] -i"
 		echo -en "\n"
 		printf "${PRINTF}" "Chroot Validation (Dependency Tree):"	"<output>"	"${_HEART} [{chroot}] -y -j"
 		printf "${PRINTF}" "Chroot Validation (Reverse Dependencies):"	"<output>"	"${_HEART} [{chroot}] -y -j (d|depends) {package}"
@@ -1079,10 +1085,12 @@ if [[ ${1} == -W ]]; then
 	shift
 	for FILE in \
 		${ETCDIR}/make.conf \
-		${ETCDIR}/package.*
+		${ETCDIR}/package.* \
+		${ETCDIR}/sets/*
 	do
-		${_NEW} && { ${SED} -i "s|^[#][{]NEW[}][ ](.+)$|\1|g" ${FILE}	|| EXIT 1 ;}
-		${_GOS} && { ${SED} -i "s|^[#][{]GOS[}][ ](.+)$|\1|g" ${FILE}	|| EXIT 1 ;}
+		${_MIN} && { ${SED} -i "/[#][{]MIN[}]/d"		${FILE} || EXIT 1 ;}
+		${_NEW} && { ${SED} -i "s|^[#][{]NEW[}][ ](.+)$|\1|g"	${FILE} || EXIT 1 ;}
+		${_GOS} && { ${SED} -i "s|^[#][{]GOS[}][ ](.+)$|\1|g"	${FILE} || EXIT 1 ;}
 	done
 	${SED} -i \
 		-e "s|^[#][{]CPU[}][ ]||g" \
