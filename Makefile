@@ -112,11 +112,7 @@ endif
 
 .PHONY: help
 help: usage
-ifneq ($(wildcard $(O)),)
 	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -v -q $(CHROOT)
-else
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -v
-endif
 
 ########################################
 
