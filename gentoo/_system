@@ -998,23 +998,7 @@ if [[ ${1} == -i ]]; then
 	fi
 	mount_dev_dirs													|| EXIT 1
 							${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -r			|| EXIT 1
-	if [[ ! -d ${TARGET}${REPDIR} ]] && [[ -d ${GITDIR} ]]; then
-		${MKDIR}				${TARGET}${REPDIR}{,.git}					|| EXIT 1
-		${RSYNC_U} ${GITDIR}/			${TARGET}${REPDIR}.git						|| EXIT 1
-	fi
-	declare META_FULL="${TARGET}${REPDIR}.git.tar.xz"
-	declare META_ONLY="${TARGET}${REPDIR}.tar.xz"
-	if [[ ! -f ${META_FULL} ]] || [[ ! -f ${META_ONLY} ]]; then
-		if safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} ${FUNTOO}
-		then
-			FILE="$(dirname ${TARGET}${REPDIR})"
-			NEXT="$(basename ${REPDIR})"
-			tar -cvv --xz -C ${FILE} -f	${META_FULL}	${NEXT}{,.git}					|| EXIT 1
-			tar -cvv --xz -C ${FILE} -f	${META_ONLY}	${NEXT}						|| EXIT 1
-		else
-			${SETDIR}/${FUNDIR}/${FUNKIT}	${TARGET}${REPDIR} ${FUNTOO}					|| EXIT 1
-		fi
-	fi
+	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} ${FUNTOO}		|| EXIT 1
 	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w			|| EXIT 1
 	if ${_BLD}; then
 		if ${_NEW}; then
@@ -1182,6 +1166,9 @@ elif [[ ${1} != -! ]]; then
 		print_info update
 #>>>		expect_wrapper emerge --ask=n --verbose --sync				|| EXIT 1
 		expect_wrapper ego sync							|| EXIT 1
+		if [[ ! -d ${REPDIR}.git ]] && [[ -d ${REPDIR}/.git ]]; then
+			${MV} ${REPDIR}/.git ${REPDIR}.git				|| EXIT 1
+		fi
 		${SETDIR}/${FUNDIR}/${FUNKIT} ${REPDIR} ${1}				|| EXIT 1
 		expect_wrapper eix-update						|| EXIT 1
 		for FILE in ${REPDIR}/kits/*kit; do

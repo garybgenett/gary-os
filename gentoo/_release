@@ -141,6 +141,7 @@ function _release_reset {	#{main}
 		${RM} ${_RAMFS}*			|| return 1
 	fi
 	if [[ ${TARGET} != / ]] && [[ ${TARGET} != ${_GINST} ]]; then
+		${RM} ${TARGET}${REPDIR}.tar.xz		|| return 1
 		${RM} ${TARGET}${LDIR}			|| return 1
 		${RM} ${TARGET}${LDIR}.tar.xz		|| return 1
 		${LN} ${KBAS} ${TARGET}${LDIR}		|| return 1
@@ -158,6 +159,7 @@ function _prepare_build {	#{reset}
 	fi
 	_prepare_config		|| return 1
 	_prepare_docdir		|| return 1
+	_prepare_repdir		|| return 1
 	_prepare_linux		|| return 1
 	_prepare_packages	|| return 1
 	_prepare_symlink	|| return 1
@@ -339,6 +341,16 @@ function _prepare_docdir {
 
 ########################################
 
+function _prepare_repdir {
+	if [[ ! -f ${TARGET}${REPDIR}.tar.xz ]]; then
+		safe_env ${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} ${FUNTOO}	|| return 1
+		common_tar ${TARGET}${REPDIR}					|| return 1
+	fi
+	return 0
+}
+
+########################################
+
 function _prepare_linux {
 	if [[ ${TARGET} == / ]]; then
 		if [[ ! -d ${TARGET}${LDIR} ]]; then
@@ -409,7 +421,6 @@ function _prepare_symlink {
 	${LN} --relative ${TARGET}${DSTDIR}			${_FINAL}/_$(basename ${DSTDIR})		|| return 1
 	${LN} --relative ${TARGET}${PAKDIR}			${_FINAL}/_$(basename ${PAKDIR})		|| return 1
 #>>> sort -b -k4
-	${LN} --relative ${TARGET}${REPDIR}.git.tar.xz		${_RAMFS}.$(basename ${REPDIR}).git.tar.xz	|| return 1
 	${LN} --relative ${TARGET}${REPDIR}.tar.xz		${_RAMFS}.$(basename ${REPDIR}).tar.xz		|| return 1
 	${LN} --relative ${TARGET}${LDIR}.tar.xz		${_RAMFS}.linux.tar.xz				|| return 1
 	${LN} --relative ${TARGET}/.${_TITLE}${_GPACK}		${_RAMFS}${_GPACK}				|| return 1
@@ -481,7 +492,7 @@ function release_cpio_nul {
 		\\\( -path .${DSTDIR}			-prune \\\) -o \
 		\\\( -path .${PAKDIR}			-prune \\\) -o \
 		\\\( -path .${REPDIR}			-prune \\\) -o \
-		\\\( -path .${REPDIR}.git\\\*		-prune \\\) -o \
+		\\\( -path .${REPDIR}.git		-prune \\\) -o \
 		\
 		\\\( -path .${LDIR}			-prune \\\) -o \
 		\\\( -path .${LDIR}-\\\*		-prune \\\) -o \
@@ -719,7 +730,7 @@ function release_install_root {
 	TARGET="${_GINST}" _release_reset	|| return 1
 	TARGET="${_GINST}" _release_unpack	|| return 1
 #>>>	${RM} ${_GINST}/${_TITLE}*		|| return 1
-#>>>	${RM} ${_GINST}${REPDIR}*.tar.xz	|| return 1
+#>>>	${RM} ${_GINST}${REPDIR}.tar.xz		|| return 1
 #>>>	${RM} ${_GINST}${LDIR}.tar.xz		|| return 1
 	return 0
 }
