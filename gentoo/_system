@@ -1008,8 +1008,10 @@ if [[ ${1} == -i ]]; then
 		tar -pvvx --xz -C ${TARGET} -f		$(ls -t ${TARGET}${ARCDIR}/stage3-generic_64-funtoo-*.tar.xz	| head -n1) || EXIT 1
 	fi
 	mount_dev_dirs													|| EXIT 1
+	if ! ${_CFG}; then
 							${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -r			|| EXIT 1
-	if ! ${QUICK_RUN}; then
+	fi
+	if ! ${QUICK_RUN} && ! ${_CFG}; then
 		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} ${FUNTOO}		|| EXIT 1
 		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w			|| EXIT 1
 	fi
@@ -1078,6 +1080,7 @@ if [[ ${1} == -i ]]; then
 			safe_env			${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} \
 							${ARCDIR}/$(basename ${CFGSCR}) "${@}"				|| EXIT 1
 		fi
+		mount_dev_dirs -u											|| EXIT 1
 		EXIT 0
 	fi
 	if ! ${QUICK_RUN}; then
