@@ -354,7 +354,7 @@ x11-themes/gtk-theme-switch
 media-libs/alsa-lib
 media-libs/alsa-oss
 media-sound/alsa-utils
-media-sound/apulse
+#>>>media-sound/apulse
 
 media-libs/libdvdcss
 media-libs/libdvdnav
