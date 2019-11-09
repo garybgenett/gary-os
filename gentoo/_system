@@ -714,7 +714,7 @@ fi
 
 if [[ -x ${1} ]]; then
 	declare DOIT="${1}"	&& shift
-	${DOIT} "${@}"		|| EXIT -1
+	${DOIT} ${_SOUL} "${@}"	|| EXIT -1
 	EXIT -0
 fi
 
