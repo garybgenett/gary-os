@@ -338,7 +338,7 @@ dev-tcltk/expect
 media-libs/alsa-lib
 media-libs/alsa-oss
 media-sound/alsa-utils
-media-sound/apulse
+#>>>media-sound/apulse
 
 ########################################
 # utilities
