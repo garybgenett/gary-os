@@ -3745,6 +3745,7 @@ function task-depends {
 #>>>		my $c_dat = 23;
 		my $c_dat = 14;
 		my $c_fld = {
+			"id"		=> "0",
 			"project"	=> "0",
 			"priority"	=> "0",
 			"tags"		=> "0",
@@ -3891,6 +3892,7 @@ function task-depends {
 				$task = {
 					"status"	=> "HEADER",
 					"uuid"		=> "+UUID",
+					"id"		=> "ID",
 					"project"	=> "PROJECT",
 					"tags"		=> "TAGS",
 					"priority"	=> "P",
@@ -3914,6 +3916,8 @@ function task-depends {
 				my $end = (&do_time($task->{"end"}) || "-"); if ($task->{"status"} eq "deleted") { $end = "~~" . ${end} . "~~"; };
 				print " | "; printf("%-${c_dat}.${c_dat}s", ${due});
 				print " | "; printf("%-${c_dat}.${c_dat}s", ${end});
+			} else {
+				print " | "; printf("%-" . $c_fld->{"id"}	. "." . $c_fld->{"id"}		. "s", $task->{"id"} || "-");
 			};
 			if (${deep} >= 0) {
 				if (${deep} == 0) {	print " | ";
