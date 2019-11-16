@@ -1851,9 +1851,9 @@ function mount-robust {
 	fi
 	if ! ${TEST} && {
 		{ [[ ! -b ${DEV} ]] && [[ ! -d ${DEV} ]] && [[ ! -f ${DEV} ]]; } ||
-		{ [[   -f ${DEV} ]] && [[ ! -d ${DIR} ]] && ! ${UN}; };
+		{ [[   -f ${DEV} ]] && [[ ! -d ${DIR} ]] && ! ${UN}; } ||
 		{ [[ ! -d ${DEV} ]] && ${OV}; } ||
-		{ [[ ! -d ${DIR} ]] && ! ${UN}; }
+		{ [[ ! -d ${DIR} ]] && ! ${UN}; };
 	}; then
 		echo -en "- <Invalid Arguments!>\n"
 		if ! ${DEBUG}; then
