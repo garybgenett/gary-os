@@ -111,7 +111,6 @@ export LDFLAGS="-Wl,--hash-style=gnu -Wl,--as-needed"
 export MAKEFLAGS="-j9"
 
 export CCACHE_DIR="/tmp/.ccache"
-export CCACHE_LOGFILE="" #>>>"/tmp/.ccache.log"
 
 ########################################
 
@@ -2125,10 +2124,10 @@ function prompt {
 			${LDFLAGS+LDFLAGS="${LDFLAGS}"} \
 			${MAKEFLAGS+MAKEFLAGS="${MAKEFLAGS}"} \
 			${CCACHE_DIR+CCACHE_DIR="${CCACHE_DIR}"} \
-			${CCACHE_LOGFILE+CCACHE_LOGFILE="${CCACHE_LOGFILE}"} \
 			${PATH+PATH="${PATH}"} \
 			${CYGWIN+CYGWIN="${CYGWIN}"} \
 			${CYGWIN_ROOT+CYGWIN_ROOT="${CYGWIN_ROOT}"} \
+			${I_KNOW_WHAT_I_AM_DOING+I_KNOW_WHAT_I_AM_DOING="${I_KNOW_WHAT_I_AM_DOING}"} \
 			${CMD} "${@}"
 		return ${?}
 	fi
