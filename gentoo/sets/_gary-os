@@ -87,6 +87,9 @@
 # - mount-robust ${USB_SOURCE} ${_GINST}
 # - ${MKDIR} ${_GINST}${SAVE_DIR}
 #
+# [expert]
+# - export I_KNOW_WHAT_I_AM_DOING="true"
+#
 ########################################
 # basic setup
 ########################################
@@ -113,14 +116,16 @@
 # - mount-robust ${_GINST}${USB_DIST} /var/cache/portage/distfiles
 # - mount-robust ${_GINST}${USB_PACK} /var/cache/portage/packages
 # <ssh>
-# - prompt -z emerge --ask=n sshfs
+# - prompt -z emerge --ask=n --usepkg=y sshfs
 # - ${MKDIR} ${FUSE_DST}.ssh ${FUSE_PAK}.ssh
 # - ${MKDIR} ${FUSE_DST} ${FUSE_PAK}
-# - sshfs -o ro ${SSH_SOURCE}:${SSH_DIST} ${FUSE_DST}.ssh || true
-# - sshfs -o ro ${SSH_SOURCE}:${SSH_PACK} ${FUSE_PAK}.ssh || true
+# - modprobe fuse
+# - sshfs -o ro ${SSH_SOURCE}:${SSH_DIST} ${FUSE_DST}.ssh || [[ $(findmnt --noheadings --output TARGET --source ${SSH_SOURCE}:${SSH_DIST}) == $(realpath ${FUSE_DST}.ssh) ]]
+# - sshfs -o ro ${SSH_SOURCE}:${SSH_PACK} ${FUSE_PAK}.ssh || [[ $(findmnt --noheadings --output TARGET --source ${SSH_SOURCE}:${SSH_PACK}) == $(realpath ${FUSE_PAK}.ssh) ]]
 # - mount-robust -o ${FUSE_DST} /var/cache/portage/distfiles ${FUSE_DST}.ssh
 # - mount-robust -o ${FUSE_PAK} /var/cache/portage/packages ${FUSE_PAK}.ssh
 # <install>
+# - ${SED} -i "s|^(--usepkg=).*$|\1y|g" ${SETDIR}/${FUNDIR}/make.conf ${ETCDIR}/make.conf
 # - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} QUICKLY="true" doit
 #
 # [xorg]
