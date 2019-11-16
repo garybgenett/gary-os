@@ -124,7 +124,7 @@
 # - mount-robust -o ${FUSE_DST} /var/cache/portage/distfiles ${FUSE_DST}.ssh
 # - mount-robust -o ${FUSE_PAK} /var/cache/portage/packages ${FUSE_PAK}.ssh
 # <install>
-# - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} QUICK_RUN="true" doit
+# - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} QUICKLY="true" doit
 #
 # [xorg]
 # <setup>
@@ -223,7 +223,7 @@
 # - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} release
 # - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} initrd
 # <minimal>
-# - (GOSPKG="gary-os" && make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} QUICK_RUN="true" tiny)
+# - (GOSPKG="gary-os" && make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} QUICKLY="true" tiny)
 # - ${RM} ${REPDIR}.tar.xz
 # - ${RM} ${LDIR}.tar.xz
 # - (GOSPKG="gary-os" && make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} clean)
