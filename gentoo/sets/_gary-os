@@ -82,9 +82,9 @@
 # - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} unpack
 # <mount>
 # - ${MKDIR} ${_FINAL} ${_GINST} ${SAVE_DIR}
-# - mount-robust ${USB_SOURCE} ${_GINST}
 # - ${RM} ${_FINAL} && ${LN} ${_GINST} ${_FINAL}
 # - ${RM} ${SAVE_DIR} && ${LN} ${_GINST}${SAVE_DIR} ${SAVE_DIR}
+# - mount-robust ${USB_SOURCE} ${_GINST}
 # - ${MKDIR} ${_GINST}${SAVE_DIR}
 #
 ########################################
@@ -109,7 +109,7 @@
 # - ${MKDIR} ${SETDIR}/sources
 # - ${MKDIR} /var/cache/portage/{distfiles,packages}
 # <usb>
-# - ${MKDIR} ${_GINST}${USB_DIST} ${_GINST}${USB_PACK}}
+# - ${MKDIR} ${_GINST}${USB_DIST} ${_GINST}${USB_PACK}
 # - mount-robust ${_GINST}${USB_DIST} /var/cache/portage/distfiles
 # - mount-robust ${_GINST}${USB_PACK} /var/cache/portage/packages
 # <ssh>
@@ -145,31 +145,31 @@
 #
 # [home]
 # <setup>
-# - cd / && ${MKDIR} ${HOME} && ${RSYNC_U} /root/ ${HOME} && ${RM} /root && ${LN} ${HOME} /root && cd -
+# - mount -o remount,rw,size=8g / && df /
+# - ${MKDIR} ${HOME} && ${RM} /root && ${LN} ${HOME} /root
 # <usb>
 # - ${RSYNC_U} ${_GINST}/.home/ ${HOME}
 # <ssh>
 # - ${MKDIR} ${HOME}/scripts
 # - ${RSYNC_U} ${SSH_SOURCE}:/.g/_data/zactive/.static/.bashrc ${HOME}/
 # - ${RSYNC_U} ${SSH_SOURCE}:/.g/_data/zactive/.static/scripts/_sync ${HOME}/scripts/
-# - _sync _home ${HOME}
-#
-# [auth]
-# - shell -i
-# - ${RSYNC_U} ${SSH_SOURCE}:/.g/_data/zactive/.static/_secure/.ssh/remote_id* ${HOME}/.ssh/
-#
-# [history]
+# - ${HOME}/scripts/_sync _home ${HOME}
+# <links>
+# - ${HOME}/scripts/_sync mount vm sda || true
+# <history>
 # - ${MKDIR} ${HOME}/.history/shell
 # - ${RSYNC_U} ${SSH_SOURCE}:/.g/_data/zactive/.history/shell/gary-os.* ${HOME}/.history/shell/
+# <mozilla>
+# - ${HOME}/scripts/_sync _moz _clone ${HOME}/.mozilla
+# - ${RM} ${HOME}/.thunderbird && ${LN} .mozilla/thunderbird ${HOME}/.thunderbird
 #
-# [vpn]
-# - _sync archive
+# [remote]
+# <ssh>
+# - shell -i
+# - ${RSYNC_U} ${SSH_SOURCE}:/.g/_data/zactive/.static/_secure/.ssh/remote_id* ${HOME}/.ssh/
+# <vpn>
 # - vpn -a
 # - vpn -v
-#
-# [config]
-# - _sync _moz _clone ${HOME}/.mozilla
-# - ${RM} ${HOME}/.thunderbird && ${LN} .mozilla/thunderbird ${HOME}/.thunderbird
 #
 # [runit] == https://wiki.gentoo.org/wiki/Runit#openrclaunch
 # - SETUP=${HOME}/setup ${HOME}/setup/.setconf -r
@@ -181,8 +181,9 @@
 # - openrc
 # - runsvchdir ${RUNSV}
 #
-# [extra]
-# - _sync mount shadow $(echo "${USB_SOURCE}" | ${SED} -e "s|^.+[/]||g" -e "s|[p]?[0-9]+$||g")
+# [sync]
+# - ${HOME}/scripts/_sync mount shadow $(echo "${USB_SOURCE}" | ${SED} -e "s|^.+[/]||g" -e "s|[p]?[0-9]+$||g")
+# - ${HOME}/scripts/_sync archive
 #
 ########################################
 # build a build
@@ -243,7 +244,12 @@
 # - mount-robust -u ${_GINST}
 #
 # [cleanup]
-# - ${RM} ${_FINAL}
+# - [[ -z "$(find ${_FINAL} -type f 2>/dev/null)" ]] && ${RM} ${_FINAL}
+# - [[ -z "$(find ${_GINST} -type f 2>/dev/null)" ]] && ${RM} ${_GINST}
+# - [[ -z "$(find ${SAVE_DIR} -type f 2>/dev/null)" ]] && ${RM} ${SAVE_DIR}
+#
+# [exit]
+# - echo -en "SUCCESS!\n"
 # - exit 0
 #
 ################################################################################
