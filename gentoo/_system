@@ -564,7 +564,7 @@ function expect_wrapper {
 ########################################
 
 function mount_dev_dirs {
-	if ! ${DO_CHROOT} || [[ ! -e ${TARGET} ]] || [[ ${TARGET} == / ]]; then
+	if ! ${DO_CHROOT} || [[ ! -d ${TARGET} ]] || [[ ${TARGET} == / ]]; then
 		return 0
 	fi
 	if [[ -z ${1} ]]; then
@@ -672,7 +672,7 @@ print_info marker
 
 if ${DEBUG}; then
 	if ${DO_CHROOT} && ! ${DEBUG_QUIET}; then
-		if [[ ! -e ${TARGET} ]] || [[ ! -x ${TARGET}${MYSELF} ]]; then
+		if [[ ! -d ${TARGET} ]] || [[ ! -x ${TARGET}${MYSELF} ]]; then
 			echo -en "\n"
 			${LL} ${TARGET}${MYSELF}
 			requires_chroot "${@}"
@@ -686,10 +686,7 @@ fi
 
 ########################################
 
-if ${DO_CHROOT} && {
-	{ [[ -L ${TARGET} ]] && [[ ! -d ${TARGET} ]]; } ||
-	{ [[ -e ${TARGET} ]] && [[ ! -d ${TARGET} ]]; }
-}; then
+if ${DO_CHROOT} && [[ ! -d ${TARGET} ]]; then
 	echo -en "\n"
 	${LL} -d ${TARGET}
 	requires_chroot "${@}"
