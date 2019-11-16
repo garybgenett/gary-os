@@ -2020,17 +2020,22 @@ function mount-robust {
 			if [[ ${TYP} == exfat ]]; then
 				modprobe fuse || return 1
 			fi
-			if [[ ${TYP} == ext4		]]; then fsck -MV -t ${TYP} -pC	${DEV} || return 1; fi
-			if [[ ${TYP} == exfat		]]; then fsck.${TYP}		${DEV} || return 1; fi
-			if [[ ${TYP} == ntfs-3g		]]; then fsck -MV -t ${TYP}	${DEV} || return 1; fi
-			if [[ ${TYP} == vfat		]]; then fsck -MV -t ${TYP}	${DEV} || return 1; fi
-			if ! ${OV} && [[ -d ${DEV}	]]; then mount -v --bind ${RO:+-o ${RO/%,}}					"${@}" ${DEV} ${DIR} || return 1; fi
-			if ! ${OV} && [[ -f ${DEV}	]]; then mount -v -o ${RO}loop							"${@}" ${DEV} ${DIR} || return 1; fi
-			if ${OV}			]]; then mount -v -t ${TYP} -o ${OVERLAY}					"${@}"        ${DIR} || return 1; fi
-			if [[ ${TYP} == ext4		]]; then mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro			"${@}" ${DEV} ${DIR} || return 1; fi
-			if [[ ${TYP} == exfat		]]; then mount -v -t ${TYP} -o ${RO}relatime					"${@}" ${DEV} ${DIR} || return 1; fi
-			if [[ ${TYP} == ntfs-3g		]]; then mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro,shortname=mixed	"${@}" ${DEV} ${DIR} || return 1; fi
-			if [[ ${TYP} == vfat		]]; then mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro,shortname=mixed	"${@}" ${DEV} ${DIR} || return 1; fi
+			declare DID="false"
+			if [[ ${TYP} == ext4		]]; then DID="true"; fsck -MV -t ${TYP} -pC	${DEV} || return 1; fi
+			if [[ ${TYP} == exfat		]]; then DID="true"; fsck.${TYP}		${DEV} || return 1; fi
+			if [[ ${TYP} == ntfs-3g		]]; then DID="true"; fsck -MV -t ${TYP}		${DEV} || return 1; fi
+			if [[ ${TYP} == vfat		]]; then DID="true"; fsck -MV -t ${TYP}		${DEV} || return 1; fi
+			if ! ${OV} && [[ -d ${DEV}	]]; then DID="true"; mount -v --bind ${RO:+-o ${RO/%,}}						"${@}" ${DEV} ${DIR} || return 1; fi
+			if ! ${OV} && [[ -f ${DEV}	]]; then DID="true"; mount -v -o ${RO}loop							"${@}" ${DEV} ${DIR} || return 1; fi
+			if ${OV}			]]; then DID="true"; mount -v -t ${TYP} -o ${OVERLAY}						"${@}"        ${DIR} || return 1; fi
+			if [[ ${TYP} == ext4		]]; then DID="true"; mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro			"${@}" ${DEV} ${DIR} || return 1; fi
+			if [[ ${TYP} == exfat		]]; then DID="true"; mount -v -t ${TYP} -o ${RO}relatime					"${@}" ${DEV} ${DIR} || return 1; fi
+			if [[ ${TYP} == ntfs-3g		]]; then DID="true"; mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro,shortname=mixed	"${@}" ${DEV} ${DIR} || return 1; fi
+			if [[ ${TYP} == vfat		]]; then DID="true"; mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro,shortname=mixed	"${@}" ${DEV} ${DIR} || return 1; fi
+			if ! ${DID}; then
+				echo -en "- <Unknown Filesystem Type!>\n"
+				return 1
+			fi
 		fi
 	fi
 	return 0
