@@ -91,15 +91,14 @@
 # basic setup
 ########################################
 #
-# [network]
-# - rc-update add wpa_supplicant default
-# - rc-update add dhcpcd default
-# - openrc
-#
-# [remote]
-# - rc-update add sshd default
-# - openrc
+# [security]
 # - passwd
+#
+# [network]
+# - rc-update add wpa_supplicant default || true
+# - rc-update add dhcpcd default || true
+# - rc-update add sshd default || true
+# - openrc
 #
 # [time]
 # - ${LN} /usr/share/zoneinfo/US/Pacific /etc/localtime
@@ -129,8 +128,8 @@
 # - echo "XSESSION=\"openbox\"" >/etc/env.d/90xsession
 # - env-update
 # <server>
-# - rc-update add xdm default
-# - rc-update add spice-vdagent default
+# - rc-update add xdm default || true
+# - rc-update add spice-vdagent default || true
 # - openrc
 # <qemu>
 # - export DISPLAY=":0"
@@ -177,8 +176,8 @@
 # - ${RM} ${RUNSV}/tty*
 # - ${SED} -i "s|/usr/bin/runsvdir|/bin/runsvdir|g" /etc/init.d/runsvdir
 # - ${SED} -i "s|[$][{]?RC_SVCDIR[}]?/sv|$(dirname ${RUNSV})/current|g" /etc/init.d/runsvdir
-# - rc-update del xdm default
-# - rc-update add runsvdir default
+# - rc-update del xdm default || true
+# - rc-update add runsvdir default || true
 # - openrc
 # - runsvchdir ${RUNSV}
 #
@@ -274,9 +273,9 @@
 #{RCUPDT} rc-update show
 
 #{RCUPDT} ln -fsv /usr/share/zoneinfo/US/Pacific /etc/localtime
-#{RCUPDT} rc-update add xdm default
-#{RCUPDT} rc-update add spice-vdagent default
-#{RCUPDT} rc-update add runsvdir default
+#{RCUPDT} rc-update add xdm default		|| true
+#{RCUPDT} rc-update add spice-vdagent default	|| true
+#{RCUPDT} rc-update add runsvdir default	|| true
 
 #{RCUPDT} rc-update show
 
