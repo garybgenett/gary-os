@@ -175,7 +175,7 @@ sys-apps/fakeroot-ng
 
 #{RCUPDT} rc-update del netmount default	|| true
 #{RCUPDT} rc-update add gpm default		|| true
-#{RCUPDT} rc-update add sysklogd default	|| true
+#{RCUPDT} rc-update del sysklogd default	|| true
 #{RCUPDT} rc-update del wpa_supplicant default	|| true
 #{RCUPDT} rc-update del dhcpcd default		|| true
 #{RCUPDT} rc-update del sshd default		|| true
