@@ -56,8 +56,8 @@ declare NEXT=
 
 ################################################################################
 
-#OPTIONS[QUICK_RUN]
-export QUICK_RUN="${QUICK_RUN:-false}"
+#OPTIONS[QUICKLY]
+export QUICKLY="${QUICKLY:-false}"
 
 ########################################
 
@@ -1011,7 +1011,7 @@ if [[ ${1} == -i ]]; then
 	if ! ${_CFG}; then
 							${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -r			|| EXIT 1
 	fi
-	if ! ${QUICK_RUN} && ! ${_CFG}; then
+	if ! ${QUICKLY} && ! ${_CFG}; then
 		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} ${FUNTOO}		|| EXIT 1
 		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w			|| EXIT 1
 	fi
@@ -1083,7 +1083,7 @@ if [[ ${1} == -i ]]; then
 		mount_dev_dirs -u											|| EXIT 1
 		EXIT 0
 	fi
-	if ! ${QUICK_RUN}; then
+	if ! ${QUICKLY}; then
 		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -f			|| EXIT 1
 	fi
 	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -u			|| EXIT 1
@@ -1164,10 +1164,10 @@ if [[ ${1} == -u ]]; then
 #>>>	if [[ -n "$(which python-updater 2>/dev/null)" ]]; then
 #>>>		expect_wrapper python-updater					|| EXIT 1
 #>>>	fi
-	if ! ${QUICK_RUN} && [[ -n "$(which perl-cleaner 2>/dev/null)" ]]; then
+	if ! ${QUICKLY} && [[ -n "$(which perl-cleaner 2>/dev/null)" ]]; then
 		expect_wrapper perl-cleaner --all				|| EXIT 1
 	fi
-	if ! ${QUICK_RUN} && [[ -n "$(which haskell-updater 2>/dev/null)" ]]; then
+	if ! ${QUICKLY} && [[ -n "$(which haskell-updater 2>/dev/null)" ]]; then
 		expect_wrapper haskell-updater --all				|| EXIT 1
 	fi
 	expect_wrapper emerge ${_ASK} \@module-rebuild --exclude "${LINPKG}"	|| EXIT 1
