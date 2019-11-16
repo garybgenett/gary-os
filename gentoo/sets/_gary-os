@@ -93,7 +93,6 @@
 ########################################
 #
 # [network]
-# - rc-update add sysklogd default
 # - rc-update add wpa_supplicant default
 # - rc-update add dhcpcd default
 # - openrc
@@ -277,7 +276,7 @@
 
 #{RCUPDT} rc-update del netmount default	|| true
 #{RCUPDT} rc-update add gpm default		|| true
-#{RCUPDT} rc-update add sysklogd default	|| true
+#{RCUPDT} rc-update del sysklogd default	|| true
 #{RCUPDT} rc-update add wpa_supplicant default	|| true
 #{RCUPDT} rc-update add dhcpcd default		|| true
 #{RCUPDT} rc-update add sshd default		|| true
