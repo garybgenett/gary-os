@@ -173,18 +173,37 @@
 # - shell -i
 # - ${RSYNC_U} ${SSH_SOURCE}:/.g/_data/zactive/.static/_secure/.ssh/remote_id* ${HOME}/.ssh/
 # <vpn>
-# - vpn -a
-# - vpn -v
+# - ${MKDIR} ${HOME}/.openssl
+# - ${RSYNC_U} ${SSH_SOURCE}:/.g/_data/zactive/.static/.openssl/server-ca.garybgenett.net.crt ${HOME}/.openssl/
+# - ${RSYNC_U} ${SSH_SOURCE}:/.g/_data/zactive/.static/.openssl/client.garybgenett.net.* ${HOME}/.openssl/
 #
 # [runit] == https://wiki.gentoo.org/wiki/Runit#openrclaunch
+# <setup>
 # - SETUP=${HOME}/setup ${HOME}/setup/.setconf -r
-# - ${RM} ${RUNSV}/tty*
+# - ${SED} -i "s|sudo -H -u [^[:space:]]+||g" ${RUNSV}/*/run
 # - ${SED} -i "s|/usr/bin/runsvdir|/bin/runsvdir|g" /etc/init.d/runsvdir
 # - ${SED} -i "s|[$][{]?RC_SVCDIR[}]?/sv|$(dirname ${RUNSV})/current|g" /etc/init.d/runsvdir
+# <disable>
+# - ${RM} ${RUNSV}/autossh
+# - ${RM} ${RUNSV}/openvpn
+# - ${RM} ${RUNSV}/wpa_supplicant
+# <replace>
+# - rc-update del gpm default || true
+# - rc-update del sysklogd default || true
+# - rc-update del wpa_supplicant default || true
+# - rc-update del dhcpcd default || true
+# - rc-update del sshd default || true
 # - rc-update del xdm default || true
+# - rc-update del spice-vdagent default || true
+# - ${SED} -i "s|^(.+agetty.+tty.+)$|#\1|g" /etc/inittab
+# - telinit q
+# <swtich>
 # - rc-update add runsvdir default || true
 # - openrc
 # - runsvchdir ${RUNSV}
+# <logs>
+# - ${RM} ${RUNSV}/*/log
+# - pkill -9 svlogd
 #
 # [sync]
 # - ${HOME}/scripts/_sync mount shadow $(echo "${USB_SOURCE}" | ${SED} -e "s|^.+[/]||g" -e "s|[p]?[0-9]+$||g")
