@@ -254,6 +254,8 @@ games-fps/doom3-mitm			-dedicated
 
 ########################################
 
+#{GOS} dev-util/scons			python_targets_python2_7	# gentoo required
+#{GOS} sys-devel/clang			python_targets_python2_7	# gentoo required
 #{GOS} x11-drivers/xf86-video-qxl	python_targets_python2_7	# gentoo required
 
 #{GOS} app-crypt/pinentry		-gnome-keyring	# requires: gnome-base/gnome-keyring
@@ -267,6 +269,7 @@ games-fps/doom3-mitm			-dedicated
 #{GOS} sys-apps/dstat			-wifi		# requires: net-wireless/python-wifi
 #{GOS} sys-auth/pambase			-consolekit	# requires: sys-auth/consolekit -> sys-auth/polkit
 #{GOS} sys-fs/lvm2			-thin		# requires: sys-block/thin-provisioning-tools -> dev-libs/boost
+#{GOS} x11-apps/xdm			-consolekit	# requires: sys-auth/consolekit -> sys-auth/polkit
 
 ################################################################################
 # end of file
