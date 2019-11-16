@@ -68,7 +68,6 @@
 # - declare SSH_DIST="/.g/_data/_builds/.gary-os.release/_distfiles"
 # - declare SSH_PACK="/.g/_data/_builds/.gary-os.release/_packages"
 # - declare SSH_COPY="/.g/_data/_builds/_gary-os/${_RAMFS/#${TARGET}\/}"
-# - declare RUNSV="/.runit/runsvdir/current"
 #
 # [overrides]
 # - declare _GOPTS="console=ttyS0,38400"
@@ -126,27 +125,27 @@
 # - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} QUICKLY="true" doit
 #
 # [xorg]
-# <setup>
-# - export DISPLAY=:0
-# - ${EDITOR} /etc/env.d/90xsession
+# <session>
+# - echo "XSESSION=\"openbox\"" >/etc/env.d/90xsession
 # - env-update
-# <run>
-# - exec -l startx &
-# - sleep 1
-# - xrandr --query
-# - xrandr --output Virtual-0 --mode 1280x1024
-# <qemu>
+# <server>
+# - rc-update add xdm default
 # - rc-update add spice-vdagent default
 # - openrc
+# <qemu>
+# - export DISPLAY=":0"
 # - spice-vdagent
 #
 ########################################
 # personal setup
 ########################################
 #
+# [locations]
+# - export HOME="/.g/.home"
+# - export RUNSV="/.runit/runsvdir/system"
+#
 # [home]
 # <setup>
-# - export HOME=/.g/.home
 # - cd / && ${MKDIR} ${HOME} && ${RSYNC_U} /root/ ${HOME} && ${RM} /root && ${LN} ${HOME} /root && cd -
 # <usb>
 # - ${RSYNC_U} ${_GINST}/.home/ ${HOME}
@@ -175,21 +174,13 @@
 #
 # [runit] == https://wiki.gentoo.org/wiki/Runit#openrclaunch
 # - SETUP=${HOME}/setup ${HOME}/setup/.setconf -r
-# - ${RM} ${RUNSV}
-# - ${MKDIR} ${RUNSV}
-# - ${LN} ../../services/autossh			${RUNSV}/
-# - ${LN} ../../services/dhcpcd				${RUNSV}/
-# - ${LN} ../../services/klogd				${RUNSV}/
-# - ${LN} ../../services/ntpd				${RUNSV}/
-# - ${LN} ../../services/openvpn			${RUNSV}/
-# - ${LN} ../../services/sshd				${RUNSV}/
-# - ${LN} ../../services/syslogd			${RUNSV}/
-# - ${LN} ../../services/wpa_supplicant			${RUNSV}/
-# - ${SED} -i "s|/usr/bin/runsvdir|/bin/runsvdir|g"	/etc/init.d/runsvdir
-# - ${SED} -i "s|[$][{]?RC_SVCDIR[}]?/sv|${RUNSV}|g"	/etc/init.d/runsvdir
+# - ${RM} ${RUNSV}/tty*
+# - ${SED} -i "s|/usr/bin/runsvdir|/bin/runsvdir|g" /etc/init.d/runsvdir
+# - ${SED} -i "s|[$][{]?RC_SVCDIR[}]?/sv|$(dirname ${RUNSV})/current|g" /etc/init.d/runsvdir
+# - rc-update del xdm default
 # - rc-update add runsvdir default
 # - openrc
-# - vpn -v
+# - runsvchdir ${RUNSV}
 #
 # [extra]
 # - _sync mount shadow $(echo "${USB_SOURCE}" | ${SED} -e "s|^.+[/]||g" -e "s|[p]?[0-9]+$||g")
@@ -283,6 +274,7 @@
 #{RCUPDT} rc-update show
 
 #{RCUPDT} ln -fsv /usr/share/zoneinfo/US/Pacific /etc/localtime
+#{RCUPDT} rc-update add xdm default
 #{RCUPDT} rc-update add spice-vdagent default
 #{RCUPDT} rc-update add runsvdir default
 
@@ -303,6 +295,7 @@
 #{WINMGR}
 #{WMHELP}
 
+x11-apps/xdm
 x11-base/xorg-x11
 
 x11-misc/obconf
