@@ -254,9 +254,16 @@ games-fps/doom3-mitm			-dedicated
 
 ########################################
 
+#{GOS} dev-python/docutils		python_targets_python2_7	# gentoo required
+#{GOS} dev-python/numpy			python_targets_python2_7	# gentoo required
+#{GOS} dev-python/pycairo		python_targets_python2_7	# gentoo required
+#{GOS} dev-python/pygments		python_targets_python2_7	# gentoo required
+#{GOS} dev-python/pygobject		python_targets_python2_7	# gentoo required
+#{GOS} dev-python/pygtk			python_targets_python2_7	# gentoo required
 #{GOS} dev-util/scons			python_targets_python2_7	# gentoo required
 #{GOS} sys-devel/clang			python_targets_python2_7	# gentoo required
 #{GOS} x11-drivers/xf86-video-qxl	python_targets_python2_7	# gentoo required
+#{GOS} x11-misc/arandr			python_targets_python2_7	# gentoo required
 
 #{GOS} app-crypt/pinentry		-gnome-keyring	# requires: gnome-base/gnome-keyring
 #{GOS} app-editors/vim			minimal		# requires: dev-util/ctags -> dev-python/docutils
