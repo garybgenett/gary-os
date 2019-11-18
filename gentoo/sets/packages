@@ -166,6 +166,7 @@ app-editors/gvim
 app-editors/nano
 app-editors/nvi
 app-editors/vim
+app-editors/vim-core
 app-text/dos2unix
 app-vim/taglist
 app-vim/vim-spell-en
