@@ -266,7 +266,6 @@ games-fps/doom3-mitm			-dedicated
 #{GOS} x11-misc/arandr			python_targets_python2_7	# gentoo required
 
 #{GOS} app-crypt/pinentry		-gnome-keyring	# requires: gnome-base/gnome-keyring
-#{GOS} app-editors/vim			minimal		# requires: dev-util/ctags -> dev-python/docutils
 #{GOS} dev-util/ninja			-zsh-completion	# requires: app-shells/zsh
 #{GOS} net-wireless/wpa_supplicant	-qt5		# requires: dev-qt/qtcore
 
