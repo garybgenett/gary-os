@@ -992,7 +992,7 @@ fi
 ########################################
 
 if [[ ${1} == -i ]]; then
-	if ! ${DO_CHROOT} || [[ ! -d ${SOURCE} ]]; then
+	if ! ${DO_CHROOT} || { [[ ! -d ${SOURCE} ]] && [[ ${TARGET} != / ]]; }; then
 		echo -en "\n"
 		${LL} -d ${SOURCE}
 		requires_chroot "${@}"
