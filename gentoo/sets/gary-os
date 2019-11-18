@@ -152,7 +152,7 @@ app-editors/nvi
 app-editors/vim
 app-editors/vim-core
 app-text/dos2unix
-#>>>app-vim/taglist			# requires: dev-util/ctags -> dev-python/docutils
+app-vim/taglist
 app-vim/vim-spell-en
 dev-util/cloc
 #>>>dev-util/indent			# fails to build as "generic_64"
