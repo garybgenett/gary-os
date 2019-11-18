@@ -109,7 +109,6 @@
 #
 # [emerge]
 # <setup>
-# - ${MKDIR} ${SETDIR}/sources
 # - ${MKDIR} /var/cache/portage/{distfiles,packages}
 # <usb>
 # - ${MKDIR} ${_GINST}${USB_DIST} ${_GINST}${USB_PACK}
