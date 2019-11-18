@@ -10,10 +10,11 @@
 # automation
 ########################################
 #
-#note: turn this file into a script by removing "^# - " from the desired command lines
+#note: turn this file into a script by removing "^# [-+] " from the desired command lines
 #note: you almost certainly want to uncomment all of the ones at the top of the file
 #
 # rsync -avv /.gary-os/gentoo/sets/_gary-os /
+# sed -ir "s|^# - ||g" /_gary-os
 # vi -c "set nowrap" /_gary-os
 # HOME=/.gary-os bash /_gary-os
 #
@@ -61,7 +62,7 @@
 #
 # [globals]
 # - declare _GOPTS=""
-# - declare USB_SOURCE="/dev/sda1"
+# + declare USB_SOURCE="/dev/sda1"
 # - declare USB_DIST="/gary-os/_distfiles"
 # - declare USB_PACK="/gary-os/_packages"
 # - declare SSH_SOURCE="root@me.garybgenett.net"
@@ -70,19 +71,19 @@
 # - declare SSH_COPY="/.g/_data/_builds/_gary-os/${_RAMFS/#${TARGET}\/}"
 #
 # [overrides]
-# - declare _GOPTS="console=ttyS0,38400"
+# + declare _GOPTS="console=ttyS0,38400"
 # - declare USB_SOURCE="/dev/sdb1"
-# - declare USB_SOURCE="/dev/nvme0n1p1"
-# - declare SSH_DIST="/.g/_data/_builds/_gary-os.working/var/cache/portage/distfiles"
-# - declare SSH_PACK="/.g/_data/_builds/_gary-os.working/var/cache/portage/packages"
-# - declare SSH_COPY="/.g/_data/_builds/_gary-os.working/${_RAMFS/#${TARGET}\/}"
+# + declare USB_SOURCE="/dev/nvme0n1p1"
+# + declare SSH_DIST="/.g/_data/_builds/_gary-os.working/var/cache/portage/distfiles"
+# + declare SSH_PACK="/.g/_data/_builds/_gary-os.working/var/cache/portage/packages"
+# + declare SSH_COPY="/.g/_data/_builds/_gary-os.working/${_RAMFS/#${TARGET}\/}"
 #
 # [prepare]
 # <unpack>
 # - mount -o remount,rw,size=6g / && df /
 # - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} unpack
 # <memory>
-# - ${MKDIR} ${_FINAL} ${_GINST} ${SAVE_DIR}
+# + ${MKDIR} ${_FINAL} ${_GINST} ${SAVE_DIR}
 # <usb>
 # - ${MKDIR} ${_GINST}
 # - mount-robust ${USB_SOURCE} ${_GINST}
@@ -101,14 +102,14 @@
 # - passwd
 #
 # [network]
-# - rc-update add wpa_supplicant default || true
-# - rc-update add dhcpcd default || true
-# - rc-update add sshd default || true
-# - openrc
+# + rc-update add wpa_supplicant default || true
+# + rc-update add dhcpcd default || true
+# + rc-update add sshd default || true
+# + openrc
 #
 # [time]
 # - ${LN} /usr/share/zoneinfo/US/Pacific /etc/localtime
-# - ntpdate -v -b pool.ntp.org
+# + ntpdate -v -b pool.ntp.org
 #
 # [emerge]
 # <setup>
@@ -118,29 +119,29 @@
 # - mount-robust ${_GINST}${USB_DIST} /var/cache/portage/distfiles
 # - mount-robust ${_GINST}${USB_PACK} /var/cache/portage/packages
 # <ssh>
-# - prompt -z emerge --ask=n --usepkg=y sshfs
-# - ${MKDIR} ${FUSE_DST}.ssh ${FUSE_PAK}.ssh
-# - ${MKDIR} ${FUSE_DST} ${FUSE_PAK}
-# - modprobe fuse
-# - sshfs -o ro ${SSH_SOURCE}:${SSH_DIST} ${FUSE_DST}.ssh || [[ $(findmnt --noheadings --output TARGET --source ${SSH_SOURCE}:${SSH_DIST}) == $(realpath ${FUSE_DST}.ssh) ]]
-# - sshfs -o ro ${SSH_SOURCE}:${SSH_PACK} ${FUSE_PAK}.ssh || [[ $(findmnt --noheadings --output TARGET --source ${SSH_SOURCE}:${SSH_PACK}) == $(realpath ${FUSE_PAK}.ssh) ]]
-# - mount-robust -o ${FUSE_DST} /var/cache/portage/distfiles ${FUSE_DST}.ssh
-# - mount-robust -o ${FUSE_PAK} /var/cache/portage/packages ${FUSE_PAK}.ssh
+# + prompt -z emerge --ask=n --usepkg=y net-fs/sshfs
+# + ${MKDIR} ${FUSE_DST}.ssh ${FUSE_PAK}.ssh
+# + ${MKDIR} ${FUSE_DST} ${FUSE_PAK}
+# + modprobe fuse
+# + sshfs -o ro ${SSH_SOURCE}:${SSH_DIST} ${FUSE_DST}.ssh || [[ $(findmnt --noheadings --output TARGET --source ${SSH_SOURCE}:${SSH_DIST}) == $(realpath ${FUSE_DST}.ssh) ]]
+# + sshfs -o ro ${SSH_SOURCE}:${SSH_PACK} ${FUSE_PAK}.ssh || [[ $(findmnt --noheadings --output TARGET --source ${SSH_SOURCE}:${SSH_PACK}) == $(realpath ${FUSE_PAK}.ssh) ]]
+# + mount-robust -o ${FUSE_DST} /var/cache/portage/distfiles ${FUSE_DST}.ssh
+# + mount-robust -o ${FUSE_PAK} /var/cache/portage/packages ${FUSE_PAK}.ssh
 # <install>
 # - ${SED} -i "s|^(--usepkg=).*$|\1y|g" ${SETDIR}/${FUNDIR}/make.conf ${ETCDIR}/make.conf
 # - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} QUICKLY="true" doit
 #
 # [xorg]
 # <session>
-# - echo "XSESSION=\"openbox\"" >/etc/env.d/90xsession
-# - env-update
+# + echo "XSESSION=\"openbox\"" >/etc/env.d/90xsession
+# + env-update
 # <server>
-# - rc-update add xdm default || true
-# - rc-update add spice-vdagent default || true
-# - openrc
+# + rc-update add xdm default || true
+# + rc-update add spice-vdagent default || true
+# + openrc
 # <qemu>
-# - export DISPLAY=":0"
-# - spice-vdagent
+# + export DISPLAY=":0"
+# + spice-vdagent
 #
 ########################################
 # personal setup
@@ -157,27 +158,27 @@
 # <usb>
 # - ${RSYNC_U} ${_GINST}/.home/ ${HOME}
 # <ssh>
-# - ${MKDIR} ${HOME}/scripts
-# - ${RSYNC_U} ${SSH_SOURCE}:/.g/_data/zactive/.static/.bashrc ${HOME}/
-# - ${RSYNC_U} ${SSH_SOURCE}:/.g/_data/zactive/.static/scripts/_sync ${HOME}/scripts/
-# - ${HOME}/scripts/_sync _home ${HOME}
+# + ${MKDIR} ${HOME}/scripts
+# + ${RSYNC_U} ${SSH_SOURCE}:/.g/_data/zactive/.static/.bashrc ${HOME}/
+# + ${RSYNC_U} ${SSH_SOURCE}:/.g/_data/zactive/.static/scripts/_sync ${HOME}/scripts/
+# + ${HOME}/scripts/_sync _home ${HOME}
 # <links>
 # - ${HOME}/scripts/_sync mount g null || true
 # <history>
-# - ${MKDIR} ${HOME}/.history/shell
-# - ${RSYNC_U} ${SSH_SOURCE}:/.g/_data/zactive/.history/shell/gary-os.* ${HOME}/.history/shell/
+# + ${MKDIR} ${HOME}/.history/shell
+# + ${RSYNC_U} ${SSH_SOURCE}:/.g/_data/zactive/.history/shell/gary-os.* ${HOME}/.history/shell/
 # <mozilla>
-# - ${HOME}/scripts/_sync _moz _clone ${HOME}/.mozilla
-# - ${RM} ${HOME}/.thunderbird && ${LN} .mozilla/thunderbird ${HOME}/.thunderbird
+# + ${HOME}/scripts/_sync _moz _clone ${HOME}/.mozilla
+# + ${RM} ${HOME}/.thunderbird && ${LN} .mozilla/thunderbird ${HOME}/.thunderbird
 #
 # [remote]
 # <ssh>
-# - shell -i
-# - ${RSYNC_U} ${SSH_SOURCE}:/.g/_data/zactive/.static/_secure/.ssh/remote_id* ${HOME}/.ssh/
+# + shell -i
+# + ${RSYNC_U} ${SSH_SOURCE}:/.g/_data/zactive/.static/_secure/.ssh/remote_id* ${HOME}/.ssh/
 # <vpn>
-# - ${MKDIR} ${HOME}/.openssl
-# - ${RSYNC_U} ${SSH_SOURCE}:/.g/_data/zactive/.static/.openssl/server-ca.garybgenett.net.crt ${HOME}/.openssl/
-# - ${RSYNC_U} ${SSH_SOURCE}:/.g/_data/zactive/.static/.openssl/client.garybgenett.net.* ${HOME}/.openssl/
+# + ${MKDIR} ${HOME}/.openssl
+# + ${RSYNC_U} ${SSH_SOURCE}:/.g/_data/zactive/.static/.openssl/server-ca.garybgenett.net.crt ${HOME}/.openssl/
+# + ${RSYNC_U} ${SSH_SOURCE}:/.g/_data/zactive/.static/.openssl/client.garybgenett.net.* ${HOME}/.openssl/
 #
 # [runit] == https://wiki.gentoo.org/wiki/Runit#openrclaunch
 # <setup>
@@ -191,7 +192,7 @@
 # - telinit q
 # <network>
 # - ${SED} -i "s|eth0|wlan0|g" ${RUNSV}/*/run
-# - ${RM} ${RUNSV}/wpa_supplicant
+# + ${RM} ${RUNSV}/wpa_supplicant
 # <disable>
 # - ${RM} ${RUNSV}/autossh
 # - ${RM} ${RUNSV}/openvpn
@@ -210,12 +211,12 @@
 # - openrc
 # - runsvchdir ${RUNSV}
 # <logs>
-# - ${RM} ${RUNSV}/*/log
-# - pkill -9 svlogd
+# + ${RM} ${RUNSV}/*/log
+# + pkill -9 svlogd
 #
 # [sync]
-# - ${HOME}/scripts/_sync mount shadow $(echo "${USB_SOURCE}" | ${SED} -e "s|^.+[/]||g" -e "s|[p]?[0-9]+$||g")
-# - ${HOME}/scripts/_sync archive
+# + ${HOME}/scripts/_sync mount shadow $(echo "${USB_SOURCE}" | ${SED} -e "s|^.+[/]||g" -e "s|[p]?[0-9]+$||g")
+# + ${HOME}/scripts/_sync archive
 #
 ########################################
 # build a build
@@ -223,43 +224,43 @@
 #
 # [grub]
 # <format>
-# - mount-robust -u ${USB_SOURCE}
-# - ${MKDIR} ${GRUB_DIR}
-# - ${SETDIR}/scripts/grub.sh ${GRUB_DIR} -f ${USB_SOURCE} ${_GOPTS}
-# - ${SETDIR}/scripts/grub.sh ${GRUB_DIR} -fx ${USB_SOURCE} ${_GOPTS}
-# - mount-robust ${USB_SOURCE} ${_GINST}
+# + mount-robust -u ${USB_SOURCE}
+# + ${MKDIR} ${GRUB_DIR}
+# + ${SETDIR}/scripts/grub.sh ${GRUB_DIR} -f ${USB_SOURCE} ${_GOPTS}
+# + ${SETDIR}/scripts/grub.sh ${GRUB_DIR} -fx ${USB_SOURCE} ${_GOPTS}
+# + mount-robust ${USB_SOURCE} ${_GINST}
 # <install>
-# - ${MKDIR} ${GRUB_DIR}
-# - ${SETDIR}/scripts/grub.sh ${GRUB_DIR} ${USB_SOURCE} ${_GOPTS}
+# + ${MKDIR} ${GRUB_DIR}
+# + ${SETDIR}/scripts/grub.sh ${GRUB_DIR} ${USB_SOURCE} ${_GOPTS}
 #
 # [package]
 # <memory>
-# - mount -o remount,rw,size=20g / && df /
+# + mount -o remount,rw,size=20g / && df /
 # <disk>
-# - [[ ! -d ${LINX_DIR} ]] && ${RSYNC_U} ${LDIR}.tar.xz $(dirname ${LINX_DIR})/ && common_untar ${LINX_DIR}
-# - [[ ! -d ${META_DIR} ]] && ${RSYNC_U} ${REPDIR}.tar.xz $(dirname ${META_DIR})/ && common_untar ${META_DIR}
-# - [[ -d ${LINX_DIR} ]] && ${RM} ${LDIR} && ${LN} ${LINX_DIR} ${LDIR}
-# - [[ -d ${META_DIR} ]] && ${RM} ${REPDIR} && ${LN} ${META_DIR} ${REPDIR}
+# + [[ ! -d ${LINX_DIR} ]] && ${RSYNC_U} ${LDIR}.tar.xz $(dirname ${LINX_DIR})/ && common_untar ${LINX_DIR}
+# + [[ ! -d ${META_DIR} ]] && ${RSYNC_U} ${REPDIR}.tar.xz $(dirname ${META_DIR})/ && common_untar ${META_DIR}
+# + [[ -d ${LINX_DIR} ]] && ${RM} ${LDIR} && ${LN} ${LINX_DIR} ${LDIR}
+# + [[ -d ${META_DIR} ]] && ${RM} ${REPDIR} && ${LN} ${META_DIR} ${REPDIR}
 # <build>
-# - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} clean
-# - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} release
-# - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} initrd
+# + make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} clean
+# + make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} release
+# + make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} initrd
 # <minimal>
-# - (GOSPKG="gary-os" && make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} QUICKLY="true" tiny)
-# - ${RM} ${REPDIR}.tar.xz
-# - ${RM} ${LDIR}.tar.xz
-# - (GOSPKG="gary-os" && make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} clean)
-# - (GOSPKG="gary-os" && make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} _release_cpio _release_kernel _release_report) #>>> == release - _prepare_build _release_grub
+# + (GOSPKG="gary-os" && make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} QUICKLY="true" tiny)
+# + ${RM} ${REPDIR}.tar.xz
+# + ${RM} ${LDIR}.tar.xz
+# + (GOSPKG="gary-os" && make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} clean)
+# + (GOSPKG="gary-os" && make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} _release_cpio _release_kernel _release_report) #>>> == release - _prepare_build _release_grub
 # <copy>
-# - ${MKDIR} ${_GINST}/gary-os
-# - ${RSYNC_U} -L ${_RAMFS}.boot.kernel ${_GINST}/gary-os/gary-os.boot.kernel
-# - ${RSYNC_U} -L ${_RAMFS}.kernel ${_GINST}/gary-os/gary-os.kernel
-# - ${RSYNC_U} -L ${_RAMFS}.cpio.xz ${_GINST}/gary-os/gary-os.initrd
-# - ${RSYNC_U} -L ${_RAMFS}.kernel ${SSH_SOURCE}:${SSH_COPY}.minimal.kernel
-# - ${RSYNC_U} -L ${_RAMFS}.cpio.xz ${SSH_SOURCE}:${SSH_COPY}.minimal.initrd
+# + ${MKDIR} ${_GINST}/gary-os
+# + ${RSYNC_U} -L ${_RAMFS}.boot.kernel ${_GINST}/gary-os/gary-os.boot.kernel
+# + ${RSYNC_U} -L ${_RAMFS}.kernel ${_GINST}/gary-os/gary-os.kernel
+# + ${RSYNC_U} -L ${_RAMFS}.cpio.xz ${_GINST}/gary-os/gary-os.initrd
+# + ${RSYNC_U} -L ${_RAMFS}.kernel ${SSH_SOURCE}:${SSH_COPY}.minimal.kernel
+# + ${RSYNC_U} -L ${_RAMFS}.cpio.xz ${SSH_SOURCE}:${SSH_COPY}.minimal.initrd
 #
 # [install]
-# - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} install
+# + make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} install
 #
 ########################################
 # complete
@@ -269,8 +270,8 @@
 # <emerge>
 # - mount-robust -u /var/cache/portage/distfiles
 # - mount-robust -u /var/cache/portage/packages
-# - mount-robust -u $(realpath ${FUSE_DST}.ssh)
-# - mount-robust -u $(realpath ${FUSE_PAK}.ssh)
+# + mount-robust -u $(realpath ${FUSE_DST}.ssh)
+# + mount-robust -u $(realpath ${FUSE_PAK}.ssh)
 # <prepare>
 # - mount-robust -u ${USB_SOURCE}
 # - mount-robust -u ${_GINST}
