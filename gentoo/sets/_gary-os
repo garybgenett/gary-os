@@ -71,6 +71,7 @@
 #
 # [overrides]
 # - declare _GOPTS="console=ttyS0,38400"
+# - declare USB_SOURCE="/dev/sdb1"
 # - declare USB_SOURCE="/dev/nvme0n1p1"
 # - declare SSH_DIST="/.g/_data/_builds/_gary-os.working/var/cache/portage/distfiles"
 # - declare SSH_PACK="/.g/_data/_builds/_gary-os.working/var/cache/portage/packages"
@@ -80,12 +81,14 @@
 # <unpack>
 # - mount -o remount,rw,size=6g / && df /
 # - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} unpack
-# <mount>
+# <memory>
 # - ${MKDIR} ${_FINAL} ${_GINST} ${SAVE_DIR}
-# - ${RM} ${_FINAL} && ${LN} ${_GINST} ${_FINAL}
-# - ${RM} ${SAVE_DIR} && ${LN} ${_GINST}${SAVE_DIR} ${SAVE_DIR}
+# <usb>
+# - ${MKDIR} ${_GINST}
 # - mount-robust ${USB_SOURCE} ${_GINST}
 # - ${MKDIR} ${_GINST}${SAVE_DIR}
+# - ${RM} ${_FINAL} && ${LN} ${_GINST} ${_FINAL}
+# - ${RM} ${SAVE_DIR} && ${LN} ${_GINST}${SAVE_DIR} ${SAVE_DIR}
 #
 # [expert]
 # - export I_KNOW_WHAT_I_AM_DOING="true"
@@ -150,7 +153,7 @@
 # [home]
 # <setup>
 # - mount -o remount,rw,size=8g / && df /
-# - ${MKDIR} ${HOME} && ${RM} /root && ${LN} ${HOME} /root
+# - cd / && ${MKDIR} ${HOME} && ${RM} /root && ${LN} ${HOME} /root && cd -
 # <usb>
 # - ${RSYNC_U} ${_GINST}/.home/ ${HOME}
 # <ssh>
@@ -159,7 +162,7 @@
 # - ${RSYNC_U} ${SSH_SOURCE}:/.g/_data/zactive/.static/scripts/_sync ${HOME}/scripts/
 # - ${HOME}/scripts/_sync _home ${HOME}
 # <links>
-# - ${HOME}/scripts/_sync mount vm sda || true
+# - ${HOME}/scripts/_sync mount g null || true
 # <history>
 # - ${MKDIR} ${HOME}/.history/shell
 # - ${RSYNC_U} ${SSH_SOURCE}:/.g/_data/zactive/.history/shell/gary-os.* ${HOME}/.history/shell/
@@ -179,13 +182,21 @@
 # [runit] == https://wiki.gentoo.org/wiki/Runit#openrclaunch
 # <setup>
 # - SETUP=${HOME}/setup ${HOME}/setup/.setconf -r
-# - ${SED} -i "s|sudo -H -u [^[:space:]]+||g" ${RUNSV}/*/run
 # - ${SED} -i "s|/usr/bin/runsvdir|/bin/runsvdir|g" /etc/init.d/runsvdir
 # - ${SED} -i "s|[$][{]?RC_SVCDIR[}]?/sv|$(dirname ${RUNSV})/current|g" /etc/init.d/runsvdir
+# - ${SED} -i "s|sudo -H -u [^[:space:]]+||g" ${RUNSV}/*/run
+# <tty>
+# - ${RM} ${RUNSV}/tty*
+# - ${SED} -i "s|^(.+agetty.+tty[5-9].+)$|#\1|g" /etc/inittab
+# - telinit q
+# <network>
+# - ${SED} -i "s|eth0|wlan0|g" ${RUNSV}/*/run
+# - ${RM} ${RUNSV}/wpa_supplicant
 # <disable>
 # - ${RM} ${RUNSV}/autossh
 # - ${RM} ${RUNSV}/openvpn
-# - ${RM} ${RUNSV}/wpa_supplicant
+# - ${RM} ${RUNSV}/xorg
+# - ${RM} ${RUNSV}/xsession
 # <replace>
 # - rc-update del gpm default || true
 # - rc-update del sysklogd default || true
@@ -194,8 +205,6 @@
 # - rc-update del sshd default || true
 # - rc-update del xdm default || true
 # - rc-update del spice-vdagent default || true
-# - ${SED} -i "s|^(.+agetty.+tty.+)$|#\1|g" /etc/inittab
-# - telinit q
 # <swtich>
 # - rc-update add runsvdir default || true
 # - openrc
