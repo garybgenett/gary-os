@@ -132,6 +132,9 @@ declare FINDMNT="findmnt --noheadings --output TARGET --target"
 #note: this is called statically in the "_system" script
 #note: cross-reference with the "release_install" function any time this changes
 function _release_reset {	#{main}
+	${RM} ${TARGET}/${CMTFIL}			|| return 1
+	${RM} ${TARGET}/${_RPACK}			|| return 1
+	${RM} ${TARGET}/.${_TITLE}${_GPACK}		|| return 1
 	if [[ ${TARGET} != / ]]; then
 		${RM} ${TARGET}/{.,_}${_TITLE}*		|| return 1
 	fi
