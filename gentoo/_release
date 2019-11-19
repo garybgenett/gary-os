@@ -823,6 +823,7 @@ function _publish_gitdir {
 	SETUP_FILES+="^linux"
 	declare STATIC_FILES=
 	STATIC_FILES+=".bashrc"
+	STATIC_FILES+="^.vimrc"
 	STATIC_FILES+="^scripts/grub.sh"
 	STATIC_FILES+="^scripts/metro.sh"
 	STATIC_FILES+="^scripts/qemu.bsh"
