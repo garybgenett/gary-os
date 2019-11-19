@@ -664,6 +664,7 @@ Here is an overview of the repository contents, in order of relative importance:
 | [gentoo/sets/\_gary-os]    | Additional packages list, along with scripting instructions/commands for accomplishing various tasks and testing GaryOS.
 | [shmem\_size\_hack.patch]  | Kernel code changes to set the initramfs size in memory and add the "shmem_size" parameter.  Both of these changes were understandably rejected by Linux development team, and are therefore custom to GaryOS.  *(See the [Contributions] and [Live Update] sections for details.)*
 | **Just for fun:**          | --
+| [.vimrc]                   | Vim is a pretty critical tool for the author, and this is just to keep a copy of the configuration file handy.  This is also the only place it is published online, and hopefully it is useful to somebody.
 | [xclock\_size\_hack.patch] | The author wanted "[gkrellaclock]" to look more like a genuine "xclock", so he did it.  First real experience coding in C.  Created in early 2014 and still in active use.
 
 [README.md]: https://github.com/garybgenett/gary-os/blob/master/README.md
