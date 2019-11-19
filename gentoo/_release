@@ -135,6 +135,7 @@ function _release_reset {	#{main}
 	${RM} ${TARGET}/${CMTFIL}			|| return 1
 	${RM} ${TARGET}/${_RPACK}			|| return 1
 	${RM} ${TARGET}/.${_TITLE}${_GPACK}		|| return 1
+	${RM} ${TARGET}/.gitignore			|| return 1
 	if [[ ${TARGET} != / ]]; then
 		${RM} ${TARGET}/{.,_}${_TITLE}*		|| return 1
 	fi
@@ -771,20 +772,43 @@ function _release_install {	#{main}
 ################################################################################
 
 function _publish_daily {	#{main}
-	_publish_gitdir	|| return 1
-#>>>	_publish_export	|| return 1
-	_publish_upload	|| return 1
-	_publish_report	|| return 1
+#>>> #{reset}
+#>>>	if [[ ${1} == --reset ]]; then
+#>>>		shift
+#>>>		_publish_prep	|| return 1
+#>>>	else
+		_publish_gitdir	|| return 1
+#>>>		_publish_export	|| return 1
+		_publish_upload	|| return 1
+		_publish_report	|| return 1
+#>>>	fi
 	return 0
 }
 
 ########################################
 
-function _publish_release {	#{main}
-	_publish_gitdir	|| return 1
-	_publish_export	|| return 1
-	_publish_upload	|| return 1
-	_publish_report	|| return 1
+function _publish_release {	#{main} #{reset}
+	if [[ ${1} == --reset ]]; then
+		shift
+		_publish_prep	|| return 1
+	else
+		_publish_gitdir	|| return 1
+		_publish_export	|| return 1
+		_publish_upload	|| return 1
+		_publish_report	|| return 1
+	fi
+	return 0
+}
+
+########################################
+
+function _publish_prep {
+	echo -en "${SKIP_DIRS}"		>${TARGET}/.gitignore	|| return 1
+	sort -u -o ${TARGET}/.gitignore	${TARGET}/.gitignore	|| return 1
+	${SED} -i "/^$/d"		${TARGET}/.gitignore	|| return 1
+	${RM}				${CPIO_FILE}		|| return 1
+	${RM}				${CPIO_FILE}.dir	|| return 1
+	${RM}				${TARGET}/tmp/.ccache	|| return 1
 	return 0
 }
 
