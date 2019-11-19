@@ -808,6 +808,7 @@ function _publish_prep {
 	${SED} -i "/^$/d"		${TARGET}/.gitignore	|| return 1
 	${RM}				${CPIO_FILE}		|| return 1
 	${RM}				${CPIO_FILE}.dir	|| return 1
+	${RM}				${_RAMFS}.grub		|| return 1
 	${RM}				${TARGET}/tmp/.ccache	|| return 1
 	return 0
 }
