@@ -20,6 +20,7 @@
 \e[1;33m Username / password:	\e[1;32m root \e[1;30m/\e[1;32m gary-os
 \e[1;33m Graphical interface:	\e[1;32m startx
 \e[1;33m More information:	\e[1;32m less /.gary-os/README.md
+\e[1;33m Packages list:		\e[1;32m less /.gary-os.packages.txt
 
 \e[1;37m Happy Hacking!
 \e[1;30m
