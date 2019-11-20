@@ -14,12 +14,19 @@
 #note: you almost certainly want to uncomment all of the ones at the top of the file
 #
 # rsync -avv /.gary-os/gentoo/sets/_gary-os /
-# sed -ir "s|^# - ||g" /_gary-os
 # vi -c "set nowrap" /_gary-os
 # HOME=/.gary-os /_gary-os
 #
 ########################################
 # personal automation
+########################################
+#
+# rsync -avv /.gary-os/gentoo/sets/_gary-os / && \
+# sed -ir "s|^# - ||g" /_gary-os && \
+# HOME=/.gary-os /_gary-os
+#
+########################################
+# qemu automation
 ########################################
 #
 # rc-update add dhcpcd default
