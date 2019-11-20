@@ -16,7 +16,7 @@
 # rsync -avv /.gary-os/gentoo/sets/_gary-os /
 # sed -ir "s|^# - ||g" /_gary-os
 # vi -c "set nowrap" /_gary-os
-# HOME=/.gary-os bash /_gary-os
+# HOME=/.gary-os /_gary-os
 #
 ########################################
 # personal automation
@@ -37,7 +37,7 @@
 #
 # rsync -avv -L --filter="-_/sources" --filter="-_/build" root@me.garybgenett.net:/.g/_data/zactive/.setup/gentoo.gary-os/ /.gary-os && \
 # rsync -avv /.gary-os/gentoo/sets/_gary-os / && \
-# HOME=/.gary-os bash /_gary-os
+# HOME=/.gary-os /_gary-os
 #
 ################################################################################
 # beginning of scripting
