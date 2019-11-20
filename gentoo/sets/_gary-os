@@ -28,7 +28,7 @@
 # HOME=/.gary-os /_gary-os
 #
 ########################################
-# qemu automation
+# qemu testing: setup
 ########################################
 #
 # rc-update add dhcpcd default && \
@@ -43,8 +43,37 @@
 # alias ll="ls -la" && \
 # (source /.gary-os/.bashrc && shell -i)
 #
+########################################
+# qemu testing: validation
+########################################
+#
 # rsync -avv -L --filter="-_/sources" --filter="-_/build" root@me.garybgenett.net:/.g/_data/zactive/.setup/gentoo.gary-os/ /.gary-os && \
 # rsync -avv /.gary-os/gentoo/sets/_gary-os / && \
+# HOME=/.gary-os /_gary-os
+#
+########################################
+# qemu testing: personal automation
+########################################
+#
+# mkdir -pv /tmp/grub && \
+# HOME=/.gary-os /.gary-os/scripts/grub.sh /tmp/grub -f /dev/sda1
+#
+# mkdir -pv /.install && \
+# HOME=/.gary-os /.gary-os/.bashrc mount-robust /dev/sda1 /.install && \
+# mkdir -pv /.install/.home && \
+# mkdir -pv /.install/gary-os/_packages && \
+# rsync -rvv root@me.garybgenett.net:/.g/.home/ /.install/.home && \
+# rsync -rvv root@me.garybgenett.net:/.g/_data/zactive/.setup/gentoo.gary-os/build/.gary-os-generic_64/_packages/ /.install/gary-os/_packages && \
+# rsync -avv -L --filter="-_/sources" --filter="-_/build" root@me.garybgenett.net:/.g/_data/zactive/.setup/gentoo.gary-os/ /.gary-os
+#
+# ifconfig eth0 down && \
+# ping 10.0.0.254
+#
+# rsync -avv /.gary-os/gentoo/sets/_gary-os / && \
+# sed -ir "s|^# - ||g" /_gary-os && \
+# sed -ir "/passwd/d" /_gary-os && \
+# sed -ir "s|sdb|sda|g" /_gary-os && \
+# sed -ir "s|wlan0|eth0|g" /_gary-os && \
 # HOME=/.gary-os /_gary-os
 #
 ################################################################################
