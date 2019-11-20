@@ -173,16 +173,18 @@ function _prepare_build {	#{reset}
 ########################################
 
 function prepare_config_issue {
+	declare FUNTOO_DATE="$(${SED} -n "s|^#.+([0-9]{4}-[0-9]{2}-[0-9]{2}).+(${FUNTOO}).*$|\1|gp" ${SETDIR}/${FUNDIR}/${FUNCMT})"
 	for FILE in \
 		"GaryOS Version|${_VERSN}" \
-		"Release Date|${_RDATE}" \
+		"GaryOS Release Date|${_RDATE}" \
+		"Funtoo Commit Date|${FUNTOO_DATE}" \
 		"Funtoo Commit|${FUNTOO}" \
 		"Linux Kernel|${KVER}" \
 	; do
 		declare KEY="$(echo "${FILE}" | ${SED} "s|^(.+)[|](.+)$|\1|g")"
 		declare VAL="$(echo "${FILE}" | ${SED} "s|^(.+)[|](.+)$|\2|g")"
 		${SED} -i \
-			-e "s|^(.*${KEY}[:].*[0-9]m).*$|\1 ${VAL}|g" \
+			-e "s|^(.*${KEY}[:].*[0-9]m ).*$|\1${VAL}|g" \
 			${ARTDIR}/issue \
 			|| return 1
 	done
