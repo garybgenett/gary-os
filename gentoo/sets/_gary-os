@@ -21,6 +21,8 @@
 # personal automation
 ########################################
 #
+# sed -r -e "s|^# ||g" -e "s|^#$||g" /.gary-os/gentoo/sets/_gary-os | less
+#
 # rsync -avv /.gary-os/gentoo/sets/_gary-os / && \
 # sed -ir "s|^# - ||g" /_gary-os && \
 # HOME=/.gary-os /_gary-os
@@ -29,17 +31,16 @@
 # qemu automation
 ########################################
 #
-# rc-update add dhcpcd default
-# rc-update add sshd default
+# rc-update add dhcpcd default && \
+# rc-update add sshd default && \
 # openrc
 #
-# :set foldcolumn=0
+# == :set foldcolumn=0
 #
-# cp ~/.ssh/known_hosts{.bak,} && \
-# shell 10.0.6.254
+# == cp ~/.ssh/known_hosts{.bak,} && shell 10.0.6.254
 #
-# set -o vi
-# alias ll="ls -la"
+# set -o vi && \
+# alias ll="ls -la" && \
 # (source /.gary-os/.bashrc && shell -i)
 #
 # rsync -avv -L --filter="-_/sources" --filter="-_/build" root@me.garybgenett.net:/.g/_data/zactive/.setup/gentoo.gary-os/ /.gary-os && \
