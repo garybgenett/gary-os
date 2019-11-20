@@ -218,6 +218,9 @@
 # - rc-update add runsvdir default || true
 # - openrc
 # - runsvchdir ${RUNSV}
+# <enable>
+# + ${LN} ../../services/{autossh,openvpn} ${RUNSV}/
+# + ${LN} ../../services/{xorg,xsession} ${RUNSV}/
 # <logs>
 # + ${RM} ${RUNSV}/*/log
 # + pkill -9 svlogd
