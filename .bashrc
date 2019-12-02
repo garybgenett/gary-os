@@ -4425,7 +4425,12 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				fi
 				declare NUM="0"
 				for FILE in "${@}"; do
-					HEADER[${NUM}]="${FILE}"
+					if [[ "${FILE}" == "0" ]]; then
+						HEADER[${NUM}]="Notes"; NUM=$((${NUM}+1))
+						HEADER[${NUM}]="Projects"
+					else
+						HEADER[${NUM}]="${FILE}"
+					fi
 					NUM=$((${NUM}+1))
 				done
 			fi
