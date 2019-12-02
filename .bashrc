@@ -4411,11 +4411,10 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			) | ${MORE}
 		elif [[ ${1} == "todo" ]]; then
 			shift
-			declare SOURCE
+			declare SOURCE="${TODOUUID}"
 			declare -a HEADER
 			declare FILE
 			if [[ -z "${@}" ]]; then
-				SOURCE="${TODOUUID}"
 				HEADER[0]="Priorities"
 				HEADER[1]="Projects"
 				HEADER[2]="Notes"
