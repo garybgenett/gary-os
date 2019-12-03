@@ -4484,6 +4484,9 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 					if [[ "${FILE}" == "0" ]]; then
 						HEADER[${NUM}]="Notes"; NUM=$((${NUM}+1))
 						HEADER[${NUM}]="Projects"
+					elif [[ "${FILE}" == "1" ]]; then
+						HEADER[${NUM}]="Notes"; NUM=$((${NUM}+1))
+						HEADER[${NUM}]="Kanban"
 					else
 						HEADER[${NUM}]="${FILE}"
 					fi
