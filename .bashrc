@@ -3093,12 +3093,13 @@ function task-export-text {
 			open(KANBAN, "<", ${ENV{NOTES_MD}}) || die();
 			my $kanban_text = do { local $/; <KANBAN> }; $kanban_text =~ s/\n+$//g;
 			close(KANBAN) || die();
-			while (${kanban_text} =~ m|^.+?${key}[:][ ][`]([^ ]+)[ ]([^`]+)[`]|gms) {
+			while (${kanban_text} =~ m|^.+?${key}[:][^`]*?[`]([^\s]+)\s+([^`]+)[`]|gms) {
 				my $kanban_filt = ${1};
 				my $kanban_args = ${2};
 				$kanban_filt = qx(task _get rc.report.${kanban_filt}.filter); chomp(${kanban_filt});
+				$kanban_args = "\"" . ((${kanban_filt}) ? "( ${kanban_filt} )" : "") . ((${kanban_args}) ? "( ${kanban_args} )" : "") . "\"";
 				$kanban_args =~ s|\\||g;
-				my $kanban_task = qx(task export "${kanban_filt} ${kanban_args}"); $kanban_task =~ s/\n//g; $kanban_task = decode_json(${kanban_task});
+				my $kanban_task = qx(task export ${kanban_args}); $kanban_task =~ s/\n//g; $kanban_task = decode_json(${kanban_task});
 				warn("EXPORTING KANBAN[${key} = " . ($#{$kanban_task}+1) . "]");
 				foreach my $task (@{$kanban_task}) {
 					my $uuid = $task->{"uuid"};
