@@ -3033,6 +3033,7 @@ function task-export-text {
 		print NOTE "% " . localtime() . "\n";
 		my $NOTE = {}; $NOTE->{"other"} = {};
 		my $multi_tag = [];
+		my $kanban_length = (64 - 4 - 3); #>>> maximum - ellipsis - annotations
 		my $kanban = {
 			"k1" => {},
 			"k2" => {},
@@ -3091,20 +3092,24 @@ function task-export-text {
 		foreach my $key (sort(keys(%{$kanban}))) {
 			my $kanban_args = qx(${ENV{SED}} -n "s|^.+${key}[:][ ].(.+).\$|\\1|gp" ${ENV{NOTES_MD}}); chomp(${kanban_args});
 			my $kanban_task = qx(task export ${kanban_args}); $kanban_task =~ s/\n//g; $kanban_task = decode_json(${kanban_task});
-			foreach my $task (@{$kanban_task}) {
-				$kanban->{$key}{ $task->{"uuid"} } = ${task};
-			};
+				foreach my $task (@{$kanban_task}) {
+					my $uuid = $task->{"uuid"};
+					$task->{"uuid"} =~ s|[-].+$||g;
+					$task->{"description"} =~ s|^(.{${kanban_length}}).*$|$1 ...|g;
+					$task->{"annotations"} = ($#{ $task->{"annotations"} } +1);
+					$kanban->{$key}{$uuid} = ${task};
+				};
 		};
 		sub export_kanban {
 			my $task = shift();
 			foreach my $key (sort(keys(%{$kanban}))) {
 				if (exists($kanban->{$key}{ $task->{"uuid"} })) {
-					my $uuid = $task->{"uuid"}; $uuid =~ s|[-].+$||g;
-					print KNBN "" . (${key}					|| "")	. ",";
-					print KNBN "" . (${uuid}				|| "-")	. ",";
-					print KNBN "" . ($task->{"project"}			|| "")	. ",";
-					print KNBN "" . ($task->{"description"}			|| "-")	. " ";
-					print KNBN "[" . (($#{ $task->{"annotations"} } +1)	|| "")	. "]";
+					my $ktask = $kanban->{$key}{ $task->{"uuid"} };
+					print KNBN "" . (${key}				|| "")	. ",";
+					print KNBN "" . ($ktask->{"uuid"}		|| "-")	. ",";
+					print KNBN "" . ($ktask->{"project"}		|| "")	. ",";
+					print KNBN "" . ($ktask->{"description"}	|| "-")	. " ";
+					print KNBN "[" . ($ktask->{"annotations"}	|| "")	. "]";
 					print KNBN "\n";
 				};
 			};
