@@ -3090,8 +3090,16 @@ function task-export-text {
 			};
 		};
 		foreach my $key (sort(keys(%{$kanban}))) {
-			my $kanban_args = qx(${ENV{SED}} -n "s|^.+${key}[:][ ].(.+).\$|\\1|gp" ${ENV{NOTES_MD}}); chomp(${kanban_args});
-			my $kanban_task = qx(task export ${kanban_args}); $kanban_task =~ s/\n//g; $kanban_task = decode_json(${kanban_task});
+			open(KANBAN, "<", ${ENV{NOTES_MD}}) || die();
+			my $kanban_text = do { local $/; <KANBAN> }; $kanban_text =~ s/\n+$//g;
+			close(KANBAN) || die();
+			while (${kanban_text} =~ m|^.+?${key}[:][ ][`]([^ ]+)[ ]([^`]+)[`]|gms) {
+				my $kanban_filt = ${1};
+				my $kanban_args = ${2};
+				$kanban_filt = qx(task _get rc.report.${kanban_filt}.filter); chomp(${kanban_filt});
+				$kanban_args =~ s|\\||g;
+				my $kanban_task = qx(task export "${kanban_filt} ${kanban_args}"); $kanban_task =~ s/\n//g; $kanban_task = decode_json(${kanban_task});
+				warn("EXPORTING KANBAN[${key} = " . ($#{$kanban_task}+1) . "]");
 				foreach my $task (@{$kanban_task}) {
 					my $uuid = $task->{"uuid"};
 					$task->{"uuid"} =~ s|[-].+$||g;
@@ -3099,6 +3107,7 @@ function task-export-text {
 					$task->{"annotations"} = ($#{ $task->{"annotations"} } +1);
 					$kanban->{$key}{$uuid} = ${task};
 				};
+			};
 		};
 		sub export_kanban {
 			my $task = shift();
