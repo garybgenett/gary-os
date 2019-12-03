@@ -3103,28 +3103,25 @@ function task-export-text {
 				my $kanban_task = qx(task export ${kanban_args}); $kanban_task =~ s/\n//g; $kanban_task = decode_json(${kanban_task});
 				$kanban_export .= " " . ($#{$kanban_task}+1);
 				foreach my $task (@{$kanban_task}) {
-					my $uuid = $task->{"uuid"};
-					$task->{"uuid"} =~ s|[-].+$||g;
-					$task->{"description"} =~ s|^(.{${kanban_length}}).*$|$1 ...|g;
-					$task->{"annotations"} = ($#{ $task->{"annotations"} } +1);
-					$kanban->{$key}{$uuid} = ${task};
+					$kanban->{$key}{ $task->{"uuid"} } = ${task};
 				};
 			};
 			$kanban_export = "${key} = " . scalar(keys(%{ $kanban->{$key} })) . " =" . ${kanban_export};
 			warn("EXPORTED KANBAN[${kanban_export}]");
 		};
-		sub export_kanban {
-			my $task = shift();
-			foreach my $key (sort(keys(%{$kanban}))) {
-				if (exists($kanban->{$key}{ $task->{"uuid"} })) {
-					my $ktask = $kanban->{$key}{ $task->{"uuid"} };
-					print KNBN "" . (${key}				|| "")	. ",";
-					print KNBN "" . ($ktask->{"uuid"}		|| "-")	. ",";
-					print KNBN "" . ($ktask->{"project"}		|| "")	. ",";
-					print KNBN "" . ($ktask->{"description"}	|| "-")	. " ";
-					print KNBN "[" . ($ktask->{"annotations"}	|| "")	. "]";
-					print KNBN "\n";
-				};
+		foreach my $key (sort(keys(%{$kanban}))) {
+			foreach my $uuid (sort(keys(%{ $kanban->{$key} }))) {
+				my $task = $kanban->{$key}{$uuid};
+				$task->{"uuid"}		=~ s|[-].+$||g;
+				$task->{"description"}	=~ s|^(.{${kanban_length}}).*$|$1 ...|g;
+				$task->{"description"}	=~ s|,|;|g;
+				$task->{"annotations"}	= ($#{ $task->{"annotations"} } +1);
+				print KNBN "" . (${key}				|| "")	. ",";
+				print KNBN "" . ($task->{"uuid"}		|| "-")	. ",";
+				print KNBN "" . ($task->{"project"}		|| "")	. ",";
+				print KNBN "" . ($task->{"description"}		|| "-")	. " ";
+				print KNBN "[" . ($task->{"annotations"}	|| "")	. "]";
+				print KNBN "\n";
 			};
 		};
 		my $current_time = strftime("%Y-%m-%d %H:%M:%S", localtime(time()));
@@ -3402,7 +3399,6 @@ function task-export-text {
 			my $started = "0";
 			my $begin = "0";
 			my $notes = "0";
-			&export_kanban(${task});
 			if ((exists($task->{"project"})) && ($task->{"project"} eq "_journal")) {
 				my $date = $task->{"description"};
 				$date =~ s/^([0-9]{4}[-][0-9]{2}[-][0-9]{2}).*$/$1/g;
