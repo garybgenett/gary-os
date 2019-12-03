@@ -3699,7 +3699,7 @@ function task-track {
 			$entries->{$1} = ${ltime};
 		};
 		open(TRACK, ">", ${text}) || die();
-		foreach my $key (sort(keys(${entries}))) {
+		foreach my $key (sort(keys(%{$entries}))) {
 			print TRACK $entries->{$key} . ${mark} . ${key} . "\n";
 		};
 		close(TRACK) || die();
@@ -3715,7 +3715,7 @@ function task-track {
 		};
 		close(TRACK) || die();
 		unlink(${text}) || warn();
-		foreach my $key (sort(keys(${entries}))) {
+		foreach my $key (sort(keys(%{$entries}))) {
 			my $find = ${key}; $find =~ s/[:].+$//g;
 			my $repl = "annotation_" . $entries->{$key};
 			$new =~ s/${find}/${repl}/g;
