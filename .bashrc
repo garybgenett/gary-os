@@ -3090,6 +3090,7 @@ function task-export-text {
 			};
 		};
 		foreach my $key (sort(keys(%{$kanban}))) {
+			my $kanban_export = "";
 			open(KANBAN, "<", ${ENV{NOTES_MD}}) || die();
 			my $kanban_text = do { local $/; <KANBAN> }; $kanban_text =~ s/\n+$//g;
 			close(KANBAN) || die();
@@ -3100,7 +3101,7 @@ function task-export-text {
 				$kanban_args = "\"" . ((${kanban_filt}) ? "( ${kanban_filt} )" : "") . ((${kanban_args}) ? "( ${kanban_args} )" : "") . "\"";
 				$kanban_args =~ s|\\||g;
 				my $kanban_task = qx(task export ${kanban_args}); $kanban_task =~ s/\n//g; $kanban_task = decode_json(${kanban_task});
-				warn("EXPORTING KANBAN[${key} = " . ($#{$kanban_task}+1) . "]");
+				$kanban_export .= " " . ($#{$kanban_task}+1);
 				foreach my $task (@{$kanban_task}) {
 					my $uuid = $task->{"uuid"};
 					$task->{"uuid"} =~ s|[-].+$||g;
@@ -3109,6 +3110,8 @@ function task-export-text {
 					$kanban->{$key}{$uuid} = ${task};
 				};
 			};
+			$kanban_export = "${key} = " . scalar(keys(%{ $kanban->{$key} })) . " =" . ${kanban_export};
+			warn("EXPORTED KANBAN[${kanban_export}]");
 		};
 		sub export_kanban {
 			my $task = shift();
