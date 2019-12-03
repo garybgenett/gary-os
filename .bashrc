@@ -3012,9 +3012,10 @@ function task-export-text {
 		my $data = qx(task export ${args}); $data =~ s/\n//g; $data = decode_json(${data});
 		my $base = ${root}; $base =~ s|^.*/||g;
 		open(JSON, ">", ${root} . ".json")			|| die();
-		open(TIME, ">", ${root} . ".csv")			|| die();
+		open(KNBN, ">", ${root} . ".kanban.csv")		|| die();
 		open(PROJ, ">", ${root} . ".timeline.projects.json")	|| die();
 		open(LINE, ">", ${root} . ".timeline.json")		|| die();
+		open(TIME, ">", ${root} . ".csv")			|| die();
 		open(NOTE, ">", ${root} . ".md")			|| die();
 		foreach my $task (@{$data}) { delete($task->{"id"}); delete($task->{"urgency"}); };
 		my $json = JSON::XS->new(); print JSON $json->canonical->pretty->encode(${data});
@@ -3032,6 +3033,20 @@ function task-export-text {
 		print NOTE "% " . localtime() . "\n";
 		my $NOTE = {}; $NOTE->{"other"} = {};
 		my $multi_tag = [];
+		my $kanban = {
+			"k1" => {},
+			"k2" => {},
+			"k3" => {},
+			"k4" => {},
+			"k5" => {},
+		};
+		foreach my $key (sort(keys(%{$kanban}))) {
+			my $kanban_args = qx(${ENV{SED}} -n "s|^.+${key}[:][ ].(.+).\$|\\1|gp" ${ENV{NOTES_MD}}); chomp(${kanban_args});
+			my $kanban_task = qx(task export ${kanban_args}); $kanban_task =~ s/\n//g; $kanban_task = decode_json(${kanban_task});
+			foreach my $task (@{$kanban_task}) {
+				$kanban->{$key}{ $task->{"uuid"} } = ${task};
+			};
+		};
 		my $proj_dups = {};
 		my $proj = {
 			"dateTimeFormat"	=> "iso8601",
@@ -3161,6 +3176,20 @@ function task-export-text {
 				($z, $result) = &time_format(${result});
 			};
 			return(${result});
+		};
+		sub export_kanban {
+			my $task = shift();
+			foreach my $key (sort(keys(%{$kanban}))) {
+				if (exists($kanban->{$key}{ $task->{"uuid"} })) {
+					my $uuid = $task->{"uuid"}; $uuid =~ s|[-].+$||g;
+					print KNBN "" . (${key}					|| "")	. ",";
+					print KNBN "" . (${uuid}				|| "-")	. ",";
+					print KNBN "" . ($task->{"project"}			|| "")	. ",";
+					print KNBN "" . ($task->{"description"}			|| "-")	. " ";
+					print KNBN "[" . (($#{ $task->{"annotations"} } +1)	|| "")	. "]";
+					print KNBN "\n";
+				};
+			};
 		};
 		sub export_proj {
 			my $task		= shift();
@@ -3355,6 +3384,7 @@ function task-export-text {
 			my $started = "0";
 			my $begin = "0";
 			my $notes = "0";
+			&export_kanban(${task});
 			if ((exists($task->{"project"})) && ($task->{"project"} eq "_journal")) {
 				my $date = $task->{"description"};
 				$date =~ s/^([0-9]{4}[-][0-9]{2}[-][0-9]{2}).*$/$1/g;
@@ -3483,9 +3513,10 @@ function task-export-text {
 #>>>		if (exists($NOTE->{"someday"}))			{ print NOTE "\n\nSomeday"		. " {#list-someday}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"someday"}			; };
 #>>>		if (exists(${$NOTE->{"other"}}{"someday"}))	{ print NOTE "\n\nSomeday (Other)"	. " {#list-someday-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"someday"}		; };
 		close(JSON) || die();
-		close(TIME) || die();
+		close(KNBN) || die();
 		close(PROJ) || die();
 		close(LINE) || die();
+		close(TIME) || die();
 		close(NOTE) || die();
 		foreach my $task (sort({
 			(($a->{"project"}	|| "") cmp ($b->{"project"}	|| "")) ||
