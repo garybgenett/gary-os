@@ -3040,13 +3040,6 @@ function task-export-text {
 			"k4" => {},
 			"k5" => {},
 		};
-		foreach my $key (sort(keys(%{$kanban}))) {
-			my $kanban_args = qx(${ENV{SED}} -n "s|^.+${key}[:][ ].(.+).\$|\\1|gp" ${ENV{NOTES_MD}}); chomp(${kanban_args});
-			my $kanban_task = qx(task export ${kanban_args}); $kanban_task =~ s/\n//g; $kanban_task = decode_json(${kanban_task});
-			foreach my $task (@{$kanban_task}) {
-				$kanban->{$key}{ $task->{"uuid"} } = ${task};
-			};
-		};
 		my $proj_dups = {};
 		my $proj = {
 			"dateTimeFormat"	=> "iso8601",
@@ -3093,6 +3086,27 @@ function task-export-text {
 		foreach my $uda (split( ",", $udas->[0] )) {
 			if (!defined( $line_color->{ $uda } )) {
 				$line_color->{ $uda } = "pink";
+			};
+		};
+		foreach my $key (sort(keys(%{$kanban}))) {
+			my $kanban_args = qx(${ENV{SED}} -n "s|^.+${key}[:][ ].(.+).\$|\\1|gp" ${ENV{NOTES_MD}}); chomp(${kanban_args});
+			my $kanban_task = qx(task export ${kanban_args}); $kanban_task =~ s/\n//g; $kanban_task = decode_json(${kanban_task});
+			foreach my $task (@{$kanban_task}) {
+				$kanban->{$key}{ $task->{"uuid"} } = ${task};
+			};
+		};
+		sub export_kanban {
+			my $task = shift();
+			foreach my $key (sort(keys(%{$kanban}))) {
+				if (exists($kanban->{$key}{ $task->{"uuid"} })) {
+					my $uuid = $task->{"uuid"}; $uuid =~ s|[-].+$||g;
+					print KNBN "" . (${key}					|| "")	. ",";
+					print KNBN "" . (${uuid}				|| "-")	. ",";
+					print KNBN "" . ($task->{"project"}			|| "")	. ",";
+					print KNBN "" . ($task->{"description"}			|| "-")	. " ";
+					print KNBN "[" . (($#{ $task->{"annotations"} } +1)	|| "")	. "]";
+					print KNBN "\n";
+				};
 			};
 		};
 		my $current_time = strftime("%Y-%m-%d %H:%M:%S", localtime(time()));
@@ -3176,20 +3190,6 @@ function task-export-text {
 				($z, $result) = &time_format(${result});
 			};
 			return(${result});
-		};
-		sub export_kanban {
-			my $task = shift();
-			foreach my $key (sort(keys(%{$kanban}))) {
-				if (exists($kanban->{$key}{ $task->{"uuid"} })) {
-					my $uuid = $task->{"uuid"}; $uuid =~ s|[-].+$||g;
-					print KNBN "" . (${key}					|| "")	. ",";
-					print KNBN "" . (${uuid}				|| "-")	. ",";
-					print KNBN "" . ($task->{"project"}			|| "")	. ",";
-					print KNBN "" . ($task->{"description"}			|| "-")	. " ";
-					print KNBN "[" . (($#{ $task->{"annotations"} } +1)	|| "")	. "]";
-					print KNBN "\n";
-				};
-			};
 		};
 		sub export_proj {
 			my $task		= shift();
