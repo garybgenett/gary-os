@@ -3109,8 +3109,19 @@ function task-export-text {
 			$kanban_export = "${key} = " . scalar(keys(%{ $kanban->{$key} })) . " =" . ${kanban_export};
 			warn("EXPORTED KANBAN[${kanban_export}]");
 		};
+		# report.skim.sort=project+,kind-,depends-,description+,entry+
+		# (stolen from task-depends)
+		my $k = "";
+		sub kanban_sorter {
+			(($kanban->{$k}{$a}{"project"}		|| "") cmp ($kanban->{$k}{$b}{"project"}	|| "")) ||
+#>>>			(&print_task_sorter_udas("kind",	${b}, ${a})					) ||
+#>>>			(($kanban->{$k}{$b}{"depends"}		|| "") cmp ($kanban->{$k}{$a}{"depends"}	|| "")) ||
+			(($kanban->{$k}{$a}{"description"}	|| "") cmp ($kanban->{$k}{$b}{"description"}	|| "")) ||
+			(($kanban->{$k}{$a}{"entry"}		|| "") cmp ($kanban->{$k}{$b}{"entry"}		|| ""))
+		};
 		foreach my $key (sort(keys(%{$kanban}))) {
-			foreach my $uuid (sort(keys(%{ $kanban->{$key} }))) {
+			$k = ${key};
+			foreach my $uuid (sort(kanban_sorter keys(%{ $kanban->{$key} }))) {
 				my $task = $kanban->{$key}{$uuid};
 				$task->{"uuid"}		=~ s|[-].+$||g;
 				$task->{"description"}	=~ s|^(.{${kanban_length}}).*$|$1 ...|g;
