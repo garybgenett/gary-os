@@ -3361,7 +3361,7 @@ function task-export-text {
 				while (${output} =~ m/^\[TASKLIST[ ]?([^\n]*)?\]$/gms) {
 					my $project = ${1} || $task->{"project"};
 					warn("EXPORTING TASKLIST[${project}]");
-					my $tasklist = qx(.bashrc task-depends project.is:${project});
+					my $tasklist = qx(.bashrc task-depends -r project.is:${project});
 					$tasklist =~ s/^\n*/<!-- TASKLIST[${project}] -->\n/g;
 					$tasklist =~ s/\n*$//g;
 					$output =~ s/^\[TASKLIST[ ]?([^\n]*)?\]$/${tasklist}/ms;
@@ -3560,12 +3560,12 @@ function task-export-text {
 			unlink(${ENV{PIMDIR}} . "/.composed") || warn();
 		};
 	' -- "${NAME}" "${@}" || return 1
-	echo -en "\n"		>>tasks.md
-	echo -en "<!--\n"	>>tasks.md
-	task-depends +BLOCKED	>>tasks.md
-	echo -en "-->\n"	>>tasks.md
-	${GREP} "[-][-][ ]TASK" tasks.md
-	${SED} -n "s/^#+ //gp" tasks.md |
+	echo -en "\n"			>>tasks.md
+	echo -en "<!--\n"		>>tasks.md
+	task-depends -r +BLOCKED	>>tasks.md
+	echo -en "-->\n"		>>tasks.md
+	${GREP} "[-][-][ ]TASK"		tasks.md
+	${SED} -n "s/^#+ //gp"		tasks.md |
 		sort |
 		uniq -c |
 		${SED} \
@@ -3933,7 +3933,7 @@ function task-depends {
 		sub print_header {
 			$header = "1";
 			&print_task("0", "HEADER");
-			if (!${do_report}) {
+			if (${do_report}) {
 				print "" . ("|:---" x 7) . "|\n";
 			} else {
 				print "" . ("|:---" x 2) . "|\n";
@@ -3963,7 +3963,7 @@ function task-depends {
 				};
 			};
 			print "| "; printf("%-${c_uid}.${c_uid}s", $task->{"uuid"});
-			if (!${do_report}) {
+			if (${do_report}) {
 				print " | "; printf("%-" . $c_fld->{"project"}	. "." . $c_fld->{"project"}	. "s", $task->{"project"} || "-");
 				print " | "; printf("%-" . $c_fld->{"tags"}	. "." . $c_fld->{"tags"}	. "s", (
 					(ref($task->{"tags"}) eq "ARRAY") ?
@@ -4004,7 +4004,7 @@ function task-depends {
 			) && (
 				($task->{"status"} ne "HEADER")
 			))					{ $title = "**" . ${title} . "**"; };
-			if (!${do_report}) {
+			if (${do_report}) {
 				print ${title} . "\n";
 			} else {
 				if ($task->{"status"} eq "HEADER") {
@@ -4293,8 +4293,8 @@ function task-project {
 			PROJ=" status:pending"
 		fi
 #>>>		task read	project.is:${PROJ} -PARENT -CHILD
-#>>>		task-depends	project.is:${PROJ} -PARENT -CHILD
-		task-depends -r	project.is:${PROJ} -PARENT -CHILD
+#>>>		task-depends -r	project.is:${PROJ} -PARENT -CHILD
+		task-depends	project.is:${PROJ} -PARENT -CHILD
 		task look	project.is:${PROJ} -PARENT -CHILD
 	done
 	return 0
