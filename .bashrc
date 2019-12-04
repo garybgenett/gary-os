@@ -3115,12 +3115,18 @@ function task-export-text {
 				if (exists($kanban->{$key}{ $task->{"uuid"} })) {
 					my $ktsk = $kanban->{$key}{ $task->{"uuid"} };
 					$ktsk->{"uuid"}		=~ s|[-].+$||g;
-					$ktsk->{"description"}	=~ s|^(.{${kanban_length}}).*$|$1 ...|g;
-					$ktsk->{"description"}	=~ s|,|;|g;
-					$ktsk->{"annotations"}	= ($#{ $ktsk->{"annotations"} } +1);
+					my($epoch, $ltime)		= ("", "");
+					if (exists($ktsk->{"due"})) {
+						($epoch, $ltime)	= &time_format( $ktsk->{"due"} );
+						$ltime			=~ s|[ ][0-9:]+$||g;
+					};
+					$ktsk->{"description"}		=~ s|^(.{${kanban_length}}).*$|$1 ...|g;
+					$ktsk->{"description"}		=~ s|,|;|g;
+					$ktsk->{"annotations"}		= ($#{ $ktsk->{"annotations"} } +1);
 					print KNBN "" . (${key}				|| "")	. ",";
 					print KNBN "" . ($ktsk->{"uuid"}		|| "-")	. ",";
 					print KNBN "" . ($ktsk->{"project"}		|| "")	. ",";
+					print KNBN "" . (${ltime}			|| "")	. ",";
 					print KNBN "" . ($ktsk->{"description"}		|| "-")	. " ";
 					print KNBN "[" . ($ktsk->{"annotations"}	|| "")	. "]";
 					print KNBN "\n";
