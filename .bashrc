@@ -2898,19 +2898,32 @@ function task-export-zoho {
 
 function task-export-report {
 	declare DATE="$(date --iso)"
-	declare REPORT="${1}.${DATE}" && shift
+	declare REPORT="$(realpath "${1}").${DATE}" && shift
+	declare REPORT_DIR="$(dirname ${REPORT})"
 	declare TASKS_LIST="${1}" && shift
 	declare EMAIL_DEST="${1}" && shift
 	declare EMAIL_MAIL="${1}" && shift
 	declare EMAIL_NAME="${1}" && shift
 	declare EMAIL_SIGN="${1}" && shift
-	declare TIMELINE_Y="${1}" && shift
-	if [[ ${TIMELINE_Y} != false ]] && [[ ${TIMELINE_Y} != true ]]; then
-		TIMELINE_Y="false"
-	fi
+	declare PROJECTS_Y="${1}" && shift; if [[ ${PROJECTS_Y} != false ]] && [[ ${PROJECTS_Y} != true ]]; then PROJECTS_Y="false"; fi
+	declare KANBAN_YES="${1}" && shift; if [[ ${KANBAN_YES} != false ]] && [[ ${KANBAN_YES} != true ]]; then KANBAN_YES="false"; fi
+	declare TIMELINE_Y="${1}" && shift; if [[ ${TIMELINE_Y} != false ]] && [[ ${TIMELINE_Y} != true ]]; then TIMELINE_Y="false"; fi
 	task-export-text "${EMAIL_NAME}" "${TASKS_LIST}"
-	${CP} ${PIMDIR}/tasks.md.html		${REPORT}.projects.html
-	${CP} ${PIMDIR}/tasks.timeline.html	${REPORT}.timeline.html
+	${MKDIR} ${REPORT_DIR}
+	if ${PROJECTS_Y}; then ${CP} ${PIMDIR}/tasks.md.html		${REPORT}.projects.html	; fi
+	if ${KANBAN_YES}; then ${CP} ${PIMDIR}/tasks.kanban.html	${REPORT}.kanban.html	; fi
+	if ${TIMELINE_Y}; then ${CP} ${PIMDIR}/tasks.timeline.html	${REPORT}.timeline.html	; fi
+	if ${KANBAN_YES}; then
+		perl -i -pe '
+			my $data = qx(cat '${PIMDIR}/tasks.kanban.csv'); chomp(${data});
+			s|<!-- INCLUDE -->|${data}|g;
+			s|<!-- INTERNAL (.*) -->|${1}|g;
+#>>>			s|<!-- TEST (.*) -->|${1}|g;
+#>>>			s|<!-- FULL (.*) -->|${1}|g;
+		' \
+		${REPORT}.kanban.html
+	fi
+	if ${TIMELINE_Y}; then
 		perl -i -pe '
 			use JSON::XS;
 			my $json = JSON::XS->new();
@@ -2930,49 +2943,80 @@ function task-export-report {
 			s|.+tasks.timeline.projects.json.+$|	var parsed_p = JSON.parse('\''${projects}'\''); projectSource.loadJSON(parsed_p, "");|g;
 		' \
 		${REPORT}.timeline.html
-cat >${REPORT}.txt <<END_OF_FILE
-This is my weekly status report.  It is an automated message, and should be generated every weekend.
+	fi
+cat >${REPORT}.md <<END_OF_FILE
+This is my weekly status report.  It should be generated every weekend.
+
+The attached HTML files can be opened in any browser:
 
 END_OF_FILE
-if ! ${TIMELINE_Y}; then cat >>${REPORT}.txt <<END_OF_FILE
-The attached HTML file should open in any browser, and contains a list of all projects along with their status and all notes.
-END_OF_FILE
-else cat >>${REPORT}.txt <<END_OF_FILE
-Attached are two HTML files which should open in any browser:
-	* Projects
-		* List of all projects, along with their status and all notes
-		* The projects report is self-explanatory, and does not have any further details in this message
-	* Timeline
-		* Interactive visualization, for projects which have deadlines
-		* The timeline report requires some additional context, which is the remainder of this message
-
-Internet access is required to properly view the timeline file, as it uses 3rd party Javascript libraries to render the output.  Your browser may request that you accept running the script / blocked content, which you will need to do.
-
-There are four slider bars in the report, progressing in scope from monthly to weekly to daily to hourly.  The highlighted areas show what portion of the more granular timeframes are being displayed.  Long-term project tracking is shown on the top two bars (monthly and weekly), and daily time-tracking is on the bottom two bars (daily and hourly).
-
-Long-term project tracking legend:
-	* Text color coding:
-		* Black text -- final / due items
-		* Gray text -- dependencies / sub-tasks
-	* Bar color coding:
-		* Green -- in progress (hours have been logged)
-		* Yellow -- not yet started
-		* Red -- overdue
-		* Black -- complete
-		* White -- skipped / deleted
-
-Some important notes:
-	* Mousing over each item will show a pop-up with start and end dates, along with any "hold" dates and the first and last dates logged against the task
-	* The long-term tracking is just a guideline/overview, since not all tasks will take the amount of time allotted
-	* Not all time is accounted for in the hourly time-tracking in this report
+if ! ${PROJECTS_Y} && ! ${KANBAN_YES} && ! ${TIMELINE_Y}; then cat >>${REPORT}.md <<END_OF_FILE
+  * Oops!  I made a mistake.  Please let me know my reports are missing.
 END_OF_FILE
 fi
-cat >>${REPORT}.txt <<END_OF_FILE
-
-Please see me with any comments or questions.
+if ${PROJECTS_Y}; then cat >>${REPORT}.md <<END_OF_FILE
+  * Projects -- List of projects, their status, and all notes
 END_OF_FILE
-	if [[ -n ${EMAIL_SIGN} ]]; then
-		echo -en "\n-- \n${EMAIL_SIGN}\n" >>${REPORT}.txt
+fi
+if ${KANBAN_YES}; then cat >>${REPORT}.md <<END_OF_FILE
+  * Kanban -- Interactive board of all high-priority items
+    * Display
+        * Top line is task identifier, project and due date
+        * Bottom line is the title and number of notes and/or time logs
+    * Usage
+        * Items may be dragged/dropped, if desired, but not saved
+    * Columns
+        * Except for Archive, items should only show up in one column
+        * Holding -- Blocked, with due date
+        * Waiting -- Blocked, no due date
+        * Working -- Ready to be worked (filtered, not all are active)
+        * Complete -- Completed/deleted/dropped (pruned regularly)
+        * Archive -- Recently modified (pruned regularly)
+END_OF_FILE
+fi
+if ${TIMELINE_Y}; then cat >>${REPORT}.md <<END_OF_FILE
+  * Timeline -- Gantt-style chart of deadline projects and time tracking
+    * Requirements
+        * Internet access (it uses 3rd party Javascript libraries)
+        * Browser may request authorization to run/view the content
+    * Display
+        * Slider bars progress through monthly/weekly/daily/hourly
+        * Highlighted areas represent displayed portion of lower scope
+        * Project tracking is on top (monthly and weekly)
+        * Time tracking is on the bottom (daily and hourly)
+    * Usage
+        * Mousing over weekly/hourly items displays date/time details
+        * Time-lines are estimated (tasks may not take allotted time)
+        * Not all time is accounted for in tracking (intentionally)
+    * Legend
+        * Black text -- Final task driving the due date
+        * Gray text -- Dependencies and sub-tasks
+        * Green bar -- In-progress (hours have been logged)
+        * Yellow bar -- Not yet started
+        * Red bar -- Overdue
+        * Black bar -- Complete
+        * White bar -- Deleted/dropped
+END_OF_FILE
+fi
+cat >>${REPORT}.md <<END_OF_FILE
+
+That's it!  Please see me with any comments or questions.
+END_OF_FILE
+	if [[ -f ${EMAIL_SIGN} ]]; then
+		echo -en "\n\\\\-\\\\-&nbsp;\\\\\n"	>>${REPORT}.md
+		${SED}					\
+			-e "s|[[:space:]]|\&nbsp;|g"	\
+			-e "s|\*|\\\\\*|g"		\
+			-e "s|$|\ \\\\|g"		\
+			${EMAIL_SIGN}			>>${REPORT}.md
+	fi
+	if [[ -f "${COMPOSER}" ]]; then
+		make				\
+			-f "${COMPOSER}"	\
+			-C "${REPORT_DIR}"	\
+			${REPORT}.html		\
+			${REPORT}.txt
+		${RM} ${REPORT_DIR}/.composed
 	fi
 	if [[ -n ${EMAIL_DEST} ]] && [[ -n ${EMAIL_MAIL} ]]; then
 		cat ${REPORT}.txt |
@@ -2980,7 +3024,8 @@ END_OF_FILE
 			EMAIL_NAME="${EMAIL_NAME}" \
 			email -x \
 				-s "Status Report: ${DATE}" \
-				-a ${REPORT}.projects.html \
+				$(if ${PROJECTS_Y}; then echo "-a ${REPORT}.projects.html"; fi) \
+				$(if ${KANBAN_YES}; then echo "-a ${REPORT}.kanban.html"; fi) \
 				$(if ${TIMELINE_Y}; then echo "-a ${REPORT}.timeline.html"; fi) \
 				-c ${EMAIL_MAIL} \
 				"${@}" \
