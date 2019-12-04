@@ -3109,30 +3109,22 @@ function task-export-text {
 			$kanban_export = "${key} = " . scalar(keys(%{ $kanban->{$key} })) . " =" . ${kanban_export};
 			warn("EXPORTED KANBAN[${kanban_export}]");
 		};
-		# report.skim.sort=project+,kind-,depends-,description+,entry+
-		# (stolen from task-depends)
-		my $k = "";
-		sub kanban_sorter {
-			(($kanban->{$k}{$a}{"project"}		|| "") cmp ($kanban->{$k}{$b}{"project"}	|| "")) ||
-#>>>			(&print_task_sorter_udas("kind",	${b}, ${a})					) ||
-#>>>			(($kanban->{$k}{$b}{"depends"}		|| "") cmp ($kanban->{$k}{$a}{"depends"}	|| "")) ||
-			(($kanban->{$k}{$a}{"description"}	|| "") cmp ($kanban->{$k}{$b}{"description"}	|| "")) ||
-			(($kanban->{$k}{$a}{"entry"}		|| "") cmp ($kanban->{$k}{$b}{"entry"}		|| ""))
-		};
-		foreach my $key (sort(keys(%{$kanban}))) {
-			$k = ${key};
-			foreach my $uuid (sort(kanban_sorter keys(%{ $kanban->{$key} }))) {
-				my $task = $kanban->{$key}{$uuid};
-				$task->{"uuid"}		=~ s|[-].+$||g;
-				$task->{"description"}	=~ s|^(.{${kanban_length}}).*$|$1 ...|g;
-				$task->{"description"}	=~ s|,|;|g;
-				$task->{"annotations"}	= ($#{ $task->{"annotations"} } +1);
-				print KNBN "" . (${key}				|| "")	. ",";
-				print KNBN "" . ($task->{"uuid"}		|| "-")	. ",";
-				print KNBN "" . ($task->{"project"}		|| "")	. ",";
-				print KNBN "" . ($task->{"description"}		|| "-")	. " ";
-				print KNBN "[" . ($task->{"annotations"}	|| "")	. "]";
-				print KNBN "\n";
+		sub export_kanban {
+			my $task = shift();
+			foreach my $key (sort(keys(%{$kanban}))) {
+				if (exists($kanban->{$key}{ $task->{"uuid"} })) {
+					my $ktsk = $kanban->{$key}{ $task->{"uuid"} };
+					$ktsk->{"uuid"}		=~ s|[-].+$||g;
+					$ktsk->{"description"}	=~ s|^(.{${kanban_length}}).*$|$1 ...|g;
+					$ktsk->{"description"}	=~ s|,|;|g;
+					$ktsk->{"annotations"}	= ($#{ $ktsk->{"annotations"} } +1);
+					print KNBN "" . (${key}				|| "")	. ",";
+					print KNBN "" . ($ktsk->{"uuid"}		|| "-")	. ",";
+					print KNBN "" . ($ktsk->{"project"}		|| "")	. ",";
+					print KNBN "" . ($ktsk->{"description"}		|| "-")	. " ";
+					print KNBN "[" . ($ktsk->{"annotations"}	|| "")	. "]";
+					print KNBN "\n";
+				};
 			};
 		};
 		my $current_time = strftime("%Y-%m-%d %H:%M:%S", localtime(time()));
@@ -3405,11 +3397,13 @@ function task-export-text {
 		};
 		foreach my $task (sort({
 			(($a->{"project"}	|| "") cmp ($b->{"project"}	|| "")) ||
-			(($a->{"description"}	|| "") cmp ($b->{"description"}	|| ""))
+			(($a->{"description"}	|| "") cmp ($b->{"description"}	|| "")) ||
+			(($a->{"entry"}		|| "") cmp ($b->{"entry"}	|| ""))
 		} @{$data})) {
 			my $started = "0";
 			my $begin = "0";
 			my $notes = "0";
+			&export_kanban(${task});
 			if ((exists($task->{"project"})) && ($task->{"project"} eq "_journal")) {
 				my $date = $task->{"description"};
 				$date =~ s/^([0-9]{4}[-][0-9]{2}[-][0-9]{2}).*$/$1/g;
@@ -4520,8 +4514,8 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			${RM} /tmp/${FUNCNAME}-${IMPERSONATE_NAME}-todo
 		elif [[ ${1} == [=] ]]; then
 			shift
-			task-export-text	|| return 1
-#>>>			task-export		|| return 1
+			task-export-text "" "${@}"	|| return 1
+#>>>			task-export			|| return 1
 			zpim-commit tasks
 		elif [[ ${1} == [@] ]]; then
 			task-export-drive || return 1
