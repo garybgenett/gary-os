@@ -2944,21 +2944,21 @@ function task-export-report {
 		' \
 		${REPORT}.timeline.html
 	fi
-cat >${REPORT}.md <<END_OF_FILE
+cat >${REPORT}.txt <<END_OF_FILE
 This is my weekly status report.  It should be generated every weekend.
 
 The attached HTML files can be opened in any browser:
 
 END_OF_FILE
-if ! ${PROJECTS_Y} && ! ${KANBAN_YES} && ! ${TIMELINE_Y}; then cat >>${REPORT}.md <<END_OF_FILE
+if ! ${PROJECTS_Y} && ! ${KANBAN_YES} && ! ${TIMELINE_Y}; then cat >>${REPORT}.txt <<END_OF_FILE
   * Oops!  I made a mistake.  Please let me know my reports are missing.
 END_OF_FILE
 fi
-if ${PROJECTS_Y}; then cat >>${REPORT}.md <<END_OF_FILE
+if ${PROJECTS_Y}; then cat >>${REPORT}.txt <<END_OF_FILE
   * Projects -- List of projects, their status, and all notes
 END_OF_FILE
 fi
-if ${KANBAN_YES}; then cat >>${REPORT}.md <<END_OF_FILE
+if ${KANBAN_YES}; then cat >>${REPORT}.txt <<END_OF_FILE
   * Kanban -- Interactive board of all high-priority items
     * Display
         * Top line is task identifier, project and due date
@@ -2974,19 +2974,19 @@ if ${KANBAN_YES}; then cat >>${REPORT}.md <<END_OF_FILE
         * Archive -- Recently modified (pruned regularly)
 END_OF_FILE
 fi
-if ${TIMELINE_Y}; then cat >>${REPORT}.md <<END_OF_FILE
+if ${TIMELINE_Y}; then cat >>${REPORT}.txt <<END_OF_FILE
   * Timeline -- Gantt-style chart of deadline projects and time tracking
     * Requirements
         * Internet access (it uses 3rd party Javascript libraries)
         * Browser may request authorization to run/view the content
     * Display
-        * Slider bars progress through monthly/weekly/daily/hourly
-        * Highlighted areas represent displayed portion of lower scope
+        * Slider bars progress down through monthly/weekly/daily/hourly
+        * Highlighted areas represent displayed portions of lower scopes
         * Project tracking is on top (monthly and weekly)
         * Time tracking is on the bottom (daily and hourly)
     * Usage
         * Mousing over weekly/hourly items displays date/time details
-        * Time-lines are estimated (tasks may not take allotted time)
+        * Timelines are estimated (tasks may not take allotted time)
         * Not all time is accounted for in tracking (intentionally)
     * Legend
         * Black text -- Final task driving the due date
@@ -2998,31 +2998,36 @@ if ${TIMELINE_Y}; then cat >>${REPORT}.md <<END_OF_FILE
         * White bar -- Deleted/dropped
 END_OF_FILE
 fi
-cat >>${REPORT}.md <<END_OF_FILE
+cat >>${REPORT}.txt <<END_OF_FILE
 
 That's it!  Please see me with any comments or questions.
 END_OF_FILE
+	if [[ -f "${COMPOSER}" ]]; then
+		${MV} ${REPORT}.txt				${REPORT}.md
+		make -f "${COMPOSER}" -C "${REPORT_DIR}"	${REPORT}.txt
+	fi
 	if [[ -f ${EMAIL_SIGN} ]]; then
-		echo -en "\n\\\\-\\\\-&nbsp;\\\\\n"	>>${REPORT}.md
-		${SED}					\
-			-e "s|[[:space:]]|\&nbsp;|g"	\
-			-e "s|\*|\\\\\*|g"		\
-			-e "s|$|\ \\\\|g"		\
-			${EMAIL_SIGN}			>>${REPORT}.md
+		echo -en "\n"					>>${REPORT}.txt
+		echo -en "-- \n"				>>${REPORT}.txt
+		cat ${EMAIL_SIGN}				>>${REPORT}.txt
 	fi
 	if [[ -f "${COMPOSER}" ]]; then
-		make				\
-			-f "${COMPOSER}"	\
-			-C "${REPORT_DIR}"	\
-			${REPORT}.html		\
-			${REPORT}.txt
-		${RM} ${REPORT_DIR}/.composed
+		if [[ -f ${EMAIL_SIGN} ]]; then
+			echo -en "\n"				>>${REPORT}.md
+			echo -en "\t-- \n"			>>${REPORT}.md
+			${SED} "s|^|\t|g" ${EMAIL_SIGN}		>>${REPORT}.md
+		fi
+		make -f "${COMPOSER}" -C "${REPORT_DIR}"	${REPORT}.html
+		${SED} -i "/text\/css/d"			${REPORT}.html
+		${RM}						${REPORT_DIR}/.composed
 	fi
 	if [[ -n ${EMAIL_DEST} ]] && [[ -n ${EMAIL_MAIL} ]]; then
-		cat ${REPORT}.txt |
+#>>>		cat ${REPORT}.txt |
+		cat ${REPORT}.html |
 			EMAIL_MAIL="${EMAIL_MAIL}" \
 			EMAIL_NAME="${EMAIL_NAME}" \
 			email -x \
+				-e "set content_type = text/html" \
 				-s "Status Report: ${DATE}" \
 				$(if ${PROJECTS_Y}; then echo "-a ${REPORT}.projects.html"; fi) \
 				$(if ${KANBAN_YES}; then echo "-a ${REPORT}.kanban.html"; fi) \
