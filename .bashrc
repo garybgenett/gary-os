@@ -2322,7 +2322,7 @@ function shell {
 		return 0
 	fi
 	if [[ ${DEST} == -i ]]; then
-		rsync root@me.garybgenett.net:/.g/_data/zactive/.static/.ssh/id_* ${HOME}/.ssh/
+		${RSYNC_U} root@me.garybgenett.net:/.g/_data/zactive/.static/.ssh/id_* ${HOME}/.ssh/
 		return 0
 	fi
 	case ${DEST} in
@@ -3742,7 +3742,7 @@ function task-notes {
 				if (! -f ${filelist}) {
 					die("FILE AND FILELIST!");
 				};
-				system("rsync -avv ${automatic} ${filelist}");
+				system("${ENV{RSYNC_U}} ${automatic} ${filelist}");
 			} else {
 				system("${edit} ${filelist}");
 			};
