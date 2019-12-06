@@ -193,9 +193,9 @@ GaryOS has maintained a [steady stream of overall downloads] since its
 inception in 2014.  Activity is concentrated in the U.S. and Europe, but there
 is clearly a worldwide audience, with interest coming from [countries all over
 the world].  Current [v4.0 downloads] are being tracked since [v4.0] was
-released in October 2019.  As of September 2019, GaryOS maintained an average
+released in December 2019.  As of November 2019, GaryOS maintained an average
 of 10-15 [v3.0 downloads] a month since the [v3.0] release in March 2015.
-There are notable spikes in the overall downloads of ~2K, ~0.6K and ~1.5K in
+There are notable spikes in the overall downloads of ~2K, ~0.6K and ~1.9K in
 March 2018, January 2019 and September 2019, respectively, which were most
 likely fetches of supporting files.  The SourceForge statistics are not
 granular enough to investigate.
@@ -210,7 +210,7 @@ the [Funtoo ecosystem page].
 
 No entries in the [Wikipedia list of Linux distributions] or on [DistroWatch] yet...
 
-There is a [Softpedia review] of [v3.0] from a few years ago (written the day
+There is a [Softpedia review of v3.0] from a few years ago (written the day
 after it was released), which is interesting because they took the time to boot
 it up and play with it, and make some comments of their own beyond doing
 a copy/paste of the README text.
@@ -241,7 +241,7 @@ this far.
 [Funtoo ecosystem page]: https://funtoo.org/Gentoo_Ecosystem
 [Wikipedia list of Linux distributions]: https://en.wikipedia.org/wiki/List_of_Linux_distributions
 [DistroWatch]: https://distrowatch.com/table.php?distribution=funtoo
-[Softpedia review]: https://linux.softpedia.com/get/Linux-Distributions/GaryOS-103629.shtml
+[Softpedia review of v3.0]: https://linux.softpedia.com/get/Linux-Distributions/GaryOS-103629.shtml
 [Internet search for "GaryOS"]: https://duckduckgo.com/?q=GaryOS
 [Wikipedia list of Gentoo-derived distributions]: https://en.wikipedia.org/wiki/Gentoo_Linux#Derived_distributions
 [non-systemd distributions]: https://sysdfree.wordpress.com/2019/03/09/135
