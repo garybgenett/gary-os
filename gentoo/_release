@@ -469,7 +469,7 @@ declare CPIO_IN="cpio -v --create --format newc --null	--file ${CPIO_FILE}	--dir
 declare CPIO_OUT="cpio -v --extract			--file ${CPIO_FILE}	--directory ${CPIO_FILE}.dir"
 declare XZ="xz -vv --compress --stdout --format xz --check crc32"
 
-#note: this is also used in the "release_install_root" function, so making it global
+#note: this is also used in the "release_install_root" and "publish_prep" functions, so making it global
 declare SKIP_DIRS="
 /dev
 /mnt
