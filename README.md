@@ -261,12 +261,12 @@ manifested as a few tiny patches to upstream projects.
 The "shmem" subsystem in the Linux kernel is what manages the "tmpfs"
 infrastructure used for in-memory filesystems, including initramfs.  Initial
 creation of the shmem filesystem reserves half of the available memory.  On
-a 4GB system, this is not enough room for GaryOS to boot.  In the [early
-history of the "gentoo/\_release" script], there was a minor hack to the kernel
-source to make this work the way that was needed.  For the completion of the
-[v4.0] release, this was formalized as a kernel patch which also added
-a configuration option and a boot parameter.  This was submitted to the Linux
-"mm" development team in the following mailing list threads:
+a 4GB system, this is not enough room for GaryOS to boot.  In the early history
+of the "[gentoo/\_release]" script, there was a minor hack to the kernel source
+to make this work the way that was needed.  For the completion of the [v4.0]
+release, this was formalized as a kernel patch which also added a configuration
+option and a boot parameter.  This was submitted to the Linux "mm" development
+team in the following mailing list threads:
 
   * [Initial complete patch] -- [shmem-add-shmem_size-option-set-filesystem-size.v5.4-rc2.patch]
   * [Secondary patch, configuration option only] -- [shmem-add-shmem_size-option-for-full-filesystem.v5.4-rc2.patch]
@@ -280,8 +280,8 @@ functionality, and is mentioned in the [Structure] and [Live Update] sections.
 
 Ego is the tool used by Funtoo to keep the "meta-repo" Portage tree up to date.
 While Portage uses a monolithic directory tree, Ego uses a collection of Git
-repositories pulled together using a "kits" infrastructure.  The
-[gentoo/funtoo.kits] script was written to properly "pin" the final tree to
+repositories pulled together using the [Funtoo Kits] infrastructure.  The
+[gentoo/\_funtoo.kits] script was written to properly "pin" the final tree to
 a particular commit, for stability and reproducibility.  Also for the [v4.0]
 release, this hack was coded directly into the Ego tool:
 
@@ -289,16 +289,16 @@ release, this hack was coded directly into the Ego tool:
 
 This was submitted upstream, but was not usable in [v4.0] because of
 a mis-match in the filesystem and Ego versions.  Thus, the
-[ego\_commit\_hack.patch] is in the GaryOS "\_overlay" directory, but is not
-yet in production use.  This will hopefully change in [v5.0], with the updated
-Portage commit.
+[ego\_commit\_hack.patch] is in the GaryOS "[gentoo/overlay]" directory, but is
+not yet in production use.  This will hopefully change in [v5.0], with the
+updated Portage commit.
 
 **Suckless DWM**
 
 Tangentially related to GaryOS are the [DWM multimon patches] that the author
 created to make multiple monitors easier to use in the DWM window manager.  The
 [Suckless] team accepts these patches on their website, but due to their
-minimalist philosophy, contributions of this type are not committed into the
+minimalist philosophy contributions of this type are not committed into the
 main repository, leaving users to use whatever set of patches suits them.
 
 GaryOS does use DWM as the window manager for the [Graphical Interface], and
@@ -307,10 +307,10 @@ default DWM color scheme to the URxvt terminal and Links web browser, and also
 makes Links the browser that is launched.  The default configuration is
 otherwise unmodified, and no patches are used.
 
-[early history of the "gentoo/\_release" script]: https://github.com/garybgenett/gary-os/commits/master/gentoo/_release
 [Initial complete patch]: https://marc.info/?l=linux-mm&m=157048756423988
 [Secondary patch, configuration option only]: https://marc.info/?l=linux-mm&m=157056583814243
 [Final patch, default global variable only]: https://marc.info/?l=linux-mm&m=157064677005638
+[Funtoo Kits]: https://www.funtoo.org/Funtoo_Kits
 [DWM multimon patches]: http://dwm.suckless.org/patches/historical/multimon
 
 <!-- https://kernel.org/doc/html/latest/process/submitting-patches.html -->
