@@ -635,7 +635,7 @@ configuration files will also line up with major version numbers.
 Here is an overview of the repository contents, in order of relative importance:
 
 | Directory / File           | Purpose
-| :---                       | :---
+|:---                        |:---
 | [README.md]                | This file.  All the documentation for GaryOS.
 | [LICENSE.md]               | The license GaryOS is distributed under.
 | [Makefile]                 | Primary starting point for using the build system using the `make` command.
@@ -644,7 +644,7 @@ Here is an overview of the repository contents, in order of relative importance:
 | **Key directories:**       | --
 | [linux]                    | Archive of Linux kernel configuration files.
 | [gentoo]                   | Entirety of the Funtoo configuration, including the scripts used to build and manage installations.
-| [gentoo/\_overlay]         | Funtoo overlay directory.  Used very sparingly, and mostly for fixing broken packages.
+| [gentoo/overlay]           | Funtoo overlay directory.  Used very sparingly, and mostly for fixing broken packages.
 | [scripts]                  | Ancillary scripts relevant to GaryOS, such as "[scripts/grub.sh]".
 | [artifacts]                | Storage for miscellaneous files used in the initramfs build.
 | [artifacts/patches]        | Archive of patch files for preparing initramfs images.
@@ -655,8 +655,8 @@ Here is an overview of the repository contents, in order of relative importance:
 | [scripts/grub.sh]          | Generates the [Grub] archive, which contains BIOS and EFI rescue bootloaders, along with a prepared disk image.
 | [gentoo/\_system]          | Heart and soul of the build engine.  Creates new installations, and provides maintenance and inspection tooling.
 | [gentoo/\_release]         | Does all the initramfs work, customizing and packaging the root filesystem and building the kernel.  Also performs the entire release and publishing process.
-| [gentoo/funtoo]            | Contains the commit ID that the Funtoo Portage repository should be "pinned" to.  Ties the Funtoo configuration to a particular version of the Portage tree, which ensures repeatability and stability.
-| [gentoo/funtoo.kits]       | Hackish wrapper to the `meta-repo` Portage repository, to ensure proper "pinning".  *(The [ego\_commit\_hack.patch] is a replacement, but currently usused due to a version conflict.  See [Contributions] section.)*
+| [gentoo/\_funtoo]          | Contains the commit ID that the Funtoo Portage repository should be "pinned" to.  Ties the Funtoo configuration to a particular version of the Portage tree, which ensures repeatability and stability.
+| [gentoo/\_funtoo.kits]     | Hackish wrapper to the `meta-repo` Portage repository, to ensure proper "pinning".  *(The [ego\_commit\_hack.patch] is a replacement, but currently usused due to a version conflict.  See [Contributions] section.)*
 | [gentoo.config]            | Example script for post-build customization of an initramfs.
 | [gentoo/.emergent]         | Audit script which validates current Funtoo configuration against Portage tools/output.  Also extracts useful information from the `meta-repo` Portage repository.
 | [dwm]                      | Slightly modified DWM configuration file, to make `startx` more usable.
@@ -675,7 +675,7 @@ Here is an overview of the repository contents, in order of relative importance:
 
 [linux]: https://github.com/garybgenett/gary-os/blob/master/linux
 [gentoo]: https://github.com/garybgenett/gary-os/blob/master/gentoo
-[gentoo/\_overlay]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_overlay
+[gentoo/overlay]: https://github.com/garybgenett/gary-os/blob/master/gentoo/overlay
 [scripts]: https://github.com/garybgenett/gary-os/blob/master/scripts
 [artifacts]: https://github.com/garybgenett/gary-os/blob/master/artifacts
 [artifacts/patches]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches
@@ -686,15 +686,15 @@ Here is an overview of the repository contents, in order of relative importance:
 [scripts/grub.sh]: https://github.com/garybgenett/gary-os/blob/master/scripts/grub.sh
 [gentoo/\_system]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_system
 [gentoo/\_release]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_release
-[gentoo/funtoo]: https://github.com/garybgenett/gary-os/blob/master/gentoo/funtoo
-[gentoo/funtoo.kits]: https://github.com/garybgenett/gary-os/blob/master/gentoo/funtoo.kits
+[gentoo/\_funtoo]: https://github.com/garybgenett/gary-os/blob/master/gentoo/\_funtoo
+[gentoo/\_funtoo.kits]: https://github.com/garybgenett/gary-os/blob/master/gentoo/\_funtoo.kits
 [gentoo.config]: https://github.com/garybgenett/gary-os/blob/master/gentoo.config
 [gentoo/.emergent]: https://github.com/garybgenett/gary-os/blob/master/gentoo/.emergent
 [dwm]: https://github.com/garybgenett/gary-os/blob/master/gentoo/savedconfig/x11-wm/dwm
 [gentoo/sets/gary-os]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/gary-os
 [gentoo/sets/\_gary-os]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/_gary-os
 
-[ego\_commit\_hack.patch]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_overlay/app-admin/ego/files/add-commit-option-to-ego-sync.2.7.4-r1.patch
+[ego\_commit\_hack.patch]: https://github.com/garybgenett/gary-os/blob/master/gentoo/overlay/app-admin/ego/files/add-commit-option-to-ego-sync.2.7.4-r1.patch
 [Ego "commit" patch]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/add-commit-option-to-ego-sync.2.7.4-r1.patch
 [add-commit-option-to-ego-sync.2.7.4-r1.patch]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/add-commit-option-to-ego-sync.2.7.4-r1.patch
 
@@ -704,8 +704,9 @@ Here is an overview of the repository contents, in order of relative importance:
 [shmem-add-shmem_size-option-for-full-filesystem.v5.4-rc2.patch]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/shmem-add-shmem_size-option-for-full-filesystem.v5.4-rc2.patch
 [shmem-make-shmem-default-size-a-define-value.v5.4-rc2.patch]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/shmem-make-shmem-default-size-a-define-value.v5.4-rc2.patch
 
-[gkrellaclock]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_overlay/x11-plugins/gkrellaclock
-[xclock\_size\_hack.patch]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_overlay/x11-plugins/gkrellaclock/files/xclock_size_hack.patch
+[.vimrc]: https://github.com/garybgenett/gary-os/blob/master/.vimrc
+[gkrellaclock]: https://github.com/garybgenett/gary-os/blob/master/gentoo/overlay/x11-plugins/gkrellaclock
+[xclock\_size\_hack.patch]: https://github.com/garybgenett/gary-os/blob/master/gentoo/overlay/x11-plugins/gkrellaclock/files/xclock_size_hack.patch
 
 ### Tools ######################################################################
 [Tools]: #tools
