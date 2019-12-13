@@ -2966,7 +2966,7 @@ if ${KANBAN_YES}; then cat >>${REPORT}.txt <<END_OF_FILE
     * Usage
         * Items may be dragged/dropped, if desired, but not saved
     * Columns
-        * Except for Archive, items should only show up in one column
+        * Except Holding and Archive, items should only show up in one column
         * Holding -- Blocked, with due date
         * Waiting -- Blocked, no due date
         * Working -- Ready to be worked (filtered, not all are active)
