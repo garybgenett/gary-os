@@ -4028,6 +4028,7 @@ function task-depends {
 				print " | "; printf("%-${c_dat}.${c_dat}s", ${end});
 			} else {
 				print " | "; printf("%-" . $c_fld->{"id"}	. "." . $c_fld->{"id"}		. "s", $task->{"id"} || "-");
+				print " | "; printf("%-" . $c_fld->{"project"}	. "." . $c_fld->{"project"}	. "s", $task->{"project"} || "-");
 			};
 			if (${deep} >= 0) {
 				if (${deep} == 0) {	print " | ";
