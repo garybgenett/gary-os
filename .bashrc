@@ -3692,6 +3692,7 @@ function task-notes {
 		my $data = qx(task export ${args}); $data =~ s/\n//g; $data = decode_json(${data});
 		my $edit = ${args}; $edit =~ s/\"/\\\"/g; $edit = "${ENV{EDITOR}} -c \"map \~ <ESC>:!task read ${edit}<CR>\" -c \"map \\ <ESC>:!task \"";
 		my $mark = "DELETE";
+		my $rsync_u = ${ENV{RSYNC_U}}; $rsync_u =~ s/^reporter //g;
 		if (!@{$data}) {
 			die("NO MATCHES!");
 		}
@@ -3744,7 +3745,7 @@ function task-notes {
 				if (! -f ${filelist}) {
 					die("FILE AND FILELIST!");
 				};
-				system("${ENV{RSYNC_U}} ${automatic} ${filelist}");
+				system("${rsync_u} ${automatic} ${filelist}");
 			} else {
 				system("${edit} ${filelist}");
 			};
