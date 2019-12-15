@@ -3083,7 +3083,7 @@ function task-export-text {
 		print NOTE "% " . localtime() . "\n";
 		my $NOTE = {}; $NOTE->{"other"} = {};
 		my $multi_tag = [];
-		my $kanban_length = (64 - 4 - 3); #>>> maximum - ellipsis - annotations
+		my $kanban_length = (64 - 2 - 7 - 4); #>>> maximum - marker<= > - annotations< [####]> - ellipsis< ...>
 		my $kanban = {
 			"k1" => {},
 			"k2" => {},
@@ -3172,6 +3172,11 @@ function task-export-text {
 					};
 					$ktsk->{"description"}		=~ s|^(.{${kanban_length}}).*$|$1 ...|g;
 					$ktsk->{"description"}		=~ s|,|;|g;
+					if ($ktsk->{"status"} eq "pending") {		$ktsk->{"description"} = "= " . $ktsk->{"description"};
+					} elsif ($ktsk->{"status"} eq "completed") {	$ktsk->{"description"} = "+ " . $ktsk->{"description"};
+					} elsif ($ktsk->{"status"} eq "deleted") {	$ktsk->{"description"} = "- " . $ktsk->{"description"};
+					} else {					$ktsk->{"description"} = "? " . $ktsk->{"description"};
+					};
 					if (exists($ktsk->{"annotations"})) {
 						$ktsk->{"annotations"}	= ($#{ $ktsk->{"annotations"} } +1);
 					};
