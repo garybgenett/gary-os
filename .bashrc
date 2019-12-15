@@ -3172,7 +3172,9 @@ function task-export-text {
 					};
 					$ktsk->{"description"}		=~ s|^(.{${kanban_length}}).*$|$1 ...|g;
 					$ktsk->{"description"}		=~ s|,|;|g;
-					$ktsk->{"annotations"}		= ($#{ $ktsk->{"annotations"} } +1);
+					if (exists($ktsk->{"annotations"})) {
+						$ktsk->{"annotations"}	= ($#{ $ktsk->{"annotations"} } +1);
+					};
 					print KNBN "" . (${key}				|| "")	. ",";
 					print KNBN "" . ($ktsk->{"uuid"}		|| "-")	. ",";
 					print KNBN "" . ($ktsk->{"project"}		|| "")	. ",";
