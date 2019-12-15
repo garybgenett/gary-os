@@ -4203,15 +4203,16 @@ function task-recur {
 ########################################
 
 function task-duplicates {
-	declare FILE="$(task _get rc.data.location)/completed.data"
+	declare FILE="$(task _get rc.data.location)"
 	declare UUID
 	for UUID in $(task diagnostics | grep "Found[ ]duplicate" | awk '{print $3;}'); do
-		echo -en "\n${UUID}\n";
-		${GREP} -n "uuid[:][\"]${UUID}[\"]" ${FILE}
 		echo -en "\n"
+		echo -en "${UUID}\n";
+		${GREP} -nH "uuid[:][\"]${UUID}[\"]" ${FILE}/{pending,completed}.data
+		echo -en "${UUID}\n";
 		# http://www.linuxtopia.org/online_books/linux_tool_guides/the_sed_faq/sedfaq4_004.html
-		${SED} -i "0,/uuid[:][\"]${UUID}[\"]/{//d;}" "${FILE}"
-		${GREP} -n "uuid[:][\"]${UUID}[\"]" ${FILE}
+#>>>		${SED} -i "0,/uuid[:][\"]${UUID}[\"]/{//d;}" ${FILE}/{pending,completed}.data
+		${GREP} -nH "uuid[:][\"]${UUID}[\"]" ${FILE}/{pending,completed}.data
 	done
 	return 0
 }
