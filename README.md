@@ -791,10 +791,13 @@ anyhow" computing environment.
 # Instructions #################################################################
 [Instructions]: #instructions
 
-Below are the primary use cases considered for GaryOS.  Each is tested
-every release, and contains validation information.
+The following sections are intended to be the HOWTO documentation for using
+various aspects of GaryOS.  They are the primary use cases that have been
+considered and tested.
 
-These are also considered the "howto" instructions for each case.
+These are fully supported, and are verified each release.  Each section
+contains the validation details, and the [Release Process & Checklist] section
+has further information about the testing done.
 
 ## Booting #####################################################################
 [Booting]: #booting
