@@ -802,6 +802,8 @@ has further information about the testing done.
 ## Booting #####################################################################
 [Booting]: #booting
 
+These sections cover the various ways of booting GaryOS into a running system.
+
 ### USB Drive & Grub Rescue ####################################################
 [USB Drive & Grub Rescue]: #usb-drive--grub-rescue
 
