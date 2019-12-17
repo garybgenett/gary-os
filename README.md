@@ -959,6 +959,9 @@ basis add the following configuration option to `dhcpd.conf`:
 ## Running #####################################################################
 [Running]: #running
 
+There are few tasks you may wish to perform once GaryOS is booted and running.
+Some examples are setting up networking or running the graphical interface.
+
 ### Forensics & Recovery #######################################################
 [Forensics & Recovery]: #forensics--recovery
 
