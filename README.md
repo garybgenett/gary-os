@@ -1059,6 +1059,13 @@ lightweight and useful software.
 ## Building ####################################################################
 [Building]: #building
 
+In addition to being a live GNU/Linux system, GaryOS is also the build system
+used to produce itself.  The system can also be used to create new installations
+from scratch, or install GaryOS directly from memory to disk.
+
+Another important feature is the ability to update the system while it is
+running live, including installing new packages.
+
 ### Live Update ################################################################
 [Live Update]: #live-update
 
