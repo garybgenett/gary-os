@@ -3582,8 +3582,6 @@ function task-export-text {
 		print LINE $json->pretty->encode(${line});
 		if (exists($NOTE->{"data"}))			{ print NOTE "\n\nData"			. " {#list-data}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"data"}				; };
 		if (exists(${$NOTE->{"other"}}{"data"}))	{ print NOTE "\n\nData (Other)"		. " {#list-data-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"data"}		; };
-		if (exists($NOTE->{"journal"}))			{ print NOTE "\n\nJournal"		. " {#list-journal}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"journal"}			; };
-		if (exists(${$NOTE->{"other"}}{"journal"}))	{ print NOTE "\n\nJournal (Other)"	. " {#list-journal-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"journal"}		; };
 		if (exists($NOTE->{"notes"}))			{ print NOTE "\n\nNotes"		. " {#list-notes}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"notes"}			; };
 		if (exists(${$NOTE->{"other"}}{"notes"}))	{ print NOTE "\n\nNotes (Other)"	. " {#list-notes-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"notes"}		; };
 		if (exists($NOTE->{"open"}))			{ print NOTE "\n\nOpen"			. " {#list-open}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"open"}				; };
@@ -3594,6 +3592,8 @@ function task-export-text {
 		if (exists(${$NOTE->{"other"}}{"deleted"}))	{ print NOTE "\n\nDeleted (Other)"	. " {#list-deleted-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"deleted"}		; };
 #>>>		if (exists($NOTE->{"someday"}))			{ print NOTE "\n\nSomeday"		. " {#list-someday}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"someday"}			; };
 #>>>		if (exists(${$NOTE->{"other"}}{"someday"}))	{ print NOTE "\n\nSomeday (Other)"	. " {#list-someday-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"someday"}		; };
+		if (exists($NOTE->{"journal"}))			{ print NOTE "\n\nJournal"		. " {#list-journal}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"journal"}			; };
+		if (exists(${$NOTE->{"other"}}{"journal"}))	{ print NOTE "\n\nJournal (Other)"	. " {#list-journal-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"journal"}		; };
 		close(JSON) || die();
 		close(KNBN) || die();
 		close(PROJ) || die();
