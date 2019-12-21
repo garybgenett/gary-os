@@ -2599,7 +2599,7 @@ function chroma {
 	declare STEP=; if [[ -n ${1} ]]; then STEP="${1}"; shift; fi
 	declare MODE=; if [[ -n ${1} ]]; then MODE="${1}"; shift; fi
 	declare DRIVER_DIR="/sys/bus/hid/drivers"
-	declare RAZER_KB="1532:0232"
+	declare RAZER_KB="1532:0239"
 	declare RAZER_MS="1532:005C"
 	RAZER_KB="$(basename $(ls -d ${DRIVER_DIR}/{hid,razer}*/*:${RAZER_KB}.* 2>/dev/null | tail -n1))"
 	RAZER_MS="$(basename $(ls -d ${DRIVER_DIR}/{hid,razer}*/*:${RAZER_MS}.* 2>/dev/null | head -n1))"
@@ -2636,11 +2636,12 @@ function chroma {
 		cat								${DRIVER_DIR}/razerkbd/${RAZER_KB}/device_type
 		cat								${DRIVER_DIR}/razerkbd/${RAZER_KB}/firmware_version
 			echo -en "\x03\x00"					>${DRIVER_DIR}/razerkbd/${RAZER_KB}/device_mode
-			echo -en "0"						>${DRIVER_DIR}/razerkbd/${RAZER_KB}/fn_toggle
-			echo -en "0"						>${DRIVER_DIR}/razerkbd/${RAZER_KB}/logo_led_state
+#>>>			echo -en "0"						>${DRIVER_DIR}/razerkbd/${RAZER_KB}/fn_toggle
+#>>>			echo -en "0"						>${DRIVER_DIR}/razerkbd/${RAZER_KB}/logo_led_state
 			echo -en "${BRIGHT}"					>${DRIVER_DIR}/razerkbd/${RAZER_KB}/matrix_brightness
 			[[ ${MODE} == "off"	]] && echo -en "1"		>${DRIVER_DIR}/razerkbd/${RAZER_KB}/matrix_effect_none
-			[[ ${MODE} == "wave"	]] && echo -en "1"		>${DRIVER_DIR}/razerkbd/${RAZER_KB}/matrix_effect_wave
+#>>>			[[ ${MODE} == "wave"	]] && echo -en "1"		>${DRIVER_DIR}/razerkbd/${RAZER_KB}/matrix_effect_wave
+			[[ ${MODE} == "wave"	]] && echo -en "1"		>${DRIVER_DIR}/razerkbd/${RAZER_KB}/matrix_effect_breath
 			[[ ${MODE} == "spect"	]] && echo -en "1"		>${DRIVER_DIR}/razerkbd/${RAZER_KB}/matrix_effect_spectrum
 			[[ ${MODE} == "react"	]] && echo -en "\x03${COLOR}"	>${DRIVER_DIR}/razerkbd/${RAZER_KB}/matrix_effect_reactive
 			[[ -z ${MODE}		]] && echo -en "${COLOR}"	>${DRIVER_DIR}/razerkbd/${RAZER_KB}/matrix_effect_static
@@ -2649,13 +2650,15 @@ function chroma {
 			echo -en "\x03\x00"					>${DRIVER_DIR}/razermouse/${RAZER_MS}/device_mode
 			echo -en "${BRIGHT}"					>${DRIVER_DIR}/razermouse/${RAZER_MS}/logo_led_brightness
 			[[ ${MODE} == "off"	]] && echo -en "1"		>${DRIVER_DIR}/razermouse/${RAZER_MS}/logo_matrix_effect_none
-			[[ ${MODE} == "wave"	]] && echo -en "1"		>${DRIVER_DIR}/razermouse/${RAZER_MS}/logo_matrix_effect_spectrum
+#>>>			[[ ${MODE} == "wave"	]] && echo -en "1"		>${DRIVER_DIR}/razermouse/${RAZER_MS}/logo_matrix_effect_spectrum
+			[[ ${MODE} == "wave"	]] && echo -en "1"		>${DRIVER_DIR}/razermouse/${RAZER_MS}/logo_matrix_effect_breath
 			[[ ${MODE} == "spect"	]] && echo -en "1"		>${DRIVER_DIR}/razermouse/${RAZER_MS}/logo_matrix_effect_spectrum
 			[[ ${MODE} == "react"	]] && echo -en "\x03${COLOR}"	>${DRIVER_DIR}/razermouse/${RAZER_MS}/logo_matrix_effect_reactive
 			[[ -z ${MODE}		]] && echo -en "\x03${COLOR}"	>${DRIVER_DIR}/razermouse/${RAZER_MS}/logo_matrix_effect_reactive
 			echo -en "${BRIGHT}"					>${DRIVER_DIR}/razermouse/${RAZER_MS}/scroll_led_brightness
 			[[ ${MODE} == "off"	]] && echo -en "1"		>${DRIVER_DIR}/razermouse/${RAZER_MS}/scroll_matrix_effect_none
-			[[ ${MODE} == "wave"	]] && echo -en "1"		>${DRIVER_DIR}/razermouse/${RAZER_MS}/scroll_matrix_effect_spectrum
+#>>>			[[ ${MODE} == "wave"	]] && echo -en "1"		>${DRIVER_DIR}/razermouse/${RAZER_MS}/scroll_matrix_effect_spectrum
+			[[ ${MODE} == "wave"	]] && echo -en "1"		>${DRIVER_DIR}/razermouse/${RAZER_MS}/scroll_matrix_effect_breath
 			[[ ${MODE} == "spect"	]] && echo -en "1"		>${DRIVER_DIR}/razermouse/${RAZER_MS}/scroll_matrix_effect_spectrum
 			[[ ${MODE} == "react"	]] && echo -en "\x03${COLOR}"	>${DRIVER_DIR}/razermouse/${RAZER_MS}/scroll_matrix_effect_reactive
 			[[ -z ${MODE}		]] && echo -en "${COLOR}"	>${DRIVER_DIR}/razermouse/${RAZER_MS}/scroll_matrix_effect_static
