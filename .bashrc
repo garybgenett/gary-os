@@ -4759,6 +4759,7 @@ if [[ "${-/i}" != "${-}" ]]; then
 	${LL} --directory \
 		/.g/_data/zactive.workspace* \
 		/.g/_toor/.workspace* \
+		/tmp/.wpa_random \
 		2>/dev/null
 	echo -en "\e[0m"
 	echo -en "\n"
