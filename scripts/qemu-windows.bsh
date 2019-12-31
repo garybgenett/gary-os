@@ -15,23 +15,36 @@ fi
 
 ########################################
 
+declare QNAM="windows-10"
+declare QINS="$(date --iso).0-install"
+declare QPGM="$(date --iso).1-program"
+declare QCFG="$(date --iso).2-config"
+declare QUPD="$(date --iso).3-update"
+
 if [[ ${QSYS} == -c ]]; then
-	QSYS="windows_10"
-	qemu-img convert -O vdi ${QSYS}.1_1_system.qcow2 ${QSYS}.1_1_system.vdi
+	qemu-img convert -O vdi ${QNAM}.${QUPD}.qcow2 ${QSYS}.${QUPD}.vdi
+	${LL}
 	exit 0
 fi
 
 if [[ ${QSYS} == -d ]]; then
-	QSYS="windows_10"
-	qemu-img create -f qcow2 -o compat=1.1						${QSYS}.0_install.qcow2 100G
-	qemu-img create -f qcow2 -o compat=1.1,backing_file=${QSYS}.0_install.qcow2	${QSYS}.qcow2
-	${LN} ${QSYS}.0_install.qcow2 ${QFIL}
-#>>>	for QSYS in ${QSYS}*; do
-#>>>		echo -en "\n"
-#>>>		qemu-img info ${QSYS}
-#>>>	done
+	qemu-img create -f qcow2 -o compat=1.1						${QNAM}.${QINS}.qcow2 100G
+	qemu-img create -f qcow2 -o compat=1.1,backing_file=${QNAM}.${QINS}.qcow2	${QNAM}.${QPGM}.qcow2
+	qemu-img create -f qcow2 -o compat=1.1,backing_file=${QNAM}.${QPGM}.qcow2	${QNAM}.${QCFG}.qcow2
+	qemu-img create -f qcow2 -o compat=1.1,backing_file=${QNAM}.${QCFG}.qcow2	${QNAM}.${QUPD}.qcow2
+	qemu-img create -f qcow2 -o compat=1.1,backing_file=${QNAM}.${QUPD}.qcow2	${QNAM}.qcow2
+	${LN} ${QNAM}.${QINS}.qcow2 ${QFIL}
+#>>>	${LN} ${QNAM}.qcow2 ${QFIL}
 	echo -en "\n"
-	qemu-img info --backing-chain ${QSYS}.qcow2
+	declare FILE
+	for FILE in ${QNAM}*; do
+		${LL} ${FILE}
+		qemu-img info ${FILE}
+	done
+	echo -en "\n"
+	${LL} ${QNAM}.qcow2
+	qemu-img info --backing-chain ${QNAM}.qcow2
+	${LL}
 	exit 0
 fi
 
@@ -79,12 +92,21 @@ fi
 #>>>	-device usb-host,bus=xhci0.0,vendorid=0x0781,productid=0x5530 \
 #>>>	-device usb-host,bus=xhci0.0,vendorid=0x0781,productid=0x5406 \
 
-#>>>	-cdrom /.g/_data/source/microsoft/en_windows_10_*_x64_*.iso \
+#>>>	-cdrom /.g/_data/source/microsoft/en_windows_*.iso \
 #>>>	-boot d \
 
-exec qemu.bsh "${QNUM}" "${QMEM}" "${QFIL}" "${QSYS}" IDE \
-	"${@}" \
-	-rtc base=localtime,clock=host
+# [...]/vioscsi/w10/amd64
+#>>>	${RM} /tmp/qemu.windows.img.*
+#>>>	${LN} $(${LS} /.g/_data/_target/install/_qemu/virtio-win-*.iso	| sort -n | tail -n1) /tmp/qemu.windows.img.qcow2
+#>>>	${LN} $(${LS} /.g/_data/source/microsoft/en_windows_*.iso	| sort -n | tail -n1) /tmp/qemu.windows.img.iso
+#>>>	${LN} $(${LS} /.g/_data/source/microsoft/en_office_*.iso	| sort -n | tail -n1) /tmp/qemu.windows.img.iso
+#>>>	${LN} $(${LS} /.g/_data/source/microsoft/en_visio_*.iso		| sort -n | tail -n1) /tmp/qemu.windows.img.iso
+#>>>	${LL} /tmp/qemu.windows.img.*
+#>>>	exec qemu.bsh "${QNUM}" "${QMEM}" "${QFIL}" / ALT \
+
+exec qemu.bsh "${QNUM}" "${QMEM}" "${QFIL}" "${QSYS}" \
+	-rtc base=localtime,clock=host \
+	"${@}"
 
 ################################################################################
 # end of file
