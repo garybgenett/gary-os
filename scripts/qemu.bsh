@@ -127,13 +127,13 @@ if [[ ! -f ${QISO} ]]; then
 	touch ${QISO}
 fi
 
-if [[ -n $(file -L ${I} 2>/dev/null | ${GREP} "Linux[ ]kernel[ ].+[ ]boot[ ]executable") ]]; then
+if [[ -n $(file -L ${I} 2>/dev/null | ${GREP} "Linux kernel .+ boot executable") ]]; then
 	QKRN="-kernel ${I}"
-	if [[ -n $(file -L ${I/%.kernel}.initrd 2>/dev/null | ${GREP} "(XZ|gzip)[ ]compressed[ ]data") ]]; then
+	if [[ -n $(file -L ${I/%.kernel}.initrd 2>/dev/null | ${GREP} "(XZ|gzip) compressed data") ]]; then
 		QKRN+=" -initrd ${I/%.kernel}.initrd"
 	fi
 #>>>	QKRN+=" -append console=ttyS0,38400"
-elif [[ -n $(file -L ${I} 2>/dev/null | ${GREP} "DOS[/]MBR[ ]boot[ ]sector[;]") ]]; then
+elif [[ -n $(file -L ${I} 2>/dev/null | ${GREP} "DOS/MBR boot sector") ]]; then
 	QDSK+=" -drive id=cdrom1,if=none,format=raw,file=${I}"
 	QDSK+=" -device scsi-cd,drive=cdrom1,bootindex=2"
 elif [[ -f ${I} ]]; then
