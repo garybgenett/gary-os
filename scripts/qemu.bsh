@@ -19,14 +19,17 @@ if [[ ${1} == MBR ]]; then
 fi
 
 declare DISK="scsi-hd"
+declare E_CD="scsi-cd"
 if [[ ${1} == IDE ]]; then
 	DISK="ide-hd,bus=ide.0"
+	E_CD="ide-cd,bus=ide.0"
 	shift
 fi
 
 declare EXTR="scsi-hd"
-if [[ ${1} == USB ]]; then
+if [[ ${1} == ALT ]]; then
 	EXTR="usb-storage"
+	E_CD="ide-cd,bus=ide.0"
 	shift
 fi
 
@@ -144,11 +147,16 @@ elif [[ -b ${I} ]]; then
 	QDSK+=" -device ${DISK},drive=drive0,bootindex=2"
 fi
 
-QDSK+=" -drive id=drive1,if=none,format=qcow2,file=${QNFL}"
-QDSK+=" -device ${EXTR},drive=drive1,bootindex=${INDX}"
+declare QFMT="qcow2"
 if [[ ! -f ${QNFL} ]]; then
 	qemu-img create -f qcow2 ${QNFL} ${QNSZ}
+elif [[ -n $(file -L ${QNFL} 2>/dev/null | ${GREP} "(DOS/MBR boot sector|ISO 9660 CD-ROM)") ]]; then
+	QFMT="raw"
+	EXTR="${E_CD}"
 fi
+QDSK+=" -drive id=drive1,if=none,format=${QFMT},file=${QNFL}"
+QDSK+=" -device ${EXTR},drive=drive1,bootindex=${INDX}"
+
 if [[ ! -f ${QNUL} ]]; then
 	${LN} ${QNFL} ${QNUL}
 fi
