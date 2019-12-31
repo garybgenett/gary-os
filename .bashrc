@@ -2396,12 +2396,12 @@ function sync-dir {
 			${MKDIR} ${BAS_DIR}/${REP_DST}
 			${LN} /usr/bin/python2.7 ${BAS_DIR}/${REP_DST}/python
 			(cd ${BAS_DIR}/${REP_DST} &&
-				reporter ${BAS_DIR}/.repo/repo init -u ${REP_SRC//\/=\// })
+				reporter ${BAS_DIR}/_repo/repo init -u ${REP_SRC//\/=\// })
 		fi
 		${RM} ${BAS_DIR}/${REP_DST}/python
 		${LN} /usr/bin/python2.7 ${BAS_DIR}/${REP_DST}/python
 		(cd ${BAS_DIR}/${REP_DST} &&
-			reporter ${BAS_DIR}/.repo/repo sync)
+			reporter ${BAS_DIR}/_repo/repo sync)
 	elif [[ ${REP_TYP} == git ]]; then
 		if [[ ! -d ${BAS_DIR}/${REP_DST} ]]; then
 			git-clone ${REP_SRC} ${BAS_DIR}/${REP_DST}
