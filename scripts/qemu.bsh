@@ -12,9 +12,9 @@ fi
 
 ########################################
 
-declare BIOS="/usr/share/qemu/bios.bin"
-if [[ ${1} == EFI ]]; then
-	BIOS="/usr/share/edk2-ovmf/OVMF.fd"
+declare BIOS="/usr/share/edk2-ovmf/OVMF.fd"
+if [[ ${1} == MBR ]]; then
+	BIOS="/usr/share/qemu/bios.bin"
 	shift
 fi
 
