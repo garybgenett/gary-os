@@ -2689,8 +2689,13 @@ function chroma {
 function scrcpy {
 	declare VER="master"
 	declare BLD="false"
-	[[ -n ${1} ]] && [[ ${1} != build ]] && VER="${1}" && shift
-	[[ -n ${1} ]] && [[ ${1} == build ]] && BLD="true" && shift
+	declare HLP="false"
+	[[ -n ${1} ]] && {
+		[[ ${1} != build	]] &&
+		[[ ${1} != help		]]
+	} && VER="${1}" && shift
+	[[ -n ${1} ]] && [[ ${1} == build	]] && BLD="true" && shift
+	[[ -n ${1} ]] && [[ ${1} == help	]] && HLP="true" && shift
 #>>>	prompt -d -x
 #>>>	export ANDROID_SDK_ROOT="/opt/android-studio"
 	export ANDROID_SDK_ROOT="/.g/_data/source/android-studio"
@@ -2705,7 +2710,11 @@ function scrcpy {
 			chown -R plastic /.g/_data/_build/other/scrcpy		&&
 			(cd x && su plastic -c ninja)
 	fi
-	cd /.g/_data/_build/other/scrcpy && ./run x "${@}"
+	if ${HLP}; then
+		cd /.g/_data/_build/other/scrcpy && ./run x --help 2>&1 | ${PAGER}
+	else
+		cd /.g/_data/_build/other/scrcpy && ./run x "${@}"
+	fi
 	return 0
 }
 
