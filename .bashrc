@@ -3639,6 +3639,7 @@ function task-export-text {
 			my $compose = "make"
 				. " -f ${ENV{COMPOSER}}"
 				. " -C ${ENV{PIMDIR}}"
+				. " CSS=css_alt"
 				. " TOC=6"
 				. " ${base}${extn}.html"
 				;
@@ -4677,6 +4678,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				make all			\
 					-f "${COMPOSER}"	\
 					-C "${PIMDIR}"		\
+					CSS="css_alt"		\
 					TOC="6"			\
 					COMPOSER_TARGETS="${FILES}"
 				declare ENTER=
