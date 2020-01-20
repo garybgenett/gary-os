@@ -3413,6 +3413,53 @@ function task-export-text {
 				. "",
 			});
 		};
+		sub export_note_process {
+			my $task	= shift();
+			my $output	= shift();
+			while (${output} =~ m/(^|\s+)\[TASKFILE[ ]?([^]]*)?\]/gms) {
+				my $source = ${2};
+				warn("EXPORTING TASKFILE[${source}]");
+				open(TASKFILE, "<", ${source}) || die();
+				my $taskfile = do { local $/; <TASKFILE> }; $taskfile =~ s/\n+$//g;
+				close(TASKFILE) || die();
+				$taskfile =~ s/^\n*/<!-- TASKFILE[${source}] -->\n/g;
+				$taskfile =~ s/[\s\n]*$//g;
+				$output =~ s/([^\s]+)\s+(\[TASKFILE[ ]?([^]]*)?\])$/${1}\n\n${2}\n/ms;
+				$output =~ s/\[TASKFILE[ ]?([^]]*)?\]/${taskfile}/ms;
+				$output = &export_note_process(${task}, ${output});
+			};
+			while (${output} =~ m/(^|\s+)\[TASKNOTES[ ]?([^]]*)?\]/gms) {
+				my $notes = ${2};
+				warn("EXPORTING TASKNOTES[${notes}]");
+				my $tasknotes = qx(.bashrc task-notes -x ${notes});
+				$tasknotes =~ s/^\n*/<!-- TASKNOTES[${notes}] -->\n/g;
+				$tasknotes =~ s/[\s\n]*$//g;
+				$output =~ s/([^\s]+)\s+(\[TASKNOTES[ ]?([^]]*)?\])$/${1}\n\n${2}\n/ms;
+				$output =~ s/\[TASKNOTES[ ]?([^]]*)?\]/${tasknotes}/ms;
+				$output = &export_note_process(${task}, ${output});
+			};
+			while (${output} =~ m/(^|\s+)\[TASKLIST[ ]?([^]]*)?\]/gms) {
+				my $project = ${2} || $task->{"project"};
+				warn("EXPORTING TASKLIST[${project}]");
+				my $tasklist = qx(.bashrc task-depends -r project.is:${project});
+				$tasklist =~ s/^\n*/<!-- TASKLIST[${project}] -->\n/g;
+				$tasklist =~ s/[\s\n]*$//g;
+				$output =~ s/([^\s]+)\s+(\[TASKLIST[ ]?([^]]*)?\])$/${1}\n\n${2}\n/ms;
+				$output =~ s/\[TASKLIST[ ]?([^]]*)?\]/${tasklist}/ms;
+				$output = &export_note_process(${task}, ${output});
+			};
+			while (${output} =~ m/(^|\s+)\[TASKCMD[ ]?([^]]*)?\]/gms) {
+				my $command = ${2};
+				warn("EXPORTING TASKCMD[${command}]");
+				my $taskcmd = qx(task ${command});
+				$taskcmd =~ s/^\n*/<!-- TASKCMD[${command}] -->\n/g;
+				$taskcmd =~ s/[\s\n]*$//g;
+				$output =~ s/([^\s]+)\s+(\[TASKCMD[ ]?([^]]*)?\])$/${1}\n\n${2}\n/ms;
+				$output =~ s/\[TASKCMD[ ]?([^]]*)?\]/${taskcmd}/ms;
+				$output = &export_note_process(${task}, ${output});
+			};
+			return(${output});
+		};
 		sub export_note {
 			my $task	= shift();
 			my $annotation	= shift();
@@ -3428,32 +3475,7 @@ function task-export-text {
 				$output = $annotation->{"description"};
 				$output =~ s/^[[]notes[]][:]//g;
 				$output = "\n" . decode_base64(${output}) . "\n";
-				while (${output} =~ m/^\[TASKLIST[ ]?([^\n]*)?\]$/gms) {
-					my $project = ${1} || $task->{"project"};
-					warn("EXPORTING TASKLIST[${project}]");
-					my $tasklist = qx(.bashrc task-depends -r project.is:${project});
-					$tasklist =~ s/^\n*/<!-- TASKLIST[${project}] -->\n/g;
-					$tasklist =~ s/\n*$//g;
-					$output =~ s/^\[TASKLIST[ ]?([^\n]*)?\]$/${tasklist}/ms;
-				};
-				while (${output} =~ m/^\[TASKCMD[ ]?([^\n]*)?\]$/gms) {
-					my $command = ${1};
-					warn("EXPORTING TASKCMD[${command}]");
-					my $taskcmd = qx(task ${command});
-					$taskcmd =~ s/^\n*/<!-- TASKCMD[${command}] -->\n/g;
-					$taskcmd =~ s/\n*$//g;
-					$output =~ s/^\[TASKCMD[ ]?([^\n]*)?\]$/${taskcmd}/ms;
-				};
-				while (${output} =~ m/^\[TASKFILE[ ]?([^\n]*)?\]$/gms) {
-					my $source = ${1};
-					warn("EXPORTING TASKFILE[${source}]");
-					open(TASKFILE, "<", ${source}) || die();
-					my $taskfile = do { local $/; <TASKFILE> }; $taskfile =~ s/\n+$//g;
-					close(TASKFILE) || die();
-					$taskfile =~ s/^\n*/<!-- TASKFILE[${source}] -->\n/g;
-					$taskfile =~ s/\n*$//g;
-					$output =~ s/^\[TASKFILE[ ]?([^\n]*)?\]$/${taskfile}/ms;
-				};
+				$output = &export_note_process(${task}, ${output});
 			} else {
 				$modified = "No Notes";
 			};
@@ -3623,6 +3645,7 @@ function task-export-text {
 		if (exists(${$NOTE->{"other"}}{"never"}))	{ print NOTE "\n\nNever (Other)"	. " {#list-never-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"never"}		; };
 		if (exists($NOTE->{"journal"}))			{ print NOTE "\n\nJournal"		. " {#list-journal}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"journal"}			; };
 		if (exists(${$NOTE->{"other"}}{"journal"}))	{ print NOTE "\n\nJournal (Other)"	. " {#list-journal-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"journal"}		; };
+		print NOTE "\n**End Of File**\n";
 		close(JSON) || die();
 		close(KNBN) || die();
 		close(PROJ) || die();
