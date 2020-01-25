@@ -506,7 +506,7 @@ alias rsynclook="${GREP} -v '^[.<>][fdDLS][ ]'"
 
 alias dmesgtail="dmesg --kernel --human --decode --ctime --follow"
 alias logtail="tail --follow /.runit/log/syslogd"
-alias synctail="${GREP} '^ERROR[:][ ]' /.g/_data/+sync/_sync.log ; echo ; tail --follow /.g/_data/+sync/_sync.log"
+alias synctail="${GREP} -a '^ERROR[:][ ]' /.g/_data/+sync/_sync.log ; echo ; tail --follow /.g/_data/+sync/_sync.log"
 
 ########################################
 
