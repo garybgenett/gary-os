@@ -4813,7 +4813,7 @@ if [[ "${-/i}" != "${-}" ]]; then
 		/.g/_data/zactive.workspace* \
 		/.g/_toor/.workspace* \
 		/tmp/.wpa* \
-		2>/dev/null
+		2>/dev/null | cat
 	echo -en "\e[0m"
 	echo -en "\n"
 fi
