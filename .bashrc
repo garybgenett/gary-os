@@ -1515,6 +1515,7 @@ function indexer {
 	[[ "${1}" == -d ]] && DEBUG="true" && shift
 	if [[ "${1}" == -[a-z] ]] &&
 	   [[ "${1}" != -m ]] &&
+	   [[ "${1}" != -c ]] &&
 	   (( "${#}" >= 2 )); then
 		declare OPTION="${1}" && shift
 		${FUNCNAME} -m "${@}" | ${FUNCNAME} $(${DEBUG} && echo "-d") "${OPTION}"
@@ -1696,6 +1697,15 @@ function indexer {
 				fi
 			done
 		fi
+	elif [[ "${1}" == -c ]]; then
+		shift
+		declare TMP="$(mktemp /tmp/${FUNCNAME}.XXX 2>/dev/null)"
+		declare OLD="${1}" && shift
+		declare NEW="${1}" && shift
+		diff -a ${OLD} ${NEW} |
+			cut -d "" --output-delimiter=" " -f1,6,9- \
+			>${TMP}
+		${VIEW} -- ${TMP}
 	elif [[ "${1}" == -du ]]; then
 		shift
 		DEBUG="${DEBUG}" perl -e '
