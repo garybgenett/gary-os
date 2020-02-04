@@ -721,12 +721,43 @@ function git-remove {
 ########################################
 
 function hist-grep {
-	${GREP} "${@}" ${HOME}/.history/shell/${HOSTNAME}.${USER}.$(basename ${SHELL}).* |
-		cut -d: -f2- |
-		sort |
-		uniq --count |
-		sort --numeric-sort |
-		${GREP} "${@}"
+	if [[ ${1} == -l ]]; then
+		shift
+		export HIST_DATES="."
+		export HIST_FINDS="."
+		if [[ -n $(echo "${1}" | ${GREP} "^[-+:T0-9^(|)]+$") ]]; then
+			HIST_DATES="${1}" && shift
+		fi
+		if [[ -n ${1} ]]; then
+			HIST_FINDS="${1}" && shift
+		fi
+		cat ${HOME}/.history/shell/${HOSTNAME}.${USER}.$(basename ${SHELL}).* |
+			perl -e '
+				use strict;
+				use warnings;
+				use POSIX qw(strftime);
+				my $history = do { local $/; <STDIN> };
+				while (${history} =~ m|^#([0-9]{10})\n([^\n]+)|gms) {
+					my $datetime = strftime("%Y-%m-%dT%H:%M:%S%z", localtime(${1}));
+					my $command = ${2};
+					if (
+						(${datetime} =~ m/${ENV{HIST_DATES}}/) &&
+						(${command} =~ m/${ENV{HIST_FINDS}}/)
+					) {
+						print "${datetime} ${command}\n";
+					};
+				};
+			' -- "${@}" |
+			sort |
+			${GREP} -a "${@}" -e "${HIST_FINDS/#^/\ }"
+	else
+		${GREP} "${@}" ${HOME}/.history/shell/${HOSTNAME}.${USER}.$(basename ${SHELL}).* |
+			cut -d: -f2- |
+			sort |
+			uniq --count |
+			sort --numeric-sort |
+			${GREP} -a "${@}"
+	fi
 }
 
 ########################################
