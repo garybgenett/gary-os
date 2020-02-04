@@ -557,7 +557,7 @@ if [[ "${UNAME}" == "Darwin" ]]; then
 fi
 
 ################################################################################
-# basic functions
+# functions
 ################################################################################
 
 function adb-run {
@@ -596,279 +596,6 @@ function burn {
 }
 
 ########################################
-
-function filter {
-	declare TABLE=
-	for TABLE in \
-		filter \
-		nat \
-		mangle \
-		raw \
-		security \
-	; do
-		echo -en "\n----------[ ${TABLE} ]----------\n"
-		iptables -L -nvx --line-numbers -t ${TABLE}
-	done
-}
-
-########################################
-
-function format {
-	if [[ ${1} == -z ]]; then
-		shift
-		shred -vzn 7 "${@}"
-	elif [[ ${1} == -i ]]; then
-		shift
-		mkisofs -iso-level 4 -o "${@}"
-	elif [[ ${1} == -d ]]; then
-		shift
-		mkfs.vfat -vF 32 "${@}"
-	elif [[ ${1} == -f ]]; then
-		shift
-		mkfs.exfat "${@}"
-	elif [[ ${1} == -n ]]; then
-		shift
-		mkfs.ntfs -vI "${@}"
-	elif [[ ${1} == -l ]]; then
-		shift
-		cryptsetup --hash sha256 --cipher aes-cbc-essiv:sha256 --key-size 256 luksFormat "${@}"
-	else
-		mkfs.ext4 -jvm 0 "${@}"
-	fi
-}
-
-########################################
-
-function git {
-	declare DIR="$(realpath "${PWD}")"
-	${NICELY} $(which git) --git-dir="${DIR}.git" --work-tree="${DIR}" "${@}"
-}
-
-########################################
-
-function git-am {
-	${GIT} am \
-		--ignore-space-change \
-		--ignore-whitespace \
-		--whitespace="nowarn" \
-		"${@}"
-}
-
-########################################
-
-function git-clone {
-	if [[ ${1} == svn ]]; then
-		shift
-		reporter $(which git) svn clone "${@}"
-	else
-		reporter $(which git) clone --verbose "${@}"
-	fi
-	${MV} "${!#}/.git" "${!#}.git"
-}
-
-########################################
-
-function git-list {
-	if [[ ${1} == -l ]]; then
-		shift
-		${FUNCNAME} -r "${@}" |
-			awk '{print $5;}' |
-			sort |
-			uniq
-	elif [[ ${1} == -r ]]; then
-		shift
-		declare HASH
-		for HASH in $(${FUNCNAME} | cut -d' ' -f4); do
-			${FUNCNAME} ${HASH} "${@}"
-		done
-	elif [[ -n "$(echo "${1}" | ${GREP} "^[a-z0-9]{40}$")" ]]; then
-		${GIT} ls-tree -lrt "${@}"
-	else
-		${GIT_CMD} log --pretty=format:"%ai %H %s %d" "${@}"
-	fi
-}
-
-########################################
-
-function git-patch {
-	${GIT} format-patch ${GIT_PAT} ${DIFF_OPTS} "${@}"
-}
-
-########################################
-
-function git-perms {
-	if [[ -n ${@} ]]; then
-		declare USERNAME="${1}" && shift
-		chown -R ${USERNAME}:plastic ./
-		find ./ -type d -exec chmod 755 {} \;
-		find ./ -type f -exec chmod 644 {} \;
-		chmod 755 $(find ./ | ${GREP} "Makefile") ${@}
-	else
-		${GIT_CMD} diff ${GIT_DIF} ${DIFF_OPTS} -R "${@}" |
-			${GREP} "^(diff|(old|new) mode)" |
-			${GIT_CMD} apply
-	fi
-	${GIT_STS}
-}
-
-########################################
-
-function git-remove {
-	declare FILTER="git rm -fr --cached --ignore-unmatch ${@}"
-	${GIT} filter-branch --index-filter "${FILTER}" HEAD
-}
-
-########################################
-
-function hist-grep {
-	if [[ ${1} == -l ]]; then
-		shift
-		export HIST_DATES="."
-		export HIST_FINDS="."
-		if [[ -n $(echo "${1}" | ${GREP} "^[-+:T0-9^(|)]+$") ]]; then
-			HIST_DATES="${1}" && shift
-		fi
-		if [[ -n ${1} ]]; then
-			HIST_FINDS="${1}" && shift
-		fi
-		cat ${HOME}/.history/shell/${HOSTNAME}.${USER}.$(basename ${SHELL}).* |
-			perl -e '
-				use strict;
-				use warnings;
-				use POSIX qw(strftime);
-				my $history = do { local $/; <STDIN> };
-				while (${history} =~ m|^#([0-9]{10})\n([^\n]+)|gms) {
-					my $datetime = strftime("%Y-%m-%dT%H:%M:%S%z", localtime(${1}));
-					my $command = ${2};
-					if (
-						(${datetime} =~ m/${ENV{HIST_DATES}}/) &&
-						(${command} =~ m/${ENV{HIST_FINDS}}/)
-					) {
-						print "${datetime} ${command}\n";
-					};
-				};
-			' -- "${@}" |
-			sort |
-			${GREP} -a "${@}" -e "${HIST_FINDS/#^/\ }"
-	else
-		${GREP} "${@}" ${HOME}/.history/shell/${HOSTNAME}.${USER}.$(basename ${SHELL}).* |
-			cut -d: -f2- |
-			sort |
-			uniq --count |
-			sort --numeric-sort |
-			${GREP} -a "${@}"
-	fi
-}
-
-########################################
-
-function ldir {
-	${LL} -R "${@}" | more
-}
-
-########################################
-
-function ln-null {
-	declare FILE
-	find ./ -type l | while read -r FILE; do
-		if [[ ! -e ${FILE} ]]; then
-			echo -en "${FILE}\n"
-		fi
-	done | sort
-}
-
-########################################
-
-function letmeknow {
-	screen -X wall "$(
-		echo -en "[${?}] ["
-		history |
-			tail -n1 |
-			tr -d '\n' |
-			${SED} \
-				-e "s/^[[:space:]]*[0-9]+[[:space:]]+[0-9T:-]+[[:space:]]+//g" \
-				-e "s/[[:space:]]*;[[:space:]]*letmeknow[[:space:]]*$//g"
-		echo -en "]"
-	)"
-}
-
-########################################
-
-function pages {
-	calc "$(lynx -dump "${@}" | wc -l) / 60"
-}
-
-########################################
-
-function psg {
-	declare PSLIST="$(pgrep -d, -f "${@}" | ${SED} "s/[,]$//g")"
-	if [[ -n "${PSLIST}" ]]; then
-		$(which ps) u -ww -p ${PSLIST}
-	fi
-}
-
-########################################
-
-function psk {
-	declare PSNAME="${1}" && shift
-	declare PSLIST="$(pgrep -f "${PSNAME}")"
-	psg ${PSNAME}
-	if [[ -n "${PSLIST}" ]]; then
-		kill "${@}" ${PSLIST}
-		sleep 1
-	fi
-	psg ${PSNAME}
-}
-
-########################################
-
-function mirror {
-	declare PREFIX="$(echo "${!#}" | ${SED} "s|^(http\|ftp)[s]?://||g" | ${SED} "s|^([^/]+).*$|\1|g")-$(date --iso)"
-	${WGET_R} --directory-prefix "${PREFIX}" "${@}" 2>&1 | tee -a ${PREFIX}.log
-}
-
-########################################
-
-function swint {
-	declare INT="${1}" && shift
-	declare WID="${1}" && shift
-	declare WPW="${1}" && shift
-	${SED} -i "s/eth0/${INT}/g" \
-		${HOME}/scripts/fw.${HOSTNAME} \
-		${HOME}/scripts/ip.${HOSTNAME} \
-		/.runit/_config/dhclient \
-		/.runit/_config/dhcpcd \
-		/.runit/_config/tcpdump
-	if [[ -n ${WID} ]] && [[ -n ${WPW} ]]; then
-		${SED} -i \
-			-e "s/(\tssid=).+$/\1\"${WID}\"/g" \
-			-e "s/(\tpsk=).+$/\1\"${WPW}\"/g" \
-			/.runit/_config/wpa_supplicant
-	fi
-	ip-setup
-}
-
-########################################
-
-function vlc-rc {
-	if [[ -n ${@} ]]; then
-		echo "${@}" | nc -q 1 127.0.0.1 4212
-	else
-		nc 127.0.0.1 4212
-	fi
-}
-
-########################################
-
-function zpim-shortcuts {
-	${SED} -n \
-		-e "s/^.*HREF[=][\"]([^\"]+)[\"].*SHORTCUTURL[=][\"]([^\"]+)[\"].*[>]([^>]+)[<].*$/\2\t\3\t\1/gp" \
-		${PIMDIR}/bookmarks.html
-}
-
-################################################################################
-# advanced functions
-################################################################################
 
 function calendar {
 	cd ${PIMDIR}
@@ -1120,6 +847,65 @@ function email-copy {
 
 ########################################
 
+function filter {
+	declare TABLE=
+	for TABLE in \
+		filter \
+		nat \
+		mangle \
+		raw \
+		security \
+	; do
+		echo -en "\n----------[ ${TABLE} ]----------\n"
+		iptables -L -nvx --line-numbers -t ${TABLE}
+	done
+}
+
+########################################
+
+function format {
+	if [[ ${1} == -z ]]; then
+		shift
+		shred -vzn 7 "${@}"
+	elif [[ ${1} == -i ]]; then
+		shift
+		mkisofs -iso-level 4 -o "${@}"
+	elif [[ ${1} == -d ]]; then
+		shift
+		mkfs.vfat -vF 32 "${@}"
+	elif [[ ${1} == -f ]]; then
+		shift
+		mkfs.exfat "${@}"
+	elif [[ ${1} == -n ]]; then
+		shift
+		mkfs.ntfs -vI "${@}"
+	elif [[ ${1} == -l ]]; then
+		shift
+		cryptsetup --hash sha256 --cipher aes-cbc-essiv:sha256 --key-size 256 luksFormat "${@}"
+	else
+		mkfs.ext4 -jvm 0 "${@}"
+	fi
+}
+
+########################################
+
+function git {
+	declare DIR="$(realpath "${PWD}")"
+	${NICELY} $(which git) --git-dir="${DIR}.git" --work-tree="${DIR}" "${@}"
+}
+
+########################################
+
+function git-am {
+	${GIT} am \
+		--ignore-space-change \
+		--ignore-whitespace \
+		--whitespace="nowarn" \
+		"${@}"
+}
+
+########################################
+
 function git-backup {
 	declare DIR="$(realpath "${PWD}")"
 	declare FAIL=
@@ -1261,6 +1047,18 @@ function git-clean {
 
 ########################################
 
+function git-clone {
+	if [[ ${1} == svn ]]; then
+		shift
+		reporter $(which git) svn clone "${@}"
+	else
+		reporter $(which git) clone --verbose "${@}"
+	fi
+	${MV} "${!#}/.git" "${!#}.git"
+}
+
+########################################
+
 function git-export {
 	declare EXP_NAM="${1}" && shift
 	declare EXP_DIR="${1}" && shift
@@ -1333,6 +1131,28 @@ function git-export {
 
 ########################################
 
+function git-list {
+	if [[ ${1} == -l ]]; then
+		shift
+		${FUNCNAME} -r "${@}" |
+			awk '{print $5;}' |
+			sort |
+			uniq
+	elif [[ ${1} == -r ]]; then
+		shift
+		declare HASH
+		for HASH in $(${FUNCNAME} | cut -d' ' -f4); do
+			${FUNCNAME} ${HASH} "${@}"
+		done
+	elif [[ -n "$(echo "${1}" | ${GREP} "^[a-z0-9]{40}$")" ]]; then
+		${GIT} ls-tree -lrt "${@}"
+	else
+		${GIT_CMD} log --pretty=format:"%ai %H %s %d" "${@}"
+	fi
+}
+
+########################################
+
 function git-logdir {
 	declare DIR="$(realpath "${PWD}")"
 	declare GITDIR="${DIR}.gitlog"
@@ -1362,6 +1182,29 @@ function git-logdir {
 
 ########################################
 
+function git-patch {
+	${GIT} format-patch ${GIT_PAT} ${DIFF_OPTS} "${@}"
+}
+
+########################################
+
+function git-perms {
+	if [[ -n ${@} ]]; then
+		declare USERNAME="${1}" && shift
+		chown -R ${USERNAME}:plastic ./
+		find ./ -type d -exec chmod 755 {} \;
+		find ./ -type f -exec chmod 644 {} \;
+		chmod 755 $(find ./ | ${GREP} "Makefile") ${@}
+	else
+		${GIT_CMD} diff ${GIT_DIF} ${DIFF_OPTS} -R "${@}" |
+			${GREP} "^(diff|(old|new) mode)" |
+			${GIT_CMD} apply
+	fi
+	${GIT_STS}
+}
+
+########################################
+
 function git-purge {
 	declare DIR="$(realpath "${PWD}")"
 	declare MEM_DIR="/dev/shm"
@@ -1385,6 +1228,13 @@ function git-purge {
 #>>>	${RM} ${DIR}.git/refs/${FUNCNAME}				|| return 1
 	git-clean							|| return 1
 	return 0
+}
+
+########################################
+
+function git-remove {
+	declare FILTER="git rm -fr --cached --ignore-unmatch ${@}"
+	${GIT} filter-branch --index-filter "${FILTER}" HEAD
 }
 
 ########################################
@@ -1460,6 +1310,48 @@ function gtasks {
 			zpim-commit tasks
 	fi
 	return 0
+}
+
+########################################
+
+function hist-grep {
+	if [[ ${1} == -l ]]; then
+		shift
+		export HIST_DATES="."
+		export HIST_FINDS="."
+		if [[ -n $(echo "${1}" | ${GREP} "^[-+:T0-9^(|)]+$") ]]; then
+			HIST_DATES="${1}" && shift
+		fi
+		if [[ -n ${1} ]]; then
+			HIST_FINDS="${1}" && shift
+		fi
+		cat ${HOME}/.history/shell/${HOSTNAME}.${USER}.$(basename ${SHELL}).* |
+			perl -e '
+				use strict;
+				use warnings;
+				use POSIX qw(strftime);
+				my $history = do { local $/; <STDIN> };
+				while (${history} =~ m|^#([0-9]{10})\n([^\n]+)|gms) {
+					my $datetime = strftime("%Y-%m-%dT%H:%M:%S%z", localtime(${1}));
+					my $command = ${2};
+					if (
+						(${datetime} =~ m/${ENV{HIST_DATES}}/) &&
+						(${command} =~ m/${ENV{HIST_FINDS}}/)
+					) {
+						print "${datetime} ${command}\n";
+					};
+				};
+			' -- "${@}" |
+			sort |
+			${GREP} -a "${@}" -e "${HIST_FINDS/#^/\ }"
+	else
+		${GREP} "${@}" ${HOME}/.history/shell/${HOSTNAME}.${USER}.$(basename ${SHELL}).* |
+			cut -d: -f2- |
+			sort |
+			uniq --count |
+			sort --numeric-sort |
+			${GREP} -a "${@}"
+	fi
 }
 
 ########################################
@@ -1836,6 +1728,38 @@ function journal {
 
 ########################################
 
+function ldir {
+	${LL} -R "${@}" | more
+}
+
+########################################
+
+function ln-null {
+	declare FILE
+	find ./ -type l | while read -r FILE; do
+		if [[ ! -e ${FILE} ]]; then
+			echo -en "${FILE}\n"
+		fi
+	done | sort
+}
+
+########################################
+
+function letmeknow {
+	screen -X wall "$(
+		echo -en "[${?}] ["
+		history |
+			tail -n1 |
+			tr -d '\n' |
+			${SED} \
+				-e "s/^[[:space:]]*[0-9]+[[:space:]]+[0-9T:-]+[[:space:]]+//g" \
+				-e "s/[[:space:]]*;[[:space:]]*letmeknow[[:space:]]*$//g"
+		echo -en "]"
+	)"
+}
+
+########################################
+
 function maildirmake {
 	declare MAILDIR
 	declare DIR
@@ -2145,6 +2069,12 @@ function organize {
 
 ########################################
 
+function pages {
+	calc "$(lynx -dump "${@}" | wc -l) / 60"
+}
+
+########################################
+
 function prompt {
 	if [[ ${1} == -z ]]; then
 		shift
@@ -2237,6 +2167,35 @@ function prompt {
 
 ########################################
 
+function psg {
+	declare PSLIST="$(pgrep -d, -f "${@}" | ${SED} "s/[,]$//g")"
+	if [[ -n "${PSLIST}" ]]; then
+		$(which ps) u -ww -p ${PSLIST}
+	fi
+}
+
+########################################
+
+function psk {
+	declare PSNAME="${1}" && shift
+	declare PSLIST="$(pgrep -f "${PSNAME}")"
+	psg ${PSNAME}
+	if [[ -n "${PSLIST}" ]]; then
+		kill "${@}" ${PSLIST}
+		sleep 1
+	fi
+	psg ${PSNAME}
+}
+
+########################################
+
+function mirror {
+	declare PREFIX="$(echo "${!#}" | ${SED} "s|^(http\|ftp)[s]?://||g" | ${SED} "s|^([^/]+).*$|\1|g")-$(date --iso)"
+	${WGET_R} --directory-prefix "${PREFIX}" "${@}" 2>&1 | tee -a ${PREFIX}.log
+}
+
+########################################
+
 function rater {
 	declare DEV
 	declare DEVS="bond0.91 bond0.92 bond0.251 bond0.252 bond0.253 bond0.255"
@@ -2319,11 +2278,6 @@ function session {
 	fi
 	return 0
 }
-
-if [[ "${-/i}" != "${-}" ]] &&
-   [[ -n "${STY}" ]]; then
-	session -c "${PROMPT_SCR_COLOR}"
-fi
 
 ########################################
 
@@ -2422,6 +2376,27 @@ function shell {
 	prompt
 	cd - >/dev/null
 	return 0
+}
+
+########################################
+
+function swint {
+	declare INT="${1}" && shift
+	declare WID="${1}" && shift
+	declare WPW="${1}" && shift
+	${SED} -i "s/eth0/${INT}/g" \
+		${HOME}/scripts/fw.${HOSTNAME} \
+		${HOME}/scripts/ip.${HOSTNAME} \
+		/.runit/_config/dhclient \
+		/.runit/_config/dhcpcd \
+		/.runit/_config/tcpdump
+	if [[ -n ${WID} ]] && [[ -n ${WPW} ]]; then
+		${SED} -i \
+			-e "s/(\tssid=).+$/\1\"${WID}\"/g" \
+			-e "s/(\tpsk=).+$/\1\"${WPW}\"/g" \
+			/.runit/_config/wpa_supplicant
+	fi
+	ip-setup
 }
 
 ########################################
@@ -2569,6 +2544,16 @@ function vdiff {
 
 ########################################
 
+function vlc-rc {
+	if [[ -n ${@} ]]; then
+		echo "${@}" | nc -q 1 127.0.0.1 4212
+	else
+		nc 127.0.0.1 4212
+	fi
+}
+
+########################################
+
 function vpn {
 	if [[ ${1} == -a ]]; then
 		killall -9 autossh
@@ -2628,6 +2613,14 @@ function zpim-commit {
 	fi
 	cd - >/dev/null
 	return ${RETURN}
+}
+
+########################################
+
+function zpim-shortcuts {
+	${SED} -n \
+		-e "s/^.*HREF[=][\"]([^\"]+)[\"].*SHORTCUTURL[=][\"]([^\"]+)[\"].*[>]([^>]+)[<].*$/\2\t\3\t\1/gp" \
+		${PIMDIR}/bookmarks.html
 }
 
 ################################################################################
@@ -2820,8 +2813,390 @@ function vysor {
 }
 
 ################################################################################
-# impersonate functions
+# task functions
 ################################################################################
+
+function task-copy {
+	perl -e '
+		use strict;
+		use warnings;
+		use JSON::XS;
+		my $links = [];
+		if (($ARGV[0]) && ($ARGV[0] =~ m/^[+]/)) {
+			my $list = shift();
+			$list =~ s/^[+]//g;
+			@{ $links } = split(/,/, ${list});
+		};
+		if ((!$ARGV[0]) && (!$ARGV[1])) {
+			exit(0);
+		};
+		my $orig = shift();
+		chomp($orig = qx(task uuids ${orig}));
+		my $data = qx(task export ${orig}); $data =~ s/\n//g; $data = decode_json(${data});
+		$data = @{$data}[0];
+		while (@{ARGV}) {
+			my $field = shift();
+			if (${field} =~ m/^(p(ro(ject)?)?[:])(.*)$/)		{ $data->{"project"}	= ${4}; }
+			elsif (${field} =~ m/^(k(ind)?[:])(.*)$/)		{ $data->{"kind"}	= ${3}; }
+			elsif (${field} =~ m/^(a(rea)?[:])(.*)$/)		{ $data->{"area"}	= ${3}; }
+			elsif (${field} =~ m/^(t(ag(s)?)?[:])(.*)$/)		{ ${$data->{"tags"}}[0]	= ${4}; }
+			elsif (${field} =~ m/^(d(ue)?[:])(.*)$/)		{ $data->{"due"}	= ${3}; }
+			elsif (${field} =~ m/^(dep(ends)?[:])(.*)$/)		{ $data->{"depends"}	= ${3}; }
+			elsif (${field} =~ m/^(p(ri(ority)?)?[:])(.*)$/)	{ $data->{"priority"}	= ${4}; }
+			elsif (${field} =~ m/^[-][-]$/)				{ last; };
+		};
+		if (@{ARGV}) {
+			$data->{"description"} = join(" ", @{ARGV});
+		};
+		system("task add"
+			. " " . ($data->{"project"}	? "project:"	. $data->{"project"}		: "")
+			. " " . ($data->{"kind"}	? "kind:"	. $data->{"kind"}		: "")
+			. " " . ($data->{"area"}	? "area:"	. $data->{"area"}		: "")
+			. " " . ($data->{"tags"}	? "tags:"	. join(",", @{$data->{"tags"}})	: "")
+			. " " . ($data->{"due"}		? "due:"	. $data->{"due"}		: "")
+			. " " . ($data->{"depends"}	? "depends:"	. $data->{"depends"}		: "")
+			. " " . ($data->{"priority"}	? "priority:"	. $data->{"priority"}		: "")
+			. " -- " . $data->{"description"}
+		);
+		if (${?} == 0) {
+			chomp(my $done = qx(task rc.verbose=nothing ids));
+			$done =~ s/^1[-]//g;
+			foreach my $link (@{$links}) {
+				system("task modify ${link} depends:${done}");
+			};
+			system("task read ${orig} ${done} " . join(" ", @{$links}));
+		};
+	' -- "${@}" || return 1
+	return 0
+}
+
+########################################
+
+function task-depends {
+	perl -e '
+		use strict;
+		use warnings;
+		use JSON::XS;
+		use POSIX qw(strftime);
+		use Time::Local qw(timegm timelocal);
+#>>>		my $c_uid = 36;
+		my $c_uid = 8;
+#>>>		my $c_dat = 23;
+		my $c_dat = 14;
+		my $c_fld = {
+			"id"		=> "0",
+			"project"	=> "0",
+			"priority"	=> "0",
+			"tags"		=> "0",
+		};
+		foreach my $field (keys(%{$c_fld})) {
+			foreach my $value (qx(task _unique ${field})) {
+				chomp(${value});
+				my $len = length(${value});
+				if (${len} > $c_fld->{$field}) {
+					$c_fld->{$field} = ${len};
+				};
+			};
+		};
+		my $udas = {};
+		foreach my $line (qx(task show uda)) {
+			if ($line =~ m/^uda[.]([^.]+)[.]values\s+(.+)$/) {
+				my $uda = ${1};
+				my $val = ${2};
+				$val =~ s/^,/-,/g;
+				$val =~ s/,,/,-,/g;
+				$val =~ s/,$/,-/g;
+				$udas->{$uda} = [ split(",", ${val}) ];
+			};
+		};
+		my $init_deep = "0";
+		my $do_report = "0";
+		my $print_all = "0";
+		if (($ARGV[0]) && ($ARGV[0] eq "-r")) {
+			$do_report = $ARGV[0];
+			shift();
+		};
+		if (($ARGV[0]) && ($ARGV[0] eq "-a")) {
+			$print_all = $ARGV[0];
+			shift();
+		};
+		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
+		my $data = qx(task export);		$data =~ s/\n//g; $data = decode_json(${data});
+		my $show = qx(task export ${args});	$show =~ s/\n//g; $show = decode_json(${show});
+		my $list = {};
+		my $rdep = {};
+		my $filt = {};
+		my $lnum = {};
+		my $dnum = {};
+		my $pnum = {};
+		my $onum = {};
+		my $header;
+		foreach my $task (@{$data}) {
+			$list->{$task->{"uuid"}} = ${task};
+			if (exists($task->{"depends"})) {
+				foreach my $uuid (split(",", $task->{"depends"})) {
+					push(@{$rdep->{$uuid}}, $task->{"uuid"});
+				};
+			};
+		};
+		foreach my $task (@{$show}) {
+			$filt->{$task->{"uuid"}} = ${task};
+		};
+		foreach my $task (sort({
+			(($a->{"project"}	|| "") cmp ($b->{"project"}	|| "")) ||
+			(($a->{"description"}	|| "") cmp ($b->{"description"}	|| ""))
+		} @{$show})) {
+			if ((
+				(
+					(!exists($rdep->{$task->{"uuid"}}))
+				) || (
+					(exists($task->{"project"})) &&
+					($task->{"project"} =~ /[.]/) &&
+					(exists($task->{"kind"})) &&
+					($task->{"kind"} eq "notes")
+				)
+			) && (
+				(!${print_all}) &&
+				(exists($task->{"depends"})) &&
+				($task->{"depends"})
+			)) {
+				&print_task($task->{"uuid"}, ${init_deep});
+			}
+			elsif (${print_all}) {
+				&print_task($task->{"uuid"}, ${init_deep});
+				$onum->{ $task->{"uuid"} }++;
+			};
+		};
+		sub time_format {
+			my $stamp = shift();
+			$stamp =~ m/^([0-9]{4})([0-9]{2})([0-9]{2})[T]([0-9]{2})([0-9]{2})([0-9]{2})[Z]$/;
+			my($yr,$mo,$dy,$hr,$mn,$sc) = ($1,$2,$3,$4,$5,$6);
+			my $epoch = timegm($sc,$mn,$hr,$dy,($mo-1),$yr);
+#>>>			my $ltime = strftime("%Y-%m-%d %H:%M:%S", localtime(${epoch}));
+			my $ltime = strftime("%Y-%m-%d", localtime(${epoch}));
+			return(${epoch}, ${ltime});
+		};
+		sub do_time {
+			my $date = shift();
+			my($epoch, $ltime);
+			if ((${date}) && (${date} =~ m/^[0-9TZ]+$/)) {
+				(${epoch}, ${ltime}) = &time_format(${date});
+				$date = ${ltime};
+			};
+			return (${date});
+		};
+		# https://stackoverflow.com/questions/8171528/in-perl-how-can-i-sort-hash-keys-using-a-custom-ordering#48692004
+		sub print_task_sorter_udas {
+			my $uda = shift();
+			my $one = shift();
+			my $two = shift();
+			my $eno;
+			my $owt;
+			my $num = 0;
+			foreach my $test (@{$udas->{$uda}}) {
+				if ((($list->{$one}{$uda}) && ($list->{$one}{$uda} eq ${test})) || ((!defined(${eno})) && (${test} eq "-"))) { $eno = ${num}; };
+				if ((($list->{$two}{$uda}) && ($list->{$two}{$uda} eq ${test})) || ((!defined(${owt})) && (${test} eq "-"))) { $owt = ${num}; };
+				${num}++;
+			};
+			# taskwarrior ranks udas (n..1) instead of (1..n), so (uda+) should be entered ($a, $b) and we will reverse it to ($b, $a), and vice versa
+			return(${owt} <=> ${eno});
+		};
+		# report.skim.sort=project+,kind-,depends-,description+,entry+
+		sub print_task_sorter {
+			(($list->{$a}{"project"}		|| "") cmp ($list->{$b}{"project"}	|| "")) ||
+			(&print_task_sorter_udas("kind",	${b}, ${a})				) ||
+			(($list->{$b}{"depends"}		|| "") cmp ($list->{$a}{"depends"}	|| "")) ||
+			(($list->{$a}{"description"}		|| "") cmp ($list->{$b}{"description"}	|| "")) ||
+			(($list->{$a}{"entry"}			|| "") cmp ($list->{$b}{"entry"}	|| ""))
+		};
+		sub print_header {
+			$header = "1";
+			&print_task("0", "HEADER");
+			if (${do_report}) {
+				print "" . ("|:---" x 7) . "|\n";
+			} else {
+				print "" . ("|:---" x 2) . "|\n";
+			};
+		};
+		sub print_task {
+			my $uuid = shift();
+			my $deep = shift() || 0;
+			my $task = $list->{$uuid};
+			# report.skim.labels=+UUID,PROJECT,TAGS,P,+DEAD,+DIED,KIND,DESCRIPTION
+			if (!${header}) {
+				&print_header();
+			};
+			if(${deep} eq "HEADER") {
+				$deep = "0";
+				$task = {
+					"status"	=> "HEADER",
+					"uuid"		=> "+UUID",
+					"id"		=> "ID",
+					"project"	=> "PROJECT",
+					"tags"		=> "TAGS",
+					"priority"	=> "P",
+					"due"		=> "+DEAD",
+					"end"		=> "+DIED",
+					"kind"		=> "KIND",
+					"description"	=> "DESCRIPTION",
+				};
+			};
+			print "| "; printf("%-${c_uid}.${c_uid}s", $task->{"uuid"});
+			if (${do_report}) {
+				print " | "; printf("%-" . $c_fld->{"project"}	. "." . $c_fld->{"project"}	. "s", $task->{"project"} || "-");
+				print " | "; printf("%-" . $c_fld->{"tags"}	. "." . $c_fld->{"tags"}	. "s", (
+					(ref($task->{"tags"}) eq "ARRAY") ?
+					(join(" ", @{$task->{"tags"}}) || "-") :
+					($task->{"tags"} || "-")
+					)
+				);
+				print " | "; printf("%-" . $c_fld->{"priority"}	. "." . $c_fld->{"priority"}	. "s", $task->{"priority"} || "-");
+				my $due = (&do_time($task->{"due"}) || "-");
+				my $end = (&do_time($task->{"end"}) || "-"); if ($task->{"status"} eq "deleted") { $end = "~~" . ${end} . "~~"; };
+				print " | "; printf("%-${c_dat}.${c_dat}s", ${due});
+				print " | "; printf("%-${c_dat}.${c_dat}s", ${end});
+			} else {
+				print " | "; printf("%-" . $c_fld->{"id"}	. "." . $c_fld->{"id"}		. "s", $task->{"id"} || "-");
+				print " | "; printf("%-" . $c_fld->{"project"}	. "." . $c_fld->{"project"}	. "s", $task->{"project"} || "-");
+			};
+			if (${deep} >= 0) {
+				if (${deep} == 0) {	print " | ";
+				} else {		print " | " . (". " x ${deep}) . "${deep} ";
+				};
+			} else {
+				if (${deep} == -1) {	print " | - ";
+				} else {		print " | - " . ("- " x (abs(${deep}) - 1)) . (abs(${deep}) - 1) . " ";
+				};
+			};
+			my $title = $task->{"description"};
+			if (exists($task->{"kind"}))		{ $title = "[" . $task->{"kind"} . "] " . ${title}; };
+			if (
+				(!$filt->{$uuid}) &&
+				($task->{"status"} ne "HEADER")
+			)					{ $title = "\`" . ${title} . "\`"; };
+			if (
+				($task->{"status"} ne "HEADER") &&
+				($task->{"status"} ne "pending")
+			)					{ $title = "~~" . ${title} . "~~"; };
+			if ((
+				(exists($task->{"priority"})) ||
+				(exists($task->{"due"}))
+			) && (
+				($task->{"status"} ne "HEADER")
+			))					{ $title = "**" . ${title} . "**"; };
+			if (${do_report}) {
+				print ${title} . "\n";
+			} else {
+				if ($task->{"status"} eq "HEADER") {
+					print $task->{"description"} . "\n";
+				} else {
+					my $do_report_command = "task";
+					$do_report_command .= " rc.verbose=";
+					$do_report_command .= " rc.report.skim.columns=description.count";
+					$do_report_command .= " rc.report.skim.labels=DESCRIPTION";
+					$do_report_command .= " skim";
+					$do_report_command .= " " . $task->{"uuid"};
+					system(${do_report_command});
+				};
+			};
+			if (${deep} >= 0) {
+				if ($task->{"depends"}) {
+					foreach my $uuid (sort(print_task_sorter split(",", $task->{"depends"}))) {
+						&print_task(${uuid}, (${deep} + 1));
+					};
+				};
+			} else {
+				foreach my $uuid (sort(print_task_sorter @{$rdep->{$task->{"uuid"}}})) {
+					&print_task(${uuid}, (${deep} - 1));
+				};
+			};
+			if (
+				(${uuid}) &&
+				(${deep} >= 0)
+			) {
+				if ($filt->{$uuid}) {
+					$lnum->{$uuid}++;
+				} else {
+					$dnum->{$uuid}++;
+				};
+				$pnum->{$uuid}++;
+			};
+		};
+		foreach my $uuid (keys(%{$filt})) {
+			if (!$pnum->{$uuid}) {
+				$onum->{$uuid}++;
+			};
+		};
+		if (%{$onum}) {
+			if (!${header}) {
+				&print_header();
+			};
+			print "" . ("| - " x 7) . "\n";
+			foreach my $uuid (sort(print_task_sorter keys(%{$onum}))) {
+				&print_task(${uuid}, -1);
+			};
+		};
+		my $c_lnum = scalar(keys(%{$lnum}));
+		my $c_dnum = scalar(keys(%{$dnum}));
+		my $c_pnum = scalar(keys(%{$pnum}));
+		my $c_onum = scalar(keys(%{$onum}));
+		print "\n";
+		print "Tasks [${args}]: ";
+		print "${c_lnum} linked + ${c_dnum} depended = ${c_pnum} printed";
+		print " / ";
+		print "${c_lnum} linked + ${c_onum} orphaned = " . (${c_lnum} + ${c_onum}) . " matched\n";
+	' -- "${@}" || return 1
+	return 0
+}
+
+########################################
+
+function task-duplicates {
+	declare FILE="$(task _get rc.data.location)"
+	declare UUID
+	for UUID in $(task diagnostics | grep "Found[ ]duplicate" | awk '{print $3;}'); do
+		echo -en "\n"
+		echo -en "${UUID}\n";
+		${GREP} -nH "uuid[:][\"]${UUID}[\"]" ${FILE}/{pending,completed}.data
+		echo -en "${UUID}\n";
+		# http://www.linuxtopia.org/online_books/linux_tool_guides/the_sed_faq/sedfaq4_004.html
+#>>>		${SED} -i "0,/uuid[:][\"]${UUID}[\"]/{//d;}" ${FILE}/{pending,completed}.data
+		${GREP} -nH "uuid[:][\"]${UUID}[\"]" ${FILE}/{pending,completed}.data
+	done
+	return 0
+}
+
+########################################
+
+function task-export {
+	declare FILE=
+	cd ${PIMDIR}
+#>>>	gtasks_export.pl twimport "+Inbox"
+	gtasks_export.pl purge "+Inbox,@agenda,@errand"	"+GTD"
+#>>>	gtasks_export.pl twexport "+Alerts"		"mind"	"project.isnt:_gtd"
+#>>>	gtasks_export.pl twexport "+Notes"		"note"
+	gtasks_export.pl twexport "+Docs"		"docs"
+#>>>	gtasks_export.pl twexport "-Data"		"data"
+#>>>	gtasks_export.pl twexport "-Fail"		"fail"
+#>>>	gtasks_export.pl twexport "-Mark"		"mark"
+#>>>	gtasks_export.pl twexport "-Mind"		"mind"
+	gtasks_export.pl twexport "-Todo"		"todo"
+#>>>	for FILE in $(task reports 2>&1 | ${GREP} "[ ]Custom[ ][[]" | awk '{print $1;}'); do
+#>>>		gtasks_export.pl twexport ".${FILE}"	"${FILE}"
+#>>>	done
+#>>>	for FILE in $(task uda 2>&1 | ${GREP} "^area" | awk '{print $4;}' | tr ',' ' '); do
+#>>>		gtasks_export.pl twexport "=${FILE}"	"view"	"area:${FILE}"
+#>>>	done
+#>>>	for FILE in $(task _unique tags); do
+#>>>		gtasks_export.pl twexport "@${FILE}"	"view"	"tags:${FILE}"
+#>>>	done
+	gtasks_export.pl twexport "@agenda"		"agenda"
+	gtasks_export.pl twexport "@errand"		"errand"
+	cd - >/dev/null
+	return 0
+}
+
+########################################
 
 function task-export-calendar {
 	cd ${PIMDIR}
@@ -2897,58 +3272,6 @@ function task-export-drive-sync {
 		/.g/_data/zactive/_drive/_sync \
 		$(find -L /.g/_data/zactive/_drive/_sync -type l 2>/dev/null)
 	return 0
-}
-
-########################################
-
-function task-export {
-	declare FILE=
-	cd ${PIMDIR}
-#>>>	gtasks_export.pl twimport "+Inbox"
-	gtasks_export.pl purge "+Inbox,@agenda,@errand"	"+GTD"
-#>>>	gtasks_export.pl twexport "+Alerts"		"mind"	"project.isnt:_gtd"
-#>>>	gtasks_export.pl twexport "+Notes"		"note"
-	gtasks_export.pl twexport "+Docs"		"docs"
-#>>>	gtasks_export.pl twexport "-Data"		"data"
-#>>>	gtasks_export.pl twexport "-Fail"		"fail"
-#>>>	gtasks_export.pl twexport "-Mark"		"mark"
-#>>>	gtasks_export.pl twexport "-Mind"		"mind"
-	gtasks_export.pl twexport "-Todo"		"todo"
-#>>>	for FILE in $(task reports 2>&1 | ${GREP} "[ ]Custom[ ][[]" | awk '{print $1;}'); do
-#>>>		gtasks_export.pl twexport ".${FILE}"	"${FILE}"
-#>>>	done
-#>>>	for FILE in $(task uda 2>&1 | ${GREP} "^area" | awk '{print $4;}' | tr ',' ' '); do
-#>>>		gtasks_export.pl twexport "=${FILE}"	"view"	"area:${FILE}"
-#>>>	done
-#>>>	for FILE in $(task _unique tags); do
-#>>>		gtasks_export.pl twexport "@${FILE}"	"view"	"tags:${FILE}"
-#>>>	done
-	gtasks_export.pl twexport "@agenda"		"agenda"
-	gtasks_export.pl twexport "@errand"		"errand"
-	cd - >/dev/null
-	return 0
-}
-
-########################################
-
-function task-export-zoho {
-	declare UPLOAD=
-	if [[ ${1} == "upload" ]]; then
-		UPLOAD="${1}"; shift
-	fi
-	cd ${PIMDIR}
-	cat ${PIMDIR}/.zoho.reports
-#>>>	gdrive_export.pl ${UPLOAD} "${SALES_MD}:${SALES_MD_ID}" || return 1
-	if [[ ! -f ${PIMDIR}/zoho.today.out.md ]]; then
-		${RSYNC_U} ${SALES_MD} ${PIMDIR}/zoho.today.out.md
-	fi
-	eval zohocrm_events.pl \
-		$(cat ${PIMDIR}/.zoho.reports) \
-		"${@}"
-	declare RETURN="${?}"
-#>>>	gdrive_export.pl ${UPLOAD} "${SALES_MD}:${SALES_MD_ID}" || return 1
-	cd - >/dev/null
-	return ${RETURN}
 }
 
 ########################################
@@ -3739,6 +4062,70 @@ function task-export-text {
 
 ########################################
 
+function task-export-zoho {
+	declare UPLOAD=
+	if [[ ${1} == "upload" ]]; then
+		UPLOAD="${1}"; shift
+	fi
+	cd ${PIMDIR}
+	cat ${PIMDIR}/.zoho.reports
+#>>>	gdrive_export.pl ${UPLOAD} "${SALES_MD}:${SALES_MD_ID}" || return 1
+	if [[ ! -f ${PIMDIR}/zoho.today.out.md ]]; then
+		${RSYNC_U} ${SALES_MD} ${PIMDIR}/zoho.today.out.md
+	fi
+	eval zohocrm_events.pl \
+		$(cat ${PIMDIR}/.zoho.reports) \
+		"${@}"
+	declare RETURN="${?}"
+#>>>	gdrive_export.pl ${UPLOAD} "${SALES_MD}:${SALES_MD_ID}" || return 1
+	cd - >/dev/null
+	return ${RETURN}
+}
+
+########################################
+
+function task-flush {
+	declare FILE=
+	for FILE in "${@}"; do
+		declare UUIDS="$(task uuids \
+			project.is:${FILE} \
+			'(status:completed or status:deleted)' \
+			kind.none: \
+		)"
+		if [[ -n "${UUIDS}" ]]; then
+			task read ${UUIDS}
+			task-move ${FILE} ${FILE}.done ${UUIDS}
+			task read ${UUIDS}
+		fi
+	done
+	return 0
+}
+
+########################################
+
+function task-insert {
+	declare UNDO="false"
+	if [[ ${1} == -d ]]; then
+		UNDO="true"
+		shift
+	fi
+	if [[ -n ${1} ]] && [[ -n ${2} ]] && [[ -n ${3} ]]; then
+		declare PRNT="$(task uuids ${1})"; shift
+		declare CHLD="$(task uuids ${1})"; shift
+		declare HOST="$(task uuids ${1})"; shift
+		if ! ${UNDO}; then
+			task modify ${HOST} depends:${CHLD}
+			task modify ${PRNT} depends:-${CHLD},${HOST}
+		else
+			task modify ${HOST} depends:-${CHLD}
+			task modify ${PRNT} depends:${CHLD},-${HOST}
+		fi
+	fi
+	return 0
+}
+
+########################################
+
 function task-journal {
 #>>>	if [[ -z "${@}" ]]; then
 #>>>		return 1
@@ -3765,6 +4152,22 @@ function task-journal {
 				task "${UUID}" stop
 				task "${UUID}" done
 			fi
+		done
+	fi
+	return 0
+}
+
+########################################
+
+function task-move {
+	declare PSRC="${1}"; declare PSID="$(task uuids kind:notes project.is:${1})"; shift
+	declare PDST="${1}"; declare PDID="$(task uuids kind:notes project.is:${1})"; shift
+	declare FILE=
+	if [[ -n ${PSID} ]] && [[ -n ${PDID} ]]; then
+		for FILE in $(task uuids "${@}"); do
+			task modify ${FILE} project:${PDST}
+			task modify ${PSID} depends:-${FILE} &&
+			task modify ${PDID} depends:${FILE}
 		done
 	fi
 	return 0
@@ -3877,352 +4280,17 @@ function task-notes {
 
 ########################################
 
-function task-track {
-	perl -e '
-		use strict;
-		use warnings;
-		use JSON::XS;
-		use POSIX qw(strftime);
-		use Time::Local qw(timelocal);
-		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
-		my $root = qx(task _get rc.data.location); chomp(${root});
-		my $uuid = qx(task uuids ${args}); chomp(${uuid}); $uuid = [ split(" ", ${uuid}) ];
-		if (!@{$uuid}) {
-			die("NO MATCHES!");
-		}
-		elsif ($#{$uuid} >= 1) {
-			use Data::Dumper;
-			print Dumper(${uuid});
-			die("TOO MANY MATCHES!");
-		}
-		else {
-			$uuid = ${$uuid}[0];
-		};
-		my $mark = " => ";
-		my $edit = ${args}; $edit =~ s/\"/\\\"/g; $edit = "${ENV{EDITOR}} -c \"map \~ <ESC>:!task read ${edit}<CR>\" -c \"map \\ <ESC>:!task \"";
-		my $data = qx(${ENV{GREP}} "uuid:\\\"${uuid}\\\"" "${root}"/{completed,pending}.data); chomp(${data});
-		my $file = ${data}; $file =~ s/[:].+$//g; $data =~ s/^.+(completed|pending)[.]data[:]//g; $data =~ s/^[[]//g; $data =~ s/[]]$//g;
-		my $text = ${root} . "/" . ${uuid};
-		my $old = ${data};
-		my $new = ${data};
-		my $entries = {};
-		while (${data} =~ m|(annotation_([0-9]{10})[:][^[:space:]]+)|g) {
-			my $ltime = strftime("%Y-%m-%d %H:%M:%S", localtime(${2}));
-			$entries->{$1} = ${ltime};
-		};
-		open(TRACK, ">", ${text}) || die();
-		foreach my $key (sort(keys(%{$entries}))) {
-			print TRACK $entries->{$key} . ${mark} . ${key} . "\n";
-		};
-		close(TRACK) || die();
-		system("${edit} ${text}");
-		open(TRACK, "<", ${text}) || die();
-		while(<TRACK>) {
-			chomp(my $line = $_);
-			my($val, $key) = split(${mark}, ${line});
-			$val =~ m/^([0-9]{4})[-]([0-9]{2})[-]([0-9]{2})[ ]([0-9]{2})[:]([0-9]{2})[:]([0-9]{2})$/;
-			my($yr,$mo,$dy,$hr,$mn,$sc) = ($1,$2,$3,$4,$5,$6);
-			$val = timelocal($sc,$mn,$hr,$dy,($mo-1),$yr);
-			$entries->{$key} = ${val};
-		};
-		close(TRACK) || die();
-		unlink(${text}) || warn();
-		foreach my $key (sort(keys(%{$entries}))) {
-			my $find = ${key}; $find =~ s/[:].+$//g;
-			my $repl = "annotation_" . $entries->{$key};
-			$new =~ s/${find}/${repl}/g;
-		};
-		if (${new} ne ${old}) {
-			system("${ENV{GREP}} \"uuid:\\\"${uuid}\\\"\" \"${file}\""); print "\n";
-			open(TRACK, "<", ${file}) || die();
-			$data = do { local $/; <TRACK> }; $data =~ s/\n+$//g;
-			close(TRACK) || die();
-			open(TRACK, ">", ${file}) || die();
-			$data =~ s|\Q${old}|${new}|g;
-			print TRACK ${data};
-			close(TRACK) || die();
-			system("${ENV{GREP}} \"uuid:\\\"${uuid}\\\"\" \"${file}\"");
-		};
-	' -- "${@}" || return 1
-	return 0
-}
-
-########################################
-
-function task-depends {
-	perl -e '
-		use strict;
-		use warnings;
-		use JSON::XS;
-		use POSIX qw(strftime);
-		use Time::Local qw(timegm timelocal);
-#>>>		my $c_uid = 36;
-		my $c_uid = 8;
-#>>>		my $c_dat = 23;
-		my $c_dat = 14;
-		my $c_fld = {
-			"id"		=> "0",
-			"project"	=> "0",
-			"priority"	=> "0",
-			"tags"		=> "0",
-		};
-		foreach my $field (keys(%{$c_fld})) {
-			foreach my $value (qx(task _unique ${field})) {
-				chomp(${value});
-				my $len = length(${value});
-				if (${len} > $c_fld->{$field}) {
-					$c_fld->{$field} = ${len};
-				};
-			};
-		};
-		my $udas = {};
-		foreach my $line (qx(task show uda)) {
-			if ($line =~ m/^uda[.]([^.]+)[.]values\s+(.+)$/) {
-				my $uda = ${1};
-				my $val = ${2};
-				$val =~ s/^,/-,/g;
-				$val =~ s/,,/,-,/g;
-				$val =~ s/,$/,-/g;
-				$udas->{$uda} = [ split(",", ${val}) ];
-			};
-		};
-		my $init_deep = "0";
-		my $do_report = "0";
-		my $print_all = "0";
-		if (($ARGV[0]) && ($ARGV[0] eq "-r")) {
-			$do_report = $ARGV[0];
-			shift();
-		};
-		if (($ARGV[0]) && ($ARGV[0] eq "-a")) {
-			$print_all = $ARGV[0];
-			shift();
-		};
-		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
-		my $data = qx(task export);		$data =~ s/\n//g; $data = decode_json(${data});
-		my $show = qx(task export ${args});	$show =~ s/\n//g; $show = decode_json(${show});
-		my $list = {};
-		my $rdep = {};
-		my $filt = {};
-		my $lnum = {};
-		my $dnum = {};
-		my $pnum = {};
-		my $onum = {};
-		my $header;
-		foreach my $task (@{$data}) {
-			$list->{$task->{"uuid"}} = ${task};
-			if (exists($task->{"depends"})) {
-				foreach my $uuid (split(",", $task->{"depends"})) {
-					push(@{$rdep->{$uuid}}, $task->{"uuid"});
-				};
-			};
-		};
-		foreach my $task (@{$show}) {
-			$filt->{$task->{"uuid"}} = ${task};
-		};
-		foreach my $task (sort({
-			(($a->{"project"}	|| "") cmp ($b->{"project"}	|| "")) ||
-			(($a->{"description"}	|| "") cmp ($b->{"description"}	|| ""))
-		} @{$show})) {
-			if ((
-				(
-					(!exists($rdep->{$task->{"uuid"}}))
-				) || (
-					(exists($task->{"project"})) &&
-					($task->{"project"} =~ /[.]/) &&
-					(exists($task->{"kind"})) &&
-					($task->{"kind"} eq "notes")
-				)
-			) && (
-				(!${print_all}) &&
-				(exists($task->{"depends"})) &&
-				($task->{"depends"})
-			)) {
-				&print_task($task->{"uuid"}, ${init_deep});
-			}
-			elsif (${print_all}) {
-				&print_task($task->{"uuid"}, ${init_deep});
-				$onum->{ $task->{"uuid"} }++;
-			};
-		};
-		sub time_format {
-			my $stamp = shift();
-			$stamp =~ m/^([0-9]{4})([0-9]{2})([0-9]{2})[T]([0-9]{2})([0-9]{2})([0-9]{2})[Z]$/;
-			my($yr,$mo,$dy,$hr,$mn,$sc) = ($1,$2,$3,$4,$5,$6);
-			my $epoch = timegm($sc,$mn,$hr,$dy,($mo-1),$yr);
-#>>>			my $ltime = strftime("%Y-%m-%d %H:%M:%S", localtime(${epoch}));
-			my $ltime = strftime("%Y-%m-%d", localtime(${epoch}));
-			return(${epoch}, ${ltime});
-		};
-		sub do_time {
-			my $date = shift();
-			my($epoch, $ltime);
-			if ((${date}) && (${date} =~ m/^[0-9TZ]+$/)) {
-				(${epoch}, ${ltime}) = &time_format(${date});
-				$date = ${ltime};
-			};
-			return (${date});
-		};
-		# https://stackoverflow.com/questions/8171528/in-perl-how-can-i-sort-hash-keys-using-a-custom-ordering#48692004
-		sub print_task_sorter_udas {
-			my $uda = shift();
-			my $one = shift();
-			my $two = shift();
-			my $eno;
-			my $owt;
-			my $num = 0;
-			foreach my $test (@{$udas->{$uda}}) {
-				if ((($list->{$one}{$uda}) && ($list->{$one}{$uda} eq ${test})) || ((!defined(${eno})) && (${test} eq "-"))) { $eno = ${num}; };
-				if ((($list->{$two}{$uda}) && ($list->{$two}{$uda} eq ${test})) || ((!defined(${owt})) && (${test} eq "-"))) { $owt = ${num}; };
-				${num}++;
-			};
-			# taskwarrior ranks udas (n..1) instead of (1..n), so (uda+) should be entered ($a, $b) and we will reverse it to ($b, $a), and vice versa
-			return(${owt} <=> ${eno});
-		};
-		# report.skim.sort=project+,kind-,depends-,description+,entry+
-		sub print_task_sorter {
-			(($list->{$a}{"project"}		|| "") cmp ($list->{$b}{"project"}	|| "")) ||
-			(&print_task_sorter_udas("kind",	${b}, ${a})				) ||
-			(($list->{$b}{"depends"}		|| "") cmp ($list->{$a}{"depends"}	|| "")) ||
-			(($list->{$a}{"description"}		|| "") cmp ($list->{$b}{"description"}	|| "")) ||
-			(($list->{$a}{"entry"}			|| "") cmp ($list->{$b}{"entry"}	|| ""))
-		};
-		sub print_header {
-			$header = "1";
-			&print_task("0", "HEADER");
-			if (${do_report}) {
-				print "" . ("|:---" x 7) . "|\n";
-			} else {
-				print "" . ("|:---" x 2) . "|\n";
-			};
-		};
-		sub print_task {
-			my $uuid = shift();
-			my $deep = shift() || 0;
-			my $task = $list->{$uuid};
-			# report.skim.labels=+UUID,PROJECT,TAGS,P,+DEAD,+DIED,KIND,DESCRIPTION
-			if (!${header}) {
-				&print_header();
-			};
-			if(${deep} eq "HEADER") {
-				$deep = "0";
-				$task = {
-					"status"	=> "HEADER",
-					"uuid"		=> "+UUID",
-					"id"		=> "ID",
-					"project"	=> "PROJECT",
-					"tags"		=> "TAGS",
-					"priority"	=> "P",
-					"due"		=> "+DEAD",
-					"end"		=> "+DIED",
-					"kind"		=> "KIND",
-					"description"	=> "DESCRIPTION",
-				};
-			};
-			print "| "; printf("%-${c_uid}.${c_uid}s", $task->{"uuid"});
-			if (${do_report}) {
-				print " | "; printf("%-" . $c_fld->{"project"}	. "." . $c_fld->{"project"}	. "s", $task->{"project"} || "-");
-				print " | "; printf("%-" . $c_fld->{"tags"}	. "." . $c_fld->{"tags"}	. "s", (
-					(ref($task->{"tags"}) eq "ARRAY") ?
-					(join(" ", @{$task->{"tags"}}) || "-") :
-					($task->{"tags"} || "-")
-					)
-				);
-				print " | "; printf("%-" . $c_fld->{"priority"}	. "." . $c_fld->{"priority"}	. "s", $task->{"priority"} || "-");
-				my $due = (&do_time($task->{"due"}) || "-");
-				my $end = (&do_time($task->{"end"}) || "-"); if ($task->{"status"} eq "deleted") { $end = "~~" . ${end} . "~~"; };
-				print " | "; printf("%-${c_dat}.${c_dat}s", ${due});
-				print " | "; printf("%-${c_dat}.${c_dat}s", ${end});
-			} else {
-				print " | "; printf("%-" . $c_fld->{"id"}	. "." . $c_fld->{"id"}		. "s", $task->{"id"} || "-");
-				print " | "; printf("%-" . $c_fld->{"project"}	. "." . $c_fld->{"project"}	. "s", $task->{"project"} || "-");
-			};
-			if (${deep} >= 0) {
-				if (${deep} == 0) {	print " | ";
-				} else {		print " | " . (". " x ${deep}) . "${deep} ";
-				};
-			} else {
-				if (${deep} == -1) {	print " | - ";
-				} else {		print " | - " . ("- " x (abs(${deep}) - 1)) . (abs(${deep}) - 1) . " ";
-				};
-			};
-			my $title = $task->{"description"};
-			if (exists($task->{"kind"}))		{ $title = "[" . $task->{"kind"} . "] " . ${title}; };
-			if (
-				(!$filt->{$uuid}) &&
-				($task->{"status"} ne "HEADER")
-			)					{ $title = "\`" . ${title} . "\`"; };
-			if (
-				($task->{"status"} ne "HEADER") &&
-				($task->{"status"} ne "pending")
-			)					{ $title = "~~" . ${title} . "~~"; };
-			if ((
-				(exists($task->{"priority"})) ||
-				(exists($task->{"due"}))
-			) && (
-				($task->{"status"} ne "HEADER")
-			))					{ $title = "**" . ${title} . "**"; };
-			if (${do_report}) {
-				print ${title} . "\n";
-			} else {
-				if ($task->{"status"} eq "HEADER") {
-					print $task->{"description"} . "\n";
-				} else {
-					my $do_report_command = "task";
-					$do_report_command .= " rc.verbose=";
-					$do_report_command .= " rc.report.skim.columns=description.count";
-					$do_report_command .= " rc.report.skim.labels=DESCRIPTION";
-					$do_report_command .= " skim";
-					$do_report_command .= " " . $task->{"uuid"};
-					system(${do_report_command});
-				};
-			};
-			if (${deep} >= 0) {
-				if ($task->{"depends"}) {
-					foreach my $uuid (sort(print_task_sorter split(",", $task->{"depends"}))) {
-						&print_task(${uuid}, (${deep} + 1));
-					};
-				};
-			} else {
-				foreach my $uuid (sort(print_task_sorter @{$rdep->{$task->{"uuid"}}})) {
-					&print_task(${uuid}, (${deep} - 1));
-				};
-			};
-			if (
-				(${uuid}) &&
-				(${deep} >= 0)
-			) {
-				if ($filt->{$uuid}) {
-					$lnum->{$uuid}++;
-				} else {
-					$dnum->{$uuid}++;
-				};
-				$pnum->{$uuid}++;
-			};
-		};
-		foreach my $uuid (keys(%{$filt})) {
-			if (!$pnum->{$uuid}) {
-				$onum->{$uuid}++;
-			};
-		};
-		if (%{$onum}) {
-			if (!${header}) {
-				&print_header();
-			};
-			print "" . ("| - " x 7) . "\n";
-			foreach my $uuid (sort(print_task_sorter keys(%{$onum}))) {
-				&print_task(${uuid}, -1);
-			};
-		};
-		my $c_lnum = scalar(keys(%{$lnum}));
-		my $c_dnum = scalar(keys(%{$dnum}));
-		my $c_pnum = scalar(keys(%{$pnum}));
-		my $c_onum = scalar(keys(%{$onum}));
-		print "\n";
-		print "Tasks [${args}]: ";
-		print "${c_lnum} linked + ${c_dnum} depended = ${c_pnum} printed";
-		print " / ";
-		print "${c_lnum} linked + ${c_onum} orphaned = " . (${c_lnum} + ${c_onum}) . " matched\n";
-	' -- "${@}" || return 1
+function task-project {
+	declare PROJ=
+	for PROJ in "${@}"; do
+		if [[ ${PROJ} == - ]]; then
+			PROJ=" status:pending"
+		fi
+#>>>		task read	project.is:${PROJ} -PARENT -CHILD
+#>>>		task-depends -r	project.is:${PROJ} -PARENT -CHILD
+		task-depends	project.is:${PROJ} -PARENT -CHILD
+		task look	project.is:${PROJ} -PARENT -CHILD
+	done
 	return 0
 }
 
@@ -4306,23 +4374,6 @@ function task-recur {
 
 ########################################
 
-function task-duplicates {
-	declare FILE="$(task _get rc.data.location)"
-	declare UUID
-	for UUID in $(task diagnostics | grep "Found[ ]duplicate" | awk '{print $3;}'); do
-		echo -en "\n"
-		echo -en "${UUID}\n";
-		${GREP} -nH "uuid[:][\"]${UUID}[\"]" ${FILE}/{pending,completed}.data
-		echo -en "${UUID}\n";
-		# http://www.linuxtopia.org/online_books/linux_tool_guides/the_sed_faq/sedfaq4_004.html
-#>>>		${SED} -i "0,/uuid[:][\"]${UUID}[\"]/{//d;}" ${FILE}/{pending,completed}.data
-		${GREP} -nH "uuid[:][\"]${UUID}[\"]" ${FILE}/{pending,completed}.data
-	done
-	return 0
-}
-
-########################################
-
 function task-switch {
 	declare FILTER="status:pending kind.isnt:notes +ANNOTATED"
 	FILE="$(task uuids ${FILTER} "${@}")"
@@ -4349,134 +4400,78 @@ function task-switch {
 
 ########################################
 
-function task-copy {
+function task-track {
 	perl -e '
 		use strict;
 		use warnings;
 		use JSON::XS;
-		my $links = [];
-		if (($ARGV[0]) && ($ARGV[0] =~ m/^[+]/)) {
-			my $list = shift();
-			$list =~ s/^[+]//g;
-			@{ $links } = split(/,/, ${list});
+		use POSIX qw(strftime);
+		use Time::Local qw(timelocal);
+		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
+		my $root = qx(task _get rc.data.location); chomp(${root});
+		my $uuid = qx(task uuids ${args}); chomp(${uuid}); $uuid = [ split(" ", ${uuid}) ];
+		if (!@{$uuid}) {
+			die("NO MATCHES!");
+		}
+		elsif ($#{$uuid} >= 1) {
+			use Data::Dumper;
+			print Dumper(${uuid});
+			die("TOO MANY MATCHES!");
+		}
+		else {
+			$uuid = ${$uuid}[0];
 		};
-		if ((!$ARGV[0]) && (!$ARGV[1])) {
-			exit(0);
+		my $mark = " => ";
+		my $edit = ${args}; $edit =~ s/\"/\\\"/g; $edit = "${ENV{EDITOR}} -c \"map \~ <ESC>:!task read ${edit}<CR>\" -c \"map \\ <ESC>:!task \"";
+		my $data = qx(${ENV{GREP}} "uuid:\\\"${uuid}\\\"" "${root}"/{completed,pending}.data); chomp(${data});
+		my $file = ${data}; $file =~ s/[:].+$//g; $data =~ s/^.+(completed|pending)[.]data[:]//g; $data =~ s/^[[]//g; $data =~ s/[]]$//g;
+		my $text = ${root} . "/" . ${uuid};
+		my $old = ${data};
+		my $new = ${data};
+		my $entries = {};
+		while (${data} =~ m|(annotation_([0-9]{10})[:][^[:space:]]+)|g) {
+			my $ltime = strftime("%Y-%m-%d %H:%M:%S", localtime(${2}));
+			$entries->{$1} = ${ltime};
 		};
-		my $orig = shift();
-		chomp($orig = qx(task uuids ${orig}));
-		my $data = qx(task export ${orig}); $data =~ s/\n//g; $data = decode_json(${data});
-		$data = @{$data}[0];
-		while (@{ARGV}) {
-			my $field = shift();
-			if (${field} =~ m/^(p(ro(ject)?)?[:])(.*)$/)		{ $data->{"project"}	= ${4}; }
-			elsif (${field} =~ m/^(k(ind)?[:])(.*)$/)		{ $data->{"kind"}	= ${3}; }
-			elsif (${field} =~ m/^(a(rea)?[:])(.*)$/)		{ $data->{"area"}	= ${3}; }
-			elsif (${field} =~ m/^(t(ag(s)?)?[:])(.*)$/)		{ ${$data->{"tags"}}[0]	= ${4}; }
-			elsif (${field} =~ m/^(d(ue)?[:])(.*)$/)		{ $data->{"due"}	= ${3}; }
-			elsif (${field} =~ m/^(dep(ends)?[:])(.*)$/)		{ $data->{"depends"}	= ${3}; }
-			elsif (${field} =~ m/^(p(ri(ority)?)?[:])(.*)$/)	{ $data->{"priority"}	= ${4}; }
-			elsif (${field} =~ m/^[-][-]$/)				{ last; };
+		open(TRACK, ">", ${text}) || die();
+		foreach my $key (sort(keys(%{$entries}))) {
+			print TRACK $entries->{$key} . ${mark} . ${key} . "\n";
 		};
-		if (@{ARGV}) {
-			$data->{"description"} = join(" ", @{ARGV});
+		close(TRACK) || die();
+		system("${edit} ${text}");
+		open(TRACK, "<", ${text}) || die();
+		while(<TRACK>) {
+			chomp(my $line = $_);
+			my($val, $key) = split(${mark}, ${line});
+			$val =~ m/^([0-9]{4})[-]([0-9]{2})[-]([0-9]{2})[ ]([0-9]{2})[:]([0-9]{2})[:]([0-9]{2})$/;
+			my($yr,$mo,$dy,$hr,$mn,$sc) = ($1,$2,$3,$4,$5,$6);
+			$val = timelocal($sc,$mn,$hr,$dy,($mo-1),$yr);
+			$entries->{$key} = ${val};
 		};
-		system("task add"
-			. " " . ($data->{"project"}	? "project:"	. $data->{"project"}		: "")
-			. " " . ($data->{"kind"}	? "kind:"	. $data->{"kind"}		: "")
-			. " " . ($data->{"area"}	? "area:"	. $data->{"area"}		: "")
-			. " " . ($data->{"tags"}	? "tags:"	. join(",", @{$data->{"tags"}})	: "")
-			. " " . ($data->{"due"}		? "due:"	. $data->{"due"}		: "")
-			. " " . ($data->{"depends"}	? "depends:"	. $data->{"depends"}		: "")
-			. " " . ($data->{"priority"}	? "priority:"	. $data->{"priority"}		: "")
-			. " -- " . $data->{"description"}
-		);
-		if (${?} == 0) {
-			chomp(my $done = qx(task rc.verbose=nothing ids));
-			$done =~ s/^1[-]//g;
-			foreach my $link (@{$links}) {
-				system("task modify ${link} depends:${done}");
-			};
-			system("task read ${orig} ${done} " . join(" ", @{$links}));
+		close(TRACK) || die();
+		unlink(${text}) || warn();
+		foreach my $key (sort(keys(%{$entries}))) {
+			my $find = ${key}; $find =~ s/[:].+$//g;
+			my $repl = "annotation_" . $entries->{$key};
+			$new =~ s/${find}/${repl}/g;
+		};
+		if (${new} ne ${old}) {
+			system("${ENV{GREP}} \"uuid:\\\"${uuid}\\\"\" \"${file}\""); print "\n";
+			open(TRACK, "<", ${file}) || die();
+			$data = do { local $/; <TRACK> }; $data =~ s/\n+$//g;
+			close(TRACK) || die();
+			open(TRACK, ">", ${file}) || die();
+			$data =~ s|\Q${old}|${new}|g;
+			print TRACK ${data};
+			close(TRACK) || die();
+			system("${ENV{GREP}} \"uuid:\\\"${uuid}\\\"\" \"${file}\"");
 		};
 	' -- "${@}" || return 1
 	return 0
 }
 
-########################################
-
-function task-move {
-	declare PSRC="${1}"; declare PSID="$(task uuids kind:notes project.is:${1})"; shift
-	declare PDST="${1}"; declare PDID="$(task uuids kind:notes project.is:${1})"; shift
-	declare FILE=
-	if [[ -n ${PSID} ]] && [[ -n ${PDID} ]]; then
-		for FILE in $(task uuids "${@}"); do
-			task modify ${FILE} project:${PDST}
-			task modify ${PSID} depends:-${FILE} &&
-			task modify ${PDID} depends:${FILE}
-		done
-	fi
-	return 0
-}
-
-########################################
-
-function task-insert {
-	declare UNDO="false"
-	if [[ ${1} == -d ]]; then
-		UNDO="true"
-		shift
-	fi
-	if [[ -n ${1} ]] && [[ -n ${2} ]] && [[ -n ${3} ]]; then
-		declare PRNT="$(task uuids ${1})"; shift
-		declare CHLD="$(task uuids ${1})"; shift
-		declare HOST="$(task uuids ${1})"; shift
-		if ! ${UNDO}; then
-			task modify ${HOST} depends:${CHLD}
-			task modify ${PRNT} depends:-${CHLD},${HOST}
-		else
-			task modify ${HOST} depends:-${CHLD}
-			task modify ${PRNT} depends:${CHLD},-${HOST}
-		fi
-	fi
-	return 0
-}
-
-########################################
-
-function task-project {
-	declare PROJ=
-	for PROJ in "${@}"; do
-		if [[ ${PROJ} == - ]]; then
-			PROJ=" status:pending"
-		fi
-#>>>		task read	project.is:${PROJ} -PARENT -CHILD
-#>>>		task-depends -r	project.is:${PROJ} -PARENT -CHILD
-		task-depends	project.is:${PROJ} -PARENT -CHILD
-		task look	project.is:${PROJ} -PARENT -CHILD
-	done
-	return 0
-}
-
-########################################
-
-function task-flush {
-	declare FILE=
-	for FILE in "${@}"; do
-		declare UUIDS="$(task uuids \
-			project.is:${FILE} \
-			'(status:completed or status:deleted)' \
-			kind.none: \
-		)"
-		if [[ -n "${UUIDS}" ]]; then
-			task read ${UUIDS}
-			task-move ${FILE} ${FILE}.done ${UUIDS}
-			task read ${UUIDS}
-		fi
-	done
-	return 0
-}
-
+################################################################################
+# impersonate functions
 ################################################################################
 
 export TW="IMPERSONATE_NAME=task .bashrc impersonate_command"
@@ -4848,6 +4843,15 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 fi
 
 ################################################################################
+# interactive shells
+################################################################################
+
+if [[ "${-/i}" != "${-}" ]] &&
+   [[ -n "${STY}" ]]; then
+	session -c "${PROMPT_SCR_COLOR}"
+fi
+
+########################################
 
 if [[ "${-/i}" != "${-}" ]]; then
 	echo -en "\n"
