@@ -1811,6 +1811,7 @@ function mount-robust {
 	declare DEBUG="false"
 	declare TEST="false"
 	declare RO=
+	declare DM="false"
 	declare OV="false"
 	declare UN="false"
 	declare DEV=
@@ -1818,6 +1819,7 @@ function mount-robust {
 	if [[ ${1} == DEBUG ]]; then	DEBUG="true";	shift; fi
 	if [[ ${1} == TEST ]]; then	TEST="true";	shift; fi
 	if [[ ${1} == -0 ]]; then	RO="ro,";	shift; fi
+	if [[ ${1} == -d ]]; then	DM="true";	shift; fi
 	if [[ ${1} == -o ]]; then	OV="true";	shift; fi
 	if [[ ${1} == -u ]]; then	UN="true";	shift; fi
 	if [[ -n ${1} ]]; then		DEV="${1}";	shift; fi
@@ -1887,13 +1889,11 @@ function mount-robust {
 	}; then
 		echo -en "- (Root Filesystem)\n"
 		IS_ROOT="true"
-#>>>
 	elif {
-		{ ! ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV_TGT} == / ]];	}
+		{ ! ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV_TGT} == / ]];	};
 	}; then
 		echo -en "- <Remounting Root Device!>\n"
-#>>>		IS_ROOT="true"
-#>>>
+		IS_ROOT="true"
 	fi
 	declare IS_MOUNT="false"
 	if {
@@ -1904,13 +1904,11 @@ function mount-robust {
 	}; then
 		echo -en "- (Mounted Filesystem)\n"
 		IS_MOUNT="true"
-#>>>
 	elif {
-		{ ! ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV} == ${DEV_SRC} ]];	}
+		{ ! ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV} == ${DEV_SRC} ]];	};
 	}; then
 		echo -en "- <Remounting Mounted Device!>\n"
-#>>>		IS_MOUNT="true"
-#>>>
+		IS_MOUNT="true"
 	fi
 	if ${DEBUG}; then
 		echo -en "- [Device Source: ${DEV_SRC}]\n"
@@ -1996,7 +1994,7 @@ function mount-robust {
 				cryptsetup luksDump ${LUKS_DEV}				|| return 1
 			fi
 		fi
-		if ! ${IS_MOUNT}; then
+		if ${DM} || ! ${IS_MOUNT}; then
 			echo -en "- Mounting...\n"
 			if ${DEBUG}; then
 				return 0
