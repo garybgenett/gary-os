@@ -1506,9 +1506,10 @@ function indexer {
 # 10	name
 # 11	(target)
 ####################
-	declare SED_DATE="[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
-	declare SED_TIME="[0-9]{2}[:][0-9]{2}[:][0-9]{2}([.][0-9]{10})?"
-	declare SED_ZONE="[A-Z]{3}"
+	declare SED_DATE="([0-9]{4}[-][0-9]{2}[-][0-9]{2})"
+	declare SED_TIME="([0-9]{2}[:][0-9]{2}[:][0-9]{2})"
+	declare SED_NANO="([.][0-9]{10})"
+	declare SED_ZONE="([A-Z]{3}|([+-][0-9]{2})([0-9]{2}))"
 	declare FILE=
 	declare DEBUG="false"
 	[[ "${1}" == -d ]] && DEBUG="true" && shift
@@ -1665,7 +1666,7 @@ function indexer {
 				declare IDX__TYPE="$(echo -en "${FILE}" | cut -d$'\t' -f1 | cut -d, -f1)"
 				declare IDX_CHMOD="$(echo -en "${FILE}" | cut -d$'\t' -f4 | cut -d, -f2)"
 				declare IDX_CHOWN="$(echo -en "${FILE}" | cut -d$'\t' -f5 | cut -d, -f2)"
-				declare IDX_TOUCH="$(echo -en "${FILE}" | cut -d$'\t' -f6 | cut -d, -f1 | ${SED} "s/(${SED_DATE})[T+](${SED_TIME}${SED_ZONE})/\1 \2/g")"
+				declare IDX_TOUCH="$(echo -en "${FILE}" | cut -d$'\t' -f6 | cut -d, -f2 | ${SED} "s/^/@/g")"
 				if ${DEBUG}; then
 					echo -en "RESTORE: ${TARGET}\n"
 					do_file
@@ -1763,8 +1764,11 @@ function indexer {
 			test -z "${NULL}"			&& NULL="!"
 			${NICELY} find "${FILE}" \
 				-maxdepth 0 \
-				-printf "%y,%Y\t%i\t%n\t%M,%m\t%u:%g,%U:%G\t%T+%TZ,%T@\t%k,%s\t${SIZE}\t${HASH}\t${NULL}\t%p\t(%l)\n" |
-					${SED} -e "s/[.][0]{10}//g" -e "s/(${SED_DATE})[T+](${SED_TIME}${SED_ZONE})/\1T\2/g" |
+				-printf "%y,%Y\t%i\t%n\t%M,%m\t%u:%g,%U:%G\t%T+%Tz,%T@\t%k,%s\t${SIZE}\t${HASH}\t${NULL}\t%p\t(%l)\n" |
+					${SED} \
+						-e "s/${SED_TIME}${SED_NANO}/\1/g" \
+						-e "s/${SED_DATE}[T+]${SED_TIME}${SED_ZONE}/\1T\2\4:\5/g" \
+						|
 					tr '\t' '\0'
 		done
 	fi
