@@ -1319,12 +1319,14 @@ function hist-grep {
 		shift
 		export HIST_DATES="."
 		export HIST_FINDS="."
-		if [[ -n $(echo "${1}" | ${GREP} "^[-+:T0-9^(|)]+$") ]]; then
+		if [[ -n $(echo "${1}" | ${GREP} "^[][(|)^.*0-9T:+-]+$") ]]; then
 			HIST_DATES="${1}" && shift
 		fi
 		if [[ -n ${1} ]]; then
 			HIST_FINDS="${1}" && shift
 		fi
+		echo "DATES: ${HIST_DATES}"
+		echo "FINDS: ${HIST_FINDS}"
 		cat ${HOME}/.history/shell/${HOSTNAME}.${USER}.$(basename ${SHELL}).* |
 			perl -e '
 				use strict;
