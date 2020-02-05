@@ -1631,6 +1631,7 @@ function indexer {
 			cut -d "" --output-delimiter=" " -f1,6,9- \
 			>${TMP}
 		${VIEW} -- ${TMP}
+		${RM} ${TMP}
 	elif [[ "${1}" == -du ]]; then
 		shift
 		DEBUG="${DEBUG}" perl -e '
