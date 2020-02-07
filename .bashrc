@@ -513,7 +513,6 @@ alias synctail="${GREP} -a '^ERROR[:][ ]' /.g/_data/+sync/_sync.log ; echo ; tai
 alias cal="cal --monday --three"
 alias clean="_sync clean"
 alias clock="clockywock"
-alias dd="dcfldd conv=noerror,notrunc"
 alias dict="sdcv"
 alias diskio="iostat -cdmtN -p sda,sdb,sdc,sdd 1"
 alias ftp="lftp"
@@ -690,6 +689,26 @@ function contacts {
 	chmod 750 ./${CONTACTS}.adb
 	prompt
 	cd - >/dev/null
+	return 0
+}
+
+########################################
+
+function dd {
+	declare SRC="$((${#}-1))"	; SRC="${!SRC}"
+	declare DST="${#}"		; DST="${!DST}"
+	declare MAP="/tmp/.${FUNCNAME}-$(basename ${SRC})-$(basename ${DST}).mapfile"
+	if [[ ${1} == --rescue ]]; then
+		shift
+		echo -en "\n"
+		${LL} ${MAP}
+		echo -en "\n"
+		ddrescue --force --idirect --odirect \
+			"${@}" \
+			${MAP}
+	else
+		dcfldd conv=noerror,notrunc "${@}"
+	fi
 	return 0
 }
 
