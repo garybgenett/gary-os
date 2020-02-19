@@ -3471,6 +3471,33 @@ function task-export-text {
 		open(NOTE, ">", ${root} . ".md")			|| die();
 		foreach my $task (@{$data}) { delete($task->{"id"}); delete($task->{"urgency"}); };
 		my $json = JSON::XS->new(); print JSON $json->canonical->pretty->encode(${data});
+		# tasks.xltx
+		#	data
+		#		data -> get data from text/csv
+		#			rename: tasks (data)
+		#			applied steps
+		#				removed columns -> column1
+		#				changed type -> [=beg] -> date/time
+		#				changed type -> [=hrs] -> decimal
+		#	table
+		#		insert -> pivot table -> external data source
+		#			rename: tasks (table)
+		#		<field list -> populate filters, rows and values>
+		#			sort in data source order
+		#			[=hrs] -> sum, 2 decimal places
+		#			[=beg] -> ungroup -> group -> 1970-01-05, 2038-01-19, 7 days
+		#		<table sort>
+		#			[desc] = a-z
+		#			[=beg] = old-new
+		#			more options = [=hrs] -> z-a
+		#			[desc] = collapse entire field
+		#		<toolboxes>
+		#			<data -> queries and connections>
+		#			<analyze -> field list>
+		#	chart
+		#		insert -> pivot chart -> stacked column
+		#		<right click -> move chart -> new sheet>
+		#	<sort sheets: table, chart, data>
 		print TIME "\"[DESC]\",\"[PROJ]\",\"[KIND]\",\"[AREA]\",\"[TAGS]\",";
 		print TIME "\"[.UID]\",";
 		print TIME "\"[.BRN]\",\"[_BRN]\",\"[=BRN]\",";
@@ -3481,15 +3508,23 @@ function task-export-text {
 		print TIME "\"[=HRS]\",";
 		print TIME "\n";
 		# force week grouping to start on monday
-		print TIME "\"(null)\",\"\",\"\",\"\",\"\",";
-		print TIME "\"\",";
-		print TIME "\"\",\"\",\"\",";
-		print TIME "\"\",\"\",\"\",";
-		print TIME "\"\",";
-		print TIME "\"\",\"\",\"1970-01-05 00:00:00\",";
-		print TIME "\"\",\"\",\"\",";
-		print TIME "\"0\",";
-		print TIME "\n";
+		my $epoch = 345600;	# 60*60*24*4 = 1970-01-05 00:00:00
+		my $wtime = 604800;	# 60*60*24*7 = one week / seven days
+		my $rtime = time();
+		my $null = "(null)";
+		while (${epoch} <= ${rtime}) {
+			my $marker = strftime("%Y-%m-%d %H:%M:%S", gmtime(${epoch}));
+			print TIME "\"${null}\",\"${null}\",\"${null}\",\"${null}\",\"${null}\",";
+			print TIME "\"${null}\",";
+			print TIME "\"-\",\"-\",\"-\",";
+			print TIME "\"-\",\"-\",\"-\",";
+			print TIME "\"-\",";
+			print TIME "\"-\",\"-\",\"${marker}\",";
+			print TIME "\"-\",\"-\",\"-\",";
+			print TIME "\"0.00\",";
+			print TIME "\n";
+			$epoch += ${wtime};
+		};
 		print NOTE "% Taskwarrior: Project List & Notes\n";
 		print NOTE "% " . ${name} . "\n";
 		print NOTE "% " . localtime() . "\n";
@@ -4087,6 +4122,7 @@ function task-export-text {
 		xargs -i -d "\n" \
 			${GREP} -B10 -A10 '^#+ {}' tasks.md
 	${GREP} "#section" tasks.md.html
+	${GREP} "[0-9]{2}[:][0-9]{2}[:][0-9]{2}[\"][,][\"][^-0-9]" tasks.csv
 	${GREP} -B1 "^[\"][0-9]{8}T[0-9]{6}Z" tasks.csv
 	cd - >/dev/null
 	return 0
