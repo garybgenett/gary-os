@@ -3480,6 +3480,16 @@ function task-export-text {
 		print TIME "\"[.END]\",\"[_END]\",\"[=END]\",";
 		print TIME "\"[=HRS]\",";
 		print TIME "\n";
+		# force week grouping to start on monday
+		print TIME "\"(null)\",\"\",\"\",\"\",\"\",";
+		print TIME "\"\",";
+		print TIME "\"\",\"\",\"\",";
+		print TIME "\"\",\"\",\"\",";
+		print TIME "\"\",";
+		print TIME "\"\",\"\",\"1970-01-05 00:00:00\",";
+		print TIME "\"\",\"\",\"\",";
+		print TIME "\"0\",";
+		print TIME "\n";
 		print NOTE "% Taskwarrior: Project List & Notes\n";
 		print NOTE "% " . ${name} . "\n";
 		print NOTE "% " . localtime() . "\n";
