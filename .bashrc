@@ -437,7 +437,6 @@ export WGET_C="wget \
 	--verbose \
 	--progress=bar \
 	--execute robots=off \
-	--user-agent=Mozilla/5.0 \
 	--restrict-file-names=windows \
 	--no-check-certificate \
 	--server-response \
@@ -454,6 +453,7 @@ export WGET_S="${WGET_C} \
 	--convert-links \
 	--backup-converted"
 export WGET_R="${WGET_S} \
+	--user-agent=Mozilla/5.0 \
 	--recursive \
 	--level=inf \
 	--random-wait \
