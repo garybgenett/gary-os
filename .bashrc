@@ -3227,8 +3227,8 @@ function task-export-calendar {
 		"c|export.default:Z2FyeUB0cmVzb2Jpcy5vcmc" \
 		"c|export.personal:dHJlc29iaXMub3JnX2c4djBwa3RzbnQ4NGVvdHM4aGtpanRzanZnQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
 		"c|export.orion:dHJlc29iaXMub3JnX2FiZm9wc3UxdHZmNDRiYzBqZTdtZHFzNmNvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
-		"c|export.rachel:dHJlc29iaXMub3JnX3RoYTF1cjFnbzJpZDRlZGxkZHRnOW90YzlvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
-		"c|export.other:dHJlc29iaXMub3JnX28zZHBwNWNzbmIzaG1ocGV2czMxZDJrZGlvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
+		"c|export.present:dHJlc29iaXMub3JnX28zZHBwNWNzbmIzaG1ocGV2czMxZDJrZGlvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
+		"c|export.past:dHJlc29iaXMub3JnX3RoYTF1cjFnbzJpZDRlZGxkZHRnOW90YzlvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
 		${@}
 	${WGET_C} --output-document \
 		${PIMDIR}/calendar-export.doodle.ics \
