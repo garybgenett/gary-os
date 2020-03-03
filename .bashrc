@@ -1845,7 +1845,7 @@ function mount-robust {
 	if ! ${TEST} && {
 		{ [[ ! -b ${DEV} ]] && [[ ! -d ${DEV} ]] && [[ ! -f ${DEV} ]]; } ||
 		{ [[   -f ${DEV} ]] && [[ ! -d ${DIR} ]] && ! ${UN}; } ||
-		{ [[ ! -d ${DEV} ]] && ${OV}; } ||
+		{ [[ ! -d ${DEV} ]] && [[ ! -f ${DEV} ]] && ${OV}; } ||
 		{ [[ ! -d ${DIR} ]] && ! ${UN}; };
 	}; then
 		echo -en "- <Invalid Arguments!>\n"
@@ -1867,9 +1867,11 @@ function mount-robust {
 	if [[ -d ${DEV} ]]; then
 			DEV_SRC="$(${FINDMNT} --output SOURCE --target ${DEV} 2>/dev/null | tail -n1)";	DEV_TGT="$(${FINDMNT} --output TARGET --target ${DEV} 2>/dev/null | tail -n1)"
 	fi
-	declare WORKDIR="$(${FINDMNT} --output OPTIONS --target ${DEV} 2>/dev/null | tail -n1 | ${SED} -n "s|^.*workdir[=]([^,]*).*$|\1|gp")"
-	if [[ -z ${WORKDIR} ]]; then
-		WORKDIR="${DEV}.${FUNCNAME}"
+	IS_OVLY="false"
+	if ${OV} || [[ ${DEV_SRC} == overlay ]]; then
+		DEV_SRC="$(${SED} -n "s|^overlay[ ]${DEV_TGT}[ ]overlay[ ].+lowerdir[=]([^:, ]+).*$|\1|gp" /proc/mounts)"
+		echo -en "- (Overlay Mount)\n"
+		IS_OVLY="true"
 	fi
 	declare IS_ROOT="false"
 	if {
@@ -1965,16 +1967,29 @@ function mount-robust {
 				echo -en "- <Directory Is Still Mounted!>\n"
 				return 1
 			fi
+			if ${IS_OVLY}; then
+				declare OVLY_DIR="${DEV_SRC}.${FUNCNAME}"
+				if [[ -d ${DEV_TGT}/.${FUNCNAME} ]]; then
+					OVLY_DIR="${DEV_TGT}/.${FUNCNAME}"
+					${FUNCNAME} -u ${DEV_TGT}/.${FUNCNAME}/lowerdir
+				fi
+				declare FILES="$(find ${OVLY_DIR} -type f)"
+				if [[ -n ${FILES} ]]; then
+					echo -en "\n"
+					${LL} -d ${OVLY_DIR}
+					${LL} ${OVLY_DIR}
+					echo -en "\n"
+					${LL} -d ${OVLY_DIR}/upperdir
+					${LL} ${OVLY_DIR}/upperdir
+				else
+					${RM} ${OVLY_DIR}
+				fi
+			fi
 		fi
 		if ${IS_LUKS} && [[ -b ${DEV} ]]; then
 			echo -en "- Closing Encryption...\n"
 			if ! ${DEBUG}; then
 				cryptsetup luksClose ${DEV} || return 1
-			fi
-		fi
-		if ! ${DEBUG}; then
-			if [[ -d ${WORKDIR} ]]; then
-				${RM} ${WORKDIR}
 			fi
 		fi
 	else
@@ -1993,21 +2008,32 @@ function mount-robust {
 			declare TYP="$(${LSBLK} --fs --output FSTYPE ${DEV} 2>/dev/null | tail -n1)"
 			declare OVERLAY=
 			if ${OV}; then
-				modprobe fuse overlay || return 1
+				modprobe fuse overlay #>>> || return 1
 				TYP="overlay overlay"
-				${MKDIR} ${WORKDIR}
 				declare LOWER_DIRS="${DEV}:${DIR}"
+				if [[ -f ${DEV} ]]; then
+					LOWER_DIRS="${DIR}/.${FUNCNAME}/lowerdir:${DIR}"
+				fi
 				while [[ -d ${1} ]]; do
 					LOWER_DIRS+=":${1}"
 					shift
 				done
 				OVERLAY="lowerdir=${LOWER_DIRS}"
 				if [[ -z ${RO} ]]; then
-					OVERLAY+=",upperdir=${DEV},workdir=${DEV}.${FUNCNAME}"
+					if [[ -f ${DEV} ]]; then
+						${MKDIR} ${DIR}/.${FUNCNAME}/{lowerdir,upperdir,workdir}
+						mount -o loop ${DEV} ${DIR}/.${FUNCNAME}/lowerdir
+						OVERLAY+=",upperdir=${DIR}/.${FUNCNAME}/upperdir,workdir=${DIR}/.${FUNCNAME}/workdir"
+					else
+						${MKDIR} ${DEV}.${FUNCNAME}
+						OVERLAY+=",upperdir=${DEV},workdir=${DEV}.${FUNCNAME}"
+					fi
+				elif [[ -f ${DEV} ]]; then
+					OV="false"
 				fi
 			fi
 			if [[ ${TYP} == exfat ]]; then
-				modprobe fuse || return 1
+				modprobe fuse #>>> || return 1
 			fi
 			declare DID="false"
 			if [[ ${TYP} == ext4		]]; then DID="true"; fsck -MV -t ${TYP} -pC	${DEV} || return 1; fi
