@@ -3324,6 +3324,7 @@ function task-export-drive-sync {
 	${RCLONE_C} about ${GDRIVE_REMOTE}:
 	${LL} \
 		/.g/_data/zactive/_drive/_sync \
+		$(find /.g/_data/zactive/_drive/_sync -mindepth 1 -maxdepth 1 ! -type l) \
 		$(find -L /.g/_data/zactive/_drive/_sync -type l 2>/dev/null)
 	return 0
 }
