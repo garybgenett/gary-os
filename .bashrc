@@ -2235,6 +2235,29 @@ function psk {
 
 ########################################
 
+function pso {
+	declare P_IONC="-19.19"
+	declare P_NICE="3.3"
+	declare P_PROC="-120.120"
+	declare P_PSNL=" "
+	declare P_SPAC=" | "
+	declare PSLIST="$(ps --no-headers -e -o pid | sort -nu)"
+	if [[ -n "${@}" ]]; then
+		PSLIST="$(pgrep -f "${@}")"
+	fi
+	declare PID=
+	for PID in ${PSLIST}; do
+		if [[ -n "$(ps --no-headers -p ${PID})" ]]; then
+			printf "%${P_IONC}s${P_SPAC}%${P_NICE}s${P_SPAC}%${P_PROC}s\n" \
+				"$(ionice -p ${PID} | tr "\n" "${P_PSNL}")" \
+				"$(ps -o "%n" -p ${PID} --no-headers | tr "\n" "${P_PSNL}")" \
+				"$(${PS/ -e} -p ${PID} --no-headers)"
+		fi
+	done
+}
+
+########################################
+
 function mirror {
 	declare PREFIX="$(echo "${!#}" | ${SED} "s|^(http\|ftp)[s]?://||g" | ${SED} "s|^([^/]+).*$|\1|g")-$(date --iso)"
 	${WGET_R} --directory-prefix "${PREFIX}" "${@}" 2>&1 | tee -a ${PREFIX}.log
