@@ -14,8 +14,11 @@
 [Readme]: https://github.com/garybgenett/gary-os/blob/master/README.md
 [License]: https://github.com/garybgenett/gary-os/blob/master/LICENSE.md
 
-[Gary B. Genett]: http://www.garybgenett.net/resume.html
+[Gary B. Genett]: http://www.garybgenett.net
 [gary-os@garybgenett.net]: mailto:gary-os@garybgenett.net?subject=GaryOS%20Submission&body=Why%20I%20love%20GaryOS%20so%20much...
+
+<!-- [![GaryOS Download Button](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/gary-os/files/latest/download) -->
+[![GaryOS Download Counts](https://img.shields.io/sourceforge/dm/gary-os.svg)](https://sourceforge.net/projects/gary-os/files/latest/download)
 
 ********************************************************************************
 
