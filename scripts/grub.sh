@@ -19,6 +19,7 @@ echo -en "${HEADER}\n"
 ########################################
 
 declare TIMEOUT="5"
+declare SHMEM="3000m"
 
 ################################################################################
 
@@ -30,7 +31,7 @@ shift
 
 declare HEDEF="10"
 declare GIDEF="${GDEST}/loopfile.img"
-declare GIBAK="/dev/sda"
+declare GIBAK="/dev/sdb"
 declare GPDEF="1"
 
 function print_usage {
@@ -177,10 +178,10 @@ menuentry \"---\" {
 
 set garyos_custom=
 set garyos_rescue=
-set garyos_initrd=
+set garyos_rootfs=
 search --file --set garyos_custom /${_BASE}/${GCUST}
 search --file --set garyos_rescue /${_BASE}/${_BASE}.kernel
-search --file --set garyos_initrd /${_BASE}/${_BASE}.initrd
+search --file --set garyos_rootfs /${_BASE}/${_BASE}.rootfs
 
 if [ -n \"\${garyos_custom}\" ]; then
 	set default=2
@@ -194,26 +195,22 @@ if [ -n \"\${garyos_rescue}\" ]; then
 else
 	set garyos_rescue=\"${GROOT}\"
 fi
-if [ -n \"\${garyos_initrd}\" ]; then
+if [ -n \"\${garyos_rootfs}\" ]; then
 	set default=4
 	set timeout=${TIMEOUT}
 else
-	set garyos_initrd=\"${GROOT}\"
+	set garyos_rootfs=\"${GROOT}\"
 fi
 
 menuentry \"${_PROJ} Menu\" {
 	configfile (\${garyos_custom})/${_BASE}/${GCUST}
 }
 menuentry \"${_PROJ} Boot\" {
-	if [ -f (\${garyos_rescue})/${_BASE}/${_BASE}.boot.kernel ]; then
-		linux (\${garyos_rescue})/${_BASE}/${_BASE}.boot.kernel${GOPTS:+ ${GOPTS}}
-	fi
 	linux (\${garyos_rescue})/${_BASE}/${_BASE}.kernel${GOPTS:+ ${GOPTS}}
 	boot
 }
-menuentry \"${_PROJ} Boot Initrd\" {
-	linux (\${garyos_initrd})/${_BASE}/${_BASE}.boot.kernel${GOPTS:+ ${GOPTS}}
-	initrd (\${garyos_initrd})/${_BASE}/${_BASE}.initrd
+menuentry \"${_PROJ} Boot Rootfs\" {
+	linux (\${garyos_rootfs})/${_BASE}/${_BASE}.kernel${GOPTS:+ ${GOPTS}} shmem_size=${SHMEM} groot_hint=\${garyos_rootfs} groot_file=/${_BASE}/${_BASE}.rootfs groot=${GINST_DO}${GPSEP}${GPART}
 	boot
 }
 
