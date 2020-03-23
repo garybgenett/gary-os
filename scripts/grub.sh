@@ -102,14 +102,17 @@ fi
 declare GINST="${GIDEF}"
 declare GPART="${GPDEF}"
 declare GPSEP=
-if [[ -b $(		echo ${1} | ${SED} "s|[p]?[0-9]+$||g") ]] || [[ ${1} == grub+([0-9]) ]]; then
-	GINST="$(	echo ${1} | ${SED} "s|[p]?[0-9]+$||g")"
+if [[ -b $(		echo ${1} | ${SED} "s|[p]?[0-9]*$||g") ]] || [[ ${1} == grub+([0-9]) ]]; then
+	GINST="$(	echo ${1} | ${SED} "s|[p]?[0-9]*$||g")"
 	GPART="$(	echo ${1} | ${SED} "s|^${GINST}||g")"
 	if [[ ${GINST} == grub ]]; then
 		GINST="${GIDEF}"
 	fi
 	if [[ -z ${GPART} ]]; then
 		GPART="${GPDEF}"
+	fi
+	if [[ ${GPART} == "p" ]]; then
+		GPART="p${GPDEF}"
 	fi
 	shift
 fi
