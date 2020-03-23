@@ -2244,6 +2244,7 @@ function pso {
 	declare PSLIST="$(ps --no-headers -e -o pid | sort -nu)"
 	if [[ -n "${@}" ]]; then
 		PSLIST="$(pgrep -f "${@}")"
+		P_PROC=
 	fi
 	declare PID=
 	for PID in ${PSLIST}; do
