@@ -31,13 +31,13 @@
     * [Running]: [Forensics & Recovery], [Networking Configuration], [Graphical Interface]
     * [Building]: [Live Update], [Hard Drive Install]
   * [Version History]
-    * [2015-03-16 v3.0 21811b59a8484b2a6b73e0c5277f23c50a0141dc.0]
-    * [2014-06-19 v2.0 873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d.0]
-    * [2014-03-13 v1.1 95ad4fd257697618bae7402d4bc3a27499035d30.4]
-    * [2014-02-28 v1.0 95ad4fd257697618bae7402d4bc3a27499035d30.3]
-    * [2014-02-24 v0.3 95ad4fd257697618bae7402d4bc3a27499035d30.2]
-    * [2014-02-13 v0.2 95ad4fd257697618bae7402d4bc3a27499035d30.1]
-    * [2014-02-09 v0.1 95ad4fd257697618bae7402d4bc3a27499035d30.0]
+    * [2015-03-16 v3.0]
+    * [2014-06-19 v2.0]
+    * [2014-03-13 v1.1]
+    * [2014-02-28 v1.0]
+    * [2014-02-24 v0.3]
+    * [2014-02-13 v0.2]
+    * [2014-02-09 v0.1]
 
 ********************************************************************************
 
@@ -231,11 +231,11 @@ this far.
 
 [steady stream of overall downloads]: https://sourceforge.net/projects/gary-os/files/stats/timeline?dates=2014-02-28+to+2038-01-19
 [countries all over the world]: https://sourceforge.net/projects/gary-os/files/stats/map?dates=2014-02-28+to+2038-01-19
-[v4.0 downloads]: https://sourceforge.net/projects/gary-os/files/gary-os-generic_64-v4.0.kernel/stats/timeline?dates=2014-02-28+to+2038-01-19
-[v3.0 downloads]: https://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v3.0.kernel/stats/timeline?dates=2014-02-28+to+2038-01-19
-[v2.0 downloads]: https://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v2.0.kernel/stats/timeline?dates=2014-02-28+to+2038-01-19
-[v1.1 downloads]: https://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v1.1.kernel/stats/timeline?dates=2014-02-28+to+2038-01-19
-[v1.0 downloads]: https://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v1.0.kernel/stats/timeline?dates=2014-02-28+to+2038-01-19
+[v4.0 downloads]: https://sourceforge.net/projects/gary-os/files/gary-os-v4.0-generic_64.kernel/stats/timeline?dates=2014-02-28+to+2038-01-19
+[v3.0 downloads]: https://sourceforge.net/projects/gary-os/files/gary-os-v3.0-generic_64.kernel/stats/timeline?dates=2014-02-28+to+2038-01-19
+[v2.0 downloads]: https://sourceforge.net/projects/gary-os/files/gary-os-v2.0-generic_64.kernel/stats/timeline?dates=2014-02-28+to+2038-01-19
+[v1.1 downloads]: https://sourceforge.net/projects/gary-os/files/gary-os-v1.1-generic_64.kernel/stats/timeline?dates=2014-02-28+to+2038-01-19
+[v1.0 downloads]: https://sourceforge.net/projects/gary-os/files/gary-os-v1.0-generic_64.kernel/stats/timeline?dates=2014-02-28+to+2038-01-19
 
 [Gentoo family tree]: https://github.com/gentoo/gentoo-ecosystem
 [Funtoo ecosystem page]: https://funtoo.org/Gentoo_Ecosystem
@@ -1171,20 +1171,20 @@ Instructions for installing to disk:
 # Version History ##############################################################
 [Version History]: #version-history
 
-[64-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v3.0.kernel
-[32-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v3.0.kernel
+[64-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-v3.0-generic_64.kernel
+[32-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-v3.0-generic_32.kernel
 [Packages]: https://github.com/garybgenett/gary-os/blob/v3.0/_packages.64
-[Notes]: #2015-03-16-v30-21811b59a8484b2a6b73e0c5277f23c50a0141dc0
+[Notes]: #2015-03-16-v30
 
 [v5.0]: https://github.com/garybgenett/gary-os/commits/master
 
-## 2015-03-16 v3.0 21811b59a8484b2a6b73e0c5277f23c50a0141dc.0 ##################
-[2015-03-16 v3.0 21811b59a8484b2a6b73e0c5277f23c50a0141dc.0]: #2015-03-16-v30-21811b59a8484b2a6b73e0c5277f23c50a0141dc0
-[v3.0]: #2015-03-16-v30-21811b59a8484b2a6b73e0c5277f23c50a0141dc0
+## 2015-03-16 v3.0 #############################################################
+[2015-03-16 v3.0]: #2015-03-16-v30
+[v3.0]: #2015-03-16-v30
 
   * Files: [Readme](https://github.com/garybgenett/gary-os/blob/v3.0/README.md), [License](https://github.com/garybgenett/gary-os/blob/v3.0/LICENSE.md), [Packages (64-bit)](https://github.com/garybgenett/gary-os/blob/v3.0/_packages.64), [Packages (32-bit)](https://github.com/garybgenett/gary-os/blob/v3.0/_packages.32)
-    * Kernel (64-bit): [gary-os-generic_64-funtoo-stable-v3.0.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v3.0.kernel)
-    * Kernel (32-bit): [gary-os-generic_32-funtoo-stable-v3.0.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v3.0.kernel)
+    * Kernel (64-bit): [gary-os-v3.0-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v3.0-generic_64.kernel)
+    * Kernel (32-bit): [gary-os-v3.0-generic_32.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v3.0-generic_32.kernel)
     * Grub: [grub.sh](https://github.com/garybgenett/gary-os/blob/v3.0/scripts/grub.sh)
     * Source Stage3: [stage3-core2_64-funtoo-stable-2015-01-27.tar.xz](https://sourceforge.net/projects/gary-os/files/v3.0/stage3-core2_64-funtoo-stable-2015-01-27.tar.xz)
     * Source Portage: [portage-21811b59a8484b2a6b73e0c5277f23c50a0141dc.0.tar.xz](https://sourceforge.net/projects/gary-os/files/v3.0/portage-21811b59a8484b2a6b73e0c5277f23c50a0141dc.0.tar.xz)
@@ -1205,13 +1205,13 @@ Instructions for installing to disk:
     * Added additional input drivers, for touch devices
     * Added helper packages for networking and basic X.Org GUI scripting
 
-## 2014-06-19 v2.0 873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d.0 ##################
-[2014-06-19 v2.0 873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d.0]: #2014-06-19-v20-873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d0
-[v2.0]: #2014-06-19-v20-873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d0
+## 2014-06-19 v2.0 #############################################################
+[2014-06-19 v2.0]: #2014-06-19-v20
+[v2.0]: #2014-06-19-v20
 
   * Files: [Readme](https://github.com/garybgenett/gary-os/blob/v2.0/README.md), [License](https://github.com/garybgenett/gary-os/blob/v2.0/LICENSE.md) , [Packages (64-bit)](https://github.com/garybgenett/gary-os/blob/v2.0/_packages.64), [Packages (32-bit)](https://github.com/garybgenett/gary-os/blob/v2.0/_packages.32)
-    * 64-bit kernel: [gary-os-generic_64-funtoo-stable-v2.0.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v2.0.kernel)
-    * 32-bit kernel: [gary-os-generic_32-funtoo-stable-v2.0.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v2.0.kernel)
+    * 64-bit kernel: [gary-os-v2.0-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v2.0-generic_64.kernel)
+    * 32-bit kernel: [gary-os-v2.0-generic_32.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v2.0-generic_32.kernel)
     * Grub: [grub.sh](https://github.com/garybgenett/gary-os/blob/v2.0/scripts/grub.sh)
     * Source Stage3: [stage3-core2_64-funtoo-stable-2014-01-13.tar.xz](https://sourceforge.net/projects/gary-os/files/v2.0/stage3-core2_64-funtoo-stable-2014-01-13.tar.xz)
     * Source Portage: [portage-873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d.0.tar.xz](https://sourceforge.net/projects/gary-os/files/v2.0/portage-873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d.0.tar.xz)
@@ -1250,13 +1250,13 @@ Instructions for installing to disk:
         section for information on loading up and using the graphical
         environment).
 
-## 2014-03-13 v1.1 95ad4fd257697618bae7402d4bc3a27499035d30.4 ##################
-[2014-03-13 v1.1 95ad4fd257697618bae7402d4bc3a27499035d30.4]: #2014-03-13-v11-95ad4fd257697618bae7402d4bc3a27499035d304
-[v1.1]: #2014-03-13-v11-95ad4fd257697618bae7402d4bc3a27499035d304
+## 2014-03-13 v1.1 #############################################################
+[2014-03-13 v1.1]: #2014-03-13-v11
+[v1.1]: #2014-03-13-v11
 
   * Files: [Readme](https://github.com/garybgenett/gary-os/blob/v1.1/README), [License](https://github.com/garybgenett/gary-os/blob/v1.1/LICENSE)
-    * 64-bit kernel: [gary-os-generic_64-funtoo-stable-v1.1.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v1.1.kernel)
-    * 32-bit kernel: [gary-os-generic_32-funtoo-stable-v1.1.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v1.1.kernel)
+    * 64-bit kernel: [gary-os-v1.1-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v1.1-generic_64.kernel)
+    * 32-bit kernel: [gary-os-v1.1-generic_32.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v1.1-generic_32.kernel)
     * Grub: [grub.sh](https://github.com/garybgenett/gary-os/blob/v1.1/scripts/grub.sh)
     * Source Stage3: [stage3-core2_64-funtoo-stable-2014-01-13.tar.xz](https://sourceforge.net/projects/gary-os/files/v1.1/stage3-core2_64-funtoo-stable-2014-01-13.tar.xz)
     * Source Portage: [portage-95ad4fd257697618bae7402d4bc3a27499035d30.4.tar.xz](https://sourceforge.net/projects/gary-os/files/v1.1/portage-95ad4fd257697618bae7402d4bc3a27499035d30.4.tar.xz)
@@ -1268,13 +1268,13 @@ Instructions for installing to disk:
   * Funtoo configuration
     * Miscellaneous package changes
 
-## 2014-02-28 v1.0 95ad4fd257697618bae7402d4bc3a27499035d30.3 ##################
-[2014-02-28 v1.0 95ad4fd257697618bae7402d4bc3a27499035d30.3]: #2014-02-28-v10-95ad4fd257697618bae7402d4bc3a27499035d303
-[v1.0]: #2014-02-28-v10-95ad4fd257697618bae7402d4bc3a27499035d303
+## 2014-02-28 v1.0 #############################################################
+[2014-02-28 v1.0]: #2014-02-28-v10
+[v1.0]: #2014-02-28-v10
 
   * Files: [Readme](https://github.com/garybgenett/gary-os/blob/v1.0/README)
-    * 64-bit kernel: [gary-os-generic_64-funtoo-stable-v1.0.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-generic_64-funtoo-stable-v1.0.kernel)
-    * 32-bit kernel: [gary-os-generic_32-funtoo-stable-v1.0.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-generic_32-funtoo-stable-v1.0.kernel)
+    * 64-bit kernel: [gary-os-v1.0-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v1.0-generic_64.kernel)
+    * 32-bit kernel: [gary-os-v1.0-generic_32.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v1.0-generic_32.kernel)
     * Source Stage3: [stage3-core2_64-funtoo-stable-2014-01-13.tar.xz](https://sourceforge.net/projects/gary-os/files/v1.0/stage3-core2_64-funtoo-stable-2014-01-13.tar.xz)
     * Source Portage: [portage-95ad4fd257697618bae7402d4bc3a27499035d30.3.tar.xz](https://sourceforge.net/projects/gary-os/files/v1.0/portage-95ad4fd257697618bae7402d4bc3a27499035d30.3.tar.xz)
   * Metro script
@@ -1288,12 +1288,12 @@ Instructions for installing to disk:
   * Funtoo configuration
     * Commented packages that broke during 32-bit build
 
-## 2014-02-24 v0.3 95ad4fd257697618bae7402d4bc3a27499035d30.2 ##################
-[2014-02-24 v0.3 95ad4fd257697618bae7402d4bc3a27499035d30.2]: #2014-02-24-v03-95ad4fd257697618bae7402d4bc3a27499035d302
-[v0.3]: #2014-02-24-v03-95ad4fd257697618bae7402d4bc3a27499035d302
+## 2014-02-24 v0.3 #############################################################
+[2014-02-24 v0.3]: #2014-02-24-v03
+[v0.3]: #2014-02-24-v03
 
   * Files
-    * 64-bit kernel: [gary-os-core2_64-funtoo-stable-v0.3.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-core2_64-funtoo-stable-v0.3.kernel)
+    * 64-bit kernel: [gary-os-v0.3-core2_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v0.3-core2_64.kernel)
     * Source Stage3: [stage3-core2_64-funtoo-stable-2014-01-13.tar.xz](https://sourceforge.net/projects/gary-os/files/v0.3/stage3-core2_64-funtoo-stable-2014-01-13.tar.xz)
     * Source Portage: [portage-95ad4fd257697618bae7402d4bc3a27499035d30.2.tar.xz](https://sourceforge.net/projects/gary-os/files/v0.3/portage-95ad4fd257697618bae7402d4bc3a27499035d30.2.tar.xz)
   * Metro script
@@ -1307,13 +1307,13 @@ Instructions for installing to disk:
     * Completely removed X, Java and TeX Live / LaTeX
     * Added sound and miscellaneous media packages
 
-## 2014-02-13 v0.2 95ad4fd257697618bae7402d4bc3a27499035d30.1 ##################
-[2014-02-13 v0.2 95ad4fd257697618bae7402d4bc3a27499035d30.1]: #2014-02-13-v02-95ad4fd257697618bae7402d4bc3a27499035d301
-[v0.2]: #2014-02-13-v02-95ad4fd257697618bae7402d4bc3a27499035d301
+## 2014-02-13 v0.2 #############################################################
+[2014-02-13 v0.2]: #2014-02-13-v02
+[v0.2]: #2014-02-13-v02
 
   * Files
-    * 64-bit kernel: [gary-os-core2_64-funtoo-stable-v0.2.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-core2_64-funtoo-stable-v0.2.kernel)
-    * 64-bit initrd: [gary-os-core2_64-funtoo-stable-v0.2.initrd](https://sourceforge.net/projects/gary-os/files/gary-os-core2_64-funtoo-stable-v0.2.initrd)
+    * 64-bit kernel: [gary-os-v0.2-core2_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v0.2-core2_64.kernel)
+    * 64-bit initrd: [gary-os-v0.2-core2_64.initrd](https://sourceforge.net/projects/gary-os/files/gary-os-v0.2-core2_64.initrd)
     * Source Stage3: [stage3-core2_64-funtoo-stable-2014-01-13.tar.xz](https://sourceforge.net/projects/gary-os/files/v0.2/stage3-core2_64-funtoo-stable-2014-01-13.tar.xz)
     * Source Portage: [portage-95ad4fd257697618bae7402d4bc3a27499035d30.1.tar.xz](https://sourceforge.net/projects/gary-os/files/v0.2/portage-95ad4fd257697618bae7402d4bc3a27499035d30.1.tar.xz)
   * Metro script
@@ -1322,13 +1322,13 @@ Instructions for installing to disk:
     * Added packages from Grml and SystemRescueCD package lists
     * Enabled `gpm` USE flag
 
-## 2014-02-09 v0.1 95ad4fd257697618bae7402d4bc3a27499035d30.0 ##################
-[2014-02-09 v0.1 95ad4fd257697618bae7402d4bc3a27499035d30.0]: #2014-02-09-v01-95ad4fd257697618bae7402d4bc3a27499035d300
-[v0.1]: #2014-02-09-v01-95ad4fd257697618bae7402d4bc3a27499035d300
+## 2014-02-09 v0.1 #############################################################
+[2014-02-09 v0.1]: #2014-02-09-v01
+[v0.1]: #2014-02-09-v01
 
   * Files
-    * 64-bit kernel: [gary-os-core2_64-funtoo-stable-v0.1.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-core2_64-funtoo-stable-v0.1.kernel)
-    * 32-bit initrd: [gary-os-core2_64-funtoo-stable-v0.1.initrd](https://sourceforge.net/projects/gary-os/files/gary-os-core2_64-funtoo-stable-v0.1.initrd)
+    * 64-bit kernel: [gary-os-v0.1-core2_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v0.1-core2_64.kernel)
+    * 32-bit initrd: [gary-os-v0.1-core2_64.initrd](https://sourceforge.net/projects/gary-os/files/gary-os-v0.1-core2_64.initrd)
     * Source Stage3: [stage3-core2_64-funtoo-stable-2014-01-13.tar.xz](https://sourceforge.net/projects/gary-os/files/v0.1/stage3-core2_64-funtoo-stable-2014-01-13.tar.xz)
     * Source Portage: [portage-95ad4fd257697618bae7402d4bc3a27499035d30.0.tar.xz](https://sourceforge.net/projects/gary-os/files/v0.1/portage-95ad4fd257697618bae7402d4bc3a27499035d30.0.tar.xz)
   * Metro script
