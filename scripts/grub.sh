@@ -155,6 +155,8 @@ set timeout=-1
 
 # modules
 
+insmod all_video
+
 insmod fat
 insmod exfat
 insmod ext2
@@ -320,8 +322,11 @@ declare MODULES_LIST="$(
 		-e "[/]bsd" \
 		-e "[/]btrfs" \
 		-e "[/]cbfs" \
+		-e "[/]efiemu" \
 		-e "[/]freedos" \
+		-e "[/]functional_test" \
 		-e "[/]gcry" \
+		-e "[/]gdb" \
 		-e "[/]geli" \
 		-e "[/]gettext" \
 		-e "[/]gfx" \
@@ -337,6 +342,9 @@ declare MODULES_LIST="$(
 		-e "[/]mda" \
 		-e "[/]minix" \
 		-e "[/]morse" \
+		-e "[/]mpi" \
+		-e "[/]multiboot" \
+		-e "[/]multiboot2" \
 		-e "[/]named-colors" \
 		-e "[/]net" \
 		-e "[/]nilfs2" \
@@ -362,6 +370,7 @@ declare MODULES_LIST="$(
 		-e "[/]sfs" \
 		-e "[/]spkmodem" \
 		-e "[/]squash" \
+		-e "[/]syslinuxcfg" \
 		-e "[/]terminfo" \
 		-e "[/]testspeed" \
 		-e "[/]tga" \
