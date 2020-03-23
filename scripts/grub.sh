@@ -25,7 +25,7 @@ declare SHMEM="3000m"
 
 declare GDEST="$(realpath ${1} 2>/dev/null)"
 if [[ ! -d ${GDEST} ]]; then
-	GDEST="[...]"
+	GDEST="{directory}"
 fi
 shift
 
@@ -533,7 +533,7 @@ function exit_summary {
 
 ################################################################################
 
-${RM} ${GDEST}/*					|| exit 1
+#>>>${RM} ${GDEST}/*					|| exit 1
 
 ${MKDIR} ${GDEST}/_${GTYPE}				|| exit 1
 ${RSYNC_U} ${GMODS}/ ${GDEST}/_${GTYPE}/		|| exit 1
@@ -584,7 +584,7 @@ if [[ -b ${GINST_DO} ]]; then
 	fi
 	custom_menu ${GINST_DO}				|| exit 1
 else
-	dd \
+	$(which dd) \
 		status=progress \
 		bs=${BLOCKS_SIZE} \
 		count=${LOOP_BLOCKS} \
