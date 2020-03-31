@@ -3630,6 +3630,7 @@ function task-export-text {
 			"work.cn"	=> "brown",
 			"work.em"	=> "brown",
 			"work.f5"	=> "brown",
+			"work.hs"	=> "brown",
 			"work.jb"	=> "brown",
 			"work.me"	=> "brown",
 			"work.tk"	=> "brown",
