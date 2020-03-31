@@ -2821,7 +2821,10 @@ function scrcpy {
 	if ${HLP}; then
 		cd /.g/_data/_build/other/scrcpy && ./run x --help 2>&1 | ${PAGER}
 	else
-		cd /.g/_data/_build/other/scrcpy && ./run x "${@}"
+		# https://github.com/Genymobile/scrcpy/issues/975#issuecomment-560373096
+		# https://github.com/Genymobile/scrcpy/issues/951
+#>>>		cd /.g/_data/_build/other/scrcpy && ./run x --prefer-text --port=27183:27184 "${@}"
+		cd /.g/_data/_build/other/scrcpy && ./run x --prefer-text "${@}"
 	fi
 	return 0
 }
