@@ -2794,6 +2794,7 @@ function chroma {
 
 # https://github.com/Genymobile/scrcpy
 # 2019-08-14 22:24:26 +0200 da5b0ec0d59a9da591507cbb7b5d19f55b76c35c Improve FAQ
+# 2020-04-07 22:52:14 +0200 cdd8edbbb68d6cecdced5036d8e3a3c8583ac512 Add a note about prebuilt server in BUILD.md  (HEAD -> master, origin/master, origin/HEAD)
 function scrcpy {
 	declare VER="master"
 	declare BLD="false"
