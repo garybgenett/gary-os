@@ -3280,14 +3280,32 @@ function task-export-calendar {
 #>>>		"c|export.orion:dHJlc29iaXMub3JnX2FiZm9wc3UxdHZmNDRiYzBqZTdtZHFzNmNvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
 #>>>		"c|export.present:dHJlc29iaXMub3JnX28zZHBwNWNzbmIzaG1ocGV2czMxZDJrZGlvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
 #>>>		"c|export.past:dHJlc29iaXMub3JnX3RoYTF1cjFnbzJpZDRlZGxkZHRnOW90YzlvQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20" \
-	gcalendar_export.pl \
-		"c|export.gtd:tresobis.org_1fcog23c1a099apgju9o7vfm18@group.calendar.google.com" \
-		"c|export.default:gary@tresobis.org" \
-		"c|export.personal:tresobis.org_g8v0pktsnt84eots8hkijtsjvg@group.calendar.google.com" \
-		"c|export.orion:tresobis.org_abfopsu1tvf44bc0je7mdqs6co@group.calendar.google.com" \
-		"c|export.present:tresobis.org_o3dpp5csnb3hmhpevs31d2kdio@group.calendar.google.com" \
-		"c|export.past:tresobis.org_tha1ur1go2id4edlddtg9otc9o@group.calendar.google.com" \
-		${@}
+#>>>	gcalendar_export.pl \
+#>>>		"c|export.gtd:tresobis.org_1fcog23c1a099apgju9o7vfm18@group.calendar.google.com" \
+#>>>		"c|export.default:gary@tresobis.org" \
+#>>>		"c|export.personal:tresobis.org_g8v0pktsnt84eots8hkijtsjvg@group.calendar.google.com" \
+#>>>		"c|export.orion:tresobis.org_abfopsu1tvf44bc0je7mdqs6co@group.calendar.google.com" \
+#>>>		"c|export.present:tresobis.org_o3dpp5csnb3hmhpevs31d2kdio@group.calendar.google.com" \
+#>>>		"c|export.past:tresobis.org_tha1ur1go2id4edlddtg9otc9o@group.calendar.google.com" \
+#>>>		${@}
+	for FILE in \
+		"|export.gtd:tresobis.org_1fcog23c1a099apgju9o7vfm18@group.calendar.google.com" \
+		"|export.default:gary@tresobis.org" \
+		"|export.personal:tresobis.org_g8v0pktsnt84eots8hkijtsjvg@group.calendar.google.com" \
+		"|export.orion:tresobis.org_abfopsu1tvf44bc0je7mdqs6co@group.calendar.google.com" \
+		"|export.present:tresobis.org_o3dpp5csnb3hmhpevs31d2kdio@group.calendar.google.com" \
+		"|export.past:tresobis.org_tha1ur1go2id4edlddtg9otc9o@group.calendar.google.com" \
+		"highspot|static.highspot:gary.genett@highspot.com" \
+	; do
+		declare PROF="$(echo "${FILE}" | ${SED} "s/^(.*)[|](.+)$/\1/g")"
+		declare GCAL="$(echo "${FILE}" | ${SED} "s/^(.*)[|](.+)$/\2/g")"
+		declare CNAM="$(echo "${GCAL}" | ${SED} "s/^(.+)[:](.+)$/\1/g")"
+		declare CSRC="$(echo "${GCAL}" | ${SED} "s/^(.+)[:](.+)$/\2/g")"
+		declare ACCS="$(oauth2.sh ${PROF} -c)"
+		${WGET_C} --output-document \
+			${PIMDIR}/calendar-${CNAM}.ics \
+			"https://apidata.googleusercontent.com/caldav/v2/${CSRC}/events?access_token=${ACCS}"
+	done
 	${WGET_C} --output-document \
 		${PIMDIR}/calendar-export.doodle.ics \
 		https://doodle.com/ics/mydoodle/j4afu5q0krixfr0gfm1iltcnl1rdpry9.ics
