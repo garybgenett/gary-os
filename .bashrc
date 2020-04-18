@@ -361,6 +361,8 @@ export RDP="rdesktop -z -n NULL -g 1024x768 -a 24 -r sound:remote"		; alias rdp=
 export VNC="vncviewer -Shared -FullColor"					; alias vnc="${VNC}"
 export X2VNC="x2vnc -west -tunnel -shared -noblank -lockdelay 60 -timeout 60"	; alias x2vnc="${X2VNC}"
 
+export VLC="vlc --intf ncurses --no-color"					; alias vlc-c="${VLC}"
+
 ########################################
 
 export UNISON="/.g/_data/+unison"
@@ -542,7 +544,6 @@ alias smount="_sync mount"
 alias tasker="prompt -x +task"
 alias torrent="rtorrent -n -s ."
 alias trust="_sync archive"
-alias vlc-c="vlc --intf ncurses --no-color" #>>> --fullscreen
 alias vlc-help="vlc-c --help --full-help --longhelp --advanced 2>&1 | ${MORE}"
 alias vlc-play="vlc-c ${HOME}/setup/_misc/playlist.m3u"
 alias web="w3m https://www.google.com"
@@ -4613,6 +4614,30 @@ function task-track {
 			system("${ENV{GREP}} \"uuid:\\\"${uuid}\\\"\" \"${file}\"");
 		};
 	' -- "${@}" || return 1
+	return 0
+}
+
+########################################
+
+function vlc-do {
+	declare REDSHIFT="off"
+	if [[ ${1} == red ]]; then
+		REDSHIFT="on"
+	fi
+	prompt -d -x
+	(_menu redshift/${REDSHIFT} &)
+	(_menu relieve/off &)
+	(_menu realize/off &)
+	(_menu xlock/off &)
+	(_menu xvnc/on &)
+	psk xlock -9
+	${VLC} "${@}"
+	(_menu redshift/on &)
+	(_menu relieve/on &)
+	(_menu realize/on &)
+	(_menu xlock/on &)
+	(_menu xvnc/on &)
+	(_menu retreat &)
 	return 0
 }
 
