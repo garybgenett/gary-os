@@ -3362,6 +3362,10 @@ function task-export-drive {
 
 function task-export-drive-sync {
 	${RCLONE_U} \
+		${GDRIVE_REMOTE}-highspot: \
+		/.g/_data/zactive/data.highspot
+	${RCLONE_C} about ${GDRIVE_REMOTE}-highspot:
+	${RCLONE_U} \
 		--filter="- /_share/" \
 		--filter="- /_sync/" \
 		\
