@@ -2986,9 +2986,14 @@ function task-depends {
 		};
 		my $init_deep = "0";
 		my $do_report = "0";
+		my $all_tasks = "0";
 		my $print_all = "0";
 		if (($ARGV[0]) && ($ARGV[0] eq "-r")) {
 			$do_report = $ARGV[0];
+			shift();
+		};
+		if (($ARGV[0]) && ($ARGV[0] eq "-t")) {
+			$all_tasks = $ARGV[0];
 			shift();
 		};
 		if (($ARGV[0]) && ($ARGV[0] eq "-a")) {
@@ -3116,62 +3121,64 @@ function task-depends {
 					"description"	=> "DESCRIPTION",
 				};
 			};
-			print "| "; printf("%-${c_uid}.${c_uid}s", $task->{"uuid"});
-			if (${do_report}) {
-				print " | "; printf("%-" . $c_fld->{"project"}	. "." . $c_fld->{"project"}	. "s", $task->{"project"} || "-");
-				print " | "; printf("%-" . $c_fld->{"tags"}	. "." . $c_fld->{"tags"}	. "s", (
-					(ref($task->{"tags"}) eq "ARRAY") ?
-					(join(" ", @{$task->{"tags"}}) || "-") :
-					($task->{"tags"} || "-")
-					)
-				);
-				print " | "; printf("%-" . $c_fld->{"priority"}	. "." . $c_fld->{"priority"}	. "s", $task->{"priority"} || "-");
-				my $due = (&do_time($task->{"due"}) || "-");
-				my $end = (&do_time($task->{"end"}) || "-"); if ($task->{"status"} eq "deleted") { $end = "~~" . ${end} . "~~"; };
-				print " | "; printf("%-${c_dat}.${c_dat}s", ${due});
-				print " | "; printf("%-${c_dat}.${c_dat}s", ${end});
-			} else {
-				print " | "; printf("%-" . $c_fld->{"id"}	. "." . $c_fld->{"id"}		. "s", $task->{"id"} || "-");
-				print " | "; printf("%-" . $c_fld->{"project"}	. "." . $c_fld->{"project"}	. "s", $task->{"project"} || "-");
-			};
-			if (${deep} >= 0) {
-				if (${deep} == 0) {	print " | ";
-				} else {		print " | " . (". " x ${deep}) . "${deep} ";
-				};
-			} else {
-				if (${deep} == -1) {	print " | - ";
-				} else {		print " | - " . ("- " x (abs(${deep}) - 1)) . (abs(${deep}) - 1) . " ";
-				};
-			};
-			my $title = $task->{"description"};
-			if (exists($task->{"kind"}))		{ $title = "[" . $task->{"kind"} . "] " . ${title}; };
-			if (
-				(!$filt->{$uuid}) &&
-				($task->{"status"} ne "HEADER")
-			)					{ $title = "\`" . ${title} . "\`"; };
-			if (
-				($task->{"status"} ne "HEADER") &&
-				($task->{"status"} ne "pending")
-			)					{ $title = "~~" . ${title} . "~~"; };
-			if ((
-				(exists($task->{"priority"})) ||
-				(exists($task->{"due"}))
-			) && (
-				($task->{"status"} ne "HEADER")
-			))					{ $title = "**" . ${title} . "**"; };
-			if (${do_report}) {
-				print ${title} . "\n";
-			} else {
-				if ($task->{"status"} eq "HEADER") {
-					print $task->{"description"} . "\n";
+			if ((${all_tasks}) || ($task->{"status"} eq "pending")) {
+				print "| "; printf("%-${c_uid}.${c_uid}s", $task->{"uuid"});
+				if (${do_report}) {
+					print " | "; printf("%-" . $c_fld->{"project"}	. "." . $c_fld->{"project"}	. "s", $task->{"project"} || "-");
+					print " | "; printf("%-" . $c_fld->{"tags"}	. "." . $c_fld->{"tags"}	. "s", (
+						(ref($task->{"tags"}) eq "ARRAY") ?
+						(join(" ", @{$task->{"tags"}}) || "-") :
+						($task->{"tags"} || "-")
+						)
+					);
+					print " | "; printf("%-" . $c_fld->{"priority"}	. "." . $c_fld->{"priority"}	. "s", $task->{"priority"} || "-");
+					my $due = (&do_time($task->{"due"}) || "-");
+					my $end = (&do_time($task->{"end"}) || "-"); if ($task->{"status"} eq "deleted") { $end = "~~" . ${end} . "~~"; };
+					print " | "; printf("%-${c_dat}.${c_dat}s", ${due});
+					print " | "; printf("%-${c_dat}.${c_dat}s", ${end});
 				} else {
-					my $do_report_command = "task";
-					$do_report_command .= " rc.verbose=";
-					$do_report_command .= " rc.report.skim.columns=description.count";
-					$do_report_command .= " rc.report.skim.labels=DESCRIPTION";
-					$do_report_command .= " skim";
-					$do_report_command .= " " . $task->{"uuid"};
-					system(${do_report_command});
+					print " | "; printf("%-" . $c_fld->{"id"}	. "." . $c_fld->{"id"}		. "s", $task->{"id"} || "-");
+					print " | "; printf("%-" . $c_fld->{"project"}	. "." . $c_fld->{"project"}	. "s", $task->{"project"} || "-");
+				};
+				if (${deep} >= 0) {
+					if (${deep} == 0) {	print " | ";
+					} else {		print " | " . (". " x ${deep}) . "${deep} ";
+					};
+				} else {
+					if (${deep} == -1) {	print " | - ";
+					} else {		print " | - " . ("- " x (abs(${deep}) - 1)) . (abs(${deep}) - 1) . " ";
+					};
+				};
+				my $title = $task->{"description"};
+				if (exists($task->{"kind"}))		{ $title = "[" . $task->{"kind"} . "] " . ${title}; };
+				if (
+					(!$filt->{$uuid}) &&
+					($task->{"status"} ne "HEADER")
+				)					{ $title = "\`" . ${title} . "\`"; };
+				if (
+					($task->{"status"} ne "HEADER") &&
+					($task->{"status"} ne "pending")
+				)					{ $title = "~~" . ${title} . "~~"; };
+				if ((
+					(exists($task->{"priority"})) ||
+					(exists($task->{"due"}))
+				) && (
+					($task->{"status"} ne "HEADER")
+				))					{ $title = "**" . ${title} . "**"; };
+				if (${do_report}) {
+					print ${title} . "\n";
+				} else {
+					if ($task->{"status"} eq "HEADER") {
+						print $task->{"description"} . "\n";
+					} else {
+						my $do_report_command = "task";
+						$do_report_command .= " rc.verbose=";
+						$do_report_command .= " rc.report.skim.columns=description.count";
+						$do_report_command .= " rc.report.skim.labels=DESCRIPTION";
+						$do_report_command .= " skim";
+						$do_report_command .= " " . $task->{"uuid"};
+						system(${do_report_command});
+					};
 				};
 			};
 			if (${deep} >= 0) {
@@ -4428,15 +4435,20 @@ function task-notes {
 ########################################
 
 function task-project {
+	declare ARGS=
 	declare PROJ=
+	if [[ ${1} == -r ]]; then ARGS+=" ${1}" && shift; fi
+	if [[ ${1} == -t ]]; then ARGS+=" ${1}" && shift; fi
+	if [[ ${1} == -a ]]; then ARGS+=" ${1}" && shift; fi
 	for PROJ in "${@}"; do
 		if [[ ${PROJ} == - ]]; then
 			PROJ=" status:pending"
 		fi
-#>>>		task read	project.is:${PROJ} -PARENT -CHILD
-#>>>		task-depends -r	project.is:${PROJ} -PARENT -CHILD
-		task-depends	project.is:${PROJ} -PARENT -CHILD
-		task look	project.is:${PROJ} -PARENT -CHILD
+		if [[ ${ARGS} == *(*)-r*(*) ]]; then
+			task read	project.is:${PROJ} -PARENT -CHILD
+		fi
+		task-depends	${ARGS}	project.is:${PROJ} -PARENT -CHILD
+		task look		project.is:${PROJ} -PARENT -CHILD
 	done
 	return 0
 }
