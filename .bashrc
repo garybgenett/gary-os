@@ -3966,7 +3966,7 @@ function task-export-text {
 			while (${output} =~ m/(^|\s+)\[TASKLIST[ ]?([^]]*)?\]/gms) {
 				my $project = ${2} || $task->{"project"};
 				warn("EXPORTING TASKLIST[${project}]");
-				my $tasklist = qx(.bashrc task-depends -r project.is:${project});
+				my $tasklist = qx(.bashrc task-depends -r -t project.is:${project});
 				$tasklist =~ s/^\n*/<!-- TASKLIST[${project}] -->\n/g;
 				$tasklist =~ s/[\s\n]*$//g;
 				$output =~ s/([^\s]+)\s+(\[TASKLIST[ ]?([^]]*)?\])$/${1}\n\n${2}\n/ms;
@@ -4197,7 +4197,7 @@ function task-export-text {
 	' -- "${NAME}" "${@}" || return 1
 	echo -en "\n"			>>tasks.md
 	echo -en "<!--\n"		>>tasks.md
-	task-depends -r +BLOCKED	>>tasks.md
+	task-depends -r -t +BLOCKED	>>tasks.md
 	echo -en "-->\n"		>>tasks.md
 	${GREP} "[-][-][ ]TASK"		tasks.md
 	${SED} -n "s/^#+ //gp"		tasks.md |
