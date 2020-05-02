@@ -958,6 +958,27 @@ function enc-sshfs {
 
 ########################################
 
+function enc-status {
+	declare CMD="ssh -o LogLevel=INFO ${ENCFS_HOST:-ssh@example.net}"
+	declare ZFS="./.zfs ./.zfs/snapshot"
+	echo -en "\n"
+	${CMD} "pwd" || return 1
+	echo -en "\n"
+	${CMD} "quota" 2>/dev/null
+	echo -en "\n"
+	for FILE in \
+		${ZFS} \
+		$(${CMD} "find ./ -mindepth 1 -maxdepth 2 -type d" 2>/dev/null | sort)
+	do
+		${CMD} "du -ms ${FILE/#.\/}" 2>/dev/null
+	done
+	echo -en "\n"
+	${CMD} "ls -la ./ ./.ssh ${ZFS}" 2>/dev/null
+	return 0
+}
+
+########################################
+
 function filter {
 	declare TABLE=
 	for TABLE in \
