@@ -889,7 +889,7 @@ function enc-fs {
 	else
 		OUT="$(gpg --decrypt ${ENCFS_FILE} 2>/dev/null)"
 	fi
-	fusermount -u ${DST} 2>/dev/null
+	mount-robust -u ${DST}
 	(echo "${OUT}" | ${ENCFS} --stdinpass "${@}") &
 	sleep 1
 	if [[ -z $(${GREP} "encfs[ ]${DST}[ ]fuse.encfs" /proc/mounts) ]]; then
@@ -910,8 +910,8 @@ function enc-rsync {
 	${MKDIR} ${TMP}
 	enc-fs -f -o ro --reverse ${SRC} ${TMP} || return 1
 	${RSYNC_U} "${@}" ${TMP}/ ${DST}
-	fusermount -u ${TMP}
-	${RM} ${TMP}
+	mount-robust -u ${TMP} || return 1
+#>>>	${RM} ${TMP}
 	return 0
 }
 
@@ -940,7 +940,7 @@ function enc-sshfs {
 	declare TMP="/tmp/.${FUNCNAME}.$(basename ${DST})"
 	if ! ${UMT}; then
 		${MKDIR} ${TMP}
-		fusermount -u ${TMP} 2>/dev/null
+		mount-robust -u ${TMP}
 		(sshfs -f -o ${RWR} ${SRC} ${TMP}) &
 		sleep 1
 		if [[ -z $(${GREP} "${SRC}[ ]${TMP}[ ]fuse.sshfs" /proc/mounts) ]]; then
@@ -948,9 +948,9 @@ function enc-sshfs {
 		fi
 		enc-fs -f -o ${RWR} ${TMP}${DIR} ${DST} || return 1
 	else
-		fusermount -u ${DST}
-		fusermount -u ${TMP}
-		${RM} ${TMP}
+		mount-robust -u ${DST} || return 1
+		mount-robust -u ${TMP} || return 1
+#>>>		${RM} ${TMP}
 	fi
 	${GREP} "encfs" /proc/mounts
 	return 0
