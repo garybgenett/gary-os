@@ -917,6 +917,47 @@ function enc-rsync {
 
 ########################################
 
+function enc-sshfs {
+	declare RWR="ro"
+	if [[ ${1} == -r ]]; then
+		RWR="rw"
+		shift
+	fi
+	declare UMT="false"
+	if [[ ${1} == -u ]]; then
+		UMT="true"
+		shift
+	fi
+	declare SRC="${1}" && shift
+	declare DST="${1}" && shift
+	declare DIR=
+	if [[ ${1} == [+]+(*) ]]; then
+		DIR="/${1/#+}" && shift
+	fi
+	if [[ -z ${SRC} ]] || [[ -z ${DST} ]]; then
+		return 1
+	fi
+	declare TMP="/tmp/.${FUNCNAME}.$(basename ${DST})"
+	if ! ${UMT}; then
+		${MKDIR} ${TMP}
+		fusermount -u ${TMP} 2>/dev/null
+		(sshfs -f -o ${RWR} ${SRC} ${TMP}) &
+		sleep 1
+		if [[ -z $(${GREP} "${SRC}[ ]${TMP}[ ]fuse.sshfs" /proc/mounts) ]]; then
+			return 1
+		fi
+		enc-fs -f -o ${RWR} ${TMP}${DIR} ${DST} || return 1
+	else
+		fusermount -u ${DST}
+		fusermount -u ${TMP}
+		${RM} ${TMP}
+	fi
+	${GREP} "encfs" /proc/mounts
+	return 0
+}
+
+########################################
+
 function filter {
 	declare TABLE=
 	for TABLE in \
