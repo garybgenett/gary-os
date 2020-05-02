@@ -365,6 +365,20 @@ export VLC="vlc --intf ncurses --no-color"					; alias vlc-c="${VLC}"
 
 ########################################
 
+export ENCFS6_CONFIG="${ENCFS6_CONFIG:-/.g/_data/zactive/.static/.encfs/encfs6.master.xml}"
+export ENCFS_FILE="${ENCFS6_CONFIG/%xml/asc}"
+
+#>>>	--verbose \
+export ENCFS="encfs \
+	--nocache \
+	--standard \
+	--no-default-flags \
+	--idle=1"
+
+alias encfs="${ENCFS}"
+
+########################################
+
 export UNISON="/.g/_data/+unison"
 export UNISON_LOG="_log"
 
