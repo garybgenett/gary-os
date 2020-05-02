@@ -879,6 +879,27 @@ function email-copy {
 
 ########################################
 
+function enc-fs {
+	declare DST="${#}"; DST="${!DST}"
+	declare OUT=
+	if [[ ! -f ${ENCFS_FILE} ]]; then
+		echo -en "${FUNCNAME}: "
+		read -s OUT
+		echo -en "\n"
+	else
+		OUT="$(gpg --decrypt ${ENCFS_FILE} 2>/dev/null)"
+	fi
+	fusermount -u ${DST} 2>/dev/null
+	(echo "${OUT}" | ${ENCFS} --stdinpass "${@}") &
+	sleep 1
+	if [[ -z $(${GREP} "encfs[ ]${DST}[ ]fuse.encfs" /proc/mounts) ]]; then
+		return 1
+	fi
+	return 0
+}
+
+########################################
+
 function filter {
 	declare TABLE=
 	for TABLE in \
