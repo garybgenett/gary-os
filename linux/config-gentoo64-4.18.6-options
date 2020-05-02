@@ -39,6 +39,7 @@ Networking support								CONFIG_NET=y
 
 Device Drivers
 	Block devices								CONFIG_BLK_DEV=y
+		Loopback device support						CONFIG_BLK_DEV_LOOP=y
 		Virtio block driver						CONFIG_VIRTIO_BLK=y
 		SCSI passthrough request for the Virtio block driver		CONFIG_VIRTIO_BLK_SCSI=y
 	NVME Support
@@ -67,7 +68,7 @@ Device Drivers
 		RAID-10 (mirrored striping) mode				CONFIG_MD_RAID10=y
 		RAID-4/RAID-5/RAID-6 mode					CONFIG_MD_RAID456=y
 		Device mapper support						CONFIG_BLK_DEV_DM=y
-		Crypt target support						CONFIG_DM_CRYP=y
+		Crypt target support						CONFIG_DM_CRYPT=y
 		Snapshot target							CONFIG_DM_SNAPSHOT=y
 		Thin provisioning target (EXPERIMENTAL)				CONFIG_DM_THIN_PROVISIONING=y
 		Mirror target							CONFIG_DM_MIRROR=y
@@ -112,6 +113,14 @@ File systems
 		Ext4 Security Labels						CONFIG_EXT4_FS_SECURITY=y
 		Ext4 Encryption							CONFIG_EXT4_ENCRYPTION=y
 		EXT4 debugging support						CONFIG_EXT4_DEBUG=y
+	FUSE (Filesystem in Userspace) support					CONFIG_FUSE_FS=y
+	Overlay filesystem support						CONFIG_OVERLAY_FS=y
+	DOS/FAT/NT Filesystems
+		VFAT (Windows-95) fs support					CONFIG_VFAT_FS=y
+	Miscellaneous filesystems
+		SquashFS 4.0 - Squashed file system support			CONFIG_SQUASHFS=y
+		Squashfs XATTR support						CONFIG_SQUASHFS_XATTR=y
+		Include support for XZ compressed file systems			CONFIG_SQUASHFS_XZ=y
 
 Virtualization									CONFIG_VIRTUALIZATION=y
 	Kernel-based Virtual Machine (KVM) support				CONFIG_KVM=m
