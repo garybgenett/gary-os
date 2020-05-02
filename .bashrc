@@ -960,7 +960,7 @@ function enc-sshfs {
 
 function enc-status {
 	declare CMD="ssh -o LogLevel=INFO ${ENCFS_HOST:-ssh@example.net}"
-	declare ZFS="./.zfs ./.zfs/snapshot"
+	declare ZFS="./.zfs ./.zfs/snapshot ./.zfs/snapshot/*/.upload"
 	echo -en "\n"
 	${CMD} "pwd" || return 1
 	echo -en "\n"
