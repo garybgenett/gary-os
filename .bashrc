@@ -900,6 +900,23 @@ function enc-fs {
 
 ########################################
 
+function enc-rsync {
+	declare SRC="${1}" && shift
+	declare DST="${1}" && shift
+	if [[ -z ${SRC} ]] || [[ -z ${DST} ]]; then
+		return 1
+	fi
+	declare TMP="/tmp/.${FUNCNAME}.$(basename ${SRC})"
+	${MKDIR} ${TMP}
+	enc-fs -f -o ro --reverse ${SRC} ${TMP} || return 1
+	${RSYNC_U} "${@}" ${TMP}/ ${DST}
+	fusermount -u ${TMP}
+	${RM} ${TMP}
+	return 0
+}
+
+########################################
+
 function filter {
 	declare TABLE=
 	for TABLE in \
