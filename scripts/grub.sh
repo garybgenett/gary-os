@@ -144,6 +144,12 @@ declare GFILE="/boot/grub/grub.cfg"
 
 declare GCUST="${_BASE}.grub.cfg"
 
+declare GCDEV="${GINST}${GPSEP}${GPART}"
+if [[ ${GINST} == ${GIDEF} ]]; then
+#>>>	GCDEV="${GIBAK}${GPSEP}${GPART}"
+	GCDEV="${GIBAK}${GPART}"
+fi
+
 ########################################
 
 declare GMENU="\
@@ -215,7 +221,7 @@ menuentry \"${_PROJ} Boot\" {
 	boot
 }
 menuentry \"${_PROJ} Boot Rootfs\" {
-	linux (\${garyos_rootfs})/${_BASE}/${_BASE}.kernel${GOPTS:+ ${GOPTS}} shmem_size=${SHMEM} groot_hint=\${garyos_rootfs} groot_file=/${_BASE}/${_BASE}.rootfs groot=${GINST_DO}${GPSEP}${GPART}
+	linux (\${garyos_rootfs})/${_BASE}/${_BASE}.kernel${GOPTS:+ ${GOPTS}} shmem_size=${SHMEM} groot_hint=\${garyos_rootfs} groot_file=/${_BASE}/${_BASE}.rootfs groot=${GCDEV}
 	boot
 }
 
@@ -239,14 +245,7 @@ menuentry \"${_PROJ} Install Menu\" {
 	configfile (\${garyos_install})${GFILE}
 }
 menuentry \"${_PROJ} Install Boot\" {
-	linux (\${garyos_install})/boot/kernel root=$(
-		if [[ ${GINST} == ${GIDEF} ]]; then
-#>>>			echo -en "${GIBAK}${GPSEP}${GPART}"
-			echo -en "${GIBAK}${GPART}"
-		else
-			echo -en "${GINST}${GPSEP}${GPART}"
-		fi
-	)${GOPTS:+ ${GOPTS}}
+	linux (\${garyos_install})/boot/kernel root=${GCDEV}${GOPTS:+ ${GOPTS}}
 	initrd (\${garyos_install})/boot/initrd
 	boot
 }
