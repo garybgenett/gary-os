@@ -901,6 +901,11 @@ function enc-fs {
 ########################################
 
 function enc-rsync {
+	if [[ ${1} == -c ]]; then
+		shift
+		lsof | ${GREP} "^encfs" | ${GREP} "${@}"
+		return 0
+	fi
 	declare SRC="${1}" && shift
 	declare DST="${1}" && shift
 	if [[ -z ${SRC} ]] || [[ -z ${DST} ]]; then
