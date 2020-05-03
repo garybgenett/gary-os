@@ -890,7 +890,7 @@ function enc-fs {
 		OUT="$(gpg --decrypt ${ENCFS_FILE} 2>/dev/null)"
 	fi
 	mount-robust -u ${DST}
-	(echo "${OUT}" | ${ENCFS} --stdinpass "${@}") &
+	(echo "${OUT}" | ${ENCFS} -f --stdinpass "${@}") &
 	sleep 1
 	if [[ -z $(${GREP} "encfs[ ]${DST}[ ]fuse.encfs" /proc/mounts) ]]; then
 		return 1
@@ -908,7 +908,7 @@ function enc-rsync {
 	fi
 	declare TMP="/tmp/.${FUNCNAME}.$(basename ${SRC})"
 	${MKDIR} ${TMP}
-	enc-fs -f -o ro --reverse ${SRC} ${TMP}	|| return 1
+	enc-fs -o ro --reverse ${SRC} ${TMP}	|| return 1
 	${RSYNC_U} "${@}" ${TMP}/ ${DST}	|| return 1
 	mount-robust -u ${TMP}			|| return 1
 #>>>	${RM} ${TMP}
@@ -946,7 +946,7 @@ function enc-sshfs {
 		if [[ -z $(${GREP} "${SRC}[ ]${TMP}[ ]fuse.sshfs" /proc/mounts) ]]; then
 			return 1
 		fi
-		enc-fs -f -o ${RWR} ${TMP}${DIR} ${DST}	|| return 1
+		enc-fs -o ${RWR} ${TMP}${DIR} ${DST}	|| return 1
 	else
 		mount-robust -u ${DST}			|| return 1
 		mount-robust -u ${TMP}			|| return 1
