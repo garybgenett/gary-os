@@ -908,9 +908,9 @@ function enc-rsync {
 	fi
 	declare TMP="/tmp/.${FUNCNAME}.$(basename ${SRC})"
 	${MKDIR} ${TMP}
-	enc-fs -f -o ro --reverse ${SRC} ${TMP} || return 1
-	${RSYNC_U} "${@}" ${TMP}/ ${DST}
-	mount-robust -u ${TMP} || return 1
+	enc-fs -f -o ro --reverse ${SRC} ${TMP}	|| return 1
+	${RSYNC_U} "${@}" ${TMP}/ ${DST}	|| return 1
+	mount-robust -u ${TMP}			|| return 1
 #>>>	${RM} ${TMP}
 	return 0
 }
@@ -946,10 +946,10 @@ function enc-sshfs {
 		if [[ -z $(${GREP} "${SRC}[ ]${TMP}[ ]fuse.sshfs" /proc/mounts) ]]; then
 			return 1
 		fi
-		enc-fs -f -o ${RWR} ${TMP}${DIR} ${DST} || return 1
+		enc-fs -f -o ${RWR} ${TMP}${DIR} ${DST}	|| return 1
 	else
-		mount-robust -u ${DST} || return 1
-		mount-robust -u ${TMP} || return 1
+		mount-robust -u ${DST}			|| return 1
+		mount-robust -u ${TMP}			|| return 1
 #>>>		${RM} ${TMP}
 	fi
 	${GREP} "encfs" /proc/mounts
@@ -960,7 +960,7 @@ function enc-sshfs {
 
 function enc-status {
 	declare CMD="ssh -o LogLevel=INFO ${ENCFS_HOST:-ssh@example.net}"
-	declare ZFS="./.zfs ./.zfs/snapshot ./.zfs/snapshot/*/.upload"
+	declare ZFS="./.zfs ./.zfs/snapshot ./.zfs/snapshot/*/*.upload"
 	echo -en "\n"
 	${CMD} "pwd" || return 1
 	echo -en "\n"
