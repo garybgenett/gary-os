@@ -965,20 +965,23 @@ function enc-sshfs {
 
 function enc-status {
 	declare CMD="ssh -o LogLevel=INFO ${ENCFS_HOST:-ssh@example.net}"
-	declare ZFS="./.zfs ./.zfs/snapshot ./.zfs/snapshot/*/*.upload"
+	declare EDU="${1}" && shift
+	declare ELS="${1}" && shift
+	EDU+=" .zfs/snapshot/*"
+	ELS+=" .ssh .zfs .zfs/snapshot"
 	echo -en "\n"
 	${CMD} "pwd" || return 1
 	echo -en "\n"
 	${CMD} "quota" 2>/dev/null
 	echo -en "\n"
 	for FILE in \
-		${ZFS} \
-		$(${CMD} "find ./ -mindepth 1 -maxdepth 2 -type d" 2>/dev/null | sort)
+		${EDU} \
+		$(${CMD} "find ./ -mindepth 2 -maxdepth 2 -type d" 2>/dev/null | sort)
 	do
 		${CMD} "du -ms ${FILE/#.\/}" 2>/dev/null
 	done
 	echo -en "\n"
-	${CMD} "ls -la ./ ./.ssh ${ZFS}" 2>/dev/null
+	${CMD} "ls -la ./ ${ELS}" 2>/dev/null
 	return 0
 }
 
