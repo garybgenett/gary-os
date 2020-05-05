@@ -137,6 +137,7 @@ fi
 declare GROOT="hd0,${GPART}"
 declare GEFIS="x86_64-efi" #>>> i386-efi"
 declare GTYPE="i386-pc"
+declare GPXE="efinet0"
 
 declare GRUBD="/usr/lib/grub"
 declare GMODS="${GRUBD}/${GTYPE}"
@@ -249,6 +250,35 @@ menuentry \"${_PROJ} Install Boot\" {
 	initrd (\${garyos_install})/boot/initrd
 	boot
 }
+
+# pxe
+
+if [ \"\${net_default_interface}\" = \"${GPXE}\" ]; then
+	set default=7
+	set timeout=${TIMEOUT}
+
+	set garyos_server=\"\${net_${GPXE}_next_server}\"
+	set garyos_source=\"\${net_${GPXE}_rootpath}\"
+	set garyos_params=\"\${net_${GPXE}_dhcp_server_name}\"
+
+	if [ -z \"\${garyos_server}\" ]; then
+		set garyos_server=\"\${net_default_server}\"
+	fi
+	if [ -z \"\${garyos_source}\" ]; then
+		set garyos_source=\"/${_BASE}/${_BASE}.kernel\"
+	fi
+	#note: it would be nice if grub supported something like \"||\" for this...
+	if [ -z \"\${garyos_params}\" ]; then
+		set garyos_params=\"shmem_size=${SHMEM} groot_hint=(${GPXE}) groot_file=/${_BASE}/${_BASE}.rootfs groot=\${garyos_server}\"
+	elif [ \"\${garyos_server}\" = \"\${garyos_params}\" ]; then
+		set garyos_params=\"shmem_size=${SHMEM} groot_hint=(${GPXE}) groot_file=/${_BASE}/${_BASE}.rootfs groot=\${garyos_server}\"
+	fi
+
+	menuentry \"${_PROJ} PXE\" {
+		linux (tftp,\${garyos_server})\${garyos_source}${GOPTS:+ ${GOPTS}} \${garyos_params}
+		boot
+	}
+fi
 
 # chainload
 
