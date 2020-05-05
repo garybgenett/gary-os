@@ -153,6 +153,12 @@ fi
 
 ########################################
 
+declare GMENU_CUSTOM="/${_BASE}/${GCUST}"
+declare GMENU_RESCUE="/${_BASE}/${_BASE}.kernel"
+declare GMENU_ROOTFS="/${_BASE}/${_BASE}.rootfs"
+declare GMENU_OPTION="shmem_size=${SHMEM} groot_hint=\${garyos_rootfs} groot_file=${GMENU_ROOTFS} groot=${GCDEV}"
+declare GMENU_OPTPXE="shmem_size=${SHMEM} groot_hint=${GPXE} groot_file=${GMENU_ROOTFS} groot=\${garyos_server}"
+
 declare GMENU="\
 # settings
 
@@ -189,9 +195,9 @@ set pager=0
 set garyos_custom=
 set garyos_rescue=
 set garyos_rootfs=
-search --no-floppy --file --set garyos_custom /${_BASE}/${GCUST}
-search --no-floppy --file --set garyos_rescue /${_BASE}/${_BASE}.kernel
-search --no-floppy --file --set garyos_rootfs /${_BASE}/${_BASE}.rootfs
+search --no-floppy --file --set garyos_custom ${GMENU_CUSTOM}
+search --no-floppy --file --set garyos_rescue ${GMENU_RESCUE}
+search --no-floppy --file --set garyos_rootfs ${GMENU_ROOTFS}
 
 if [ -n \"\${garyos_custom}\" ]; then
 	set default=2
@@ -213,14 +219,14 @@ else
 fi
 
 menuentry \"${_PROJ} Menu\" {
-configfile (\${garyos_custom})/${_BASE}/${GCUST}
+configfile (\${garyos_custom})${GMENU_CUSTOM}
 }
 menuentry \"${_PROJ} Boot\" {
-linux (\${garyos_rescue})/${_BASE}/${_BASE}.kernel${GOPTS}
+linux (\${garyos_rescue})${GMENU_RESCUE}${GOPTS}
 boot
 }
 menuentry \"${_PROJ} Boot Rootfs\" {
-linux (\${garyos_rootfs})/${_BASE}/${_BASE}.kernel${GOPTS} shmem_size=${SHMEM} groot_hint=\${garyos_rootfs} groot_file=/${_BASE}/${_BASE}.rootfs groot=${GCDEV}
+linux (\${garyos_rootfs})${GMENU_RESCUE}${GOPTS} ${GMENU_OPTION}
 boot
 }
 
@@ -244,7 +250,7 @@ menuentry \"${_PROJ} Install Menu\" {
 configfile (\${garyos_install})${GFILE}
 }
 menuentry \"${_PROJ} Install Boot\" {
-linux (\${garyos_install})/boot/kernel root=${GCDEV}${GOPTS}
+linux (\${garyos_install})/boot/kernel${GOPTS} root=${GCDEV}
 initrd (\${garyos_install})/boot/initrd
 boot
 }
@@ -259,17 +265,11 @@ if [ \"\${net_default_interface}\" = \"${GPXE}\" ]; then
 	set garyos_source=\"\${net_${GPXE}_rootpath}\"
 	set garyos_params=\"\${net_${GPXE}_dhcp_server_name}\"
 
-	if [ -z \"\${garyos_server}\" ]; then
-		set garyos_server=\"\${net_default_server}\"
-	fi
-	if [ -z \"\${garyos_source}\" ]; then
-		set garyos_source=\"/${_BASE}/${_BASE}.kernel\"
-	fi
+	if [ -z \"\${garyos_server}\" ]; then				set garyos_server=\"\${net_default_server}\"; fi
+	if [ -z \"\${garyos_source}\" ]; the				set garyos_source=\"${GMENU_RESCUE}\"; fi
 	#note: it would be nice if grub supported something like \"||\" for this...
-	if [ -z \"\${garyos_params}\" ]; then
-		set garyos_params=\"shmem_size=${SHMEM} groot_hint=(${GPXE}) groot_file=/${_BASE}/${_BASE}.rootfs groot=\${garyos_server}\"
-	elif [ \"\${garyos_server}\" = \"\${garyos_params}\" ]; then
-		set garyos_params=\"shmem_size=${SHMEM} groot_hint=(${GPXE}) groot_file=/${_BASE}/${_BASE}.rootfs groot=\${garyos_server}\"
+	if [ -z \"\${garyos_params}\" ]; then				set garyos_params=\"${GMENU_OPTPXE}\"
+	elif [ \"\${garyos_server}\" = \"\${garyos_params}\" ]; then	set garyos_params=\"${GMENU_OPTPXE}\"
 	fi
 
 menuentry \"${_PROJ} PXE\" {
