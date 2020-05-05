@@ -127,8 +127,8 @@ fi
 ########################################
 
 declare GOPTS=
-if [[ -n ${1} ]]; then
-	GOPTS="${1}"
+if [[ -n ${@} ]]; then
+	GOPTS=" ${@}"
 	shift
 fi
 
@@ -216,11 +216,11 @@ menuentry \"${_PROJ} Menu\" {
 configfile (\${garyos_custom})/${_BASE}/${GCUST}
 }
 menuentry \"${_PROJ} Boot\" {
-linux (\${garyos_rescue})/${_BASE}/${_BASE}.kernel${GOPTS:+ ${GOPTS}}
+linux (\${garyos_rescue})/${_BASE}/${_BASE}.kernel${GOPTS}
 boot
 }
 menuentry \"${_PROJ} Boot Rootfs\" {
-linux (\${garyos_rootfs})/${_BASE}/${_BASE}.kernel${GOPTS:+ ${GOPTS}} shmem_size=${SHMEM} groot_hint=\${garyos_rootfs} groot_file=/${_BASE}/${_BASE}.rootfs groot=${GCDEV}
+linux (\${garyos_rootfs})/${_BASE}/${_BASE}.kernel${GOPTS} shmem_size=${SHMEM} groot_hint=\${garyos_rootfs} groot_file=/${_BASE}/${_BASE}.rootfs groot=${GCDEV}
 boot
 }
 
@@ -244,7 +244,7 @@ menuentry \"${_PROJ} Install Menu\" {
 configfile (\${garyos_install})${GFILE}
 }
 menuentry \"${_PROJ} Install Boot\" {
-linux (\${garyos_install})/boot/kernel root=${GCDEV}${GOPTS:+ ${GOPTS}}
+linux (\${garyos_install})/boot/kernel root=${GCDEV}${GOPTS}
 initrd (\${garyos_install})/boot/initrd
 boot
 }
@@ -273,7 +273,7 @@ if [ \"\${net_default_interface}\" = \"${GPXE}\" ]; then
 	fi
 
 menuentry \"${_PROJ} PXE\" {
-linux (tftp,\${garyos_server})\${garyos_source}${GOPTS:+ ${GOPTS}} \${garyos_params}
+linux (tftp,\${garyos_server})\${garyos_source}${GOPTS} \${garyos_params}
 boot
 }
 fi
