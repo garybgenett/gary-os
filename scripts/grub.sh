@@ -191,9 +191,9 @@ menuentry \"---\" {
 set garyos_custom=
 set garyos_rescue=
 set garyos_rootfs=
-search --file --set garyos_custom /${_BASE}/${GCUST}
-search --file --set garyos_rescue /${_BASE}/${_BASE}.kernel
-search --file --set garyos_rootfs /${_BASE}/${_BASE}.rootfs
+search --no-floppy --file --set garyos_custom /${_BASE}/${GCUST}
+search --no-floppy --file --set garyos_rescue /${_BASE}/${_BASE}.kernel
+search --no-floppy --file --set garyos_rootfs /${_BASE}/${_BASE}.rootfs
 
 if [ -n \"\${garyos_custom}\" ]; then
 	set default=2
@@ -229,7 +229,7 @@ menuentry \"${_PROJ} Boot Rootfs\" {
 # install
 
 set garyos_install=
-search --file --set garyos_install /boot/kernel
+search --no-floppy --file --set garyos_install /boot/kernel
 
 if [ -n \"\${garyos_install}\" ]; then
 	if [ -f \"(\${garyos_install})${GFILE}\" ]; then
