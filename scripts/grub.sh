@@ -173,6 +173,7 @@ insmod all_video
 insmod fat
 insmod exfat
 insmod ext2
+insmod net
 
 insmod search
 insmod configfile
@@ -257,26 +258,32 @@ boot
 
 # pxe
 
-if [ \"\${net_default_interface}\" = \"${GPXE}\" ]; then
+set garyos_server=\"\${net_${GPXE}_next_server}\"
+set garyos_source=\"\${net_${GPXE}_rootpath}\"
+set garyos_params=\"\${net_${GPXE}_extensionspath}\"
+if [ -z \"\${garyos_server}\" ]; then				set garyos_server=\"\${net_${GPXE}_dhcp_next_server}\"; fi
+if [ -z \"\${garyos_source}\" ]; then				set garyos_source=\"${GMENU_RESCUE}\"; fi
+#note: it would be nice if grub supported something like \"||\" for this...
+if [ -z \"\${garyos_params}\" ]; then				set garyos_params=\"${GMENU_OPTPXE}\"
+elif [ \"\${garyos_params}\" = \"\${garyos_server}\" ]; then	set garyos_params=\"${GMENU_OPTPXE}\"
+fi
+
+if [ -n \"\${garyos_server}\" ]; then
 	set default=7
 	set timeout=${TIMEOUT}
 
-	set garyos_server=\"\${net_${GPXE}_next_server}\"
-	set garyos_source=\"\${net_${GPXE}_rootpath}\"
-	set garyos_params=\"\${net_${GPXE}_dhcp_server_name}\"
-
-	if [ -z \"\${garyos_server}\" ]; then				set garyos_server=\"\${net_default_server}\"; fi
-	if [ -z \"\${garyos_source}\" ]; the				set garyos_source=\"${GMENU_RESCUE}\"; fi
-	#note: it would be nice if grub supported something like \"||\" for this...
-	if [ -z \"\${garyos_params}\" ]; then				set garyos_params=\"${GMENU_OPTPXE}\"
-	elif [ \"\${garyos_server}\" = \"\${garyos_params}\" ]; then	set garyos_params=\"${GMENU_OPTPXE}\"
-	fi
+fi
 
 menuentry \"${_PROJ} PXE\" {
+echo command: net_bootp
+echo command: configfile (memdisk)${GFILE}
+echo variable: set garyos_server=\"\${garyos_server}\"
+echo variable: set garyos_source=\"${GMENU_RESCUE}\"
+echo variable: set garyos_params=\"${GMENU_OPTPXE}\"
+
 linux (tftp,\${garyos_server})\${garyos_source}${GOPTS} \${garyos_params}
 boot
 }
-fi
 
 # chainload
 
