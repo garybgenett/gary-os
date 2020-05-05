@@ -176,14 +176,12 @@ insmod chain
 # titles
 
 menuentry \"${_NAME}\" {
-	set pager=1
-	set
-	set pager=0
+configfile (memdisk)${GFILE}
 }
 menuentry \"---\" {
-	set pager=1
-	set
-	set pager=0
+set pager=1
+set
+set pager=0
 }
 
 # kernel
@@ -215,15 +213,15 @@ else
 fi
 
 menuentry \"${_PROJ} Menu\" {
-	configfile (\${garyos_custom})/${_BASE}/${GCUST}
+configfile (\${garyos_custom})/${_BASE}/${GCUST}
 }
 menuentry \"${_PROJ} Boot\" {
-	linux (\${garyos_rescue})/${_BASE}/${_BASE}.kernel${GOPTS:+ ${GOPTS}}
-	boot
+linux (\${garyos_rescue})/${_BASE}/${_BASE}.kernel${GOPTS:+ ${GOPTS}}
+boot
 }
 menuentry \"${_PROJ} Boot Rootfs\" {
-	linux (\${garyos_rootfs})/${_BASE}/${_BASE}.kernel${GOPTS:+ ${GOPTS}} shmem_size=${SHMEM} groot_hint=\${garyos_rootfs} groot_file=/${_BASE}/${_BASE}.rootfs groot=${GCDEV}
-	boot
+linux (\${garyos_rootfs})/${_BASE}/${_BASE}.kernel${GOPTS:+ ${GOPTS}} shmem_size=${SHMEM} groot_hint=\${garyos_rootfs} groot_file=/${_BASE}/${_BASE}.rootfs groot=${GCDEV}
+boot
 }
 
 # install
@@ -243,12 +241,12 @@ else
 fi
 
 menuentry \"${_PROJ} Install Menu\" {
-	configfile (\${garyos_install})${GFILE}
+configfile (\${garyos_install})${GFILE}
 }
 menuentry \"${_PROJ} Install Boot\" {
-	linux (\${garyos_install})/boot/kernel root=${GCDEV}${GOPTS:+ ${GOPTS}}
-	initrd (\${garyos_install})/boot/initrd
-	boot
+linux (\${garyos_install})/boot/kernel root=${GCDEV}${GOPTS:+ ${GOPTS}}
+initrd (\${garyos_install})/boot/initrd
+boot
 }
 
 # pxe
@@ -274,19 +272,19 @@ if [ \"\${net_default_interface}\" = \"${GPXE}\" ]; then
 		set garyos_params=\"shmem_size=${SHMEM} groot_hint=(${GPXE}) groot_file=/${_BASE}/${_BASE}.rootfs groot=\${garyos_server}\"
 	fi
 
-	menuentry \"${_PROJ} PXE\" {
-		linux (tftp,\${garyos_server})\${garyos_source}${GOPTS:+ ${GOPTS}} \${garyos_params}
-		boot
-	}
+menuentry \"${_PROJ} PXE\" {
+linux (tftp,\${garyos_server})\${garyos_source}${GOPTS:+ ${GOPTS}} \${garyos_params}
+boot
+}
 fi
 
 # chainload
 
 menuentry \"Boot Primary\" {
-	chainloader (hd0)+1
+chainloader (hd0)+1
 }
 menuentry \"Boot Secondary\" {
-	chainloader (hd1)+1
+chainloader (hd1)+1
 }
 
 # end of file
@@ -295,9 +293,7 @@ menuentry \"Boot Secondary\" {
 declare GCONF="\
 # custom
 menuentry \"${_NAME} (Custom)\" {
-	set pager=1
-	set
-	set pager=0
+configfile (memdisk)${GFILE}
 }
 # end of file
 "
