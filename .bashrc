@@ -2409,12 +2409,93 @@ function rater {
 ########################################
 
 function reporter {
+	declare TOLERANCE="4"
 	declare MARKER="($(date --iso=s) ${HOSTNAME}:${PWD}) ${@}"
 	declare CMD="$(basename ${1})"
 	declare SRC="$((${#}-1))"	; SRC="${!SRC}"
 	declare DST="${#}"		; DST="${!DST}"
 	echo -en "\n reporting [${CMD}]: '${SRC}' -> '${DST}'\n"			1>&2
 	echo -en "${MARKER}\n"								1>&2
+	if
+		[[ ${1} == rsync ]] ||
+		[[ ${1} == unison ]]
+	then
+		function rsync_list {
+			declare FILE="${1}" && shift
+			declare LIST=
+			LIST="$(
+				$(which rsync) --list-only ${FILE}/ 2>/dev/null |
+				${GREP} -v "^.+[ ][.]$" |
+				${SED} "s|^.+[[:space:]]([^[:space:]]+)$|\1|g"
+			)"
+			if [[ -n ${LIST} ]]; then
+				echo -en "${LIST}"
+			else
+				echo -en "$(
+					$(which rsync) --list-only --no-dirs ${FILE} 2>/dev/null |
+					${GREP} -v "^.+[ ][.]$" |
+					${SED} "s|^.+[[:space:]]([^[:space:]]+)$|\1|g"
+				)"
+			fi
+			return 0
+		}
+		function rsync_match {
+			declare SRC_LIST=( $(rsync_list ${1}) ) && shift
+			declare DST_LIST=( $(rsync_list ${1}) ) && shift
+			declare SRC_TEST=
+			declare DST_TEST=
+			declare MATCHED="0"
+			if [[ -z "${SRC_LIST[*]}" ]]; then
+				echo -en "ERROR: EMPTY SOURCE"				1>&2
+				echo -en "\n"						1>&2
+				return 1
+			fi
+#>>>			if [[ -z "${DST_LIST[*]}" ]]; then
+#>>>				echo -en "ERROR: EMPTY TARGET"				1>&2
+#>>>				echo -en "\n"						1>&2
+#>>>				return 1
+#>>>			fi
+			for SRC_TEST in ${SRC_LIST[*]}; do
+				for DST_TEST in ${DST_LIST[*]}; do
+					if [[ ${SRC_TEST} == ${DST_TEST} ]]; then
+						MATCHED="$((${MATCHED}+1))"
+					fi
+				done
+			done
+			if { {
+				(( ${#DST_LIST[*]} >= 1 ));
+			} && {
+				(( ${MATCHED} == 0 )) ||
+				(( ${#SRC_LIST[*]} != ${#DST_LIST[*]} ));
+			}; }; then
+				echo -en "WARNING: FILE LISTS DO NOT MATCH"		1>&2
+				echo -en "\n"						1>&2
+				echo -en "SOURCE[${#SRC_LIST[*]}]: ${SRC_LIST[*]}"	1>&2
+				echo -en "\n"						1>&2
+				echo -en "TARGET[${#DST_LIST[*]}]: ${DST_LIST[*]}"	1>&2
+				echo -en "\n"						1>&2
+				echo -en "MATCHED[${MATCHED}/${TOLERANCE}]"		1>&2
+				echo -en "\n"						1>&2
+				if (( ${MATCHED} == 0 )); then
+					echo -en "ERROR: LISTS HAVE NO MATCHES"		1>&2
+					echo -en "\n"					1>&2
+					return 1
+				fi
+				if
+					(( ${MATCHED} < $((${#DST_LIST[*]}/${TOLERANCE})) )) ||
+					(( ${MATCHED} < $((${#SRC_LIST[*]}/${TOLERANCE})) ))
+				then
+					echo -en "ERROR: DIFFERENCES ARE TOO DANGEROUS"	1>&2
+					echo -en "\n"					1>&2
+					return 1
+				fi
+			fi
+			return 0
+		}
+		if ! rsync_match ${SRC} ${DST}; then
+			return 1;
+		fi
+	fi
 #>>>	if [[ ${1} != git ]]; then
 		time ${NICELY} "${@}" || {
 			echo -en "ERROR: ${MARKER}"					1>&2
