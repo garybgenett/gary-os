@@ -1031,7 +1031,7 @@ function format {
 
 function git {
 	declare DIR="$(realpath "${PWD}")"
-	${NICELY} $(which git) --git-dir="${DIR}.git" --work-tree="${DIR}" "${@}"
+	$(which git) --git-dir="${DIR}.git" --work-tree="${DIR}" "${@}"
 }
 
 ########################################
