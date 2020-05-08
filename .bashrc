@@ -974,14 +974,14 @@ function enc-status {
 	echo -en "\n"
 	${CMD} "quota" 2>/dev/null
 	echo -en "\n"
+	${CMD} "ls -la ./ ${ELS}" 2>/dev/null
+	echo -en "\n"
 	for FILE in \
 		${EDU} \
 		$(${CMD} "find ./ -mindepth 1 -maxdepth 2 -type d" 2>/dev/null | sort)
 	do
 		${CMD} "du -ms ${FILE/#.\/}" 2>/dev/null
 	done
-	echo -en "\n"
-	${CMD} "ls -la ./ ${ELS}" 2>/dev/null
 	return 0
 }
 
