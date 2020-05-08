@@ -2463,7 +2463,8 @@ function reporter {
 				done
 			done
 			if { {
-				(( ${#DST_LIST[*]} >= 1 ));
+				(( ${#SRC_LIST[*]} > 1 )) &&
+				(( ${#DST_LIST[*]} > 1 ));
 			} && {
 				(( ${MATCHED} == 0 )) ||
 				(( ${#SRC_LIST[*]} != ${#DST_LIST[*]} ));
