@@ -1031,7 +1031,7 @@ function format {
 
 function git {
 	declare DIR="$(realpath "${PWD}")"
-	$(which git) --git-dir="${DIR}.git" --work-tree="${DIR}" "${@}"
+	${NICELY} $(which git) --git-dir="${DIR}.git" --work-tree="${DIR}" "${@}"
 }
 
 ########################################
@@ -2496,19 +2496,19 @@ function reporter {
 			return 1;
 		fi
 	fi
-#>>>	if [[ ${1} != git ]]; then
+	if [[ ${1} != git ]]; then
 		time ${NICELY} "${@}" || {
 			echo -en "ERROR: ${MARKER}"					1>&2
 			echo -en "\n"							1>&2
 			return 1;
 		};
-#>>>	else
-#>>>		time "${@}" || {
-#>>>			echo -en "ERROR: ${MARKER}"					1>&2
-#>>>			echo -en "\n"							1>&2
-#>>>			return 1;
-#>>>		};
-#>>>	fi
+	else
+		time "${@}" || {
+			echo -en "ERROR: ${MARKER}"					1>&2
+			echo -en "\n"							1>&2
+			return 1;
+		};
+	fi
 	return 0
 }
 
