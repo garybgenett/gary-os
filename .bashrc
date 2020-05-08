@@ -976,7 +976,7 @@ function enc-status {
 	echo -en "\n"
 	for FILE in \
 		${EDU} \
-		$(${CMD} "find ./ -mindepth 2 -maxdepth 2 -type d" 2>/dev/null | sort)
+		$(${CMD} "find ./ -mindepth 1 -maxdepth 2 -type d" 2>/dev/null | sort)
 	do
 		${CMD} "du -ms ${FILE/#.\/}" 2>/dev/null
 	done
