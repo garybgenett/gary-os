@@ -2413,16 +2413,18 @@ function reporter {
 	declare CMD="$(basename ${1})"
 	declare SRC="$((${#}-1))"	; SRC="${!SRC}"
 	declare DST="${#}"		; DST="${!DST}"
-	echo -en "\n reporting [${CMD}]: '${SRC}' -> '${DST}'\n"
-	echo -en "${MARKER}\n"
+	echo -en "\n reporting [${CMD}]: '${SRC}' -> '${DST}'\n"			1>&2
+	echo -en "${MARKER}\n"								1>&2
 #>>>	if [[ ${1} != git ]]; then
 		time ${NICELY} "${@}" || {
-			echo -en "ERROR: ${MARKER}\n"
+			echo -en "ERROR: ${MARKER}"					1>&2
+			echo -en "\n"							1>&2
 			return 1;
 		};
 #>>>	else
 #>>>		time "${@}" || {
-#>>>			echo -en "ERROR: ${MARKER}\n"
+#>>>			echo -en "ERROR: ${MARKER}"					1>&2
+#>>>			echo -en "\n"							1>&2
 #>>>			return 1;
 #>>>		};
 #>>>	fi
