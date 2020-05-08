@@ -2476,7 +2476,7 @@ function reporter {
 				echo -en "\n"						1>&2
 				echo -en "TARGET[${#DST_LIST[*]}]: ${DST_LIST[*]}"	1>&2
 				echo -en "\n"						1>&2
-				echo -en "MATCHED[${MATCHED}/${TOLERANCE}]"		1>&2
+				echo -en "MATCHED[${MATCHED}](${TOLERANCE})"		1>&2
 				echo -en "\n"						1>&2
 				if (( ${MATCHED} == 0 )); then
 					echo -en "ERROR: LISTS HAVE NO MATCHES"		1>&2
