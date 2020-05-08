@@ -2415,17 +2415,17 @@ function reporter {
 	declare DST="${#}"		; DST="${!DST}"
 	echo -en "\n reporting [${CMD}]: '${SRC}' -> '${DST}'\n"
 	echo -en "${MARKER}\n"
-	if [[ ${1} != git ]]; then
+#>>>	if [[ ${1} != git ]]; then
 		time ${NICELY} "${@}" || {
 			echo -en "ERROR: ${MARKER}\n"
 			return 1;
 		};
-	else
-		time "${@}" || {
-			echo -en "ERROR: ${MARKER}\n"
-			return 1;
-		};
-	fi
+#>>>	else
+#>>>		time "${@}" || {
+#>>>			echo -en "ERROR: ${MARKER}\n"
+#>>>			return 1;
+#>>>		};
+#>>>	fi
 	return 0
 }
 
