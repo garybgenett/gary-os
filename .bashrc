@@ -911,7 +911,7 @@ function enc-rsync {
 	if [[ -z ${SRC} ]] || [[ -z ${DST} ]]; then
 		return 1
 	fi
-	declare TMP="/tmp/.${FUNCNAME}.$(basename ${SRC})"
+	declare TMP="/tmp/.${FUNCNAME}/$(basename ${SRC})"
 	${MKDIR} ${TMP}
 	enc-fs -o ro --reverse ${SRC} ${TMP}	|| return 1
 	${RSYNC_U} "${@}" ${TMP}/ ${DST}	|| return 1
@@ -942,7 +942,7 @@ function enc-sshfs {
 	if [[ -z ${SRC} ]] || [[ -z ${DST} ]]; then
 		return 1
 	fi
-	declare TMP="/tmp/.${FUNCNAME}.$(basename ${DST})"
+	declare TMP="/tmp/.${FUNCNAME}/$(basename ${DST})"
 	if ! ${UMT}; then
 		${MKDIR} ${TMP}
 		mount-robust -u ${TMP}
