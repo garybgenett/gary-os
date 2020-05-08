@@ -977,13 +977,20 @@ function enc-status {
 	echo -en "\n"
 	${CMD} "ls -la ./ ${ELS}" 2>/dev/null
 	echo -en "\n"
-	echo "
-		${EDU}
-		$(${CMD} "find ./ -mindepth 1 -maxdepth 2 -type d" 2>/dev/null)
-	" |
-		${SED} -e "s|^[[:space:]]+||g" -e "s|^[.][/]||g" -e "/^$/d" | sort -u |
-	while read -r FILE; do
-		${CMD} "du -ms ${FILE/#.\/}" 2>/dev/null
+	declare LST="${EDU} $(
+		echo "
+			${EDU}
+			$(${CMD} "find ./ -mindepth 1 -maxdepth 2 -type d" 2>/dev/null)
+		" |
+			${SED} \
+				-e "s|^[[:space:]]+||g" \
+				-e "s|^[.][/]||g" \
+				-e "/^$/d" \
+				|
+			sort -u
+	)"
+	for FILE in ${LST}; do
+		${CMD} "du -ms ${FILE}" 2>/dev/null
 	done
 	return 0
 }
