@@ -3898,11 +3898,18 @@ function task-export-text {
 			open(KANBAN, "<", ${ENV{NOTES_MD}}) || die();
 			my $kanban_text = do { local $/; <KANBAN> }; $kanban_text =~ s/\n+$//g;
 			close(KANBAN) || die();
-			while (${kanban_text} =~ m|^.+?${key}[:][^`]*?[`]([^\s]+)\s+([^`]+)[`]|gms) {
+			while (${kanban_text} =~ m|^.*?${key}[:].*?[`]([^\s]+)\s+([^`]+)[`]$|gms) {
 				my $kanban_filt = ${1};
-				my $kanban_args = ${2};
+				my $kanban_args = ${2}; $kanban_args =~ s|rc.context=([^\s]+)||g;
+				my $kanban_cont = ${1};
 				$kanban_filt = qx(task _get rc.report.${kanban_filt}.filter); chomp(${kanban_filt});
-				$kanban_args = "\"" . ((${kanban_filt}) ? "( ${kanban_filt} )" : "") . ((${kanban_args}) ? "( ${kanban_args} )" : "") . "\"";
+				$kanban_cont = qx(task _get rc.context.${kanban_cont}); chomp(${kanban_cont});
+				$kanban_args =
+					((${kanban_filt}) ? "( ${kanban_filt} )" : "") .
+					((${kanban_args}) ? "( ${kanban_args} )" : "") .
+					((${kanban_cont}) ? "( ${kanban_cont} )" : "");
+				$kanban_args =
+					((${kanban_args}) ? "\"${kanban_args}\"" : "");
 				$kanban_args =~ s|\\||g;
 				my $kanban_task = qx(task export ${kanban_args}); $kanban_task =~ s/\n//g; $kanban_task = decode_json(${kanban_task});
 				$kanban_export .= " " . ($#{$kanban_task}+1);
@@ -4947,7 +4954,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				${SED} \
 					-e "s/^[^\`]*[\`]//g" \
 					-e "s/[\`][^\`]*$//g" \
-					-e "s/[\`][,][ ][\`]/\n/g" \
+					-e "s/[\`][,[:space:]]+[\`]/\n/g" \
 					-e "s/(['&])/\\\\\1/g"
 		}
 		function _task_parse_cmd_bash {
@@ -5219,7 +5226,19 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 #>>>			(cd ${PIMDIR} && ${GIT_STS} taskd tasks*)
 #>>>			task tags status:pending
 #>>>			task mark rc.gc=1 rc.recurrence=1
-			if [[ ${1} == [,] ]]; then
+			if [[ ${1} == k[1-5] ]]; then
+				CONTEXT="${1}" && shift
+				task $(
+					[[ ${CONTEXT} == k1 ]] && echo "mind";	# holding
+					[[ ${CONTEXT} == k2 ]] && echo "read";	# waiting
+					[[ ${CONTEXT} == k3 ]] && echo "todo";	# working
+					[[ ${CONTEXT} == k4 ]] && echo "read";	# complete
+					[[ ${CONTEXT} == k5 ]] && echo "read";	# archive
+				) \
+					${OPTS/rc.gc=1} \
+					rc.context=${CONTEXT} \
+					"${@}" 2>/dev/null
+			elif [[ ${1} == [,] ]]; then
 				shift
 				task view \
 					${OPTS} \
