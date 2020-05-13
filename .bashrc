@@ -2451,8 +2451,18 @@ function reporter {
 			return 0
 		}
 		function rsync_match {
-			declare SRC_LIST=( $(rsync_list ${1}) ) && shift
-			declare DST_LIST=( $(rsync_list ${1}) ) && shift
+			declare MTCH_SRC=${1} && shift
+			declare MTCH_DST=${1} && shift
+			if
+			[[ ${MTCH_SRC/%\/} == ${MTCH_SRC} ]] &&
+			[[ ${MTCH_DST/%\/} != ${MTCH_DST} ]]
+			then
+				echo -en "WARNING: COMPLETELY TRUSTING FILE LISTS"	1>&2
+				echo -en "\n"						1>&2
+				return 0
+			fi
+			declare SRC_LIST=( $(rsync_list ${MTCH_SRC}) ) && shift
+			declare DST_LIST=( $(rsync_list ${MTCH_DST}) ) && shift
 			declare SRC_TEST=
 			declare DST_TEST=
 			declare MATCHED="0"
