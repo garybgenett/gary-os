@@ -1031,7 +1031,8 @@ function format {
 		mkfs.ntfs -vI "${@}"
 	elif [[ ${1} == -l ]]; then
 		shift
-		cryptsetup --hash sha256 --cipher aes-cbc-essiv:sha256 --key-size 256 luksFormat "${@}"
+		# https://wiki.archlinux.org/index.php/Dm-crypt/Device_encryption#Encryption_options_for_LUKS_mode
+		cryptsetup --verbose --type luks2 --cipher aes-xts-plain64 --key-size 256 --hash sha256 luksFormat "${@}"
 	else
 		mkfs.ext4 -jvm 0 "${@}"
 	fi
