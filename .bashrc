@@ -4856,6 +4856,7 @@ function vlc-do {
 	declare REDSHIFT="off"
 	if [[ ${1} == red ]]; then
 		REDSHIFT="on"
+		shift
 	fi
 	prompt -d -x
 	(_menu redshift/${REDSHIFT} &)
