@@ -2457,11 +2457,13 @@ function reporter {
 			declare DST_TEST=
 			declare MATCHED="0"
 			if [[ -z "${SRC_LIST[*]}" ]]; then
+				echo -en "ERROR: ${MARKER}"				1>&2
 				echo -en "ERROR: EMPTY SOURCE"				1>&2
 				echo -en "\n"						1>&2
 				return 1
 			fi
 #>>>			if [[ -z "${DST_LIST[*]}" ]]; then
+#>>>				echo -en "ERROR: ${MARKER}"				1>&2
 #>>>				echo -en "ERROR: EMPTY TARGET"				1>&2
 #>>>				echo -en "\n"						1>&2
 #>>>				return 1
@@ -2480,6 +2482,7 @@ function reporter {
 				(( ${MATCHED} == 0 )) ||
 				(( ${#SRC_LIST[*]} != ${#DST_LIST[*]} ));
 			}; }; then
+#>>>				echo -en "WARNING: ${MARKER}"				1>&2
 				echo -en "WARNING: FILE LISTS DO NOT MATCH"		1>&2
 				echo -en "\n"						1>&2
 				echo -en "SOURCE[${#SRC_LIST[*]}]: ${SRC_LIST[*]}"	1>&2
@@ -2489,6 +2492,7 @@ function reporter {
 				echo -en "MATCHED[${MATCHED}](${TOLERANCE})"		1>&2
 				echo -en "\n"						1>&2
 				if (( ${MATCHED} == 0 )); then
+					echo -en "ERROR: ${MARKER}"			1>&2
 					echo -en "ERROR: LISTS HAVE NO MATCHES"		1>&2
 					echo -en "\n"					1>&2
 					return 1
@@ -2497,6 +2501,7 @@ function reporter {
 					(( ${MATCHED} < $((${#DST_LIST[*]}/${TOLERANCE})) )) ||
 					(( ${MATCHED} < $((${#SRC_LIST[*]}/${TOLERANCE})) ))
 				then
+					echo -en "ERROR: ${MARKER}"			1>&2
 					echo -en "ERROR: DIFFERENCES ARE TOO DANGEROUS"	1>&2
 					echo -en "\n"					1>&2
 					return 1
