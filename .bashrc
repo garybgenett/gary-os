@@ -373,7 +373,7 @@ export ENCFS="encfs \
 	--nocache \
 	--standard \
 	--no-default-flags \
-	--idle=1"
+	--idle=60"
 
 alias encfs="${ENCFS}"
 
