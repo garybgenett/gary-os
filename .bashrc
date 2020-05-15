@@ -2636,7 +2636,8 @@ function shell {
 		return 0
 	fi
 	case ${DEST} in
-		(me)	DEST="me.garybgenett.net"
+#>>>		(me)	DEST="me.garybgenett.net"
+		(me)	DEST="server.garybgenett.net"
 			[[ -z $(${PS} 2>/dev/null | ${GREP} "5900[:]") ]] && OPTS="${OPTS} -L 5900:127.0.0.1:5900"
 			[[ -z $(${PS} 2>/dev/null | ${GREP} "5901[:]") ]] && OPTS="${OPTS} -L 5901:127.0.0.1:5901"
 			[[ -z $(${PS} 2>/dev/null | ${GREP} "5902[:]") ]] && OPTS="${OPTS} -L 5902:127.0.0.1:5902"
