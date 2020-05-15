@@ -2622,7 +2622,7 @@ function shell {
 		return 0
 	fi
 	if [[ ${DEST} == -i ]]; then
-		${RSYNC_U} root@me.garybgenett.net:/.g/_data/zactive/.static/.ssh/id_* ${HOME}/.ssh/
+		${RSYNC_U} root@server.garybgenett.net:/.g/_data/zactive/.static/.ssh/id_* ${HOME}/.ssh/
 		return 0
 	fi
 	case ${DEST} in
@@ -2864,9 +2864,9 @@ function vpn {
 			-M 0 -f \
 			-i ${HOME}/.ssh/remote_id \
 			-R 65535:127.0.0.1:22 \
-			plastic@me.garybgenett.net
+			plastic@server.garybgenett.net
 	elif [[ ${1} == -v ]]; then
-		declare SRC="root@me.garybgenett.net:/.g/_data/zactive"
+		declare SRC="root@server.garybgenett.net:/.g/_data/zactive"
 		${RSYNC_U} ${SRC}/.setup/openvpn/openvpn.conf+VPN			/etc/openvpn/openvpn.conf
 		${RSYNC_U} ${SRC}/.static/.openssl/server-ca.garybgenett.net.crt	/etc/openvpn
 		${RSYNC_U} ${SRC}/.static/.openssl/vpn-client.garybgenett.net.*		/etc/openvpn
