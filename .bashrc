@@ -2433,9 +2433,10 @@ function reporter {
 	then
 		function rsync_list {
 			declare FILE="${1}" && shift
+			declare _SSH="${@}"
 			declare LIST=
 			LIST="$(
-				$(which rsync) --list-only ${FILE}/ 2>/dev/null |
+				eval $(which rsync) ${_SSH} --list-only ${FILE}/ 2>/dev/null |
 				${GREP} -v "^.+[ ][.]$" |
 				${SED} "s|^.+[[:space:]]([^[:space:]]+)$|\1|g"
 			)"
@@ -2443,7 +2444,7 @@ function reporter {
 				echo -en "${LIST}"
 			else
 				echo -en "$(
-					$(which rsync) --list-only --no-dirs ${FILE} 2>/dev/null |
+					eval $(which rsync) ${_SSH} --list-only --no-dirs ${FILE} 2>/dev/null |
 					${GREP} -v "^.+[ ][.]$" |
 					${SED} "s|^.+[[:space:]]([^[:space:]]+)$|\1|g"
 				)"
@@ -2451,8 +2452,9 @@ function reporter {
 			return 0
 		}
 		function rsync_match {
-			declare MTCH_SRC=${1} && shift
-			declare MTCH_DST=${1} && shift
+			declare MTCH_SRC="${1}" && shift
+			declare MTCH_DST="${1}" && shift
+			declare MTCH_SSH="${@}"
 			if
 			[[ ${MTCH_SRC/%\/} == ${MTCH_SRC} ]] &&
 			[[ ${MTCH_DST/%\/} != ${MTCH_DST} ]]
@@ -2461,8 +2463,8 @@ function reporter {
 				echo -en "\n"						1>&2
 				return 0
 			fi
-			declare SRC_LIST=( $(rsync_list ${MTCH_SRC}) ) && shift
-			declare DST_LIST=( $(rsync_list ${MTCH_DST}) ) && shift
+			declare SRC_LIST=( $(rsync_list ${MTCH_SRC} ${MTCH_SSH}) ) && shift
+			declare DST_LIST=( $(rsync_list ${MTCH_DST} ${MTCH_SSH}) ) && shift
 			declare SRC_TEST=
 			declare DST_TEST=
 			declare MATCHED="0"
@@ -2519,7 +2521,15 @@ function reporter {
 			fi
 			return 0
 		}
-		if ! rsync_match ${SRC} ${DST}; then
+		declare SSH_ARGS=
+		declare SSH_TEST=
+		for FILE in "${@}"; do
+			SSH_TEST="$(echo "${FILE}" | ${SED} -n "s|^--rsh=[\"]?(.*ssh [^\"]+)[\"]?$|--rsh=\"\1\"|gp")"
+			if [[ -n ${SSH_TEST} ]]; then
+				SSH_ARGS="${SSH_TEST}"
+			fi
+		done
+		if ! rsync_match ${SRC} ${DST} ${SSH_ARGS}; then
 			return 1;
 		fi
 	fi
@@ -2776,7 +2786,7 @@ function sync-dir {
 				${GIT} -c i18n.commitencoding=ascii cvsimport -akmR)
 #>>>		fi
 	elif [[ ${REP_TYP} == rsync ]]; then
-		${RSYNC_U/--rsh=ssh } ${REP_SRC}/ ${BAS_DIR}/${REP_DST}
+		${RSYNC_U} ${REP_SRC}/ ${BAS_DIR}/${REP_DST}
 		if [[ -n $(echo "${REP_DST}" | ${GREP} "CVSROOT$") ]]; then
 			declare NEW_DST="${BAS_DIR}/${REP_DST/%\/CVSROOT}"
 			(cd ${BAS_DIR} &&
