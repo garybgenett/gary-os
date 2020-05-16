@@ -361,7 +361,8 @@ export RDP="rdesktop -z -n NULL -g 1024x768 -a 24 -r sound:remote"		; alias rdp=
 export VNC="vncviewer -Shared -FullColor"					; alias vnc="${VNC}"
 export X2VNC="x2vnc -west -tunnel -shared -noblank -lockdelay 60 -timeout 60"	; alias x2vnc="${X2VNC}"
 
-export VLC="vlc --intf ncurses --no-color"					; alias vlc-c="${VLC}"
+#>>>export VLC="vlc --intf ncurses --no-color"					; alias vlc-c="${VLC}"
+export VLC="vlc --intf ncurses --no-color --no-playlist-tree"			; alias vlc-c="${VLC}"
 
 ########################################
 
@@ -559,8 +560,8 @@ alias smount="_sync mount"
 alias tasker="prompt -x +task"
 alias torrent="rtorrent -n -s ."
 alias trust="_sync archive"
-alias vlc-help="vlc-c --help --full-help --longhelp --advanced 2>&1 | ${MORE}"
-alias vlc-play="vlc-c ${HOME}/setup/_misc/playlist.m3u"
+alias vlc-help="${VLC} --help --full-help --longhelp --advanced 2>&1 | ${MORE}"
+alias vlc-play="${VLC} ${HOME}/setup/_misc/playlist.m3u"
 alias web="w3m https://www.google.com"
 alias workspace="_sync workspace"
 alias wpa="ip-setup wpa"
