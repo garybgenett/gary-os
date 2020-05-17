@@ -4906,7 +4906,9 @@ function vlc-do {
 	(_menu xlock/off &)
 	(_menu xvnc/on &)
 	psk xlock -9
+	xset s noblank
 	${VLC} "${@}"
+	xset s off
 	(_menu redshift/on &)
 	(_menu relieve/on &)
 	(_menu realize/on &)
