@@ -913,11 +913,13 @@ function enc-rsync {
 	if [[ -z ${SRC} ]] || [[ -z ${DST} ]]; then
 		return 1
 	fi
+	declare FAIL="false"
 	declare TMP="/tmp/.${FUNCNAME}/$(basename ${SRC})"
-	${MKDIR} ${TMP}
+	${MKDIR} ${TMP}				|| return 1
 	enc-fs -o ro --reverse ${SRC} ${TMP}	|| return 1
-	${RSYNC_U} "${@}" ${TMP}/ ${DST}	|| return 1
-	mount-robust -u ${TMP}			|| return 1
+	${RSYNC_U} "${@}" ${TMP}/ ${DST}	|| FAIL="true"
+	mount-robust -u ${TMP}			|| FAIL="true"
+	${FAIL}					&& return 1
 #>>>	${RM} ${TMP}
 	return 0
 }
