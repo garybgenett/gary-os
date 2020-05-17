@@ -1055,7 +1055,7 @@ function git {
 ########################################
 
 function git-am {
-	${GIT} am \
+	${GIT} -c gc.auto=0 am \
 		--ignore-space-change \
 		--ignore-whitespace \
 		--whitespace="nowarn" \
