@@ -949,19 +949,22 @@ function enc-sshfs {
 	declare TMP="/tmp/.${FUNCNAME}/$(basename ${DST})"
 	if ! ${UMT}; then
 		${MKDIR} ${TMP}
-		mount-robust -u ${TMP}
-		(sshfs -f -o ${RWR} ${SRC} ${TMP}) &
+		if [[ -z $(${GREP} "${SRC}[ ]${TMP}[ ]fuse.sshfs" /proc/mounts) ]]; then
+			(sshfs -f -o ${RWR} ${SRC} ${TMP}) &
+		fi
 		sleep 1
 		if [[ -z $(${GREP} "${SRC}[ ]${TMP}[ ]fuse.sshfs" /proc/mounts) ]]; then
 			return 1
 		fi
+		${MKDIR} ${TMP}${DIR}			|| return 1
 		enc-fs -o ${RWR} ${TMP}${DIR} ${DST}	|| return 1
 	else
 		mount-robust -u ${DST}			|| return 1
 		mount-robust -u ${TMP}			|| return 1
 #>>>		${RM} ${TMP}
 	fi
-	${GREP} "encfs" /proc/mounts
+	${GREP} "^${SRC}[ ]${TMP}[ ]fuse.sshfs"		/proc/mounts
+	${GREP} "^encfs[ ]${DST}[ ]fuse.encfs"		/proc/mounts
 	return 0
 }
 
