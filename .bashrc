@@ -370,11 +370,11 @@ export ENCFS6_CONFIG="${ENCFS6_CONFIG:-/.g/_data/zactive/.static/.encfs/encfs6.m
 export ENCFS_FILE="${ENCFS6_CONFIG/%xml/asc}"
 
 #>>>	--verbose \
+#>>>	--idle=60 \
 export ENCFS="encfs \
 	--nocache \
 	--standard \
-	--no-default-flags \
-	--idle=60"
+	--no-default-flags"
 
 alias encfs="${ENCFS}"
 
