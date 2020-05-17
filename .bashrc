@@ -979,9 +979,9 @@ function enc-status {
 	echo -en "\n"
 	${CMD} "pwd" || return 1
 	echo -en "\n"
-	${CMD} "quota" 2>/dev/null
+	${CMD} "quota" #>>> 2>/dev/null
 	echo -en "\n"
-	${CMD} "ls -la ./ ${ELS}" 2>/dev/null
+	${CMD} "ls -la ./ ${ELS}" #>>> 2>/dev/null
 	echo -en "\n"
 	declare LST="${EDU} $(
 		echo "
@@ -996,8 +996,9 @@ function enc-status {
 			sort -u
 	)"
 	for FILE in ${LST}; do
-		${CMD} "du -ms ${FILE}" 2>/dev/null
+		${CMD} "du -ms ${FILE}" #>>> 2>/dev/null
 	done
+	${CMD} "id"
 	return 0
 }
 
