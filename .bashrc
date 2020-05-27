@@ -2436,12 +2436,18 @@ function rater {
 
 function reporter {
 	declare TOLERANCE="4"
+	declare FORCE=
+	if [[ ${1} == -f ]]; then
+		FORCE="${1}"
+		shift
+	fi
 	declare CMD="${1}"		; shift
 	declare CMD_ARG="$(basename	${CMD})"
 	declare SRC="$((${#}-1))"	; SRC="${!SRC}"
 	declare DST="${#}"		; DST="${!DST}"
 	declare MARKER="($(date --iso=s) ${HOSTNAME}:${PWD}) ${CMD} ${@}"
-	echo -en "\n reporting [${CMD_ARG}]: '${SRC}' -> '${DST}'\n"			1>&2
+	echo -en "\n reporting [${CMD_ARG}]${FORCE:+(${FORCE})}:"			1>&2
+	echo -en " '${SRC}' -> '${DST}'\n"						1>&2
 	echo -en "${MARKER}\n"								1>&2
 	if
 		[[ ${CMD_ARG} == rsync ]] ||
@@ -2539,16 +2545,18 @@ function reporter {
 			fi
 			return 0
 		}
-		declare SSH_ARGS=
-		declare SSH_TEST=
-		for RFILE in "${@}"; do
-			SSH_TEST="$(echo "${RFILE}" | ${SED} -n "s|^--rsh=[\"]?(.*ssh [^\"]+)[\"]?$|--rsh=\"\1\"|gp")"
-			if [[ -n ${SSH_TEST} ]]; then
-				SSH_ARGS="${SSH_TEST}"
+		if [[ -z ${FORCE} ]]; then
+			declare SSH_ARGS=
+			declare SSH_TEST=
+			for RFILE in "${@}"; do
+				SSH_TEST="$(echo "${RFILE}" | ${SED} -n "s|^--rsh=[\"]?(.*ssh [^\"]+)[\"]?$|--rsh=\"\1\"|gp")"
+				if [[ -n ${SSH_TEST} ]]; then
+					SSH_ARGS="${SSH_TEST}"
+				fi
+			done
+			if ! rsync_match ${SRC} ${DST} ${SSH_ARGS}; then
+				return 1;
 			fi
-		done
-		if ! rsync_match ${SRC} ${DST} ${SSH_ARGS}; then
-			return 1;
 		fi
 	fi
 	if [[ ${CMD} != git ]]; then
