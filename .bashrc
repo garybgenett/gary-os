@@ -939,9 +939,9 @@ function enc-sshfs {
 	fi
 	declare SRC="${1}" && shift
 	declare DST="${1}" && shift
-	declare DIR=
+	declare TGT=
 	if [[ ${1} == [+]+(*) ]]; then
-		DIR="/${1/#+}" && shift
+		TGT="/${1/#+}" && shift
 	fi
 	if [[ -z ${SRC} ]] || [[ -z ${DST} ]]; then
 		return 1
@@ -956,8 +956,8 @@ function enc-sshfs {
 		if [[ -z $(${GREP} "${SRC}[ ]${TMP}[ ]fuse.sshfs" /proc/mounts) ]]; then
 			return 1
 		fi
-		${MKDIR} ${TMP}${DIR}			|| return 1
-		enc-fs -o ${RWR} ${TMP}${DIR} ${DST}	|| return 1
+		${MKDIR} ${TMP}${TGT}			|| return 1
+		enc-fs -o ${RWR} ${TMP}${TGT} ${DST}	|| return 1
 	else
 		mount-robust -u ${DST}			|| return 1
 		mount-robust -u ${TMP}			|| return 1
