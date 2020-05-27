@@ -1050,6 +1050,13 @@ function format {
 function git {
 	declare WORK="$(realpath "${PWD}")"
 	declare REPO="$(realpath "${PWD}.git")"
+	if [[ ! -d ${REPO} ]]; then
+		if [[ -d ${WORK}/.git ]] || [[ -f ${WORK}/.git ]]; then
+			REPO="${WORK}/.git"
+		elif [[ ${WORK/%.git} != ${WORK} ]]; then
+			REPO="${WORK}"
+		fi
+	fi
 	${NICELY} $(which git) --git-dir="${REPO}" --work-tree="${WORK}" "${@}"
 }
 
