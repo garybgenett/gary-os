@@ -2447,11 +2447,11 @@ function reporter {
 		[[ ${1} == unison ]]
 	then
 		function rsync_list {
-			declare FILE="${1}" && shift
-			declare _SSH="${@}"
+			declare RFILE="${1}" && shift
+			declare R_SSH="${@}"
 			declare LIST=
 			LIST="$(
-				eval $(which rsync) ${_SSH} --list-only ${FILE}/ 2>/dev/null |
+				eval $(which rsync) ${R_SSH} --list-only ${RFILE}/ 2>/dev/null |
 				${GREP} -v "^.+[ ][.]$" |
 				${SED} "s|^.+[[:space:]]([^[:space:]]+)$|\1|g"
 			)"
@@ -2459,7 +2459,7 @@ function reporter {
 				echo -en "${LIST}"
 			else
 				echo -en "$(
-					eval $(which rsync) ${_SSH} --list-only --no-dirs ${FILE} 2>/dev/null |
+					eval $(which rsync) ${R_SSH} --list-only --no-dirs ${RFILE} 2>/dev/null |
 					${GREP} -v "^.+[ ][.]$" |
 					${SED} "s|^.+[[:space:]]([^[:space:]]+)$|\1|g"
 				)"
@@ -2540,8 +2540,8 @@ function reporter {
 		}
 		declare SSH_ARGS=
 		declare SSH_TEST=
-		for FILE in "${@}"; do
-			SSH_TEST="$(echo "${FILE}" | ${SED} -n "s|^--rsh=[\"]?(.*ssh [^\"]+)[\"]?$|--rsh=\"\1\"|gp")"
+		for RFILE in "${@}"; do
+			SSH_TEST="$(echo "${RFILE}" | ${SED} -n "s|^--rsh=[\"]?(.*ssh [^\"]+)[\"]?$|--rsh=\"\1\"|gp")"
 			if [[ -n ${SSH_TEST} ]]; then
 				SSH_ARGS="${SSH_TEST}"
 			fi
