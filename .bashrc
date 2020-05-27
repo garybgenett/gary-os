@@ -2524,10 +2524,12 @@ function reporter {
 					echo -en "\n"					1>&2
 					return 1
 				fi
-				if
-					(( ${MATCHED} < $((${#DST_LIST[*]}/${TOLERANCE})) )) ||
-					(( ${MATCHED} < $((${#SRC_LIST[*]}/${TOLERANCE})) ))
-				then
+				if { {
+					(( ${MATCHED} < $((${#SRC_LIST[*]}/${TOLERANCE})) )) ||
+					(( ${MATCHED} < $((${#DST_LIST[*]}/${TOLERANCE})) ));
+				} && {
+					(( ${MATCHED} != ${#DST_LIST[*]} ));
+				}; }; then
 					echo -en "ERROR: ${MARKER}"			1>&2
 					echo -en "ERROR: DIFFERENCES ARE TOO DANGEROUS"	1>&2
 					echo -en "\n"					1>&2
