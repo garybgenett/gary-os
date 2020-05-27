@@ -2436,15 +2436,16 @@ function rater {
 
 function reporter {
 	declare TOLERANCE="4"
-	declare MARKER="($(date --iso=s) ${HOSTNAME}:${PWD}) ${@}"
-	declare CMD="$(basename ${1})"
+	declare CMD="${1}"		; shift
+	declare CMD_ARG="$(basename	${CMD})"
 	declare SRC="$((${#}-1))"	; SRC="${!SRC}"
 	declare DST="${#}"		; DST="${!DST}"
-	echo -en "\n reporting [${CMD}]: '${SRC}' -> '${DST}'\n"			1>&2
+	declare MARKER="($(date --iso=s) ${HOSTNAME}:${PWD}) ${CMD} ${@}"
+	echo -en "\n reporting [${CMD_ARG}]: '${SRC}' -> '${DST}'\n"			1>&2
 	echo -en "${MARKER}\n"								1>&2
 	if
-		[[ ${1} == rsync ]] ||
-		[[ ${1} == unison ]]
+		[[ ${CMD_ARG} == rsync ]] ||
+		[[ ${CMD_ARG} == unison ]]
 	then
 		function rsync_list {
 			declare RFILE="${1}" && shift
@@ -2550,14 +2551,14 @@ function reporter {
 			return 1;
 		fi
 	fi
-	if [[ ${1} != git ]]; then
-		time ${NICELY} "${@}" || {
+	if [[ ${CMD} != git ]]; then
+		time ${NICELY} ${CMD} "${@}" || {
 			echo -en "ERROR: ${MARKER}"					1>&2
 			echo -en "\n"							1>&2
 			return 1;
 		};
 	else
-		time "${@}" || {
+		time ${CMD} "${@}" || {
 			echo -en "ERROR: ${MARKER}"					1>&2
 			echo -en "\n"							1>&2
 			return 1;
