@@ -996,7 +996,7 @@ function enc-status {
 			sort -u
 	)"
 	for FILE in ${LST}; do
-		${CMD} "du -ms ${FILE}" #>>> 2>/dev/null
+		${CMD} "du -ms ${FILE}" 2>/dev/null
 	done
 	${CMD} "id"
 	return 0
