@@ -2730,15 +2730,11 @@ function sync-dir {
 	declare REP_FUL="${1}" && shift
 	${MKDIR} $(dirname ${BAS_DIR}/${REP_DST})
 	if [[ ${REP_TYP} == repo ]]; then
-		export PATH="${BAS_DIR}/${REP_DST}:${PATH}"
 		if [[ ! -d ${BAS_DIR}/${REP_DST} ]]; then
 			${MKDIR} ${BAS_DIR}/${REP_DST}
-			${LN} /usr/bin/python2.7 ${BAS_DIR}/${REP_DST}/python
 			(cd ${BAS_DIR}/${REP_DST} &&
 				reporter ${BAS_DIR}/_repo/repo init -u ${REP_SRC//\/=\// })
 		fi
-		${RM} ${BAS_DIR}/${REP_DST}/python
-		${LN} /usr/bin/python2.7 ${BAS_DIR}/${REP_DST}/python
 		(cd ${BAS_DIR}/${REP_DST} &&
 			reporter ${BAS_DIR}/_repo/repo sync)
 	elif [[ ${REP_TYP} == git ]]; then
