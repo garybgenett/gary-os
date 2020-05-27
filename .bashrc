@@ -1048,8 +1048,9 @@ function format {
 ########################################
 
 function git {
-	declare DIR="$(realpath "${PWD}")"
-	${NICELY} $(which git) --git-dir="${DIR}.git" --work-tree="${DIR}" "${@}"
+	declare WORK="$(realpath "${PWD}")"
+	declare REPO="$(realpath "${PWD}.git")"
+	${NICELY} $(which git) --git-dir="${REPO}" --work-tree="${WORK}" "${@}"
 }
 
 ########################################
