@@ -61,7 +61,7 @@ _EOF_
 
 if [[ ! -d ${GDEST} ]]; then
 	print_usage
-	exit 0
+	exit 1
 fi
 
 ########################################
@@ -115,6 +115,9 @@ if [[ -b $(		echo ${1} | ${SED} "s|[p]?[0-9]*$||g") ]] || [[ ${1} == grub+([0-9]
 		GPART="p${GPDEF}"
 	fi
 	shift
+elif [[ -n $(		echo ${1} | ${GREP} "^[/]dev[/]") ]]; then
+	print_usage
+	exit 1
 fi
 declare GINST_DO="${GINST}"
 GPSEP="$(echo "${GPART}" | ${SED} "s|^([p]?)([0-9]+)$|\1|g")"
