@@ -2870,11 +2870,12 @@ function vdiff {
 		diff ${DIFF_OPTS} "${@}"		>>${VDIFF} 2>&1
 	fi
 	if ${CATIT}; then
-		cat ${VDIFF} | ${GREP} "${SEARCH}"
+		${GREP} "${SEARCH}" ${VDIFF}
+		${LL} ${VDIFF} #>>> >/dev/null 2>&1
 	else
 		${VIEW} "+/${SEARCH}" ${VDIFF}
+		${RM} ${VDIFF} >/dev/null 2>&1
 	fi
-	${RM} ${VDIFF} >/dev/null 2>&1
 	return 0
 }
 
