@@ -892,7 +892,7 @@ function enc-fs {
 		OUT="$(gpg --decrypt ${ENCFS_FILE} 2>/dev/null)"
 	fi
 	mount-robust -u ${DST}
-	(echo "${OUT}" | ${ENCFS} -f --stdinpass "${@}") &
+	echo "${OUT}" | (${ENCFS} -f --stdinpass "${@}") &
 	sleep 1
 	if [[ -z $(${GREP} "encfs[ ]${DST}[ ]fuse.encfs" /proc/mounts) ]]; then
 		return 1
