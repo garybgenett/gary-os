@@ -48,6 +48,7 @@ declare INTERFACE="display"
 
 if [[ ${QSYS} == 0 ]]; then
 	FORK="false"
+	INTERFACE="curses"
 elif [[ ${QSYS} == 1 ]]; then
 	NET_NUM="5"
 	INTERFACE="console"
@@ -57,7 +58,6 @@ if ${FORK}; then
 	FORK="&"
 else
 	FORK=
-	INTERFACE=
 fi
 
 declare ROOT="false"
@@ -135,7 +135,10 @@ if [[ -n $(file -L ${I} 2>/dev/null | ${GREP} "Linux kernel .+ boot executable")
 	if [[ -n $(file -L ${I/%.kernel}.initrd 2>/dev/null | ${GREP} "(XZ|gzip) compressed data") ]]; then
 		QKRN+=" -initrd ${I/%.kernel}.initrd"
 	fi
-#>>>	QKRN+=" -append console=ttyS0,38400"
+	if [[ ${INTERFACE} == curses ]]; then
+		QKRN+=" -append console=ttyS0,38400"
+		FORK="&"
+	fi
 elif [[ -n $(file -L ${I} 2>/dev/null | ${GREP} "(DOS/MBR boot sector|ISO 9660 CD-ROM)") ]]; then
 	QDSK+=" -drive id=cdrom1,if=none,format=raw,file=${I}"
 	QDSK+=" -device scsi-cd,drive=cdrom1,bootindex=2"
@@ -198,10 +201,15 @@ QVDA+=" -device virtserialport,chardev=spicevmc0,bus=virtio-serial0.0,nr=1,name=
 ########################################
 
 QVGA="-display curses"
-QVGA+=" -vga qxl"
-QVGA+=" -device qxl,id=qxl0,max_outputs=1"
-QVGA+=" -device qxl,id=qxl1,max_outputs=1"
-QVGA+=" -device qxl,id=qxl2,max_outputs=1"
+if [[ ${INTERFACE} == curses ]]; then
+	QVGA+=" -curses"
+	QVGA+=" -vga std"
+else
+	QVGA+=" -vga qxl"
+	QVGA+=" -device qxl,id=qxl0,max_outputs=1"
+	QVGA+=" -device qxl,id=qxl1,max_outputs=1"
+	QVGA+=" -device qxl,id=qxl2,max_outputs=1"
+fi
 QVGA+=" -vnc 127.0.0.1:9${QNUM}"
 
 ########################################
@@ -289,13 +297,17 @@ eval exec qemu-system-x86_64 \
 
 ########################################
 
-sleep 1
-cat "${QOUT}"
+if [[ -n ${FORK} ]]; then
+	sleep 1
+	cat "${QOUT}"
+fi
 
 if [[ ${INTERFACE} == display ]]; then
 #>>>	exec ${VNC} 127.0.0.1:599${QNUM} &
 	exec remote-viewer --title=SPICE:${QNUM} spice://127.0.0.1/?port=666${QNUM} &
 	exec telnet 127.0.0.1 999${QNUM}
+elif [[ ${INTERFACE} == curses ]] && [[ -n ${FORK} ]]; then
+	exec telnet 127.0.0.1 990${QNUM}
 elif [[ ${INTERFACE} == console ]]; then
 	exec telnet 127.0.0.1 990${QNUM}
 fi
