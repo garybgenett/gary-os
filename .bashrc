@@ -2492,14 +2492,18 @@ function reporter {
 			declare MATCHED="0"
 			if [[ -z "${SRC_LIST[*]}" ]]; then
 				echo -en "ERROR: ${MARKER}"				1>&2
+				echo -en "\n"						1>&2
 				echo -en "ERROR: EMPTY SOURCE"				1>&2
 				echo -en "\n"						1>&2
+				sleep 10
 				return 1
 			fi
 #>>>			if [[ -z "${DST_LIST[*]}" ]]; then
 #>>>				echo -en "ERROR: ${MARKER}"				1>&2
+#>>>				echo -en "\n"						1>&2
 #>>>				echo -en "ERROR: EMPTY TARGET"				1>&2
 #>>>				echo -en "\n"						1>&2
+#>>>				sleep 10
 #>>>				return 1
 #>>>			fi
 			for SRC_TEST in ${SRC_LIST[*]}; do
@@ -2527,8 +2531,10 @@ function reporter {
 				echo -en "\n"						1>&2
 				if (( ${MATCHED} == 0 )); then
 					echo -en "ERROR: ${MARKER}"			1>&2
+					echo -en "\n"					1>&2
 					echo -en "ERROR: LISTS HAVE NO MATCHES"		1>&2
 					echo -en "\n"					1>&2
+					sleep 10
 					return 1
 				fi
 				if { {
@@ -2538,8 +2544,10 @@ function reporter {
 					(( ${MATCHED} != ${#DST_LIST[*]} ));
 				}; }; then
 					echo -en "ERROR: ${MARKER}"			1>&2
+					echo -en "\n"					1>&2
 					echo -en "ERROR: DIFFERENCES ARE TOO DANGEROUS"	1>&2
 					echo -en "\n"					1>&2
+					sleep 10
 					return 1
 				fi
 			fi
