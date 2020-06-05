@@ -2449,10 +2449,12 @@ function reporter {
 	echo -en "\n reporting [${CMD_ARG}]${FORCE:+(${FORCE})}:"			1>&2
 	echo -en " '${SRC}' -> '${DST}'\n"						1>&2
 	echo -en "${MARKER}\n"								1>&2
-	if
+	if { {
+		false;
+	} && {
 		[[ ${CMD_ARG} == rsync ]] ||
-		[[ ${CMD_ARG} == unison ]]
-	then
+		[[ ${CMD_ARG} == unison ]];
+	}; }; then
 		function rsync_list {
 			declare RFILE="${1}" && shift
 			declare R_SSH="${@}"
