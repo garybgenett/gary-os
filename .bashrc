@@ -1198,6 +1198,13 @@ function git-check {
 
 ########################################
 
+function git-fsck {
+	${GIT} fsck --verbose --full --no-reflogs --strict	|| return 1
+	return 0
+}
+
+########################################
+
 function git-clean {
 	${GIT} reset --soft								|| return 1
 	declare REF
@@ -1208,7 +1215,7 @@ function git-clean {
 	done
 	${GIT} reflog expire --verbose --all --expire=all --expire-unreachable=all	|| return 1
 	${GIT} gc --prune=all								|| return 1
-	${GIT} fsck --verbose --full --no-reflogs --strict				|| return 1
+	git-fsck									|| return 1
 	return 0
 }
 
