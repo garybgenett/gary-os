@@ -1953,7 +1953,7 @@ function maildirmake {
 function mount-robust {
 	echo -en "=== [Robust Mount: ${@}]\n"
 	declare FINDMNT="findmnt --noheadings" #>>> --first-only"
-	declare LSBLK="lsblk --noheadings"
+	declare LSBLK="lsblk --noheadings --fs --output FSTYPE"
 	declare DEBUG="false"
 	declare TEST="false"
 	declare RO=
@@ -2020,7 +2020,7 @@ function mount-robust {
 	declare DEV_SRC="$(${FINDMNT} --output SOURCE --source ${DEV} 2>/dev/null | tail -n1)"; declare	DEV_TGT="$(${FINDMNT} --output TARGET --source ${DEV} 2>/dev/null | tail -n1)"
 	declare DIR_SRC="$(${FINDMNT} --output SOURCE --target ${DIR} 2>/dev/null | tail -n1)"; declare	DIR_TGT="$(${FINDMNT} --output TARGET --target ${DIR} 2>/dev/null | tail -n1)"
 	if [[ -d ${DEV} ]]; then
-			DEV_SRC="$(${FINDMNT} --output SOURCE --target ${DEV} 2>/dev/null | tail -n1)";	DEV_TGT="$(${FINDMNT} --output TARGET --target ${DEV} 2>/dev/null | tail -n1)"
+		DEV_SRC="$(${FINDMNT} --output SOURCE --target ${DEV} 2>/dev/null | tail -n1)";		DEV_TGT="$(${FINDMNT} --output TARGET --target ${DEV} 2>/dev/null | tail -n1)"
 	fi
 	IS_OVLY="false"
 	if ${OV} || [[ ${DEV_SRC} == overlay ]]; then
@@ -2118,7 +2118,9 @@ function mount-robust {
 			if ! ${DEBUG}; then
 				umount -drv ${DEV} || return 1
 			fi
-			if [[ $(${FINDMNT} --output TARGET --target ${TRUE_DIR} 2>/dev/null | tail -n1) == ${TRUE_DIR} ]]; then
+			if {
+				[[ $(${FINDMNT} --output TARGET --target ${TRUE_DIR} 2>/dev/null | tail -n1) == ${TRUE_DIR} ]];
+			}; then
 				echo -en "- <Directory Is Still Mounted!>\n"
 				return 1
 			fi
@@ -2160,10 +2162,10 @@ function mount-robust {
 			if ${DEBUG}; then
 				return 0
 			fi
-			declare TYP="$(${LSBLK} --fs --output FSTYPE ${DEV} 2>/dev/null | tail -n1)"
+			declare TYP="$(${LSBLK} ${DEV} 2>/dev/null | tail -n1)"
 			declare OVERLAY=
 			if ${OV}; then
-				modprobe fuse overlay #>>> || return 1
+				modprobe --all fuse overlay #>>> || return 1
 				TYP="overlay overlay"
 				declare LOWER_DIRS="${DEV}:${DIR}"
 				if [[ -f ${DEV} ]]; then
@@ -2188,7 +2190,7 @@ function mount-robust {
 				fi
 			fi
 			if [[ ${TYP} == exfat ]]; then
-				modprobe fuse #>>> || return 1
+				modprobe --all fuse #>>> || return 1
 			fi
 			declare DID="false"
 			if [[ ${TYP} == ext4		]]; then DID="true"; fsck -MV -t ${TYP} -pC	${DEV} || return 1; fi
