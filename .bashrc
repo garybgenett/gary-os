@@ -2502,7 +2502,7 @@ function reporter {
 			declare SRC_TEST=
 			declare DST_TEST=
 			declare MATCHED="0"
-			if [[ -z "${SRC_LIST[*]}" ]]; then
+			if [[ -z "${SRC_LIST[@]}" ]]; then
 				echo -en "ERROR: ${MARKER}"				1>&2
 				echo -en "\n"						1>&2
 				echo -en "ERROR: EMPTY SOURCE"				1>&2
@@ -2510,7 +2510,7 @@ function reporter {
 				sleep 10
 				return 1
 			fi
-#>>>			if [[ -z "${DST_LIST[*]}" ]]; then
+#>>>			if [[ -z "${DST_LIST[@]}" ]]; then
 #>>>				echo -en "ERROR: ${MARKER}"				1>&2
 #>>>				echo -en "\n"						1>&2
 #>>>				echo -en "ERROR: EMPTY TARGET"				1>&2
@@ -2518,26 +2518,26 @@ function reporter {
 #>>>				sleep 10
 #>>>				return 1
 #>>>			fi
-			for SRC_TEST in ${SRC_LIST[*]}; do
-				for DST_TEST in ${DST_LIST[*]}; do
+			for SRC_TEST in "${SRC_LIST[@]}"; do
+				for DST_TEST in "${DST_LIST[@]}"; do
 					if [[ ${SRC_TEST} == ${DST_TEST} ]]; then
 						MATCHED="$((${MATCHED}+1))"
 					fi
 				done
 			done
 			if { {
-				(( ${#SRC_LIST[*]} > 1 )) &&
-				(( ${#DST_LIST[*]} > 1 ));
+				(( ${#SRC_LIST[@]} > 1 )) &&
+				(( ${#DST_LIST[@]} > 1 ));
 			} && {
 				(( ${MATCHED} == 0 )) ||
-				(( ${#SRC_LIST[*]} != ${#DST_LIST[*]} ));
+				(( ${#SRC_LIST[@]} != ${#DST_LIST[@]} ));
 			}; }; then
 #>>>				echo -en "WARNING: ${MARKER}"				1>&2
 				echo -en "WARNING: FILE LISTS DO NOT MATCH"		1>&2
 				echo -en "\n"						1>&2
-				echo -en "SOURCE[${#SRC_LIST[*]}]: ${SRC_LIST[*]}"	1>&2
+				echo -en "SOURCE[${#SRC_LIST[@]}]: ${SRC_LIST[@]}"	1>&2
 				echo -en "\n"						1>&2
-				echo -en "TARGET[${#DST_LIST[*]}]: ${DST_LIST[*]}"	1>&2
+				echo -en "TARGET[${#DST_LIST[@]}]: ${DST_LIST[@]}"	1>&2
 				echo -en "\n"						1>&2
 				echo -en "MATCHED[${MATCHED}](${TOLERANCE})"		1>&2
 				echo -en "\n"						1>&2
@@ -2550,10 +2550,10 @@ function reporter {
 					return 1
 				fi
 				if { {
-					(( ${MATCHED} < $((${#SRC_LIST[*]}/${TOLERANCE})) )) ||
-					(( ${MATCHED} < $((${#DST_LIST[*]}/${TOLERANCE})) ));
+					(( ${MATCHED} < $((${#SRC_LIST[@]}/${TOLERANCE})) )) ||
+					(( ${MATCHED} < $((${#DST_LIST[@]}/${TOLERANCE})) ));
 				} && {
-					(( ${MATCHED} != ${#DST_LIST[*]} ));
+					(( ${MATCHED} != ${#DST_LIST[@]} ));
 				}; }; then
 					echo -en "ERROR: ${MARKER}"			1>&2
 					echo -en "\n"					1>&2
