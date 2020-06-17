@@ -566,6 +566,8 @@ alias vlc-play="${VLC} ${HOME}/setup/_misc/playlist.m3u"
 alias web="w3m https://www.google.com"
 alias workspace="_sync workspace"
 alias wpa="ip-setup wpa"
+alias zstatus="mount-zfs -! -?"
+
 if [[ "${UNAME}" == "Darwin" ]]; then
 	alias trust="/_install/_mac_osx.txt -r ; /_install/_mac_osx.txt -x ; /_install/_mac_osx.txt -s"
 	alias workspace="/_install/_mac_osx.txt -w"
@@ -2022,6 +2024,37 @@ function mount-robust {
 	if [[ -d ${DEV} ]]; then
 		DEV_SRC="$(${FINDMNT} --output SOURCE --target ${DEV} 2>/dev/null | tail -n1)";		DEV_TGT="$(${FINDMNT} --output TARGET --target ${DEV} 2>/dev/null | tail -n1)"
 	fi
+	declare ZFS_CHECK_IMPORT="mount-zfs -?"
+	declare ZFS_CHECK="mount-zfs -! -?"
+	declare ZFS_PINT=
+	declare ZFS_POOL=
+	declare ZFS_MTPT=
+	declare ZFS_LIVE=
+	declare ZFS_STAT=
+	declare IS_ZFS="false"
+	if ${ZFS_CHECK} ${DEV} >/dev/null 2>&1; then
+		if ! ${UN}; then
+			${ZFS_CHECK_IMPORT} ${DEV} >/dev/null
+		fi
+		ZFS_PINT="$(${ZFS_CHECK} ${DEV} pint	2>/dev/null)"
+		ZFS_POOL="$(${ZFS_CHECK} ${DEV} pool	2>/dev/null)"
+		ZFS_MTPT="$(${ZFS_CHECK} ${DEV} mount	2>/dev/null)"
+		ZFS_LIVE="$(${ZFS_CHECK} ${DEV} live	2>/dev/null)"
+		ZFS_STAT="$(${ZFS_CHECK} ${DEV} state	2>/dev/null)"
+		IS_ZFS="true"
+	fi
+	if [[ -b ${DEV} ]] && ${IS_ZFS}; then
+		DEV_SRC="${DEV}"
+		DEV_TGT="ZFS(${ZFS_POOL})"
+	fi
+	if [[ -d ${DEV} ]] && ${IS_ZFS}; then
+		DEV_SRC="ZFS(${ZFS_POOL})"
+		DEV_TGT="${ZFS_MTPT}"
+	fi
+	if [[ -d ${DIR} ]] && ${IS_ZFS}; then
+		DIR_SRC="ZFS(${ZFS_POOL})"
+		DIR_TGT="${ZFS_MTPT}"
+	fi
 	IS_OVLY="false"
 	if ${OV} || [[ ${DEV_SRC} == overlay ]]; then
 		DEV_SRC="$(${SED} -n "s|^overlay[ ]${DEV_TGT}[ ]overlay[ ].+lowerdir[=]([^:, ]+).*$|\1|gp" /proc/mounts)"
@@ -2029,7 +2062,14 @@ function mount-robust {
 		IS_OVLY="true"
 	fi
 	declare IS_ROOT="false"
-	if {
+	if ${IS_ZFS}; then
+		if {
+			[[ ${ZFS_MTPT} == / ]] ||
+			{ [[ -b ${DEV} ]] && [[ ${DIR} == / ]]; };
+		}; then
+			IS_ROOT="true"
+		fi
+	elif {
 #>>>		{ ! ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV_TGT} == / ]];	} ||
 		{ ! ${UN} &&	[[ -d ${DIR} ]] && [[ ${DIR} == / ]];		} ||
 		{ ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV_TGT} == / ]];	} ||
@@ -2044,7 +2084,15 @@ function mount-robust {
 		IS_ROOT="true"
 	fi
 	declare IS_MOUNT="false"
-	if {
+	if ${IS_ZFS}; then
+		if {
+			[[ ${ZFS_LIVE} == yes ]] &&
+			[[ ${ZFS_STAT} == online ]] &&
+			[[ ${DEV_TGT} == ${DIR_SRC} ]];
+		}; then
+			IS_MOUNT="true"
+		fi
+	elif {
 #>>>		{ ! ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV} == ${DEV_SRC} ]];	} ||
 		{ ! ${UN} &&	[[ -d ${DIR} ]] && [[ ${DIR} == ${DIR_TGT} ]];	} ||
 		{ ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV} == ${DEV_SRC} ]];	} ||
@@ -2104,6 +2152,9 @@ function mount-robust {
 		{ ${UN} && ! ${IS_MOUNT}; } && {
 			{
 				{ ! ${IS_LUKS} || [[ ! -b ${DEV} ]]; };
+			} && {
+				! ${IS_ZFS} ||
+				[[ -z ${ZFS_PINT} ]];
 			};
 		};
 	}; }; then
@@ -2117,7 +2168,9 @@ function mount-robust {
 		fi
 		if ${IS_MOUNT}; then
 			declare TRUE_DIR="${DEV}"
-			if [[ -b ${DEV} ]]; then
+			if ${IS_ZFS}; then
+				TRUE_DIR="${ZFS_MTPT}"
+			elif [[ -b ${DEV} ]]; then
 				TRUE_DIR="${DEV_TGT}"
 			fi
 			declare PROCESS="$(lsof | ${GREP} "[[:space:]]${TRUE_DIR}([/].+)?$")"
@@ -2126,12 +2179,19 @@ function mount-robust {
 				echo -en "${PROCESS}\n"
 				return 1
 			fi
-			echo -en "- Unmounting...\n"
-			if ! ${DEBUG}; then
-				umount -drv ${DEV} || return 1
+			if ${IS_ZFS}; then
+				if ! ${DEBUG}; then
+					mount-zfs -u ${DEV}	|| return 1
+				fi
+			else
+				echo -en "- Unmounting...\n"
+				if ! ${DEBUG}; then
+					umount -drv ${TRUE_DIR}	|| return 1
+				fi
 			fi
 			if {
-				[[ $(${FINDMNT} --output TARGET --target ${TRUE_DIR} 2>/dev/null | tail -n1) == ${TRUE_DIR} ]];
+				[[ $(${FINDMNT} --output TARGET --target ${TRUE_DIR}	2>/dev/null | tail -n1) == ${TRUE_DIR} ]] ||
+				[[ $(${ZFS_CHECK} ${DEV} live				2>/dev/null) == yes ]];
 			}; then
 				echo -en "- <Directory Is Still Mounted!>\n" 1>&2
 				return 1
@@ -2155,6 +2215,11 @@ function mount-robust {
 				fi
 			fi
 		fi
+		if ${IS_ZFS}; then
+			if ! ${DEBUG}; then
+				mount-zfs -u ${DEV} || return 1
+			fi
+		fi
 		if ${IS_LUKS} && [[ -b ${DEV} ]]; then
 			echo -en "- Closing Encryption...\n"
 			if ! ${DEBUG}; then
@@ -2170,7 +2235,9 @@ function mount-robust {
 			fi
 		fi
 		if ${DM} || ! ${IS_MOUNT}; then
-			echo -en "- Mounting...\n"
+			if ! ${IS_ZFS}; then
+				echo -en "- Mounting...\n"
+			fi
 			if ${DEBUG}; then
 				return 0
 			fi
@@ -2216,11 +2283,299 @@ function mount-robust {
 			if [[ ${TYP} == exfat		]]; then DID="true"; mount -v -t ${TYP} -o ${RO}relatime					"${@}" ${DEV} ${DIR} || return 1; fi
 			if [[ ${TYP} == ntfs-3g		]]; then DID="true"; mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro,shortname=mixed	"${@}" ${DEV} ${DIR} || return 1; fi
 			if [[ ${TYP} == vfat		]]; then DID="true"; mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro,shortname=mixed	"${@}" ${DEV} ${DIR} || return 1; fi
+			if [[ ${TYP} == zfs_member	]]; then DID="true"; mount-zfs ${RO:+-0}							"${@}" ${DEV} ${DIR} || return 1; fi
 			if ! ${DID}; then
 				echo -en "- <Unknown Filesystem Type!>\n" 1>&2
 				return 1
 			fi
 		fi
+	fi
+	return 0
+}
+
+########################################
+
+function mount-zfs {
+	declare ZFS_ROTATE="${ZFS_ROTATE:-true}"
+	declare ZFS_ARC_MAX="$(( (2**30) * 2 ))"
+	declare Z_DATE="$(date --iso=seconds | ${SED} "s|[-:]||g")"
+	declare Z_DREG="[T0-9]+"
+	declare Z_IMPORT="zpool import -d /dev -N"
+	declare Z_LIST="zpool list -H -P -v"
+	declare Z_GET="zpool get -H -o value"
+	declare Z_DAT="zfs get -H -o value"
+	declare Z_ALL="zfs get -o all all"
+	declare Z_ZDB="zdb -l"
+	declare Z_ZDB_META="zdb -u"
+	declare Z_MOUNT="zfs mount -O"
+	declare Z_STATUS="zpool status -P -i"
+	declare Z_FSEP="|"
+	declare Z_PSEP=":"
+	declare Z_DSEP="-"
+	declare ZOPTS=
+	ZOPTS+=" canmount=noauto"
+	ZOPTS+=" compression=lz4"
+	ZOPTS+=" relatime=on"
+	ZOPTS+=" sharenfs=off"
+	ZOPTS+=" sharesmb=off"
+	function zfs_import_pools {
+		modprobe --all zfs >/dev/null 2>&1			#>>> || return 1
+#>>>		# https://serverfault.com/questions/581669/why-isnt-the-arc-max-setting-honoured-on-zfs-on-linux
+		echo -en "${ZFS_ARC_MAX}"	>/sys/module/zfs/parameters/zfs_arc_max
+#>>>		echo -en "3"			>/proc/sys/vm/drop_caches
+		for FILE in $(${Z_IMPORT} 2>/dev/null | ${SED} -n "s|^[[:space:]]+pool[:][ ](.+)$|\1|gp"); do
+			echo -en "- (ZFS Importing: ${FILE})\n" 1>&2
+			zpool import ${FILE}				|| return 1
+			zfs set ${ZOPTS} mountpoint=none ${FILE}	|| return 1
+		done
+		return 0
+	}
+	function zfs_pool_info {
+		${Z_ALL} ${ZPOOL} | ${GREP} --color=never "local$"
+		if [[ ${ZPINT} == ${ZPOOL} ]]; then
+			${Z_ZDB_META} ${ZPOOL}
+		else
+			echo -en "- (ZFS Name: ${ZPINT} -> ${ZPOOL})\n" 1>&2
+		fi
+		return 0
+	}
+	declare Z_CHECK="${FUNCNAME} -! -?"
+	declare IMPORT="true"
+	declare IS="false"
+	declare RO="false"
+	declare UN="false"
+	declare DEV=
+	declare DIR=
+	if [[ ${1} == -! ]]; then	IMPORT="false";	shift; fi
+	if [[ ${1} == -[?] ]]; then	IS="true";	shift; fi
+	if [[ ${1} == -0 ]]; then	RO="true";	shift; fi; if ${RO}; then ZFS_ROTATE="false"; fi
+	if [[ ${1} == -u ]]; then	UN="true";	shift; fi; if ${UN}; then IMPORT="false"; fi
+	if [[ -n ${1} ]]; then		DEV="${1}";	shift; fi
+	if [[ -n ${1} ]]; then		DIR="${1}";	shift; fi
+	if { {
+		[[ -z ${DEV} ]] ||
+		{ [[ ! -b ${DEV} ]] && { ! ${IS} && ! ${UN}; }; } ||
+		{ [[ ! -d ${DIR} ]] && { ! ${IS} && ! ${UN}; }; };
+	} && {
+		! { ! ${UN} && [[ -b ${DEV} ]] && [[ -n ${DIR} ]]; };
+	}; }; then
+		if ${IS}; then
+			if ${IMPORT}; then
+				zfs_import_pools || return 1
+			fi
+			${Z_STATUS}
+			return 0
+		fi
+		echo -en "- <ZFS: Invalid Arguments!>\n" 1>&2
+		return 1
+	fi
+	if ${IMPORT}; then
+		zfs_import_pools || return 1
+	fi
+	declare ZPOOL=
+	if { {
+		{ ! ${UN} && [[ -b ${DEV} ]] && [[ -d ${DIR} ]]; };
+	} && {
+		[[ $(		${Z_CHECK} ${DIR} mount	2>/dev/null) == ${DIR} ]] ||
+		[[ $(		${Z_CHECK} ${DIR} pool	2>/dev/null) == ${DIR} ]];
+	}; }; then ZPOOL="$(	${Z_CHECK} ${DIR} pool	2>/dev/null)"
+	elif [[ -b ${DEV} ]]; then ZPOOL="$(${Z_ZDB}			${DEV}	2>/dev/null | ${SED} -n "s|^[ ]{4}name[:][ ][\'](.+)[\']$|\1|gp"		)"
+	elif [[ -d ${DEV} ]]; then ZPOOL="$(${Z_DAT},name mountpoint	${DEV}	2>/dev/null | ${SED} -n "s|^${DEV}[[:space:]]+(.+)$|\1|gp"			)"
+	elif [[ -n $(${Z_LIST}						${DEV}	2>/dev/null) ]]; then ZPOOL="${DEV}"
+	fi
+	declare ZNAME="$(echo "${ZPOOL}"					2>/dev/null | ${SED} "s|${Z_DSEP}${Z_DREG}$||g"					)"
+	declare ZROOT="$(echo "${ZPOOL}"					2>/dev/null | ${SED} "s|(${Z_PSEP}${Z_DREG})?(${Z_DSEP}${Z_DREG})?$||g"		)"
+	if {
+		[[ -z $(${Z_LIST}		"${ZPOOL}"			2>/dev/null) ]] &&
+		[[ -n $(${Z_LIST}		"${ZNAME}"			2>/dev/null | ${SED} -n "s|^[[:space:]]+(${DEV}).+$|\1|gp"			) ]];
+	}; then
+		ZPOOL="${ZNAME}"
+	fi
+	declare ZGUID="$(${Z_GET} guid		"${ZPOOL}"			2>/dev/null									)"
+	declare ZDEVS=($(${Z_LIST}		"${ZPOOL}"			2>/dev/null | ${SED} -n "s|^[[:space:]]+(/dev/[^[:space:]]+).+$|\1|gp"		))
+	declare ZDIDS=($(${Z_LIST} -g		"${ZPOOL}"			2>/dev/null | ${SED} -n "s|^[[:space:]]+([^[:space:]]+).+$|\1|gp"		))
+	declare ZTIME="$(${Z_ZDB_META}		"${ZPOOL}"			2>/dev/null | ${SED} -n "s|^[[:space:]]+timestamp[ ][=][ ]([^ ]+)[ ].+$|\1|gp"	)"
+	declare ZMTPT="$(${Z_DAT} mountpoint	"${ZPOOL}"			2>/dev/null									)"
+	declare ZLIVE="$(${Z_DAT} mounted	"${ZPOOL}"			2>/dev/null									)"
+	declare ZSTAT="$(${Z_STATUS}		"${ZPOOL}"			2>/dev/null | ${SED} -n "s|^[[:space:]]+${DEV}[[:space:]]+([A-Z]+).+$|\1|gp"	)"
+	if (( ${#ZDEVS[@]} > 1 )); then ZDIDS=("${ZDIDS[@]:1}"); fi
+	if [[ -n ${ZTIME} ]]; then ZTIME="$(date --iso=seconds --date="@${ZTIME}")"; fi
+	declare ZPINT="$(${Z_ZDB}		${ZDEVS[0]}			2>/dev/null | ${SED} -n "s|^[ ]{4}name[:][ ][\'](.+)[\']$|\1|gp"		)"
+	declare ZDNAM="${ZNAME}${Z_DSEP}${Z_DATE}"
+	declare ZPNAM="${ZROOT}${Z_PSEP}${Z_DATE}"
+	declare ZTYPE=
+	if {
+		[[ ${ZPOOL} == ${DEV} ]] ||
+		[[ ${ZPINT} == ${DEV} ]];
+	}; then
+		ZTYPE="pool"
+	elif {
+		[[ ${ZMTPT} == ${DEV} ]];
+	}; then
+		ZTYPE="mount"
+	elif {
+		[[ -n $(for FILE in "${ZDEVS[@]}"; do if [[ ${FILE} == ${DEV} ]]; then echo "true"; break; fi; done) ]];
+	}; then
+		ZTYPE="member"
+	elif {
+		[[ -b ${DEV} ]] &&
+		[[ -n ${ZPOOL} ]];
+	}; then
+		ZTYPE="filesystem"
+	else
+		echo -en "- <ZFS: Failed Detection!>\n" 1>&2
+		return 1
+	fi
+	if ${IS}; then							echo -en "- (ZFS ${ZTYPE^}: ${ZPOOL})\n" 1>&2
+		if { [[ ${ZMTPT} == / ]] || [[ ${DIR} == / ]]; }; then	echo -en "- (ZFS: Root Filesystem)\n" 1>&2
+		fi
+		if [[ ${ZLIVE} == yes ]]; then				echo -en "- (ZFS: Mounted Filesystem)\n" 1>&2
+		elif [[ ${ZTYPE} != filesystem ]]; then			echo -en "- (ZFS: Exported Filesystem)\n" 1>&2
+		else							echo -en "- (ZFS: Detected Filesystem)\n" 1>&2
+		fi
+		if { [[ -z ${DIR} ]] || [[ ${DIR} == pint	]]; }; then echo -en "${ZPINT}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
+		if { [[ -z ${DIR} ]] || [[ ${DIR} == pool	]]; }; then echo -en "${ZPOOL}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
+		if { [[ -z ${DIR} ]] || [[ ${DIR} == name	]]; }; then echo -en "${ZNAME}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
+		if { [[ -z ${DIR} ]] || [[ ${DIR} == root	]]; }; then echo -en "${ZROOT}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
+		if { [[ -z ${DIR} ]] || [[ ${DIR} == guid	]]; }; then echo -en "${ZGUID}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
+		if { [[ -z ${DIR} ]] || [[ ${DIR} == devs	]]; }; then echo -en "${ZDEVS[@]}"	; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
+		if { [[ -z ${DIR} ]] || [[ ${DIR} == devids	]]; }; then echo -en "${ZDIDS[@]}"	; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
+		if { [[ -z ${DIR} ]] || [[ ${DIR} == time	]]; }; then echo -en "${ZTIME}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
+		if { [[ -z ${DIR} ]] || [[ ${DIR} == mount	]]; }; then echo -en "${ZMTPT}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
+		if { [[ -z ${DIR} ]] || [[ ${DIR} == live	]]; }; then echo -en "${ZLIVE}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
+		if { [[ -z ${DIR} ]] || [[ ${DIR} == state	]]; }; then echo -en "${ZSTAT,,}"	; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
+		if { [[ -z ${DIR} ]] || [[ ${DIR} == type	]]; }; then echo -en "${ZTYPE}"		; fi; #>>> if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
+		if [[ -z ${DIR} ]]; then
+			echo -en "\n"
+		fi
+		return 0
+	fi
+	if ${UN}; then
+		if [[ -z $(${Z_CHECK} ${DEV} pint 2>/dev/null) ]]; then
+			return 0
+		fi
+		if [[ $(${Z_DAT} readonly ${ZPOOL} 2>/dev/null) == on ]]; then
+			ZFS_ROTATE="false"
+		fi
+		function zfs_unmount_pool {
+			${Z_STATUS} ${ZPOOL}
+			echo -en "- Closing Pool...\n"
+			for FILE in "${ZDEVS[@]}"; do
+				if [[ ${ZDEVS[0]} != ${FILE} ]]; then
+					echo -en "- Deactivating Member... ${FILE}\n"
+					zpool offline ${ZPOOL} ${FILE}		|| return 1
+				fi
+			done
+			if [[ -n $(${Z_DAT} mountpoint ${Z_POOL}) ]]; then
+				if [[ ${ZLIVE} == yes ]]; then
+					zfs umount "${@}" ${ZPOOL}		|| return 1
+				fi
+				zfs set ${ZOPTS} mountpoint=none ${ZPOOL}	|| return 1
+			fi
+			if {
+				${ZFS_ROTATE} &&
+				[[ ${ZPOOL} == ${ZNAME} ]];
+			}; then
+				zfs_pool_info					|| return 1
+				echo -en "- Renaming Pool...\n"
+				zpool export ${ZPOOL}				|| return 1
+				ZPOOL="${ZDNAM}"
+				zpool import ${ZPINT} ${ZPOOL}			|| return 1
+			fi
+			zfs_pool_info						|| return 1
+			zpool export ${ZPOOL}					|| return 1
+			return 0
+		}
+		function zfs_unmount_member {
+			if [[ ${ZDEVS[0]} == ${DEV} ]]; then
+				zfs_unmount_pool				|| return 1
+			else
+				echo -en "- Removing Member... (${ZPOOL}) ${DEV}\n"
+				if [[ ${ZPOOL} == ${ZROOT} ]]; then
+					zpool split -P ${ZPOOL} ${ZPNAM} ${DEV}	|| return 1
+				else
+					zpool split -P ${ZPOOL} ${ZDNAM} ${DEV}	|| return 1
+				fi
+				${Z_STATUS} ${ZPOOL}
+			fi
+			return 0
+		}
+		if {
+			[[ ${ZTYPE} == pool ]] ||
+			[[ ${ZTYPE} == mount ]];
+		}; then
+			zfs_unmount_pool					|| return 1
+		elif {
+			[[ ${ZTYPE} == member ]] ||
+			[[ ${ZTYPE} == filesystem ]];
+		}; then
+			zfs_unmount_member					|| return 1
+		fi
+	else
+		function zfs_mount_pool {
+			if [[ ${ZLIVE} == no ]]; then
+				echo -en "- Opening Pool...\n"
+				if {
+					${ZFS_ROTATE} &&
+					[[ ${ZPOOL} != ${ZNAME} ]];
+				}; then
+					zfs_pool_info				|| return 1
+					echo -en "- Renaming Pool...\n"
+					zpool export ${ZPOOL}			|| return 1
+					ZPOOL="${ZNAME}"
+					zpool import -t ${ZPINT} ${ZPOOL}	|| return 1
+				fi
+				zfs set \
+					${ZOPTS} \
+					$(if ${RO}; then	echo "readonly=on"
+						else		echo "readonly=off"
+					fi) \
+					mountpoint=${DIR} \
+					${ZPOOL}				|| return 1
+				if [[ $(${Z_DAT} mounted ${ZPOOL}) == no ]]; then
+					${Z_MOUNT} "${@}" ${ZPOOL}		|| return 1
+				fi
+				zfs_pool_info					|| return 1
+			fi
+			return 0
+		}
+		function zfs_mount_member {
+			if [[ ${ZDEVS[0]} == ${DEV} ]]; then
+				zfs_mount_pool					|| return 1
+			fi
+			declare ZMEMBER="false"
+			for FILE in ${ZDEVS[@]}; do
+				if [[ ${FILE} == ${DEV} ]]; then
+					ZMEMBER="true"
+				fi
+			done
+			if ! ${ZMEMBER}; then
+				echo -en "- Attaching Member... (${ZPOOL}) ${DEV}\n"
+				declare ZOLDPOOL="$(${Z_CHECK} ${DEV} pint 2>/dev/null)"
+				if [[ -n ${ZOLDPOOL} ]]; then
+					echo -en "- Destroying Old Pool... ${ZOLDPOOL}\n"
+					zpool destroy ${ZOLDPOOL}		|| return 1
+				fi
+				zpool attach ${ZPOOL} ${ZDEVS[0]} ${DEV}	|| return 1
+			fi
+			if [[ $(${Z_CHECK} ${DEV} state 2>/dev/null) != online ]]; then
+				echo -en "- Activating Member... ${DEV}\n"
+				zpool online ${ZPOOL} ${DEV}			|| return 1
+			fi
+			return 0
+		}
+		if {
+			[[ ${ZTYPE} == pool ]] ||
+			[[ ${ZTYPE} == mount ]];
+		}; then
+			zfs_mount_pool						|| return 1
+		elif {
+			[[ ${ZTYPE} == member ]] ||
+			[[ ${ZTYPE} == filesystem ]];
+		}; then
+			zfs_mount_member					|| return 1
+		fi
+		${Z_STATUS} ${ZPOOL}
 	fi
 	return 0
 }
