@@ -1978,7 +1978,7 @@ function mount-robust {
 		DEV_DIRS[3]="/proc"
 		DEV_DIRS[4]="/sys"
 		if [[ ! -d ${DIR} ]]; then
-			echo -en "- <Target Is Not A Directory!>\n"
+			echo -en "- <Target Is Not A Directory!>\n" 1>&2
 			if [[ -n ${DIR} ]]; then
 				${LL} -d ${DIR}
 			fi
@@ -2003,18 +2003,18 @@ function mount-robust {
 		{ [[ ! -d ${DEV} ]] && [[ ! -f ${DEV} ]] && ${OV}; } ||
 		{ [[ ! -d ${DIR} ]] && ! ${UN}; };
 	}; then
-		echo -en "- <Invalid Arguments!>\n"
+		echo -en "- <Invalid Arguments!>\n" 1>&2
 		if ! ${DEBUG}; then
 			return 1
 		fi
 	fi
 	declare IS_LUKS="false"
 	declare LUKS_DEV="${DEV}"
-	if cryptsetup isLuks ${DEV} 2>/dev/null; then
+	if cryptsetup isLuks ${DEV} >/dev/null 2>&1; then
 		if ! ${TEST}; then
 			DEV="/dev/mapper/$(basename ${DEV} 2>/dev/null)_crypt"
 		fi
-		echo -en "- (LUKS: ${DEV})\n"
+		echo -en "- (LUKS: ${DEV})\n" 1>&2
 		IS_LUKS="true"
 	fi
 	declare DEV_SRC="$(${FINDMNT} --output SOURCE --source ${DEV} 2>/dev/null | tail -n1)"; declare	DEV_TGT="$(${FINDMNT} --output TARGET --source ${DEV} 2>/dev/null | tail -n1)"
@@ -2025,7 +2025,7 @@ function mount-robust {
 	IS_OVLY="false"
 	if ${OV} || [[ ${DEV_SRC} == overlay ]]; then
 		DEV_SRC="$(${SED} -n "s|^overlay[ ]${DEV_TGT}[ ]overlay[ ].+lowerdir[=]([^:, ]+).*$|\1|gp" /proc/mounts)"
-		echo -en "- (Overlay Mount)\n"
+		echo -en "- (Overlay Mount)\n" 1>&2
 		IS_OVLY="true"
 	fi
 	declare IS_ROOT="false"
@@ -2035,12 +2035,12 @@ function mount-robust {
 		{ ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV_TGT} == / ]];	} ||
 		{ ${UN} &&	[[ -d ${DEV} ]] && [[ ${DEV} == / ]];		};
 	}; then
-		echo -en "- (Root Filesystem)\n"
+		echo -en "- (Root Filesystem)\n" 1>&2
 		IS_ROOT="true"
 	elif {
 		{ ! ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV_TGT} == / ]];	};
 	}; then
-		echo -en "- <Remounting Root Device!>\n"
+		echo -en "- <Remounting Root Device!>\n" 1>&2
 		IS_ROOT="true"
 	fi
 	declare IS_MOUNT="false"
@@ -2050,12 +2050,12 @@ function mount-robust {
 		{ ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV} == ${DEV_SRC} ]];	} ||
 		{ ${UN} &&	[[ -d ${DEV} ]] && [[ ${DEV} == ${DEV_TGT} ]];	};
 	}; then
-		echo -en "- (Mounted Filesystem)\n"
+		echo -en "- (Mounted Filesystem)\n" 1>&2
 		IS_MOUNT="true"
 	elif {
 		{ ! ${UN} &&	[[ -b ${DEV} ]] && [[ ${DEV} == ${DEV_SRC} ]];	};
 	}; then
-		echo -en "- <Remounting Mounted Device!>\n"
+		echo -en "- <Remounting Mounted Device!>\n" 1>&2
 		IS_MOUNT="true"
 	fi
 	if ${DEBUG}; then
@@ -2098,9 +2098,21 @@ function mount-robust {
 		mount
 		return 1
 	fi
+	if { {
+		{ ! ${UN} && ${IS_MOUNT}; };
+	} || {
+		{ ${UN} && ! ${IS_MOUNT}; } && {
+			{
+				{ ! ${IS_LUKS} || [[ ! -b ${DEV} ]]; };
+			};
+		};
+	}; }; then
+		echo -en "- <Nothing To Be Done.>\n" 1>&2
+		return 0
+	fi
 	if ${UN}; then
 		if ${IS_ROOT}; then
-			echo -en "- <Will Not Unmount Root Filesystem!>\n"
+			echo -en "- <Will Not Unmount Root Filesystem!>\n" 1>&2
 			return 1
 		fi
 		if ${IS_MOUNT}; then
@@ -2110,7 +2122,7 @@ function mount-robust {
 			fi
 			declare PROCESS="$(lsof | ${GREP} "[[:space:]]${TRUE_DIR}([/].+)?$")"
 			if [[ -n ${PROCESS} ]]; then
-				echo -en "- <Processes Still Running In Mount!>\n"
+				echo -en "- <Processes Still Running In Mount!>\n" 1>&2
 				echo -en "${PROCESS}\n"
 				return 1
 			fi
@@ -2121,7 +2133,7 @@ function mount-robust {
 			if {
 				[[ $(${FINDMNT} --output TARGET --target ${TRUE_DIR} 2>/dev/null | tail -n1) == ${TRUE_DIR} ]];
 			}; then
-				echo -en "- <Directory Is Still Mounted!>\n"
+				echo -en "- <Directory Is Still Mounted!>\n" 1>&2
 				return 1
 			fi
 			if ${IS_OVLY}; then
@@ -2205,7 +2217,7 @@ function mount-robust {
 			if [[ ${TYP} == ntfs-3g		]]; then DID="true"; mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro,shortname=mixed	"${@}" ${DEV} ${DIR} || return 1; fi
 			if [[ ${TYP} == vfat		]]; then DID="true"; mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro,shortname=mixed	"${@}" ${DEV} ${DIR} || return 1; fi
 			if ! ${DID}; then
-				echo -en "- <Unknown Filesystem Type!>\n"
+				echo -en "- <Unknown Filesystem Type!>\n" 1>&2
 				return 1
 			fi
 		fi
