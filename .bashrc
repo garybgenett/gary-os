@@ -2319,6 +2319,9 @@ function mount-zfs {
 	ZOPTS+=" relatime=on"
 	ZOPTS+=" sharenfs=off"
 	ZOPTS+=" sharesmb=off"
+	declare ZOPTS_DONE="${ZOPTS}"
+	ZOPTS_DONE+=" mountpoint=none"
+	ZOPTS_DONE+=" readonly=on"
 	function zfs_import_pools {
 		modprobe --all zfs >/dev/null 2>&1			#>>> || return 1
 #>>>		# https://serverfault.com/questions/581669/why-isnt-the-arc-max-setting-honoured-on-zfs-on-linux
@@ -2326,8 +2329,8 @@ function mount-zfs {
 #>>>		echo -en "3"			>/proc/sys/vm/drop_caches
 		for FILE in $(${Z_IMPORT} 2>/dev/null | ${SED} -n "s|^[[:space:]]+pool[:][ ](.+)$|\1|gp"); do
 			echo -en "- (ZFS Importing: ${FILE})\n" 1>&2
-			zpool import ${FILE}				|| return 1
-			zfs set ${ZOPTS} mountpoint=none ${FILE}	|| return 1
+			zpool import ${FILE}		|| return 1
+			zfs set ${ZOPTS_DONE} ${FILE}	|| return 1
 		done
 		return 0
 	}
@@ -2479,7 +2482,7 @@ function mount-zfs {
 				if [[ ${ZLIVE} == yes ]]; then
 					zfs umount "${@}" ${ZPOOL}		|| return 1
 				fi
-				zfs set ${ZOPTS} mountpoint=none ${ZPOOL}	|| return 1
+				zfs set ${ZOPTS_DONE} ${ZPOOL}			|| return 1
 			fi
 			if {
 				${ZFS_ROTATE} &&
@@ -2500,12 +2503,18 @@ function mount-zfs {
 				zfs_unmount_pool				|| return 1
 			else
 				echo -en "- Removing Member... (${ZPOOL}) ${DEV}\n"
+				declare ZPOOL_NEW=
 				if [[ ${ZPOOL} == ${ZROOT} ]]; then
-					zpool split -P ${ZPOOL} ${ZPNAM} ${DEV}	|| return 1
+					ZPOOL_NEW="${ZPNAM}"
 				else
-					zpool split -P ${ZPOOL} ${ZDNAM} ${DEV}	|| return 1
+					ZPOOL_NEW="${ZDNAM}"
 				fi
-				${Z_STATUS} ${ZPOOL}
+				zpool split -P ${ZPOOL} ${ZPOOL_NEW} ${DEV}	|| return 1
+				zpool import ${ZPOOL_NEW}			|| return 1
+				zfs set ${ZOPTS_DONE} ${ZPOOL_NEW}		|| return 1
+				${Z_STATUS} ${ZPOOL_NEW}			|| return 1
+				zpool export ${ZPOOL_NEW}			|| return 1
+				${Z_STATUS} ${ZPOOL}				|| return 1
 			fi
 			return 0
 		}
@@ -2536,10 +2545,10 @@ function mount-zfs {
 				fi
 				zfs set \
 					${ZOPTS} \
+					mountpoint=${DIR} \
 					$(if ${RO}; then	echo "readonly=on"
 						else		echo "readonly=off"
 					fi) \
-					mountpoint=${DIR} \
 					${ZPOOL}				|| return 1
 				if [[ $(${Z_DAT} mounted ${ZPOOL}) == no ]]; then
 					${Z_MOUNT} "${@}" ${ZPOOL}		|| return 1
