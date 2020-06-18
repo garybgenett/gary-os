@@ -2309,6 +2309,7 @@ function mount-zfs {
 	declare Z_ZDB_META="zdb -u"
 	declare Z_MOUNT="zfs mount -O"
 	declare Z_STATUS="zpool status -P -i"
+	declare Z_IOINFO="zpool iostat -P -v"
 	declare Z_FSEP="|"
 	declare Z_PSEP=":"
 	declare Z_DSEP="-"
@@ -2363,6 +2364,8 @@ function mount-zfs {
 			if ${IMPORT}; then
 				zfs_import_pools || return 1
 			fi
+			${Z_IOINFO}
+			echo -en "\n"
 			${Z_STATUS}
 			return 0
 		fi
