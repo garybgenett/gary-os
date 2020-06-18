@@ -2364,6 +2364,12 @@ function mount-zfs {
 			if ${IMPORT}; then
 				zfs_import_pools || return 1
 			fi
+			echo -en "\n"
+			for FILE in $(fdisk -l 2>&1 | ${SED} -n "s|^Disk[ ]([/][^:]+)[:].+$|\1|gp" | ${GREP} -v "/dev/mapper"); do
+				echo -en "${FILE}: "
+				hdparm -I ${FILE} 2>&1 | ${SED} -n "s|^.+Serial Number[:][[:space:]]+(.+)$|\1|gp"
+			done
+			echo -en "\n"
 			${Z_IOINFO}
 			echo -en "\n"
 			${Z_STATUS}
