@@ -1042,9 +1042,15 @@ function format {
 	elif [[ ${1} == -l ]]; then
 		shift
 		# https://wiki.archlinux.org/index.php/Dm-crypt/Device_encryption#Encryption_options_for_LUKS_mode
-		cryptsetup --verbose --type luks2 --cipher aes-xts-plain64 --key-size 256 --hash sha256 luksFormat "${@}"
+		cryptsetup --verbose --type luks2 --sector-size 4096 --cipher aes-xts-plain64 --key-size 256 --hash sha256 luksFormat "${@}"
+	elif [[ ${1} == -s ]]; then
+		shift
+		# https://openzfs.org/wiki/Performance_tuning#Alignment_shift
+		zpool create -o ashift=12 "${@}"
 	else
-		mkfs.ext4 -jvm 0 "${@}"
+		# https://bbs.archlinux.org/viewtopic.php?pid=1627961#p1627961
+		# for b in /sys/block/*/*/start; do s=$(cat $b); echo $b : $s: $(($s % 8)) : $(($s % 4096)); done
+		mkfs.ext4 -b 4096 -jvm 0 "${@}"
 	fi
 }
 
