@@ -2309,8 +2309,9 @@ function mount-zfs {
 	declare Z_ZDB="zdb -l"
 	declare Z_ZDB_META="zdb -u"
 	declare Z_MOUNT="zfs mount -O"
-	declare Z_STATUS="zpool status -P -i"
 	declare Z_IOINFO="zpool iostat -P -v"
+	declare Z_STATUS="zpool status -P -v -i"
+	declare Z_LIST_ALL="zfs list -r -o name,type,creation,used,avail,refer,ratio,version -t all"
 	declare Z_FSEP="|"
 	declare Z_PSEP=":"
 	declare Z_DSEP="-"
@@ -2334,6 +2335,28 @@ function mount-zfs {
 			zpool import ${FILE}		|| return 1
 			zfs set ${ZOPTS_DONE} ${FILE}	|| return 1
 		done
+		return 0
+	}
+	function zfs_disk_numbers {
+		for FILE in $(fdisk -l 2>&1 | ${SED} -n "s|^Disk[ ]([/][^:]+)[:].+$|\1|gp" | ${GREP} -v "/dev/mapper"); do
+			echo -en "${FILE}:"
+			FILE="$(hdparm -I ${FILE} 2>&1 | ${SED} -n "s|^.+Serial Number[:][[:space:]]+(.+)$|\1|gp")"
+			if [[ -n ${FILE} ]]; then
+				echo -en " ${FILE}"
+			fi
+			echo -en "\n"
+		done
+		return 0
+	}
+	function zfs_pool_status {
+		if [[ ${1} == - ]]; then
+			shift
+			${Z_IOINFO} "${@}"
+			echo -en "\n"
+			${Z_STATUS} "${@}"
+			echo -en "\n"
+		fi
+		${Z_LIST_ALL} "${@}"
 		return 0
 	}
 	function zfs_pool_info {
@@ -2368,15 +2391,9 @@ function mount-zfs {
 			if ${IMPORT}; then
 				zfs_import_pools || return 1
 			fi
+			zfs_disk_numbers
 			echo -en "\n"
-			for FILE in $(fdisk -l 2>&1 | ${SED} -n "s|^Disk[ ]([/][^:]+)[:].+$|\1|gp" | ${GREP} -v "/dev/mapper"); do
-				echo -en "${FILE}: "
-				hdparm -I ${FILE} 2>&1 | ${SED} -n "s|^.+Serial Number[:][[:space:]]+(.+)$|\1|gp"
-			done
-			echo -en "\n"
-			${Z_IOINFO}
-			echo -en "\n"
-			${Z_STATUS}
+			zfs_pool_status -
 			return 0
 		fi
 		echo -en "- <ZFS: Invalid Arguments!>\n" 1>&2
@@ -2421,6 +2438,7 @@ function mount-zfs {
 	declare ZSTAT="$(${Z_STATUS}		"${ZPOOL}"			2>/dev/null | ${SED} -n "s|^[[:space:]]+${DEV}[[:space:]]+([A-Z]+).+$|\1|gp"	)"
 	if (( ${#ZDEVS[@]} > 1 )); then ZDIDS=("${ZDIDS[@]:1}"); fi
 	if [[ -n ${ZTIME} ]]; then ZTIME="$(date --iso=seconds --date="@${ZTIME}")"; fi
+	ZSTAT="${ZSTAT,,}"
 	declare ZPINT_REAL="${ZDEVS[0]}";	if ${ZPOOL_EXT}; then ZPINT_REAL="${DEV}"; fi
 	declare ZPINT="$(${Z_ZDB}		${ZPINT_REAL}			2>/dev/null | ${SED} -n "s|^[ ]{4}name[:][ ][\'](.+)[\']$|\1|gp"		)"
 	declare ZDNAM="${ZNAME}${Z_DSEP}${Z_DATE}"
@@ -2455,20 +2473,26 @@ function mount-zfs {
 		elif [[ ${ZTYPE} != filesystem ]]; then			echo -en "- (ZFS: Exported Filesystem)\n" 1>&2
 		else							echo -en "- (ZFS: Detected Filesystem)\n" 1>&2
 		fi
-		if { [[ -z ${DIR} ]] || [[ ${DIR} == pint	]]; }; then echo -en "${ZPINT}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
-		if { [[ -z ${DIR} ]] || [[ ${DIR} == pool	]]; }; then echo -en "${ZPOOL}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
-		if { [[ -z ${DIR} ]] || [[ ${DIR} == name	]]; }; then echo -en "${ZNAME}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
-		if { [[ -z ${DIR} ]] || [[ ${DIR} == root	]]; }; then echo -en "${ZROOT}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
-		if { [[ -z ${DIR} ]] || [[ ${DIR} == guid	]]; }; then echo -en "${ZGUID}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
-		if { [[ -z ${DIR} ]] || [[ ${DIR} == devs	]]; }; then echo -en "${ZDEVS[@]}"	; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
-		if { [[ -z ${DIR} ]] || [[ ${DIR} == devids	]]; }; then echo -en "${ZDIDS[@]}"	; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
-		if { [[ -z ${DIR} ]] || [[ ${DIR} == time	]]; }; then echo -en "${ZTIME}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
-		if { [[ -z ${DIR} ]] || [[ ${DIR} == mount	]]; }; then echo -en "${ZMTPT}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
-		if { [[ -z ${DIR} ]] || [[ ${DIR} == live	]]; }; then echo -en "${ZLIVE}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
-		if { [[ -z ${DIR} ]] || [[ ${DIR} == state	]]; }; then echo -en "${ZSTAT,,}"	; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
-		if { [[ -z ${DIR} ]] || [[ ${DIR} == type	]]; }; then echo -en "${ZTYPE}"		; fi; #>>> if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
-		if [[ -z ${DIR} ]]; then
-			echo -en "\n"
+		if ${IS}; then
+			if { [[ -z ${DIR} ]] || [[ ${DIR} == pint	]]; }; then echo -en "${ZPINT}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
+			if { [[ -z ${DIR} ]] || [[ ${DIR} == pool	]]; }; then echo -en "${ZPOOL}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
+			if { [[ -z ${DIR} ]] || [[ ${DIR} == name	]]; }; then echo -en "${ZNAME}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
+			if { [[ -z ${DIR} ]] || [[ ${DIR} == root	]]; }; then echo -en "${ZROOT}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
+			if { [[ -z ${DIR} ]] || [[ ${DIR} == guid	]]; }; then echo -en "${ZGUID}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
+			if { [[ -z ${DIR} ]] || [[ ${DIR} == devs	]]; }; then echo -en "${ZDEVS[@]}"	; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
+			if { [[ -z ${DIR} ]] || [[ ${DIR} == devids	]]; }; then echo -en "${ZDIDS[@]}"	; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
+			if { [[ -z ${DIR} ]] || [[ ${DIR} == time	]]; }; then echo -en "${ZTIME}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
+			if { [[ -z ${DIR} ]] || [[ ${DIR} == mount	]]; }; then echo -en "${ZMTPT}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
+			if { [[ -z ${DIR} ]] || [[ ${DIR} == live	]]; }; then echo -en "${ZLIVE}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
+			if { [[ -z ${DIR} ]] || [[ ${DIR} == state	]]; }; then echo -en "${ZSTAT}"		; fi; if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
+			if { [[ -z ${DIR} ]] || [[ ${DIR} == type	]]; }; then echo -en "${ZTYPE}"		; fi; #>>> if [[ -z ${DIR} ]]; then echo -en "${Z_FSEP}"; fi
+			if [[ -z ${DIR} ]]; then
+				echo -en "\n"
+			fi
+		fi
+		if [[ -n ${DIR} ]]; then
+			echo -en "\n" 1>&2
+			zfs_pool_status - ${ZPOOL} 1>&2
 		fi
 		return 0
 	fi
@@ -2539,6 +2563,7 @@ function mount-zfs {
 		}; then
 			zfs_unmount_member					|| return 1
 		fi
+		return 0
 	else
 		function zfs_mount_pool {
 			if [[ ${ZLIVE} == no ]]; then
@@ -2607,6 +2632,7 @@ function mount-zfs {
 			zfs_mount_member					|| return 1
 		fi
 		${Z_STATUS} ${ZPOOL}
+		return 0
 	fi
 	return 0
 }
