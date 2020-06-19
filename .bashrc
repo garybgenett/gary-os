@@ -2311,7 +2311,7 @@ function mount-robust {
 
 function mount-zfs {
 	declare ZFS_ROTATE="${ZFS_ROTATE:-true}"
-	declare ZFS_SNAPSHOTS="${ZFS_SNAPSHOTS:-12}"
+	declare ZFS_SNAPSHOTS="${ZFS_SNAPSHOTS:-90}"
 	declare ZFS_ARC_MIN="$(( (2**30) / 8 ))"
 	declare ZFS_ARC_MAX="$(( (2**30) * 2 ))"
 	declare Z_DATE="$(date --iso=seconds | ${SED} "s|[-:]||g")"
@@ -2384,7 +2384,7 @@ function mount-zfs {
 	if [[ ${1} == -[?] ]]; then	IS="true";	shift; fi
 	if [[ ${1} == -0 ]]; then	RO="true";	shift; fi; if ${RO}; then ZFS_ROTATE="false"; fi
 	if [[ ${1} == -u ]]; then	UN="true";	shift; fi; if ${UN}; then IMPORT="false"; fi
-	if [[ ${1} == -s ]]; then	SN="true";	shift; fi; if ${SN}; then IMPORT="false"; fi
+	if [[ ${1} == -s ]]; then	SN="true";	shift; fi; if ${SN}; then IMPORT="false"; fi; if [[ ${1} == +([0-9]) ]]; then ZFS_SNAPSHOTS="${1}"; shift; fi
 	if [[ -n ${1} ]]; then		DEV="${1}";	shift; fi
 	if [[ -n ${1} ]]; then		DIR="${1}";	shift; fi
 	if { {
