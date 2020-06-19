@@ -1490,6 +1490,20 @@ function gtasks {
 
 ########################################
 
+function hd-sn-list {
+	for FILE in $(fdisk -l 2>&1 | ${SED} -n "s|^Disk[ ]([/][^:]+)[:].+$|\1|gp" | ${GREP} -v "/dev/mapper"); do
+		echo -en "${FILE}:"
+		FILE="$(hdparm -I ${FILE} 2>&1 | ${SED} -n "s|^.+Serial Number[:][[:space:]]+(.+)$|\1|gp")"
+		if [[ -n ${FILE} ]]; then
+			echo -en " ${FILE}"
+		fi
+		echo -en "\n"
+	done
+	return 0
+}
+
+########################################
+
 function hist-grep {
 	if [[ ${1} == -l ]]; then
 		shift
@@ -2339,17 +2353,6 @@ function mount-zfs {
 		done
 		return 0
 	}
-	function zfs_disk_numbers {
-		for FILE in $(fdisk -l 2>&1 | ${SED} -n "s|^Disk[ ]([/][^:]+)[:].+$|\1|gp" | ${GREP} -v "/dev/mapper"); do
-			echo -en "${FILE}:"
-			FILE="$(hdparm -I ${FILE} 2>&1 | ${SED} -n "s|^.+Serial Number[:][[:space:]]+(.+)$|\1|gp")"
-			if [[ -n ${FILE} ]]; then
-				echo -en " ${FILE}"
-			fi
-			echo -en "\n"
-		done
-		return 0
-	}
 	function zfs_pool_status {
 		if [[ ${1} == - ]]; then
 			shift
@@ -2396,7 +2399,7 @@ function mount-zfs {
 			if ${IMPORT}; then
 				zfs_import_pools || return 1
 			fi
-			zfs_disk_numbers
+			hd-sn-list
 			echo -en "\n"
 			zfs_pool_status -
 			return 0
