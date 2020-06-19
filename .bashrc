@@ -2297,6 +2297,7 @@ function mount-robust {
 
 function mount-zfs {
 	declare ZFS_ROTATE="${ZFS_ROTATE:-true}"
+	declare ZFS_SNAPSHOTS="${ZFS_SNAPSHOTS:-12}"
 	declare ZFS_ARC_MIN="$(( (2**30) / 8 ))"
 	declare ZFS_ARC_MAX="$(( (2**30) * 2 ))"
 	declare Z_DATE="$(date --iso=seconds | ${SED} "s|[-:]||g")"
@@ -2311,6 +2312,7 @@ function mount-zfs {
 	declare Z_MOUNT="zfs mount -O"
 	declare Z_IOINFO="zpool iostat -P -v"
 	declare Z_STATUS="zpool status -P -v -i"
+	declare Z_SNAPSHOT="zfs snapshot -r"
 	declare Z_LIST_ALL="zfs list -r -o name,type,creation,used,avail,refer,ratio,version -t all"
 	declare Z_FSEP="|"
 	declare Z_PSEP=":"
@@ -2372,12 +2374,14 @@ function mount-zfs {
 	declare IS="false"
 	declare RO="false"
 	declare UN="false"
+	declare SN="false"
 	declare DEV=
 	declare DIR=
 	if [[ ${1} == -! ]]; then	IMPORT="false";	shift; fi
 	if [[ ${1} == -[?] ]]; then	IS="true";	shift; fi
 	if [[ ${1} == -0 ]]; then	RO="true";	shift; fi; if ${RO}; then ZFS_ROTATE="false"; fi
 	if [[ ${1} == -u ]]; then	UN="true";	shift; fi; if ${UN}; then IMPORT="false"; fi
+	if [[ ${1} == -s ]]; then	SN="true";	shift; fi; if ${SN}; then IMPORT="false"; fi
 	if [[ -n ${1} ]]; then		DEV="${1}";	shift; fi
 	if [[ -n ${1} ]]; then		DIR="${1}";	shift; fi
 	if { {
@@ -2385,7 +2389,8 @@ function mount-zfs {
 		{ [[ ! -b ${DEV} ]] && { ! ${IS} && ! ${UN}; }; } ||
 		{ [[ ! -d ${DIR} ]] && { ! ${IS} && ! ${UN}; }; };
 	} && {
-		! { ! ${UN} && [[ -b ${DEV} ]] && [[ -n ${DIR} ]]; };
+		! { ! ${UN} && [[ -b ${DEV} ]] && [[ -n ${DIR} ]]; } &&
+		! { ${SN} && [[ -n ${DEV} ]]; };
 	}; }; then
 		if ${IS}; then
 			if ${IMPORT}; then
@@ -2466,7 +2471,7 @@ function mount-zfs {
 		echo -en "- <ZFS: Failed Detection!>\n" 1>&2
 		return 1
 	fi
-	if ${IS}; then							echo -en "- (ZFS ${ZTYPE^}: ${ZPOOL})\n" 1>&2
+	if { ${IS} || ${SN}; }; then					echo -en "- (ZFS ${ZTYPE^}: ${ZPOOL})\n" 1>&2
 		if { [[ ${ZMTPT} == / ]] || [[ ${DIR} == / ]]; }; then	echo -en "- (ZFS: Root Filesystem)\n" 1>&2
 		fi
 		if [[ ${ZLIVE} == yes ]]; then				echo -en "- (ZFS: Mounted Filesystem)\n" 1>&2
@@ -2494,6 +2499,37 @@ function mount-zfs {
 			echo -en "\n" 1>&2
 			zfs_pool_status - ${ZPOOL} 1>&2
 		fi
+		if ! ${SN}; then
+			return 0
+		fi
+	fi
+	if ${SN}; then
+		echo -en "- Creating Snapshot... ${ZPOOL}@${Z_DATE}\n"
+		${Z_SNAPSHOT} ${ZPOOL}@${Z_DATE}				|| return 1
+		declare Z_ITEM=
+		declare Z_ITEMS=($(
+			${Z_LIST_ALL} |
+			${SED} -n "s|^(${ZPOOL}([/][^@[:space:]]+)?)[[:space:]].*$|\1|gp" |
+			sort -u
+		))
+		declare Z_TRIM="$(( $(( ${ZFS_SNAPSHOTS} / ${#Z_ITEMS[@]} )) +1 ))"
+		if (( ${Z_TRIM} < 2 )); then
+			Z_TRIM="2"
+		fi
+		for Z_ITEM in ${Z_ITEMS[@]}; do
+			declare Z_SNAP=
+			for Z_SNAP in $(
+				${Z_LIST_ALL} |
+				${SED} -n "s|^(${Z_ITEM}[@][^[:space:]]+)[[:space:]].*$|\1|gp" |
+				sort -nr |
+				tail -n+${Z_TRIM}
+			); do
+				echo -en "- Destroying Snapshot... ${Z_SNAP}\n"
+				zfs destroy ${Z_SNAP}					|| return 1
+			done
+		done
+#>>>		echo -en "\n"
+		zfs_pool_status ${ZPOOL}
 		return 0
 	fi
 	if ${UN}; then
