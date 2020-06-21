@@ -2504,7 +2504,7 @@ function mount-zfs {
 				echo -en "\n"
 			fi
 		fi
-		if [[ -n ${DIR} ]]; then
+		if { [[ -n ${DIR} ]] || [[ ${DIR} == all ]]; }; then
 			echo -en "\n" 1>&2
 			zfs_pool_status - ${ZPOOL} 1>&2
 		fi
