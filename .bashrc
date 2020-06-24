@@ -2383,22 +2383,25 @@ function mount-zfs {
 	declare IS="false"
 	declare RO="false"
 	declare UN="false"
-	declare SN="false"
+	declare SN="false"; declare SN_ALL="false"; declare SN_OPT="-s"
 	declare DEV=
 	declare DIR=
-	if [[ ${1} == -! ]]; then	IMPORT="false";	shift; fi
-	if [[ ${1} == -[?] ]]; then	IS="true";	shift; fi
-	if [[ ${1} == -0 ]]; then	RO="true";	shift; fi; if ${RO}; then ZFS_ROTATE="false"; fi
-	if [[ ${1} == -u ]]; then	UN="true";	shift; fi; if ${UN}; then IMPORT="false"; fi
-	if [[ ${1} == -s ]]; then	SN="true";	shift; fi; if ${SN}; then IMPORT="false"; fi; if [[ ${1} == +([0-9]) ]]; then ZFS_SNAPSHOTS="${1}"; shift; fi
-	if [[ -n ${1} ]]; then		DEV="${1}";	shift; fi
-	if [[ -n ${1} ]]; then		DIR="${1}";	shift; fi
+	if [[ ${1} == -! ]]; then		IMPORT="false";	shift; fi
+	if [[ ${1} == -[?] ]]; then		IS="true";	shift; fi
+	if [[ ${1} == -0 ]]; then		RO="true";	shift; fi; if ${RO}; then ZFS_ROTATE="false"; fi
+	if [[ ${1} == -u ]]; then		UN="true";	shift; fi; if ${UN}; then IMPORT="false"; fi
+	if [[ ${1} == ${SN_OPT} ]]; then	SN="true";	shift; fi; if ${SN}; then IMPORT="false"; fi
+		if ${SN} && [[ ${1} == -a ]]; then		SN_ALL="true"; shift; fi
+		if ${SN} && [[ ${1} == +([0-9]) ]]; then	ZFS_SNAPSHOTS="${1}"; shift; fi
+	if [[ -n ${1} ]]; then			DEV="${1}";	shift; fi
+	if [[ -n ${1} ]]; then			DIR="${1}";	shift; fi
 	if { {
 		[[ -z ${DEV} ]] ||
 		{ [[ ! -b ${DEV} ]] && { ! ${IS} && ! ${UN}; }; } ||
 		{ [[ ! -d ${DIR} ]] && { ! ${IS} && ! ${UN}; }; };
 	} && {
 		! { ! ${UN} && [[ -b ${DEV} ]] && [[ -n ${DIR} ]]; } &&
+		! { ${SN} && ${SN_ALL}; } &&
 		! { ${SN} && [[ -n ${DEV} ]]; };
 	}; }; then
 		if ${IS}; then
@@ -2412,6 +2415,24 @@ function mount-zfs {
 		fi
 		echo -en "- <ZFS: Invalid Arguments!>\n" 1>&2
 		return 1
+	fi
+	if ${SN} && ${SN_ALL}; then
+		declare FAIL="false"
+		declare ZBEG="true"
+		for FILE in $(
+			${Z_LIST} 2>&1 | ${SED} -n "s|^([^[:space:]]+).+$|\1|gp"
+		); do
+			if ${ZBEG}; then
+				ZBEG="false"
+			else
+				echo -en "\n"
+			fi
+			${FUNCNAME} ${SN_OPT} ${ZFS_SNAPSHOTS} ${FILE} || FAIL="true"
+		done
+		if ${FAIL}; then
+			return 1
+		fi
+		return 0
 	fi
 	if ${IMPORT}; then
 		zfs_import_pools || return 1
@@ -2534,7 +2555,7 @@ function mount-zfs {
 				tail -n+${Z_TRIM}
 			); do
 				echo -en "- Destroying Snapshot... ${Z_SNAP}\n"
-				zfs destroy ${Z_SNAP}					|| return 1
+				zfs destroy ${Z_SNAP}				|| return 1
 			done
 		done
 #>>>		echo -en "\n"
