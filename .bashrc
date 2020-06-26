@@ -2052,16 +2052,15 @@ function mount-robust {
 	declare ZFS_LIVE=
 	declare ZFS_STAT=
 	declare IS_ZFS="false"
-	if ${ZFS_CHECK} ${DEV} >/dev/null 2>&1; then
-		if ! ${UN}; then
-			${ZFS_CHECK_IMPORT} ${DEV} >/dev/null
-		fi
+	if ${UN} &&	${ZFS_CHECK}		${DEV} 2>&1 >/dev/null | ${GREP} -v "Failed Detection"; then IS_ZFS="true"
+	elif		${ZFS_CHECK_IMPORT}	${DEV} 2>&1 >/dev/null | ${GREP} -v "Failed Detection"; then IS_ZFS="true"
+	fi
+	if ${IS_ZFS}; then
 		ZFS_PINT="$(${ZFS_CHECK} ${DEV} pint	2>/dev/null)"
 		ZFS_POOL="$(${ZFS_CHECK} ${DEV} pool	2>/dev/null)"
 		ZFS_MTPT="$(${ZFS_CHECK} ${DEV} mount	2>/dev/null)"
 		ZFS_LIVE="$(${ZFS_CHECK} ${DEV} live	2>/dev/null)"
 		ZFS_STAT="$(${ZFS_CHECK} ${DEV} state	2>/dev/null)"
-		IS_ZFS="true"
 	fi
 	if [[ -b ${DEV} ]] && ${IS_ZFS}; then
 		DEV_SRC="${DEV}"
