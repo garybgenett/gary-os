@@ -2166,7 +2166,11 @@ function mount-robust {
 		return 1
 	fi
 	if { {
-		{ ! ${UN} && ${IS_MOUNT}; };
+		{ ! ${UN} && ${IS_MOUNT}; } && {
+			{
+				{ ! ${DM}; };
+			};
+		};
 	} || {
 		{ ${UN} && ! ${IS_MOUNT}; } && {
 			{
