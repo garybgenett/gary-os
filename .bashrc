@@ -2676,6 +2676,7 @@ function mount-zfs {
 				declare ZPOOL_OLD="${ZPINT}"
 				if {
 					[[ -n ${ZPOOL_OLD} ]] &&
+					[[ ${ZPOOL_OLD} != ${ZPOOL} ]] &&
 					[[ ${ZPOOL_OLD} != ${ZROOT} ]];
 				}; then
 					echo -en "- Destroying Old Pool... ${ZPOOL_OLD}\n"
