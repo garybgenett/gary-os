@@ -2444,8 +2444,8 @@ function mount-zfs {
 	fi
 	declare ZPOOL=
 	declare ZPOOL_EXT="false"
-	declare ZDEVS_DIR="$(${Z_ZDB}					${DIR}	2>/dev/null | ${SED} -n "s|^[ ]{4}name[:][ ][\'](.+)[\']$|\1|gp"		)"
-	declare ZMTPT_DIR="$(${Z_DAT},name mountpoint			${DIR}	2>/dev/null | ${SED} -n "s|^${DIR}[[:space:]]+(.+)$|\1|gp"			)"
+	declare ZDEVS_DIR="$(${Z_ZDB}					${DIR}	2>/dev/null | ${SED} -n "s|^[ ]{4}name[:][ ][\'](.+)[\']$|\1|gp"			)"
+	declare ZMTPT_DIR="$(${Z_DAT},name mountpoint			${DIR}	2>/dev/null | ${SED} -n "s|^${DIR}[[:space:]]+(.+)$|\1|gp"				)"
 	declare ZPOOL_DIR="$(if [[ -n $(${Z_LIST}			${DIR}	2>/dev/null) ]]; then echo "${DIR}"; fi)"
 	if {
 		{ ! ${UN} && [[ -b ${DEV} ]] && [[ -n ${DIR} ]]; };
@@ -2457,30 +2457,30 @@ function mount-zfs {
 	fi
 	if ${ZPOOL_EXT}; then DIR= ; fi
 	if [[ -n ${ZPOOL} ]]; then echo -en ""
-	elif [[ -b ${DEV} ]]; then ZPOOL="$(${Z_ZDB}			${DEV}	2>/dev/null | ${SED} -n "s|^[ ]{4}name[:][ ][\'](.+)[\']$|\1|gp"		)"
-	elif [[ -d ${DEV} ]]; then ZPOOL="$(${Z_DAT},name mountpoint	${DEV}	2>/dev/null | ${SED} -n "s|^${DEV}[[:space:]]+(.+)$|\1|gp"			)"
+	elif [[ -b ${DEV} ]]; then ZPOOL="$(${Z_ZDB}			${DEV}	2>/dev/null | ${SED} -n "s|^[ ]{4}name[:][ ][\'](.+)[\']$|\1|gp"			)"
+	elif [[ -d ${DEV} ]]; then ZPOOL="$(${Z_DAT},name mountpoint	${DEV}	2>/dev/null | ${SED} -n "s|^${DEV}[[:space:]]+(.+)$|\1|gp"				)"
 	elif [[ -n $(${Z_LIST}						${DEV}	2>/dev/null) ]]; then ZPOOL="${DEV}"
 	fi
-	declare ZNAME="$(echo "${ZPOOL}"					2>/dev/null | ${SED} "s|${Z_DSEP}${Z_DREG}$||g"					)"
-	declare ZROOT="$(echo "${ZPOOL}"					2>/dev/null | ${SED} "s|(${Z_PSEP}${Z_DREG})?(${Z_DSEP}${Z_DREG})?$||g"		)"
+	declare ZNAME="$(echo "${ZPOOL}"					2>/dev/null | ${SED} "s|${Z_DSEP}${Z_DREG}$||g"						)"
+	declare ZROOT="$(echo "${ZPOOL}"					2>/dev/null | ${SED} "s|(${Z_PSEP}${Z_DREG})?(${Z_DSEP}${Z_DREG})?$||g"			)"
 	if {
-		[[ -z $(${Z_LIST}		"${ZPOOL}"			2>/dev/null) ]] &&
-		[[ -n $(${Z_LIST}		"${ZNAME}"			2>/dev/null | ${SED} -n "s|^[[:space:]]+(${DEV}).+$|\1|gp"			) ]];
+		[[ -z $(${Z_LIST}		${ZPOOL}			2>/dev/null) ]] &&
+		[[ -n $(${Z_LIST}		${ZNAME}			2>/dev/null | ${SED} -n "s|^[[:space:]]+(${DEV}).+$|\1|gp"				) ]];
 	}; then
 		ZPOOL="${ZNAME}"
 	fi
-	declare ZGUID="$(${Z_GET} guid		"${ZPOOL}"			2>/dev/null									)"
-	declare ZDEVS=($(${Z_LIST}		"${ZPOOL}"			2>/dev/null | ${SED} -n "s|^[[:space:]]+(/dev/[^[:space:]]+).+$|\1|gp"		))
-	declare ZDIDS=($(${Z_LIST_IDS}		"${ZPOOL}"			2>/dev/null | ${SED} -n "s|^[[:space:]]+([^[:space:]]+).+$|\1|gp"		))
-	declare ZTIME="$(${Z_ZDB_META}		"${ZPOOL}"			2>/dev/null | ${SED} -n "s|^[[:space:]]+timestamp[ ][=][ ]([^ ]+)[ ].+$|\1|gp"	)"
-	declare ZMTPT="$(${Z_DAT} mountpoint	"${ZPOOL}"			2>/dev/null									)"
-	declare ZLIVE="$(${Z_DAT} mounted	"${ZPOOL}"			2>/dev/null									)"
-	declare ZSTAT="$(${Z_STATUS}		"${ZPOOL}"			2>/dev/null | ${SED} -n "s|^[[:space:]]+${DEV}[[:space:]]+([A-Z]+).+$|\1|gp"	)"
+	declare ZGUID="$(${Z_GET} guid		${ZPOOL}			2>/dev/null										)"
+	declare ZDEVS=($(${Z_LIST}		${ZPOOL}			2>/dev/null | ${SED} -n "s|^[[:space:]]+(/dev/[^[:space:]]+).+$|\1|gp"			))
+	declare ZDIDS=($(${Z_LIST_IDS}		${ZPOOL}			2>/dev/null | ${SED} -n "s|^[[:space:]]+([^[:space:]]+).+$|\1|gp"			))
+	declare ZTIME="$(${Z_ZDB_META}		${ZPOOL}			2>/dev/null | ${SED} -n "s|^[[:space:]]+timestamp[ ][=][ ]([^ ]+)[ ].+$|\1|gp"		)"
+	declare ZMTPT="$(${Z_DAT} mountpoint	${ZPOOL}			2>/dev/null										)"
+	declare ZLIVE="$(${Z_DAT} mounted	${ZPOOL}			2>/dev/null										)"
+	declare ZSTAT="$(${Z_STATUS}		${ZPOOL}			2>/dev/null | ${SED} -n "s|^[[:space:]]+${DEV}[[:space:]]+([A-Z]+).+$|\1|gp"		)"
 	if (( ${#ZDEVS[@]} > 1 )); then ZDIDS=("${ZDIDS[@]:1}"); fi
 	if [[ -n ${ZTIME} ]]; then ZTIME="$(date --iso=seconds --date="@${ZTIME}")"; fi
 	ZSTAT="${ZSTAT,,}"
 	declare ZPINT_REAL="${ZDEVS[0]}";	if ${ZPOOL_EXT}; then ZPINT_REAL="${DEV}"; fi
-	declare ZPINT="$(${Z_ZDB}		${ZPINT_REAL}			2>/dev/null | ${SED} -n "s|^[ ]{4}name[:][ ][\'](.+)[\']$|\1|gp"		)"
+	declare ZPINT="$(${Z_ZDB}		${ZPINT_REAL}			2>/dev/null | ${SED} -n "s|^[ ]{4}name[:][ ][\'](.+)[\']$|\1|gp"			)"
 	declare ZDNAM="${ZNAME}${Z_DSEP}${Z_DATE}"
 	declare ZPNAM="${ZROOT}${Z_PSEP}${Z_DATE}"
 	declare ZTYPE=
@@ -2540,7 +2540,7 @@ function mount-zfs {
 	fi
 	if ${SN}; then
 		echo -en "- Creating Snapshot... ${ZPOOL}@${Z_DATE}\n"
-		${Z_SNAPSHOT} ${ZPOOL}@${Z_DATE}				|| return 1
+		${Z_SNAPSHOT} ${ZPOOL}@${Z_DATE}					|| return 1
 		declare Z_ITEM=
 		declare Z_ITEMS=($(
 			${Z_LIST_ALL} |
@@ -2560,7 +2560,7 @@ function mount-zfs {
 				tail -n+${Z_TRIM}
 			); do
 				echo -en "- Destroying Snapshot... ${Z_SNAP}\n"
-				zfs destroy ${Z_SNAP}				|| return 1
+				zfs destroy ${Z_SNAP}					|| return 1
 			done
 		done
 #>>>		echo -en "\n"
@@ -2580,32 +2580,32 @@ function mount-zfs {
 			for FILE in "${ZDEVS[@]}"; do
 				if [[ ${ZDEVS[0]} != ${FILE} ]]; then
 					echo -en "- Deactivating Member... ${FILE}\n"
-					zpool offline ${ZPOOL} ${FILE}		|| return 1
+					zpool offline ${ZPOOL} ${FILE}			|| return 1
 				fi
 			done
 			if [[ -n $(${Z_DAT} mountpoint ${Z_POOL}) ]]; then
 				if [[ ${ZLIVE} == yes ]]; then
-					zfs umount "${@}" ${ZPOOL}		|| return 1
+					zfs umount "${@}" ${ZPOOL}			|| return 1
 				fi
-				zfs set ${ZOPTS_DONE} ${ZPOOL}			|| return 1
+				zfs set ${ZOPTS_DONE} ${ZPOOL}				|| return 1
 			fi
 			if {
 				${ZFS_ROTATE} &&
 				[[ ${ZPOOL} == ${ZNAME} ]];
 			}; then
-				zfs_pool_info					|| return 1
+				zfs_pool_info						|| return 1
 				echo -en "- Renaming Pool...\n"
-				zpool export ${ZPOOL}				|| return 1
+				zpool export ${ZPOOL}					|| return 1
 				ZPOOL="${ZDNAM}"
-				${Z_IMPORT} ${ZPINT} ${ZPOOL}			|| return 1
+				${Z_IMPORT} ${ZPINT} ${ZPOOL}				|| return 1
 			fi
-			zfs_pool_info						|| return 1
-			zpool export ${ZPOOL}					|| return 1
+			zfs_pool_info							|| return 1
+			zpool export ${ZPOOL}						|| return 1
 			return 0
 		}
 		function zfs_unmount_member {
 			if [[ ${ZDEVS[0]} == ${DEV} ]]; then
-				zfs_unmount_pool				|| return 1
+				zfs_unmount_pool					|| return 1
 			else
 				echo -en "- Removing Member... (${ZPOOL}) ${DEV}\n"
 				declare ZPOOL_NEW=
@@ -2614,12 +2614,12 @@ function mount-zfs {
 				else
 					ZPOOL_NEW="${ZDNAM}"
 				fi
-				zpool split -P ${ZPOOL} ${ZPOOL_NEW} ${DEV}	|| return 1
-				${Z_IMPORT} ${ZPOOL_NEW}			|| return 1
-				zfs set ${ZOPTS_DONE} ${ZPOOL_NEW}		|| return 1
-				${Z_STATUS} ${ZPOOL_NEW}			|| return 1
-				zpool export ${ZPOOL_NEW}			|| return 1
-				${Z_STATUS} ${ZPOOL}				|| return 1
+				zpool split -P ${ZPOOL} ${ZPOOL_NEW} ${DEV}		|| return 1
+				${Z_IMPORT} ${ZPOOL_NEW}				|| return 1
+				zfs set ${ZOPTS_DONE} ${ZPOOL_NEW}			|| return 1
+				${Z_STATUS} ${ZPOOL_NEW}				|| return 1
+				zpool export ${ZPOOL_NEW}				|| return 1
+				${Z_STATUS} ${ZPOOL}					|| return 1
 			fi
 			return 0
 		}
@@ -2627,12 +2627,12 @@ function mount-zfs {
 			[[ ${ZTYPE} == pool ]] ||
 			[[ ${ZTYPE} == mount ]];
 		}; then
-			zfs_unmount_pool					|| return 1
+			zfs_unmount_pool						|| return 1
 		elif {
 			[[ ${ZTYPE} == member ]] ||
 			[[ ${ZTYPE} == filesystem ]];
 		}; then
-			zfs_unmount_member					|| return 1
+			zfs_unmount_member						|| return 1
 		fi
 		return 0
 	else
@@ -2643,11 +2643,11 @@ function mount-zfs {
 					${ZFS_ROTATE} &&
 					[[ ${ZPOOL} != ${ZNAME} ]];
 				}; then
-					zfs_pool_info				|| return 1
+					zfs_pool_info					|| return 1
 					echo -en "- Renaming Pool...\n"
-					zpool export ${ZPOOL}			|| return 1
+					zpool export ${ZPOOL}				|| return 1
 					ZPOOL="${ZNAME}"
-					${Z_IMPORT} -t ${ZPINT} ${ZPOOL}	|| return 1
+					${Z_IMPORT} -t ${ZPINT} ${ZPOOL}		|| return 1
 				fi
 				zfs set \
 					${ZOPTS} \
@@ -2655,17 +2655,17 @@ function mount-zfs {
 					$(if ${RO}; then	echo "readonly=on"
 						else		echo "readonly=off"
 					fi) \
-					${ZPOOL}				|| return 1
+					${ZPOOL}					|| return 1
 				if [[ $(${Z_DAT} mounted ${ZPOOL}) == no ]]; then
-					${Z_MOUNT} "${@}" ${ZPOOL}		|| return 1
+					${Z_MOUNT} "${@}" ${ZPOOL}			|| return 1
 				fi
-				zfs_pool_info					|| return 1
+				zfs_pool_info						|| return 1
 			fi
 			return 0
 		}
 		function zfs_mount_member {
 			if [[ ${ZDEVS[0]} == ${DEV} ]]; then
-				zfs_mount_pool					|| return 1
+				zfs_mount_pool						|| return 1
 			fi
 			declare ZMEMBER="false"
 			for FILE in ${ZDEVS[@]}; do
@@ -2682,13 +2682,13 @@ function mount-zfs {
 					[[ ${ZPOOL_OLD} != ${ZROOT} ]];
 				}; then
 					echo -en "- Destroying Old Pool... ${ZPOOL_OLD}\n"
-					zpool destroy ${ZPOOL_OLD}		|| return 1
+					zpool destroy ${ZPOOL_OLD}			|| return 1
 				fi
-				zpool attach ${ZPOOL} ${ZDEVS[0]} ${DEV}	|| return 1
+				zpool attach ${ZPOOL} ${ZDEVS[0]} ${DEV}		|| return 1
 			fi
 			if [[ ${ZSTAT} != online ]]; then
 				echo -en "- Activating Member... ${DEV}\n"
-				zpool online ${ZPOOL} ${DEV}			|| return 1
+				zpool online ${ZPOOL} ${DEV}				|| return 1
 			fi
 			return 0
 		}
@@ -2696,12 +2696,12 @@ function mount-zfs {
 			[[ ${ZTYPE} == pool ]] ||
 			[[ ${ZTYPE} == mount ]];
 		}; then
-			zfs_mount_pool						|| return 1
+			zfs_mount_pool							|| return 1
 		elif {
 			[[ ${ZTYPE} == member ]] ||
 			[[ ${ZTYPE} == filesystem ]];
 		}; then
-			zfs_mount_member					|| return 1
+			zfs_mount_member						|| return 1
 		fi
 		${Z_STATUS} ${ZPOOL}
 		return 0
