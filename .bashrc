@@ -2481,6 +2481,7 @@ function mount-zfs {
 	ZSTAT="${ZSTAT,,}"
 	declare ZPINT_REAL="${ZDEVS[0]}";	if ${ZPOOL_EXT}; then ZPINT_REAL="${DEV}"; fi
 	declare ZPINT="$(${Z_ZDB}		${ZPINT_REAL}			2>/dev/null | ${SED} -n "s|^[ ]{4}name[:][ ][\'](.+)[\']$|\1|gp"			)"
+	declare ZMNAM="${ZPOOL}${Z_DSEP}${Z_DATE}"
 	declare ZDNAM="${ZNAME}${Z_DSEP}${Z_DATE}"
 	declare ZPNAM="${ZROOT}${Z_PSEP}${Z_DATE}"
 	declare ZTYPE=
@@ -2590,13 +2591,24 @@ function mount-zfs {
 				zfs set ${ZOPTS_DONE} ${ZPOOL}				|| return 1
 			fi
 			if {
-				${ZFS_ROTATE} &&
-				[[ ${ZPOOL} == ${ZNAME} ]];
+				${ZFS_ROTATE} && {
+					[[ ${ZPOOL} == ${ZNAME} ]] || {
+						[[ ${ZPOOL} != ${ZNAME} ]] &&
+						[[ ${ZNAME} == ${ZROOT} ]];
+					};
+				};
 			}; then
 				zfs_pool_info						|| return 1
 				echo -en "- Renaming Pool...\n"
 				zpool export ${ZPOOL}					|| return 1
-				ZPOOL="${ZDNAM}"
+				if {
+					[[ ${ZPOOL} != ${ZNAME} ]] &&
+					[[ ${ZNAME} == ${ZROOT} ]];
+				}; then
+					ZPOOL="${ZMNAM}"
+				else
+					ZPOOL="${ZDNAM}"
+				fi
 				${Z_IMPORT} ${ZPINT} ${ZPOOL}				|| return 1
 			fi
 			zfs_pool_info							|| return 1
@@ -2606,6 +2618,8 @@ function mount-zfs {
 		function zfs_unmount_member {
 			if [[ ${ZDEVS[0]} == ${DEV} ]]; then
 				zfs_unmount_pool					|| return 1
+			elif [[ ${ZSTAT} != online ]]; then
+				echo -en "- Inactive Member... ${DEV}\n"
 			else
 				echo -en "- Removing Member... (${ZPOOL}) ${DEV}\n"
 				declare ZPOOL_NEW=
@@ -2680,11 +2694,13 @@ function mount-zfs {
 					[[ -n ${ZPOOL_OLD} ]] &&
 					[[ ${ZPOOL_OLD} != ${ZPOOL} ]] &&
 					[[ ${ZPOOL_OLD} != ${ZROOT} ]];
-				}; then
+				} && {
+					[[ -n $(${Z_LIST} ${ZPOOL_OLD} 2>/dev/null) ]];
+				}; }; then
 					echo -en "- Destroying Old Pool... ${ZPOOL_OLD}\n"
 					zpool destroy ${ZPOOL_OLD}			|| return 1
 				fi
-				zpool attach ${ZPOOL} ${ZDEVS[0]} ${DEV}		|| return 1
+				zpool attach -f ${ZPOOL} ${ZDEVS[0]} ${DEV}		|| return 1
 			fi
 			if [[ ${ZSTAT} != online ]]; then
 				echo -en "- Activating Member... ${DEV}\n"
