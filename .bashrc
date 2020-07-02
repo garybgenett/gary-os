@@ -374,7 +374,8 @@ export ENCFS_FILE="${ENCFS6_CONFIG/%xml/asc}"
 export ENCFS="encfs \
 	--nocache \
 	--standard \
-	--no-default-flags"
+	--no-default-flags \
+	--public"
 
 alias encfs="${ENCFS}"
 
