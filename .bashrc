@@ -2337,6 +2337,7 @@ function mount-zfs {
 	declare Z_IOINFO="zpool iostat -P -v"
 	declare Z_STATUS="zpool status -P -v -i"
 	declare Z_SNAPSHOT="zfs snapshot -r"
+	declare Z_LIST_IDS="${Z_LIST} -g"
 	declare Z_LIST_ALL="zfs list -r -o name,type,creation,used,avail,refer,ratio,version -t all"
 	declare Z_FSEP="|"
 	declare Z_PSEP=":"
@@ -2358,7 +2359,7 @@ function mount-zfs {
 #>>>		echo -en "3"			>/proc/sys/vm/drop_caches
 		for FILE in $(${Z_IMPORT} 2>/dev/null | ${SED} -n "s|^[[:space:]]+pool[:][ ](.+)$|\1|gp"); do
 			echo -en "- (ZFS Importing: ${FILE})\n" 1>&2
-			zpool import ${FILE}		|| return 1
+			${Z_IMPORT} ${FILE}		|| return 1
 			zfs set ${ZOPTS_DONE} ${FILE}	|| return 1
 		done
 		return 0
@@ -2470,7 +2471,7 @@ function mount-zfs {
 	fi
 	declare ZGUID="$(${Z_GET} guid		"${ZPOOL}"			2>/dev/null									)"
 	declare ZDEVS=($(${Z_LIST}		"${ZPOOL}"			2>/dev/null | ${SED} -n "s|^[[:space:]]+(/dev/[^[:space:]]+).+$|\1|gp"		))
-	declare ZDIDS=($(${Z_LIST} -g		"${ZPOOL}"			2>/dev/null | ${SED} -n "s|^[[:space:]]+([^[:space:]]+).+$|\1|gp"		))
+	declare ZDIDS=($(${Z_LIST_IDS}		"${ZPOOL}"			2>/dev/null | ${SED} -n "s|^[[:space:]]+([^[:space:]]+).+$|\1|gp"		))
 	declare ZTIME="$(${Z_ZDB_META}		"${ZPOOL}"			2>/dev/null | ${SED} -n "s|^[[:space:]]+timestamp[ ][=][ ]([^ ]+)[ ].+$|\1|gp"	)"
 	declare ZMTPT="$(${Z_DAT} mountpoint	"${ZPOOL}"			2>/dev/null									)"
 	declare ZLIVE="$(${Z_DAT} mounted	"${ZPOOL}"			2>/dev/null									)"
@@ -2596,7 +2597,7 @@ function mount-zfs {
 				echo -en "- Renaming Pool...\n"
 				zpool export ${ZPOOL}				|| return 1
 				ZPOOL="${ZDNAM}"
-				zpool import ${ZPINT} ${ZPOOL}			|| return 1
+				${Z_IMPORT} ${ZPINT} ${ZPOOL}			|| return 1
 			fi
 			zfs_pool_info						|| return 1
 			zpool export ${ZPOOL}					|| return 1
@@ -2614,7 +2615,7 @@ function mount-zfs {
 					ZPOOL_NEW="${ZDNAM}"
 				fi
 				zpool split -P ${ZPOOL} ${ZPOOL_NEW} ${DEV}	|| return 1
-				zpool import ${ZPOOL_NEW}			|| return 1
+				${Z_IMPORT} ${ZPOOL_NEW}			|| return 1
 				zfs set ${ZOPTS_DONE} ${ZPOOL_NEW}		|| return 1
 				${Z_STATUS} ${ZPOOL_NEW}			|| return 1
 				zpool export ${ZPOOL_NEW}			|| return 1
@@ -2646,7 +2647,7 @@ function mount-zfs {
 					echo -en "- Renaming Pool...\n"
 					zpool export ${ZPOOL}			|| return 1
 					ZPOOL="${ZNAME}"
-					zpool import -t ${ZPINT} ${ZPOOL}	|| return 1
+					${Z_IMPORT} -t ${ZPINT} ${ZPOOL}	|| return 1
 				fi
 				zfs set \
 					${ZOPTS} \
