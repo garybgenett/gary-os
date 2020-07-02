@@ -2054,7 +2054,7 @@ function mount-robust {
 	declare ZFS_STAT=
 	declare IS_ZFS="false"
 	if ${UN} &&	${ZFS_CHECK}		${DEV} 2>&1 >/dev/null | ${GREP} -v "Failed Detection"; then IS_ZFS="true"
-	elif		${ZFS_CHECK_IMPORT}	${DEV} 2>&1 >/dev/null | ${GREP} -v "Failed Detection"; then IS_ZFS="true"
+	elif ! ${UN} &&	${ZFS_CHECK_IMPORT}	${DEV} 2>&1 >/dev/null | ${GREP} -v "Failed Detection"; then IS_ZFS="true"
 	fi
 	if ${IS_ZFS}; then
 		ZFS_PINT="$(${ZFS_CHECK} ${DEV} pint	2>/dev/null)"
