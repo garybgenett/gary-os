@@ -438,6 +438,8 @@ alias rsync="${RSYNC_U}"
 export RCLONE_C="reporter rclone"
 export RCLONE_U="${RCLONE_C} sync \
 	-vv \
+	--progress \
+	--fast-list \
 	--one-file-system \
 	--stats=0 \
 	--stats-file-name-length=0 \
