@@ -2324,8 +2324,9 @@ function mount-robust {
 function mount-zfs {
 	declare ZFS_ROTATE="${ZFS_ROTATE:-true}"
 	declare ZFS_SNAPSHOTS="${ZFS_SNAPSHOTS:-90}"
-	declare ZFS_ARC_MIN="$(( (2**30) / 8 ))"
-	declare ZFS_ARC_MAX="$(( (2**30) * 2 ))"
+	# https://serverfault.com/questions/581669/why-isnt-the-arc-max-setting-honoured-on-zfs-on-linux
+	declare ZFS_ARC_MIN="$(( (2**30) / 2 ))"	# default: dynamic	512M
+	declare ZFS_ARC_MAX="$(( (2**30) * 2 ))"	# default: dynamic	2G
 	declare Z_DATE="$(date --iso=seconds | ${SED} "s|[-:]||g")"
 	declare Z_DREG="[T0-9]+"
 	declare Z_IMPORT="zpool import -d /dev -N"
@@ -2354,11 +2355,10 @@ function mount-zfs {
 	ZOPTS_DONE+=" mountpoint=none"
 	ZOPTS_DONE+=" readonly=on"
 	function zfs_import_pools {
-		modprobe --all zfs >/dev/null 2>&1			#>>> || return 1
-#>>>		# https://serverfault.com/questions/581669/why-isnt-the-arc-max-setting-honoured-on-zfs-on-linux
-		echo -en "${ZFS_ARC_MIN}"	>/sys/module/zfs/parameters/zfs_arc_min
-		echo -en "${ZFS_ARC_MAX}"	>/sys/module/zfs/parameters/zfs_arc_max
-#>>>		echo -en "3"			>/proc/sys/vm/drop_caches
+		modprobe --all zfs >/dev/null 2>&1		#>>> || return 1
+		echo -en "${ZFS_ARC_MIN}"			>/sys/module/zfs/parameters/zfs_arc_min
+		echo -en "${ZFS_ARC_MAX}"			>/sys/module/zfs/parameters/zfs_arc_max
+#>>>		echo -en "3"					>/proc/sys/vm/drop_caches
 		for FILE in $(${Z_IMPORT} 2>/dev/null | ${SED} -n "s|^[[:space:]]+pool[:][ ](.+)$|\1|gp"); do
 			echo -en "- (ZFS Importing: ${FILE})\n" 1>&2
 			${Z_IMPORT} ${FILE}		|| return 1
