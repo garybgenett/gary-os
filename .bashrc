@@ -2323,10 +2323,23 @@ function mount-robust {
 
 function mount-zfs {
 	declare ZFS_ROTATE="${ZFS_ROTATE:-true}"
+	declare ZFS_KILLER="${ZFS_KILLER:-false}"
 	declare ZFS_SNAPSHOTS="${ZFS_SNAPSHOTS:-90}"
 	# https://serverfault.com/questions/581669/why-isnt-the-arc-max-setting-honoured-on-zfs-on-linux
 	declare ZFS_ARC_MIN="$(( (2**30) / 2 ))"	# default: dynamic	512M
 	declare ZFS_ARC_MAX="$(( (2**30) * 2 ))"	# default: dynamic	2G
+	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/ZFS%20on%20Linux%20Module%20Parameters.html#snapshot
+	declare ZFS_ADMIN_SNAP="0"			# default: 1
+	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/ZFS%20on%20Linux%20Module%20Parameters.html#resilver
+	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/ZFS%20on%20Linux%20Module%20Parameters.html#scrub
+	# https://www.svennd.be/tuning-of-zfs-module
+	declare -A ZFS_PARAM
+	ZFS_PARAM[TXG_TIME]="10";			ZFS_PARAM[TXG_TIME_DEF]="5"
+	ZFS_PARAM[SLV_DDEF]="0";			ZFS_PARAM[SLV_DDEF_DEF]="0"
+	ZFS_PARAM[SLV_MTMS]="5000";			ZFS_PARAM[SLV_MTMS_DEF]="3000"
+	ZFS_PARAM[SCB_MTMS]="5000";			ZFS_PARAM[SCB_MTMS_DEF]="1000"
+	ZFS_PARAM[VDV_SMNA]="32";			ZFS_PARAM[VDV_SMNA_DEF]="1"
+	ZFS_PARAM[VDV_SMXA]="64";			ZFS_PARAM[VDV_SMXA_DEF]="2"
 	declare Z_DATE="$(date --iso=seconds | ${SED} "s|[-:]||g")"
 	declare Z_DREG="[T0-9]+"
 	declare Z_IMPORT="zpool import -d /dev -N"
@@ -2355,10 +2368,21 @@ function mount-zfs {
 	ZOPTS_DONE+=" mountpoint=none"
 	ZOPTS_DONE+=" readonly=on"
 	function zfs_import_pools {
+		declare ZDEF="_DEF"
+		if ${ZFS_KILLER}; then
+			ZDEF=
+		fi
 		modprobe --all zfs >/dev/null 2>&1		#>>> || return 1
 		echo -en "${ZFS_ARC_MIN}"			>/sys/module/zfs/parameters/zfs_arc_min
 		echo -en "${ZFS_ARC_MAX}"			>/sys/module/zfs/parameters/zfs_arc_max
+		echo -en "${ZFS_ADMIN_SNAP}"			>/sys/module/zfs/parameters/zfs_admin_snapshot
 #>>>		echo -en "3"					>/proc/sys/vm/drop_caches
+		echo -en "${ZFS_PARAM[TXG_TIME${ZDEF}]}"	>/sys/module/zfs/parameters/zfs_txg_timeout
+		echo -en "${ZFS_PARAM[SLV_DDEF${ZDEF}]}"	>/sys/module/zfs/parameters/zfs_resilver_disable_defer
+		echo -en "${ZFS_PARAM[SLV_MTMS${ZDEF}]}"	>/sys/module/zfs/parameters/zfs_resilver_min_time_ms
+		echo -en "${ZFS_PARAM[SCB_MTMS${ZDEF}]}"	>/sys/module/zfs/parameters/zfs_scrub_min_time_ms
+		echo -en "${ZFS_PARAM[VDV_SMNA${ZDEF}]}"	>/sys/module/zfs/parameters/zfs_vdev_scrub_min_active
+		echo -en "${ZFS_PARAM[VDV_SMXA${ZDEF}]}"	>/sys/module/zfs/parameters/zfs_vdev_scrub_max_active
 		for FILE in $(${Z_IMPORT} 2>/dev/null | ${SED} -n "s|^[[:space:]]+pool[:][ ](.+)$|\1|gp"); do
 			echo -en "- (ZFS Importing: ${FILE})\n" 1>&2
 			${Z_IMPORT} ${FILE}		|| return 1
