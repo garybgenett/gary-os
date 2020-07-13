@@ -2552,31 +2552,28 @@ function mount-zfs {
 		elif [[ ${ZTYPE} != filesystem ]]; then			echo -en "- (ZFS: Exported Filesystem)\n" 1>&2
 		else							echo -en "- (ZFS: Detected Filesystem)\n" 1>&2
 		fi
-		if ${IS}; then
-			if { [[ -z ${DIR} ]] || [[ ${DIR} == all ]] || [[ ${DIR} == pint	]]; }; then echo -en "${ZPINT}"		; fi; if [[ -z ${DIR} ]] || [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
-			if { [[ -z ${DIR} ]] || [[ ${DIR} == all ]] || [[ ${DIR} == pool	]]; }; then echo -en "${ZPOOL}"		; fi; if [[ -z ${DIR} ]] || [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
-			if { [[ -z ${DIR} ]] || [[ ${DIR} == all ]] || [[ ${DIR} == name	]]; }; then echo -en "${ZNAME}"		; fi; if [[ -z ${DIR} ]] || [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
-			if { [[ -z ${DIR} ]] || [[ ${DIR} == all ]] || [[ ${DIR} == root	]]; }; then echo -en "${ZROOT}"		; fi; if [[ -z ${DIR} ]] || [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
-			if { [[ -z ${DIR} ]] || [[ ${DIR} == all ]] || [[ ${DIR} == guid	]]; }; then echo -en "${ZGUID}"		; fi; if [[ -z ${DIR} ]] || [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
-			if { [[ -z ${DIR} ]] || [[ ${DIR} == all ]] || [[ ${DIR} == devs	]]; }; then echo -en "${ZDEVS[@]}"	; fi; if [[ -z ${DIR} ]] || [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
-			if { [[ -z ${DIR} ]] || [[ ${DIR} == all ]] || [[ ${DIR} == devids	]]; }; then echo -en "${ZDIDS[@]}"	; fi; if [[ -z ${DIR} ]] || [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
-			if { [[ -z ${DIR} ]] || [[ ${DIR} == all ]] || [[ ${DIR} == devid	]]; }; then echo -en "${ZDVID}"		; fi; if [[ -z ${DIR} ]] || [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
-			if { [[ -z ${DIR} ]] || [[ ${DIR} == all ]] || [[ ${DIR} == time	]]; }; then echo -en "${ZTIME}"		; fi; if [[ -z ${DIR} ]] || [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
-			if { [[ -z ${DIR} ]] || [[ ${DIR} == all ]] || [[ ${DIR} == mount	]]; }; then echo -en "${ZMTPT}"		; fi; if [[ -z ${DIR} ]] || [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
-			if { [[ -z ${DIR} ]] || [[ ${DIR} == all ]] || [[ ${DIR} == live	]]; }; then echo -en "${ZLIVE}"		; fi; if [[ -z ${DIR} ]] || [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
-			if { [[ -z ${DIR} ]] || [[ ${DIR} == all ]] || [[ ${DIR} == state	]]; }; then echo -en "${ZSTAT}"		; fi; if [[ -z ${DIR} ]] || [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
-			if { [[ -z ${DIR} ]] || [[ ${DIR} == all ]] || [[ ${DIR} == type	]]; }; then echo -en "${ZTYPE}"		; fi; #>>> if [[ -z ${DIR} ]] || [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
-			if { [[ -z ${DIR} ]] || [[ ${DIR} == all ]]; }; then
-				echo -en "\n"
-			fi
-		fi
-		if { [[ -n ${DIR} ]] && [[ ${DIR} != all ]]; }; then
+	fi
+	if ${IS}; then
+		if [[ -n ${DIR} ]]; then
+			if [[ ${DIR} == all ]] || [[ ${DIR} == pint	]]; then echo -en "${ZPINT}"	; fi; if [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
+			if [[ ${DIR} == all ]] || [[ ${DIR} == pool	]]; then echo -en "${ZPOOL}"	; fi; if [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
+			if [[ ${DIR} == all ]] || [[ ${DIR} == name	]]; then echo -en "${ZNAME}"	; fi; if [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
+			if [[ ${DIR} == all ]] || [[ ${DIR} == root	]]; then echo -en "${ZROOT}"	; fi; if [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
+			if [[ ${DIR} == all ]] || [[ ${DIR} == guid	]]; then echo -en "${ZGUID}"	; fi; if [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
+			if [[ ${DIR} == all ]] || [[ ${DIR} == devs	]]; then echo -en "${ZDEVS[@]}"	; fi; if [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
+			if [[ ${DIR} == all ]] || [[ ${DIR} == devids	]]; then echo -en "${ZDIDS[@]}"	; fi; if [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
+			if [[ ${DIR} == all ]] || [[ ${DIR} == devid	]]; then echo -en "${ZDVID}"	; fi; if [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
+			if [[ ${DIR} == all ]] || [[ ${DIR} == time	]]; then echo -en "${ZTIME}"	; fi; if [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
+			if [[ ${DIR} == all ]] || [[ ${DIR} == mount	]]; then echo -en "${ZMTPT}"	; fi; if [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
+			if [[ ${DIR} == all ]] || [[ ${DIR} == live	]]; then echo -en "${ZLIVE}"	; fi; if [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
+			if [[ ${DIR} == all ]] || [[ ${DIR} == state	]]; then echo -en "${ZSTAT}"	; fi; if [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
+			if [[ ${DIR} == all ]] || [[ ${DIR} == type	]]; then echo -en "${ZTYPE}"	; fi; #>>> if { [[ -z ${DIR} ]] || [[ ${DIR} == all ]]; }; then echo -en "${Z_FSEP}"; fi
+			echo -en "\n"
+		else
 			echo -en "\n" 1>&2
 			zfs_pool_status - ${ZPOOL} 1>&2
 		fi
-		if ! ${SN}; then
-			return 0
-		fi
+		return 0
 	fi
 	if ${SN}; then
 		echo -en "- Creating Snapshot... ${ZPOOL}@${Z_DATE}\n"
@@ -2603,7 +2600,9 @@ function mount-zfs {
 				zfs destroy ${Z_SNAP}					|| return 1
 			done
 		done
-#>>>		echo -en "\n"
+		if (( ${#Z_ITEMS[@]} > 0 )); then
+			echo -en "\n"
+		fi
 		zfs_pool_status ${ZPOOL}
 		return 0
 	fi
