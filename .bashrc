@@ -2325,6 +2325,7 @@ function mount-zfs {
 	declare ZFS_ROTATE="${ZFS_ROTATE:-true}"
 	declare ZFS_KILLER="${ZFS_KILLER:-false}"
 	declare ZFS_SNAPSHOTS="${ZFS_SNAPSHOTS:-90}"
+	declare ZFS_PARAM_PRINTF="30"
 	# https://serverfault.com/questions/581669/why-isnt-the-arc-max-setting-honoured-on-zfs-on-linux
 	declare ZFS_ARC_MIN="$(( (2**30) / 2 ))"	# default: dynamic	512M
 	declare ZFS_ARC_MAX="$(( (2**30) * 2 ))"	# default: dynamic	2G
@@ -2440,6 +2441,12 @@ function mount-zfs {
 				zfs_import_pools || return 1
 			fi
 			hd-sn-list
+			echo -en "\n"
+			for FILE in $(
+				set | ${SED} -n "s|^.+[>][ ]/sys/module/zfs/parameters/([^;]+).*$|\1|gp" | sort -u
+			); do
+				printf "%-${ZFS_PARAM_PRINTF}.${ZFS_PARAM_PRINTF}s %s\n" "${FILE}" "$(cat /sys/module/zfs/parameters/${FILE})"
+			done
 			echo -en "\n"
 			zfs_pool_status -
 			return 0
