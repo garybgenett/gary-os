@@ -2594,7 +2594,8 @@ function mount-zfs {
 				${Z_LIST_ALL} |
 				${SED} -n "s|^(${Z_ITEM}[@][^[:space:]]+)[[:space:]].*$|\1|gp" |
 				sort -nr |
-				tail -n+${Z_TRIM}
+				tail -n+${Z_TRIM} |
+				sort -n
 			); do
 				echo -en "- Destroying Snapshot... ${Z_SNAP}\n"
 				zfs destroy ${Z_SNAP}					|| return 1
