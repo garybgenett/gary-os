@@ -436,10 +436,10 @@ alias rsync="${RSYNC_U}"
 ########################################
 
 export RCLONE_C="reporter rclone"
+#>>>	--fast-list \
 export RCLONE_U="${RCLONE_C} sync \
 	-vv \
 	--progress \
-	--fast-list \
 	--one-file-system \
 	--stats=0 \
 	--stats-file-name-length=0 \
@@ -4204,15 +4204,15 @@ function task-export-drive-sync {
 		/.g/_data/zactive/data.highspot
 	${RCLONE_C} about ${GDRIVE_REMOTE}-highspot:
 	${RCLONE_U} \
-		--filter="- /_share/" \
-		--filter="- /_sync/" \
-		\
+		--filter "- /_share/*/gary/**" \
+		--filter "- /_share/transmetropolitan**" \
+		--filter "- /_sync/**" \
 		${GDRIVE_REMOTE}:/ \
 		/.g/_data/zactive/_drive
 	${RCLONE_U} \
 		--delete-excluded \
-		--filter="- /_pim/taskd/orgs/local/users/*/tx.data" \
-		--filter="- /_pim/tasks/undo.*" \
+		--filter "- /_pim/taskd/orgs/local/users/*/tx.data" \
+		--filter "- /_pim/tasks/undo.*" \
 		/.g/_data/zactive/_drive/_sync/ \
 		${GDRIVE_REMOTE}:/_sync
 	${RCLONE_C} about ${GDRIVE_REMOTE}:
