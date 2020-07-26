@@ -5484,25 +5484,13 @@ function task-track {
 function vlc-do {
 	declare REDSHIFT="off"
 	if [[ ${1} == red ]]; then
-		REDSHIFT="on"
+		REDSHIFT="${1}"
 		shift
 	fi
 	prompt -d -x
-	(_menu redshift/${REDSHIFT} &)
-	(_menu relieve/off &)
-	(_menu realize/off &)
-	(_menu xlock/off &)
-	(_menu xvnc/on &)
-	psk xlock -9
-	xset s noblank
+	(_menu realign/${REDSHIFT} &)
 	${VLC} "${@}"
-	xset s off
-	(_menu redshift/on &)
-	(_menu relieve/on &)
-	(_menu realize/on &)
-	(_menu xlock/on &)
-	(_menu xvnc/on &)
-	(_menu retreat &)
+	(_menu realign/on &)
 	return 0
 }
 
