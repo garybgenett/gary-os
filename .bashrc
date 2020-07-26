@@ -2577,8 +2577,8 @@ function mount-zfs {
 			if [[ ${DIR} == all ]] || [[ ${DIR} == type	]]; then echo -en "${ZTYPE}"	; fi; #>>> if { [[ -z ${DIR} ]] || [[ ${DIR} == all ]]; }; then echo -en "${Z_FSEP}"; fi
 			echo -en "\n"
 		else
-			echo -en "\n" 1>&2
-			zfs_pool_status - ${ZPOOL} 1>&2
+			echo -en "\n"
+			zfs_pool_status - ${ZPOOL}
 		fi
 		return 0
 	fi
