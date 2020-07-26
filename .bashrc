@@ -2540,9 +2540,13 @@ function mount-zfs {
 	}; then
 		ZTYPE="mount"
 	elif {
-		[[ -n $(for FILE in "${ZDEVS[@]}"; do if [[ ${FILE} == ${DEV} ]]; then echo "true"; break; fi; done) ]];
+		${ZMEMBER};
 	}; then
-		ZTYPE="member"
+		if [[ ${ZDIDS[0]} == ${ZDVID} ]]; then
+			ZTYPE="primary"
+		else
+			ZTYPE="member"
+		fi
 	elif {
 		[[ -b ${DEV} ]] &&
 		[[ -n ${ZPOOL} ]];
@@ -2689,6 +2693,7 @@ function mount-zfs {
 		}; then
 			zfs_unmount_pool						|| return 1
 		elif {
+			[[ ${ZTYPE} == primary ]] ||
 			[[ ${ZTYPE} == member ]] ||
 			[[ ${ZTYPE} == filesystem ]];
 		}; then
@@ -2754,6 +2759,7 @@ function mount-zfs {
 		}; then
 			zfs_mount_pool							|| return 1
 		elif {
+			[[ ${ZTYPE} == primary ]] ||
 			[[ ${ZTYPE} == member ]] ||
 			[[ ${ZTYPE} == filesystem ]];
 		}; then
