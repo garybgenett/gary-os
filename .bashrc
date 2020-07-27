@@ -2258,7 +2258,7 @@ function mount-robust {
 			if ! ${DEBUG}; then
 				cryptsetup luksOpen ${LUKS_DEV} $(basename ${DEV})	|| return 1
 				cryptsetup luksDump ${LUKS_DEV}				|| return 1
-				if ${ZFS_CHECK_IMPORT} ${LUKS_DEV} 2>&1 >/dev/null | ${GREP} -v "Failed Detection"; then IS_ZFS="true"; fi
+				if ${ZFS_CHECK_IMPORT} ${DEV} 2>&1 >/dev/null | ${GREP} -v "Failed Detection"; then IS_ZFS="true"; fi
 			fi
 		fi
 		if ${DM} || ! ${IS_MOUNT}; then
