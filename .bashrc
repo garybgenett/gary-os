@@ -2327,6 +2327,9 @@ function mount-zfs {
 	declare ZFS_KILLER="${ZFS_KILLER:-false}"
 	declare ZFS_SNAPSHOTS="${ZFS_SNAPSHOTS:-90}"
 	declare ZFS_PARAM_PRINTF="30"
+	# /proc/spl/kstat/zfs/dbgmsg
+	declare ZFS_DBG_ENB="1"				# default: 0
+	declare ZFS_DBG_SIZ="$((100* 2**20))"		# default: 4194304
 	# https://serverfault.com/questions/581669/why-isnt-the-arc-max-setting-honoured-on-zfs-on-linux
 	declare ZFS_ARC_MIN="$(( (2**30) / 2 ))"	# default: dynamic	512M
 	declare ZFS_ARC_MAX="$(( (2**30) * 2 ))"	# default: dynamic	2G
@@ -2375,6 +2378,8 @@ function mount-zfs {
 			ZDEF=
 		fi
 		modprobe --all zfs >/dev/null 2>&1		#>>> || return 1
+		echo -en "${ZFS_DBG_ENB}"			>/sys/module/zfs/parameters/zfs_dbgmsg_enable
+		echo -en "${ZFS_DBG_SIZ}"			>/sys/module/zfs/parameters/zfs_dbgmsg_maxsize
 		echo -en "${ZFS_ARC_MIN}"			>/sys/module/zfs/parameters/zfs_arc_min
 		echo -en "${ZFS_ARC_MAX}"			>/sys/module/zfs/parameters/zfs_arc_max
 		echo -en "${ZFS_ADMIN_SNAP}"			>/sys/module/zfs/parameters/zfs_admin_snapshot
