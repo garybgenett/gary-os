@@ -5508,10 +5508,12 @@ function vlc-do {
 		${GREP} "[/]${1}[.]pls"
 	)"
 	if [[ -n ${1} ]] && [[ -n ${PLAYLIST} ]]; then
+		shift
 		psk "vlc.+[/]playlist[.]m3u$" -9
 		psk "vlc.+[/]listen[.]di[.]fm" -9
-		if [[ ${2} == +([0-9]) ]]; then
-			aumix -L -v ${2}
+		if [[ ${1} == +([0-9]) ]]; then
+			aumix -L -v ${1}
+			shift
 		else
 			aumix -L -v 30
 		fi
