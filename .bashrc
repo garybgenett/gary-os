@@ -5500,10 +5500,27 @@ function vlc-do {
 		REDSHIFT="${1}"
 		shift
 	fi
-	prompt -d -x
-	(_menu realign/${REDSHIFT} &)
-	${VLC} "${@}"
-	(_menu realign/on &)
+	declare PLAYLIST="$(
+		${GREP} -v "^#" /.g/_data/zactive/.setup/_misc/playlists/radio-di-favorites.m3u |
+		${GREP} "[/]${1}[.]pls"
+	)"
+	if [[ -n ${1} ]] && [[ -n ${PLAYLIST} ]]; then
+		psk "vlc.+[/]playlist[.]m3u$" -9
+		psk "vlc.+[/]listen[.]di[.]fm" -9
+		if [[ ${2} == +([0-9]) ]]; then
+			aumix -L -v ${2}
+		else
+			aumix -L -v 30
+		fi
+		(sudo -H -u \#1000 $(which vlc) "${PLAYLIST}" &)
+		return 0
+	fi
+	if [[ -z ${@} ]]; then
+		prompt -d -x
+		(_menu realign/${REDSHIFT} &)
+		${VLC} "${@}"
+		(_menu realign/on &)
+	fi
 	return 0
 }
 
