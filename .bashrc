@@ -2348,7 +2348,7 @@ function mount-zfs {
 	ZFS_PARAM[VDV_SMXA]="64";			ZFS_PARAM[VDV_SMXA_DEF]="2"
 	declare Z_DATE="$(date --iso=seconds | ${SED} "s|[-:]||g")"
 	declare Z_DREG="[T0-9]+"
-	declare Z_IMPORT="zpool import -d /dev -N"
+	declare Z_IMPORT="zpool import -d /dev/disk/by-id -d /dev -N"
 	declare Z_LIST="zpool list -H -P -v"
 	declare Z_GET="zpool get -H -o value"
 	declare Z_DAT="zfs get -H -o value"
