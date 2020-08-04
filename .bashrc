@@ -2378,19 +2378,22 @@ function mount-zfs {
 		if ${ZFS_KILLER}; then
 			ZDEF=
 		fi
-		modprobe --all zfs >/dev/null 2>&1		#>>> || return 1
-		echo -en "${ZFS_DBG_ENB}"			>/sys/module/zfs/parameters/zfs_dbgmsg_enable
-		echo -en "${ZFS_DBG_SIZ}"			>/sys/module/zfs/parameters/zfs_dbgmsg_maxsize
-		echo -en "${ZFS_ARC_MIN}"			>/sys/module/zfs/parameters/zfs_arc_min
-		echo -en "${ZFS_ARC_MAX}"			>/sys/module/zfs/parameters/zfs_arc_max
-		echo -en "${ZFS_ADMIN_SNAP}"			>/sys/module/zfs/parameters/zfs_admin_snapshot
-#>>>		echo -en "3"					>/proc/sys/vm/drop_caches
-		echo -en "${ZFS_PARAM[TXG_TIME${ZDEF}]}"	>/sys/module/zfs/parameters/zfs_txg_timeout
-		echo -en "${ZFS_PARAM[SLV_DDEF${ZDEF}]}"	>/sys/module/zfs/parameters/zfs_resilver_disable_defer
-		echo -en "${ZFS_PARAM[SLV_MTMS${ZDEF}]}"	>/sys/module/zfs/parameters/zfs_resilver_min_time_ms
-		echo -en "${ZFS_PARAM[SCB_MTMS${ZDEF}]}"	>/sys/module/zfs/parameters/zfs_scrub_min_time_ms
-		echo -en "${ZFS_PARAM[VDV_SMNA${ZDEF}]}"	>/sys/module/zfs/parameters/zfs_vdev_scrub_min_active
-		echo -en "${ZFS_PARAM[VDV_SMXA${ZDEF}]}"	>/sys/module/zfs/parameters/zfs_vdev_scrub_max_active
+		modprobe --all zfs >/dev/null 2>&1 #>>> || return 1
+		declare ZPARAM="/sys/module/zfs/parameters"
+		if [[ -d ${ZPARAM} ]]; then
+			echo -en "${ZFS_DBG_ENB}"			>${ZPARAM}/zfs_dbgmsg_enable
+			echo -en "${ZFS_DBG_SIZ}"			>${ZPARAM}/zfs_dbgmsg_maxsize
+			echo -en "${ZFS_ARC_MIN}"			>${ZPARAM}/zfs_arc_min
+			echo -en "${ZFS_ARC_MAX}"			>${ZPARAM}/zfs_arc_max
+#>>>			echo -en "3"					>/proc/sys/vm/drop_caches
+			echo -en "${ZFS_ADMIN_SNAP}"			>${ZPARAM}/zfs_admin_snapshot
+			echo -en "${ZFS_PARAM[TXG_TIME${ZDEF}]}"	>${ZPARAM}/zfs_txg_timeout
+			echo -en "${ZFS_PARAM[SLV_DDEF${ZDEF}]}"	>${ZPARAM}/zfs_resilver_disable_defer
+			echo -en "${ZFS_PARAM[SLV_MTMS${ZDEF}]}"	>${ZPARAM}/zfs_resilver_min_time_ms
+			echo -en "${ZFS_PARAM[SCB_MTMS${ZDEF}]}"	>${ZPARAM}/zfs_scrub_min_time_ms
+			echo -en "${ZFS_PARAM[VDV_SMNA${ZDEF}]}"	>${ZPARAM}/zfs_vdev_scrub_min_active
+			echo -en "${ZFS_PARAM[VDV_SMXA${ZDEF}]}"	>${ZPARAM}/zfs_vdev_scrub_max_active
+		fi
 		for FILE in $(${Z_IMPORT} 2>/dev/null | ${SED} -n "s|^[[:space:]]+pool[:][ ](.+)$|\1|gp"); do
 			echo -en "- (ZFS Importing: ${FILE})\n" 1>&2
 			${Z_IMPORT} ${FILE}		|| return 1
@@ -2450,7 +2453,7 @@ function mount-zfs {
 			hd-sn-list
 			echo -en "\n"
 			for FILE in $(
-				set | ${SED} -n "s|^.+[>][ ]/sys/module/zfs/parameters/([^;]+).*$|\1|gp" | sort -u
+				set | ${SED} -n "s|^.+[>][ ][$][{]ZPARAM[}]/([^;]+).*$|\1|gp" | sort -u
 			); do
 				printf "%-${ZFS_PARAM_PRINTF}.${ZFS_PARAM_PRINTF}s %s\n" "${FILE}" "$(cat /sys/module/zfs/parameters/${FILE})"
 			done
