@@ -324,7 +324,7 @@ export LT="tree -asF -hD --du"					; alias lt="${LT}"
 
 export DU="du -b --time --time-style=long-iso"			; alias du="${DU}"
 export LU="${DU} -ak --max-depth 1"				; alias lu="${LU}"
-export NCDU="(sleep 5 && echo cmgg &);
+export NCDU="(sleep 5 && echo cmgg) &;
 	ncdu --confirm-quit -2 -rr -x -e"			; alias ncdu="${NCDU}"
 
 ########################################
@@ -3496,7 +3496,7 @@ function vpn {
 		iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 		echo "1" >/proc/sys/net/ipv4/ip_forward
 		/etc/init.d/openvpn restart
-		(tail --follow /var/log/syslog &)
+		(tail --follow /var/log/syslog) &
 		read ENTER
 		psk /var/log/syslog
 	fi
@@ -5517,15 +5517,15 @@ function vlc-do {
 		else
 			aumix -L -v 30
 		fi
-		(sudo -H -u \#1000 $(which vlc) "${PLAYLIST}" &)
+		(sudo -H -u \#1000 $(which vlc) "${PLAYLIST}") &
 		return 0
 	fi
 	if [[ -f ${1} ]]; then
 		PLAYLIST="${1}" && shift
 		prompt -d -x
-		(_menu realign/${REDSHIFT} &)
+		(_menu realign/${REDSHIFT}) &
 		${VLC} "${@}" ${PLAYLIST}
-		(_menu realign/on &)
+		(_menu realign/on) &
 	fi
 	return 0
 }
