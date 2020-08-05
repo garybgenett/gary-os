@@ -5520,10 +5520,11 @@ function vlc-do {
 		(sudo -H -u \#1000 $(which vlc) "${PLAYLIST}" &)
 		return 0
 	fi
-	if [[ -z ${@} ]]; then
+	if [[ -f ${1} ]]; then
+		PLAYLIST="${1}" && shift
 		prompt -d -x
 		(_menu realign/${REDSHIFT} &)
-		${VLC} "${@}"
+		${VLC} "${@}" ${PLAYLIST}
 		(_menu realign/on &)
 	fi
 	return 0
