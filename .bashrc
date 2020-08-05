@@ -5517,7 +5517,10 @@ function vlc-do {
 		else
 			aumix -L -v 30
 		fi
-		(sudo -H -u \#1000 $(which vlc) "${PLAYLIST}") &
+		if [[ ${1} == off ]]; then
+			return 0
+		fi
+		(sudo -H -u \#1000 $(which vlc) "${@}" "${PLAYLIST}") &
 		return 0
 	fi
 	if [[ -f ${1} ]]; then
