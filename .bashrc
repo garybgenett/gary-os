@@ -2326,7 +2326,7 @@ function mount-robust {
 function mount-zfs {
 	declare ZFS_ROTATE="${ZFS_ROTATE:-true}"
 	declare ZFS_KILLER="${ZFS_KILLER:-false}"
-	declare ZFS_SNAPSHOTS="${ZFS_SNAPSHOTS:-90}"
+	declare ZFS_SNAPSHOTS="${ZFS_SNAPSHOTS:-0}"
 	declare ZFS_PARAM_PRINTF="30"
 	# /proc/spl/kstat/zfs/dbgmsg
 	declare ZFS_DBG_ENB="1"				# default: 0
@@ -2599,31 +2599,33 @@ function mount-zfs {
 	if ${SN}; then
 		echo -en "- Creating Snapshot... ${ZPOOL}@${Z_DATE}\n"
 		${Z_SNAPSHOT} ${ZPOOL}@${Z_DATE}					|| return 1
-		declare Z_ITEM=
-		declare Z_ITEMS=($(
-			${Z_LIST_ALL} |
-			${SED} -n "s|^(${ZPOOL}([/][^@[:space:]]+)?)[[:space:]].*$|\1|gp" |
-			sort -u
-		))
-		declare Z_TRIM="$(( $(( ${ZFS_SNAPSHOTS} / ${#Z_ITEMS[@]} )) +1 ))"
-		if (( ${Z_TRIM} < 2 )); then
-			Z_TRIM="2"
-		fi
-		for Z_ITEM in ${Z_ITEMS[@]}; do
-			declare Z_SNAP=
-			for Z_SNAP in $(
+		if (( ${ZFS_SNAPSHOTS} > 0 )); then
+			declare Z_ITEM=
+			declare Z_ITEMS=($(
 				${Z_LIST_ALL} |
-				${SED} -n "s|^(${Z_ITEM}[@][^[:space:]]+)[[:space:]].*$|\1|gp" |
-				sort -nr |
-				tail -n+${Z_TRIM} |
-				sort -n
-			); do
-				echo -en "- Destroying Snapshot... ${Z_SNAP}\n"
-				zfs destroy ${Z_SNAP}					|| return 1
+				${SED} -n "s|^(${ZPOOL}([/][^@[:space:]]+)?)[[:space:]].*$|\1|gp" |
+				sort -u
+			))
+			declare Z_TRIM="$(( $(( ${ZFS_SNAPSHOTS} / ${#Z_ITEMS[@]} )) +1 ))"
+			if (( ${Z_TRIM} < 2 )); then
+				Z_TRIM="2"
+			fi
+			for Z_ITEM in ${Z_ITEMS[@]}; do
+				declare Z_SNAP=
+				for Z_SNAP in $(
+					${Z_LIST_ALL} |
+					${SED} -n "s|^(${Z_ITEM}[@][^[:space:]]+)[[:space:]].*$|\1|gp" |
+					sort -nr |
+					tail -n+${Z_TRIM} |
+					sort -n
+				); do
+					echo -en "- Destroying Snapshot... ${Z_SNAP}\n"
+					zfs destroy ${Z_SNAP}					|| return 1
+				done
 			done
-		done
-		if (( ${#Z_ITEMS[@]} > 0 )); then
-			echo -en "\n"
+			if (( ${#Z_ITEMS[@]} > 0 )); then
+				echo -en "\n"
+			fi
 		fi
 		zfs_pool_status ${ZPOOL}
 		return 0
