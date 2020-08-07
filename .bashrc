@@ -2518,6 +2518,10 @@ function mount-zfs {
 	elif [[ -d ${DEV} ]]; then ZPOOL="$(${Z_DAT},name mountpoint	${DEV}	2>/dev/null | ${SED} -n "s|^${DEV}[[:space:]]+(.+)$|\1|gp"				)"
 	elif [[ -n $(${Z_LIST}						${DEV}	2>/dev/null) ]]; then ZPOOL="${DEV}"
 	fi
+	declare ZDATA="$(${Z_LIST_ALL}					${DEV}	2>/dev/null | ${GREP} -o "^${DEV}" | sort -u | ${GREP} "[/]" | ${SED} "s|[@].*$||g"	)"
+	if [[ -n ${ZDATA} ]]; then
+		ZPOOL="$(echo "${ZDATA}" | ${SED} -n "s|^([^/]+)[/].*$|\1|gp")"
+	fi
 	declare ZDVID="$(${Z_ZDB}					${DEV}	2>/dev/null | ${SED} -n "s|^[ ]{4}guid[:][ ](.+)$|\1|gp"				)"
 	declare ZNAME="$(echo "${ZPOOL}"					2>/dev/null | ${SED} "s|${Z_DSEP}${Z_DREG}$||g"						)"
 	declare ZROOT="$(echo "${ZPOOL}"					2>/dev/null | ${SED} "s|(${Z_PSEP}${Z_DREG})?(${Z_DSEP}${Z_DREG})?$||g"			)"
@@ -2555,6 +2559,10 @@ function mount-zfs {
 	declare ZPNAM="${ZROOT}${Z_PSEP}${Z_DATE}"
 	declare ZTYPE=
 	if {
+		[[ -n ${ZDATA} ]];
+	}; then
+		ZTYPE="dataset"
+	elif {
 		[[ ${ZPOOL} == ${DEV} ]] ||
 		[[ ${ZPINT} == ${DEV} ]];
 	}; then
@@ -2611,6 +2619,9 @@ function mount-zfs {
 		return 0
 	fi
 	if ${SN}; then
+		if [[ -n ${ZDATA} ]]; then
+			ZPOOL="${ZDATA}"
+		fi
 		echo -en "- Creating Snapshot... ${ZPOOL}@${Z_DATE}\n"
 		${Z_SNAPSHOT} ${ZPOOL}@${Z_DATE}					|| return 1
 		if (( ${ZFS_SNAPSHOTS} > 0 )); then
