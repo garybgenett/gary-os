@@ -2499,20 +2499,17 @@ function mount-zfs {
 	if ${IMPORT}; then
 		zfs_import_pools || return 1
 	fi
-	declare ZMEMBER="false"
-	declare ZDEVICE="${DEV}"
 	declare ZPOOL=
 	declare ZPOOL_EXT="false"
 	declare ZDEVS_DIR="$(${Z_ZDB}					${DIR}	2>/dev/null | ${SED} -n "s|^[ ]{4}name[:][ ][\'](.+)[\']$|\1|gp"			)"
 	declare ZMTPT_DIR="$(${Z_DAT},name mountpoint			${DIR}	2>/dev/null | ${SED} -n "s|^${DIR}[[:space:]]+(.+)$|\1|gp"				)"
 	declare ZPOOL_DIR="$(if [[ -n $(${Z_LIST}			${DIR}	2>/dev/null) ]]; then echo "${DIR}"; fi)"
-	declare ZDVID="$(${Z_ZDB}					${DEV}	2>/dev/null | ${SED} -n "s|^[ ]{4}guid[:][ ](.+)$|\1|gp"				)"
 	if {
 		{ ! ${UN} && [[ -b ${DEV} ]] && [[ -n ${DIR} ]]; };
 	}; then
-		if {	[[ -z ${ZPOOL} ]] && [[ -n ${ZDEVS_DIR} ]]; }; then ZPOOL_EXT="true"; ZPOOL="${ZDEVS_DIR}"
-		elif {	[[ -z ${ZPOOL} ]] && [[ -n ${ZMTPT_DIR} ]]; }; then ZPOOL_EXT="true"; ZPOOL="${ZMTPT_DIR}"
-		elif {	[[ -z ${ZPOOL} ]] && [[ -n ${ZPOOL_DIR} ]]; }; then ZPOOL_EXT="true"; ZPOOL="${ZPOOL_DIR}"
+		if	[[ -n ${ZDEVS_DIR} ]]; then ZPOOL_EXT="true"; ZPOOL="${ZDEVS_DIR}"
+		elif	[[ -n ${ZMTPT_DIR} ]]; then ZPOOL_EXT="true"; ZPOOL="${ZMTPT_DIR}"
+		elif	[[ -n ${ZPOOL_DIR} ]]; then ZPOOL_EXT="true"; ZPOOL="${ZPOOL_DIR}"
 		fi
 	fi
 	if ${ZPOOL_EXT}; then DIR= ; fi
@@ -2521,6 +2518,7 @@ function mount-zfs {
 	elif [[ -d ${DEV} ]]; then ZPOOL="$(${Z_DAT},name mountpoint	${DEV}	2>/dev/null | ${SED} -n "s|^${DEV}[[:space:]]+(.+)$|\1|gp"				)"
 	elif [[ -n $(${Z_LIST}						${DEV}	2>/dev/null) ]]; then ZPOOL="${DEV}"
 	fi
+	declare ZDVID="$(${Z_ZDB}					${DEV}	2>/dev/null | ${SED} -n "s|^[ ]{4}guid[:][ ](.+)$|\1|gp"				)"
 	declare ZNAME="$(echo "${ZPOOL}"					2>/dev/null | ${SED} "s|${Z_DSEP}${Z_DREG}$||g"						)"
 	declare ZROOT="$(echo "${ZPOOL}"					2>/dev/null | ${SED} "s|(${Z_PSEP}${Z_DREG})?(${Z_DSEP}${Z_DREG})?$||g"			)"
 	if {
@@ -2535,6 +2533,8 @@ function mount-zfs {
 	declare ZTIME="$(${Z_ZDB_META}		${ZPOOL}			2>/dev/null | ${SED} -n "s|^[[:space:]]+timestamp[ ][=][ ]([^ ]+)[ ].+$|\1|gp"		)"
 	declare ZMTPT="$(${Z_DAT} mountpoint	${ZPOOL}			2>/dev/null										)"
 	declare ZLIVE="$(${Z_DAT} mounted	${ZPOOL}			2>/dev/null										)"
+	declare ZMEMBER="false"
+	declare ZDEVICE="${DEV}"
 	if (( ${#ZDIDS[@]} > 1 )); then ZDIDS=("${ZDIDS[@]:1}"); fi
 	if [[ -n ${ZDIDS[@]} ]]; then
 		for FILE in $(eval echo "{0..$((${#ZDIDS[@]}-1))}"); do
@@ -2560,10 +2560,6 @@ function mount-zfs {
 	}; then
 		ZTYPE="pool"
 	elif {
-		[[ ${ZMTPT} == ${DEV} ]];
-	}; then
-		ZTYPE="mount"
-	elif {
 		${ZMEMBER};
 	}; then
 		if [[ ${ZDIDS[0]} == ${ZDVID} ]]; then
@@ -2575,7 +2571,11 @@ function mount-zfs {
 		[[ -b ${DEV} ]] &&
 		[[ -n ${ZPOOL} ]];
 	}; then
-		ZTYPE="filesystem"
+		ZTYPE="device"
+	elif {
+		[[ ${ZMTPT} == ${DEV} ]];
+	}; then
+		ZTYPE="mount"
 	else
 		echo -en "- <ZFS: Failed Detection!>\n" 1>&2
 		return 1
