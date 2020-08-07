@@ -2447,7 +2447,10 @@ function mount-zfs {
 	if [[ ${1} == -u ]]; then		UN="true";	shift; fi; if ${UN}; then IMPORT="false"; fi
 	if [[ ${1} == ${SN_OPT} ]]; then	SN="true";	shift; fi; if ${SN}; then IMPORT="false"; fi
 		if ${SN} && [[ ${1} == -a ]]; then		SN_ALL="true"; shift; fi
-		if ${SN} && [[ ${1} == +([0-9]) ]]; then	ZFS_SNAPSHOTS="${1}"; shift; fi
+		if ${SN} && {
+				[[ ${1} == - ]] ||
+				[[ ${1} == +([0-9]) ]];
+		}; then						ZFS_SNAPSHOTS="${1}"; shift; fi
 	if [[ -n ${1} ]]; then			DEV="${1}";	shift; fi
 	if [[ -n ${1} ]]; then			DIR="${1}";	shift; fi
 	if { {
@@ -2622,19 +2625,29 @@ function mount-zfs {
 		if [[ -n ${ZDATA} ]]; then
 			ZPOOL="${ZDATA}"
 		fi
-		echo -en "- Creating Snapshot... ${ZPOOL}@${Z_DATE}\n"
-		${Z_SNAPSHOT} ${ZPOOL}@${Z_DATE}					|| return 1
-		if (( ${ZFS_SNAPSHOTS} > 0 )); then
+		if [[ ${ZFS_SNAPSHOTS} != - ]]; then
+			echo -en "- Creating Snapshot... ${ZPOOL}@${Z_DATE}\n"
+			${Z_SNAPSHOT} ${ZPOOL}@${Z_DATE}	|| return 1
+		fi
+		if {
+			[[ ${ZFS_SNAPSHOTS} == - ]] ||
+			(( ${ZFS_SNAPSHOTS} > 0 ));
+		}; then
 			declare Z_ITEM=
 			declare Z_ITEMS=($(
 				${Z_LIST_ALL} |
 				${SED} -n "s|^(${ZPOOL}([/][^@[:space:]]+)?)[[:space:]].*$|\1|gp" |
 				sort -u
 			))
-#>>>			declare Z_TRIM="$(( ( ${ZFS_SNAPSHOTS} / ${#Z_ITEMS[@]} ) +1 ))"
-			declare Z_TRIM="$(( ${ZFS_SNAPSHOTS} +1 ))"
-			if (( ${Z_TRIM} < 2 )); then
-				Z_TRIM="2"
+			declare Z_TRIM=
+			if [[ ${ZFS_SNAPSHOTS} == - ]]; then
+				Z_TRIM="0"
+			else
+#>>>				Z_TRIM="$(( ( ${ZFS_SNAPSHOTS} / ${#Z_ITEMS[@]} ) +1 ))"
+				Z_TRIM="$(( ${ZFS_SNAPSHOTS} +1 ))"
+				if (( ${Z_TRIM} < 2 )); then
+					Z_TRIM="2"
+				fi
 			fi
 			for Z_ITEM in ${Z_ITEMS[@]}; do
 				declare Z_SNAP=
@@ -2646,7 +2659,7 @@ function mount-zfs {
 					sort -n
 				); do
 					echo -en "- Destroying Snapshot... ${Z_SNAP}\n"
-					zfs destroy ${Z_SNAP}					|| return 1
+					zfs destroy ${Z_SNAP}	|| return 1
 				done
 			done
 			if (( ${#Z_ITEMS[@]} > 0 )); then
