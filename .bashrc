@@ -2360,7 +2360,9 @@ function mount-zfs {
 	declare Z_STATUS="zpool status -P -v -i"
 	declare Z_SNAPSHOT="zfs snapshot -r"
 	declare Z_LIST_IDS="${Z_LIST} -g"
-	declare Z_LIST_ALL="zfs list -r -o name,type,creation,used,avail,refer,ratio,version -t all"
+#>>>	declare Z_LIST_ALL="zfs list -r -t all -o name,type,creation,used,available,referenced,compressratio,version"
+#>>>	declare Z_LIST_ALL="zfs list -r -t all -o name,type,creation,available,used,usedbydataset,usedbychildren,usedbysnapshots,usedbyrefreservation,compressratio"
+	declare Z_LIST_ALL="zfs list -r -t all -o name,type,creation,available,used,usedbydataset,usedbychildren,usedbysnapshots,usedbyrefreservation,referenced,written,compressratio,mounted,createtxg,version"
 	declare Z_FSEP="|"
 	declare Z_PSEP=":"
 	declare Z_DSEP="-"
@@ -2404,6 +2406,8 @@ function mount-zfs {
 	function zfs_pool_status {
 		if [[ ${1} == - ]]; then
 			shift
+			zfs_pool_info
+			echo -en "\n"
 			${Z_IOINFO} "${@}"
 			echo -en "\n"
 			${Z_STATUS} "${@}"
@@ -2413,11 +2417,20 @@ function mount-zfs {
 		return 0
 	}
 	function zfs_pool_info {
-		${Z_ALL} ${ZPOOL} | ${GREP} --color=never "local$"
-		if [[ ${ZPINT} == ${ZPOOL} ]]; then
-			${Z_ZDB_META} ${ZPOOL}
-		else
-			echo -en "- (ZFS Name: ${ZPINT} -> ${ZPOOL})\n" 1>&2
+		${Z_ALL} \
+			| ${GREP} "^[^[:space:]@]+[[:space:]]" \
+			| if [[ -n ${ZPOOL} ]]; then
+				${GREP} "^${ZPOOL}"
+			else
+				cat
+			fi \
+			| ${GREP} --color=never "local$"
+		if [[ -n ${ZPOOL} ]]; then
+			if [[ ${ZPINT} == ${ZPOOL} ]]; then
+				${Z_ZDB_META} ${ZPOOL}
+			else
+				echo -en "- (ZFS Name: ${ZPINT} -> ${ZPOOL})\n" 1>&2
+			fi
 		fi
 		return 0
 	}
