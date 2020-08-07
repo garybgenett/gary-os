@@ -2460,8 +2460,9 @@ function mount-zfs {
 			echo -en "\n"
 			zfs_pool_status -
 			return 0
+		else
+			echo -en "- <ZFS: Invalid Arguments!>\n" 1>&2
 		fi
-		echo -en "- <ZFS: Invalid Arguments!>\n" 1>&2
 		return 1
 	fi
 	if ${SN} && ${SN_ALL}; then
