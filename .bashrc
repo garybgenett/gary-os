@@ -2406,14 +2406,20 @@ function mount-zfs {
 	function zfs_pool_status {
 		if [[ ${1} == - ]]; then
 			shift
-			zfs_pool_info
-			echo -en "\n"
-			${Z_IOINFO} "${@}"
-			echo -en "\n"
-			${Z_STATUS} "${@}"
-			echo -en "\n"
+			if ! ${SL}; then
+				zfs_pool_info
+				echo -en "\n"
+				${Z_IOINFO} "${@}"
+				echo -en "\n"
+				${Z_STATUS} "${@}"
+				echo -en "\n"
+			fi
 		fi
-		${Z_LIST_ALL} "${@}"
+		if ${SL}; then
+			${Z_LIST_ALL/-t all/-t filesystem} "${@}"
+		else
+			${Z_LIST_ALL} "${@}"
+		fi
 		return 0
 	}
 	function zfs_pool_info {
@@ -2436,6 +2442,7 @@ function mount-zfs {
 	}
 	declare IMPORT="true"
 	declare IS="false"
+	declare SL="false"
 	declare RO="false"
 	declare UN="false"
 	declare SN="false"; declare SN_ALL="false"; declare SN_OPT="-s"
@@ -2443,6 +2450,7 @@ function mount-zfs {
 	declare DIR=
 	if [[ ${1} == -! ]]; then		IMPORT="false";	shift; fi
 	if [[ ${1} == -[?] ]]; then		IS="true";	shift; fi
+	if [[ ${1} == -l ]]; then		SL="true";	shift; fi
 	if [[ ${1} == -0 ]]; then		RO="true";	shift; fi; if ${RO}; then ZFS_ROTATE="false"; fi
 	if [[ ${1} == -u ]]; then		UN="true";	shift; fi; if ${UN}; then IMPORT="false"; fi
 	if [[ ${1} == ${SN_OPT} ]]; then	SN="true";	shift; fi; if ${SN}; then IMPORT="false"; fi
@@ -2466,14 +2474,16 @@ function mount-zfs {
 			if ${IMPORT}; then
 				zfs_import_pools || return 1
 			fi
-			hd-sn-list
-			echo -en "\n"
-			for FILE in $(
-				set | ${SED} -n "s|^.+[>][ ][$][{]ZPARAM[}]/([^;]+).*$|\1|gp" | sort -u
-			); do
-				printf "%-${ZFS_PARAM_PRINTF}.${ZFS_PARAM_PRINTF}s %s\n" "${FILE}" "$(cat /sys/module/zfs/parameters/${FILE})"
-			done
-			echo -en "\n"
+			if ! ${SL}; then
+				hd-sn-list
+				echo -en "\n"
+				for FILE in $(
+					set | ${SED} -n "s|^.+[>][ ][$][{]ZPARAM[}]/([^;]+).*$|\1|gp" | sort -u
+				); do
+					printf "%-${ZFS_PARAM_PRINTF}.${ZFS_PARAM_PRINTF}s %s\n" "${FILE}" "$(cat /sys/module/zfs/parameters/${FILE})"
+				done
+				echo -en "\n"
+			fi
 			zfs_pool_status -
 			return 0
 		else
