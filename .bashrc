@@ -2606,7 +2606,8 @@ function mount-zfs {
 				${SED} -n "s|^(${ZPOOL}([/][^@[:space:]]+)?)[[:space:]].*$|\1|gp" |
 				sort -u
 			))
-			declare Z_TRIM="$(( $(( ${ZFS_SNAPSHOTS} / ${#Z_ITEMS[@]} )) +1 ))"
+#>>>			declare Z_TRIM="$(( ( ${ZFS_SNAPSHOTS} / ${#Z_ITEMS[@]} ) +1 ))"
+			declare Z_TRIM="$(( ${ZFS_SNAPSHOTS} +1 ))"
 			if (( ${Z_TRIM} < 2 )); then
 				Z_TRIM="2"
 			fi
