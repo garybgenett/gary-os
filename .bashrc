@@ -2367,11 +2367,11 @@ function mount-zfs {
 	declare Z_PSEP=":"
 	declare Z_DSEP="-"
 	declare ZOPTS=
-	ZOPTS+=" canmount=noauto"
 	ZOPTS+=" compression=lz4"
-	ZOPTS+=" relatime=on"
+	ZOPTS+=" canmount=noauto"
 	ZOPTS+=" sharenfs=off"
 	ZOPTS+=" sharesmb=off"
+	ZOPTS+=" relatime=on"
 	declare ZOPTS_DONE="${ZOPTS}"
 	ZOPTS_DONE+=" mountpoint=none"
 	ZOPTS_DONE+=" readonly=on"
@@ -2406,7 +2406,12 @@ function mount-zfs {
 	function zfs_pool_status {
 		if [[ ${1} == - ]]; then
 			shift
-			if ! ${SL}; then
+			if {
+				! ${SL} && {
+					[[ -z ${1} ]] ||
+					[[ ${1} != ${ZDATA} ]];
+				};
+			}; then
 				zfs_pool_info
 				echo -en "\n"
 				${Z_IOINFO} "${@}"
@@ -2626,6 +2631,9 @@ function mount-zfs {
 			if [[ ${DIR} == all ]] || [[ ${DIR} == type	]]; then echo -en "${ZTYPE}"	; fi; #>>> if { [[ -z ${DIR} ]] || [[ ${DIR} == all ]]; }; then echo -en "${Z_FSEP}"; fi
 			echo -en "\n"
 		else
+			if [[ -n ${ZDATA} ]]; then
+				ZPOOL="${ZDATA}"
+			fi
 			echo -en "\n"
 			zfs_pool_status - ${ZPOOL}
 		fi
@@ -2672,10 +2680,8 @@ function mount-zfs {
 					zfs destroy ${Z_SNAP}	|| return 1
 				done
 			done
-			if (( ${#Z_ITEMS[@]} > 0 )); then
-				echo -en "\n"
-			fi
 		fi
+		echo -en "\n"
 		zfs_pool_status ${ZPOOL}
 		return 0
 	fi
