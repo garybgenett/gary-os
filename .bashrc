@@ -2362,7 +2362,10 @@ function mount-zfs {
 	declare Z_LIST_IDS="${Z_LIST} -g"
 #>>>	declare Z_LIST_ALL="zfs list -r -t all -o name,type,creation,used,available,referenced,compressratio,version"
 #>>>	declare Z_LIST_ALL="zfs list -r -t all -o name,type,creation,available,used,usedbydataset,usedbychildren,usedbysnapshots,usedbyrefreservation,quota,compressratio"
-	declare Z_LIST_ALL="zfs list -r -t all -o name,type,creation,available,used,usedbydataset,usedbychildren,usedbysnapshots,usedbyrefreservation,quota,referenced,written,compressratio,mounted,createtxg,version"
+#>>>	declare Z_LIST_ALL="zfs list -r -t all -o name,type,creation,available,used,usedbydataset,usedbychildren,usedbysnapshots,usedbyrefreservation,quota,referenced,written,compressratio,mounted,createtxg,version"
+	declare Z_LIST_ALL="zfs list -H -r -t all -o name"
+	declare Z_LIST_INF="zfs list -r -t all -o name,type,creation,available,compressratio,mounted,createtxg,version"
+	declare Z_LIST_SIZ="zfs list -r -t all -o name,type,available,used,usedbydataset,usedbychildren,usedbysnapshots,usedbyrefreservation,quota,referenced,written"
 	declare Z_FSEP="|"
 	declare Z_PSEP=":"
 	declare Z_DSEP="-"
@@ -2421,9 +2424,13 @@ function mount-zfs {
 			fi
 		fi
 		if ${SL}; then
-			${Z_LIST_ALL/-t all/-t filesystem} "${@}"
+			${Z_LIST_INF/-t all/-t filesystem,volume} "${@}"
+			echo -en "\n"
+			${Z_LIST_SIZ/-t all/-t filesystem,volume} "${@}"
 		else
-			${Z_LIST_ALL} "${@}"
+			${Z_LIST_INF} "${@}"
+			echo -en "\n"
+			${Z_LIST_SIZ} "${@}"
 		fi
 		return 0
 	}
@@ -2536,7 +2543,7 @@ function mount-zfs {
 	elif [[ -d ${DEV} ]]; then ZPOOL="$(${Z_DAT},name mountpoint	${DEV}	2>/dev/null | ${SED} -n "s|^${DEV}[[:space:]]+(.+)$|\1|gp"				)"
 	elif [[ -n $(${Z_LIST}						${DEV}	2>/dev/null) ]]; then ZPOOL="${DEV}"
 	fi
-	declare ZDATA="$(${Z_LIST_ALL}					${DEV}	2>/dev/null | ${GREP} -o "^${DEV}" | sort -u | ${GREP} "[/]" | ${SED} "s|[@].*$||g"	)"
+	declare ZDATA="$(${Z_LIST_ALL/-t all/-t filesystem,volume}	${DEV}	2>/dev/null | ${GREP} -o "^${DEV}$" | ${GREP} "[/]"					)"
 	if [[ -n ${ZDATA} ]]; then
 		ZPOOL="$(echo "${ZDATA}" | ${SED} -n "s|^([^/]+)[/].*$|\1|gp")"
 	fi
@@ -2577,9 +2584,13 @@ function mount-zfs {
 	declare ZPNAM="${ZROOT}${Z_PSEP}${Z_DATE}"
 	declare ZTYPE=
 	if {
-		[[ -n ${ZDATA} ]];
+		[[ -n $(${Z_LIST_ALL/-t all/-t filesystem},type ${ZDATA} 2>/dev/null | ${SED} -n "s|^(${ZDATA})[[:space:]]filesystem$|\1|gp") ]];
 	}; then
 		ZTYPE="dataset"
+	elif {
+		[[ -n $(${Z_LIST_ALL/-t all/-t volume},type ${ZDATA} 2>/dev/null | ${SED} -n "s|^(${ZDATA})[[:space:]]volume$|\1|gp") ]];
+	}; then
+		ZTYPE="volume"
 	elif {
 		[[ ${ZPOOL} == ${DEV} ]] ||
 		[[ ${ZPINT} == ${DEV} ]];
@@ -2653,9 +2664,7 @@ function mount-zfs {
 		}; then
 			declare Z_ITEM=
 			declare Z_ITEMS=($(
-				${Z_LIST_ALL} |
-				${SED} -n "s|^(${ZPOOL}([/][^@[:space:]]+)?)[[:space:]].*$|\1|gp" |
-				sort -u
+				${Z_LIST_ALL/-t all/-t filesystem,volume} ${ZPOOL} 2>/dev/null
 			))
 			declare Z_TRIM=
 			if [[ ${ZFS_SNAPSHOTS} == - ]]; then
@@ -2670,8 +2679,7 @@ function mount-zfs {
 			for Z_ITEM in ${Z_ITEMS[@]}; do
 				declare Z_SNAP=
 				for Z_SNAP in $(
-					${Z_LIST_ALL} |
-					${SED} -n "s|^(${Z_ITEM}[@][^[:space:]]+)[[:space:]].*$|\1|gp" |
+					${Z_LIST_ALL/-t all/-t snapshot} ${Z_ITEM} 2>/dev/null |
 					sort -nr |
 					tail -n+${Z_TRIM} |
 					sort -n
