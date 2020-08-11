@@ -2407,21 +2407,19 @@ function mount-zfs {
 		return 0
 	}
 	function zfs_pool_status {
-		if [[ ${1} == - ]]; then
-			shift
-			if {
-				! ${SL} && {
-					[[ -z ${1} ]] ||
-					[[ ${1} != ${ZDATA} ]];
-				};
-			}; then
-				zfs_pool_info
-				echo -en "\n"
-				${Z_IOINFO} "${@}"
-				echo -en "\n"
-				${Z_STATUS} "${@}"
-				echo -en "\n"
-			fi
+		if {
+			${IS} &&
+			! ${SL} && {
+				[[ -z ${1} ]] ||
+				[[ ${1} != ${ZDATA} ]];
+			};
+		}; then
+			zfs_pool_info
+			echo -en "\n"
+			${Z_IOINFO} "${@}"
+			echo -en "\n"
+			${Z_STATUS} "${@}"
+			echo -en "\n"
 		fi
 		if ${SL}; then
 			${Z_LIST_INF/-t all/-t filesystem,volume} "${@}"
@@ -2454,17 +2452,17 @@ function mount-zfs {
 	}
 	declare IMPORT="true"
 	declare IS="false"
-	declare SL="false"
 	declare RO="false"
 	declare UN="false"
+	declare SL="false"
 	declare SN="false"; declare SN_ALL="false"; declare SN_SKP=""; declare SN_OPT="-s"
 	declare DEV=
 	declare DIR=
 	if [[ ${1} == -! ]]; then		IMPORT="false";	shift; fi
 	if [[ ${1} == -[?] ]]; then		IS="true";	shift; fi
-	if [[ ${1} == -l ]]; then		SL="true";	shift; fi
 	if [[ ${1} == -0 ]]; then		RO="true";	shift; fi; if ${RO}; then ZFS_ROTATE="false"; fi
 	if [[ ${1} == -u ]]; then		UN="true";	shift; fi; if ${UN}; then IMPORT="false"; fi
+	if [[ ${1} == -l ]]; then		SL="true";	shift; fi; if ${SL}; then IMPORT="false"; fi
 	if [[ ${1} == ${SN_OPT} ]]; then	SN="true";	shift; fi; if ${SN}; then IMPORT="false"; fi
 		if ${SN} && [[ ${1} == -a ]]; then		SN_ALL="true"; shift; fi
 		if ${SN} && [[ ${1} == - ]]; then		SN_SKP="${1}"; shift; fi
@@ -2494,7 +2492,7 @@ function mount-zfs {
 				done
 				echo -en "\n"
 			fi
-			zfs_pool_status -
+			zfs_pool_status
 			return 0
 		else
 			echo -en "- <ZFS: Invalid Arguments!>\n" 1>&2
@@ -2644,7 +2642,7 @@ function mount-zfs {
 				ZPOOL="${ZDATA}"
 			fi
 			echo -en "\n"
-			zfs_pool_status - ${ZPOOL}
+			zfs_pool_status ${ZPOOL}
 		fi
 		return 0
 	fi
