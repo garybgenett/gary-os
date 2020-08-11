@@ -2457,7 +2457,7 @@ function mount-zfs {
 	declare SL="false"
 	declare RO="false"
 	declare UN="false"
-	declare SN="false"; declare SN_ALL="false"; declare SN_OPT="-s"
+	declare SN="false"; declare SN_ALL="false"; declare SN_SKP=""; declare SN_OPT="-s"
 	declare DEV=
 	declare DIR=
 	if [[ ${1} == -! ]]; then		IMPORT="false";	shift; fi
@@ -2467,10 +2467,8 @@ function mount-zfs {
 	if [[ ${1} == -u ]]; then		UN="true";	shift; fi; if ${UN}; then IMPORT="false"; fi
 	if [[ ${1} == ${SN_OPT} ]]; then	SN="true";	shift; fi; if ${SN}; then IMPORT="false"; fi
 		if ${SN} && [[ ${1} == -a ]]; then		SN_ALL="true"; shift; fi
-		if ${SN} && {
-				[[ ${1} == - ]] ||
-				[[ ${1} == +([0-9]) ]];
-		}; then						ZFS_SNAPSHOTS="${1}"; shift; fi
+		if ${SN} && [[ ${1} == - ]]; then		SN_SKP="${1}"; shift; fi
+		if ${SN} && [[ ${1} == +([0-9]) ]]; then	ZFS_SNAPSHOTS="${1}"; shift; fi
 	if [[ -n ${1} ]]; then			DEV="${1}";	shift; fi
 	if [[ -n ${1} ]]; then			DIR="${1}";	shift; fi
 	if { {
@@ -2514,7 +2512,7 @@ function mount-zfs {
 			else
 				echo -en "\n"
 			fi
-			${FUNCNAME} ${SN_OPT} ${ZFS_SNAPSHOTS} ${FILE} || FAIL="true"
+			${FUNCNAME} ${SN_OPT} ${SN_SKP} ${ZFS_SNAPSHOTS} ${FILE} || FAIL="true"
 		done
 		if ${FAIL}; then
 			return 1
@@ -2654,32 +2652,32 @@ function mount-zfs {
 		if [[ -n ${ZDATA} ]]; then
 			ZPOOL="${ZDATA}"
 		fi
-		if [[ ${ZFS_SNAPSHOTS} != - ]]; then
+		if [[ -z ${SN_SKP} ]]; then
 			echo -en "- Creating Snapshot... ${ZPOOL}@${Z_DATE}\n"
 			${Z_SNAPSHOT} ${ZPOOL}@${Z_DATE}	|| return 1
 		fi
 		if {
-			[[ ${ZFS_SNAPSHOTS} == - ]] ||
-			(( ${ZFS_SNAPSHOTS} > 0 ));
+			[[ ${ZFS_SNAPSHOTS} == +([0-9]) ]] && {
+				[[ -n ${SN_SKP} ]] ||
+				(( ${ZFS_SNAPSHOTS} > 0 ));
+			};
 		}; then
+			declare Z_TRIM="$((${ZFS_SNAPSHOTS}+1))"
+			declare Z_ITEMS=($(${Z_LIST_ALL/-t all/-t filesystem,volume} ${ZPOOL} 2>/dev/null))
 			declare Z_ITEM=
-			declare Z_ITEMS=($(
-				${Z_LIST_ALL/-t all/-t filesystem,volume} ${ZPOOL} 2>/dev/null
-			))
-			declare Z_TRIM=
-			if [[ ${ZFS_SNAPSHOTS} == - ]]; then
+			if {
+				[[ -n ${SN_SKP} ]] &&
+				[[ ${ZFS_SNAPSHOTS} == 0 ]];
+			}; then
 				Z_TRIM="0"
-			else
-#>>>				Z_TRIM="$(( ( ${ZFS_SNAPSHOTS} / ${#Z_ITEMS[@]} ) +1 ))"
-				Z_TRIM="$(( ${ZFS_SNAPSHOTS} +1 ))"
-				if (( ${Z_TRIM} < 2 )); then
-					Z_TRIM="2"
-				fi
+			elif (( ${Z_TRIM} < 2 )); then
+				Z_TRIM="2"
 			fi
 			for Z_ITEM in ${Z_ITEMS[@]}; do
 				declare Z_SNAP=
 				for Z_SNAP in $(
 					${Z_LIST_ALL/-t all/-t snapshot} ${Z_ITEM} 2>/dev/null |
+					${GREP} "^${Z_ITEM}@" |
 					sort -nr |
 					tail -n+${Z_TRIM} |
 					sort -n
