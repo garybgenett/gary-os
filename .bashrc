@@ -2816,6 +2816,9 @@ function mount-zfs {
 				if [[ $(${Z_DAT} mounted ${ZPOOL}) == no ]]; then
 					${Z_MOUNT} "${@}" ${ZPOOL}			|| return 1
 				fi
+				for FILE in $(${Z_LIST_ALL/-t all/-t filesystem} ${ZPOOL} | ${GREP} -v "^${ZPOOL}$"); do
+					${Z_MOUNT} ${FILE}				|| return 1
+				done
 				zfs_pool_info						|| return 1
 			fi
 			return 0
