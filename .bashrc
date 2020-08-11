@@ -382,7 +382,7 @@ alias encfs="${ENCFS}"
 
 ########################################
 
-export UNISON="/.g/_data/+unison"
+export UNISON="/.g/_data/-track/+unison"
 export UNISON_LOG="_log"
 
 export UNISON_W="reporter unison \
@@ -525,7 +525,7 @@ alias rsynclook="${GREP} -v '^[.<>][fdDLS][ ]'"
 
 alias dmesgtail="dmesg --kernel --human --decode --ctime --follow"
 alias logtail="tail --follow /.runit/log/syslogd"
-alias synctail="${GREP} -a '^ERROR[:][ ]' /.g/_data/+sync/_sync.log ; echo ; tail --follow /.g/_data/+sync/_sync.log"
+alias synctail="${GREP} -a '^ERROR[:][ ]' /.g/_data/-track/+sync/_sync.log ; echo ; tail --follow /.g/_data/-track/+sync/_sync.log"
 
 ########################################
 
