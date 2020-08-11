@@ -5,9 +5,13 @@
 General setup
 	Kernel compression mode							CONFIG_KERNEL_XZ=y
 	Default hostname							CONFIG_DEFAULT_HOSTNAME=gary-os
-	Support for paging of anonymous memory (swap)				CONFIG_SWAP=n
+	Support for paging of anonymous memory (swap)				CONFIG_SWAP=y
 	Kernel .config support							CONFIG_IKCONFIG=y
 		Enable access to .config through /proc/config.gz		CONFIG_IKCONFIG_PROC=y
+	Control Group support							CONFIG_CGROUPS=y
+		Memory controller						CONFIG_MEMCG=Y
+			Swap controller						CONFIG_MEMCG_SWAP=y
+				Swap controller enabled by default		CONFIG_MEMCG_SWAP_ENABLED=y
 	Support initial ramdisk/ramfs compressed using gzip			CONFIG_RD_GZIP=n
 	Support initial ramdisk/ramfs compressed using bzip2			CONFIG_RD_BZIP2=n
 	Support initial ramdisk/ramfs compressed using LZMA			CONFIG_RD_LZMA=n
