@@ -2351,8 +2351,9 @@ function mount-zfs {
 	declare Z_IMPORT="zpool import -d /dev/disk/by-id -d /dev -N"
 	declare Z_LIST="zpool list -H -P -v"
 	declare Z_GET="zpool get -H -o value"
+	declare Z_GET_ALL="zpool get -o all all"
 	declare Z_DAT="zfs get -H -o value"
-	declare Z_ALL="zfs get -o all all"
+	declare Z_DAT_ALL="zfs get -o all all"
 	declare Z_ZDB="zdb -l"
 	declare Z_ZDB_META="zdb -u"
 	declare Z_MOUNT="zfs mount -O"
@@ -2364,8 +2365,9 @@ function mount-zfs {
 #>>>	declare Z_LIST_ALL="zfs list -r -t all -o name,type,creation,available,used,usedbydataset,usedbychildren,usedbysnapshots,usedbyrefreservation,quota,compressratio"
 #>>>	declare Z_LIST_ALL="zfs list -r -t all -o name,type,creation,available,used,usedbydataset,usedbychildren,usedbysnapshots,usedbyrefreservation,quota,referenced,written,compressratio,mounted,createtxg,version"
 	declare Z_LIST_ALL="zfs list -H -r -t all -o name"
-	declare Z_LIST_INF="zfs list -r -t all -o name,type,creation,available,compressratio,mounted,createtxg,version"
+	declare Z_LIST_INF="zfs list -r -t all -o name,type,creation,available,used,compressratio,mounted,createtxg,version"
 	declare Z_LIST_SIZ="zfs list -r -t all -o name,type,available,used,usedbydataset,usedbychildren,usedbysnapshots,usedbyrefreservation,quota,referenced,written"
+	declare Z_LIST_BIT="zfs list -r -t all -p -o        available,used,usedbydataset,usedbychildren,usedbysnapshots,usedbyrefreservation,name \"\${@}\" | ${GREP} -v \"NAME\" | sort -nr -k3 -k4 -k5 -k6"
 	declare Z_FSEP="|"
 	declare Z_PSEP=":"
 	declare Z_DSEP="-"
@@ -2416,24 +2418,43 @@ function mount-zfs {
 		}; then
 			zfs_pool_info
 			echo -en "\n"
-			${Z_IOINFO} "${@}"
-			echo -en "\n"
 			${Z_STATUS} "${@}"
+			echo -en "\n"
+			${Z_IOINFO} "${@}"
 			echo -en "\n"
 		fi
 		if ${SL}; then
-			${Z_LIST_INF/-t all/-t filesystem,volume} "${@}"
-			echo -en "\n"
-			${Z_LIST_SIZ/-t all/-t filesystem,volume} "${@}"
-		else
 			${Z_LIST_INF} "${@}"
 			echo -en "\n"
 			${Z_LIST_SIZ} "${@}"
+			echo -en "\n"
+			${Z_DAT_ALL} \
+				| ${GREP} "^${1}" \
+				| ${GREP} "[[:space:]]((ref)?reservation|quota)[[:space:]]" \
+				| ${GREP} --color=never "local$"
+			echo -en "\n"
+			eval ${Z_LIST_BIT/-t all/-t filesystem,volume}
+		elif ${SN}; then
+			${Z_LIST_INF/-t all/-t filesystem,volume} "${@}"
+			echo -en "\n"
+			${Z_LIST_SIZ} "${@}"
+		else
+			${Z_LIST_INF/-t all/-t filesystem,volume} "${@}"
 		fi
 		return 0
 	}
 	function zfs_pool_info {
-		${Z_ALL} \
+		${Z_GET_ALL} \
+			| if [[ -n ${ZPOOL} ]]; then
+				${GREP} "^${ZPOOL}"
+			else
+				cat
+			fi \
+			| ${GREP} --color=never "[-]$"
+		if [[ -z ${ZPOOL} ]]; then
+			echo -en "\n" 1>&2
+		fi
+		${Z_DAT_ALL} \
 			| ${GREP} "^[^[:space:]@]+[[:space:]]" \
 			| if [[ -n ${ZPOOL} ]]; then
 				${GREP} "^${ZPOOL}"
