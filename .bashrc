@@ -2428,10 +2428,9 @@ function mount-zfs {
 			echo -en "\n"
 			${Z_LIST_SIZ} "${@}"
 			echo -en "\n"
-			${Z_DAT_ALL} \
-				| ${GREP} "^${1}" \
-				| ${GREP} "[[:space:]]((ref)?reservation|quota)[[:space:]]" \
-				| ${GREP} --color=never "local$"
+			${Z_DAT_ALL} -s local \
+				| ${GREP} --color=never "^${1}" \
+				| ${GREP} --color=never "[[:space:]]((ref)?reservation|quota)[[:space:]]"
 			echo -en "\n"
 			eval ${Z_LIST_BIT/-t all/-t filesystem,volume}
 		elif ${SN}; then
@@ -2446,7 +2445,7 @@ function mount-zfs {
 	function zfs_pool_info {
 		${Z_GET_ALL} \
 			| if [[ -n ${ZPOOL} ]]; then
-				${GREP} "^${ZPOOL}"
+				${GREP} --color=never "^${ZPOOL}"
 			else
 				cat
 			fi \
@@ -2454,14 +2453,13 @@ function mount-zfs {
 		if [[ -z ${ZPOOL} ]]; then
 			echo -en "\n" 1>&2
 		fi
-		${Z_DAT_ALL} \
-			| ${GREP} "^[^[:space:]@]+[[:space:]]" \
+		${Z_DAT_ALL} -s local \
+			| ${GREP} --color=never "^[^[:space:]@]+[[:space:]]" \
 			| if [[ -n ${ZPOOL} ]]; then
-				${GREP} "^${ZPOOL}"
+				${GREP} --color=never "^${ZPOOL}"
 			else
 				cat
-			fi \
-			| ${GREP} --color=never "local$"
+			fi
 		if [[ -n ${ZPOOL} ]]; then
 			if [[ ${ZPINT} == ${ZPOOL} ]]; then
 				${Z_ZDB_META} ${ZPOOL}
