@@ -2838,6 +2838,7 @@ function mount-zfs {
 					echo -en "- Destroying Old Pool... ${ZPOOL_OLD}\n"
 					zpool destroy ${ZPOOL_OLD}			|| return 1
 				fi
+#>>>				wipefs --force --all ${ZDEVICE}				|| return 1
 				zpool attach -f ${ZPOOL} ${ZDIDS[0]} ${ZDEVICE}		|| return 1
 			fi
 			if [[ ${ZSTAT} != online ]]; then
