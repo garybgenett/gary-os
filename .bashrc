@@ -716,6 +716,17 @@ function contacts {
 
 ########################################
 
+function date-string {
+	date --iso=seconds |
+		${SED} \
+			-e "s|[-]([0-9]{2}[:]?[0-9]{2})$|T\1|g" \
+			-e "s|[-:]||g" \
+			-e "s|T|-|g"
+	return 0
+}
+
+########################################
+
 function dd {
 	declare SRC="$((${#}-1))"	; SRC="${!SRC}"
 	declare DST="${#}"		; DST="${!DST}"
@@ -1573,7 +1584,7 @@ function index-dir {
 		EXCL_PATHS="${EXCL_PATHS} \( -path \"${EXCL_PATH}\" -prune \) -o"
 	done
 	declare INDEX_I="${INDEX_D}/+index"
-	declare CUR_IDX="${INDEX_I}/$(date --iso=seconds | ${SED} "s/[:]/-/g")"
+	declare CUR_IDX="${INDEX_I}/$(date-string)"
 	declare CUR_LNK="${INDEX_I}/_current.txt"
 	declare I_ERROR="${INDEX_I}/_error.log"
 	declare I_USAGE="${INDEX_I}/_usage.txt"
@@ -1923,7 +1934,7 @@ function journal {
 	prompt -x ${FUNCNAME}
 	${VI} \
 		"${@}" \
-		$(date --iso=seconds | ${SED} "s/[:]/-/g").txt
+		$(date-string).txt
 	prompt
 	cd - >/dev/null
 	return 0
@@ -2346,7 +2357,7 @@ function mount-zfs {
 	ZFS_PARAM[SCB_MTMS]="5000";			ZFS_PARAM[SCB_MTMS_DEF]="1000"
 	ZFS_PARAM[VDV_SMNA]="32";			ZFS_PARAM[VDV_SMNA_DEF]="1"
 	ZFS_PARAM[VDV_SMXA]="64";			ZFS_PARAM[VDV_SMXA_DEF]="2"
-	declare Z_DATE="$(date --iso=seconds | ${SED} "s|[-:]||g")"
+	declare Z_DATE="$(date-string)"
 	declare Z_DREG="[T0-9]+"
 	declare Z_IMPORT="zpool import -d /dev/disk/by-id -d /dev -N"
 	declare Z_LIST="zpool list -H -P -v"
@@ -3071,7 +3082,7 @@ function pso {
 ########################################
 
 function mirror {
-	declare PREFIX="$(echo "${!#}" | ${SED} "s|^(http\|ftp)[s]?://||g" | ${SED} "s|^([^/]+).*$|\1|g")-$(date --iso)"
+	declare PREFIX="$(echo "${!#}" | ${SED} "s|^(http\|ftp)[s]?://||g" | ${SED} "s|^([^/]+).*$|\1|g")-$(date-string)"
 	${WGET_R} --directory-prefix "${PREFIX}" "${@}" 2>&1 | tee -a ${PREFIX}.log
 }
 
@@ -4327,7 +4338,7 @@ function task-export-drive-sync {
 
 function task-export-report {
 	declare DATE="$(date --iso)"
-	declare REPORT="$(realpath "${1}").${DATE}" && shift
+	declare REPORT="$(realpath "${1}").$(date-string)" && shift
 	declare REPORT_DIR="$(dirname ${REPORT})"
 	declare TASKS_LIST="${1}" && shift
 	declare EMAIL_DEST="${1}" && shift
