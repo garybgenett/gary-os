@@ -324,8 +324,7 @@ export LT="tree -asF -hD --du"					; alias lt="${LT}"
 
 export DU="du -b --time --time-style=long-iso"			; alias du="${DU}"
 export LU="${DU} -ak --max-depth 1"				; alias lu="${LU}"
-export NCDU="(sleep 5 && echo cmgg &);
-	ncdu --confirm-quit -2 -rr -x -e"			; alias ncdu="${NCDU}"
+export NCDU="ncdu --confirm-quit -2 -rr -x -e"			; alias ncdu="(sleep 2 && echo cmgg &); ${NCDU}"
 
 ########################################
 
