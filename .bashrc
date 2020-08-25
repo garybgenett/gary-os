@@ -1105,17 +1105,17 @@ function git-backup {
 		[[ -n "$(echo "${1}" | ${GREP} "^[a-z0-9]{40}$")" ]] && COMMIT="${1}" && shift
 		[[ -z "${@}" ]] && ENTIRE="./ ${ENTIRE}"
 		${GIT} checkout ${COMMIT} ${ENTIRE} "${@}" &&
-		index-dir ${DIR} -r "${@}"
+		index-dir -0 ${DIR} -r "${@}"
 		return 0
 	fi
 	echo -en "* -delta\n" >${DIR}/.gitattributes
 	if [[ "${1}" == -! ]]; then
 		shift
 	else
-		index-dir ${DIR} -0 $(
+		index-dir -0 ${DIR} $(
 			${GREP} "^/" .gitignore 2>/dev/null |
 			${SED} -e "s|^/|./|g" -e "s|/$||g"
-			)
+		)
 	fi
 	declare COUNT=
 	declare AMEND=
@@ -1570,17 +1570,18 @@ function hist-grep {
 
 function index-dir {
 	declare INDEX_D="${PWD}"
-	declare INDEX_N="$((12+4))"
+	declare N_FILES="$((3+1))"
+	declare INDEX_N="$((0+${N_FILES}))"
 	declare OPTION=
 	declare SINGLE="false"
-	[[ -d "${1}" ]]			&& INDEX_D="${1}"		&& shift
-	[[ "${1}" == +([0-9]) ]]	&& INDEX_N="$((${1}+4))"	&& shift
-	[[ "${1}" == -[a-z] ]]		&& OPTION="${1}"		&& shift
-	[[ "${1}" == -0 ]]		&& SINGLE="true"		&& shift
+	[[ "${1}" == -0 ]]		&& SINGLE="true"			&& shift
+	[[ "${1}" == +([0-9]) ]]	&& INDEX_N="$((${1}+${N_FILES}))"	&& shift
+	[[ -d "${1}" ]]			&& INDEX_D="${1}"			&& shift
+	[[ "${1}" == -[a-z] ]]		&& OPTION="${1}"			&& shift
+	INDEX_D="$(realpath ${INDEX_D})"
 	declare EXCL_PATHS=
-	declare EXCL_PATH=
-	for EXCL_PATH in "${@}"; do
-		EXCL_PATHS="${EXCL_PATHS} \( -path \"${EXCL_PATH}\" -prune \) -o"
+	for FILE in "${@}"; do
+		EXCL_PATHS="${EXCL_PATHS} \( -path \"./${FILE/#\.\/}\" -prune \) -o"
 	done
 	declare INDEX_I="${INDEX_D}/+index"
 	declare CUR_IDX="${INDEX_I}/$(date-string)"
@@ -1596,30 +1597,37 @@ function index-dir {
 		${PV} | indexer "${OPTION}" "${@}"
 		return 0
 	fi
-	echo -en "\n ${FUNCNAME}: ${INDEX_D}\n"
 	echo -en "\n"
+	echo -en "${FUNCNAME}: ${INDEX_D}\n"
 	if ${SINGLE}; then
-		(cd ${INDEX_D} && \
-			(	eval find . ${EXCL_PATHS} -print	2>&3; [[ -n "${@}" ]] &&
-				eval find "${@}" -type d -print		2>&3) | ${PV} -N find |
-			sort						2>&3 | ${PV} -N sort |
-			indexer -0					2>&3 | ${PV} -N indx |
-			cat				>${INDEX_I}	) 3>&2
+		if true; then
+			(cd ${INDEX_D} && \
+				(	eval find . ${EXCL_PATHS} -print	2>&3; [[ -n "${@}" ]] &&
+					eval find "${@}" -type d -print		2>&3) | ${PV} -N find |
+				sort						2>&3  | ${PV} -N sort |
+				indexer -0					2>&3  | ${PV} -N indx |
+				cat				>${INDEX_I}	) 3>&2
+		fi
 	else
 		${MKDIR} ${INDEX_I}
-		cat /dev/null						>${I_ERROR}
+		cat /dev/null							>${I_ERROR}
 		(cd ${INDEX_I} && \
-			${RM} $(ls -A | sort -r | tail -n+${INDEX_N})	) 2>>${I_ERROR}
-		(cd ${INDEX_D} && \
-			(	eval find . ${EXCL_PATHS} -print	2>&3; [[ -n "${@}" ]] &&
-				eval find "${@}" -type d -print		2>&3) | ${PV} -N find |
-			sort						2>&3  | ${PV} -N sort |
-			indexer						2>&3  | ${PV} -N indx |
-			cat				>${CUR_IDX}	) 3>>${I_ERROR}
-		(cd ${INDEX_D} && \
-			cat ${CUR_IDX} | indexer -s	>${I_USAGE}	) 2>>${I_ERROR}
-		(cd ${INDEX_I} && \
-			${LN} $(basename ${CUR_IDX}) ${CUR_LNK}		) 2>>${I_ERROR}
+			${LN} $(basename ${CUR_IDX}) ${CUR_LNK}			) 2>>${I_ERROR}
+		if true; then
+			(cd ${INDEX_D} && \
+				(	eval find . ${EXCL_PATHS} -print	2>&3; [[ -n "${@}" ]] &&
+					eval find "${@}" -type d -print		2>&3) | ${PV} -N find |
+				sort						2>&3  | ${PV} -N sort |
+				indexer						2>&3  | ${PV} -N indx |
+				cat				>${CUR_IDX}	) 3>>${I_ERROR}
+			(cd ${INDEX_D} && \
+				cat ${CUR_IDX} |
+					indexer -s		>${I_USAGE}	) 2>>${I_ERROR}
+		fi
+		if (( ${INDEX_N} > ${N_FILES} )); then
+			(cd ${INDEX_I} && \
+				${RM} $(ls -A | sort -r | tail -n+${INDEX_N})	) 2>>${I_ERROR}
+		fi
 	fi
 	return 0
 }
