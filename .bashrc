@@ -319,7 +319,7 @@ export LL="${LS} -asF -l"					; alias ll="${LL}"
 export LX="${LS} -asF -kC"					; alias lx="${LX}"
 export LF="eval ${LL} -d \`find . -maxdepth 1 ! -type l\`"	; alias lf="${LF}"
 
-export LI="find . | sort | indexer | indexer -p"		; alias li="${LI}"
+export LI="indexer | indexer -p"				; alias li="${LI}"
 export LT="tree -asF -hD --du"					; alias lt="${LT}"
 
 export DU="du -b --time --time-style=long-iso"			; alias du="${DU}"
@@ -1573,7 +1573,9 @@ function index-dir {
 	declare N_FILES="$((3+1))"
 	declare INDEX_N="$((0+${N_FILES}))"
 	declare OPTION=
+	declare QUICK="true"; declare QUICK_OPT=""
 	declare SINGLE="false"
+	[[ "${1}" == -q ]]		&& QUICK="false"			&& shift && QUICK_OPT="-q"
 	[[ "${1}" == -0 ]]		&& SINGLE="true"			&& shift
 	[[ "${1}" == +([0-9]) ]]	&& INDEX_N="$((${1}+${N_FILES}))"	&& shift
 	[[ -d "${1}" ]]			&& INDEX_D="${1}"			&& shift
@@ -1594,18 +1596,23 @@ function index-dir {
 		else
 			cat ${CUR_LNK}
 		fi |
-		${PV} | indexer "${OPTION}" "${@}"
+		indexer ${QUICK_OPT} "${OPTION}" "${@}"
 		return 0
 	fi
 	echo -en "\n"
 	echo -en "${FUNCNAME}: ${INDEX_D}\n"
 	if ${SINGLE}; then
-		if true; then
+		if ${QUICK}; then
+			(cd ${INDEX_D} && \
+				indexer ${QUICK_OPT} -0 "${@}"			2>&3 | ${PV} |
+				cat				>${INDEX_I}	) 3>&2
+			sort -t"\0" -k11 -o ${INDEX_I}		${INDEX_I}
+		else
 			(cd ${INDEX_D} && \
 				(	eval find . ${EXCL_PATHS} -print	2>&3; [[ -n "${@}" ]] &&
 					eval find "${@}" -type d -print		2>&3) | ${PV} -N find |
 				sort						2>&3  | ${PV} -N sort |
-				indexer -0					2>&3  | ${PV} -N indx |
+				indexer ${QUICK_OPT} -0				2>&3  | ${PV} -N indx |
 				cat				>${INDEX_I}	) 3>&2
 		fi
 	else
@@ -1613,16 +1620,27 @@ function index-dir {
 		cat /dev/null							>${I_ERROR}
 		(cd ${INDEX_I} && \
 			${LN} $(basename ${CUR_IDX}) ${CUR_LNK}			) 2>>${I_ERROR}
-		if true; then
+		if ${QUICK}; then
+			(cd ${INDEX_D} && \
+				indexer ${QUICK_OPT} "${@}"			2>&3 | ${PV} |
+				cat				>${CUR_IDX}	) 3>>${I_ERROR}
+			sort -t"\0" -k11 -o ${CUR_IDX}		${CUR_IDX}	>>${I_ERROR}
+			(cd ${INDEX_D} && \
+				${NCDU} -1 \
+					$(for FILE in "${@}"; do
+						echo "--exclude \"${FILE/#\.\/}\""
+					done) \
+					-o			${I_USAGE}	) #>>> 2>>${I_ERROR}
+		else
 			(cd ${INDEX_D} && \
 				(	eval find . ${EXCL_PATHS} -print	2>&3; [[ -n "${@}" ]] &&
 					eval find "${@}" -type d -print		2>&3) | ${PV} -N find |
 				sort						2>&3  | ${PV} -N sort |
-				indexer						2>&3  | ${PV} -N indx |
+				indexer ${QUICK_OPT}				2>&3  | ${PV} -N indx |
 				cat				>${CUR_IDX}	) 3>>${I_ERROR}
 			(cd ${INDEX_D} && \
 				cat ${CUR_IDX} |
-					indexer -s		>${I_USAGE}	) 2>>${I_ERROR}
+					indexer ${QUICK_OPT} -s	>${I_USAGE}	) 2>>${I_ERROR}
 		fi
 		if (( ${INDEX_N} > ${N_FILES} )); then
 			(cd ${INDEX_I} && \
@@ -1635,6 +1653,19 @@ function index-dir {
 ########################################
 
 function indexer {
+####################
+#  1	type
+#  2	target_type
+#  3	empty		[0=empty, 1=non-empty]
+#  4	uid
+#  5	gid
+#  6	octal_mode
+#  7	size_in_bytes	[*=skipped]
+#  8	mod_time_epoch
+#  9	mod_time_iso
+# 10	sha1sum		[*=skipped]
+# 11	name
+# 12	target
 ####################
 #  1	type,target_type
 #  2	inode
@@ -1659,24 +1690,32 @@ function indexer {
 	declare SED_ZONE="([A-Z]{3}|([+-][0-9]{2})([0-9]{2}))"
 	declare FILE=
 	declare DEBUG="false"
+	declare QUICK="true"
 	[[ "${1}" == -d ]] && DEBUG="true" && shift
+	[[ "${1}" == -q ]] && QUICK="false" && shift
 	if [[ "${1}" == -[a-z] ]] &&
 	   [[ "${1}" != -m ]] &&
 	   [[ "${1}" != -c ]] &&
 	   (( "${#}" >= 2 )); then
 		declare OPTION="${1}" && shift
 		${FUNCNAME} \
+			$(! ${QUICK} && echo "-q") \
 			-m "${@}" \
 		| ${FUNCNAME} \
+			$(! ${QUICK} && echo "-q") \
 			$(${DEBUG} && echo "-d") \
 			"${OPTION}"
 		return 0
 	elif [[ "${1}" == -p ]]; then
 		shift
+		if ${QUICK}; then
 			sort -u -t'\0' -k11 | tr '\0' '\t'
+		else
+			sort -u -t'\0' -k11 | tr '\0' '\t'
+		fi
 	elif [[ "${1}" == -m ]]; then
 		shift
-		DEBUG="${DEBUG}" perl -e '
+		DEBUG="${DEBUG}" QUICK="${QUICK}" perl -e '
 			use strict;
 			use warnings;
 			my $matches = [@ARGV];
@@ -1688,15 +1727,21 @@ function indexer {
 				chomp();
 				my $a = [split(/\0/)];
 				foreach my $match (@{$matches}){
+					if(${ENV{QUICK}} eq "true"){
 						if($a->[10] =~ m|${match}|){
 							print "${_}\n";
 						};
+					}else{
+						if($a->[10] =~ m|${match}|){
+							print "${_}\n";
+						};
+					};
 				};
 			};
 		' -- "${@}" || return 1
 	elif [[ "${1}" == -l ]]; then
 		shift
-		DEBUG="${DEBUG}" perl -e '
+		DEBUG="${DEBUG}" QUICK="${QUICK}" perl -e '
 			use strict;
 			use warnings;
 			my $emp_dir = [];
@@ -1707,6 +1752,14 @@ function indexer {
 			while(<>){
 				chomp();
 				my $a = [split(/\0/)];
+				if(${ENV{QUICK}} eq "true"){
+					if($a->[0] eq "d" && $a->[2] eq "0"){ push(@{$emp_dir}, $a); };
+					if($a->[0] eq "f" && $a->[2] eq "0"){ push(@{$emp_fil}, $a); };
+					if($a->[0] eq "l"){
+						if($a->[1] eq "l"){ push(@{$brk_sym}, $a); };
+						push(@{$symlink}, $a); };
+					if($a->[9] =~ "FAILED"){ push(@{$failure}, $a); };
+				}else{
 					if($a->[9] eq "\@d"){ push(@{$emp_dir}, $a); };
 					if($a->[9] eq "\@f"){ push(@{$emp_fil}, $a); };
 					if($a->[0] eq "l,l"){ push(@{$brk_sym}, $a); };
@@ -1714,6 +1767,7 @@ function indexer {
 					if($a->[7] eq "!"  ||
 					   $a->[8] eq "!"  ||
 					   $a->[9] eq "!"  ){ push(@{$failure}, $a); };
+				};
 			};
 			print ">>> Empty directories: "	. ($#{$emp_dir} + 1) . "\n"; if (${ENV{DEBUG}} eq "true") { foreach my $out (@{$emp_dir}) { print "@{$out}\n"; }; };
 			print ">>> Empty files: "	. ($#{$emp_fil} + 1) . "\n"; if (${ENV{DEBUG}} eq "true") { foreach my $out (@{$emp_fil}) { print "@{$out}\n"; }; };
@@ -1723,11 +1777,14 @@ function indexer {
 		' -- "${@}" || return 1
 	elif [[ "${1}" == -s ]]; then
 		shift
-		DEBUG="${DEBUG}" perl -e '
+		DEBUG="${DEBUG}" QUICK="${QUICK}" perl -e '
 			use strict;
 			use warnings;
 			my $tlds = [];
 			my $subs = {};
+			if(${ENV{QUICK}} eq "true"){
+				exit(0);
+			};
 			while(<>){
 				chomp();
 				my $a = [split(/\0/)];
@@ -1776,6 +1833,40 @@ function indexer {
 		' -- "${@}" || return 1
 	elif [[ "${1}" == -v ]]; then
 		shift
+		if ${QUICK}; then
+			if ! ${DEBUG}; then
+				if [[ -f +${FUNCNAME}.failed ]]; then
+					${RM} +${FUNCNAME}.failed
+				fi
+			fi
+			tr '\0' '\t' | while read -r FILE; do
+				declare CHK="$(echo -en "${FILE}" | cut -d'\t' -f10)"
+				declare FIL="$(echo -en "${FILE}" | cut -d'\t' -f11)"
+				if [[ ${CHK} == +([0-9a-f]) ]]; then
+					if [[ $(${HASH_TYPE} "${FIL}" 2>/dev/null | ${SED} "s|[[:space:]].+$||g") == ${CHK} ]]; then
+						if ${DEBUG}; then
+							echo -en "CHECKING: ${FIL}\n"
+						else
+							echo -en "="
+						fi
+					else
+						if ${DEBUG}; then
+							echo -en "FAILED: ${FIL}\n" 1>&2
+						else
+							echo -en "!"
+							echo "${FILE}" | tr '\t' '\0' >>+${FUNCNAME}.failed
+						fi
+					fi
+				fi
+			done
+			if ! ${DEBUG}; then
+				echo -en "\n"
+				if [[ -f +${FUNCNAME}.failed ]]; then
+					echo -en "\n"
+					cat +${FUNCNAME}.failed | ${FUNCNAME} -d $(if ! ${QUICK}; then echo "-q"; fi) -v
+				fi
+			fi
+		else
 			tr '\0' '\t' | while read -r FILE; do
 				declare MD5="$(echo -en "${FILE}" | cut -d'\t' -f9)"
 				declare FIL="$(echo -en "${FILE}" | cut -d'\t' -f11)"
@@ -1785,6 +1876,7 @@ function indexer {
 					echo "${MD5}  ${FIL}"
 				fi
 			done | ${NICELY} md5sum -c -
+		fi
 	elif [[ "${1}" == -r ]]; then
 		shift
 		if ! ${DEBUG}; then
@@ -1806,11 +1898,24 @@ function indexer {
 			declare    TARGET="$(echo -en "${FILE}" | cut -d'\t' -f11)"
 			declare IDX__TYPE="$(echo -en "${FILE}" | cut -d'\t' -f1 | cut -d, -f1)"
 			declare IDX_EMPTY="$(echo -en "${FILE}" | cut -d'\t' -f10)"
+			if ${QUICK}; then
+				   TARGET="$(echo -en "${FILE}" | cut -d'\t' -f11)"
+				IDX__TYPE="$(echo -en "${FILE}" | cut -d'\t' -f1)"
+				IDX_EMPTY="$(echo -en "${FILE}" | cut -d'\t' -f3)"
+				if [[ "${IDX__TYPE}" == "d" ]] && [[ "${IDX_EMPTY}" == "${NULL_CHAR}0" ]]; then
+					IDX_EMPTY="@d"
+				fi
+			fi
 			if [[ -e "${TARGET}" ]] ||
 			   [[ "${IDX_EMPTY}" == "@d" ]]; then
 				declare IDX_CHMOD="$(echo -en "${FILE}" | cut -d'\t' -f4 | cut -d, -f2)"
 				declare IDX_CHOWN="$(echo -en "${FILE}" | cut -d'\t' -f5 | cut -d, -f2)"
 				declare IDX_TOUCH="$(echo -en "${FILE}" | cut -d'\t' -f6 | cut -d, -f2 | ${SED} "s/^/@/g")"
+				if ${QUICK}; then
+					IDX_CHMOD="$(echo -en "${FILE}" | cut -d'\t' -f6)"
+					IDX_CHOWN="$(echo -en "${FILE}" | cut -d'\t' -f4):$(echo -en "${FILE}" | cut -d'\t' -f5)"
+					IDX_TOUCH="$(echo -en "${FILE}" | cut -d'\t' -f8 | ${SED} "s/^/@/g")"
+				fi
 				if ${DEBUG}; then
 					echo -en "RESTORE: ${TARGET}\n"
 					do_file
@@ -1836,7 +1941,7 @@ function indexer {
 			for FILE in errors missing; do
 				if [[ -f +${FUNCNAME}.${FILE} ]]; then
 					echo -en "\n"
-					cat +${FUNCNAME}.${FILE} | ${FUNCNAME} -d -r
+					cat +${FUNCNAME}.${FILE} | ${FUNCNAME} -d $(if ! ${QUICK}; then echo "-q"; fi) -r
 				fi
 			done
 		fi
@@ -1847,14 +1952,18 @@ function indexer {
 		declare NEW="${1}" && shift
 		diff -a ${OLD} ${NEW} |
 			cut -d "" --output-delimiter=" " $(
+				if ${QUICK}; then
+					echo "-f1,2,9-"
+				else
 					echo "-f1,6,9-"
+				fi
 			) \
 			>${TMP}
 		${VIEW} -- ${TMP}
 		${RM} ${TMP}
 	elif [[ "${1}" == -du ]]; then
 		shift
-		DEBUG="${DEBUG}" perl -e '
+		DEBUG="${DEBUG}" QUICK="${QUICK}" perl -e '
 			use strict;
 			use warnings;
 			use File::Find;
@@ -1878,7 +1987,7 @@ function indexer {
 		' -- "${@}" || return 1
 	elif [[ "${1}" == -! ]]; then
 		shift
-		DEBUG="${DEBUG}" perl -e '
+		DEBUG="${DEBUG}" QUICK="${QUICK}" perl -e '
 			while(<>){
 				chomp();
 				# \000 = null character
@@ -1895,6 +2004,44 @@ function indexer {
 			FORKS="false"
 			shift
 		fi
+		if ${QUICK}; then
+			eval find ./ \
+				$(for FILE in "${@}"; do
+					echo "\\( -path \"./${FILE/#\.\/}\" -prune \\) -o"
+				done) \
+				\\\( \
+					-printf \"%y\\\0%Y\" \
+					\\\( \
+						\\\( -empty -printf \"\\\0${NULL_CHAR}\\\060\" \\\) -or \
+						\\\( -printf \"\\\0${NULL_CHAR}\\\061\" \\\) \
+					\\\) \
+					-printf \"\\\0%U\\\0%G\\\0%m\" \
+					\\\( \
+						\\\( \
+							$(if ${FORKS}; then echo "-true"; else echo "-false"; fi) \
+							-printf \"\\\0%s\" \
+						\\\) -or \\\( \
+							-printf \"\\\0${NULL_CHAR}\" \
+						\\\) \
+					\\\) \
+					-printf \"\\\0%T@\\\0%TY%Tm%Td-%TH%TM%TS%Tz\" \
+					\\\( \
+						\\\( \
+							$(if ${FORKS}; then echo "-true"; else echo "-false"; fi) \
+							-type f -printf \"\\\0\" -exec ${HASH_TYPE} \\\{\\\} \\\; \
+						\\\) -or \\\( \
+							-printf \"\\\0${NULL_CHAR}\\\0%p\" \
+							\\\( \
+								\\\( -type l -printf \"\\\0%l\\\n\" \\\) -or \
+								\\\( -printf \"\\\n\" \\\) \
+							\\\) \
+						\\\) \
+					\\\) \
+				\\\) \
+				| ${SED} \
+					-e "s|([0-9a-f]{${HASH_SIZE}})[[:space:]]+([.][/])|\1\x00\2|g" \
+					-e "s|([0-9]{8}[-][0-9]{6})${SED_NANO}|\1|g"
+		else
 			function get_output {
 				if ${FORKS}; then
 					#>>> this is a really hugly hack... where did these garbage characters come from?
@@ -1930,6 +2077,7 @@ function indexer {
 							-e "s/${SED_TIME}${SED_NANO}/\1/g" \
 							-e "s/${SED_DATE}[T+]${SED_TIME}${SED_ZONE}/\1T\2\4:\5/g"
 			done
+		fi
 	fi
 	return 0
 }
