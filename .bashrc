@@ -2530,7 +2530,8 @@ function mount-zfs {
 	declare Z_MOUNT="zfs mount -O"
 	declare Z_IOINFO="zpool iostat -P -v"
 	declare Z_STATUS="zpool status -P -v -i"
-	declare Z_SNAPSHOT="zfs snapshot -r"
+#>>>	declare Z_SNAPSHOT="zfs snapshot -r"
+	declare Z_SNAPSHOT="zfs snapshot"
 	declare Z_LIST_IDS="${Z_LIST} -g"
 #>>>	declare Z_LIST_ALL="zfs list -r -t all -o name,type,creation,used,available,referenced,compressratio,version"
 #>>>	declare Z_LIST_ALL="zfs list -r -t all -o name,type,creation,available,used,usedbydataset,usedbychildren,usedbysnapshots,usedbyrefreservation,quota,compressratio"
@@ -2841,8 +2842,19 @@ function mount-zfs {
 			ZPOOL="${ZDATA}"
 		fi
 		if [[ -z ${SN_SKP} ]]; then
-			echo -en "- Creating Snapshot... ${ZPOOL}@${Z_DATE}\n"
-			${Z_SNAPSHOT} ${ZPOOL}@${Z_DATE}	|| return 1
+			if [[ ${DIR} == - ]]; then
+				echo -en "- Recursive Snapshot... ${ZPOOL}@${Z_DATE}\n"
+				${Z_SNAPSHOT} -r ${ZPOOL}@${Z_DATE}	|| return 1
+			else
+				for FILE in \
+					${ZPOOL} \
+					${DIR} \
+					${@} \
+				; do
+					echo -en "- Creating Snapshot... ${FILE}@${Z_DATE}\n"
+					${Z_SNAPSHOT} ${FILE}@${Z_DATE}	|| return 1
+				done
+			fi
 		fi
 		if {
 			[[ ${ZFS_SNAPSHOTS} == +([0-9]) ]] && {
@@ -2851,8 +2863,15 @@ function mount-zfs {
 			};
 		}; then
 			declare Z_TRIM="$((${ZFS_SNAPSHOTS}+1))"
-			declare Z_ITEMS=($(${Z_LIST_ALL/-t all/-t filesystem,volume} ${ZPOOL} 2>/dev/null))
-			declare Z_ITEM=
+			if [[ ${DIR} == - ]]; then
+				declare Z_ITEMS=($(${Z_LIST_ALL/-t all/-t filesystem,volume} ${ZPOOL} 2>/dev/null))
+			else
+				declare Z_ITEMS=(
+					${ZPOOL} \
+					${DIR} \
+					${@} \
+				)
+			fi
 			if {
 				[[ -n ${SN_SKP} ]] &&
 				[[ ${ZFS_SNAPSHOTS} == 0 ]];
@@ -2861,6 +2880,7 @@ function mount-zfs {
 			elif (( ${Z_TRIM} < 2 )); then
 				Z_TRIM="2"
 			fi
+			declare Z_ITEM=
 			for Z_ITEM in ${Z_ITEMS[@]}; do
 				declare Z_SNAP=
 				for Z_SNAP in $(
@@ -2876,7 +2896,7 @@ function mount-zfs {
 			done
 		fi
 		echo -en "\n"
-		zfs_pool_status ${ZPOOL}
+		zfs_pool_status ${Z_ITEMS[@]}
 		return 0
 	fi
 	if ${UN}; then
