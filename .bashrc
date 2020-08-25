@@ -2537,7 +2537,7 @@ function mount-zfs {
 #>>>	declare Z_LIST_ALL="zfs list -r -t all -o name,type,creation,available,used,usedbydataset,usedbychildren,usedbysnapshots,usedbyrefreservation,quota,compressratio"
 #>>>	declare Z_LIST_ALL="zfs list -r -t all -o name,type,creation,available,used,usedbydataset,usedbychildren,usedbysnapshots,usedbyrefreservation,quota,referenced,written,compressratio,mounted,createtxg,version"
 	declare Z_LIST_ALL="zfs list -H -r -t all -o name"
-	declare Z_LIST_INF="zfs list -r -t all -o name,type,creation,available,used,compressratio,mounted,createtxg,version"
+	declare Z_LIST_INF="zfs list -r -t all -o name,type,creation,available,used,usedbydataset,compressratio,mounted,createtxg,version"
 	declare Z_LIST_SIZ="zfs list -r -t all -o name,type,available,used,usedbydataset,usedbychildren,usedbysnapshots,usedbyrefreservation,quota,referenced,written"
 	declare Z_LIST_BIT="zfs list -r -t all -p -o        available,used,usedbydataset,usedbychildren,usedbysnapshots,usedbyrefreservation,name \"\${@}\" | ${GREP} -v \"NAME\" | sort -nr -k3 -k4 -k5 -k6"
 	declare Z_FSEP="|"
