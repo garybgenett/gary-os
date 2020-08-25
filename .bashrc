@@ -3749,13 +3749,16 @@ function scrcpy {
 	declare VER="master"
 	declare BLD="false"
 	declare HLP="false"
-	[[ -n ${1} ]] && {
-		[[ ${1} != build	]] &&
-		[[ ${1} != help		]]
-	} && VER="${1}" && shift
+	declare DST=""
 	[[ -n ${1} ]] && [[ ${1} == build	]] && BLD="true" && shift
 	[[ -n ${1} ]] && [[ ${1} == help	]] && HLP="true" && shift
-#>>>	prompt -d -x
+	[[ -n ${1} ]] && ${BLD} && VER="${1}" && shift
+	if { [[ -n ${@} ]] && [[ ${1} != --+(*) ]]; }; then
+		DST="${1}" && shift
+	fi
+	if [[ -z ${DISPLAY} ]]; then
+		prompt -d -x
+	fi
 #>>>	export ANDROID_SDK_ROOT="/opt/android-studio"
 	export ANDROID_SDK_ROOT="/.g/_data/source/android-studio"
 #>>>	export ANDROID_SDK_ROOT="/tmp/.android"
@@ -3774,8 +3777,23 @@ function scrcpy {
 	else
 		# https://github.com/Genymobile/scrcpy/issues/975#issuecomment-560373096
 		# https://github.com/Genymobile/scrcpy/issues/951
-#>>>		cd /.g/_data/_build/other/scrcpy && ./run x --prefer-text --port=27183:27184 "${@}"
-		cd /.g/_data/_build/other/scrcpy && ./run x --prefer-text "${@}"
+		if [[ -n ${DST} ]]; then
+			if [[ -z $(adb devices 2>/dev/null | ${GREP} "[:]5555[[:space:]]+device$") ]]; then
+				adb kill-server
+				psk adb -9
+				adb tcpip 5555
+				adb connect ${DST}:5555
+			fi
+			adb devices
+			cd /.g/_data/_build/other/scrcpy && ./run x --prefer-text --stay-awake --lock-video-orientation=0 --max-fps=100 --bit-rate=100M --port=5555 "${@}" || return 1
+		else
+			if [[ -z $(adb devices 2>/dev/null | ${GREP} "[0-9a-f][[:space:]]+device$") ]]; then
+				adb kill-server
+				psk adb -9
+			fi
+			adb devices
+			cd /.g/_data/_build/other/scrcpy && ./run x --prefer-text "${@}" || return 1
+		fi
 	fi
 	return 0
 }
