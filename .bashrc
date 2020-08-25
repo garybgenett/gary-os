@@ -1636,19 +1636,23 @@ function index-dir {
 
 function indexer {
 ####################
-#  0	type,target_type
-#  1	inode
-#  2	hard_links
-#  3	char_mode,octal_mode
-#  4	user:group,uid:gid
-#  5	mod_time_iso,mod_time_epoch
-#  6	blocks,size_in_b
-#  7	size_in_b	[*,!,x]		(directories only)
-#  8	md5_hash	[*,!,x]		(files only)
-#  9	@d,@f		[*,!,-]		(directories and files only, denotes empty)
-# 10	name
-# 11	(target)
+#  1	type,target_type
+#  2	inode
+#  3	hard_links
+#  4	char_mode,octal_mode
+#  5	user:group,uid:gid
+#  6	mod_time_iso,mod_time_epoch
+#  7	blocks,size_in_b
+#  8	size_in_b	[*,!,x]		(directories only)
+#  9	md5_hash	[*,!,x]		(files only)
+# 10	@d,@f		[*,!,-]		(directories and files only, denotes empty)
+# 11	name
+# 12	(target)
 ####################
+	declare NULL_CHAR="*"
+	declare HASH_TYPE="sha1sum"
+	declare HASH_SIZE="40"
+	declare HASH_NULL="$(eval printf "${NULL_CHAR}%.0s" {1..${HASH_SIZE}})"
 	declare SED_DATE="([0-9]{4}[-][0-9]{2}[-][0-9]{2})"
 	declare SED_TIME="([0-9]{2}[:][0-9]{2}[:][0-9]{2})"
 	declare SED_NANO="([.][0-9]{10})"
@@ -1661,19 +1665,15 @@ function indexer {
 	   [[ "${1}" != -c ]] &&
 	   (( "${#}" >= 2 )); then
 		declare OPTION="${1}" && shift
-		${FUNCNAME} -m "${@}" | ${FUNCNAME} $(${DEBUG} && echo "-d") "${OPTION}"
+		${FUNCNAME} \
+			-m "${@}" \
+		| ${FUNCNAME} \
+			$(${DEBUG} && echo "-d") \
+			"${OPTION}"
 		return 0
 	elif [[ "${1}" == -p ]]; then
 		shift
-		DEBUG="${DEBUG}" perl -e '
-			use strict;
-			use warnings;
-			while(<>){
-				chomp();
-				my $a = [split(/\0/)];
-				print "@{$a}\n";
-			};
-		' -- "${@}" || return 1
+			sort -u -t'\0' -k11 | tr '\0' '\t'
 	elif [[ "${1}" == -m ]]; then
 		shift
 		DEBUG="${DEBUG}" perl -e '
@@ -1688,9 +1688,9 @@ function indexer {
 				chomp();
 				my $a = [split(/\0/)];
 				foreach my $match (@{$matches}){
-					if($a->[10] =~ m|${match}|){
-						print "${_}\n";
-					};
+						if($a->[10] =~ m|${match}|){
+							print "${_}\n";
+						};
 				};
 			};
 		' -- "${@}" || return 1
@@ -1707,13 +1707,13 @@ function indexer {
 			while(<>){
 				chomp();
 				my $a = [split(/\0/)];
-				if($a->[9] eq "\@d"){ push(@{$emp_dir}, $a); };
-				if($a->[9] eq "\@f"){ push(@{$emp_fil}, $a); };
-				if($a->[0] eq "l,l"){ push(@{$brk_sym}, $a); };
-				if($a->[0] =~ /l,/ ){ push(@{$symlink}, $a); };
-				if($a->[7] eq "!"  ||
-				   $a->[8] eq "!"  ||
-				   $a->[9] eq "!"  ){ push(@{$failure}, $a); };
+					if($a->[9] eq "\@d"){ push(@{$emp_dir}, $a); };
+					if($a->[9] eq "\@f"){ push(@{$emp_fil}, $a); };
+					if($a->[0] eq "l,l"){ push(@{$brk_sym}, $a); };
+					if($a->[0] =~ /l,/ ){ push(@{$symlink}, $a); };
+					if($a->[7] eq "!"  ||
+					   $a->[8] eq "!"  ||
+					   $a->[9] eq "!"  ){ push(@{$failure}, $a); };
 			};
 			print ">>> Empty directories: "	. ($#{$emp_dir} + 1) . "\n"; if (${ENV{DEBUG}} eq "true") { foreach my $out (@{$emp_dir}) { print "@{$out}\n"; }; };
 			print ">>> Empty files: "	. ($#{$emp_fil} + 1) . "\n"; if (${ENV{DEBUG}} eq "true") { foreach my $out (@{$emp_fil}) { print "@{$out}\n"; }; };
@@ -1776,15 +1776,15 @@ function indexer {
 		' -- "${@}" || return 1
 	elif [[ "${1}" == -v ]]; then
 		shift
-		tr '\0' '\t' | while read -r FILE; do
-			declare MD5="$(echo -en "${FILE}" | cut -d$'\t' -f9)"
-			declare FIL="$(echo -en "${FILE}" | cut -d$'\t' -f11)"
-			if [[ "${MD5}" != "*" ]] &&
-			   [[ "${MD5}" != "!" ]] &&
-			   [[ "${MD5}" != "x" ]]; then
-				echo "${MD5}  ${FIL}"
-			fi
-		done | ${NICELY} md5sum -c -
+			tr '\0' '\t' | while read -r FILE; do
+				declare MD5="$(echo -en "${FILE}" | cut -d'\t' -f9)"
+				declare FIL="$(echo -en "${FILE}" | cut -d'\t' -f11)"
+				if [[ "${MD5}" != "${NULL_CHAR}" ]] &&
+				   [[ "${MD5}" != "!" ]] &&
+				   [[ "${MD5}" != "x" ]]; then
+					echo "${MD5}  ${FIL}"
+				fi
+			done | ${NICELY} md5sum -c -
 	elif [[ "${1}" == -r ]]; then
 		shift
 		if ! ${DEBUG}; then
@@ -1803,14 +1803,14 @@ function indexer {
 			return 1
 		}
 		tr '\0' '\t' | while read -r FILE; do
-			declare    TARGET="$(echo -en "${FILE}" | cut -d$'\t' -f11)"
-			declare IDX_EMPTY="$(echo -en "${FILE}" | cut -d$'\t' -f10)"
+			declare    TARGET="$(echo -en "${FILE}" | cut -d'\t' -f11)"
+			declare IDX__TYPE="$(echo -en "${FILE}" | cut -d'\t' -f1 | cut -d, -f1)"
+			declare IDX_EMPTY="$(echo -en "${FILE}" | cut -d'\t' -f10)"
 			if [[ -e "${TARGET}" ]] ||
 			   [[ "${IDX_EMPTY}" == "@d" ]]; then
-				declare IDX__TYPE="$(echo -en "${FILE}" | cut -d$'\t' -f1 | cut -d, -f1)"
-				declare IDX_CHMOD="$(echo -en "${FILE}" | cut -d$'\t' -f4 | cut -d, -f2)"
-				declare IDX_CHOWN="$(echo -en "${FILE}" | cut -d$'\t' -f5 | cut -d, -f2)"
-				declare IDX_TOUCH="$(echo -en "${FILE}" | cut -d$'\t' -f6 | cut -d, -f2 | ${SED} "s/^/@/g")"
+				declare IDX_CHMOD="$(echo -en "${FILE}" | cut -d'\t' -f4 | cut -d, -f2)"
+				declare IDX_CHOWN="$(echo -en "${FILE}" | cut -d'\t' -f5 | cut -d, -f2)"
+				declare IDX_TOUCH="$(echo -en "${FILE}" | cut -d'\t' -f6 | cut -d, -f2 | ${SED} "s/^/@/g")"
 				if ${DEBUG}; then
 					echo -en "RESTORE: ${TARGET}\n"
 					do_file
@@ -1826,7 +1826,7 @@ function indexer {
 				if ${DEBUG}; then
 					echo -en "MISSING: ${TARGET}\n" 1>&2
 				else
-					echo -en "*"
+					echo -en "${NULL_CHAR}"
 					echo "${FILE}" | tr '\t' '\0' >>+${FUNCNAME}.missing
 				fi
 			fi
@@ -1846,7 +1846,9 @@ function indexer {
 		declare OLD="${1}" && shift
 		declare NEW="${1}" && shift
 		diff -a ${OLD} ${NEW} |
-			cut -d "" --output-delimiter=" " -f1,6,9- \
+			cut -d "" --output-delimiter=" " $(
+					echo "-f1,6,9-"
+			) \
 			>${TMP}
 		${VIEW} -- ${TMP}
 		${RM} ${TMP}
@@ -1882,8 +1884,8 @@ function indexer {
 				# \000 = null character
 				# \042 = double quote
 				# \047 = single quote
-				if($_ =~ m|([^A-Za-z0-9 \000\042\047 \(\)\[\]\{\} \!\#\$\%\&\*\+\,\/\:\;\=\?\@\^\~ _.-])|){
-					print "[$1]: $_\n";
+				if(${_} =~ m|([^A-Za-z0-9 \000\042\047 \(\)\[\]\{\} \!\#\$\%\&\*\+\,\/\:\;\=\?\@\^\~ _.-])|){
+					print "[$1]: ${_}\n";
 				};
 			};
 		' -- "${@}" || return 1
@@ -1891,40 +1893,43 @@ function indexer {
 		declare FORKS="true"
 		if [[ "${1}" == -0 ]]; then
 			FORKS="false"
+			shift
 		fi
-		function get_output {
-			if ${FORKS}; then
-				${NICELY} "${@}" "${FILE}" 2>/dev/null | ${SED} "s/[[:space:]].+$//g"
-			else
-				echo -en "x"
-			fi
-		}
-		function get_null {
-			declare TYPE="${1}" && shift
-			if [[ -n "$(find "${FILE}" -maxdepth 0 -empty 2>/dev/null)" ]]; then
-				echo -en "@${TYPE}"
-			else
-				echo -en "-"
-			fi
-		}
-		while read -r FILE; do
-			declare SIZE="*"
-			declare HASH="*"
-			declare NULL="*"
-			test -d "${FILE}" -a ! -L "${FILE}"	&& SIZE="$(get_output du -bs)" && NULL="$(get_null d)"
-			test -f "${FILE}" -a ! -L "${FILE}"	&& HASH="$(get_output md5sum)" && NULL="$(get_null f)"
-			test -z "${SIZE}"			&& SIZE="!"
-			test -z "${HASH}"			&& HASH="!"
-			test -z "${NULL}"			&& NULL="!"
-			${NICELY} find "${FILE}" \
-				-maxdepth 0 \
-				-printf "%y,%Y\t%i\t%n\t%M,%m\t%u:%g,%U:%G\t%T+%Tz,%T@\t%k,%s\t${SIZE}\t${HASH}\t${NULL}\t%p\t(%l)\n" |
-					${SED} \
-						-e "s/${SED_TIME}${SED_NANO}/\1/g" \
-						-e "s/${SED_DATE}[T+]${SED_TIME}${SED_ZONE}/\1T\2\4:\5/g" \
-						|
-					tr '\t' '\0'
-		done
+			function get_output {
+				if ${FORKS}; then
+					#>>> this is a really hugly hack... where did these garbage characters come from?
+					#>>> sed fix is below
+					echo -en ">>>"
+					${NICELY} "${@}" "${FILE}" 2>/dev/null | ${SED} -e "s/^[^0-9a-f]+//g" -e "s/[[:space:]].+$//g"
+				else
+					echo -en "x"
+				fi
+			}
+			function get_null {
+				declare TYPE="${1}" && shift
+				if [[ -n "$(find "${FILE}" -maxdepth 0 -empty 2>/dev/null)" ]]; then
+					echo -en "@${TYPE}"
+				else
+					echo -en "-"
+				fi
+			}
+			while read -r FILE; do
+				declare SIZE="${NULL_CHAR}"
+				declare HASH="${NULL_CHAR}"
+				declare NULL="${NULL_CHAR}"
+				test -d "${FILE}" -a ! -L "${FILE}"	&& SIZE="$(get_output du -bs)" && NULL="$(get_null d)"
+				test -f "${FILE}" -a ! -L "${FILE}"	&& HASH="$(get_output md5sum)" && NULL="$(get_null f)"
+				test -z "${SIZE}"			&& SIZE="!"
+				test -z "${HASH}"			&& HASH="!"
+				test -z "${NULL}"			&& NULL="!"
+				${NICELY} find "${FILE}" \
+					-maxdepth 0 \
+					-printf "%y,%Y\0%i\0%n\0%M,%m\0%u:%g,%U:%G\0%T+%Tz,%T@\0%k,%s\0${SIZE}\0${HASH}\0${NULL}\0%p\0(%l)\n" |
+						${SED} \
+							-e "s/>>>[^0-9a-f]*//g" \
+							-e "s/${SED_TIME}${SED_NANO}/\1/g" \
+							-e "s/${SED_DATE}[T+]${SED_TIME}${SED_ZONE}/\1T\2\4:\5/g"
+			done
 	fi
 	return 0
 }
