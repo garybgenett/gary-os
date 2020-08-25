@@ -2168,12 +2168,13 @@ function mount-robust {
 	if [[ -n ${1} ]]; then		DEV="${1}";	shift; fi
 	if [[ -n ${1} ]]; then		DIR="${1}";	shift; fi
 	if [[ ${DEV} == --dev ]]; then
-		declare DEV_DIRS=
-		DEV_DIRS[0]="/dev"
-		DEV_DIRS[1]="/dev/pts"
-		DEV_DIRS[2]="/dev/shm"
-		DEV_DIRS[3]="/proc"
-		DEV_DIRS[4]="/sys"
+		declare DEV_DIRS=(
+			/dev
+			/dev/pts
+			/dev/shm
+			/proc
+			/sys
+		)
 		if [[ ! -d ${DIR} ]]; then
 			echo -en "- <Target Is Not A Directory!>\n" 1>&2
 			if [[ -n ${DIR} ]]; then
