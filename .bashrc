@@ -2108,17 +2108,6 @@ function ldir {
 
 ########################################
 
-function ln-null {
-	declare FILE
-	find ./ -type l | while read -r FILE; do
-		if [[ ! -e ${FILE} ]]; then
-			echo -en "${FILE}\n"
-		fi
-	done | sort
-}
-
-########################################
-
 function letmeknow {
 	screen -X wall "$(
 		echo -en "[${?}] ["
