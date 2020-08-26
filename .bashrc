@@ -1626,7 +1626,7 @@ function index-dir {
 				cat				>${CUR_IDX}	) 3>>${I_ERROR}
 			sort -t"\0" -k11 -o ${CUR_IDX}		${CUR_IDX}	>>${I_ERROR}
 			(cd ${INDEX_D} && \
-				${NCDU} -1 \
+				eval ${NCDU} -1 \
 					$(for FILE in "${@}"; do
 						echo "--exclude \"${FILE/#\.\/}\""
 					done) \
