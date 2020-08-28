@@ -4499,9 +4499,11 @@ function task-export-drive {
 
 function task-export-drive-sync {
 	${RCLONE_U} \
-		${GDRIVE_REMOTE}-highspot: \
-		/.g/_data/zactive/data.highspot
-	${RCLONE_C} about ${GDRIVE_REMOTE}-highspot:
+		--delete-excluded \
+		--filter "- /_pim/taskd/orgs/local/users/*/tx.data" \
+		--filter "- /_pim/tasks/undo.*" \
+		/.g/_data/zactive/_drive/_sync/ \
+		${GDRIVE_REMOTE}:/_sync
 	${RCLONE_U} \
 		--filter "- /_share/*/gary/**" \
 		--filter "- /_share/transmetropolitan**" \
@@ -4509,11 +4511,9 @@ function task-export-drive-sync {
 		${GDRIVE_REMOTE}:/ \
 		/.g/_data/zactive/_drive
 	${RCLONE_U} \
-		--delete-excluded \
-		--filter "- /_pim/taskd/orgs/local/users/*/tx.data" \
-		--filter "- /_pim/tasks/undo.*" \
-		/.g/_data/zactive/_drive/_sync/ \
-		${GDRIVE_REMOTE}:/_sync
+		${GDRIVE_REMOTE}-highspot: \
+		/.g/_data/zactive/data.highspot
+	${RCLONE_C} about ${GDRIVE_REMOTE}-highspot:
 	${RCLONE_C} about ${GDRIVE_REMOTE}:
 	${LL} \
 		/.g/_data/zactive/_drive/_sync \
