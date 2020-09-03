@@ -2508,7 +2508,7 @@ function mount-zfs {
 	ZFS_PARAM[VDV_SMNA]="32";			ZFS_PARAM[VDV_SMNA_DEF]="1"
 	ZFS_PARAM[VDV_SMXA]="64";			ZFS_PARAM[VDV_SMXA_DEF]="2"
 	declare Z_DATE="$(date-string)"
-	declare Z_DREG="[T0-9]+"
+	declare Z_DREG="[-0-9]+"
 	declare Z_IMPORT="zpool import -d /dev/disk/by-id -d /dev -N"
 	declare Z_LIST="zpool list -H -P -v"
 	declare Z_GET="zpool get -H -o value"
@@ -2532,7 +2532,7 @@ function mount-zfs {
 	declare Z_LIST_BIT="zfs list -r -t all -p -o        available,used,usedbydataset,usedbychildren,usedbysnapshots,usedbyrefreservation,name \"\${@}\" | ${GREP} -v \"NAME\" | sort -nr -k3 -k4 -k5 -k6"
 	declare Z_FSEP="|"
 	declare Z_PSEP=":"
-	declare Z_DSEP="-"
+	declare Z_DSEP="."
 	declare ZOPTS=
 	ZOPTS+=" compression=lz4"
 	ZOPTS+=" canmount=noauto"
@@ -2725,8 +2725,8 @@ function mount-zfs {
 		ZPOOL="$(echo "${ZDATA}" | ${SED} -n "s|^([^/]+)[/].*$|\1|gp")"
 	fi
 	declare ZDVID="$(${Z_ZDB}					${DEV}	2>/dev/null | ${SED} -n "s|^[ ]{4}guid[:][ ](.+)$|\1|gp"				)"
-	declare ZNAME="$(echo "${ZPOOL}"					2>/dev/null | ${SED} "s|${Z_DSEP}${Z_DREG}$||g"						)"
-	declare ZROOT="$(echo "${ZPOOL}"					2>/dev/null | ${SED} "s|(${Z_PSEP}${Z_DREG})?(${Z_DSEP}${Z_DREG})?$||g"			)"
+	declare ZNAME="$(echo "${ZPOOL}"					2>/dev/null | ${SED} "s|[${Z_DSEP}]${Z_DREG}$||g"					)"
+	declare ZROOT="$(echo "${ZPOOL}"					2>/dev/null | ${SED} "s|([${Z_PSEP}]${Z_DREG})?([${Z_DSEP}]${Z_DREG})?$||g"		)"
 	if {
 		[[ -z $(${Z_LIST}		${ZPOOL}			2>/dev/null) ]] &&
 		[[ -n $(${Z_LIST_IDS}		${ZNAME}			2>/dev/null | ${SED} -n "s|^[[:space:]]+(${ZDVID}).+$|\1|gp"				) ]];
