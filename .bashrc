@@ -68,6 +68,7 @@ export UNAME="$(uname -s)"
 
 export COMPOSER="/.g/_data/zactive/coding/composer/Makefile";	alias composer="make -f ${COMPOSER}"
 export PIMDIR="/.g/_data/zactive/_pim"
+export NULLDIR="/.g/_data/zactive/_zcache"
 export MAILDIR="${HOME}/Maildir"
 export MAILCAPS="${HOME}/.mailcap"
 
@@ -504,7 +505,7 @@ alias zplan="IMPERSONATE_NAME=task ${HOME}/.bashrc impersonate_command %"
 
 alias s="run-mailcap"
 alias x="cd / ; clear"
-alias zdesk="cd /.g/_data/zactive/_zcache ; clear ; ${LL}"
+alias zdesk="cd ${NULLDIR} ; clear ; ${LL}"
 if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
 	alias s="cygstart"
 	alias x="cd / ; clear"
@@ -804,7 +805,7 @@ function edit {
 function email {
 	declare TMPDIR="${HOME}/Desktop"
 	declare MUTTRC="${HOME}/.muttrc"
-	declare MUTT_X="/tmp/_mutt_mail"
+	declare MUTT_X="${NULLDIR}/_mutt_mail"
 	if [[ ${1} == -a ]]; then
 		shift
 		MUTTRC="${MUTTRC}.all"
@@ -878,7 +879,7 @@ function email {
 ########################################
 
 function email-copy {
-	declare TMPFILE="/tmp/_mutt_copy"
+	declare TMPFILE="${NULLDIR}/_mutt_copy"
 	declare SRC="${1}"
 	declare DST="${2}"
 	if [[ -d ${SRC} ]] && [[ -d ${DST} ]]; then
@@ -3931,7 +3932,6 @@ function scrcpy {
 	fi
 #>>>	export ANDROID_SDK_ROOT="/opt/android-studio"
 	export ANDROID_SDK_ROOT="/.g/_data/source/android-studio"
-#>>>	export ANDROID_SDK_ROOT="/tmp/.android"
 	if ${BLD}; then
 		${MKDIR} ${ANDROID_SDK_ROOT} && android-studio
 		cd /.g/_data/_build/other/scrcpy				&&
@@ -5995,12 +5995,12 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 					eval $(_task_parse_cmd_bash		"${SOURCE}" "${FILE}")
 				done
 #>>>				eval ${MARKER}
-			) | tee /tmp/${FUNCNAME}-${IMPERSONATE_NAME}-todo ; (
+			) | tee ${NULLDIR}/${FUNCNAME}-${IMPERSONATE_NAME}-todo ; (
 				_echo "Remaining"
 				_task look $(
 					declare ID=
 					for ID in $(
-						cat /tmp/${FUNCNAME}-${IMPERSONATE_NAME}-todo |
+						cat ${NULLDIR}/${FUNCNAME}-${IMPERSONATE_NAME}-todo |
 						${SED} "s/[[:cntrl:]][[]([0-9]+[;])*[0-9]+m//g" |
 						${GREP} -o "^[[:space:]]{,3}[0-9]+" |
 						sort -nu
@@ -6011,7 +6011,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				_echo "Success!"
 				eval ${MARKER}
 			) ) | ${MORE}
-			${RM} /tmp/${FUNCNAME}-${IMPERSONATE_NAME}-todo
+			${RM} ${NULLDIR}/${FUNCNAME}-${IMPERSONATE_NAME}-todo
 		elif [[ ${1} == [=] ]]; then
 			shift
 			task-export-text "" "${@}"	|| return 1
