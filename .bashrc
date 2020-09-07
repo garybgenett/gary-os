@@ -931,13 +931,13 @@ function enc-rsync {
 		return 1
 	fi
 	declare FAIL="false"
-	declare TMP="/tmp/.${FUNCNAME}/$(basename ${SRC})"
-	${MKDIR} ${TMP}				|| return 1
-	enc-fs -o ro --reverse ${SRC} ${TMP}	|| return 1
-	${RSYNC_U} "${@}" ${TMP}/ ${DST}	|| FAIL="true"
-	mount-robust -u ${TMP}			|| FAIL="true"
+	declare MNT="/mnt/.${FUNCNAME}/$(basename ${SRC})"
+	${MKDIR} ${MNT}				|| return 1
+	enc-fs -o ro --reverse ${SRC} ${MNT}	|| return 1
+	${RSYNC_U} "${@}" ${MNT}/ ${DST}	|| FAIL="true"
+	mount-robust -u ${MNT}			|| FAIL="true"
 	${FAIL}					&& return 1
-#>>>	${RM} ${TMP}
+#>>>	${RM} ${MNT}
 	return 0
 }
 
@@ -963,24 +963,24 @@ function enc-sshfs {
 	if [[ -z ${SRC} ]] || [[ -z ${DST} ]]; then
 		return 1
 	fi
-	declare TMP="/tmp/.${FUNCNAME}/$(basename ${DST})"
+	declare MNT="/mnt/.${FUNCNAME}/$(basename ${DST})"
 	if ! ${UMT}; then
-		${MKDIR} ${TMP}
-		if [[ -z $(${GREP} "${SRC}[ ]${TMP}[ ]fuse.sshfs" /proc/mounts) ]]; then
-			(sshfs -f -o ${RWR} ${SRC} ${TMP}) &
+		${MKDIR} ${MNT}
+		if [[ -z $(${GREP} "${SRC}[ ]${MNT}[ ]fuse.sshfs" /proc/mounts) ]]; then
+			(sshfs -f -o ${RWR} ${SRC} ${MNT}) &
 		fi
 		sleep 1
-		if [[ -z $(${GREP} "${SRC}[ ]${TMP}[ ]fuse.sshfs" /proc/mounts) ]]; then
+		if [[ -z $(${GREP} "${SRC}[ ]${MNT}[ ]fuse.sshfs" /proc/mounts) ]]; then
 			return 1
 		fi
-		${MKDIR} ${TMP}${TGT}			|| return 1
-		enc-fs -o ${RWR} ${TMP}${TGT} ${DST}	|| return 1
+		${MKDIR} ${MNT}${TGT}			|| return 1
+		enc-fs -o ${RWR} ${MNT}${TGT} ${DST}	|| return 1
 	else
 		mount-robust -u ${DST}			|| return 1
-		mount-robust -u ${TMP}			|| return 1
-#>>>		${RM} ${TMP}
+		mount-robust -u ${MNT}			|| return 1
+#>>>		${RM} ${MNT}
 	fi
-	${GREP} "^${SRC}[ ]${TMP}[ ]fuse.sshfs"		/proc/mounts
+	${GREP} "^${SRC}[ ]${MNT}[ ]fuse.sshfs"		/proc/mounts
 	${GREP} "^encfs[ ]${DST}[ ]fuse.encfs"		/proc/mounts
 	return 0
 }
@@ -2298,8 +2298,8 @@ function mount-robust {
 	fi
 	if ${TEST}; then
 		declare DO_DEBUG="DEBUG"
-		declare TEST_SRC="/tmp/.${FUNCNAME}/source"
-		declare TEST_TGT="/tmp/.${FUNCNAME}/target"
+		declare TEST_SRC="/mnt/.${FUNCNAME}/source"
+		declare TEST_TGT="/mnt/.${FUNCNAME}/target"
 		if [[ -z ${@} ]]; then
 			declare PRINTF="%-20.20s %-30.30s %-30.30s %-30.30s %s\n"
 			printf "${PRINTF}" "TEST"			"${FUNCNAME} TEST SRC_DEV"	"SRC_DIR"		"TGT_DIR"	"NOTES"
