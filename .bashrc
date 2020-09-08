@@ -2602,6 +2602,8 @@ function mount-zfs {
 			${Z_LIST_SIZ} "${@}"
 		else
 			${Z_LIST_INF/-t all/-t filesystem,volume} "${@}"
+			echo -en "\n"
+			${Z_LIST_SIZ/-t all/-t filesystem,volume} "${@}"
 		fi
 		return 0
 	}
