@@ -2530,7 +2530,7 @@ function mount-zfs {
 	declare Z_LIST_ALL="zfs list -H -r -t all -o name"
 	declare Z_LIST_INF="zfs list -r -t all -o name,type,creation,available,used,usedbydataset,compressratio,mounted,createtxg,version"
 	declare Z_LIST_SIZ="zfs list -r -t all -o name,type,available,used,usedbydataset,usedbychildren,usedbysnapshots,usedbyrefreservation,quota,referenced,written"
-	declare Z_LIST_BIT="zfs list -r -t all -p -o        available,used,usedbydataset,usedbychildren,usedbysnapshots,usedbyrefreservation,name \"\${@}\" | ${GREP} -v \"NAME\" | sort -nr -k3 -k4 -k5 -k6"
+	declare Z_LIST_BIT="zfs list -r -t all -p -o        available,used,usedbydataset,usedbychildren,usedbysnapshots,usedbyrefreservation,name"
 	declare Z_FSEP="|"
 	declare Z_PSEP=":"
 	declare Z_DSEP="."
@@ -2595,7 +2595,18 @@ function mount-zfs {
 				| ${GREP} --color=never "^${1}" \
 				| ${GREP} --color=never "[[:space:]]((ref)?reservation|quota)[[:space:]]"
 			echo -en "\n"
-			eval ${Z_LIST_BIT/-t all/-t filesystem,volume}
+			${Z_LIST_BIT/-t all/-t filesystem,volume} "${@}" |
+				${GREP} -v "NAME" |
+				sort -nr -k3 -k4 -k5 -k6
+			echo -en "\n"
+			DIR="0"
+			for FILE in $(
+				${Z_LIST_BIT/-t all/-t filesystem,volume} -H "${@}" |
+				cut -d$'\t' -f3
+			); do
+				DIR="$((${DIR}+${FILE}))"
+			done
+			echo -en "${DIR}\n"
 		elif ${SN}; then
 			${Z_LIST_INF/-t all/-t filesystem,volume} "${@}"
 			echo -en "\n"
