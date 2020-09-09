@@ -2599,14 +2599,21 @@ function mount-zfs {
 				${GREP} -v "NAME" |
 				sort -nr -k3 -k4 -k5 -k6
 			echo -en "\n"
-			DIR="0"
-			for FILE in $(
-				${Z_LIST_BIT/-t all/-t filesystem,volume} -H "${@}" |
-				cut -d$'\t' -f3
-			); do
-				DIR="$((${DIR}+${FILE}))"
+			declare -a TOTALS=(0 0 0 0 0 0 0)
+			declare TOTAL="0"
+			for DIR in 3 5 6; do
+				for FILE in $(
+					${Z_LIST_BIT/-t all/-t filesystem,volume} -H "${@}" |
+					cut -d$'\t' -f${DIR}
+				); do
+					TOTALS[$DIR]="$((${TOTALS[$DIR]}+${FILE}))"
+				done
+				TOTAL="$((${TOTAL}+${TOTALS[$DIR]}))"
 			done
-			echo -en "${DIR}\n"
+			for DIR in {1..6}; do
+				echo -en "${TOTALS[$DIR]} "
+			done
+			echo -en "= ${TOTAL}\n"
 		elif ${SN}; then
 			${Z_LIST_INF/-t all/-t filesystem,volume} "${@}"
 			echo -en "\n"
