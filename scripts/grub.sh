@@ -173,6 +173,9 @@ set timeout=-1
 
 insmod all_video
 
+insmod part_gpt
+insmod part_msdos
+
 insmod fat
 insmod exfat
 insmod ext2
