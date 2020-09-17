@@ -22,10 +22,10 @@ update_process_names=1
 account_guest_in_cpu_meter=0
 color_scheme=0
 delay=15
-left_meters=AllCPUs Blank CPU Memory Swap
-left_meter_modes=1 2 1 1 1
-right_meters=Hostname Clock Blank Uptime Battery Blank Tasks LoadAverage
-right_meter_modes=2 2 2 2 2 2 2 2
+left_meters=Hostname Battery CPU Memory Swap LeftCPUs2
+left_meter_modes=2 1 1 1 1 1
+right_meters=Clock Uptime Tasks LoadAverage Memory RightCPUs2
+right_meter_modes=2 2 2 2 2 1
 
 ################################################################################
 # end of file
