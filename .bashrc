@@ -2464,14 +2464,14 @@ function mount-robust {
 			declare DID="false"
 			if [[ ${TYP} == ext4		]]; then DID="true"; fsck -MV -t ${TYP} -pC	${DEV} || return 1; fi
 			if [[ ${TYP} == exfat		]]; then DID="true"; fsck.${TYP}		${DEV} || return 1; fi
-			if [[ ${TYP} == ntfs-3g		]]; then DID="true"; fsck -MV -t ${TYP}		${DEV} || return 1; fi
+			if [[ ${TYP} == ntfs		]]; then DID="true"; fsck -MV -t ${TYP}-3g	${DEV} || return 1; fi
 			if [[ ${TYP} == vfat		]]; then DID="true"; fsck -MV -t ${TYP}		${DEV} || return 1; fi
 			if ! ${OV} && [[ -d ${DEV}	]]; then DID="true"; mount -v --bind ${RO:+-o ${RO/%,}}						"${@}" ${DEV} ${DIR} || return 1; fi
 			if ! ${OV} && [[ -f ${DEV}	]]; then DID="true"; mount -v -o ${RO}loop							"${@}" ${DEV} ${DIR} || return 1; fi
 			if ${OV}			]]; then DID="true"; mount -v -t ${TYP} -o ${OVERLAY}						"${@}"        ${DIR} || return 1; fi
 			if [[ ${TYP} == ext4		]]; then DID="true"; mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro			"${@}" ${DEV} ${DIR} || return 1; fi
 			if [[ ${TYP} == exfat		]]; then DID="true"; mount -v -t ${TYP} -o ${RO}relatime					"${@}" ${DEV} ${DIR} || return 1; fi
-			if [[ ${TYP} == ntfs-3g		]]; then DID="true"; mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro,shortname=mixed	"${@}" ${DEV} ${DIR} || return 1; fi
+			if [[ ${TYP} == ntfs		]]; then DID="true"; mount -v -t ${TYP}-3g -o ${RO}relatime,errors=remount-ro,shortname=mixed	"${@}" ${DEV} ${DIR} || return 1; fi
 			if [[ ${TYP} == vfat		]]; then DID="true"; mount -v -t ${TYP} -o ${RO}relatime,errors=remount-ro,shortname=mixed	"${@}" ${DEV} ${DIR} || return 1; fi
 			if [[ ${TYP} == zfs_member	]]; then DID="true"; mount-zfs ${RO:+-0}							"${@}" ${DEV} ${DIR} || return 1; fi
 			if ! ${DID}; then
