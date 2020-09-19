@@ -24,7 +24,7 @@ color_scheme=0
 delay=15
 left_meters=Hostname Battery CPU Memory Swap LeftCPUs2
 left_meter_modes=2 1 1 1 1 1
-right_meters=Clock Uptime Tasks LoadAverage Memory RightCPUs2
+right_meters=Clock Uptime LoadAverage Memory Tasks RightCPUs2
 right_meter_modes=2 2 2 2 2 1
 
 ################################################################################
