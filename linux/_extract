@@ -5,10 +5,16 @@ source ${HOME}/.bashrc
 declare ISO="${1}" && shift
 declare KRN="${1}" && shift
 
+if [[ -z ${ISO} ]]; then
+	ISO="64"
+fi
 if [[ ! -f ${ISO} ]]; then
 	KRN="/boot/grml${ISO}full/vmlinuz"
 	ISO="$(ls -t /.g/_data/_target/iso/grml${ISO}-*.iso | head -n1)"
 fi
+
+echo -en "ISO: ${ISO}\n"
+echo -en "KRN: ${KRN}\n"
 
 ########################################
 
@@ -16,12 +22,14 @@ declare MNT="/mnt"
 
 ################################################################################
 
-mount -o loop ${ISO} ${MNT}		|| exit 1
-if [[ -f ${MNT}${KRN} ]]; then
-	/usr/src/linux/scripts/extract-ikconfig ${MNT}${KRN} \
-		>${_SELF}.config	|| exit 1
+mount -o loop ${ISO} ${MNT}
+file ${MNT}${KRN}
+/usr/src/linux/scripts/extract-ikconfig ${MNT}${KRN} >${_SELF}.config
+if [[ ${?} != 0 ]]; then
+	mount | ${GREP} "^${ISO}"
+else
+	umount ${ISO}
 fi
-umount ${ISO}				|| exit 1
 
 exit 0
 ################################################################################
