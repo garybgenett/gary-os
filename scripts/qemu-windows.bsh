@@ -17,9 +17,8 @@ fi
 
 declare QNAM="windows-10"
 declare QINS="$(date --iso).0-install"
-declare QPGM="$(date --iso).1-program"
-declare QCFG="$(date --iso).2-config"
-declare QUPD="$(date --iso).3-update"
+declare QCFG="$(date --iso).1-config"
+declare QUPD="$(date --iso).2-update"
 
 if [[ ${QSYS} == -c ]]; then
 	qemu-img convert -O vdi ${QNAM}.${QUPD}.qcow2 ${QSYS}.${QUPD}.vdi
@@ -29,8 +28,7 @@ fi
 
 if [[ ${QSYS} == -d ]]; then
 	qemu-img create -f qcow2 -o compat=1.1						${QNAM}.${QINS}.qcow2 100G
-	qemu-img create -f qcow2 -o compat=1.1,backing_file=${QNAM}.${QINS}.qcow2	${QNAM}.${QPGM}.qcow2
-	qemu-img create -f qcow2 -o compat=1.1,backing_file=${QNAM}.${QPGM}.qcow2	${QNAM}.${QCFG}.qcow2
+	qemu-img create -f qcow2 -o compat=1.1,backing_file=${QNAM}.${QINS}.qcow2	${QNAM}.${QCFG}.qcow2
 	qemu-img create -f qcow2 -o compat=1.1,backing_file=${QNAM}.${QCFG}.qcow2	${QNAM}.${QUPD}.qcow2
 	qemu-img create -f qcow2 -o compat=1.1,backing_file=${QNAM}.${QUPD}.qcow2	${QNAM}.qcow2
 	${LN} ${QNAM}.${QINS}.qcow2 ${QFIL}
