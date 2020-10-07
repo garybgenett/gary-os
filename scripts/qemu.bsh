@@ -104,8 +104,12 @@ if ${ROOT}; then
 		rmmod -v kvm-intel
 		rmmod -v kvm
 		modprobe -v kvm
-		modprobe -v kvm-intel
+		modprobe -v kvm-intel nested=1
+		modprobe -v vhost-net
 	done
+	if ! virt-host-validate; then
+		sleep 2
+	fi
 fi
 
 export SDL_VIDEO_X11_DGAMOUSE="0"
@@ -169,8 +173,8 @@ fi
 if ${ROOT}; then
 	QMCH="-machine type=pc,accel=kvm"
 	QMCH+=" -enable-kvm"
-#>>>	QMCH+=" -cpu host"
-	QMCH+=" -cpu qemu64"
+#>>>	QMCH+=" -cpu qemu64"
+	QMCH+=" -cpu host"
 else
 	QMCH="-machine type=pc"
 	QMCH+=" -cpu qemu64"
