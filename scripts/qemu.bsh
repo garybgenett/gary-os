@@ -192,15 +192,17 @@ QMON+=" -serial telnet:127.0.0.1:990${QNUM},server,nowait"
 ########################################
 
 # http://www.linux-kvm.org/page/SPICE
-# http://www.spice-space.org/page/Whiteboard/AgentProtocol
-
-# SPICE Channel: vdagent
-# SPICE Device: com.redhat.spice.0
-
 QVDA="-spice addr=127.0.0.1,port=666${QNUM},disable-ticketing"
-QVDA+=" -device virtio-serial,id=virtio-serial0"
+
+# https://www.spice-space.org/spice-user-manual.html
 QVDA+=" -chardev spicevmc,id=spicevmc0,name=vdagent"
+QVDA+=" -device virtio-serial,id=virtio-serial0"
 QVDA+=" -device virtserialport,chardev=spicevmc0,bus=virtio-serial0.0,nr=1,name=com.redhat.spice.0"
+
+# https://wiki.qemu.org/Features/GuestAgent
+QVDA+=" -chardev socket,id=qga0,path=/tmp/qemu.${QNAM}.sock,server,nowait"
+QVDA+=" -device virtio-serial,id=virtio-serial1"
+QVDA+=" -device virtserialport,chardev=qga0,bus=virtio-serial1.0,nr=1,name=org.qemu.guest_agent.0"
 
 ########################################
 
