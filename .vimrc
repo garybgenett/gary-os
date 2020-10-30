@@ -88,7 +88,7 @@ set foldminlines			=0
 set foldmethod				=indent
 set foldtext				=v:folddashes.\"\ \".v:foldlevel.\"\ \[\".(v:foldend\ \-\ v:foldstart\ \+\ 1).\"\,\ \".v:foldstart.\"\-\".v:foldend.\"\]\ \"
 
-set wrap
+set nowrap
 set whichwrap				=b,s
 set backspace				=indent,eol
 
