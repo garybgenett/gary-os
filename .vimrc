@@ -17,10 +17,9 @@ let loaded_matchparen			=1
 set viminfo				=
 set printheader				=[\ %<%t\ -\ %N\ ]
 
-">>>set swapfile
 set noswapfile
 set directory				=.
-">>>set swapsync				=sync
+set swapsync				=sync
 set updatecount				=10
 set updatetime				=10
 
@@ -163,7 +162,7 @@ map  <C-J> <ESC>/+VIM+<CR>c5l
 map! <C-J> <C-O>/+VIM+<CR><C-O>c5l
 
 " turn swapfile off
-map <F3> <ESC>:set noswapfile<CR>
+map <F3> <ESC>:set swapfile<CR>
 
 " convert tab-delimited file to properly formatted csv
 map <F4> <ESC>:%s/^/\"/g<CR>:%s/\t/\"\,\"/g<CR>:%s/$/\"/g<CR>
