@@ -290,12 +290,15 @@ fi
 
 export MORE="less -rX"						; alias more="${MORE}"
 export VI="${REALTIME} vim -u ${HOME}/.vimrc -i NONE -p"	; alias vi="${VI}"
-export VIEW="eval ${VI} -nR -c \"set nowrap\""			; alias view="${VIEW/#eval\ /}"
+export GVI="prompt -d -x ; ${VI} -g"				; alias gvim="${GVI}"
+export VIEW="${VI}"						; alias view="${VIEW}"
+if [[ "${UNAME}" == "Darwin" ]]; then
+	GVI="${GVI/prompt -d -x ; }"				; alias gvim="${GVI}"
+fi
 
 export PAGER="${MORE}"
 export EDITOR="${VI}"
-
-unset VISUAL
+export VISUAL="${VI}"
 
 ########################################
 
