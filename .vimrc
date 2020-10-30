@@ -48,17 +48,21 @@ highlight foldcolumn guibg=black ctermbg=none guifg=darkblue ctermfg=darkblue
 
 set noautowrite
 set noautowriteall
+set noruler
+set noshowmode
+set nospell
+
 set hidden
 set hlsearch
 set ignorecase
 set incsearch
 set modeline
-set noruler
+set paste
 set showcmd
-set noshowmode
 set smartcase
-set nospell
+
 set novisualbell
+set belloff				=all
 
 set wildmenu
 set wildmode				=full
@@ -84,6 +88,7 @@ set foldminlines			=0
 set foldmethod				=indent
 set foldtext				=v:folddashes.\"\ \".v:foldlevel.\"\ \[\".(v:foldend\ \-\ v:foldstart\ \+\ 1).\"\,\ \".v:foldstart.\"\-\".v:foldend.\"\]\ \"
 
+set wrap
 set whichwrap				=b,s
 set backspace				=indent,eol
 
