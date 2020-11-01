@@ -544,7 +544,6 @@ alias htop="${CP} -L ${HOME}/.htoprc.bak ${HOME}/.config/htop/htoprc ; htop"
 alias jokes="cd data.personal ; ${EDITOR} _jokes.txt ; ${LL} -t"
 alias loopfile="dcfldd if=/dev/zero of=/tmp/loopfile bs=1k count=98288"
 alias man="PAGER='less' man"
-alias mixer="aumix -C ansi"
 alias mozall="_sync _moz _save"
 alias mozall-reset="_sync _moz _clone"
 alias mozall-sync="_sync _moz _upload"
@@ -2135,6 +2134,91 @@ function maildirmake {
 			${MKDIR} ${MAILDIR}/${DIR}
 		done
 	done
+	return 0
+}
+
+########################################
+
+function mixer {
+	if (( $(id -u) == 0 )); then
+		sudo -H -u \#1000 ${HOME}/.bashrc ${FUNCNAME} "${@}"
+		return 0
+	fi
+	declare MIXER_DAT="/proc/asound/cards"
+	declare MIXER_DEV="/dev/mixer"
+	declare MIXER_VIS=(synaesthesia projectM-pulseaudio)
+	declare MIXER_NUM="$(
+		${SED} -n "s|^[^0-9]*([0-9]+).+$(
+			${SED} -n "s|^.*${MIXER_DAT} = ([^\t]+)\t+([^\t]+)$|\1|gp" ${HOME}/.asoundrc |
+			head -n1
+		).*$|\1|gp" ${MIXER_DAT}
+	)"
+	declare MIXER_PLS="$(
+		pactl list short sinks 2>/dev/null |
+		${SED} -n "s|^([0-9]+).+$(
+			${SED} -n "s|^.*${MIXER_DAT} = (.+)[[:space:]]+(.+)$|\2|gp" ${HOME}/.asoundrc |
+			head -n1
+		).*$|\1|gp"
+	)"
+	if [[ -n ${MIXER_NUM} ]]; then
+		#>>> & == avoid delay on disk i/o
+		sudo ${SED} -i "s%^(defaults.(pcm|ctl).card[[:space:]]+)([0-9]+)$%\1${MIXER_NUM}%g" ${HOME}/.asoundrc &
+		if [[ ${MIXER_NUM} != 0 ]]; then
+			MIXER_DEV+="${MIXER_NUM}"
+		fi
+	fi
+	if [[ -n ${MIXER_PLS} ]]; then
+		pactl set-default-sink ${MIXER_PLS}
+		pactl set-sink-mute ${MIXER_PLS} false
+		for FILE in $(
+			pactl list short sink-inputs |
+			${SED} -n "s|^([0-9]+).+$|\1|gp"
+		); do
+			pactl move-sink-input ${FILE} ${MIXER_PLS}
+			pactl set-sink-input-volume ${FILE} "100%"
+		done
+		for FILE in $(
+			pactl list short sources |
+			${SED} -n "s|^([0-9]+).+$|\1|gp"
+		); do
+			pactl set-source-mute ${FILE} $(
+				if [[ ${FILE} == ${MIXER_PLS} ]]; then
+					echo "false"
+				else
+					echo "true"
+				fi
+			)
+		done
+		for FILE in ${MIXER_VIS[@]}; do
+			for DIR in $(
+				pactl list short source-outputs |
+				${SED} -n "s|^([0-9]+).+[[:space:]]$(
+					pactl list short clients |
+					${SED} -n "s|^([0-9]+).+${FILE}$|\1|gp" |
+					sort -u
+				)[[:space:]].+$|\1|gp"
+			); do
+				pactl move-source-output ${DIR} ${MIXER_PLS}
+			done
+		done
+	fi
+	if [[ ${1} == +([0-9]) ]]; then
+		if [[ -n ${MIXER_PLS} ]]; then
+			pactl set-sink-volume ${MIXER_PLS} "${1}%"
+		fi
+		aumix -d ${MIXER_DEV} -L -v ${1} -w ${1}
+	elif [[ -n ${@} ]] && [[ ${1} != - ]]; then
+		aumix -d ${MIXER_DEV} "${@}"
+	elif [[ -z ${@} ]]; then
+		aumix -d ${MIXER_DEV} -C ansi
+	fi
+	if [[ -n ${MIXER_PLS} ]]; then
+		pactl list short clients
+		pactl list sinks |
+			${SED} -n "/^Sink[ ][#]${MIXER_PLS}/,/^$/p" |
+			${GREP} --color=never -A1 "Volume"
+	fi
+	aumix -d ${MIXER_DEV} -q
 	return 0
 }
 
@@ -5816,7 +5900,7 @@ function vlc-do {
 	fi
 	killall -9 vlc
 	sleep 1
-	aumix -L -v ${VOLUME}
+	mixer ${VOLUME}
 	declare PLAYLIST="$(
 		${GREP} -v "^#" /.g/_data/zactive/.setup/_misc/playlists/radio-di-favorites.m3u |
 		${GREP} "[/]${1}[.]pls"
