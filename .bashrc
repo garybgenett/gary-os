@@ -167,7 +167,8 @@ declare PROMPT_TOKEN_CLR="\[\e[7;31m\]"
 declare PROMPT_TOKEN_DFL="\[\e[0m\]"	# reset color
 declare PROMPT_TOKEN_PWD="\w"
 
-if [[ ${HOSTNAME} == spider ]]; then
+if [[ ${HOSTNAME} == phoenix ]] ||
+   [[ ${HOSTNAME} == spider ]]; then
 	PROMPT_TOKEN_CLR="\[\e[7;32m\]"
 	PROMPT_SCR_COLOR="g"
 elif [[ ${HOSTNAME} == shadow ]] ||
@@ -3677,7 +3678,8 @@ function shell {
 			[[ -z $(${PS} 2>/dev/null | ${GREP} "5900[:]") ]] && OPTS="${OPTS} -L 5900:127.0.0.1:5900"
 			[[ -z $(${PS} 2>/dev/null | ${GREP} "5901[:]") ]] && OPTS="${OPTS} -L 5901:127.0.0.1:5901"
 			[[ -z $(${PS} 2>/dev/null | ${GREP} "5902[:]") ]] && OPTS="${OPTS} -L 5902:127.0.0.1:5902"
-			if [[ ${HOSTNAME} != spider ]]; then
+			if [[ ${HOSTNAME} != phoenix ]] &&
+			   [[ ${HOSTNAME} != spider ]]; then
 				[[ -z $(${PS} 2>/dev/null | ${GREP} "5909[:]") ]] && OPTS="${OPTS} -L 5909:127.0.0.1:5900"
 				[[ -z $(${PS} 2>/dev/null | ${GREP} "6606[:]") ]] && OPTS="${OPTS} -L 6606:127.0.0.1:6666"
 				[[ -z $(${PS} 2>/dev/null | ${GREP} "6608[:]") ]] && OPTS="${OPTS} -L 6608:127.0.0.1:6668"
