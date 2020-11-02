@@ -42,13 +42,15 @@ fi
 
 ########################################
 
+export HOME="$(realpath ${HOME})"
+
 if [[ "${-/i}" != "${-}" ]]; then
 	mkdir -p ${HOME}/.history/screen	2>/dev/null
 	mkdir -p ${HOME}/.history/shell		2>/dev/null
 
 	export SCREENDIR="${HOME}/.screen"
 	mkdir -p ${SCREENDIR}			2>/dev/null
-	chown -R root:root ${SCREENDIR}		2>/dev/null
+	chown -R ${USER}:root ${SCREENDIR}	2>/dev/null
 	chmod -R 700 ${SCREENDIR}		2>/dev/null
 fi
 
