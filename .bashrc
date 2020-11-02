@@ -2275,6 +2275,7 @@ function mount-robust {
 	declare RO=
 	declare DM="false"
 	declare OV="false"
+	declare ZF="false"
 	declare UN="false"
 	declare DEV=
 	declare DIR=
@@ -2283,6 +2284,7 @@ function mount-robust {
 	if [[ ${1} == -0 ]]; then	RO="ro,";	shift; fi
 	if [[ ${1} == -d ]]; then	DM="true";	shift; fi
 	if [[ ${1} == -o ]]; then	OV="true";	shift; fi
+	if [[ ${1} == -z ]]; then	ZF="true";	shift; fi
 	if [[ ${1} == -u ]]; then	UN="true";	shift; fi
 	if [[ -n ${1} ]]; then		DEV="${1}";	shift; fi
 	if [[ -n ${1} ]]; then		DIR="${1}";	shift; fi
@@ -2347,8 +2349,10 @@ function mount-robust {
 	declare ZFS_LIVE=
 	declare ZFS_STAT=
 	declare IS_ZFS="false"
-	if ${UN} &&	${ZFS_CHECK}		${DEV} 2>&1 >/dev/null | ${GREP} -v "Failed Detection"; then IS_ZFS="true"
-	elif ! ${UN} &&	${ZFS_CHECK_IMPORT}	${DEV} 2>&1 >/dev/null | ${GREP} -v "Failed Detection"; then IS_ZFS="true"
+	if ${ZF}; then
+		if ${UN} &&	${ZFS_CHECK}		${DEV} 2>&1 >/dev/null; then IS_ZFS="true"
+		elif ! ${UN} &&	${ZFS_CHECK_IMPORT}	${DEV} 2>&1 >/dev/null; then IS_ZFS="true"
+		fi
 	fi
 	if ${IS_ZFS}; then
 		ZFS_PINT="$(${ZFS_CHECK} ${DEV} pint	2>/dev/null)"
