@@ -2119,7 +2119,7 @@ function journal {
 ########################################
 
 function ldir {
-	${LL} -R "${@}" | more
+	${LL} --color=always --recursive "${@}" | ${PAGER}
 }
 
 ########################################
