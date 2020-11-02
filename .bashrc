@@ -5898,7 +5898,7 @@ function vlc-do {
 		REDSHIFT="${1}"
 		shift
 	fi
-	declare VOLUME="30"
+	declare VOLUME="10"
 	if [[ ${1} == +([0-9]) ]]; then
 		VOLUME="${1}"
 		shift
