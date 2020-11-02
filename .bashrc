@@ -928,6 +928,8 @@ function enc-fs {
 	echo "${OUT}" | (${ENCFS} -f --stdinpass "${@}") &
 	sleep 1
 	if [[ -z $(${GREP} "encfs[ ]${DST}[ ]fuse.encfs" /proc/mounts) ]]; then
+		echo -en "${FUNCNAME}: failed!"
+		echo -en "\n"
 		return 1
 	fi
 	return 0
