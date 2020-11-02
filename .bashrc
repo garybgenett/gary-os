@@ -1163,6 +1163,11 @@ function git-check {
 	declare NEW=".${FUNCNAME}-new"
 	declare OLD=".${FUNCNAME}-old"
 	declare LST=
+	if [[ ${1} == -d ]]; then
+		shift
+		vdiff ${1}{,.git-check-new}
+		return 0
+	fi
 	function git-check-out {
 		declare FILE="${1}" && shift
 		touch --reference ${FILE} ${FILE}${NEW}		|| return 1
