@@ -2912,8 +2912,7 @@ function mount-zfs {
 	if [[ -n ${ZTIME} ]]; then ZTIME="$(date --iso=seconds --date="@${ZTIME}")"; fi
 	declare ZSTAT="$(${Z_STATUS}		${ZPOOL}			2>/dev/null | ${SED} -n "s|^[[:space:]]+${ZDEVICE}[[:space:]]+([A-Z]+).+$|\1|gp"	)"
 	ZSTAT="${ZSTAT,,}"
-	declare ZPINT_REAL="${ZDEVS[0]}";	if ${ZPOOL_EXT}; then ZPINT_REAL="${ZDEVICE}"; fi
-	declare ZPINT="$(${Z_ZDB}		${ZPINT_REAL}			2>/dev/null | ${SED} -n "s|^[ ]{4}name[:][ ][\'](.+)[\']$|\1|gp"			)"
+	declare ZPINT="$(${Z_ZDB}		${ZDEVICE}			2>/dev/null | ${SED} -n "s|^[ ]{4}name[:][ ][\'](.+)[\']$|\1|gp"			)"
 	declare ZMNAM="${ZPOOL}${Z_DSEP}${Z_DATE}"
 	declare ZDNAM="${ZNAME}${Z_DSEP}${Z_DATE}"
 	declare ZPNAM="${ZROOT}${Z_PSEP}${Z_DATE}"
@@ -3161,9 +3160,9 @@ function mount-zfs {
 			return 0
 		}
 		function zfs_mount_member {
-			if [[ ${ZDIDS[0]} == ${ZDVID} ]]; then
+#>>>			if [[ ${ZDIDS[0]} == ${ZDVID} ]]; then
 				zfs_mount_pool						|| return 1
-			fi
+#>>>			fi
 			if ! ${ZMEMBER}; then
 				echo -en "- Attaching Member... (${ZPOOL}) ${DEV}\n"
 				declare ZPOOL_OLD="${ZPINT}"
