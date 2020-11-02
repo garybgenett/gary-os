@@ -3883,7 +3883,7 @@ function vdiff {
 		${GREP} "${SEARCH}" ${VDIFF}
 		${LL} ${VDIFF} #>>> >/dev/null 2>&1
 	else
-		${VIEW} -c "'set filetype=diff'" "'+/${SEARCH}'" ${VDIFF}
+		${VIEW} -c "set filetype=diff" "+/${SEARCH}" ${VDIFF}
 		${RM} ${VDIFF} >/dev/null 2>&1
 	fi
 	return 0
