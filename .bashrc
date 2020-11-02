@@ -382,7 +382,7 @@ alias emerge="${EMERGE}"
 
 ########################################
 
-export ENCFS6_CONFIG="${ENCFS6_CONFIG:-/.g/_data/zactive/.static/.encfs/encfs6.master.xml}"
+export ENCFS6_CONFIG="${ENCFS6_CONFIG:-/.g/_data/zactive/.static/.encfs/encfs6.primary.xml}"
 export ENCFS_FILE="${ENCFS6_CONFIG/%xml/asc}"
 
 #>>>	--verbose \
