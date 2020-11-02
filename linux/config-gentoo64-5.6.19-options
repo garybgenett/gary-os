@@ -57,13 +57,15 @@ Device Drivers
 		Serial drivers
 			8250/16550 and compatible serial support		CONFIG_SERIAL_8250=y
 			Console on 8250/16550 and compatible serial port	CONFIG_SERIAL_8250_CONSOLE=y
+#>>>	Multifunction device drivers
+#>>>		Intel Low Power Subsystem support in PCI mode			CONFIG_MFD_INTEL_LPSS_PCI=y
 	Graphics support
-		/dev/agpgart (AGP Support)					CONFIG_AGP=y
-		Direct Rendering Manager (XFree86 4.1.0 and higher DRI support)	CONFIG_DRM=y
-		ATI Radeon							CONFIG_DRM_RADEON=y
-		AMD GPU								CONFIG_DRM_AMDGPU=y
-		Nouveau (NVIDIA) cards						CONFIG_DRM_NOUVEAU=y
-		Intel 8xx/9xx/G3x/G4x/HD Graphics				CONFIG_DRM_I915=y
+#>>>		/dev/agpgart (AGP Support)					CONFIG_AGP=y
+#>>>		Direct Rendering Manager (XFree86 4.1.0 and higher DRI support)	CONFIG_DRM=y
+#>>>		ATI Radeon							CONFIG_DRM_RADEON=y
+#>>>		AMD GPU								CONFIG_DRM_AMDGPU=y
+#>>>		Nouveau (NVIDIA) cards						CONFIG_DRM_NOUVEAU=y
+#>>>		Intel 8xx/9xx/G3x/G4x/HD Graphics				CONFIG_DRM_I915=y
 		Frame buffer Devices
 			Support for frame buffer devices			CONFIG_FB=y
 				VGA 16-color graphics support			CONFIG_FB_VGA16=y
@@ -72,9 +74,9 @@ Device Drivers
 #>>>				nVidia Framebuffer Support			CONFIG_FB_NVIDIA=y
 #>>>				Intel .../915G/945G/945GM/965G/965GM support	CONFIG_FB_INTEL=y
 #>>>				ATI Radeon display support			CONFIG_FB_RADEON=y
-#>>>		Console display driver support
-#>>>			VGA text console					CONFIG_VGA_CONSOLE=y
-#>>>			Framebuffer Console support				CONFIG_FRAMEBUFFER_CONSOLE=y
+		Console display driver support
+			VGA text console					CONFIG_VGA_CONSOLE=y
+			Framebuffer Console support				CONFIG_FRAMEBUFFER_CONSOLE=y
 #>>>			Framebuffer Console Deferred Takeover			CONFIG_FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER=y
 		Bootup logo							CONFIG_LOGO=n
 	HID support
@@ -90,6 +92,8 @@ Device Drivers
 		OHCI HCD (USB 1.1) support					CONFIG_USB_OHCI_HCD=y
 		UHCI HCD (most Intel and VIA) support				CONFIG_USB_UHCI_HCD=y
 		USB Mass Storage support					CONFIG_USB_STORAGE=y
+			USB Mass Storage verbose debug				CONFIG_USB_STORAGE_DEBUG=y
+			USB Attached SCSI					CONFIG_USB_UAS=y
 		USB Serial Converter support					CONFIG_USB_SERIAL=y
 			USB Serial Console device support			CONFIG_USB_SERIAL_CONSOLE=y
 			USB Generic Serial Driver				CONFIG_USB_SERIAL_GENERIC=y
@@ -108,9 +112,9 @@ File systems
 			Decompressor parallelisation options			CONFIG_SQUASHFS_DECOMP_MULTI_PERCPU=y [Use percpu multiple decompressors for parallel I/O]
 		Include support for XZ compressed file systems			CONFIG_SQUASHFS_XZ=y
 
-#>>>Library routines
-#>>>	Select compiled-in fonts						CONFIG_FONTS=y
-#>>>		VGA 8x8 font							CONFIG_FONT_8x8=y
+Library routines
+	Select compiled-in fonts						CONFIG_FONTS=y
+		VGA 8x8 font							CONFIG_FONT_8x8=y
 #>>>		VGA 8x16 font							CONFIG_FONT_8x16=y
 #>>>		Terminus 16x32 font (not supported by all drivers)		CONFIG_FONT_TER16x32=y
 
