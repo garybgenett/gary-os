@@ -325,7 +325,6 @@ export LX="${LS} -asF -kC"					; alias lx="${LX}"
 export LF="eval ${LL} -d \`find . -maxdepth 1 ! -type l\`"	; alias lf="${LF}"
 
 export LI="indexer | indexer -p"				; alias li="${LI}"
-export LT="tree -asF -hD --du"					; alias lt="${LT}"
 
 export DU="du -b --time --time-style=long-iso"			; alias du="${DU}"
 export LU="${DU} -ak --max-depth 1"				; alias lu="${LU}"
@@ -2119,7 +2118,11 @@ function journal {
 ########################################
 
 function ldir {
-	${LL} --color=always --recursive "${@}" | ${PAGER}
+	if [[ ${1} == -t ]]; then
+		tree -asF -hCD --du "${@}"
+	else
+		${LL} --color=always --recursive "${@}"
+	fi | ${PAGER}
 }
 
 ########################################
