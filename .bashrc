@@ -2627,6 +2627,9 @@ function mount-zfs {
 	declare ZFS_ARC_MAX="$(( (2**30) * 2 ))"	# default: dynamic	2G
 	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/ZFS%20on%20Linux%20Module%20Parameters.html#snapshot
 	declare ZFS_ADMIN_SNAP="0"			# default: 1
+	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/ZFS%20on%20Linux%20Module%20Parameters.html#zfs-initialize-value
+	declare ZFS_INITIALIZE="0"			# default: 0xdeadbeef
+	ZFS_INITIALIZE="0x$(uuidgen | ${SED} -e "s|[-]||g" -e "s|^([a-z0-9]{16}).+$|\1|g")"
 	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/ZFS%20on%20Linux%20Module%20Parameters.html#resilver
 	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/ZFS%20on%20Linux%20Module%20Parameters.html#scrub
 	# https://www.svennd.be/tuning-of-zfs-module
@@ -2686,6 +2689,7 @@ function mount-zfs {
 			echo -en "${ZFS_ARC_MAX}"			>${ZPARAM}/zfs_arc_max
 #>>>			echo -en "3"					>/proc/sys/vm/drop_caches
 			echo -en "${ZFS_ADMIN_SNAP}"			>${ZPARAM}/zfs_admin_snapshot
+			echo -en "${ZFS_INITIALIZE}"			>${ZPARAM}/zfs_initialize_value
 			echo -en "${ZFS_PARAM[TXG_TIME${ZDEF}]}"	>${ZPARAM}/zfs_txg_timeout
 			echo -en "${ZFS_PARAM[SLV_DDEF${ZDEF}]}"	>${ZPARAM}/zfs_resilver_disable_defer
 			echo -en "${ZFS_PARAM[SLV_MTMS${ZDEF}]}"	>${ZPARAM}/zfs_resilver_min_time_ms
