@@ -2193,6 +2193,11 @@ function mixer {
 		fi
 	fi
 	if [[ -n ${MIXER_PLS} ]]; then
+		#>>> pavucontrol
+		#>>>	playback	= clients / sink-inputs
+		#>>>	recording	= clients / source-outputs
+		#>>>	output devices	= sinks
+		#>>>	input devices	= sources
 		pactl set-default-sink ${MIXER_PLS}
 		pactl set-sink-mute ${MIXER_PLS} false
 		for FILE in $(
@@ -2200,6 +2205,7 @@ function mixer {
 			${SED} -n "s|^([0-9]+).+$|\1|gp"
 		); do
 			pactl move-sink-input ${FILE} ${MIXER_PLS}
+			pactl set-sink-input-mute ${FILE} false
 			pactl set-sink-input-volume ${FILE} "100%"
 		done
 		for FILE in $(
@@ -2213,6 +2219,7 @@ function mixer {
 					echo "true"
 				fi
 			)
+			pactl set-source-volume ${FILE} "100%"
 		done
 		for FILE in ${MIXER_VIS[@]}; do
 			for DIR in $(
@@ -2224,6 +2231,8 @@ function mixer {
 				)[[:space:]].+$|\1|gp"
 			); do
 				pactl move-source-output ${DIR} ${MIXER_PLS}
+				pactl set-source-output-mute ${DIR} false
+				pactl set-source-output-volume ${DIR} "100%"
 			done
 		done
 	fi
