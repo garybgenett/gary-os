@@ -48,6 +48,7 @@ highlight foldcolumn guibg=black ctermbg=none guifg=darkblue ctermfg=darkblue
 
 set noautowrite
 set noautowriteall
+set nopaste
 set noruler
 set noshowmode
 set nospell
@@ -57,7 +58,6 @@ set hlsearch
 set ignorecase
 set incsearch
 set modeline
-set paste
 set showcmd
 set smartcase
 
