@@ -5888,6 +5888,10 @@ function task-track {
 ########################################
 
 function vlc-do {
+	if (( $(id -u) == 0 )); then
+		sudo -H -u \#1000 ${HOME}/.bashrc ${FUNCNAME} "${@}"
+		return 0
+	fi
 	declare VIDEO_ARG="video"
 	declare REDSHIFT="on"
 	if [[ ${1} == red ]]; then
@@ -5911,16 +5915,21 @@ function vlc-do {
 	)"
 	if [[ -n ${PLAYLIST} ]]; then
 		shift
-		(sudo -H -u \#1000 $(which vlc) "${@}" "${PLAYLIST}") &
+		(DISPLAY= $(which vlc) "${@}" ${PLAYLIST}) &
 	elif {
 		[[ ${1} == ${VIDEO_ARG} ]] ||
 		[[ -f ${1} ]];
 	}; then
 		PLAYLIST="${1}" && shift
-		prompt -d -x
-		(_menu realign/${REDSHIFT}) &
-		${VLC} "${@}" ${PLAYLIST}
-		(_menu realign/on) &
+		DISPLAY=:0 _menu realign/${REDSHIFT}
+		DISPLAY= sudo _sync tunes off
+		if [[ ${PLAYLIST} == ${VIDEO_ARG} ]]; then
+			mixer
+		else
+			DISPLAY=:0 ${VLC} "${@}" ${PLAYLIST}
+		fi
+		DISPLAY= sudo _sync tunes on
+		DISPLAY=:0 _menu realign/off
 	fi
 	return 0
 }
