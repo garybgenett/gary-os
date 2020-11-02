@@ -2119,7 +2119,7 @@ function journal {
 		"${@}" \
 		$(date-string).txt
 	prompt
-	cd - >/dev/null
+#>>>	cd - >/dev/null
 	return 0
 }
 
