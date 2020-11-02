@@ -3978,6 +3978,11 @@ function zpim-shortcuts {
 # https://github.com/openrazer/openrazer/wiki/Setting-up-the-keyboard-driver
 # https://github.com/openrazer/openrazer/wiki/Using-the-keyboard-driver
 # https://github.com/openrazer/openrazer/wiki/Using-the-mouse-driver
+# dependencies
+#	dev-python/dbus-python
+#	dev-python/lesscpy
+#	dev-python/pyudev
+#	dev-python/setproctitle
 function chroma {
 	declare BRIGHT="128"
 	declare COLOR="\x40\x00\x00"
@@ -3991,9 +3996,9 @@ function chroma {
 	echo -en "${RAZER_KB}\n"
 	echo -en "${RAZER_MS}\n"
 	if [[ ${STEP} == "bld" ]]; then
-		cd /.g/_data/_build/razer/python-daemonize			&&
-			python setup.py build					&&
-			python setup.py install					&&
+#>>>		cd /.g/_data/_build/razer/python-daemonize			&&
+#>>>			python setup.py build					&&
+#>>>			python setup.py install					&&
 		cd /.g/_data/_build/razer/openrazer				&&
 			${RM} /usr/share/man/man*/openrazer-daemon*		&&
 			${RM} /usr/share/man/man*/razer.conf*			&&
@@ -4004,8 +4009,8 @@ function chroma {
 			prompt -z make udev_install				&&
 			prompt -z make daemon_install				&&
 			prompt -z make python_library_install			&&
-		cd /.g/_data/_build/razer/polychromatic				&&
-			prompt -z make LESSC="lesscpy" install			&&
+#>>>		cd /.g/_data/_build/razer/polychromatic				&&
+#>>>			prompt -z make LESSC="lesscpy" install			&&
 		echo -en "\n[${FUNCNAME}: ${STEP}]\n"
 		return 0
 	fi
