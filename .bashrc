@@ -750,9 +750,10 @@ function dd {
 		echo -en "\n"
 		${LL} ${MAP}
 		echo -en "\n"
-		ddrescue --force --idirect --odirect \
-			"${@}" \
-			${MAP}
+		ddrescue --force --idirect --odirect "${@}" ${MAP}
+	elif [[ ${1} == --dd ]]; then
+		shift
+		dd_rescue --alwayswrite "${@}"
 	else
 		dcfldd conv=noerror,notrunc "${@}"
 	fi
