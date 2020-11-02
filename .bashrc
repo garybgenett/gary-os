@@ -99,8 +99,6 @@ export HISTIGNORE=
 
 ########################################
 
-unset EMERGE_DEFAULT_OPTS
-
 #>>>export CARCH="i686"
 #>>>export CHOST="i686-pc-linux-gnu"
 export CARCH="x86_64"
@@ -108,10 +106,11 @@ export CHOST="x86_64-pc-linux-gnu"
 
 #>>>export CFLAGS="-march=i686 -mtune=i686 -m32 -O2 -ggdb -pipe"
 #>>>export CFLAGS="-march=core2 -mtune=core2 -m64 -O2 -ggdb -pipe"
-export CFLAGS="-march=core2 -mtune=core2 -O2 -pipe"
+#>>>export CFLAGS="-march=core2 -mtune=core2 -O2 -pipe"
+export CFLAGS="-march=x86-64 -mtune=generic -O2 -pipe"
 export CXXFLAGS="${CFLAGS}"
 export LDFLAGS="-Wl,--hash-style=gnu -Wl,--as-needed"
-export MAKEFLAGS="-j9"
+export MAKEFLAGS="-j21"
 
 export CCACHE_DIR="/tmp/.ccache"
 
@@ -334,8 +333,6 @@ export NCDU="ncdu --confirm-quit -2 -rr -x -e"			; alias ncdu="(sleep 2 && echo 
 
 ########################################
 
-export EMERGE_CMD="prompt -z emerge"		; alias emerge="${EMERGE_CMD}"
-
 export CVS="reporter cvs"			; alias cvs="${CVS}"
 export SVN="reporter svn"			; alias svn="${SVN}"
 export SVNSYNC="reporter svnsync"		; alias svnsync="${SVNSYNC}"
@@ -369,6 +366,20 @@ export X2VNC="x2vnc -west -tunnel -shared -noblank -lockdelay 60 -timeout 60"	; 
 
 #>>>export VLC="vlc --intf ncurses --no-color"					; alias vlc-c="${VLC}"
 export VLC="vlc --intf ncurses --no-color --no-playlist-tree"			; alias vlc-c="${VLC}"
+
+########################################
+
+unset EMERGE_DEFAULT_OPTS
+export EMERGE="prompt -z emerge \
+	--tree \
+	--unordered-display \
+	--deep \
+	--newuse \
+	--update \
+	--selective=n \
+"
+
+alias emerge="${EMERGE}"
 
 ########################################
 
