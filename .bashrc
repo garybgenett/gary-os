@@ -5888,7 +5888,8 @@ function task-track {
 ########################################
 
 function vlc-do {
-	declare REDSHIFT="off"
+	declare VIDEO_ARG="video"
+	declare REDSHIFT="on"
 	if [[ ${1} == red ]]; then
 		REDSHIFT="${1}"
 		shift
@@ -5902,13 +5903,19 @@ function vlc-do {
 	sleep 1
 	mixer ${VOLUME}
 	declare PLAYLIST="$(
-		${GREP} -v "^#" /.g/_data/zactive/.setup/_misc/playlists/radio-di-favorites.m3u |
-		${GREP} "[/]${1}[.]pls"
+		if [[ -n ${1} ]]; then
+			${GREP} -h "^[^#].*${1}.*[.]pls.*$" /.g/_data/zactive/.setup/_misc/playlists/* |
+			sort -u |
+			tail -n1
+		fi
 	)"
 	if [[ -n ${PLAYLIST} ]]; then
 		shift
 		(sudo -H -u \#1000 $(which vlc) "${@}" "${PLAYLIST}") &
-	elif [[ -f ${1} ]]; then
+	elif {
+		[[ ${1} == ${VIDEO_ARG} ]] ||
+		[[ -f ${1} ]];
+	}; then
 		PLAYLIST="${1}" && shift
 		prompt -d -x
 		(_menu realign/${REDSHIFT}) &
