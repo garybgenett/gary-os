@@ -112,10 +112,6 @@ if ${ROOT}; then
 	fi
 fi
 
-export SDL_VIDEO_X11_DGAMOUSE="0"
-export SDL_VIDEO_X11_MOUSEACCEL="0/0/0"
-export QEMU_AUDIO_DRV="alsa"
-
 ########################################
 
 I="${QFIL}"
@@ -275,7 +271,17 @@ QUSB+=" -device nec-usb-xhci,id=xhci0"
 
 ########################################
 
-QSND="-soundhw all"
+# https://wiki.archlinux.org/index.php/QEMU_#Audio
+
+QSND="-device ich9-intel-hda,bus=pci.0"
+QSND+=" -device hda-duplex"
+
+#>>>	QSND+=" -audiodev spice,id=spiceaudio0"
+if [[ -n $(pgrep pulseaudio) ]]; then
+	QSND+=" -audiodev pa,id=pa0,server=/tmp/pulseaudio"
+else
+	QSND+=" -audiodev alsa,id=alsa0"
+fi
 
 ################################################################################
 
