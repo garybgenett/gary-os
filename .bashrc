@@ -3780,7 +3780,7 @@ function sync-dir {
 				${GIT} submodule update --force --init --recursive --remote --rebase)
 		fi
 		if [[ $(basename ${REP_DST}) == meta-repo ]]; then
-			${HOME}/setup/gentoo.make/gentoo/_funtoo.kits ${BAS_DIR}/${REP_DST}
+			${HOME}/setup/gentoo.make/gentoo/_funtoo.kits ${BAS_DIR}/${REP_DST} master master
 		fi
 	elif [[ ${REP_TYP} == hg ]]; then
 		if [[ ! -d ${BAS_DIR}/${REP_DST} ]]; then
