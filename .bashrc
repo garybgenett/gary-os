@@ -6198,7 +6198,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			zpim-commit tasks
 		elif [[ ${1} == [@] ]]; then
 			task-export-drive || return 1
-			${EDITOR} -c "map ~ <ESC>:!${TW} todo<CR>" -c "map \\ <ESC>:!${TW} " \
+			${EDITOR} +/"\[\ \]" -c "map ~ <ESC>:!${TW} todo<CR>" -c "map \\ <ESC>:!${TW} " \
 				${NOTES_MD} \
 				${IDEAS_MD} \
 #>>>				${SALES_MD}
