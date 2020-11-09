@@ -350,6 +350,9 @@ export GIT_PAT="${GIT_DIF} --attach --binary --keep-subject"
 
 ########################################
 
+export HTOPRC="${HOME}/.htoprc"
+alias htop="${CP} -L ${HOME}/.htoprc.bak ${HOME}/.htoprc ; htop"
+
 export LAST="last --system --fullnames --fulltimes --hostlast --ip"		; alias last="${LAST}"
 
 export PV="pv --cursor --bytes --timer --progress --eta --rate --average-rate"	; alias pv="${PV}"
@@ -554,7 +557,6 @@ alias diskio="iostat -cdmtN -p sda,sdb,sdc,sdd 1"
 alias emount="_sync upload mount"
 alias estatus="_sync upload status"
 alias ftp="lftp"
-alias htop="${CP} -L ${HOME}/.htoprc.bak ${HOME}/.config/htop/htoprc ; htop"
 alias jokes="cd data.personal ; ${EDITOR} _jokes.txt ; ${LL} -t"
 alias loopfile="dcfldd if=/dev/zero of=/tmp/loopfile bs=1k count=98288"
 alias man="PAGER='less' man"
