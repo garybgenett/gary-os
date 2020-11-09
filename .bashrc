@@ -459,6 +459,7 @@ export RCLONE_C="reporter rclone"
 #>>>	--fast-list \
 export RCLONE_U="${RCLONE_C} sync \
 	-vv \
+	--config ${HOME}/.rclone.conf \
 	--progress \
 	--one-file-system \
 	--stats=0 \
