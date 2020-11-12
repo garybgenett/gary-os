@@ -1014,30 +1014,29 @@ function enc-status {
 	declare CMD="ssh -o LogLevel=INFO ${ENCFS_HOST:-ssh@example.net}"
 	declare ELS="${1}" && shift
 	declare EDU="${1}" && shift
-	ELS+=" .ssh .zfs .zfs/snapshot"
-#>>>	EDU+=" .zfs/snapshot/*"
+	ELS+=" .ssh .zfs .zfs/*"
+	EDU+=" .ssh .zfs .zfs/* .zfs/snapshot/*"
 	echo -en "\n"
 	${CMD} "pwd" || return 1
 	echo -en "\n"
 	${CMD} "quota" #>>> 2>/dev/null
 	echo -en "\n"
-	${CMD} "ls -la ./ ${ELS}" #>>> 2>/dev/null
+	${CMD} "${LL/--color=auto --time-style=long-iso } ./ ${ELS}" #>>> 2>/dev/null
 	echo -en "\n"
-	declare LST="${EDU} $(
-		echo "
-			${EDU}
-			$(${CMD} "find ./ -mindepth 1 -maxdepth 2 -type d" 2>/dev/null)
-		" |
-			${SED} \
+	#>>>		${CMD} "find ./ -mindepth 1 -maxdepth 2 -type d" 2>/dev/null ; \
+	${CMD} "du -cms $(
+		echo "$(
+			echo -en "${EDU// /\\\n}\n" ; \
+			echo -en "\n" ; \
+			${CMD} "find ./ -mindepth 1 -maxdepth 2 -type d" ; \
+		)" \
+			| ${SED} \
 				-e "s|^[[:space:]]+||g" \
 				-e "s|^[.][/]||g" \
 				-e "/^$/d" \
-				|
-			sort -u
-	)"
-	for FILE in ${LST}; do
-		${CMD} "du -ms ${FILE}" 2>/dev/null
-	done
+			| sort -u \
+			| tr '\n' ' ' \
+	)" #>>> 2>/dev/null
 	${CMD} "id"
 	return 0
 }
