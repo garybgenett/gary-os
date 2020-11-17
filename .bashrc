@@ -295,7 +295,9 @@ export VI="${REALTIME} vim -u ${HOME}/.vimrc -i NONE -p"	; alias vi="${VI}"
 export GVI="prompt -d -x ; ${VI} -g"				; alias gvim="${GVI}"
 export VIEW="${VI}"						; alias view="${VIEW}"
 if [[ "${UNAME}" == "Darwin" ]]; then
-	GVI="${GVI/prompt -d -x ; }"				; alias gvim="${GVI}"
+	VI="${VI/#${REALTIME} }"				; alias vi="${VI}"
+	GVI="${GVI/#prompt -d -x ; ${REALTIME} }"		; alias gvim="${GVI}"
+	VIEW="${VI/#${REALTIME} }"				; alias view="${VIEW}"
 fi
 
 export PAGER="${MORE}"
