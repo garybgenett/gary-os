@@ -4671,18 +4671,27 @@ function task-export-drive-sync {
 		--filter "- /_pim/taskd/orgs/local/users/*/tx.data" \
 		--filter "- /_pim/tasks/undo.*" \
 		/.g/_data/zactive/_drive/_sync/ \
-		${GDRIVE_REMOTE}:/_sync
+		${GDRIVE_REMOTE}:/_sync \
+		&&
+	${RCLONE_U} \
+		--drive-shared-with-me \
+		--filter "- /email from*" \
+		${GDRIVE_REMOTE}:/ \
+		/.g/_data/zactive/_drive/_shared.all \
+		&&
 	${RCLONE_U} \
 		--filter "- /_share/*/gary/**" \
 		--filter "- /_share/transmetropolitan**" \
 		--filter "- /_sync/**" \
 		${GDRIVE_REMOTE}:/ \
-		/.g/_data/zactive/_drive
+		/.g/_data/zactive/_drive \
+		&&
 	${RCLONE_U} \
 		${GDRIVE_REMOTE}-highspot: \
-		/.g/_data/zactive/data.highspot
-	${RCLONE_C} about ${GDRIVE_REMOTE}-highspot:
-	${RCLONE_C} about ${GDRIVE_REMOTE}:
+		/.g/_data/zactive/data.highspot \
+		&&
+	${RCLONE_C} about ${GDRIVE_REMOTE}-highspot: &&
+	${RCLONE_C} about ${GDRIVE_REMOTE}: &&
 	${LL} \
 		/.g/_data/zactive/_drive/_sync \
 		$(find /.g/_data/zactive/_drive/_sync -mindepth 1 -maxdepth 1 ! -type l) \
