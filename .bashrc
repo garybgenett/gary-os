@@ -2185,15 +2185,22 @@ function mixer {
 	fi
 	declare MIXER_DAT="/proc/asound/cards"
 	declare MIXER_DEV="/dev/mixer"
-	declare MIXER_VIS=(synaesthesia projectM-pulseaudio)
+	declare MIXER_CMD="(pactl|pavucontrol)"
 	declare MIXER_NUM="$(
 		${SED} -n "s|^[^0-9]*([0-9]+).+$(
 			${SED} -n "s|^.*${MIXER_DAT} = ([^\t]+)\t+([^\t]+)$|\1|gp" ${HOME}/.asoundrc |
 			head -n1
 		).*$|\1|gp" ${MIXER_DAT}
 	)"
-	declare MIXER_PLS="$(
+	declare MIXER_SNK="$(
 		pactl list short sinks 2>/dev/null |
+		${SED} -n "s|^([0-9]+).+$(
+			${SED} -n "s|^.*${MIXER_DAT} = (.+)[[:space:]]+(.+)$|\2|gp" ${HOME}/.asoundrc |
+			head -n1
+		).*$|\1|gp"
+	)"
+	declare MIXER_SRC="$(
+		pactl list short sources 2>/dev/null |
 		${SED} -n "s|^([0-9]+).+$(
 			${SED} -n "s|^.*${MIXER_DAT} = (.+)[[:space:]]+(.+)$|\2|gp" ${HOME}/.asoundrc |
 			head -n1
@@ -2206,19 +2213,22 @@ function mixer {
 			MIXER_DEV+="${MIXER_NUM}"
 		fi
 	fi
-	if [[ -n ${MIXER_PLS} ]]; then
+	if {
+		[[ -n ${MIXER_SNK} ]] &&
+		[[ -n ${MIXER_SRC} ]];
+	}; then
 		#>>> pavucontrol
 		#>>>	playback	= clients / sink-inputs
 		#>>>	recording	= clients / source-outputs
 		#>>>	output devices	= sinks
 		#>>>	input devices	= sources
-		pactl set-default-sink ${MIXER_PLS}
-		pactl set-sink-mute ${MIXER_PLS} false
+		pactl set-default-sink ${MIXER_SNK}
+		pactl set-sink-mute ${MIXER_SNK} false
 		for FILE in $(
 			pactl list short sink-inputs |
 			${SED} -n "s|^([0-9]+).+$|\1|gp"
 		); do
-			pactl move-sink-input ${FILE} ${MIXER_PLS}
+			pactl move-sink-input ${FILE} ${MIXER_SNK}
 			pactl set-sink-input-mute ${FILE} false
 			pactl set-sink-input-volume ${FILE} "100%"
 		done
@@ -2227,7 +2237,7 @@ function mixer {
 			${SED} -n "s|^([0-9]+).+$|\1|gp"
 		); do
 			pactl set-source-mute ${FILE} $(
-				if [[ ${FILE} == ${MIXER_PLS} ]]; then
+				if [[ ${FILE} == ${MIXER_SRC} ]]; then
 					echo "false"
 				else
 					echo "true"
@@ -2235,24 +2245,25 @@ function mixer {
 			)
 			pactl set-source-volume ${FILE} "100%"
 		done
-		for FILE in ${MIXER_VIS[@]}; do
+		for FILE in $(
+			pactl list short clients |
+			${GREP} -v "${MIXER_CMD}$" |
+			${SED} -n "s|^([0-9]+).+$|\1|gp" |
+			sort -nu
+		); do
 			for DIR in $(
 				pactl list short source-outputs |
-				${SED} -n "s|^([0-9]+).+[[:space:]]$(
-					pactl list short clients |
-					${SED} -n "s|^([0-9]+).+${FILE}$|\1|gp" |
-					sort -u
-				)[[:space:]].+$|\1|gp"
+				${SED} -n "s|^([0-9]+).+[[:space:]]${FILE}[[:space:]].+$|\1|gp"
 			); do
-				pactl move-source-output ${DIR} ${MIXER_PLS}
+				pactl move-source-output ${DIR} ${MIXER_SRC}
 				pactl set-source-output-mute ${DIR} false
 				pactl set-source-output-volume ${DIR} "100%"
 			done
 		done
 	fi
 	if [[ ${1} == +([0-9]) ]]; then
-		if [[ -n ${MIXER_PLS} ]]; then
-			pactl set-sink-volume ${MIXER_PLS} "${1}%"
+		if [[ -n ${MIXER_SNK} ]]; then
+			pactl set-sink-volume ${MIXER_SNK} "${1}%"
 		fi
 		aumix -d ${MIXER_DEV} -L -v ${1} -w ${1}
 	elif [[ -n ${@} ]] && [[ ${1} != - ]]; then
@@ -2260,10 +2271,10 @@ function mixer {
 	elif [[ -z ${@} ]]; then
 		aumix -d ${MIXER_DEV} -C ansi
 	fi
-	if [[ -n ${MIXER_PLS} ]]; then
+	if [[ -n ${MIXER_SNK} ]]; then
 		pactl list short clients
 		pactl list sinks |
-			${SED} -n "/^Sink[ ][#]${MIXER_PLS}/,/^$/p" |
+			${SED} -n "/^Sink[ ][#]${MIXER_SNK}/,/^$/p" |
 			${GREP} --color=never -A1 "Volume"
 	fi
 	aumix -d ${MIXER_DEV} -q
