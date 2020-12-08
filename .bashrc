@@ -1017,7 +1017,7 @@ function enc-status {
 	declare ELS="${1}" && shift
 	declare EDU="${1}" && shift
 	ELS+=" .ssh .zfs .zfs/*"
-	EDU+=" .ssh .zfs .zfs/* .zfs/snapshot/*"
+#>>>	EDU+=" .ssh .zfs .zfs/* .zfs/snapshot/*"
 	echo -en "\n"
 	${CMD} "pwd" || return 1
 	echo -en "\n"
