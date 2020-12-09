@@ -3182,16 +3182,15 @@ function mount-zfs {
 #>>>			fi
 			if ! ${ZMEMBER}; then
 				echo -en "- Attaching Member... (${ZPOOL}) ${DEV}\n"
-				declare ZPOOL_OLD="${ZPINT}"
 				if { {
-					[[ -n ${ZPOOL_OLD} ]] &&
-					[[ ${ZPOOL_OLD} != ${ZPOOL} ]] &&
-					[[ ${ZPOOL_OLD} != ${ZROOT} ]];
+					[[ -n ${ZPINT} ]] &&
+					[[ ${ZPINT} != ${ZPOOL} ]] &&
+					[[ ${ZPINT} != ${ZROOT} ]];
 				} && {
-					[[ -n $(${Z_LIST} ${ZPOOL_OLD} 2>/dev/null) ]];
+					[[ -n $(${Z_LIST} ${ZPINT} 2>/dev/null) ]];
 				}; }; then
-					echo -en "- Destroying Old Pool... ${ZPOOL_OLD}\n"
-					zpool destroy ${ZPOOL_OLD}			|| return 1
+					echo -en "- Destroying Old Pool... ${ZPINT}\n"
+					zpool destroy ${ZPINT}				|| return 1
 				fi
 #>>>				wipefs --force --all ${ZDEVICE}				|| return 1
 				zpool attach -f ${ZPOOL} ${ZDIDS[0]} ${ZDEVICE}		|| return 1
