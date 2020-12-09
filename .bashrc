@@ -2640,24 +2640,29 @@ function mount-zfs {
 	declare ZFS_KILLER="${ZFS_KILLER:-false}"
 	declare ZFS_SNAPSHOTS="${ZFS_SNAPSHOTS:-0}"
 	declare ZFS_PARAM_PRINTF="30"
+	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#zfs-dbgmsg-enable
+	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#zfs-dbgmsg-maxsize
 	# /proc/spl/kstat/zfs/dbgmsg
 	declare ZFS_DBG_ENB="1"				# default: 0
 	declare ZFS_DBG_SIZ="$((100* 2**20))"		# default: 4194304
+	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#zfs-arc-min
+	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#zfs-arc-max
 	# https://serverfault.com/questions/581669/why-isnt-the-arc-max-setting-honoured-on-zfs-on-linux
 	declare ZFS_ARC_MIN="$(( (2**30) / 2 ))"	# default: dynamic	512M
 	declare ZFS_ARC_MAX="$(( (2**30) * 2 ))"	# default: dynamic	2G
-	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/ZFS%20on%20Linux%20Module%20Parameters.html#snapshot
+	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#snapshot
 	declare ZFS_ADMIN_SNAP="0"			# default: 1
-	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/ZFS%20on%20Linux%20Module%20Parameters.html#zfs-initialize-value
+	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#zfs-initialize-value
 	declare ZFS_INITIALIZE="0"			# default: 0xdeadbeef
 	ZFS_INITIALIZE="0x$(uuidgen | ${SED} -e "s|[-]||g" -e "s|^([a-z0-9]{16}).+$|\1|g")"
-	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/ZFS%20on%20Linux%20Module%20Parameters.html#resilver
-	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/ZFS%20on%20Linux%20Module%20Parameters.html#scrub
+	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#zfs-txg-timeout
+	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#resilver
+	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#scrub
 	# https://www.svennd.be/tuning-of-zfs-module
 	declare -A ZFS_PARAM
 	ZFS_PARAM[TXG_TIME]="10";			ZFS_PARAM[TXG_TIME_DEF]="5"
-	ZFS_PARAM[SLV_DDEF]="1";			ZFS_PARAM[SLV_DDEF_DEF]="0"
-	ZFS_PARAM[SLV_MTMS]="5000";			ZFS_PARAM[SLV_MTMS_DEF]="3000"
+	ZFS_PARAM[SVR_DDEF]="1";			ZFS_PARAM[SVR_DDEF_DEF]="0"
+	ZFS_PARAM[SVR_MTMS]="5000";			ZFS_PARAM[SVR_MTMS_DEF]="3000"
 	ZFS_PARAM[SCB_MTMS]="5000";			ZFS_PARAM[SCB_MTMS_DEF]="1000"
 	ZFS_PARAM[VDV_SMNA]="32";			ZFS_PARAM[VDV_SMNA_DEF]="1"
 	ZFS_PARAM[VDV_SMXA]="64";			ZFS_PARAM[VDV_SMXA_DEF]="2"
@@ -2712,8 +2717,8 @@ function mount-zfs {
 			echo -en "${ZFS_ADMIN_SNAP}"			>${ZPARAM}/zfs_admin_snapshot
 			echo -en "${ZFS_INITIALIZE}"			>${ZPARAM}/zfs_initialize_value
 			echo -en "${ZFS_PARAM[TXG_TIME${ZDEF}]}"	>${ZPARAM}/zfs_txg_timeout
-			echo -en "${ZFS_PARAM[SLV_DDEF${ZDEF}]}"	>${ZPARAM}/zfs_resilver_disable_defer
-			echo -en "${ZFS_PARAM[SLV_MTMS${ZDEF}]}"	>${ZPARAM}/zfs_resilver_min_time_ms
+			echo -en "${ZFS_PARAM[SVR_DDEF${ZDEF}]}"	>${ZPARAM}/zfs_resilver_disable_defer
+			echo -en "${ZFS_PARAM[SVR_MTMS${ZDEF}]}"	>${ZPARAM}/zfs_resilver_min_time_ms
 			echo -en "${ZFS_PARAM[SCB_MTMS${ZDEF}]}"	>${ZPARAM}/zfs_scrub_min_time_ms
 			echo -en "${ZFS_PARAM[VDV_SMNA${ZDEF}]}"	>${ZPARAM}/zfs_vdev_scrub_min_active
 			echo -en "${ZFS_PARAM[VDV_SMXA${ZDEF}]}"	>${ZPARAM}/zfs_vdev_scrub_max_active
