@@ -2929,6 +2929,7 @@ function mount-zfs {
 	if [[ -n ${ZTIME} ]]; then ZTIME="$(date --iso=seconds --date="@${ZTIME}")"; fi
 	declare ZSTAT="$(${Z_STATUS}		${ZPOOL}			2>/dev/null | ${SED} -n "s|^[[:space:]]+${ZDEVICE}[[:space:]]+([A-Z]+).+$|\1|gp"	)"
 	ZSTAT="${ZSTAT,,}"
+	declare ZPINT_Z="$(${Z_ZDB}		${ZDEVS[0]}			2>/dev/null | ${SED} -n "s|^[ ]{4}name[:][ ][\'](.+)[\']$|\1|gp"			)"
 	declare ZPINT="$(${Z_ZDB}		${ZDEVICE}			2>/dev/null | ${SED} -n "s|^[ ]{4}name[:][ ][\'](.+)[\']$|\1|gp"			)"
 	declare ZMNAM="${ZPOOL}${Z_DSEP}${Z_DATE}"
 	declare ZDNAM="${ZNAME}${Z_DSEP}${Z_DATE}"
@@ -2978,7 +2979,7 @@ function mount-zfs {
 	fi
 	if ${IS}; then
 		if [[ -n ${DIR} ]]; then
-			if [[ ${DIR} == all ]] || [[ ${DIR} == pint	]]; then echo -en "${ZPINT}"	; fi; if [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
+			if [[ ${DIR} == all ]] || [[ ${DIR} == pint	]]; then echo -en "${ZPINT_Z}"	; fi; if [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
 			if [[ ${DIR} == all ]] || [[ ${DIR} == pool	]]; then echo -en "${ZPOOL}"	; fi; if [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
 			if [[ ${DIR} == all ]] || [[ ${DIR} == name	]]; then echo -en "${ZNAME}"	; fi; if [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
 			if [[ ${DIR} == all ]] || [[ ${DIR} == root	]]; then echo -en "${ZROOT}"	; fi; if [[ ${DIR} == all ]]; then echo -en "${Z_FSEP}"; fi
