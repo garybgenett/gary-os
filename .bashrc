@@ -2650,8 +2650,12 @@ function mount-zfs {
 	# https://serverfault.com/questions/581669/why-isnt-the-arc-max-setting-honoured-on-zfs-on-linux
 	declare ZFS_ARC_MIN="$(( (2**30) / 2 ))"	# default: dynamic	512M
 	declare ZFS_ARC_MAX="$(( (2**30) * 2 ))"	# default: dynamic	2G
+	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#zfs-prefetch-disable
+	# /proc/spl/kstat/zfs/arcstats
+	declare ZFS_PRE_DIS="1"				# default: 0
 	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#snapshot
 	declare ZFS_ADMIN_SNAP="0"			# default: 1
+	declare ZFS_EXPIR_SNAP="600"			# default: 300
 	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#zfs-initialize-value
 	declare ZFS_INITIALIZE="0"			# default: 0xdeadbeef
 	ZFS_INITIALIZE="0x$(uuidgen | ${SED} -e "s|[-]||g" -e "s|^([a-z0-9]{16}).+$|\1|g")"
@@ -2713,8 +2717,10 @@ function mount-zfs {
 			echo -en "${ZFS_DBG_SIZ}"			>${ZPARAM}/zfs_dbgmsg_maxsize
 			echo -en "${ZFS_ARC_MIN}"			>${ZPARAM}/zfs_arc_min
 			echo -en "${ZFS_ARC_MAX}"			>${ZPARAM}/zfs_arc_max
+			echo -en "${ZFS_PRE_DIS}"			>${ZPARAM}/zfs_prefetch_disable
 #>>>			echo -en "3"					>/proc/sys/vm/drop_caches
 			echo -en "${ZFS_ADMIN_SNAP}"			>${ZPARAM}/zfs_admin_snapshot
+			echo -en "${ZFS_EXPIR_SNAP}"			>${ZPARAM}/zfs_expire_snapshot
 			echo -en "${ZFS_INITIALIZE}"			>${ZPARAM}/zfs_initialize_value
 			echo -en "${ZFS_PARAM[TXG_TIME${ZDEF}]}"	>${ZPARAM}/zfs_txg_timeout
 			echo -en "${ZFS_PARAM[SVR_DDEF${ZDEF}]}"	>${ZPARAM}/zfs_resilver_disable_defer
@@ -2851,6 +2857,8 @@ function mount-zfs {
 				); do
 					printf "%-${ZFS_PARAM_PRINTF}.${ZFS_PARAM_PRINTF}s %s\n" "${FILE}" "$(cat /sys/module/zfs/parameters/${FILE})"
 				done
+				echo -en "\n"
+				${GREP} --color=never "prefetch" /proc/spl/kstat/zfs/arcstats
 				echo -en "\n"
 			fi
 			zfs_pool_status
