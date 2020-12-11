@@ -2993,7 +2993,7 @@ function mount-zfs {
 		if { [[ ${ZMTPT} == / ]] || [[ ${DIR} == / ]]; }; then	echo -en "- (ZFS: Root Filesystem)\n" 1>&2
 		fi
 		if [[ ${ZLIVE} == yes ]]; then				echo -en "- (ZFS: Mounted Filesystem)\n" 1>&2
-		elif [[ ${ZTYPE} != filesystem ]]; then			echo -en "- (ZFS: Exported Filesystem)\n" 1>&2
+		elif [[ ${ZTYPE} != device ]]; then			echo -en "- (ZFS: Exported Filesystem)\n" 1>&2
 		else							echo -en "- (ZFS: Detected Filesystem)\n" 1>&2
 		fi
 	fi
@@ -3161,7 +3161,7 @@ function mount-zfs {
 		elif {
 			[[ ${ZTYPE} == primary ]] ||
 			[[ ${ZTYPE} == member ]] ||
-			[[ ${ZTYPE} == filesystem ]];
+			[[ ${ZTYPE} == device ]];
 		}; then
 			zfs_unmount_member						|| return 1
 		fi
@@ -3230,7 +3230,7 @@ function mount-zfs {
 		elif {
 			[[ ${ZTYPE} == primary ]] ||
 			[[ ${ZTYPE} == member ]] ||
-			[[ ${ZTYPE} == filesystem ]];
+			[[ ${ZTYPE} == device ]];
 		}; then
 			zfs_mount_member						|| return 1
 		fi
