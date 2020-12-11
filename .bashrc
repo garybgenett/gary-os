@@ -5053,7 +5053,7 @@ function task-export-text {
 			foreach my $key (sort(keys(%{$kanban}))) {
 				if (exists($kanban->{$key}{ $task->{"uuid"} })) {
 					my $ktsk = $kanban->{$key}{ $task->{"uuid"} };
-					$ktsk->{"uuid"}		=~ s|[-].+$||g;
+					$ktsk->{"uuid"}			=~ s|[-].+$||g;
 					my($epoch, $ltime)		= ("", "");
 					if (exists($ktsk->{"due"})) {
 						($epoch, $ltime)	= &time_format( $ktsk->{"due"} );
