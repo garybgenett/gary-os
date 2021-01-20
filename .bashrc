@@ -851,7 +851,7 @@ function email {
 		echo "source ${MUTTRC}"								>${MUTT_X}
 		${SED} -n "/^alternates.+${EMAIL_MAIL}$/,/^$/p" ${MUTTRC} |
 			${SED} -n "s/^<enter-command>(.+)<return>.+$/\1/gp" |
-			while read LINE; do
+			while read -r LINE; do
 				VAR="$(echo "${LINE}" | ${SED} -n "s/^.+[$](my[_].+)$/\1/gp")"
 				if [[ -n ${VAR} ]]; then
 					VAL="$(${SED} -n "s/^set[ ]${VAR}.+[=](.+)$/\1/gp" ${MUTTRC})"
