@@ -292,9 +292,6 @@ fi
 
 export MORE="less -rX"						; alias more="${MORE}"
 export VI="${REALTIME} vim -u ${HOME}/.vimrc -i NONE -p"	; alias vi="${VI}"
-if [[ "${UNAME}" == "Darwin" ]]; then
-	export VI="${VI/vim/\/usr\/bin\/vim}"			; alias vi="${VI}"
-fi
 export GVI="prompt -d -x ; ${VI} -g"				; alias gvim="${GVI}"
 export VIEW="${VI}"						; alias view="${VIEW}"
 
