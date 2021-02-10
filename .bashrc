@@ -1628,47 +1628,47 @@ function index-dir {
 	if ${SINGLE}; then
 		if ${QUICK}; then
 			(cd ${INDEX_D} && \
-				indexer ${QUICK_OPT} -0 "${@}"			2>&3 | ${PV} |
-				cat				>${INDEX_I}	) 3>&2
+				indexer ${QUICK_OPT} -0 "${INDEX_I/#${INDEX_D}\/}" "${@}"	2>&3 | ${PV} |
+				cat				>${INDEX_I}			) 3>&2
 			sort -t"\0" -k11 -o ${INDEX_I}		${INDEX_I}
 		else
 			(cd ${INDEX_D} && \
-				(	eval find . ${EXCL_PATHS} -print	2>&3; [[ -n "${@}" ]] &&
-					eval find "${@}" -type d -print		2>&3) | ${PV} -N find |
-				sort						2>&3  | ${PV} -N sort |
-				indexer ${QUICK_OPT} -0				2>&3  | ${PV} -N indx |
-				cat				>${INDEX_I}	) 3>&2
+				(	eval find . ${EXCL_PATHS} -print			2>&3; [[ -n "${@}" ]] &&
+					eval find "${@}" -type d -print				2>&3) | ${PV} -N find |
+				sort								2>&3  | ${PV} -N sort |
+				indexer ${QUICK_OPT} -0						2>&3  | ${PV} -N indx |
+				cat				>${INDEX_I}			) 3>&2
 		fi
 	else
 		${MKDIR} ${INDEX_I}
-		cat /dev/null							>${I_ERROR}
+		cat /dev/null									>${I_ERROR}
 		(cd ${INDEX_I} && \
-			${LN} $(basename ${CUR_IDX}) ${CUR_LNK}			) 2>>${I_ERROR}
+			${LN} $(basename ${CUR_IDX}) ${CUR_LNK}					) 2>>${I_ERROR}
 		if ${QUICK}; then
 			(cd ${INDEX_D} && \
-				indexer ${QUICK_OPT} "${@}"			2>&3 | ${PV} |
-				cat				>${CUR_IDX}	) 3>>${I_ERROR}
-			sort -t"\0" -k11 -o ${CUR_IDX}		${CUR_IDX}	>>${I_ERROR}
+				indexer ${QUICK_OPT} "${INDEX_I/#${INDEX_D}\/}" "${@}"		2>&3 | ${PV} |
+				cat				>${CUR_IDX}			) 3>>${I_ERROR}
+			sort -t"\0" -k11 -o ${CUR_IDX}		${CUR_IDX}			>>${I_ERROR}
 			(cd ${INDEX_D} && \
 				eval ${NCDU} -1 \
 					$(for FILE in "${@}"; do
 						echo "--exclude \"${FILE/#\.\/}\""
 					done) \
-					-o			${I_USAGE}	) #>>> 2>>${I_ERROR}
+					-o			${I_USAGE}			) #>>> 2>>${I_ERROR}
 		else
 			(cd ${INDEX_D} && \
-				(	eval find . ${EXCL_PATHS} -print	2>&3; [[ -n "${@}" ]] &&
-					eval find "${@}" -type d -print		2>&3) | ${PV} -N find |
-				sort						2>&3  | ${PV} -N sort |
-				indexer ${QUICK_OPT}				2>&3  | ${PV} -N indx |
-				cat				>${CUR_IDX}	) 3>>${I_ERROR}
+				(	eval find . ${EXCL_PATHS} -print			2>&3; [[ -n "${@}" ]] &&
+					eval find "${@}" -type d -print				2>&3) | ${PV} -N find |
+				sort								2>&3  | ${PV} -N sort |
+				indexer ${QUICK_OPT}						2>&3  | ${PV} -N indx |
+				cat				>${CUR_IDX}			) 3>>${I_ERROR}
 			(cd ${INDEX_D} && \
 				cat ${CUR_IDX} |
-					indexer ${QUICK_OPT} -s	>${I_USAGE}	) 2>>${I_ERROR}
+					indexer ${QUICK_OPT} -s	>${I_USAGE}			) 2>>${I_ERROR}
 		fi
 		if (( ${INDEX_N} > ${N_FILES} )); then
 			(cd ${INDEX_I} && \
-				${RM} $(ls -A | sort -r | tail -n+${INDEX_N})	) 2>>${I_ERROR}
+				${RM} $(ls -A | sort -r | tail -n+${INDEX_N})			) 2>>${I_ERROR}
 		fi
 	fi
 	return 0
