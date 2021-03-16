@@ -515,7 +515,7 @@ alias hg="history | ${GREP}"
 
 alias cl="clear ; ${LL}"
 alias ztmp="cd /tmp ; clear ; ${LL}"
-alias zpim="cd ${PIMDIR} ; clear ; ${LL}"
+alias zpim="cd ${PIMDIR} ; clear ; ${LL} ; git-status"
 alias zcode="cd /.g/_data/zactive/coding ; clear ; ${LL}"
 alias zwrite="cd /.g/_data/zactive/writing ; clear ; ${LL}"
 alias zplan="IMPERSONATE_NAME=task ${HOME}/.bashrc impersonate_command %"
