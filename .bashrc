@@ -2760,9 +2760,7 @@ function mount-zfs {
 				| ${GREP} --color=never "[[:space:]]((ref)?reservation|quota)[[:space:]]"
 			echo -en "\n"
 			${Z_LIST_BIT/-t all/-t filesystem,volume} "${@}" |
-				${GREP} -v "NAME" |
 				sort -nr -k3 -k4 -k5 -k6
-			echo -en "\n"
 			declare -a TOTALS=(0 0 0 0 0 0 0)
 			declare TOTAL="0"
 			for DIR in 3 5 6; do
@@ -2774,10 +2772,27 @@ function mount-zfs {
 				done
 				TOTAL="$((${TOTAL}+${TOTALS[$DIR]}))"
 			done
+			declare ZFS_TOTAL_PRINTF="0"
 			for DIR in {1..6}; do
-				echo -en "${TOTALS[$DIR]} "
+				ZFS_TOTAL_PRINTF="0"
+				for FILE in ${TOTALS[$DIR]} $(
+					${Z_LIST_BIT/-t all/-t filesystem,volume} "${@}" |
+					${SED} -e "s|^[[:space:]]+||g" -e "s|[[:space:]]+|\t|g" |
+					cut -d$'\t' -f${DIR}
+				); do
+					FILE="$(echo -en "${FILE}" | wc -c)"
+					if (( ${FILE} > ${ZFS_TOTAL_PRINTF} )); then
+						ZFS_TOTAL_PRINTF="${FILE}"
+					fi
+				done
+				if (( ${DIR} > 1 )); then
+					echo -en "  "
+				fi
+				printf "%${ZFS_TOTAL_PRINTF}.${ZFS_TOTAL_PRINTF}s" "${TOTALS[$DIR]}"
 			done
-			echo -en "= ${TOTAL}\n"
+			echo -en "  "
+			echo -en "${TOTAL}"
+			echo -en "\n"
 		elif ${SN}; then
 			${Z_LIST_INF/-t all/-t filesystem,volume} "${@}"
 			echo -en "\n"
