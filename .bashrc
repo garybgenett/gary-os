@@ -2775,7 +2775,7 @@ function mount-zfs {
 			declare ZFS_TOTAL_PRINTF="0"
 			for DIR in {1..6}; do
 				ZFS_TOTAL_PRINTF="0"
-				for FILE in ${TOTALS[$DIR]} $(
+				for FILE in $(
 					${Z_LIST_BIT/-t all/-t filesystem,volume} "${@}" |
 					${SED} -e "s|^[[:space:]]+||g" -e "s|[[:space:]]+|\t|g" |
 					cut -d$'\t' -f${DIR}
@@ -2786,12 +2786,13 @@ function mount-zfs {
 					fi
 				done
 				if (( ${DIR} > 1 )); then
-					echo -en "  "
+					ZFS_TOTAL_PRINTF="$((${ZFS_TOTAL_PRINTF}+2))"
+					TOTALS[$DIR]=" ${TOTALS[$DIR]}"
 				fi
-				printf "%${ZFS_TOTAL_PRINTF}.${ZFS_TOTAL_PRINTF}s" "${TOTALS[$DIR]}"
+				printf "%${ZFS_TOTAL_PRINTF}s" "${TOTALS[$DIR]}"
 			done
 			echo -en "  "
-			echo -en "${TOTAL}"
+			echo -en "${TOTAL} ($((${TOTAL}-${TOTALS[6]})))"
 			echo -en "\n"
 		elif ${SN}; then
 			${Z_LIST_INF/-t all/-t filesystem,volume} "${@}"
