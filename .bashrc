@@ -2643,7 +2643,7 @@ function mount-zfs {
 	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#zfs-dbgmsg-maxsize
 	# /proc/spl/kstat/zfs/dbgmsg
 	declare ZFS_DBG_ENB="1"				# default: 0
-	declare ZFS_DBG_SIZ="$((100* 2**20))"		# default: 4194304
+	declare ZFS_DBG_SIZ="$(( (2**20) * 100 ))"	# default: 4194304
 	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#zfs-arc-min
 	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#zfs-arc-max
 	# https://serverfault.com/questions/581669/why-isnt-the-arc-max-setting-honoured-on-zfs-on-linux
