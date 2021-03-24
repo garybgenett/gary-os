@@ -4654,7 +4654,6 @@ function task-export-calendar {
 		"|export.orion:tresobis.org_abfopsu1tvf44bc0je7mdqs6co@group.calendar.google.com" \
 		"|export.present:tresobis.org_o3dpp5csnb3hmhpevs31d2kdio@group.calendar.google.com" \
 		"|export.past:tresobis.org_tha1ur1go2id4edlddtg9otc9o@group.calendar.google.com" \
-		"highspot|static.highspot:gary.genett@highspot.com" \
 	; do
 		declare PROF="$(echo "${FILE}" | ${SED} "s/^(.*)[|](.+)$/\1/g")"
 		declare GCAL="$(echo "${FILE}" | ${SED} "s/^(.*)[|](.+)$/\2/g")"
@@ -4732,11 +4731,6 @@ function task-export-drive-sync {
 		${GDRIVE_REMOTE}:/ \
 		/.g/_data/zactive/_drive \
 		&&
-	${RCLONE_U} \
-		${GDRIVE_REMOTE}-highspot: \
-		/.g/_data/zactive/data.highspot \
-		&&
-	${RCLONE_C} about ${GDRIVE_REMOTE}-highspot: &&
 	${RCLONE_C} about ${GDRIVE_REMOTE}: &&
 	${LL} \
 		/.g/_data/zactive/_drive/_sync \
