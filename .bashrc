@@ -6444,6 +6444,8 @@ if [[ "${-/i}" != "${-}" ]]; then
 	echo -en "\n"
 	echo -en "\e[37;44m"
 	${LL} --directory \
+		/.g/._data/.workspace* \
+		/.g/_data/.workspace* \
 		/.g/_data/zactive.workspace* \
 		/.g/_toor/.workspace* \
 		/tmp/.wpa* \
