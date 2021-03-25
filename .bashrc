@@ -2187,21 +2187,21 @@ function mixer {
 	declare MIXER_CMD="(pactl|pavucontrol)"
 	declare MIXER_NUM="$(
 		${SED} -n "s|^[^0-9]*([0-9]+).+$(
-			${SED} -n "s|^.*${MIXER_DAT} = ([^\t]+)\t+([^\t]+)$|\1|gp" ${HOME}/.asoundrc |
+			${SED} -n "s|^.*${HOSTNAME} = ([^\t]+)\t+([^\t]+)$|\1|gp" ${HOME}/.asoundrc |
 			head -n1
 		).*$|\1|gp" ${MIXER_DAT}
 	)"
 	declare MIXER_SNK="$(
 		pactl list short sinks 2>/dev/null |
 		${SED} -n "s|^([0-9]+).+$(
-			${SED} -n "s|^.*${MIXER_DAT} = (.+)[[:space:]]+(.+)$|\2|gp" ${HOME}/.asoundrc |
+			${SED} -n "s|^.*${HOSTNAME} = (.+)[[:space:]]+(.+)$|\2|gp" ${HOME}/.asoundrc |
 			head -n1
 		).*$|\1|gp"
 	)"
 	declare MIXER_SRC="$(
 		pactl list short sources 2>/dev/null |
 		${SED} -n "s|^([0-9]+).+$(
-			${SED} -n "s|^.*${MIXER_DAT} = (.+)[[:space:]]+(.+)$|\2|gp" ${HOME}/.asoundrc |
+			${SED} -n "s|^.*${HOSTNAME} = (.+)[[:space:]]+(.+)$|\2|gp" ${HOME}/.asoundrc |
 			head -n1
 		).*$|\1|gp"
 	)"
