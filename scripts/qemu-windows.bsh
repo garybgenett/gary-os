@@ -37,13 +37,14 @@ if [[ ${QSYS} == -d ]]; then
 #>>>	${LN} ${QNAM}.qcow2 ${QFIL}
 	echo -en "\n"
 	declare FILE
-	for FILE in ${QNAM}*; do
+	for FILE in ${QNAM}.*.qcow2; do
 		${LL} ${FILE}
 		qemu-img info ${FILE}
+		echo -en "\n"
 	done
-	echo -en "\n"
 	${LL} ${QNAM}.qcow2
 	qemu-img info --backing-chain ${QNAM}.qcow2
+	echo -en "\n"
 	${LL}
 	exit 0
 fi
