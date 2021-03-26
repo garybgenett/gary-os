@@ -6072,18 +6072,26 @@ function zfs-snap {
 	declare FILE
 	declare DIR
 	for FILE in "${@}"; do
-		FILE="${PWD/#${ZACTDIR}\/}/${FILE}"
-		DIR="${SNAPDIR}/${SNAPNUM}/${FILE}"
+		if {
+			[[ ${FILE} == . ]] ||
+			[[ ${FILE} == ./ ]];
+		}; then
+			FILE=
+		else
+			FILE="/${FILE}"
+		fi
+		FILE="${PWD/#${ZACTDIR}}${FILE}"
+		DIR="${SNAPDIR}/${SNAPNUM}${FILE}"
 		if ${RESTORE}; then
-			rsync --dry-run $(
+			rsync $(
 				if [[ -d ${DIR} ]]; then
 					echo "${DIR}/"
 				else
 					echo "${DIR}"
 				fi
-				) ${ZACTDIR}/${FILE} || return 1
+				) ${ZACTDIR}${FILE} || return 1
 		else
-			vdiff -r ${DIR} ${ZACTDIR}/${FILE}
+			vdiff -r ${DIR} ${ZACTDIR}${FILE}
 		fi
 	done
 	return 0
