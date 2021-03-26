@@ -6045,6 +6045,50 @@ function vlc-do {
 	return 0
 }
 
+
+########################################
+
+function zfs-snap {
+	declare ZACTDIR="/.g/_data/zactive"
+	declare SNAPDIR="${ZACTDIR}/.zfs/snapshot"
+	declare SNAPNUM="$(ls ${SNAPDIR} | tail -n1)"
+	declare RESTORE="false"
+	if [[ ${1} == -l ]]; then
+		shift
+		${LS} ${SNAPDIR}
+		return 0
+	fi
+	if [[ ${1} == -r ]]; then
+		RESTORE="true"
+		shift
+	fi
+	if [[ ${1} == +([0-9-]) ]]; then
+		SNAPNUM="${1}"
+		shift
+	fi
+	if [[ -z ${@} ]]; then
+		return 0
+	fi
+	declare FILE
+	declare DIR
+	for FILE in "${@}"; do
+		FILE="${PWD/#${ZACTDIR}\/}/${FILE}"
+		DIR="${SNAPDIR}/${SNAPNUM}/${FILE}"
+		if ${RESTORE}; then
+			rsync --dry-run $(
+				if [[ -d ${DIR} ]]; then
+					echo "${DIR}/"
+				else
+					echo "${DIR}"
+				fi
+				) ${ZACTDIR}/${FILE} || return 1
+		else
+			vdiff -r ${DIR} ${ZACTDIR}/${FILE}
+		fi
+	done
+	return 0
+}
+
 ################################################################################
 # impersonate functions
 ################################################################################
