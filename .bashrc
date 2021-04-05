@@ -278,9 +278,14 @@ ${PROMPT_TOKEN_DFL}\
 export NICELY="sudo -E ionice -c 2 -n 7 -t nice -n 19"		; alias nicely="${NICELY}"
 export REALTIME="sudo -E ionice -c 1 -n 0 -t nice -n -20"	; alias realtime="${REALTIME}"
 
-if { [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; } ||
-   [[ "${UNAME}" == "Darwin" ]] ||
-   [[ -d /data/data/com.termux/files ]]; then
+if {
+	{ [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; } ||
+	[[ "${UNAME}" == "Darwin" ]] ||
+	[[ -d /data/data/com.termux/files ]] ||
+	[[ ! -x $(which sudo 2>/dev/null) ]] ||
+	[[ ! -x $(which ionice 2>/dev/null) ]] ||
+	[[ ! -x $(which nice 2>/dev/null) ]];
+}; then
 	export NICELY=
 	export REALTIME=
 fi
