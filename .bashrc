@@ -3393,19 +3393,15 @@ function prompt {
 		return ${?}
 	fi
 	if [[ ${1} == -d ]]; then
-		export DISPLAY=
+		netstat -an |
+			${GREP} "^tcp.+:60[0-9]{2}[[:space:]].+LISTEN[[:space:]]*$" |
+			${GREP} ":60[0-9]{2}"
 		if [[ ${2} == +([0-9]) ]]; then
 			export DISPLAY=":${2}"
 		elif [[ ${2} == -x ]]; then
 			export DISPLAY=":0"
 		fi
-		if [[ ${2} == -x ]] || [[ ${3} == -x ]]; then
-			declare XAUTH="/var/lib/xdm/{,authdir/}authfiles/*"
-			export XAUTHORITY="$(eval "ls ${XAUTH}" 2>/dev/null | head -n1)"
-			if [[ -z "${XAUTHORITY}" ]]; then
-				export XAUTHORITY=$(${PS} 2>/dev/null | ${GREP} "xinit" | ${GREP} "${DISPLAY} -auth" | ${SED} "s/^.+-auth //g")
-			fi
-		fi
+		echo "${DISPLAY}"
 	elif [[ ${1} == -s ]]; then
 		export PROMPT="simple"
 	elif [[ ${1} == -x ]]; then
