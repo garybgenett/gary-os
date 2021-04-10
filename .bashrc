@@ -3394,7 +3394,7 @@ function prompt {
 	fi
 	if [[ ${1} == -d ]]; then
 		export DISPLAY=
-		if [[ ${2} == [0-9] ]]; then
+		if [[ ${2} == +([0-9]) ]]; then
 			export DISPLAY=":${2}"
 		elif [[ ${2} == -x ]]; then
 			export DISPLAY=":0"
