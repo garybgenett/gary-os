@@ -79,8 +79,6 @@ export NOTES_MD="/.g/_data/zactive/_pim/tasks.notes.md";	export NOTES_MD_ID="1as
 export IDEAS_MD="/.g/_data/zactive/writing/_imagination.md";	export IDEAS_MD_ID="1_p06qeX31eFRTUJ2VKWhdfGUhaQBqF5k"
 export SALES_MD="/.g/_data/zactive/_pim/zoho.today.md";		#>>>export SALES_MD_ID="1wQrnTw0I5pDfzlqeuKdBNCNvFH9Ifulz"
 
-export ACRO_ALLOW_SUDO="set"
-
 ########################################
 
 export LANG="en_US.UTF-8"
@@ -3393,11 +3391,13 @@ function prompt {
 		return ${?}
 	fi
 	if [[ ${1} == -d ]]; then
+		export XAUTHORITY="${HOME}/.Xauthority"
+		sudo chown plastic:plastic ${XAUTHORITY}*
 		netstat -an |
 			${GREP} "^tcp.+:60[0-9]{2}[[:space:]].+LISTEN[[:space:]]*$" |
 			${GREP} ":60[0-9]{2}"
 		if [[ ${2} == +([0-9]) ]]; then
-			export DISPLAY=":${2}"
+			export DISPLAY="127.0.0.1:${2}"
 		elif [[ ${2} == -x ]]; then
 			export DISPLAY=":0"
 		fi
@@ -3703,7 +3703,7 @@ function shell {
 	declare PROMPT_NAME="${FUNCNAME}_${DEST}"
 	declare SHELL_TERM="${TERM}"
 	[[ -n ${1} ]] && [[ ${1} != -*(*) ]] && PROMPT_NAME="${1}" && SHELL_TERM="ansi" && shift
-	declare SSH="sudo -H ssh -2 -Y"
+	declare SSH="sudo -H ssh -2"
 	declare LOG="root"
 	declare OPTS
 	if { [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; } ||
