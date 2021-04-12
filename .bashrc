@@ -6053,11 +6053,11 @@ function zfs-snap {
 	declare ZACTDIR="/.g/_data/zactive"
 	declare SNAPDIR="${ZACTDIR}/.zfs/snapshot"
 	declare SNAPNUM="$(ls ${SNAPDIR} | tail -n1)"
+	declare LISTING="false"
 	declare RESTORE="false"
 	if [[ ${1} == -l ]]; then
+		LISTING="true"
 		shift
-		${LS} ${SNAPDIR}
-		return 0
 	fi
 	if [[ ${1} == -r ]]; then
 		RESTORE="true"
@@ -6066,6 +6066,14 @@ function zfs-snap {
 	if [[ ${1} == +([0-9-]) ]]; then
 		SNAPNUM="${1}"
 		shift
+	fi
+	if ${LISTING}; then
+		if [[ -n ${1} ]]; then
+			${LL} ${SNAPDIR}/${SNAPNUM}/${1}
+		else
+			${LS} ${SNAPDIR}
+		fi
+		return 0
 	fi
 	if [[ -z ${@} ]]; then
 		return 0
