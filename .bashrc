@@ -932,7 +932,8 @@ function enc-fs {
 	mount-robust -u ${DST}
 	echo -en "${FUNCNAME}: mounting..."
 	echo -en "\n"
-	echo "${OUT}" | (${ENCFS} -dfv --stdinpass "${@}") &
+#>>>	echo "${OUT}" | (${ENCFS} -dfv --stdinpass "${@}") &
+	echo "${OUT}" | (${ENCFS} -fv --stdinpass "${@}") &
 	sleep 1
 	if [[ -z $(${GREP} "encfs[ ]${DST}[ ]fuse.encfs" /proc/mounts) ]]; then
 		echo -en "${FUNCNAME}: failed!"
