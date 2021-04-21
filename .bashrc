@@ -298,9 +298,9 @@ export VI="${REALTIME} vim -u ${HOME}/.vimrc -i NONE -p"	; alias vi="${VI}"
 export GVI="prompt -d -x ; ${VI} -g"				; alias gvim="${GVI}"
 export VIEW="${VI}"						; alias view="${VIEW}"
 
-export PAGER="${MORE}"
-export EDITOR="${VI}"
-export VISUAL="${VI}"
+export PAGER="${PAGER:-${MORE}}"
+export EDITOR="${EDITOR:-${VI}}"
+export VISUAL="${EDITOR:-${VI}}"
 
 ########################################
 
