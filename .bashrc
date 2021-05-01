@@ -920,7 +920,7 @@ function email-copy {
 ########################################
 
 function enc-fs {
-	declare DST="${#}"; DST="${!DST}"
+	declare DST="${#}"; DST="$(realpath ${!DST})"
 	declare OUT=
 	if [[ ! -f ${ENCFS_FILE} ]]; then
 		echo -en "${FUNCNAME}: "
