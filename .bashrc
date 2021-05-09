@@ -6031,6 +6031,7 @@ function vlc-do {
 		(DISPLAY= $(which vlc) "${@}" ${PLAYLIST}) &
 	elif {
 		[[ ${1} == ${VIDEO_ARG} ]] ||
+		[[ -b ${1} ]] ||
 		[[ -f ${1} ]];
 	}; then
 		PLAYLIST="${1}" && shift
