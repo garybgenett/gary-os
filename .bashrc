@@ -2759,7 +2759,7 @@ function mount-zfs {
 			echo -en "\n"
 			${Z_LIST_SIZ} "${@}"
 			echo -en "\n"
-			${Z_DAT_ALL} -s local "${@}" \
+			${Z_DAT_ALL} -s local \
 				| ${GREP} --color=never "^${1}" \
 				| ${GREP} --color=never "[[:space:]]((ref)?reservation|quota)[[:space:]]"
 			echo -en "\n"
