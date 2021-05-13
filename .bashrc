@@ -2909,12 +2909,12 @@ function mount-zfs {
 	fi
 	declare ZPOOL=
 	declare ZPOOL_EXT="false"
-	declare ZDEVS_DIR="$(${Z_ZDB}					${DIR}	2>/dev/null | ${SED} -n "s|^[ ]{4}name[:][ ][\'](.+)[\']$|\1|gp"			)"
-	declare ZMTPT_DIR="$(${Z_DAT},name mountpoint			${DIR}	2>/dev/null | ${SED} -n "s|^${DIR}[[:space:]]+(.+)$|\1|gp"				)"
-	declare ZPOOL_DIR="$(if [[ -n $(${Z_LIST}			${DIR}	2>/dev/null) ]]; then echo "${DIR}"; fi)"
 	if {
 		{ ! ${UN} && [[ -b ${DEV} ]] && [[ -n ${DIR} ]]; };
 	}; then
+		declare ZDEVS_DIR="$(${Z_ZDB}				${DIR}	2>/dev/null | ${SED} -n "s|^[ ]{4}name[:][ ][\'](.+)[\']$|\1|gp"			)"
+		declare ZMTPT_DIR="$(${Z_DAT},name mountpoint		${DIR}	2>/dev/null | ${SED} -n "s|^${DIR}[[:space:]]+(.+)$|\1|gp"				)"
+		declare ZPOOL_DIR="$(if [[ -n $(${Z_LIST}		${DIR}	2>/dev/null) ]]; then echo "${DIR}"; fi)"
 		if	[[ -n ${ZDEVS_DIR} ]]; then ZPOOL_EXT="true"; ZPOOL="${ZDEVS_DIR}"
 		elif	[[ -n ${ZMTPT_DIR} ]]; then ZPOOL_EXT="true"; ZPOOL="${ZMTPT_DIR}"
 		elif	[[ -n ${ZPOOL_DIR} ]]; then ZPOOL_EXT="true"; ZPOOL="${ZPOOL_DIR}"
