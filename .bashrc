@@ -2817,7 +2817,9 @@ function mount-zfs {
 				cat
 			fi \
 			| ${GREP} --color=never "[-]$"
-		echo -en "\n" 1>&2
+		if [[ -z ${ZPOOL} ]]; then
+			echo -en "\n" 1>&2
+		fi
 		${Z_DAT_ALL} -s local \
 			| ${GREP} --color=never "^[^[:space:]@]+[[:space:]]" \
 			| if [[ -n ${ZPOOL} ]]; then
@@ -2826,7 +2828,6 @@ function mount-zfs {
 				cat
 			fi
 		if [[ -n ${ZPOOL} ]]; then
-			echo -en "\n" 1>&2
 			if [[ ${ZPINT} == ${ZPOOL} ]]; then
 				${Z_ZDB_META} ${ZPOOL}
 			else
