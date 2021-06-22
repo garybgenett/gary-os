@@ -298,6 +298,11 @@ export VI="${REALTIME} vim -u ${HOME}/.vimrc -i NONE -p"	; alias vi="${VI}"
 export GVI="prompt -d -x ; ${VI} -g"				; alias gvim="${GVI}"
 export VIEW="${VI}"						; alias view="${VIEW}"
 
+if [[ "${-/i}" != "${-}" ]]; then
+	export PAGER=
+	export EDITOR=
+	export VISUAL=
+fi
 export PAGER="${PAGER:-${MORE}}"
 export EDITOR="${EDITOR:-${VI}}"
 export VISUAL="${EDITOR:-${VI}}"
