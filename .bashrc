@@ -1096,7 +1096,7 @@ function format {
 	else
 		# https://bbs.archlinux.org/viewtopic.php?pid=1627961#p1627961
 		# for b in /sys/block/*/*/start; do s=$(cat $b); echo $b : $s: $(($s % 8)) : $(($s % 4096)); done
-		mkfs.ext4 -b 4096 -jvm 0 "${@}"
+		mkfs.ext4 -B 4096 -jvm 0 "${@}"
 	fi
 }
 
