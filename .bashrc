@@ -4723,6 +4723,7 @@ function task-export-drive-sync {
 		&&
 	${RCLONE_U} \
 		--drive-shared-with-me \
+		--filter "- /The Ultimate Onewheel Knowledge Base*" \
 		--filter "- /email from*" \
 		${GDRIVE_REMOTE}:/ \
 		/.g/_data/zactive/_drive/_shared.all \
