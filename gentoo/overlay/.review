@@ -88,10 +88,13 @@ function review_header {
 
 declare FILE
 for FILE in $(
-	find ./ -mindepth 2 -maxdepth 2 \
-		\( -path ./${ARCHIVE} -prune \) \
-		-o \( -path ./\*/\*.src -prune \) \
-		-o \( -type d -print \) |
+	find ./ -mindepth 2 -maxdepth 2 -type d \( \
+		\( -path ./${ARCHIVE} -prune \) -o \
+		\( -path ./\*/\*.src -prune \) -o \
+		\( -path ./metadata -prune \) -o \
+		\( -path ./overlay.conf -prune \) -o \
+		\( -path ./profiles -prune \) -o \
+		-print \) |
 	${SED} "s|^[.]/||g" |
 	sort
 ); do
@@ -115,6 +118,10 @@ for FILE in $(
 	echo									2>&1
 	${LS} -R ./${FILE}							2>&1
 done >${0}.txt
+
+########################################
+
+${RM} $(find ./ -type d -empty)
 
 ########################################
 
