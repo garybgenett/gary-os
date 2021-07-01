@@ -38,8 +38,8 @@ function kit_list {
 		close(INFO)	|| die();
 		close(SHA1)	|| die();
 		my $release = {};
-		foreach my $rel (sort(keys(%{ $info->{"release_defs"} }))) {
-			$release = $info->{"release_defs"}{$rel};
+		foreach my $kit (sort(keys(%{ $info->{"release_defs"} }))) {
+			$release->{$kit} = $info->{"release_defs"}{$kit};
 		};
 		my $order = $info->{"kit_order"};
 		foreach my $kit (@{$order}) {
