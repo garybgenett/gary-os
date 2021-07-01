@@ -2,6 +2,8 @@
 source ${HOME}/.bashrc
 ################################################################################
 
+declare ARCHIVE="_archive"
+
 declare LENGTH="120"
 
 ########################################
@@ -40,6 +42,36 @@ if [[ ${1} == -l ]]; then
 	exit 0
 fi
 
+########################################
+
+if [[ ${1} == -a ]]; then
+	for FILE in $(
+		find ./${ARCHIVE} -mindepth 2 -maxdepth 2 -type d |
+		${SED} "s|^[.][/]||g" |
+		sort |
+		${GREP} -v "[.]src$"
+	) $(
+		find ./ -mindepth 2 -maxdepth 2 -type d \( \
+				\( -path ./${ARCHIVE}/\* -prune \) \
+				-o -print \
+			\) |
+		${SED} "s|^[.][/]||g" |
+		sort |
+		${GREP} -v "[.]src$"
+	); do
+		if [[ -n $(echo "${FILE}" | ${GREP} "^${ARCHIVE}") ]]; then
+			echo "ARCHIVED: ${FILE}"
+		elif [[ -f ${FILE}/.keep ]]; then
+			echo "KEEPING: ${FILE}"
+		else
+			echo "ARCHIVING: ${FILE}"
+			${MKDIR} ${ARCHIVE}/$(dirname ${FILE})
+			${MV} ${FILE}{,.src} ${ARCHIVE}/$(dirname ${FILE})
+		fi
+	done
+	exit 0
+fi
+
 ################################################################################
 
 function review_header {
@@ -57,7 +89,7 @@ function review_header {
 declare FILE
 for FILE in $(
 	find ./ -mindepth 2 -maxdepth 2 \
-		\( -path ./.working/\* -prune \) \
+		\( -path ./${ARCHIVE} -prune \) \
 		-o \( -path ./\*/\*.src -prune \) \
 		-o \( -type d -print \) |
 	${SED} "s|^[.]/||g" |
