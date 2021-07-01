@@ -26,6 +26,11 @@ function kit_list {
 		use warnings;
 		use JSON::XS;
 		use Data::Dumper;
+		my $debug = "0";
+		if (${ARGV[0]} eq "debug") {
+			$debug = "1";
+			shift
+		};
 		my $repdir = ${ENV{REPDIR}};
 		open(INFO, "<", ${repdir} . "/metadata/kit-info.json")	|| die();
 		open(SHA1, "<", ${repdir} . "/metadata/kit-sha1.json")	|| die();
@@ -33,13 +38,18 @@ function kit_list {
 		my $sha1 = do { local $/; <SHA1> };
 		$info = decode_json(${info});
 		$sha1 = decode_json(${sha1});
-#>>>		print Dumper(${info});
-#>>>		print Dumper(${sha1});
 		close(INFO)	|| die();
 		close(SHA1)	|| die();
+		if (${debug}) {
+			print "INFO: " . Dumper(${info});
+			print "SHA1: " . Dumper(${sha1});
+		};
 		my $release = {};
 		foreach my $kit (sort(keys(%{ $info->{"release_defs"} }))) {
 			$release->{$kit} = $info->{"release_defs"}{$kit};
+		};
+		if (${debug}) {
+			print "RELEASE: " . Dumper(${release});
 		};
 		my $order = $info->{"kit_order"};
 		foreach my $kit (@{$order}) {
@@ -53,7 +63,7 @@ function kit_list {
 			my $hash = $sha1->{$kit}{$head};
 			print "${kit}|${head}|${hash}\n";
 		};
-	'
+	' -- "${@}"
 	return 0
 }
 
@@ -129,10 +139,13 @@ fun_git \
 	${COMMIT} \
 	${COMMIT} \
 	|| exit 1
+
+#>>> kit_list debug
 declare KIT_LIST="$(kit_list)"
 if [[ -z ${KIT_LIST} ]]; then
 	exit 1
 fi
+
 for FILE in ${KIT_LIST}; do
 	declare RKIT=$(echo "${FILE}" | ${SED} "s/^(.+)[|](.+)[|](.+)$/\1/g")
 	declare HEAD=$(echo "${FILE}" | ${SED} "s/^(.+)[|](.+)[|](.+)$/\2/g")
@@ -144,6 +157,7 @@ for FILE in ${KIT_LIST}; do
 		${HASH} \
 		|| exit 1
 done
+
 chown -R portage:portage ${REPDIR}{,.git}
 
 exit 0
