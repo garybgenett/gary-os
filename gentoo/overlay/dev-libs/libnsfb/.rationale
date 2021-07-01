@@ -1,4 +1,4 @@
 emerge: there are no ebuilds to satisfy ">=dev-libs/libnsfb-0.2".
 (dependency required by "www-client/netsurf-3.8-r2::overlay[fbcon]" [ebuild])
 (dependency required by "netsurf" [argument])
-https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/libnsfb/libnsfb-0.2.0-r1.ebuild?id=0e856edefbd36efffc141a2174e75db9afe1f204
+https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/libnsfb?id=0e856edefbd36efffc141a2174e75db9afe1f204
