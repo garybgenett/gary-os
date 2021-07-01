@@ -1,2 +1,2 @@
-# custom patch
-# Error: 'gkrellm_init_plugin': /usr/lib64/gkrellm2/plugins/gkrellaclock.so: undefined symbol: gkrellm_init_plugin
+custom patch
+Error: 'gkrellm_init_plugin': /usr/lib64/gkrellm2/plugins/gkrellaclock.so: undefined symbol: gkrellm_init_plugin
