@@ -39,14 +39,18 @@ sys-process/runit
 
 sys-apps/gptfdisk
 sys-block/parted
-#>>>sys-fs/btrfs-progs			# requires: app-text/asciidoc
+sys-fs/btrfs-progs		# requires: app-text/asciidoc
 sys-fs/cryptsetup
 sys-fs/dosfstools
 sys-fs/e2fsprogs
+sys-fs/exfat-utils
 sys-fs/ext3grep
 sys-fs/ext4magic
 sys-fs/extundelete
+sys-fs/fuse-exfat
+sys-fs/mdadm
 sys-fs/mtools
+sys-fs/ntfs3g
 sys-fs/squashfs-tools
 
 sys-apps/attr
@@ -94,7 +98,6 @@ sys-apps/net-tools
 
 net-ftp/lftp
 net-misc/curl
-#>>>net-misc/rclone			# requires: dev-lang/go
 net-misc/rsync
 net-misc/wget
 www-client/elinks
@@ -110,6 +113,7 @@ sys-apps/kbd
 sys-devel/gettext
 sys-libs/gpm
 
+app-admin/perl-cleaner
 dev-lang/perl
 dev-libs/libpcre
 dev-perl/JSON
@@ -146,13 +150,13 @@ app-text/aspell
 
 #{SELECT} vi:vim
 
-app-editors/gvim
+#>>>#{MOD} app-editors/gvim		# requires: x11-libs/gtk+
 app-editors/nano
 app-editors/nvi
-app-editors/vim
+app-editors/vim				# requires: dev-util/ctags -> dev-python/docutils -> dev-python/pygments
 app-editors/vim-core
 app-text/dos2unix
-app-vim/taglist
+app-vim/taglist			# requires: dev-util/ctags -> dev-python/docutils -> dev-python/pygments
 app-vim/vim-spell-en
 dev-util/cloc
 #>>>dev-util/indent			# fails to build as "generic_64"
@@ -163,9 +167,6 @@ app-arch/deb2targz
 app-arch/dpkg
 app-arch/rpm
 app-arch/rpm2targz
-
-sys-apps/fakeroot
-sys-apps/fakeroot-ng
 
 ########################################
 # gentoo
@@ -213,6 +214,7 @@ sys-devel/gcc-config
 x11-apps/xrandr				#{MIN}
 x11-base/xorg-drivers			#{MIN}
 x11-base/xorg-server			#{MIN}
+#>>>#{MOD} x11-misc/arandr		# requires: x11-libs/gtk+
 
 x11-misc/dmenu				#{MIN}
 x11-wm/dwm				#{MIN}
@@ -221,7 +223,7 @@ x11-terms/rxvt-unicode			#{MIN}
 
 x11-apps/xset				#{MIN}
 x11-apps/xsetroot			#{MIN}
-#>>>x11-misc/tabbed			# was only needed for "www-client/surf"
+#>>>#{MOD} x11-misc/tabbed		# needed by: www-client/surf
 
 ########################################
 # toolkits
@@ -234,7 +236,14 @@ dev-vcs/subversion
 dev-lang/python
 
 dev-db/sqlite
-#>>>dev-tcltk/expect			# requires: dev-lang/tcl
+dev-tcltk/expect			# requires: dev-lang/tcl
+
+#>>>#{MOD} x11-libs/gtk+
+#>>>#{MOD} x11-themes/gtk-theme-switch
+
+net-wireless/bluez
+net-wireless/bluez-hcidump
+net-wireless/bluez-tools
 
 ########################################
 # utilities
@@ -244,12 +253,11 @@ sys-devel/bc
 
 dev-util/ltrace
 dev-util/strace
-#>>>dev-util/sysprof			# requires: dev-libs/appstream-glib -> x11-libs/gtk+
+#>>>#{MOD} dev-util/sysprof		# too many dependencies
 sys-apps/kexec-tools
 
 sys-apps/hdparm
 sys-block/blktrace
-sys-fs/mdadm
 
 sys-apps/dcfldd
 sys-block/whdd
@@ -290,7 +298,7 @@ net-analyzer/tcptrace
 net-analyzer/tcptraceroute
 net-analyzer/traceroute
 net-analyzer/vnstat
-#>>>net-analyzer/wireshark		# requires: x11-libs/gtk+
+net-analyzer/wireshark		# requires: x11-libs/gtk+
 net-dns/avahi
 net-dns/bind-tools
 net-misc/cadaver
@@ -299,43 +307,38 @@ net-misc/netkit-telnetd
 net-misc/rdate
 net-misc/socat
 net-misc/whois
-#>>>net-wireless/kismet			# requires: net-misc/networkmanager, net-libs/libmicrohttpd
+net-wireless/kismet		# requires: net-misc/networkmanager, net-libs/libmicrohttpd
 
 net-misc/autossh
 net-misc/pipes
 net-vpn/httptunnel
 
-sys-fs/exfat-utils
-sys-fs/fuse-exfat
-sys-fs/ntfs3g
+net-fs/cifs-utils
 
 app-forensics/cmospwd
 app-forensics/foremost
 app-forensics/sleuthkit
 
-#>>>sys-apps/flashrom			# requires: dev-embedded/libftdi -> dev-libs/boost
+sys-apps/flashrom		# requires: dev-embedded/libftdi -> dev-libs/boost
 
 ########################################
 # servers
 
 net-misc/ntp
 net-vpn/openvpn
+net-vpn/tor			# requires: app-text/asciidoc
+net-wireless/hostapd
 
 ########################################
 # programs
 
-app-emulation/spice-protocol		#{MIN}
-app-emulation/spice-vdagent		#{MIN}
+www-client/netsurf		# requires: dev-libs/libnsfb [sdl]
+#>>>#{MOD} www-client/surf		# requires: net-libs/webkit-gtk (x11-libs/gtk+) -> dev-lang/ruby -> dev-ruby/json -> dev-util/ragel -> dev-util/colm -> app-text/asciidoc
 
-#>>>app-emulation/virtualbox-guest-additions	# gentoo required: [app-emulation/virtualbox-guest-additions-5.1.36 / sys-kernel/gentoo-sources-4.18.6] /var/tmp/portage/app-emulation/virtualbox-guest-additions-5.1.36/work/vboxsf/utils.c:165:28: error: passing argument 1 of ‘sf_ftime_from_timespec’ from incompatible pointer type [-Werror=incompatible-pointer-types] sf_ftime_from_timespec(&inode->i_atime, &info->AccessTime);
+#>>>#{MOD} app-text/mupdf
 
-mail-client/mutt
-
-www-client/netsurf
-#>>>www-client/surf			# requires: net-libs/webkit-gtk, x11-libs/gtk+
-
-net-misc/freerdp			#{MIN}
-net-misc/tigervnc			#{MIN}
+#>>>#{MOD} net-misc/rdesktop
+#>>>#{MOD} net-misc/tigervnc
 
 ########################################
 # media
