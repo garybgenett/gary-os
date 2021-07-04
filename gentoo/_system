@@ -73,6 +73,11 @@ export QUICKLY="${QUICKLY:-false}"
 
 ########################################
 
+#OPTIONS[DOREDO]
+if [[ ${DOREDO} != true ]] && [[ ${DOREDO} != false ]]; then DOREDO="false"; fi
+
+########################################
+
 #OPTIONS[SOURCE GITDIR]
 export SOURCE="${SOURCE:-/.g/_data/_target/iso}"
 export GITDIR="${GITDIR:-/.g/_data/_build/funtoo/meta-repo.git}"
@@ -181,8 +186,9 @@ fi
 
 ########################################
 
-#VARIABLES[AUTO _ASK _BLD _KRN _CFG]
+#VARIABLES[AUTO _RST _ASK _BLD _KRN _CFG]
 export AUTO=
+export _RST="--reset"
 export _ASK="--ask=y"
 export _BLD="false"
 export _KRN="false"
@@ -448,7 +454,7 @@ function print_info {
 		printf "${PRINTF}" "Initramfs System (Live Install):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${_HEART} {chroot} ${MAKEIT}_install"
 		echo -en "\n"
 		printf "${PRINTF}" "Distribution Targets (Internal Only):"	"<internal>"	"${_HEART} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#][{]main[}].*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
-		printf "${PRINTF}" "Distribution Reset (Internal Only):"	"<internal>"	"${_HEART} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#][{]reset[}].*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	)) --reset"
+		printf "${PRINTF}" "Distribution Reset (Internal Only):"	"<internal>"	"${_HEART} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#][{]reset[}].*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	)) ${_RST}"
 		printf "${PRINTF}" "Distribution Initrd (Internal Only):"	"<internal>"	"${_HEART} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#][{]initrd[}].*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	)) --initrd"
 		echo -en "\n"
 		printf "${PRINTF}" "Distribution Prepare (Internal Only):"	"<internal>"	"${_HEART} {chroot} ${PREPIT}_($(	${SED} -n "s|^function[ ]${PREPIT}_(.+)[ ][{].*$|\1|gp"		${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"

@@ -132,7 +132,7 @@ declare FINDMNT="findmnt --noheadings --output TARGET --target"
 
 #note: this is called statically in the "_system" script
 #note: cross-reference with the "release_install" function any time this changes
-function _release_reset {	#{main}
+function _release_reset {		#{main}
 	${RM} ${TARGET}/${CMTFIL}			|| return 1
 	${RM} ${TARGET}/${_RPACK}			|| return 1
 	${RM} ${TARGET}/.${_TITLE}${_GPACK}		|| return 1
@@ -150,24 +150,25 @@ function _release_reset {	#{main}
 		${RM} ${TARGET}${LDIR}			|| return 1
 		${RM} ${TARGET}${LDIR}.tar.xz		|| return 1
 		${LN} ${KBAS} ${TARGET}${LDIR}		|| return 1
-		_prepare_config --reset			|| return 1
+		_prepare_config ${_RST}			|| return 1
 	fi
 	return 0
 }
 
 ################################################################################
 
-function _prepare_build {	#{reset}
-	if [[ ${1} == --reset ]]; then
+function _prepare_build {		#{reset}
+	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
+	if [[ -n ${RESET} ]]; then
 		shift
-		_release_reset	|| return 1
+		DOREDO="false" _release_reset	|| return 1
 	fi
-	_prepare_config		|| return 1
-	_prepare_docdir		|| return 1
-	_prepare_repdir		|| return 1
-	_prepare_linux		|| return 1
-	_prepare_packages	|| return 1
-	_prepare_symlink	|| return 1
+	DOREDO="false" _prepare_config		|| return 1
+	DOREDO="false" _prepare_docdir		|| return 1
+	DOREDO="false" _prepare_repdir		|| return 1
+	DOREDO="false" _prepare_linux		|| return 1
+	DOREDO="false" _prepare_packages	|| return 1
+	DOREDO="false" _prepare_symlinks	|| return 1
 	return 0
 }
 
@@ -214,8 +215,8 @@ function prepare_config_issue {
 	return 0
 }
 
-function prepare_config_restore {
-	declare RESET= ; if [[ ${1} == --reset ]]; then RESET="${1}" && shift; fi
+function prepare_config_restore {	#>>>{reset}
+	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
 	declare PACK="${1}" && shift
 	declare PFIL="${1}" && shift
 	declare PSRC="${1}" && shift
@@ -277,8 +278,8 @@ function prepare_config_restore {
 #NOTE: UPDATE THE "SYSTEM INSTALLATION" TABLE IN "README" WHEN MAKING CHANGES HERE
 
 #note: this is called statically in the "_system" script
-function _prepare_config {	#{reset}
-	declare RESET= ; if [[ ${1} == --reset ]]; then RESET="${1}" && shift; fi
+function _prepare_config {		#{reset}
+	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
 	#note: these are from the "prepare_config_issue" function above
 	prepare_config_restore ${RESET} sys-apps/baselayout			/etc/issue				|| return 1
 	prepare_config_restore ${RESET} ""					/etc/motd				|| return 1
@@ -410,7 +411,8 @@ function _prepare_packages {
 
 ########################################
 
-function _prepare_symlink {
+function _prepare_symlinks {		#{reset}
+	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
 	if [[ ${TARGET} == / ]]; then
 		return 0
 	fi
@@ -421,6 +423,9 @@ function _prepare_symlink {
 	fi
 	${MKDIR} ${_FINAL}											|| return 1
 	${RM} $(find						${_FINAL} -maxdepth 1 -type l | sort)		|| return 1
+	if [[ -n ${RESET} ]]; then
+		return 0
+	fi
 	${LN} --relative ${TARGET}${DSTDIR}			${_FINAL}/_$(basename ${DSTDIR})		|| return 1
 	${LN} --relative ${TARGET}${PAKDIR}			${_FINAL}/_$(basename ${PAKDIR})		|| return 1
 #>>> sort -b -k4
@@ -436,21 +441,21 @@ function _prepare_symlink {
 
 ################################################################################
 
-function _release_ramfs {	#{main} #{reset} #{initrd}
-	declare RESET= ; if [[ ${1} == --reset ]]; then RESET="${1}" && shift; fi
+function _release_ramfs {		#{main} #{reset} #{initrd}
+	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
 	declare INITRD= ; if [[ ${1} == --initrd ]]; then INITRD="${1}" && shift; fi
-	_prepare_build ${RESET}		|| return 1
-	_release_cpio ${INITRD}		|| return 1
-	_release_kernel ${INITRD}	|| return 1
-	_release_grub			|| return 1
-	_release_report			|| return 1
+	DOREDO="false" _prepare_build	${RESET}	|| return 1
+	DOREDO="false" _release_cpio	${INITRD}	|| return 1
+	DOREDO="false" _release_kernel	${INITRD}	|| return 1
+	DOREDO="false" _release_grub			|| return 1
+	DOREDO="false" _release_report			|| return 1
 	return 0
 }
 
 ########################################
 
-function _release_initrd {	#{main} #{reset}
-	declare RESET= ; if [[ ${1} == --reset ]]; then RESET="${1}" && shift; fi
+function _release_initrd {		#{main} #{reset}
+	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
 	_release_ramfs ${RESET} --initrd \
 		|| return 1
 	return 0
@@ -537,7 +542,7 @@ function release_cpio_dir {	#>>> {initrd}
 	return 0
 }
 
-function _release_cpio {	#{initrd}
+function _release_cpio {		#{initrd}
 	declare INITRD= ; if [[ ${1} == --initrd ]]; then INITRD="${1}" && shift; fi
 	mount_dev_dirs -u				|| return 1
 	${MKDIR} ${_FINAL}				|| return 1
@@ -636,7 +641,7 @@ function release_kernel_build {
 	return 0
 }
 
-function _release_kernel {	#{initrd}
+function _release_kernel {		#{initrd}
 	declare INITRD= ; if [[ ${1} == --initrd ]]; then INITRD="${1}" && shift; fi
 	declare DODIR="${KDIR}"
 	if [[ ${TARGET} == / ]]; then
@@ -708,7 +713,7 @@ function _release_report {
 
 ########################################
 
-function _release_unpack {	#{main}
+function _release_unpack {		#{main}
 	common_untar ${TARGET}${REPDIR}	|| return 1
 	common_untar ${TARGET}${LDIR}	|| return 1
 	return 0
@@ -755,7 +760,7 @@ function release_install_boot {
 	return 0
 }
 
-function _release_install {	#{main}
+function _release_install {		#{main}
 	if [[ ! -d ${_GINST} ]]; then
 		echo -en "\n"
 		echo -en ">>> THIS OPTION REQUIRES THAT THE (${_GINST}) INSTALL DIRECTORY EXISTS <<<\n"
@@ -770,9 +775,8 @@ function _release_install {	#{main}
 
 ################################################################################
 
-function _publish_daily {	#{main}
-#>>> #{reset}
-#>>>	if [[ ${1} == --reset ]]; then
+function _publish_daily {		#{main} #>>>{reset}
+#>>>	if [[ ${1} == ${_RST} ]]; then
 #>>>		shift
 #>>>		_publish_prep	|| return 1
 #>>>	else
@@ -786,16 +790,16 @@ function _publish_daily {	#{main}
 
 ########################################
 
-function _publish_release {	#{main} #{reset}
-	if [[ ${1} == --reset ]]; then
+function _publish_release {		#{main} #{reset}
+	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
+	if [[ -n ${RESET} ]]; then
 		shift
-		_publish_prep	|| return 1
-	else
-		_publish_gitdir	|| return 1
-		_publish_export	|| return 1
-		_publish_upload	|| return 1
-		_publish_report	|| return 1
+		DOREDO="false" _publish_prep	|| return 1
 	fi
+	DOREDO="false" _publish_gitdir		|| return 1
+	DOREDO="false" _publish_export		|| return 1
+	DOREDO="false" _publish_upload		|| return 1
+	DOREDO="false" _publish_report		|| return 1
 	return 0
 }
 
