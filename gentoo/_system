@@ -682,10 +682,10 @@ if ${DEBUG}; then
 	QUIET="false"
 fi
 
-print_info marker;	print_info title
-print_info marker;	print_info usage
-print_info marker;	print_info starter
-print_info marker;	print_info environment;	clear_environment
+print_info marker;		print_info title
+print_info marker;		print_info usage
+print_info marker;		print_info starter
+print_info marker;		print_info environment;	clear_environment
 print_info marker
 
 if ${DEBUG}; then
@@ -1022,92 +1022,92 @@ if [[ ${1} == -i ]]; then
 	fi
 	shift
 	if [[ ! -d ${TARGET}/boot ]]; then
-		${MKDIR}				${TARGET}${ARCDIR}						|| EXIT 1
-		${RSYNC_U} ${SOURCE}/stage3-*-funtoo-*	${TARGET}${ARCDIR}/						|| EXIT 1
-#>>>		tar -pvvx --xz -C ${TARGET} -f		$(ls -t ${TARGET}${ARCDIR}/stage3-i686-funtoo-*.tar.xz		| head -n1) || EXIT 1
-		tar -pvvx --xz -C ${TARGET} -f		$(ls -t ${TARGET}${ARCDIR}/stage3-generic_64-funtoo-*.tar.xz	| head -n1) || EXIT 1
+		${MKDIR}				${TARGET}${ARCDIR}					|| EXIT 1
+		${RSYNC_U} ${SOURCE}/stage3-*		${TARGET}${ARCDIR}/					|| EXIT 1
+#>>>		tar -pvvx --xz -C ${TARGET} -f		$(ls -t ${TARGET}${ARCDIR}/stage3-i686-*.tar.xz		| head -n1) || EXIT 1
+		tar -pvvx --xz -C ${TARGET} -f		$(ls -t ${TARGET}${ARCDIR}/stage3-generic_64-*.tar.xz	| head -n1) || EXIT 1
 	fi
-	mount_dev_dirs													|| EXIT 1
+	mount_dev_dirs												|| EXIT 1
 	if ! ${_CFG}; then
-							${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -r			|| EXIT 1
+							${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -r		|| EXIT 1
 	fi
 	if ! ${QUICKLY} && ! ${_CFG}; then
-		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} ${FUNTOO}		|| EXIT 1
-		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w			|| EXIT 1
+		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} ${FUNTOO}	|| EXIT 1
+		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w		|| EXIT 1
 	fi
 	if ${_BLD}; then
 		if ${_NEW}; then
-			expect_wrapper			emerge ${_ASK} expect						|| EXIT 1
-			safe_env			${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -f			|| EXIT 1
-			expect_wrapper			emerge ${_ASK} ${EMERGE_UPDT_OPTS} \@system			|| EXIT 1
+			expect_wrapper			emerge ${_ASK} dev-tcltk/expect				|| EXIT 1
+			safe_env			${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -f		|| EXIT 1
+			expect_wrapper			emerge ${_ASK} ${EMERGE_UPDT_OPTS} \@system		|| EXIT 1
 		else
-#>>>			expect_wrapper			emerge ${_ASK} --emptytree \@system \@world			|| EXIT 1
-			expect_wrapper			emerge ${_ASK} --emptytree \@system \@${_PKG}			|| EXIT 1
+#>>>			expect_wrapper			emerge ${_ASK} --emptytree \@system \@world		|| EXIT 1
+			expect_wrapper			emerge ${_ASK} --emptytree \@system \@${_PKG}		|| EXIT 1
 		fi
 	fi
 	if ${_KRN}; then
-		${RM}					${TARGET}/boot/*						|| EXIT 1
-		${RM}					${TARGET}/etc/kernels/*						|| EXIT 1
-		${RM}					${TARGET}/lib/modules/*						|| EXIT 1
-		${RM}					${TARGET}${LDIR}*						|| EXIT 1
-		expect_wrapper				emerge ${_ASK} genkernel ${LINPKG}				|| EXIT 1
+		${RM}					${TARGET}/boot/*					|| EXIT 1
+		${RM}					${TARGET}/etc/kernels/*					|| EXIT 1
+		${RM}					${TARGET}/lib/modules/*					|| EXIT 1
+		${RM}					${TARGET}${LDIR}*					|| EXIT 1
+		expect_wrapper				emerge ${_ASK} sys-kernel/genkernel ${LINPKG}		|| EXIT 1
 		declare KERN="$(cd ${TARGET}/boot; ls kernel-debian-sources-*		2>/dev/null | sort | tail -n1)"
 		declare INIT="$(cd ${TARGET}/boot; ls initramfs-debian-sources-*	2>/dev/null | sort | tail -n1)"
 		if [[ -n ${KERN} ]]; then
-			${RM}				${TARGET}/boot/_kernel						|| EXIT 1
-			${LN} ${KERN}			${TARGET}/boot/_kernel						|| EXIT 1
+			${RM}				${TARGET}/boot/_kernel					|| EXIT 1
+			${LN} ${KERN}			${TARGET}/boot/_kernel					|| EXIT 1
 		fi
 		if [[ -n ${INIT} ]]; then
-			${RM}				${TARGET}/boot/_initrd						|| EXIT 1
-			${LN} ${INIT}			${TARGET}/boot/_initrd						|| EXIT 1
+			${RM}				${TARGET}/boot/_initrd					|| EXIT 1
+			${LN} ${INIT}			${TARGET}/boot/_initrd					|| EXIT 1
 		fi
 	fi
 	if ${_KRN}; then for FILE in ${KERNEL}; do
-		${RM}					${TARGET}${LDIR}						|| EXIT 1
-		${LN} linux-${FILE}-gentoo		${TARGET}${LDIR}						|| EXIT 1
-		${RSYNC_U}				${SETDIR}/${LINDIR}/config-gentoo64-${FILE}			\
-							${TARGET}${ARCDIR}/config-gentoo64-${FILE}			|| EXIT 1
-		kernel_cpu 				${TARGET}${ARCDIR}/config-gentoo64-${FILE}			|| EXIT 1
+		${RM}					${TARGET}${LDIR}					|| EXIT 1
+		${LN} linux-${FILE}-gentoo		${TARGET}${LDIR}					|| EXIT 1
+		${RSYNC_U}				${SETDIR}/${LINDIR}/config-gentoo64-${FILE}		\
+							${TARGET}${ARCDIR}/config-gentoo64-${FILE}		|| EXIT 1
+		kernel_cpu 				${TARGET}${ARCDIR}/config-gentoo64-${FILE}		|| EXIT 1
 		declare GENKERNEL_OPTS="--loglevel=5 --bootloader=grub --install --symlink"
 		if [[ -z ${AUTO} ]]; then
-			expect_wrapper			genkernel ${GENKERNEL_OPTS} kernel --menuconfig			|| EXIT 1
+			expect_wrapper			genkernel ${GENKERNEL_OPTS} kernel --menuconfig		|| EXIT 1
 		else
-			expect_wrapper			genkernel ${GENKERNEL_OPTS} kernel				\
-							--kernel-config=${ARCDIR}/config-gentoo64-${FILE}		|| EXIT 1
+			expect_wrapper			genkernel ${GENKERNEL_OPTS} kernel			\
+							--kernel-config=${ARCDIR}/config-gentoo64-${FILE}	|| EXIT 1
 		fi
-		${RSYNC_U}				${TARGET}${LDIR}/.config					\
-							${TARGET}${ARCDIR}/config-gentoo64-${FILE}			|| EXIT 1
-#>>>		FILE="kernel-genkernel-x86-${FILE}-gentoo"								|| EXIT 1
-		FILE="kernel-genkernel-x86_64-${FILE}-gentoo"								|| EXIT 1
+		${RSYNC_U}				${TARGET}${LDIR}/.config				\
+							${TARGET}${ARCDIR}/config-gentoo64-${FILE}		|| EXIT 1
+#>>>		FILE="kernel-genkernel-x86-${FILE}-gentoo"							|| EXIT 1
+		FILE="kernel-genkernel-x86_64-${FILE}-gentoo"							|| EXIT 1
 		if ! ${_GOS}; then
-			${RM}				${TARGET}/boot/_cur						|| EXIT 1
-			${LN} ${FILE}			${TARGET}/boot/_cur						|| EXIT 1
-			${RM}				${TARGET}/boot/_new						|| EXIT 1
-			${LN} kernel			${TARGET}/boot/_new						|| EXIT 1
-			${RM}				${TARGET}/boot/_old						|| EXIT 1
-			${LN} kernel.old		${TARGET}/boot/_old						|| EXIT 1
-			[[ -L				${TARGET}/boot/kernel.old					]] ||
-			${LN} ${FILE}			${TARGET}/boot/kernel.old					|| EXIT 1
+			${RM}				${TARGET}/boot/_cur					|| EXIT 1
+			${LN} ${FILE}			${TARGET}/boot/_cur					|| EXIT 1
+			${RM}				${TARGET}/boot/_new					|| EXIT 1
+			${LN} kernel			${TARGET}/boot/_new					|| EXIT 1
+			${RM}				${TARGET}/boot/_old					|| EXIT 1
+			${LN} kernel.old		${TARGET}/boot/_old					|| EXIT 1
+			[[ -L				${TARGET}/boot/kernel.old				]] ||
+			${LN} ${FILE}			${TARGET}/boot/kernel.old				|| EXIT 1
 		fi
 	done; fi
 	if ${_CFG}; then
 		#note: these need to match the names in the "${MAKEIT}" script
 		#note: compare with the "${MAKEIT}_install" function in the "${MAKEIT}" script
-		${MAKEIT}_reset												|| EXIT 1
+		${MAKEIT}_reset											|| EXIT 1
 		if [[ -x ${CFGSCR} ]]; then
 			${RSYNC_U} --copy-links		${CFGSCR} \
-							${TARGET}${ARCDIR}/$(basename ${CFGSCR})			|| EXIT 1
+							${TARGET}${ARCDIR}/$(basename ${CFGSCR})		|| EXIT 1
 			safe_env			${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} \
-							${ARCDIR}/$(basename ${CFGSCR}) "${@}"				|| EXIT 1
+							${ARCDIR}/$(basename ${CFGSCR}) "${@}"			|| EXIT 1
 		fi
-		mount_dev_dirs -u											|| EXIT 1
+		mount_dev_dirs -u										|| EXIT 1
 		EXIT 0
 	fi
 	if ! ${QUICKLY}; then
-		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -f			|| EXIT 1
+		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -f		|| EXIT 1
 	fi
-	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -u			|| EXIT 1
-	mount_dev_dirs -u												|| EXIT 1
+	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -u		|| EXIT 1
+	mount_dev_dirs -u											|| EXIT 1
 	EXIT 0
 fi
 
@@ -1174,27 +1174,27 @@ fi
 
 if [[ ${1} == -u ]]; then
 	shift
-	safe_env ${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -w			|| EXIT 1
-	expect_wrapper emerge ${_ASK} ${EMERGE_UPDT_OPTS} \@system \@world	|| EXIT 1
-	safe_env ${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -p			|| EXIT 1
+	safe_env ${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -w				|| EXIT 1
+	expect_wrapper emerge ${_ASK} ${EMERGE_UPDT_OPTS} \@system \@world		|| EXIT 1
+	safe_env ${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -p				|| EXIT 1
 #>>>	https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=b7a4174e075a922a255c0ff4a6ebd4f6d0437c61
 #>>>	if [[ -n "$(which python-updater 2>/dev/null)" ]]; then
-#>>>		expect_wrapper python-updater					|| EXIT 1
+#>>>		expect_wrapper python-updater						|| EXIT 1
 #>>>	fi
 	if ! ${QUICKLY} && [[ -n "$(which perl-cleaner 2>/dev/null)" ]]; then
-		expect_wrapper perl-cleaner --all				|| EXIT 1
+		expect_wrapper perl-cleaner --all					|| EXIT 1
 	fi
 	if ! ${QUICKLY} && [[ -n "$(which haskell-updater 2>/dev/null)" ]]; then
-		expect_wrapper haskell-updater --all				|| EXIT 1
+		expect_wrapper haskell-updater --all					|| EXIT 1
 	fi
-	expect_wrapper emerge ${_ASK} \@module-rebuild --exclude "${LINPKG}"	|| EXIT 1
-	expect_wrapper emerge ${_ASK} \@preserved-rebuild			|| EXIT 1
-	expect_wrapper emerge ${_ASK} --depclean				|| EXIT 1
-	expect_wrapper revdep-rebuild --ignore					|| EXIT 1
-	expect_wrapper emaint --fix all						|| EXIT 1
-	expect_wrapper eclean --verbose distfiles				|| EXIT 1
-	expect_wrapper eclean --verbose packages				|| EXIT 1
-	expect_wrapper dispatch-conf						|| EXIT 1
+	expect_wrapper emerge ${_ASK} \@module-rebuild --exclude "${LINPKG}"		|| EXIT 1
+	expect_wrapper emerge ${_ASK} \@preserved-rebuild				|| EXIT 1
+	expect_wrapper emerge ${_ASK} --depclean					|| EXIT 1
+	expect_wrapper revdep-rebuild --ignore						|| EXIT 1
+	expect_wrapper emaint --fix all							|| EXIT 1
+	expect_wrapper eclean --verbose distfiles					|| EXIT 1
+	expect_wrapper eclean --verbose packages					|| EXIT 1
+	expect_wrapper dispatch-conf							|| EXIT 1
 
 ########################################
 
