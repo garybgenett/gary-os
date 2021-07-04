@@ -44,6 +44,33 @@ done
 
 ########################################
 
+declare _AUTHOR="Gary B. Genett <me@garybgenett.net>"
+declare _LOGIN="garybgenett"
+
+declare _GITHUB="ssh://git@github.com/${_LOGIN}/${_TITLE}.git"
+declare _SFCODE="ssh://${_LOGIN}@git.code.sf.net/p/${_TITLE}/code"
+declare _SFFILE="${_LOGIN}@web.sourceforge.net:/home/frs/project/${_TITLE}"
+declare _SFRSSH="${_LOGIN},${_TITLE}@shell.sourceforge.net create"
+
+declare _DOCDIR="/.g/_data/zactive/coding/${_TITLE}"
+declare _BLDDIR="/.g/_data/_builds"
+declare _SAVDIR="${_BLDDIR}/_${_TITLE}"
+declare _RELDIR="${_BLDDIR}/.${_TITLE}"
+declare _G_REPO="${_RELDIR}/.${_TITLE}"
+declare _OUTDIR="${_RELDIR}.release"
+
+declare -a RELEASE=
+declare -a CMTHASH=
+RELEASE[0]="v0.1"; CMTHASH[0]="4d1b46b02798a1d3d3421b1c8087d80a80012a53"
+RELEASE[1]="v0.2"; CMTHASH[1]="99c1bafbf1116c1400705803da45e1ac03f3d492"
+RELEASE[2]="v0.3"; CMTHASH[2]="6e968d212ea62a1054e3cafa2436b6a98cf8776b"
+RELEASE[3]="v1.0"; CMTHASH[3]="f6885f3482b95fe15a688135c441f8f6391c9529"
+RELEASE[4]="v1.1"; CMTHASH[4]="9b653e64164e68873333043b41f8bbf23b0fbd55"
+RELEASE[5]="v2.0"; CMTHASH[5]="deda452a0aab311f243311b48a39b7ac60ab3fd8"
+RELEASE[6]="v3.0"; CMTHASH[6]="35141e1e20259d7d1c2f4b143c6ae4505d7d5045"
+
+########################################
+
 declare CMTFIL="_commit"
 declare COMMIT=
 for FILE in \
@@ -59,29 +86,41 @@ done
 
 ################################################################################
 
-declare _AUTHOR="Gary B. Genett <me@garybgenett.net>"
-declare _LOGIN="garybgenett"
+declare DU_L="${DU} --summarize --total --block-size 1M"
+declare DU_S="${DU} --summarize --apparent-size --block-size 1"
 
-declare _GITHUB="ssh://git@github.com/${_LOGIN}/${_TITLE}.git"
-declare _SFCODE="ssh://${_LOGIN}@git.code.sf.net/p/${_TITLE}/code"
-declare _SFFILE="${_LOGIN}@web.sourceforge.net:/home/frs/project/${_TITLE}"
-declare _SFRSSH="${_LOGIN},${_TITLE}@shell.sourceforge.net create"
+########################################
 
-declare _G_REPO="/.g/_data/_builds/.${_TITLE}/.${_TITLE}"
-declare _DOCDIR="/.g/_data/zactive/coding/${_TITLE}"
-declare _SAVDIR="/.g/_data/_builds/_${_TITLE}"
-declare _RELDIR="$(dirname ${_G_REPO})"
-declare _OUTDIR="${_RELDIR}.release"
+declare CPIO_FILE="${_RAMFS}.cpio"
 
-declare -a RELEASE=
-declare -a CMTHASH=
-RELEASE[0]="v0.1"; CMTHASH[0]="4d1b46b02798a1d3d3421b1c8087d80a80012a53"
-RELEASE[1]="v0.2"; CMTHASH[1]="99c1bafbf1116c1400705803da45e1ac03f3d492"
-RELEASE[2]="v0.3"; CMTHASH[2]="6e968d212ea62a1054e3cafa2436b6a98cf8776b"
-RELEASE[3]="v1.0"; CMTHASH[3]="f6885f3482b95fe15a688135c441f8f6391c9529"
-RELEASE[4]="v1.1"; CMTHASH[4]="9b653e64164e68873333043b41f8bbf23b0fbd55"
-RELEASE[5]="v2.0"; CMTHASH[5]="deda452a0aab311f243311b48a39b7ac60ab3fd8"
-RELEASE[6]="v3.0"; CMTHASH[6]="35141e1e20259d7d1c2f4b143c6ae4505d7d5045"
+declare XARGS="xargs --max-procs 0 --max-args 1 --null	--arg-file ${CPIO_FILE}.nul"
+declare CPIO_IN="cpio -v --create --format newc --null	--file ${CPIO_FILE}	--directory ${TARGET}"
+declare CPIO_OUT="cpio -v --extract			--file ${CPIO_FILE}	--directory ${CPIO_FILE}.dir"
+declare XZ="xz -vv --compress --stdout --format xz --check crc32"
+
+########################################
+
+declare PATCH="patch --force --strip=1"
+declare PATCH_DIR="${ARTDIR}/patches"
+declare -a PATCHES
+PATCHES[0]="shmem-add-shmem_size-option-set-filesystem-size.v4.18-rc6.patch"
+
+########################################
+
+declare SKIP_DIRS="
+/dev
+/mnt
+/proc
+/run
+/sys
+\
+/tmp
+/var/cache
+/var/lock
+/var/log
+/var/run
+/var/tmp
+"
 
 ################################################################################
 
@@ -91,7 +130,7 @@ function common_exists {
 	echo -en ">>> THE OUTPUT FILES OF (${SRC_FUNC}) SEEM TO ALREADY EXIST <<<\n"
 	echo -en ">>> OR THE REQUIRED DIRECTORIES OR FILES ARE MISSING <<<\n"
 	echo -en "\n"
-	${LL} -d "${@}"
+	${LL} --directory "${@}"
 	echo -en "\n"
 	return 0
 }
@@ -101,11 +140,14 @@ function common_exists {
 function common_tar {
 	declare SRC_FILE="${1}" && shift
 	if [[ ! -f ${SRC_FILE}.tar.xz ]] && [[ -d ${SRC_FILE} ]] && [[ ! -L ${SRC_FILE} ]]; then
-		tar -cvv --xz -C $(dirname ${SRC_FILE}) -f ${SRC_FILE}.tar.xz $(basename ${SRC_FILE}) \
-			|| return 1
+		tar -cvv --xz				\
+			-C $(dirname ${SRC_FILE})	\
+			-f ${SRC_FILE}.tar.xz		\
+			${@}				\
+			$(basename ${SRC_FILE})		|| return 1
 	else
-		common_exists ${FUNCNAME} ${SRC_FILE}.tar.xz ${SRC_FILE} \
-			|| return 1
+		common_exists ${FUNCNAME}		\
+			${SRC_FILE}.tar.xz ${SRC_FILE}	|| return 1
 	fi
 	return 0
 }
@@ -115,11 +157,15 @@ function common_tar {
 function common_untar {
 	declare SRC_FILE="${1}" && shift
 	if [[ -f ${SRC_FILE}.tar.xz ]] && [[ ! -d ${SRC_FILE} ]] && [[ ! -L ${SRC_FILE} ]]; then
-		tar -vvx --xz -C $(dirname ${SRC_FILE}) -f ${SRC_FILE}.tar.xz \
-			|| return 1
+		FILE="$(dirname ${SRC_FILE})"
+		${MKDIR} ${FILE}			|| return 1
+		tar -vvx --xz				\
+			-C ${FILE}			\
+			-f ${SRC_FILE}.tar.xz		\
+			${@}				|| return 1
 	else
-		common_exists ${FUNCNAME} ${SRC_FILE}.tar.xz ${SRC_FILE} \
-			|| return 1
+		common_exists ${FUNCNAME}		\
+			${SRC_FILE}.tar.xz ${SRC_FILE}	|| return 1
 	fi
 	return 0
 }
@@ -190,7 +236,7 @@ function prepare_config_issue {
 			${ARTDIR}/issue \
 			|| return 1
 	done
-	${RSYNC_C} -L ${ARTDIR}/issue ${TARGET}/etc/issue \
+	${RSYNC_C} --copy-links ${ARTDIR}/issue ${TARGET}/etc/issue \
 		|| return 1
 	if
 	[[ -z ${COMMIT} ]] ||
@@ -281,47 +327,47 @@ function prepare_config_restore {	#>>>{reset}
 function _prepare_config {		#{reset}
 	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
 	#note: these are from the "prepare_config_issue" function above
-	prepare_config_restore ${RESET} sys-apps/baselayout			/etc/issue				|| return 1
-	prepare_config_restore ${RESET} ""					/etc/motd				|| return 1
+	prepare_config_restore ${RESET} sys-apps/baselayout		/etc/issue				|| return 1
+	prepare_config_restore ${RESET} ""				/etc/motd				|| return 1
 	#note: these are all directly below
-	prepare_config_restore ${RESET} ""					/init					|| return 1
-	prepare_config_restore ${RESET} sys-apps/baselayout			/etc/fstab				fstab			|| return 1
-	prepare_config_restore ${RESET} sys-libs/glibc				/etc/locale.gen				|| return 1
-	prepare_config_restore ${RESET} sys-apps/openrc				/etc/conf.d/hostname			|| return 1
-	prepare_config_restore ${RESET} ""					/etc/profile.d/setterm.sh		|| return 1
-	prepare_config_restore ${RESET} net-wireless/wpa_supplicant		/etc/wpa_supplicant/wpa_supplicant.conf	wpa_supplicant.conf.bz2	|| return 1
-	prepare_config_restore ${RESET} net-misc/openssh			/etc/ssh/sshd_config			|| return 1
-	prepare_config_restore ${RESET} ""					/etc/env.d/90xsession			|| return 1
-	prepare_config_restore ${RESET} x11-wm/dwm				/etc/X11/Sessions/dwm			|| return 1
+	prepare_config_restore ${RESET} ""				/init					|| return 1
+	prepare_config_restore ${RESET} sys-apps/baselayout		/etc/fstab				fstab			|| return 1
+	prepare_config_restore ${RESET} sys-libs/glibc			/etc/locale.gen				|| return 1
+	prepare_config_restore ${RESET} sys-apps/openrc			/etc/conf.d/hostname			|| return 1
+	prepare_config_restore ${RESET} ""				/etc/profile.d/setterm.sh		|| return 1
+	prepare_config_restore ${RESET} net-wireless/wpa_supplicant	/etc/wpa_supplicant/wpa_supplicant.conf	wpa_supplicant.conf.bz2	|| return 1
+	prepare_config_restore ${RESET} net-misc/openssh		/etc/ssh/sshd_config			|| return 1
+	prepare_config_restore ${RESET} ""				/etc/env.d/90xsession			|| return 1
+	prepare_config_restore ${RESET} x11-wm/dwm			/etc/X11/Sessions/dwm			|| return 1
 	if [[ -n ${RESET} ]]; then
-		${SED} -i "s|^[#](en_US)|\1|g"					${TARGET}/etc/locale.gen		|| return 1
-		safe_env							/usr/sbin/locale-gen			|| return 1
+		${SED} -i "s|^[#](en_US)|\1|g"				${TARGET}/etc/locale.gen		|| return 1
+		safe_env						/usr/sbin/locale-gen			|| return 1
 		return 0
 	fi
 	echo "${RCUPDT}" | tr ';' '\n' | while read -r FILE; do
-		eval safe_env							${FILE}					|| return 1
+		eval safe_env						${FILE}					|| return 1
 	done
-	prepare_config_issue												|| return 1
-	${LN} sbin/init								${TARGET}/init				|| return 1
-	${SED} -i "s|^([^#].+)$|#\1|g"						${TARGET}/etc/fstab			|| return 1
-	${RSYNC_C} -L ${ARTDIR}/locale.gen					${TARGET}/etc/				|| return 1
-	${SED} -i "s|^(hostname=[\"]?)[^\"]+([\"]?)$|\1${_TITLE}\2|g"		${TARGET}/etc/conf.d/hostname		|| return 1
-	echo -en "setterm -blength 0\n"						>${TARGET}/etc/profile.d/setterm.sh	|| return 1
-	${RSYNC_C} -L ${ARTDIR}/wpa_supplicant.conf				${TARGET}/etc/wpa_supplicant/		|| return 1
-	${SED} -i "s|^.*(PermitRootLogin).*$|\1 yes|g"				${TARGET}/etc/ssh/sshd_config		|| return 1
-	echo -en "XSESSION=\"${WINMGR}\"\n"					>${TARGET}/etc/env.d/90xsession		|| return 1
-	FILE=														|| return 1
-		FILE+="xset -b\n"											|| return 1
-		FILE+="xsetroot -mod 3 3 -fg '#000000' -bg '#404040'\n"							|| return 1
-	${SED} -i													\
-		-e "/xset[ ][-]b/d"											\
-		-e "/xsetroot[ ][-]mod/d"										\
-		-e "s|^(exec.*dwm.*)$|${FILE}\1|g"									\
-										${TARGET}/etc/X11/Sessions/dwm		|| return 1
-	${SED} -i "s|^(.*xsetroot[ ][-]name[ ]).*$|\1\"${WMHELP}\"|g"		${TARGET}/etc/X11/Sessions/dwm		|| return 1
-	safe_env								/usr/sbin/locale-gen			|| return 1
-	safe_env								/usr/sbin/env-update			|| return 1
-	echo -en "${_TITLE}\n${_TITLE}\n" | safe_env				/usr/bin/passwd root			|| return 1
+	prepare_config_issue											|| return 1
+	${LN} sbin/init							${TARGET}/init				|| return 1
+	${SED} -i "s|^([^#].+)$|#\1|g"					${TARGET}/etc/fstab			|| return 1
+	${RSYNC_C} --copy-links ${ARTDIR}/locale.gen			${TARGET}/etc/				|| return 1
+	${SED} -i "s|^(hostname=[\"]?)[^\"]+([\"]?)$|\1${_TITLE}\2|g"	${TARGET}/etc/conf.d/hostname		|| return 1
+	echo -en "setterm -blength 0\n"					>${TARGET}/etc/profile.d/setterm.sh	|| return 1
+	${RSYNC_C} --copy-links ${ARTDIR}/wpa_supplicant.conf		${TARGET}/etc/wpa_supplicant/		|| return 1
+	${SED} -i "s|^.*(PermitRootLogin).*$|\1 yes|g"			${TARGET}/etc/ssh/sshd_config		|| return 1
+	echo -en "XSESSION=\"${WINMGR}\"\n"				>${TARGET}/etc/env.d/90xsession		|| return 1
+	FILE=													|| return 1
+		FILE+="xset -b\n"										|| return 1
+		FILE+="xsetroot -mod 3 3 -fg '#000000' -bg '#404040'\n"						|| return 1
+	${SED} -i												\
+		-e "/xset[ ][-]b/d"										\
+		-e "/xsetroot[ ][-]mod/d"									\
+		-e "s|^(exec[ ].*)$|${FILE}\1|g"								\
+									${TARGET}/etc/X11/Sessions/dwm		|| return 1
+	${SED} -i "s|^(.*xsetroot[ ][-]name[ ]).*$|\1\"${WMHELP}\"|g"	${TARGET}/etc/X11/Sessions/dwm		|| return 1
+	safe_env							/usr/sbin/locale-gen			|| return 1
+	safe_env							/usr/sbin/env-update			|| return 1
+	echo -en "${_TITLE}\n${_TITLE}\n" | safe_env			/usr/bin/passwd root			|| return 1
 	return 0
 }
 
@@ -329,17 +375,17 @@ function _prepare_config {		#{reset}
 
 function _prepare_docdir {
 	if [[ ! -d ${_G_REPO} ]] || [[ ! -d ${_G_REPO}.git ]]; then
-#>>>		${RM}					${TARGET}/.${_TITLE}			|| return 1
-#>>>		${RM}					${TARGET}/.${_TITLE}.git		|| return 1
+#>>>		${RM}							${TARGET}/.${_TITLE}			|| return 1
+#>>>		${RM}							${TARGET}/.${_TITLE}.git		|| return 1
 		return 0
 	fi
-	${RSYNC_U} --filter="-_/.git" ${_G_REPO}/	${TARGET}/.${_TITLE}			|| return 1
-#>>>	${RSYNC_U} ${_G_REPO}.git/			${TARGET}/.${_TITLE}.git		|| return 1
-#>>>	${LN} ../.${_TITLE}.git				${TARGET}/.${_TITLE}/.git		|| return 1
-#>>>	echo -en "gitdir: ../.${_TITLE}.git\n"		>${TARGET}/.${_TITLE}/.git		|| return 1
-	${RM}						${TARGET}/.${_TITLE}.git		|| return 1
-	${RSYNC_U} ${_G_REPO}.git/			${TARGET}/.${_TITLE}/.git		|| return 1
-	${SED} -i "/worktree[ ][=]/d"			${TARGET}/.${_TITLE}/.git/config	|| return 1
+	${RSYNC_U} --filter="-_/.git" ${_G_REPO}/			${TARGET}/.${_TITLE}			|| return 1
+#>>>	${RSYNC_U} ${_G_REPO}.git/					${TARGET}/.${_TITLE}.git		|| return 1
+#>>>	${LN} ../.${_TITLE}.git						${TARGET}/.${_TITLE}/.git		|| return 1
+#>>>	echo -en "gitdir: ../.${_TITLE}.git\n"				>${TARGET}/.${_TITLE}/.git		|| return 1
+	${RM}								${TARGET}/.${_TITLE}.git		|| return 1
+	${RSYNC_U} ${_G_REPO}.git/					${TARGET}/.${_TITLE}/.git		|| return 1
+	${SED} -i "/worktree[ ][=]/d"					${TARGET}/.${_TITLE}/.git/config	|| return 1
 	return 0
 }
 
@@ -383,29 +429,29 @@ function _prepare_linux {
 
 function _prepare_packages {
 	if [[ ${TARGET} == / ]]; then
-		${RM} ${TARGET}/.${_TITLE}${_GPACK}								|| return 1
+		${RM} ${TARGET}/.${_TITLE}${_GPACK}							|| return 1
 		return 0
 	fi
-	cat /dev/null >${TARGET}/.${_TITLE}${_GPACK}								|| return 1
+	cat /dev/null >${TARGET}/.${_TITLE}${_GPACK}							|| return 1
 	NEXT=
 	for FILE in $(
-		cd ${TARGET}${PAKDIR}										&&
-		find ./ -mindepth 2 -maxdepth 2 -type f								|
-			${SED} "s|^[.][/]||g"									|
+		cd ${TARGET}${PAKDIR}									&&
+		find ./ -mindepth 2 -maxdepth 2 -type f							|
+			${SED} "s|^[.][/]||g"								|
 			sort -u
 	); do
 		NEXT+=" ${FILE}"
 	done
 	for FILE in ${NEXT}; do
-		declare PKG_DB="$(cd ${TARGET}${PDBDIR} && ${LS} -d ${FILE/%.tbz2}	2>/dev/null)"		|| return 1
-		declare PKG_DU="$(cd ${TARGET}${PAKDIR} && ${DU} -ks ${FILE}		2>/dev/null)"		|| return 1
+		declare PKG_DB="$(cd ${TARGET}${PDBDIR} && ${LS} -d ${FILE/%.tbz2}	2>/dev/null)"	|| return 1
+		declare PKG_DU="$(cd ${TARGET}${PAKDIR} && ${DU} -ks ${FILE}		2>/dev/null)"	|| return 1
 		if [[ -n ${PKG_DB} ]]; then
-			echo -en "${PKG_DU} (installed)\n"	| tee -a ${TARGET}/.${_TITLE}${_GPACK}		|| return 1
+			echo -en "${PKG_DU} (installed)\n"	| tee -a ${TARGET}/.${_TITLE}${_GPACK}	|| return 1
 		else
-			echo -en "${PKG_DU} (packaged)\n"	| tee -a >>${TARGET}/.${_TITLE}${_GPACK}	|| return 1
+			echo -en "${PKG_DU} (packaged)\n"	| tee -a ${TARGET}/.${_TITLE}${_GPACK}	|| return 1
 		fi
 	done
-	${RSYNC_U} ${TARGET}/.${_TITLE}${_GPACK}		${TARGET}/${_RPACK}				|| return 1
+	${RSYNC_U} ${TARGET}/.${_TITLE}${_GPACK}		${TARGET}/${_RPACK}			|| return 1
 	return 0
 }
 
@@ -418,23 +464,23 @@ function _prepare_symlinks {		#{reset}
 	fi
 	if [[ -n ${COMMIT} ]]
 		#note: also doing this in "_system" script on purpose
-		then echo -en "${COMMIT}"			>${TARGET}/${CMTFIL}				|| return 1
-		else ${RM}					${TARGET}/${CMTFIL}				|| return 1
+		then echo -en "${COMMIT}"				>${TARGET}/${CMTFIL}				|| return 1
+		else ${RM}						${TARGET}/${CMTFIL}				|| return 1
 	fi
-	${MKDIR} ${_FINAL}											|| return 1
-	${RM} $(find						${_FINAL} -maxdepth 1 -type l | sort)		|| return 1
+	${MKDIR} ${_FINAL}												|| return 1
+	${RM} $(find							${_FINAL} -maxdepth 1 -type l | sort)		|| return 1
 	if [[ -n ${RESET} ]]; then
 		return 0
 	fi
-	${LN} --relative ${TARGET}${DSTDIR}			${_FINAL}/_$(basename ${DSTDIR})		|| return 1
-	${LN} --relative ${TARGET}${PAKDIR}			${_FINAL}/_$(basename ${PAKDIR})		|| return 1
+	${LN} --relative ${TARGET}${DSTDIR}				${_FINAL}/_$(basename ${DSTDIR})		|| return 1
+	${LN} --relative ${TARGET}${PAKDIR}				${_FINAL}/_$(basename ${PAKDIR})		|| return 1
 #>>> sort -b -k4
-	${LN} --relative ${TARGET}${REPDIR}.tar.xz		${_RAMFS}.$(basename ${REPDIR}).tar.xz		|| return 1
-	${LN} --relative ${TARGET}${LDIR}.tar.xz		${_RAMFS}.linux.tar.xz				|| return 1
-	${LN} --relative ${TARGET}/.${_TITLE}${_GPACK}		${_RAMFS}${_GPACK}				|| return 1
+	${LN} --relative ${TARGET}${REPDIR}.tar.xz			${_RAMFS}.$(basename ${REPDIR}).tar.xz		|| return 1
+	${LN} --relative ${TARGET}${LDIR}.tar.xz			${_RAMFS}.linux.tar.xz				|| return 1
+	${LN} --relative ${TARGET}/.${_TITLE}${_GPACK}			${_RAMFS}${_GPACK}				|| return 1
 #>>>
 	for FILE in ${TARGET}${ARCDIR}/stage3-*.tar.xz; do
-		${LN} --relative ${FILE}			${_FINAL}/					|| return 1
+		${LN} --relative ${FILE}				${_FINAL}/					|| return 1
 	done
 	return 0
 }
@@ -463,81 +509,57 @@ function _release_initrd {		#{main} #{reset}
 
 ########################################
 
-#note: the "du" command is also used in the "release_kernel_shmem" function, so making them all global
-declare CPIO_FILE="${_RAMFS}.cpio"
-declare XARGS="xargs --max-procs 0 --max-args 1 --null	--arg-file ${CPIO_FILE}.nul"
-declare DU_S="${DU} --summarize --apparent-size		--block-size 1"
-declare CPIO_IN="cpio -v --create --format newc --null	--file ${CPIO_FILE}	--directory ${TARGET}"
-declare CPIO_OUT="cpio -v --extract			--file ${CPIO_FILE}	--directory ${CPIO_FILE}.dir"
-declare XZ="xz -vv --compress --stdout --format xz --check crc32"
-
-#note: this is also used in the "release_install_root" and "publish_prep" functions, so making it global
-declare SKIP_DIRS="
-/dev
-/mnt
-/proc
-/run
-/sys
-\
-/tmp
-/var/cache
-/var/lock
-/var/log
-/var/run
-/var/tmp
-"
-
 function release_cpio_nul {
 	(cd ${TARGET} && eval find ./ -mindepth 1 -xdev \
-		\\\( -path ./${CMTFIL}			-prune \\\) -o \
-		\\\( -path ./${_FINAL/#${TARGET}\/}	-prune \\\) -o \
-		\\\( -path ./${_RAMFS/#${TARGET}\/}\\\*	-prune \\\) -o \
-		\\\( -path ./${_RPACK}			-prune \\\) -o \
+		\\\( -path ./${CMTFIL}				-prune \\\) -o \
+		\\\( -path ./${_FINAL/#${TARGET}\/}		-prune \\\) -o \
+		\\\( -path ./${_RAMFS/#${TARGET}\/}\\\*		-prune \\\) -o \
+		\\\( -path ./${_RPACK}				-prune \\\) -o \
 		\
-		\\\( -path .${ARCDIR}\\\*		-prune \\\) -o \
-		\\\( -path .${GENDIR}\\\*		-prune \\\) -o \
+		\\\( -path .${ARCDIR}\\\*			-prune \\\) -o \
+		\\\( -path .${GENDIR}\\\*			-prune \\\) -o \
 		\
-		\\\( -path .${DSTDIR}			-prune \\\) -o \
-		\\\( -path .${PAKDIR}			-prune \\\) -o \
-		\\\( -path .${REPDIR}			-prune \\\) -o \
-		\\\( -path .${REPDIR}.git		-prune \\\) -o \
+		\\\( -path .${DSTDIR}				-prune \\\) -o \
+		\\\( -path .${PAKDIR}				-prune \\\) -o \
+		\\\( -path .${REPDIR}				-prune \\\) -o \
+		\\\( -path .${REPDIR}.git			-prune \\\) -o \
 		\
-		\\\( -path .${LDIR}			-prune \\\) -o \
-		\\\( -path .${LDIR}-\\\*		-prune \\\) -o \
+		\\\( -path .${LDIR}				-prune \\\) -o \
+		\\\( -path .${LDIR}-\\\*			-prune \\\) -o \
 		\
-		\\\( -path ./usr/lib/debug		-prune \\\) -o \
-		\\\( -path ./usr/lib32/debug		-prune \\\) -o \
-		\\\( -path ./usr/lib64/debug		-prune \\\) -o \
-		\\\( -path ./usr/src/debug		-prune \\\) -o \
+		\\\( -path ./usr/lib/debug			-prune \\\) -o \
+		\\\( -path ./usr/lib32/debug			-prune \\\) -o \
+		\\\( -path ./usr/lib64/debug			-prune \\\) -o \
+		\\\( -path ./usr/src/debug			-prune \\\) -o \
 		\
-		$(echo "${FSSKIP}" | tr ';' '\n' | while read -r FILE; do	echo "\\( -path .${FILE//\*/\\\*} -prune \\) -o"; done) \
-		$(for FILE in ${SKIP_DIRS}; do					echo "\\( -path .${FILE//\*/\\\*}/\\* -prune \\) -o"; done) \
-	-print0)					>${CPIO_FILE}.nul	|| return 1
-	${MKDIR}					${TARGET}/tmp/dev	|| return 1
-	realdev						${TARGET}/tmp/dev	|| return 1
-	realdev						${TARGET}/dev		|| return 1
-	(cd ${TARGET}/tmp && find ./dev -print0)	>>${CPIO_FILE}.nul	|| return 1
-	${RM}						${TARGET}/tmp/dev	|| return 1
+		$(echo "${FSSKIP}" | tr ';' '\n' | while read -r FILE; do			echo "\\( -path .${FILE//\*/\\\*} -prune \\) -o"; done) \
+		$(for FILE in ${SKIP_DIRS}; do							echo "\\( -path .${FILE//\*/\\\*}/\\* -prune \\) -o"; done) \
+	-print0)						>${CPIO_FILE}.nul		|| return 1
+	${MKDIR}						${TARGET}/tmp/dev		|| return 1
+	realdev							${TARGET}/tmp/dev		|| return 1
+	realdev							${TARGET}/dev			|| return 1
+	(cd ${TARGET}/tmp && find ./dev -print0)		>>${CPIO_FILE}.nul		|| return 1
+	${RM}							${TARGET}/tmp/dev		|| return 1
 	return 0
 }
 
 function release_cpio_file {
-	(cd ${TARGET} && ${XARGS} ${DU_S})	| tee ${CPIO_FILE}.txt	#>>> || return 1
-	sort -k4 -u -o ${CPIO_FILE}.txt		${CPIO_FILE}.txt	|| return 1
-	cat ${CPIO_FILE}.nul | ${CPIO_IN}				|| return 1
-	${RM}					${CPIO_FILE}.nul	|| return 1
+	(cd ${TARGET} && ${XARGS} ${DU_S})					| tee ${CPIO_FILE}.txt		#>>> || return 1
+	sort -k4 -u -o ${CPIO_FILE}.txt						${CPIO_FILE}.txt		|| return 1
+	cat ${CPIO_FILE}.nul | ${CPIO_IN}									|| return 1
+	${RM}									${CPIO_FILE}.nul		|| return 1
 	return 0
 }
 
 function release_cpio_dir {	#>>> {initrd}
 	declare INITRD= ; if [[ ${1} == --initrd ]]; then INITRD="${1}" && shift; fi
 	if [[ ${TARGET} != / ]]; then
-		${RM}			${CPIO_FILE}.dir	|| return 1
-		${MKDIR}		${CPIO_FILE}.dir	|| return 1
-		${CPIO_OUT}					|| return 1
+		${RM}				${CPIO_FILE}.dir	|| return 1
+		${MKDIR}			${CPIO_FILE}.dir	|| return 1
+		${CPIO_OUT}						|| return 1
 	fi
 	if [[ ${TARGET} != / ]] || [[ -n ${INITRD} ]]; then
-		${XZ} ${CPIO_FILE}	>${CPIO_FILE}.xz	|| return 1
+		${XZ} ${CPIO_FILE}		>${CPIO_FILE}.xz	|| return 1
 	fi
 	return 0
 }
@@ -562,11 +584,6 @@ function _release_cpio {		#{initrd}
 }
 
 ########################################
-
-declare PATCH="patch --force --strip=1"
-declare PATCH_DIR="${ARTDIR}/patches"
-declare -a PATCHES
-PATCHES[0]="shmem-add-shmem_size-option-set-filesystem-size.v4.18-rc6.patch"
 
 function release_kernel_patch {
 	declare LDIR="${1}" && shift
@@ -611,8 +628,8 @@ function release_kernel_initramfs {
 	${SED} -i \
 		-e "/CONFIG_INITRAMFS_COMPRESSION/d" \
 		-e "s|^.*(CONFIG_INITRAMFS_SOURCE)[^_].*$|${INITRAMFS_CONFIG}|g" \
-								${TARGET}${LDIR}/.config			|| return 1
-	${RM}							${TARGET}${LDIR}/usr/initramfs_data.cpio*	|| return 1
+		${TARGET}${LDIR}/.config			|| return 1
+	${RM}	${TARGET}${LDIR}/usr/initramfs_data.cpio*	|| return 1
 	return 0
 }
 
@@ -637,7 +654,7 @@ function release_kernel_build {
 	${SED} -i.${_TITLE} "s|^(${BZ_SEDR})$|\#\1|g"	${BZ_MAKE}		|| return 1
 	safe_make -C ${TARGET}${DODIR}			olddefconfig		|| return 1
 	safe_make -C ${TARGET}${DODIR}			bzImage			|| return 1
-	${RSYNC_U} -L ${BZIMAGE}			${KOUT}			|| return 1
+	${RSYNC_U} --copy-links ${BZIMAGE}		${KOUT}			|| return 1
 	return 0
 }
 
@@ -651,23 +668,23 @@ function _release_kernel {		#{initrd}
 		[[ ! -f ${_RAMFS}.boot.kernel ]] ||
 		[[ ! -f ${_RAMFS}.kernel ]];
 	}; then
-		release_kernel_patch ${DODIR}					|| return 1
-		release_kernel_config ${DODIR}					|| return 1
-		release_kernel_shmem ${DODIR}					|| return 1
+		release_kernel_patch		${DODIR}				|| return 1
+		release_kernel_config		${DODIR}				|| return 1
+		release_kernel_shmem		${DODIR}				|| return 1
 		#note: boot/initrd kernel
-		release_kernel_build ${DODIR}		${_RAMFS}.boot.kernel	|| return 1
+		release_kernel_build		${DODIR}	${_RAMFS}.boot.kernel	|| return 1
 		if [[ -z ${INITRD} ]]; then
 			#note: initramfs kernel
-			release_kernel_initramfs ${DODIR}			|| return 1
-			release_kernel_diff ${DODIR}				|| return 1
-			release_kernel_build ${DODIR}	${_RAMFS}.kernel	|| return 1
+			release_kernel_initramfs ${DODIR}				|| return 1
+			release_kernel_diff	${DODIR}				|| return 1
+			release_kernel_build	${DODIR}	${_RAMFS}.kernel	|| return 1
 		fi
 	else
-		common_exists ${FUNCNAME}					\
-			${TARGET}${DODIR}					\
-			${_RAMFS}.boot.kernel					\
-			${_RAMFS}.kernel					\
-										|| return 1
+		common_exists ${FUNCNAME}						\
+								${TARGET}${DODIR}	\
+								${_RAMFS}.boot.kernel	\
+								${_RAMFS}.kernel	\
+											|| return 1
 	fi
 	return 0
 }
@@ -700,14 +717,16 @@ function _release_grub {
 ########################################
 
 function _release_report {
-	echo -en "\n"; ${LL}						\
-				${TARGET}/				\
-				${_FINAL}*				\
-									2>/dev/null #>>> || return 1
-	echo -en "\n"; ${DU} -ms --dereference --one-file-system	\
-				${TARGET}${LDIR}/usr/initramfs_data.*	\
-				${_RAMFS}*				\
-									2>/dev/null #>>> || return 1
+	echo -en "\n"
+	${LL}						\
+		${TARGET}/				\
+		${_FINAL}*				\
+							2>/dev/null #>>> || return 1
+	echo -en "\n"
+	${DU_L} --dereference --one-file-system		\
+		${TARGET}${LDIR}/usr/initramfs_data.*	\
+		${_RAMFS}*				\
+							2>/dev/null #>>> || return 1
 	return 0
 }
 
@@ -745,18 +764,18 @@ function release_install_root {
 
 function release_install_boot {
 	declare DEVICE="$(findmnt --noheadings --output SOURCE --target ${_GINST}/boot)"
-	mount-robust --dev			${_GINST}			|| return 1
-	${RSYNC_U} /usr/lib/grub/i386-pc/	${_GINST}/boot/grub		|| return 1
-	chroot ${_GINST} boot-update --verbose					|| return 1
-	mount-robust -u --dev			${_GINST}			|| return 1
+	mount-robust --dev				${_GINST}			|| return 1
+	${RSYNC_U} /usr/lib/grub/i386-pc/		${_GINST}/boot/grub		|| return 1
+	chroot ${_GINST} boot-update --verbose						|| return 1
+	mount-robust -u --dev				${_GINST}			|| return 1
 	${SED} -i \
 		-e "s|([[:space:]])[/](kernel\|init)|\1/boot/\2|g" \
 		-e "s|(real_root=)[^[:space:]]+|\1${DEVICE} root=${DEVICE}|g" \
-						${_GINST}/boot/grub/grub.cfg	|| return 1
+							${_GINST}/boot/grub/grub.cfg	|| return 1
 	${SED} -i \
 		-e "s|^([^#].+)$|#\1|g" \
 		-e "s|^(.+)([[:space:]][/][[:space:]])|${DEVICE}\2|g" \
-						${_GINST}/etc/fstab		|| return 1
+							${_GINST}/etc/fstab		|| return 1
 	return 0
 }
 
@@ -806,13 +825,13 @@ function _publish_release {		#{main} #{reset}
 ########################################
 
 function _publish_prep {
-	echo -en "${SKIP_DIRS}"		>${TARGET}/.gitignore	|| return 1
-	sort -u -o ${TARGET}/.gitignore	${TARGET}/.gitignore	|| return 1
-	${SED} -i "/^$/d"		${TARGET}/.gitignore	|| return 1
-	${RM}				${CPIO_FILE}		|| return 1
-	${RM}				${CPIO_FILE}.dir	|| return 1
-	${RM}				${_RAMFS}.grub		|| return 1
-	${RM}				${TARGET}/tmp/.ccache	|| return 1
+	echo -en "${SKIP_DIRS}"			>${TARGET}/.gitignore			|| return 1
+	sort -u -o ${TARGET}/.gitignore		${TARGET}/.gitignore			|| return 1
+	${SED} -i "/^$/d"			${TARGET}/.gitignore			|| return 1
+	${RM}					${CPIO_FILE}				|| return 1
+	${RM}					${CPIO_FILE}.dir			|| return 1
+	${RM}					${_RAMFS}.grub				|| return 1
+	${RM}					${TARGET}/tmp/.ccache			|| return 1
 	return 0
 }
 
@@ -925,7 +944,7 @@ function publish_export_gitbackup {
 
 function publish_export_underscore {
 	FILE="${1}" && shift
-	${RSYNC_U} -L \
+	${RSYNC_U} --copy-links \
 		${_OUTDIR}/.${_TITLE}-*/_$(basename ${FILE})/ \
 		${_OUTDIR}/_$(basename ${FILE}) \
 		|| return 1
@@ -954,9 +973,9 @@ function publish_export_checksum {
 }
 
 function _publish_export {
-	${MKDIR} ${_OUTDIR}										|| return 1
-	${RM} ${_OUTDIR}.git										|| return 1
-	${LN} ${_SAVDIR}.git ${_OUTDIR}.git								|| return 1
+	${MKDIR} ${_OUTDIR}									|| return 1
+	${RM} ${_OUTDIR}.git									|| return 1
+	${LN} ${_SAVDIR}.git ${_OUTDIR}.git							|| return 1
 	declare INDEX=
 	for INDEX in $(
 		eval echo -en "{0..$((${#RELEASE[*]}-1))}"
@@ -966,33 +985,37 @@ function _publish_export {
 		else
 			continue
 		fi
-		publish_export_gitbackup ${_OUTDIR} ${CMTHASH[${INDEX}]}				|| return 1
+		publish_export_gitbackup ${_OUTDIR} ${CMTHASH[${INDEX}]}			|| return 1
 		if [[ -d $(${LS} -d ${_OUTDIR}/.${_TITLE}-* 2>/dev/null) ]]; then
 			if [[ ${RELEASE[${INDEX}]} == ${RELEASE[-1]} ]]; then
-				publish_export_underscore ${DSTDIR}					|| return 1
-				publish_export_underscore ${PAKDIR}					|| return 1
+				publish_export_underscore ${DSTDIR}				|| return 1
+				publish_export_underscore ${PAKDIR}				|| return 1
 			fi
-			${RSYNC_U} -L $(publish_export_filelist ${_OUTDIR}/.${_TITLE}-*) ${_OUTDIR}/	|| return 1
+			${RSYNC_U} --copy-links							\
+				$(publish_export_filelist ${_OUTDIR}/.${_TITLE}-*)		\
+				${_OUTDIR}/							|| return 1
 			${RM} $(realpath --canonicalize-missing $(
 				publish_export_filelist ${_OUTDIR}/.${_TITLE}-*
-			))										|| return 1
+			))									|| return 1
 			until [[ -z $(find ${_OUTDIR} -type d -empty) ]]; do
-				${RM} $(find ${_OUTDIR} -type d -empty)					|| return 1
+				${RM} $(find ${_OUTDIR} -type d -empty)				|| return 1
 			done
-			${RM} ${_OUTDIR}/.${_TITLE}-*							|| return 1
+			${RM} ${_OUTDIR}/.${_TITLE}-*						|| return 1
 		fi
-		(cd ${_OUTDIR} && publish_export_checksum $(publish_export_filelist .))			|| return 1
-		${MKDIR} ${_OUTDIR}/${RELEASE[${INDEX}]}						|| return 1
-		${RSYNC_U} -L $(publish_export_filelist ${_OUTDIR}) ${_OUTDIR}/${RELEASE[${INDEX}]}/	|| return 1
-		${RM} $(publish_export_filelist ${_OUTDIR})						|| return 1
+		(cd ${_OUTDIR} && publish_export_checksum $(publish_export_filelist .))		|| return 1
+		${MKDIR} ${_OUTDIR}/${RELEASE[${INDEX}]}					|| return 1
+		${RSYNC_U} --copy-links								\
+			$(publish_export_filelist ${_OUTDIR})					\
+			${_OUTDIR}/${RELEASE[${INDEX}]}/					|| return 1
+		${RM} $(publish_export_filelist ${_OUTDIR})					|| return 1
 		touch -r $(
-			${LS} -t ${_OUTDIR}/${RELEASE[${INDEX}]}/*.kernel 2>/dev/null			|
+			${LS} -t ${_OUTDIR}/${RELEASE[${INDEX}]}/*.kernel 2>/dev/null		|
 			head -n1
-		) ${_OUTDIR}/${RELEASE[${INDEX}]}							|| return 1
+		) ${_OUTDIR}/${RELEASE[${INDEX}]}						|| return 1
 	done
-	${RM} ${_OUTDIR}.git										|| return 1
-	${RM} ${_OUTDIR}/+index*									|| return 1
-	${GIT} --git-dir=${_SAVDIR}.git --work-tree=${_SAVDIR} reset					|| return 1
+	${RM} ${_OUTDIR}.git									|| return 1
+	${RM} ${_OUTDIR}/+index*								|| return 1
+	${GIT} --git-dir=${_SAVDIR}.git --work-tree=${_SAVDIR} reset				|| return 1
 	for INDEX in ${RELEASE[*]}; do
 		for NEXT in $(
 			${LS} ${_OUTDIR}/${INDEX}/*.{kernel,initrd} 2>/dev/null
@@ -1002,9 +1025,9 @@ function _publish_export {
 				${SED} \
 					-e "s%^stage3%${_TITLE}%g" \
 					-e "s%[a-z0-9]{40}[.][0-9][.]tar[.]xz%${INDEX}%g"
-			)"										|| return 1
-			${RSYNC_U} ${NEXT} ${_OUTDIR}/${OUTFILE}					|| return 1
-			publish_export_checksum ${_OUTDIR}/${OUTFILE}					|| return 1
+			)"									|| return 1
+			${RSYNC_U} ${NEXT} ${_OUTDIR}/${OUTFILE}				|| return 1
+			publish_export_checksum ${_OUTDIR}/${OUTFILE}				|| return 1
 		done
 	done
 	return 0
@@ -1017,22 +1040,20 @@ function _publish_upload {
 		README.md \
 		LICENSE.md \
 	; do
-		${RSYNC_U} -L		${_G_REPO}/${FILE} ${_OUTDIR}/			|| return 1
+		${RSYNC_U} --copy-links				${_G_REPO}/${FILE}	${_OUTDIR}/		|| return 1
 	done
-#>>>	${MKDIR}			${_OUTDIR}/$(basename ${ARTDIR})		|| return 1
-#>>>	${RSYNC_U} -L ${ARTDIR}/	${_OUTDIR}/$(basename ${ARTDIR})		|| return 1
-	find				${_OUTDIR} -type d -exec chmod 755 {} \;	|| return 1
-	find				${_OUTDIR} -type f -exec chmod 644 {} \;	|| return 1
-	chown -R root:root		${_OUTDIR}					|| return 1
-	${RSYNC_U}			${_OUTDIR}/ ${_SFFILE}				|| return 1
+#>>>	${RSYNC_U} --copy-links ${ARTDIR}			${_OUTDIR}/					|| return 1
+	find							${_OUTDIR} -type d -exec chmod 755 {} \;	|| return 1
+	find							${_OUTDIR} -type f -exec chmod 644 {} \;	|| return 1
+	chown -R root:root					${_OUTDIR}					|| return 1
+	${RSYNC_U}						${_OUTDIR}/		${_SFFILE}		|| return 1
 	return 0
 }
 
 ########################################
 
 function _publish_report {
-	${LL} -R ${_OUTDIR} \
-		|| return 1
+	${LL} --dereference ${_OUTDIR}					|| return 1
 	return 0
 }
 
