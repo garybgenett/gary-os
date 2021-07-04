@@ -6046,6 +6046,7 @@ function vlc-do {
 		if [[ ${PLAYLIST} == ${VIDEO_ARG} ]]; then
 			mixer
 		else
+			mixer ${VOLUME}
 			DISPLAY=:0 ${VLC} "${@}" ${PLAYLIST}
 		fi
 		DISPLAY= sudo _sync tunes on
