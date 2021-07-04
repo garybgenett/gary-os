@@ -209,7 +209,9 @@ function _prepare_build {		#{reset}
 		shift
 		DOREDO="false" _release_reset	|| return 1
 	fi
-	DOREDO="false" _prepare_config		|| return 1
+	if ! ${DOFAST}; then
+		DOREDO="false" _prepare_config	|| return 1
+	fi
 	DOREDO="false" _prepare_docdir		|| return 1
 	DOREDO="false" _prepare_repdir		|| return 1
 	DOREDO="false" _prepare_linux		|| return 1
