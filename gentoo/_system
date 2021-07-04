@@ -309,6 +309,25 @@ export WMHELP="${WMHELP:-${_TITLE} / \`date --iso=s\`}"
 
 ########################################
 
+declare LDIR="/usr/src/linux"
+declare MDIR="/lib64/modules"
+
+declare KVER=
+declare KCFG=
+declare KBAS=
+declare KFIL=
+declare KDIR=
+for FILE in ${KERNEL}; do
+	KVER="${FILE}"
+	KCFG="config-gentoo64-${KVER}"
+	KBAS="linux-${KVER}-gentoo"
+#>>>	KFIL="kernel-genkernel-x86-${KVER}-gentoo"
+	KFIL="kernel-genkernel-x86_64-${KVER}-gentoo"
+	KDIR="/usr/src/${KBAS}"
+done
+
+########################################
+
 #VARIABLES[HOME MYSELF IS_CHROOT DO_CHROOT SAFE_ENV]
 export MYSELF="${ARCDIR}/${FUNDIR}/${_HEART}"
 
@@ -1116,30 +1135,29 @@ if [[ ${1} == -i ]]; then
 	fi
 	if ${_KRN}; then for FILE in ${KERNEL}; do
 		${RM}					${TARGET}${LDIR}					|| EXIT 1
-		${LN} linux-${FILE}-gentoo		${TARGET}${LDIR}					|| EXIT 1
-		${RSYNC_U}				${SETDIR}/${LINDIR}/config-gentoo64-${FILE}		\
-							${TARGET}${ARCDIR}/config-gentoo64-${FILE}		|| EXIT 1
-		kernel_cpu 				${TARGET}${ARCDIR}/config-gentoo64-${FILE}		|| EXIT 1
+		${LN} ${KBAS//${KVER}/${FILE}}		${TARGET}${LDIR}					|| EXIT 1
+		${RSYNC_U}				${SETDIR}/${LINDIR}/${KCFG//${KVER}/${FILE}}		\
+							${TARGET}${ARCDIR}/${KCFG//${KVER}/${FILE}}		|| EXIT 1
+		kernel_cpu				${TARGET}${ARCDIR}/${KCFG//${KVER}/${FILE}}		|| EXIT 1
 		declare GENKERNEL_OPTS="--loglevel=5 --bootloader=grub --install --symlink"
 		if [[ -z ${AUTO} ]]; then
 			expect_wrapper			genkernel ${GENKERNEL_OPTS} kernel --menuconfig		|| EXIT 1
 		else
 			expect_wrapper			genkernel ${GENKERNEL_OPTS} kernel			\
-							--kernel-config=${ARCDIR}/config-gentoo64-${FILE}	|| EXIT 1
+							--kernel-config=${ARCDIR}/${KCFG//${KVER}/${FILE}}	|| EXIT 1
 		fi
 		${RSYNC_U}				${TARGET}${LDIR}/.config				\
-							${TARGET}${ARCDIR}/config-gentoo64-${FILE}		|| EXIT 1
-#>>>		FILE="kernel-genkernel-x86-${FILE}-gentoo"							|| EXIT 1
-		FILE="kernel-genkernel-x86_64-${FILE}-gentoo"							|| EXIT 1
+							${TARGET}${ARCDIR}/${KCFG//${KVER}/${FILE}}		|| EXIT 1
+		NEXT="${KFIL//${KVER}/${FILE}}"									|| EXIT 1
 		if ! ${_GOS}; then
 			${RM}				${TARGET}/boot/_cur					|| EXIT 1
-			${LN} ${FILE}			${TARGET}/boot/_cur					|| EXIT 1
+			${LN} ${NEXT}			${TARGET}/boot/_cur					|| EXIT 1
 			${RM}				${TARGET}/boot/_new					|| EXIT 1
 			${LN} kernel			${TARGET}/boot/_new					|| EXIT 1
 			${RM}				${TARGET}/boot/_old					|| EXIT 1
 			${LN} kernel.old		${TARGET}/boot/_old					|| EXIT 1
 			[[ -L				${TARGET}/boot/kernel.old				]] ||
-			${LN} ${FILE}			${TARGET}/boot/kernel.old				|| EXIT 1
+			${LN} ${NEXT}			${TARGET}/boot/kernel.old				|| EXIT 1
 		fi
 	done; fi
 	if ${_CFG}; then
@@ -1192,11 +1210,9 @@ if [[ ${1} == -w ]]; then
 	java-config --set-system-vm $(java-config --list-available-vm | ${GREP} -o "icedtea[-][0-9]+" | sort -n | tail -n1)
 	java-config --list-available-vms
 	for FILE in \
-		$(for NEXT in ${KERNEL}; do
-			echo "kernel:linux-${NEXT}-gentoo"
-		done) \
-		${SELECT}
-	do
+		kernel:${KBAS} \
+		${SELECT} \
+	; do
 		declare KEY="$(echo "${FILE}" | ${SED} "s|^(.+)[:](.+)$|\1|g")"
 		declare VAL="$(echo "${FILE}" | ${SED} "s|^(.+)[:](.+)$|\2|g")"
 		eselect ${KEY} set ${VAL}

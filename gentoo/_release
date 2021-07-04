@@ -27,23 +27,6 @@ export _RPACK="_packages"
 
 ########################################
 
-declare LDIR="/usr/src/linux"
-
-declare KVER=
-declare KCFG=
-declare KBAS=
-declare KDIR=
-declare KFIL=
-for FILE in ${KERNEL}; do
-	KVER="${FILE}"
-	KCFG="config-gentoo64-${KVER}"
-	KBAS="linux-${KVER}-gentoo"
-	KDIR="/usr/src/${KBAS}"
-	KFIL="/boot/kernel-genkernel-x86_64-${KVER}-gentoo"
-done
-
-########################################
-
 declare _AUTHOR="Gary B. Genett <me@garybgenett.net>"
 declare _LOGIN="garybgenett"
 
@@ -588,25 +571,25 @@ function _release_cpio {		#{initrd}
 ########################################
 
 function release_kernel_patch {
-	declare LDIR="${1}" && shift
+	declare DODIR="${1}" && shift
 	for FILE in ${PATCHES[*]}; do
-		${PATCH} --directory=${TARGET}${LDIR} --reverse <${PATCH_DIR}/${FILE}	#>>> || return 1
-		${PATCH} --directory=${TARGET}${LDIR} <${PATCH_DIR}/${FILE}		|| return 1
+		${PATCH} --directory=${TARGET}${DODIR} --reverse <${PATCH_DIR}/${FILE}	#>>> || return 1
+		${PATCH} --directory=${TARGET}${DODIR} <${PATCH_DIR}/${FILE}		|| return 1
 	done
 	return 0
 }
 
 function release_kernel_config {
-	declare LDIR="${1}" && shift
-	if [[ ${TARGET} == / ]]; then	${RSYNC_U} ${SETDIR}/${LINDIR}/${KCFG}	${TARGET}${LDIR}/.config	|| return 1
-	else				${RSYNC_U} ${TARGET}${ARCDIR}/${KCFG}	${TARGET}${LDIR}/.config	|| return 1
+	declare DODIR="${1}" && shift
+	if [[ ${TARGET} == / ]]; then	${RSYNC_U} ${SETDIR}/${LINDIR}/${KCFG}	${TARGET}${DODIR}/.config	|| return 1
+	else				${RSYNC_U} ${TARGET}${ARCDIR}/${KCFG}	${TARGET}${DODIR}/.config	|| return 1
 	fi
-	kernel_cpu								${TARGET}${LDIR}/.config	|| return 1
+	kernel_cpu								${TARGET}${DODIR}/.config	|| return 1
 	return 0
 }
 
 function release_kernel_shmem {
-	declare LDIR="${1}" && shift
+	declare DODIR="${1}" && shift
 	#note: treating the size of the cpio as the in-memory filesystem size, adding buffer and free disk space, and then rounding pages
 	declare SHMEM_PAGES="4096"
 	declare SHMEM_MEM="768*(1024^2)"
@@ -614,12 +597,12 @@ function release_kernel_shmem {
 	SHMEM="$(${DU_S} ${CPIO_FILE} | ${SED} "s|[[:space:]].*$||g")"
 	SHMEM="$(echo "((${SHMEM}+(${SHMEM_MEM}))/${SHMEM_PAGES})" | bc | ${SED} -r "s|[.].*$||g")"
 	SHMEM="$(echo "(${SHMEM}*${SHMEM_PAGES})" | bc)"
-	echo "CONFIG_SHMEM_SIZE=\"${SHMEM}\"" >>${TARGET}${LDIR}/.config	|| return 1
+	echo "CONFIG_SHMEM_SIZE=\"${SHMEM}\"" >>${TARGET}${DODIR}/.config	|| return 1
 	return 0
 }
 
 function release_kernel_initramfs {
-	declare LDIR="${1}" && shift
+	declare DODIR="${1}" && shift
 	declare INITRAMFS_CONFIG=
 	INITRAMFS_CONFIG+="CONFIG_INITRAMFS_SOURCE=\"$(realpath ${CPIO_FILE})\"\n"
 #>>>	INITRAMFS_CONFIG+="CONFIG_INITRAMFS_ROOT_GID=0\n"
@@ -630,15 +613,15 @@ function release_kernel_initramfs {
 	${SED} -i \
 		-e "/CONFIG_INITRAMFS_COMPRESSION/d" \
 		-e "s|^.*(CONFIG_INITRAMFS_SOURCE)[^_].*$|${INITRAMFS_CONFIG}|g" \
-		${TARGET}${LDIR}/.config			|| return 1
-	${RM}	${TARGET}${LDIR}/usr/initramfs_data.cpio*	|| return 1
+		${TARGET}${DODIR}/.config			|| return 1
+	${RM}	${TARGET}${DODIR}/usr/initramfs_data.cpio*	|| return 1
 	return 0
 }
 
 function release_kernel_diff {
-	declare LDIR="${1}" && shift
+	declare DODIR="${1}" && shift
 	if [[ ${TARGET} != / ]]; then
-		${RSYNC_U} ${TARGET}${LDIR}/.config		${TARGET}${ARCDIR}/${KCFG}.initramfs	|| return 1
+		${RSYNC_U} ${TARGET}${DODIR}/.config		${TARGET}${ARCDIR}/${KCFG}.initramfs	|| return 1
 		${GREP} "CONFIG_(SHMEM|KERNEL|INITRAMFS|RD)_"	${TARGET}${ARCDIR}/${KCFG}.initramfs	|| return 1
 		diff ${DIFF_OPTS} ${TARGET}${ARCDIR}/${KCFG}	${TARGET}${ARCDIR}/${KCFG}.initramfs	| ${GREP} "^[-+]" #>>> || return 1
 	fi
@@ -646,13 +629,13 @@ function release_kernel_diff {
 }
 
 function release_kernel_build {
-	declare LDIR="${1}" && shift
+	declare DODIR="${1}" && shift
 	declare KOUT="${1}" && shift
-	declare BZIMAGE="${TARGET}${DODIR}/arch/x86/boot/bzImage"		|| return 1
-#>>>	declare BZIMAGE="${TARGET}${DODIR}/arch/x86_64/boot/bzImage"		|| return 1
-	declare BZ_MAKE="${TARGET}${DODIR}/arch/x86/Makefile"			|| return 1
-	declare BZ_SEDR=".+ln -fsn.+/x86/boot/bzImage.+"			|| return 1
-	[[ -f ${BZ_MAKE}.${_TITLE} ]] && { ${MV}	${BZ_MAKE}{.${_TITLE},}	|| return 1 ;}
+	declare BZIMAGE="${TARGET}${DODIR}/arch/x86/boot/bzImage"
+#>>>	declare BZIMAGE="${TARGET}${DODIR}/arch/x86_64/boot/bzImage"
+	declare BZ_MAKE="${TARGET}${DODIR}/arch/x86/Makefile"
+	declare BZ_SEDR=".+ln -fsn.+/x86/boot/bzImage.+"
+	if [[ -f ${BZ_MAKE}.${_TITLE} ]]; then ${MV}	${BZ_MAKE}{.${_TITLE},}	|| return 1; fi
 	${SED} -i.${_TITLE} "s|^(${BZ_SEDR})$|\#\1|g"	${BZ_MAKE}		|| return 1
 	safe_make -C ${TARGET}${DODIR}			olddefconfig		|| return 1
 	safe_make -C ${TARGET}${DODIR}			bzImage			|| return 1
