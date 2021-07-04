@@ -755,8 +755,11 @@ fi
 print_info marker;		print_info title
 print_info marker;		print_info usage
 print_info marker;		print_info starter
-print_info marker;		print_info environment;	clear_environment
-print_info marker
+if ! ${DEBUG}; then
+	print_info marker;	print_info environment;
+	clear_environment
+	print_info marker
+fi
 
 if ${DEBUG}; then
 	if ${DO_CHROOT} && ! ${DEBUG_QUIET}; then
