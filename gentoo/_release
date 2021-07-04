@@ -3,7 +3,7 @@ source ${HOME}/.bashrc
 ################################################################################
 
 #NOTE: SCRIPT NAME AND FUNCTION NAMES (${PREPIT}, ${MAKEIT}, ${SHIPIT}) MUST MATCH FOR "_SYSTEM" WRAPPING TO WORK
-#NOTE: UPDATE "#SETTINGS" LINES IN "_SYSTEM" SCRIPT WHEN THESE VAIABLES CHANGE
+#NOTE: UPDATE "#SETTINGS" LINES IN "_SYSTEM" SCRIPT WHEN THESE VARIABLES CHANGE
 
 export _TITLE="gary-os"
 export _VERSN="v4.0"
@@ -11,6 +11,7 @@ export _RDATE="$(date --iso=date)"
 
 export _FINAL="${TARGET/%\/}/.${_TITLE}-${ESUB}"
 export _RAMFS="${_FINAL}/${_TITLE}-${ESUB}-${_VERSN}"
+
 export _GINST="${TARGET/%\/}/.install"
 
 #note: the "$_GPACK" extension is for the root filesystem

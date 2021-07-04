@@ -64,16 +64,18 @@ declare NEXT=
 #OPTIONS[QUICKLY]
 export QUICKLY="${QUICKLY:-false}"
 
+#NOTE: UPDATE THESE WHEN THEY CHANGE IN THE "${MAKEIT}" SCRIPT
+
+#SETTINGS[_TITLE _VERSN _RDATE]
+#SETTINGS[_FINAL _RAMFS]
+#SETTINGS[_GINST]
+#SETTINGS[_GPACK _RPACK]
+
 ########################################
 
 #OPTIONS[SOURCE GITDIR]
 export SOURCE="${SOURCE:-/.g/_data/_target/iso}"
 export GITDIR="${GITDIR:-/.g/_data/_build/funtoo/meta-repo.git}"
-
-#OPTIONS[SETDIR ARCDIR GENDIR]
-export SETDIR="${SETDIR:-/.g/_data/zactive/.setup}"
-export ARCDIR="${ARCDIR:-/_build}"
-export GENDIR="${GENDIR:-/_gentoo}"
 
 #>>> #OPTIONS[BLDDIR WRKDIR TORDIR GOSDIR]
 export BLDDIR="${BLDDIR:-/.g/_data/_builds/_gentoo}"
@@ -89,44 +91,48 @@ export GOSPKG="${GOSPKG:-gary-os}"
 
 ########################################
 
-#SETTINGS[_TITLE _VERSN _RDATE]
-#SETTINGS[_FINAL _RAMFS _GINST]
-#SETTINGS[_GPACK _RPACK]
-
-#VARIABLES[ETCDIR DSTDIR PAKDIR PDBDIR REPDIR TMPDIR]
+#VARIABLES[ETCDIR DSTDIR PAKDIR REPDIR TMPDIR PDBDIR]
 export ETCDIR="/etc/portage"
 export DSTDIR="/var/cache/portage/distfiles"
 export PAKDIR="/var/cache/portage/packages"
-export PDBDIR="/var/db/pkg"
 export REPDIR="/var/git/meta-repo"
 export TMPDIR="/var/tmp/portage"
+export PDBDIR="/var/db/pkg"
+
+#VARIABLES[ARCDIR GENDIR]
+export ARCDIR="/_build"
+export GENDIR="/_gentoo"
 
 #VARIABLES[LINDIR FUNDIR]
 export LINDIR="linux"
 export FUNDIR="gentoo"
 
-#VARIABLES[FUNCMT FUNKIT LAYDIR AUDITS]
+#VARIABLES[FUNCMT FUNKIT AUDITS LAYDIR]
 export FUNCMT="_funtoo"
 export FUNKIT="${FUNCMT}.kits"
-export LAYDIR="overlay"
 export AUDITS=".emergent"
+export LAYDIR="overlay"
 
-#OPTIONS[ARTDIR CFGSCR]
-#VARIABLES[PREPIT MAKEIT SHIPIT]
-export ARTDIR="${ARTDIR:-/.g/_data/zactive/coding/gary-os/artifacts}"
+#OPTIONS[SETDIR CFGSCR ARTDIR]
+export SETDIR="${SETDIR:-/.g/_data/zactive/.setup}"
 export CFGSCR="${CFGSCR:-${SETDIR}/${FUNDIR}.config}"
+export ARTDIR="${ARTDIR:-/.g/_data/zactive/coding/gary-os/artifacts}"
+
+#NOTE: UPDATE THESE WHEN THEY CHANGE IN THE "${MAKEIT}" SCRIPT
+
+#VARIABLES[PREPIT MAKEIT SHIPIT]
 export PREPIT="_prepare"
 export MAKEIT="_release"
 export SHIPIT="_publish"
 
 ########################################
 
-#VARIABLES[TARGET TOOR _PKG _MIN _NEW _GOS]
+#VARIABLES[TARGET TOOR _PKG _NEW _MIN _GOS]
 export TARGET="${BLDDIR}"
 export TOOR="${TOOR}"
 export _PKG="${BLDPKG}"
-export _MIN="false"
 export _NEW="false"
+export _MIN="false"
 export _GOS="false"
 
 if ! ${_BASH_SOURCED}; then
@@ -156,14 +162,14 @@ if [[ -e ${TARGET} ]]; then
 fi
 
 if ! ${_BASH_SOURCED}; then
-	if [[ ${1} == -m ]]; then
-		TOOR="${TOOR} ${1}"
-		_MIN="true"
-		shift
-	fi
 	if [[ ${1} == -n ]]; then
 		TOOR="${TOOR} ${1}"
 		_NEW="true"
+		shift
+	fi
+	if [[ ${1} == -m ]]; then
+		TOOR="${TOOR} ${1}"
+		_MIN="true"
 		shift
 	fi
 fi
@@ -204,20 +210,21 @@ fi
 
 ########################################
 
-#OPTIONS[FUNTOO LINPKG KERNEL PYTHON SELECT]
+#OPTIONS[FUNTOO LINPKG KERNEL]
 export FUNTOO="${FUNTOO:-$(tail -n1 ${SETDIR}/${FUNDIR}/${FUNCMT})}"
 export LINPKG="${LINPKG:-$(${SED} -n "s|^[#][{]LINPKG[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[ ]*$||g")}"
 export KERNEL="${KERNEL:-$(${SED} -n "s|^[#][{]KERNEL[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[ ]*$||g")}"
-export PYTHON="${PYTHON:-$(${SED} -n "s|^[#][{]PYTHON[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[ ]*$||g")}"
-export SELECT="${SELECT:-$(${SED} -n "s|^[#][{]SELECT[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[ ]*$||g")}"
 
-#OPTIONS[RCUPDT FSSKIP WINMGR WMHELP]
-export RCUPDT="${RCUPDT:-$(${SED} -n "s|^[#][{]RCUPDT[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '!' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[! ]*$||g" -e "s|[!]|\ \;\ |g")}"
-export FSSKIP="${FSSKIP:-$(${SED} -n "s|^[#][{]FSSKIP[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '!' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[! ]*$||g" -e "s|[!]|\ \;\ |g")}"
-export WINMGR="${WINMGR:-$(${SED} -n "s|^[#][{]WINMGR[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '!' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[! ]*$||g" -e "s|[!]|\ \;\ |g")}"
-export WMHELP="${WMHELP:-$(${SED} -n "s|^[#][{]WMHELP[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '!' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[! ]*$||g" -e "s|[!]|\ \;\ |g")}"
+#OPTIONS[SELECT WINMGR WMHELP]
+export SELECT="${SELECT:-$(${SED} -n "s|^[#][{]SELECT[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[ ]*$||g")}"
+export WINMGR="${WINMGR:-$(${SED} -n "s|^[#][{]WINMGR[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[ ]*$||g")}"
+export WMHELP="${WMHELP:-$(${SED} -n "s|^[#][{]WMHELP[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[ ]*$||g")}"
 export WINMGR="${WINMGR:-dwm}"
 export WMHELP="${WMHELP:-gary-os / \`date --iso=s\`}"
+
+#OPTIONS[RCUPDT FSSKIP]
+export RCUPDT="${RCUPDT:-$(${SED} -n "s|^[#][{]RCUPDT[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '!' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[! ]*$||g" -e "s|[!]|\ \;\ |g")}"
+export FSSKIP="${FSSKIP:-$(${SED} -n "s|^[#][{]FSSKIP[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '!' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[! ]*$||g" -e "s|[!]|\ \;\ |g")}"
 
 ########################################
 
@@ -1143,9 +1150,6 @@ if [[ ${1} == -w ]]; then
 	for FILE in \
 		$(for NEXT in ${KERNEL}; do
 			echo "kernel:linux-${NEXT}-gentoo"
-		done) \
-		$(for NEXT in ${PYTHON}; do
-			echo "python:${NEXT}"
 		done) \
 		${SELECT}
 	do
