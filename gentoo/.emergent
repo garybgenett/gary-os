@@ -337,6 +337,15 @@ diff ${DIFF_OPTS} ${GENDIR}/_packages.db ${GENDIR}/_packages |
 	cat				>>${GENDIR}/.checks 2>&1
 
 echo -en "\n"				>>${GENDIR}/.checks 2>&1
+echo -en "[python]"			>>${GENDIR}/.checks 2>&1
+echo -en "\n"				>>${GENDIR}/.checks 2>&1
+${GREP} -o "[^-(]python[0-9][_][0-9]" ${GENDIR}/.emerge |
+	${SED} "s|^.||g" |
+	sort -r |
+	uniq -c |
+	cat				>>${GENDIR}/.checks 2>&1
+
+echo -en "\n"				>>${GENDIR}/.checks 2>&1
 echo -en "[news]"			>>${GENDIR}/.checks 2>&1
 echo -en "\n"				>>${GENDIR}/.checks 2>&1
 eselect news read all			>>${GENDIR}/.checks 2>&1
