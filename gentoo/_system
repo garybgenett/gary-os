@@ -61,9 +61,6 @@ declare NEXT=
 
 ################################################################################
 
-#OPTIONS[QUICKLY]
-export QUICKLY="${QUICKLY:-false}"
-
 #NOTE: UPDATE THESE WHEN THEY CHANGE IN THE "${MAKEIT}" SCRIPT
 
 #SETTINGS[_TITLE _VERSN _RDATE]
@@ -73,8 +70,9 @@ export QUICKLY="${QUICKLY:-false}"
 
 ########################################
 
-#OPTIONS[DOREDO]
+#OPTIONS[DOREDO DOFAST]
 if [[ ${DOREDO} != true ]] && [[ ${DOREDO} != false ]]; then DOREDO="false"; fi
+if [[ ${DOFAST} != true ]] && [[ ${DOFAST} != false ]]; then DOFAST="false"; fi
 
 ########################################
 
@@ -1031,7 +1029,7 @@ if [[ ${1} == -i ]]; then
 	if ! ${_CFG}; then
 							${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -r		|| EXIT 1
 	fi
-	if ! ${QUICKLY} && ! ${_CFG}; then
+	if ! ${DOFAST} && ! ${_CFG}; then
 		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} ${FUNTOO}	|| EXIT 1
 		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w		|| EXIT 1
 	fi
@@ -1103,7 +1101,7 @@ if [[ ${1} == -i ]]; then
 		mount_dev_dirs -u										|| EXIT 1
 		EXIT 0
 	fi
-	if ! ${QUICKLY}; then
+	if ! ${DOFAST}; then
 		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -f		|| EXIT 1
 	fi
 	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -u		|| EXIT 1
@@ -1177,23 +1175,27 @@ if [[ ${1} == -u ]]; then
 	safe_env ${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -w				|| EXIT 1
 	expect_wrapper emerge ${_ASK} ${EMERGE_UPDT_OPTS} \@system \@world		|| EXIT 1
 	safe_env ${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -p				|| EXIT 1
-#>>>	https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=b7a4174e075a922a255c0ff4a6ebd4f6d0437c61
-#>>>	if [[ -n "$(which python-updater 2>/dev/null)" ]]; then
-#>>>		expect_wrapper python-updater						|| EXIT 1
-#>>>	fi
-	if ! ${QUICKLY} && [[ -n "$(which perl-cleaner 2>/dev/null)" ]]; then
-		expect_wrapper perl-cleaner --all					|| EXIT 1
+	if ! ${DOFAST}; then
+#>>>		https://gitweb.gentoo.org/repo/gentoo.git/commit?id=b7a4174e075a922a255c0ff4a6ebd4f6d0437c61
+#>>>		if [[ -n "$(which python-updater 2>/dev/null)" ]]; then
+#>>>			expect_wrapper python-updater					|| EXIT 1
+#>>>		fi
+		if [[ -n "$(which perl-cleaner 2>/dev/null)" ]]; then
+			expect_wrapper perl-cleaner --all				|| EXIT 1
+		fi
+		if [[ -n "$(which haskell-updater 2>/dev/null)" ]]; then
+			expect_wrapper haskell-updater --all				|| EXIT 1
+		fi
+		expect_wrapper emerge ${_ASK} \@module-rebuild --exclude "${LINPKG}"	|| EXIT 1
+		expect_wrapper emerge ${_ASK} \@preserved-rebuild			|| EXIT 1
 	fi
-	if ! ${QUICKLY} && [[ -n "$(which haskell-updater 2>/dev/null)" ]]; then
-		expect_wrapper haskell-updater --all					|| EXIT 1
-	fi
-	expect_wrapper emerge ${_ASK} \@module-rebuild --exclude "${LINPKG}"		|| EXIT 1
-	expect_wrapper emerge ${_ASK} \@preserved-rebuild				|| EXIT 1
 	expect_wrapper emerge ${_ASK} --depclean					|| EXIT 1
-	expect_wrapper revdep-rebuild --ignore						|| EXIT 1
-	expect_wrapper emaint --fix all							|| EXIT 1
-	expect_wrapper eclean --verbose distfiles					|| EXIT 1
-	expect_wrapper eclean --verbose packages					|| EXIT 1
+	if ! ${DOFAST}; then
+		expect_wrapper revdep-rebuild --ignore					|| EXIT 1
+		expect_wrapper emaint --fix all						|| EXIT 1
+		expect_wrapper eclean --verbose distfiles				|| EXIT 1
+		expect_wrapper eclean --verbose packages				|| EXIT 1
+	fi
 	expect_wrapper dispatch-conf							|| EXIT 1
 
 ########################################
