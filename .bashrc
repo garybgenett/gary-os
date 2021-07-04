@@ -328,7 +328,6 @@ fi
 export LS="ls --color=auto --time-style=long-iso"		; alias ls="${LS}"
 export LL="${LS} -asF -l"					; alias ll="${LL}"
 export LX="${LS} -asF -kC"					; alias lx="${LX}"
-export LF="eval ${LL} -d \`find . -maxdepth 1 ! -type l\`"	; alias lf="${LF}"
 
 export DU="du -b --time --time-style=long-iso"			; alias du="${DU}"
 export LU="${DU} -cms -L {.[^.],}* 2>/dev/null | sort -nr"	; alias lu="${LU}"
@@ -2169,6 +2168,49 @@ function letmeknow {
 				-e "s/[[:space:]]*;[[:space:]]*letmeknow[[:space:]]*$//g"
 		echo -en "]"
 	)"
+}
+
+########################################
+
+function lf {
+	declare LF_SAFE="
+		.Xauthority
+		.screen
+	"
+	declare LF_RM="$(
+		find . -mindepth 1 -maxdepth 1 ! -type l |
+		${SED} "s|^./||g" |
+		eval ${GREP} -v $(
+			for FILE in ${LF_SAFE}; do
+				echo "-e \"^${FILE}\$\""
+			done
+		) |
+		sort |
+		tr '\n' ' '
+	)"
+	declare REMOVE="false"
+	if [[ ${1} == --rm ]]; then
+		REMOVE="true"
+	fi
+	if {
+		! ${REMOVE} ||
+		[[ -z ${LF_RM} ]];
+	}; then
+		${LL} -d ${LF_SAFE}
+	fi
+	if [[ -n ${LF_RM} ]]; then
+		if ${REMOVE}; then
+			shift
+			${RM} ${LF_RM}
+			echo -en "\n"
+			${FUNCNAME}
+		else
+			echo -en "\n"
+			${LL} -d ${LF_RM}
+			echo -en "\n${LF_RM}\n"
+		fi
+	fi
+	return 0
 }
 
 ########################################
