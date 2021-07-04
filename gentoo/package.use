@@ -204,27 +204,29 @@ sys-process/runit			static
 mail-client/thunderbird			-bindist
 www-client/firefox			-bindist
 
+########################################
+
 app-emulation/qemu			ncurses sdl spice
 app-emulation/spice			client gui
 app-emulation/virtualbox		qt5 sdk vnc
 app-office/libreoffice			java
 dev-libs/openssl			rfc3779
-net-libs/gnutls				openpgp openssl tls-heartbeat tools
 dev-vcs/subversion			-apache2
-mail-client/mutt			-tokyocabinet gpg hcache sasl sidebar smime smtp
+mail-client/mutt			-tokyocabinet debug gpg hcache sasl sidebar smime smtp
 mail-client/thunderbird			-crypt -lightning -wifi ldap	# installing "enigmail" and "lightning" plugins manually
 mail-mta/msmtp				mta
 media-sound/pulseaudio			bluetooth dbus
 media-video/vlc				projectm qt5 vlm
 net-analyzer/tcpdump			-chroot
 net-fs/samba				client cups
-net-misc/networkmanager			-introspection -modemmanager -nss dhcpcd gnutls
+net-libs/gnutls				openpgp openssl tls-heartbeat tools
+net-misc/networkmanager			-elogind -introspection -modemmanager -nss dhcpcd gnutls
 net-print/cups				samba
 net-vpn/openvpn				iproute2
 net-wireless/wpa_supplicant		qt5
 sci-calculators/qalculate-gtk		-gnome
 sys-apps/iproute2			iptables
-sys-boot/grub				device-mapper mount
+sys-boot/grub				device-mapper efiemu mount
 virtual/wine				-gstreamer -mp3 -opengl
 www-client/firefox			-wifi
 www-servers/apache			-threads
@@ -265,17 +267,25 @@ games-fps/doom3-mitm			-dedicated
 #{GOS} x11-drivers/xf86-video-qxl	python_targets_python2_7	# gentoo required
 #{GOS} x11-misc/arandr			python_targets_python2_7	# gentoo required
 
+########################################
+
 #{GOS} app-crypt/pinentry		-gnome-keyring	# requires: gnome-base/gnome-keyring
+#{GOS} app-text/asciidoc		-graphviz	# pulls in too many dependencies (required by: sys-fs/btrfs-progs)
+#{GOS} dev-libs/libnsfb			sdl		# gentoo required: www-client/netsurf
 #{GOS} dev-util/ninja			-zsh-completion	# requires: app-shells/zsh
 #{GOS} net-wireless/wpa_supplicant	-qt5		# requires: dev-qt/qtcore
 
-#{GOS} app-emulation/spice-vdagent	-consolekit	# requires: sys-auth/consolekit -> sys-auth/polkit
-#{GOS} dev-vcs/subversion		-http		# requires: net-libs/serf -> dev-util/scons ( python_targets_python2_7 )
+#{GOS} dev-vcs/subversion		-http		# requires: net-libs/serf -> dev-util/scons
 #{GOS} net-dns/avahi			-gtk3		# requires: x11-libs/gtk+
-#{GOS} sys-apps/dstat			-wifi		# requires: net-wireless/python-wifi
-#{GOS} sys-auth/pambase			-consolekit	# requires: sys-auth/consolekit -> sys-auth/polkit
+#{GOS} net-misc/networkmanager		-ppp		# requires: net-dialup/ppp
+#{GOS} sys-apps/flashrom		-ft2232_spi	# requires: dev-embedded/libftdi -> dev-libs/boost
+#{GOS} sys-apps/flashrom		-usbblaster_spi	# requires: dev-embedded/libftdi -> dev-libs/boost
 #{GOS} sys-fs/lvm2			-thin		# requires: sys-block/thin-provisioning-tools -> dev-libs/boost
-#{GOS} x11-apps/xdm			-consolekit	# requires: sys-auth/consolekit -> sys-auth/polkit
+
+#>>>#{GOS} x11-base/xorg-server		-glamor		# requires: media-libs/mesa
+#>>>#{GOS} x11-base/xorg-server		-xnest		# not needed, keep size down
+#>>>#{GOS} x11-base/xorg-server		-xvfb		# not needed, keep size down
+#>>>#{GOS} x11-base/xorg-server		minimal		# requires: media-libs/mesa
 
 ################################################################################
 # end of file
