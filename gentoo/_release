@@ -9,10 +9,10 @@ export _TITLE="gary-os"
 export _VERSN="v4.0"
 export _RDATE="$(date --iso=date)"
 
-export _FINAL="${TARGET/%\/}/.${_TITLE}-${ESUB}"
+export _FINAL="${TARGET}/.${_TITLE}-${ESUB}"
 export _RAMFS="${_FINAL}/${_TITLE}-${ESUB}-${_VERSN}"
 
-export _GINST="${TARGET/%\/}/.install"
+export _GINST="${TARGET}/.install"
 
 #note: the "$_GPACK" extension is for the root filesystem
 #note: the "$_RPACK" file is for the repository
@@ -21,7 +21,7 @@ export _RPACK="_packages"
 
 ########################################
 
-#>>> if [[ ${TARGET} == / ]]; then
+#>>> if [[ -z ${TARGET} ]]; then
 #>>> 	_TITLE="${_TITLE}-custom"
 #>>> fi
 
@@ -226,7 +226,7 @@ function prepare_config_issue {
 	if
 	[[ -z ${COMMIT} ]] ||
 	[[ ${_PKG} != ${GOSPKG} ]] ||
-	[[ ${TARGET} == / ]]
+	[[ -z ${TARGET} ]]
 	then
 		FILE=" "
 #>>>		FILE+="\\\e[1;45;37m"
@@ -387,7 +387,7 @@ function _prepare_repdir {
 ########################################
 
 function _prepare_linux {
-	if [[ ${TARGET} == / ]]; then
+	if [[ -z ${TARGET} ]]; then
 		if [[ ! -d ${TARGET}${LDIR} ]]; then
 			${RM}				${TARGET}${LDIR}		|| return 1
 			common_untar			${TARGET}${LDIR}		|| return 1
@@ -402,9 +402,9 @@ function _prepare_linux {
 			-f ${TARGET}${PAKDIR}/*/gentoo-sources-${KVER}.tbz2		|| return 1
 		${MV} ${TARGET}${LDIR}.${_TITLE}${KDIR}	${TARGET}${LDIR}		|| return 1
 		${RM}					${TARGET}${LDIR}.${_TITLE}	|| return 1
-		safe_make -C ${TARGET}${LDIR}		distclean			|| return 1
+		safe_env make -C ${LDIR}		distclean			|| return 1
 		${RSYNC_U} ${TARGET}${ARCDIR}/${KCFG}	${TARGET}${LDIR}/.config	|| return 1
-		safe_make -C ${TARGET}${LDIR}		modules_prepare			|| return 1
+		safe_env make -C ${LDIR}		modules_prepare			|| return 1
 		common_tar				${TARGET}${LDIR}		|| return 1
 	fi
 	return 0
@@ -413,7 +413,7 @@ function _prepare_linux {
 ########################################
 
 function _prepare_packages {
-	if [[ ${TARGET} == / ]]; then
+	if [[ -z ${TARGET} ]]; then
 		${RM} ${TARGET}/.${_TITLE}${_GPACK}							|| return 1
 		return 0
 	fi
@@ -444,7 +444,7 @@ function _prepare_packages {
 
 function _prepare_symlinks {		#{reset}
 	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
-	if [[ ${TARGET} == / ]]; then
+	if [[ -z ${TARGET} ]]; then
 		return 0
 	fi
 	if [[ -n ${COMMIT} ]]
@@ -581,7 +581,7 @@ function release_kernel_patch {
 
 function release_kernel_config {
 	declare DODIR="${1}" && shift
-	if [[ ${TARGET} == / ]]; then	${RSYNC_U} ${SETDIR}/${LINDIR}/${KCFG}	${TARGET}${DODIR}/.config	|| return 1
+	if [[ -z ${TARGET} ]]; then	${RSYNC_U} ${SETDIR}/${LINDIR}/${KCFG}	${TARGET}${DODIR}/.config	|| return 1
 	else				${RSYNC_U} ${TARGET}${ARCDIR}/${KCFG}	${TARGET}${DODIR}/.config	|| return 1
 	fi
 	kernel_cpu								${TARGET}${DODIR}/.config	|| return 1
@@ -637,8 +637,8 @@ function release_kernel_build {
 	declare BZ_SEDR=".+ln -fsn.+/x86/boot/bzImage.+"
 	if [[ -f ${BZ_MAKE}.${_TITLE} ]]; then ${MV}	${BZ_MAKE}{.${_TITLE},}	|| return 1; fi
 	${SED} -i.${_TITLE} "s|^(${BZ_SEDR})$|\#\1|g"	${BZ_MAKE}		|| return 1
-	safe_make -C ${TARGET}${DODIR}			olddefconfig		|| return 1
-	safe_make -C ${TARGET}${DODIR}			bzImage			|| return 1
+	safe_env make -C ${DODIR}			olddefconfig		|| return 1
+	safe_env make -C ${DODIR}			bzImage			|| return 1
 	${RSYNC_U} --copy-links ${BZIMAGE}		${KOUT}			|| return 1
 	return 0
 }
@@ -646,7 +646,7 @@ function release_kernel_build {
 function _release_kernel {		#{initrd}
 	declare INITRD= ; if [[ ${1} == --initrd ]]; then INITRD="${1}" && shift; fi
 	declare DODIR="${KDIR}"
-	if [[ ${TARGET} == / ]]; then
+	if [[ -z ${TARGET} ]]; then
 		DODIR="${LDIR}"
 	fi
 	if [[ -d ${TARGET}${DODIR} ]] && {
