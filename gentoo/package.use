@@ -38,6 +38,7 @@ x11-misc/xlockmore			-pam		# gentoo required: [x11-misc/xlockmore-5.55] pam_unix
 
 ########################################
 
+dev-db/sqlite				secure-delete	# gentoo required
 dev-libs/libdbusmenu			gtk3		# gentoo required
 dev-libs/libpcre2			pcre16		# gentoo required
 dev-libs/xmlsec				gcrypt		# gentoo required
@@ -61,6 +62,8 @@ net-dns/avahi			mdnsresponder-compat	# gentoo required
 net-dns/dnsmasq				script		# gentoo required
 x11-base/xorg-server			glamor		# gentoo required
 x11-libs/libxcb				xkb		# gentoo required
+
+dev-lang/rust			llvm_targets_AArch64	# gentoo required
 
 ################################################################################
 
@@ -250,20 +253,39 @@ games-fps/doom3-mitm			-dedicated
 
 ################################################################################
 
-#{NEW} app-crypt/mit-krb5		-keyutils	# gentoo required
 #{NEW} app-text/xmlto			-latex		# gentoo required
-#{NEW} net-libs/glib-networking		-libproxy	# gentoo required
+#{NEW} net-libs/libproxy		-webkit		# gentoo required
+
+#{NEW} app-crypt/mit-krb5		-keyutils	# gentoo required
 
 ########################################
 
+#{MOD} net-libs/libproxy		-webkit		# gentoo required
+
+########################################
+
+#{GOS} net-libs/libproxy		-webkit		# gentoo required
+
+#{GOS} app-crypt/mit-krb5		-keyutils	# gentoo required
+
+########################################
+
+#{GOS} sys-libs/talloc			python		# gentoo required
+
+#{GOS} app-text/asciidoc		python_targets_python2_7	# gentoo required
 #{GOS} dev-python/docutils		python_targets_python2_7	# gentoo required
 #{GOS} dev-python/numpy			python_targets_python2_7	# gentoo required
 #{GOS} dev-python/pycairo		python_targets_python2_7	# gentoo required
 #{GOS} dev-python/pygments		python_targets_python2_7	# gentoo required
 #{GOS} dev-python/pygobject		python_targets_python2_7	# gentoo required
 #{GOS} dev-python/pygtk			python_targets_python2_7	# gentoo required
-#{GOS} dev-util/scons			python_targets_python2_7	# gentoo required
+#{GOS} dev-python/six			python_targets_python2_7	# gentoo required
+#{GOS} net-fs/samba			python_targets_python2_7	# gentoo required
+#{GOS} net-wireless/kismet		python_targets_python2_7	# gentoo required
+#{GOS} net-wireless/python-wifi		python_targets_python2_7	# gentoo required
+#{GOS} sys-apps/dstat			python_targets_python2_7	# gentoo required
 #{GOS} sys-devel/clang			python_targets_python2_7	# gentoo required
+#{GOS} sys-libs/talloc			python_targets_python2_7	# gentoo required
 #{GOS} x11-drivers/xf86-video-qxl	python_targets_python2_7	# gentoo required
 #{GOS} x11-misc/arandr			python_targets_python2_7	# gentoo required
 
