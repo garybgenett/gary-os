@@ -127,12 +127,12 @@ export SHIPIT="_publish"
 
 ########################################
 
-#VARIABLES[TARGET TOOR _PKG _NEW _MIN _GOS]
+#VARIABLES[TARGET TOOR _PKG _NEW _MOD _GOS]
 export TARGET="${BLDDIR}"
 export TOOR="${TOOR}"
 export _PKG="${BLDPKG}"
 export _NEW="false"
-export _MIN="false"
+export _MOD="false"
 export _GOS="false"
 
 if ! ${_BASH_SOURCED}; then
@@ -169,7 +169,7 @@ if ! ${_BASH_SOURCED}; then
 	fi
 	if [[ ${1} == -m ]]; then
 		TOOR="${TOOR} ${1}"
-		_MIN="true"
+		_MOD="true"
 		shift
 	fi
 fi
@@ -1114,8 +1114,8 @@ if [[ ${1} == -W ]]; then
 		${ETCDIR}/package.* \
 		${ETCDIR}/sets/*
 	do
-		${_MIN} && { ${SED} -i "/[#][{]MIN[}]/d"		${FILE} || EXIT 1 ;}
 		${_NEW} && { ${SED} -i "s|^[#][{]NEW[}][ ](.+)$|\1|g"	${FILE} || EXIT 1 ;}
+		${_MOD} && { ${SED} -i "s|^[#][{]MOD[}][ ](.+)$|\1|g"	${FILE} || EXIT 1 ;}
 		${_GOS} && { ${SED} -i "s|^[#][{]GOS[}][ ](.+)$|\1|g"	${FILE} || EXIT 1 ;}
 	done
 	${SED} -i \
