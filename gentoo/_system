@@ -162,6 +162,8 @@ if [[ ${TOOR} == -g ]]; then
 fi
 if [[ -e ${TARGET} ]]; then
 	TARGET="$(realpath ${TARGET})"
+	#note: this is a potentially dangerous way of stripping "//" to just "/" for pattern matching and pretty output
+	TARGET="${TARGET/%\/}"
 fi
 
 if ! ${_BASH_SOURCED}; then
@@ -345,7 +347,11 @@ SAFE_ENV="${SAFE_ENV/#\ }"
 
 if ${DO_CHROOT}; then
 	function safe_env {
-		eval prompt -z IS_CHROOT=\"true\" ${SAFE_ENV} HOME=\"${ARCDIR}\" SETDIR=\"${ARCDIR}\" chroot \"${TARGET}\" '"${@}"' || return 1
+		declare C_TARGET="${TARGET}"
+		if [[ -z ${TARGET} ]]; then
+			C_TARGET="/"
+		fi
+		eval prompt -z IS_CHROOT=\"true\" ${SAFE_ENV} HOME=\"${ARCDIR}\" SETDIR=\"${ARCDIR}\" chroot \"${C_TARGET}\" '"${@}"' || return 1
 		return 0
 	}
 else
@@ -354,16 +360,6 @@ else
 		return 0
 	}
 fi
-
-function safe_make {
-	declare MAKE_CONF="${SETDIR}/${FUNDIR}/make.conf"
-	if ${DO_CHROOT}; then
-		MAKE_CONF="${TARGET}${ETCDIR}/make.conf"
-	fi
-	source ${MAKE_CONF}				|| return 1
-	eval prompt -z ${SAFE_ENV} make '"${@}"'	|| return 1
-	return 0
-}
 
 ########################################
 
@@ -606,11 +602,18 @@ function print_info {
 ########################################
 
 function requires_chroot {
-	declare SRC_OPTS="${@}" && shift
+	declare SRC_OPTS="${@}"
+	declare C_OPTION="${1}" && shift
+	declare C_TARGET="${TARGET}"
+	if [[ -z ${TARGET} ]]; then
+		C_TARGET="/"
+	fi
 	echo -en "\n"
 	echo -en ">>> THIS OPTION (${SRC_OPTS}) REQUIRES A CHROOT <<<\n"
 	echo -en ">>> IT CAN BE RUN AGAINST ROOT(/) USING THE (-g)(GOSDIR=/) OPTIONS <<<\n"
-	echo -en ">>> CURRENTLY USING (${TOOR}) CHROOT OPTION AND (${TARGET}) DIRECTORY <<<\n"
+	echo -en ">>> CURRENTLY USING (${TOOR}) CHROOT OPTION AND (${C_TARGET}) DIRECTORY <<<\n"
+	echo -en "\n"
+	${_SOUL} ${DEBUG_OPT} 2>&1 | ${GREP} " ${C_OPTION}"
 	echo -en "\n"
 	EXIT 1
 }
@@ -652,7 +655,7 @@ function expect_wrapper {
 ########################################
 
 function mount_dev_dirs {
-	if ! ${DO_CHROOT} || [[ ! -d ${TARGET} ]] || [[ ${TARGET} == / ]]; then
+	if ! ${DO_CHROOT} || [[ ! -d ${TARGET} ]] || [[ -z ${TARGET} ]]; then
 		return 0
 	fi
 	if [[ -z ${1} ]]; then
@@ -777,7 +780,7 @@ fi
 
 ########################################
 
-if ${DO_CHROOT} && [[ ! -d ${TARGET} ]]; then
+if ${DO_CHROOT} && [[ -n ${TARGET} ]] && [[ ! -d ${TARGET} ]]; then
 	echo -en "\n"
 	${LL} -d ${TARGET}
 	requires_chroot "${@}"
@@ -1045,7 +1048,7 @@ fi
 ################################################################################
 
 if [[ ${1} == -[0/12] ]]; then
-	${MKDIR} ${TARGET}${GENDIR}
+	${MKDIR} $(dirname ${TARGET}${GENDIR})
 	date --iso=seconds >${TARGET}${GENDIR}.log 2>&1
 fi
 
@@ -1089,18 +1092,22 @@ fi
 ########################################
 
 if [[ ${1} == -i ]]; then
-	if ! ${DO_CHROOT} || { [[ ! -d ${SOURCE} ]] && [[ ${TARGET} != / ]]; }; then
-		echo -en "\n"
-		${LL} -d ${SOURCE}
+	if ! ${DO_CHROOT}; then
 		requires_chroot "${@}"
 	fi
-	shift
+#>>>	shift
 	if [[ ! -d ${TARGET}/boot ]]; then
+		if [[ ! -d ${SOURCE} ]]; then
+			echo -en "\n"
+			${LL} -d ${SOURCE}
+			requires_chroot "${@}"
+		fi
 		${MKDIR}				${TARGET}${ARCDIR}					|| EXIT 1
 		${RSYNC_U} ${SOURCE}/stage3-*		${TARGET}${ARCDIR}/					|| EXIT 1
 #>>>		tar -pvvx --xz -C ${TARGET} -f		$(ls -t ${TARGET}${ARCDIR}/stage3-i686-*.tar.xz		| head -n1) || EXIT 1
 		tar -pvvx --xz -C ${TARGET} -f		$(ls -t ${TARGET}${ARCDIR}/stage3-generic_64-*.tar.xz	| head -n1) || EXIT 1
 	fi
+	shift
 	mount_dev_dirs												|| EXIT 1
 	if ! ${_CFG}; then
 							${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -r		|| EXIT 1
