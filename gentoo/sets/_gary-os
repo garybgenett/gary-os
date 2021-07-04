@@ -332,7 +332,18 @@
 @gary-os
 
 ########################################
-# toolchain
+
+#{FUNTOO}
+#{LINPKG} sys-kernel/gentoo-sources:4.18.6
+#{KERNEL} 4.18.6
+
+#{SELECT} python:python3.6
+#{SELECT} vi:vim
+#{SELECT} mesa:--auto
+#{SELECT} opengl:xorg-x11
+#{SELECT} unison:2.51
+#{WINMGR}
+#{WMHELP}
 
 #{RCUPDT} rc-update del netmount default	|| true
 #{RCUPDT} rc-update add gpm default		|| true
@@ -343,9 +354,10 @@
 #{RCUPDT} rc-update show
 
 #{RCUPDT} ln -fsv /usr/share/zoneinfo/US/Pacific /etc/localtime
+#{RCUPDT} ln -fsv /bin/runsvdir /usr/bin/runsvdir
+#{RCUPDT} rc-update add runsvdir default	|| true
 #{RCUPDT} rc-update add xdm default		|| true
 #{RCUPDT} rc-update add spice-vdagent default	|| true
-#{RCUPDT} rc-update add runsvdir default	|| true
 
 #{RCUPDT} rc-update show
 
@@ -354,6 +366,9 @@
 #{FSSKIP} /lib64/firmware/qed
 #{FSSKIP} /usr/lib64/gcc/x86_64-pc-linux-gnu/7.3.1/debug
 #{FSSKIP} /usr/lib64/python*/test
+
+########################################
+# toolchain
 
 sys-devel/autoconf
 sys-devel/automake
@@ -369,8 +384,6 @@ sys-devel/gdb
 
 ########################################
 # system
-
-#{SELECT} vi:vim
 
 app-misc/ca-certificates
 app-text/iso-codes
@@ -539,10 +552,6 @@ sys-apps/fakeroot-ng
 ########################################
 # gentoo
 
-#{LINPKG} sys-kernel/gentoo-sources:4.18.6
-
-#{KERNEL} 4.18.6
-
 sys-kernel/genkernel
 sys-kernel/linux-firmware
 
@@ -565,12 +574,6 @@ app-portage/portage-utils
 
 ########################################
 # x11
-
-#{SELECT} mesa:--auto
-#{SELECT} opengl:xorg-x11
-
-#{WINMGR}
-#{WMHELP}
 
 x11-apps/xdm
 x11-apps/xev
@@ -611,8 +614,6 @@ x11-terms/root-tail
 
 ########################################
 # toolkits
-
-#{PYTHON} python3.6
 
 net-misc/unison
 net-misc/unison:2.48
