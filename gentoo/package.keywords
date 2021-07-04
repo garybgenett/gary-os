@@ -2,7 +2,10 @@
 # portage package keywords file
 ################################################################################
 
+sys-libs/libomp				**		# gentoo required
+
 games-emulation/mekanix			**		# gentoo required
+sys-devel/binutils			**		# gentoo required
 
 ################################################################################
 
