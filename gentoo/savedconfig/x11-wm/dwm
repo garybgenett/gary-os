@@ -60,8 +60,9 @@ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
 static const char *readcmd[]		= { "urxvt", "+sb", "-fn", urxvt_font, "-fb", urxvt_font, "-bg", normbgcolor, "-fg", normfgcolor, "-title", "GaryOS Readme", "-e", "less", "/.gary-os/README.md", NULL };
 static const char *mancmd[]		= { "urxvt", "+sb", "-fn", urxvt_font, "-fb", urxvt_font, "-bg", normbgcolor, "-fg", normfgcolor, "-title", "DWM Manual", "-e", "man", "dwm", NULL };
 //>>> static const char *termcmd[]	= { "tabbed", "-d", "-f", "-r", "2", "-n", "URxvt", "urxvt", "-embed", "''", "-sr", "-bg", normbgcolor, "-fg", normfgcolor, NULL };
-//>>> static const char *webcmd[]	= { "tabbed", "-d", "-f", "-r", "2", "-n", "Surf", "surf", "-e", "''", "http://www.duckduckgo.com", NULL };
 static const char *termcmd[]		= { "urxvt", "-sr", "-fn", urxvt_font, "-fb", urxvt_font, "-bg", normbgcolor, "-fg", normfgcolor, NULL };
+//>>> static const char *webcmd[]	= { "tabbed", "-d", "-f", "-r", "2", "-n", "Surf", "surf", "-e", "''", "http://www.duckduckgo.com", NULL };
+static const char *extcmd[]		= { "tabbed", "-d", "-f", "-r", "2", "-n", "Surf", "surf", "-e", "''", "http://www.duckduckgo.com", NULL };
 static const char *webcmd[]		= { "links", "-g",
 	"-menu-font-size",		links_fontsize,
 	"-html-user-font-size",		links_fontsize,
@@ -81,6 +82,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY|ControlMask,           XK_Return, spawn,          {.v = webcmd } },
+	{ MODKEY|ShiftMask|ControlMask, XK_Return, spawn,          {.v = extcmd } },
 	{ MODKEY,                       XK_Left,   spawn,          {.v = readcmd } },
 	{ MODKEY,                       XK_Right,  spawn,          {.v = mancmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
