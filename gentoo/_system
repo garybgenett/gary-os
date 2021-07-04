@@ -1250,8 +1250,6 @@ fi
 
 ################################################################################
 
-safe_env ${SETDIR}/${FUNDIR}/${AUDITS}
-
 #>>> if ! ${_GOS}; then
 #>>> 	safe_env ${SETDIR}/${FUNDIR}/.hacks
 #>>> fi
@@ -1277,27 +1275,8 @@ ${LL} \
 
 ########################################
 
-#note: the "_packages" file is hard-set in the ".emergent" script
-echo -en "\n"
-wc -l ${GENDIR}/_packages
-wc -l ${GENDIR}/_packages.db
-diff ${DIFF_OPTS} ${GENDIR}/_packages.db ${GENDIR}/_packages |
-	${GREP} "^[-+]"
-
-echo -en "\n"
-${LL} ${GENDIR}
-if [[ -n "$(diff ${GENDIR}/+okay ${GENDIR}/+okay.okay 2>/dev/null)" ]]; then
-	cat ${GENDIR}/+okay
-fi
-
-########################################
-
-if [[ -z ${AUTO} ]] && [[ ${1} == -u ]]; then
-	echo -en "\n"
-	eselect news read new
-	echo -en "\n"
-	glsa-check --verbose --cve --test all
-fi
+safe_env ${SETDIR}/${FUNDIR}/${AUDITS}
+cat ${GENDIR}/.checks
 
 EXIT 0
 ################################################################################
