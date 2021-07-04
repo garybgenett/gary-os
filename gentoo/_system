@@ -214,24 +214,6 @@ fi
 
 ########################################
 
-#OPTIONS[FUNTOO LINPKG KERNEL]
-export FUNTOO="${FUNTOO:-$(tail -n1 ${SETDIR}/${FUNDIR}/${FUNCMT})}"
-export LINPKG="${LINPKG:-$(${SED} -n "s|^[#][{]LINPKG[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[ ]*$||g")}"
-export KERNEL="${KERNEL:-$(${SED} -n "s|^[#][{]KERNEL[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[ ]*$||g")}"
-
-#OPTIONS[SELECT WINMGR WMHELP]
-export SELECT="${SELECT:-$(${SED} -n "s|^[#][{]SELECT[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[ ]*$||g")}"
-export WINMGR="${WINMGR:-$(${SED} -n "s|^[#][{]WINMGR[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[ ]*$||g")}"
-export WMHELP="${WMHELP:-$(${SED} -n "s|^[#][{]WMHELP[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' ' ' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[ ]*$||g")}"
-export WINMGR="${WINMGR:-dwm}"
-export WMHELP="${WMHELP:-gary-os / \`date --iso=s\`}"
-
-#OPTIONS[RCUPDT FSSKIP]
-export RCUPDT="${RCUPDT:-$(${SED} -n "s|^[#][{]RCUPDT[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '!' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[! ]*$||g" -e "s|[!]|\ \;\ |g")}"
-export FSSKIP="${FSSKIP:-$(${SED} -n "s|^[#][{]FSSKIP[}][ ](.+)$|\1|gp" ${SETDIR}/${FUNDIR}/sets/${_PKG} | tr '\n' '!' | ${SED} -e "s|[[:space:]]+| |g" -e "s|[! ]*$||g" -e "s|[!]|\ \;\ |g")}"
-
-########################################
-
 #note: athlon64 build = WRKDIR="/.g/_data/_builds/_gentoo.amd64" _CPU="CONFIG_MK8" ESUB="amd64-k8" GARC="athlon64" GSUB="athlon64" ${HOME}/setup/gentoo/_system -x -0
 
 #OPTIONS[_CPU EARC ESUB GARC GSUB GOPT]
@@ -253,6 +235,77 @@ if ${_GOS}; then
 	GSUB="generic"
 	GOPT="-Os -s"
 fi
+
+########################################
+
+function portage_file {
+	declare PORT_SEL="${1}" && shift
+	declare P_FILTER="${1}" && shift
+	declare P_SPACER="${1}" && shift
+	if [[ -d ${PORT_SEL} ]]; then
+		for FILE in $(${LS}		\
+			${PORT_SEL}/make.conf	\
+			${PORT_SEL}/package.*	\
+			${PORT_SEL}/sets/*	\
+			2>/dev/null)		\
+		; do
+			{ ${FUNCNAME} ${FILE} || return 1; }	>${FILE}.${FUNCNAME}	|| return 1
+			${MV} ${FILE}.${FUNCNAME}		${FILE}			|| return 1
+		done
+	elif [[ -f ${PORT_SEL} ]]; then
+		cat ${PORT_SEL} |
+			{ { ${_NEW} &&	{ ${SED} -e "s|^[#][{]NEW[}][ ](.+)$|\1|g" -e "/[#][{]NEW[}]/d" || return 1; }; } || cat; } |
+			{ { ${_MOD} &&	{ ${SED} -e "s|^[#][{]MOD[}][ ](.+)$|\1|g" -e "/[#][{]MOD[}]/d" || return 1; }; } || cat; } |
+			{ { ${_GOS} &&	{ ${SED} -e "s|^[#][{]GOS[}][ ](.+)$|\1|g" -e "/[#][{]GOS[}]/d" || return 1; }; } || cat; } |
+			{ {		{ ${SED} -e "s|^[#][{]CPU[}][ ](.+)$|\1|g" -e "/[#][{]CPU[}]/d" || return 1; }; } || cat; } |
+			{ ${SED} \
+				-e "s|[#][{]GARC[}]|${GARC}|g"	\
+				-e "s|[#][{]GSUB[}]|${GSUB}|g"	\
+				-e "s|[#][{]GOPT[}]|${GOPT}|g"	\
+				|| return 1;
+			} |
+			{ {
+				{
+					[[ -n ${P_FILTER} ]] && [[ -n ${P_SPACER} ]];
+				} && {
+					{ ${SED} -n "s|^[#][{]${P_FILTER}[}][ ]([^#]+).*$|\1|gp"			|| return 1; } |
+					{ tr '\n' '!'									|| return 1; } |
+					{ ${SED} -e "s|[[:space:]]+| |g" -e "s|[! ]*$||g" -e "s|[!]|${P_SPACER}|g"	|| return 1; };
+				};
+			} || cat; } \
+		2>/dev/null
+	else
+		return 1
+	fi
+	return 0
+}
+
+#OPTIONS[FUNTOO LINPKG KERNEL]
+#OPTIONS[SELECT WINMGR WMHELP]
+#OPTIONS[RCUPDT FSUPDT FSPACK FSKEEP FSARCH FSEXCL]
+export FUNTOO="${FUNTOO:-$(tail -n1 ${SETDIR}/${FUNDIR}/${FUNCMT} 2>/dev/null)}"
+for FILE in	\
+	LINPKG	\
+	KERNEL	\
+	\
+	SELECT	\
+	WINMGR	\
+	WMHELP	\
+; do
+	eval export ${FILE}=\"${!FILE:-$(portage_file ${SETDIR}/${FUNDIR}/sets/${_PKG} ${FILE} " ")}\"
+done
+for FILE in	\
+	RCUPDT	\
+	FSUPDT	\
+	FSPACK	\
+	FSKEEP	\
+	FSARCH	\
+	FSEXCL	\
+; do
+	eval export ${FILE}=\"${!FILE:-$(portage_file ${SETDIR}/${FUNDIR}/sets/${_PKG} ${FILE} " ; ")}\"
+done
+export WINMGR="${WINMGR:-dwm}"
+export WMHELP="${WMHELP:-${_TITLE} / \`date --iso=s\`}"
 
 ########################################
 
@@ -1001,6 +1054,7 @@ if [[ ${1} == -r ]]; then
 	${RSYNC_C} ${SETDIR}/${FUNDIR}/[a-z]*			${TARGET}${ETCDIR}/				|| EXIT 1
 	${RSYNC_U} ${SETDIR}/${FUNDIR}/${LAYDIR}/		${TARGET}${ETCDIR}/${LAYDIR}			|| EXIT 1
 	${LN} ../${LAYDIR}/overlay.conf				${TARGET}${ETCDIR}/repos.conf/			|| EXIT 1
+	portage_file						${TARGET}${ARCDIR}/${FUNDIR}			|| EXIT 1
 	if [[ ${1} == -w ]]; then
 		shift
 		safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w	|| EXIT 1
@@ -1113,21 +1167,7 @@ fi
 
 if [[ ${1} == -W ]]; then
 	shift
-	for FILE in \
-		${ETCDIR}/make.conf \
-		${ETCDIR}/package.* \
-		${ETCDIR}/sets/*
-	do
-		${_NEW} && { ${SED} -i "s|^[#][{]NEW[}][ ](.+)$|\1|g"	${FILE} || EXIT 1 ;}
-		${_MOD} && { ${SED} -i "s|^[#][{]MOD[}][ ](.+)$|\1|g"	${FILE} || EXIT 1 ;}
-		${_GOS} && { ${SED} -i "s|^[#][{]GOS[}][ ](.+)$|\1|g"	${FILE} || EXIT 1 ;}
-	done
-	${SED} -i \
-		-e "s|^[#][{]CPU[}][ ]||g" \
-		-e "s|[#][{]GARC[}]|${GARC}|g" \
-		-e "s|[#][{]GSUB[}]|${GSUB}|g" \
-		-e "s|[#][{]GOPT[}]|${GOPT}|g" \
-		${ETCDIR}/make.conf							|| EXIT 1
+	portage_file		${ETCDIR}	|| EXIT 1
 	cat /dev/null		>/var/lib/portage/world
 	echo "@${_PKG}"		>/var/lib/portage/world_sets
 	$(for NEXT in ${LINPKG}; do
