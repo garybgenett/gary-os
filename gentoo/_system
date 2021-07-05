@@ -27,7 +27,7 @@ export _SYSTEMED="true"
 
 ################################################################################
 
-#>>> ${GREP} -o "[!=][=][ ][-][^[:space:]]+" ${HOME}/setup/gentoo/_system | sort
+#>>> ${GREP} -o "[!=][=][ ][-][^[:space:]]+" ${HOME}/setup/gentoo/_system | ${SED} "s|^[!=][=][[:space:]]+||g" | sort -u
 
 export _OPTS="${@}"
 
@@ -236,9 +236,7 @@ fi
 #OPTIONS[_CPU EARC ESUB GARC GSUB GOPT]
 export _CPU_RESET="CONFIG_MCORE2"
 export _CPU="${_CPU:-${_CPU_RESET}}"
-#>>> export EARC="${EARC:-x86-32bit}"
 export EARC="${EARC:-x86-64bit}"
-#>>> export ESUB="${EARC:-i686}"
 export ESUB="${ESUB:-core2_64}"
 export GARC="${GARC:-core2}"
 export GSUB="${GSUB:-core2}"
@@ -338,7 +336,6 @@ for FILE in ${KERNEL}; do
 	KVER="${FILE}"
 	KCFG="config-gentoo64-${KVER}"
 	KBAS="linux-${KVER}-gentoo"
-#>>>	KFIL="kernel-genkernel-x86-${KVER}-gentoo"
 	KFIL="kernel-genkernel-x86_64-${KVER}-gentoo"
 	KDIR="/usr/src/${KBAS}"
 done
@@ -380,10 +377,6 @@ fi
 
 declare VARSREGEX="[A-Z][A-Z0-9_]+"
 declare MASKREGEX="^[[:space:]]+(${VARSREGEX})([[:space:]].*)?$"
-#>>> man make.conf | ${GREP} "${MASKREGEX}|$"
-#>>> man make.conf | ${GREP} "${MASKREGEX}" | ${GREP} "${VARSREGEX}"
-
-#>>> $(man make.conf | ${SED} -n "s|${MASKREGEX}|\1|gp")
 declare MASKVARS="
 $(man make.conf | ${GREP} "${MASKREGEX}" | ${GREP} --only-matching "${VARSREGEX}")
 CARCH
@@ -412,7 +405,6 @@ function clear_environment {
 			${SED} -e "s|^[|]*||g" -e "s|[|]*$||g"
 		))$"
 	); do
-#>>>		echo -en "${FILE}=${!FILE}\n" | ${GREP} "[=].*$"
 		echo -en "${FILE}=${!FILE}\n" | ${GREP} "[=].+$"
 		unset ${FILE}
 	done
@@ -854,7 +846,6 @@ if [[ ${1} == -s ]]; then
 			${EMERGE_UPDT_OPTS}		\
 			--selective=n			\
 			${@:-\@system \@world}		|| EXIT 1
-#>>>			"${@}"				|| EXIT 1
 	else
 		safe_env bash --norc ${@:+-c "${@}"}	|| EXIT 1
 	fi
@@ -878,7 +869,6 @@ if [[ ${1} == -y ]]; then
 		mount_dev_dirs				|| EXIT 1
 		if [[ ${1} == depends ]] || [[ ${1} == d ]]; then
 			shift
-#>>>				--depth=3		\
 			safe_env equery depends		\
 				--indirect		\
 				--depth=0		\
@@ -923,7 +913,6 @@ if [[ ${1} == -y ]]; then
 			echo -en ">>> PACKAGES: ${NAM} <<<\n"
 			echo -en ">>> COMPARING (${DST}) AGAINST (${SRC}) FILE <<<\n"
 			echo -en "\n"
-#>>>			for NEXT in $(${SED} "s|^.*[[:space:]]||g" ${DST}); do
 			for NEXT in $(cat ${DST}); do
 				NEXT="$(echo "${NEXT}" | ${SED} "s|[-][0-9].*$||g")"
 				if [[ -z $(${GREP} "${NEXT}" ${SRC}) ]]; then
@@ -1074,6 +1063,8 @@ fi
 
 ########################################
 
+#>>> for FILE in ${FILELIST}; do more ./build${FILE} ; read continue ; done
+
 if [[ ${1} == -p ]]; then
 #>>>	shift
 	if ${DO_CHROOT}; then
@@ -1163,7 +1154,6 @@ if [[ ${1} == -i ]]; then
 		fi
 		${MKDIR}				${TARGET}${ARCDIR}					|| EXIT 1
 		${RSYNC_U} ${SOURCE}/stage3-*		${TARGET}${ARCDIR}/					|| EXIT 1
-#>>>		tar -pvvx --xz -C ${TARGET} -f		$(ls -t ${TARGET}${ARCDIR}/stage3-i686-*.tar.xz		| head -n1) || EXIT 1
 		tar -pvvx --xz -C ${TARGET} -f		$(ls -t ${TARGET}${ARCDIR}/stage3-generic_64-*.tar.xz	| head -n1) || EXIT 1
 	fi
 	shift
@@ -1270,7 +1260,6 @@ if [[ ${1} == -w ]]; then
 	safe_env ${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -W	|| EXIT 1
 	ego profile arch ${EARC}				|| EXIT 1
 	ego profile subarch ${ESUB}				|| EXIT 1
-#>>>	ego profile build stable				|| EXIT 1	# ERROR: build stable is not available. Can't set. Available names: {'current'}
 	ego profile build current				|| EXIT 1
 	ego profile flavor desktop				|| EXIT 1
 	ego profile show
@@ -1301,10 +1290,6 @@ if [[ ${1} == -u ]]; then
 	expect_wrapper emerge ${_ASK} ${EMERGE_UPDT_OPTS} \@system \@world		|| EXIT 1
 	safe_env ${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -p				|| EXIT 1
 	if ! ${DOFAST}; then
-#>>>		https://gitweb.gentoo.org/repo/gentoo.git/commit?id=b7a4174e075a922a255c0ff4a6ebd4f6d0437c61
-#>>>		if [[ -n "$(which python-updater 2>/dev/null)" ]]; then
-#>>>			expect_wrapper python-updater					|| EXIT 1
-#>>>		fi
 		if [[ -n "$(which perl-cleaner 2>/dev/null)" ]]; then
 			expect_wrapper perl-cleaner --all				|| EXIT 1
 		fi
@@ -1324,6 +1309,10 @@ if [[ ${1} == -u ]]; then
 	expect_wrapper dispatch-conf							|| EXIT 1
 
 ########################################
+
+#>>> declare DISTFILES="/.g/_data/_builds/_gentoo/var/cache/portage/distfiles"
+#>>> declare DISTFILES="/.g/_data/_builds/.gary-os.release/_distfiles"
+#>>> for FILE in ${FILELIST}; do ${RSYNC_U} ${DISTFILES}/${FILE} ./build/var/cache/portage/distfiles/ ; done
 
 elif [[ ${1} != -! ]]; then
 	if [[ ${1} != -f ]]; then
