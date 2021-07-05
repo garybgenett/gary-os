@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-source ${HOME}/.bashrc
+#>>> source ${HOME}/.bashrc
 ################################################################################
 
 #NOTE: SCRIPT NAME AND FUNCTION NAMES (${PREPIT}, ${MAKEIT}, ${SHIPIT}) MUST MATCH FOR "_SYSTEM" WRAPPING TO WORK
@@ -236,7 +236,6 @@ function prepare_config_issue {
 #>>>		FILE+="\\\e[1;45;37m"
 		FILE+="\\\e[0;35m"
 		FILE+="PLEASE NOTE THAT THIS BUILD HAS BEEN CUSTOMIZED AND IS NOT AN OFFICIAL RELEASE"
-#>>>		FILE+="\\\e[1;40;30m"
 		FILE+="\\\e[0;37m"
 		${SED} -i "/Some helpful notes/,/More information/c\\${FILE}" \
 			${TARGET}/etc/issue \
@@ -369,9 +368,6 @@ function _prepare_docdir {
 		return 0
 	fi
 	${RSYNC_U} --filter="-_/.git" ${_G_REPO}/			${TARGET}/.${_TITLE}			|| return 1
-#>>>	${RSYNC_U} ${_G_REPO}.git/					${TARGET}/.${_TITLE}.git		|| return 1
-#>>>	${LN} ../.${_TITLE}.git						${TARGET}/.${_TITLE}/.git		|| return 1
-#>>>	echo -en "gitdir: ../.${_TITLE}.git\n"				>${TARGET}/.${_TITLE}/.git		|| return 1
 	${RM}								${TARGET}/.${_TITLE}.git		|| return 1
 	${RSYNC_U} ${_G_REPO}.git/					${TARGET}/.${_TITLE}/.git		|| return 1
 	${SED} -i "/worktree[ ][=]/d"					${TARGET}/.${_TITLE}/.git/config	|| return 1
@@ -461,13 +457,11 @@ function _prepare_symlinks {		#{reset}
 	if [[ -n ${RESET} ]]; then
 		return 0
 	fi
+	${LN} --relative ${TARGET}/.${_TITLE}${_GPACK}			${_RAMFS}${_GPACK}				|| return 1
 	${LN} --relative ${TARGET}${DSTDIR}				${_FINAL}/_$(basename ${DSTDIR})		|| return 1
 	${LN} --relative ${TARGET}${PAKDIR}				${_FINAL}/_$(basename ${PAKDIR})		|| return 1
-#>>> sort -b -k4
 	${LN} --relative ${TARGET}${REPDIR}.tar.xz			${_RAMFS}.$(basename ${REPDIR}).tar.xz		|| return 1
 	${LN} --relative ${TARGET}${LDIR}.tar.xz			${_RAMFS}.linux.tar.xz				|| return 1
-	${LN} --relative ${TARGET}/.${_TITLE}${_GPACK}			${_RAMFS}${_GPACK}				|| return 1
-#>>>
 	for FILE in ${TARGET}${ARCDIR}/stage3-*.tar.xz; do
 		${LN} --relative ${FILE}				${_FINAL}/					|| return 1
 	done
@@ -533,7 +527,7 @@ function release_cpio_nul {
 }
 
 function release_cpio_file {
-	(cd ${TARGET} && ${XARGS} ${DU_S})					| tee ${CPIO_FILE}.txt		#>>> || return 1
+	(cd ${TARGET} && ${XARGS} ${DU_S})					| tee ${CPIO_FILE}.txt
 	sort -k4 -u -o ${CPIO_FILE}.txt						${CPIO_FILE}.txt		|| return 1
 	cat ${CPIO_FILE}.nul | ${CPIO_IN}									|| return 1
 	${RM}									${CPIO_FILE}.nul		|| return 1
@@ -627,7 +621,7 @@ function release_kernel_diff {
 	if [[ ${TARGET} != / ]]; then
 		${RSYNC_U} ${TARGET}${DODIR}/.config		${TARGET}${ARCDIR}/${KCFG}.initramfs	|| return 1
 		${GREP} "CONFIG_(SHMEM|KERNEL|INITRAMFS|RD)_"	${TARGET}${ARCDIR}/${KCFG}.initramfs	|| return 1
-		diff ${DIFF_OPTS} ${TARGET}${ARCDIR}/${KCFG}	${TARGET}${ARCDIR}/${KCFG}.initramfs	| ${GREP} "^[-+]" #>>> || return 1
+		diff ${DIFF_OPTS} ${TARGET}${ARCDIR}/${KCFG}	${TARGET}${ARCDIR}/${KCFG}.initramfs	| ${GREP} "^[-+]"
 	fi
 	return 0
 }
@@ -635,8 +629,8 @@ function release_kernel_diff {
 function release_kernel_build {
 	declare DODIR="${1}" && shift
 	declare KOUT="${1}" && shift
-	declare BZIMAGE="${TARGET}${DODIR}/arch/x86/boot/bzImage"
 #>>>	declare BZIMAGE="${TARGET}${DODIR}/arch/x86_64/boot/bzImage"
+	declare BZIMAGE="${TARGET}${DODIR}/arch/x86/boot/bzImage"
 	declare BZ_MAKE="${TARGET}${DODIR}/arch/x86/Makefile"
 	declare BZ_SEDR=".+ln -fsn.+/x86/boot/bzImage.+"
 	if [[ -f ${BZ_MAKE}.${_TITLE} ]]; then ${MV}	${BZ_MAKE}{.${_TITLE},}	|| return 1; fi
@@ -706,12 +700,12 @@ function _release_report {
 	${LL}						\
 		${TARGET}/				\
 		${_FINAL}*				\
-							2>/dev/null #>>> || return 1
+							2>/dev/null
 	echo -en "\n"
 	${DU_L} --dereference --one-file-system		\
 		${TARGET}${LDIR}/usr/initramfs_data.*	\
 		${_RAMFS}*				\
-							2>/dev/null #>>> || return 1
+							2>/dev/null
 	return 0
 }
 
@@ -741,9 +735,6 @@ function release_install_root {
 	realdev ${_GINST}/dev			|| return 1
 	TARGET="${_GINST}" _release_reset	|| return 1
 	TARGET="${_GINST}" _release_unpack	|| return 1
-#>>>	${RM} ${_GINST}/${_TITLE}*		|| return 1
-#>>>	${RM} ${_GINST}${REPDIR}.tar.xz		|| return 1
-#>>>	${RM} ${_GINST}${LDIR}.tar.xz		|| return 1
 	return 0
 }
 
@@ -779,16 +770,10 @@ function _release_install {		#{main}
 
 ################################################################################
 
-function _publish_daily {		#{main} #>>>{reset}
-#>>>	if [[ ${1} == ${_RST} ]]; then
-#>>>		shift
-#>>>		_publish_prep	|| return 1
-#>>>	else
-		_publish_gitdir	|| return 1
-#>>>		_publish_export	|| return 1
-		_publish_upload	|| return 1
-		_publish_report	|| return 1
-#>>>	fi
+function _publish_daily {		#{main}
+	_publish_gitdir	|| return 1
+	_publish_upload	|| return 1
+	_publish_report	|| return 1
 	return 0
 }
 
@@ -825,10 +810,10 @@ function _publish_prep {
 function _publish_gitdir {
 #>>>	if [[ -x $(which task 2>/dev/null) ]]; then
 #>>>		FILE="${GIT} --git-dir=${_DOCDIR}.git --work-tree=${_DOCDIR}"
-#>>>		NEXT="Automated update of \"TODO.md\" tasks list."
+#>>>		NEXT="Automated \"TODO.md\" update."
 #>>>		task zoom	project:geek.gary-os >${_DOCDIR}/TODO.md	|| return 1
-#>>>		${FILE} add	TODO.md						#>>> || return 1
-#>>>		${FILE} commit	--message="${NEXT}" TODO.md			#>>> || return 1
+#>>>		${FILE} add	TODO.md						|| return 1
+#>>>		${FILE} commit	--message="${NEXT}" TODO.md			|| return 1
 #>>>	fi
 	function git-export-preprocess {
 		${SED} -i "s%^(From[:][ ]).+%\1${_AUTHOR}%g"							"${@}"	|| return 1
@@ -1027,7 +1012,6 @@ function _publish_upload {
 	; do
 		${RSYNC_U} --copy-links				${_G_REPO}/${FILE}	${_OUTDIR}/		|| return 1
 	done
-#>>>	${RSYNC_U} --copy-links ${ARTDIR}			${_OUTDIR}/					|| return 1
 	find							${_OUTDIR} -type d -exec chmod 755 {} \;	|| return 1
 	find							${_OUTDIR} -type f -exec chmod 644 {} \;	|| return 1
 	chown -R root:root					${_OUTDIR}					|| return 1
