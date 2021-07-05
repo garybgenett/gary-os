@@ -377,9 +377,33 @@ function _prepare_docdir {
 ########################################
 
 function _prepare_repdir {
-	if [[ ! -f ${TARGET}${REPDIR}.tar.xz ]]; then
-		safe_env ${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} ${FUNTOO}	|| return 1
-		common_tar ${TARGET}${REPDIR}					|| return 1
+	if [[ -z ${TARGET} ]]; then
+		return 0
+	fi
+	REP_FILE="${TARGET}${ARCDIR}/$(basename ${REPDIR})"
+	if [[ -f ${REP_FILE}.tar.xz ]] && [[ -f ${REP_FILE}.git.tar.xz ]]; then
+		${RSYNC_U} ${REP_FILE}.tar.xz			${TARGET}${REPDIR}.tar.xz		|| return 1
+		${RSYNC_U} ${REP_FILE}.git.tar.xz		${TARGET}${REPDIR}.git.tar.xz		|| return 1
+	fi
+	if [[ ! -f ${TARGET}${REPDIR}.tar.xz ]] || [[ ! -f ${TARGET}${REPDIR}.git.tar.xz ]]; then
+		${RM}						${REP_FILE}{,.git}.tar.xz		|| return 1
+		${RM}						${TARGET}${REPDIR}{,.git}{,.tar.xz}	|| return 1
+		if [[ -d ${GITDIR} ]]; then
+			${MKDIR}				${TARGET}${REPDIR}.git			|| return 1
+			${RSYNC_U} ${GITDIR}/			${TARGET}${REPDIR}.git			|| return 1
+		fi
+		safe_env ${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} ${FUNTOO}				|| return 1
+		common_tar					${TARGET}${REPDIR}			|| return 1
+		common_tar					${TARGET}${REPDIR}.git			|| return 1
+	fi
+	if [[ ! -d ${TARGET}${REPDIR} ]] || [[ ! -d ${TARGET}${REPDIR}.git ]]; then
+		${RM}						${TARGET}${REPDIR}{,.git}		|| return 1
+		common_untar					${TARGET}${REPDIR}			|| return 1
+		common_untar					${TARGET}${REPDIR}.git			|| return 1
+	fi
+	if [[ ! -f ${REP_FILE}.tar.xz ]] || [[ ! -f ${REP_FILE}.git.tar.xz ]]; then
+		${RSYNC_U} ${TARGET}${REPDIR}.tar.xz		${REP_FILE}.tar.xz			|| return 1
+		${RSYNC_U} ${TARGET}${REPDIR}.git.tar.xz	${REP_FILE}.git.tar.xz			|| return 1
 	fi
 	return 0
 }
