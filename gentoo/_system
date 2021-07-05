@@ -348,7 +348,7 @@ done
 #VARIABLES[HOME MYSELF IS_CHROOT DO_CHROOT SAFE_ENV]
 export MYSELF="${ARCDIR}/${FUNDIR}/${_HEART}"
 
-export IS_CHROOT="${IS_CHROOT:-false}"
+if [[ ${IS_CHROOT} != true ]] && [[ ${IS_CHROOT} != false ]]; then export IS_CHROOT="false"; fi
 export DO_CHROOT="false"
 if ! ${IS_CHROOT} && [[ -n ${TOOR} ]]; then
 	DO_CHROOT="true"
