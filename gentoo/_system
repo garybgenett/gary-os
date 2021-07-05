@@ -1159,7 +1159,7 @@ if [[ ${1} == -i ]]; then
 	shift
 	mount_dev_dirs												|| EXIT 1
 	if ! ${_CFG}; then
-							${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -r		|| EXIT 1
+							${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -r -W		|| EXIT 1
 	fi
 	if ! ${DOFAST} && ! ${_CFG}; then
 		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} ${FUNTOO}	|| EXIT 1
@@ -1167,13 +1167,14 @@ if [[ ${1} == -i ]]; then
 	fi
 	if ${_BLD}; then
 		if ${_NEW}; then
-			expect_wrapper			emerge ${_ASK} dev-tcltk/expect				|| EXIT 1
-			safe_env			${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -f		|| EXIT 1
+			if [[ -z "$(which expect 2>/dev/null)" ]]; then
+				expect_wrapper		emerge ${_ASK} dev-tcltk/expect				|| EXIT 1
+			fi
 			expect_wrapper			emerge ${_ASK} ${EMERGE_UPDT_OPTS} \@system		|| EXIT 1
-		else
-#>>>			expect_wrapper			emerge ${_ASK} --emptytree \@system \@world		|| EXIT 1
-			expect_wrapper			emerge ${_ASK} --emptytree \@system \@${_PKG}		|| EXIT 1
+			safe_env			${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -f		|| EXIT 1
 		fi
+#>>>		expect_wrapper				emerge ${_ASK} --emptytree \@system \@world		|| EXIT 1
+		expect_wrapper				emerge ${_ASK} --emptytree \@system \@${_PKG}		|| EXIT 1
 	fi
 	if ${_KRN}; then
 		${RM}					${TARGET}/boot/*					|| EXIT 1
