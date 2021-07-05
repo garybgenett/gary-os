@@ -1319,10 +1319,10 @@ elif [[ ${1} != -! ]]; then
 		print_info update
 #>>>		expect_wrapper emerge --ask=n --verbose --sync				|| EXIT 1
 		expect_wrapper ego sync							|| EXIT 1
-		if [[ ! -d ${REPDIR}.git ]] && [[ -d ${REPDIR}/.git ]]; then
-			${MV} ${REPDIR}/.git ${REPDIR}.git				|| EXIT 1
+		if ! perl -MJSON::XS -e 1; then
+			expect_wrapper emerge ${_ASK} dev-perl/JSON-XS			|| EXIT 1
 		fi
-		${SETDIR}/${FUNDIR}/${FUNKIT} ${REPDIR} ${1}				|| EXIT 1
+		${SETDIR}/${FUNDIR}/${FUNKIT} ${REPDIR} ${@}				|| EXIT 1
 		if [[ -n "$(which eix-update 2>/dev/null)" ]]; then
 			expect_wrapper eix-update					|| EXIT 1
 		fi
