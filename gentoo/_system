@@ -68,6 +68,8 @@ declare NEXT=
 #SETTINGS[_GINST]
 #SETTINGS[_GPACK _RPACK]
 
+export _TITLE="gary-os"
+
 ########################################
 
 #OPTIONS[DOREDO DOFAST]
@@ -84,13 +86,13 @@ export GITDIR="${GITDIR:-/.g/_data/_build/funtoo/meta-repo.git}"
 export BLDDIR="${BLDDIR:-/.g/_data/_builds/_gentoo}"
 export WRKDIR="${WRKDIR:-${BLDDIR}.working}"
 export TORDIR="${TORDIR:-/.g/_toor}"
-export GOSDIR="${GOSDIR:-/.g/_data/_builds/_gary-os.working}"
+export GOSDIR="${GOSDIR:-/.g/_data/_builds/_${_TITLE}.working}"
 
 #>>> #OPTIONS[BLDPKG WRKPKG TORPKG GOSPKG]
 export BLDPKG="${BLDPKG:-packages}"
 export WRKPKG="${WRKPKG:-${BLDPKG}}"
 export TORPKG="${TORPKG:-${BLDPKG}}"
-export GOSPKG="${GOSPKG:-gary-os}"
+export GOSPKG="${GOSPKG:-${_TITLE}}"
 
 ########################################
 
@@ -179,8 +181,11 @@ if ! ${_BASH_SOURCED}; then
 	fi
 fi
 
-#note: detection of a "gary-os" build is based purely on the package set
-if [[ ${_PKG} == _${GOSPKG} ]] || [[ ${_PKG} == ${GOSPKG} ]]; then
+#note: detection of a "gary-os" build is based purely on the package set name
+if [[ ${_PKG} == ${_TITLE} ]]; then
+	_GOS="true"
+fi
+if [[ ${_PKG} == _${_TITLE} ]]; then
 	_GOS="true"
 fi
 
