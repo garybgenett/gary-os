@@ -75,9 +75,10 @@ export _TITLE="gary-os"
 #OPTIONS[DOMODS]
 if [[ ${DOMODS} != true ]] && [[ ${DOMODS} != false ]]; then DOMODS="false"; fi
 
-#OPTIONS[DOREDO DOFAST]
+#OPTIONS[DOREDO DOFAST DOTEST]
 if [[ ${DOREDO} != true ]] && [[ ${DOREDO} != false ]]; then DOREDO="false"; fi
 if [[ ${DOFAST} != true ]] && [[ ${DOFAST} != false ]]; then DOFAST="false"; fi
+if [[ ${DOTEST} != true ]] && [[ ${DOTEST} != false ]]; then DOTEST="false"; fi
 
 ########################################
 
