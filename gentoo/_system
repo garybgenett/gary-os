@@ -398,6 +398,9 @@ PATH
 "
 
 function clear_environment {
+	if ${QUIET}; then
+		return 0
+	fi
 	for FILE in $(
 		echo "${MASKVARS}" |
 		${SED} "/^$/d" |
@@ -409,10 +412,8 @@ function clear_environment {
 			${SED} -e "s|^[|]*||g" -e "s|[|]*$||g"
 		))$"
 	); do
-		if ! ${QUIET}; then
-#>>>			echo -en "${FILE}=${!FILE}\n" | ${GREP} "[=].*$"
-			echo -en "${FILE}=${!FILE}\n" | ${GREP} "[=].+$"
-		fi
+#>>>		echo -en "${FILE}=${!FILE}\n" | ${GREP} "[=].*$"
+		echo -en "${FILE}=${!FILE}\n" | ${GREP} "[=].+$"
 		unset ${FILE}
 	done
 	return 0
