@@ -511,6 +511,7 @@ function print_info {
 		printf "${PRINTF}" "Chroot Validation (Change Review):"		"<output>"	"${_HEART} {chroot} -y [{packages_file}]"
 		echo -en "\n"
 		printf "${PRINTF}" "Chroot Configuration (Overlay Helper):"	"<interactive>"	"${_HEART} {chroot} -o {package}"
+		printf "${PRINTF}" "Chroot Configuration (Overlay Downloader):"	"<interactive>"	"${_HEART}          -o {package} {file} [{commit}]"
 		printf "${PRINTF}" "Chroot Configuration (Internal Only):"	"<internal>"	"${_HEART} {chroot} -r [-w]"
 		echo -en "\n"
 		printf "${PRINTF}" "Chroot Shell (Bash):"			"<interactive>"	"${_HEART} {chroot} -s"
@@ -968,25 +969,67 @@ fi
 ########################################
 
 if [[ ${1} == -o ]]; then
-	if ! ${DO_CHROOT} && ! ${IS_CHROOT}; then
+	if ! ${DO_CHROOT} && ! ${IS_CHROOT} && [[ -z ${3} ]]; then
 		requires_chroot "${@}"
 	fi
 #>>>	shift
-	if ${DO_CHROOT}
+	if ${DO_CHROOT} || [[ -n ${3} ]]
 		then FILE="${SETDIR}/${FUNDIR}"
 		else FILE="${ETCDIR}"
 	fi
 	FILE="$(${LS} -d ${FILE}/${LAYDIR}/*/${2} | ${SED} "s|^${FILE}/${LAYDIR}/||g")"
-	NEXT="$(dirname ${FILE})"
+	if [[ -z ${FILE} ]]; then
+		${LL} -d ${FILE}/${LAYDIR}/*/${2}
+		EXIT 1
+	fi
+	if [[ -n ${3} ]]; then
+		declare BASE="https://gitweb.gentoo.org/repo/gentoo.git"
+		declare OFIL="${3}"; if [[ -z $(echo "${OFIL}" | ${GREP} "[.]ebuild$") ]]; then OFIL="files/${OFIL}"; fi
+		declare ID="$(if [[ -n ${4} ]]; then echo "?id=${4}"; fi)"
+		declare FAIL=
+		declare SKIP=
+		if [[ -z $(${GREP} "${BASE}/tree/${FILE}"	${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/.rationale) ]]; then
+			echo "${BASE}/tree/${FILE}${ID}"	>>${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/.rationale		|| EXIT 1
+		fi
+		${MKDIR}					${SETDIR}/${FUNDIR}/${LAYDIR}/$(dirname ${FILE}/${OFIL})	|| EXIT 1
+		${WGET_C} -O					${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/${OFIL}			\
+								"${BASE}/plain/${FILE}/${OFIL}${ID}"				|| FAIL+=" ${OFIL}" #>>> EXIT 1
+		for NEXT in $(${SED} -n				"s|^.*[\"]?[$][{]FILESDIR[}][\"]?/([^[:space:]\"]+).*$|\1|gp"	\
+								${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/${OFIL}			2>/dev/null
+		); do
+			if [[ -n $(echo "${NEXT}" | ${GREP} "[$]") ]]; then SKIP+=" ${NEXT}"; continue; fi
+			${MKDIR}				${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/files			|| EXIT 1
+			${WGET_C} -O				${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/files/${NEXT}		\
+								"${BASE}/plain/${FILE}/files/${NEXT}${ID}"			|| FAIL+=" ${NEXT}" #>>> EXIT 1
+		done
+#>>>		echo -en "\n"
+		echo -en "[${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/.rationale]\n"
+		cat ${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/.rationale								|| EXIT 1
+		if [[ -n ${FAIL} ]] || [[ -n ${SKIP} ]]; then
+			echo -en "\n"
+			if [[ -n ${FAIL} ]]; then
+				echo -en ">>> THESE FILES WERE NOT DOWNLOADED SUCCESSFULLY: ${FAIL/# } <<<\n"
+				echo -en "\n"
+			fi
+			if [[ -n ${SKIP} ]]; then
+				echo -en ">>> THESE FILES WERE SKIPPED: ${SKIP/# } <<<\n"
+				echo -en "\n"
+			fi
+			EXIT 1
+		fi
+		EXIT 0
+	fi
 	if ${DO_CHROOT}; then
+		mount_dev_dirs													|| EXIT 1
 		#note: ensuring configuration is up-to-date
 		${_SOUL} ${QUIET_OPT} ${TOOR} -r										|| EXIT 1
-		${MKDIR}	${TARGET}${ETCDIR}/${LAYDIR}/${NEXT}								|| EXIT 1
+		${MKDIR}	${TARGET}${ETCDIR}/${LAYDIR}/$(basename ${FILE})						|| EXIT 1
 		${RSYNC_U}	${TARGET}${REPDIR}/kits/*/${FILE}/		${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}.src	|| EXIT 1
 		${RSYNC_U}	${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/		${TARGET}${ETCDIR}/${LAYDIR}/${FILE}		|| EXIT 1
 		safe_env ${MYSELF} ${QUIET_OPT} ${TOOR} "${@}"									|| EXIT 1
 		${RSYNC_U}	${TARGET}${ETCDIR}/${LAYDIR}/${FILE}/Manifest	${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/		|| EXIT 1
 		${RSYNC_U}	${TARGET}${ETCDIR}/${LAYDIR}/.review.txt	${SETDIR}/${FUNDIR}/${LAYDIR}/			|| EXIT 1
+		mount_dev_dirs -u												|| EXIT 1
 	else
 		FILE="$(realpath ${ETCDIR}/${LAYDIR}/${FILE}/*.ebuild | sort -n | tail -n1)"
 		ebuild		${FILE} digest											|| EXIT 1
