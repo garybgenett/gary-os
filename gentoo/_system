@@ -72,6 +72,9 @@ export _TITLE="gary-os"
 
 ########################################
 
+#OPTIONS[DOMODS]
+if [[ ${DOMODS} != true ]] && [[ ${DOMODS} != false ]]; then DOMODS="false"; fi
+
 #OPTIONS[DOREDO DOFAST]
 if [[ ${DOREDO} != true ]] && [[ ${DOREDO} != false ]]; then DOREDO="false"; fi
 if [[ ${DOFAST} != true ]] && [[ ${DOFAST} != false ]]; then DOFAST="false"; fi
@@ -166,6 +169,12 @@ if [[ -e ${TARGET} ]]; then
 	TARGET="$(realpath ${TARGET})"
 	#note: this is a potentially dangerous way of stripping "//" to just "/" for pattern matching and pretty output
 	TARGET="${TARGET/%\/}"
+fi
+
+#note: environment variable to select modified build with the makefile
+#note: command line option overrides the environment variable
+if ${DOMODS}; then
+	_MOD="true"
 fi
 
 if ! ${_BASH_SOURCED}; then
