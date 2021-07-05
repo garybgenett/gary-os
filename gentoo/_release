@@ -69,6 +69,10 @@ done
 
 ################################################################################
 
+declare RUFUS_URL="https://github.com/pbatard/rufus/releases/download/v3.7/rufus-3.7p.exe"
+
+########################################
+
 declare DU_L="${DU} --summarize --total --block-size 1M"
 declare DU_S="${DU} --summarize --apparent-size --block-size 1"
 
@@ -675,10 +679,6 @@ function _release_kernel {		#{initrd}
 }
 
 ########################################
-
-#NOTE: THE "LOOPFILE" NAME MUST MATCH THE "GRUB.SH" SCRIPT
-
-declare RUFUS_URL="https://github.com/pbatard/rufus/releases/download/v3.7/rufus-3.7p.exe"
 
 function _release_grub {
 	FILE="${_RAMFS}.grub"
