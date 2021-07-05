@@ -1050,7 +1050,7 @@ if [[ ${1} == -l ]]; then
 	if [[ -z ${1} ]]; then
 		EXIT 0
 	elif [[ ${1} == +([0-9]) ]]; then
-		echo -en "https://bugs.gentoo.org/show_bug.cgi?id=${1}"
+		echo -en "https://bugs.gentoo.org/show_bug.cgi?id=${1}\n"
 	else
 		FILE="$(${LS} -d ${REPDIR}/kits/*/*/${1} 2>/dev/null)"
 		NEXT="$(echo "${FILE}" | ${SED} "s|^${REPDIR}/kits/.+[/]([^/]+[/][^/]+)$|\1|g")"
