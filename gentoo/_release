@@ -430,23 +430,29 @@ function _prepare_repdir {
 
 ########################################
 
+function prepare_linux_directory {
+	declare DODIR="${1}" && shift
+	if [[ ! -d ${TARGET}${DODIR} ]]; then
+		${RM}						${TARGET}${DODIR}.${_TITLE}	|| return 1
+		${MKDIR}					${TARGET}${DODIR}.${_TITLE}	|| return 1
+		tar -vvx --bzip2								\
+			-C ${TARGET}${DODIR}.${_TITLE}						\
+			-f ${TARGET}${PAKDIR}/*/gentoo-sources-${KVER}.tbz2			|| return 1
+		${MV} ${TARGET}${DODIR}.${_TITLE}${KDIR}	${TARGET}${DODIR}		|| return 1
+		${RM}						${TARGET}${DODIR}.${_TITLE}	|| return 1
+		safe_env make -C ${DODIR}			distclean			|| return 1
+	fi
+	return 0
+}
+
 function _prepare_linux {
 	if [[ -z ${TARGET} ]]; then
-		if [[ ! -d ${TARGET}${LDIR} ]]; then
-			${RM}				${TARGET}${LDIR}		|| return 1
-			common_untar			${TARGET}${LDIR}		|| return 1
-		fi
 		return 0
 	fi
 	if [[ ! -f ${TARGET}${LDIR}.tar.xz ]]; then
-		${RM}					${TARGET}${LDIR}{,.${_TITLE}}	|| return 1
-		${MKDIR}				${TARGET}${LDIR}.${_TITLE}	|| return 1
-		tar -vvx --bzip2							\
-			-C ${TARGET}${LDIR}.${_TITLE}					\
-			-f ${TARGET}${PAKDIR}/*/gentoo-sources-${KVER}.tbz2		|| return 1
-		${MV} ${TARGET}${LDIR}.${_TITLE}${KDIR}	${TARGET}${LDIR}		|| return 1
-		${RM}					${TARGET}${LDIR}.${_TITLE}	|| return 1
-		safe_env make -C ${LDIR}		distclean			|| return 1
+		${RM}					${TARGET}${LDIR}		|| return 1
+#>>>		prepare_linux_directory			${TARGET}${LDIR}		|| return 1
+		prepare_linux_directory			${LDIR}				|| return 1
 		${RSYNC_U} ${TARGET}${ARCDIR}/${KCFG}	${TARGET}${LDIR}/.config	|| return 1
 		safe_env make -C ${LDIR}		modules_prepare			|| return 1
 		common_tar				${TARGET}${LDIR}		|| return 1
@@ -693,6 +699,7 @@ function _release_kernel {		#{initrd}
 		[[ ! -f ${_RAMFS}.boot.kernel ]] ||
 		[[ ! -f ${_RAMFS}.kernel ]];
 	}; then
+		prepare_linux_directory		${DODIR}				|| return 1
 		release_kernel_patch		${DODIR}				|| return 1
 		release_kernel_config		${DODIR}				|| return 1
 		release_kernel_shmem		${DODIR}				|| return 1
