@@ -19,8 +19,11 @@
 #{WMHELP}
 
 #{RCUPDT}
-
-#{FSSKIP}
+#{FSUPDT}
+#{FSPACK}
+#{FSKEEP}
+#{FSARCH}
+#{FSEXCL}
 
 ########################################
 # toolchain

@@ -358,14 +358,21 @@
 #{RCUPDT} rc-update add runsvdir default	|| true
 #{RCUPDT} rc-update add xdm default		|| true
 #{RCUPDT} rc-update add spice-vdagent default	|| true
-
 #{RCUPDT} rc-update show
 
-#{FSSKIP} /lib64/firmware/liquidio
-#{FSSKIP} /lib64/firmware/netronome
-#{FSSKIP} /lib64/firmware/qed
-#{FSSKIP} /usr/lib64/gcc/x86_64-pc-linux-gnu/7.3.1/debug
-#{FSSKIP} /usr/lib64/python*/test
+#{FSUPDT}
+#{FSPACK}
+
+#{FSKEEP} emerge:/usr/src/linux
+#{FSKEEP} emerge:/var/db/pkg
+#{FSKEEP} emerge:/var/git/meta-repo
+#{FSARCH} emerge:/var/git/meta-repo.git
+
+#{FSARCH} debug:/usr/lib64/debug
+#{FSARCH} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/7.3.1/debug
+#{FSARCH} debug:/usr/src/debug
+
+#{FSEXCL}
 
 ########################################
 # toolchain
