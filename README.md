@@ -649,7 +649,7 @@ Here is an overview of the repository contents, in order of relative importance:
 | [gentoo]                   | Entirety of the Funtoo configuration, including the scripts used to build and manage installations.
 | [gentoo/overlay]           | Funtoo overlay directory.  Used very sparingly, and mostly for fixing broken packages.
 | [scripts]                  | Ancillary scripts relevant to GaryOS, such as "[scripts/grub.sh]".
-| [artifacts]                | Storage for miscellaneous files used in the initramfs build.
+| [artifacts/files]          | Storage for files used in the initramfs build.
 | [artifacts/patches]        | Archive of patch files for preparing initramfs images.
 | [artifacts/images]         | Icons, screenshots and the like.
 | [artifacts/archive]        | Stash space for files which don't fit elsewhere, including snapshots of [Acknowledgements & Reviews] items.
@@ -680,7 +680,7 @@ Here is an overview of the repository contents, in order of relative importance:
 [gentoo]: https://github.com/garybgenett/gary-os/blob/master/gentoo
 [gentoo/overlay]: https://github.com/garybgenett/gary-os/blob/master/gentoo/overlay
 [scripts]: https://github.com/garybgenett/gary-os/blob/master/scripts
-[artifacts]: https://github.com/garybgenett/gary-os/blob/master/artifacts
+[artifacts/files]: https://github.com/garybgenett/gary-os/blob/master/artifacts/files
 [artifacts/patches]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches
 [artifacts/images]: https://github.com/garybgenett/gary-os/blob/master/artifacts/images
 [artifacts/archive]: https://github.com/garybgenett/gary-os/blob/master/artifacts/archive
