@@ -22,11 +22,30 @@
 #{RCUPDT} rc-update del sshd default		|| true
 #{RCUPDT} rc-update show
 
-#{FSSKIP} /lib64/firmware/liquidio
-#{FSSKIP} /lib64/firmware/netronome
-#{FSSKIP} /lib64/firmware/qed
-#{FSSKIP} /usr/lib64/gcc/x86_64-pc-linux-gnu/7.3.1/debug
-#{FSSKIP} /usr/lib64/python*/test
+#{FSPACK}
+
+#{FSKEEP} docs:/usr/share/doc
+#{FSKEEP} docs:/usr/share/gtk-doc
+#{FSKEEP} docs:/usr/share/info
+#{FSKEEP} docs:/usr/share/man
+#{FSKEEP} docs:/usr/share/texmf-dist
+
+#{FSKEEP} base:/lib64/firmware
+
+#{FSKEEP} gcc:/usr/include
+#{FSKEEP} gcc:/usr/libexec/gcc
+#{FSKEEP} gcc:/usr/x86_64-pc-linux-gnu
+
+#{FSKEEP} emerge:/usr/src/linux
+#{FSKEEP} emerge:/var/db/pkg
+#{FSKEEP} emerge:/var/git/meta-repo
+#{FSARCH} emerge:/var/git/meta-repo.git
+
+#{FSARCH} debug:/usr/lib64/debug
+#{FSARCH} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/7.3.1/debug
+#{FSARCH} debug:/usr/src/debug
+
+#{FSEXCL}
 
 ########################################
 # toolchain
