@@ -10,7 +10,7 @@ export _VERSN="v4.0"
 export _RDATE="$(date --iso=date)"
 
 export _FINAL="${TARGET}/.${_TITLE}-${ESUB}"
-export _RAMFS="${_FINAL}/${_TITLE}-${ESUB}-${_VERSN}"
+export _RAMFS="${_FINAL}/${_TITLE}-${_VERSN}-${ESUB}"
 
 export _GINST="${TARGET}/.install"
 
