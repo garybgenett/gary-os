@@ -639,7 +639,7 @@ function release_kernel_initramfs {
 
 function release_kernel_diff {
 	declare DODIR="${1}" && shift
-	if [[ ${TARGET} != / ]]; then
+	if [[ -n ${TARGET} ]]; then
 		${RSYNC_U} ${TARGET}${DODIR}/.config		${TARGET}${ARCDIR}/${KCFG}.initramfs	|| return 1
 		${GREP} "CONFIG_(SHMEM|KERNEL|INITRAMFS|RD)_"	${TARGET}${ARCDIR}/${KCFG}.initramfs	|| return 1
 		diff ${DIFF_OPTS} ${TARGET}${ARCDIR}/${KCFG}	${TARGET}${ARCDIR}/${KCFG}.initramfs	| ${GREP} "^[-+]"
