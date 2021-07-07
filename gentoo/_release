@@ -14,10 +14,7 @@ export _RAMFS="${_FINAL}/${_TITLE}-${_VERSN}-${ESUB}"
 
 export _GINST="${TARGET}/.install"
 
-#note: the "$_GPACK" extension is for the root filesystem
-#note: the "$_RPACK" file is for the repository
-export _GPACK=".packages.txt"
-export _RPACK="_packages"
+export _GPACK="packages.txt"
 
 ########################################
 
@@ -167,8 +164,7 @@ declare FINDMNT="findmnt --noheadings --output TARGET --target"
 #note: cross-reference with the "release_install" function any time this changes
 function _release_reset {		#{main}
 	${RM} ${TARGET}/${CMTFIL}			|| return 1
-	${RM} ${TARGET}/${_RPACK}			|| return 1
-	${RM} ${TARGET}/.${_TITLE}${_GPACK}		|| return 1
+	${RM} ${TARGET}/${_GPACK}			|| return 1
 	${RM} ${TARGET}/.gitignore			|| return 1
 	if [[ ${TARGET} != / ]]; then
 		${RM} ${TARGET}/{.,_}${_TITLE}*		|| return 1
@@ -437,11 +433,12 @@ function _prepare_linux {
 ########################################
 
 function _prepare_packages {
+	declare PACK_FILE="${_GPACK}"
 	if [[ -z ${TARGET} ]]; then
-		${RM} ${TARGET}/.${_TITLE}${_GPACK}							|| return 1
+		${RM} ${TARGET}/${PACK_FILE}								|| return 1
 		return 0
 	fi
-	cat /dev/null >${TARGET}/.${_TITLE}${_GPACK}							|| return 1
+	cat /dev/null >${TARGET}/${PACK_FILE}								|| return 1
 	NEXT=
 	for FILE in $(
 		cd ${TARGET}${PAKDIR}									&&
@@ -449,18 +446,14 @@ function _prepare_packages {
 			${SED} "s|^[.][/]||g"								|
 			sort -u
 	); do
-		NEXT+=" ${FILE}"
-	done
-	for FILE in ${NEXT}; do
 		declare PKG_DB="$(cd ${TARGET}${PDBDIR} && ${LS} -d ${FILE/%.tbz2}	2>/dev/null)"	|| return 1
 		declare PKG_DU="$(cd ${TARGET}${PAKDIR} && ${DU} -ks ${FILE}		2>/dev/null)"	|| return 1
 		if [[ -n ${PKG_DB} ]]; then
-			echo -en "${PKG_DU} (installed)\n"	| tee -a ${TARGET}/.${_TITLE}${_GPACK}	|| return 1
+			echo -en "${PKG_DU} (installed)\n"	| tee -a ${TARGET}/${PACK_FILE}		|| return 1
 		else
-			echo -en "${PKG_DU} (packaged)\n"	| tee -a ${TARGET}/.${_TITLE}${_GPACK}	|| return 1
+			echo -en "${PKG_DU} (packaged)\n"	| tee -a ${TARGET}/${PACK_FILE}		|| return 1
 		fi
 	done
-	${RSYNC_U} ${TARGET}/.${_TITLE}${_GPACK}		${TARGET}/${_RPACK}			|| return 1
 	return 0
 }
 
@@ -481,7 +474,7 @@ function _prepare_symlinks {		#{reset}
 	if [[ -n ${RESET} ]]; then
 		return 0
 	fi
-	${LN} --relative ${TARGET}/.${_TITLE}${_GPACK}			${_RAMFS}${_GPACK}				|| return 1
+	${LN} --relative ${TARGET}/${_GPACK}				${_RAMFS}${_GPACK}				|| return 1
 	${LN} --relative ${TARGET}${DSTDIR}				${_FINAL}/_$(basename ${DSTDIR})		|| return 1
 	${LN} --relative ${TARGET}${PAKDIR}				${_FINAL}/_$(basename ${PAKDIR})		|| return 1
 	${LN} --relative ${TARGET}${REPDIR}.tar.xz			${_RAMFS}.$(basename ${REPDIR}).tar.xz		|| return 1
@@ -521,7 +514,7 @@ function release_cpio_nul {
 		\\\( -path ./${CMTFIL}				-prune \\\) -o \
 		\\\( -path ./${_FINAL/#${TARGET}\/}		-prune \\\) -o \
 		\\\( -path ./${_RAMFS/#${TARGET}\/}\\\*		-prune \\\) -o \
-		\\\( -path ./${_RPACK}				-prune \\\) -o \
+		\\\( -path ./${_GPACK}				-prune \\\) -o \
 		\
 		\\\( -path .${ARCDIR}\\\*			-prune \\\) -o \
 		\\\( -path .${GENDIR}\\\*			-prune \\\) -o \
@@ -860,7 +853,7 @@ function _publish_gitdir {
 	SAVE_FILES+="${CMTFIL}"
 	SAVE_FILES+="^_commit"
 	SAVE_FILES+="^_config\*"
-	SAVE_FILES+="^${_RPACK}"
+	SAVE_FILES+="^${_GPACK}"
 	SAVE_FILES+="^_packages\*"
 	declare SETUP_FILES=
 	SETUP_FILES+="gentoo"
