@@ -227,7 +227,7 @@ function prepare_config_issue {
 			${ARTDIR}/files/issue \
 			|| return 1
 	done
-	${RSYNC_C} --copy-links ${ARTDIR}/files/issue ${TARGET}/etc/files/issue \
+	${RSYNC_C} --copy-links ${ARTDIR}/files/issue ${TARGET}/etc/issue \
 		|| return 1
 	if
 	[[ -z ${COMMIT} ]] ||
