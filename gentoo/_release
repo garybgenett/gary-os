@@ -69,6 +69,38 @@ done
 
 ################################################################################
 
+declare LASTPIPE="$(shopt lastpipe | ${SED} "s%^.+(on|off)$%\1%g")"
+if [[ ${LASTPIPE} == on ]]; then
+	LASTPIPE="-s"
+else
+	LASTPIPE="-u"
+fi
+
+########################################
+
+function variable_parse {
+	declare VARIABLE="${1}"		&& shift
+	declare V_SPACER="${1:- }"	&& shift
+	declare V_PREFIX="${1}"		&& shift
+	declare V_SUFFIX="${1}"		&& shift
+	declare V_CATGRY="${1:-false}"	&& shift
+	declare V_SELECT=
+	declare V_LOOPER=
+	for V_SELECT in ${VARIABLE}; do
+		echo "${!V_SELECT}" | ${SED} "s|${V_SPACER}|\n|g" | while read -r V_LOOPER; do
+			if [[ -n ${V_LOOPER} ]]; then
+				if ! ${V_CATGRY}; then
+					V_LOOPER="$(echo "${V_LOOPER}" | ${SED} "s|^[^${PACKDIRS_CSEP}]+[${PACKDIRS_CSEP}]||g")"
+				fi
+				echo "${V_PREFIX}${V_LOOPER}${V_SUFFIX}"
+			fi
+		done
+	done
+	return 0
+}
+
+################################################################################
+
 declare RUFUS_URL="https://github.com/pbatard/rufus/releases/download/v3.7/rufus-3.7p.exe"
 
 ########################################
@@ -334,9 +366,11 @@ function _prepare_config {		#{reset}
 		safe_env						/usr/sbin/locale-gen			|| return 1
 		return 0
 	fi
-	echo "${RCUPDT}" | tr ';' '\n' | while read -r FILE; do
+	shopt -s lastpipe
+	variable_parse RCUPDT ";" | while read -r FILE; do
 		eval safe_env						${FILE}					|| return 1
 	done
+	shopt ${LASTPIPE} lastpipe
 	prepare_config_issue											|| return 1
 	${LN} sbin/init							${TARGET}/init				|| return 1
 	${SED} -i "s|^([^#].+)$|#\1|g"					${TARGET}/etc/fstab			|| return 1
