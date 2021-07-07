@@ -80,6 +80,10 @@ declare DU_S="${DU} --summarize --apparent-size --block-size 1"
 
 declare CPIO_FILE="${_RAMFS}.cpio"
 
+#note: this is an environment variable for "xz" and is not explicitly used in this script
+#note: this is not for direct "xz" commands, but for "tar --xz" archiving
+export XZ_OPT="--verbose --threads=0 --extreme -9"
+
 declare XARGS="xargs --max-procs 0 --max-args 1 --null	--arg-file ${CPIO_FILE}.nul"
 declare CPIO_IN="cpio -v --create --format newc --null	--file ${CPIO_FILE}	--directory ${TARGET}"
 declare CPIO_OUT="cpio -v --extract			--file ${CPIO_FILE}	--directory ${CPIO_FILE}.dir"
