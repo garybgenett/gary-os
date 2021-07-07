@@ -99,6 +99,31 @@ function variable_parse {
 	return 0
 }
 
+########################################
+
+function variable_match {
+	declare MARIABLE="${1}"		&& shift
+	declare M_SPACER="${1:- }"	&& shift
+	declare M_EQUALS="${1}"		&& shift
+	declare M_SUBDIR="${1:-false}"	&& shift
+	declare M_SELECT=
+	declare M_LOOPER=
+	shopt -s lastpipe
+	for M_SELECT in ${MARIABLE}; do
+		variable_parse ${M_SELECT} "${M_SPACER}" | while read -r M_LOOPER; do
+			if {
+				{ ! ${M_SUBDIR} && [[ "${M_EQUALS}" == "${M_LOOPER}" ]]			; } ||
+				{ ${M_SUBDIR} && [[ ${M_EQUALS} != ${M_EQUALS/#${M_LOOPER}\/} ]]	; };
+			}; then
+				shopt ${LASTPIPE} lastpipe
+				return 0
+			fi
+		done
+	done
+	shopt ${LASTPIPE} lastpipe
+	return 1
+}
+
 ################################################################################
 
 declare RUFUS_URL="https://github.com/pbatard/rufus/releases/download/v3.7/rufus-3.7p.exe"
