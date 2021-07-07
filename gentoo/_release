@@ -15,6 +15,7 @@ export _RAMFS="${_FINAL}/${_TITLE}-${_VERSN}-${ESUB}"
 export _GINST="${TARGET}/.install"
 
 export _GPACK="packages.txt"
+export _GREAD="readme.md"
 
 ########################################
 
@@ -474,6 +475,7 @@ function _prepare_symlinks {		#{reset}
 	if [[ -n ${RESET} ]]; then
 		return 0
 	fi
+	${LN} --relative ${TARGET}/.${_TITLE}/README.md			${_RAMFS}.${_GREAD}				|| return 1
 	${LN} --relative ${TARGET}/${_GPACK}				${_RAMFS}${_GPACK}				|| return 1
 	${LN} --relative ${TARGET}${DSTDIR}				${_FINAL}/_$(basename ${DSTDIR})		|| return 1
 	${LN} --relative ${TARGET}${PAKDIR}				${_FINAL}/_$(basename ${PAKDIR})		|| return 1
