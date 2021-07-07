@@ -165,28 +165,27 @@ function common_untar {
 
 #NOTE: CONSULT THE "SYSTEM INSTALLATION" TABLE IN "README" FOR THIS SECTION
 
-declare FINDMNT="findmnt --noheadings --output TARGET --target"
-
 #note: this is called statically in the "_system" script
 #note: cross-reference with the "release_install" function any time this changes
 function _release_reset {		#{main}
-	${RM} ${TARGET}/${CMTFIL}			|| return 1
-	${RM} ${TARGET}/${_GPACK}			|| return 1
-	${RM} ${TARGET}/.gitignore			|| return 1
-	if [[ ${TARGET} != / ]]; then
-		${RM} ${TARGET}/{.,_}${_TITLE}*		|| return 1
+	${RM} ${TARGET}/${CMTFIL}				|| return 1
+	${RM} ${TARGET}/${_GPACK}				|| return 1
+	${RM} ${TARGET}/.gitignore				|| return 1
+	if [[ -n ${TARGET} ]]; then
+		${RM} ${TARGET}/{.,_}${_TITLE}*			|| return 1
 	fi
-	if [[ $(${FINDMNT} ${_FINAL}) != ${_FINAL} ]] && [[ ! -L ${_FINAL} ]]; then
-		${RM} ${_FINAL}*			|| return 1
+	FILE="$(findmnt --noheadings --output TARGET --target ${_FINAL})"
+	if [[ ${FILE} != ${_FINAL} ]] && [[ ! -L ${_FINAL} ]]; then
+		${RM} ${_FINAL}*				|| return 1
 	else
-		${RM} ${_RAMFS}*			|| return 1
+		${RM} ${_RAMFS}*				|| return 1
 	fi
-	if [[ ${TARGET} != / ]] && [[ ${TARGET} != ${_GINST} ]]; then
-		${RM} ${TARGET}${REPDIR}.tar.xz		|| return 1
-		${RM} ${TARGET}${LDIR}			|| return 1
-		${RM} ${TARGET}${LDIR}.tar.xz		|| return 1
-		${LN} ${KBAS} ${TARGET}${LDIR}		|| return 1
-		_prepare_config ${_RST}			|| return 1
+	if [[ -n ${TARGET} ]] && [[ ${TARGET} != ${_GINST} ]]; then
+		${RM} ${TARGET}${REPDIR}.tar.xz			|| return 1
+		${RM} ${TARGET}${LDIR}				|| return 1
+		${RM} ${TARGET}${LDIR}.tar.xz			|| return 1
+		${LN} ${KBAS} ${TARGET}${LDIR}			|| return 1
+		_prepare_config ${_RST}				|| return 1
 	fi
 	return 0
 }
