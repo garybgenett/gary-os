@@ -40,6 +40,8 @@ declare _RELDIR="${_BLDDIR}/.${_TITLE}"
 declare _G_REPO="${_RELDIR}/.${_TITLE}"
 declare _OUTDIR="${_RELDIR}.release"
 
+declare _EAMARK="${_FINAL}/_EARLY_ACCESS_DIRECTORY--IN_DEVELOPMENT--UNSUPPORTED"
+
 declare -a RELEASE=
 declare -a CMTHASH=
 RELEASE[0]="v0.1"; CMTHASH[0]="4d1b46b02798a1d3d3421b1c8087d80a80012a53"
@@ -1025,6 +1027,10 @@ function _publish_export {
 ########################################
 
 function _publish_upload {
+	if [[ -L ${_OUTDIR}/${_VERSN} ]]; then
+		cat ${TARGET}/etc/motd				>${_EAMARK}					|| return 1
+		${LL}						${_EAMARK}					|| return 1
+	fi
 	for FILE in \
 		README.md \
 		LICENSE.md \
