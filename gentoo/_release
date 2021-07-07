@@ -12,7 +12,7 @@ export _RDATE="$(date --iso=date)"
 export _FINAL="${TARGET}/.${_TITLE}-${ESUB}"
 export _RAMFS="${_FINAL}/${_TITLE}-${_VERSN}-${ESUB}"
 
-export _GINST="${TARGET}/.install"
+export _GINST="/.install"
 
 export _GPACK="packages.txt"
 export _GREAD="readme.md"
@@ -130,6 +130,11 @@ declare RUFUS_URL="https://github.com/pbatard/rufus/releases/download/v3.7/rufus
 
 ########################################
 
+#>>> declare SHMEM_MEM="768"
+declare SHMEM_MEM="512"
+
+########################################
+
 declare DU_L="${DU} --summarize --total --block-size 1M"
 declare DU_S="${DU} --summarize --apparent-size --block-size 1"
 
@@ -155,7 +160,58 @@ PATCHES[0]="shmem-add-shmem_size-option-set-filesystem-size.v4.18-rc6.patch"
 
 ########################################
 
-declare SKIP_DIRS="
+declare PACKDIRS_LINK="packdir"
+declare PACKDIRS_DSEP="--"
+declare PACKDIRS_CSEP=":"
+declare PACKDIRS_PRNT="60"
+
+#>>> for CHAR in {32..47} {58..64} {91..96} {123..126}; do printf "%3s" "${CHAR}"; printf " [\\$(printf "%0.3o" "${CHAR}")]\n"; done
+#note: these must not be "[a-z]" and category names must be "[a-z]+[:]" for regular expressions to work properly
+declare PACKDIRS_KEEP="*"
+declare PACKDIRS_INST="+"
+declare PACKDIRS_PACK="-"
+declare PACKDIRS_GONE="|"
+declare PACKDIRS_MARK="-"
+
+declare PACKDIRS_DEFL="${PACKDIRS_INST}"
+
+#note: the "$repdir" and "$ldir" directories are packed in the "prepare_repdir" and "prepare_linux" functions, respectively
+#note: adding them here ensures they will be handled properly by functions like "release_reset" and "release_unpack", as though they were regular archives
+for FILE in ${REPDIR} ${LDIR} ${PDBDIR}	; do if ! variable_match "FSPACK FSKEEP FSARCH FSEXCL" ";" "${FILE}"; then FSPACK+="; ${_TITLE}:${FILE}"; fi; done
+for FILE in ${REPDIR}.git		; do if ! variable_match "FSPACK FSKEEP FSARCH FSEXCL" ";" "${FILE}"; then FSARCH+="; ${_TITLE}:${FILE}"; fi; done
+FSEXCL+="$(${LS} ${TARGET}${MDIR} 2>/dev/null | while read -r FILE; do
+	declare KEEP="false"
+	for NEXT in ${KERNEL}; do
+		if [[ ${FILE} == ${NEXT}-gentoo ]]; then
+			KEEP="true"
+		fi
+	done
+	if ! ${KEEP}			&& ! variable_match "FSPACK FSKEEP FSARCH FSEXCL" ";" "${FILE}"; then echo -en "; ${_TITLE}:${MDIR}/${FILE}"; fi
+done)"
+if ! ${DOTEST}; then
+	FSPACK="$(variable_parse FSPACK ";" "" "" true | sort -u | tr '\n' ';' | ${SED} -e "s|;$||g" -e "s|;| ; |g")"
+	FSKEEP="$(variable_parse FSKEEP ";" "" "" true | sort -u | tr '\n' ';' | ${SED} -e "s|;$||g" -e "s|;| ; |g")"
+	FSARCH="$(variable_parse FSARCH ";" "" "" true | sort -u | tr '\n' ';' | ${SED} -e "s|;$||g" -e "s|;| ; |g")"
+	FSEXCL="$(variable_parse FSEXCL ";" "" "" true | sort -u | tr '\n' ';' | ${SED} -e "s|;$||g" -e "s|;| ; |g")"
+fi
+
+declare PACKDIRS="
+$(variable_parse FSPACK ";" "" "" true)
+$(variable_parse FSKEEP ";" "" "" true)
+$(variable_parse FSARCH ";" "" "" true)
+"
+declare PACKDIRS_LIST="
+${PACKDIRS}
+$(variable_parse FSEXCL ";" "" "" true)
+"
+if ! ${DOTEST}; then
+	PACKDIRS="$(variable_parse PACKDIRS "" "" "" true | sort -u)"
+fi
+
+########################################
+
+declare REALDEV="/sbin/realdev"
+declare DEVDIRS="
 /dev
 /mnt
 /proc
@@ -169,6 +225,47 @@ declare SKIP_DIRS="
 /var/run
 /var/tmp
 "
+
+declare SKIPDIRS_GOS="
+/.gitignore
+/${CMTFIL}
+\
+/${_FINAL/#${TARGET}\/}
+/${_RAMFS/#${TARGET}\/}*
+\
+${_GOVLY}
+${_GUNPK}
+${_GINST}
+\
+/${_GPACK/%.txt}*
+\
+${ARCDIR}*
+${GENDIR}*
+"
+declare SKIPDIRS_FUN="
+${DSTDIR}
+${PAKDIR}
+\
+${LDIR}-*
+"
+declare SKIPDIRS="
+$(variable_parse SKIPDIRS_GOS)
+${PACKDIRS_MARK}
+$(variable_parse SKIPDIRS_FUN)
+${PACKDIRS_MARK}
+$(variable_parse PACKDIRS)
+${PACKDIRS_MARK}
+$(variable_parse FSARCH ";" "" ".tar.xz")
+${PACKDIRS_MARK}
+$(variable_parse FSEXCL ";")
+$(variable_parse FSEXCL ";" "" ".tar.xz")
+${PACKDIRS_MARK}
+$(variable_parse DEVDIRS "" "" "/.*")
+$(variable_parse DEVDIRS "" "" "/*")
+"
+if ! ${DOTEST}; then
+	SKIPDIRS="$(variable_parse SKIPDIRS | ${SED} "/^${PACKDIRS_MARK}$/d" | sort -u)"
+fi
 
 ################################################################################
 
@@ -218,6 +315,26 @@ function common_untar {
 	return 0
 }
 
+########################################
+
+function common_packdir {
+	declare SRC_FILE="${1}" && shift
+	echo "${_RAMFS/#${_FINAL}\/}.${PACKDIRS_LINK}${SRC_FILE//\//${PACKDIRS_DSEP}}.tar.xz"
+	return 0
+}
+
+########################################
+
+function common_packdirs_list {
+	${LL} --directory $(
+		variable_parse PACKDIRS_LIST "" "${TARGET}"				| sort -u
+		variable_parse PACKDIRS_LIST "" "${TARGET}" ".tar.xz"			| sort -u
+	)												2>/dev/null
+	echo -en "\n"; ${DU_L} $(variable_parse PACKDIRS_LIST "" "${TARGET}"		| sort -u)	2>/dev/null
+	echo -en "\n"; ${DU_L} $(variable_parse PACKDIRS_LIST "" "${TARGET}" ".tar.xz"	| sort -u)	2>/dev/null
+	return 0
+}
+
 ################################################################################
 
 #NOTE: CONSULT THE "SYSTEM INSTALLATION" TABLE IN "README" FOR THIS SECTION
@@ -237,11 +354,12 @@ function _release_reset {		#{main}
 	else
 		${RM} ${_RAMFS}*				|| return 1
 	fi
+	if [[ -n ${TARGET} ]]; then
+		_prepare_packdirs ${_RST}			|| return 1
+	fi
 	if [[ -n ${TARGET} ]] && [[ ${TARGET} != ${_GINST} ]]; then
-		${RM} ${TARGET}${REPDIR}.tar.xz			|| return 1
-		${RM} ${TARGET}${LDIR}				|| return 1
-		${RM} ${TARGET}${LDIR}.tar.xz			|| return 1
-		${LN} ${KBAS} ${TARGET}${LDIR}			|| return 1
+		${RM}		${TARGET}${LDIR}		|| return 1
+		${LN} ${KBAS}	${TARGET}${LDIR}		|| return 1
 		_prepare_config ${_RST}				|| return 1
 	fi
 	return 0
@@ -261,6 +379,7 @@ function _prepare_build {		#{reset}
 	DOREDO="false" _prepare_docdir		|| return 1
 	DOREDO="false" _prepare_repdir		|| return 1
 	DOREDO="false" _prepare_linux		|| return 1
+	DOREDO="false" _prepare_packdirs	|| return 1
 	DOREDO="false" _prepare_packages	|| return 1
 	DOREDO="false" _prepare_symlinks	|| return 1
 	return 0
@@ -521,6 +640,61 @@ function _prepare_linux {
 
 ########################################
 
+#note: companion to the "release_unpack" function
+function _prepare_packdirs {		#{reset}
+	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
+	if [[ -n ${RESET} ]]; then
+		${RM} $(variable_parse PACKDIRS_LIST "" "${TARGET}" ".tar.xz")
+		NEXT="$(eval find ${TARGET} \
+			$(variable_parse DEVDIRS "" "\\( -path ${TARGET}" " -prune \\) -o ") \
+			\\\( -path ${_FINAL} -prune \\\) -o \
+			\\\( -path ${TARGET}${ARCDIR} -prune \\\) -o \
+			\\\( -path ${TARGET}${DSTDIR} -prune \\\) -o \
+			\\\( -path ${TARGET}${PAKDIR} -prune \\\) -o \
+			-print |
+			${GREP} "[.]tar[.]xz$"
+		)"
+		if [[ -n ${NEXT} ]]; then
+			${LL} ${NEXT} | ${GREP} "[^/]+[.]tar[.]xz$"
+			return 1
+		fi
+		return 0
+	fi
+	shopt -s lastpipe
+	#note: packing them in reverse, so that embedded packdirs get included
+	variable_parse PACKDIRS | sort -r | while read -r FILE; do
+		eval common_tar ${TARGET}${FILE} $(
+			variable_parse FSEXCL ";" | while read -r NEXT; do
+				if [[ ${NEXT/#${FILE}\/} != ${NEXT} ]]; then
+					echo "--exclude=\"${NEXT/#${FILE}\/}\""
+					echo "--exclude=\"${NEXT/#${FILE}\/}.tar.xz\""
+				fi
+			done
+			variable_parse FSARCH ";" | while read -r NEXT; do
+				if [[ ${NEXT/#${FILE}\/} != ${NEXT} ]]; then
+					echo "--exclude=\"${NEXT/#${FILE}\/}\""
+					echo "--exclude=\"${NEXT/#${FILE}\/}.tar.xz\""
+				fi
+			done
+			variable_parse FSKEEP ";" | while read -r NEXT; do
+				if [[ ${NEXT/#${FILE}\/} != ${NEXT} ]]; then
+					echo "--exclude=\"${NEXT/#${FILE}\/}\""
+				fi
+			done
+			variable_parse FSPACK ";" | while read -r NEXT; do
+				if [[ ${NEXT/#${FILE}\/} != ${NEXT} ]]; then
+					echo "--exclude=\"${NEXT/#${FILE}\/}\""
+				fi
+			done
+		) || return 1
+	done
+	shopt ${LASTPIPE} lastpipe
+	echo -en "\n"; common_packdirs_list
+	return 0
+}
+
+########################################
+
 function _prepare_packages {
 	declare PACK_FILE="${_GPACK}"
 	if [[ -z ${TARGET} ]]; then
@@ -528,7 +702,6 @@ function _prepare_packages {
 		return 0
 	fi
 	cat /dev/null >${TARGET}/${PACK_FILE}								|| return 1
-	NEXT=
 	for FILE in $(
 		cd ${TARGET}${PAKDIR}									&&
 		find ./ -mindepth 2 -maxdepth 2 -type f							|
@@ -550,6 +723,7 @@ function _prepare_packages {
 
 function _prepare_symlinks {		#{reset}
 	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
+	REP_FILE="$(basename ${REPDIR})"
 	if [[ -z ${TARGET} ]]; then
 		return 0
 	fi
@@ -567,8 +741,13 @@ function _prepare_symlinks {		#{reset}
 	${LN} --relative ${TARGET}/${_GPACK}				${_RAMFS}${_GPACK}				|| return 1
 	${LN} --relative ${TARGET}${DSTDIR}				${_FINAL}/_$(basename ${DSTDIR})		|| return 1
 	${LN} --relative ${TARGET}${PAKDIR}				${_FINAL}/_$(basename ${PAKDIR})		|| return 1
-	${LN} --relative ${TARGET}${REPDIR}.tar.xz			${_RAMFS}.$(basename ${REPDIR}).tar.xz		|| return 1
-	${LN} --relative ${TARGET}${LDIR}.tar.xz			${_RAMFS}.linux.tar.xz				|| return 1
+	${LN} --relative ${TARGET}${ARCDIR}/${REP_FILE}.tar.xz		${_RAMFS}.${REP_FILE}.tar.xz			|| return 1
+	${LN} --relative ${TARGET}${ARCDIR}/${REP_FILE}.git.tar.xz	${_RAMFS}.${REP_FILE}.git.tar.xz		|| return 1
+	shopt -s lastpipe
+	variable_parse PACKDIRS | while read -r FILE; do
+		${LN} --relative ${TARGET}${FILE}.tar.xz		${_FINAL}/$(common_packdir ${FILE})		|| return 1
+	done
+	shopt ${LASTPIPE} lastpipe
 	for FILE in ${TARGET}${ARCDIR}/stage3-*.tar.xz; do
 		${LN} --relative ${FILE}				${_FINAL}/					|| return 1
 	done
@@ -600,36 +779,18 @@ function _release_initrd {		#{main} #{reset}
 ########################################
 
 function release_cpio_nul {
-	(cd ${TARGET} && eval find ./ -mindepth 1 -xdev \
-		\\\( -path ./${CMTFIL}				-prune \\\) -o \
-		\\\( -path ./${_FINAL/#${TARGET}\/}		-prune \\\) -o \
-		\\\( -path ./${_RAMFS/#${TARGET}\/}\\\*		-prune \\\) -o \
-		\\\( -path ./${_GPACK}				-prune \\\) -o \
-		\
-		\\\( -path .${ARCDIR}\\\*			-prune \\\) -o \
-		\\\( -path .${GENDIR}\\\*			-prune \\\) -o \
-		\
-		\\\( -path .${DSTDIR}				-prune \\\) -o \
-		\\\( -path .${PAKDIR}				-prune \\\) -o \
-		\\\( -path .${REPDIR}				-prune \\\) -o \
-		\\\( -path .${REPDIR}.git			-prune \\\) -o \
-		\
-		\\\( -path .${LDIR}				-prune \\\) -o \
-		\\\( -path .${LDIR}-\\\*			-prune \\\) -o \
-		\
-		\\\( -path ./usr/lib/debug			-prune \\\) -o \
-		\\\( -path ./usr/lib32/debug			-prune \\\) -o \
-		\\\( -path ./usr/lib64/debug			-prune \\\) -o \
-		\\\( -path ./usr/src/debug			-prune \\\) -o \
-		\
-		$(echo "${FSSKIP}" | tr ';' '\n' | while read -r FILE; do			echo "\\( -path .${FILE//\*/\\\*} -prune \\) -o"; done) \
-		$(for FILE in ${SKIP_DIRS}; do							echo "\\( -path .${FILE//\*/\\\*}/\\* -prune \\) -o"; done) \
-	-print0)						>${CPIO_FILE}.nul		|| return 1
-	${MKDIR}						${TARGET}/tmp/dev		|| return 1
-	realdev							${TARGET}/tmp/dev		|| return 1
-	realdev							${TARGET}/dev			|| return 1
-	(cd ${TARGET}/tmp && find ./dev -print0)		>>${CPIO_FILE}.nul		|| return 1
-	${RM}							${TARGET}/tmp/dev		|| return 1
+		(cd ${TARGET} && eval find ./ -mindepth 1 -xdev \
+			$(for FILE in $(
+				variable_parse SKIPDIRS | ${SED} \
+								-e "s|\*|\\\*|g" \
+				); do				echo "\\( -path .${FILE} -prune \\) -o"; done
+			) \
+		-print0)					>${CPIO_FILE}.nul		|| return 1
+		${RM}						${TARGET}/tmp/dev		|| return 1
+		${MKDIR}					${TARGET}/tmp/dev		|| return 1
+		${TARGET}${REALDEV}				${TARGET}/tmp/dev		|| return 1
+		(cd ${TARGET}/tmp && find ./dev -print0)	>>${CPIO_FILE}.nul		|| return 1
+		${RM}						${TARGET}/tmp/dev		|| return 1
 	return 0
 }
 
@@ -695,13 +856,67 @@ function release_kernel_config {
 
 function release_kernel_shmem {
 	declare DODIR="${1}" && shift
-	#note: treating the size of the cpio as the in-memory filesystem size, adding buffer and free disk space, and then rounding pages
+	#note: treating the size of the ".cpio" as the in-memory filesystem size, adding buffer and free disk space, and then rounding pages
+	#note: the "$fspack" directories are ".tar.xz" compressed, so also calculating their final cost once they are unpacked and the archives are deleted
+	#note: the "$fspack" calculation also factors in the status of subdirectories
+	#note: none of this is perfect, but it is close enough
 	declare SHMEM_PAGES="4096"
-	declare SHMEM_MEM="768*(1024^2)"
-	declare SHMEM=
-	SHMEM="$(${DU_S} ${CPIO_FILE} | ${SED} "s|[[:space:]].*$||g")"
+	declare SHMEM_MEM="${SHMEM_MEM}*(1024^2)"
+	declare SHMEM="$(${DU_S} ${CPIO_FILE} | ${SED} "s|[[:space:]].*$||g")"
+	declare PRINTF=" %10.10s %10.10s %10.10s %10.10s %10.10s\n"
+	printf "%-${PACKDIRS_PRNT}.${PACKDIRS_PRNT}s" ">>> INITIAL SHMEM: ${SHMEM}"
+	printf "${PRINTF}" "~ SIZE" "+ COST" "- PACK" "@ DIFF" "= SHMEM"
+	shopt -s lastpipe
+	variable_parse FSPACK ";" | while read -r FILE; do
+		#note: the "if" subshell is to work around a "lastpipe" error when the last item in the "$fspack" list is excluded
+		if [[ -n $(if {
+			! variable_match FSKEEP FSARCH FSEXCL ";" "${FILE}" &&
+			! variable_match FSKEEP FSARCH FSEXCL ";" "${FILE}" true;
+		}; then
+			echo "true"
+		fi) ]]; then
+			printf "%-${PACKDIRS_PRNT}.${PACKDIRS_PRNT}s" ">>> PACKDIR: ${FILE}"
+			if [[ ! -d ${TARGET}${FILE} ]] || [[ ! -f ${TARGET}${FILE}.tar.xz ]]; then
+				echo -en "\n"
+				common_exists ${FUNCNAME} ${TARGET}${FILE} ${TARGET}${FILE}.tar.xz
+				return 1
+			fi
+			declare S_VAL="$(${DU_S} ${TARGET}${FILE}		2>/dev/null | ${SED} "s|[[:space:]].*$||g")"
+			declare S_ADD="$(eval ${DU_S} ${TARGET}${FILE} $(
+				variable_parse FSEXCL | while read -r NEXT; do
+					if [[ ${NEXT/#${FILE}\/} != ${NEXT} ]]; then
+						echo "--exclude=\"${NEXT/#${FILE}\/}\""
+						echo "--exclude=\"${NEXT/#${FILE}\/}.tar.xz\""
+					fi
+				done
+				variable_parse FSARCH | while read -r NEXT; do
+					if [[ ${NEXT/#${FILE}\/} != ${NEXT} ]]; then
+						echo "--exclude=\"${NEXT/#${FILE}\/}\""
+						echo "--exclude=\"${NEXT/#${FILE}\/}.tar.xz\""
+					fi
+				done
+				variable_parse FSKEEP | while read -r NEXT; do
+					if [[ ${NEXT/#${FILE}\/} != ${NEXT} ]]; then
+						echo "--exclude=\"${NEXT/#${FILE}\/}\""
+					fi
+				done
+				variable_parse FSPACK | while read -r NEXT; do
+					if [[ ${NEXT/#${FILE}\/} != ${NEXT} ]]; then
+						echo "--exclude=\"${NEXT/#${FILE}\/}.tar.xz\""
+					fi
+				done
+			)							2>/dev/null | ${SED} "s|[[:space:]].*$||g")"
+			declare S_SUB="$(${DU_S} ${TARGET}${FILE}.tar.xz	2>/dev/null | ${SED} "s|[[:space:]].*$||g")"
+			declare S_TOT="$(echo "${S_ADD}-${S_SUB}" | bc)"
+			SHMEM="$(echo "${SHMEM}+${S_TOT}" | bc)"
+			printf "${PRINTF}" "${S_VAL}" "${S_ADD}" "${S_SUB}" "${S_TOT}" "${SHMEM}"
+		fi
+	done
+	shopt ${LASTPIPE} lastpipe
+	echo -en ">>> TOTAL SHMEM: ${SHMEM}\n"
 	SHMEM="$(echo "((${SHMEM}+(${SHMEM_MEM}))/${SHMEM_PAGES})" | bc | ${SED} -r "s|[.].*$||g")"
 	SHMEM="$(echo "(${SHMEM}*${SHMEM_PAGES})" | bc)"
+	echo -en ">>> FINAL SHMEM: ${SHMEM}\n"
 	echo "CONFIG_SHMEM_SIZE=\"${SHMEM}\"" >>${TARGET}${DODIR}/.config	|| return 1
 	return 0
 }
@@ -834,13 +1049,13 @@ function _release_unpack {		#{main}
 function release_install_root {
 	eval ${RSYNC_U} \
 		--one-file-system \
-		--filter="-_/[._]${_TITLE}*" \
-		--filter="-_/${_TITLE}*" \
-		--filter="-_/${_GINST/#${TARGET}\/}" \
-		$(for FILE in ${SKIP_DIRS}; do echo "--filter=\"-_${FILE}/*\""; done) \
+		--filter="-_/.${_TITLE}" \
+		--filter="-_/_${_TITLE}" \
+		$(variable_parse SKIPDIRS_GOS	"" "--filter=\"-_" "\"") \
+		$(variable_parse DEVDIRS	"" "--filter=\"-_" "/*\"") \
 		${TARGET}/* ${_GINST}/		|| return 1
 #>>>		${TARGET}/ ${_GINST}		|| return 1
-	realdev ${_GINST}/dev			|| return 1
+	${TARGET}${REALDEV} ${_GINST}/dev	|| return 1
 	TARGET="${_GINST}" _release_reset	|| return 1
 	TARGET="${_GINST}" _release_unpack	|| return 1
 	return 0
