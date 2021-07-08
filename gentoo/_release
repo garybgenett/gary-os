@@ -366,6 +366,120 @@ function _release_reset {		#{main}
 	return 0
 }
 
+########################################
+
+function _release_review {		#{main}
+	if ${DO_CHROOT} && [[ -n ${TARGET} ]]; then
+		${_SOUL} ${QUIET_OPT} ${TOOR} -r				|| return 1
+#>>>		safe_env ${MYSELF} ${QUIET_OPT} ${TOOR} ${FUNCNAME}		|| return 1
+		declare SAFE_ENV_ORIG="${SAFE_ENV}"
+		export SAFE_ENV+=" IS_CHROOT=\"false\" GOSDIR=\"/\" FSPACK=\"\" FSKEEP=\"\" FSARCH=\"\" FSEXCL=\"\""
+		safe_env ${MYSELF} ${QUIET_OPT} -g ${FUNCNAME}			|| return 1
+		SAFE_ENV="${SAFE_ENV_ORIG}"
+		return 0
+	fi
+	variable_parse SKIPDIRS
+	read FILE
+	#note: total filesystem size with all directories unpacked (completely loaded memory size)
+	eval ncdu -r -x $(
+		variable_parse SKIPDIRS | while read -r FILE; do
+			if variable_match PACKDIRS "" "${FILE}"; then
+				echo "--exclude=\"${TARGET}${FILE}.tar.xz\""
+			else
+				echo "--exclude=\"${TARGET}${FILE}\""
+			fi
+		done
+	)	${TARGET}							|| return 1
+	#note: initial rootfs size with "$fspack" and "$fskeep" still packed (kernel size)
+	eval ncdu -r -x $(
+		variable_parse SKIPDIRS | while read -r FILE; do
+			if variable_match FSEXCL ";" "${FILE}"; then
+				echo "--exclude=\"${TARGET}${FILE}\""
+				echo "--exclude=\"${TARGET}${FILE}.tar.xz\""
+			elif variable_match FSARCH ";" "${FILE}"; then
+				echo "--exclude=\"${TARGET}${FILE}\""
+				echo "--exclude=\"${TARGET}${FILE}.tar.xz\""
+			elif variable_match FSKEEP ";" "${FILE}"; then
+				echo "--exclude=\"${TARGET}${FILE}\""
+				if {
+					variable_match FSPACK ";" "${FILE}" true ||
+					variable_match FSKEEP ";" "${FILE}" true;
+				}; then
+					echo "--exclude=\"${TARGET}${FILE}.tar.xz\""
+				fi
+			elif variable_match FSPACK ";" "${FILE}"; then
+				echo "--exclude=\"${TARGET}${FILE}\""
+				if {
+					variable_match FSPACK ";" "${FILE}" true ||
+					variable_match FSKEEP ";" "${FILE}" true;
+				}; then
+					echo "--exclude=\"${TARGET}${FILE}.tar.xz\""
+				fi
+			else
+				echo "--exclude=\"${TARGET}${FILE}\""
+			fi
+		done
+	)	${TARGET}							|| return 1
+	#note: loaded rootfs size with "$fspack" unpacked and "$fskeep" still packed (memory size)
+	eval ncdu -r -x $(
+		variable_parse SKIPDIRS | while read -r FILE; do
+			if variable_match FSEXCL ";" "${FILE}"; then
+				echo "--exclude=\"${TARGET}${FILE}\""
+				echo "--exclude=\"${TARGET}${FILE}.tar.xz\""
+			elif variable_match FSARCH ";" "${FILE}"; then
+				echo "--exclude=\"${TARGET}${FILE}\""
+				echo "--exclude=\"${TARGET}${FILE}.tar.xz\""
+			elif variable_match FSKEEP ";" "${FILE}"; then
+				echo "--exclude=\"${TARGET}${FILE}\""
+				if {
+					variable_match FSKEEP ";" "${FILE}" true;
+				}; then
+					echo "--exclude=\"${TARGET}${FILE}.tar.xz\""
+				fi
+			elif variable_match FSPACK ";" "${FILE}"; then
+				echo "--exclude=\"${TARGET}${FILE}.tar.xz\""
+				if {
+					variable_match FSKEEP ";" "${FILE}" true;
+				}; then
+					echo "--exclude=\"${TARGET}${FILE}\""
+				fi
+			else
+				echo "--exclude=\"${TARGET}${FILE}\""
+			fi
+		done
+	)	${TARGET}							|| return 1
+	#note: final rootfs size with both "$fspack" and "$fskeep" unpacked (maximum memory size)
+	eval ncdu -r -x $(
+		variable_parse SKIPDIRS | while read -r FILE; do
+			if variable_match FSEXCL ";" "${FILE}"; then
+				echo "--exclude=\"${TARGET}${FILE}\""
+				echo "--exclude=\"${TARGET}${FILE}.tar.xz\""
+			elif variable_match FSARCH ";" "${FILE}"; then
+				echo "--exclude=\"${TARGET}${FILE}\""
+				echo "--exclude=\"${TARGET}${FILE}.tar.xz\""
+			elif variable_match FSKEEP ";" "${FILE}"; then
+				echo "--exclude=\"${TARGET}${FILE}.tar.xz\""
+			elif variable_match FSPACK ";" "${FILE}"; then
+				echo "--exclude=\"${TARGET}${FILE}.tar.xz\""
+			else
+				echo "--exclude=\"${TARGET}${FILE}\""
+			fi
+		done
+	)	${TARGET}							|| return 1
+	#note: cross-reference with the "prepare_packdirs" function any time this changes
+	declare FILE="${SETDIR}/${FUNDIR}/sets/${_PKG}"
+	echo -en "\n[FSPACK]\n"
+	${SED} -n "s|^[#][{]FSPACK[}][ ]([^#]+).*$|\1|gp" ${FILE} | sort -u	|| return 1
+	echo -en "\n[FSKEEP]\n"
+	${SED} -n "s|^[#][{]FSKEEP[}][ ]([^#]+).*$|\1|gp" ${FILE} | sort -u	|| return 1
+	echo -en "\n[FSARCH]\n"
+	${SED} -n "s|^[#][{]FSARCH[}][ ]([^#]+).*$|\1|gp" ${FILE} | sort -u	|| return 1
+	echo -en "\n[FSEXCL]\n"
+	${SED} -n "s|^[#][{]FSEXCL[}][ ]([^#]+).*$|\1|gp" ${FILE} | sort -u	|| return 1
+	echo -en "\n"; common_packdirs_list
+	return 0
+}
+
 ################################################################################
 
 function _prepare_build {		#{reset}
