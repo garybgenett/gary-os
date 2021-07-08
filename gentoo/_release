@@ -15,8 +15,8 @@ export _RAMFS="${_FINAL}/${_TITLE}-${_VERSN}-${ESUB}"
 export _GUNPK="/.unpack"
 export _GINST="/.install"
 
-export _GPACK="packages.txt"
 export _GREAD="readme.md"
+export _GPACK="packages.txt"
 
 ########################################
 
