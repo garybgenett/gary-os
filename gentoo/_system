@@ -253,6 +253,8 @@ fi
 
 ########################################
 
+#>>> ${GREP} -r "[#][{](NEW|MOD|GOS|CPU|GARC|GSUB|GOPT)[}]" ${HOME}/setup/gentoo
+
 function portage_file {
 	declare PORT_SEL="${1}" && shift
 	declare P_FILTER="${1}" && shift
