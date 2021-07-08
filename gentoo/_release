@@ -923,7 +923,6 @@ function _release_cpio {
 	mount_dev_dirs -u				|| return 1
 	${MKDIR} ${_FINAL}				|| return 1
 	if [[ ! -f ${CPIO_FILE} ]]; then
-		${RM} ${_RAMFS}.boot.kernel		|| return 1
 		${RM} ${_RAMFS}.kernel			|| return 1
 		release_cpio_nul			|| return 1
 		release_cpio_file			|| return 1
@@ -1068,24 +1067,17 @@ function _release_kernel {
 	if [[ -z ${TARGET} ]]; then
 		DODIR="${LDIR}"
 	fi
-	if [[ -d ${TARGET}${DODIR} ]] && {
-		[[ ! -f ${_RAMFS}.boot.kernel ]] ||
-		[[ ! -f ${_RAMFS}.kernel ]];
-	}; then
+	if [[ ! -f ${_RAMFS}.kernel ]]; then
 		prepare_linux_directory		${DODIR}				|| return 1
 		release_kernel_patch		${DODIR}				|| return 1
 		release_kernel_config		${DODIR}				|| return 1
 		release_kernel_shmem		${DODIR}				|| return 1
-		#note: boot kernel
-		release_kernel_build		${DODIR}	${_RAMFS}.boot.kernel	|| return 1
-		#note: initramfs kernel
 		release_kernel_initramfs	${DODIR}				|| return 1
 		release_kernel_diff		${DODIR}				|| return 1
 		release_kernel_build		${DODIR}	${_RAMFS}.kernel	|| return 1
 	else
 		common_exists ${FUNCNAME}						\
 								${TARGET}${DODIR}	\
-								${_RAMFS}.boot.kernel	\
 								${_RAMFS}.kernel	\
 											|| return 1
 	fi
