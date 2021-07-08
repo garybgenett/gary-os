@@ -1681,16 +1681,16 @@ function _publish_gitdir {
 	}
 	declare DOC_FILES=
 	declare SAVE_FILES=
-	SAVE_FILES+="${CMTFIL}"
 	SAVE_FILES+="^_commit"
 	SAVE_FILES+="^_config\*"
-	SAVE_FILES+="^${_GPACK}"
 	SAVE_FILES+="^_packages\*"
+	SAVE_FILES+="^${CMTFIL}"
+	SAVE_FILES+="^${_GPACK/%.txt}*"
 	declare SETUP_FILES=
-	SETUP_FILES+="gentoo"
+	SETUP_FILES+="^gentoo"
 	SETUP_FILES+="^linux"
 	declare STATIC_FILES=
-	STATIC_FILES+=".bashrc"
+	STATIC_FILES+="^.bashrc"
 	STATIC_FILES+="^.vimrc"
 	STATIC_FILES+="^scripts/grub.sh"
 	STATIC_FILES+="^scripts/metro.sh"
@@ -1698,10 +1698,10 @@ function _publish_gitdir {
 	STATIC_FILES+="^scripts/qemu-network\*"
 	eval git-export ${_TITLE} ${_RELDIR} ${_GITHUB}					\
 		+git-export-preprocess +git-export-postprocess				\
-		${_TITLE}:${_DOCDIR}:${DOC_FILES}					\
-		_${_TITLE}:${_SAVDIR}:${SAVE_FILES}					\
-		setup:/.g/_data/zactive/.setup:${SETUP_FILES}				\
-		static:/.g/_data/zactive/.static:${STATIC_FILES}			\
+		${_TITLE}:${_DOCDIR}:${DOC_FILES/#^}					\
+		_${_TITLE}:${_SAVDIR}:${SAVE_FILES/#^}					\
+		setup:/.g/_data/zactive/.setup:${SETUP_FILES/#^}			\
+		static:/.g/_data/zactive/.static:${STATIC_FILES/#^}			\
 											|| return 1
 	FILE="git --git-dir=/home/git/p/${_TITLE}/code.git config"
 	NEXT=
