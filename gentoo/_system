@@ -65,14 +65,15 @@ declare NEXT=
 
 #SETTINGS[_TITLE _VERSN _RDATE]
 #SETTINGS[_FINAL _RAMFS]
-#SETTINGS[_GUNPK _GINST]
+#SETTINGS[_GOVLY _GUNPK _GINST]
 #SETTINGS[_GREAD _GPACK]
 
 export _TITLE="gary-os"
 
 ########################################
 
-#OPTIONS[DOMODS]
+#OPTIONS[ROOTFS DOMODS]
+if [[ ${ROOTFS} != true ]] && [[ ${ROOTFS} != false ]]; then ROOTFS="true"; fi
 if [[ ${DOMODS} != true ]] && [[ ${DOMODS} != false ]]; then DOMODS="false"; fi
 
 #OPTIONS[DOREDO DOFAST DOTEST]
@@ -524,8 +525,10 @@ function print_info {
 		echo -en "\n"
 		printf "${PRINTF}" "Initramfs Build (Chroot Reset):"		"<auto>"	"${_HEART} {chroot} ${MAKEIT}_reset"
 		printf "${PRINTF}" "Initramfs Build (Chroot Create):"		"<auto>"	"${_HEART} {chroot} ${MAKEIT}_ramfs"
+		printf "${PRINTF}" "Initramfs Build (Chroot Root):"		"<auto>"	"${_HEART} {chroot} ${MAKEIT}_rootfs"
 		printf "${PRINTF}" "Initramfs System (Live Reset):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${_HEART} {chroot} ${MAKEIT}_reset"
 		printf "${PRINTF}" "Initramfs System (Live Create):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${_HEART} {chroot} ${MAKEIT}_ramfs"
+		printf "${PRINTF}" "Initramfs System (Live Root):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${_HEART} {chroot} ${MAKEIT}_rootfs"
 		printf "${PRINTF}" "Initramfs System (Live Unpack):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${_HEART} {chroot} ${MAKEIT}_unpack"
 		printf "${PRINTF}" "Initramfs System (Live Install):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${_HEART} {chroot} ${MAKEIT}_install"
 		echo -en "\n"
