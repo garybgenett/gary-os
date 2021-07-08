@@ -475,6 +475,7 @@ function print_info {
 		printf "${PRINTF}" "Build Configuration Files (Internal Only):"	"<internal>"	"${_HEART} -W"
 		echo -en "\n"
 		printf "${PRINTF}" "Validation (Usage & Variables Only):"	"<output>"	"${_HEART} ${DEBUG_OPT} [{chroot}] [{options}]"
+		printf "${PRINTF}" "Variable Query (Internal Only):"		"<internal>"	"${_HEART} ${DEBUG_OPT} [{chroot}] [{options}] {variable}"
 		printf "${PRINTF}" "Suppress Output (Internal Only)"		"<internal>"	"${_HEART} [${DEBUG_OPT}] ${QUIET_OPT} [{chroot}] [{options}]"
 		echo -en "\n"
 		printf "${PRINTF}" "Run Script (Configuration):"		"<custom>"	"${_HEART} {script} [{options}]" "<$(basename ${CFGSCR}) [${_OPTS}]>"
@@ -759,11 +760,17 @@ fi
 
 ########################################
 
+if ${DEBUG} && [[ ${1} == +([A-Z]) ]]; then
+	FILE="${1}" && shift
+	echo "${!FILE}"
+	QUIET="true"
+	EXIT 0
+fi
+
 declare DEBUG_QUIET="${QUIET}"
 if ${DEBUG}; then
 	QUIET="false"
 fi
-
 print_info marker;		print_info title
 print_info marker;		print_info usage
 print_info marker;		print_info starter
