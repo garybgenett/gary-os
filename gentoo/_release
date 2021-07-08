@@ -12,6 +12,7 @@ export _RDATE="$(date --iso=date)"
 export _FINAL="${TARGET}/.${_TITLE}-${ESUB}"
 export _RAMFS="${_FINAL}/${_TITLE}-${_VERSN}-${ESUB}"
 
+export _GUNPK="/.unpack"
 export _GINST="/.install"
 
 export _GPACK="packages.txt"
@@ -1034,9 +1035,157 @@ function _release_report {
 
 ########################################
 
+#note: companion to the "prepare_packdirs" function
 function _release_unpack {		#{main}
-	common_untar ${TARGET}${REPDIR}	|| return 1
-	common_untar ${TARGET}${LDIR}	|| return 1
+	declare UNPACK="${TARGET}${_GUNPK}"
+	declare DOINST="${TARGET}${_GINST}/${_TITLE}"
+	declare CREGEX+="([a-z]+[${PACKDIRS_CSEP}])?"
+	declare FREGEX="(([[:space:]]+[(]).*([)]))?"
+	declare PRINTF="%-${PACKDIRS_PRNT}.${PACKDIRS_PRNT}s %s\n"
+	declare SORTER="-k1.2"
+	if [[ ! -f ${UNPACK} ]]; then
+		shopt -s lastpipe
+		variable_parse FSPACK ";" | while read -r FILE; do
+			if ! variable_match FSKEEP FSARCH FSEXCL ";" "${FILE}"; then
+				echo "${FILE}"							>>${UNPACK}		|| return 1
+			fi
+		done
+		shopt ${LASTPIPE} lastpipe
+	fi
+	echo "# ${PACKDIRS_KEEP}<directory> = fetch/unpack directory, keep archive"		>>${UNPACK}		|| return 1
+	echo "# ${PACKDIRS_INST}<directory> = fetch/unpack directory, remove archive"		>>${UNPACK}		|| return 1
+	echo "# ${PACKDIRS_PACK}<directory> = remove directory, keep archive"			>>${UNPACK}		|| return 1
+	echo "# ${PACKDIRS_GONE}<directory> = remove directory, remove archive"			>>${UNPACK}		|| return 1
+	printf "${PRINTF}"												\
+		"#${PACKDIRS_MARK} <none><directory> = ${PACKDIRS_DEFL}<directory>"					\
+		"(<file>) = local archive"										\
+												>>${UNPACK}		|| return 1
+	shopt -s lastpipe
+	variable_parse PACKDIRS "" "" "" true | while read -r FILE; do
+		declare PFIL="${FILE/#*${PACKDIRS_CSEP}}"
+		declare PSRC="$(common_packdir ${PFIL})"
+		if variable_match FSEXCL ";" ${PFIL}; then
+			echo -en ">>> EXCLUDING: ${PFIL}\n"
+			continue
+		fi
+		if {
+			[[ -z $(${GREP} "^${CREGEX}${PFIL}${FREGEX}$" ${UNPACK}) ]] &&
+			[[ -z $(${GREP} "^[${PACKDIRS_KEEP}]${CREGEX}${PFIL}${FREGEX}$" ${UNPACK}) ]] &&
+			[[ -z $(${GREP} "^[${PACKDIRS_INST}]${CREGEX}${PFIL}${FREGEX}$" ${UNPACK}) ]] &&
+			[[ -z $(${GREP} "^[${PACKDIRS_PACK}]${CREGEX}${PFIL}${FREGEX}$" ${UNPACK}) ]] &&
+			[[ -z $(${GREP} "^[${PACKDIRS_GONE}]${CREGEX}${PFIL}${FREGEX}$" ${UNPACK}) ]]
+		}; then
+			if [[ -d ${TARGET}${PFIL} ]] && [[ -f ${TARGET}${PFIL}.tar.xz ]]; then
+				echo "${PACKDIRS_KEEP}${PFIL}"					>>${UNPACK}		|| return 1
+			elif [[ -d ${TARGET}${PFIL} ]] && [[ ! -f ${TARGET}${PFIL}.tar.xz ]]; then
+				echo "${PACKDIRS_INST}${PFIL}"					>>${UNPACK}		|| return 1
+			elif [[ ! -d ${TARGET}${PFIL} ]] && [[ -f ${TARGET}${PFIL}.tar.xz ]]; then
+				echo "${PACKDIRS_PACK}${PFIL}"					>>${UNPACK}		|| return 1
+			elif [[ ! -d ${TARGET}${PFIL} ]] && [[ ! -f ${TARGET}${PFIL}.tar.xz ]]; then
+				echo "${PACKDIRS_GONE}${PFIL}"					>>${UNPACK}		|| return 1
+			fi
+		fi
+		if [[ -n $(${GREP} "^${CREGEX}${PFIL}${FREGEX}$" ${UNPACK}) ]]; then
+			${SED} -i -e "/^${CREGEX}${PFIL//\//\\\/}${FREGEX}$/d" -e "/^$/d"	${UNPACK}		|| return 1
+			printf "${PRINTF}" "${PACKDIRS_DEFL}${FILE}"	"()"			>>${UNPACK}		|| return 1
+			sort ${SORTER} -u -o ${UNPACK}						${UNPACK}		|| return 1
+		elif [[ -n $(${GREP} "^[${PACKDIRS_KEEP}]${CREGEX}${PFIL}${FREGEX}$" ${UNPACK}) ]]; then
+			${SED} -i -e "/^.?${CREGEX}${PFIL//\//\\\/}${FREGEX}$/d" -e "/^$/d"	${UNPACK}		|| return 1
+			printf "${PRINTF}" "${PACKDIRS_KEEP}${FILE}"	"()"			>>${UNPACK}		|| return 1
+			sort ${SORTER} -u -o ${UNPACK}						${UNPACK}		|| return 1
+		elif [[ -n $(${GREP} "^[${PACKDIRS_INST}]${CREGEX}${PFIL}${FREGEX}$" ${UNPACK}) ]]; then
+			${SED} -i -e "/^.?${CREGEX}${PFIL//\//\\\/}${FREGEX}$/d" -e "/^$/d"	${UNPACK}		|| return 1
+			printf "${PRINTF}" "${PACKDIRS_INST}${FILE}"	"()"			>>${UNPACK}		|| return 1
+			sort ${SORTER} -u -o ${UNPACK}						${UNPACK}		|| return 1
+		elif [[ -n $(${GREP} "^[${PACKDIRS_PACK}]${CREGEX}${PFIL}${FREGEX}$" ${UNPACK}) ]]; then
+			${SED} -i -e "/^.?${CREGEX}${PFIL//\//\\\/}${FREGEX}$/d" -e "/^$/d"	${UNPACK}		|| return 1
+			printf "${PRINTF}" "${PACKDIRS_PACK}${FILE}"	"()"			>>${UNPACK}		|| return 1
+			sort ${SORTER} -u -o ${UNPACK}						${UNPACK}		|| return 1
+		elif [[ -n $(${GREP} "^[${PACKDIRS_GONE}]${CREGEX}${PFIL}${FREGEX}$" ${UNPACK}) ]]; then
+			${SED} -i -e "/^.?${CREGEX}${PFIL//\//\\\/}${FREGEX}$/d" -e "/^$/d"	${UNPACK}		|| return 1
+			printf "${PRINTF}" "${PACKDIRS_GONE}${FILE}"	"()"			>>${UNPACK}		|| return 1
+			sort ${SORTER} -u -o ${UNPACK}						${UNPACK}		|| return 1
+		fi
+		if [[ ! -f ${TARGET}${PFIL}.tar.xz ]] && {
+			{ [[ -n $(${GREP} "^[${PACKDIRS_INST}]${FILE}${FREGEX}$" ${UNPACK}) ]] && [[ ! -d ${TARGET}${PFIL} ]]; } ||
+			[[ -n $(${GREP} "^[${PACKDIRS_KEEP}]${FILE}${FREGEX}$" ${UNPACK}) ]] ||
+			[[ -n $(${GREP} "^[${PACKDIRS_PACK}]${FILE}${FREGEX}$" ${UNPACK}) ]]
+		}; then
+			echo -en ">>> FETCHING: ${PFIL}\n"
+			if ! ${DOTEST}; then
+				${MKDIR}							$(dirname ${PFIL})	|| return 1
+				if [[ -f ${DOINST}/${PSRC} ]]; then
+					${RSYNC_U} --copy-links ${DOINST}/${PSRC}		${TARGET}${PFIL}.tar.xz	|| return 1
+				else
+					${WGET_C} ${_SFDOWN}/${PSRC} -O				${TARGET}${PFIL}.tar.xz	|| return 1
+				fi
+			fi
+		fi
+		if {
+			[[ -n $(${GREP} "^[${PACKDIRS_KEEP}]${FILE}${FREGEX}$" ${UNPACK}) ]] ||
+			[[ -n $(${GREP} "^[${PACKDIRS_INST}]${FILE}${FREGEX}$" ${UNPACK}) ]]
+		}; then
+			echo -en ">>> UNPACKING: ${PFIL}"
+			if ! ${DOTEST}; then
+				echo -en " "
+				if ! common_untar ${TARGET}${PFIL} 2>&1 | ${SED} "s|^.*$||g" | tr '\n' '.'; then
+					return 1
+				fi
+			fi
+			echo -en "\n"
+		fi
+		if {
+			[[ -n $(${GREP} "^[${PACKDIRS_PACK}]${FILE}${FREGEX}$" ${UNPACK}) ]] ||
+			[[ -n $(${GREP} "^[${PACKDIRS_GONE}]${FILE}${FREGEX}$" ${UNPACK}) ]]
+		}; then
+			echo -en ">>> REMOVING: ${PFIL}\n"
+			if ! ${DOTEST}; then
+				${RM} ${TARGET}${PFIL}									|| return 1
+			fi
+		fi
+		if {
+			[[ -n $(${GREP} "^[${PACKDIRS_INST}]${FILE}${FREGEX}$" ${UNPACK}) ]] ||
+			[[ -n $(${GREP} "^[${PACKDIRS_GONE}]${FILE}${FREGEX}$" ${UNPACK}) ]]
+		}; then
+			echo -en ">>> REMOVING: ${PFIL}.tar.xz\n"
+			if ! ${DOTEST}; then
+				${RM} ${TARGET}${PFIL}.tar.xz								|| return 1
+			fi
+		fi
+		NEXT=""
+		if [[ -f ${TARGET}${PFIL}.tar.xz ]]; then
+			NEXT="${PFIL}.tar.xz"
+		elif [[ -f ${DOINST}/${PSRC} ]]; then
+			NEXT="${DOINST/#${TARGET}}/${PSRC}"
+		fi
+		${SED} -i "s|^(.?${FILE})${FREGEX}$|\1\3${NEXT}\4|g"				${UNPACK}		|| return 1
+	done
+	shopt ${LASTPIPE} lastpipe
+	if {
+		[[ ! -d ${TARGET}${KDIR} ]] &&
+		[[ ! -L ${TARGET}${KDIR} ]];
+	}; then
+		echo -en ">>> LINKING: ${KDIR}\n"
+		if ! ${DOTEST}; then
+			${RM}									${TARGET}${KDIR}	|| return 1
+			${LN} --relative ${TARGET}${LDIR}					${TARGET}${KDIR}	|| return 1
+		fi
+	fi
+	if ! ${DOTEST}; then
+		echo -en "\n"
+		shopt -s lastpipe
+		variable_parse FSUPDT ";" | while read -r FILE; do
+			eval safe_env								${FILE}			|| return 1
+		done
+		shopt ${LASTPIPE} lastpipe
+	fi
+	echo -en "\n"; common_packdirs_list
+	echo -en "\n"
+	echo -en ">>> EDIT THE (${UNPACK}) FILE TO MODIFY THE LIST OF DIRECTORIES TO UNPACK <<<\n"
+	echo -en ">>> ARCHIVES MUST EXIST OR BE IN THE (${DOINST}) DIRECTORY <<<\n"
+	echo -en ">>> OTHERWISE NETWORK ACCESS WILL BE REQUIRED TO FETCH THEM <<<\n"
+	echo -en "\n"
+	cat ${UNPACK}
 	return 0
 }
 
