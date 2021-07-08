@@ -34,6 +34,7 @@ declare _GITHUB="ssh://git@github.com/${_LOGIN}/${_TITLE}.git"
 declare _SFCODE="ssh://${_LOGIN}@git.code.sf.net/p/${_TITLE}/code"
 declare _SFFILE="${_LOGIN}@web.sourceforge.net:/home/frs/project/${_TITLE}"
 declare _SFRSSH="${_LOGIN},${_TITLE}@shell.sourceforge.net create"
+declare _SFDOWN="https://sourceforge.net/projects/gary-os/files/${_VERSN}"
 
 declare _DOCDIR="/.g/_data/zactive/coding/${_TITLE}"
 declare _BLDDIR="/.g/_data/_builds"
@@ -918,6 +919,7 @@ function _prepare_packages {
 
 ########################################
 
+#note: companion to the "release_fetch" function
 function _prepare_symlinks {		#{reset}
 	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
 	REP_FILE="$(basename ${REPDIR})"
@@ -1366,6 +1368,50 @@ function _release_report {
 		${TARGET}${LDIR}/usr/initramfs_data.*	\
 		${_RAMFS}*				\
 							2>/dev/null
+	return 0
+}
+
+########################################
+
+#note: companion to the "prepare_symlinks" function
+function _release_fetch {		#{main}
+	declare FET_DST="${PWD}/${_TITLE}"
+	declare FET_BAS="${_RAMFS/#${_FINAL}\/}"
+	declare FET_SRC="${RSYNC_C} --copy-links --delete ${_FINAL}"
+	declare FET_OUT=""
+	if [[ ! -d ${_FINAL} ]]; then
+		FET_SRC="${WGET_C} ${_SFDOWN}"
+		FET_OUT="--directory-prefix"
+	fi
+	declare FET_PKG="${FET_DST}/${FET_BAS}.${PACKDIRS_LINK}.${FUNCNAME/#${MAKEIT}_}"
+	${MKDIR}							${FET_DST}					|| return 1
+	${FET_SRC}/${FET_BAS}.grub.zip ${FET_OUT}			${FET_DST}/					|| return 1
+	7z e -aoa \
+		-x\!\*/loopfile\* \
+		-x\!\*/rufus\* \
+		-o${FET_DST}/${_TITLE}.grub				${FET_DST}/${FET_BAS}.grub.zip			|| return 1
+	${RM}								${FET_DST}/${_TITLE}.grub/${FET_BAS}.grub	|| return 1
+	for FILE in kernel rootfs; do
+		${FET_SRC}/${FET_BAS}.${FILE} ${FET_OUT}		${FET_DST}/					|| return 1
+		${LN}			${FET_BAS}.${FILE}		${FET_DST}/${_TITLE}.${FILE}			||
+			${RSYNC_C}	${FET_DST}/${FET_BAS}.${FILE}	${FET_DST}/${_TITLE}.${FILE}			|| return 1
+		${FET_SRC}/${FET_BAS}.${FILE}.${_GPACK} ${FET_OUT}	${FET_DST}/					|| return 1
+	done
+	${FET_SRC}/${FET_BAS}.${_GREAD} ${FET_OUT}			${FET_DST}/					|| return 1
+	if [[ ! -s ${FET_PKG} ]]; then
+		cat /dev/null						>${FET_PKG}
+	else
+		shopt -s lastpipe
+		variable_parse PACKDIRS | while read -r FILE; do
+			${FET_SRC}/$(common_packdir ${FILE}) ${FET_OUT}	${FET_DST}/					|| return 1
+		done
+		shopt ${LASTPIPE} lastpipe
+	fi
+	(cd ${FET_DST};
+		echo -en "\n"; ${LL}
+		echo -en "\n"; ${DU_L} *
+	)
+	echo -en "\n"; ${LL} $(realpath --relative-to ${PWD} ${FET_PKG}); cat ${FET_PKG}
 	return 0
 }
 
