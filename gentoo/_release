@@ -735,7 +735,6 @@ function _prepare_config {		#{reset}
 function _prepare_docdir {
 	if [[ ! -d ${_G_REPO} ]] || [[ ! -d ${_G_REPO}.git ]]; then
 #>>>		${RM}							${TARGET}/.${_TITLE}			|| return 1
-#>>>		${RM}							${TARGET}/.${_TITLE}.git		|| return 1
 		return 0
 	fi
 	${MKDIR}							${TARGET}/.${_TITLE}			|| return 1
@@ -745,7 +744,8 @@ function _prepare_docdir {
 	}; then
 		eval ${RSYNC_U} --copy-links --delete-excluded							\
 			--filter="-_/.git"									\
-			$(cat ${SETDIR}/.gitignore | while read -r FILE; do
+			--filter="P_/.git"									\
+			$(${GREP} -v -e "^[#]" -e "^$" ${SETDIR}/.gitignore | while read -r FILE; do
 				echo "--filter=\"-_${FILE/%\/}\""
 			done)											\
 			${SETDIR}/					${TARGET}/.${_TITLE}			|| return 1
