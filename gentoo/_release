@@ -1716,7 +1716,7 @@ function _publish_gitdir {
 
 ########################################
 
-declare FILELIST="
+declare PUB_FILES="
 	.${_TITLE}-
 	${_TITLE}-
 	portage-
@@ -1726,7 +1726,7 @@ declare FILELIST="
 function publish_export_filelist {
 	FILE="${1}" && shift
 	${LS} -d $(
-		for NEXT in ${FILELIST}; do
+		for NEXT in ${PUB_FILES}; do
 			echo -en " ${FILE}/${NEXT}*"
 		done
 	) 2>/dev/null \
@@ -1738,7 +1738,7 @@ function publish_export_gitbackup {
 	declare GDIR="${1}" && shift
 	declare HASH="${1}" && shift
 	FILE="$(
-		for NEXT in ${FILELIST}; do
+		for NEXT in ${PUB_FILES}; do
 			(set -o pipefail;
 				$(which git) --git-dir=${GDIR}.git --work-tree=${GDIR}	\
 				ls-tree ${HASH}						\
@@ -1761,14 +1761,18 @@ function publish_export_gitbackup {
 }
 
 function publish_export_underscore {
-	FILE="${1}" && shift
-	${RSYNC_U} --copy-links \
-		${_OUTDIR}/.${_TITLE}-*/_$(basename ${FILE})/ \
-		${_OUTDIR}/_$(basename ${FILE}) \
+	FILE="$(basename ${1})" && shift
+	if {
+		[[ ! -d ${_OUTDIR}/_${FILE} ]] ||
+		[[ -L ${_OUTDIR}/_${FILE} ]];
+	}; then
+		${RM} ${_OUTDIR}/_${FILE} \
 		|| return 1
-	${RM} $(realpath --canonicalize-missing \
-		${_OUTDIR}/.${_TITLE}-*/_$(basename ${FILE})
-	)
+	fi
+	${RSYNC_U} --copy-links \
+		${_FINAL}/_${FILE}/ \
+		${_OUTDIR}/_${FILE} \
+		|| return 1
 	return 0
 }
 
@@ -1777,7 +1781,7 @@ function publish_export_checksum {
 		declare CHECKDIR="$(dirname ${FILE})"
 		declare CHECKFIL="$(basename ${FILE})"
 		declare CHECKSUM="${FILE}.hash.txt"
-		if [[ -f ${CHECKDIR}/${CHECKFIL} ]]; then
+		if [[ -f ${CHECKDIR}/${CHECKFIL} ]] && [[ -n $(echo "${CHECKDIR}/${CHECKFIL}" | ${GREP} -v "[.]txt$") ]]; then
 			(set -o pipefail;
 				(cd ${CHECKDIR}					&&
 					sha256sum --tag		${CHECKFIL}	&&
@@ -1794,11 +1798,15 @@ function _publish_export {
 	${MKDIR} ${_OUTDIR}									|| return 1
 	${RM} ${_OUTDIR}.git									|| return 1
 	${LN} ${_SAVDIR}.git ${_OUTDIR}.git							|| return 1
+	${RM} ${_OUTDIR}/${_TITLE}-*								|| return 1
 	declare INDEX=
 	for INDEX in $(
 		eval echo -en "{0..$((${#RELEASE[*]}-1))}"
 	); do
-		if [[ -n ${RELEASE[${INDEX}]} ]] && [[ -n ${CMTHASH[${INDEX}]} ]]; then
+		if {
+			[[ -n ${RELEASE[${INDEX}]} ]] && [[ -n ${CMTHASH[${INDEX}]} ]] &&
+			[[ ! -d ${_OUTDIR}/${RELEASE[${INDEX}]} ]];
+		}; then
 			echo -en "\n[ ${RELEASE[${INDEX}]} :: ${CMTHASH[${INDEX}]} ]\n"
 		else
 			continue
@@ -1835,17 +1843,22 @@ function _publish_export {
 	${RM} ${_OUTDIR}/+index*								|| return 1
 	${GIT} --git-dir=${_SAVDIR}.git --work-tree=${_SAVDIR} reset				|| return 1
 	for INDEX in ${RELEASE[*]}; do
+		if [[ -L ${_OUTDIR}/${INDEX} ]]; then
+			continue
+		fi
 		for NEXT in $(
-			${LS} ${_OUTDIR}/${INDEX}/*.{kernel,initrd} 2>/dev/null
+			${LS} ${_OUTDIR}/${INDEX}/*.{kernel,initrd,rootfs,grub.zip} 2>/dev/null
 		); do
 			declare OUTFILE="$(
 				echo -en "$(basename ${NEXT})" |
 				${SED} \
 					-e "s%^stage3%${_TITLE}%g" \
-					-e "s%[a-z0-9]{40}[.][0-9][.]tar[.]xz%${INDEX}%g"
+					-e "s%-funtoo-[^.-]+%%g" \
+					-e "s%[a-z0-9]{40}[.][0-9][.]tar[.]xz%${INDEX}%g" \
+					-e "s%^(${_TITLE})(-.+)(-${INDEX})%\1\3\2%g" \
 			)"									|| return 1
-			${RSYNC_U} ${NEXT} ${_OUTDIR}/${OUTFILE}				|| return 1
-			publish_export_checksum ${_OUTDIR}/${OUTFILE}				|| return 1
+			${LN} --relative ${NEXT}		${_OUTDIR}/${OUTFILE}		|| return 1
+			${LN} --relative ${NEXT}.hash.txt	${_OUTDIR}/${OUTFILE}.hash.txt	|| return 1
 		done
 	done
 	return 0
