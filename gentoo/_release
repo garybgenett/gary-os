@@ -12,6 +12,7 @@ export _RDATE="$(date --iso=date)"
 export _FINAL="${TARGET}/.${_TITLE}-${ESUB}"
 export _RAMFS="${_FINAL}/${_TITLE}-${_VERSN}-${ESUB}"
 
+export _GOVLY="/.overlay"
 export _GUNPK="/.unpack"
 export _GINST="/.install"
 
@@ -148,8 +149,8 @@ declare CPIO_FILE="${_RAMFS}.cpio"
 export XZ_OPT="--verbose --threads=0 --extreme -9"
 
 declare XARGS="xargs --max-procs 0 --max-args 1 --null	--arg-file ${CPIO_FILE}.nul"
-declare CPIO_IN="cpio -v --create --format newc --null	--file ${CPIO_FILE}	--directory ${TARGET}"
-declare CPIO_OUT="cpio -v --extract			--file ${CPIO_FILE}	--directory ${CPIO_FILE}.dir"
+declare CPIO_IN="cpio -v --create --format newc --null	--file ${CPIO_FILE}	--directory" #>>> ${TARGET}
+declare CPIO_OUT="cpio -v --extract			--file ${CPIO_FILE}	--directory" #>>> ${CPIO_FILE}.dir
 declare XZ="xz -vv --compress --stdout --format xz --check crc32"
 
 ########################################
@@ -208,6 +209,84 @@ $(variable_parse FSEXCL ";" "" "" true)
 if ! ${DOTEST}; then
 	PACKDIRS="$(variable_parse PACKDIRS "" "" "" true | sort -u)"
 fi
+
+########################################
+
+declare ROOTFS_CPIO="${ROOTFS}"
+declare ROOTFS_TEST="${DOTEST}"
+if ! ${ROOTFS_CPIO}; then
+	ROOTFS_TEST="false"
+fi
+declare ROOTFS_CUST="false"
+
+declare ROOTFS_NAME="rootfs"
+declare ROOTFS_TYPE="squashfs"
+declare ROOTFS_FILE="${_RAMFS}.${ROOTFS_NAME}"
+declare ROOTFS_COMP="-comp xz -b $((2**20)) -Xdict-size 100%"
+declare ROOTFS_OPTS="-noappend -info -xattrs ${ROOTFS_COMP} -wildcards -ef" #>>> ${ROOTFS_FILE}.exclude"
+
+declare ROOTFS_ROOT="/.${_TITLE}.${ROOTFS_NAME}"
+declare ROOTFS_ROOT_SRC="${ROOTFS_ROOT/#\/\.//${_TITLE}\/}"
+declare ROOTFS_ROOT_OPT="groot"
+declare ROOTFS_FUNC="rescue"
+
+declare ROOTFS_BUSYBOX="/bin/busybox"
+declare ROOTFS_COREUTILS="/usr/bin/coreutils"
+declare ROOTFS_BASH="/bin/bash"
+declare ROOTFS_SHELL="/bin/sh"
+declare ROOTFS_LDD="/usr/bin/ldd"
+if [[ -n $(ldd ${TARGET}${ROOTFS_BASH} 2>/dev/null | ${GREP} "not a dynamic executable") ]]; then
+	ROOTFS_SHELL="${ROOTFS_BASH}"
+fi
+
+declare ROOTFS_DIRTREE_PKG="$(ls ${TARGET}${PAKDIR}/sys-apps/baselayout-[.0-9]*.tbz2 2>/dev/null | sort | tail -n1)"
+declare ROOTFS_DIRTREE=""
+declare ROOTFS_UTILS="
+${ROOTFS_BUSYBOX}
+${ROOTFS_COREUTILS}
+${ROOTFS_BASH}
+\
+/bin/grep
+/bin/sed
+/bin/tar
+/usr/bin/make
+/usr/bin/rsync
+\
+/bin/mount
+/bin/umount
+/sbin/fsck
+/sbin/fsck.ext2
+/sbin/fsck.ext3
+/sbin/fsck.ext4
+/sbin/mount.fuse
+/usr/sbin/fsck.exfat
+/usr/sbin/fsck.fat
+/usr/sbin/fsck.vfat
+/usr/sbin/mount.exfat
+/usr/sbin/mount.exfat-fuse
+/usr/sbin/mount.ntfs
+/usr/sbin/mount.ntfs-3g
+"
+
+declare ROOTFS_FILES="
+/.profile
+/etc/inittab
+/initrc
+"
+declare ROOTFS_FILE_VARS="
+_TITLE
+_GOVLY
+_GUNPK
+ROOTFS_TEST
+ROOTFS_NAME
+ROOTFS_TYPE
+ROOTFS_ROOT
+ROOTFS_ROOT_SRC
+ROOTFS_ROOT_OPT
+ROOTFS_FUNC
+ROOTFS_BASH
+ROOTFS_SHELL
+"
 
 ########################################
 
@@ -344,7 +423,7 @@ function common_packdirs_list {
 #note: cross-reference with the "release_install" function any time this changes
 function _release_reset {		#{main}
 	${RM} ${TARGET}/${CMTFIL}				|| return 1
-	${RM} ${TARGET}/${_GPACK}				|| return 1
+	${RM} ${TARGET}/${_GPACK/%.txt}*			|| return 1
 	${RM} ${TARGET}/.gitignore				|| return 1
 	if [[ -n ${TARGET} ]]; then
 		${RM} ${TARGET}/{.,_}${_TITLE}*			|| return 1
@@ -812,6 +891,9 @@ function _prepare_packdirs {		#{reset}
 
 function _prepare_packages {
 	declare PACK_FILE="${_GPACK}"
+	if ${ROOTFS_CUST}; then
+		PACK_FILE="${_GPACK/%.txt/.${ROOTFS_NAME}.txt}"
+	fi
 	if [[ -z ${TARGET} ]]; then
 		${RM} ${TARGET}/${PACK_FILE}								|| return 1
 		return 0
@@ -853,7 +935,8 @@ function _prepare_symlinks {		#{reset}
 		return 0
 	fi
 	${LN} --relative ${TARGET}/.${_TITLE}/README.md			${_RAMFS}.${_GREAD}				|| return 1
-	${LN} --relative ${TARGET}/${_GPACK}				${_RAMFS}${_GPACK}				|| return 1
+	${LN} --relative ${TARGET}/${_GPACK}				${_RAMFS}.kernel.${_GPACK}			|| return 1
+	${LN} --relative ${TARGET}/${_GPACK/%.txt/.${ROOTFS_NAME}.txt}	${_RAMFS}.${ROOTFS_NAME}.${_GPACK}		|| return 1
 	${LN} --relative ${TARGET}${DSTDIR}				${_FINAL}/_$(basename ${DSTDIR})		|| return 1
 	${LN} --relative ${TARGET}${PAKDIR}				${_FINAL}/_$(basename ${PAKDIR})		|| return 1
 	${LN} --relative ${TARGET}${ARCDIR}/${REP_FILE}.tar.xz		${_RAMFS}.${REP_FILE}.tar.xz			|| return 1
@@ -883,7 +966,161 @@ function _release_ramfs {		#{main} #{reset}
 
 ########################################
 
+function release_rootfs_cpio_utils {
+	declare ROOTFS_DEST="${ROOTFS_FILE}"
+	if [[ -n ${1} ]]; then
+		ROOTFS_DEST="${1}" && shift
+	fi
+	for FILE in ${ROOTFS_UTILS}; do
+		${MKDIR}				${ROOTFS_DEST}.dir$(dirname ${FILE})	|| return 1
+		${RSYNC_U} --copy-links			${TARGET}${FILE}			\
+							${ROOTFS_DEST}.dir${FILE}		|| return 1
+		for NEXT in $(
+			chroot ${TARGET} ${ROOTFS_LDD}	${FILE}					|
+			${GREP} --only-matching		"[/][^[:space:]]+"			\
+		); do
+			${MKDIR}			${ROOTFS_DEST}.dir$(dirname ${NEXT})	|| return 1
+			${RSYNC_U} --copy-links		${TARGET}${NEXT}			\
+							${ROOTFS_DEST}.dir${NEXT}		|| return 1
+		done
+	done
+	return 0
+}
+
+function release_rootfs_cpio_tools {
+	declare ROOTFS_DEST="${ROOTFS_FILE}"
+	if [[ -n ${1} ]]; then
+		ROOTFS_DEST="${1}" && shift
+	fi
+	declare BUSY_DIR="$(dirname			${ROOTFS_BUSYBOX})"
+	${MKDIR}					${ROOTFS_DEST}.dir${BUSY_DIR}		|| return 1
+	(chroot ${ROOTFS_DEST}.dir ${ROOTFS_BUSYBOX}	--install -s ${BUSY_DIR})		|| return 1
+	declare CORE_DIR="$(dirname			${ROOTFS_COREUTILS})"
+	${MKDIR}					${ROOTFS_DEST}.dir${CORE_DIR}		|| return 1
+	for FILE in $(
+		${TARGET}${ROOTFS_COREUTILS} --help | ${GREP} "^[[:space:]]*[[]"
+	); do
+		${LN} --relative			${ROOTFS_DEST}.dir${ROOTFS_COREUTILS}	\
+							${ROOTFS_DEST}.dir${BUSY_DIR}/${FILE}	|| return 1
+		${LN} --relative			${ROOTFS_DEST}.dir${ROOTFS_COREUTILS}	\
+							${ROOTFS_DEST}.dir${CORE_DIR}/${FILE}	|| return 1
+	done
+	return 0
+}
+
+function release_rootfs_cpio_files {
+	declare ROOTFS_DEST="${ROOTFS_FILE}"
+	if [[ -n ${1} ]]; then
+		ROOTFS_DEST="${1}" && shift
+	fi
+	for FILE in ${ROOTFS_FILES}; do
+		${MKDIR}				${ROOTFS_DEST}.dir$(dirname ${FILE})	|| return 1
+		${RSYNC_C} --copy-links			${ARTDIR}/files/$(basename ${FILE})	\
+							${ROOTFS_DEST}.dir${FILE}		|| return 1
+		for NEXT in ${ROOTFS_FILE_VARS}; do
+			${SED} -i "s|[$][{]${NEXT}[}]|${!NEXT}|g"				\
+							${ROOTFS_DEST}.dir${FILE}		|| return 1
+		done
+	done
+	return 0
+}
+
+function release_rootfs_cpio {
+	declare ROOTFS_DEST="${ROOTFS_FILE}"
+	if [[ -n ${1} ]]; then
+		ROOTFS_DEST="${1}" && shift
+	fi
+	${RM}						${ROOTFS_DEST}.dir			|| return 1
+#>>>	tar -xvvf ${ROOTFS_DIRTREE_PKG} --directory	${ROOTFS_DEST}.dir			|| return 1
+	for FILE in ${ROOTFS_DIRTREE}; do
+		${MKDIR}				${ROOTFS_DEST}.dir${FILE}		|| return 1
+	done
+	${MKDIR}					${ROOTFS_DEST}.dir/dev			|| return 1
+	${TARGET}${REALDEV}				${ROOTFS_DEST}.dir/dev			|| return 1
+	#note: need "utils" first to get the "tools" before unpacking them
+	#note: then need "utils" again to overwrite/update key binaries
+	release_rootfs_cpio_utils			${ROOTFS_DEST}				|| return 1
+	release_rootfs_cpio_tools			${ROOTFS_DEST}				|| return 1
+	release_rootfs_cpio_utils			${ROOTFS_DEST}				|| return 1
+	release_rootfs_cpio_files			${ROOTFS_DEST}				|| return 1
+	if [[ -d ${ROOTFS_DEST}.dir/lib64 ]]; then
+		${LN} --relative			${ROOTFS_DEST}.dir/lib64		\
+							${ROOTFS_DEST}.dir/lib			|| return 1
+	fi
+	${LN} --relative				${ROOTFS_DEST}.dir${ROOTFS_BUSYBOX}	\
+							${ROOTFS_DEST}.dir/init			|| return 1
+	echo -en "\n"
+	${DU_L}						${ROOTFS_DEST}.dir			|| return 1
+	(cd ${ROOTFS_DEST}.dir && ${LL} --directory	$(find ./ ! -type l))			|| return 1
+	${RSYNC_U} ${ROOTFS_DEST}			${ROOTFS_DEST}.dir${ROOTFS_ROOT}	|| return 1
+	return 0
+}
+
+function release_rootfs_file {
+	declare ROOTFS_DEST="${ROOTFS_FILE}"
+	if [[ -n ${1} ]]; then
+		ROOTFS_DEST="${1}" && shift
+	fi
+	${MKDIR}			$(dirname ${ROOTFS_DEST})				|| return 1
+	cat /dev/null			>${ROOTFS_DEST}.exclude					|| return 1
+	variable_parse SKIPDIRS | ${SED}							\
+					-e "s|^/||g"						\
+					>>${ROOTFS_DEST}.exclude				|| return 1
+	${SED} -i "/^dev\//d"		${ROOTFS_DEST}.exclude					|| return 1
+	${RM}				${TARGET}/tmp/${_TITLE}.dev				|| return 1
+	${MKDIR}			${TARGET}/tmp/${_TITLE}.dev				|| return 1
+	${TARGET}${REALDEV}		${TARGET}/tmp/${_TITLE}.dev				|| return 1
+	for FILE in $(cd		${TARGET}/dev && find ./); do				declare SKIP="true"
+		for NEXT in $(cd	${TARGET}/tmp/${_TITLE}.dev && find ./); do		if [[ ${FILE} == ${NEXT} ]]; then SKIP="false"; fi
+		done;										if ${SKIP}; then echo "${FILE/#\./dev}"; fi
+	done				>>${ROOTFS_DEST}.exclude				|| return 1
+	${RM}				${TARGET}/tmp/${_TITLE}.dev				|| return 1
+	mk${ROOTFS_TYPE} ${TARGET}	${ROOTFS_DEST} ${ROOTFS_OPTS} ${ROOTFS_DEST}.exclude	|| return 1
+	un${ROOTFS_TYPE} -lls		${ROOTFS_DEST} >${ROOTFS_DEST}.txt			|| return 1
+	return 0
+}
+
+function _release_rootfs {		#{main} #{reset}
+	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
+	declare ROOTFS_DEST="${ROOTFS_FILE}"
+	if [[ -n ${1} ]]; then
+		ROOTFS_DEST="${1}" && shift
+	fi
+	if [[ -n ${RESET} ]]; then
+		${RM}						${ROOTFS_DEST}*	|| return 1
+	fi
+	if [[ ${ROOTFS_DEST} == ${ROOTFS_FILE} ]]; then
+		ROOTFS_CUST="true"
+		if [[ -n ${RESET} ]]; then
+			DOREDO="false" _prepare_symlinks	${RESET}	|| return 1
+			DOREDO="false" _prepare_packdirs	${RESET}	|| return 1
+		fi
+		DOREDO="false" DOFAST="false" _prepare_build			|| return 1
+	fi
+	if [[ ! -f ${ROOTFS_DEST} ]]; then
+		${RM}						${CPIO_FILE}	|| return 1
+		release_rootfs_file				${ROOTFS_DEST}	|| return 1
+		release_rootfs_cpio				${ROOTFS_DEST}	|| return 1
+	elif ${ROOTFS_TEST}; then
+		release_rootfs_cpio				${ROOTFS_DEST}	|| return 1
+	else
+		common_exists ${FUNCNAME}			${ROOTFS_DEST}*	|| return 1
+	fi
+	return 0
+}
+
+########################################
+
 function release_cpio_nul {
+	if ${ROOTFS_CPIO}; then
+		if ! ${ROOTFS_TEST}; then
+			_release_rootfs ${_RST}			${CPIO_FILE}.${ROOTFS_NAME}	|| return 1
+		else
+			_release_rootfs				${CPIO_FILE}.${ROOTFS_NAME}	|| return 1
+		fi
+		(cd ${CPIO_FILE}.${ROOTFS_NAME}.dir && eval find ./ -mindepth 1 -xdev \
+		-print0)					>${CPIO_FILE}.nul		|| return 1
+	else
 		(cd ${TARGET} && eval find ./ -mindepth 1 -xdev \
 			$(for FILE in $(
 				variable_parse SKIPDIRS | ${SED} \
@@ -896,22 +1133,30 @@ function release_cpio_nul {
 		${TARGET}${REALDEV}				${TARGET}/tmp/dev		|| return 1
 		(cd ${TARGET}/tmp && find ./dev -print0)	>>${CPIO_FILE}.nul		|| return 1
 		${RM}						${TARGET}/tmp/dev		|| return 1
+	fi
 	return 0
 }
 
 function release_cpio_file {
-	(cd ${TARGET} && ${XARGS} ${DU_S})					| tee ${CPIO_FILE}.txt
+	if ${ROOTFS_CPIO}; then
+		(cd ${CPIO_FILE}.${ROOTFS_NAME}.dir && ${XARGS} ${DU_S})	| tee ${CPIO_FILE}.txt
+		cat ${CPIO_FILE}.nul | ${CPIO_IN}				${CPIO_FILE}.${ROOTFS_NAME}.dir	|| return 1
+	else
+		(cd ${TARGET} && ${XARGS} ${DU_S})				| tee ${CPIO_FILE}.txt
+		cat ${CPIO_FILE}.nul | ${CPIO_IN}				${TARGET}			|| return 1
+	fi
 	sort -k4 -u -o ${CPIO_FILE}.txt						${CPIO_FILE}.txt		|| return 1
-	cat ${CPIO_FILE}.nul | ${CPIO_IN}									|| return 1
 	${RM}									${CPIO_FILE}.nul		|| return 1
 	return 0
 }
 
 function release_cpio_dir {
 	if [[ -n ${TARGET} ]]; then
-		${RM}				${CPIO_FILE}.dir	|| return 1
-		${MKDIR}			${CPIO_FILE}.dir	|| return 1
-		${CPIO_OUT}						|| return 1
+		if ! ${ROOTFS_CPIO}; then
+			${RM}			${CPIO_FILE}.dir	|| return 1
+			${MKDIR}		${CPIO_FILE}.dir	|| return 1
+			${CPIO_OUT}		${CPIO_FILE}.dir	|| return 1
+		fi
 		if ! ${ROOTFS_TEST}; then
 			${XZ} ${CPIO_FILE}	>${CPIO_FILE}.xz	|| return 1
 		fi
@@ -1023,12 +1268,15 @@ function release_kernel_shmem {
 function release_kernel_initramfs {
 	declare DODIR="${1}" && shift
 	declare INITRAMFS_CONFIG=
-	INITRAMFS_CONFIG+="CONFIG_INITRAMFS_SOURCE=\"$(realpath ${CPIO_FILE})\"\n"
+	INITRAMFS_CONFIG+="CONFIG_INITRAMFS_SOURCE=\"${CPIO_FILE/#${TARGET}}\"\n"
 #>>>	INITRAMFS_CONFIG+="CONFIG_INITRAMFS_ROOT_GID=0\n"
 #>>>	INITRAMFS_CONFIG+="CONFIG_INITRAMFS_ROOT_UID=0\n"
-#>>>	INITRAMFS_CONFIG+="CONFIG_INITRAMFS_COMPRESSION_NONE=y\n"
-	INITRAMFS_CONFIG+="CONFIG_INITRAMFS_COMPRESSION_XZ=y\n"
-#>>>	INITRAMFS_CONFIG+="CONFIG_INITRAMFS_COMPRESSION=\".xz\"\n"
+	if ${ROOTFS_CPIO}; then
+		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_COMPRESSION_NONE=y\n"
+	else
+		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_COMPRESSION_XZ=y\n"
+#>>>		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_COMPRESSION=\".xz\"\n"
+	fi
 	${SED} -i \
 		-e "/CONFIG_INITRAMFS_COMPRESSION/d" \
 		-e "s|^.*(CONFIG_INITRAMFS_SOURCE)[^_].*$|${INITRAMFS_CONFIG}|g" \
@@ -1355,11 +1603,16 @@ function _publish_release {		#{main} #{reset}
 ########################################
 
 function _publish_prep {
-	echo -en "${SKIP_DIRS}"			>${TARGET}/.gitignore			|| return 1
+	variable_parse DEVDIRS "" "" "/"	>${TARGET}/.gitignore			|| return 1
 	sort -u -o ${TARGET}/.gitignore		${TARGET}/.gitignore			|| return 1
 	${SED} -i "/^$/d"			${TARGET}/.gitignore			|| return 1
 	${RM}					${CPIO_FILE}				|| return 1
 	${RM}					${CPIO_FILE}.dir			|| return 1
+	${RM}					${CPIO_FILE}.${ROOTFS_NAME}		|| return 1
+	${RM}					${CPIO_FILE}.${ROOTFS_NAME}.dir		|| return 1
+	${RM}					${CPIO_FILE}.${ROOTFS_NAME}.exclude	|| return 1
+	${RM}					${ROOTFS_FILE}.dir			|| return 1
+	${RM}					${ROOTFS_FILE}.exclude			|| return 1
 	${RM}					${_RAMFS}.grub				|| return 1
 	${RM}					${TARGET}/tmp/.ccache			|| return 1
 	return 0
