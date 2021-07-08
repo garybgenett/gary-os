@@ -871,23 +871,13 @@ function _prepare_symlinks {		#{reset}
 
 ################################################################################
 
-function _release_ramfs {		#{main} #{reset} #{initrd}
+function _release_ramfs {		#{main} #{reset}
 	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
-	declare INITRD= ; if [[ ${1} == --initrd ]]; then INITRD="${1}" && shift; fi
 	DOREDO="false" _prepare_build	${RESET}	|| return 1
-	DOREDO="false" _release_cpio	${INITRD}	|| return 1
-	DOREDO="false" _release_kernel	${INITRD}	|| return 1
+	DOREDO="false" _release_cpio			|| return 1
+	DOREDO="false" _release_kernel			|| return 1
 	DOREDO="false" _release_grub			|| return 1
 	DOREDO="false" _release_report			|| return 1
-	return 0
-}
-
-########################################
-
-function _release_initrd {		#{main} #{reset}
-	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
-	_release_ramfs ${RESET} --initrd \
-		|| return 1
 	return 0
 }
 
@@ -917,32 +907,27 @@ function release_cpio_file {
 	return 0
 }
 
-function release_cpio_dir {	#>>> {initrd}
-	declare INITRD= ; if [[ ${1} == --initrd ]]; then INITRD="${1}" && shift; fi
-	if [[ ${TARGET} != / ]]; then
+function release_cpio_dir {
+	if [[ -n ${TARGET} ]]; then
 		${RM}				${CPIO_FILE}.dir	|| return 1
 		${MKDIR}			${CPIO_FILE}.dir	|| return 1
 		${CPIO_OUT}						|| return 1
-	fi
-	if [[ ${TARGET} != / ]] || [[ -n ${INITRD} ]]; then
-		${XZ} ${CPIO_FILE}		>${CPIO_FILE}.xz	|| return 1
+		if ! ${ROOTFS_TEST}; then
+			${XZ} ${CPIO_FILE}	>${CPIO_FILE}.xz	|| return 1
+		fi
 	fi
 	return 0
 }
 
-function _release_cpio {		#{initrd}
-	declare INITRD= ; if [[ ${1} == --initrd ]]; then INITRD="${1}" && shift; fi
+function _release_cpio {
 	mount_dev_dirs -u				|| return 1
 	${MKDIR} ${_FINAL}				|| return 1
-	if {
-		{ [[ ! -f ${CPIO_FILE}.xz ]]	&& [[ -n ${INITRD} ]]; } ||
-		{ [[ ! -f ${CPIO_FILE} ]]	&& [[ -z ${INITRD} ]]; }
-	}; then
+	if [[ ! -f ${CPIO_FILE} ]]; then
 		${RM} ${_RAMFS}.boot.kernel		|| return 1
 		${RM} ${_RAMFS}.kernel			|| return 1
-		release_cpio_nul	${INITRD}	|| return 1
-		release_cpio_file	${INITRD}	|| return 1
-		release_cpio_dir	${INITRD}	|| return 1
+		release_cpio_nul			|| return 1
+		release_cpio_file			|| return 1
+		release_cpio_dir			|| return 1
 	else
 		common_exists ${FUNCNAME} ${CPIO_FILE}*	|| return 1
 	fi
@@ -1078,8 +1063,7 @@ function release_kernel_build {
 	return 0
 }
 
-function _release_kernel {		#{initrd}
-	declare INITRD= ; if [[ ${1} == --initrd ]]; then INITRD="${1}" && shift; fi
+function _release_kernel {
 	declare DODIR="${KDIR}"
 	if [[ -z ${TARGET} ]]; then
 		DODIR="${LDIR}"
@@ -1092,14 +1076,12 @@ function _release_kernel {		#{initrd}
 		release_kernel_patch		${DODIR}				|| return 1
 		release_kernel_config		${DODIR}				|| return 1
 		release_kernel_shmem		${DODIR}				|| return 1
-		#note: boot/initrd kernel
+		#note: boot kernel
 		release_kernel_build		${DODIR}	${_RAMFS}.boot.kernel	|| return 1
-		if [[ -z ${INITRD} ]]; then
-			#note: initramfs kernel
-			release_kernel_initramfs ${DODIR}				|| return 1
-			release_kernel_diff	${DODIR}				|| return 1
-			release_kernel_build	${DODIR}	${_RAMFS}.kernel	|| return 1
-		fi
+		#note: initramfs kernel
+		release_kernel_initramfs	${DODIR}				|| return 1
+		release_kernel_diff		${DODIR}				|| return 1
+		release_kernel_build		${DODIR}	${_RAMFS}.kernel	|| return 1
 	else
 		common_exists ${FUNCNAME}						\
 								${TARGET}${DODIR}	\
