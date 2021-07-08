@@ -22,6 +22,10 @@
 #{RCUPDT} rc-update del sshd default		|| true
 #{RCUPDT} rc-update show
 
+#{FSUPDT} rc-service udev restart	|| true
+#{FSUPDT} rc-service modules restart	|| true
+#{FSUPDT} rc-service keymaps restart	|| true
+
 #{FSPACK}
 
 #{FSKEEP} docs:/usr/share/doc
