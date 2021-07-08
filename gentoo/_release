@@ -1655,14 +1655,39 @@ function _publish_prep {
 
 ########################################
 
-function _publish_gitdir {
-#>>>	if [[ -x $(which task 2>/dev/null) ]]; then
-#>>>		FILE="${GIT} --git-dir=${_DOCDIR}.git --work-tree=${_DOCDIR}"
-#>>>		NEXT="Automated \"TODO.md\" update."
-#>>>		task zoom	project:geek.gary-os >${_DOCDIR}/TODO.md	|| return 1
-#>>>		${FILE} add	TODO.md						|| return 1
-#>>>		${FILE} commit	--message="${NEXT}" TODO.md			|| return 1
-#>>>	fi
+function _publish_gitdir {		#{main}
+#>>>
+#	if [[ -x $(which task 2>/dev/null) ]]; then
+#		declare GIT_RUN="${GIT} --git-dir=${_DOCDIR}.git --work-tree=${_DOCDIR}"
+#		declare GIT_MSG="Automated update of \"TODO.md\" tasks list."
+#		cat /dev/null						>${_DOCDIR}/TODO.md
+#		echo -en "### GaryOS Tasks\n"				>>${_DOCDIR}/TODO.md
+#		echo -en "\n"						>>${_DOCDIR}/TODO.md
+#		task sort \
+#			rc.verbose=nothing \
+#			rc.report.sort.columns=status,description.desc \
+#			rc.report.sort.labels=status,description \
+#			project:geek.gary-os \
+#			kind.none: \
+#			| ${SED} \
+#				-e "s|gary-os: ||g" \
+#				-e "s|^Completed |[x] |g" \
+#				-e "s|^Deleted   |[x] ~~|g" \
+#				-e "s|^Pending   |[ ] |g" \
+#				-e "s|^(\[x\] ~~.+)$|\1~~|g" \
+#				-e "s|^|  * |g" \
+#									>>${_DOCDIR}/TODO.md
+#>>>
+#		echo -en "\n"						>>${_DOCDIR}/TODO.md
+#		task-notes -x pro:geek.gary-os kind:note		>>${_DOCDIR}/TODO.md
+#		task-export-notes project:
+#>>>
+#		if [[ -n $(GIT_PAGER=cat ${FILE} diff TODO.md 2>/dev/null) ]]; then
+#			${GIT_RUN} add					TODO.md	|| return 1
+#			${GIT_RUN} commit --message="${GIT_MSG}"	TODO.md	|| return 1
+#		fi
+#	fi
+#>>>
 	function git-export-preprocess {
 		${SED} -i "s%^(From[:][ ]).+%\1${_AUTHOR}%g"							"${@}"	|| return 1
 		${SED} -i "N;N;s%^(Subject[:][ ])[[]git-backup[^[]+[[](.+)[]]%\1(RELEASE:\2)%g"			"${@}"	|| return 1
