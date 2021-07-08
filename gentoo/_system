@@ -378,7 +378,7 @@ fi
 declare VARSREGEX="[A-Z][A-Z0-9_]+"
 declare MASKREGEX="^[[:space:]]+(${VARSREGEX})([[:space:]].*)?$"
 declare MASKVARS="
-$(man make.conf | ${GREP} "${MASKREGEX}" | ${GREP} --only-matching "${VARSREGEX}")
+$(man make.conf 2>/dev/null | ${GREP} "${MASKREGEX}" | ${GREP} --only-matching "${VARSREGEX}")
 CARCH
 "
 declare SKIPVARS="
