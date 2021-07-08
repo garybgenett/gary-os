@@ -1854,14 +1854,14 @@ function _publish_export {
 
 function _publish_direct {
 	if [[ -L ${_OUTDIR}/${_VERSN} ]]; then
-		cat ${TARGET}/etc/motd				>${_EAMARK}					|| return 1
-		${LL}						${_EAMARK}					|| return 1
+		cat ${TARGET}/etc/motd	>${_EAMARK}
+		${LL}			${_EAMARK}
 	fi
 	for FILE in \
 		README.md \
 		LICENSE.md \
 	; do
-		${RSYNC_U} --copy-links				${_G_REPO}/${FILE}	${_OUTDIR}/		|| return 1
+		${RSYNC_U} --copy-links	${_G_REPO}/${FILE} ${_OUTDIR}/	|| return 1
 	done
 	return 0
 }
@@ -1869,20 +1869,20 @@ function _publish_direct {
 ########################################
 
 function _publish_upload {
-	find							${_OUTDIR} -type d -exec chmod 755 {} \;	|| return 1
-	find							${_OUTDIR} -type f -exec chmod 644 {} \;	|| return 1
-	chown -R root:root					${_OUTDIR}					|| return 1
-	eval ${RSYNC_U} --copy-links --delete-excluded								\
+	find			${_OUTDIR} -type d -exec chmod 755 {} \;	|| return 1
+	find			${_OUTDIR} -type f -exec chmod 644 {} \;	|| return 1
+	chown -R root:root	${_OUTDIR}					|| return 1
+	eval ${RSYNC_U} --copy-links --delete-excluded				\
 		$(for FILE in $(${LS} --directory ${_OUTDIR}/${_VERSN}/*/); do
 			echo "--filter=\"-_/${_VERSN}/$(basename ${FILE})\""
-		done)						${_OUTDIR}/		${_SFFILE}		|| return 1
+		done)		${_OUTDIR}/ ${_SFFILE}				|| return 1
 	return 0
 }
 
 ########################################
 
 function _publish_report {
-	${LL} --dereference ${_OUTDIR}					|| return 1
+	${LL} --dereference ${_OUTDIR}	|| return 1
 	return 0
 }
 
