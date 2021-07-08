@@ -1882,7 +1882,11 @@ function _publish_upload {
 ########################################
 
 function _publish_report {
-	${LL} --dereference ${_OUTDIR}	|| return 1
+	(cd ${_OUTDIR};
+		echo -en "\n"; ${LL} --dereference v[0-9]*
+		echo -en "\n"; ${LL} --dereference
+		echo -en "\n"; ${LL} $(find ./ -type l | ${SED} "s|^[.][/]||g")
+	)
 	return 0
 }
 
