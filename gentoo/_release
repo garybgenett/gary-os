@@ -451,11 +451,13 @@ function _release_reset {		#{main}
 function _release_review {		#{main}
 	if ${DO_CHROOT} && [[ -n ${TARGET} ]]; then
 		${_SOUL} ${QUIET_OPT} ${TOOR} -r				|| return 1
+		echo -en "\n"
 #>>>		safe_env ${MYSELF} ${QUIET_OPT} ${TOOR} ${FUNCNAME}		|| return 1
 		declare SAFE_ENV_ORIG="${SAFE_ENV}"
 		export SAFE_ENV+=" IS_CHROOT=\"false\" GOSDIR=\"/\" FSPACK=\"\" FSKEEP=\"\" FSARCH=\"\" FSEXCL=\"\""
 		safe_env ${MYSELF} ${QUIET_OPT} -g ${FUNCNAME}			|| return 1
 		SAFE_ENV="${SAFE_ENV_ORIG}"
+#>>>
 		return 0
 	fi
 	variable_parse SKIPDIRS
@@ -546,16 +548,10 @@ function _release_review {		#{main}
 			fi
 		done
 	)	${TARGET}							|| return 1
-	#note: cross-reference with the "prepare_packdirs" function any time this changes
-	declare FILE="${SETDIR}/${FUNDIR}/sets/${_PKG}"
-	echo -en "\n[FSPACK]\n"
-	${SED} -n "s|^[#][{]FSPACK[}][ ]([^#]+).*$|\1|gp" ${FILE} | sort -u	|| return 1
-	echo -en "\n[FSKEEP]\n"
-	${SED} -n "s|^[#][{]FSKEEP[}][ ]([^#]+).*$|\1|gp" ${FILE} | sort -u	|| return 1
-	echo -en "\n[FSARCH]\n"
-	${SED} -n "s|^[#][{]FSARCH[}][ ]([^#]+).*$|\1|gp" ${FILE} | sort -u	|| return 1
-	echo -en "\n[FSEXCL]\n"
-	${SED} -n "s|^[#][{]FSEXCL[}][ ]([^#]+).*$|\1|gp" ${FILE} | sort -u	|| return 1
+	echo -en "\n[FSPACK]\n"; variable_parse FSPACK ";" | sort -u
+	echo -en "\n[FSKEEP]\n"; variable_parse FSKEEP ";" | sort -u
+	echo -en "\n[FSARCH]\n"; variable_parse FSARCH ";" | sort -u
+	echo -en "\n[FSEXCL]\n"; variable_parse FSEXCL ";" | sort -u
 	echo -en "\n"; common_packdirs_list
 	return 0
 }
