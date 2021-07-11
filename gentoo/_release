@@ -1354,7 +1354,10 @@ function release_kernel_build {
 	return 0
 }
 
-function _release_kernel {
+function _release_kernel {		#{doredo}
+	if ${DOREDO}; then
+		${RM}						${_RAMFS}.kernel	|| return 1
+	fi
 	declare DODIR="${KDIR}"
 	if [[ -z ${TARGET} ]]; then
 		DODIR="${LDIR}"
