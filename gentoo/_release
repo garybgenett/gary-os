@@ -21,6 +21,12 @@ export _GPACK="packages.txt"
 
 ########################################
 
+#>>> #{isexit} + ${target} = /\t\treturn 0
+#>>> pass-through =
+#>>>	/DOREDO="${DOREDO}"
+#>>>	/DOFAST="${DOFAST}"
+#>>>	/DOTEST="${DOTEST}"
+
 #>>> if [[ -z ${TARGET} ]]; then
 #>>> 	_TITLE="${_TITLE}-custom"
 #>>> fi
