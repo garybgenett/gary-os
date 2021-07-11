@@ -199,8 +199,10 @@ fi
 if [[ ${_PKG} == ${_TITLE} ]]; then
 	_GOS="true"
 fi
+#note: forcing unmodified configuration for full "_gary-os" build
 if [[ ${_PKG} == _${_TITLE} ]]; then
-	_GOS="true"
+	_MOD="false"
+	_GOS="false"
 fi
 
 ########################################
