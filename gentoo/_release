@@ -559,7 +559,7 @@ function _release_review {		#{ismain}
 
 ################################################################################
 
-function _prepare_build {		#{doredo}
+function _prepare_build {		#{doredo} #{dofast}
 	if ${DOREDO}; then
 		_release_reset					|| return 1
 	fi
@@ -949,12 +949,12 @@ function _prepare_symlinks {		#{isexit} #{doredo}
 
 ################################################################################
 
-function _release_ramfs {		#{ismain} #{doredo}
-	DOREDO="${DOREDO}" _prepare_build	|| return 1
-	DOREDO="false" _release_cpio		|| return 1
-	DOREDO="false" _release_kernel		|| return 1
-	DOREDO="false" _release_grub		|| return 1
-	DOREDO="false" _release_report		|| return 1
+function _release_ramfs {		#{ismain} #{doredo} #{dofast}
+	DOREDO="${DOREDO}" DOFAST="${DOFAST}" _prepare_build	|| return 1
+	DOREDO="false" _release_cpio				|| return 1
+	DOREDO="false" _release_kernel				|| return 1
+	DOREDO="false" _release_grub				|| return 1
+	DOREDO="false" _release_report				|| return 1
 	return 0
 }
 
@@ -1074,7 +1074,7 @@ function release_rootfs_file {
 	return 0
 }
 
-function _release_rootfs {		#{ismain} #{doredo}
+function _release_rootfs {		#{ismain} #{doredo} #{dofast}
 	declare ROOTFS_DEST="${ROOTFS_FILE}"
 	if [[ -n ${1} ]]; then
 		ROOTFS_DEST="${1}" && shift
@@ -1088,7 +1088,7 @@ function _release_rootfs {		#{ismain} #{doredo}
 			DOREDO="false" _prepare_symlinks			|| return 1
 			DOREDO="false" _prepare_packdirs			|| return 1
 		fi
-		DOREDO="false" DOFAST="false" _prepare_build			|| return 1
+		DOREDO="false" DOFAST="${DOFAST}" _prepare_build		|| return 1
 	fi
 	if [[ ! -f ${ROOTFS_DEST} ]]; then
 		${RM}					${CPIO_FILE}		|| return 1
@@ -1104,12 +1104,12 @@ function _release_rootfs {		#{ismain} #{doredo}
 
 ########################################
 
-function release_cpio_nul {
+function release_cpio_nul {		#>>>{dofast}
 	if ${ROOTFS_CPIO}; then
 		if ! ${ROOTFS_TEST}; then
-			_release_rootfs ${_RST}							${CPIO_FILE}.${ROOTFS_NAME}	|| return 1
+			DOREDO="true" DOFAST="${DOFAST}" _release_rootfs			${CPIO_FILE}.${ROOTFS_NAME}	|| return 1
 		else
-			_release_rootfs								${CPIO_FILE}.${ROOTFS_NAME}	|| return 1
+			DOREDO="false" DOFAST="${DOFAST}" _release_rootfs			${CPIO_FILE}.${ROOTFS_NAME}	|| return 1
 		fi
 		(cd ${CPIO_FILE}.${ROOTFS_NAME}.dir && eval find ./ -mindepth 1 -xdev \
 		-print0)									>${CPIO_FILE}.nul		|| return 1
@@ -1157,12 +1157,12 @@ function release_cpio_dir {
 	return 0
 }
 
-function _release_cpio {
+function _release_cpio {		#{dofast}
 	mount_dev_dirs -u						|| return 1
 	${MKDIR} ${_FINAL}						|| return 1
 	if [[ ! -f ${CPIO_FILE} ]]; then
 		${RM} ${_RAMFS}.kernel					|| return 1
-		release_cpio_nul					|| return 1
+		DOFAST="${DOFAST}" release_cpio_nul			|| return 1
 		release_cpio_file					|| return 1
 		release_cpio_dir					|| return 1
 	else
