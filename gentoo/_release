@@ -1050,6 +1050,13 @@ function release_rootfs_cpio_files {
 							${ROOTFS_DEST}.dir${FILE}		|| return 1
 		done
 	done
+	touch						${ROOTFS_DEST}.dir/etc/passwd		\
+							${ROOTFS_DEST}.dir/etc/group		|| return 1
+	chroot						${ROOTFS_DEST}.dir ${ROOTFS_BUSYBOX}	\
+							adduser					\
+		-D -H -h / -u 0 -s ${ROOTFS_SHELL}	root					|| return 1
+	echo -en "${_TITLE}\n${_TITLE}\n" | chroot	${ROOTFS_DEST}.dir ${ROOTFS_BUSYBOX}	\
+							passwd root				|| return 1
 	return 0
 }
 
