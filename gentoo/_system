@@ -205,9 +205,8 @@ fi
 
 ########################################
 
-#VARIABLES[AUTO _RST _ASK _BLD _KRN _CFG]
+#VARIABLES[AUTO _ASK _BLD _KRN _CFG]
 export AUTO=
-export _RST="--reset"
 export _ASK="--ask=y"
 export _BLD="false"
 export _KRN="false"
@@ -545,7 +544,7 @@ function print_info {
 		printf "${PRINTF}" "Initramfs System (Live Install):"		"<auto>"	"(BLD|WRK|TOR|GOS)DIR=/ ${_HEART} {chroot} ${MAKEIT}_install"
 		echo -en "\n"
 		printf "${PRINTF}" "Distribution Targets (Internal Only):"	"<internal>"	"${_HEART} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#]{ismain}.*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
-		printf "${PRINTF}" "Distribution Reset (Internal Only):"	"<internal>"	"${_HEART} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#][{]reset[}].*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	)) ${_RST}"
+		printf "${PRINTF}" "Distribution Reset (Internal Only):"	"<internal>"	"${_HEART} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#]{doredo}.*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
 		echo -en "\n"
 		printf "${PRINTF}" "Distribution Prepare (Internal Only):"	"<internal>"	"${_HEART} {chroot} ${PREPIT}_($(	${SED} -n "s|^function[ ]${PREPIT}_(.+)[ ][{].*$|\1|gp"		${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
 		printf "${PRINTF}" "Distribution Release (Internal Only):"	"<internal>"	"${_HEART} {chroot} ${MAKEIT}_($(	${SED} -n "s|^function[ ]${MAKEIT}_(.+)[ ][{].*$|\1|gp"		${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
