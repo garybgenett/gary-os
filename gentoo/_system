@@ -424,6 +424,10 @@ function clear_environment {
 #NOTE: (TERM=ansi-mono ; tput colors ; dircolors -p | grep -x "TERM ${TERM}")
 #NOTE: OR COMMENT COLOR DECLARATIONS
 
+#NOTE: TRY TO KEEP OUTPUT IN THIS AND ${MAKEIT} SCRIPT TO 80 CHARACTERS WIDE
+#>>>	echo -en ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"
+#>>>	print_info header
+
 function print_info {
 	if ${QUIET}; then
 		return 0
@@ -438,6 +442,10 @@ function print_info {
 	if [[ ${1} == "marker" ]]; then
 		echo -en "${OTHER}"
 		printf "~%.0s" {1..80}
+		echo -en "${RESET}\n"
+	elif [[ ${1} == "header" ]]; then
+		echo -en "${RESET}"
+		printf ">%.0s" {1..80}
 		echo -en "${RESET}\n"
 	elif [[ ${1} == "title" ]]; then
 		echo -en "${NOTES}"
