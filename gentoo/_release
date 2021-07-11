@@ -423,7 +423,7 @@ function common_packdirs_list {
 
 #note: this is called statically in the "_system" script, under the "$_cfg" option
 #note: cross-reference with the "release_install" function any time this changes
-function _release_reset {		#{main}
+function _release_reset {		#{ismain}
 	${RM} ${TARGET}/${CMTFIL}			|| return 1
 	${RM} ${TARGET}/${_GPACK/%.txt}*		|| return 1
 	${RM} ${TARGET}/.gitignore			|| return 1
@@ -449,7 +449,7 @@ function _release_reset {		#{main}
 
 ########################################
 
-function _release_review {		#{main}
+function _release_review {		#{ismain}
 	if ${DO_CHROOT} && [[ -n ${TARGET} ]]; then
 		${_SOUL} ${QUIET_OPT} ${TOOR} -r				|| return 1
 		echo -en "\n"
@@ -955,7 +955,7 @@ function _prepare_symlinks {		#{reset}
 
 ################################################################################
 
-function _release_ramfs {		#{main} #{reset}
+function _release_ramfs {		#{ismain} #{reset}
 	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
 	DOREDO="false" _prepare_build	${RESET}		|| return 1
 	DOREDO="false" _release_cpio				|| return 1
@@ -1081,7 +1081,7 @@ function release_rootfs_file {
 	return 0
 }
 
-function _release_rootfs {		#{main} #{reset}
+function _release_rootfs {		#{ismain} #{reset}
 	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
 	declare ROOTFS_DEST="${ROOTFS_FILE}"
 	if [[ -n ${1} ]]; then
@@ -1373,7 +1373,7 @@ function _release_report {
 ########################################
 
 #note: companion to the "prepare_symlinks" function
-function _release_fetch {		#{main}
+function _release_fetch {		#{ismain}
 	declare FET_DST="${PWD}/${_TITLE}"
 	declare FET_BAS="${_RAMFS/#${_FINAL}\/}"
 	declare FET_SRC="${RSYNC_C} --copy-links --delete ${_FINAL}"
@@ -1417,7 +1417,7 @@ function _release_fetch {		#{main}
 ########################################
 
 #note: companion to the "prepare_packdirs" function
-function _release_unpack {		#{main}
+function _release_unpack {		#{ismain}
 	declare UNPACK="${TARGET}${_GUNPK}"
 	declare DOINST="${TARGET}${_GINST}/${_TITLE}"
 	declare CREGEX+="([a-z]+[${PACKDIRS_CSEP}])?"
@@ -1608,7 +1608,7 @@ function release_install_boot {
 	return 0
 }
 
-function _release_install {		#{main}
+function _release_install {		#{ismain}
 	if [[ ! -d ${_GINST} ]]; then
 		echo -en "\n"
 		echo -en ">>> THIS OPTION REQUIRES THAT THE (${_GINST}) INSTALL DIRECTORY EXISTS <<<\n"
@@ -1623,7 +1623,7 @@ function _release_install {		#{main}
 
 ################################################################################
 
-function _publish_release {		#{main} #{reset}
+function _publish_release {		#{ismain} #{reset}
 	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
 	if [[ -n ${RESET} ]]; then
 		shift
@@ -1657,7 +1657,7 @@ function _publish_prep {
 
 ########################################
 
-function _publish_gitdir {		#{main}
+function _publish_gitdir {		#{ismain}
 #>>>
 #	if [[ -x $(which task 2>/dev/null) ]]; then
 #		declare GIT_RUN="${GIT} --git-dir=${_DOCDIR}.git --work-tree=${_DOCDIR}"
