@@ -737,6 +737,7 @@ function _prepare_config {		#{isexit} #{doredo}
 
 ########################################
 
+#note: cross-reference with the "release_install" function any time this changes
 function _prepare_docdir {		#{dotest}
 	if [[ ! -d ${_G_REPO} ]] || {
 		[[ ! -d ${_G_REPO}/.git ]] &&
@@ -779,11 +780,14 @@ function _prepare_docdir {		#{dotest}
 	${RM}						${TARGET}/.${_TITLE}/build		|| return 1
 	${LN} "/"					${TARGET}/.${_TITLE}/build		|| return 1
 	#note: the configuration files need to match the current state when everything is unpacked
+	#note: except if this is being called by the "release_install" function
+	if [[ ${TARGET} != ${_GINST} ]]; then
 		${SED} -i									\
 			-e "s|^(override DOMODS[[:space:]]+[?][=][ ]).+$|\1${DOMODS}|g"		\
 			-e "s|^(override P[[:space:]]+[?][=][ ]).+$|\1${_PKG}|g"		\
 							${TARGET}/.${_TITLE}/Makefile		|| return 1
 		portage_file				${TARGET}/.${_TITLE}/gentoo		|| return 1
+	fi
 	return 0
 }
 
@@ -1486,6 +1490,7 @@ function _release_unpack {		#{ismain} #{dotest}
 	declare SORTER="-k1.2"
 	#note: doing some other helpful things when in a live filesystem environment
 	#note: cross-reference with the "prepare_docdir" function any time this changes
+	#note: cross-reference with the "release_install" function any time this changes
 	if [[ -z ${TARGET} ]]; then
 		#note: for "release_install" function
 		if [[ ! -d ${_GINST} ]]; then
@@ -1667,27 +1672,42 @@ function _release_unpack {		#{ismain} #{dotest}
 
 #NOTE: CONSULT THE "SYSTEM INSTALLATION" TABLE IN "README" FOR THIS SECTION
 
-#note: compare with the "${_CFG}" option in the "_system" script
-#note: cross-reference with the "release_reset" function any time this changes
+#note: this function is intentionally not in the right order of usage, for readability
+function release_install_live {
+	if [[ -n $(
+		${GREP} "GaryOS" \
+			${_GINST}/etc/issue \
+			${_GINST}/etc/motd \
+			2>/dev/null
+	) ]]; then
+		#note: cross-reference with the "prepare_docdir" function any time this changes
+		#note: cross-reference with the "release_unpack" function any time this changes
+		TARGET="${_GINST}"						prepare_config_issue	|| return 1
+		_G_REPO="${TARGET}/.${_TITLE}" TARGET="${_GINST}" DOTEST="true"	_prepare_docdir		|| return 1
+	fi
+	return 0
+}
+
 function release_install_root {
 	eval ${RSYNC_U} \
 		--one-file-system \
-		--filter="-_/.${_TITLE}" \
-		--filter="-_/_${_TITLE}" \
+		--filter="-_/.${_TITLE}*" \
+		--filter="-_/_${_TITLE}*" \
+		--filter="-_${_GOVLY}" \
+		--filter="-_${_GUNPK}" \
+		--filter="-_${_GINST}" \
 		$(variable_parse SKIPDIRS_GOS	"" "--filter=\"-_" "\"") \
 		$(variable_parse DEVDIRS	"" "--filter=\"-_" "/*\"") \
-		${TARGET}/* ${_GINST}/		|| return 1
-#>>>		${TARGET}/ ${_GINST}		|| return 1
-	${TARGET}${REALDEV} ${_GINST}/dev	|| return 1
-	TARGET="${_GINST}" _release_reset	|| return 1
-	TARGET="${_GINST}" _release_unpack	|| return 1
+		${TARGET}/	${_GINST}	|| return 1
+	${RM}			${_GINST}/dev	|| return 1
+	${MKDIR}		${_GINST}/dev	|| return 1
+	${TARGET}${REALDEV}	${_GINST}/dev	|| return 1
 	return 0
 }
 
 function release_install_boot {
-	declare DEVICE="$(findmnt --noheadings --output SOURCE --target ${_GINST}/boot)"
+	declare DEVICE="$(findmnt --noheadings --output SOURCE --target ${_GINST})"
 	mount-robust --dev				${_GINST}			|| return 1
-	${RSYNC_U} /usr/lib/grub/i386-pc/		${_GINST}/boot/grub		|| return 1
 	chroot ${_GINST} boot-update --verbose						|| return 1
 	mount-robust -u --dev				${_GINST}			|| return 1
 	${SED} -i \
@@ -1698,19 +1718,56 @@ function release_install_boot {
 		-e "s|^([^#].+)$|#\1|g" \
 		-e "s|^(.+)([[:space:]][/][[:space:]])|${DEVICE}\2|g" \
 							${_GINST}/etc/fstab		|| return 1
+	echo -en "\n"
+	echo -en ">>> EVERYTHING FOR THE GRUB BOOTLOADER SHOULD BE PROPERLY CONFIGURED <<<\n"
+	echo -en ">>> THE ROOT FILESYSTEM SHOULD BE VERIFIED/UPDATED IN THE BOOT FILES <<<\n"
+	echo -en "\n"
+	${LL}										\
+							${_GINST}/boot/grub/grub.cfg	\
+							${_GINST}/etc/fstab
+	echo -en "\n"
+	echo -en ">>> IF GRUB IS NOT ALREADY INSTALLED BY THE (GRUB.SH) SCRIPT OR ANOTHER SOURCE <<<\n"
+	echo -en ">>> AND THERE IS NO OTHER BOOLOADER SET UP, EXAMPLES OF NECESSARY STEPS ARE BELOW <<<\n"
+	echo -en "\n"
+	#note: cross-reference with "grub.sh" script
+	echo -en "declare GRUB_INST=\"grub-install --verbose --removable --skip-fs-probe\"\n"
+	echo -en "declare GRUB_DISK=\"$(echo "${DEVICE}" | ${SED} "s|p?[0-9]+$||g")\"\n"
+	echo -en "declare GRUB_PART_EFI=\"3\"\n"
+	echo -en "mount \${GRUB_DISK}\${GRUB_PART_EFI} ${_GINST}/mnt\n"
+	echo -en "GRUB_PLAT=\"i386-pc\"; \${GRUB_INST} --target=\"\${GRUB_PLAT}\" --directory=\"${_GINST}/usr/lib/grub/\${GRUB_PLAT}\" --boot-directory=\"${_GINST}/boot\" \${GRUB_DISK}\n"
+	echo -en "GRUB_PLAT=\"x86_64-efi\"; \${GRUB_INST} --target=\"\${GRUB_PLAT}\" --directory=\"${_GINST}/usr/lib/grub/\${GRUB_PLAT}\" --efi-directory=\"${_GINST}/mnt\" \${GRUB_DISK}\n"
+	echo -en "chroot ${_GINST} grub-mkconfig -o /boot/grub/grub.cfg\n"
+	echo -en "\n"
+	echo -en ">>> THE BOOTLOADER CONFIGURATION AND INSTALLATION IS YOUR RESPONSIBILITY <<<\n"
+	echo -en ">>> DUE TO THE COMPLEXITY AND VARIABLES INVOLVED, AND IS NOT SUPPORTED <<<\n"
+	echo -en "\n"
 	return 0
 }
 
-function _release_install {		#{ismain}
-	if [[ ! -d ${_GINST} ]]; then
+function _release_install {		#{ismain} #{doredo}
+	if [[ -n ${TARGET} ]]; then
 		echo -en "\n"
-		echo -en ">>> THIS OPTION REQUIRES THAT THE (${_GINST}) INSTALL DIRECTORY EXISTS <<<\n"
+		echo -en ">>> THIS OPTION MUST BE RUN INSIDE A LIVE FILESYSTEM ENVIRONMENT <<<\n"
 		echo -en "\n"
 		return 1
 	fi
-	release_install_root	|| return 1
-	release_install_boot	|| return 1
-	${LL} ${_GINST}		|| return 1
+	FILE="$(findmnt --noheadings --output TARGET --target ${_GINST})"
+	if [[ ${FILE} != ${_GINST} ]]; then
+		echo -en "\n"
+		echo -en ">>> THIS OPTION REQUIRES THAT THE (${_GINST}) INSTALL DIRECTORY IS MOUNTED <<<\n"
+		echo -en "\n"
+		return 1
+	fi
+	if ${DOREDO}; then
+		variable_parse PACKDIRS_LIST | sort -u >${_GUNPK}
+		DOTEST="false" _release_unpack	|| return 1
+		_release_reset			|| return 1
+	else
+		release_install_root		|| return 1
+		release_install_live		|| return 1
+		release_install_boot		|| return 1
+	fi
+#>>>	${LL} ${_GINST}		|| return 1
 	return 0
 }
 
