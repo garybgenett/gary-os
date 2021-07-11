@@ -72,6 +72,9 @@ export _TITLE="gary-os"
 
 ########################################
 
+#>>> ${GREP} "{(ROOTFS|DOMODS|DOREDO|DOFAST|DOTEST)}" ${HOME}/setup/gentoo/_system ${HOME}/setup/gentoo/_release
+#>>> ${GREP} "(ROOTFS|DOMODS|DOREDO|DOFAST|DOTEST)[=]" ${HOME}/setup/gentoo/_system ${HOME}/setup/gentoo/_release
+
 #OPTIONS[ROOTFS DOMODS]
 if [[ ${ROOTFS} != true ]] && [[ ${ROOTFS} != false ]]; then ROOTFS="true"; fi
 if [[ ${DOMODS} != true ]] && [[ ${DOMODS} != false ]]; then DOMODS="false"; fi
