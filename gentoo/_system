@@ -1177,7 +1177,9 @@ if [[ ${1} == -i ]]; then
 		fi
 		${MKDIR}				${TARGET}${ARCDIR}					|| EXIT 1
 		${RSYNC_U} ${SOURCE}/stage3-*		${TARGET}${ARCDIR}/					|| EXIT 1
-		tar -pvvx --xz -C ${TARGET} -f		$(ls -t ${TARGET}${ARCDIR}/stage3-generic_64-*.tar.xz	| head -n1) || EXIT 1
+		FILE="$(basename $(ls			${TARGET}${ARCDIR}/stage3-${ESUB}-*.tar.xz		| tail -n1))"
+		${LN} ${FILE}				${TARGET}${ARCDIR}/stage3-${ESUB}.tar.xz		|| EXIT 1
+		tar -pvvx --xz -C ${TARGET} -f		${TARGET}${ARCDIR}/stage3-${ESUB}.tar.xz		|| EXIT 1
 	fi
 	shift
 	mount_dev_dirs												|| EXIT 1
