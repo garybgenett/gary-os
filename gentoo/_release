@@ -437,12 +437,12 @@ function _release_reset {		#{ismain}
 		${RM} ${_RAMFS}*			|| return 1
 	fi
 	if [[ -n ${TARGET} ]]; then
-		_prepare_packdirs ${_RST}		|| return 1
+		DOREDO="true" _prepare_packdirs		|| return 1
 	fi
 	if [[ -n ${TARGET} ]] && [[ ${TARGET} != ${_GINST} ]]; then
 		${RM}		${TARGET}${LDIR}	|| return 1
 		${LN} ${KBAS}	${TARGET}${LDIR}	|| return 1
-		_prepare_config ${_RST}			|| return 1
+		DOREDO="true" _prepare_config		|| return 1
 	fi
 	return 0
 }
@@ -559,11 +559,9 @@ function _release_review {		#{ismain}
 
 ################################################################################
 
-function _prepare_build {		#{reset}
-	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
-	if [[ -n ${RESET} ]]; then
-		shift
-		DOREDO="false" _release_reset			|| return 1
+function _prepare_build {		#{doredo}
+	if ${DOREDO}; then
+		_release_reset					|| return 1
 	fi
 	if ! ${DOFAST}; then
 		DOREDO="false" _prepare_config			|| return 1
@@ -619,8 +617,7 @@ function prepare_config_issue {
 	return 0
 }
 
-function prepare_config_restore {	#>>>{reset}
-	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
+function prepare_config_restore {	#>>>{doredo}
 	declare PACK="${1}" && shift
 	declare PFIL="${1}" && shift
 	declare PSRC="${1}" && shift
@@ -673,7 +670,7 @@ function prepare_config_restore {	#>>>{reset}
 		echo -en "\n"
 		${RM} ${TARGET}${PFIL}						|| return 1
 	fi
-	if [[ -n ${RESET} ]]; then
+	if ${DOREDO}; then
 		${RM} ${TARGET}${PFIL}.${_TITLE}				|| return 1
 	fi
 	return 0
@@ -682,22 +679,21 @@ function prepare_config_restore {	#>>>{reset}
 #NOTE: UPDATE THE "SYSTEM INSTALLATION" TABLE IN "README" WHEN MAKING CHANGES HERE
 
 #note: this is called statically in the "_system" script
-function _prepare_config {		#{reset}
-	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
+function _prepare_config {		#{doredo}
 	#note: these are from the "prepare_config_issue" function above
-	prepare_config_restore ${RESET} sys-apps/baselayout			/etc/issue				|| return 1
-	prepare_config_restore ${RESET} ""					/etc/motd				|| return 1
+	DOREDO="${DOREDO}" prepare_config_restore sys-apps/baselayout		/etc/issue				|| return 1
+	DOREDO="${DOREDO}" prepare_config_restore ""				/etc/motd				|| return 1
 	#note: these are all directly below
-	prepare_config_restore ${RESET} ""					/init					|| return 1
-	prepare_config_restore ${RESET} sys-apps/baselayout			/etc/fstab				fstab			|| return 1
-	prepare_config_restore ${RESET} sys-libs/glibc				/etc/locale.gen				|| return 1
-	prepare_config_restore ${RESET} sys-apps/openrc				/etc/conf.d/hostname			|| return 1
-	prepare_config_restore ${RESET} ""					/etc/profile.d/setterm.sh		|| return 1
-	prepare_config_restore ${RESET} net-wireless/wpa_supplicant		/etc/wpa_supplicant/wpa_supplicant.conf	wpa_supplicant.conf.bz2	|| return 1
-	prepare_config_restore ${RESET} net-misc/openssh			/etc/ssh/sshd_config			|| return 1
-	prepare_config_restore ${RESET} ""					/etc/env.d/90xsession			|| return 1
-	prepare_config_restore ${RESET} x11-wm/dwm				/etc/X11/Sessions/dwm			|| return 1
-	if [[ -n ${RESET} ]]; then
+	DOREDO="${DOREDO}" prepare_config_restore ""				/init					|| return 1
+	DOREDO="${DOREDO}" prepare_config_restore sys-apps/baselayout		/etc/fstab				fstab			|| return 1
+	DOREDO="${DOREDO}" prepare_config_restore sys-libs/glibc		/etc/locale.gen				|| return 1
+	DOREDO="${DOREDO}" prepare_config_restore sys-apps/openrc		/etc/conf.d/hostname			|| return 1
+	DOREDO="${DOREDO}" prepare_config_restore ""				/etc/profile.d/setterm.sh		|| return 1
+	DOREDO="${DOREDO}" prepare_config_restore net-wireless/wpa_supplicant	/etc/wpa_supplicant/wpa_supplicant.conf	wpa_supplicant.conf.bz2	|| return 1
+	DOREDO="${DOREDO}" prepare_config_restore net-misc/openssh		/etc/ssh/sshd_config			|| return 1
+	DOREDO="${DOREDO}" prepare_config_restore ""				/etc/env.d/90xsession			|| return 1
+	DOREDO="${DOREDO}" prepare_config_restore x11-wm/dwm			/etc/X11/Sessions/dwm			|| return 1
+	if ${DOREDO}; then
 		${SED} -i "s|^[#](en_US)|\1|g"					${TARGET}/etc/locale.gen		|| return 1
 		safe_env							/usr/sbin/locale-gen			|| return 1
 		return 0
@@ -835,9 +831,8 @@ function _prepare_linux {
 ########################################
 
 #note: companion to the "release_unpack" function
-function _prepare_packdirs {		#{reset}
-	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
-	if [[ -n ${RESET} ]]; then
+function _prepare_packdirs {		#{doredo}
+	if ${DOREDO}; then
 		${RM} $(variable_parse PACKDIRS_LIST "" "${TARGET}" ".tar.xz")
 		NEXT="$(eval find ${TARGET} \
 			$(variable_parse DEVDIRS "" "\\( -path ${TARGET}" " -prune \\) -o ") \
@@ -919,8 +914,7 @@ function _prepare_packages {
 ########################################
 
 #note: companion to the "release_fetch" function
-function _prepare_symlinks {		#{reset}
-	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
+function _prepare_symlinks {		#{doredo}
 	REP_FILE="$(basename ${REPDIR})"
 	if [[ -z ${TARGET} ]]; then
 		return 0
@@ -932,7 +926,7 @@ function _prepare_symlinks {		#{reset}
 	fi
 	${MKDIR} ${_FINAL}												|| return 1
 	${RM} $(find							${_FINAL} -maxdepth 1 -type l | sort)		|| return 1
-	if [[ -n ${RESET} ]]; then
+	if ${DOREDO}; then
 		return 0
 	fi
 	${LN} --relative ${TARGET}/.${_TITLE}/README.md			${_RAMFS}.${_GREAD}				|| return 1
@@ -955,13 +949,12 @@ function _prepare_symlinks {		#{reset}
 
 ################################################################################
 
-function _release_ramfs {		#{ismain} #{reset}
-	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
-	DOREDO="false" _prepare_build	${RESET}		|| return 1
-	DOREDO="false" _release_cpio				|| return 1
-	DOREDO="false" _release_kernel				|| return 1
-	DOREDO="false" _release_grub				|| return 1
-	DOREDO="false" _release_report				|| return 1
+function _release_ramfs {		#{ismain} #{doredo}
+	DOREDO="${DOREDO}" _prepare_build	|| return 1
+	DOREDO="false" _release_cpio		|| return 1
+	DOREDO="false" _release_kernel		|| return 1
+	DOREDO="false" _release_grub		|| return 1
+	DOREDO="false" _release_report		|| return 1
 	return 0
 }
 
@@ -1081,18 +1074,17 @@ function release_rootfs_file {
 	return 0
 }
 
-function _release_rootfs {		#{ismain} #{reset}
-	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
+function _release_rootfs {		#{ismain} #{doredo}
 	declare ROOTFS_DEST="${ROOTFS_FILE}"
 	if [[ -n ${1} ]]; then
 		ROOTFS_DEST="${1}" && shift
 	fi
-	if [[ -n ${RESET} ]]; then
+	if ${DOREDO}; then
 		${RM}					${ROOTFS_DEST}*		|| return 1
 	fi
 	if [[ ${ROOTFS_DEST} == ${ROOTFS_FILE} ]]; then
 		ROOTFS_CUST="true"
-		if [[ -n ${RESET} ]]; then
+		if ${DOREDO}; then
 			DOREDO="false" _prepare_symlinks			|| return 1
 			DOREDO="false" _prepare_packdirs			|| return 1
 		fi
@@ -1623,17 +1615,15 @@ function _release_install {		#{ismain}
 
 ################################################################################
 
-function _publish_release {		#{ismain} #{reset}
-	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
-	if [[ -n ${RESET} ]]; then
-		shift
-		DOREDO="false" _publish_prep	|| return 1
+function _publish_release {		#{ismain} #{doredo}
+	if ${DOREDO}; then
+		_publish_prep	|| return 1
 	fi
-	DOREDO="false" _publish_gitdir		|| return 1
-	DOREDO="false" _publish_export		|| return 1
-	DOREDO="false" _publish_direct		|| return 1
-	DOREDO="false" _publish_upload		|| return 1
-	DOREDO="false" _publish_report		|| return 1
+	_publish_gitdir		|| return 1
+	_publish_export		|| return 1
+	_publish_direct		|| return 1
+	_publish_upload		|| return 1
+	_publish_report		|| return 1
 	return 0
 }
 
