@@ -941,16 +941,16 @@ function _prepare_symlinks {		#{isexit} #{doredo}
 	if [[ -z ${TARGET} ]]; then
 		return 0
 	fi
+	${RM} $(find ${_FINAL} -maxdepth 1 -type l 2>/dev/null | sort)							|| return 1
+	if ${DOREDO}; then
+		return 0
+	fi
 	if [[ -n ${COMMIT} ]]
 		#note: also doing this in "_system" script on purpose
 		then echo -en "${COMMIT}"				>${TARGET}/${CMTFIL}				|| return 1
 		else ${RM}						${TARGET}/${CMTFIL}				|| return 1
 	fi
 	${MKDIR} ${_FINAL}												|| return 1
-	${RM} $(find							${_FINAL} -maxdepth 1 -type l | sort)		|| return 1
-	if ${DOREDO}; then
-		return 0
-	fi
 	${LN} --relative ${TARGET}/.${_TITLE}/README.md			${_RAMFS}.${_GREAD}				|| return 1
 	${LN} --relative ${TARGET}/${_GPACK}				${_RAMFS}.kernel.${_GPACK}			|| return 1
 	${LN} --relative ${TARGET}/${_GPACK/%.txt/.${ROOTFS_NAME}.txt}	${_RAMFS}.${ROOTFS_NAME}.${_GPACK}		|| return 1
