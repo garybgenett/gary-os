@@ -679,7 +679,7 @@ function prepare_config_restore {	#>>>{doredo}
 #NOTE: UPDATE THE "SYSTEM INSTALLATION" TABLE IN "README" WHEN MAKING CHANGES HERE
 
 #note: this is called statically in the "_system" script
-function _prepare_config {		#{doredo}
+function _prepare_config {		#{isexit} #{doredo}
 	#note: these are from the "prepare_config_issue" function above
 	DOREDO="${DOREDO}" prepare_config_restore sys-apps/baselayout		/etc/issue				|| return 1
 	DOREDO="${DOREDO}" prepare_config_restore ""				/etc/motd				|| return 1
@@ -831,7 +831,7 @@ function _prepare_linux {
 ########################################
 
 #note: companion to the "release_unpack" function
-function _prepare_packdirs {		#{doredo}
+function _prepare_packdirs {		#{isexit} #{doredo}
 	if ${DOREDO}; then
 		${RM} $(variable_parse PACKDIRS_LIST "" "${TARGET}" ".tar.xz")
 		NEXT="$(eval find ${TARGET} \
@@ -914,7 +914,7 @@ function _prepare_packages {
 ########################################
 
 #note: companion to the "release_fetch" function
-function _prepare_symlinks {		#{doredo}
+function _prepare_symlinks {		#{isexit} #{doredo}
 	REP_FILE="$(basename ${REPDIR})"
 	if [[ -z ${TARGET} ]]; then
 		return 0
