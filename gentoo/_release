@@ -234,20 +234,20 @@ declare ROOTFS_ROOT_SRC="${ROOTFS_ROOT/#\/\.//${_TITLE}\/}"
 declare ROOTFS_ROOT_OPT="groot"
 declare ROOTFS_FUNC="rescue"
 
+declare ROOTFS_LDD="${TARGET:+chroot ${TARGET} }ldd"
 declare ROOTFS_BUSYBOX="/bin/busybox"
 declare ROOTFS_COREUTILS="/usr/bin/coreutils"
 declare ROOTFS_BASH="/bin/bash"
 declare ROOTFS_SHELL="/bin/sh"
-declare ROOTFS_LDD="/usr/bin/ldd"
-if [[ -n $(ldd ${TARGET}${ROOTFS_BASH} 2>/dev/null | ${GREP} "not a dynamic executable") ]]; then
-	ROOTFS_SHELL="${ROOTFS_BASH}"
-fi
+#>>>if [[ -n $(${ROOTFS_LDD} ${ROOTFS_BASH} 2>/dev/null | ${GREP} "not a dynamic executable") ]]; then
+#>>>	ROOTFS_SHELL="${ROOTFS_BASH}"
+#>>>fi
 
+#note: update the "#{rootfs}" markers in "sets/gary-os" whenever "$rootfs_utils" changes
+#note: verify accuracy using "${dotest}" in the "release_rootfs_cpio_utils" function
 declare ROOTFS_DIRTREE_PKG="$(ls ${TARGET}${PAKDIR}/sys-apps/baselayout-[.0-9]*.tbz2 2>/dev/null | sort | tail -n1)"
 declare ROOTFS_DIRTREE=""
 declare ROOTFS_UTILS="
-${ROOTFS_BUSYBOX}
-${ROOTFS_COREUTILS}
 ${ROOTFS_BASH}
 \
 /bin/grep
@@ -255,6 +255,7 @@ ${ROOTFS_BASH}
 /bin/tar
 /usr/bin/make
 /usr/bin/rsync
+/usr/bin/tftp
 \
 /bin/mount
 /bin/umount
@@ -973,9 +974,12 @@ function release_rootfs_cpio_tools {
 	fi
 	declare BUSY_DIR="$(dirname			${ROOTFS_BUSYBOX})"
 	${MKDIR}					${ROOTFS_DEST}.dir${BUSY_DIR}		|| return 1
-	(chroot ${ROOTFS_DEST}.dir ${ROOTFS_BUSYBOX}	--install -s ${BUSY_DIR})		|| return 1
+	${RSYNC_U} ${TARGET}${ROOTFS_BUSYBOX}		${ROOTFS_DEST}.dir${ROOTFS_BUSYBOX}	|| return 1
+	chroot						${ROOTFS_DEST}.dir ${ROOTFS_BUSYBOX}	\
+							--install -s ${BUSY_DIR}		|| return 1
 	declare CORE_DIR="$(dirname			${ROOTFS_COREUTILS})"
 	${MKDIR}					${ROOTFS_DEST}.dir${CORE_DIR}		|| return 1
+	${RSYNC_U} ${TARGET}${ROOTFS_COREUTILS}		${ROOTFS_DEST}.dir${ROOTFS_COREUTILS}	|| return 1
 	for FILE in $(
 		${TARGET}${ROOTFS_COREUTILS} --help | ${GREP} "^[[:space:]]*[[]"
 	); do
@@ -987,17 +991,26 @@ function release_rootfs_cpio_tools {
 	return 0
 }
 
-function release_rootfs_cpio_utils {
+function release_rootfs_cpio_utils {	#>>>{dotest}
 	declare ROOTFS_DEST="${ROOTFS_FILE}"
 	if [[ -n ${1} ]]; then
 		ROOTFS_DEST="${1}" && shift
 	fi
+	if ${DOTEST}; then
+		safe_env equery belongs			${ROOTFS_BUSYBOX}			\
+							${ROOTFS_COREUTILS}			\
+							${ROOTFS_UTILS}				|| return 1
+		sort -u					${SETDIR}/${FUNDIR}/sets/${_PKG} | ${GREP} "#{rootfs}"
+	fi
 	for FILE in ${ROOTFS_UTILS}; do
 		${MKDIR}				${ROOTFS_DEST}.dir$(dirname ${FILE})	|| return 1
+		if [[ -L				${ROOTFS_DEST}.dir${FILE}		]]; then
+			${RM}				${ROOTFS_DEST}.dir${FILE}		|| return 1
+		fi
 		${RSYNC_U} --copy-links			${TARGET}${FILE}			\
 							${ROOTFS_DEST}.dir${FILE}		|| return 1
 		for NEXT in $(
-			chroot ${TARGET} ${ROOTFS_LDD}	${FILE}					|
+			${ROOTFS_LDD}			${FILE}					|
 			${GREP} --only-matching		"[/][^[:space:]]+"			\
 		); do
 			${MKDIR}			${ROOTFS_DEST}.dir$(dirname ${NEXT})	|| return 1
@@ -1037,9 +1050,6 @@ function release_rootfs_cpio {		#>>>{dotest}
 	done
 	${MKDIR}					${ROOTFS_DEST}.dir/dev			|| return 1
 	${TARGET}${REALDEV}				${ROOTFS_DEST}.dir/dev			|| return 1
-	#note: need "utils" first to get the "tools" before unpacking them
-	#note: then need "utils" again to overwrite/update key binaries
-	DOTEST="${DOTEST}" release_rootfs_cpio_utils	${ROOTFS_DEST}				|| return 1
 	release_rootfs_cpio_tools			${ROOTFS_DEST}				|| return 1
 	DOTEST="${DOTEST}" release_rootfs_cpio_utils	${ROOTFS_DEST}				|| return 1
 	release_rootfs_cpio_files			${ROOTFS_DEST}				|| return 1
@@ -1056,6 +1066,7 @@ function release_rootfs_cpio {		#>>>{dotest}
 	return 0
 }
 
+#note: this function is intentionally not in the right order of usage, for readability
 function release_rootfs_file {
 	declare ROOTFS_DEST="${ROOTFS_FILE}"
 	if [[ -n ${1} ]]; then
@@ -1090,20 +1101,25 @@ function _release_rootfs {		#{ismain} #{doredo} #{dofast} #{dotest}
 	fi
 	if [[ ${ROOTFS_DEST} == ${ROOTFS_FILE} ]]; then
 		ROOTFS_CUST="true"
-		if ${DOREDO}; then
-			DOREDO="false" _prepare_symlinks			|| return 1
-			DOREDO="false" _prepare_packdirs			|| return 1
+		if [[ ! -f ${ROOTFS_DEST} ]]; then
+			if ${DOREDO}; then
+				DOREDO="${DOREDO}" _prepare_packdirs		|| return 1
+			fi
+			DOREDO="false" DOFAST="${DOFAST}" _prepare_build	|| return 1
+			release_rootfs_file		${ROOTFS_DEST}		|| return 1
+		else
+			common_exists ${FUNCNAME}	${ROOTFS_DEST}*		|| return 1
 		fi
-		DOREDO="false" DOFAST="${DOFAST}" _prepare_build		|| return 1
-	fi
-	if [[ ! -f ${ROOTFS_DEST} ]]; then
-		${RM}					${CPIO_FILE}		|| return 1
-		release_rootfs_file			${ROOTFS_DEST}		|| return 1
-		release_rootfs_cpio			${ROOTFS_DEST}		|| return 1
-	elif ${DOTEST}; then
-		release_rootfs_cpio			${ROOTFS_DEST}		|| return 1
 	else
-		common_exists ${FUNCNAME}		${ROOTFS_DEST}*		|| return 1
+		if [[ ! -f ${ROOTFS_DEST} ]]; then
+			${RM}				${CPIO_FILE}		|| return 1
+			release_rootfs_file		${ROOTFS_DEST}		|| return 1
+			release_rootfs_cpio		${ROOTFS_DEST}		|| return 1
+		elif ${DOTEST}; then
+			release_rootfs_cpio		${ROOTFS_DEST}		|| return 1
+		else
+			common_exists ${FUNCNAME}	${ROOTFS_DEST}*		|| return 1
+		fi
 	fi
 	return 0
 }
@@ -1164,6 +1180,13 @@ function release_cpio_dir {		#>>>{dotest}
 }
 
 function _release_cpio {		#{dofast} #{dotest}
+	if ${DOREDO}; then
+		if ${DOTEST}; then
+			${RM} ${CPIO_FILE}				|| return 1
+		else
+			${RM} ${CPIO_FILE}*				|| return 1
+		fi
+	fi
 	mount_dev_dirs -u						|| return 1
 	${MKDIR} ${_FINAL}						|| return 1
 	if [[ ! -f ${CPIO_FILE} ]]; then
