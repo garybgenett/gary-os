@@ -215,10 +215,6 @@ fi
 ########################################
 
 declare ROOTFS_CPIO="${ROOTFS}"
-declare ROOTFS_TEST="${DOTEST}"
-if ! ${ROOTFS_CPIO}; then
-	ROOTFS_TEST="false"
-fi
 declare ROOTFS_CUST="false"
 
 declare ROOTFS_NAME="rootfs"
@@ -279,7 +275,7 @@ declare ROOTFS_FILE_VARS="
 _TITLE
 _GOVLY
 _GUNPK
-ROOTFS_TEST
+DOTEST
 ROOTFS_NAME
 ROOTFS_TYPE
 ROOTFS_ROOT
@@ -559,14 +555,14 @@ function _release_review {		#{ismain}
 
 ################################################################################
 
-function _prepare_build {		#{doredo} #{dofast}
+function _prepare_build {		#{doredo} #{dofast} #{dotest}
 	if ${DOREDO}; then
 		_release_reset					|| return 1
 	fi
 	if ! ${DOFAST}; then
 		DOREDO="false" _prepare_config			|| return 1
 	fi
-	DOREDO="false" _prepare_docdir				|| return 1
+	DOREDO="false" DOTEST="${DOTEST}" _prepare_docdir	|| return 1
 	DOREDO="false" _prepare_repdir				|| return 1
 	DOREDO="false" _prepare_linux				|| return 1
 	DOREDO="false" _prepare_packdirs			|| return 1
@@ -729,7 +725,7 @@ function _prepare_config {		#{isexit} #{doredo}
 
 ########################################
 
-function _prepare_docdir {
+function _prepare_docdir {		#{dotest}
 	if [[ ! -d ${_G_REPO} ]] || [[ ! -d ${_G_REPO}.git ]]; then
 #>>>		${RM}					${TARGET}/.${_TITLE}			|| return 1
 		return 0
@@ -949,9 +945,9 @@ function _prepare_symlinks {		#{isexit} #{doredo}
 
 ################################################################################
 
-function _release_ramfs {		#{ismain} #{doredo} #{dofast}
+function _release_ramfs {		#{ismain} #{doredo} #{dofast} #{dotest}
 	DOREDO="${DOREDO}" DOFAST="${DOFAST}" _prepare_build	|| return 1
-	DOREDO="false" _release_cpio				|| return 1
+	DOREDO="false" DOTEST="${DOTEST}" _release_cpio		|| return 1
 	DOREDO="false" _release_kernel				|| return 1
 	DOREDO="false" _release_grub				|| return 1
 	DOREDO="false" _release_report				|| return 1
@@ -1019,7 +1015,7 @@ function release_rootfs_cpio_files {
 	return 0
 }
 
-function release_rootfs_cpio {
+function release_rootfs_cpio {		#>>>{dotest}
 	declare ROOTFS_DEST="${ROOTFS_FILE}"
 	if [[ -n ${1} ]]; then
 		ROOTFS_DEST="${1}" && shift
@@ -1033,9 +1029,9 @@ function release_rootfs_cpio {
 	${TARGET}${REALDEV}				${ROOTFS_DEST}.dir/dev			|| return 1
 	#note: need "utils" first to get the "tools" before unpacking them
 	#note: then need "utils" again to overwrite/update key binaries
-	release_rootfs_cpio_utils			${ROOTFS_DEST}				|| return 1
+	DOTEST="${DOTEST}" release_rootfs_cpio_utils	${ROOTFS_DEST}				|| return 1
 	release_rootfs_cpio_tools			${ROOTFS_DEST}				|| return 1
-	release_rootfs_cpio_utils			${ROOTFS_DEST}				|| return 1
+	DOTEST="${DOTEST}" release_rootfs_cpio_utils	${ROOTFS_DEST}				|| return 1
 	release_rootfs_cpio_files			${ROOTFS_DEST}				|| return 1
 	if [[ -d ${ROOTFS_DEST}.dir/lib64 ]]; then
 		${LN} --relative			${ROOTFS_DEST}.dir/lib64		\
@@ -1074,7 +1070,7 @@ function release_rootfs_file {
 	return 0
 }
 
-function _release_rootfs {		#{ismain} #{doredo} #{dofast}
+function _release_rootfs {		#{ismain} #{doredo} #{dofast} #{dotest}
 	declare ROOTFS_DEST="${ROOTFS_FILE}"
 	if [[ -n ${1} ]]; then
 		ROOTFS_DEST="${1}" && shift
@@ -1094,7 +1090,7 @@ function _release_rootfs {		#{ismain} #{doredo} #{dofast}
 		${RM}					${CPIO_FILE}		|| return 1
 		release_rootfs_file			${ROOTFS_DEST}		|| return 1
 		release_rootfs_cpio			${ROOTFS_DEST}		|| return 1
-	elif ${ROOTFS_TEST}; then
+	elif ${DOTEST}; then
 		release_rootfs_cpio			${ROOTFS_DEST}		|| return 1
 	else
 		common_exists ${FUNCNAME}		${ROOTFS_DEST}*		|| return 1
@@ -1104,12 +1100,12 @@ function _release_rootfs {		#{ismain} #{doredo} #{dofast}
 
 ########################################
 
-function release_cpio_nul {		#>>>{dofast}
+function release_cpio_nul {		#>>>{dofast} #>>>{dotest}
 	if ${ROOTFS_CPIO}; then
-		if ! ${ROOTFS_TEST}; then
-			DOREDO="true" DOFAST="${DOFAST}" _release_rootfs			${CPIO_FILE}.${ROOTFS_NAME}	|| return 1
+		if ${DOTEST}; then
+			DOREDO="false" DOFAST="${DOFAST}" DOTEST="${DOTEST}" _release_rootfs	${CPIO_FILE}.${ROOTFS_NAME}	|| return 1
 		else
-			DOREDO="false" DOFAST="${DOFAST}" _release_rootfs			${CPIO_FILE}.${ROOTFS_NAME}	|| return 1
+			DOREDO="true" DOFAST="${DOFAST}" DOTEST="${DOTEST}" _release_rootfs	${CPIO_FILE}.${ROOTFS_NAME}	|| return 1
 		fi
 		(cd ${CPIO_FILE}.${ROOTFS_NAME}.dir && eval find ./ -mindepth 1 -xdev \
 		-print0)									>${CPIO_FILE}.nul		|| return 1
@@ -1143,28 +1139,28 @@ function release_cpio_file {
 	return 0
 }
 
-function release_cpio_dir {
+function release_cpio_dir {		#>>>{dotest}
 	if [[ -n ${TARGET} ]]; then
 		if ! ${ROOTFS_CPIO}; then
 			${RM}			${CPIO_FILE}.dir	|| return 1
 			${MKDIR}		${CPIO_FILE}.dir	|| return 1
 			${CPIO_OUT}		${CPIO_FILE}.dir	|| return 1
 		fi
-		if ! ${ROOTFS_TEST}; then
+		if ! ${DOTEST}; then
 			${XZ} ${CPIO_FILE}	>${CPIO_FILE}.xz	|| return 1
 		fi
 	fi
 	return 0
 }
 
-function _release_cpio {		#{dofast}
+function _release_cpio {		#{dofast} #{dotest}
 	mount_dev_dirs -u						|| return 1
 	${MKDIR} ${_FINAL}						|| return 1
 	if [[ ! -f ${CPIO_FILE} ]]; then
 		${RM} ${_RAMFS}.kernel					|| return 1
-		DOFAST="${DOFAST}" release_cpio_nul			|| return 1
+		DOFAST="${DOFAST}" DOTEST="${DOTEST}" release_cpio_nul	|| return 1
 		release_cpio_file					|| return 1
-		release_cpio_dir					|| return 1
+		DOTEST="${DOTEST}" release_cpio_dir			|| return 1
 	else
 		common_exists ${FUNCNAME} ${CPIO_FILE}*			|| return 1
 	fi
@@ -1409,7 +1405,7 @@ function _release_fetch {		#{ismain}
 ########################################
 
 #note: companion to the "prepare_packdirs" function
-function _release_unpack {		#{ismain}
+function _release_unpack {		#{ismain} #{dotest}
 	declare UNPACK="${TARGET}${_GUNPK}"
 	declare DOINST="${TARGET}${_GINST}/${_TITLE}"
 	declare CREGEX+="([a-z]+[${PACKDIRS_CSEP}])?"
