@@ -26,69 +26,102 @@
 #{FSUPDT} rc-service modules restart	|| true
 #{FSUPDT} rc-service keymaps restart	|| true
 
-#{FSPACK}
+#note: match these up with "release_review" output
+#note: for "release_install" to work correctly, "#{fsexcl}" must be empty
+#{MOD} #{FSKEEP}
+#{FSEXCL}	#{MOD}
 
-#{FSKEEP} docs:/usr/share/doc
-#{FSKEEP} docs:/usr/share/gtk-doc
-#{FSKEEP} docs:/usr/share/info
-#{FSKEEP} docs:/usr/share/man
-#{FSKEEP} docs:/usr/share/texmf-dist
+#note: speed up boot time by only having these in the "#{mod}" build
+#note: size of the default "rootfs" file is not as much of a concern as the in-memory footprint
+#note: this will also keep the "$_gunpk" file and online repository less cluttered
+#{MOD} #{FSPACK} base:/usr/bin
+#{MOD} #{FSPACK} base:/usr/lib32
+#{MOD} #{FSPACK} base:/usr/lib64
+#{MOD} #{FSPACK} base:/usr/libexec
+#{MOD} #{FSPACK} base:/usr/local
+#{MOD} #{FSPACK} base:/usr/sbin
+#{MOD} #{FSPACK} base:/usr/share
 
-#{FSKEEP} base:/lib64/firmware
+#{FSPACK} base:/lib64/modules
+#{FSPACK} base:/lib64/firmware		#{MOD}
+#{MOD} #{FSARCH} base:/lib64/firmware
 
-#{FSKEEP} gcc:/usr/include
-#{FSKEEP} gcc:/usr/libexec/gcc
-#{FSKEEP} gcc:/usr/x86_64-pc-linux-gnu
+#{FSKEEP} docs:/usr/share/doc		#{MOD}
+#{FSKEEP} docs:/usr/share/gtk-doc	#{MOD}
+#{FSKEEP} docs:/usr/share/info		#{MOD}
+#{FSKEEP} docs:/usr/share/man		#{MOD}
+#{FSKEEP} docs:/usr/share/texmf-dist	#{MOD}
+#{MOD} #{FSARCH} docs:/usr/share/doc
+#{MOD} #{FSARCH} docs:/usr/share/gtk-doc
+#{MOD} #{FSARCH} docs:/usr/share/info
+#{MOD} #{FSARCH} docs:/usr/share/man
+#{MOD} #{FSARCH} docs:/usr/share/texmf-dist
 
-#{FSKEEP} emerge:/usr/src/linux
-#{FSKEEP} emerge:/var/db/pkg
-#{FSKEEP} emerge:/var/git/meta-repo
-#{FSARCH} emerge:/var/git/meta-repo.git
+#{FSKEEP} gcc:/usr/include		#{MOD}
+#{FSKEEP} gcc:/usr/libexec/gcc		#{MOD}
+#{FSKEEP} gcc:/usr/x86_64-pc-linux-gnu	#{MOD}
+#{MOD} #{FSARCH} gcc:/usr/include
+#{MOD} #{FSARCH} gcc:/usr/libexec/gcc
+#{MOD} #{FSARCH} gcc:/usr/x86_64-pc-linux-gnu
 
-#{FSARCH} debug:/usr/lib64/debug
-#{FSARCH} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/7.3.1/debug
-#{FSARCH} debug:/usr/src/debug
+#{FSKEEP} emerge:/usr/src/linux		#{MOD}
+#{FSKEEP} emerge:/var/db/pkg		#{MOD}
+#{FSKEEP} emerge:/var/git/meta-repo	#{MOD}
+#{FSARCH} emerge:/var/git/meta-repo.git	#{MOD}
+#{MOD} #{FSARCH} emerge:/usr/src/linux
+#{MOD} #{FSARCH} emerge:/var/db/pkg
+#{MOD} #{FSARCH} emerge:/var/git/meta-repo
+#{MOD} #{FSEXCL} emerge:/var/git/meta-repo.git
 
-#{FSEXCL}
+#note: only removing these from the "#{mod}" build, for size
+#{MOD} #{FSEXCL} debug:/usr/lib64/python2.7/test
+#{MOD} #{FSEXCL} debug:/usr/lib64/python3.6/test
+
+#{FSARCH} debug:/usr/lib64/debug				#{MOD}
+#{FSARCH} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/7.3.1/debug	#{MOD}
+#{FSARCH} debug:/usr/src/debug					#{MOD}
+#{MOD} #{FSEXCL} debug:/usr/lib64/debug
+#{MOD} #{FSEXCL} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/7.3.1/debug
+#{MOD} #{FSEXCL} debug:/usr/src/debug
 
 ########################################
 # toolchain
 
-sys-devel/autoconf
-sys-devel/automake
-sys-devel/binutils
-sys-devel/gcc
+sys-devel/autoconf			#{MOD}
+sys-devel/automake			#{MOD}
+sys-devel/binutils			#{MOD}
+sys-devel/gcc				#{MOD}
 sys-devel/make				#{rootfs}
-sys-devel/patch
+sys-devel/patch				#{MOD}
 sys-libs/glibc
 
-dev-util/ccache
-dev-util/debugedit
-sys-devel/gdb
+dev-util/ccache				#{MOD}
+dev-util/debugedit			#{MOD}
+sys-devel/gdb				#{MOD}
 
 ########################################
 # system
 
-app-misc/ca-certificates
-app-text/iso-codes
-sys-libs/timezone-data
+app-misc/ca-certificates		#{MOD}
+app-text/iso-codes			#{MOD}
+sys-libs/timezone-data			#{MOD}
 
 #>>>app-crypt/efitools			# fails to build as "generic_64"
 sys-apps/busybox			#{rootfs}
 sys-apps/openrc
-sys-apps/sysvinit
+sys-apps/sysvinit			#{MOD}
 sys-boot/boot-update
 sys-boot/efibootmgr
 sys-boot/grub
 sys-boot/os-prober
-sys-boot/syslinux
+sys-boot/syslinux			#{MOD}
 sys-libs/efivar
-sys-power/suspend
-sys-process/runit
+sys-power/suspend			#{MOD}
+sys-process/runit			#{MOD}
 
 sys-apps/gptfdisk
 sys-block/parted
-sys-fs/btrfs-progs		# requires: app-text/asciidoc
+sys-fs/btrfs-progs			#{MOD} # requires: app-text/asciidoc
 sys-fs/cryptsetup
 sys-fs/dosfstools			#{rootfs}
 sys-fs/e2fsprogs			#{rootfs}
@@ -122,16 +155,16 @@ sys-process/lsof
 sys-process/nmon
 sys-process/procps
 sys-process/psmisc
-sys-process/schedtool
+sys-process/schedtool			#{MOD}
 
-app-admin/sysklogd
-app-admin/ulogd
-sys-fs/inotify-tools
+app-admin/sysklogd			#{MOD}
+app-admin/ulogd				#{MOD}
+sys-fs/inotify-tools			#{MOD}
 
 app-admin/pwgen
-app-admin/sudo
+app-admin/sudo				#{MOD}
 sys-libs/cracklib
-sys-libs/pam
+sys-libs/pam				#{MOD}
 
 net-firewall/ebtables
 net-firewall/iptables
@@ -146,137 +179,137 @@ sys-apps/ethtool
 sys-apps/iproute2
 sys-apps/net-tools
 
-net-ftp/lftp
+net-ftp/lftp				#{MOD}
 net-misc/curl
 net-misc/rsync				#{rootfs}
 net-misc/wget
-www-client/elinks
+www-client/elinks			#{MOD}
 www-client/links
-www-client/lynx
+www-client/lynx				#{MOD}
 www-client/w3m
 
-app-misc/screen
+app-misc/screen				#{MOD}
 app-shells/bash				#{rootfs}
-app-shells/bash-completion
-app-shells/bashdb
-sys-apps/kbd
-sys-devel/gettext
+app-shells/bash-completion		#{MOD}
+app-shells/bashdb			#{MOD}
+sys-apps/kbd				#{MOD}
+sys-devel/gettext			#{MOD}
 sys-libs/gpm
 
-app-admin/perl-cleaner
-dev-lang/perl
+app-admin/perl-cleaner			#{MOD}
+dev-lang/perl				#{MOD}
 dev-libs/libpcre
-dev-perl/JSON
-dev-perl/JSON-XS
+dev-perl/JSON				#{MOD}
+dev-perl/JSON-XS			#{MOD}
 
-app-crypt/gnupg
+app-crypt/gnupg				#{MOD}
 dev-libs/openssl
 net-misc/openssh
 
-app-arch/afio
+app-arch/afio				#{MOD}
 app-arch/bzip2
 app-arch/cpio
 app-arch/gzip
-app-arch/lz4
+app-arch/lz4				#{MOD}
 app-arch/p7zip
 app-arch/rar
-app-arch/sharutils
+app-arch/sharutils			#{MOD}
 app-arch/tar				#{rootfs}
 app-arch/unrar
-app-arch/unzip
-app-arch/upx-ucl
-app-arch/xar
+app-arch/unzip				#{MOD}
+app-arch/upx-ucl			#{MOD}
+app-arch/xar				#{MOD}
 app-arch/xz-utils
-app-arch/zip
+app-arch/zip				#{MOD}
 dev-util/xdelta
 
-sys-apps/man-db
-sys-apps/man-pages
-sys-apps/man-pages-posix
-sys-apps/texinfo
+sys-apps/man-db				#{MOD}
+sys-apps/man-pages			#{MOD}
+sys-apps/man-pages-posix		#{MOD}
+sys-apps/texinfo			#{MOD}
 
-app-dicts/aspell-en
-app-text/aspell
+app-dicts/aspell-en			#{MOD}
+app-text/aspell				#{MOD}
 
-#>>>#{MOD} app-editors/gvim		# requires: x11-libs/gtk+
+#>>>app-editors/gvim			#{MOD} # requires: x11-libs/gtk+
 app-editors/nano
-app-editors/nvi
+app-editors/nvi				#{MOD}
 app-editors/vim				# requires: dev-util/ctags -> dev-python/docutils -> dev-python/pygments
 app-editors/vim-core
 app-text/dos2unix
-app-vim/taglist			# requires: dev-util/ctags -> dev-python/docutils -> dev-python/pygments
-app-vim/vim-spell-en
-dev-util/cloc
-#>>>dev-util/indent			# fails to build as "generic_64"
-sys-apps/ed
+app-vim/taglist				#{MOD} # requires: dev-util/ctags -> dev-python/docutils -> dev-python/pygments
+app-vim/vim-spell-en			#{MOD}
+dev-util/cloc				#{MOD}
+#>>>dev-util/indent			#{MOD} # fails to build as "generic_64"
+sys-apps/ed				#{MOD}
 
-app-arch/cabextract
-app-arch/deb2targz
-app-arch/dpkg
-app-arch/rpm
-app-arch/rpm2targz
+app-arch/cabextract			#{MOD}
+app-arch/deb2targz			#{MOD}
+app-arch/dpkg				#{MOD}
+app-arch/rpm				#{MOD}
+app-arch/rpm2targz			#{MOD}
 
 ########################################
 # gentoo
 
-sys-kernel/genkernel
+sys-kernel/genkernel			#{MOD}
 sys-kernel/linux-firmware		# takes up way too much space, but required
 
-app-admin/ego
-app-admin/eselect
-sys-apps/portage
+app-admin/ego				#{MOD}
+app-admin/eselect			#{MOD}
+sys-apps/portage			#{MOD}
 
-app-portage/gentoolkit
-app-shells/gentoo-bashcomp
-app-vim/gentoo-syntax
+app-portage/gentoolkit			#{MOD}
+app-shells/gentoo-bashcomp		#{MOD}
+app-vim/gentoo-syntax			#{MOD}
 
-sys-devel/gcc-config
+sys-devel/gcc-config			#{MOD}
 
 ########################################
 # x11
 
-x11-apps/xrandr				#{MIN}
-x11-base/xorg-drivers			#{MIN}
-x11-base/xorg-server			#{MIN}
-#>>>#{MOD} x11-misc/arandr		# requires: x11-libs/gtk+
+x11-apps/xrandr				#{MOD}
+x11-base/xorg-drivers			#{MOD}
+x11-base/xorg-server			#{MOD}
+#>>>x11-misc/arandr			#{MOD} # requires: x11-libs/gtk+
 
-x11-misc/dmenu				#{MIN}
-x11-wm/dwm				#{MIN}
+x11-misc/dmenu				#{MOD}
+x11-wm/dwm				#{MOD}
 
-x11-terms/rxvt-unicode			#{MIN}
+x11-terms/rxvt-unicode			#{MOD}
 
-x11-apps/xset				#{MIN}
-x11-apps/xsetroot			#{MIN}
-#>>>#{MOD} x11-misc/tabbed		# needed by: www-client/surf
+x11-apps/xset				#{MOD}
+x11-apps/xsetroot			#{MOD}
+#>>>x11-misc/tabbed			#{MOD} # needed by: www-client/surf
 
 ########################################
 # toolkits
 
-dev-vcs/git
-dev-vcs/subversion
+dev-vcs/git				#{MOD}
+dev-vcs/subversion			#{MOD}
 
-dev-lang/python
+dev-lang/python				#{MOD}
 
-dev-db/sqlite
-dev-tcltk/expect			# requires: dev-lang/tcl
+dev-db/sqlite				#{MOD}
+dev-tcltk/expect			#{MOD} # requires: dev-lang/tcl
 
-#>>>#{MOD} x11-libs/gtk+
-#>>>#{MOD} x11-themes/gtk-theme-switch
+#>>>x11-libs/gtk+			#{MOD}
+#>>>x11-themes/gtk-theme-switch		#{MOD}
 
-net-wireless/bluez
-net-wireless/bluez-hcidump
-net-wireless/bluez-tools
+net-wireless/bluez			#{MOD}
+net-wireless/bluez-hcidump		#{MOD}
+net-wireless/bluez-tools		#{MOD}
 
 ########################################
 # utilities
 
-sci-mathematics/calc
+sci-mathematics/calc			#{MOD}
 sys-devel/bc
 
 dev-util/ltrace
 dev-util/strace
-#>>>#{MOD} dev-util/sysprof		# too many dependencies
-sys-apps/kexec-tools
+#>>>dev-util/sysprof			#{MOD} # too many dependencies
+sys-apps/kexec-tools			#{MOD}
 
 sys-apps/hdparm
 sys-block/blktrace
@@ -295,79 +328,79 @@ sys-apps/usbutils
 sys-fs/sysfsutils
 sys-power/acpitool
 
-app-admin/procinfo-ng
-app-admin/sysstat
-app-misc/binwalk
-app-misc/reptyr
-app-text/tree
-sys-apps/dstat
-sys-apps/pv
+app-admin/procinfo-ng			#{MOD}
+app-admin/sysstat			#{MOD}
+app-misc/binwalk			#{MOD}
+app-misc/reptyr				#{MOD}
+app-text/tree				#{MOD}
+sys-apps/dstat				#{MOD}
+sys-apps/pv				#{MOD}
 
-net-analyzer/dnstracer
-net-analyzer/httping
-net-analyzer/iftop
-net-analyzer/iptraf-ng
-net-analyzer/macchanger
-net-analyzer/netcat6
-net-analyzer/nethogs
-net-analyzer/ngrep
+net-analyzer/dnstracer			#{MOD}
+net-analyzer/httping			#{MOD}
+net-analyzer/iftop			#{MOD}
+net-analyzer/iptraf-ng			#{MOD}
+net-analyzer/macchanger			#{MOD}
+net-analyzer/netcat6			#{MOD}
+net-analyzer/nethogs			#{MOD}
+net-analyzer/ngrep			#{MOD}
 net-analyzer/nmap
-net-analyzer/rrdtool
-net-analyzer/snort
+net-analyzer/rrdtool			#{MOD}
+net-analyzer/snort			#{MOD}
 net-analyzer/ssldump
 net-analyzer/tcpdump
-net-analyzer/tcptrace
-net-analyzer/tcptraceroute
-net-analyzer/traceroute
-net-analyzer/vnstat
-net-analyzer/wireshark		# requires: x11-libs/gtk+
-net-dns/avahi
-net-dns/bind-tools
-net-misc/cadaver
-net-misc/iperf
-net-misc/netkit-telnetd
-net-misc/rdate
-net-misc/socat
-net-misc/whois
-net-wireless/kismet		# requires: net-misc/networkmanager, net-libs/libmicrohttpd
+net-analyzer/tcptrace			#{MOD}
+net-analyzer/tcptraceroute		#{MOD}
+net-analyzer/traceroute			#{MOD}
+net-analyzer/vnstat			#{MOD}
+net-analyzer/wireshark			#{MOD} # requires: x11-libs/gtk+
+net-dns/avahi				#{MOD}
+net-dns/bind-tools			#{MOD}
+net-misc/cadaver			#{MOD}
+net-misc/iperf				#{MOD}
+net-misc/netkit-telnetd			#{MOD}
+net-misc/rdate				#{MOD}
+net-misc/socat				#{MOD}
+net-misc/whois				#{MOD}
+net-wireless/kismet			#{MOD} # requires: net-misc/networkmanager, net-libs/libmicrohttpd
 
-net-misc/autossh
-net-misc/pipes
-net-vpn/httptunnel
+net-misc/autossh			#{MOD}
+net-misc/pipes				#{MOD}
+net-vpn/httptunnel			#{MOD}
 
-net-fs/cifs-utils
+net-fs/cifs-utils			#{MOD}
 
 app-forensics/cmospwd
 app-forensics/foremost
 app-forensics/sleuthkit
 
-sys-apps/flashrom		# requires: dev-embedded/libftdi -> dev-libs/boost
+sys-apps/flashrom			#{MOD} # requires: dev-embedded/libftdi -> dev-libs/boost
 
 ########################################
 # servers
 
 net-ftp/tftp-hpa			#{rootfs}
-net-misc/ntp
-net-vpn/openvpn
-net-vpn/tor			# requires: app-text/asciidoc
-net-wireless/hostapd
+net-misc/ntp				#{MOD}
+net-vpn/openvpn				#{MOD}
+net-vpn/tor				#{MOD} # requires: app-text/asciidoc
+net-wireless/hostapd			#{MOD}
 
 ########################################
 # programs
 
-www-client/netsurf		# requires: dev-libs/libnsfb [sdl]
-#>>>#{MOD} www-client/surf		# requires: net-libs/webkit-gtk (x11-libs/gtk+) -> dev-lang/ruby -> dev-ruby/json -> dev-util/ragel -> dev-util/colm -> app-text/asciidoc
+www-client/netsurf			#{MOD} # requires: dev-libs/libnsfb [sdl]
+#>>>www-client/surf			#{MOD} # requires: net-libs/webkit-gtk (x11-libs/gtk+) -> dev-lang/ruby -> dev-ruby/json -> dev-util/ragel -> dev-util/colm -> app-text/asciidoc
 
-#>>>#{MOD} app-text/mupdf
+#>>>app-text/mupdf			#{MOD}
 
-#>>>#{MOD} net-misc/rdesktop
-#>>>#{MOD} net-misc/tigervnc
+#>>>net-misc/rdesktop			#{MOD}
+#>>>net-misc/tigervnc			#{MOD}
 
 ########################################
 # media
 
-app-cdr/cdrtools
-app-cdr/dvd+rw-tools
+app-cdr/cdrtools			#{MOD}
+app-cdr/dvd+rw-tools			#{MOD}
 
 ################################################################################
 # end of file

@@ -260,10 +260,6 @@ games-fps/doom3-mitm			-dedicated
 
 ########################################
 
-#{MOD} net-libs/libproxy		-webkit		# gentoo required
-
-########################################
-
 #{GOS} net-libs/libproxy		-webkit		# gentoo required
 
 #{GOS} app-crypt/mit-krb5		-keyutils	# gentoo required
