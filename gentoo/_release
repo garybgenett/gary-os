@@ -1381,8 +1381,11 @@ function _release_kernel {		#{doredo}
 
 ########################################
 
-function _release_grub {
+function _release_grub {		#{doredo}
 	FILE="${_RAMFS}.grub"
+	if ${DOREDO}; then
+		${RM}				${FILE}*		|| return 1
+	fi
 	if [[ ! -f ${FILE}.tar.xz ]] && [[ ! -f ${FILE}.zip ]]; then
 		${RM}				${FILE}*		|| return 1
 		${MKDIR}			${FILE}			|| return 1
