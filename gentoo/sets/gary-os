@@ -58,7 +58,7 @@ sys-devel/autoconf
 sys-devel/automake
 sys-devel/binutils
 sys-devel/gcc
-sys-devel/make
+sys-devel/make				#{rootfs}
 sys-devel/patch
 sys-libs/glibc
 
@@ -74,7 +74,7 @@ app-text/iso-codes
 sys-libs/timezone-data
 
 #>>>app-crypt/efitools			# fails to build as "generic_64"
-sys-apps/busybox
+sys-apps/busybox			#{rootfs}
 sys-apps/openrc
 sys-apps/sysvinit
 sys-boot/boot-update
@@ -90,28 +90,29 @@ sys-apps/gptfdisk
 sys-block/parted
 sys-fs/btrfs-progs		# requires: app-text/asciidoc
 sys-fs/cryptsetup
-sys-fs/dosfstools
-sys-fs/e2fsprogs
-sys-fs/exfat-utils
+sys-fs/dosfstools			#{rootfs}
+sys-fs/e2fsprogs			#{rootfs}
+sys-fs/exfat-utils			#{rootfs}
 sys-fs/ext3grep
 sys-fs/ext4magic
 sys-fs/extundelete
-sys-fs/fuse-exfat
+sys-fs/fuse				#{rootfs}
+sys-fs/fuse-exfat			#{rootfs}
 sys-fs/mdadm
 sys-fs/mtools
-sys-fs/ntfs3g
+sys-fs/ntfs3g				#{rootfs}
 sys-fs/squashfs-tools
 
 sys-apps/attr
-sys-apps/coreutils
+sys-apps/coreutils			#{rootfs}
 sys-apps/diffutils
 sys-apps/file
 sys-apps/findutils
 sys-apps/gawk
-sys-apps/grep
+sys-apps/grep				#{rootfs}
 sys-apps/less
-sys-apps/sed
-sys-apps/util-linux
+sys-apps/sed				#{rootfs}
+sys-apps/util-linux			#{rootfs}
 sys-apps/which
 
 sys-process/atop
@@ -147,7 +148,7 @@ sys-apps/net-tools
 
 net-ftp/lftp
 net-misc/curl
-net-misc/rsync
+net-misc/rsync				#{rootfs}
 net-misc/wget
 www-client/elinks
 www-client/links
@@ -155,7 +156,7 @@ www-client/lynx
 www-client/w3m
 
 app-misc/screen
-app-shells/bash
+app-shells/bash				#{rootfs}
 app-shells/bash-completion
 app-shells/bashdb
 sys-apps/kbd
@@ -180,7 +181,7 @@ app-arch/lz4
 app-arch/p7zip
 app-arch/rar
 app-arch/sharutils
-app-arch/tar
+app-arch/tar				#{rootfs}
 app-arch/unrar
 app-arch/unzip
 app-arch/upx-ucl
@@ -345,6 +346,7 @@ sys-apps/flashrom		# requires: dev-embedded/libftdi -> dev-libs/boost
 ########################################
 # servers
 
+net-ftp/tftp-hpa			#{rootfs}
 net-misc/ntp
 net-vpn/openvpn
 net-vpn/tor			# requires: app-text/asciidoc
