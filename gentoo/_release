@@ -1393,6 +1393,7 @@ function _release_fetch {		#{ismain}
 			${FET_SRC}/$(common_packdir ${FILE}) ${FET_OUT}	${FET_DST}/					|| return 1
 		done
 		shopt ${LASTPIPE} lastpipe
+		${FET_SRC}/stage3-${ESUB}.tar.xz ${FET_OUT}		${FET_DST}/					|| return 1
 	fi
 	(cd ${FET_DST};
 		echo -en "\n"; ${LL}
