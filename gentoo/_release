@@ -1208,7 +1208,7 @@ function release_cpio_dir {		#>>>{dotest}
 	return 0
 }
 
-function _release_cpio {		#{dofast} #{dotest}
+function _release_cpio {		#{doredo} #{dofast} #{dotest}
 	if ${DOREDO}; then
 		if ${DOTEST}; then
 			${RM} ${CPIO_FILE}				|| return 1
@@ -1265,8 +1265,8 @@ function release_kernel_shmem {
 	variable_parse FSPACK ";" | while read -r FILE; do
 		#note: the "if" subshell is to work around a "lastpipe" error when the last item in the "$fspack" list is excluded
 		if [[ -n $(if {
-			! variable_match FSKEEP FSARCH FSEXCL ";" "${FILE}" &&
-			! variable_match FSKEEP FSARCH FSEXCL ";" "${FILE}" true;
+			! variable_match "FSKEEP FSARCH FSEXCL" ";" "${FILE}" &&
+			! variable_match "FSKEEP FSARCH FSEXCL" ";" "${FILE}" true;
 		}; then
 			echo "true"
 		fi) ]]; then
@@ -1277,6 +1277,7 @@ function release_kernel_shmem {
 				return 1
 			fi
 			declare S_VAL="$(${DU_S} ${TARGET}${FILE}		2>/dev/null | ${SED} "s|[[:space:]].*$||g")"
+			#note: counting them in reverse, so that embedded packdirs get excluded
 			declare S_ADD="$(eval ${DU_S} ${TARGET}${FILE} $(
 				variable_parse FSEXCL | while read -r NEXT; do
 					if [[ ${NEXT/#${FILE}\/} != ${NEXT} ]]; then
@@ -1525,7 +1526,7 @@ function _release_unpack {		#{ismain} #{dotest}
 	if [[ ! -f ${UNPACK} ]]; then
 		shopt -s lastpipe
 		variable_parse FSPACK ";" | while read -r FILE; do
-			if ! variable_match FSKEEP FSARCH FSEXCL ";" "${FILE}"; then
+			if ! variable_match "FSKEEP FSARCH FSEXCL" ";" "${FILE}"; then
 				echo "${FILE}"							>>${UNPACK}		|| return 1
 			fi
 		done
