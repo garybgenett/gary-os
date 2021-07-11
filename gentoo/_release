@@ -1422,8 +1422,8 @@ function _release_report {
 ########################################
 
 #note: companion to the "prepare_symlinks" function
-function _release_fetch {		#{ismain}
-	declare FET_DST="${PWD}/${_TITLE}"
+function _release_fetch {		#{ismain} #{doredo} #{dotest}
+	declare FET_DST="${_TITLE}"
 	declare FET_BAS="${_RAMFS/#${_FINAL}\/}"
 	declare FET_SRC="${RSYNC_C} --copy-links --delete ${_FINAL}"
 	declare FET_OUT=""
@@ -1432,6 +1432,9 @@ function _release_fetch {		#{ismain}
 		FET_OUT="--directory-prefix"
 	fi
 	declare FET_PKG="${FET_DST}/${FET_BAS}.${PACKDIRS_LINK}.${FUNCNAME/#${MAKEIT}_}"
+	if ${DOREDO}; then
+		${RM}							${FET_DST}/*					|| return 1
+	fi
 	${MKDIR}							${FET_DST}					|| return 1
 	${FET_SRC}/${FET_BAS}.grub.zip ${FET_OUT}			${FET_DST}/					|| return 1
 	7z e -aoa \
@@ -1446,7 +1449,10 @@ function _release_fetch {		#{ismain}
 		${FET_SRC}/${FET_BAS}.${FILE}.${_GPACK} ${FET_OUT}	${FET_DST}/					|| return 1
 	done
 	${FET_SRC}/${FET_BAS}.${_GREAD} ${FET_OUT}			${FET_DST}/					|| return 1
-	if [[ ! -s ${FET_PKG} ]]; then
+	if {
+		[[ ! -s ${FET_PKG} ]] &&
+		! ${DOTEST};
+	}; then
 		cat /dev/null						>${FET_PKG}
 	else
 		shopt -s lastpipe
@@ -1460,7 +1466,7 @@ function _release_fetch {		#{ismain}
 		echo -en "\n"; ${LL}
 		echo -en "\n"; ${DU_L} *
 	)
-	echo -en "\n"; ${LL} $(realpath --relative-to ${PWD} ${FET_PKG}); cat ${FET_PKG}
+	echo -en "\n"; ${LL} ${FET_PKG}; cat ${FET_PKG}
 	return 0
 }
 
