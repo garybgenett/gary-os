@@ -70,6 +70,7 @@ sys-fs/exfat-utils
 sys-fs/ext3grep
 sys-fs/ext4magic
 sys-fs/extundelete
+sys-fs/fuse
 sys-fs/fuse-exfat
 sys-fs/mdadm
 sys-fs/mtools
