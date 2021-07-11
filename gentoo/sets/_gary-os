@@ -47,7 +47,7 @@
 # qemu testing: validation
 ########################################
 #
-# rsync -avv -L --filter="-_/sources" --filter="-_/build" root@me.garybgenett.net:/.g/_data/zactive/.setup/gentoo.gary-os/ /.gary-os && \
+# rsync -avv -L --filter="-_/sources" --filter="-_/build" root@server.garybgenett.net:/.g/_data/zactive/.setup/gentoo.gary-os/ /.gary-os && \
 # rsync -avv /.gary-os/gentoo/sets/_gary-os / && \
 # HOME=/.gary-os /_gary-os
 #
@@ -62,9 +62,9 @@
 # HOME=/.gary-os /.gary-os/.bashrc mount-robust /dev/sda1 /.install && \
 # mkdir -pv /.install/.home && \
 # mkdir -pv /.install/gary-os/_packages && \
-# rsync -rvv root@me.garybgenett.net:/.g/.home/ /.install/.home && \
-# rsync -rvv root@me.garybgenett.net:/.g/_data/zactive/.setup/gentoo.gary-os/build/.gary-os-generic_64/_packages/ /.install/gary-os/_packages && \
-# rsync -avv -L --filter="-_/sources" --filter="-_/build" root@me.garybgenett.net:/.g/_data/zactive/.setup/gentoo.gary-os/ /.gary-os
+# rsync -rvv root@server.garybgenett.net:/.g/.home/ /.install/.home && \
+# rsync -rvv root@server.garybgenett.net:/.g/_data/zactive/.setup/gentoo.gary-os/build/.gary-os-generic_64/_packages/ /.install/gary-os/_packages && \
+# rsync -avv -L --filter="-_/sources" --filter="-_/build" root@server.garybgenett.net:/.g/_data/zactive/.setup/gentoo.gary-os/ /.gary-os
 #
 # ifconfig eth0 down && \
 # ping 10.0.0.254
@@ -90,7 +90,7 @@
 # - print_info starter
 #
 # [directories]
-# - declare SAVE_DIR="/${_TITLE}.archive"
+# - declare SAVE_DIR="/_${_TITLE}"
 # - declare FUSE_DST="${SAVE_DIR}/distfiles"
 # - declare FUSE_PAK="${SAVE_DIR}/packages"
 # - declare GRUB_DIR="${SAVE_DIR}/grub"
@@ -102,7 +102,7 @@
 # + declare USB_SOURCE="/dev/sda1"
 # - declare USB_DIST="/gary-os/_distfiles"
 # - declare USB_PACK="/gary-os/_packages"
-# - declare SSH_SOURCE="root@me.garybgenett.net"
+# - declare SSH_SOURCE="root@server.garybgenett.net"
 # - declare SSH_DIST="/.g/_data/_builds/.gary-os.release/_distfiles"
 # - declare SSH_PACK="/.g/_data/_builds/.gary-os.release/_packages"
 # - declare SSH_COPY="/.g/_data/_builds/_gary-os/${_RAMFS/#${TARGET}\/}"
@@ -117,8 +117,8 @@
 #
 # [prepare]
 # <unpack>
-# - mount -o remount,rw,size=6g / && df /
-# - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} unpack
+# - ${SED} -i "s|^[-]|\*|g" /.unpack
+# - make -C ${SETDIR} O=${GOSDIR} P=${GOSPKG} unpack
 # <memory>
 # + ${MKDIR} ${_FINAL} ${_GINST} ${SAVE_DIR}
 # <usb>
@@ -149,6 +149,10 @@
 # + ntpdate -v -b pool.ntp.org
 #
 # [emerge]
+# <unpack>
+# - mount -o remount,rw,size=6g /.overlay && df /
+# - for FILE in ${PACK_DIRS}; do echo "${FILE}" >>${_GUNPK}; done
+# - make -C ${SETDIR} O=${GOSDIR} P=${GOSPKG} unpack
 # <setup>
 # - ${MKDIR} /var/cache/portage/{distfiles,packages}
 # <usb>
@@ -166,13 +170,14 @@
 # + mount-robust -o ${FUSE_PAK} /var/cache/portage/packages ${FUSE_PAK}.ssh
 # <install>
 # - ${SED} -i "s|^(--usepkg=).*$|\1y|g" ${SETDIR}/${FUNDIR}/make.conf ${ETCDIR}/make.conf
-# - make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} QUICKLY="true" doit
+# - make -C ${SETDIR} O=${GOSDIR} P=${GOSPKG} DOFAST="true" doit
 #
 # [xorg]
 # <session>
 # + echo "XSESSION=\"openbox\"" >/etc/env.d/90xsession
 # + env-update
 # <server>
+# + rc-update add dbus default || true
 # + rc-update add xdm default || true
 # + rc-update add spice-vdagent default || true
 # + openrc
@@ -190,7 +195,7 @@
 #
 # [home]
 # <setup>
-# - mount -o remount,rw,size=8g / && df /
+# - mount -o remount,rw,size=8g /.overlay && df /
 # - cd / && ${MKDIR} ${HOME} && ${RM} /root && ${LN} ${HOME} /root && cd -
 # <usb>
 # - ${RSYNC_U} ${_GINST}/.home/ ${HOME}
@@ -241,6 +246,7 @@
 # - rc-update del wpa_supplicant default || true
 # - rc-update del dhcpcd default || true
 # - rc-update del sshd default || true
+# - rc-update del dbus default || true
 # - rc-update del xdm default || true
 # - rc-update del spice-vdagent default || true
 # <swtich>
@@ -257,6 +263,15 @@
 # [sync]
 # + ${HOME}/scripts/_sync mount shadow $(echo "${USB_SOURCE}" | ${SED} -e "s|^.+[/]||g" -e "s|[p]?[0-9]+$||g")
 # + ${HOME}/scripts/_sync archive
+#
+# [virtualbox]
+# + /.gary-os/gentoo/.hacks
+# + ${SED} -i "s|^[-]|\*|g" /.unpack && make -C /.gary-os unpack
+# + mount /dev/sr0 /mnt && cd /mnt && ./VBoxLinuxAdditions.run && cd - && umount /dev/sr0
+# + mkdir -pv /.g/_data && mount -t vboxsf _data /.g/_data
+# + rc-service xdm restart
+# + sleep 5
+# + source /.gary-os/.bashrc && prompt -d -x && xrandr --output Virtual-1 --mode 1440x900
 #
 ########################################
 # build a build
@@ -275,32 +290,28 @@
 #
 # [package]
 # <memory>
-# + mount -o remount,rw,size=20g / && df /
+# + mount -o remount,rw,size=20g /.overlay && df /
 # <disk>
 # + [[ ! -d ${LINX_DIR} ]] && ${RSYNC_U} ${LDIR}.tar.xz $(dirname ${LINX_DIR})/ && common_untar ${LINX_DIR}
 # + [[ ! -d ${META_DIR} ]] && ${RSYNC_U} ${REPDIR}.tar.xz $(dirname ${META_DIR})/ && common_untar ${META_DIR}
 # + [[ -d ${LINX_DIR} ]] && ${RM} ${LDIR} && ${LN} ${LINX_DIR} ${LDIR}
 # + [[ -d ${META_DIR} ]] && ${RM} ${REPDIR} && ${LN} ${META_DIR} ${REPDIR}
 # <build>
-# + make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} clean
-# + make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} release
-# + make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} initrd
-# <minimal>
-# + (GOSPKG="gary-os" && make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} QUICKLY="true" tiny)
-# + ${RM} ${REPDIR}.tar.xz
-# + ${RM} ${LDIR}.tar.xz
-# + (GOSPKG="gary-os" && make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} clean)
-# + (GOSPKG="gary-os" && make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} _release_cpio _release_kernel _release_report) #>>> == release - _prepare_build _release_grub
+# + make -C ${SETDIR} O=${GOSDIR} P=${GOSPKG} clean
+# + make -C ${SETDIR} O=${GOSDIR} P=${GOSPKG} release
+# + make -C ${SETDIR} O=${GOSDIR} P=${GOSPKG} initrd
 # <copy>
 # + ${MKDIR} ${_GINST}/gary-os
-# + ${RSYNC_U} -L ${_RAMFS}.boot.kernel ${_GINST}/gary-os/gary-os.boot.kernel
 # + ${RSYNC_U} -L ${_RAMFS}.kernel ${_GINST}/gary-os/gary-os.kernel
 # + ${RSYNC_U} -L ${_RAMFS}.cpio.xz ${_GINST}/gary-os/gary-os.initrd
-# + ${RSYNC_U} -L ${_RAMFS}.kernel ${SSH_SOURCE}:${SSH_COPY}.minimal.kernel
-# + ${RSYNC_U} -L ${_RAMFS}.cpio.xz ${SSH_SOURCE}:${SSH_COPY}.minimal.initrd
+#
+# [remote]
+# + ${MKDIR} ${_GINST}/gary-os
+# + ${RSYNC_U} -L ${SSH_SOURCE}:${SSH_COPY}.kernel ${_GINST}/gary-os/gary-os.kernel
+# + ${RSYNC_U} -L ${SSH_SOURCE}:${SSH_COPY}.cpio.xz ${_GINST}/gary-os/gary-os.initrd
 #
 # [install]
-# + make -f ${SETDIR}/Makefile O=${GOSDIR} P=${GOSPKG} install
+# + make -C ${SETDIR} O=${GOSDIR} P=${GOSPKG} install
 #
 ########################################
 # complete
@@ -356,11 +367,13 @@
 #{RCUPDT} ln -fsv /usr/share/zoneinfo/US/Pacific /etc/localtime
 #{RCUPDT} ln -fsv /bin/runsvdir /usr/bin/runsvdir
 #{RCUPDT} rc-update add runsvdir default	|| true
+#{RCUPDT} rc-update add dbus default		|| true
 #{RCUPDT} rc-update add xdm default		|| true
 #{RCUPDT} rc-update add spice-vdagent default	|| true
 #{RCUPDT} rc-update show
 
-#{FSUPDT}
+#{FSUPDT} usermod --home /.gary-os --shell /bin/bash root
+
 #{FSPACK}
 
 #{FSKEEP} emerge:/usr/src/linux
