@@ -421,28 +421,28 @@ function common_packdirs_list {
 
 #NOTE: CONSULT THE "SYSTEM INSTALLATION" TABLE IN "README" FOR THIS SECTION
 
-#note: this is called statically in the "_system" script
+#note: this is called statically in the "_system" script, under the "$_cfg" option
 #note: cross-reference with the "release_install" function any time this changes
 function _release_reset {		#{main}
-	${RM} ${TARGET}/${CMTFIL}				|| return 1
-	${RM} ${TARGET}/${_GPACK/%.txt}*			|| return 1
-	${RM} ${TARGET}/.gitignore				|| return 1
+	${RM} ${TARGET}/${CMTFIL}			|| return 1
+	${RM} ${TARGET}/${_GPACK/%.txt}*		|| return 1
+	${RM} ${TARGET}/.gitignore			|| return 1
 	if [[ -n ${TARGET} ]]; then
-		${RM} ${TARGET}/{.,_}${_TITLE}*			|| return 1
+		${RM} ${TARGET}/{.,_}${_TITLE}*		|| return 1
 	fi
 	FILE="$(findmnt --noheadings --output TARGET --target ${_FINAL})"
 	if [[ ${FILE} != ${_FINAL} ]] && [[ ! -L ${_FINAL} ]]; then
-		${RM} ${_FINAL}*				|| return 1
+		${RM} ${_FINAL}*			|| return 1
 	else
-		${RM} ${_RAMFS}*				|| return 1
+		${RM} ${_RAMFS}*			|| return 1
 	fi
 	if [[ -n ${TARGET} ]]; then
-		_prepare_packdirs ${_RST}			|| return 1
+		_prepare_packdirs ${_RST}		|| return 1
 	fi
 	if [[ -n ${TARGET} ]] && [[ ${TARGET} != ${_GINST} ]]; then
-		${RM}		${TARGET}${LDIR}		|| return 1
-		${LN} ${KBAS}	${TARGET}${LDIR}		|| return 1
-		_prepare_config ${_RST}				|| return 1
+		${RM}		${TARGET}${LDIR}	|| return 1
+		${LN} ${KBAS}	${TARGET}${LDIR}	|| return 1
+		_prepare_config ${_RST}			|| return 1
 	fi
 	return 0
 }
@@ -563,17 +563,17 @@ function _prepare_build {		#{reset}
 	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
 	if [[ -n ${RESET} ]]; then
 		shift
-		DOREDO="false" _release_reset	|| return 1
+		DOREDO="false" _release_reset			|| return 1
 	fi
 	if ! ${DOFAST}; then
-		DOREDO="false" _prepare_config	|| return 1
+		DOREDO="false" _prepare_config			|| return 1
 	fi
-	DOREDO="false" _prepare_docdir		|| return 1
-	DOREDO="false" _prepare_repdir		|| return 1
-	DOREDO="false" _prepare_linux		|| return 1
-	DOREDO="false" _prepare_packdirs	|| return 1
-	DOREDO="false" _prepare_packages	|| return 1
-	DOREDO="false" _prepare_symlinks	|| return 1
+	DOREDO="false" _prepare_docdir				|| return 1
+	DOREDO="false" _prepare_repdir				|| return 1
+	DOREDO="false" _prepare_linux				|| return 1
+	DOREDO="false" _prepare_packdirs			|| return 1
+	DOREDO="false" _prepare_packages			|| return 1
+	DOREDO="false" _prepare_symlinks			|| return 1
 	return 0
 }
 
@@ -685,49 +685,49 @@ function prepare_config_restore {	#>>>{reset}
 function _prepare_config {		#{reset}
 	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
 	#note: these are from the "prepare_config_issue" function above
-	prepare_config_restore ${RESET} sys-apps/baselayout		/etc/issue				|| return 1
-	prepare_config_restore ${RESET} ""				/etc/motd				|| return 1
+	prepare_config_restore ${RESET} sys-apps/baselayout			/etc/issue				|| return 1
+	prepare_config_restore ${RESET} ""					/etc/motd				|| return 1
 	#note: these are all directly below
-	prepare_config_restore ${RESET} ""				/init					|| return 1
-	prepare_config_restore ${RESET} sys-apps/baselayout		/etc/fstab				fstab			|| return 1
-	prepare_config_restore ${RESET} sys-libs/glibc			/etc/locale.gen				|| return 1
-	prepare_config_restore ${RESET} sys-apps/openrc			/etc/conf.d/hostname			|| return 1
-	prepare_config_restore ${RESET} ""				/etc/profile.d/setterm.sh		|| return 1
-	prepare_config_restore ${RESET} net-wireless/wpa_supplicant	/etc/wpa_supplicant/wpa_supplicant.conf	wpa_supplicant.conf.bz2	|| return 1
-	prepare_config_restore ${RESET} net-misc/openssh		/etc/ssh/sshd_config			|| return 1
-	prepare_config_restore ${RESET} ""				/etc/env.d/90xsession			|| return 1
-	prepare_config_restore ${RESET} x11-wm/dwm			/etc/X11/Sessions/dwm			|| return 1
+	prepare_config_restore ${RESET} ""					/init					|| return 1
+	prepare_config_restore ${RESET} sys-apps/baselayout			/etc/fstab				fstab			|| return 1
+	prepare_config_restore ${RESET} sys-libs/glibc				/etc/locale.gen				|| return 1
+	prepare_config_restore ${RESET} sys-apps/openrc				/etc/conf.d/hostname			|| return 1
+	prepare_config_restore ${RESET} ""					/etc/profile.d/setterm.sh		|| return 1
+	prepare_config_restore ${RESET} net-wireless/wpa_supplicant		/etc/wpa_supplicant/wpa_supplicant.conf	wpa_supplicant.conf.bz2	|| return 1
+	prepare_config_restore ${RESET} net-misc/openssh			/etc/ssh/sshd_config			|| return 1
+	prepare_config_restore ${RESET} ""					/etc/env.d/90xsession			|| return 1
+	prepare_config_restore ${RESET} x11-wm/dwm				/etc/X11/Sessions/dwm			|| return 1
 	if [[ -n ${RESET} ]]; then
-		${SED} -i "s|^[#](en_US)|\1|g"				${TARGET}/etc/locale.gen		|| return 1
-		safe_env						/usr/sbin/locale-gen			|| return 1
+		${SED} -i "s|^[#](en_US)|\1|g"					${TARGET}/etc/locale.gen		|| return 1
+		safe_env							/usr/sbin/locale-gen			|| return 1
 		return 0
 	fi
 	shopt -s lastpipe
 	variable_parse RCUPDT ";" | while read -r FILE; do
-		eval safe_env						${FILE}					|| return 1
+		eval safe_env							${FILE}					|| return 1
 	done
 	shopt ${LASTPIPE} lastpipe
-	prepare_config_issue											|| return 1
-	${LN} sbin/init							${TARGET}/init				|| return 1
-	${SED} -i "s|^([^#].+)$|#\1|g"					${TARGET}/etc/fstab			|| return 1
-	${RSYNC_C} --copy-links ${ARTDIR}/files/locale.gen		${TARGET}/etc/				|| return 1
-	${SED} -i "s|^(hostname=[\"]?)[^\"]+([\"]?)$|\1${_TITLE}\2|g"	${TARGET}/etc/conf.d/hostname		|| return 1
-	echo -en "setterm -blength 0\n"					>${TARGET}/etc/profile.d/setterm.sh	|| return 1
-	${RSYNC_C} --copy-links ${ARTDIR}/files/wpa_supplicant.conf	${TARGET}/etc/wpa_supplicant/		|| return 1
-	${SED} -i "s|^.*(PermitRootLogin).*$|\1 yes|g"			${TARGET}/etc/ssh/sshd_config		|| return 1
-	echo -en "XSESSION=\"${WINMGR}\"\n"				>${TARGET}/etc/env.d/90xsession		|| return 1
-	FILE=													|| return 1
-		FILE+="xset -b\n"										|| return 1
-		FILE+="xsetroot -mod 3 3 -fg '#000000' -bg '#404040'\n"						|| return 1
-	${SED} -i												\
-		-e "/xset[ ][-]b/d"										\
-		-e "/xsetroot[ ][-]mod/d"									\
-		-e "s|^(exec[ ].*)$|${FILE}\1|g"								\
-									${TARGET}/etc/X11/Sessions/dwm		|| return 1
-	${SED} -i "s|^(.*xsetroot[ ][-]name[ ]).*$|\1\"${WMHELP}\"|g"	${TARGET}/etc/X11/Sessions/dwm		|| return 1
-	safe_env							/usr/sbin/locale-gen			|| return 1
-	safe_env							/usr/sbin/env-update			|| return 1
-	echo -en "${_TITLE}\n${_TITLE}\n" | safe_env			/usr/bin/passwd root			|| return 1
+	prepare_config_issue												|| return 1
+	${LN} sbin/init								${TARGET}/init				|| return 1
+	${SED} -i "s|^([^#].+)$|#\1|g"						${TARGET}/etc/fstab			|| return 1
+	${RSYNC_C} --copy-links ${ARTDIR}/files/locale.gen			${TARGET}/etc/				|| return 1
+	${SED} -i "s|^(hostname=[\"]?)[^\"]+([\"]?)$|\1${_TITLE}\2|g"		${TARGET}/etc/conf.d/hostname		|| return 1
+	echo -en "setterm -blength 0\n"						>${TARGET}/etc/profile.d/setterm.sh	|| return 1
+	${RSYNC_C} --copy-links ${ARTDIR}/files/wpa_supplicant.conf		${TARGET}/etc/wpa_supplicant/		|| return 1
+	${SED} -i "s|^.*(PermitRootLogin).*$|\1 yes|g"				${TARGET}/etc/ssh/sshd_config		|| return 1
+	echo -en "XSESSION=\"${WINMGR}\"\n"					>${TARGET}/etc/env.d/90xsession		|| return 1
+	FILE=														|| return 1
+		FILE+="xset -b\n"											|| return 1
+		FILE+="xsetroot -mod 3 3 -fg '#000000' -bg '#404040'\n"							|| return 1
+	${SED} -i													\
+		-e "/xset[ ][-]b/d"											\
+		-e "/xsetroot[ ][-]mod/d"										\
+		-e "s|^(exec[ ].*)$|${FILE}\1|g"									\
+										${TARGET}/etc/X11/Sessions/dwm		|| return 1
+	${SED} -i "s|^(.*xsetroot[ ][-]name[ ]).*$|\1\"${WMHELP}\"|g"		${TARGET}/etc/X11/Sessions/dwm		|| return 1
+	safe_env								/usr/sbin/locale-gen			|| return 1
+	safe_env								/usr/sbin/env-update			|| return 1
+	echo -en "${_TITLE}\n${_TITLE}\n" | safe_env				/usr/bin/passwd root			|| return 1
 	return 0
 }
 
@@ -735,30 +735,32 @@ function _prepare_config {		#{reset}
 
 function _prepare_docdir {
 	if [[ ! -d ${_G_REPO} ]] || [[ ! -d ${_G_REPO}.git ]]; then
-#>>>		${RM}							${TARGET}/.${_TITLE}			|| return 1
+#>>>		${RM}					${TARGET}/.${_TITLE}			|| return 1
 		return 0
 	fi
-	${MKDIR}							${TARGET}/.${_TITLE}			|| return 1
+	${MKDIR}					${TARGET}/.${_TITLE}			|| return 1
 	if ${DOTEST} && {
 		[[ -s ${SETDIR}/.gitignore ]] &&
 		[[ -s ${SETDIR}/Makefile ]];
 	}; then
-		eval ${RSYNC_U} --copy-links --delete-excluded							\
-			--filter="-_/.git"									\
-			--filter="P_/.git"									\
+		eval ${RSYNC_U} --copy-links --delete-excluded					\
+			--filter="-_/.git"							\
+			--filter="P_/.git"							\
 			$(${GREP} -v -e "^[#]" -e "^$" ${SETDIR}/.gitignore | while read -r FILE; do
 				echo "--filter=\"-_${FILE/%\/}\""
-			done)											\
-			${SETDIR}/					${TARGET}/.${_TITLE}			|| return 1
+			done)									\
+			${SETDIR}/			${TARGET}/.${_TITLE}			|| return 1
 	else
-		${RSYNC_U} --filter="-_/.git" ${_G_REPO}/		${TARGET}/.${_TITLE}			|| return 1
+		${RSYNC_U}									\
+			--filter="-_/.git"							\
+			${_G_REPO}/			${TARGET}/.${_TITLE}			|| return 1
 	fi
-	${RSYNC_U} ${_G_REPO}.git/					${TARGET}/.${_TITLE}/.git		|| return 1
-	${SED} -i "/worktree[ ][=]/d"					${TARGET}/.${_TITLE}/.git/config	|| return 1
-	${RM}								${TARGET}/.${_TITLE}/build		|| return 1
-	${LN} "/"							${TARGET}/.${_TITLE}/build		|| return 1
+	${RSYNC_U} ${_G_REPO}.git/			${TARGET}/.${_TITLE}/.git		|| return 1
+	${SED} -i "/worktree[ ][=]/d"			${TARGET}/.${_TITLE}/.git/config	|| return 1
+	${RM}						${TARGET}/.${_TITLE}/build		|| return 1
+	${LN} "/"					${TARGET}/.${_TITLE}/build		|| return 1
 	#note: the configuration files need to match the current state when everything is unpacked
-	portage_file							${TARGET}/.${_TITLE}/gentoo		|| return 1
+	portage_file					${TARGET}/.${_TITLE}/gentoo		|| return 1
 	#note: same with the selected package set in the makefile
 	${SED} -i "s|^(override P[[:space:]]+[?][=][ ]).+$|\1${_PKG}|g"	${TARGET}/.${_TITLE}/Makefile		|| return 1
 	return 0
@@ -955,36 +957,15 @@ function _prepare_symlinks {		#{reset}
 
 function _release_ramfs {		#{main} #{reset}
 	declare RESET= ; if [[ ${1} == ${_RST} ]]; then RESET="${_RST}" && shift; elif ${DOREDO}; then RESET="${_RST}"; fi
-	DOREDO="false" _prepare_build	${RESET}	|| return 1
-	DOREDO="false" _release_cpio			|| return 1
-	DOREDO="false" _release_kernel			|| return 1
-	DOREDO="false" _release_grub			|| return 1
-	DOREDO="false" _release_report			|| return 1
+	DOREDO="false" _prepare_build	${RESET}		|| return 1
+	DOREDO="false" _release_cpio				|| return 1
+	DOREDO="false" _release_kernel				|| return 1
+	DOREDO="false" _release_grub				|| return 1
+	DOREDO="false" _release_report				|| return 1
 	return 0
 }
 
 ########################################
-
-function release_rootfs_cpio_utils {
-	declare ROOTFS_DEST="${ROOTFS_FILE}"
-	if [[ -n ${1} ]]; then
-		ROOTFS_DEST="${1}" && shift
-	fi
-	for FILE in ${ROOTFS_UTILS}; do
-		${MKDIR}				${ROOTFS_DEST}.dir$(dirname ${FILE})	|| return 1
-		${RSYNC_U} --copy-links			${TARGET}${FILE}			\
-							${ROOTFS_DEST}.dir${FILE}		|| return 1
-		for NEXT in $(
-			chroot ${TARGET} ${ROOTFS_LDD}	${FILE}					|
-			${GREP} --only-matching		"[/][^[:space:]]+"			\
-		); do
-			${MKDIR}			${ROOTFS_DEST}.dir$(dirname ${NEXT})	|| return 1
-			${RSYNC_U} --copy-links		${TARGET}${NEXT}			\
-							${ROOTFS_DEST}.dir${NEXT}		|| return 1
-		done
-	done
-	return 0
-}
 
 function release_rootfs_cpio_tools {
 	declare ROOTFS_DEST="${ROOTFS_FILE}"
@@ -1003,6 +984,27 @@ function release_rootfs_cpio_tools {
 							${ROOTFS_DEST}.dir${BUSY_DIR}/${FILE}	|| return 1
 		${LN} --relative			${ROOTFS_DEST}.dir${ROOTFS_COREUTILS}	\
 							${ROOTFS_DEST}.dir${CORE_DIR}/${FILE}	|| return 1
+	done
+	return 0
+}
+
+function release_rootfs_cpio_utils {
+	declare ROOTFS_DEST="${ROOTFS_FILE}"
+	if [[ -n ${1} ]]; then
+		ROOTFS_DEST="${1}" && shift
+	fi
+	for FILE in ${ROOTFS_UTILS}; do
+		${MKDIR}				${ROOTFS_DEST}.dir$(dirname ${FILE})	|| return 1
+		${RSYNC_U} --copy-links			${TARGET}${FILE}			\
+							${ROOTFS_DEST}.dir${FILE}		|| return 1
+		for NEXT in $(
+			chroot ${TARGET} ${ROOTFS_LDD}	${FILE}					|
+			${GREP} --only-matching		"[/][^[:space:]]+"			\
+		); do
+			${MKDIR}			${ROOTFS_DEST}.dir$(dirname ${NEXT})	|| return 1
+			${RSYNC_U} --copy-links		${TARGET}${NEXT}			\
+							${ROOTFS_DEST}.dir${NEXT}		|| return 1
+		done
 	done
 	return 0
 }
@@ -1086,24 +1088,24 @@ function _release_rootfs {		#{main} #{reset}
 		ROOTFS_DEST="${1}" && shift
 	fi
 	if [[ -n ${RESET} ]]; then
-		${RM}						${ROOTFS_DEST}*	|| return 1
+		${RM}					${ROOTFS_DEST}*		|| return 1
 	fi
 	if [[ ${ROOTFS_DEST} == ${ROOTFS_FILE} ]]; then
 		ROOTFS_CUST="true"
 		if [[ -n ${RESET} ]]; then
-			DOREDO="false" _prepare_symlinks	${RESET}	|| return 1
-			DOREDO="false" _prepare_packdirs	${RESET}	|| return 1
+			DOREDO="false" _prepare_symlinks			|| return 1
+			DOREDO="false" _prepare_packdirs			|| return 1
 		fi
 		DOREDO="false" DOFAST="false" _prepare_build			|| return 1
 	fi
 	if [[ ! -f ${ROOTFS_DEST} ]]; then
-		${RM}						${CPIO_FILE}	|| return 1
-		release_rootfs_file				${ROOTFS_DEST}	|| return 1
-		release_rootfs_cpio				${ROOTFS_DEST}	|| return 1
+		${RM}					${CPIO_FILE}		|| return 1
+		release_rootfs_file			${ROOTFS_DEST}		|| return 1
+		release_rootfs_cpio			${ROOTFS_DEST}		|| return 1
 	elif ${ROOTFS_TEST}; then
-		release_rootfs_cpio				${ROOTFS_DEST}	|| return 1
+		release_rootfs_cpio			${ROOTFS_DEST}		|| return 1
 	else
-		common_exists ${FUNCNAME}			${ROOTFS_DEST}*	|| return 1
+		common_exists ${FUNCNAME}		${ROOTFS_DEST}*		|| return 1
 	fi
 	return 0
 }
@@ -1113,25 +1115,25 @@ function _release_rootfs {		#{main} #{reset}
 function release_cpio_nul {
 	if ${ROOTFS_CPIO}; then
 		if ! ${ROOTFS_TEST}; then
-			_release_rootfs ${_RST}			${CPIO_FILE}.${ROOTFS_NAME}	|| return 1
+			_release_rootfs ${_RST}							${CPIO_FILE}.${ROOTFS_NAME}	|| return 1
 		else
-			_release_rootfs				${CPIO_FILE}.${ROOTFS_NAME}	|| return 1
+			_release_rootfs								${CPIO_FILE}.${ROOTFS_NAME}	|| return 1
 		fi
 		(cd ${CPIO_FILE}.${ROOTFS_NAME}.dir && eval find ./ -mindepth 1 -xdev \
-		-print0)					>${CPIO_FILE}.nul		|| return 1
+		-print0)									>${CPIO_FILE}.nul		|| return 1
 	else
 		(cd ${TARGET} && eval find ./ -mindepth 1 -xdev \
 			$(for FILE in $(
 				variable_parse SKIPDIRS | ${SED} \
-								-e "s|\*|\\\*|g" \
-				); do				echo "\\( -path .${FILE} -prune \\) -o"; done
+					-e "s|\*|\\\*|g" \
+				); do echo "\\( -path .${FILE} -prune \\) -o"; done
 			) \
-		-print0)					>${CPIO_FILE}.nul		|| return 1
-		${RM}						${TARGET}/tmp/dev		|| return 1
-		${MKDIR}					${TARGET}/tmp/dev		|| return 1
-		${TARGET}${REALDEV}				${TARGET}/tmp/dev		|| return 1
-		(cd ${TARGET}/tmp && find ./dev -print0)	>>${CPIO_FILE}.nul		|| return 1
-		${RM}						${TARGET}/tmp/dev		|| return 1
+		-print0)									>${CPIO_FILE}.nul		|| return 1
+		${RM}										${TARGET}/tmp/dev		|| return 1
+		${MKDIR}									${TARGET}/tmp/dev		|| return 1
+		${TARGET}${REALDEV}								${TARGET}/tmp/dev		|| return 1
+		(cd ${TARGET}/tmp && find ./dev -print0)					>>${CPIO_FILE}.nul		|| return 1
+		${RM}										${TARGET}/tmp/dev		|| return 1
 	fi
 	return 0
 }
@@ -1164,15 +1166,15 @@ function release_cpio_dir {
 }
 
 function _release_cpio {
-	mount_dev_dirs -u				|| return 1
-	${MKDIR} ${_FINAL}				|| return 1
+	mount_dev_dirs -u						|| return 1
+	${MKDIR} ${_FINAL}						|| return 1
 	if [[ ! -f ${CPIO_FILE} ]]; then
-		${RM} ${_RAMFS}.kernel			|| return 1
-		release_cpio_nul			|| return 1
-		release_cpio_file			|| return 1
-		release_cpio_dir			|| return 1
+		${RM} ${_RAMFS}.kernel					|| return 1
+		release_cpio_nul					|| return 1
+		release_cpio_file					|| return 1
+		release_cpio_dir					|| return 1
 	else
-		common_exists ${FUNCNAME} ${CPIO_FILE}*	|| return 1
+		common_exists ${FUNCNAME} ${CPIO_FILE}*			|| return 1
 	fi
 	return 0
 }
