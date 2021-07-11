@@ -435,6 +435,7 @@ function _release_reset {		#{ismain}
 		${RM} ${TARGET}/_${_TITLE}*		|| return 1
 	fi
 	#note: checking if the output directory is a mounted filesystem or symlink
+	#note: this is created in the "release_unpack" function
 	FILE="$(findmnt --noheadings --output TARGET --target ${_FINAL})"
 	if [[ ${FILE} != ${_FINAL} ]] && [[ ! -L ${_FINAL} ]]; then
 		${RM} ${_FINAL}				|| return 1
@@ -759,12 +760,14 @@ function _prepare_docdir {		#{dotest}
 			G_REPO_OPT="--copy-links"
 		fi
 	fi
+	#note: cross-reference with the "release_unpack" function any time this changes
 	eval ${RSYNC_U} ${G_REPO_OPT} --delete-excluded						\
 		--filter="-_/.git"								\
 		--filter="P_/.git"								\
 		$(${GREP} -v -e "^[#]" -e "^$" ${SETDIR}/.gitignore | while read -r FILE; do
 			echo "--filter=\"-_${FILE/%\/}\""
 		done)										\
+		--filter="-_/build.${_GINST/#\/.}"						\
 		${G_REPO_SRC}/				${TARGET}/.${_TITLE}			|| return 1
 	if [[ -d ${_G_REPO}/.git ]]; then
 		${RSYNC_U} ${_G_REPO}/.git/		${TARGET}/.${_TITLE}/.git		|| return 1
@@ -1422,6 +1425,7 @@ function _release_report {
 ########################################
 
 #note: companion to the "prepare_symlinks" function
+#note: also maps to the "release_unpack" function
 function _release_fetch {		#{ismain} #{doredo} #{dotest}
 	declare FET_DST="${_TITLE}"
 	declare FET_BAS="${_RAMFS/#${_FINAL}\/}"
@@ -1480,6 +1484,39 @@ function _release_unpack {		#{ismain} #{dotest}
 	declare FREGEX="(([[:space:]]+[(]).*([)]))?"
 	declare PRINTF="%-${PACKDIRS_PRNT}.${PACKDIRS_PRNT}s %s\n"
 	declare SORTER="-k1.2"
+	#note: doing some other helpful things when in a live filesystem environment
+	#note: cross-reference with the "prepare_docdir" function any time this changes
+	if [[ -z ${TARGET} ]]; then
+		#note: for "release_install" function
+		if [[ ! -d ${_GINST} ]]; then
+			${RM}		${_GINST}								|| return 1
+			${MKDIR}	${_GINST}								|| return 1
+		fi
+		#note: for all "release_*" functions
+		if [[ ! -d ${_FINAL} ]]; then
+			${RM}		${_FINAL}								|| return 1
+#>>>			${MKDIR}	${_GINST}${_FINAL/#\/./\/}						|| return 1
+			${LN}		${_GINST}${_FINAL/#\/./\/}	${_FINAL}				|| return 1
+		fi
+		#note: for mapping between the "release_fetch" function and this one
+		if [[ ! -d /.${_TITLE}/${_TITLE} ]]; then
+			${RM}		/.${_TITLE}/${_TITLE}							|| return 1
+#>>>			${MKDIR}	${DOINST}								|| return 1
+			${LN}		${DOINST}			/.${_TITLE}/${_TITLE}			|| return 1
+		fi
+		#note: set the "makefile" to use "$_title" as the "$source" by default
+		if [[ ! -d /.${_TITLE}/sources ]]; then
+			${RM}		/.${_TITLE}/sources							|| return 1
+#>>>			${MKDIR}	/.${_TITLE}/${_TITLE}							|| return 1
+#>>>			${LN}		/.${_TITLE}/${_TITLE}		/.${_TITLE}/sources			|| return 1
+			${LN}		${_TITLE}			/.${_TITLE}/sources			|| return 1
+		fi
+		#note: dummy pointer to set the "makefile" to use "$_ginst" as the "$target" by default
+		if [[ ! -L /.${_TITLE}/build.${_GINST/#\/.} ]]; then
+			${RM}		/.${_TITLE}/build.${_GINST/#\/.}					|| return 1
+			${LN}		${_GINST}			/.${_TITLE}/build.${_GINST/#\/.}	|| return 1
+		fi
+	fi
 	if [[ ! -f ${UNPACK} ]]; then
 		shopt -s lastpipe
 		variable_parse FSPACK ";" | while read -r FILE; do
