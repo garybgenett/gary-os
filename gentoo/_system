@@ -546,6 +546,7 @@ function print_info {
 		printf "${PRINTF}" "Distribution Targets (Internal Only):"	"<internal>"	"${_HEART} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#]{ismain}.*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
 		printf "${PRINTF}" "Distribution Reset (Internal Only):"	"<internal>"	"${_HEART} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#]{doredo}.*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
 		printf "${PRINTF}" "Distribution Reset & Exit (Internal Only):"	"<internal>"	"${_HEART} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#]{isexit}.*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
+		printf "${PRINTF}" "Distribution Fast (Internal Only):"		"<internal>"	"${_HEART} [{chroot}] ($(		${SED} -n "s|^function[ ](.+)[ ][{].*[#]{dofast}.*$|\1|gp"	${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
 		echo -en "\n"
 		printf "${PRINTF}" "Distribution Prepare (Internal Only):"	"<internal>"	"${_HEART} {chroot} ${PREPIT}_($(	${SED} -n "s|^function[ ]${PREPIT}_(.+)[ ][{].*$|\1|gp"		${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
 		printf "${PRINTF}" "Distribution Release (Internal Only):"	"<internal>"	"${_HEART} {chroot} ${MAKEIT}_($(	${SED} -n "s|^function[ ]${MAKEIT}_(.+)[ ][{].*$|\1|gp"		${SETDIR}/${FUNDIR}/${MAKEIT} | tr '\n' '|' | ${SED} "s|[|]*$||g"	))"
