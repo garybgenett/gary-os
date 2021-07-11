@@ -426,26 +426,30 @@ function common_packdirs_list {
 #note: this is called statically in the "_system" script, under the "$_cfg" option
 #note: cross-reference with the "release_install" function any time this changes
 function _release_reset {		#{ismain}
+	${RM} ${TARGET}/.gitignore			|| return 1
 	${RM} ${TARGET}/${CMTFIL}			|| return 1
 	${RM} ${TARGET}/${_GPACK/%.txt}*		|| return 1
-	${RM} ${TARGET}/.gitignore			|| return 1
 	if [[ -n ${TARGET} ]]; then
-		${RM} ${TARGET}/{.,_}${_TITLE}*		|| return 1
+		${RM} ${TARGET}/.${_TITLE}*		|| return 1
+		${RM} ${TARGET}/_${_TITLE}*		|| return 1
 	fi
+	#note: checking if the output directory is a mounted filesystem or symlink
 	FILE="$(findmnt --noheadings --output TARGET --target ${_FINAL})"
 	if [[ ${FILE} != ${_FINAL} ]] && [[ ! -L ${_FINAL} ]]; then
-		${RM} ${_FINAL}*			|| return 1
+		${RM} ${_FINAL}				|| return 1
 	else
+		${RM} ${_EAMARK}			|| return 1
+		${RM} ${_FINAL}/stage3-*		|| return 1
+		${RM} ${_FINAL}/_$(basename ${DSTDIR})	|| return 1
+		${RM} ${_FINAL}/_$(basename ${PAKDIR})	|| return 1
 		${RM} ${_RAMFS}*			|| return 1
 	fi
-	if [[ -n ${TARGET} ]]; then
-		DOREDO="true" _prepare_packdirs		|| return 1
-	fi
-	if [[ -n ${TARGET} ]] && [[ ${TARGET} != ${_GINST} ]]; then
-		${RM}		${TARGET}${LDIR}	|| return 1
-		${LN} ${KBAS}	${TARGET}${LDIR}	|| return 1
-		DOREDO="true" _prepare_config		|| return 1
-	fi
+	#note: all "prepare_*" functions that "#{isexit}" on "${doredo}"
+	DOREDO="true" _prepare_config			|| return 1
+	DOREDO="true" _prepare_packdirs			|| return 1
+	DOREDO="true" _prepare_symlinks			|| return 1
+	${RM}		${TARGET}${LDIR}		|| return 1
+	${LN} ${KBAS}	${TARGET}${LDIR}		|| return 1
 	return 0
 }
 
