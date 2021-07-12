@@ -259,17 +259,37 @@ echo -en "\n"
 
 ########################################
 
-echo -en "verifying results..."
+echo -en "performing checks..."
 
-cat /dev/null >${GENDIR}/+okay
+cat /dev/null						>${GENDIR}/+checks 2>&1
+
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
+echo -en "[directory]"					>>${GENDIR}/+checks 2>&1
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
+${LL} ${GENDIR}						>>${GENDIR}/+checks 2>&1
+echo -en "."
+
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
+echo -en "[python]"					>>${GENDIR}/+checks 2>&1
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
+${GREP} -o "[^-(]python[0-9][_][0-9]" ${GENDIR}/.emerge |
+	${SED} "s|^.||g" |
+	sort -r |
+	uniq -c |
+	cat						>>${GENDIR}/+checks 2>&1
+echo -en "."
 
 for TOKEN in ${GENDIR}/*.OKAY; do
-	echo -e "\n[${TOKEN/%\.OKAY}]" >>${GENDIR}/+okay
-	diff ${DIFF_OPTS} ${TOKEN} ${TOKEN/%\.OKAY} >>${GENDIR}/+okay
+	echo -en "\n"					>>${GENDIR}/+checks 2>&1
+	echo -en "[${TOKEN/%\.OKAY}]"			>>${GENDIR}/+checks 2>&1
+	echo -en "\n"					>>${GENDIR}/+checks 2>&1
+	diff ${DIFF_OPTS} ${TOKEN} ${TOKEN/%\.OKAY}	>>${GENDIR}/+checks 2>&1
 done
 echo -en "."
 
-echo -e "\n[emerge]" >>${GENDIR}/+okay
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
+echo -en "[emerge]"					>>${GENDIR}/+checks 2>&1
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
 ${GREP} -v \
 	-e "^$" \
 	-e "^PORTAGE_BZIP2_COMMAND[ ]" \
@@ -281,29 +301,7 @@ ${GREP} -v \
 	-e "^Fetch Restriction[:][ ]" \
 	-e "^[ ][*][ ]IMPORTANT: [0-9]+ news items need reading for repository" \
 	-e "^[ ][*][ ]Use eselect news read to view new items" \
-	${GENDIR}/.emerge >>${GENDIR}/+okay
-echo -en "."
-
-echo -en "\n"
-
-########################################
-
-echo -en "performing checks..."
-
-cat /dev/null						>${GENDIR}/+checks 2>&1
-
-echo -en "\n"						>>${GENDIR}/+checks 2>&1
-echo -en "[directory]"					>>${GENDIR}/+checks 2>&1
-echo -en "\n"						>>${GENDIR}/+checks 2>&1
-${LL} ${GENDIR}						>>${GENDIR}/+checks 2>&1
-echo -en "."
-
-#>>>echo -en "\n"					>>${GENDIR}/+checks 2>&1
-#>>>echo -en "[okay]"					>>${GENDIR}/+checks 2>&1
-#>>>echo -en "\n"					>>${GENDIR}/+checks 2>&1
-if [[ -n "$(diff ${GENDIR}/+okay ${GENDIR}/+okay.okay 2>/dev/null)" ]]; then
-	cat ${GENDIR}/+okay				>>${GENDIR}/+checks 2>&1
-fi
+	${GENDIR}/.emerge				>>${GENDIR}/+checks 2>&1
 echo -en "."
 
 echo -en "\n"						>>${GENDIR}/+checks 2>&1
@@ -313,16 +311,6 @@ wc -l ${GENDIR}/_packages				>>${GENDIR}/+checks 2>&1
 wc -l ${GENDIR}/_packages.db				>>${GENDIR}/+checks 2>&1
 diff ${DIFF_OPTS} ${GENDIR}/_packages.db ${GENDIR}/_packages |
 	${GREP} "^[-+]" |
-	cat						>>${GENDIR}/+checks 2>&1
-echo -en "."
-
-echo -en "\n"						>>${GENDIR}/+checks 2>&1
-echo -en "[python]"					>>${GENDIR}/+checks 2>&1
-echo -en "\n"						>>${GENDIR}/+checks 2>&1
-${GREP} -o "[^-(]python[0-9][_][0-9]" ${GENDIR}/.emerge |
-	${SED} "s|^.||g" |
-	sort -r |
-	uniq -c |
 	cat						>>${GENDIR}/+checks 2>&1
 echo -en "."
 
