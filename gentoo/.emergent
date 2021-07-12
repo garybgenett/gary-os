@@ -290,52 +290,52 @@ echo -en "\n"
 
 echo -en "performing checks..."
 
-cat /dev/null				>${GENDIR}/.checks 2>&1
+cat /dev/null						>${GENDIR}/+checks 2>&1
 
-echo -en "\n"				>>${GENDIR}/.checks 2>&1
-echo -en "[directory]"			>>${GENDIR}/.checks 2>&1
-echo -en "\n"				>>${GENDIR}/.checks 2>&1
-${LL} ${GENDIR}				>>${GENDIR}/.checks 2>&1
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
+echo -en "[directory]"					>>${GENDIR}/+checks 2>&1
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
+${LL} ${GENDIR}						>>${GENDIR}/+checks 2>&1
 echo -en "."
 
-#>>>echo -en "\n"				>>${GENDIR}/.checks 2>&1
-#>>>echo -en "[okay]"			>>${GENDIR}/.checks 2>&1
-#>>>echo -en "\n"				>>${GENDIR}/.checks 2>&1
+#>>>echo -en "\n"					>>${GENDIR}/+checks 2>&1
+#>>>echo -en "[okay]"					>>${GENDIR}/+checks 2>&1
+#>>>echo -en "\n"					>>${GENDIR}/+checks 2>&1
 if [[ -n "$(diff ${GENDIR}/+okay ${GENDIR}/+okay.okay 2>/dev/null)" ]]; then
-	cat ${GENDIR}/+okay		>>${GENDIR}/.checks 2>&1
+	cat ${GENDIR}/+okay				>>${GENDIR}/+checks 2>&1
 fi
 echo -en "."
 
-echo -en "\n"				>>${GENDIR}/.checks 2>&1
-echo -en "[packages]"			>>${GENDIR}/.checks 2>&1
-echo -en "\n"				>>${GENDIR}/.checks 2>&1
-wc -l ${GENDIR}/_packages		>>${GENDIR}/.checks 2>&1
-wc -l ${GENDIR}/_packages.db		>>${GENDIR}/.checks 2>&1
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
+echo -en "[packages]"					>>${GENDIR}/+checks 2>&1
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
+wc -l ${GENDIR}/_packages				>>${GENDIR}/+checks 2>&1
+wc -l ${GENDIR}/_packages.db				>>${GENDIR}/+checks 2>&1
 diff ${DIFF_OPTS} ${GENDIR}/_packages.db ${GENDIR}/_packages |
 	${GREP} "^[-+]" |
-	cat				>>${GENDIR}/.checks 2>&1
+	cat						>>${GENDIR}/+checks 2>&1
 echo -en "."
 
-echo -en "\n"				>>${GENDIR}/.checks 2>&1
-echo -en "[python]"			>>${GENDIR}/.checks 2>&1
-echo -en "\n"				>>${GENDIR}/.checks 2>&1
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
+echo -en "[python]"					>>${GENDIR}/+checks 2>&1
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
 ${GREP} -o "[^-(]python[0-9][_][0-9]" ${GENDIR}/.emerge |
 	${SED} "s|^.||g" |
 	sort -r |
 	uniq -c |
-	cat				>>${GENDIR}/.checks 2>&1
+	cat						>>${GENDIR}/+checks 2>&1
 echo -en "."
 
-echo -en "\n"				>>${GENDIR}/.checks 2>&1
-echo -en "[news]"			>>${GENDIR}/.checks 2>&1
-echo -en "\n"				>>${GENDIR}/.checks 2>&1
-eselect news read all			>>${GENDIR}/.checks 2>&1
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
+echo -en "[news]"					>>${GENDIR}/+checks 2>&1
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
+eselect news read all					>>${GENDIR}/+checks 2>&1
 echo -en "."
 
-echo -en "\n"				>>${GENDIR}/.checks 2>&1
-echo -en "[glsa]"			>>${GENDIR}/.checks 2>&1
-echo -en "\n"				>>${GENDIR}/.checks 2>&1
-glsa-check --verbose --cve --test all	>>${GENDIR}/.checks 2>&1
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
+echo -en "[glsa]"					>>${GENDIR}/+checks 2>&1
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
+glsa-check --verbose --cve --test all			>>${GENDIR}/+checks 2>&1
 echo -en "."
 
 echo -en "\n"
