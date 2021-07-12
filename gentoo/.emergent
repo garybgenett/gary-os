@@ -5,6 +5,7 @@ source ${HOME}/.bashrc
 #NOTE: ASSUMING LOCATION AND NAME OF THE "_SYSTEM" SCRIPT
 
 source $(dirname "${_SELF}")/_system
+source ${ETCDIR}/make.conf
 
 ########################################
 
@@ -117,9 +118,9 @@ echo -en "\n"
 
 echo -en "use flags..."
 
-cat /dev/null >${GENDIR}/_use.enabled
 cat /dev/null >${GENDIR}/_use.disabled
-for TOKEN in $(source ${ETCDIR}/make.conf ; echo ${USE}); do
+cat /dev/null >${GENDIR}/_use.enabled
+for TOKEN in ${USE}; do
 	if [[ ${TOKEN} == ${TOKEN/#-} ]]; then
 		grep_token "^${TOKEN/#-}[ ][-]" ${REPDIR}/kits/*/profiles/use.desc |
 			sort \
@@ -183,7 +184,7 @@ echo -en "\n"
 
 echo -en "configuration data..."
 
-(source ${ETCDIR}/make.conf ; echo ${USE}) |
+echo "${USE}" |
 	${SED} "s/^-//g"	|
 	${SED} "s/ -/ /g"	|
 	${SED} "s/ /\n/g"	|
