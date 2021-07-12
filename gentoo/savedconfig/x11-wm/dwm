@@ -4,15 +4,21 @@
 static const char *fonts[] = {
 	"monospace:size=8"
 };
-static const char dmenufont[]		= "monospace:size=8";
+static const char dmenufont[]       = "monospace:size=8";
+static const char normbordercolor[] = "#444444";
+static const char normbgcolor[]     = "#222222";
+static const char normfgcolor[]     = "#bbbbbb";
+static const char selbordercolor[]  = "#005577";
+static const char selbgcolor[]      = "#005577";
+static const char selfgcolor[]      = "#eeeeee";
 static const char urxvt_font[]		= "x:fixed";
 static const char links_fontsize[]	= "14";
-static const char normbordercolor[]	= "#444444"; static const char l_normbordercolor[]	= "0x444444";
-static const char normbgcolor[]		= "#222222"; static const char l_normbgcolor[]		= "0x222222";
-static const char normfgcolor[]		= "#bbbbbb"; static const char l_normfgcolor[]		= "0xbbbbbb";
-static const char selbordercolor[]	= "#005577"; static const char l_selbordercolor[]	= "0x005577";
-static const char selbgcolor[]		= "#005577"; static const char l_selbgcolor[]		= "0x005577";
-static const char selfgcolor[]		= "#eeeeee"; static const char l_selfgcolor[]		= "0xeeeeee";
+static const char l_normbordercolor[]	= "0x444444";
+static const char l_normbgcolor[]	= "0x222222";
+static const char l_normfgcolor[]	= "0xbbbbbb";
+static const char l_selbordercolor[]	= "0x005577";
+static const char l_selbgcolor[]	= "0x005577";
+static const char l_selfgcolor[]	= "0xeeeeee";
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
