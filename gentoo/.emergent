@@ -87,49 +87,6 @@ echo -en "\n"
 
 ########################################
 
-#>>>declare OPTS="-mindepth 1 -mount \
-#>>>	-or \( -path ${GENDIR} -prune \) \
-#>>>	\
-#>>>	-or \( -path ${REPDIR} -prune \) \
-#>>>	-or \( -path ${REPDIR}.git -prune \) \
-#>>>	\
-#>>>	-or \( -path /dev -prune \) \
-#>>>	-or \( -path /lost+found -prune \) \
-#>>>	-or \( -path /mnt -prune \) \
-#>>>	-or \( -path /proc -prune \) \
-#>>>	-or \( -path /run -prune \) \
-#>>>	-or \( -path /sys -prune \) \
-#>>>	-or \( -path /tmp -prune \) \
-#>>>	-or \( -path /var/log -prune \) \
-#>>>	-or \( -path /var/tmp -prune \) \
-#>>>	\
-#>>>	-or \( -path /boot -prune \) \
-#>>>	-or \( -path /lib64/firmware -prune \) \
-#>>>	-or \( -path /lib64/modules -prune \) \
-#>>>	-or \( -path /opt/Adobe -prune \) \
-#>>>	-or \( -path /opt/oracle-jdk-bin-\* -prune \) \
-#>>>	-or \( -path /opt/sun-jdk-\* -prune \) \
-#>>>	-or \( -path /usr/lib32/debug -prune \) \
-#>>>	-or \( -path /usr/lib64/debug -prune \) \
-#>>>	-or \( -path /usr/portage -prune \) \
-#>>>	-or \( -path /usr/portage.git -prune \) \
-#>>>	-or \( -path /usr/src/debug -prune \) \
-#>>>	-or \( -path /usr/src/linux-\* -prune \) \
-#>>>	-or \( -path /var/cache/portage -prune \) \
-#>>>	-or \( -path /var/db/pkg -prune \) \
-#>>>"
-#>>>(
-#>>>	eval find -L / ${OPTS} '-or \( -type l -print \)';
-#>>>	eval find    / ${OPTS} '-or \( -type d -empty -print \)';
-#>>>	eval find    / ${OPTS} '-or -print' |
-#>>>		qfile --orphans --from -;
-#>>>) |
-#>>>	sort |
-#>>>	uniq \
-#>>>	>${GENDIR}/_orphans
-
-########################################
-
 echo -en "packages..."
 
 #note: the "_packages" file is also hard-set in the "_system" script
@@ -153,19 +110,6 @@ for TOKEN in $(cat ${GENDIR}/_packages.db); do
 	fi
 done
 echo -en "."
-
-#>>>${GREP} -v "^[#]" ${ETCDIR}/package.*			|
-#>>>	${SED} -n "s/^[^:]+[:]([a-z][^[:space:]]+).+$/\1/gp"	|
-#>>>	sort							|
-#>>>	uniq							\
-#>>>	>${GENDIR}/_packages.modified
-
-#>>>${GREP} -v "^[#]" ${ETCDIR}/package.*			|
-#>>>	${GREP} "[#][ ]gentoo[ ]required"			|
-#>>>	${SED} -n "s/^[^:]+[:]([a-z][^[:space:]]+).+$/\1/gp"	|
-#>>>	sort							|
-#>>>	uniq							\
-#>>>	>${GENDIR}/_packages.modified.required
 
 echo -en "\n"
 
@@ -293,22 +237,6 @@ for TOKEN in $(cat ${GENDIR}/emerge.use); do
 				sort \
 				>>${GENDIR}/use.missing.global
 		else
-#>>>			echo -e "" \
-#>>>				>>${GENDIR}/use.missing.local
-#>>>			echo -e "[${TOKEN}: set]" \
-#>>>				>>${GENDIR}/use.missing.local
-#>>>			(
-#>>>			${SED} -n "s/^([^[:space:]]+)[[:space:]].*[^-](${TOKEN}).*$/\1:\2/gp" ${ETCDIR}/package.use
-#>>>			${SED} -n "s/^([^[:space:]]+)[[:space:]].*([-]${TOKEN}).*$/\1:\2/gp" ${ETCDIR}/package.use
-#>>>			) |
-#>>>			${GREP} -v -e "^[#]" -e "^$" |
-#>>>			sort \
-#>>>				>>${GENDIR}/use.missing.local
-#>>>			echo -e "[${TOKEN}: all]" \
-#>>>				>>${GENDIR}/use.missing.local
-#>>>			grep_token "[:]${TOKEN}[ ][-]" ${REPDIR}/kits/*/profiles/use.local.desc |
-#>>>				sort \
-#>>>				>>${GENDIR}/use.missing.local
 			grep_token "[:]${TOKEN}[ ][-]" ${REPDIR}/kits/*/profiles/use.local.desc |
 				${GREP} -v "$(${SED} -n "s/^([^[:space:]]+)[[:space:]].*(${TOKEN}).*$/\1:\2/gp" ${ETCDIR}/package.use)" |
 				sort \
