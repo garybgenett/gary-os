@@ -949,7 +949,7 @@ if [[ ${1} == -y ]]; then
 		compare_packages "ADDED"	${FILE}				${TARGET}${GENDIR}/_packages
 		compare_packages "REMOVED"	${TARGET}${GENDIR}/_packages	${FILE}
 	fi
-	#note: the ".emerge" file is also hard-set in the ".emergent" script
+	#note: the ".emerge" file is hard-set in the ".emergent" script
 	echo -en "\n>>> USE: GLOBAL <<<\n"
 	for FILE in $(
 		source ${SETDIR}/${FUNDIR}/make.conf
@@ -1035,14 +1035,16 @@ if [[ ${1} == -o ]]; then
 	fi
 	if ${DO_CHROOT}; then
 		mount_dev_dirs													|| EXIT 1
+		declare LAY_DIR="${SETDIR}/${FUNDIR}/${LAYDIR}"
+		declare ETC_DIR="${TARGET}${ETCDIR}/${LAYDIR}"
 		#note: ensuring configuration is up-to-date
 		${_SOUL} ${QUIET_OPT} ${TOOR} -r										|| EXIT 1
-		${MKDIR}	${TARGET}${ETCDIR}/${LAYDIR}/$(basename ${FILE})						|| EXIT 1
-		${RSYNC_U}	${TARGET}${REPDIR}/kits/*/${FILE}/		${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}.src	|| EXIT 1
-		${RSYNC_U}	${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/		${TARGET}${ETCDIR}/${LAYDIR}/${FILE}		|| EXIT 1
+		${MKDIR}	${ETC_DIR}/${FILE}			${LAY_DIR}/${FILE}.src					|| EXIT 1
+		${RSYNC_U}	${TARGET}${REPDIR}/kits/*/${FILE}/	${LAY_DIR}/${FILE}.src					|| EXIT 1
+		${RSYNC_U}	${LAY_DIR}/${FILE}/			${ETC_DIR}/${FILE}					|| EXIT 1
 		safe_env ${MYSELF} ${QUIET_OPT} ${TOOR} "${@}"									|| EXIT 1
-		${RSYNC_U}	${TARGET}${ETCDIR}/${LAYDIR}/${FILE}/Manifest	${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/		|| EXIT 1
-		${RSYNC_U}	${TARGET}${ETCDIR}/${LAYDIR}/.review.txt	${SETDIR}/${FUNDIR}/${LAYDIR}/			|| EXIT 1
+		${RSYNC_U}	${ETC_DIR}/${FILE}/Manifest		${LAY_DIR}/${FILE}/					|| EXIT 1
+		${RSYNC_U}	${ETC_DIR}/.review.txt			${LAY_DIR}/						|| EXIT 1
 		mount_dev_dirs -u												|| EXIT 1
 	else
 		FILE="$(realpath ${ETCDIR}/${LAYDIR}/${FILE}/*.ebuild | sort -n | tail -n1)"
@@ -1205,26 +1207,22 @@ if [[ ${1} == -i ]]; then
 		expect_wrapper				emerge ${_ASK} --emptytree \@system \@${_PKG}		|| EXIT 1
 	fi
 	if ${_KRN}; then
-		${RM}					${TARGET}/boot/*					|| EXIT 1
+		${RM}					${TARGET}/boot/{_,System.map,initramfs,kernel}*		|| EXIT 1
 		${RM}					${TARGET}/etc/kernels/*					|| EXIT 1
 		${RM}					${TARGET}/lib/modules/*					|| EXIT 1
 		${RM}					${TARGET}${LDIR}*					|| EXIT 1
 		expect_wrapper				emerge ${_ASK} sys-kernel/genkernel ${LINPKG}		|| EXIT 1
 		declare KERN="$(cd ${TARGET}/boot; ls kernel-debian-sources-*		2>/dev/null | sort | tail -n1)"
 		declare INIT="$(cd ${TARGET}/boot; ls initramfs-debian-sources-*	2>/dev/null | sort | tail -n1)"
-		if [[ -n ${KERN} ]]; then
-			${RM}				${TARGET}/boot/_kernel					|| EXIT 1
-			${LN} ${KERN}			${TARGET}/boot/_kernel					|| EXIT 1
-		fi
-		if [[ -n ${INIT} ]]; then
-			${RM}				${TARGET}/boot/_initrd					|| EXIT 1
-			${LN} ${INIT}			${TARGET}/boot/_initrd					|| EXIT 1
-		fi
+		${RM}					${TARGET}/boot/_kernel					|| EXIT 1
+		${RM}					${TARGET}/boot/_initrd					|| EXIT 1
+		if [[ -n ${KERN} ]]; then ${LN} ${KERN}	${TARGET}/boot/_kernel					|| EXIT 1; fi
+		if [[ -n ${INIT} ]]; then ${LN} ${INIT}	${TARGET}/boot/_initrd					|| EXIT 1; fi
 	fi
 	if ${_KRN}; then for FILE in ${KERNEL}; do
 		${RM}					${TARGET}${LDIR}					|| EXIT 1
 		${LN} ${KBAS//${KVER}/${FILE}}		${TARGET}${LDIR}					|| EXIT 1
-		${RSYNC_U}				${SETDIR}/${LINDIR}/${KCFG//${KVER}/${FILE}}		\
+		${RSYNC_U} --copy-links			${SETDIR}/${LINDIR}/${KCFG//${KVER}/${FILE}}		\
 							${TARGET}${ARCDIR}/${KCFG//${KVER}/${FILE}}		|| EXIT 1
 		kernel_cpu				${TARGET}${ARCDIR}/${KCFG//${KVER}/${FILE}}		|| EXIT 1
 		declare GENKERNEL_OPTS="--loglevel=5 --bootloader=grub --install --symlink"
@@ -1234,18 +1232,17 @@ if [[ ${1} == -i ]]; then
 			expect_wrapper			genkernel ${GENKERNEL_OPTS} kernel			\
 							--kernel-config=${ARCDIR}/${KCFG//${KVER}/${FILE}}	|| EXIT 1
 		fi
-		${RSYNC_U}				${TARGET}${LDIR}/.config				\
+		${RSYNC_U} --copy-links			${TARGET}${LDIR}/.config				\
 							${TARGET}${ARCDIR}/${KCFG//${KVER}/${FILE}}		|| EXIT 1
-		NEXT="${KFIL//${KVER}/${FILE}}"									|| EXIT 1
 		if ! ${_GOS}; then
 			${RM}				${TARGET}/boot/_cur					|| EXIT 1
-			${LN} ${NEXT}			${TARGET}/boot/_cur					|| EXIT 1
+			${LN} ${KFIL//${KVER}/${FILE}}	${TARGET}/boot/_cur					|| EXIT 1
 			${RM}				${TARGET}/boot/_new					|| EXIT 1
 			${LN} kernel			${TARGET}/boot/_new					|| EXIT 1
 			${RM}				${TARGET}/boot/_old					|| EXIT 1
 			${LN} kernel.old		${TARGET}/boot/_old					|| EXIT 1
 			[[ -L				${TARGET}/boot/kernel.old				]] ||
-			${LN} ${NEXT}			${TARGET}/boot/kernel.old				|| EXIT 1
+			${LN} ${KFIL//${KVER}/${FILE}}	${TARGET}/boot/kernel.old				|| EXIT 1
 		fi
 	done; fi
 	if ${_CFG}; then
@@ -1386,9 +1383,10 @@ elif [[ ${1} != -! ]]; then
 			echo -en "\"\n"							1>&2
 		fi
 		for NEXT in								\
+			$(find ${DSTDIR} -empty			2>/dev/null | sort)	\
 			$(find ${DSTDIR}/*checksum_failure*	2>/dev/null | sort)	\
-			$(find ${DSTDIR}/.*.portage_lockfile	2>/dev/null | sort)	;
-		do
+			$(find ${DSTDIR}/.*.portage_lockfile	2>/dev/null | sort)	\
+		; do
 			${RM} ${NEXT}							1>&2
 			FILE="false"
 		done
@@ -1430,7 +1428,6 @@ ${LL} \
 ########################################
 
 safe_env ${SETDIR}/${FUNDIR}/${AUDITS}
-cat ${GENDIR}/.checks
 
 EXIT 0
 ################################################################################
