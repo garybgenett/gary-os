@@ -281,11 +281,14 @@ if [ -n \"\${garyos_server}\" ]; then
 fi
 
 menuentry \"${_PROJ} PXE\" {
-echo command: net_bootp
-echo command: configfile (memdisk)${GFILE}
-echo variable: set garyos_server=\"\${garyos_server}\"
-echo variable: set garyos_source=\"${GMENU_RESCUE}\"
-echo variable: set garyos_params=\"${GMENU_OPTPXE}\"
+echo cmd: net_bootp
+echo cmd: configfile (memdisk)${GFILE}
+echo var: set garyos_server=\"\${garyos_server}\"
+echo var: set garyos_source=\"${GMENU_RESCUE}\"
+echo var: set garyos_params=\"${GMENU_OPTPXE}\"
+echo garyos_server: \${garyos_server}
+echo garyos_source: \${garyos_source}
+echo garyos_params: \${garyos_params}
 
 linux (tftp,\${garyos_server})\${garyos_source}${GOPTS} \${garyos_params}
 boot
