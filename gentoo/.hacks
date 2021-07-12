@@ -28,6 +28,11 @@ chmod -v 000 /usr/sbin/console-kit-daemon
 
 ########################################
 
+chmod -v 1777 /dev/shm
+ipcrm --all=shm
+
+########################################
+
 #>>>	/lib/modules/*/kernel/drivers/gpu/drm/nouveau/nouveau.ko	\
 #>>>	/lib/modules/*/kernel/drivers/gpu/drm/radeon/radeon.ko		\
 
