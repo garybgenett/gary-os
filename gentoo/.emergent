@@ -261,12 +261,14 @@ echo -en "\n"
 
 echo -en "performing checks..."
 
-cat /dev/null						>${GENDIR}/+checks 2>&1
+echo -en "# vim: filetype=diff"				>${GENDIR}/+checks 2>&1
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
+echo -en "."
 
 echo -en "\n"						>>${GENDIR}/+checks 2>&1
 echo -en "[directory]"					>>${GENDIR}/+checks 2>&1
 echo -en "\n"						>>${GENDIR}/+checks 2>&1
-${LL} ${GENDIR}						>>${GENDIR}/+checks 2>&1
+LC_COLLATE="C" LC_ALL= ${LL} ${GENDIR}			>>${GENDIR}/+checks 2>&1
 echo -en "."
 
 echo -en "\n"						>>${GENDIR}/+checks 2>&1
@@ -277,6 +279,36 @@ ${GREP} -o "[^-(]python[0-9][_][0-9]" ${GENDIR}/.emerge |
 	sort -r |
 	uniq -c |
 	cat						>>${GENDIR}/+checks 2>&1
+echo -en "."
+
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
+echo -en "[cflags]"					>>${GENDIR}/+checks 2>&1
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
+${GREP} -v -- "${CFLAGS}" ${PDBDIR}/*/*/CFLAGS |
+	${SED} \
+		-e "s|^${PDBDIR}[/]||g" \
+		-e "s|[/]CFLAGS[:]| |g" \
+							>>${GENDIR}/+checks 2>&1
+echo -en "."
+
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
+echo -en "[cxxflags]"					>>${GENDIR}/+checks 2>&1
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
+${GREP} -v -- "${CXXFLAGS}" ${PDBDIR}/*/*/CXXFLAGS |
+	${SED} \
+		-e "s|^${PDBDIR}[/]||g" \
+		-e "s|[/]CXXFLAGS[:]| |g" \
+							>>${GENDIR}/+checks 2>&1
+echo -en "."
+
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
+echo -en "[ldflags]"					>>${GENDIR}/+checks 2>&1
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
+${GREP} -v -- "${LDFLAGS}" ${PDBDIR}/*/*/LDFLAGS |
+	${SED} \
+		-e "s|^${PDBDIR}[/]||g" \
+		-e "s|[/]LDFLAGS[:]| |g" \
+							>>${GENDIR}/+checks 2>&1
 echo -en "."
 
 for TOKEN in ${GENDIR}/*.OKAY; do
@@ -315,6 +347,12 @@ diff ${DIFF_OPTS} ${GENDIR}/_packages.db ${GENDIR}/_packages |
 echo -en "."
 
 echo -en "\n"						>>${GENDIR}/+checks 2>&1
+echo -en "[binaries]"					>>${GENDIR}/+checks 2>&1
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
+${GREP} "[-]bin[-]" ${GENDIR}/.emerge			>>${GENDIR}/+checks 2>&1
+echo -en "."
+
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
 echo -en "[news]"					>>${GENDIR}/+checks 2>&1
 echo -en "\n"						>>${GENDIR}/+checks 2>&1
 eselect news read all					>>${GENDIR}/+checks 2>&1
@@ -324,6 +362,11 @@ echo -en "\n"						>>${GENDIR}/+checks 2>&1
 echo -en "[glsa]"					>>${GENDIR}/+checks 2>&1
 echo -en "\n"						>>${GENDIR}/+checks 2>&1
 glsa-check --verbose --cve --test all			>>${GENDIR}/+checks 2>&1
+echo -en "."
+
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
+echo -en "# end of file"				>>${GENDIR}/+checks 2>&1
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
 echo -en "."
 
 echo -en "\n"
