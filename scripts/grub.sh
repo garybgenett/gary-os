@@ -79,8 +79,8 @@ fi
 
 ########################################
 
-declare GPMBR="99"; declare GNMBR="ef02"; declare GFMBR="-d"	# vfat
-declare GPEFI="98"; declare GNEFI="ef00"; declare GFEFI="-d"	# vfat
+declare GPMBR="4"; declare GNMBR="ef02"; declare GFMBR="-d"	# vfat
+declare GPEFI="3"; declare GNEFI="ef00"; declare GFEFI="-d"	# vfat
 
 ########################################
 
