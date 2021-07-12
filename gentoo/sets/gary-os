@@ -85,6 +85,11 @@
 #{MOD} #{FSEXCL} debug:/usr/src/debug
 
 ########################################
+# firmware
+
+sys-kernel/linux-firmware		# takes up way too much space, but required
+
+########################################
 # toolchain
 
 sys-devel/autoconf			#{MOD}
@@ -105,6 +110,19 @@ sys-devel/gdb				#{MOD}
 app-misc/ca-certificates		#{MOD}
 app-text/iso-codes			#{MOD}
 sys-libs/timezone-data			#{MOD}
+
+sys-apps/man-db				#{MOD}
+sys-apps/man-pages			#{MOD}
+sys-apps/man-pages-posix		#{MOD}
+sys-apps/texinfo			#{MOD}
+
+app-misc/screen				#{MOD}
+app-shells/bash				#{rootfs}
+app-shells/bash-completion		#{MOD}
+app-shells/bashdb			#{MOD}
+sys-apps/kbd				#{MOD}
+sys-devel/gettext			#{MOD}
+sys-libs/gpm
 
 #>>>app-crypt/efitools			# fails to build as "generic_64"
 sys-apps/busybox			#{rootfs}
@@ -148,6 +166,7 @@ sys-apps/sed				#{rootfs}
 sys-apps/util-linux			#{rootfs}
 sys-apps/which
 
+sys-fs/sysfsutils
 sys-process/atop
 sys-process/htop
 sys-process/iotop
@@ -188,48 +207,9 @@ www-client/links
 www-client/lynx				#{MOD}
 www-client/w3m
 
-app-misc/screen				#{MOD}
-app-shells/bash				#{rootfs}
-app-shells/bash-completion		#{MOD}
-app-shells/bashdb			#{MOD}
-sys-apps/kbd				#{MOD}
-sys-devel/gettext			#{MOD}
-sys-libs/gpm
-
-app-admin/perl-cleaner			#{MOD}
-dev-lang/perl				#{MOD}
-dev-libs/libpcre
-dev-perl/JSON				#{MOD}
-dev-perl/JSON-XS			#{MOD}
-
 app-crypt/gnupg				#{MOD}
 dev-libs/openssl
 net-misc/openssh
-
-app-arch/afio				#{MOD}
-app-arch/bzip2
-app-arch/cpio
-app-arch/gzip
-app-arch/lz4				#{MOD}
-app-arch/p7zip
-app-arch/rar
-app-arch/sharutils			#{MOD}
-app-arch/tar				#{rootfs}
-app-arch/unrar
-app-arch/unzip				#{MOD}
-app-arch/upx-ucl			#{MOD}
-app-arch/xar				#{MOD}
-app-arch/xz-utils
-app-arch/zip				#{MOD}
-dev-util/xdelta
-
-sys-apps/man-db				#{MOD}
-sys-apps/man-pages			#{MOD}
-sys-apps/man-pages-posix		#{MOD}
-sys-apps/texinfo			#{MOD}
-
-app-dicts/aspell-en			#{MOD}
-app-text/aspell				#{MOD}
 
 #>>>app-editors/gvim			#{MOD} # requires: x11-libs/gtk+
 app-editors/nano
@@ -243,6 +223,26 @@ dev-util/cloc				#{MOD}
 #>>>dev-util/indent			#{MOD} # fails to build as "generic_64"
 sys-apps/ed				#{MOD}
 
+app-dicts/aspell-en			#{MOD}
+app-text/aspell				#{MOD}
+
+app-arch/afio				#{MOD}
+app-arch/bzip2
+app-arch/cpio
+app-arch/gzip
+app-arch/lz4				#{MOD} # requires: dev-util/cmake
+app-arch/p7zip
+app-arch/rar
+app-arch/sharutils			#{MOD}
+app-arch/tar				#{rootfs}
+app-arch/unrar
+app-arch/unzip				#{MOD}
+app-arch/upx-ucl			#{MOD}
+app-arch/xar				#{MOD}
+app-arch/xz-utils
+app-arch/zip				#{MOD}
+dev-util/xdelta
+
 app-arch/cabextract			#{MOD}
 app-arch/deb2targz			#{MOD}
 app-arch/dpkg				#{MOD}
@@ -253,7 +253,6 @@ app-arch/rpm2targz			#{MOD}
 # gentoo
 
 sys-kernel/genkernel			#{MOD}
-sys-kernel/linux-firmware		# takes up way too much space, but required
 
 app-admin/ego				#{MOD}
 app-admin/eselect			#{MOD}
@@ -287,6 +286,12 @@ x11-apps/xsetroot			#{MOD}
 
 dev-vcs/git				#{MOD}
 dev-vcs/subversion			#{MOD}
+
+app-admin/perl-cleaner			#{MOD}
+dev-lang/perl				#{MOD}
+dev-libs/libpcre
+dev-perl/JSON				#{MOD}
+dev-perl/JSON-XS			#{MOD}
 
 dev-lang/python				#{MOD}
 
@@ -325,7 +330,6 @@ sys-apps/lshw
 sys-apps/memtester
 sys-apps/pciutils
 sys-apps/usbutils
-sys-fs/sysfsutils
 sys-power/acpitool
 
 app-admin/procinfo-ng			#{MOD}
@@ -364,11 +368,12 @@ net-misc/socat				#{MOD}
 net-misc/whois				#{MOD}
 net-wireless/kismet			#{MOD} # requires: net-misc/networkmanager, net-libs/libmicrohttpd
 
-net-misc/autossh			#{MOD}
 net-misc/pipes				#{MOD}
 net-vpn/httptunnel			#{MOD}
 
 net-fs/cifs-utils			#{MOD}
+
+net-misc/autossh			#{MOD}
 
 app-forensics/cmospwd
 app-forensics/foremost
@@ -382,8 +387,9 @@ sys-apps/flashrom			#{MOD} # requires: dev-embedded/libftdi -> dev-libs/boost
 net-ftp/tftp-hpa			#{rootfs}
 net-misc/ntp				#{MOD}
 net-vpn/openvpn				#{MOD}
-net-vpn/tor				#{MOD} # requires: app-text/asciidoc
 net-wireless/hostapd			#{MOD}
+
+net-vpn/tor				#{MOD} # requires: app-text/asciidoc
 
 ########################################
 # programs
