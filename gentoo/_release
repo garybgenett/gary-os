@@ -1084,26 +1084,26 @@ function release_rootfs_cpio {		#>>>{dotest}
 	if [[ -n ${1} ]]; then
 		ROOTFS_DEST="${1}" && shift
 	fi
-	${RM}						${ROOTFS_DEST}.dir			|| return 1
-#>>>	tar -xvvf ${ROOTFS_DIRTREE_PKG} --directory	${ROOTFS_DEST}.dir			|| return 1
+	${RM}						${ROOTFS_DEST}.dir				|| return 1
+#>>>	tar -xvvf ${ROOTFS_DIRTREE_PKG} --directory	${ROOTFS_DEST}.dir				|| return 1
 	for FILE in ${ROOTFS_DIRTREE}; do
-		${MKDIR}				${ROOTFS_DEST}.dir${FILE}		|| return 1
+		${MKDIR}				${ROOTFS_DEST}.dir${FILE}			|| return 1
 	done
-	${MKDIR}					${ROOTFS_DEST}.dir/dev			|| return 1
-	${TARGET}${REALDEV}				${ROOTFS_DEST}.dir/dev			|| return 1
-	release_rootfs_cpio_tools			${ROOTFS_DEST}				|| return 1
-	DOTEST="${DOTEST}" release_rootfs_cpio_utils	${ROOTFS_DEST}				|| return 1
-	release_rootfs_cpio_files			${ROOTFS_DEST}				|| return 1
+	${MKDIR}					${ROOTFS_DEST}.dir/dev				|| return 1
+	${TARGET}${REALDEV}				${ROOTFS_DEST}.dir/dev				|| return 1
+	release_rootfs_cpio_tools			${ROOTFS_DEST}					|| return 1
+	DOTEST="${DOTEST}" release_rootfs_cpio_utils	${ROOTFS_DEST}					|| return 1
+	release_rootfs_cpio_files			${ROOTFS_DEST}					|| return 1
 	if [[ -d ${ROOTFS_DEST}.dir/lib64 ]]; then
-		${LN} --relative			${ROOTFS_DEST}.dir/lib64		\
-							${ROOTFS_DEST}.dir/lib			|| return 1
+		${LN} --relative			${ROOTFS_DEST}.dir/lib64			\
+							${ROOTFS_DEST}.dir/lib				|| return 1
 	fi
-	${LN} --relative				${ROOTFS_DEST}.dir${ROOTFS_BUSYBOX}	\
-							${ROOTFS_DEST}.dir/init			|| return 1
+	${LN} --relative				${ROOTFS_DEST}.dir${ROOTFS_BUSYBOX}		\
+							${ROOTFS_DEST}.dir/init				|| return 1
 	echo -en "\n"
-	${DU_L}						${ROOTFS_DEST}.dir			|| return 1
-	(cd ${ROOTFS_DEST}.dir && ${LL} --directory	$(find ./ ! -type l))			|| return 1
-	${RSYNC_U} ${ROOTFS_DEST}			${ROOTFS_DEST}.dir${ROOTFS_ROOT}	|| return 1
+	${DU_L}						${ROOTFS_DEST}.dir				|| return 1
+	(cd ${ROOTFS_DEST}.dir && ${LL} --directory	$(find ./ ! -type l))				|| return 1
+	${RSYNC_U} ${ROOTFS_DEST}			${ROOTFS_DEST}.dir${ROOTFS_ROOT}		|| return 1
 	return 0
 }
 
@@ -1138,28 +1138,27 @@ function _release_rootfs {		#{ismain} #{doredo} #{dofast} #{dotest}
 		ROOTFS_DEST="${1}" && shift
 	fi
 	if ${DOREDO}; then
-		${RM}					${ROOTFS_DEST}*		|| return 1
+		${RM}							${ROOTFS_DEST}*		|| return 1
 	fi
 	if [[ ${ROOTFS_DEST} == ${ROOTFS_FILE} ]]; then
 		if [[ ! -f ${ROOTFS_DEST} ]]; then
 			if ${DOREDO}; then
-				DOREDO="${DOREDO}" _prepare_packdirs		|| return 1
+				DOREDO="${DOREDO}" _prepare_packdirs				|| return 1
 			fi
 			ROOTFS_CUST="true"
-			DOREDO="false" DOFAST="${DOFAST}" _prepare_build	|| return 1
-			release_rootfs_file		${ROOTFS_DEST}		|| return 1
+			DOREDO="false" DOFAST="${DOFAST}" _prepare_build			|| return 1
+			release_rootfs_file				${ROOTFS_DEST}		|| return 1
 		else
-			common_exists ${FUNCNAME}	${ROOTFS_DEST}*		|| return 1
+			common_exists ${FUNCNAME}			${ROOTFS_DEST}*		|| return 1
 		fi
 	else
 		if [[ ! -f ${ROOTFS_DEST} ]]; then
-			${RM}				${CPIO_FILE}		|| return 1
-			release_rootfs_file		${ROOTFS_DEST}		|| return 1
-			release_rootfs_cpio		${ROOTFS_DEST}		|| return 1
+			release_rootfs_file				${ROOTFS_DEST}		|| return 1
+			release_rootfs_cpio				${ROOTFS_DEST}		|| return 1
 		elif ${DOTEST}; then
-			release_rootfs_cpio		${ROOTFS_DEST}		|| return 1
+			release_rootfs_cpio				${ROOTFS_DEST}		|| return 1
 		else
-			common_exists ${FUNCNAME}	${ROOTFS_DEST}*		|| return 1
+			common_exists ${FUNCNAME}			${ROOTFS_DEST}*		|| return 1
 		fi
 	fi
 	return 0
@@ -1207,15 +1206,13 @@ function release_cpio_file {
 }
 
 function release_cpio_dir {		#>>>{dotest}
-	if [[ -n ${TARGET} ]]; then
-		if ! ${ROOTFS}; then
-			${RM}			${CPIO_FILE}.dir	|| return 1
-			${MKDIR}		${CPIO_FILE}.dir	|| return 1
-			${CPIO_OUT}		${CPIO_FILE}.dir	|| return 1
-		fi
-		if ! ${DOTEST}; then
-			${XZ} ${CPIO_FILE}	>${CPIO_FILE}.xz	|| return 1
-		fi
+	if ! ${ROOTFS}; then
+		${RM}			${CPIO_FILE}.dir	|| return 1
+		${MKDIR}		${CPIO_FILE}.dir	|| return 1
+		${CPIO_OUT}		${CPIO_FILE}.dir	|| return 1
+	fi
+	if ! ${DOTEST}; then
+		${XZ} ${CPIO_FILE}	>${CPIO_FILE}.xz	|| return 1
 	fi
 	return 0
 }
@@ -1223,20 +1220,19 @@ function release_cpio_dir {		#>>>{dotest}
 function _release_cpio {		#{doredo} #{dofast} #{dotest}
 	if ${DOREDO}; then
 		if ${DOTEST}; then
-			${RM} ${CPIO_FILE}				|| return 1
+			${RM} ${CPIO_FILE}							|| return 1
 		else
-			${RM} ${CPIO_FILE}*				|| return 1
+			${RM} ${CPIO_FILE}*							|| return 1
 		fi
 	fi
-	mount_dev_dirs -u						|| return 1
-	${MKDIR} ${_FINAL}						|| return 1
+	${MKDIR} ${_FINAL}									|| return 1
 	if [[ ! -f ${CPIO_FILE} ]]; then
-		${RM} ${_RAMFS}.kernel					|| return 1
-		DOFAST="${DOFAST}" DOTEST="${DOTEST}" release_cpio_nul	|| return 1
-		release_cpio_file					|| return 1
-		DOTEST="${DOTEST}" release_cpio_dir			|| return 1
+		${RM} ${_RAMFS}.kernel								|| return 1
+		DOFAST="${DOFAST}" DOTEST="${DOTEST}" release_cpio_nul				|| return 1
+		release_cpio_file								|| return 1
+		DOTEST="${DOTEST}" release_cpio_dir						|| return 1
 	else
-		common_exists ${FUNCNAME} ${CPIO_FILE}*			|| return 1
+		common_exists ${FUNCNAME} ${CPIO_FILE}*						|| return 1
 	fi
 	return 0
 }
@@ -1351,11 +1347,9 @@ function release_kernel_initramfs {
 
 function release_kernel_diff {
 	declare DODIR="${1}" && shift
-	if [[ -n ${TARGET} ]]; then
-		${RSYNC_U} ${TARGET}${DODIR}/.config		${TARGET}${ARCDIR}/${KCFG}.initramfs	|| return 1
-		${GREP} "CONFIG_(SHMEM|KERNEL|INITRAMFS|RD)_"	${TARGET}${ARCDIR}/${KCFG}.initramfs	|| return 1
-		diff ${DIFF_OPTS} ${TARGET}${ARCDIR}/${KCFG}	${TARGET}${ARCDIR}/${KCFG}.initramfs	| ${GREP} "^[-+]"
-	fi
+	${RSYNC_U} ${TARGET}${DODIR}/.config		${TARGET}${ARCDIR}/${KCFG}.initramfs	|| return 1
+	${GREP} "CONFIG_(SHMEM|KERNEL|INITRAMFS|RD)_"	${TARGET}${ARCDIR}/${KCFG}.initramfs	|| return 1
+	diff ${DIFF_OPTS} ${TARGET}${ARCDIR}/${KCFG}	${TARGET}${ARCDIR}/${KCFG}.initramfs	| ${GREP} "^[-+]"
 	return 0
 }
 
@@ -1439,7 +1433,7 @@ function _release_report {
 	return 0
 }
 
-########################################
+################################################################################
 
 #note: companion to the "prepare_symlinks" function
 #note: also maps to the "release_unpack" function
