@@ -977,7 +977,7 @@ function _prepare_symlinks {		#{isexit} #{doredo}
 
 ################################################################################
 
-function _release_ramfs {		#{ismain} #{doredo} #{dofast} #{dotest}
+function _release_build {		#{ismain} #{doredo} #{dofast} #{dotest}
 	DOREDO="${DOREDO}" DOFAST="${DOFAST}" _prepare_build	|| return 1
 	DOREDO="false" DOTEST="${DOTEST}" _release_cpio		|| return 1
 	DOREDO="false" _release_kernel				|| return 1
