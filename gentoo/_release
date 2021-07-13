@@ -457,30 +457,10 @@ function _release_reset {		#{ismain}
 ########################################
 
 function _release_review {		#{ismain}
-	if ${DO_CHROOT} && [[ -n ${TARGET} ]]; then
-		${_SOUL} ${QUIET_OPT} ${TOOR} -r				|| return 1
-		echo -en "\n"
-#>>>		safe_env ${MYSELF} ${QUIET_OPT} ${TOOR} ${FUNCNAME}		|| return 1
-		declare SAFE_ENV_ORIG="${SAFE_ENV}"
-		export SAFE_ENV+=" IS_CHROOT=\"false\" GOSDIR=\"/\" FSPACK=\"\" FSKEEP=\"\" FSARCH=\"\" FSEXCL=\"\""
-		safe_env ${MYSELF} ${QUIET_OPT} -g ${FUNCNAME}			|| return 1
-		SAFE_ENV="${SAFE_ENV_ORIG}"
-#>>>
-		return 0
-	fi
 	variable_parse SKIPDIRS
-	read FILE
-	#note: total filesystem size with all directories unpacked (completely loaded memory size)
-	eval ncdu -r -x $(
-		variable_parse SKIPDIRS | while read -r FILE; do
-			if variable_match PACKDIRS "" "${FILE}"; then
-				echo "--exclude=\"${TARGET}${FILE}.tar.xz\""
-			else
-				echo "--exclude=\"${TARGET}${FILE}\""
-			fi
-		done
-	)	${TARGET}							|| return 1
+	sleep 10
 	#note: initial rootfs size with "$fspack" and "$fskeep" still packed (kernel size)
+	#note: counting them in reverse, so that embedded packdirs get excluded
 	eval ncdu -r -x $(
 		variable_parse SKIPDIRS | while read -r FILE; do
 			if variable_match FSEXCL ";" "${FILE}"; then
@@ -511,6 +491,7 @@ function _release_review {		#{ismain}
 		done
 	)	${TARGET}							|| return 1
 	#note: loaded rootfs size with "$fspack" unpacked and "$fskeep" still packed (memory size)
+	#note: counting them in reverse, so that embedded packdirs get excluded
 	eval ncdu -r -x $(
 		variable_parse SKIPDIRS | while read -r FILE; do
 			if variable_match FSEXCL ";" "${FILE}"; then
@@ -539,6 +520,7 @@ function _release_review {		#{ismain}
 		done
 	)	${TARGET}							|| return 1
 	#note: final rootfs size with both "$fspack" and "$fskeep" unpacked (maximum memory size)
+	#note: counting them in reverse, so that embedded packdirs get excluded
 	eval ncdu -r -x $(
 		variable_parse SKIPDIRS | while read -r FILE; do
 			if variable_match FSEXCL ";" "${FILE}"; then
@@ -550,6 +532,16 @@ function _release_review {		#{ismain}
 			elif variable_match FSKEEP ";" "${FILE}"; then
 				echo "--exclude=\"${TARGET}${FILE}.tar.xz\""
 			elif variable_match FSPACK ";" "${FILE}"; then
+				echo "--exclude=\"${TARGET}${FILE}.tar.xz\""
+			else
+				echo "--exclude=\"${TARGET}${FILE}\""
+			fi
+		done
+	)	${TARGET}							|| return 1
+	#note: total filesystem size with all directories unpacked (completely loaded memory size)
+	eval ncdu -r -x $(
+		variable_parse SKIPDIRS | while read -r FILE; do
+			if variable_match PACKDIRS "" "${FILE}"; then
 				echo "--exclude=\"${TARGET}${FILE}.tar.xz\""
 			else
 				echo "--exclude=\"${TARGET}${FILE}\""
