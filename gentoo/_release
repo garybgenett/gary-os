@@ -140,8 +140,7 @@ declare RUFUS_URL="https://github.com/pbatard/rufus/releases/download/v3.7/rufus
 
 ########################################
 
-#>>> declare SHMEM_MEM="768"
-declare SHMEM_MEM="512"
+declare SHMEM_MEM="$(((2**20)*768))"
 
 ########################################
 
@@ -1288,7 +1287,6 @@ function release_kernel_shmem {
 	#note: the "$fspack" calculation also factors in the status of subdirectories
 	#note: none of this is perfect, but it is close enough
 	declare SHMEM_PAGES="4096"
-	declare SHMEM_MEM="${SHMEM_MEM}*(1024^2)"
 	declare SHMEM="$(${DU_S} ${CPIO_FILE} | ${SED} "s|[[:space:]].*$||g")"
 	declare PRINTF=" %10.10s %10.10s %10.10s %10.10s %10.10s\n"
 	printf "%-${PACKDIRS_PRNT}.${PACKDIRS_PRNT}s" ">>> INITIAL SHMEM: ${SHMEM}"
