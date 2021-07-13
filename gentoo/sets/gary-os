@@ -46,11 +46,11 @@
 #{FSPACK} base:/lib64/firmware		#{MOD}
 #{MOD} #{FSARCH} base:/lib64/firmware
 
-#{FSKEEP} docs:/usr/share/doc		#{MOD}
-#{FSKEEP} docs:/usr/share/gtk-doc	#{MOD}
-#{FSKEEP} docs:/usr/share/info		#{MOD}
-#{FSKEEP} docs:/usr/share/man		#{MOD}
-#{FSKEEP} docs:/usr/share/texmf-dist	#{MOD}
+#{FSPACK} docs:/usr/share/doc		#{MOD}
+#{FSPACK} docs:/usr/share/gtk-doc	#{MOD}
+#{FSPACK} docs:/usr/share/info		#{MOD}
+#{FSPACK} docs:/usr/share/man		#{MOD}
+#{FSPACK} docs:/usr/share/texmf-dist	#{MOD}
 #{MOD} #{FSARCH} docs:/usr/share/doc
 #{MOD} #{FSARCH} docs:/usr/share/gtk-doc
 #{MOD} #{FSARCH} docs:/usr/share/info
