@@ -220,12 +220,11 @@ fi
 
 ########################################
 
-declare ROOTFS_CPIO="${ROOTFS}"
-declare ROOTFS_CUST="false"
-
 declare ROOTFS_NAME="rootfs"
-declare ROOTFS_TYPE="squashfs"
 declare ROOTFS_FILE="${_RAMFS}.${ROOTFS_NAME}"
+
+declare ROOTFS_CUST="false"
+declare ROOTFS_TYPE="squashfs"
 declare ROOTFS_COMP="-comp xz -b $((2**20)) -Xdict-size 100%"
 declare ROOTFS_OPTS="-noappend -info -xattrs ${ROOTFS_COMP} -wildcards -ef" #>>> ${ROOTFS_FILE}.exclude"
 
@@ -1142,11 +1141,11 @@ function _release_rootfs {		#{ismain} #{doredo} #{dofast} #{dotest}
 		${RM}					${ROOTFS_DEST}*		|| return 1
 	fi
 	if [[ ${ROOTFS_DEST} == ${ROOTFS_FILE} ]]; then
-		ROOTFS_CUST="true"
 		if [[ ! -f ${ROOTFS_DEST} ]]; then
 			if ${DOREDO}; then
 				DOREDO="${DOREDO}" _prepare_packdirs		|| return 1
 			fi
+			ROOTFS_CUST="true"
 			DOREDO="false" DOFAST="${DOFAST}" _prepare_build	|| return 1
 			release_rootfs_file		${ROOTFS_DEST}		|| return 1
 		else
@@ -1169,7 +1168,7 @@ function _release_rootfs {		#{ismain} #{doredo} #{dofast} #{dotest}
 ########################################
 
 function release_cpio_nul {		#>>>{dofast} #>>>{dotest}
-	if ${ROOTFS_CPIO}; then
+	if ${ROOTFS}; then
 		if ${DOTEST}; then
 			DOREDO="false" DOFAST="${DOFAST}" DOTEST="${DOTEST}" _release_rootfs	${CPIO_FILE}.${ROOTFS_NAME}	|| return 1
 		else
@@ -1195,7 +1194,7 @@ function release_cpio_nul {		#>>>{dofast} #>>>{dotest}
 }
 
 function release_cpio_file {
-	if ${ROOTFS_CPIO}; then
+	if ${ROOTFS}; then
 		(cd ${CPIO_FILE}.${ROOTFS_NAME}.dir && ${XARGS} ${DU_S})	| tee ${CPIO_FILE}.txt
 		cat ${CPIO_FILE}.nul | ${CPIO_IN}				${CPIO_FILE}.${ROOTFS_NAME}.dir	|| return 1
 	else
@@ -1209,7 +1208,7 @@ function release_cpio_file {
 
 function release_cpio_dir {		#>>>{dotest}
 	if [[ -n ${TARGET} ]]; then
-		if ! ${ROOTFS_CPIO}; then
+		if ! ${ROOTFS}; then
 			${RM}			${CPIO_FILE}.dir	|| return 1
 			${MKDIR}		${CPIO_FILE}.dir	|| return 1
 			${CPIO_OUT}		${CPIO_FILE}.dir	|| return 1
@@ -1336,7 +1335,7 @@ function release_kernel_initramfs {
 	INITRAMFS_CONFIG+="CONFIG_INITRAMFS_SOURCE=\"${CPIO_FILE/#${TARGET}}\"\n"
 #>>>	INITRAMFS_CONFIG+="CONFIG_INITRAMFS_ROOT_GID=0\n"
 #>>>	INITRAMFS_CONFIG+="CONFIG_INITRAMFS_ROOT_UID=0\n"
-	if ${ROOTFS_CPIO}; then
+	if ${ROOTFS}; then
 		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_COMPRESSION_NONE=y\n"
 	else
 		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_COMPRESSION_XZ=y\n"
