@@ -1161,12 +1161,23 @@ function release_cpio_nul {		#>>>{doredo} #>>>{dofast} #>>>{dotest}
 		(cd ${CPIO_FILE}.${ROOTFS_NAME}.dir && eval find ./ -mindepth 1 -xdev \
 		-print0)									>${CPIO_FILE}.nul		|| return 1
 	else
+		#note: excluding them in reverse, so that embedded packdirs get included
 		(cd ${TARGET} && eval find ./ -mindepth 1 -xdev \
-			$(for FILE in $(
-				variable_parse SKIPDIRS | ${SED} \
-					-e "s|\*|\\\*|g" \
-				); do echo "\\( -path .${FILE} -prune \\) -o"; done
-			) \
+			$(variable_parse SKIPDIRS | while read -r FILE; do
+				if variable_match FSEXCL ";" "${FILE}"; then
+					echo "\\( -path .${FILE/\*/\\\*} -prune \\) -o"
+					echo "\\( -path .${FILE/\*/\\\*}.tar.xz -prune \\) -o"
+				elif variable_match FSARCH ";" "${FILE}"; then
+					echo "\\( -path .${FILE/\*/\\\*} -prune \\) -o"
+					echo "\\( -path .${FILE/\*/\\\*}.tar.xz -prune \\) -o"
+				elif variable_match FSKEEP ";" "${FILE}"; then
+					echo "\\( -path .${FILE/\*/\\\*}.tar.xz -prune \\) -o"
+				elif variable_match FSPACK ";" "${FILE}"; then
+					echo "\\( -path .${FILE/\*/\\\*}.tar.xz -prune \\) -o"
+				else
+					echo "\\( -path .${FILE/\*/\\\*} -prune \\) -o"
+				fi
+			done) \
 		-print0)									>${CPIO_FILE}.nul		|| return 1
 		${RM}										${TARGET}/tmp/dev		|| return 1
 		${MKDIR}									${TARGET}/tmp/dev		|| return 1
