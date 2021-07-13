@@ -92,6 +92,18 @@ endif
 	@$(PRINTF) "Output Directory:"				"O=\"$(O)\""
 	@$(PRINTF) "Artifacts Directory:"			"A=\"$(A)\""
 	@$(PRINTF) "Package List:"				"P=\"$(P)\""
+ifneq ($(findstring help,$(MAKECMDGOALS)),)
+ifeq ($(DOTEST),true)
+	@$(ECHO) "\n"
+	@$(ECHO) "$(STATE)There are a few additional environment variables to control build behaviore:$(RESET)\n"
+	@$(ECHO) "\n"
+	@$(PRINTF) "Undocumented (Development Only):"		"ROOTFS=\"`SETDIR="$(C)" ROOTFS="$(ROOTFS)" $(C)/gentoo/_system -v $(CHROOT) ROOTFS && echo -en "$$$ROOTFS"`\""
+	@$(PRINTF) "Undocumented (Development Only):"		"DOMODS=\"`SETDIR="$(C)" DOMODS="$(DOMODS)" $(C)/gentoo/_system -v $(CHROOT) DOMODS && echo -en "$$$DOMODS"`\""
+	@$(PRINTF) "Undocumented (Development Only):"		"DOREDO=\"`SETDIR="$(C)" DOREDO="$(DOREDO)" $(C)/gentoo/_system -v $(CHROOT) DOREDO && echo -en "$$$DOREDO"`\""
+	@$(PRINTF) "Undocumented (Development Only):"		"DOFAST=\"`SETDIR="$(C)" DOFAST="$(DOFAST)" $(C)/gentoo/_system -v $(CHROOT) DOFAST && echo -en "$$$DOFAST"`\""
+	@$(PRINTF) "Undocumented (Development Only):"		"DOTEST=\"`SETDIR="$(C)" DOTEST="$(DOTEST)" $(C)/gentoo/_system -v $(CHROOT) DOTEST && echo -en "$$$DOTEST"`\""
+endif
+endif
 	@$(ECHO) "\n"
 	@$(ECHO) "$(STATE)A full example to initialize a new chroot build would be:$(RESET)\n"
 	@$(ECHO) "\n"
