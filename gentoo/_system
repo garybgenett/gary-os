@@ -349,7 +349,7 @@ done
 
 ########################################
 
-#VARIABLES[HOME MYSELF IS_CHROOT DO_CHROOT SAFE_ENV]
+#VARIABLES[HOME PWD MYSELF IS_CHROOT DO_CHROOT SAFE_ENV]
 export MYSELF="${ARCDIR}/${FUNDIR}/${_HEART}"
 
 if [[ ${IS_CHROOT} != true ]] && [[ ${IS_CHROOT} != false ]]; then export IS_CHROOT="false"; fi
