@@ -977,6 +977,21 @@ function _prepare_symlinks {		#{isexit} #{doredo}
 
 ################################################################################
 
+function _release_devel {		#{ismain} #{doredo} #{dofast} #{dotest}
+	DOTEST="true" _prepare_docdir						|| return 1
+	if ${DOTEST}; then
+		DOREDO="false" DOFAST="false" DOTEST="true" _release_cpio	|| return 1
+	else
+		DOREDO="false" _prepare_config					|| return 1
+		DOREDO="true" DOFAST="false" DOTEST="false" _release_cpio	|| return 1
+	fi
+	DOREDO="true" _release_kernel						|| return 1
+	_release_report								|| return 1
+	return 0
+}
+
+########################################
+
 function _release_build {		#{ismain} #{doredo} #{dofast} #{dotest}
 	DOREDO="${DOREDO}" DOFAST="${DOFAST}" DOTEST="${DOTEST}" _prepare_build	|| return 1
 	DOREDO="false" DOFAST="${DOFAST}" DOTEST="${DOTEST}" _release_cpio	|| return 1
