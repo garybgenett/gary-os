@@ -694,6 +694,7 @@ function _prepare_config {		#{isexit} #{doredo}
 	DOREDO="${DOREDO}" prepare_config_restore "null"			/etc/profile.d/setterm.sh				|| return 1
 	DOREDO="${DOREDO}" prepare_config_restore net-wireless/wpa_supplicant	/etc/wpa_supplicant/wpa_supplicant.conf			wpa_supplicant.conf.bz2	|| return 1
 	DOREDO="${DOREDO}" prepare_config_restore net-misc/openssh		/etc/ssh/sshd_config					|| return 1
+	DOREDO="${DOREDO}" prepare_config_restore x11-drivers/xf86-video-intel	/usr/share/X11/xorg.conf.d/20-intel.conf		|| return 1
 	DOREDO="${DOREDO}" prepare_config_restore "null"			/etc/env.d/90xsession					|| return 1
 	DOREDO="${DOREDO}" prepare_config_restore x11-wm/dwm			/etc/X11/Sessions/dwm					|| return 1
 	if ${DOREDO}; then
@@ -716,6 +717,7 @@ function _prepare_config {		#{isexit} #{doredo}
 	echo -en "setterm -blength 0\n"						>${TARGET}/etc/profile.d/setterm.sh			|| return 1
 	${RSYNC_C} --copy-links ${ARTDIR}/files/wpa_supplicant.conf		${TARGET}/etc/wpa_supplicant/				|| return 1
 	${SED} -i "s|^.*(PermitRootLogin).*$|\1 yes|g"				${TARGET}/etc/ssh/sshd_config				|| return 1
+	${SED} -i "s|^|#|g"							${TARGET}/usr/share/X11/xorg.conf.d/20-intel.conf	|| return 1
 	echo -en "XSESSION=\"${WINMGR}\"\n"					>${TARGET}/etc/env.d/90xsession				|| return 1
 	FILE=																|| return 1
 		FILE+="xset -b\n"													|| return 1
