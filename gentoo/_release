@@ -985,6 +985,7 @@ function _prepare_symlinks {		#{isexit} #{doredo}
 	for FILE in ${TARGET}${ARCDIR}/stage3-*.tar.xz; do
 		${LN} --relative ${FILE}				${_FINAL}/					|| return 1
 	done
+#>>>	${RM} $(find -L ${_FINAL} -maxdepth 1 -type l 2>/dev/null | sort)						|| return 1
 	return 0
 }
 
