@@ -1236,8 +1236,8 @@ function _release_cpio {		#{doredo} #{dofast} #{dotest}
 function release_kernel_patch {
 	declare DODIR="${1}" && shift
 	for FILE in ${PATCHES[*]}; do
-		${PATCH} --directory=${TARGET}${DODIR} --reverse <${PATCH_DIR}/${FILE}	#>>> || return 1
-		${PATCH} --directory=${TARGET}${DODIR} <${PATCH_DIR}/${FILE}		|| return 1
+		${PATCH} --directory=${TARGET}${DODIR} --reverse	<${PATCH_DIR}/${FILE}	#>>> || return 1
+		${PATCH} --directory=${TARGET}${DODIR}			<${PATCH_DIR}/${FILE}	|| return 1
 	done
 	return 0
 }
