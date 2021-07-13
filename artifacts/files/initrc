@@ -1,0 +1,351 @@
+#!${ROOTFS_SHELL}
+PATH="/usr/sbin:/usr/bin:/sbin:/bin"
+export ${ROOTFS_NAME}_init="false"
+export ${ROOTFS_NAME}_load="false"
+
+marker() {
+	echo -en "################################################################################\n"
+	return 0
+}
+
+${ROOTFS_FUNC}() {
+	marker
+	echo -en "#\n"
+	echo -en "# ${_TITLE}: ${ROOTFS_FUNC} shell\n"
+	echo -en "#\n"
+	if [ "${1}" != "-" ]; then
+		shift
+		echo -en "# AN ERROR HAS OCCURRED -- DROPPING TO THE COMMAND LINE\n"
+		echo -en "#\n"
+	fi
+	${ROOTFS_FUNC}_note="false"
+	if [ -n "`grep -E "^overlay /.${ROOTFS_ROOT_OPT} overlay" /proc/mounts`" ]; then
+		${ROOTFS_FUNC}_note="true"
+		echo -en "# chroot environment is mounted: /.${ROOTFS_ROOT_OPT}\n"
+	fi
+	if [ -n "`grep -E "^[^[:space:]]+ /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}" /proc/mounts`" ]; then
+		${ROOTFS_FUNC}_note="true"
+		echo -en "# device is mounted (/.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}): "
+		sed -r -n "s|^([^[:space:]]+) /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}.+$|\1|gp" /proc/mounts
+	fi
+	if [ -n "`grep -E "^overlay ${_GOVLY} overlay" /proc/mounts`" ]; then
+		${ROOTFS_FUNC}_note="true"
+		echo -en "# ${ROOTFS_NAME} overlay is mounted: ${_GOVLY}\n"
+	fi
+	if ${${ROOTFS_FUNC}_note}; then
+		echo -en "#\n"
+	fi
+	echo -en "# use \"${ROOTFS_NAME} -\" to launch the ${ROOTFS_NAME} selection menu\n"
+	echo -en "# use \"${ROOTFS_NAME} =\" to load the ${ROOTFS_NAME} chroot environment\n"
+	echo -en "# use \"${ROOTFS_NAME} [...]\" to boot using the specified ${ROOTFS_NAME} values\n"
+	echo -en "# use \"un${ROOTFS_NAME}\" to unmount all the ${ROOTFS_NAME} directories\n"
+	echo -en "# use \"dotty\" to start a psuedo-terminal (login: root / ${_TITLE})\n"
+	echo -en "#\n"
+	echo -en "# exiting the shell will return control to the \"/initrc\" script\n"
+	echo -en "#\n"
+	marker
+	exec ${ROOTFS_SHELL} -l
+	return 1
+}
+
+mounts() {
+	mounts="${1}" && shift
+	do_mnt="${1}" && shift
+	if ! ${do_mnt}; then
+		lsof | sed -r -n "s|^([0-9]+)[[:space:]]+${mounts}.+$|\1|gp" | sort -u | while read -r file; do
+			kill -9 ${file} || ${ROOTFS_FUNC}
+		done
+		sed -r -n "s%^.+(${mounts}/(dev|proc|sys)/[^[:space:]]+).+$%\1%gp" /proc/mounts | sort -ru | while read -r file; do
+			umount -v ${file} || ${ROOTFS_FUNC}
+		done
+		for mount in \
+			${mounts}/dev \
+			${mounts}/proc \
+			${mounts}/sys \
+		; do
+			if [ -n "`grep -E " ${mount} " /proc/mounts`" ]; then
+				umount -v ${mount} || ${ROOTFS_FUNC}
+			fi
+		done
+		return 0
+	fi
+	if [ -z "`grep -E "^none ${mounts}/dev devtmpfs" /proc/mounts`" ]; then
+		mkdir -v -p ${mounts}/dev || ${ROOTFS_FUNC}
+		mount -v -t devtmpfs none ${mounts}/dev || ${ROOTFS_FUNC}
+	fi
+	if [ -z "`grep -E "^none ${mounts}/proc proc" /proc/mounts`" ]; then
+		mkdir -v -p ${mounts}/proc || ${ROOTFS_FUNC}
+		mount -v -t proc none ${mounts}/proc || ${ROOTFS_FUNC}
+	fi
+	if [ -z "`grep -E "^none ${mounts}/sys sysfs" /proc/mounts`" ]; then
+		mkdir -v -p ${mounts}/sys || ${ROOTFS_FUNC}
+		mount -v -t sysfs none ${mounts}/sys || ${ROOTFS_FUNC}
+	fi
+	if [ -z "${mounts}" ]; then
+		ln -v -fs /proc/mounts /etc/mtab || ${ROOTFS_FUNC}
+		mdev -s || ${ROOTFS_FUNC}
+		if [ -f "/proc/sys/kernel/hotplug" ]; then
+			echo -en "mdev\n" >/proc/sys/kernel/hotplug || ${ROOTFS_FUNC}
+		fi
+	fi
+	return 0
+}
+
+${ROOTFS_NAME}() {
+	mounts="${1}" && shift
+	${ROOTFS_NAME}="${1}" && shift
+	do_mnt="${1}" && shift
+	to_mem="${1}" && shift
+	do_pak="${1}" && shift
+	if ! ${do_mnt}; then
+		mounts ${mounts} false "${@}" || ${ROOTFS_FUNC}
+		for mount in \
+			${mounts}/.${ROOTFS_ROOT_OPT} \
+			${mounts}${_GOVLY} \
+			${mounts} \
+			${mounts}${_GOVLY}/lowerdir \
+			${mounts} \
+			${mounts}.shm \
+		; do
+			if [ -n "`grep -E " ${mount} " /proc/mounts`" ]; then
+				umount -v ${mount} || ${ROOTFS_FUNC}
+			fi
+		done
+		return 0
+	fi
+	if [ -z "`grep -E "^shm ${mounts}.shm tmpfs" /proc/mounts`" ]; then
+		mkdir -v -p ${mounts}.shm || ${ROOTFS_FUNC}
+		mount -v -t tmpfs shm ${mounts}.shm || ${ROOTFS_FUNC}
+	fi
+	if [ -z "`grep -E "^shm ${mounts} tmpfs" /proc/mounts`" ]; then
+		mkdir -v -p ${mounts} || ${ROOTFS_FUNC}
+		mount -v ${mounts}.shm ${mounts} || ${ROOTFS_FUNC}
+		mkdir -v -p ${mounts}${_GOVLY}/lowerdir || ${ROOTFS_FUNC}
+		mkdir -v -p ${mounts}${_GOVLY}/upperdir || ${ROOTFS_FUNC}
+		mkdir -v -p ${mounts}${_GOVLY}/workdir || ${ROOTFS_FUNC}
+	fi
+	if ${to_mem}; then
+		mkdir -v -p `dirname ${mounts}${_GOVLY}${ROOTFS_ROOT}` || ${ROOTFS_FUNC}
+		rsync -avv --progress --copy-links ${${ROOTFS_NAME}} ${mounts}${_GOVLY}${ROOTFS_ROOT} || ${ROOTFS_FUNC}
+		${ROOTFS_NAME}="${mounts}${_GOVLY}${ROOTFS_ROOT}"
+	fi
+	if [ -z "`grep -E "^/dev/loop[0-9] ${mounts}${_GOVLY}/lowerdir" /proc/mounts`" ]; then
+#>>>		mount -v -t ${ROOTFS_TYPE} -o ro,loop ${${ROOTFS_NAME}} ${mounts}${_GOVLY}/lowerdir || ${ROOTFS_FUNC}
+		mount -v -o ro,loop ${${ROOTFS_NAME}} ${mounts}${_GOVLY}/lowerdir || ${ROOTFS_FUNC}
+	fi
+	if [ -z "`grep -E "^overlay ${mounts} overlay" /proc/mounts`" ]; then
+		lowerdir="${mounts}${_GOVLY}/lowerdir:${mounts}"
+		upperdir="${mounts}${_GOVLY}/upperdir"
+		workdir="${mounts}${_GOVLY}/workdir"
+		mount -v -t overlay overlay -o lowerdir=${lowerdir},upperdir=${upperdir},workdir=${workdir} ${mounts} || ${ROOTFS_FUNC}
+	fi
+	if [ -z "`grep -E "^shm ${mounts}${_GOVLY} tmpfs" /proc/mounts`" ]; then
+		mkdir -v -p ${mounts}${_GOVLY} || ${ROOTFS_FUNC}
+		mount -v -o move ${mounts}.shm ${mounts}${_GOVLY} || ${ROOTFS_FUNC}
+	fi
+	if ${do_pak} && [ -d ${mounts}/.${_TITLE} ]; then
+#>>>		mounts ${mounts} true "${@}" || ${ROOTFS_FUNC}
+#>>>		chroot ${mounts} make -C /.${_TITLE} O=/ unpack || ${ROOTFS_FUNC}
+		make -C ${mounts}/.${_TITLE} O=${mounts} unpack || ${ROOTFS_FUNC}
+#>>>		mounts ${mounts} false "${@}" || ${ROOTFS_FUNC}
+	fi
+	return 0
+}
+
+select() {
+	${ROOTFS_ROOT_OPT}_hint="`sed -r -n "s|^.*${ROOTFS_ROOT_OPT}_hint=([^ ]+).*$|\1|gp" /proc/cmdline`"
+	${ROOTFS_ROOT_OPT}_file="`sed -r -n "s|^.*${ROOTFS_ROOT_OPT}_file=([^ ]+).*$|\1|gp" /proc/cmdline`"
+	${ROOTFS_ROOT_OPT}="`sed -r -n "s|^.*${ROOTFS_ROOT_OPT}=([^ ]+).*$|\1|gp" /proc/cmdline`"
+	select_opt="false"; if [ "${1}" == "-" ]; then select_opt="true"; shift; fi
+	chroot_opt="false"; if [ "${1}" == "=" ]; then chroot_opt="true"; shift; fi
+	if [ -n "${1}" ]; then
+		${ROOTFS_ROOT_OPT}="${1}" && shift
+		if [ -n "${1}" ]; then
+			${ROOTFS_ROOT_OPT}_file="${1}" && shift
+		fi
+	elif
+		[ -z "${${ROOTFS_ROOT_OPT}}" ] &&
+		! ${select_opt}
+	then
+		return 1
+	fi
+	if [ -z "${${ROOTFS_ROOT_OPT}_file}" ]; then
+		${ROOTFS_ROOT_OPT}_file="${ROOTFS_ROOT_SRC}"
+	fi
+	if ! ${select_opt} && (
+		[ -n "`echo "${${ROOTFS_ROOT_OPT}}" | grep -E "^/dev/.+$"`" ] ||
+		[ -n "`echo "${${ROOTFS_ROOT_OPT}}" | grep -E "^[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+$"`" ] ||
+		${chroot_opt}
+	); then
+		# using "/bin/mount" to get filesystem auto-detection
+		if	[ -z "`echo "${${ROOTFS_ROOT_OPT}}" | grep -E "^/dev/.+$"`" ] ||
+			[ ! -b "${${ROOTFS_ROOT_OPT}}" ] ||
+			! mkdir -v -p /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT} ||
+			! /bin/mount -v -o ro,nonempty ${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}
+		then
+			${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} ${ROOTFS_ROOT} true false true "${@}" || ${ROOTFS_FUNC}
+			mounts /.${ROOTFS_ROOT_OPT} true "${@}" || ${ROOTFS_FUNC}
+			if [ ! -d /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT} ]; then
+				mkdir -v -p /.${ROOTFS_ROOT_OPT}/run/openrc || ${ROOTFS_FUNC}
+				touch /.${ROOTFS_ROOT_OPT}/run/openrc/softlevel || ${ROOTFS_FUNC}
+				chroot /.${ROOTFS_ROOT_OPT} rc-update add udev default || ${ROOTFS_FUNC}
+				chroot /.${ROOTFS_ROOT_OPT} rc-update add modules default || ${ROOTFS_FUNC}
+				chroot /.${ROOTFS_ROOT_OPT} openrc || ${ROOTFS_FUNC}
+				mkdir -v -p /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT} || ${ROOTFS_FUNC}
+			fi
+			if	[ -n "`echo "${${ROOTFS_ROOT_OPT}}" | grep -E "^/dev/.+$"`" ] &&
+				[ -z "`grep -E "^${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}" /proc/mounts`" ]
+			then
+				if	! chroot /.${ROOTFS_ROOT_OPT} mount -v -o ro,nonempty ${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT} &&
+					! ${chroot_opt}
+				then
+					${ROOTFS_FUNC}
+				fi
+			elif [ -n "`echo "${${ROOTFS_ROOT_OPT}}" | grep -E "^[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+$"`" ]; then
+				chroot /.${ROOTFS_ROOT_OPT} rc-update add dhcpcd default || ${ROOTFS_FUNC}
+				chroot /.${ROOTFS_ROOT_OPT} openrc || ${ROOTFS_FUNC}
+				chroot /.${ROOTFS_ROOT_OPT} rc-service dhcpcd restart || ${ROOTFS_FUNC}
+				count 9 27
+				mkdir -v -p `dirname /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}${${ROOTFS_ROOT_OPT}_file}` || ${ROOTFS_FUNC}
+#>>>				if	! chroot /.${ROOTFS_ROOT_OPT} tftp -v ${${ROOTFS_ROOT_OPT}} -c get ${${ROOTFS_ROOT_OPT}_file} /.${ROOTFS_ROOT_OPT}${${ROOTFS_ROOT_OPT}_file} &&
+				if	! tftp ${${ROOTFS_ROOT_OPT}} -g -r ${${ROOTFS_ROOT_OPT}_file} -l /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}${${ROOTFS_ROOT_OPT}_file} &&
+					! ${chroot_opt}
+				then
+					${ROOTFS_FUNC}
+				fi
+			fi
+			if ${chroot_opt}; then
+				marker
+				echo -en "#\n"
+				echo -en "# ${_TITLE}: ${ROOTFS_NAME} chroot\n"
+				echo -en "#\n"
+				echo -en "# expected location of ${ROOTFS_NAME} file: /.${ROOTFS_ROOT_OPT}${${ROOTFS_ROOT_OPT}_file}\n"
+				echo -en "# exiting the shell will return control to the \"/initrc\" script\n"
+				echo -en "#\n"
+				marker
+				chroot /.${ROOTFS_ROOT_OPT} ${ROOTFS_BASH} || ${ROOTFS_FUNC}
+			fi
+		fi
+		if [ -f "/.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}${${ROOTFS_ROOT_OPT}_file}" ]; then
+			${ROOTFS_NAME} ${_GOVLY} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}${${ROOTFS_ROOT_OPT}_file} true true false "${@}" || ${ROOTFS_FUNC}
+			if [ -n "`grep -E "^${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}" /proc/mounts`" ]; then
+				umount -v ${${ROOTFS_ROOT_OPT}} || ${ROOTFS_FUNC}
+			fi
+			${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} "" false false "${@}" || ${ROOTFS_FUNC}
+			${ROOTFS_NAME} ${_GOVLY} ${_GOVLY}${ROOTFS_ROOT} true false true "${@}" || ${ROOTFS_FUNC}
+			return 0
+		else
+			select - "${${ROOTFS_ROOT_OPT}}" "${${ROOTFS_ROOT_OPT}_file}" "${@}" || ${ROOTFS_FUNC}
+			return 0
+		fi
+	else
+		marker
+		echo -en "#\n"
+		echo -en "# ${_TITLE}: ${ROOTFS_NAME} selection\n"
+		echo -en "#\n"
+		echo -en "# selected source of ${ROOTFS_NAME} file: ${${ROOTFS_ROOT_OPT}}\n"
+		echo -en "# expected location of ${ROOTFS_NAME} file: ${${ROOTFS_ROOT_OPT}_file}\n"
+		echo -en "# available bootloader hint: ${${ROOTFS_ROOT_OPT}_hint}\n"
+		echo -en "#\n"
+		echo -en "# the ${ROOTFS_NAME} file was not found using these settings\n"
+		echo -en "#\n"
+		echo -en "# please enter a new device or partition\n"
+		echo -en "# using an ip address will set up dhcp and tftp from that server\n"
+		echo -en "# a different file location can be specified after the source\n"
+		echo -en "#\n"
+		echo -en "# examples:\n"
+		echo -en "# /dev/sdb1  -or- /dev/sdb1  ${ROOTFS_ROOT_SRC}\n"
+		echo -en "# 10.0.0.254 -or- 10.0.0.254 ${ROOTFS_ROOT_SRC}\n"
+		echo -en "#\n"
+		echo -en "# use \"l\" to get a list of available devices and partitions\n"
+		echo -en "# use \"g\" to boot the default ${ROOTFS_NAME}\n"
+		echo -en "# use \"c\" to enter the chroot environment\n"
+		echo -en "# use \"q\" for the ${ROOTFS_FUNC} shell\n"
+		echo -en "#\n"
+		marker
+		echo -en "> "
+		read ${ROOTFS_ROOT_OPT}
+		if [ "${${ROOTFS_ROOT_OPT}}" == "l" ]; then
+			marker
+			echo -en "#\n"
+			echo -en "# the \"c\" chroot environment may be necessary if this list is empty\n"
+			echo -en "#\n"
+			marker
+			fdisk -l | grep -E "^(Disk|[[:space:]]*[0-9])"
+			select -
+			return 0
+		elif [ "${${ROOTFS_ROOT_OPT}}" == "g" ]; then
+			return 1
+		elif [ "${${ROOTFS_ROOT_OPT}}" == "c" ]; then
+			select =
+			return 0
+		elif [ "${${ROOTFS_ROOT_OPT}}" == "q" ]; then
+			${ROOTFS_FUNC} -
+			return 0
+		elif [ -z "${${ROOTFS_ROOT_OPT}}" ]; then
+			select -
+			return 0
+		else
+			select ${${ROOTFS_ROOT_OPT}} "${@}" || ${ROOTFS_FUNC}
+			return 0
+		fi
+	fi
+	${ROOTFS_FUNC}
+	return 1
+}
+
+count() {
+	time="${1}" && shift
+	line="${1}" && shift
+	wait="`expr ${time}00 / ${line}`"
+	if [ "${wait}" -lt "10" ]; then
+		wait="0.0${wait}"
+	else
+		wait="0.${wait}"
+	fi
+	doit="0"
+	while [ "${doit}" -lt "${line}" ]; do
+		echo -en ".\n"
+		sleep "${wait}"
+		doit="`expr ${doit} + 1`"
+	done
+	return 0
+}
+
+if [ "${1}" == "un${ROOTFS_NAME}" ]; then
+	shift
+	${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} "" false false false "${@}" || ${ROOTFS_FUNC}
+	${ROOTFS_NAME} ${_GOVLY} "" false false false "${@}" || ${ROOTFS_FUNC}
+	${ROOTFS_FUNC} -
+else
+	if [ "${1}" == "${ROOTFS_NAME}" ]; then
+		shift
+		count 1 3
+	else
+		count 3 9
+	fi
+	mounts "" true "${@}" || ${ROOTFS_FUNC}
+	if ! ${${ROOTFS_NAME}_init} || [ -n "${@}" ]; then
+		export ${ROOTFS_NAME}_init="true"
+		if select "${@}"; then
+			export ${ROOTFS_NAME}_load="true"
+		fi
+	else
+		if select - "${${ROOTFS_ROOT_OPT}}" "${${ROOTFS_ROOT_OPT}_file}" "${@}"; then
+			export ${ROOTFS_NAME}_load="true"
+		fi
+	fi
+	if ! ${${ROOTFS_NAME}_load}; then
+		${ROOTFS_NAME} ${_GOVLY} ${ROOTFS_ROOT} true true true "${@}" || ${ROOTFS_FUNC}
+	fi
+fi
+
+if ${DOTEST}; then
+	marker
+	echo -en "# ${_TITLE}: success!\n"
+#>>>	marker
+	${ROOTFS_FUNC} -
+fi
+kill -SIGQUIT 1
+
+exit 1
