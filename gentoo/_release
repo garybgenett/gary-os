@@ -1475,10 +1475,10 @@ function _release_fetch {		#{ismain} #{doredo} #{dotest}
 		${FET_SRC}/${FET_BAS}.${FILE}.${_GPACK} ${FET_OUT}	${FET_DST}/					|| return 1
 	done
 	${FET_SRC}/${FET_BAS}.${_GREAD} ${FET_OUT}			${FET_DST}/					|| return 1
-	if {
-		[[ ! -s ${FET_PKG} ]] &&
-		! ${DOTEST};
-	}; then
+	if ${DOTEST}; then
+		echo "${FUNCNAME}"					>${FET_PKG}
+	fi
+	if [[ ! -s ${FET_PKG} ]]; then
 		cat /dev/null						>${FET_PKG}
 	else
 		shopt -s lastpipe
