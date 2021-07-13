@@ -10,8 +10,8 @@ override GARYOS_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 ifneq ($(wildcard $(GARYOS_DIR)/.bashrc),)
 export HOME	:= $(GARYOS_DIR)
 endif
-override CHROOT	:= -g
 
+override CHROOT	:= -g
 override C	?= $(GARYOS_DIR)
 override S	?= $(GARYOS_DIR)/sources
 override O	?= $(GARYOS_DIR)/build
@@ -40,6 +40,7 @@ override PRINTF	:= printf "$(TITLE)%-45.45s$(RESET) $(HOWTO)%s$(RESET) $(STATE)%
 ########################################
 
 #NOTE: KEEP THIS OUTPUT TO LESS THAN 80 CHARACTERS WIDE
+#>>>	@$(ECHO) "$(STATE)>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>$(RESET)\n"
 
 .PHONY: usage
 usage:
@@ -74,7 +75,7 @@ usage:
 	@$(PRINTF) "Initramfs System (Live Install):"		"$(MAKE) O=/ install"
 ifneq ($(findstring help,$(MAKECMDGOALS)),)
 	@$(ECHO) "\n"
-	@$(ECHO) "$(STATE)There are also \"initramfs\" pass-through targets, for advanced use:$(RESET)\n"
+	@$(ECHO) "$(STATE)There are also build script pass-through targets, for advanced use:$(RESET)\n"
 	@$(ECHO) "\n"
 	@$(PRINTF) "Distribution Prepare (Internal Only):"	"_prepare_*"
 	@$(PRINTF) "Distribution Release (Internal Only):"	"_release_*"
@@ -213,16 +214,16 @@ _release_%:
 
 .PHONY: readme
 readme:
-	@grep -E "^[#*]"					$(GARYOS_DIR)/README.md
+	@grep -E "^[#*]"						$(GARYOS_DIR)/README.md
 
 .PHONY: readme-all
 readme-all: readme
 	@$(ECHO) "\n"
-	@grep -E "^[[:space:]]+[*][ ][[][A-Z0-9].+[]]$$"	$(GARYOS_DIR)/README.md
+	@grep -E "^[[:space:]]+[*][ ][[][A-Z0-9].+[]]$$"		$(GARYOS_DIR)/README.md
 	@$(ECHO) "\n"
-	@grep -E "^[[#*][#*A-Z0-9 ]"				$(GARYOS_DIR)/README.md
+	@grep -E "^[[#*][#*A-Z0-9 ]"					$(GARYOS_DIR)/README.md
 	@$(ECHO) "\n"
-	@grep -E "^[#*]"					$(GARYOS_DIR)/LICENSE.md
+	@grep -E "^[#*]"						$(GARYOS_DIR)/LICENSE.md
 
 ################################################################################
 # End Of File
