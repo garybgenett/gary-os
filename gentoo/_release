@@ -1170,13 +1170,9 @@ function _release_rootfs {		#{ismain} #{doredo} #{dofast} #{dotest}
 
 ########################################
 
-function release_cpio_nul {		#>>>{dofast} #>>>{dotest}
+function release_cpio_nul {		#>>>{doredo} #>>>{dofast} #>>>{dotest}
 	if ${ROOTFS}; then
-		if ${DOTEST}; then
-			DOREDO="false" DOFAST="${DOFAST}" DOTEST="${DOTEST}" _release_rootfs	${CPIO_FILE}.${ROOTFS_NAME}	|| return 1
-		else
-			DOREDO="true" DOFAST="${DOFAST}" DOTEST="${DOTEST}" _release_rootfs	${CPIO_FILE}.${ROOTFS_NAME}	|| return 1
-		fi
+		DOREDO="${DOREDO}" DOFAST="${DOFAST}" DOTEST="${DOTEST}" _release_rootfs	${CPIO_FILE}.${ROOTFS_NAME}	|| return 1
 		(cd ${CPIO_FILE}.${ROOTFS_NAME}.dir && eval find ./ -mindepth 1 -xdev \
 		-print0)									>${CPIO_FILE}.nul		|| return 1
 	else
@@ -1223,16 +1219,14 @@ function release_cpio_dir {		#>>>{dotest}
 
 function _release_cpio {		#{doredo} #{dofast} #{dotest}
 	if ${DOREDO}; then
-		if ${DOTEST}; then
-			${RM} ${CPIO_FILE}							|| return 1
-		else
-			${RM} ${CPIO_FILE}*							|| return 1
-		fi
+		${RM} ${CPIO_FILE}*								|| return 1
+	elif ${ROOTFS} && ${DOTEST}; then
+		${RM} ${CPIO_FILE}								|| return 1
 	fi
 	${MKDIR} ${_FINAL}									|| return 1
 	if [[ ! -f ${CPIO_FILE} ]]; then
 		${RM} ${_RAMFS}.kernel								|| return 1
-		DOFAST="${DOFAST}" DOTEST="${DOTEST}" release_cpio_nul				|| return 1
+		DOREDO="${DOREDO}" DOFAST="${DOFAST}" DOTEST="${DOTEST}" release_cpio_nul	|| return 1
 		release_cpio_file								|| return 1
 		DOTEST="${DOTEST}" release_cpio_dir						|| return 1
 	else
