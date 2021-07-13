@@ -81,6 +81,7 @@ ifneq ($(findstring help,$(MAKECMDGOALS)),)
 	@$(ECHO) "\n"
 	@$(PRINTF) "Distribution Prepare (Internal Only):"	"_prepare_*"
 	@$(PRINTF) "Distribution Release (Internal Only):"	"_release_*"
+	@$(PRINTF) "Distribution Release (Internal Only):"	"_publish_*"
 endif
 	@$(ECHO) "\n"
 	@$(ECHO) "$(STATE)All of the targets generally run non-interactively, except \"update\" and \"shell\".$(RESET)\n"
@@ -223,6 +224,10 @@ _prepare_%:
 .PHONY: _release_%
 _release_%:
 	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) _release_$(*)
+
+.PHONY: _publish_%
+_publish_%:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) _publish_$(*)
 
 ################################################################################
 
