@@ -578,6 +578,7 @@ function _prepare_build {		#{doredo} #{dofast} #{dotest}
 
 function prepare_config_issue {
 	declare FUNTOO_DATE="$(${SED} -n "s|^#.+([0-9]{4}-[0-9]{2}-[0-9]{2}).+(${FUNTOO}).*$|\1|gp" ${SETDIR}/${FUNDIR}/${FUNCMT})"
+	${RSYNC_C} --copy-links ${ARTDIR}/files/issue				${TARGET}/etc/issue	|| return 1
 	for FILE in \
 		"GaryOS Version|${_VERSN}" \
 		"GaryOS Release Date|${_RDATE}" \
@@ -587,13 +588,8 @@ function prepare_config_issue {
 	; do
 		declare KEY="$(echo "${FILE}" | ${SED} "s|^(.+)[|](.+)$|\1|g")"
 		declare VAL="$(echo "${FILE}" | ${SED} "s|^(.+)[|](.+)$|\2|g")"
-		${SED} -i \
-			-e "s|^(.*${KEY}[:].*[0-9]m ).*$|\1${VAL}|g" \
-			${ARTDIR}/files/issue \
-			|| return 1
+		${SED} -i "s|^(.*${KEY}[:].*[0-9]m ).*$|\1${VAL}|g"		${TARGET}/etc/issue	|| return 1
 	done
-	${RSYNC_C} --copy-links ${ARTDIR}/files/issue ${TARGET}/etc/issue \
-		|| return 1
 	if {
 		{ [[ -z ${COMMIT} ]] || [[ ! -d ${_G_REPO} ]]; } ||
 		[[ ${_PKG} != ${_TITLE} ]] ||
@@ -605,25 +601,21 @@ function prepare_config_issue {
 		FILE+="\\\e[0;35m"
 		FILE+="PLEASE NOTE THAT THIS BUILD HAS BEEN CUSTOMIZED AND IS NOT AN OFFICIAL RELEASE"
 		FILE+="\\\e[0;37m"
-		${SED} -i "/Some helpful notes/,/Build system/c\\${FILE}" \
-			${TARGET}/etc/issue \
-			|| return 1
+		${SED} -i "/Some helpful notes/,/Build system/c\\${FILE}"	${TARGET}/etc/issue	|| return 1
 	fi
 	if ${ROOTFS_CUST}; then
-		${SED} -i "s|${_GPACK}|${_GPACK/%.txt/.${ROOTFS_NAME}.txt}|g" \
-			${TARGET}/etc/issue \
-			|| return 1
+		${SED} -i "s|${_GPACK}|${_GPACK/%.txt/.${ROOTFS_NAME}.txt}|g"	${TARGET}/etc/issue	|| return 1
 	fi
 	if [[ ! -f ${TARGET}/usr/bin/startx ]]; then
-		${SED} -i "/startx/d" \
-			${TARGET}/etc/issue \
-			|| return 1
+		${SED} -i "/startx/d"						${TARGET}/etc/issue	|| return 1
 	fi
-	${SED} \
-		-e "s|[\]e[[]([0-9]+[;])?[0-9]+[;][0-9]+m||g" \
-		-e "/^[\][a-z]/d" \
-		${TARGET}/etc/issue >${TARGET}/etc/motd \
-		|| return 1
+	for FILE in ${ROOTFS_FILE_VARS}; do
+		${SED} -i "s|[$][{]${FILE}[}]|${!FILE}|g"			${TARGET}/etc/issue	|| return 1
+	done
+	${SED}												\
+		-e "s|[\]e[[]([0-9]+[;])?[0-9]+[;][0-9]+m||g"						\
+		-e "/^[\][a-z]/d"									\
+		${TARGET}/etc/issue						>${TARGET}/etc/motd
 	return 0
 }
 
