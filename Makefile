@@ -214,18 +214,33 @@ _release_%:
 
 ################################################################################
 
+#NOTE: THESE ARE FOR DEVELOPMENT AND TESTING AND ARE THEREFORE UNDOCUMENTED
+
+########################################
+
+.PHONY: check
+check:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) _release_review
+
+########################################
+
+export COMPOSER		?= $(GARYOS_DIR)/.composer/Makefile
+export COMPOSER_TARGETS	:= README.html
+#>>>export COMPOSER_DEBUGIT	:= 1
+#>>>export CSS		:= css_alt
+#>>>export TOC		:= 6
+#>>>export OPT		:= --metadata title="GaryOS Readme"
+
 .PHONY: readme
 readme:
 	@grep -E "^[#*]"						$(GARYOS_DIR)/README.md
 
 .PHONY: readme-all
 readme-all: readme
-	@$(ECHO) "\n"
-	@grep -E "^[[:space:]]+[*][ ][[][A-Z0-9].+[]]$$"		$(GARYOS_DIR)/README.md
-	@$(ECHO) "\n"
-	@grep -E "^[[#*][#*A-Z0-9 ]"					$(GARYOS_DIR)/README.md
-	@$(ECHO) "\n"
-	@grep -E "^[#*]"						$(GARYOS_DIR)/LICENSE.md
+	@$(MAKE) --directory="$(GARYOS_DIR)" --makefile="$(COMPOSER)"	$(COMPOSER_TARGETS)
+	@$(ECHO) "\n"; grep -E "^[[:space:]]+[*][ ][[][A-Z0-9].+[]]$$"	$(GARYOS_DIR)/README.md
+	@$(ECHO) "\n"; grep -E "^[[#*][#*A-Z0-9 ]"			$(GARYOS_DIR)/README.md
+	@$(ECHO) "\n"; grep -E "^[#*]"					$(GARYOS_DIR)/LICENSE.md
 
 ################################################################################
 # End Of File
