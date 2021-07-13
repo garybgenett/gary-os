@@ -12,6 +12,7 @@ export HOME	:= $(GARYOS_DIR)
 endif
 
 override CHROOT	:= -g
+override DOMODS	?=
 override C	?= $(GARYOS_DIR)
 override S	?= $(GARYOS_DIR)/sources
 override O	?= $(GARYOS_DIR)/build
@@ -57,7 +58,7 @@ usage:
 	@$(PRINTF) "Information Lookup (Gentoo Bug URL):"	"$(MAKE) {bug_ids}"
 	@$(ECHO) "\n"
 	@$(PRINTF) "Chroot Build (Initial):"			"$(MAKE) init"
-	@$(PRINTF) "Chroot Build (Update Only):"		"$(MAKE) doit" "<tiny>"
+	@$(PRINTF) "Chroot Build (Update Only):"		"$(MAKE) doit"
 	@$(PRINTF) "Chroot Build (Complete Rebuild):"		"$(MAKE) redo"
 	@$(PRINTF) "Chroot Build (Configuration):"		"$(MAKE) edit"
 	@$(ECHO) "\n"
@@ -67,10 +68,11 @@ usage:
 	@$(ECHO) "\n"
 	@$(PRINTF) "Initramfs Build (Chroot Reset):"		"$(MAKE) clean"
 	@$(PRINTF) "Initramfs Build (Chroot Create):"		"$(MAKE) release"
-	@$(PRINTF) "Initramfs Build (Chroot Initrd):"		"$(MAKE) initrd"
+	@$(PRINTF) "Initramfs Build (Chroot Root):"		"$(MAKE) rootfs"
 	@$(PRINTF) "Initramfs System (Live Reset):"		"$(MAKE) O=/ clean"
 	@$(PRINTF) "Initramfs System (Live Create):"		"$(MAKE) O=/ release"
-	@$(PRINTF) "Initramfs System (Live Initrd):"		"$(MAKE) O=/ initrd"
+	@$(PRINTF) "Initramfs System (Live Root):"		"$(MAKE) O=/ rootfs"
+	@$(PRINTF) "Initramfs System (Live Fetch):"		"$(MAKE) O=/ fetch"
 	@$(PRINTF) "Initramfs System (Live Unpack):"		"$(MAKE) O=/ unpack"
 	@$(PRINTF) "Initramfs System (Live Install):"		"$(MAKE) O=/ install"
 ifneq ($(findstring help,$(MAKECMDGOALS)),)
@@ -144,10 +146,6 @@ package_list: .DEFAULT
 .PHONY: all
 all: init doit redo edit release
 
-.PHONY: tiny
-tiny:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) -m -/
-
 ########################################
 
 .PHONY: init
@@ -188,9 +186,13 @@ clean:
 release:
 	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) _release_ramfs
 
-.PHONY: initrd
-initrd:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) _release_initrd
+.PHONY: rootfs
+rootfs:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) _release_rootfs
+
+.PHONY: fetch
+fetch:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) _release_fetch
 
 .PHONY: unpack
 unpack:
