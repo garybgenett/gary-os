@@ -560,17 +560,17 @@ function _release_review {		#{ismain}
 
 function _prepare_build {		#{doredo} #{dofast} #{dotest}
 	if ${DOREDO}; then
-		_release_reset					|| return 1
+		_release_reset			|| return 1
 	fi
 	if ! ${DOFAST}; then
-		DOREDO="false" _prepare_config			|| return 1
+		DOREDO="false" _prepare_config	|| return 1
 	fi
-	DOREDO="false" DOTEST="${DOTEST}" _prepare_docdir	|| return 1
-	DOREDO="false" _prepare_repdir				|| return 1
-	DOREDO="false" _prepare_linux				|| return 1
-	DOREDO="false" _prepare_packdirs			|| return 1
-	DOREDO="false" _prepare_packages			|| return 1
-	DOREDO="false" _prepare_symlinks			|| return 1
+	DOTEST="${DOTEST}" _prepare_docdir	|| return 1
+	_prepare_repdir				|| return 1
+	_prepare_linux				|| return 1
+	DOREDO="false" _prepare_packdirs	|| return 1
+	_prepare_packages			|| return 1
+	DOREDO="false" _prepare_symlinks	|| return 1
 	return 0
 }
 
@@ -978,11 +978,11 @@ function _prepare_symlinks {		#{isexit} #{doredo}
 ################################################################################
 
 function _release_build {		#{ismain} #{doredo} #{dofast} #{dotest}
-	DOREDO="${DOREDO}" DOFAST="${DOFAST}" _prepare_build	|| return 1
-	DOREDO="false" DOTEST="${DOTEST}" _release_cpio		|| return 1
-	DOREDO="false" _release_kernel				|| return 1
-	DOREDO="false" _release_grub				|| return 1
-	DOREDO="false" _release_report				|| return 1
+	DOREDO="${DOREDO}" DOFAST="${DOFAST}" DOTEST="${DOTEST}" _prepare_build	|| return 1
+	DOREDO="false" DOFAST="${DOFAST}" DOTEST="${DOTEST}" _release_cpio	|| return 1
+	DOREDO="false" _release_kernel						|| return 1
+	DOREDO="false" _release_grub						|| return 1
+	_release_report								|| return 1
 	return 0
 }
 
@@ -1137,7 +1137,7 @@ function _release_rootfs {		#{ismain} #{doredo} #{dofast} #{dotest}
 #>>>				DOREDO="true" _prepare_symlinks					|| return 1
 			fi
 			ROOTFS_CUST="true"
-			DOREDO="false" DOFAST="${DOFAST}" _prepare_build			|| return 1
+			DOREDO="false" DOFAST="${DOFAST}" DOTEST="${DOTEST}" _prepare_build	|| return 1
 			release_rootfs_file				${ROOTFS_DEST}		|| return 1
 		else
 			common_exists ${FUNCNAME}			${ROOTFS_DEST}*		|| return 1
@@ -1147,7 +1147,7 @@ function _release_rootfs {		#{ismain} #{doredo} #{dofast} #{dotest}
 			release_rootfs_file				${ROOTFS_DEST}		|| return 1
 			DOTEST="${DOTEST}" release_rootfs_cpio		${ROOTFS_DEST}		|| return 1
 		elif ${DOTEST}; then
-			DOTEST="${DOTEST}" release_rootfs_cpio		${ROOTFS_DEST}		|| return 1
+			DOTEST="true" release_rootfs_cpio		${ROOTFS_DEST}		|| return 1
 		else
 			common_exists ${FUNCNAME}			${ROOTFS_DEST}*		|| return 1
 		fi
@@ -1685,8 +1685,8 @@ function release_install_live {
 	) ]]; then
 		#note: cross-reference with the "prepare_docdir" function any time this changes
 		#note: cross-reference with the "release_unpack" function any time this changes
-		TARGET="${_GINST}" prepare_config_issue	|| return 1
-		TARGET="${_GINST}" _prepare_docdir	|| return 1
+		TARGET="${_GINST}" prepare_config_issue			|| return 1
+		TARGET="${_GINST}" DOTEST="false" _prepare_docdir	|| return 1
 	fi
 	return 0
 }
