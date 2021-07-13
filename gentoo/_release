@@ -982,7 +982,13 @@ function _release_devel {		#{ismain} #{doredo} #{dofast} #{dotest}
 	if ${DOTEST}; then
 		DOREDO="false" DOFAST="false" DOTEST="true" _release_cpio	|| return 1
 	else
-		DOREDO="false" _prepare_config					|| return 1
+		if ${DOREDO}; then
+			#note: all "prepare_*" functions that "#{isexit}" on "${doredo}"
+			DOREDO="true" _prepare_config				|| return 1
+			DOREDO="true" _prepare_packdirs				|| return 1
+			DOREDO="true" _prepare_symlinks				|| return 1
+		fi
+		DOREDO="false" DOFAST="false" DOTEST="false" _prepare_build	|| return 1
 		DOREDO="true" DOFAST="false" DOTEST="false" _release_cpio	|| return 1
 	fi
 	DOREDO="true" _release_kernel						|| return 1
