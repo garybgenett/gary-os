@@ -146,8 +146,6 @@ declare GRUBD="/usr/lib/grub"
 declare GMODS="${GRUBD}/${GTYPE}"
 declare GFILE="/boot/grub/grub.cfg"
 
-declare GCUST="${_BASE}.grub.cfg"
-
 declare GCDEV="${GINST}${GPSEP}${GPART}"
 if [[ ${GINST} == ${GIDEF} ]]; then
 #>>>	GCDEV="${GIBAK}${GPSEP}${GPART}"
@@ -156,13 +154,14 @@ fi
 
 ########################################
 
-declare GMENU_CUSTOM="/${_BASE}/${GCUST}"
-declare GMENU_RESCUE="/${_BASE}/${_BASE}.kernel"
+declare GMENU_KERNEL="/${_BASE}/${_BASE}.kernel"
 declare GMENU_ROOTFS="/${_BASE}/${_BASE}.rootfs"
 declare GMENU_OPTION="shmem_size=${SHMEM} groot_hint=\${garyos_rootfs} groot_file=${GMENU_ROOTFS} groot=${GCDEV}"
 declare GMENU_OPTPXE="shmem_size=${SHMEM} groot_hint=${GPXE} groot_file=${GMENU_ROOTFS} groot=\${garyos_server}"
 
-declare GMENU="\
+declare GMENU_CUSTOM="/${_BASE}/${_BASE}.grub.cfg"
+
+declare GMENU_HEAD="\
 # settings
 
 set debug=linux
@@ -185,16 +184,18 @@ insmod search
 insmod configfile
 insmod linux
 insmod chain
-
+"
+declare GMENU="\
+${GMENU_HEAD}
 # titles
 
 menuentry \"${_NAME}\" {
-configfile (memdisk)${GFILE}
+	configfile (memdisk)${GFILE}
 }
 menuentry \"---\" {
-set pager=1
-set
-set pager=0
+	set pager=1
+	set
+	set pager=0
 }
 
 # kernel
@@ -203,7 +204,7 @@ set garyos_custom=
 set garyos_rescue=
 set garyos_rootfs=
 search --no-floppy --file --set garyos_custom ${GMENU_CUSTOM}
-search --no-floppy --file --set garyos_rescue ${GMENU_RESCUE}
+search --no-floppy --file --set garyos_rescue ${GMENU_KERNEL}
 search --no-floppy --file --set garyos_rootfs ${GMENU_ROOTFS}
 
 if [ -n \"\${garyos_custom}\" ]; then
@@ -226,15 +227,15 @@ else
 fi
 
 menuentry \"${_PROJ} Menu\" {
-configfile (\${garyos_custom})${GMENU_CUSTOM}
+	configfile (\${garyos_custom})${GMENU_CUSTOM}
 }
 menuentry \"${_PROJ} Boot\" {
-linux (\${garyos_rescue})${GMENU_RESCUE}${GOPTS}
-boot
+	linux (\${garyos_rescue})${GMENU_KERNEL}${GOPTS}
+	boot
 }
 menuentry \"${_PROJ} Boot Rootfs\" {
-linux (\${garyos_rootfs})${GMENU_RESCUE}${GOPTS} ${GMENU_OPTION}
-boot
+	linux (\${garyos_rootfs})${GMENU_KERNEL}${GOPTS} ${GMENU_OPTION}
+	boot
 }
 
 # install
@@ -254,12 +255,12 @@ else
 fi
 
 menuentry \"${_PROJ} Install Menu\" {
-configfile (\${garyos_install})${GFILE}
+	configfile (\${garyos_install})${GFILE}
 }
 menuentry \"${_PROJ} Install Boot\" {
-linux (\${garyos_install})/boot/kernel${GOPTS} root=${GCDEV}
-initrd (\${garyos_install})/boot/initrd
-boot
+	linux (\${garyos_install})/boot/kernel${GOPTS} root=${GCDEV}
+	initrd (\${garyos_install})/boot/initrd
+	boot
 }
 
 # pxe
@@ -268,7 +269,7 @@ set garyos_server=\"\${net_${GPXE}_next_server}\"
 set garyos_source=\"\${net_${GPXE}_rootpath}\"
 set garyos_params=\"\${net_${GPXE}_extensionspath}\"
 if [ -z \"\${garyos_server}\" ]; then				set garyos_server=\"\${net_${GPXE}_dhcp_next_server}\"; fi
-if [ -z \"\${garyos_source}\" ]; then				set garyos_source=\"${GMENU_RESCUE}\"; fi
+if [ -z \"\${garyos_source}\" ]; then				set garyos_source=\"${GMENU_KERNEL}\"; fi
 #note: it would be nice if grub supported something like \"||\" for this...
 if [ -z \"\${garyos_params}\" ]; then				set garyos_params=\"${GMENU_OPTPXE}\"
 elif [ \"\${garyos_params}\" = \"\${garyos_server}\" ]; then	set garyos_params=\"${GMENU_OPTPXE}\"
@@ -281,35 +282,37 @@ if [ -n \"\${garyos_server}\" ]; then
 fi
 
 menuentry \"${_PROJ} PXE\" {
-echo cmd: net_bootp
-echo cmd: configfile (memdisk)${GFILE}
-echo var: set garyos_server=\"\${garyos_server}\"
-echo var: set garyos_source=\"${GMENU_RESCUE}\"
-echo var: set garyos_params=\"${GMENU_OPTPXE}\"
-echo garyos_server: \${garyos_server}
-echo garyos_source: \${garyos_source}
-echo garyos_params: \${garyos_params}
+	echo cmd: net_bootp
+	echo cmd: configfile (memdisk)${GFILE}
+	echo var: set garyos_server=\"\${garyos_server}\"
+	echo var: set garyos_source=\"${GMENU_KERNEL}\"
+	echo var: set garyos_params=\"${GMENU_OPTPXE}\"
+	echo garyos_server: \${garyos_server}
+	echo garyos_source: \${garyos_source}
+	echo garyos_params: \${garyos_params}
 
-linux (tftp,\${garyos_server})\${garyos_source}${GOPTS} \${garyos_params}
-boot
+	linux (tftp,\${garyos_server})\${garyos_source}${GOPTS} \${garyos_params}
+	boot
 }
 
 # chainload
 
 menuentry \"Boot Primary\" {
-chainloader (hd0)+1
+	chainloader (hd0)+1
 }
 menuentry \"Boot Secondary\" {
-chainloader (hd1)+1
+	chainloader (hd1)+1
 }
 
 # end of file
 "
 
-declare GCONF="\
-# custom
+declare GCUST="\
+${GMENU_HEAD}
+# titles
+
 menuentry \"${_NAME} (Custom)\" {
-configfile (memdisk)${GFILE}
+	configfile (memdisk)${GFILE}
 }
 # end of file
 "
@@ -611,31 +614,31 @@ echo -en "${GMENU}"		>${GDEST}/rescue.cfg	|| exit 1
 function partition_disk {
 	declare DEV="${1}"
 	shift
-	echo -en "${GDISK}" | gdisk ${DEV}		|| return 1
-#>>>	echo -en "${GDHYB}" | gdisk ${DEV}		|| return 1
-#>>>	yes | format ${GFMBR} ${DEV}${GPSEP}${GPMBR}	|| return 1
-	yes | format ${GFEFI} ${DEV}${GPSEP}${GPEFI}	|| return 1
-	yes | format ${GFFMT} ${DEV}${GPSEP}${GPART}	|| return 1
+	echo -en "${GDISK}" | gdisk ${DEV}			|| return 1
+#>>>	echo -en "${GDHYB}" | gdisk ${DEV}			|| return 1
+#>>>	yes | format ${GFMBR} ${DEV}${GPSEP}${GPMBR}		|| return 1
+	yes | format ${GFEFI} ${DEV}${GPSEP}${GPEFI}		|| return 1
+	yes | format ${GFFMT} ${DEV}${GPSEP}${GPART}		|| return 1
 	return 0
 }
 
 function custom_menu {
 	declare DEV="${1}"
 	FILE="${GDEST}/.mount-menu"
-	${MKDIR} ${FILE}				|| return 1
-	mount-robust ${DEV}${GPSEP}${GPART} ${FILE}	|| return 1
-	${MKDIR} ${FILE}/${_BASE}			|| return 1
-	echo -en "${GCONF}" >${FILE}/${_BASE}/${GCUST}	|| return 1
-	mount-robust -u ${DEV}${GPSEP}${GPART}		|| return 1
-	${RM} ${FILE}					|| return 1
+	${MKDIR} ${FILE}					|| return 1
+	mount-robust ${DEV}${GPSEP}${GPART} ${FILE}		|| return 1
+	${MKDIR} ${FILE}$(dirname ${GMENU_CUSTOM})		|| return 1
+	echo -en "${GCUST}" >${FILE}${GMENU_CUSTOM}		|| return 1
+	mount-robust -u ${DEV}${GPSEP}${GPART}			|| return 1
+	${RM} ${FILE}						|| return 1
 	return 0
 }
 
 if [[ -b ${GINST_DO} ]]; then
 	if ${GFDSK}; then
-		partition_disk ${GINST_DO}		|| exit 1
+		partition_disk ${GINST_DO}			|| exit 1
 	fi
-	custom_menu ${GINST_DO}				|| exit 1
+	custom_menu ${GINST_DO}					|| exit 1
 else
 	$(which dd) \
 		status=progress \
@@ -643,12 +646,12 @@ else
 		count=${LOOP_BLOCKS} \
 		conv=sparse \
 		if=/dev/zero \
-		of=${GINST}				|| exit 1
-	losetup -d ${LOOP_DEVICE}			#>>> || exit 1
-	losetup -v -P ${LOOP_DEVICE} ${GINST}		|| exit 1
+		of=${GINST}					|| exit 1
+	losetup -d ${LOOP_DEVICE}				#>>> || exit 1
+	losetup -v -P ${LOOP_DEVICE} ${GINST}			|| exit 1
 	GINST_DO="${LOOP_DEVICE}"
-	partition_disk ${GINST_DO}			|| exit 1
-	custom_menu ${GINST_DO}				|| exit 1
+	partition_disk ${GINST_DO}				|| exit 1
+	custom_menu ${GINST_DO}					|| exit 1
 fi
 
 ########################################
@@ -700,7 +703,7 @@ ${RM} ${GDEST}/*.tar.tar				|| exit 1
 
 ########################################
 
-FILE="${GDEST}/.mount"
+FILE="${GDEST}/.mount-mbr"
 ${MKDIR} ${FILE}								|| exit 1
 mount-robust ${GINST_DO}${GPSEP}${GPART} ${FILE}				|| exit 1
 ${RSYNC_U} ${GDEST}/rescue.img ${GDEST}/_${GTYPE}/core.img			|| exit 1
@@ -721,7 +724,7 @@ grub-bios-setup \
 	${GINST_DO}								|| exit_summary 1
 ${MV} ${FILE}/${SCRIPT} ${GDEST}/_${GTYPE}.boot					|| exit 1
 mount-robust -u ${GINST_DO}${GPSEP}${GPART}					|| exit 1
-${RM} ${GDEST}/.mount								|| exit 1
+${RM} ${GDEST}/.mount-mbr							|| exit 1
 
 if [[ -b ${GINST_DO}${GPSEP}${GPEFI} ]]; then
 	function efi_cp {
