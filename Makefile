@@ -263,16 +263,71 @@ readme-all: readme
 	@$(ECHO) "\n"; grep -E "^[[#*][#*A-Z0-9 ]"			$(GARYOS_DIR)/README.md
 	@$(ECHO) "\n"; grep -E "^[#*]"					$(GARYOS_DIR)/LICENSE.md
 
+########################################
+
 ifeq ($(findstring @,$(USER)),)
 override USER := me@garybgenett.net
+override ACCT := garybgenett
 endif
+override WGET := $(if $(WGET_C),$(WGET_C),wget) --output-document=- --auth-no-challenge --user="$(USER)" $(if $(PASS),--password="$(PASS)",--ask-password)
+override GRIP := grip --title="" --user="$(USER)" $(if $(PASS),--pass="$(PASS)")
+override JSON := jq --raw-output
+ifeq ($(ACCT),)
+override ACCT := $(shell $(WGET) https://api.github.com/user | $(JSON) ".login")
+ifeq ($(ACCT),)
+override ACCT := $(word 2,,$(subst @, ,$(subst ., ,$(USER))))
+endif
+endif
+
+ifneq ($(DOTEST),true)
+override WGET := @$(WGET) 2>/dev/null
+override GRIP := @$(GRIP)
+endif
+override SHOW := { \
+	description: .description, \
+	homepage: .homepage, \
+	branch: .default_branch, \
+	watchers: .watchers, \
+	forks: .forks, \
+	fork: .fork, \
+	}
+override LAST := { \
+	message: .[0].commit.message, \
+	commit: .[0].sha, \
+	author: .[0].commit | { \
+		author_name: .author.name, \
+		author_date: .author.date, \
+		commit_name: .committer.name, \
+		commit_date: .committer.date, \
+		} \
+	}
+override TREE := [ .[] | { \
+		name: .name, \
+		commit: .commit.sha, \
+	} ]
+override TAGS := [ .[] | { \
+		name: .name, \
+		commit: .commit.sha, \
+	} ]
+override TEAM := .[].login
 
 .PHONY: readme-github
 readme-github:
+	@echo "USER: $(USER)"
+	@echo "ACCT: $(ACCT)"
+	@echo "PASS: $(PASS)"
 	@iptables -I INPUT 1 --proto tcp --dport 6419 -j ACCEPT
-	@grip --clear
-	@grip --title="" --export
-	grip --title="" --user="$(USER)" 10.255.255.254:6419
+ifeq ($(DOMODS),true)
+	$(WGET) https://api.github.com/repos/$(ACCT)/gary-os			| $(JSON) '$(SHOW)'
+	$(WGET) https://api.github.com/repos/$(ACCT)/gary-os/commits		| $(JSON) '$(LAST)'
+	$(WGET) https://api.github.com/repos/$(ACCT)/gary-os/branches		| $(JSON) '$(TREE)'
+	$(WGET) https://api.github.com/repos/$(ACCT)/gary-os/tags		| $(JSON) '$(TAGS)'
+	$(WGET) https://api.github.com/repos/garybgenett/gary-os/stargazers	| $(JSON) '$(TEAM)' | sort -u
+else
+	$(GRIP) --clear
+	$(GRIP) --export
+	$(GRIP) 0.0.0.0:6419
+endif
 
 ################################################################################
 # End Of File
