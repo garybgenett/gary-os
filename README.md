@@ -1,48 +1,37 @@
 # Welcome to GaryOS (gary-os)
 
-********************************************************************************
+--------------------------------------------------------------------------------
 
 ![GaryOS Icon](artifacts/images/icon.png "GaryOS Icon")
 "The one file that does it all."
 
-  * Latest: GaryOS v3.0 ([64-bit]) ([32-bit]) ([Packages]) ([Notes]) ([License])
+  * Latest: [v3.0 2015-03-16] -- [64-bit] / [32-bit] / [Grub] / [License]
   * Homepage: <https://github.com/garybgenett/gary-os>
   * Download: <https://sourceforge.net/projects/gary-os>
 
 [Homepage]: https://github.com/garybgenett/gary-os
 [Download]: https://sourceforge.net/projects/gary-os
-[Readme]: https://github.com/garybgenett/gary-os/blob/master/README.md
-[License]: https://github.com/garybgenett/gary-os/blob/master/LICENSE.md
-
-[Gary B. Genett]: http://www.garybgenett.net
-[gary-os@garybgenett.net]: mailto:gary-os@garybgenett.net?subject=GaryOS%20Submission&body=Why%20I%20love%20GaryOS%20so%20much...
 
 <!-- [![GaryOS Download Button](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/gary-os/files/latest/download) -->
 [![GaryOS Download Counts](https://img.shields.io/sourceforge/dm/gary-os.svg)](https://sourceforge.net/projects/gary-os/files/latest/download)
 
-********************************************************************************
+--------------------------------------------------------------------------------
 
   * [Introduction]
     * [Overview]
-    * [Release]: [Quick Start], [Requirements], [Contact & Support]
-    * [Project]: [Acknowledgements & Reviews], [Contributions], [Contributing], [Licensing & Disclaimer]
+    * [Release] -- [Quick Start] / [Requirements] / [Contact & Support]
+    * [Project] -- [Acknowledgements & Reviews] / [Contributions] / [Contributing] / [Licensing & Disclaimer]
   * [Information]
-    * [Design]: [Goals], [Advantages], [Limitations], [History]
-    * [Details]: [Versioning], [Structure], [Tools], [Ecosystem]
+    * [Design] -- [Goals] / [Advantages] / [Limitations] / [History]
+    * [Details] -- [Versioning] / [Structure] / [Tools] / [Ecosystem]
   * [Instructions]
-    * [Booting]: [USB Drive & Grub Rescue], [Windows Dual-Boot], [PXE Boot]
-    * [Running]: [Forensics & Recovery], [Networking Configuration], [Graphical Interface]
-    * [Building]: [Live Update], [Hard Drive Install]
+    * [Booting] -- [USB Drive & Grub Rescue] / [Windows Dual-Boot] / [PXE Boot]
+    * [Running] -- [Forensics & Recovery] / [Networking Configuration] / [Graphical Interface]
+    * [Building] -- [Live Update] / [Hard Drive Install]
   * [Version History]
-    * [2015-03-16 v3.0]
-    * [2014-06-19 v2.0]
-    * [2014-03-13 v1.1]
-    * [2014-02-28 v1.0]
-    * [2014-02-24 v0.3]
-    * [2014-02-13 v0.2]
-    * [2014-02-09 v0.1]
+    * [v3.0 2015-03-16] / [v2.0 2014-06-19] / [v1.1 2014-03-13] / [v1.0 2014-02-28] / [v0.3 2014-02-24] / [v0.2 2014-02-13] / [v0.1 2014-02-09]
 
-********************************************************************************
+--------------------------------------------------------------------------------
 
 # Introduction #################################################################
 [Introduction]: #introduction
@@ -185,6 +174,9 @@ release.
 
 The author will also take you out on the town if you schedule time to geek out
 with him in the Seattle area.
+
+[Gary B. Genett]: http://www.garybgenett.net
+[gary-os@garybgenett.net]: mailto:gary-os@garybgenett.net?subject=GaryOS%20Submission&body=Why%20I%20love%20GaryOS%20so%20much...
 
 ## Project #####################################################################
 [Project]: #project
@@ -404,7 +396,7 @@ for documents and statements like these someday.
 [GNU GPL v3.0]: https://www.gnu.org/licenses/gpl-3.0.html
 [BSD-style license]: http://opensource.org/licenses/BSD-3-Clause
 
-********************************************************************************
+--------------------------------------------------------------------------------
 
 # Information ##################################################################
 [Information]: #information
@@ -729,7 +721,7 @@ All the real heavy-lifting is accomplished using these tools/projects:
   * Funtoo & Ego: <https://funtoo.org> -- <https://funtoo.org/Package:Ego>
   * Gentoo & Portage: <https://gentoo.org> -- <https://wiki.gentoo.org/wiki/Portage>
   * Linux initramfs: <https://kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt>
-  * Grub: <https://gnu.org/software/grub>
+  * GNU Grub: <https://gnu.org/software/grub>
 
 Kernel configuration, package lists and acknowledgments to:
 
@@ -789,7 +781,7 @@ in the course of the author's career, and his sustained mentality towards the
 malleability of GNU/Linux and its power and flexibility as a "run anywhere,
 anyhow" computing environment.
 
-********************************************************************************
+--------------------------------------------------------------------------------
 
 # Instructions #################################################################
 [Instructions]: #instructions
@@ -1170,22 +1162,26 @@ Instructions for installing to disk:
      install "portage" tree and update/install packages as desired.
   7. **Don't forget to change `hostname` and update `root` password!**
 
-********************************************************************************
+--------------------------------------------------------------------------------
 # Version History ##############################################################
 [Version History]: #version-history
 
 [64-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-v3.0-generic_64.kernel
 [32-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-v3.0-generic_32.kernel
-[Packages]: https://github.com/garybgenett/gary-os/blob/v3.0/_packages.64
-[Notes]: #2015-03-16-v30
+[Grub]: https://github.com/garybgenett/gary-os/blob/v3.0/scripts/grub.sh
+[License]: https://github.com/garybgenett/gary-os/blob/v4.0/LICENSE.md
 
 [v5.0]: https://github.com/garybgenett/gary-os/commits/master
 
-## 2015-03-16 v3.0 #############################################################
-[2015-03-16 v3.0]: #2015-03-16-v30
-[v3.0]: #2015-03-16-v30
+## v3.0 2015-03-16 #############################################################
+[v3.0 2015-03-16]: #v30-2015-03-16
+[v3.0]: #v30-2015-03-16
 
-  * Files: [Readme](https://github.com/garybgenett/gary-os/blob/v3.0/README.md), [License](https://github.com/garybgenett/gary-os/blob/v3.0/LICENSE.md), [Packages (64-bit)](https://github.com/garybgenett/gary-os/blob/v3.0/_packages.64), [Packages (32-bit)](https://github.com/garybgenett/gary-os/blob/v3.0/_packages.32)
+  * Files --
+        [Readme](https://github.com/garybgenett/gary-os/blob/v3.0/README.md)
+        / [License](https://github.com/garybgenett/gary-os/blob/v3.0/LICENSE.md)
+        / [Packages (64-bit)](https://github.com/garybgenett/gary-os/blob/v3.0/_packages.64)
+        / [Packages (32-bit)](https://github.com/garybgenett/gary-os/blob/v3.0/_packages.32)
     * Kernel (64-bit): [gary-os-v3.0-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v3.0-generic_64.kernel)
     * Kernel (32-bit): [gary-os-v3.0-generic_32.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v3.0-generic_32.kernel)
     * Grub: [grub.sh](https://github.com/garybgenett/gary-os/blob/v3.0/scripts/grub.sh)
@@ -1208,11 +1204,15 @@ Instructions for installing to disk:
     * Added additional input drivers, for touch devices
     * Added helper packages for networking and basic X.Org GUI scripting
 
-## 2014-06-19 v2.0 #############################################################
-[2014-06-19 v2.0]: #2014-06-19-v20
-[v2.0]: #2014-06-19-v20
+## v2.0 2014-06-19 #############################################################
+[v2.0 2014-06-19]: #v20-2014-06-19
+[v2.0]: #v20-2014-06-19
 
-  * Files: [Readme](https://github.com/garybgenett/gary-os/blob/v2.0/README.md), [License](https://github.com/garybgenett/gary-os/blob/v2.0/LICENSE.md) , [Packages (64-bit)](https://github.com/garybgenett/gary-os/blob/v2.0/_packages.64), [Packages (32-bit)](https://github.com/garybgenett/gary-os/blob/v2.0/_packages.32)
+  * Files --
+        [Readme](https://github.com/garybgenett/gary-os/blob/v2.0/README.md)
+        / [License](https://github.com/garybgenett/gary-os/blob/v2.0/LICENSE.md)
+        / [Packages (64-bit)](https://github.com/garybgenett/gary-os/blob/v2.0/_packages.64)
+        / [Packages (32-bit)](https://github.com/garybgenett/gary-os/blob/v2.0/_packages.32)
     * 64-bit kernel: [gary-os-v2.0-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v2.0-generic_64.kernel)
     * 32-bit kernel: [gary-os-v2.0-generic_32.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v2.0-generic_32.kernel)
     * Grub: [grub.sh](https://github.com/garybgenett/gary-os/blob/v2.0/scripts/grub.sh)
@@ -1253,11 +1253,13 @@ Instructions for installing to disk:
         section for information on loading up and using the graphical
         environment).
 
-## 2014-03-13 v1.1 #############################################################
-[2014-03-13 v1.1]: #2014-03-13-v11
-[v1.1]: #2014-03-13-v11
+## v1.1 2014-03-13 #############################################################
+[v1.1 2014-03-13]: #v11-2014-03-13
+[v1.1]: #v11-2014-03-13
 
-  * Files: [Readme](https://github.com/garybgenett/gary-os/blob/v1.1/README), [License](https://github.com/garybgenett/gary-os/blob/v1.1/LICENSE)
+  * Files --
+        [Readme](https://github.com/garybgenett/gary-os/blob/v1.1/README)
+        / [License](https://github.com/garybgenett/gary-os/blob/v1.1/LICENSE)
     * 64-bit kernel: [gary-os-v1.1-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v1.1-generic_64.kernel)
     * 32-bit kernel: [gary-os-v1.1-generic_32.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v1.1-generic_32.kernel)
     * Grub: [grub.sh](https://github.com/garybgenett/gary-os/blob/v1.1/scripts/grub.sh)
@@ -1271,11 +1273,12 @@ Instructions for installing to disk:
   * Funtoo configuration
     * Miscellaneous package changes
 
-## 2014-02-28 v1.0 #############################################################
-[2014-02-28 v1.0]: #2014-02-28-v10
-[v1.0]: #2014-02-28-v10
+## v1.0 2014-02-28 #############################################################
+[v1.0 2014-02-28]: #v10-2014-02-28
+[v1.0]: #v10-2014-02-28
 
-  * Files: [Readme](https://github.com/garybgenett/gary-os/blob/v1.0/README)
+  * Files --
+        [Readme](https://github.com/garybgenett/gary-os/blob/v1.0/README)
     * 64-bit kernel: [gary-os-v1.0-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v1.0-generic_64.kernel)
     * 32-bit kernel: [gary-os-v1.0-generic_32.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v1.0-generic_32.kernel)
     * Source Stage3: [stage3-core2_64-funtoo-stable-2014-01-13.tar.xz](https://sourceforge.net/projects/gary-os/files/v1.0/stage3-core2_64-funtoo-stable-2014-01-13.tar.xz)
@@ -1291,9 +1294,9 @@ Instructions for installing to disk:
   * Funtoo configuration
     * Commented packages that broke during 32-bit build
 
-## 2014-02-24 v0.3 #############################################################
-[2014-02-24 v0.3]: #2014-02-24-v03
-[v0.3]: #2014-02-24-v03
+## v0.3 2014-02-24 #############################################################
+[v0.3 2014-02-24]: #v03-2014-02-24
+[v0.3]: #v03-2014-02-24
 
   * Files
     * 64-bit kernel: [gary-os-v0.3-core2_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v0.3-core2_64.kernel)
@@ -1310,9 +1313,9 @@ Instructions for installing to disk:
     * Completely removed X, Java and TeX Live / LaTeX
     * Added sound and miscellaneous media packages
 
-## 2014-02-13 v0.2 #############################################################
-[2014-02-13 v0.2]: #2014-02-13-v02
-[v0.2]: #2014-02-13-v02
+## v0.2 2014-02-13 #############################################################
+[v0.2 2014-02-13]: #v02-2014-02-13
+[v0.2]: #v02-2014-02-13
 
   * Files
     * 64-bit kernel: [gary-os-v0.2-core2_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v0.2-core2_64.kernel)
@@ -1325,9 +1328,9 @@ Instructions for installing to disk:
     * Added packages from Grml and SystemRescueCD package lists
     * Enabled `gpm` USE flag
 
-## 2014-02-09 v0.1 #############################################################
-[2014-02-09 v0.1]: #2014-02-09-v01
-[v0.1]: #2014-02-09-v01
+## v0.1 2014-02-09 #############################################################
+[v0.1 2014-02-09]: #v01-2014-02-09
+[v0.1]: #v01-2014-02-09
 
   * Files
     * 64-bit kernel: [gary-os-v0.1-core2_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v0.1-core2_64.kernel)
@@ -1340,5 +1343,5 @@ Instructions for installing to disk:
     * Active personal configuration at time of build
     * Commented packages that broke
 
-********************************************************************************
+--------------------------------------------------------------------------------
 *End Of File*
