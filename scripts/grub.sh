@@ -36,7 +36,9 @@ declare GPDEF="1"
 
 function print_usage {
 	cat <<_EOF_
-usage: ${SCRIPT} {directory} [options]
+usage:
+	${SCRIPT} {directory} [options]	= build / install
+	${SCRIPT} {directory} {-m|-u}	= mount / unmount loopfile (for testing)
 
 {directory}		target directory to use for building grub files (must already exist)
 [-d || -d<0-9+>]	show debug information || number of objects to list (default: ${HEDEF})
@@ -47,6 +49,7 @@ usage: ${SCRIPT} {directory} [options]
 	${GIBAK}	use specified device with standard data partition (default: ${GPDEF})
 	${GIBAK}<0-9+>	custom data partition number
 [kernel options]	additional custom options to pass to the kernel at boot
+[-m || -u]		mount/unmount the generated loopfile, for testing purposes
 
 All arguments must be used in the order specified.
 
@@ -125,6 +128,17 @@ GPART="$(echo "${GPART}" | ${SED} "s|^([p]?)([0-9]+)$|\2|g")"
 
 if [[ ! -b ${GINST} ]]; then
 	GPSEP="p"
+fi
+
+########################################
+
+declare DO_MOUNT=
+if [[ ${1} == -m ]]; then
+	DO_MOUNT="${1}"
+	shift
+elif [[ ${1} == -u ]]; then
+	DO_MOUNT="${1}"
+	shift
 fi
 
 ########################################
@@ -622,6 +636,33 @@ function exit_summary {
 
 	exit ${EXIT}
 }
+
+########################################
+
+if [[ -f ${GIDEF} ]]; then
+	FILE="${GDEST}/.mount-loop"
+	if {
+		[[ ${DO_MOUNT} == -m ]] ||
+		[[ ${DO_MOUNT} == -u ]];
+	}; then
+		if [[ -b ${LOOP_DEVICE}p${GPDEF} ]]; then
+			mount-robust -u ${LOOP_DEVICE}p${GPDEF}	|| exit 1
+			losetup -d ${LOOP_DEVICE}		|| exit 1
+			${RM} ${FILE}				|| return 1
+		fi
+		if [[ ${DO_MOUNT} == -u ]]; then
+			exit 0
+		fi
+	fi
+	if [[ ${DO_MOUNT} == -m ]]; then
+		losetup -v -P ${LOOP_DEVICE} ${GINST}		|| exit 1
+		partx -a ${LOOP_DEVICE}				#>>> || exit 1
+		${MKDIR} ${FILE}				|| exit 1
+		mount-robust ${LOOP_DEVICE}p${GPDEF} ${FILE}	|| exit 1
+		echo -en "\n"; ${LL} -R ${FILE}
+		exit 0
+	fi
+fi
 
 ################################################################################
 
