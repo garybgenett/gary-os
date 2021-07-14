@@ -263,12 +263,16 @@ readme-all: readme
 	@$(ECHO) "\n"; grep -E "^[[#*][#*A-Z0-9 ]"			$(GARYOS_DIR)/README.md
 	@$(ECHO) "\n"; grep -E "^[#*]"					$(GARYOS_DIR)/LICENSE.md
 
+ifeq ($(findstring @,$(USER)),)
+override USER := me@garybgenett.net
+endif
+
 .PHONY: readme-github
 readme-github:
 	@iptables -I INPUT 1 --proto tcp --dport 6419 -j ACCEPT
 	@grip --clear
 	@grip --title="" --export
-	@grip --title="" 10.255.255.254:6419
+	grip --title="" --user="$(USER)" 10.255.255.254:6419
 
 ################################################################################
 # End Of File
