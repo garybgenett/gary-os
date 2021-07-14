@@ -242,26 +242,38 @@ check:
 ########################################
 
 export COMPOSER		?= $(GARYOS_DIR)/.composer/Makefile
-export COMPOSER_TARGETS	:= README.html README.pdf
+export MARKDOWN_OUTPUT	:= GaryOS-Readme.md
+export COMPOSER_TARGETS	:= GaryOS-Readme.html GaryOS-Readme.pdf
 #>>>export COMPOSER_DEBUGIT	:= 1
 #>>>export CSS		:= css_alt
 #>>>export TOC		:= 6
 #>>>export OPT		:= --metadata title="GaryOS Readme"
 
+override GREP	?= grep --color=auto -E
+override SED	?= sed -r
+override RM	?= rm -fv
+
 .PHONY: readme
 readme:
-	@grep -E "^[#*]"						$(GARYOS_DIR)/README.md
+	@$(GREP) "^[-#*]"						$(GARYOS_DIR)/README.md
+ifeq ($(DOTEST),true)
+	@$(ECHO) "\n"; $(GREP) "^[[:space:]]+[*][ ][[]"			$(GARYOS_DIR)/README.md
+	@$(ECHO) "\n"; $(GREP) -e "^[-#*]" -e "^[[][^]]+[]][:]"		$(GARYOS_DIR)/README.md
+	@$(ECHO) "\n"; $(GREP) "^[-#*]"					$(GARYOS_DIR)/LICENSE.md
+endif
 
 .PHONY: readme-clean
 readme-clean:
 	@$(MAKE) --directory="$(GARYOS_DIR)" --makefile="$(COMPOSER)"	clean
+	@$(RM)								$(GARYOS_DIR)/$(MARKDOWN_OUTPUT)
 
 .PHONY: readme-all
-readme-all: readme
+readme-all:
+	@$(SED) -r \
+		-e "s|^([[]v)([0-9]+)[.]([0-9]+)([ ][X0-9]{4}-[X0-9]{2}-[X0-9]{2}[]]:[ ][#]v)[0-9]+([-][0-9]{4})|\1\2.\3\4\2.\3\5|g" \
+		-e "s|^([[]v)([0-9]+)[.]([0-9]+)([]]:[ ][#]v)[0-9]+([-][0-9]{4})|\1\2.\3\4\2.\3\5|g" \
+		README.md						>$(GARYOS_DIR)/$(MARKDOWN_OUTPUT)
 	@$(MAKE) --directory="$(GARYOS_DIR)" --makefile="$(COMPOSER)"	$(COMPOSER_TARGETS)
-	@$(ECHO) "\n"; grep -E "^[[:space:]]+[*][ ][[][A-Z0-9].+[]]$$"	$(GARYOS_DIR)/README.md
-	@$(ECHO) "\n"; grep -E "^[[#*][#*A-Z0-9 ]"			$(GARYOS_DIR)/README.md
-	@$(ECHO) "\n"; grep -E "^[#*]"					$(GARYOS_DIR)/LICENSE.md
 
 ########################################
 
