@@ -242,7 +242,7 @@ check:
 ########################################
 
 export COMPOSER		?= $(GARYOS_DIR)/.composer/Makefile
-export COMPOSER_TARGETS	:= README.html
+export COMPOSER_TARGETS	:= README.html README.pdf
 #>>>export COMPOSER_DEBUGIT	:= 1
 #>>>export CSS		:= css_alt
 #>>>export TOC		:= 6
@@ -251,6 +251,10 @@ export COMPOSER_TARGETS	:= README.html
 .PHONY: readme
 readme:
 	@grep -E "^[#*]"						$(GARYOS_DIR)/README.md
+
+.PHONY: readme-clean
+readme-clean:
+	@$(MAKE) --directory="$(GARYOS_DIR)" --makefile="$(COMPOSER)"	clean
 
 .PHONY: readme-all
 readme-all: readme
