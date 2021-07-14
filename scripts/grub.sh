@@ -159,7 +159,10 @@ declare GMENU_ROOTFS="/${_BASE}/${_BASE}.rootfs"
 declare GMENU_OPTION="shmem_size=${SHMEM} groot_hint=\${garyos_rootfs} groot_file=${GMENU_ROOTFS} groot=${GCDEV}"
 declare GMENU_OPTPXE="shmem_size=${SHMEM} groot_hint=${GPXE} groot_file=${GMENU_ROOTFS} groot=\${garyos_server}"
 
-declare GMENU_CUSTOM="/${_BASE}/${_BASE}.grub.cfg"
+declare GMENU_CUSTOM="/${_BASE}.custom/${_BASE}.grub.cfg"
+declare GCUST_KERNEL="$(dirname ${GMENU_CUSTOM})/$(basename ${GMENU_KERNEL})"
+declare GCUST_ROOTFS="$(dirname ${GMENU_CUSTOM})/$(basename ${GMENU_ROOTFS})"
+declare GCUST_OPTION="shmem_size=${SHMEM} groot_hint=\${garyos_rootfs} groot_file=${GCUST_ROOTFS} groot=${GCDEV}"
 
 declare GMENU_HEAD="\
 # settings
@@ -314,6 +317,39 @@ ${GMENU_HEAD}
 menuentry \"${_NAME} (Custom)\" {
 	configfile (memdisk)${GFILE}
 }
+menuentry \"---\" {
+	set pager=1
+	set
+	set pager=0
+}
+
+set garyos_rescue=
+set garyos_rootfs=
+search --no-floppy --file --set garyos_rescue ${GCUST_KERNEL}
+search --no-floppy --file --set garyos_rootfs ${GCUST_ROOTFS}
+
+if [ -n \"\${garyos_rescue}\" ]; then
+	set default=2
+	set timeout=${TIMEOUT}
+else
+	set garyos_rescue=\"${GROOT}\"
+fi
+if [ -n \"\${garyos_rootfs}\" ]; then
+	set default=3
+	set timeout=${TIMEOUT}
+else
+	set garyos_rootfs=\"${GROOT}\"
+fi
+
+menuentry \"${_PROJ} Boot\" {
+	linux (\${garyos_rescue})${GCUST_KERNEL}${GOPTS}
+	boot
+}
+menuentry \"${_PROJ} Boot Rootfs\" {
+	linux (\${garyos_rootfs})${GCUST_KERNEL}${GOPTS} ${GCUST_OPTION}
+	boot
+}
+
 # end of file
 "
 
@@ -627,8 +663,10 @@ function custom_menu {
 	FILE="${GDEST}/.mount-menu"
 	${MKDIR} ${FILE}					|| return 1
 	mount-robust ${DEV}${GPSEP}${GPART} ${FILE}		|| return 1
-	${MKDIR} ${FILE}$(dirname ${GMENU_CUSTOM})		|| return 1
-	echo -en "${GCUST}" >${FILE}${GMENU_CUSTOM}		|| return 1
+	if [[ ! -f ${FILE}${GMENU_CUSTOM} ]]; then
+		${MKDIR} ${FILE}$(dirname ${GMENU_CUSTOM})	|| return 1
+		echo -en "${GCUST}" >${FILE}${GMENU_CUSTOM}	|| return 1
+	fi
 	mount-robust -u ${DEV}${GPSEP}${GPART}			|| return 1
 	${RM} ${FILE}						|| return 1
 	return 0
