@@ -340,7 +340,7 @@ ifeq ($(DOMODS),true)
 	$(WGET) https://api.github.com/repos/garybgenett/gary-os/stargazers	| $(JSON) '$(TEAM)' | sort -u
 else
 	$(GRIP) --clear
-	$(GRIP) --export
+	$(GRIP) --export $(GARYOS_DIR) $(firstword $(COMPOSER_TARGETS))
 	$(GRIP) 0.0.0.0:6419
 endif
 
