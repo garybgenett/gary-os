@@ -37,42 +37,25 @@
 [Overview]: #overview
 
 GaryOS is an entire GNU/Linux system in a single bootable file.  It is also
-a build system to produce both the bootable file and entire installations.
+a build system to create and package Funtoo installations.
 
-The booted system consists of a Linux kernel and a Funtoo (based on Gentoo)
-initramfs.  It is generated using a customized Portage configuration with
-a modified Linux kernel configuration (based on the latest Grml default).  The
-included build system is entirely specialized for the task.  GaryOS can build
-itself from within itself.
+Key features:
 
-There are no major projects which take this same approach on this scale.  The
-result is a self-contained file that is more flexible and capable than other
-live systems.
+  * Optimized source-based Funtoo system with GNU toolchain
+  * Fast in-memory filesystem does not require a physical device
+  * Can be booted from anywhere a Linux kernel can
+  * Upgrades are as simple as replacing the file
 
-Primary features:
+Primary uses:
 
-  * Comprehensive: complete and optimized Funtoo system with GNU toolchain
-  * Invisible: resides completely in memory and does not need media after boot
-  * Safe: no hard drives are mounted and swap is disabled
-  * Flexible: can be used anywhere a Linux kernel can (USB, PXE, etc.)
-  * Portable: small footprint can easily fit on any partition
-  * Usable: upgrades are as simple as replacing the file
-  * Adaptable: supports source-based package options and custom builds
-  * Complete: bootloader and direct-to-disk install of a ready-to-use system
-  * Fast: everything lives in memory, so all operations happen very rapidly
+  * System rescue and recovery
+  * Anonymous and secure workstation
+  * GNU/Linux learning environment
+  * Installation of Funtoo (or Gentoo)
 
-Designed for several specific uses (details in [Uses]):
-
-  * Forensics, Rescue & Recovery
-  * Anonymous & Secure Workstation
-  * GNU/Linux Training & Learning
-  * Gentoo & Funtoo Installation
-
-The goal of GaryOS is to provide a single, simple file which can be
-conveniently used for system rescue or installation, or as a temporary
-workstation for productivity or learning.  In parallel with this is the
-objective of maintaining a usable build system to create GaryOS or other custom
-systems.
+The build system can also be used to create custom root filesystems that GaryOS
+can load into memory in place of its own.  GaryOS can build new or updated
+versions of itself from within itself.
 
 <!-- ![GaryOS CLI Screenshot](artifacts/images/screenshot_cli.png "GaryOS CLI Screenshot") -->
 <!-- ![GaryOS GUI Screenshot](artifacts/images/screenshot_gui.png "GaryOS GUI Screenshot") -->
