@@ -78,32 +78,17 @@ the normal 'shutdown now' or simply power off when finished.
 
 A 64-bit x86 CPU is required.  GaryOS is not built for any other platforms.
 Intel and AMD x86 processors are by far the most common for desktop and laptop
-computers, which is what GaryOS was designed for.  Due to fundamental internal
-hardware differences, and the lack of an available development system, Apple
-platforms are not supported.
+computers, which is what GaryOS was designed for.
 
 The booted system requires at least 4GB of RAM.  Some of the advanced features
 and uses require additional memory, and 8GB is recommended.
 
-The GaryOS kernel is roughly ~750MB in size, and at least 1GB of storage is
+The GaryOS kernel is several hundred MB, and at least 1GB of storage is
 recommended.  All efforts have been made to make GaryOS as compact as possible,
-but required Linux packages continue to grow over time, such as these:
+without sacrificing functionality or pruning the filesystem.
 
-  * GCC
-  * Linux firmware
-  * Grub
-  * Python (still needs both v2.x and v3.x for a complete system)
-  * Glibc
-
-This list is not meant to be critical, and is only provided for transparency.
-The work necessary to keep the distribution compact is ongoing.
-
-Twice during boot, at initial kernel load and initramfs decompression, GaryOS
-can appear to hang as the kernel and initramfs are loaded into memory.  This is
-normal, and only takes a few moments each.  It uses the standard Linux
-infrastructure which does not display any progress.  The actual boot time is
-just as fast as other live systems, but the lack of output can be unnerving.
-Thus, the final requirement is a tad bit of patience.
+You will also need a keyboard and monitor in order to use GaryOS, although
+a serial terminal will work just fine.
 
 ## Support #####################################################################
 [Support]: #support
