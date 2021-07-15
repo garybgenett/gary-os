@@ -6,7 +6,7 @@
 
 | | |
 |:---|:---|
-| Latest   | [v3.0 2015-03-16] -- [64-bit] / [32-bit] / [Grub]
+| Latest   | [v3.0 2015-03-16] -- [64-bit] / [32-bit] / [Boot]
 | Homepage | <https://github.com/garybgenett/gary-os>
 | Download | <https://sourceforge.net/projects/gary-os>
 
@@ -224,8 +224,8 @@ Overview of the output:
     * Grub menu used by "bootstrap" above.  Can be modified as needed to
       boot other OSes/objects.
   * `rescue.*`
-    * Grub "core.img" rescue environment detailed further in [Grub
-      Rescue] section below.
+    * Grub "core.img" rescue environment detailed further in [Grub] section
+      below.
   * `rescue_example.raw`
     * Hard disk image file example of installation of Grub "rescue"
       environment.
@@ -989,14 +989,14 @@ Here is an overview of the repository contents, in order of relative importance:
   | [\_packages]               | Final package list, including sizes and markers for what is installed versus packaged for the build.
   | [\_commit]                 | Solely for author tracking.  Records commit IDs for each of the repositories relevant to the building of GaryOS.
   | **Key directories:**       |
-  | [linux]                    | Archive of Linux kernel configuration files.
-  | [gentoo]                   | Entirety of the Funtoo configuration, including the scripts used to build and manage installations.
-  | [gentoo/overlay]           | Funtoo overlay directory.  Used very sparingly, and mostly for fixing broken packages.
-  | [scripts]                  | Ancillary scripts relevant to GaryOS, such as "[scripts/grub.sh]".
-  | [artifacts/files]          | Storage for files used in the initramfs build.
-  | [artifacts/patches]        | Archive of patch files for preparing initramfs images.
-  | [artifacts/images]         | Icons, screenshots and the like.
-  | [artifacts/archive]        | Stash space for files which don't fit elsewhere, including snapshots of [References] items.
+  | [linux/]                   | Archive of Linux kernel configuration files.
+  | [gentoo/]                  | Entirety of the Funtoo configuration, including the scripts used to build and manage installations.
+  | [gentoo/overlay/]          | Funtoo overlay directory.  Used very sparingly, and mostly for fixing broken packages.
+  | [scripts/]                 | Ancillary scripts relevant to GaryOS, such as "[scripts/grub.sh]".
+  | [artifacts/files/]         | Storage for files used in the initramfs build.
+  | [artifacts/patches/]       | Archive of patch files for preparing initramfs images.
+  | [artifacts/images/]        | Icons, screenshots and the like.
+  | [artifacts/archive/]       | Stash space for files which don't fit elsewhere, including snapshots of [References] items.
   | **Core files:**            |
   | [.bashrc]                  | Custom Bash configuration file.  Included as an essential scripting library.
   | [scripts/grub.sh]          | Generates the [Grub] archive, which contains BIOS and EFI rescue bootloaders, along with a prepared disk image.
@@ -1020,14 +1020,14 @@ Here is an overview of the repository contents, in order of relative importance:
   [\_packages]: https://github.com/garybgenett/gary-os/blob/master/_packages
   [\_commit]: https://github.com/garybgenett/gary-os/blob/master/_commit
 
-  [linux]: https://github.com/garybgenett/gary-os/blob/master/linux
-  [gentoo]: https://github.com/garybgenett/gary-os/blob/master/gentoo
-  [gentoo/overlay]: https://github.com/garybgenett/gary-os/blob/master/gentoo/overlay
-  [scripts]: https://github.com/garybgenett/gary-os/blob/master/scripts
-  [artifacts/files]: https://github.com/garybgenett/gary-os/blob/master/artifacts/files
-  [artifacts/patches]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches
-  [artifacts/images]: https://github.com/garybgenett/gary-os/blob/master/artifacts/images
-  [artifacts/archive]: https://github.com/garybgenett/gary-os/blob/master/artifacts/archive
+  [linux/]: https://github.com/garybgenett/gary-os/blob/master/linux
+  [gentoo/]: https://github.com/garybgenett/gary-os/blob/master/gentoo
+  [gentoo/overlay/]: https://github.com/garybgenett/gary-os/blob/master/gentoo/overlay
+  [scripts/]: https://github.com/garybgenett/gary-os/blob/master/scripts
+  [artifacts/files/]: https://github.com/garybgenett/gary-os/blob/master/artifacts/files
+  [artifacts/patches/]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches
+  [artifacts/images/]: https://github.com/garybgenett/gary-os/blob/master/artifacts/images
+  [artifacts/archive/]: https://github.com/garybgenett/gary-os/blob/master/artifacts/archive
 
   [.bashrc]: https://github.com/garybgenett/gary-os/blob/master/.bashrc
   [scripts/grub.sh]: https://github.com/garybgenett/gary-os/blob/master/scripts/grub.sh
@@ -1142,7 +1142,7 @@ anyhow" computing environment.
 
 [64-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-v3.0-generic_64.kernel
 [32-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-v3.0-generic_32.kernel
-[Grub]: https://github.com/garybgenett/gary-os/blob/v3.0/scripts/grub.sh
+[Boot]: https://github.com/garybgenett/gary-os/blob/v3.0/scripts/grub.sh
 [License]: https://github.com/garybgenett/gary-os/blob/v3.0/LICENSE.md
 
 [v5.0]: https://github.com/garybgenett/gary-os/commits/master
@@ -1159,9 +1159,9 @@ anyhow" computing environment.
 
   | | |
   |:---|:---|
-  | Kernel (64-bit) | [gary-os-v3.0-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v3.0-generic_64.kernel)
+  | Kernel          | [gary-os-v3.0-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v3.0-generic_64.kernel)
   | Kernel (32-bit) | [gary-os-v3.0-generic_32.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v3.0-generic_32.kernel)
-  | Grub            | [grub.sh](https://github.com/garybgenett/gary-os/blob/v3.0/scripts/grub.sh)
+  | Boot            | [grub.sh](https://github.com/garybgenett/gary-os/blob/v3.0/scripts/grub.sh)
   | Source Stage3   | [stage3-core2_64-funtoo-stable-2015-01-27.tar.xz](https://sourceforge.net/projects/gary-os/files/v3.0/stage3-core2_64-funtoo-stable-2015-01-27.tar.xz)
   | Source Portage  | [portage-21811b59a8484b2a6b73e0c5277f23c50a0141dc.0.tar.xz](https://sourceforge.net/projects/gary-os/files/v3.0/portage-21811b59a8484b2a6b73e0c5277f23c50a0141dc.0.tar.xz)
 
@@ -1194,11 +1194,11 @@ anyhow" computing environment.
 
   | | |
   |:---|:---|
-  | 64-bit kernel  | [gary-os-v2.0-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v2.0-generic_64.kernel)
-  | 32-bit kernel  | [gary-os-v2.0-generic_32.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v2.0-generic_32.kernel)
-  | Grub           | [grub.sh](https://github.com/garybgenett/gary-os/blob/v2.0/scripts/grub.sh)
-  | Source Stage3  | [stage3-core2_64-funtoo-stable-2014-01-13.tar.xz](https://sourceforge.net/projects/gary-os/files/v2.0/stage3-core2_64-funtoo-stable-2014-01-13.tar.xz)
-  | Source Portage | [portage-873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d.0.tar.xz](https://sourceforge.net/projects/gary-os/files/v2.0/portage-873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d.0.tar.xz)
+  | Kernel          | [gary-os-v2.0-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v2.0-generic_64.kernel)
+  | Kernel (32-bit) | [gary-os-v2.0-generic_32.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v2.0-generic_32.kernel)
+  | Boot            | [grub.sh](https://github.com/garybgenett/gary-os/blob/v2.0/scripts/grub.sh)
+  | Source Stage3   | [stage3-core2_64-funtoo-stable-2014-01-13.tar.xz](https://sourceforge.net/projects/gary-os/files/v2.0/stage3-core2_64-funtoo-stable-2014-01-13.tar.xz)
+  | Source Portage  | [portage-873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d.0.tar.xz](https://sourceforge.net/projects/gary-os/files/v2.0/portage-873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d.0.tar.xz)
 
   * Metro/Grub scripts
     * Added creation of package list files
@@ -1244,11 +1244,11 @@ anyhow" computing environment.
 
   | | |
   |:---|:---|
-  | 64-bit kernel  | [gary-os-v1.1-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v1.1-generic_64.kernel)
-  | 32-bit kernel  | [gary-os-v1.1-generic_32.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v1.1-generic_32.kernel)
-  | Grub           | [grub.sh](https://github.com/garybgenett/gary-os/blob/v1.1/scripts/grub.sh)
-  | Source Stage3  | [stage3-core2_64-funtoo-stable-2014-01-13.tar.xz](https://sourceforge.net/projects/gary-os/files/v1.1/stage3-core2_64-funtoo-stable-2014-01-13.tar.xz)
-  | Source Portage | [portage-95ad4fd257697618bae7402d4bc3a27499035d30.4.tar.xz](https://sourceforge.net/projects/gary-os/files/v1.1/portage-95ad4fd257697618bae7402d4bc3a27499035d30.4.tar.xz)
+  | Kernel          | [gary-os-v1.1-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v1.1-generic_64.kernel)
+  | Kernel (32-bit) | [gary-os-v1.1-generic_32.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v1.1-generic_32.kernel)
+  | Boot            | [grub.sh](https://github.com/garybgenett/gary-os/blob/v1.1/scripts/grub.sh)
+  | Source Stage3   | [stage3-core2_64-funtoo-stable-2014-01-13.tar.xz](https://sourceforge.net/projects/gary-os/files/v1.1/stage3-core2_64-funtoo-stable-2014-01-13.tar.xz)
+  | Source Portage  | [portage-95ad4fd257697618bae7402d4bc3a27499035d30.4.tar.xz](https://sourceforge.net/projects/gary-os/files/v1.1/portage-95ad4fd257697618bae7402d4bc3a27499035d30.4.tar.xz)
 
   * Metro/Grub scripts
     * Added Linux kernel configurations from Grml, to provide more
@@ -1267,10 +1267,10 @@ anyhow" computing environment.
 
   | | |
   |:---|:---|
-  | 64-bit kernel  | [gary-os-v1.0-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v1.0-generic_64.kernel)
-  | 32-bit kernel  | [gary-os-v1.0-generic_32.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v1.0-generic_32.kernel)
-  | Source Stage3  | [stage3-core2_64-funtoo-stable-2014-01-13.tar.xz](https://sourceforge.net/projects/gary-os/files/v1.0/stage3-core2_64-funtoo-stable-2014-01-13.tar.xz)
-  | Source Portage | [portage-95ad4fd257697618bae7402d4bc3a27499035d30.3.tar.xz](https://sourceforge.net/projects/gary-os/files/v1.0/portage-95ad4fd257697618bae7402d4bc3a27499035d30.3.tar.xz)
+  | Kernel          | [gary-os-v1.0-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v1.0-generic_64.kernel)
+  | Kernel (32-bit) | [gary-os-v1.0-generic_32.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v1.0-generic_32.kernel)
+  | Source Stage3   | [stage3-core2_64-funtoo-stable-2014-01-13.tar.xz](https://sourceforge.net/projects/gary-os/files/v1.0/stage3-core2_64-funtoo-stable-2014-01-13.tar.xz)
+  | Source Portage  | [portage-95ad4fd257697618bae7402d4bc3a27499035d30.3.tar.xz](https://sourceforge.net/projects/gary-os/files/v1.0/portage-95ad4fd257697618bae7402d4bc3a27499035d30.3.tar.xz)
 
   * Metro script
     * Completed support for both 64-bit and 32-bit builds
@@ -1291,7 +1291,7 @@ anyhow" computing environment.
 
   | | |
   |:---|:---|
-  | 64-bit kernel  | [gary-os-v0.3-core2_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v0.3-core2_64.kernel)
+  | Kernel         | [gary-os-v0.3-core2_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v0.3-core2_64.kernel)
   | Source Stage3  | [stage3-core2_64-funtoo-stable-2014-01-13.tar.xz](https://sourceforge.net/projects/gary-os/files/v0.3/stage3-core2_64-funtoo-stable-2014-01-13.tar.xz)
   | Source Portage | [portage-95ad4fd257697618bae7402d4bc3a27499035d30.2.tar.xz](https://sourceforge.net/projects/gary-os/files/v0.3/portage-95ad4fd257697618bae7402d4bc3a27499035d30.2.tar.xz)
 
@@ -1314,8 +1314,8 @@ anyhow" computing environment.
 
   | | |
   |:---|:---|
-  | 64-bit kernel  | [gary-os-v0.2-core2_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v0.2-core2_64.kernel)
-  | 64-bit initrd  | [gary-os-v0.2-core2_64.initrd](https://sourceforge.net/projects/gary-os/files/gary-os-v0.2-core2_64.initrd)
+  | Kernel         | [gary-os-v0.2-core2_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v0.2-core2_64.kernel)
+  | Initrd         | [gary-os-v0.2-core2_64.initrd](https://sourceforge.net/projects/gary-os/files/gary-os-v0.2-core2_64.initrd)
   | Source Stage3  | [stage3-core2_64-funtoo-stable-2014-01-13.tar.xz](https://sourceforge.net/projects/gary-os/files/v0.2/stage3-core2_64-funtoo-stable-2014-01-13.tar.xz)
   | Source Portage | [portage-95ad4fd257697618bae7402d4bc3a27499035d30.1.tar.xz](https://sourceforge.net/projects/gary-os/files/v0.2/portage-95ad4fd257697618bae7402d4bc3a27499035d30.1.tar.xz)
 
@@ -1333,8 +1333,8 @@ anyhow" computing environment.
 
   | | |
   |:---|:---|
-  | 64-bit kernel  | [gary-os-v0.1-core2_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v0.1-core2_64.kernel)
-  | 32-bit initrd  | [gary-os-v0.1-core2_64.initrd](https://sourceforge.net/projects/gary-os/files/gary-os-v0.1-core2_64.initrd)
+  | Kernel         | [gary-os-v0.1-core2_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v0.1-core2_64.kernel)
+  | Initrd         | [gary-os-v0.1-core2_64.initrd](https://sourceforge.net/projects/gary-os/files/gary-os-v0.1-core2_64.initrd)
   | Source Stage3  | [stage3-core2_64-funtoo-stable-2014-01-13.tar.xz](https://sourceforge.net/projects/gary-os/files/v0.1/stage3-core2_64-funtoo-stable-2014-01-13.tar.xz)
   | Source Portage | [portage-95ad4fd257697618bae7402d4bc3a27499035d30.0.tar.xz](https://sourceforge.net/projects/gary-os/files/v0.1/portage-95ad4fd257697618bae7402d4bc3a27499035d30.0.tar.xz)
 
