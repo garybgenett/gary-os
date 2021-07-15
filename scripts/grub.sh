@@ -679,12 +679,13 @@ ${RSYNC_U} -L ${_SELF} ${GDEST}/$(basename ${_SELF})	|| exit 1
 
 ########################################
 
-#>>> echo -en "${GMENU}"	>${GDEST}/grub.cfg	|| exit 1
-echo -en "${GMENU}"		>${GDEST}/rescue.cfg	|| exit 1
+#>>> echo -en "${GMENU}"	>${GDEST}/grub.cfg			|| exit 1
+echo -en "${GMENU}"		>${GDEST}/rescue.cfg			|| exit 1
+echo -en "${GCUST}"		>${GDEST}/$(basename ${GMENU_CUSTOM})	|| return 1
 
-#>>> echo -en "${GMENU}"	>${GDEST}/bootstrap.cfg	|| exit 1
-#>>> echo -n "${BCDEDIT}"	>${GDEST}/bcdedit.bat	|| exit 1
-#>>> unix2dos ${GDEST}/bcdedit.bat			|| exit 1
+#>>> echo -en "${GMENU}"	>${GDEST}/bootstrap.cfg			|| exit 1
+#>>> echo -n "${BCDEDIT}"	>${GDEST}/bcdedit.bat			|| exit 1
+#>>> unix2dos ${GDEST}/bcdedit.bat					|| exit 1
 
 ########################################
 
