@@ -647,9 +647,14 @@ if [[ -f ${GIDEF} ]]; then
 	}; then
 		if [[ -b ${LOOP_DEVICE}p${GPDEF} ]]; then
 			mount-robust -u ${LOOP_DEVICE}p${GPDEF}		|| exit 1
-			losetup -d ${LOOP_DEVICE}			|| exit 1
-			${RM} ${FILE}					|| exit 1
 		fi
+		if [[ -b ${LOOP_DEVICE}p${GPEFI} ]]; then
+			mount-robust -u ${LOOP_DEVICE}p${GPEFI}		|| exit 1
+		fi
+		if [[ -b ${LOOP_DEVICE} ]]; then
+			losetup -d ${LOOP_DEVICE}			#>>> || exit 1
+		fi
+		${RM} ${FILE}{,-efi}					|| exit 1
 		if [[ ${DO_MOUNT} == -u ]]; then
 			exit 0
 		fi
@@ -657,9 +662,10 @@ if [[ -f ${GIDEF} ]]; then
 	if [[ ${DO_MOUNT} == -m ]]; then
 		losetup -v -P ${LOOP_DEVICE} ${GINST}			|| exit 1
 		partx -a ${LOOP_DEVICE}					#>>> || exit 1
-		${MKDIR} ${FILE}					|| exit 1
+		${MKDIR} ${FILE}{,-efi}					|| exit 1
 		mount-robust ${LOOP_DEVICE}p${GPDEF} ${FILE}		|| exit 1
-		echo -en "\n"; ${LL} -R ${FILE}
+		mount-robust ${LOOP_DEVICE}p${GPEFI} ${FILE}-efi	|| exit 1
+		echo -en "\n"; ${LL} -R ${FILE}*
 		exit 0
 	fi
 fi
