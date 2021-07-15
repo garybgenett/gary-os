@@ -22,14 +22,14 @@
 |:---|:---|
 | **Documentation** |
 | [Overview]        | [Quick Start] / [Requirements] / [Support]
-| [Booting]         | [Grub] / [Windows] / [PXE]
+| [Booting]         | [Windows] / [Grub] / [PXE]
 | [Running]         | [Uses] / [Networking] / [X11]
 | [Building]        | [Update] / [Install]
 | **Information**   |
 | [Project]         | [References] / [Contributions] / [Contributing] / [Licensing]
 | [Goals]           | [Advantages] / [Limitations] / [History]
 | [Details]         | [Versioning] / [Structure] / [Tools] / [Ecosystem]
-| [Versions]        | [v3.0 2015-03-16] / [v2.0 2014-06-19] / [v1.1 2014-03-13] / (...)
+| [Versions]        | [v3.0 2015-03-16] / [v2.0 2014-06-19] / [v1.1 2014-03-13] / [(...)](#v10-2014-02-28)
 
 --------------------------------------------------------------------------------
 
@@ -61,15 +61,21 @@ Primary features:
   * Complete: bootloader and direct-to-disk install of a ready-to-use system
   * Fast: everything lives in memory, so all operations happen very rapidly
 
+Designed for several specific uses (details in [Uses]):
+
+  * Forensics, Rescue & Recovery
+  * Anonymous & Secure Workstation
+  * GNU/Linux Training & Learning
+  * Gentoo & Funtoo Installation
+
 The goal of GaryOS is to provide a single, simple file which can be
 conveniently used for system rescue or installation, or as a temporary
 workstation for productivity or learning.  In parallel with this is the
 objective of maintaining a usable build system to create GaryOS or other custom
 systems.
 
-![GaryOS CLI Screenshot](artifacts/images/screenshot_cli.png "GaryOS CLI Screenshot")
-
-![GaryOS GUI Screenshot](artifacts/images/screenshot_gui.png "GaryOS GUI Screenshot")
+<!-- ![GaryOS CLI Screenshot](artifacts/images/screenshot_cli.png "GaryOS CLI Screenshot") -->
+<!-- ![GaryOS GUI Screenshot](artifacts/images/screenshot_gui.png "GaryOS GUI Screenshot") -->
 
 ## Quick Start #################################################################
 [Quick Start]: #quick-start
@@ -171,6 +177,377 @@ with him in the Seattle area.
 
 --------------------------------------------------------------------------------
 
+# Booting ######################################################################
+[Booting]: #booting
+
+## Windows #####################################################################
+[Windows]: #windows
+
+  * Definition:
+    * Boot using the native Windows bootloader.
+    * No modifications to the hard drive partitions or boot records.
+    * Do not require any files outside of `C:` in the Windows
+      installation.
+  * Last tested with:
+    * GaryOS v3.0
+    * MBR/GPT only; EFI not built or tested
+    * Windows 7 Ultimate SP1 64-bit
+    * Grub: sys-boot/grub-2.02_beta2-r3
+  * Research and development:
+    * <http://lists.gnu.org/archive/html/help-grub/2013-08/msg00005.html>
+        * <http://blog.mudy.info/2010/08/boot-grub2-stage2-directly-from-windows-bootmgr-with-grub4dos-stage1>
+    * <https://wiki.archlinux.org/index.php/Windows_and_Arch_Dual_Boot#Using_Windows_boot_loader>
+        * <http://iceflatline.com/2009/09/how-to-dual-boot-windows-7-and-linux-using-bcdedit>
+
+For convenience and supportability, this case has been mostly automated
+in the `grub.sh` script.  The `gary-os.grub.*` file in the root download
+directory contains an archive of the output of this script.
+
+Overview of the script:
+
+  * When run without arguments, it creates a series of Grub images and
+    configuration files in the current directory.
+  * When run with a single block device argument, the target device will
+    be used for installation of the "rescue" Grub image, rather than the
+    example disk image file.
+
+Overview of the output:
+
+  * `bcdedit.bat`
+    * Used to install/remove the necessary entries from the Windows
+      bootloader database.
+  * `bootstrap.*`
+    * Grub "core.img" and configuration loaded from the Windows
+      bootloader.  Uses the directory added to `C:` (instructions below)
+      for modules (such as `i386-pc` directory) and menu configuration.
+  * `grub.cfg`
+    * Grub menu used by "bootstrap" above.  Can be modified as needed to
+      boot other OSes/objects.
+  * `rescue.*`
+    * Grub "core.img" rescue environment detailed further in [Grub
+      Rescue] section below.
+  * `rescue_example.raw`
+    * Hard disk image file example of installation of Grub "rescue"
+      environment.
+
+Instructions for Windows bootloader dual-boot:
+
+  1. The script assumes a default installation, with a small boot
+     partition as partition 1 and Windows `C:` on partition 2.  All
+     other partitions must be 3 or higher.  Configurations that do not
+     match this will require minor edits to the script, and a fresh
+     build of the output directory.
+  2. Copy the output directory to `C:\gary-os.grub`, or wherever the
+     script has been modified to point to.
+  3. Run the `bcdedit.bat` script as Administrator.  Running this script
+     without Administrator privileges can cause unexpected and/or
+     undesired results.  The `bcdedit.guid.txt` file that is created is
+     necessary for automatic removal of the created boot entry.
+  4. Place the GaryOS files at these locations:
+     * `C:\gary-os-64.kernel`
+     * `C:\gary-os-32.kernel`
+  5. Use the new option in the Windows bootloader to switch to Grub and
+     boot GaryOS (or other OSes/objects bootable by Grub).  Doing
+     nothing will boot into Windows as usual.
+  6. Simply update the GaryOS files in-place to upgrade.
+  7. Run the `bcdedit.bat` script as Administrator to remove from the
+     Windows bootloader configuration.  The directory and files created
+     in `C:` need to be removed manually.
+
+If the `bcdedit.guid.txt` file is lost, or otherwise becomes out of
+date with the bootloader database, use the `bcdedit` command as
+Administrator to remove the unwanted entries:
+
+  1. Run `cmd` as Administrator.
+  2. Run `bcdedit` to view the bootloader database.  Copy the
+     `identifier` field for each GaryOS entry.
+  3. Run `bcdedit /delete {identifier} /cleanup` for each entry.  Note
+     that the `{identifier}` should be replaced with the full string
+     output in #2 above, including the `{}` markers.
+     * e.g. `bcdedit /delete {02a0fce9-68f5-11e3-aa07-e94d28b95f82}
+       /cleanup`
+
+## Grub ########################################################################
+[Grub]: #grub
+
+  * Definition:
+    * Boot into a mostly complete Grub environment directly from the
+      boot record without requiring any additional files from disk.
+    * Create a Grub "core.img" which can be booted using identical
+      methods and options as GaryOS, such as PXE, Qemu, etc.
+  * Last tested with:
+    * Tested in place of GaryOS with both Qemu and PXE.
+        * For details on PXE, see the [PXE] section below.
+    * Grub: sys-boot/grub-2.02_beta2-r3
+  * Research and development:
+    * <https://gnu.org/software/grub/manual/grub.html#BIOS-installation>
+        * <https://gnu.org/software/grub/manual/grub.html#Images>
+    * <http://lukeluo.blogspot.com/2013/06/grub-how-to-4-memdisk-and-loopback.html>
+    * <http://wiki.osdev.org/GRUB_2#Disk_image_instructions>
+
+For convenience and supportability, this case has also been automated in the
+`grub.sh` script.  The `gary-os.grub.*` file in the root download directory
+contains an archive of the output of this script.  However, for this case the
+script will need to be run locally.  The [Windows] section above has more
+details on the `grub.sh` script and its usage and output.
+
+Instructions for Grub "rescue" image installation to hard disk:
+
+  1. Create an empty working directory:
+     * e.g. `mkdir /tmp/grub`
+  2. Change into the working directory:
+     * e.g. `cd /tmp/grub`
+  3. Run the `grub.sh` script with a block device argument:
+     * e.g. `grub.sh /dev/sda`
+  4. The script will create necessary files in the working directory,
+     and then uses `grub-bios-setup` to install the custom-built
+     "core.img" into the boot record.
+  5. The block device can now be booted directly into a Grub environment
+     which does not require any access to disk for its modules or
+     configuration.
+     * **The working directory is no longer needed and can be deleted.**
+  6. To remove, simply re-install Grub using `grub-install` as usual, or
+     install another bootloader.
+
+## PXE #########################################################################
+[PXE]: #pxe
+
+  * Definition:
+    * Boot from a PXE environment.
+    * With some modification of the Funtoo configuration and package list, this
+      Metro automation can be used to create a lab workstation or other
+      automated environment where a reboot completely resets each machine
+      involved.
+  * Last tested with:
+    * GaryOS v3.0
+    * DHCPd: net-misc/dhcp-4.2.5_p1-r2
+    * TFTPd: net-misc/iputils-20121221-r2
+    * iPXE: sys-firmware/ipxe-1.0.0_p20130624-r2
+  * Research and development:
+    * <https://wiki.archlinux.org/index.php/archboot#PXE_booting_.2F_Rescue_system>
+
+Once you have a functioning PXE environment, on a global or per-host
+basis add the following configuration option to `dhcpd.conf`:
+
+  * `filename "gary-os-[...].kernel";`
+
+--------------------------------------------------------------------------------
+
+# Running ######################################################################
+[Running]: #running
+
+There are few tasks you may wish to perform once GaryOS is booted and running.
+Some examples are setting up networking or running the graphical interface.
+
+## Uses ########################################################################
+[Uses]: #uses
+
+  * Definition:
+    * Boot into a completely "clean" environment, so that diagnostics
+      and/or recovery can be done in a read-only manner.
+  * Last tested with:
+    * GaryOS v3.0
+
+GaryOS is in a forensics mode by default.  Hardware scanning is
+performed, but the hard drives are not mounted or otherwise touched.
+All entries in `/etc/fstab` have been commented out.  As a result, swap
+is also disabled.
+
+Linux kernel options can further be used to disable hardware scanning
+and interrogation.
+
+It is a stated goal that forensics mode continue being the default.
+
+## Networking ##################################################################
+[Networking]: #networking
+
+  * Definition:
+    * Configure networking, either wired or wireless
+  * Last tested with:
+    * GaryOS v3.0
+
+No networking configuration or daemons are run by default, but several
+networking packages are installed to ease on-the-fly setup.
+
+For simple DHCP, the `dhcpcd` command can be run directly on the desired
+interface, such as an Ethernet connection:
+
+  * `dhcpcd eth0`
+
+A more formal way of doing this would be to use the OpenRC scripts:
+
+  * `rc-update add dhcpcd default ; rc`
+
+For wireless networking, the NetworkManager package is available to
+simplify the configuration:
+
+  * `rc-update add NetworkManager default ; rc`
+
+Wireless networks can then be scanned and configured:
+
+  * e.g. ...
+
+    ```
+    nmcli device wifi rescan
+    nmcli device wifi list
+    nmcli device wifi connect [ssid] password [password]
+    nmcli device status
+    ```
+
+The Funtoo OpenRC scripts have all sorts of advanced networking features
+and options, covered in depth:
+<http://funtoo.org/Networking>
+
+## X11 #########################################################################
+[X11]: #x11
+
+  * Definition:
+    * Start up and use the X.Org GUI environment
+  * Last tested with:
+    * GaryOS v3.0
+
+GaryOS boots to CLI (Command-Line Interface) by default.  To enter the
+graphical interface, run `startx`.
+
+The Linux kernel includes driver modules for many common video cards,
+but to keep the size of GaryOS down the X.Org installation only includes
+the VESA driver (which almost all modern video cards support).  If the
+kernel driver for a video card is loaded at boot, it will prevent X.Org
+from taking over.  If you plan to run the graphical interface, use the
+`nomodeset` kernel option when booting to prevent Linux from loading any
+video card drivers.
+
+By default, the DWM window manager is used.  URxvt is the default
+terminal emulator, and Surf is the default browser.  Both are wrapped
+using the Tabbed utility.
+
+Keyboard shortcuts:
+
+  * Use `ALT-SHIFT-ENTER` to launch terminal emulator.
+  * Use `ALT-CTRL-ENTER` to launch web browser.
+
+More information:
+
+  * Read `man dwm` for help on the window manager.
+  * Read `man tabbed` for help on the tabbing utility.
+  * Read `man urxvt` for help on the terminal emulator.
+  * Read `man surf` for help on the web browser.
+
+Thanks to the [Suckless](http://suckless.org) team for creating such
+lightweight and useful software.
+
+--------------------------------------------------------------------------------
+
+# Building #####################################################################
+[Building]: #building
+
+In addition to being a live GNU/Linux system, GaryOS is also the build system
+used to produce itself.  The system can also be used to create new installations
+from scratch, or install GaryOS directly from memory to disk.
+
+Another important feature is the ability to update the system while it is
+running live, including installing new packages.
+
+## Update ######################################################################
+[Update]: #update
+
+  * Definition:
+    * Update/install packages using Funtoo tools.
+  * Last tested with:
+    * GaryOS v3.0, with 8GB memory
+
+A complete Funtoo environment is available.  In order to install/update
+packages, a couple of missing items need to be put into place.  A surprising
+number of packages can be installed without filling up the in-memory
+filesystem.
+
+Instructions for setting up update/install of packages:
+
+  1. Install "portage" tree.
+     * **Option 1:** Synchronize tree as usual.
+         * `emerge --sync`
+     * **Option 2:** Download `portage-*` archive from one of the `v#.#`
+       version download directories; preferably from the one which
+       matches your version of GaryOS.  This option is best if you plan
+       to keep this file on the same media along side the GaryOS kernel
+       file(s).  To extract:
+         * `tar -pvvxJ -C /usr -f portage-[...].tar.xz`
+     * Generally speaking, "Option 1" is a smaller/faster download than
+       "Option 2".  However, "Option 2" has the benefit of offline
+       access, and may be simpler to update from since it is at the same
+       revision of the tree that was used to build that version of
+       GaryOS.
+  2. Perform minor hacks to get working in a RAMdisk environment.  These
+     should **NOT** be done if planning to install to disk per the
+     [Installation] section below.  They essentially disable available
+     space checks, since the "portage" scripts expect to be using
+     a physical disk.  Commands to run:
+     * ...
+
+        ```
+        sed -i "s%has_space = False%has_space = True%g" \
+            /usr/lib/portage/pym/portage/package/ebuild/fetch.py
+        ```
+     * `alias emerge="I_KNOW_WHAT_I_AM_DOING=true emerge"`
+         * For details, see `"There is NOT at least"` in
+           `/usr/portage/eclass/check-reqs.eclass`
+  3. Make desired edits to `/etc/portage` configuration.
+     * In particular, to complete configuration of the X.Org GUI the
+       `INPUT_DEVICES` and `VIDEO_CARDS` variables should be properly
+       configured.
+     * Starting with `bindist`, there is a list of negated `-*` options
+       at the end of the `USE` list which are necessary to build GaryOS
+       via Metro.  All of these can/should be removed to get the full
+       non-Metro configuration.
+  4. Use all "portage" commands as usual.
+     * e.g. `emerge firefox`
+
+## Install #####################################################################
+[Install]: #install
+
+  * Definition:
+    * Install GaryOS to disk as a "stage3" build.
+  * Last tested with:
+    * GaryOS v3.0
+
+The in-memory environment is a complete Funtoo installation, as shown in the
+[Update] section above.  It can be copied directly to a new disk/partition and
+booted as a fresh installation.
+
+Instructions for installing to disk:
+
+  1. Mount formatted disk/partition.
+     * e.g. `mke2fs -t ext4 -jv /dev/sda2`
+     * e.g. `mount /dev/sda2 /mnt`
+  2. If you wish for `/boot` to be on a separate partition, mount that
+     location in the target.
+     * e.g. `mkdir /mnt/boot`
+     * e.g. `mount /dev/sda1 /mnt/boot`
+  3. Copy in-memory filesystem to installation target.
+     * e.g. ...
+
+        ```
+        rsync -avv \
+            --filter=-_/dev/** \
+            --filter=-_/mnt/** \
+            --filter=-_/proc/** \
+            --filter=-_/run/** \
+            --filter=-_/sys/** \
+            / /mnt
+        ```
+  4. Add necessary partition information to `/etc/fstab`, remembering an
+     entry for `/boot` if using a separate partition from #2 above.
+     * e.g. `vi /mnt/etc/fstab`
+  5. Update and install Grub, to make the new installation bootable.
+     * e.g. `for FILE in dev proc sys ; do mount --bind /${FILE} /mnt/${FILE} ; done`
+     * e.g. `chroot /mnt grub-install /dev/sda`
+     * e.g. `chroot /mnt boot-update`
+  6. Reboot into new installation, update `/etc/portage` configuration,
+     install "portage" tree and update/install packages as desired.
+  7. **Don't forget to change `hostname` and update `root` password!**
+
+--------------------------------------------------------------------------------
+
 # Project ######################################################################
 [Project]: #project
 
@@ -193,8 +570,8 @@ release schedule, GaryOS has managed to receive some official acknowledgment.
 Most notably, it has been included in the [Gentoo family tree] and listed on
 the [Funtoo ecosystem page].
 
-  ![Gentoo Ecosystem](artifacts/archive/gentoo-18_01_svg.png "Gentoo Ecosystem")
-  *Source: <https://github.com/gentoo/gentoo-ecosystem/blob/master/gentoo-18.01.svg>*
+<!-- ![Gentoo Ecosystem](artifacts/archive/gentoo-18_01_svg.png "Gentoo Ecosystem") -->
+<!-- *Source: <https://github.com/gentoo/gentoo-ecosystem/blob/master/gentoo-18.01.svg>* -->
 
 No entries in the [Wikipedia list of Linux distributions] or on [DistroWatch] yet...
 
@@ -755,377 +1132,6 @@ It should be noted, with additional emphasis, the critical role tomsrtbt played
 in the course of the author's career, and his sustained mentality towards the
 malleability of GNU/Linux and its power and flexibility as a "run anywhere,
 anyhow" computing environment.
-
---------------------------------------------------------------------------------
-
-# Booting ######################################################################
-[Booting]: #booting
-
-## Grub ########################################################################
-[Grub]: #grub
-
-  * Definition:
-    * Boot into a mostly complete Grub environment directly from the
-      boot record without requiring any additional files from disk.
-    * Create a Grub "core.img" which can be booted using identical
-      methods and options as GaryOS, such as PXE, Qemu, etc.
-  * Last tested with:
-    * Tested in place of GaryOS with both Qemu and PXE.
-        * For details on PXE, see the [PXE] section below.
-    * Grub: sys-boot/grub-2.02_beta2-r3
-  * Research and development:
-    * <https://gnu.org/software/grub/manual/grub.html#BIOS-installation>
-        * <https://gnu.org/software/grub/manual/grub.html#Images>
-    * <http://lukeluo.blogspot.com/2013/06/grub-how-to-4-memdisk-and-loopback.html>
-    * <http://wiki.osdev.org/GRUB_2#Disk_image_instructions>
-
-For convenience and supportability, this case has also been automated in the
-`grub.sh` script.  The `gary-os.grub.*` file in the root download directory
-contains an archive of the output of this script.  However, for this case the
-script will need to be run locally.  The [Windows] section above has more
-details on the `grub.sh` script and its usage and output.
-
-Instructions for Grub "rescue" image installation to hard disk:
-
-  1. Create an empty working directory:
-     * e.g. `mkdir /tmp/grub`
-  2. Change into the working directory:
-     * e.g. `cd /tmp/grub`
-  3. Run the `grub.sh` script with a block device argument:
-     * e.g. `grub.sh /dev/sda`
-  4. The script will create necessary files in the working directory,
-     and then uses `grub-bios-setup` to install the custom-built
-     "core.img" into the boot record.
-  5. The block device can now be booted directly into a Grub environment
-     which does not require any access to disk for its modules or
-     configuration.
-     * **The working directory is no longer needed and can be deleted.**
-  6. To remove, simply re-install Grub using `grub-install` as usual, or
-     install another bootloader.
-
-## Windows #####################################################################
-[Windows]: #windows
-
-  * Definition:
-    * Boot using the native Windows bootloader.
-    * No modifications to the hard drive partitions or boot records.
-    * Do not require any files outside of `C:` in the Windows
-      installation.
-  * Last tested with:
-    * GaryOS v3.0
-    * MBR/GPT only; EFI not built or tested
-    * Windows 7 Ultimate SP1 64-bit
-    * Grub: sys-boot/grub-2.02_beta2-r3
-  * Research and development:
-    * <http://lists.gnu.org/archive/html/help-grub/2013-08/msg00005.html>
-        * <http://blog.mudy.info/2010/08/boot-grub2-stage2-directly-from-windows-bootmgr-with-grub4dos-stage1>
-    * <https://wiki.archlinux.org/index.php/Windows_and_Arch_Dual_Boot#Using_Windows_boot_loader>
-        * <http://iceflatline.com/2009/09/how-to-dual-boot-windows-7-and-linux-using-bcdedit>
-
-For convenience and supportability, this case has been mostly automated
-in the `grub.sh` script.  The `gary-os.grub.*` file in the root download
-directory contains an archive of the output of this script.
-
-Overview of the script:
-
-  * When run without arguments, it creates a series of Grub images and
-    configuration files in the current directory.
-  * When run with a single block device argument, the target device will
-    be used for installation of the "rescue" Grub image, rather than the
-    example disk image file.
-
-Overview of the output:
-
-  * `bcdedit.bat`
-    * Used to install/remove the necessary entries from the Windows
-      bootloader database.
-  * `bootstrap.*`
-    * Grub "core.img" and configuration loaded from the Windows
-      bootloader.  Uses the directory added to `C:` (instructions below)
-      for modules (such as `i386-pc` directory) and menu configuration.
-  * `grub.cfg`
-    * Grub menu used by "bootstrap" above.  Can be modified as needed to
-      boot other OSes/objects.
-  * `rescue.*`
-    * Grub "core.img" rescue environment detailed further in [Grub
-      Rescue] section below.
-  * `rescue_example.raw`
-    * Hard disk image file example of installation of Grub "rescue"
-      environment.
-
-Instructions for Windows bootloader dual-boot:
-
-  1. The script assumes a default installation, with a small boot
-     partition as partition 1 and Windows `C:` on partition 2.  All
-     other partitions must be 3 or higher.  Configurations that do not
-     match this will require minor edits to the script, and a fresh
-     build of the output directory.
-  2. Copy the output directory to `C:\gary-os.grub`, or wherever the
-     script has been modified to point to.
-  3. Run the `bcdedit.bat` script as Administrator.  Running this script
-     without Administrator privileges can cause unexpected and/or
-     undesired results.  The `bcdedit.guid.txt` file that is created is
-     necessary for automatic removal of the created boot entry.
-  4. Place the GaryOS files at these locations:
-     * `C:\gary-os-64.kernel`
-     * `C:\gary-os-32.kernel`
-  5. Use the new option in the Windows bootloader to switch to Grub and
-     boot GaryOS (or other OSes/objects bootable by Grub).  Doing
-     nothing will boot into Windows as usual.
-  6. Simply update the GaryOS files in-place to upgrade.
-  7. Run the `bcdedit.bat` script as Administrator to remove from the
-     Windows bootloader configuration.  The directory and files created
-     in `C:` need to be removed manually.
-
-If the `bcdedit.guid.txt` file is lost, or otherwise becomes out of
-date with the bootloader database, use the `bcdedit` command as
-Administrator to remove the unwanted entries:
-
-  1. Run `cmd` as Administrator.
-  2. Run `bcdedit` to view the bootloader database.  Copy the
-     `identifier` field for each GaryOS entry.
-  3. Run `bcdedit /delete {identifier} /cleanup` for each entry.  Note
-     that the `{identifier}` should be replaced with the full string
-     output in #2 above, including the `{}` markers.
-     * e.g. `bcdedit /delete {02a0fce9-68f5-11e3-aa07-e94d28b95f82}
-       /cleanup`
-
-## PXE #########################################################################
-[PXE]: #pxe
-
-  * Definition:
-    * Boot from a PXE environment.
-    * With some modification of the Funtoo configuration and package list, this
-      Metro automation can be used to create a lab workstation or other
-      automated environment where a reboot completely resets each machine
-      involved.
-  * Last tested with:
-    * GaryOS v3.0
-    * DHCPd: net-misc/dhcp-4.2.5_p1-r2
-    * TFTPd: net-misc/iputils-20121221-r2
-    * iPXE: sys-firmware/ipxe-1.0.0_p20130624-r2
-  * Research and development:
-    * <https://wiki.archlinux.org/index.php/archboot#PXE_booting_.2F_Rescue_system>
-
-Once you have a functioning PXE environment, on a global or per-host
-basis add the following configuration option to `dhcpd.conf`:
-
-  * `filename "gary-os-[...].kernel";`
-
---------------------------------------------------------------------------------
-
-# Running ######################################################################
-[Running]: #running
-
-There are few tasks you may wish to perform once GaryOS is booted and running.
-Some examples are setting up networking or running the graphical interface.
-
-## Uses ########################################################################
-[Uses]: #uses
-
-  * Definition:
-    * Boot into a completely "clean" environment, so that diagnostics
-      and/or recovery can be done in a read-only manner.
-  * Last tested with:
-    * GaryOS v3.0
-
-GaryOS is in a forensics mode by default.  Hardware scanning is
-performed, but the hard drives are not mounted or otherwise touched.
-All entries in `/etc/fstab` have been commented out.  As a result, swap
-is also disabled.
-
-Linux kernel options can further be used to disable hardware scanning
-and interrogation.
-
-It is a stated goal that forensics mode continue being the default.
-
-## Networking ##################################################################
-[Networking]: #networking
-
-  * Definition:
-    * Configure networking, either wired or wireless
-  * Last tested with:
-    * GaryOS v3.0
-
-No networking configuration or daemons are run by default, but several
-networking packages are installed to ease on-the-fly setup.
-
-For simple DHCP, the `dhcpcd` command can be run directly on the desired
-interface, such as an Ethernet connection:
-
-  * `dhcpcd eth0`
-
-A more formal way of doing this would be to use the OpenRC scripts:
-
-  * `rc-update add dhcpcd default ; rc`
-
-For wireless networking, the NetworkManager package is available to
-simplify the configuration:
-
-  * `rc-update add NetworkManager default ; rc`
-
-Wireless networks can then be scanned and configured:
-
-  * e.g. ...
-
-    ```
-    nmcli device wifi rescan
-    nmcli device wifi list
-    nmcli device wifi connect [ssid] password [password]
-    nmcli device status
-    ```
-
-The Funtoo OpenRC scripts have all sorts of advanced networking features
-and options, covered in depth:
-<http://funtoo.org/Networking>
-
-## X11 #########################################################################
-[X11]: #x11
-
-  * Definition:
-    * Start up and use the X.Org GUI environment
-  * Last tested with:
-    * GaryOS v3.0
-
-GaryOS boots to CLI (Command-Line Interface) by default.  To enter the
-graphical interface, run `startx`.
-
-The Linux kernel includes driver modules for many common video cards,
-but to keep the size of GaryOS down the X.Org installation only includes
-the VESA driver (which almost all modern video cards support).  If the
-kernel driver for a video card is loaded at boot, it will prevent X.Org
-from taking over.  If you plan to run the graphical interface, use the
-`nomodeset` kernel option when booting to prevent Linux from loading any
-video card drivers.
-
-By default, the DWM window manager is used.  URxvt is the default
-terminal emulator, and Surf is the default browser.  Both are wrapped
-using the Tabbed utility.
-
-Keyboard shortcuts:
-
-  * Use `ALT-SHIFT-ENTER` to launch terminal emulator.
-  * Use `ALT-CTRL-ENTER` to launch web browser.
-
-More information:
-
-  * Read `man dwm` for help on the window manager.
-  * Read `man tabbed` for help on the tabbing utility.
-  * Read `man urxvt` for help on the terminal emulator.
-  * Read `man surf` for help on the web browser.
-
-Thanks to the [Suckless](http://suckless.org) team for creating such
-lightweight and useful software.
-
---------------------------------------------------------------------------------
-
-# Building #####################################################################
-[Building]: #building
-
-In addition to being a live GNU/Linux system, GaryOS is also the build system
-used to produce itself.  The system can also be used to create new installations
-from scratch, or install GaryOS directly from memory to disk.
-
-Another important feature is the ability to update the system while it is
-running live, including installing new packages.
-
-## Update ######################################################################
-[Update]: #update
-
-  * Definition:
-    * Update/install packages using Funtoo tools.
-  * Last tested with:
-    * GaryOS v3.0, with 8GB memory
-
-A complete Funtoo environment is available.  In order to install/update
-packages, a couple of missing items need to be put into place.  A surprising
-number of packages can be installed without filling up the in-memory
-filesystem.
-
-Instructions for setting up update/install of packages:
-
-  1. Install "portage" tree.
-     * **Option 1:** Synchronize tree as usual.
-         * `emerge --sync`
-     * **Option 2:** Download `portage-*` archive from one of the `v#.#`
-       version download directories; preferably from the one which
-       matches your version of GaryOS.  This option is best if you plan
-       to keep this file on the same media along side the GaryOS kernel
-       file(s).  To extract:
-         * `tar -pvvxJ -C /usr -f portage-[...].tar.xz`
-     * Generally speaking, "Option 1" is a smaller/faster download than
-       "Option 2".  However, "Option 2" has the benefit of offline
-       access, and may be simpler to update from since it is at the same
-       revision of the tree that was used to build that version of
-       GaryOS.
-  2. Perform minor hacks to get working in a RAMdisk environment.  These
-     should **NOT** be done if planning to install to disk per the
-     [Installation] section below.  They essentially disable available
-     space checks, since the "portage" scripts expect to be using
-     a physical disk.  Commands to run:
-     * ...
-
-        ```
-        sed -i "s%has_space = False%has_space = True%g" \
-            /usr/lib/portage/pym/portage/package/ebuild/fetch.py
-        ```
-     * `alias emerge="I_KNOW_WHAT_I_AM_DOING=true emerge"`
-         * For details, see `"There is NOT at least"` in
-           `/usr/portage/eclass/check-reqs.eclass`
-  3. Make desired edits to `/etc/portage` configuration.
-     * In particular, to complete configuration of the X.Org GUI the
-       `INPUT_DEVICES` and `VIDEO_CARDS` variables should be properly
-       configured.
-     * Starting with `bindist`, there is a list of negated `-*` options
-       at the end of the `USE` list which are necessary to build GaryOS
-       via Metro.  All of these can/should be removed to get the full
-       non-Metro configuration.
-  4. Use all "portage" commands as usual.
-     * e.g. `emerge firefox`
-
-## Install #####################################################################
-[Install]: #install
-
-  * Definition:
-    * Install GaryOS to disk as a "stage3" build.
-  * Last tested with:
-    * GaryOS v3.0
-
-The in-memory environment is a complete Funtoo installation, as shown in the
-[Update] section above.  It can be copied directly to a new disk/partition and
-booted as a fresh installation.
-
-Instructions for installing to disk:
-
-  1. Mount formatted disk/partition.
-     * e.g. `mke2fs -t ext4 -jv /dev/sda2`
-     * e.g. `mount /dev/sda2 /mnt`
-  2. If you wish for `/boot` to be on a separate partition, mount that
-     location in the target.
-     * e.g. `mkdir /mnt/boot`
-     * e.g. `mount /dev/sda1 /mnt/boot`
-  3. Copy in-memory filesystem to installation target.
-     * e.g. ...
-
-        ```
-        rsync -avv \
-            --filter=-_/dev/** \
-            --filter=-_/mnt/** \
-            --filter=-_/proc/** \
-            --filter=-_/run/** \
-            --filter=-_/sys/** \
-            / /mnt
-        ```
-  4. Add necessary partition information to `/etc/fstab`, remembering an
-     entry for `/boot` if using a separate partition from #2 above.
-     * e.g. `vi /mnt/etc/fstab`
-  5. Update and install Grub, to make the new installation bootable.
-     * e.g. `for FILE in dev proc sys ; do mount --bind /${FILE} /mnt/${FILE} ; done`
-     * e.g. `chroot /mnt grub-install /dev/sda`
-     * e.g. `chroot /mnt boot-update`
-  6. Reboot into new installation, update `/etc/portage` configuration,
-     install "portage" tree and update/install packages as desired.
-  7. **Don't forget to change `hostname` and update `root` password!**
 
 --------------------------------------------------------------------------------
 
