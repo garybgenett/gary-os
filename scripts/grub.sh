@@ -704,6 +704,9 @@ function custom_menu {
 	declare DEV="${1}"
 	FILE="${GDEST}/.mount-menu"
 	${MKDIR} ${FILE}					|| return 1
+	if [[ -b ${DEV}${GPSEP}${GPART} ]]; then
+		mount-robust -u ${DEV}${GPSEP}${GPART}		|| return 1
+	fi
 	mount-robust ${DEV}${GPSEP}${GPART} ${FILE}		|| return 1
 	if [[ ! -f ${FILE}${GMENU_CUSTOM} ]]; then
 		${MKDIR} ${FILE}$(dirname ${GMENU_CUSTOM})	|| return 1
@@ -785,6 +788,9 @@ ${RM} ${GDEST}/*.tar.tar				|| exit 1
 
 FILE="${GDEST}/.mount-mbr"
 ${MKDIR} ${FILE}								|| exit 1
+if [[ -b ${GINST_DO}${GPSEP}${GPART} ]]; then
+	mount-robust -u ${GINST_DO}${GPSEP}${GPART}				|| exit 1
+fi
 mount-robust ${GINST_DO}${GPSEP}${GPART} ${FILE}				|| exit 1
 ${RSYNC_U} ${GDEST}/rescue.img ${GDEST}/_${GTYPE}/core.img			|| exit 1
 grub-install \
@@ -819,6 +825,9 @@ if [[ -b ${GINST_DO}${GPSEP}${GPEFI} ]]; then
 		return 0
 	}
 	${MKDIR} ${GDEST}/.mount-efi						|| exit 1
+	if [[ -b ${GINST_DO}${GPSEP}${GPEFI} ]]; then
+		mount-robust -u ${GINST_DO}${GPSEP}${GPEFI}			|| exit 1
+	fi
 	mount-robust ${GINST_DO}${GPSEP}${GPEFI} ${GDEST}/.mount-efi		|| exit 1
 	FILE="${GDEST}/.mount-efi/EFI/BOOT"					|| exit 1
 	${MKDIR} ${FILE}							|| exit 1
