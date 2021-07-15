@@ -259,25 +259,24 @@ override RM	?= rm -fv
 
 .PHONY: readme
 readme:
-	@$(GREP) "^[-#*]"						$(GARYOS_DIR)/README.md
+	@$(GREP) "^[#*|-]"							$(GARYOS_DIR)/README.md
 ifeq ($(DOTEST),true)
-	@$(ECHO) "\n"; $(GREP) "^[[:space:]]+[*][ ][[]"			$(GARYOS_DIR)/README.md
-	@$(ECHO) "\n"; $(GREP) -e "^[-#*]" -e "^[[][^]]+[]][:]"		$(GARYOS_DIR)/README.md
-	@$(ECHO) "\n"; $(GREP) "^[-#*]"					$(GARYOS_DIR)/LICENSE.md
+	@$(ECHO) "\n"; $(MARKER); $(GREP) -e "^[#*-]" -e "^[[][^]]+[]][:]"	$(GARYOS_DIR)/README.md
+	@$(ECHO) "\n"; $(MARKER); $(GREP) "^[#*-]"				$(GARYOS_DIR)/LICENSE.md
 endif
 
 .PHONY: readme-clean
 readme-clean:
-	@$(MAKE) --directory="$(GARYOS_DIR)" --makefile="$(COMPOSER)"	clean
-	@$(RM)								$(GARYOS_DIR)/$(MARKDOWN_OUTPUT)
+	@$(MAKE) --directory="$(GARYOS_DIR)" --makefile="$(COMPOSER)"		clean
+	@$(RM)									$(GARYOS_DIR)/$(MARKDOWN_OUTPUT)
 
 .PHONY: readme-all
 readme-all:
 	@$(SED) -r \
 		-e "s|^([[]v)([0-9]+)[.]([0-9]+)([ ][X0-9]{4}-[X0-9]{2}-[X0-9]{2}[]]:[ ][#]v)[0-9]+([-][0-9]{4})|\1\2.\3\4\2.\3\5|g" \
 		-e "s|^([[]v)([0-9]+)[.]([0-9]+)([]]:[ ][#]v)[0-9]+([-][0-9]{4})|\1\2.\3\4\2.\3\5|g" \
-		README.md						>$(GARYOS_DIR)/$(MARKDOWN_OUTPUT)
-	@$(MAKE) --directory="$(GARYOS_DIR)" --makefile="$(COMPOSER)"	$(COMPOSER_TARGETS)
+		README.md							>$(GARYOS_DIR)/$(MARKDOWN_OUTPUT)
+	@$(MAKE) --directory="$(GARYOS_DIR)" --makefile="$(COMPOSER)"		$(COMPOSER_TARGETS)
 
 ########################################
 
