@@ -646,19 +646,19 @@ if [[ -f ${GIDEF} ]]; then
 		[[ ${DO_MOUNT} == -u ]];
 	}; then
 		if [[ -b ${LOOP_DEVICE}p${GPDEF} ]]; then
-			mount-robust -u ${LOOP_DEVICE}p${GPDEF}	|| exit 1
-			losetup -d ${LOOP_DEVICE}		|| exit 1
-			${RM} ${FILE}				|| return 1
+			mount-robust -u ${LOOP_DEVICE}p${GPDEF}		|| exit 1
+			losetup -d ${LOOP_DEVICE}			|| exit 1
+			${RM} ${FILE}					|| exit 1
 		fi
 		if [[ ${DO_MOUNT} == -u ]]; then
 			exit 0
 		fi
 	fi
 	if [[ ${DO_MOUNT} == -m ]]; then
-		losetup -v -P ${LOOP_DEVICE} ${GINST}		|| exit 1
-		partx -a ${LOOP_DEVICE}				#>>> || exit 1
-		${MKDIR} ${FILE}				|| exit 1
-		mount-robust ${LOOP_DEVICE}p${GPDEF} ${FILE}	|| exit 1
+		losetup -v -P ${LOOP_DEVICE} ${GINST}			|| exit 1
+		partx -a ${LOOP_DEVICE}					#>>> || exit 1
+		${MKDIR} ${FILE}					|| exit 1
+		mount-robust ${LOOP_DEVICE}p${GPDEF} ${FILE}		|| exit 1
 		echo -en "\n"; ${LL} -R ${FILE}
 		exit 0
 	fi
@@ -681,7 +681,7 @@ ${RSYNC_U} -L ${_SELF} ${GDEST}/$(basename ${_SELF})	|| exit 1
 
 #>>> echo -en "${GMENU}"	>${GDEST}/grub.cfg			|| exit 1
 echo -en "${GMENU}"		>${GDEST}/rescue.cfg			|| exit 1
-echo -en "${GCUST}"		>${GDEST}/$(basename ${GMENU_CUSTOM})	|| return 1
+echo -en "${GCUST}"		>${GDEST}/$(basename ${GMENU_CUSTOM})	|| exit 1
 
 #>>> echo -en "${GMENU}"	>${GDEST}/bootstrap.cfg			|| exit 1
 #>>> echo -n "${BCDEDIT}"	>${GDEST}/bcdedit.bat			|| exit 1
@@ -817,10 +817,10 @@ if [[ -b ${GINST_DO}${GPSEP}${GPEFI} ]]; then
 		declare SRC="${1}"; shift
 		declare DST="${1}"; shift
 		if [[ ${SRC} == ${GDEST}/x86_64.efi ]]; then
-			${RSYNC_C} ${SRC} ${DST}/BOOTX64.EFI			|| return 1
+			${RSYNC_C} ${SRC} ${DST}/BOOTX64.EFI			|| exit 1
 		fi
 		if [[ ${SRC} == ${GDEST}/i386.efi ]]; then
-			${RSYNC_C} ${SRC} ${DST}/BOOTIA32.EFI			|| return 1
+			${RSYNC_C} ${SRC} ${DST}/BOOTIA32.EFI			|| exit 1
 		fi
 		return 0
 	}
