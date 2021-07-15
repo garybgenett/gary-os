@@ -106,8 +106,8 @@ fi
 #>>>	exec qemu.bsh "${QNUM}" "${QMEM}" "${QFIL}" / ALT \
 
 exec qemu.bsh "${QNUM}" "${QMEM}" "${QFIL}" "${QSYS}" \
-	-rtc base=localtime,clock=host \
-	"${@}"
+	"${@}" \
+	-rtc base=localtime,clock=host
 
 ################################################################################
 # end of file
