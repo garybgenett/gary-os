@@ -97,30 +97,17 @@ a serial terminal will work just fine.
 a personal project with aspirations of recognition as an actual distribution,
 however misguided.
 
-There is no documentation other than this file and the usage output of the
-build scripts.  The uses outlined in the [Instructions] section are the
-official "happy paths", and are tested and supported.
-
-Typing `make` or `make usage` will display the supported uses of the build
-system.  Advanced uses are documented with `make help`, and are also supported
-(but should only be used by those who know what they are doing).  When
-reporting issues with the build system, please include the `_gentoo.log` file
-from the `build` directory.
+All documentation is in this file and/or the usage output of the build scripts.
+Everything in the [Booting], [Running] and [Building] sections are specifically
+tested and supported.
 
 While there appears to be some adoption of GaryOS, it is not yet enough to
-warrant a formal issue tracker.  For any issues, please contact the author
-directly at: [gary-os@garybgenett.net]
-
-GaryOS is very flexible, and both the kernel and build system can be used for
-a wide range of applications.  Other uses of all the GaryOS tooling are
-encouraged, and the author would be glad to hear about any unique or creative
-ways they are employed.  For some ideas, check out the
-"[gentoo/sets/\_gary-os]" package set, which outlines some of the author's
-personal uses along with the steps used to test and validate GaryOS each
-release.
+warrant a formal ticket system.  For any issues, or to share the creative ways
+you are using GaryOS, please contact the author directly at:
+[gary-os@garybgenett.net]
 
 The author will also take you out on the town if you schedule time to geek out
-with him in the Seattle area.
+with them in the Seattle area.
 
 --------------------------------------------------------------------------------
 
