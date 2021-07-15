@@ -63,36 +63,15 @@ versions of itself from within itself.
 ## Quick Start #################################################################
 [Quick Start]: #quick-start
 
-GaryOS releases are not stored in the Git repository, due to size.  The first
-step is to download the latest [Kernel].
+Download the latest [Kernel], and select a boot method:
 
-The simplest way to try GaryOS is using the [Qemu] virtual machine emulator,
-which runs on all major platforms.  Once installed, you can boot GaryOS
-directly using something like:
+  1. Use [Qemu] to try it out (quickest and easiest)
+  3. Configure an existing bootloader, such as [Grub] or [EFI]
+  2. Follow the instructions for either [Linux] or [Windows]
+  4. From a [PXE] server
 
-  * `qemu-system-x86_64 -m 4096 -kernel [...]/gary-os-[...].kernel`
-
-To use it "for real", follow the brief instructions in the [Grub] or [Windows]
-sections, depending on whether your current platform is Linux or Windows.
-Apple platforms are not supported.
-
-For advanced users with an existing bootloader (such as Grub), you can add an
-entry pointing to the file on disk.  In Grub, this looks something like:
-
-  * `linux (hd0,1)/boot/gary-os-[...].kernel`
-
-All the standard Linux kernel options/parameters are valid.  For example, the
-amount of memory Linux allocates to itself can be specified as usual:
-
-  * `linux (hd0,1)/boot/gary-os-[...].kernel mem=4096m`
-
-Once booted, the entire system resides in memory, and any media used to boot it
-is no longer necessary.
-
-  * Log in as `root` with password `gary-os`.
-
-After use, the system may simply be powered off.  There is no need to shutdown
-GaryOS, since it will boot completely fresh from the file each time.
+Log in as 'root' with password 'gary-os'.  Any boot media can be detached.  Use
+the normal 'shutdown now' or simply power off when finished.
 
 ## Requirements ################################################################
 [Requirements]: #requirements
