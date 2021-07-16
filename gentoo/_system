@@ -1002,9 +1002,7 @@ if [[ ${1} == -o ]]; then
 		declare ID="$(if [[ -n ${4} ]]; then echo "?id=${4}"; fi)"
 		declare FAIL=
 		declare SKIP=
-		if [[ -z $(${GREP} "${BASE}/tree/${FILE}"	${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/.rationale) ]]; then
-			echo "${BASE}/tree/${FILE}${ID}"	>>${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/.rationale		|| EXIT 1
-		fi
+		echo "-- ${3} -- ${BASE}/tree/${FILE}${ID}"	>>${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/.rationale		|| EXIT 1
 		${MKDIR}					${SETDIR}/${FUNDIR}/${LAYDIR}/$(dirname ${FILE}/${OFIL})	|| EXIT 1
 		${WGET_C} -O					${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/${OFIL}			\
 								"${BASE}/plain/${FILE}/${OFIL}${ID}"				|| FAIL+=" ${OFIL}" #>>> EXIT 1
