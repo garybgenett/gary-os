@@ -90,10 +90,9 @@ if [[ ${DOTEST} != true ]] && [[ ${DOTEST} != false ]]; then DOTEST="false"; fi
 export SOURCE="${SOURCE:-/.g/_data/_target/iso}"
 export GITDIR="${GITDIR:-/.g/_data/_build/funtoo/meta-repo.git}"
 
-#>>> #OPTIONS[BLDDIR WRKDIR TORDIR GOSDIR]
+#>>> #OPTIONS[BLDDIR WRKDIR GOSDIR]
 export BLDDIR="${BLDDIR:-/.g/_data/_builds/_gentoo}"
 export WRKDIR="${WRKDIR:-${BLDDIR}.working}"
-export TORDIR="${TORDIR:-/.g/_toor}"
 export GOSDIR="${GOSDIR:-/.g/_data/_builds/_${_TITLE}.working}"
 
 #>>> #OPTIONS[BLDPKG WRKPKG TORPKG GOSPKG]
@@ -159,14 +158,12 @@ if [[ ${TOOR} == -d ]]; then
 	_PKG="${BLDPKG}"
 fi
 if [[ ${TOOR} == -x ]]; then
+	SETDIR="${SETDIR:-${SETDIR}/${FUNDIR}.make}"
 	TARGET="${WRKDIR}"
 	_PKG="${WRKPKG}"
 fi
-if [[ ${TOOR} == -t ]]; then
-	TARGET="${TORDIR}"
-	_PKG="${TORPKG}"
-fi
 if [[ ${TOOR} == -g ]]; then
+	SETDIR="${SETDIR:-${SETDIR}/${FUNDIR}.gary-os}"
 	TARGET="${GOSDIR}"
 	_PKG="${GOSPKG}"
 fi
@@ -504,7 +501,6 @@ function print_info {
 		echo -en "\n"
 		printf "${PRINTF}" "Chroot Selection [-d] (\$BLDPKG/\$BLDDIR):"	"${BLDPKG}"	"${BLDDIR}"
 		printf "${PRINTF}" "Chroot Selection [-x] (\$WRKPKG/\$WRKDIR):"	"${WRKPKG}"	"${WRKDIR}"
-		printf "${PRINTF}" "Chroot Selection [-t] (\$TORPKG/\$TORDIR):"	"${TORPKG}"	"${TORDIR}"
 		printf "${PRINTF}" "Chroot Selection [-g] (\$GOSPKG/\$GOSDIR):"	"${GOSPKG}"	"${GOSDIR}"
 		echo -en "\n"
 		printf "${PRINTF}" "Chroot Build (Initial):"			"<auto>"	"${_HEART} {chroot} -0" "<-n -a -b -k -i>"
