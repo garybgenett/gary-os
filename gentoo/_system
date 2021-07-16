@@ -1022,9 +1022,6 @@ if [[ ${1} == -o ]]; then
 			${WGET_C} -O				${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/files/${NEXT}		\
 								"${BASE}/plain/${FILE}/files/${NEXT}${ID}"			|| FAIL+=" ${NEXT}" #>>> EXIT 1
 		done
-#>>>		echo -en "\n"
-		echo -en "[${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/.rationale]\n"
-		cat ${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/.rationale								|| EXIT 1
 		if [[ -n ${FAIL} ]] || [[ -n ${SKIP} ]]; then
 			echo -en "\n"
 			if [[ -n ${FAIL} ]]; then
@@ -1035,6 +1032,12 @@ if [[ ${1} == -o ]]; then
 				echo -en ">>> THESE FILES WERE SKIPPED: ${SKIP/# } <<<\n"
 				echo -en "\n"
 			fi
+		else
+			${_SOUL} ${TOOR} ${1} ${2}										|| EXIT 1
+		fi
+		echo -en "[${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/.rationale]\n"
+		cat ${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/.rationale								|| EXIT 1
+		if [[ -n ${FAIL} ]] || [[ -n ${SKIP} ]]; then
 			EXIT 1
 		fi
 		EXIT 0
