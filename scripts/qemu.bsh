@@ -100,13 +100,13 @@ declare T=
 ################################################################################
 
 if ${ROOT}; then
-	while [[ ! -c /dev/kvm ]]; do
+#>>>	while [[ ! -c /dev/kvm ]]; do
 		rmmod -v kvm-intel
 		rmmod -v kvm
 		modprobe -v kvm
 		modprobe -v kvm-intel nested=1
 		modprobe -v vhost-net
-	done
+#>>>	done
 	if ! virt-host-validate; then
 		sleep 2
 	fi
