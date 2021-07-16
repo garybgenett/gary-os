@@ -1011,6 +1011,12 @@ if [[ ${1} == -o ]]; then
 		for NEXT in $(${SED} -n				"s|^.*[\"]?[$][{]FILESDIR[}][\"]?/([^[:space:]\"]+).*$|\1|gp"	\
 								${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/${OFIL}			2>/dev/null
 		); do
+			declare PN="$(basename ${2})"
+			declare PV="$(echo "${OFIL}" | ${SED} -e "s|^${PN}[-](.+)[.]ebuild$|\1|g" -e "s|[-]r[0-9]+$||g")"
+			NEXT="${NEXT/%)}"
+			NEXT="$(echo "${NEXT}" | ${SED} "s|[$][{]P[}]|${PN}-${PV}|g")"
+			NEXT="$(echo "${NEXT}" | ${SED} "s|[$][{]PN[}]|${PN}|g")"
+			NEXT="$(echo "${NEXT}" | ${SED} "s|[$][{]PV[}]|${PV}|g")"
 			if [[ -n $(echo "${NEXT}" | ${GREP} "[$]") ]]; then SKIP+=" ${NEXT}"; continue; fi
 			${MKDIR}				${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/files			|| EXIT 1
 			${WGET_C} -O				${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/files/${NEXT}		\
