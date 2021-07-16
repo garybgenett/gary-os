@@ -1420,21 +1420,29 @@ function _release_kernel {		#{doredo}
 function _release_grub {		#{doredo}
 	FILE="${_RAMFS}.grub"
 	if ${DOREDO}; then
-		${RM}				${FILE}*		|| return 1
+		${RM}					${FILE}*					|| return 1
 	fi
 	if [[ ! -f ${FILE}.tar.xz ]] && [[ ! -f ${FILE}.zip ]]; then
-		${RM}				${FILE}*		|| return 1
-		${MKDIR}			${FILE}			|| return 1
-		${HOME}/scripts/grub.sh		${FILE}			|| return 1
-		${RM}				${FILE}/_*		|| return 1
-		${RM}				${FILE}/*.tar		|| return 1
-		${WGET_C} -P			${FILE} ${RUFUS_URL}	|| return 1
-#>>>		common_tar			${FILE}			|| return 1
-		7z d				${FILE}.zip		|| return 1
-		7z a				${FILE}.zip ${FILE}	|| return 1
-#>>>		${RM}				${FILE}			|| return 1
+		${RM}					${FILE}*					|| return 1
+		${MKDIR}				${FILE}						|| return 1
+		${HOME}/scripts/grub.sh			${FILE}						|| return 1
+		${RM}					${FILE}/_*					|| return 1
+		${RM}					${FILE}/*.tar					|| return 1
+		${WGET_C} -P				${FILE} ${RUFUS_URL}				|| return 1
+		if [[ -x $(which qemu-img) ]]; then
+			grub.sh				${FILE} -m					|| return 1
+			${MKDIR}			${FILE}/.mount-loop/${_TITLE}			|| return 1
+			${RSYNC_U} ${_RAMFS}.kernel	${FILE}/.mount-loop/${_TITLE}/${_TITLE}.kernel	|| return 1
+			grub.sh				${FILE} -u					|| return 1
+			qemu-img convert -O qcow2	${FILE}/loopfile.img ${FILE}/loopfile.qcow2	|| return 1
+			qemu-img info			${FILE}/loopfile.qcow2				|| return 1
+		fi
+#>>>		common_tar				${FILE}						|| return 1
+		7z d					${FILE}.zip					|| return 1
+		7z a					${FILE}.zip ${FILE}				|| return 1
+#>>>		${RM}					${FILE}						|| return 1
 	else
-		common_exists ${FUNCNAME}	${FILE}*		|| return 1
+		common_exists ${FUNCNAME}		${FILE}*					|| return 1
 	fi
 	return 0
 }
