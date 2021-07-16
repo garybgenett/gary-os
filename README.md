@@ -22,7 +22,7 @@
 |:---|:---|
 | **Documentation** |
 | [Overview]        | [Quick Start] / [Requirements] / [Support]
-| [Booting]         | [Linux] / [Windows] / [Grub] / [PXE]
+| [Booting]         | [Linux] / [Windows] / [Grub] / [EFI] / [PXE]
 | [Running]         | [Uses] / [Networking] / [X11]
 | [Building]        | [Update] / [Install]
 | **Information**   |
@@ -240,6 +240,16 @@ There will be a new drive letter available in 'My Computer', but it will be
 empty.  Create the 'gary-os' directory and add the 'gary-os.kernel' as
 described at the at the beginning of the section ([Grub]).  The
 'gary-os.custom' instructions are also supported.
+
+## EFI #########################################################################
+[EFI]: #efi
+
+Both the GaryOS [Kernel] and the Grub 'x86_64.efi' file in [Boot] are EFI
+applications, and can be used directly from an EFI menu on an appropriate
+partition.
+
+Booting from either of these files with EFI is supported, but the necessary EFI
+configuration/steps are not tested or supported.
 
 ## PXE #########################################################################
 [PXE]: #pxe
