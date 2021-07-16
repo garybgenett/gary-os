@@ -179,13 +179,15 @@ declare GCUST_ROOTFS="$(dirname ${GMENU_CUSTOM})/$(basename ${GMENU_ROOTFS})"
 declare GCUST_OPTION="shmem_size=${SHMEM} groot_hint=\${garyos_rootfs} groot_file=${GCUST_ROOTFS} groot=${GCDEV}"
 
 declare GMENU_HEAD="\
-# settings
+################################################################################
+# GaryOS Grub Configuration
+################################################################################
 
 set debug=linux
 set default=0
 set timeout=-1
 
-# modules
+########################################
 
 insmod all_video
 
@@ -201,10 +203,24 @@ insmod search
 insmod configfile
 insmod linux
 insmod chain
-"
+
+########################################
+
+serial --unit=0 --speed=9600 --word=8 --parity=no --stop=1
+terminal_input console serial
+terminal_output console serial
+
+set menu_color_normal=white/black
+set menu_color_highlight=black/red
+
+################################################################################"
+declare GMENU_FOOT="\
+################################################################################
+# end of file
+################################################################################"
+
 declare GMENU="\
 ${GMENU_HEAD}
-# titles
 
 menuentry \"${_NAME}\" {
 	configfile (memdisk)${GFILE}
@@ -215,7 +231,7 @@ menuentry \"---\" {
 	set pager=0
 }
 
-# kernel
+########################################
 
 set garyos_custom=
 set garyos_rescue=
@@ -248,14 +264,12 @@ menuentry \"${_PROJ} Menu\" {
 }
 menuentry \"${_PROJ} Boot\" {
 	linux (\${garyos_rescue})${GMENU_KERNEL}${GOPTS}
-	boot
 }
 menuentry \"${_PROJ} Boot Rootfs\" {
 	linux (\${garyos_rootfs})${GMENU_KERNEL}${GOPTS} ${GMENU_OPTION}
-	boot
 }
 
-# install
+########################################
 
 set garyos_install=
 search --no-floppy --file --set garyos_install /boot/kernel
@@ -277,10 +291,9 @@ menuentry \"${_PROJ} Install Menu\" {
 menuentry \"${_PROJ} Install Boot\" {
 	linux (\${garyos_install})/boot/kernel${GOPTS} root=${GCDEV}
 	initrd (\${garyos_install})/boot/initrd
-	boot
 }
 
-# pxe
+########################################
 
 set garyos_server=\"\${net_${GPXE}_next_server}\"
 set garyos_source=\"\${net_${GPXE}_rootpath}\"
@@ -295,7 +308,6 @@ fi
 if [ -n \"\${garyos_server}\" ]; then
 	set default=7
 	set timeout=${TIMEOUT}
-
 fi
 
 menuentry \"${_PROJ} PXE\" {
@@ -307,26 +319,14 @@ menuentry \"${_PROJ} PXE\" {
 	echo garyos_server: \${garyos_server}
 	echo garyos_source: \${garyos_source}
 	echo garyos_params: \${garyos_params}
-
 	linux (tftp,\${garyos_server})\${garyos_source}${GOPTS} \${garyos_params}
-	boot
 }
 
-# chainload
-
-menuentry \"Boot Primary\" {
-	chainloader (hd0)+1
-}
-menuentry \"Boot Secondary\" {
-	chainloader (hd1)+1
-}
-
-# end of file
+${GMENU_FOOT}
 "
 
 declare GCUST="\
 ${GMENU_HEAD}
-# titles
 
 menuentry \"${_NAME} (Custom)\" {
 	configfile (memdisk)${GFILE}
@@ -336,6 +336,8 @@ menuentry \"---\" {
 	set
 	set pager=0
 }
+
+########################################
 
 set garyos_rescue=
 set garyos_rootfs=
@@ -357,14 +359,12 @@ fi
 
 menuentry \"${_PROJ} Boot\" {
 	linux (\${garyos_rescue})${GCUST_KERNEL}${GOPTS}
-	boot
 }
 menuentry \"${_PROJ} Boot Rootfs\" {
 	linux (\${garyos_rootfs})${GCUST_KERNEL}${GOPTS} ${GCUST_OPTION}
-	boot
 }
 
-# end of file
+${GMENU_FOOT}
 "
 
 ########################################
