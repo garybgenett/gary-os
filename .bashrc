@@ -1365,22 +1365,27 @@ function git-export {
 ########################################
 
 function git-list {
+	declare COUNT=
+	if [[ ${1} == -+([0-9]) ]]; then
+		COUNT="${1}"
+		shift
+	fi
 	if [[ ${1} == -l ]]; then
 		shift
-		${FUNCNAME} -r "${@}" |
+		${FUNCNAME} ${COUNT} -r "${@}" |
 			awk '{print $5;}' |
 			sort |
 			uniq
 	elif [[ ${1} == -r ]]; then
 		shift
 		declare HASH
-		for HASH in $(${FUNCNAME} | cut -d' ' -f4); do
+		for HASH in $(${FUNCNAME} ${COUNT} "${@}" | cut -d' ' -f4); do
 			${FUNCNAME} ${HASH} "${@}"
 		done
 	elif [[ -n "$(echo "${1}" | ${GREP} "^[a-z0-9]{40}$")" ]]; then
 		${GIT} ls-tree -lrt "${@}"
 	else
-		${GIT_CMD} log --pretty=format:"%ai %H %s %d" "${@}"
+		${GIT_CMD} log ${COUNT} --pretty=format:"%ai %H %s %d" "${@}"
 	fi
 }
 
