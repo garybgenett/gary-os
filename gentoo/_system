@@ -158,12 +158,16 @@ if [[ ${TOOR} == -d ]]; then
 	_PKG="${BLDPKG}"
 fi
 if [[ ${TOOR} == -x ]]; then
-	SETDIR="${SETDIR:-${SETDIR}/${FUNDIR}.make}"
+	if [[ ${SETDIR} == /.g/_data/zactive/.setup ]]; then
+		SETDIR="${SETDIR}/${FUNDIR}.make"
+	fi
 	TARGET="${WRKDIR}"
 	_PKG="${WRKPKG}"
 fi
 if [[ ${TOOR} == -g ]]; then
-	SETDIR="${SETDIR:-${SETDIR}/${FUNDIR}.gary-os}"
+	if [[ ${SETDIR} == /.g/_data/zactive/.setup ]]; then
+		SETDIR="${SETDIR}/${FUNDIR}.${_TITLE}"
+	fi
 	TARGET="${GOSDIR}"
 	_PKG="${GOSPKG}"
 fi
