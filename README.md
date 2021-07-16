@@ -114,6 +114,24 @@ with them in the Seattle area.
 # Booting ######################################################################
 [Booting]: #booting
 
+GaryOS is a Linux kernel with a large embedded Initramfs (see [Tools] for
+details).  It can be booted in the exact same way as a standard Linux kernel,
+and from anywhere that a Linux kernel can.
+
+  | | |
+  |:---|:---|
+  | [Linux]   | Starting from any Linux system
+  | [Windows] | Starting from any Windows system
+  | [Grub]    | Hard drives or removeable media, from either Linux or Windows
+  | [EFI]     | Existing EFI systems, which are an emerging default
+  | [PXE]     | Networked environment, or for rapid testing with Qemu
+  | [Qemu]    | Run virtualized on any platform, for trying it out or testing
+
+All standard Linux kernel parameters are valid.  In addition, GaryOS has added
+"shmem_size", which specifies the initial amount of memory reserved for the
+filesystem, if something other than the default is desired at boot time.
+Details on this parameter are in the [Filesystem] section.
+
 ## Windows #####################################################################
 [Windows]: #windows
 
