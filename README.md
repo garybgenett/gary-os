@@ -254,24 +254,32 @@ configuration/steps are not tested or supported.
 ## PXE #########################################################################
 [PXE]: #pxe
 
-  * Definition:
-    * Boot from a PXE environment.
-    * With some modification of the Funtoo configuration and package list, this
-      Metro automation can be used to create a lab workstation or other
-      automated environment where a reboot completely resets each machine
-      involved.
-  * Last tested with:
-    * GaryOS v3.0
-    * DHCPd: net-misc/dhcp-4.2.5_p1-r2
-    * TFTPd: net-misc/iputils-20121221-r2
-    * iPXE: sys-firmware/ipxe-1.0.0_p20130624-r2
-  * Research and development:
-    * <https://wiki.archlinux.org/index.php/archboot#PXE_booting_.2F_Rescue_system>
+In a networked environment, one or more machines can boot GaryOS from a central
+server.  This is often used in labs or environments where centralized management
+of infrastructure is critical.
 
-Once you have a functioning PXE environment, on a global or per-host
-basis add the following configuration option to `dhcpd.conf`:
+Both the GaryOS [Kernel] and the Grub 'x86_64.efi' file in [Boot] can be loaded
+directly from PXE.  The Grub image will automatically select and load GaryOS
+from the server by default, but can also be used to provide additional boot
+options.
 
-  * `filename "gary-os-[...].kernel";`
+DHCPd and TFTPd are included in GaryOS.  An example DHCPd configuration is
+below.  Grub must be used as the 'filename' in order to pass Linux kernel
+parameters to GaryOS via 'extensions-path'.  Otherwise, the GaryOS kernel can
+be used directly as 'filename' without any other options.
+
+  ```
+  filename                "/gary-os/gary-os.grub/x86_64.efi";
+  next-server             0.0.0.0;
+  option root-path        "/gary-os/gary-os.kernel";
+  option extensions-path  "shmem_size=3000m groot_hint=efinet0 groot_file=/gary-os/gary-os.rootfs groot=0.0.0.0";
+  ```
+
+The kernel parameters in 'extensions-path' are specific to GaryOS, and are
+covered in the [Filesystem] section.
+
+Using [Custom] to create modified [Filesystem] images could form the basis of a
+completely automated and centrally managed lab or server farm.
 
 --------------------------------------------------------------------------------
 
