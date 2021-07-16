@@ -179,44 +179,67 @@ Steps for creating the bootable USB drive are in the [Grub] section.
 ## Grub ########################################################################
 [Grub]: #grub
 
-  * Definition:
-    * Boot into a mostly complete Grub environment directly from the
-      boot record without requiring any additional files from disk.
-    * Create a Grub "core.img" which can be booted using identical
-      methods and options as GaryOS, such as PXE, Qemu, etc.
-  * Last tested with:
-    * Tested in place of GaryOS with both Qemu and PXE.
-        * For details on PXE, see the [PXE] section below.
-    * Grub: sys-boot/grub-2.02_beta2-r3
-  * Research and development:
-    * <https://gnu.org/software/grub/manual/grub.html#BIOS-installation>
-        * <https://gnu.org/software/grub/manual/grub.html#Images>
-    * <http://lukeluo.blogspot.com/2013/06/grub-how-to-4-memdisk-and-loopback.html>
-    * <http://wiki.osdev.org/GRUB_2#Disk_image_instructions>
+The GaryOS [Boot] file contains everything needed to create/update Grub on both
+hard drives and USB drives.  The core of the tooling is the [scripts/grub.sh]
+script.
 
-For convenience and supportability, this case has also been automated in the
-`grub.sh` script.  The `gary-os.grub.*` file in the root download directory
-contains an archive of the output of this script.  However, for this case the
-script will need to be run locally.  The [Windows] section above has more
-details on the `grub.sh` script and its usage and output.
+Once a drive has been set up, place the GaryOS [Kernel] in the 'gary-os'
+directory as 'gary-os.kernel'.  You can also place it in the 'gary-os.custom'
+directory and edit the 'gary-os.grub.cfg' in that directory to suit your needs.
 
-Instructions for Grub "rescue" image installation to hard disk:
+The drive can booted using the BIOS or EFI boot menu on any computer that
+supports booting from removeable media.  It provides a menu which auto-selects
+the most advanced option available.  This menu can be updated at any time using
+the [scripts/grub.sh] script within GaryOS, following the directions in "Linux"
+below.
 
-  1. Create an empty working directory:
-     * e.g. `mkdir /tmp/grub`
-  2. Change into the working directory:
-     * e.g. `cd /tmp/grub`
-  3. Run the `grub.sh` script with a block device argument:
-     * e.g. `grub.sh /dev/sda`
-  4. The script will create necessary files in the working directory,
-     and then uses `grub-bios-setup` to install the custom-built
-     "core.img" into the boot record.
-  5. The block device can now be booted directly into a Grub environment
-     which does not require any access to disk for its modules or
-     configuration.
-     * **The working directory is no longer needed and can be deleted.**
-  6. To remove, simply re-install Grub using `grub-install` as usual, or
-     install another bootloader.
+**Linux**
+
+The 'grub.sh' script can be run directly from the command line.  Running it
+without any arguments will display the usage documentation.  The latest version
+is always [scripts/grub.sh].  However, the version in the [Boot] file is going
+to be better tested and supported.
+
+Be advised that this script creates a brand new partition table on whatever
+drive is targeted.  Only use this on a brand new or empty device.  The
+update option should only be used on drives that were created by the script, or
+that have a matching partition table layout.
+
+  | Partition | Start Sector | End Sector | Size       | Code | Name
+  |---:       |---:          |---:        |---:        |---:  |:---
+  | 1         |      2363392 |    7275923 |    2.3 GiB | 0700 | Microsoft basic data
+  | 3         |       266240 |    2363391 | 1024.0 MiB | EF00 | EFI System
+  | 4         |         4096 |     266239 |  128.0 MiB | EF02 | BIOS boot partition
+
+This is the output from 'gdisk -l loopfile.img'.  Using 'fdisk -l' will produce
+similar output.
+
+**Windows**
+
+These instructions are tested on Windows 10, but should work just fine on
+anything Windows 7 or later.
+
+  1. Insert a new or empty USB drive at least 4GB in size
+  2. Download the [Boot] archive, right click and 'Extract'
+  3. Double-click 'rufus.exe', click allow, and decline updates
+     1. Show advanced properties and check 'USB Drives'
+     2. For 'Device', select the USB drive
+     3. For 'Boot Selection', use the large 'Select' button and 'loopfile.img'
+     4. Click 'Start'
+     5. Read the warning and click 'OK' when ready
+     6. Click 'Close' if it completed successfully
+  4. Right-click the Windows 'Start' menu, and select 'Disk Management'
+     1. The drive will have both lettered (e.g. D:) and unallocated space
+     2. Right-click the lettered drive and select 'Delete Volume'
+     3. Read the warning and click 'Yes' when ready
+     4. Right-click the expanded unallocated space and select 'Simple Volume'
+     5. Follow the prompts, using 'exFAT' as the 'File System'
+     6. Click 'Finish' when ready
+
+There will be a new drive letter available in 'My Computer', but it will be
+empty.  Create the 'gary-os' directory and add the 'gary-os.kernel' as
+described at the at the beginning of the section ([Grub]).  The
+'gary-os.custom' instructions are also supported.
 
 ## PXE #########################################################################
 [PXE]: #pxe
