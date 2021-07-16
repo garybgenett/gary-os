@@ -165,89 +165,16 @@ support is provided.
 ## Windows #####################################################################
 [Windows]: #windows
 
-  * Definition:
-    * Boot using the native Windows bootloader.
-    * No modifications to the hard drive partitions or boot records.
-    * Do not require any files outside of `C:` in the Windows
-      installation.
-  * Last tested with:
-    * GaryOS v3.0
-    * MBR/GPT only; EFI not built or tested
-    * Windows 7 Ultimate SP1 64-bit
-    * Grub: sys-boot/grub-2.02_beta2-r3
-  * Research and development:
-    * <http://lists.gnu.org/archive/html/help-grub/2013-08/msg00005.html>
-        * <http://blog.mudy.info/2010/08/boot-grub2-stage2-directly-from-windows-bootmgr-with-grub4dos-stage1>
-    * <https://wiki.archlinux.org/index.php/Windows_and_Arch_Dual_Boot#Using_Windows_boot_loader>
-        * <http://iceflatline.com/2009/09/how-to-dual-boot-windows-7-and-linux-using-bcdedit>
+Installation for Windows systems is not complicated, but does involve a few
+steps.  Microsoft consistently changes the way their bootloader works, and what
+items are supported.  The [v3.0] version of GaryOS was the last one to support
+direct modification of the Windows 7/8 bootloader.  In Windows 10, Microsoft
+removed support for the application type required to boot the GaryOS Grub image.
+As such, using a USB drive is the safest and easiest method.  There are
+alternatives to the Windows bootloader that can dual-boot Windows and Linux, but
+they are not tested and no support is provided.
 
-For convenience and supportability, this case has been mostly automated
-in the `grub.sh` script.  The `gary-os.grub.*` file in the root download
-directory contains an archive of the output of this script.
-
-Overview of the script:
-
-  * When run without arguments, it creates a series of Grub images and
-    configuration files in the current directory.
-  * When run with a single block device argument, the target device will
-    be used for installation of the "rescue" Grub image, rather than the
-    example disk image file.
-
-Overview of the output:
-
-  * `bcdedit.bat`
-    * Used to install/remove the necessary entries from the Windows
-      bootloader database.
-  * `bootstrap.*`
-    * Grub "core.img" and configuration loaded from the Windows
-      bootloader.  Uses the directory added to `C:` (instructions below)
-      for modules (such as `i386-pc` directory) and menu configuration.
-  * `grub.cfg`
-    * Grub menu used by "bootstrap" above.  Can be modified as needed to
-      boot other OSes/objects.
-  * `rescue.*`
-    * Grub "core.img" rescue environment detailed further in [Grub] section
-      below.
-  * `rescue_example.raw`
-    * Hard disk image file example of installation of Grub "rescue"
-      environment.
-
-Instructions for Windows bootloader dual-boot:
-
-  1. The script assumes a default installation, with a small boot
-     partition as partition 1 and Windows `C:` on partition 2.  All
-     other partitions must be 3 or higher.  Configurations that do not
-     match this will require minor edits to the script, and a fresh
-     build of the output directory.
-  2. Copy the output directory to `C:\gary-os.grub`, or wherever the
-     script has been modified to point to.
-  3. Run the `bcdedit.bat` script as Administrator.  Running this script
-     without Administrator privileges can cause unexpected and/or
-     undesired results.  The `bcdedit.guid.txt` file that is created is
-     necessary for automatic removal of the created boot entry.
-  4. Place the GaryOS files at these locations:
-     * `C:\gary-os-64.kernel`
-     * `C:\gary-os-32.kernel`
-  5. Use the new option in the Windows bootloader to switch to Grub and
-     boot GaryOS (or other OSes/objects bootable by Grub).  Doing
-     nothing will boot into Windows as usual.
-  6. Simply update the GaryOS files in-place to upgrade.
-  7. Run the `bcdedit.bat` script as Administrator to remove from the
-     Windows bootloader configuration.  The directory and files created
-     in `C:` need to be removed manually.
-
-If the `bcdedit.guid.txt` file is lost, or otherwise becomes out of
-date with the bootloader database, use the `bcdedit` command as
-Administrator to remove the unwanted entries:
-
-  1. Run `cmd` as Administrator.
-  2. Run `bcdedit` to view the bootloader database.  Copy the
-     `identifier` field for each GaryOS entry.
-  3. Run `bcdedit /delete {identifier} /cleanup` for each entry.  Note
-     that the `{identifier}` should be replaced with the full string
-     output in #2 above, including the `{}` markers.
-     * e.g. `bcdedit /delete {02a0fce9-68f5-11e3-aa07-e94d28b95f82}
-       /cleanup`
+Steps for creating the bootable USB drive are in the [Grub] section.
 
 ## Grub ########################################################################
 [Grub]: #grub
