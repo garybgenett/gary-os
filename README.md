@@ -22,7 +22,7 @@
 |:---|:---|
 | **Documentation** |
 | [Overview]        | [Quick Start] / [Requirements] / [Support]
-| [Booting]         | [Windows] / [Grub] / [PXE]
+| [Booting]         | [Linux] / [Windows] / [Grub] / [PXE]
 | [Running]         | [Uses] / [Networking] / [X11]
 | [Building]        | [Update] / [Install]
 | **Information**   |
@@ -131,6 +131,36 @@ All standard Linux kernel parameters are valid.  In addition, GaryOS has added
 "shmem_size", which specifies the initial amount of memory reserved for the
 filesystem, if something other than the default is desired at boot time.
 Details on this parameter are in the [Filesystem] section.
+
+## Linux #######################################################################
+[Linux]: #linux
+
+Starting from Linux is easier than with [Windows], for obvious reasons.  There
+are two options.
+
+  1. Use an existing booloader configuration
+  2. Use the GaryOS [Grub] tooling
+
+It is recommended to use the first if it is available.  The simplest version for
+Grub is below, with the 'linux' line matching the location where you put the
+GaryOS kernel.
+
+  ```
+  menuentry "GaryOS" {
+    set debug=linux
+    linux (hd0,1)/gary-os/gary-os.kernel
+    boot
+  }
+  ```
+
+The 'gary-os.grub.cfg' file in the [Boot] archive is a good example of
+a relatively complete Grub configuration file.
+
+Both of the above will also work for Grub installations on USB drives.  See the
+[Grub] section if you want to create/update a bootable USB drive.  If your
+system boots using EFI, see the [EFI] section.  Any bootloader that can boot
+Linux will work, but GaryOS is not tested with them so no instructions or
+support is provided.
 
 ## Windows #####################################################################
 [Windows]: #windows
