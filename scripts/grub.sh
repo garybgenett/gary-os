@@ -170,13 +170,13 @@ fi
 
 declare GMENU_KERNEL="/${_BASE}/${_BASE}.kernel"
 declare GMENU_ROOTFS="/${_BASE}/${_BASE}.rootfs"
-declare GMENU_OPTION="shmem_size=${SHMEM} groot_hint=\${garyos_rootfs} groot_file=${GMENU_ROOTFS} groot=${GCDEV}"
-declare GMENU_OPTPXE="shmem_size=${SHMEM} groot_hint=${GPXE} groot_file=${GMENU_ROOTFS} groot=\${garyos_server}"
+declare GMENU_OPTION="shmem_size=${SHMEM} groot=${GCDEV} groot_hint=\${garyos_rootfs} groot_file=${GMENU_ROOTFS}"
+declare GMENU_OPTPXE="shmem_size=${SHMEM} groot=\${garyos_server} groot_hint=${GPXE} groot_file=${GMENU_ROOTFS}"
 
 declare GMENU_CUSTOM="/${_BASE}/${_BASE}.grub.cfg"
 declare GCUST_KERNEL="$(dirname ${GMENU_CUSTOM})/$(basename ${GMENU_KERNEL})"
 declare GCUST_ROOTFS="$(dirname ${GMENU_CUSTOM})/$(basename ${GMENU_ROOTFS})"
-declare GCUST_OPTION="shmem_size=${SHMEM} groot_hint=\${garyos_rootfs} groot_file=${GCUST_ROOTFS} groot=${GCDEV}"
+declare GCUST_OPTION="shmem_size=${SHMEM} groot=${GCDEV} groot_hint=\${garyos_rootfs} groot_file=${GCUST_ROOTFS}"
 
 declare GMENU_WINEFI="/efi/microsoft/boot/bootmgfw.efi"
 
