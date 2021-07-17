@@ -461,7 +461,6 @@ declare MODULES_LIST="$(
 		-e "[/]random" \
 		-e "[/]reiserfs" \
 		-e "[/]romfs" \
-		-e "[/]serial" \
 		-e "[/]sfs" \
 		-e "[/]spkmodem" \
 		-e "[/]squash" \
@@ -473,7 +472,6 @@ declare MODULES_LIST="$(
 		-e "[/]truecrypt" \
 		-e "[/]udf" \
 		-e "[/]ufs" \
-		-e "[/]usbserial" \
 		-e "[/]video" \
 		-e "[/]xfs" \
 		-e "[/]xnu" \
