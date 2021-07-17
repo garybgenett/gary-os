@@ -215,6 +215,12 @@ terminal_output console serial
 set menu_color_normal=white/black
 set menu_color_highlight=black/red
 
+########################################
+
+set options_default=\"rootwait ro\"
+
+set options_boot=\"\${options_default}\"
+
 ################################################################################"
 declare GMENU_FOOT="\
 ########################################
@@ -274,10 +280,10 @@ menuentry \"${_PROJ} Menu\" {
 	configfile (\${garyos_custom})${GMENU_CUSTOM}
 }
 menuentry \"${_PROJ} Boot\" {
-	linux (\${garyos_rescue})${GMENU_KERNEL}${GOPTS}
+	linux (\${garyos_rescue})${GMENU_KERNEL}${GOPTS} \${options_boot}
 }
 menuentry \"${_PROJ} Boot Rootfs\" {
-	linux (\${garyos_rootfs})${GMENU_KERNEL}${GOPTS} ${GMENU_OPTION}
+	linux (\${garyos_rootfs})${GMENU_KERNEL}${GOPTS} ${GMENU_OPTION} \${options_boot}
 }
 
 ########################################
@@ -300,7 +306,7 @@ menuentry \"${_PROJ} Install Menu\" {
 	configfile (\${garyos_install})${GFILE}
 }
 menuentry \"${_PROJ} Install Boot\" {
-	linux (\${garyos_install})/boot/kernel${GOPTS} root=${GCDEV}
+	linux (\${garyos_install})/boot/kernel${GOPTS} root=${GCDEV} \${options_boot}
 	initrd (\${garyos_install})/boot/initrd
 }
 
@@ -331,7 +337,7 @@ menuentry \"${_PROJ} PXE\" {
 	echo garyos_server: \${garyos_server}
 	echo garyos_source: \${garyos_source}
 	echo garyos_params: \${garyos_params}
-	linux (tftp,\${garyos_server})\${garyos_source}${GOPTS} \${garyos_params}
+	linux (tftp,\${garyos_server})\${garyos_source}${GOPTS} \${garyos_params} \${options_boot}
 }
 
 ${GMENU_FOOT}
@@ -368,10 +374,10 @@ else
 fi
 
 menuentry \"${_PROJ} Boot\" {
-	linux (\${garyos_rescue})${GCUST_KERNEL}${GOPTS}
+	linux (\${garyos_rescue})${GCUST_KERNEL}${GOPTS} \${options_boot}
 }
 menuentry \"${_PROJ} Boot Rootfs\" {
-	linux (\${garyos_rootfs})${GCUST_KERNEL}${GOPTS} ${GCUST_OPTION}
+	linux (\${garyos_rootfs})${GCUST_KERNEL}${GOPTS} ${GCUST_OPTION} \${options_boot}
 }
 
 ${GMENU_FOOT}
