@@ -1928,6 +1928,8 @@ function _publish_gitdir {		#{ismain}
 	STATIC_FILES+="^scripts/metro.sh"
 	STATIC_FILES+="^scripts/qemu.bsh"
 	STATIC_FILES+="^scripts/qemu-network\*"
+	STATIC_FILES+="^scripts/qemu-minion.bsh"
+	STATIC_FILES+="^scripts/qemu-windows.bsh"
 	eval git-export ${_TITLE} ${_RELDIR} ${_GITHUB}					\
 		+git-export-preprocess +git-export-postprocess				\
 		${_TITLE}:${_DOCDIR}:${DOC_FILES/#^}					\
