@@ -221,6 +221,31 @@ set options_default=\"rootwait ro\"
 
 set options_boot=\"\${options_default}\"
 
+################################################################################
+
+set options_serial_on=\"console=ttyS0,38400\"
+set options_serial_off=\"\${options_serial_on} console=tty0\"
+if [ -z \${options_serial} ]; then
+	set options_serial=\"\${options_serial_off}\"
+fi
+set options_boot=\"\${options_default} \${options_serial}\"
+
+########################################
+
+function serial_config {
+	if [ \"\${options_serial}\" == \"\${options_serial_off}\" ]; then
+		set options_serial=\"\${options_serial_on}\"
+	else
+		set options_serial=\"\${options_serial_off}\"
+	fi
+	echo -en \"\${options_serial}> \"
+	read options_serial_set
+	if [ \${options_serial_set} != \"\" ]; then
+		set options_serial=\"\${options_serial_set}\"
+	fi
+	set options_boot=\"\${options_default} \${options_serial}\"
+}
+
 ################################################################################"
 declare GMENU_FOOT="\
 ########################################
@@ -245,7 +270,7 @@ menuentry \"${_NAME}\" {
 	configfile (memdisk)${GFILE}
 }
 menuentry \"---\" {
-	set
+	serial_config
 }
 
 ########################################
@@ -350,7 +375,7 @@ menuentry \"${_NAME} (Custom)\" {
 	configfile (memdisk)${GFILE}
 }
 menuentry \"---\" {
-	set
+	serial_config
 }
 
 ########################################
