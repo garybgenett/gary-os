@@ -186,10 +186,10 @@ declare GMENU_HEAD="\
 ################################################################################
 
 set debug=linux
-set default=0
+set pager=1
 set timeout=-1
 
-########################################
+################################################################################
 
 insmod all_video
 
@@ -239,9 +239,7 @@ menuentry \"${_NAME}\" {
 	configfile (memdisk)${GFILE}
 }
 menuentry \"---\" {
-	set pager=1
 	set
-	set pager=0
 }
 
 ########################################
@@ -346,9 +344,7 @@ menuentry \"${_NAME} (Custom)\" {
 	configfile (memdisk)${GFILE}
 }
 menuentry \"---\" {
-	set pager=1
 	set
-	set pager=0
 }
 
 ########################################
