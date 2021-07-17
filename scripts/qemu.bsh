@@ -316,10 +316,11 @@ fi
 
 if [[ ${INTERFACE} == display ]]; then
 #>>>	exec ${VNC} 127.0.0.1:599${QNUM} &
-	exec remote-viewer --title=SPICE:${QNUM} spice://127.0.0.1/?port=666${QNUM} &
+	remote-viewer --title=SPICE:${QNUM} spice://127.0.0.1/?port=666${QNUM} &
 	exec telnet 127.0.0.1 999${QNUM}
 elif [[ ${INTERFACE} == console ]]; then
-	exec telnet 127.0.0.1 990${QNUM}
+	telnet 127.0.0.1 990${QNUM}
+	telnet 127.0.0.1 999${QNUM}
 fi
 
 exit 0
