@@ -178,6 +178,8 @@ declare GCUST_KERNEL="$(dirname ${GMENU_CUSTOM})/$(basename ${GMENU_KERNEL})"
 declare GCUST_ROOTFS="$(dirname ${GMENU_CUSTOM})/$(basename ${GMENU_ROOTFS})"
 declare GCUST_OPTION="shmem_size=${SHMEM} groot_hint=\${garyos_rootfs} groot_file=${GCUST_ROOTFS} groot=${GCDEV}"
 
+declare GMENU_WINEFI="/efi/microsoft/boot/bootmgfw.efi"
+
 declare GMENU_HEAD="\
 ################################################################################
 # GaryOS Grub Configuration
@@ -215,6 +217,16 @@ set menu_color_highlight=black/red
 
 ################################################################################"
 declare GMENU_FOOT="\
+########################################
+
+search --no-floppy --file --set garyos_winefi ${GMENU_WINEFI}
+if [ -n \"\${garyos_winefi}\" ]; then
+	menuentry \"Windows\" {
+		set root=\"\${garyos_winefi}\"
+		chainloader ${GMENU_WINEFI}
+	}
+fi
+
 ################################################################################
 # end of file
 ################################################################################"
@@ -370,33 +382,40 @@ ${GMENU_FOOT}
 
 ########################################
 
-declare _GRUB="${_BASE}.grub"
-
 declare BCDEDIT="\
 @echo off
 set CURDIR=%~dp0
 set BCDFILE=\"%CURDIR%bcdedit.guid.txt\"
 if not exist %BCDFILE% (goto create) else (goto delete)
 :create
-	for /f \"usebackq tokens=3\" %%I in (\`bcdedit.exe /create /d \"${_NAME}\" /application bootsector\`) do (set GUID=%%I)
-::>>>	for /f \"usebackq tokens=3\" %%I in (\`bcdedit.exe /create /d \"${_NAME}\" /inherit fwbootmgr\`) do (set GUID=%%I)
+::>>>	for /f \"usebackq tokens=2 delims={}\" %%G in (\`bcdedit.exe /create /d \"${_NAME}\" /inherit fwbootmgr\`) do (set GUID={%%G})
+	for /f \"usebackq tokens=2 delims={}\" %%G in (\`bcdedit.exe /copy {bootmgr} /d \"${_NAME}\"\`) do (set GUID={%%G})
 	echo %GUID% >%BCDFILE%
-	echo %GUID%
-	bcdedit.exe /set %GUID% device partition=c:
-	bcdedit.exe /set %GUID% path \\${_GRUB}\\bcdedit.img
-::>>>	bcdedit.exe /set %GUID% path \\${_GRUB}\\x86_64.efi
+	bcdedit.exe /set %GUID% device partition=y:
+	bcdedit.exe /set %GUID% path \\${_BASE}\\${_BASE}.efi
+	bcdedit.exe /set {fwbootmgr} displayorder %GUID% /addfirst
+	bcdedit.exe /set {fwbootmgr} displayorder {bootmgr} /addfirst
 	bcdedit.exe /displayorder %GUID% /addlast
 	bcdedit.exe /timeout ${TIMEOUT}
+	bcdedit.exe /enum %GUID%
+	mountvol y: /s
+	mkdir y:\\${_BASE}
+	copy /y /v %CURDIR%\\$(basename ${GMENU_CUSTOM}) y:\\${_BASE}\\$(basename ${GMENU_CUSTOM})
+	copy /y /v %CURDIR%\\x86_64.efi y:\\${_BASE}\\${_BASE}.efi
 	goto end
 :delete
 	set /p GUID=<%BCDFILE%
-	del %BCDFILE%
-	echo %GUID%
+	del /q /f %BCDFILE%
+	bcdedit.exe /enum %GUID%
 	bcdedit.exe /delete %GUID% /cleanup
-	bcdedit.exe /deletevalue {bootmgr} timeout
+	bcdedit.exe /set {bootmgr} timeout 0
+	mountvol y: /s
+	rmdir /q /s y:\\${_BASE}
 	goto end
 :end
+	bcdedit.exe /enum firmware
 	bcdedit.exe
+	dir y: y:\\${_BASE}
 	set /p EXIT=\"Hit enter to finish.\"
 :: end of file
 "
@@ -682,11 +701,11 @@ ${RSYNC_U} -L ${_SELF} ${GDEST}/$(basename ${_SELF})	|| exit 1
 
 ########################################
 
-echo -en "${GMENU}"		>${GDEST}/rescue.cfg			|| exit 1
-echo -en "${GCUST}"		>${GDEST}/$(basename ${GMENU_CUSTOM})	|| exit 1
+echo -en "${GMENU}"	>${GDEST}/rescue.cfg			|| exit 1
+echo -en "${GCUST}"	>${GDEST}/$(basename ${GMENU_CUSTOM})	|| exit 1
 
-#>>>echo -n "${BCDEDIT}"	>${GDEST}/bcdedit.bat			|| exit 1
-#>>>unix2dos ${GDEST}/bcdedit.bat					|| exit 1
+echo -n "${BCDEDIT}"	>${GDEST}/bcdedit.bat			|| exit 1
+unix2dos		${GDEST}/bcdedit.bat			|| exit 1
 
 ########################################
 
@@ -739,20 +758,6 @@ else
 fi
 
 ########################################
-
-#>>>
-#FILE="${GDEST}/bcdedit.img"
-#grub-mkimage -v \
-#	-C xz \
-#	-O ${GTYPE} \
-#	-d ${GMODS} \
-#	-o ${FILE} \
-#	-c ${GDEST}/rescue.cfg \
-#	--prefix="${GROOT}/${_GRUB}" \
-#	${MODULES_CORE}					|| exit_summary 1
-#cat ${GMODS}/lnxboot.img ${FILE} >${FILE}.lnxboot	|| exit 1
-#${MV} ${FILE}{.lnxboot,}				|| exit 1
-#>>>
 
 FILE="${GDEST}/rescue.tar/boot/grub"
 ${MKDIR} ${FILE}/${GTYPE}				|| exit 1
@@ -821,9 +826,6 @@ if [[ -b ${GINST_DO}${GPSEP}${GPEFI} ]]; then
 		declare DST="${1}"; shift
 		if [[ ${SRC} == ${GDEST}/x86_64.efi ]]; then
 			${RSYNC_C} ${SRC} ${DST}/BOOTX64.EFI			|| exit 1
-		fi
-		if [[ ${SRC} == ${GDEST}/i386.efi ]]; then
-			${RSYNC_C} ${SRC} ${DST}/BOOTIA32.EFI			|| exit 1
 		fi
 		return 0
 	}
