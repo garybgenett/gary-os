@@ -219,11 +219,12 @@ set menu_color_highlight=black/red
 declare GMENU_FOOT="\
 ########################################
 
-search --no-floppy --file --set garyos_winefi ${GMENU_WINEFI}
+set windows_efi=\"${GMENU_WINEFI}\"
+search --no-floppy --file --set garyos_winefi \${windows_efi}
 if [ -n \"\${garyos_winefi}\" ]; then
 	menuentry \"Windows\" {
 		set root=\"\${garyos_winefi}\"
-		chainloader ${GMENU_WINEFI}
+		chainloader \${windows_efi}
 	}
 fi
 
