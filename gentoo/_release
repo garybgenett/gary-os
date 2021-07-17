@@ -1417,6 +1417,15 @@ function _release_kernel {		#{doredo}
 
 ########################################
 
+function release_grub_loopfile {
+	declare GRUB_DEST="${1}" && shift
+	${MKDIR}					${GRUB_DEST}/.mount-loop/${_TITLE}			|| return 1
+	${RSYNC_U} ${GRUB_DEST}/${_TITLE}.grub.cfg	${GRUB_DEST}/.mount-loop/${_TITLE}/			|| return 1
+	${RSYNC_U} ${_RAMFS}.kernel			${GRUB_DEST}/.mount-loop/${_TITLE}/${_TITLE}.kernel	|| return 1
+	${LL} --recursive				${GRUB_DEST}/.mount-loop				|| return 1
+	return 0
+}
+
 function _release_grub {		#{doredo} #{dofast} #{dotest}
 	FILE="${_RAMFS}.grub"
 	NEXT="/dev/nbd9p1"
@@ -1433,8 +1442,7 @@ function _release_grub {		#{doredo} #{dofast} #{dotest}
 			[[ ! -x $(which qemu-nbd) ]];
 		}; then
 			grub.sh				${FILE} -m					|| return 1
-			${MKDIR}			${FILE}/.mount-loop/${_TITLE}			|| return 1
-			${RSYNC_U} ${_RAMFS}.kernel	${FILE}/.mount-loop/${_TITLE}/${_TITLE}.kernel	|| return 1
+			release_grub_loopfile		${FILE}						|| return 1
 			grub.sh				${FILE} -u					|| return 1
 		else
 			qemu-img convert -O qcow2	${FILE}/loopfile.img ${FILE}/loopfile.qcow2	|| return 1
@@ -1446,9 +1454,7 @@ function _release_grub {		#{doredo} #{dofast} #{dotest}
 			partx -t gpt -a			${NEXT/%p[0-9]}					#>>> || return 1
 			${MKDIR}			${FILE}/.mount-loop				|| return 1
 			mount -o nonempty		${NEXT} ${FILE}/.mount-loop			|| return 1
-			${MKDIR}			${FILE}/.mount-loop/${_TITLE}			|| return 1
-			${RSYNC_U} ${_RAMFS}.kernel	${FILE}/.mount-loop/${_TITLE}/${_TITLE}.kernel	|| return 1
-			${LL} --recursive		${FILE}/.mount-loop				|| return 1
+			release_grub_loopfile		${FILE}						|| return 1
 			umount				${NEXT}						|| return 1
 			qemu-nbd -d			${NEXT/%p[0-9]}					|| return 1
 			${RM}				${FILE}/.mount-loop				|| return 1
