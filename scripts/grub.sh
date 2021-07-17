@@ -662,7 +662,7 @@ if [[ -f ${GIDEF} ]]; then
 	fi
 	if [[ ${DO_MOUNT} == -m ]]; then
 		losetup -v -P ${LOOP_DEVICE} ${GINST}			|| exit 1
-		partx -a ${LOOP_DEVICE}					#>>> || exit 1
+		partx -t gpt -a ${LOOP_DEVICE}				#>>> || exit 1
 		${MKDIR} ${FILE}{,-efi}					|| exit 1
 		mount-robust ${LOOP_DEVICE}p${GPDEF} ${FILE}		|| exit 1
 		mount-robust ${LOOP_DEVICE}p${GPEFI} ${FILE}-efi	|| exit 1
