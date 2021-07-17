@@ -298,11 +298,12 @@ menuentry \"${_PROJ} Install Boot\" {
 set garyos_server=\"\${net_${GPXE}_next_server}\"
 set garyos_source=\"\${net_${GPXE}_rootpath}\"
 set garyos_params=\"\${net_${GPXE}_extensionspath}\"
-if [ -z \"\${garyos_server}\" ]; then				set garyos_server=\"\${net_${GPXE}_dhcp_next_server}\"; fi
-if [ -z \"\${garyos_source}\" ]; then				set garyos_source=\"${GMENU_KERNEL}\"; fi
-#note: it would be nice if grub supported something like \"||\" for this...
-if [ -z \"\${garyos_params}\" ]; then				set garyos_params=\"${GMENU_OPTPXE}\"
-elif [ \"\${garyos_params}\" = \"\${garyos_server}\" ]; then	set garyos_params=\"${GMENU_OPTPXE}\"
+if [ -z \"\${garyos_server}\" ]; then set garyos_server=\"\${net_${GPXE}_dhcp_next_server}\"; fi
+if [ -z \"\${garyos_source}\" ]; then set garyos_source=\"\${net_${GPXE}_dhcp_rootpath}\"; fi
+if [ -z \"\${garyos_params}\" ]; then set garyos_params=\"\${net_${GPXE}_dhcp_extensionspath}\"; fi
+
+if [ -z \"\${garyos_source}\" ]; then
+	set garyos_source=\"${GMENU_KERNEL}\"
 fi
 
 if [ -n \"\${garyos_server}\" ]; then
@@ -311,7 +312,7 @@ if [ -n \"\${garyos_server}\" ]; then
 fi
 
 menuentry \"${_PROJ} PXE\" {
-	echo cmd: net_bootp
+	echo cmd: net_dhcp
 	echo cmd: configfile (memdisk)${GFILE}
 	echo var: set garyos_server=\"\${garyos_server}\"
 	echo var: set garyos_source=\"${GMENU_KERNEL}\"
