@@ -88,7 +88,7 @@ declare GPEFI="3"; declare GNEFI="ef00"; declare GFEFI="-d"	# vfat
 ########################################
 
 declare GFDSK="false"
-#>>> declare GFFMT="-d"			# vfat
+#>>>declare GFFMT="-d"			# vfat
 declare GFFMT="-f"			# exfat
 declare GFNUM="0700"
 if [[ ${1} == -f*(x) ]]; then
@@ -152,7 +152,7 @@ fi
 ################################################################################
 
 declare GROOT="hd0,${GPART}"
-declare GEFIS="x86_64-efi" #>>> i386-efi"
+declare GEFIS="x86_64-efi"
 declare GTYPE="i386-pc"
 declare GPXE="efinet0"
 
@@ -383,7 +383,7 @@ if not exist %BCDFILE% (goto create) else (goto delete)
 	echo %GUID% >%BCDFILE%
 	echo %GUID%
 	bcdedit.exe /set %GUID% device partition=c:
-	bcdedit.exe /set %GUID% path \\${_GRUB}\\bootstrap.img
+	bcdedit.exe /set %GUID% path \\${_GRUB}\\bcdedit.img
 ::>>>	bcdedit.exe /set %GUID% path \\${_GRUB}\\x86_64.efi
 	bcdedit.exe /displayorder %GUID% /addlast
 	bcdedit.exe /timeout ${TIMEOUT}
@@ -671,8 +671,6 @@ fi
 
 ################################################################################
 
-#>>>${RM} ${GDEST}/*					|| exit 1
-
 ${MKDIR} ${GDEST}/_${GTYPE}				|| exit 1
 ${RSYNC_U} ${GMODS}/ ${GDEST}/_${GTYPE}/		|| exit 1
 for TYPE in ${GEFIS}; do
@@ -684,13 +682,11 @@ ${RSYNC_U} -L ${_SELF} ${GDEST}/$(basename ${_SELF})	|| exit 1
 
 ########################################
 
-#>>> echo -en "${GMENU}"	>${GDEST}/grub.cfg			|| exit 1
 echo -en "${GMENU}"		>${GDEST}/rescue.cfg			|| exit 1
 echo -en "${GCUST}"		>${GDEST}/$(basename ${GMENU_CUSTOM})	|| exit 1
 
-#>>> echo -en "${GMENU}"	>${GDEST}/bootstrap.cfg			|| exit 1
-#>>> echo -n "${BCDEDIT}"	>${GDEST}/bcdedit.bat			|| exit 1
-#>>> unix2dos ${GDEST}/bcdedit.bat					|| exit 1
+#>>>echo -n "${BCDEDIT}"	>${GDEST}/bcdedit.bat			|| exit 1
+#>>>unix2dos ${GDEST}/bcdedit.bat					|| exit 1
 
 ########################################
 
@@ -744,17 +740,19 @@ fi
 
 ########################################
 
-#>>> grub-mkimage -v \
-#>>> 	-C xz \
-#>>> 	-O ${GTYPE} \
-#>>> 	-d ${GMODS} \
-#>>> 	-o ${GDEST}/bootstrap.img \
-#>>> 	-c ${GDEST}/bootstrap.cfg \
-#>>> 	--prefix="${GROOT}/${_GRUB}" \
-#>>> 	${MODULES_CORE}					|| exit_summary 1
-#>>> FILE="${GDEST}/bootstrap.img"
-#>>> cat ${GMODS}/lnxboot.img ${FILE} >${FILE}.lnxboot	|| exit 1
-#>>> ${MV} ${FILE}{.lnxboot,}				|| exit 1
+#>>>
+#FILE="${GDEST}/bcdedit.img"
+#grub-mkimage -v \
+#	-C xz \
+#	-O ${GTYPE} \
+#	-d ${GMODS} \
+#	-o ${FILE} \
+#	-c ${GDEST}/rescue.cfg \
+#	--prefix="${GROOT}/${_GRUB}" \
+#	${MODULES_CORE}					|| exit_summary 1
+#cat ${GMODS}/lnxboot.img ${FILE} >${FILE}.lnxboot	|| exit 1
+#${MV} ${FILE}{.lnxboot,}				|| exit 1
+#>>>
 
 FILE="${GDEST}/rescue.tar/boot/grub"
 ${MKDIR} ${FILE}/${GTYPE}				|| exit 1
