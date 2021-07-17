@@ -1008,7 +1008,7 @@ function _release_build {		#{ismain} #{doredo} #{dofast} #{dotest}
 	DOREDO="${DOREDO}" DOFAST="${DOFAST}" DOTEST="${DOTEST}" _prepare_build	|| return 1
 	DOREDO="false" DOFAST="${DOFAST}" DOTEST="${DOTEST}" _release_cpio	|| return 1
 	DOREDO="false" _release_kernel						|| return 1
-	DOREDO="false" _release_grub						|| return 1
+	DOREDO="false" DOFAST="${DOFAST}" DOTEST="${DOTEST}" _release_grub	|| return 1
 	_release_report								|| return 1
 	return 0
 }
@@ -1417,8 +1417,9 @@ function _release_kernel {		#{doredo}
 
 ########################################
 
-function _release_grub {		#{doredo}
+function _release_grub {		#{doredo} #{dofast} #{dotest}
 	FILE="${_RAMFS}.grub"
+	NEXT="/dev/nbd9p1"
 	if ${DOREDO}; then
 		${RM}					${FILE}*					|| return 1
 	fi
@@ -1426,21 +1427,40 @@ function _release_grub {		#{doredo}
 		${RM}					${FILE}*					|| return 1
 		${MKDIR}				${FILE}						|| return 1
 		${HOME}/scripts/grub.sh			${FILE}						|| return 1
-		${RM}					${FILE}/_*					|| return 1
-		${RM}					${FILE}/*.tar					|| return 1
-		${WGET_C} -P				${FILE} ${RUFUS_URL}				|| return 1
-		if [[ -x $(which qemu-img) ]]; then
+		if {
+			${DOTEST} ||
+			[[ ! -x $(which qemu-img) ]] ||
+			[[ ! -x $(which qemu-nbd) ]];
+		}; then
 			grub.sh				${FILE} -m					|| return 1
 			${MKDIR}			${FILE}/.mount-loop/${_TITLE}			|| return 1
 			${RSYNC_U} ${_RAMFS}.kernel	${FILE}/.mount-loop/${_TITLE}/${_TITLE}.kernel	|| return 1
 			grub.sh				${FILE} -u					|| return 1
+		else
 			qemu-img convert -O qcow2	${FILE}/loopfile.img ${FILE}/loopfile.qcow2	|| return 1
 			qemu-img info			${FILE}/loopfile.qcow2				|| return 1
+			modprobe			nbd max_part=127				|| return 1
+			cat				/sys/module/nbd/parameters/max_part		|| return 1
+			qemu-nbd --fork -nv -f qcow2 -c	${NEXT/%p[0-9]}					\
+							${FILE}/loopfile.qcow2				|| return 1
+			partx -t gpt -a			${NEXT/%p[0-9]}					#>>> || return 1
+			${MKDIR}			${FILE}/.mount-loop				|| return 1
+			mount -o nonempty		${NEXT} ${FILE}/.mount-loop			|| return 1
+			${MKDIR}			${FILE}/.mount-loop/${_TITLE}			|| return 1
+			${RSYNC_U} ${_RAMFS}.kernel	${FILE}/.mount-loop/${_TITLE}/${_TITLE}.kernel	|| return 1
+			${LL} --recursive		${FILE}/.mount-loop				|| return 1
+			umount				${NEXT}						|| return 1
+			qemu-nbd -d			${NEXT/%p[0-9]}					|| return 1
+			${RM}				${FILE}/.mount-loop				|| return 1
 		fi
-#>>>		common_tar				${FILE}						|| return 1
-		7z d					${FILE}.zip					|| return 1
-		7z a					${FILE}.zip ${FILE}				|| return 1
-#>>>		${RM}					${FILE}						|| return 1
+		if ! ${DOFAST}; then
+			${RM}				${FILE}/_*					|| return 1
+			${RM}				${FILE}/*.tar					|| return 1
+			${WGET_C} -P			${FILE} ${RUFUS_URL}				|| return 1
+#>>>			common_tar			${FILE}						|| return 1
+			7z d				${FILE}.zip					|| return 1
+			7z a				${FILE}.zip ${FILE}				|| return 1
+		fi
 	else
 		common_exists ${FUNCNAME}		${FILE}*					|| return 1
 	fi
