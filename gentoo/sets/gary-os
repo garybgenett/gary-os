@@ -11,7 +11,6 @@
 #{SELECT} mesa:--auto
 #{SELECT} opengl:xorg-x11
 #{WINMGR} dwm
-#>>>#{WMHELP} doc>al+lf man>al+rt / cmd>al+p trm>al+sf+en web>al+cl+en ext>al+sf+cl+en / \`date --iso=s\`
 #{WMHELP} doc>al+lf man>al+rt / cmd>al+p trm>al+sf+en web>al+cl+en / \`date --iso=s\`
 
 #{RCUPDT} rc-update del netmount default	|| true
