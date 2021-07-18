@@ -3374,7 +3374,7 @@ function organize {
 ########################################
 
 function pages {
-	calc "$(lynx -dump "${@}" | wc -l) / 60"
+	calc "$(w3m -T text/html -dump "${@}" | wc -l) / 60"
 }
 
 ########################################
