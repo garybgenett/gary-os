@@ -52,7 +52,8 @@ usage:
 	@$(ECHO) "\n"
 	@$(ECHO) "$(STATE)This Makefile is a wrapper to the \"_system\" script, and has just a few targets:$(RESET)\n"
 	@$(ECHO) "\n"
-	@$(PRINTF) "Update Current System (Interactively):"	"$(MAKE) update"
+	@$(PRINTF) "Reset Current Configuration:"		"$(MAKE) reset"
+	@$(PRINTF) "Update Current System:"			"$(MAKE) update"
 	@$(PRINTF) "Upgrade Current System (Interactively):"	"$(MAKE) upgrade"
 	@$(ECHO) "\n"
 	@$(PRINTF) "Information Lookup (Package Data):"		"$(MAKE) {package_list}"
@@ -145,6 +146,10 @@ help: usage
 	@$(MARKER)
 
 ################################################################################
+
+.PHONY: reset
+reset:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="/" ARTDIR="$(A)" GOSPKG="_$(P)" $(C)/gentoo/_system $(CHROOT) -r -!
 
 .PHONY: update
 update:
