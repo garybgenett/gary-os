@@ -4,6 +4,7 @@
 ################################################################################
 
 override GARYOS_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
+override GARYOS_TTL := gary-os
 
 ########################################
 
@@ -17,7 +18,7 @@ override C	?= $(GARYOS_DIR)
 override S	?= $(GARYOS_DIR)/sources
 override O	?= $(GARYOS_DIR)/build
 override A	?= $(GARYOS_DIR)/artifacts
-override P	?= gary-os
+override P	?= $(GARYOS_TTL)
 
 ########################################
 
@@ -333,11 +334,11 @@ readme-github:
 	@echo "PASS: $(PASS)"
 	@iptables -I INPUT 1 --proto tcp --dport 6419 -j ACCEPT
 ifeq ($(DOMODS),true)
-	$(WGET) https://api.github.com/repos/$(ACCT)/gary-os			| $(JSON) '$(SHOW)'
-	$(WGET) https://api.github.com/repos/$(ACCT)/gary-os/commits		| $(JSON) '$(LAST)'
-	$(WGET) https://api.github.com/repos/$(ACCT)/gary-os/branches		| $(JSON) '$(TREE)'
-	$(WGET) https://api.github.com/repos/$(ACCT)/gary-os/tags		| $(JSON) '$(TAGS)'
-	$(WGET) https://api.github.com/repos/garybgenett/gary-os/stargazers	| $(JSON) '$(TEAM)' | sort -u
+	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)		| $(JSON) '$(SHOW)'
+	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/commits	| $(JSON) '$(LAST)'
+	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/branches	| $(JSON) '$(TREE)'
+	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/tags		| $(JSON) '$(TAGS)'
+	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/stargazers	| $(JSON) '$(TEAM)' | sort -u
 else
 	$(GRIP) --clear
 	$(GRIP) --export $(GARYOS_DIR) $(firstword $(COMPOSER_TARGETS))
