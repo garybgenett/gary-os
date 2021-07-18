@@ -376,6 +376,10 @@
 
 #{FSPACK}
 
+#{FSKEEP} gcc:/usr/include
+#{FSKEEP} gcc:/usr/libexec/gcc
+#{FSKEEP} gcc:/usr/x86_64-pc-linux-gnu
+
 #{FSKEEP} emerge:/usr/src/linux
 #{FSKEEP} emerge:/var/db/pkg
 #{FSKEEP} emerge:/var/git/meta-repo
