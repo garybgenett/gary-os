@@ -258,10 +258,10 @@ check:
 export COMPOSER		?= $(GARYOS_DIR)/.composer/Makefile
 export MARKDOWN_OUTPUT	:= GaryOS-Readme.md
 export COMPOSER_TARGETS	:= GaryOS-Readme.html GaryOS-Readme.pdf
-#>>>export COMPOSER_DEBUGIT	:= 1
+export COMPOSER_DEBUGIT	:= 1
 #>>>export CSS		:= css_alt
-#>>>export TOC		:= 6
-#>>>export OPT		:= --metadata title="GaryOS Readme"
+export TOC		:= 6
+export OPT		:= --metadata title="GaryOS Readme"
 
 override GREP	?= grep --color=auto -E
 override SED	?= sed -r
