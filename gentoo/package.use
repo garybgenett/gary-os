@@ -27,6 +27,7 @@ media-video/ffmpeg			theora		# gentoo required
 media-video/ffmpeg			x264		# gentoo required
 media-video/vlc				xcb		# gentoo required
 net-dns/avahi				dbus		# gentoo required
+net-libs/libproxy			-webkit		# gentoo required
 net-nds/openldap			sasl		# gentoo required
 net-wireless/wpa_supplicant		dbus		# gentoo required
 sys-apps/busybox			-pam		# gentoo required
@@ -253,14 +254,10 @@ games-fps/doom3-mitm			-dedicated
 
 ################################################################################
 
-#{NEW} app-text/xmlto			-latex		# gentoo required
-#{NEW} net-libs/libproxy		-webkit		# gentoo required
-
 #{NEW} app-crypt/mit-krb5		-keyutils	# gentoo required
+#{NEW} app-text/xmlto			-latex		# gentoo required
 
 ########################################
-
-#{GOS} net-libs/libproxy		-webkit		# gentoo required
 
 #{GOS} app-crypt/mit-krb5		-keyutils	# gentoo required
 
