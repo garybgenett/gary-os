@@ -53,6 +53,7 @@ usage:
 	@$(ECHO) "$(STATE)This Makefile is a wrapper to the \"_system\" script, and has just a few targets:$(RESET)\n"
 	@$(ECHO) "\n"
 	@$(PRINTF) "Update Current System (Interactively):"	"$(MAKE) update"
+	@$(PRINTF) "Upgrade Current System (Interactively):"	"$(MAKE) upgrade"
 	@$(ECHO) "\n"
 	@$(PRINTF) "Information Lookup (Package Data):"		"$(MAKE) {package_list}"
 	@$(PRINTF) "Information Lookup (Package Search):"	"$(MAKE) {search_list}"
@@ -148,6 +149,9 @@ help: usage
 .PHONY: update
 update:
 	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system
+
+.PHONY: upgrade
+upgrade:
 	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -u
 
 ########################################
