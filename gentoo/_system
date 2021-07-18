@@ -479,8 +479,10 @@ function print_info {
 		printf "${PRINTF}" "Synchronize (Sources, Metadata):"		"<auto>"	"${_HEART} -f"
 		printf "${PRINTF}" "Synchronize (Metadata Only):"		"<auto>"	"${_HEART} -!"
 		echo -en "\n"
-		printf "${PRINTF}" "Update System (Automatically):"		"<auto>"	"${_HEART} -a -u"
-		printf "${PRINTF}" "Update System (Interactively):"		"<interactive>"	"${_HEART} -u"
+		printf "${PRINTF}" "Reset Current Configuration:"		"<auto>"	"BLDDIR=/ ${_HEART} -d -r -!"
+		printf "${PRINTF}" "Update Current System:"			"<auto>"	"${_HEART}"
+		printf "${PRINTF}" "Upgrade Current System:"			"<auto>"	"${_HEART} -a -u"
+		printf "${PRINTF}" "Upgrade Current System (Interactively):"	"<interactive>"	"${_HEART} -u"
 		echo -en "\n"
 		printf "${PRINTF}" "Information Lookup (Package Data):"		"<output>"	"${_HEART} [{chroot}] -l {package}"
 		printf "${PRINTF}" "Information Lookup (Package Search):"	"<output>"	"${_HEART} [{chroot}] -l {search}"
@@ -525,7 +527,7 @@ function print_info {
 		printf "${PRINTF}" "Chroot Shell (Bash):"			"<interactive>"	"${_HEART} {chroot} -s"
 		printf "${PRINTF}" "Chroot Shell (Run Command):"		"<auto>"	"${_HEART} {chroot} -s {command}"
 		echo -en "\n"
-		printf "${PRINTF}" "Chroot Emerge Command (Automatically):"	"<auto>"	"${_HEART} {chroot} -a -s -e [{command}]"
+		printf "${PRINTF}" "Chroot Emerge Command:"			"<auto>"	"${_HEART} {chroot} -a -s -e [{command}]"
 		printf "${PRINTF}" "Chroot Emerge Command (Interactively):"	"<interactive>"	"${_HEART} {chroot} -s -e [{command}]"
 		echo -en "\n"
 		printf "${PRINTF}" "Chroot Complete (Unmount Cleanup):"		"<auto>"	"${_HEART} {chroot} -z"
@@ -1163,8 +1165,10 @@ if [[ ${1} == -r ]]; then
 	${RSYNC_C} ${SETDIR}/${FUNDIR}/[a-z]*			${TARGET}${ETCDIR}/				|| EXIT 1
 	${RSYNC_U} ${SETDIR}/${FUNDIR}/${LAYDIR}/		${TARGET}${ETCDIR}/${LAYDIR}			|| EXIT 1
 	${LN} ../${LAYDIR}/overlay.conf				${TARGET}${ETCDIR}/repos.conf/			|| EXIT 1
-	portage_file						${TARGET}${ARCDIR}/${FUNDIR}			|| EXIT 1
-	if [[ ${1} == -w ]]; then
+	if [[ ${1} == -! ]]; then
+		shift
+		portage_file					${TARGET}${ARCDIR}/${FUNDIR}			|| EXIT 1
+	elif [[ ${1} == -w ]]; then
 		shift
 		safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w	|| EXIT 1
 	else
