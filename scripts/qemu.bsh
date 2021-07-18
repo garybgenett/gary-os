@@ -137,7 +137,11 @@ if [[ -n $(file -L ${I} 2>/dev/null | ${GREP} "Linux kernel .+ boot executable")
 		QKRN+=" -initrd ${I/%.kernel}.initrd"
 	fi
 	if [[ ${INTERFACE} == console ]]; then
-		QKRN+=" -append console=ttyS0,38400"
+		declare KAPN=
+		if [[ ${1} != -*(*) ]]; then
+			KAPN="${1}" && shift
+		fi
+		QKRN+=" -append \"console=ttyS0,38400 ${KAPN}\""
 	fi
 elif [[ -n $(file -L ${I} 2>/dev/null | ${GREP} "(DOS/MBR boot sector|ISO 9660 CD-ROM)") ]]; then
 	QDSK+=" -drive id=cdrom1,if=none,format=raw,file=${I}"
