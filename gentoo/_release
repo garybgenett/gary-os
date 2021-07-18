@@ -1814,12 +1814,14 @@ function _release_install {		#{ismain} #{doredo}
 		echo -en "\n"
 		return 1
 	fi
-	FILE="$(findmnt --noheadings --output TARGET --target ${_GINST})"
-	if [[ ${FILE} != ${_GINST} ]]; then
-		echo -en "\n"
-		echo -en ">>> THIS OPTION REQUIRES THAT THE (${_GINST}) INSTALL DIRECTORY IS MOUNTED <<<\n"
-		echo -en "\n"
-		return 1
+	if ! ${DOREDO}; then
+		FILE="$(findmnt --noheadings --output TARGET --target ${_GINST})"
+		if [[ ${FILE} != ${_GINST} ]]; then
+			echo -en "\n"
+			echo -en ">>> THIS OPTION REQUIRES THAT THE (${_GINST}) INSTALL DIRECTORY IS MOUNTED <<<\n"
+			echo -en "\n"
+			return 1
+		fi
 	fi
 	if ${DOREDO}; then
 		variable_parse PACKDIRS_LIST | sort -u >${_GUNPK}
