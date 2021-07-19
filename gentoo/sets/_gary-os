@@ -359,9 +359,9 @@
 #{RCUPDT} rc-update del netmount default	|| true
 #{RCUPDT} rc-update add gpm default		|| true
 #{RCUPDT} rc-update del sysklogd default	|| true
-#{RCUPDT} rc-update add wpa_supplicant default	|| true
-#{RCUPDT} rc-update add dhcpcd default		|| true
-#{RCUPDT} rc-update add sshd default		|| true
+#{RCUPDT} rc-update del wpa_supplicant default	|| true
+#{RCUPDT} rc-update del dhcpcd default		|| true
+#{RCUPDT} rc-update del sshd default		|| true
 #{RCUPDT} rc-update show
 
 #note: this is a hidden, undocumented option for the author's personal setup
@@ -371,6 +371,9 @@
 #{MOD} #{FSUPDT} usermod --home /.gary-os --shell /bin/bash root
 #{MOD} #{FSUPDT} ln -fsv /usr/share/zoneinfo/US/Pacific /etc/localtime
 #{MOD} #{FSUPDT} ln -fsv /bin/runsvdir /usr/bin/runsvdir
+#{MOD} #{RCUPDT} rc-update add wpa_supplicant default	|| true
+#{MOD} #{RCUPDT} rc-update add dhcpcd default		|| true
+#{MOD} #{RCUPDT} rc-update add sshd default		|| true
 #{MOD} #{FSUPDT} rc-update add runsvdir default		|| true
 #{MOD} #{FSUPDT} rc-update add dbus default		|| true
 #{MOD} #{FSUPDT} rc-update add xdm default		|| true
