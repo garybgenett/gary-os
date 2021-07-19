@@ -341,7 +341,6 @@ readme-github:
 	@echo "USER: $(USER)"
 	@echo "ACCT: $(ACCT)"
 	@echo "PASS: $(PASS)"
-	@iptables -I INPUT 1 --proto tcp --dport 6419 -j ACCEPT
 ifeq ($(DOMODS),true)
 	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)		| $(JSON) '$(SHOW)'
 	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/commits	| $(JSON) '$(LAST)'
@@ -349,6 +348,7 @@ ifeq ($(DOMODS),true)
 	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/tags		| $(JSON) '$(TAGS)'
 	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/stargazers	| $(JSON) '$(TEAM)' | sort -u
 else
+	@iptables -I INPUT 1 --proto tcp --dport 6419 -j ACCEPT
 	$(GRIP) --clear
 	$(GRIP) --export $(GARYOS_DIR) $(firstword $(COMPOSER_TARGETS))
 	$(GRIP) 0.0.0.0:6419
