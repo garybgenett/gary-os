@@ -514,7 +514,7 @@ function print_info {
 		echo -en "\n"
 		printf "${PRINTF}" "Chroot Build (Initial):"			"<auto>"	"${_HEART} {chroot} -0" "<-n -a -b -k -i>"
 		printf "${PRINTF}" "Chroot Build (Update Only):"		"<auto>"	"${_HEART} {chroot} -/" "<-a -i>"
-		printf "${PRINTF}" "Chroot Build (Complete Rebuild):"		"<auto>"	"${_HEART} {chroot} -1" "<-a -b -i>"
+		printf "${PRINTF}" "Chroot Build (Complete Rebuild):"		"<auto>"	"${_HEART} {chroot} -1" "<-a -b -k -i>"
 		printf "${PRINTF}" "Chroot Build (Configuration):"		"<custom>"	"${_HEART} {chroot} -2" "<-c -i>"
 		printf "${PRINTF}" "Chroot Build (Internal Only):"		"<internal>"	"${_HEART} {chroot} [-m|-n|-a|-b|-k|-c] -i"
 		echo -en "\n"
@@ -1143,7 +1143,7 @@ fi
 
 if [[ ${1} == -0 ]]; then shift; ${_SOUL} ${TOOR} -n -a -b -k	-i 2>&1 | tee --append ${TARGET}${GENDIR}.log | prompt -c	; exit ${PIPESTATUS[0]}; fi
 if [[ ${1} == -/ ]]; then shift; ${_SOUL} ${TOOR} -a		-i 2>&1 | tee --append ${TARGET}${GENDIR}.log | prompt -c	; exit ${PIPESTATUS[0]}; fi
-if [[ ${1} == -1 ]]; then shift; ${_SOUL} ${TOOR} -a -b		-i 2>&1 | tee --append ${TARGET}${GENDIR}.log | prompt -c	; exit ${PIPESTATUS[0]}; fi
+if [[ ${1} == -1 ]]; then shift; ${_SOUL} ${TOOR} -a -b -k	-i 2>&1 | tee --append ${TARGET}${GENDIR}.log | prompt -c	; exit ${PIPESTATUS[0]}; fi
 if [[ ${1} == -2 ]]; then shift; ${_SOUL} ${TOOR} -c		-i								; exit ${PIPESTATUS[0]}; fi
 
 ########################################
