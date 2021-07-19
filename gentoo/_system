@@ -139,13 +139,14 @@ export SHIPIT="_publish"
 
 ########################################
 
-#VARIABLES[TARGET TOOR _PKG _NEW _MOD _GOS]
+#VARIABLES[TARGET TOOR _PKG _NEW _MOD _GOS _GFG]
 export TARGET="${BLDDIR}"
 export TOOR="${TOOR}"
 export _PKG="${BLDPKG}"
 export _NEW="false"
 export _MOD="false"
 export _GOS="false"
+export _GFG="false"
 
 if ! ${_BASH_SOURCED}; then
 	if [[ ${1} == -[dxtg] ]]; then
@@ -199,11 +200,13 @@ fi
 #note: detection of a "gary-os" build is based purely on the package set name
 if [[ ${_PKG} == ${_TITLE} ]]; then
 	_GOS="true"
+	_GFG="true"
 fi
 #note: forcing unmodified configuration for full "_gary-os" build
 if [[ ${_PKG} == _${_TITLE} ]]; then
 	_MOD="false"
-	_GOS="false"
+	_GOS="true"
+	_GFG="false"
 fi
 
 ########################################
@@ -279,7 +282,7 @@ function portage_file {
 		cat ${PORT_SEL} |
 			{ { ${_NEW} &&	{ ${SED} -e "s|^[#][{]NEW[}][ ](.+)$|\1|g" -e "/[#][{]NEW[}]/d" || return 1; }; } || cat; } |
 			{ { ${_MOD} &&	{ ${SED} -e "s|^[#][{]MOD[}][ ](.+)$|\1|g" -e "/[#][{]MOD[}]/d" || return 1; }; } || cat; } |
-			{ { ${_GOS} &&	{ ${SED} -e "s|^[#][{]GOS[}][ ](.+)$|\1|g" -e "/[#][{]GOS[}]/d" || return 1; }; } || cat; } |
+			{ { ${_GFG} &&	{ ${SED} -e "s|^[#][{]GOS[}][ ](.+)$|\1|g" -e "/[#][{]GOS[}]/d" || return 1; }; } || cat; } |
 			{ {		{ ${SED} -e "s|^[#][{]CPU[}][ ](.+)$|\1|g" -e "/[#][{]CPU[}]/d" || return 1; }; } || cat; } |
 			{ ${SED} \
 				-e "s|[#][{]GARC[}]|${GARC}|g"	\
