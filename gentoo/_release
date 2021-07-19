@@ -1453,42 +1453,42 @@ function _release_grub {		#{doredo} #{dofast} #{dotest}
 	declare GRUB_DEST="${_RAMFS}.grub"
 	declare GRUB_LOOP="/dev/nbd9p1"
 	if ${DOREDO}; then
-		${RM}					${GRUB_DEST}*						|| return 1
+		${RM}						${GRUB_DEST}*						|| return 1
 	fi
 	if [[ ! -f ${GRUB_DEST}.tar.xz ]] && [[ ! -f ${GRUB_DEST}.zip ]]; then
-		${MKDIR}				${GRUB_DEST}						|| return 1
-		${HOME}/scripts/grub.sh			${GRUB_DEST}						|| return 1
+			${MKDIR}				${GRUB_DEST}						|| return 1
+			${HOME}/scripts/grub.sh			${GRUB_DEST}						|| return 1
 		if {
 			${DOTEST} ||
 			[[ ! -x $(which qemu-img) ]] ||
 			[[ ! -x $(which qemu-nbd) ]];
 		}; then
-			grub.sh				${GRUB_DEST} -m						|| return 1
-			release_grub_loopfile		${GRUB_DEST}						|| return 1
-			grub.sh				${GRUB_DEST} -u						|| return 1
-			release_grub_qcow_mount		${GRUB_DEST} ${GRUB_LOOP}				|| return 1
-			release_grub_loopfile		${GRUB_DEST}						|| return 1
-			release_grub_qcow_unmount	${GRUB_DEST} ${GRUB_LOOP}				|| return 1
+			grub.sh					${GRUB_DEST} -m						|| return 1
+			release_grub_loopfile			${GRUB_DEST}						|| return 1
+			grub.sh					${GRUB_DEST} -u						|| return 1
+			release_grub_qcow_mount			${GRUB_DEST} ${GRUB_LOOP}				|| return 1
+			release_grub_loopfile			${GRUB_DEST}						|| return 1
+			release_grub_qcow_unmount		${GRUB_DEST} ${GRUB_LOOP}				|| return 1
 		else
-			qemu-img convert -O qcow2	${GRUB_DEST}/loopfile.img ${GRUB_DEST}/loopfile.qcow2	|| return 1
-			qemu-img info			${GRUB_DEST}/loopfile.qcow2				|| return 1
-			release_grub_qcow_mount		${GRUB_DEST} ${GRUB_LOOP}				|| return 1
-			release_grub_loopfile		${GRUB_DEST}						|| return 1
-			release_grub_qcow_unmount	${GRUB_DEST} ${GRUB_LOOP}				|| return 1
+				qemu-img convert -O qcow2	${GRUB_DEST}/loopfile.img ${GRUB_DEST}/loopfile.qcow2	|| return 1
+				qemu-img info			${GRUB_DEST}/loopfile.qcow2				|| return 1
+			release_grub_qcow_mount			${GRUB_DEST} ${GRUB_LOOP}				|| return 1
+			release_grub_loopfile			${GRUB_DEST}						|| return 1
+			release_grub_qcow_unmount		${GRUB_DEST} ${GRUB_LOOP}				|| return 1
 		fi
 		if {
 			! ${DOFAST} &&
 			! ${DOTEST};
 		}; then
-			${RM}				${GRUB_DEST}/_*						|| return 1
-			${RM}				${GRUB_DEST}/*.tar					|| return 1
-			${WGET_C} -P			${GRUB_DEST} ${RUFUS_URL}				|| return 1
-#>>>			common_tar			${GRUB_DEST}						|| return 1
-			7z d				${GRUB_DEST}.zip					|| return 1
-			7z a				${GRUB_DEST}.zip ${GRUB_DEST}				|| return 1
+			${RM}					${GRUB_DEST}/_*						|| return 1
+			${RM}					${GRUB_DEST}/*.tar					|| return 1
+			${WGET_C} -P				${GRUB_DEST} ${RUFUS_URL}				|| return 1
+#>>>			common_tar				${GRUB_DEST}						|| return 1
+			7z d					${GRUB_DEST}.zip					|| return 1
+			7z a					${GRUB_DEST}.zip ${GRUB_DEST}				|| return 1
 		fi
 	else
-		common_exists ${FUNCNAME}		${GRUB_DEST}*						|| return 1
+		common_exists ${FUNCNAME}			${GRUB_DEST}*						|| return 1
 	fi
 	return 0
 }
