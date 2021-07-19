@@ -204,7 +204,10 @@ if [[ ${_PKG} == ${_TITLE} ]]; then
 fi
 #note: forcing unmodified configuration for full "_gary-os" build
 if [[ ${_PKG} == _${_TITLE} ]]; then
-	_MOD="false"
+	#note: this is a hidden, undocumented option for the author's personal setup
+	#note: see "$fsupdt" in "gentoo/sets/_gary-os"
+	#note: see "$fsupdt" in "gentoo/_release" (release_unpack)
+#>>>	_MOD="false"
 	_GOS="true"
 	_GFG="false"
 fi
