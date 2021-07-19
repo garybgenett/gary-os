@@ -87,7 +87,7 @@ ifneq ($(findstring help,$(MAKECMDGOALS)),)
 	@$(PRINTF) "Distribution Release (Internal Only):"	"_publish_*"
 endif
 	@$(ECHO) "\n"
-	@$(ECHO) "$(STATE)All of the targets generally run non-interactively, except \"update\" and \"shell\".$(RESET)\n"
+	@$(ECHO) "$(STATE)All of the targets generally run non-interactively, except \"upgrade\" and \"shell\".$(RESET)\n"
 	@$(ECHO) "\n"
 	@$(ECHO) "$(STATE)Use these variables to change the directories and packages:$(RESET)\n"
 	@$(ECHO) "\n"
