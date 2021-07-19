@@ -590,10 +590,8 @@ function prepare_config_issue {
 		${SED} -i "s|^(.*${KEY}[:].*[0-9]m ).*$|\1${VAL}|g"		${TARGET}/etc/issue	|| return 1
 	done
 	if {
-		{ [[ -z ${COMMIT} ]] || [[ ! -d ${_G_REPO} ]]; } ||
-		[[ ${_PKG} != ${_TITLE} ]] ||
-		[[ -z ${TARGET} ]] ||
-		[[ ${TARGET} == ${_GINST} ]];
+		[[ -z ${COMMIT} ]] ||
+		[[ ! -d ${_G_REPO} ]];
 	}; then
 		FILE=" "
 #>>>		FILE+="\\\e[1;45;37m"
