@@ -364,15 +364,18 @@
 #{RCUPDT} rc-update add sshd default		|| true
 #{RCUPDT} rc-update show
 
-#{RCUPDT} ln -fsv /usr/share/zoneinfo/US/Pacific /etc/localtime
-#{RCUPDT} ln -fsv /bin/runsvdir /usr/bin/runsvdir
-#{RCUPDT} rc-update add runsvdir default	|| true
-#{RCUPDT} rc-update add dbus default		|| true
-#{RCUPDT} rc-update add xdm default		|| true
-#{RCUPDT} rc-update add spice-vdagent default	|| true
-#{RCUPDT} rc-update show
-
-#{FSUPDT} usermod --home /.gary-os --shell /bin/bash root
+#note: this is a hidden, undocumented option for the author's personal setup
+#note: see "$fsupdt" in "gentoo/sets/_gary-os"
+#note: see "$fsupdt" in "gentoo/_release" (release_unpack)
+#{FSUPDT}				#{MOD}
+#{MOD} #{FSUPDT} usermod --home /.gary-os --shell /bin/bash root
+#{MOD} #{FSUPDT} ln -fsv /usr/share/zoneinfo/US/Pacific /etc/localtime
+#{MOD} #{FSUPDT} ln -fsv /bin/runsvdir /usr/bin/runsvdir
+#{MOD} #{FSUPDT} rc-update add runsvdir default		|| true
+#{MOD} #{FSUPDT} rc-update add dbus default		|| true
+#{MOD} #{FSUPDT} rc-update add xdm default		|| true
+#{MOD} #{FSUPDT} rc-update add spice-vdagent default	|| true
+#{MOD} #{FSUPDT} rc-update show
 
 #{FSPACK}
 
