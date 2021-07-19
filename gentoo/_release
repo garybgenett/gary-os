@@ -1456,7 +1456,6 @@ function _release_grub {		#{doredo} #{dofast} #{dotest}
 		${RM}					${GRUB_DEST}*						|| return 1
 	fi
 	if [[ ! -f ${GRUB_DEST}.tar.xz ]] && [[ ! -f ${GRUB_DEST}.zip ]]; then
-		${RM}					${GRUB_DEST}*						|| return 1
 		${MKDIR}				${GRUB_DEST}						|| return 1
 		${HOME}/scripts/grub.sh			${GRUB_DEST}						|| return 1
 		if {
