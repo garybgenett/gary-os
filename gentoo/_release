@@ -228,7 +228,7 @@ declare ROOTFS_COMP="-comp xz -b $((2**20)) -Xdict-size 100%"
 declare ROOTFS_OPTS="-noappend -info -xattrs ${ROOTFS_COMP} -wildcards -ef" #>>> ${ROOTFS_FILE}.exclude"
 
 declare ROOTFS_ROOT="/.${_TITLE}.${ROOTFS_NAME}"
-declare ROOTFS_ROOT_SRC="${ROOTFS_ROOT/#\/\.//${_TITLE}\/}"
+declare ROOTFS_ROOT_SRC="${ROOTFS_ROOT/#\/\./\/${_TITLE}\/}"
 declare ROOTFS_ROOT_OPT="groot"
 declare ROOTFS_FUNC="rescue"
 
