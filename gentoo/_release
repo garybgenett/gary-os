@@ -1557,32 +1557,33 @@ function _release_unpack {		#{ismain} #{dotest}
 	if [[ -z ${TARGET} ]]; then
 		#note: for "release_install" function
 		if [[ ! -d ${_GINST} ]]; then
-			${RM}		${_GINST}								|| return 1
-			${MKDIR}	${_GINST}								|| return 1
+			${RM}		${_GINST}						|| return 1
+			${MKDIR}	${_GINST}						|| return 1
+		fi
+		#note: for "release_unpack" function
+		if [[ ! -d ${DOINST} ]]; then
+			${RM}		${DOINST}						|| return 1
+			${MKDIR}	${DOINST}						|| return 1
 		fi
 		#note: for all "release_*" functions
 		if [[ ! -d ${_FINAL} ]]; then
-			${RM}		${_FINAL}								|| return 1
-#>>>			${MKDIR}	${_GINST}${_FINAL/#\/./\/}						|| return 1
-			${LN}		${_GINST}${_FINAL/#\/./\/}	${_FINAL}				|| return 1
+			${RM}		${_FINAL}						|| return 1
+			${LN}		${DOINST}	${_FINAL}				|| return 1
 		fi
 		#note: for mapping between the "release_fetch" function and this one
 		if [[ ! -d /.${_TITLE}/${_TITLE} ]]; then
-			${RM}		/.${_TITLE}/${_TITLE}							|| return 1
-#>>>			${MKDIR}	${DOINST}								|| return 1
-			${LN}		${DOINST}			/.${_TITLE}/${_TITLE}			|| return 1
+			${RM}		/.${_TITLE}/${_TITLE}					|| return 1
+			${LN}		${DOINST}	/.${_TITLE}/${_TITLE}			|| return 1
 		fi
 		#note: set the "makefile" to use "$_title" as the "$source" by default
 		if [[ ! -d /.${_TITLE}/sources ]]; then
-			${RM}		/.${_TITLE}/sources							|| return 1
-#>>>			${MKDIR}	/.${_TITLE}/${_TITLE}							|| return 1
-#>>>			${LN}		/.${_TITLE}/${_TITLE}		/.${_TITLE}/sources			|| return 1
-			${LN}		${_TITLE}			/.${_TITLE}/sources			|| return 1
+			${RM}		/.${_TITLE}/sources					|| return 1
+			${LN}		${_TITLE}	/.${_TITLE}/sources			|| return 1
 		fi
 		#note: dummy pointer to set the "makefile" to use "$_ginst" as the "$target" by default
 		if [[ ! -L /.${_TITLE}/build.${_GINST/#\/.} ]]; then
-			${RM}		/.${_TITLE}/build.${_GINST/#\/.}					|| return 1
-			${LN}		${_GINST}			/.${_TITLE}/build.${_GINST/#\/.}	|| return 1
+			${RM}		/.${_TITLE}/build.${_GINST/#\/.}			|| return 1
+			${LN}		${_GINST}	/.${_TITLE}/build.${_GINST/#\/.}	|| return 1
 		fi
 	fi
 	if [[ ! -f ${UNPACK} ]]; then
