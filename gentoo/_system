@@ -1163,19 +1163,19 @@ if [[ ${1} == -r ]]; then
 		then ${RSYNC_U} --copy-links ${SETDIR}/.bashrc	${TARGET}${ARCDIR}/				|| EXIT 1
 		else ${RSYNC_U} --copy-links ${HOME}/.bashrc	${TARGET}${ARCDIR}/				|| EXIT 1
 	fi
-	${RSYNC_U} ${SETDIR}/${FUNDIR}/				${TARGET}${ARCDIR}/${FUNDIR}			|| EXIT 1
 	${RSYNC_U} ${SETDIR}/${LINDIR}/				${TARGET}${ARCDIR}/${LINDIR}			|| EXIT 1
+	${RSYNC_U} ${SETDIR}/${FUNDIR}/				${TARGET}${ARCDIR}/${FUNDIR}			|| EXIT 1
 	${RSYNC_C} ${SETDIR}/${FUNDIR}/[a-z]*			${TARGET}${ETCDIR}/				|| EXIT 1
 	${RSYNC_U} ${SETDIR}/${FUNDIR}/${LAYDIR}/		${TARGET}${ETCDIR}/${LAYDIR}			|| EXIT 1
 	${LN} ../${LAYDIR}/overlay.conf				${TARGET}${ETCDIR}/repos.conf/			|| EXIT 1
-	if [[ ${1} == -! ]]; then
-		shift
+	if [[ ${1} != -! ]]; then
 		portage_file					${TARGET}${ARCDIR}/${FUNDIR}			|| EXIT 1
-	elif [[ ${1} == -w ]]; then
-		shift
-		safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w	|| EXIT 1
-	else
-		safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -W	|| EXIT 1
+		if [[ ${1} == -w ]]; then
+			shift
+			safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w	|| EXIT 1
+		else
+			safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -W	|| EXIT 1
+		fi
 	fi
 	EXIT 0
 fi
