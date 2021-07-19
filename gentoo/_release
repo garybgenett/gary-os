@@ -1421,8 +1421,12 @@ function release_grub_loopfile {
 	${MKDIR}					${GRUB_DEST}/.mount-loop/${_TITLE}			|| return 1
 	${RSYNC_U} ${GRUB_DEST}/${_TITLE}.grub.cfg	${GRUB_DEST}/.mount-loop/${_TITLE}/			|| return 1
 	${RSYNC_U} ${_RAMFS}.kernel			${GRUB_DEST}/.mount-loop/${_TITLE}/${_TITLE}.kernel	|| return 1
-	if ${DOTEST}; then
+	if {
+		${DOTEST} &&
+		[[ -f ${_RAMFS}.rootfs ]];
+	}; then
 		${RSYNC_U} ${_RAMFS}.rootfs		${GRUB_DEST}/.mount-loop/${_TITLE}/${_TITLE}.rootfs	|| return 1
+	else	${RM}					${GRUB_DEST}/.mount-loop/${_TITLE}/${_TITLE}.rootfs	|| return 1
 	fi
 	${LL} --recursive				${GRUB_DEST}/.mount-loop				|| return 1
 	return 0
@@ -1456,8 +1460,14 @@ function _release_grub {		#{doredo} #{dofast} #{dotest}
 		${RM}						${GRUB_DEST}*						|| return 1
 	fi
 	if [[ ! -f ${GRUB_DEST}.tar.xz ]] && [[ ! -f ${GRUB_DEST}.zip ]]; then
+		if {
+			${DOREDO} ||
+			! ${DOTEST};
+		}; then
+			${RM}					${GRUB_DEST}*						|| return 1
 			${MKDIR}				${GRUB_DEST}						|| return 1
 			${HOME}/scripts/grub.sh			${GRUB_DEST}						|| return 1
+		fi
 		if {
 			${DOTEST} ||
 			[[ ! -x $(which qemu-img) ]] ||
@@ -1466,12 +1476,15 @@ function _release_grub {		#{doredo} #{dofast} #{dotest}
 			grub.sh					${GRUB_DEST} -m						|| return 1
 			release_grub_loopfile			${GRUB_DEST}						|| return 1
 			grub.sh					${GRUB_DEST} -u						|| return 1
-			release_grub_qcow_mount			${GRUB_DEST} ${GRUB_LOOP}				|| return 1
-			release_grub_loopfile			${GRUB_DEST}						|| return 1
-			release_grub_qcow_unmount		${GRUB_DEST} ${GRUB_LOOP}				|| return 1
-		else
+		fi
+		if {
+			[[ -x $(which qemu-img) ]] &&
+			[[ -x $(which qemu-nbd) ]];
+		}; then
+			if ! ${DOTEST}; then
 				qemu-img convert -O qcow2	${GRUB_DEST}/loopfile.img ${GRUB_DEST}/loopfile.qcow2	|| return 1
 				qemu-img info			${GRUB_DEST}/loopfile.qcow2				|| return 1
+			fi
 			release_grub_qcow_mount			${GRUB_DEST} ${GRUB_LOOP}				|| return 1
 			release_grub_loopfile			${GRUB_DEST}						|| return 1
 			release_grub_qcow_unmount		${GRUB_DEST} ${GRUB_LOOP}				|| return 1
