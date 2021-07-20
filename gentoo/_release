@@ -1594,10 +1594,10 @@ function _release_unpack {		#{ismain} #{doredo} #{dotest}
 			${MKDIR}	${_GINST}						|| return 1
 		fi
 		#note: for "release_unpack" function
-		if [[ ! -d ${DOINST} ]]; then
-			${RM}		${DOINST}						|| return 1
-			${MKDIR}	${DOINST}						|| return 1
-		fi
+#>>>		if [[ ! -d ${DOINST} ]]; then
+#>>>			${RM}		${DOINST}						|| return 1
+#>>>			${MKDIR}	${DOINST}						|| return 1
+#>>>		fi
 		#note: for all "release_*" functions
 		if [[ ! -d ${_FINAL} ]]; then
 			${RM}		${_FINAL}						|| return 1
