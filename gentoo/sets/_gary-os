@@ -356,12 +356,13 @@
 #{WINMGR} dwm
 #{WMHELP} doc>al+lf man>al+rt / cmd>al+p trm>al+sf+en web>al+cl+en ext>al+sf+cl+en / \`date --iso=s\`
 
-#{RCUPDT} rc-update del netmount default	|| true
 #{RCUPDT} rc-update add gpm default		|| true
 #{RCUPDT} rc-update del sysklogd default	|| true
+#{RCUPDT} rc-update del netmount default	|| true
 #{RCUPDT} rc-update del wpa_supplicant default	|| true
 #{RCUPDT} rc-update del dhcpcd default		|| true
 #{RCUPDT} rc-update del sshd default		|| true
+#{RCUPDT} rc-update del dbus default		|| true
 #{RCUPDT} rc-update show
 
 #note: this is a hidden, undocumented option for the author's personal setup
