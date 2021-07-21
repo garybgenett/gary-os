@@ -389,17 +389,29 @@ readme-github:
 	@$(ECHO) "ACCT: $(ACCT)\n" 1>&2
 	@$(ECHO) "TOKN: $(TOKN)\n" 1>&2
 ifeq ($(DOMODS),true)
-	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)		| $(JSON) '$(SHOW)'
-	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/commits	| $(JSON) '$(LAST)'
-	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/branches	| $(JSON) '$(TREE)'
-	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/tags		| $(JSON) '$(TAGS)'
-	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/stargazers	| $(JSON) '$(TEAM)'
-	$(WGET) "https://sourceforge.net/projects/gary-os/files/stats/json?start_date=$(BEG)&end_date=$(END)&period=$(PRD)" | $(JSON) '$(DOWN)'
+	@$(ECHO) '['
+	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)		| $(JSON) '$(SHOW)'; $(ECHO) ','
+	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/commits	| $(JSON) '$(LAST)'; $(ECHO) ','
+	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/branches	| $(JSON) '$(TREE)'; $(ECHO) ','
+	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/tags		| $(JSON) '$(TAGS)'; $(ECHO) ','
+	$(WGET) 'https://sourceforge.net/projects/gary-os/files/stats/json?start_date=$(BEG)&end_date=$(END)&period=$(PRD)' | $(JSON) '$(DOWN)'; $(ECHO) ','
 	$(if $(DOTEST),,@) \
+		$(shell $(ECHO) '{') \
+		$(ECHO) '{"versions":['; \
+		$(shell $(ECHO) '{') \
 		$(foreach FILE,$(shell $(subst @,,$(WGET)) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/tags | $(JSON) '$(VERS)'),\
-			$(ECHO) '$(FILE): '; \
-			$(subst @,,$(WGET)) "https://sourceforge.net/projects/gary-os/files/$(GARYOS_TTL)-$(FILE)-$(ARCH).kernel/stats/json?start_date=$(BEG)&end_date=$(END)&period=$(PRD)" | $(JSON) '$(TOTL)'; \
-	)
+			$(ECHO) '"$(FILE): '; \
+			$(subst @,,$(WGET)) 'https://sourceforge.net/projects/gary-os/files/$(GARYOS_TTL)-$(FILE)-$(ARCH).kernel/stats/json?start_date=$(BEG)&end_date=$(END)&period=$(PRD)' | $(JSON) '$(TOTL)' | tr '\n' '"'; \
+			$(ECHO) ','; \
+		) \
+			$(shell $(ECHO) '}') \
+			| sed 's|,$$||g'; \
+		$(ECHO) ']}\n'; \
+		$(shell $(ECHO) '}') \
+		| $(JSON)
+	@$(ECHO) ','
+	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/stargazers	| $(JSON) '$(TEAM)'; #>>> $(ECHO) ','
+	@$(ECHO) ']\n'
 else
 	@iptables -I INPUT 1 --proto tcp --dport 6419 -j ACCEPT
 	$(GRIP) --clear
