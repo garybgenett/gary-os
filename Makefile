@@ -290,6 +290,15 @@ readme-all:
 
 ########################################
 
+override BEG := 2014-02-28
+override END := 2038-01-19
+override PRD := monthly
+ifeq ($(DOREDO),)
+override BEG := $(shell expr `date +%s` - \( \( 60 \* 60 \* 24 \) \* 30 \))
+override BEG := $(shell date --iso --date='@$(BEG)')
+override PRD := daily
+endif
+
 override TOKN ?=
 ifeq ($(findstring @,$(USER)),)
 override USER := me@garybgenett.net
@@ -304,11 +313,42 @@ ifeq ($(ACCT),)
 override ACCT := $(word 2,,$(subst @, ,$(subst ., ,$(USER))))
 endif
 endif
-
 ifneq ($(DOTEST),true)
 override WGET := @$(WGET) 2>/dev/null
 override GRIP := @$(GRIP)
 endif
+
+override LIST_JSON = ( \
+		[( $(1) \
+			| select(.[1] != null) \
+			| { \
+				key: (.[0] | tostring | sub(" 00:00:00"; "")), \
+				value: .[1], \
+			} \
+		)] \
+		| sort_by(.$(if $(2),$(2),value)) \
+		| reverse \
+		$(if $(3),| .[0:$(3)],) \
+		| from_entries \
+	)
+override LIST_PRINT = ( \
+		$(1) \
+		| to_entries \
+		| [( \
+			.[] \
+			| [ (.key | tostring), (.value | tostring) ] \
+			| join(": ") \
+		)] \
+	)
+override LIST_PARSE = ( \
+		([($(1) | keys | .[])] | unique | .[]) as $$index | [ \
+			($$index), ( \
+				[($(1) | indices($$index)) | select(. != null)] | \
+				add \
+			) \
+		] \
+	)
+
 override SHOW := { \
 	description:		.description, \
 	homepage:		.homepage, \
@@ -327,15 +367,16 @@ override LAST := { \
 		commit_date:	.committer.date, \
 		} \
 	}
-override TREE := [ .[] | { \
-		name:		.name, \
-		commit:		.commit.sha, \
-	} ]
-override TAGS := [ .[] | { \
-		name:		.name, \
-		commit:		.commit.sha, \
-	} ]
+override TREE := $(call LIST_JSON,(.[] | [ .name, .commit.sha ]),key,)
+override TAGS := $(call LIST_JSON,(.[] | [ .name, .commit.sha ]),key,)
 override TEAM := { watchers:	([.[].login] | sort) }
+override DOWN := { \
+		messages:	.messages, \
+		total:		.total, \
+		downloads:	$(call LIST_PRINT,$(call LIST_JSON,.downloads[],key,10)), \
+		countries:	$(call LIST_PRINT,$(call LIST_JSON,.countries[],,10)), \
+		systems:	$(call LIST_PRINT,$(call LIST_JSON,$(call LIST_PARSE,.oses_by_country[]))), \
+	}
 
 .PHONY: readme-github
 readme-github:
@@ -348,6 +389,7 @@ ifeq ($(DOMODS),true)
 	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/branches	| $(JSON) '$(TREE)'
 	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/tags		| $(JSON) '$(TAGS)'
 	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/stargazers	| $(JSON) '$(TEAM)'
+	$(WGET) "https://sourceforge.net/projects/gary-os/files/stats/json?start_date=$(BEG)&end_date=$(END)&period=$(PRD)" | $(JSON) '$(DOWN)'
 else
 	@iptables -I INPUT 1 --proto tcp --dport 6419 -j ACCEPT
 	$(GRIP) --clear
