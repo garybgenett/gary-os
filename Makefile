@@ -373,6 +373,7 @@ override LAST := { \
 	}
 override TREE := $(call LIST_JSON,(.[] | [ .name, .commit.sha ]),key,)
 override TAGS := $(call LIST_JSON,(.[] | [ .name, .commit.sha ]),key,)
+#>>>override TEAM := { watchers:	([.[].html_url] | sort) }
 override TEAM := { watchers:	([.[].login] | sort) }
 override DOWN := { \
 		messages:	.messages, \
@@ -384,9 +385,9 @@ override DOWN := { \
 
 .PHONY: readme-github
 readme-github:
-	@echo "USER: $(USER)"
-	@echo "ACCT: $(ACCT)"
-	@echo "TOKN: $(TOKN)"
+	@$(ECHO) "USER: $(USER)\n" 1>&2
+	@$(ECHO) "ACCT: $(ACCT)\n" 1>&2
+	@$(ECHO) "TOKN: $(TOKN)\n" 1>&2
 ifeq ($(DOMODS),true)
 	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)		| $(JSON) '$(SHOW)'
 	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/commits	| $(JSON) '$(LAST)'
@@ -394,10 +395,10 @@ ifeq ($(DOMODS),true)
 	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/tags		| $(JSON) '$(TAGS)'
 	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/stargazers	| $(JSON) '$(TEAM)'
 	$(WGET) "https://sourceforge.net/projects/gary-os/files/stats/json?start_date=$(BEG)&end_date=$(END)&period=$(PRD)" | $(JSON) '$(DOWN)'
-	$(if $(DOTEST),,@)$(foreach FILE,$(shell \
-		$(subst @,,$(WGET)) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/tags | $(JSON) '$(VERS)'),\
-		$(ECHO) "$(FILE): "; \
-		$(subst @,,$(WGET)) "https://sourceforge.net/projects/gary-os/files/$(GARYOS_TTL)-$(FILE)-$(ARCH).kernel/stats/json?start_date=$(BEG)&end_date=$(END)&period=$(PRD)" | $(JSON) '$(TOTL)'; \
+	$(if $(DOTEST),,@) \
+		$(foreach FILE,$(shell $(subst @,,$(WGET)) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/tags | $(JSON) '$(VERS)'),\
+			$(ECHO) '$(FILE): '; \
+			$(subst @,,$(WGET)) "https://sourceforge.net/projects/gary-os/files/$(GARYOS_TTL)-$(FILE)-$(ARCH).kernel/stats/json?start_date=$(BEG)&end_date=$(END)&period=$(PRD)" | $(JSON) '$(TOTL)'; \
 	)
 else
 	@iptables -I INPUT 1 --proto tcp --dport 6419 -j ACCEPT
