@@ -290,12 +290,13 @@ readme-all:
 
 ########################################
 
+override TOKN ?=
 ifeq ($(findstring @,$(USER)),)
 override USER := me@garybgenett.net
 override ACCT := garybgenett
 endif
-override WGET := $(if $(WGET_C),$(WGET_C),wget) --output-document=- --auth-no-challenge --user="$(USER)" $(if $(PASS),--password="$(PASS)",--ask-password)
-override GRIP := grip --title="" --user="$(USER)" $(if $(PASS),--pass="$(PASS)")
+override WGET := $(if $(WGET_C),$(WGET_C),wget) --output-document=- --auth-no-challenge --user="$(USER)" $(if $(TOKN),--password="$(TOKN)",--ask-password)
+override GRIP := grip --title="" --user="$(USER)" $(if $(TOKN),--pass="$(TOKN)")
 override JSON := jq --raw-output
 ifeq ($(ACCT),)
 override ACCT := $(shell $(WGET) https://api.github.com/user | $(JSON) ".login")
@@ -309,44 +310,44 @@ override WGET := @$(WGET) 2>/dev/null
 override GRIP := @$(GRIP)
 endif
 override SHOW := { \
-	description: .description, \
-	homepage: .homepage, \
-	branch: .default_branch, \
-	watchers: .watchers, \
-	forks: .forks, \
-	fork: .fork, \
+	description:		.description, \
+	homepage:		.homepage, \
+	branch:			.default_branch, \
+	watchers:		.watchers, \
+	forks:			.forks, \
+	fork:			.fork, \
 	}
 override LAST := { \
-	message: .[0].commit.message, \
-	commit: .[0].sha, \
-	author: .[0].commit | { \
-		author_name: .author.name, \
-		author_date: .author.date, \
-		commit_name: .committer.name, \
-		commit_date: .committer.date, \
+	message:		.[0].commit.message, \
+	commit:			.[0].sha, \
+	author:			.[0].commit | { \
+		author_name:	.author.name, \
+		author_date:	.author.date, \
+		commit_name:	.committer.name, \
+		commit_date:	.committer.date, \
 		} \
 	}
 override TREE := [ .[] | { \
-		name: .name, \
-		commit: .commit.sha, \
+		name:		.name, \
+		commit:		.commit.sha, \
 	} ]
 override TAGS := [ .[] | { \
-		name: .name, \
-		commit: .commit.sha, \
+		name:		.name, \
+		commit:		.commit.sha, \
 	} ]
-override TEAM := .[].login
+override TEAM := { watchers:	([.[].login] | sort) }
 
 .PHONY: readme-github
 readme-github:
 	@echo "USER: $(USER)"
 	@echo "ACCT: $(ACCT)"
-	@echo "PASS: $(PASS)"
+	@echo "TOKN: $(TOKN)"
 ifeq ($(DOMODS),true)
 	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)		| $(JSON) '$(SHOW)'
 	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/commits	| $(JSON) '$(LAST)'
 	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/branches	| $(JSON) '$(TREE)'
 	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/tags		| $(JSON) '$(TAGS)'
-	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/stargazers	| $(JSON) '$(TEAM)' | sort -u
+	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/stargazers	| $(JSON) '$(TEAM)'
 else
 	@iptables -I INPUT 1 --proto tcp --dport 6419 -j ACCEPT
 	$(GRIP) --clear
