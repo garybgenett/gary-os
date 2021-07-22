@@ -577,7 +577,6 @@ alias pics-s="feh -F -rz -D5"
 alias pics-t="pics --preload --thumbnails --thumb-redraw 0 --index-info ''"
 alias pics-x="pics-s /.g/_data/personal/pictures/*/[0-9][0-9][0-9][0-9]"
 alias pim-mount="umount -f -l ${PIMDIR} ; mount -t cifs -o ro,soft,username=plastic //10.255.255.254/plastic/_pim ${PIMDIR}"
-alias ports="netstat -an | ${MORE}"
 alias pstree="pstree -clnpuA"
 alias publish="_sync publish"
 alias quote="cd data.personal ; ${EDITOR} _quotes.txt ; strfile _quotes.txt _quotes.txt.dat ; fortune _quotes.txt ; ${LL} -t"
@@ -3375,6 +3374,20 @@ function organize {
 
 function pages {
 	calc "$(w3m -T text/html -dump "${@}" | wc -l) / 60"
+}
+
+########################################
+
+function ports {
+	{
+		echo -en "\n"; netstat -an | ${GREP} "192.168.0.254" | ${GREP} "ESTABLISHED";
+		echo -en "\n"; for HOST in $(
+			netstat -an | ${GREP} "192.168.0.254" | ${GREP} "ESTABLISHED" |
+			awk '{print $5;}' | ${SED} "s|:.*$||g"
+			); do host ${HOST}; done;
+		echo -en "\n"; netstat -an
+	} | ${PAGER}
+	return 0
 }
 
 ########################################
