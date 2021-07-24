@@ -553,7 +553,7 @@ alias synctail="${GREP} -a '^ERROR[:][ ]' /.g/_data/-track/-sync/_sync.log ; ech
 
 ########################################
 
-alias astatus="zstatus ; echo ; zstatus -l gdata/zactive ; echo ; (cd /.g/_data/zbackup && git-list | head -n10) ; echo ; estatus"
+alias astatus="zstatus ; echo ; zstatus -l gdata/zactive ; echo ; (cd /.g/_data/zbackup && git-list -n10) ; echo ; estatus"
 alias cal="cal --monday --three"
 alias clean="_sync clean"
 alias clock="clockywock"
