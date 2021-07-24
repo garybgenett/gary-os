@@ -72,10 +72,10 @@ usage:
 	@$(PRINTF) "Initramfs Build (Chroot Reset):"		"$(MAKE) clean"
 	@$(PRINTF) "Initramfs Build (Chroot Create):"		"$(MAKE) release"
 	@$(PRINTF) "Initramfs Build (Chroot Root):"		"$(MAKE) rootfs"
+	@$(PRINTF) "Initramfs Build (Chroot Fetch):"		"$(MAKE) fetch"
 	@$(PRINTF) "Initramfs System (Live Reset):"		"$(MAKE) O=/ clean"
 	@$(PRINTF) "Initramfs System (Live Create):"		"$(MAKE) O=/ release"
 	@$(PRINTF) "Initramfs System (Live Root):"		"$(MAKE) O=/ rootfs"
-	@$(PRINTF) "Initramfs System (Live Fetch):"		"$(MAKE) O=/ fetch"
 	@$(PRINTF) "Initramfs System (Live Unpack):"		"$(MAKE) O=/ unpack"
 	@$(PRINTF) "Initramfs System (Live Install):"		"$(MAKE) O=/ install"
 ifneq ($(findstring help,$(MAKECMDGOALS)),)
