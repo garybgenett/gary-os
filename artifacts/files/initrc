@@ -103,7 +103,7 @@ ${ROOTFS_NAME}() {
 			${mounts}/.${ROOTFS_ROOT_OPT} \
 			${mounts}${_GOVLY} \
 			${mounts} \
-			${mounts}${_GOVLY}/lowerdir \
+			${mounts}/lowerdir \
 			${mounts} \
 			${mounts}.shm \
 		; do
@@ -120,24 +120,27 @@ ${ROOTFS_NAME}() {
 	if [ -z "`grep -E "^shm ${mounts} tmpfs" /proc/mounts`" ]; then
 		mkdir -v -p ${mounts} || ${ROOTFS_FUNC}
 		mount -v ${mounts}.shm ${mounts} || ${ROOTFS_FUNC}
-		mkdir -v -p ${mounts}${_GOVLY}/lowerdir || ${ROOTFS_FUNC}
-		mkdir -v -p ${mounts}${_GOVLY}/upperdir || ${ROOTFS_FUNC}
-		mkdir -v -p ${mounts}${_GOVLY}/workdir || ${ROOTFS_FUNC}
+		mkdir -v -p ${mounts}/lowerdir || ${ROOTFS_FUNC}
+		mkdir -v -p ${mounts}/upperdir || ${ROOTFS_FUNC}
+		mkdir -v -p ${mounts}/workdir || ${ROOTFS_FUNC}
 	fi
 	if ${to_mem}; then
-		mkdir -v -p `dirname ${mounts}${_GOVLY}${ROOTFS_ROOT}` || ${ROOTFS_FUNC}
-		rsync -avv --progress --copy-links ${${ROOTFS_NAME}} ${mounts}${_GOVLY}${ROOTFS_ROOT} || ${ROOTFS_FUNC}
-		${ROOTFS_NAME}="${mounts}${_GOVLY}${ROOTFS_ROOT}"
+		mkdir -v -p `dirname ${mounts}${ROOTFS_ROOT}` || ${ROOTFS_FUNC}
+		rsync -avv --progress --copy-links ${${ROOTFS_NAME}} ${mounts}${ROOTFS_ROOT} || ${ROOTFS_FUNC}
+		${ROOTFS_NAME}="${mounts}${ROOTFS_ROOT}"
 	fi
-	if [ -z "`grep -E "^/dev/loop[0-9] ${mounts}${_GOVLY}/lowerdir" /proc/mounts`" ]; then
-#>>>		mount -v -t ${ROOTFS_TYPE} -o ro,loop ${${ROOTFS_NAME}} ${mounts}${_GOVLY}/lowerdir || ${ROOTFS_FUNC}
-		mount -v -o ro,loop ${${ROOTFS_NAME}} ${mounts}${_GOVLY}/lowerdir || ${ROOTFS_FUNC}
+	if [ -z "`grep -E "^/dev/loop[0-9] ${mounts}/lowerdir" /proc/mounts`" ]; then
+#>>>		mount -v -t ${ROOTFS_TYPE} -o ro,loop ${${ROOTFS_NAME}} ${mounts}/lowerdir || ${ROOTFS_FUNC}
+		mount -v -o ro,loop ${${ROOTFS_NAME}} ${mounts}/lowerdir || ${ROOTFS_FUNC}
 	fi
 	if [ -z "`grep -E "^overlay ${mounts} overlay" /proc/mounts`" ]; then
-		lowerdir="${mounts}${_GOVLY}/lowerdir:${mounts}"
-		upperdir="${mounts}${_GOVLY}/upperdir"
-		workdir="${mounts}${_GOVLY}/workdir"
+		lowerdir="${mounts}/lowerdir:${mounts}"
+		upperdir="${mounts}/upperdir"
+		workdir="${mounts}/workdir"
 		mount -v -t overlay overlay -o lowerdir=${lowerdir},upperdir=${upperdir},workdir=${workdir} ${mounts} || ${ROOTFS_FUNC}
+		if [ ${${ROOTFS_NAME}} != ${ROOTFS_ROOT} ]; then
+			rm -v ${${ROOTFS_NAME}}
+		fi
 	fi
 	if [ -z "`grep -E "^shm ${mounts}${_GOVLY} tmpfs" /proc/mounts`" ]; then
 		mkdir -v -p ${mounts}${_GOVLY} || ${ROOTFS_FUNC}
@@ -343,7 +346,7 @@ fi
 if ${DOTEST}; then
 	marker
 	echo -en "# ${_TITLE}: success!\n"
-#>>>	marker
+	marker
 	${ROOTFS_FUNC} -
 fi
 kill -SIGQUIT 1
