@@ -174,7 +174,7 @@ map <F4> <ESC>:%s/^/\"/g<CR>:%s/\t/\"\,\"/g<CR>:%s/$/\"/g<CR>
 
 " (re)set folding, columns, pasting and wrapping
 map <F5> <ESC>:set foldlevel=1<CR>
-map <F6> <ESC>:set filetype=markdown<CR><ESC>:set virtualedit=all<ESC>:set foldcolumn=0<CR>:set columns=80<CR>:set nowrap<CR>:set nolist<CR>:set showbreak=<CR>
+map <F6> <ESC>:set filetype=markdown<CR><ESC>:syntax off<CR>:set virtualedit=all<ESC>:set foldcolumn=0<CR>:set columns=80<CR>
 map <F7> <ESC>:set invpaste<CR>
 map <F8> <ESC>:set invwrap<CR>
 
