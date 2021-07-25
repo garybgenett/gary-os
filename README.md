@@ -96,9 +96,9 @@ computers, which is what GaryOS was designed for.
 The booted system requires at least 4GB of RAM.  Some of the advanced features
 and uses require additional memory, and 8GB is recommended.
 
-The GaryOS kernel is several hundred MB, and at least 1GB of storage is
-recommended.  All efforts have been made to make GaryOS as compact as possible,
-without sacrificing functionality or pruning the filesystem.
+The GaryOS kernel is several hundred MB, and 1GB of storage is recommended.  All
+efforts have been made to make GaryOS as compact as possible without sacrificing
+functionality or pruning the filesystem.
 
 You will also need a keyboard and monitor in order to use GaryOS, although
 a serial terminal will work just fine.
