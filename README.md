@@ -148,32 +148,30 @@ details on this parameter are in [Loader].
 ### Linux ######################################################################
 [Linux]: #linux
 
-Starting from Linux is easier than with [Windows], for obvious reasons.  There
-are two options.
+Starting from [GNU/Linux] is easier than with [Windows], for obvious reasons.
+There are two options.
 
   1. Use an existing booloader configuration
   2. Use the GaryOS [GRUB] tooling
 
-It is recommended to use the first if it is available.  The simplest version for
-GRUB is below, with the 'linux' line matching the location where you put the
-GaryOS kernel.
+It is recommended to use the first if it is available.  The simplest version
+for GRUB is below, with the 'linux' line matching the location of the GaryOS
+kernel.
 
   ```
   menuentry "GaryOS" {
     set debug=linux
     linux (hd0,1)/gary-os/gary-os.kernel
-    boot
   }
   ```
 
 The 'gary-os.grub.cfg' file in the [Boot] archive is a good example of
 a relatively complete GRUB configuration file.
 
-Both of the above will also work for GRUB installations on USB drives.  See the
-[GRUB] section if you want to create/update a bootable USB drive.  If your
-system boots using EFI, see the [EFI] section.  Any bootloader that can boot
-Linux will work, but GaryOS is not tested with them so no instructions or
-support is provided.
+Both of the above will also work for GRUB installations on USB drives.  See
+[GRUB] to create or update a bootable USB drive.  For EFI systems, see [EFI].
+Any bootloader that can boot Linux will work, but GaryOS is not tested with them
+so no instructions or support is provided.
 
 ### Windows ####################################################################
 [Windows]: #windows
