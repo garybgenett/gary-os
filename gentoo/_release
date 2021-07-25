@@ -949,9 +949,12 @@ function _prepare_symlinks {		#{isexit} #{doredo}
 		else ${RM}						${TARGET}/${CMTFIL}				|| return 1
 	fi
 	${MKDIR} ${_FINAL}												|| return 1
+	[[ -n ${COMMIT} ]] && ${LN} --relative ${TARGET}/${CMTFIL}	${_FINAL}/${CMTFIL}				|| return 1
 	${LN} --relative ${TARGET}/.${_TITLE}/README.md			${_RAMFS}.${_GREAD}				|| return 1
 	${LN} --relative ${_RAMFS}.kernel.${_GPACK}			${_FINAL}/${_GPACK}				|| return 1
 	${LN} --relative ${_RAMFS}.rootfs.${_GPACK}			${_FINAL}/${_GPACK/%.txt/.${ROOTFS_NAME}.txt}	|| return 1
+	${LN} --relative ${TARGET}${ARCDIR}				${_FINAL}${ARCDIR}				|| return 1
+	${LN} --relative ${TARGET}${GENDIR}				${_FINAL}${GENDIR}				|| return 1
 	${LN} --relative ${TARGET}${DSTDIR}				${_FINAL}/_$(basename ${DSTDIR})		|| return 1
 	${LN} --relative ${TARGET}${PAKDIR}				${_FINAL}/_$(basename ${PAKDIR})		|| return 1
 	${LN} --relative ${TARGET}${ARCDIR}/${REP_FILE}.tar.xz		${_RAMFS}.${REP_FILE}.tar.xz			|| return 1
@@ -1795,9 +1798,6 @@ function release_install_root {
 		--one-file-system \
 		--filter="-_/.${_TITLE}*" \
 		--filter="-_/_${_TITLE}*" \
-		--filter="-_${_GOVLY}" \
-		--filter="-_${_GUNPK}" \
-		--filter="-_${_GINST}" \
 		--filter="-_/.${_GPACK/%.txt}*" \
 		$(variable_parse SKIPDIRS_GOS	"" "--filter=\"-_" "\"") \
 		$(variable_parse DEVDIRS	"" "--filter=\"-_" "/*\"") \
@@ -1894,6 +1894,8 @@ function _publish_prep {
 	variable_parse DEVDIRS "" "" "/"	>${TARGET}/.gitignore			|| return 1
 	sort -u -o ${TARGET}/.gitignore		${TARGET}/.gitignore			|| return 1
 	${SED} -i "/^$/d"			${TARGET}/.gitignore			|| return 1
+	${RM}					${TARGET}${ARCDIR}/.subversion*		|| return 1
+	${RM}					${TARGET}${ARCDIR}/.wget*		|| return 1
 	${RM}					${TARGET}/.${_GPACK/%.txt}*		|| return 1
 	${RM}					${CPIO_FILE}				|| return 1
 	${RM}					${CPIO_FILE}.dir			|| return 1
