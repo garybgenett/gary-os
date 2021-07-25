@@ -22,6 +22,7 @@
 | [Goals]    | [Design] / [Builder] / [Loader]
 | [Project]  | [References] / [Contributions] / [Contributing] / [Licensing]
 | [Details]  | [Versioning] / [Repository] / [Tools] / [Ecosystem]
+| [Release]  | [Process] / [Checklist]
 | [Versions] | [v3.0 2015-03-16] / [v2.0 2014-06-19] / [v1.1 2014-03-13] / [(...)](#v10-2014-02-28)
 
 [Gary B. Genett]: http://www.garybgenett.net
@@ -1684,6 +1685,28 @@ highly visible components, and deserve mention:
 Gratitude to all those who have contributed to making [GNU/Linux] the most
 powerful and flexible operating system on the planet, and a true "run
 anywhere, anyhow" computing environment.
+
+--------------------------------------------------------------------------------
+
+## Release #####################################################################
+[Release]: #release
+
+This is additional information pertaining exclusively to how GaryOS is
+developed, tested and released.  As the author evolved an ever more formal and
+repeatable process, it made sense to make this part of the public documentation.
+
+Everything needed to perform these steps is in the [Repository] or the
+[Downloads] folder.
+
+### Process ####################################################################
+[Process]: #process
+
+In progress for v5.0...
+
+### Checklist ##################################################################
+[Checklist]: #checklist
+
+In progress for v5.0...
 
 --------------------------------------------------------------------------------
 
