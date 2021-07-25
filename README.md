@@ -40,14 +40,18 @@
 ## Overview ####################################################################
 [Overview]: #overview
 
-GaryOS is an entire GNU/Linux system in a single bootable file.  It is also
-a build system to create and package Funtoo installations.
+GaryOS is an entire [GNU/Linux] system in a single bootable file.  It is also
+a [Builder] system to create and package [Funtoo] installations.
+
+[Builder] creates custom root filesystems that GaryOS can load into memory in
+place of its own.  GaryOS can build new or updated versions of itself from
+within itself.
 
 Key features:
 
-  * Optimized source-based Funtoo system with GNU toolchain
+  * Optimized source-based Funtoo system with [GNU] toolchain
   * Fast in-memory filesystem does not require a physical device
-  * Can be booted from anywhere a Linux kernel can
+  * Can be booted from anywhere a [Linux Kernel] can
   * Upgrades are as simple as replacing the file
 
 Primary uses:
@@ -55,11 +59,16 @@ Primary uses:
   * System rescue and recovery
   * Anonymous and secure workstation
   * GNU/Linux learning environment
-  * Installation of Funtoo (or Gentoo)
+  * Installation of Funtoo (or [Gentoo])
 
-The build system can also be used to create custom root filesystems that GaryOS
-can load into memory in place of its own.  GaryOS can build new or updated
-versions of itself from within itself.
+Unique advantages:
+
+  * Source-based distributions are more flexible and powerful than binary ones
+  * A single [Kernel] file is easier to manage and boot than an ISO image
+  * GaryOS is stored on media as a resident of it, not the purpose of it
+
+No other GNU/Linux distribution takes the same approach or has the same features
+as GaryOS.
 
 <!-- ![GaryOS CLI Screenshot](artifacts/images/screenshot_cli.png "GaryOS CLI Screenshot") -->
 <!-- ![GaryOS GUI Screenshot](artifacts/images/screenshot_gui.png "GaryOS GUI Screenshot") -->
