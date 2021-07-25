@@ -592,12 +592,17 @@ correctly configured (see [GRUB]).
 ## Building ####################################################################
 [Building]: #building
 
-In addition to being a live GNU/Linux system, GaryOS is also the build system
-used to produce itself.  The system can also be used to create new installations
-from scratch, or install GaryOS directly from memory to disk.
+In addition to being a [GNU/Linux] system, GaryOS is the [Builder] system used
+to produce itself.  It has three main purposes.
 
-Another important feature is the ability to update the system while it is
-running live, including installing new packages.
+  * [Compile] and [Manage] [Funtoo] installations
+  * Make an [Image] of a root [Filesystem]
+  * [Install] GaryOS to disk directly from memory
+
+These sections are in logical order, following the full lifecycle of creating
+a build, managing it or creating an image of it, and ultimately installing it.
+They are mainly for reference from other sections, and not necessarily
+a prescribed list of steps to take.
 
 ### Install ####################################################################
 [Install]: #install
