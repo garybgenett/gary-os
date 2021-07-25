@@ -110,9 +110,9 @@ a serial terminal will work just fine.
 a personal project with aspirations of recognition as an actual distribution,
 however misguided.
 
-All documentation is in this file and/or the usage output of the build scripts.
-Everything in the [Booting], [Running] and [Building] sections are specifically
-tested and supported.
+All documentation is in this file and the usage output of the [Builder] scripts.
+Everything in [Booting], [Running] and [Building] are specifically tested and
+supported.  See [Checklist] for details on the final testing done every release.
 
 While there appears to be some adoption of GaryOS, it is not yet enough to
 warrant a formal ticket system.  For any issues, or to share the creative ways
