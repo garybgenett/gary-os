@@ -78,10 +78,10 @@ as GaryOS.
 
 Download the latest [Kernel], and select a boot method:
 
-  1. Use [Qemu] to try it out (quickest and easiest)
-  3. Configure an existing bootloader, such as [GRUB] or [EFI]
+  1. Use [Virtual] to try it out or test it (quickest and easiest)
   2. Follow the instructions for either [Linux] or [Windows]
-  4. From a [PXE] server
+  3. Configure an existing [EFI] bootloader
+  4. Host on a [PXE] server
 
 Log in as 'root' with password 'gary-os'.  Any boot media can be detached.  Use
 the normal 'shutdown now' or simply power off when finished.
