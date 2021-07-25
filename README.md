@@ -18,7 +18,7 @@
 | [Overview] | [Quick Start] / [Requirements] / [Support]
 | [Booting]  | [Linux] / [Windows] / [GRUB] / [EFI] / [PXE] / [Virtual]
 | [Running]  | [Networking] / [GUI] / [Update] / [Filesystem]
-| [Building] | [Install]
+| [Building] | [Compile] / [Install]
 
 | [Information] | |
 |:---        |:---
@@ -603,6 +603,108 @@ These sections are in logical order, following the full lifecycle of creating
 a build, managing it or creating an image of it, and ultimately installing it.
 They are mainly for reference from other sections, and not necessarily
 a prescribed list of steps to take.
+
+### Compile ####################################################################
+[Compile]: #compile
+
+The process to build and install a source-based distribution like [Funtoo] from
+scratch is long and complex.  The GaryOS [Builder] is designed to condense it
+into a small number of atomic steps using [GNU Make].
+
+  | Target  | Action
+  |:---     |:---
+  | init    | Initial build from a [stage3] tarball
+  | doit    | Update a build with any package or configuration changes
+  | redo    | Complete start-to-finish rebuild of entire system
+  | edit    | Wrapper around [gentoo.config] customization script
+
+To prepare for a build, create a 'sources' directory in the repository and
+download a stage3 tarball into it.  Each version of GaryOS has a link in
+[Versions] to the stage3 it was built with.  The default GaryOS settings in
+[gentoo/make.conf] call for a 'generic_64' tarball.
+
+The 'build' directory will be created and used as a 'chroot'.  If this will be
+a direct installation to disk, create the 'build' directory manually and mount
+the target partition on it.  Do not mount any subdirectories until after the
+'init' phase.  Upon completion of the build, the [GRUB Quick Start] is all that
+is needed to make it ready to boot into.
+
+None of the steps in this process are specific to GaryOS, other than the
+starting [Portage] configuration and the selected list of packages.  This
+process is generally applicable to all Funtoo systems.
+
+**Init**
+
+The target directory 'build' will be created.  It will grow to many tens of GB,
+so having 100GB available is recommended.
+
+For the best performance, change the 'MAKEFLAGS -j' variable in
+[gentoo/make.conf] to the number of CPU cores your system has plus 1.
+
+  ```
+  expr `grep "^processor" /proc/cpuinfo | wc -l` + 1
+  ```
+
+The last line in [gentoo/_funtoo] must be the commit hash in [meta-repo]
+that it is desired to use for the Portage tree.
+
+Make any desired Portage package selection and configuration changes, and then
+start the build with 'make init'.  By default, the base GaryOS [Kernel] package
+list and configuration is used.  The full [Rootfs] build can be done with 'make
+P=_gary-os init'.  If so, be sure to add 'P=_gary-os' in all the rest of the
+steps as well.
+
+The initial build is where errors are most likely to occur.
+
+  * Dependency conflicts
+  * Conflicting '$USE' variable values
+  * Package incompatibilities causing build breaks
+  * Broken or out of date packages
+
+These are all beyond the control of GaryOS.  See [Builder] and [Process] for
+strategies to deal with these quickly and continue building.
+
+This phase must at least reach the stage where it is building the selected
+package list after updating the base system (the '@system' set) and downloading
+all the source files.  The 'doit' target can be used after that to resume.
+
+**Doit**
+
+The main purpose of this target is to do a system update after any package or
+configuration changes.  It also handles a number of backend items key to
+keeping things clean and orderly.
+
+Once the 'init' phase reaches the point of building the package list, this phase
+can be used to resume after failed builds.  It is sometimes handy to do 'make
+DOFAST=true doit' to skip some of the ancillary but time-consuming steps until
+a successful build is achieved, and then do a final 'make doit' to ensure they
+are run.  This is a real time saver.
+
+Successful completion of this phase is the #1 measure of a healthy build.  It
+can't be run too often.
+
+**Redo**
+
+This is almost identical to 'init'.  Once the build successfully completes
+'doit', it is good practice to recompile everything from start to finish.  This
+resolves any mutual dependencies, filters out binary bootstrap packages, and
+guarantees that the entire system can build flawlessly with the current package
+list and configuration.
+
+Ultimately, this is probably not a completely necessary step under normal
+circumstances.  However, when performing a new build there are usually multiple
+passes with 'init' and 'doit', with lots of changes to the configuration and
+additions to [gentoo/overlay/].  The final rebuild pass is to catch any bugs
+with the build that might have slipped in.
+
+**Edit**
+
+This target is only required if the [gentoo.config] script has been modified
+(see [Builder]).  It performs any automated customization steps that are
+desired.
+
+  [stage3]: https://wiki.gentoo.org/wiki/Stage_tarball
+  [GRUB Quick Start]: https://wiki.gentoo.org/wiki/GRUB2_Quick_Start
 
 ### Install ####################################################################
 [Install]: #install
