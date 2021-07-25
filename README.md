@@ -22,7 +22,7 @@
 
 | [Information] | |
 |:---        |:---
-| [Goals]    | [Advantages] / [Limitations] / [History]
+| [Goals]    | [Limitations] / [History]
 | [Project]  | [References] / [Contributions] / [Contributing] / [Licensing]
 | [Details]  | [Versioning] / [Repository] / [Tools] / [Ecosystem]
 | [Versions] | [v3.0 2015-03-16] / [v2.0 2014-06-19] / [v1.1 2014-03-13] / [(...)](#v10-2014-02-28)
@@ -975,49 +975,6 @@ Explicit non-goals:
   * Becoming a complete desktop environment
 
 GaryOS will continue to be a [Kernel] and [Builder] above all else.
-
-### Advantages #################################################################
-[Advantages]: #advantages
-
-The number of live systems, for everything from basic rescue to a full
-workstation, is quite staggering.  Many of them are extremely useful and very
-well-established.  So, why create another one?
-
-The main differentiators of GaryOS:
-
-  1. A single kernel file is easier to manage and boot than an ISO file
-  2. It is a source-based Funtoo system, which is much more powerful than
-     binary distributions, like those based on Debian (Grml, Ubuntu, etc.)
-  3. Installation of Gentoo/Funtoo can be a bit of work, and having
-     a ready-made system can make the process much more approachable
-
-ISO files are the standard method of releasing live distributions, and they
-work quite well, overall.  There are a few options for using them:
-
-  1. Write directly to CD/DVD or USB media, each install or upgrade
-  2. Use a bootloader, like GRUB, which supports booting ISO images
-  3. Extract the ISO contents to USB media, and configure everything manually
-
-They do pose some challenges, however:
-
-  1. CDs/DVDs are antiquated, and not as ubiquitous as USB drives
-  2. Wiping your USB drive every upgrade makes it more or less single-purpose
-  3. Booting directly from an ISO file uses an emulated CD/DVD "loop" drive
-     that the OS can use, requiring a small portion of bootloader code to stay
-     in memory and for the boot media to stay connected
-  4. Extracting everything onto a USB drive preserves other data on the drive
-     at the expense of complexity, and upgrades are not trivial
-
-Some distributions, such as Grml, have tools that automate the process of
-extracting to USB, which makes the process much simpler.  The drawback is that
-these scripts require you to start from a Unix-like system to begin with, and
-ultimately they manage rather than remove the complexity.
-
-The GaryOS philosophy is that no complex steps or scripting should be
-necessary.  It is a single file, and upgrades are a simple matter of replacing
-it.  Once the initial bootloader is configured, it should never need to be
-touched again.  GaryOS should be a resident on the media, and not the purpose
-of it.  No major live distribution takes this approach or makes these claims.
 
 ### Limitations ################################################################
 [Limitations]: #limitations
