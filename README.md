@@ -802,46 +802,137 @@ they need to be kept.
 ### Install ####################################################################
 [Install]: #install
 
-  * Definition:
-    * Install GaryOS to disk as a "stage3" build.
-  * Last tested with:
-    * GaryOS v3.0
+One of the [Goals] of GaryOS is to simplify the process of installing [Funtoo]
+(or [Gentoo]).  This can be done using [Compile] or from directly within
+GaryOS.
 
-The in-memory environment is a complete Funtoo installation, as shown in the
-[Update] section above.  It can be copied directly to a new disk/partition and
-booted as a fresh installation.
+  | Image    | Packages              | Configuration
+  |:---      |:---                   |:---
+  | [Kernel] | [packages.txt]        | Optimized for size and fewer dependencies
+  | [Rootfs] | [packages.rootfs.txt] | Complete configuration and package list
 
-Instructions for installing to disk:
+The final result will be identical to a [Compile] for both images.  There are
+only a few steps to doing the install.
 
-  1. Mount formatted disk/partition.
-     * e.g. `mke2fs -t ext4 -jv /dev/sda2`
-     * e.g. `mount /dev/sda2 /mnt`
-  2. If you wish for `/boot` to be on a separate partition, mount that
-     location in the target.
-     * e.g. `mkdir /mnt/boot`
-     * e.g. `mount /dev/sda1 /mnt/boot`
-  3. Copy in-memory filesystem to installation target.
-     * e.g. ...
+  1. Unpack all the [Loader] directories
+  2. Reset all configuration files to default *(optional)*
+  3. [Update] packages and configurations *(optional)*
+  4. Run the install
 
-        ```
-        rsync -avv \
-            --filter=-_/dev/** \
-            --filter=-_/mnt/** \
-            --filter=-_/proc/** \
-            --filter=-_/run/** \
-            --filter=-_/sys/** \
-            / /mnt
-        ```
-  4. Add necessary partition information to `/etc/fstab`, remembering an
-     entry for `/boot` if using a separate partition from #2 above.
-     * e.g. `vi /mnt/etc/fstab`
-  5. Update and install GRUB, to make the new installation bootable.
-     * e.g. `for FILE in dev proc sys ; do mount --bind /${FILE} /mnt/${FILE} ; done`
-     * e.g. `chroot /mnt grub-install /dev/sda`
-     * e.g. `chroot /mnt boot-update`
-  6. Reboot into new installation, update `/etc/portage` configuration,
-     install "portage" tree and update/install packages as desired.
-  7. **Don't forget to change `hostname` and update `root` password!**
+All of this except the [Update] will be done by [Builder].
+
+At least 8GB of memory will be required, due to the size of the fully unpacked
+filesystem.  The base size of the in-memory filesystem will need to be at least
+6G, which can be set with 'shmem_size=6144m' before booting (see [Filesystem])
+or 'mount -o remount,size=6144m /.overlay' after booting (see [Update]).
+
+It is strongly advised to at least skim through the [Funtoo Installation Guide]
+or the [Gentoo Installation Guide].  This is meant to simplify the process, and
+is not meant to supplant all understanding of it.
+
+**Unpack**
+
+This ensures all directories are uncompressed onto the filesystem.  Without it,
+the install will be incomplete.
+
+  ```
+  cd /.gary-os
+  make DOREDO=true unpack
+  ```
+
+The [Kernel] image will require [Networking] for this.  [Rootfs] has all the
+needed directories locally.
+
+**Configuration Files** *(Optional)*
+
+By default, the small amount of branding and configuration that GaryOS does will
+be copied over to the installation.
+
+  ```
+  cd /.gary-os
+  make DOREDO=true install
+  ```
+
+The above will reset the running GaryOS to a completely default system.  The
+full list of modified files is in "Modifications" below.
+
+**Update** *(Optional)*
+
+Perform any [Update] steps that are desired to have in the final install.  If
+there are a large number of changes, it is best to wait and perform them on the
+final system after it is installed.
+
+Any changes to package configuration files can also be done at this stage.
+
+**Install**
+
+The system is ready for install.  All that is needed is to mount the target
+partition (replace '/dev/sda1' with the desired location).  This partition must
+be empty.  Anything on it will be erased.
+
+  ```
+  mkdir /.install
+  mount /dev/sda1 /.install
+  make install
+  ```
+
+Once complete, the final step is to install the GRUB bootloader.  Some helpful
+pointers are provided at the end of the 'install' process.  Due to how
+potentially complex this can be it is not automated.  The [GRUB Quick Start] can
+also be a helpful starting point.
+
+The 'install' target can be run any number of times without issue.  Make sure to
+install GRUB as the absolute last step.
+
+  * Update '/etc/fstab' with location of the filesystem
+  * Set hostname in '/etc/conf.d/hostname'
+
+CHANGE THE PASSWORD: `passwd root`
+
+**Modifications**
+
+As part of the [Image] process, several files are added, modified, or replaced
+to ensure a good experience, fix issues, and generally create a particular look
+and feel for GaryOS.
+
+  | File                      | Change   | Purpose
+  |:---                       |:---      |:---
+  | /etc/issue                | Replaced | [artifacts/files/issue]
+  | /etc/motd                 | Added    | [artifacts/files/issue]
+  | /init                     | Added    | Symbolic link to '/sbin/init'
+  | /etc/inittab              | Modified | Added serial console
+  | /etc/fstab                | Modified | Commented all lines
+  | /etc/locale.gen           | Replaced | [artifacts/files/locale.gen]
+  | /etc/conf.d/hostname      | Modified | Set to 'gary-os'
+  | /etc/profile.d/setterm.sh | Added    | Disabled terminal bell
+  | /etc/wpa_supplicant/wpa_supplicant.conf | Replaced | [artifacts/files/wpa_supplicant.conf]
+  | /etc/ssh/sshd_config      | Modified | Enabled 'root' login
+  | /usr/share/X11/xorg.conf.d/20-intel.conf | Modified | Commented all lines
+  | /etc/env.d/90xsession     | Added    | Set default window manager
+  | /etc/X11/Sessions/dwm     | Modified | Tune [dwm] configuration
+
+In cases where the files are modified or replaced, the original is kept as
+a '*.gary-os' file.
+
+In addition to the above, the [OpenRC] configuration is modified (see
+[Loader]).  This is primarily to disable all network daemons.  The [gpm] daemon
+is enabled for mouse support on the console.
+
+As for the overall system, all configuration files for the [Linux Kernel] and
+[Portage] are in the repository.
+
+  | Configuration | Location
+  |:---           |:---
+  | Linux kernel  | [linux/]
+  | Portage       | [gentoo/]
+  | Overlay       | [gentoo/overlay/]
+
+Finally, the 'root' password is set to 'gary-os'.
+
+  [Funtoo Installation Guide]: https://www.funtoo.org/Install
+  [Gentoo Installation Guide]: https://wiki.gentoo.org/wiki/Handbook:AMD64/Full/Installation
+  [OpenRC]: https://wiki.gentoo.org/wiki/OpenRC
+  [gpm]: https://www.nico.schottelius.org/software/gpm
 
 --------------------------------------------------------------------------------
 
