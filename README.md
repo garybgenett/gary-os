@@ -267,14 +267,14 @@ configuration/steps are not tested or supported.
 ### PXE ########################################################################
 [PXE]: #pxe
 
-In a networked environment, one or more machines can boot GaryOS from a central
-server.  This is often used in labs or environments where centralized management
-of infrastructure is critical.
+In a networked environment GaryOS can boot from a central server.  This is often
+used in labs or environments where centralized management of infrastructure is
+critical.
 
-Both the GaryOS [Kernel] and the GRUB 'x86_64.efi' file in [Boot] can be loaded
-directly from PXE.  The GRUB image will automatically select and load GaryOS
-from the server by default, but can also be used to provide additional boot
-options.
+Both the GaryOS [Kernel] and the GRUB 'x86_64.efi' file in [Boot] (see [GRUB])
+can be loaded directly from PXE.  The GRUB image will automatically select and
+load GaryOS from the server, and will also pass any additional boot parameters
+to the [Linux Kernel] directly from the PXE server configuration.
 
 DHCPd and TFTPd are included in GaryOS.  An example DHCPd configuration is
 below.  GRUB must be used as the 'filename' in order to pass Linux kernel
@@ -282,17 +282,14 @@ parameters to GaryOS via 'extensions-path'.  Otherwise, the GaryOS kernel can
 be used directly as 'filename' without any other options.
 
   ```
-  filename                "/gary-os/gary-os.grub/x86_64.efi";
   next-server             0.0.0.0;
+  filename                "/gary-os/gary-os.grub/x86_64.efi";
   option root-path        "/gary-os/gary-os.kernel";
-  option extensions-path  "shmem_size=3000m groot_hint=efinet0 groot_file=/gary-os/gary-os.rootfs groot=0.0.0.0";
+  option extensions-path  "<kernel parameters>";
   ```
 
-The kernel parameters in 'extensions-path' are specific to GaryOS, and are
-covered in the [Filesystem] section.
-
-Using [Custom] to create modified [Filesystem] images could form the basis of a
-completely automated and centrally managed lab or server farm.
+Using [Image] to create modified [Filesystem] images could form the basis of
+a completely automated and centrally managed lab or server farm.
 
 --------------------------------------------------------------------------------
 
