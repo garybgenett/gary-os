@@ -22,7 +22,7 @@
 
 | [Information] | |
 |:---        |:---
-| [Goals]    | [Design] / [Builder]
+| [Goals]    | [Design] / [Builder] / [Loader]
 | [Project]  | [References] / [Contributions] / [Contributing] / [Licensing]
 | [Details]  | [Versioning] / [Repository] / [Tools] / [Ecosystem]
 | [Versions] | [v3.0 2015-03-16] / [v2.0 2014-06-19] / [v1.1 2014-03-13] / [(...)](#v10-2014-02-28)
@@ -1109,6 +1109,113 @@ References to this section:
     * General reference -- [Linux Kernel] parameters
   * [Repository]
     * Heart and soul  -- [gentoo/_system]
+
+These are to make sure everything is cross-linked, and that this section is
+complete.
+
+### Loader #####################################################################
+[Loader]: #loader
+
+The sole purpose of [Loader] is to create and load a [Filesystem] into memory
+when [Booting].  This process and the rationale behind it are detailed in
+[Design].  [Loader] also creates [Kernel] and [Rootfs] for distribution using
+[Image].
+
+[Loader] is more of an abstract concept than it is an actual thing, but it is
+most helpful to think of it this way.
+
+**Responsibilities**
+
+  * [Running]
+    * [Filesystem]
+  * [Building]
+    * [Image]
+
+  | Component          | Purpose
+  |:---                |:---
+  | [Makefile]         | Wrapper around the other components
+  | [gentoo/_system]   | All environment and variable initialization
+  | [gentoo/_release]  | Worker for [Filesystem] [Image] (core of [Loader])
+  | [artifacts/files/] | [Filesystem] [Image] scripts and configuration
+
+**Package Directories**
+
+During [Image] creation (also [Kernel] and [Rootfs]), large directories are
+packaged with [XZ Compression] to maximize space savings (see [Design]).
+Commands such as 'rc-update' are run during [Image] creation or after
+directories are unpacked.  There are variables sourced from the package set file
+which define these.
+
+  |        | |
+  |:---    |:---
+  | RCUPDT | Commands such as 'rc-update' to be run before [Image] creation
+  | FSUPDT | Identical to 'RCUPDT', but are run after directories are unpacked
+  | FSPACK | Included in [Image], and unpacked during boot
+  | FSKEEP | Included in [Image], but are left unpacked
+  | FSARCH | Excluded from [Image], but are packed for later use
+  | FSEXCL | Excluded from [Image], and are not packed at all
+
+Note that these can be nested one level deep.  Meaning, a directory can be
+'FSARCH' from a 'FSPACK' or 'FSEXCL' from a 'FSKEEP' and so on.  Anything nested
+deeper will produce undefined results.  They are evaluated in reverse order, so
+lower on the list will take precedence.  For example, if the same directory is
+set in 'FSEXCL' and 'FSPACK', the directory would be 'FSEXCL'.
+
+Complete examples of usage are in [gentoo/sets/gary-os] and
+[gentoo/sets/_gary-os].
+
+**Overlay Environment**
+
+The [Booting] process goes through three stages (see [Design]).  In the first,
+[Kernel] loads into memory along with a [Linux initramfs].  This is a minimal
+environment designed to locate, mount and boot a [Filesystem] such as [Rootfs].
+There are [Linux Kernel] parameters which inform this environment.
+
+First, 'shmem_size' specifies how much memory to reserve for the filesystem.
+This must be large enough to contain both [Kernel] and [Filesystem], plus
+a little extra for space needed after booting.  Then, the 'groot' partition is
+mounted and 'groot_file' is loaded into memory.  Optionally, 'groot_hint' can be
+used to provide helpful information in case loading the [Filesystem] fails.
+
+During this stage, Linux kernel modules are loaded from the [Kernel] internal
+[Filesystem] if they are needed.
+
+In case of failure, a minimal shell environment will be loaded.  It is
+menu-driven and self-documenting.  Its purpose is to facilitate real-time user
+selection of a [Filesystem] to load.
+
+Once a [Filesystem] is loaded, directories are unpacked as specified in 'Package
+Directories' above, and '/init' on the target filesystem is booted.  The
+majority of Linux kernel modules will be loaded after this point, so it is
+important that the [Filesystem] has a '/lib*/modules' directory which matches
+the GaryOS [Kernel] version.
+
+The final in-memory filesystem is mounted on the backend at '/.overlay', so it
+can be resized after boot using something like 'mount -o remount,size=6144m
+/.overlay' (see [Update]).
+
+If desired, the intermediary environment used to locate and boot the
+[Filesystem] can intentionally be loaded by using 'groot=null'.  This process is
+a great learning experience for anyone interested in the [GNU/Linux] boot
+process or how live systems work.
+
+**References**
+
+References to this section:
+
+  * [Booting]
+    * Parameter -- 'shmem_size'
+  * [Filesystem]
+    * Parameters -- 'shmem_size', 'groot', 'groot_file' and 'groot_hint'
+  * [Image]
+    * Symbolic link -- '/init'
+    * General reference -- [Loader] directories and 'rc-update'
+  * [Design]
+    * General reference -- [Linux Kernel] parameters
+  * [Contributions]
+    * General reference -- 'shmem_size'
+  * [Repository]
+    * Heart and soul  -- [gentoo/_release]
 
 These are to make sure everything is cross-linked, and that this section is
 complete.
