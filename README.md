@@ -350,8 +350,21 @@ This new virtual machine will run GaryOS [GRUB] and boot into the [Kernel].
 ## Running #####################################################################
 [Running]: #running
 
-There are few tasks you may wish to perform once GaryOS is booted and running.
-Some examples are setting up networking or running the graphical interface.
+There are many things that can be done with GaryOS once it is booted, some of
+which are outlined in [Overview].  It is essentially a packaged [Funtoo]
+installation.  There are a few common tasks that are documented to make them
+easier, and some additional capabilities specific to GaryOS.
+
+  * Set up [Networking]
+  * Run the [GUI] graphical interface
+  * [Update] or install new packages
+  * Loading a different [Filesystem] into memory
+
+By default, GaryOS starts the fewest processes possible and does not mount any
+hard drives or partitions.  This is for security, rescue and forensics.
+
+See [Support] if you wish to share any creative uses for GaryOS that you come up
+with.
 
 ### Uses #######################################################################
 [Uses]: #uses
