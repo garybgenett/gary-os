@@ -1279,70 +1279,85 @@ counts.
 ### Contributions ##############################################################
 [Contributions]: #contributions
 
-As much as possible, and in addition to GaryOS itself, this project tries to
-give back to the community in whatever ways it can.  So far, this has
-manifested as a few tiny patches to upstream projects.
+This project tries to give back to the community as much as it can.
 
-**Linux Initramfs**
+  * [Linux Kernel] 'shmem' patch
+  * [Funtoo] [Ego]
+  * [dwm]
 
-The "shmem" subsystem in the Linux kernel is what manages the "tmpfs"
-infrastructure used for in-memory filesystems, including initramfs.  Initial
-creation of the shmem filesystem reserves half of the available memory.  On
-a 4GB system, this is not enough room for GaryOS to boot.  In the early history
-of the "[gentoo/_release]" script, there was a minor hack to the kernel source
-to make this work the way that was needed.  For the completion of the [v4.0]
-release, this was formalized as a kernel patch which also added a configuration
-option and a boot parameter.  This was submitted to the Linux "mm" development
-team in the following mailing list threads:
+This is addition to [Builder] and GaryOS itself.
 
-  * [Initial complete patch] -- [shmem-add-shmem_size-option-set-filesystem-size.v5.4-rc2.patch]
-  * [Secondary patch, configuration option only] -- [shmem-add-shmem_size-option-for-full-filesystem.v5.4-rc2.patch]
-  * [Final patch, default global variable only] -- [shmem-make-shmem-default-size-a-define-value.v5.4-rc2.patch]
+**Linux Kernel**
 
-All three were ultimately rejected, for good reason.  The
-[shmem_size_hack.patch] continues to be used in GaryOS, due to the added
-functionality, and is mentioned in the [Structure] and [Update] sections.
+The 'shmem' subsystem manages 'tmpfs' for in-memory filesystems, including
+[Linux initramfs].  By default, half of system memory is reserved.  On a 4GB
+system, this is sometimes not enough room for a GaryOS [Filesystem] to unpack.
+For the [v4.0] rebuild of [Loader], a kernel patch was submitted to the Linux
+"mm" development team.
+
+  * Current:
+    * [shmem_size_hack.patch]
+  * Initial
+    * [First shmem version]
+    * [Linux shmem submission v1] ([shmem v1 patch])
+    * [Linux shmem submission v2] ([shmem v2 patch])
+    * [Linux shmem submission v3] ([shmem v3 patch])
+
+Alas, all three were rejected from the mainline kernel for perfectly good
+reasons.  However, it continues to be a key feature of GaryOS [Loader] and
+[Filesystem].
 
 **Funtoo Ego**
 
-Ego is the tool used by Funtoo to keep the "meta-repo" Portage tree up to date.
-While Portage uses a monolithic directory tree, Ego uses a collection of Git
-repositories pulled together using the [Funtoo Kits] infrastructure.  The
-[gentoo/_funtoo.kits] script was written to properly "pin" the final tree to
-a particular commit, for stability and reproducibility.  Also for the [v4.0]
-release, this hack was coded directly into the Ego tool:
+[Ego] keeps the [Portage] [meta-repo] tree up to date.  [Funtoo Kits] builds the
+monolithic Portage tree from a collection of smaller [Git] repositories.  The
+[gentoo/_funtoo.kits] script was written to properly set the final tree to
+a particular commit for stability and reproducibility.  For the [v4.0] release,
+this hack was coded directly into Ego.
 
-  * [add-commit-option-to-ego-sync.2.7.4-r1.patch]
+  * Current
+    * [gentoo/_funtoo.kits]
+    * [ego_commit_hack.patch] in [gentoo/overlay/]
+  * Initial
+    * [Funtoo Ego submission]
 
-This was submitted upstream, but was not usable in [v4.0] because of
-a mis-match in the filesystem and Ego versions.  Thus, the
-[ego_commit_hack.patch] is in the GaryOS "[gentoo/overlay]" directory, but is
-not yet in production use.  This will hopefully change in [v5.0], with the
-updated Portage commit.
+This was submitted upstream with no response.
 
-**Suckless DWM**
+**Suckless dwm**
 
-Tangentially related to GaryOS are the [DWM multimon patches] that the author
-created to make multiple monitors easier to use in the DWM window manager.  The
-[Suckless] team accepts these patches on their website, but due to their
-minimalist philosophy contributions of this type are not committed into the
-main repository, leaving users to use whatever set of patches suits them.
+Tangentially related to GaryOS are patches the author uses to make multiple
+monitors more effective in dwm.  [Suckless] accepts patches as entries on their
+website.
 
-GaryOS does use DWM as the window manager for [GUI], and a slightly modified
-[dwm] configuration file is used for that.  It extends the default DWM color
-scheme to the URxvt terminal and Links web browser, and also makes Links the
-browser that is launched.  The default configuration is otherwise unmodified,
-and no patches are used.
+  * Current
+    * [dwm multimon patches]
+  * Initial
+    * [dwm multimon submission]
+        * [added monitor marker to bar]
+        * [added n*view wrappers, for unified multi-monitor]
+        * [added reset_view function]
+        * [added statusall toggle, replacing need for patch]
 
-  [Initial complete patch]: https://marc.info/?l=linux-mm&m=157048756423988
-  [Secondary patch, configuration option only]: https://marc.info/?l=linux-mm&m=157056583814243
-  [Final patch, default global variable only]: https://marc.info/?l=linux-mm&m=157064677005638
+GaryOS uses dwm for [GUI] with a slightly modified configuration in
+[gentoo/savedconfig/x11-wm/dwm], but does not implement the above patches.
+
+  [First shmem version]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/shmem-add-shmem_size-option-set-filesystem-size.v4.18-rc6.patch
+  [Linux shmem submission v1]: https://marc.info/?l=linux-mm&m=157048756423988
+  [Linux shmem submission v2]: https://marc.info/?l=linux-mm&m=157056583814243
+  [Linux shmem submission v3]: https://marc.info/?l=linux-mm&m=157064677005638
+  [shmem v1 patch]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/shmem-add-shmem_size-option-set-filesystem-size.v5.4-rc2.patch
+  [shmem v2 patch]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/shmem-add-shmem_size-option-for-full-filesystem.v5.4-rc2.patch
+  [shmem v3 patch]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/shmem-make-shmem-default-size-a-define-value.v5.4-rc2.patch
+
   [Funtoo Kits]: https://www.funtoo.org/Funtoo_Kits
-  [DWM multimon patches]: http://dwm.suckless.org/patches/historical/multimon
+  [Funtoo Ego submission]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/add-commit-option-to-ego-sync.2.7.4-r1.patch
 
-  <!-- https://kernel.org/doc/html/latest/process/submitting-patches.html -->
-  <!-- https://kernel.org/doc/html/latest/process/submit-checklist.html -->
-  <!-- https://funtoo.org/Development_Guide -->
+  [dwm multimon patches]: http://dwm.suckless.org/patches/historical/multimon
+  [dwm multimon submission]: https://lists.suckless.org/dev/1403/20488.html
+  [added monitor marker to bar]: https://github.com/garybgenett/.dwm/commit/143e7f2f3caa047469c7219cd6b0cb704466683f
+  [added n*view wrappers, for unified multi-monitor]: https://github.com/garybgenett/.dwm/commit/2521a74714bb7c4b8787f30584f1565cc582928b
+  [added reset_view function]: https://github.com/garybgenett/.dwm/commit/b9f79c3dd07b285e974b2dfdf2371a72467539bb
+  [added statusall toggle, replacing need for patch]: https://github.com/garybgenett/.dwm/commit/d318ffdc7ab7a365e548776a1d8ed5ccbd67cd42
 
 ### Contributing ###############################################################
 [Contributing]: #contributing
