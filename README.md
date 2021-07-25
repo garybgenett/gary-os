@@ -8,7 +8,7 @@
 | Homepage | <https://github.com/garybgenett/gary-os>
 | Download | <https://sourceforge.net/projects/gary-os>
 
-[![GaryOS Download](https://img.shields.io/sourceforge/dm/gary-os.svg)](https://sourceforge.net/projects/gary-os/files/latest/download)
+[![GaryOS Download](https://img.shields.io/sourceforge/dw/gary-os.svg)](https://sourceforge.net/projects/gary-os/files/latest/download)
 
 | [Documentation] | |
 |:---        |:---
