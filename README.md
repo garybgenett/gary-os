@@ -22,7 +22,7 @@
 
 | [Information] | |
 |:---        |:---
-| [Goals]    | [Design]
+| [Goals]    | [Design] / [Builder]
 | [Project]  | [References] / [Contributions] / [Contributing] / [Licensing]
 | [Details]  | [Versioning] / [Repository] / [Tools] / [Ecosystem]
 | [Versions] | [v3.0 2015-03-16] / [v2.0 2014-06-19] / [v1.1 2014-03-13] / [(...)](#v10-2014-02-28)
@@ -1014,6 +1014,104 @@ In the default [Kernel], this all happens seamlessly.  When loading
 a [Filesystem], additional kernel parameters are required (see [Loader]).
 
   [XZ compression]: https://tukaani.org/xz
+
+### Builder ####################################################################
+[Builder]: #builder
+
+Installing source-based [GNU/Linux] systems like [Funtoo] and [Gentoo] involves
+a large number of steps and is very error-prone.  Keeping them up to date is
+equally complex.  GaryOS addresses this by applying a monolithic release model.
+The [Builder] system was developed over many years to accomplish the goal of
+a reliable process that produces repeatable builds.
+
+[Builder] is more of an abstract concept than it is an actual thing, but it is
+most helpful to think of it this way.  [Builder] is the very core of GaryOS.
+
+Type 'make usage' (basic) or 'make help' (advanced) to get started.
+
+**Responsibilities**
+
+  * User interface for the build system
+    * [GNU Make] (usage | help)
+    * [gentoo/_system] -v
+  * [Running]
+    * [Filesystem]
+  * [Building]
+    * [Compile]
+    * [Manage]
+    * [Install]
+
+  | Component             | Purpose
+  |:---                   |:---
+  | [Makefile]            | Wrapper around the other components
+  | [gentoo/_system]      | Worker for all of [Building] (core of [Builder])
+  | [gentoo/_funtoo]      | [Funtoo] [meta-repo] commit tracking
+  | [gentoo/_funtoo.kits] | [Funtoo] [meta-repo] set (see [Contributions])
+  | [gentoo/.emergent]    | Audit script which outputs the '/_gentoo' directory
+  | [gentoo.config]       | Optional customization for 'edit' in [Compile]
+
+**Build Tuning**
+
+The 'SELECT' variable defined in the package set file determines which 'eselect'
+values are set during the build.  There are other variables which do similar
+tuning, and are self-explanatory.  The full list is at the top of
+[gentoo/sets/gary-os].
+
+**Build Output**
+
+A '/_build' directory is created by [Compile], which archives the [Linux Kernel]
+and [Portage] configurations, along with the [stage3] tarball and [meta-repo]
+tree used.  The purpose of this directory is to centralize everything needed to
+reproduce the build.
+
+After [Compile] or [Manage], the '/_gentoo' directory will be created by
+[gentoo/.emergent].  It performs a number of checks of the [Portage]
+configuration and the installed system.  The results are in the
+'/_gentoo/+checks' text file.  This file is very helpful in keeping a Portage
+configuration in line with upstream, particularly the addition or removal of
+'$USE' flags.
+
+The '/_gentoo.log' file is created every [Compile].  It contains the complete
+output of the build, for troubleshooting.  Please include this file when
+reporting any issues (see [Support]).
+
+**Tooling**
+
+Another primary function of [gentoo/_system] is to provide helpful tooling for
+the sometimes arduous process of bringing [Compile] 'init' or 'redo' through to
+a successful build.  [Process] walks through the author's workflow, and has
+examples of these helpers.
+
+Use [gentoo.config] to automate any final build steps with [Compile] 'edit'.  By
+default, it is run inside the 'chroot', so all paths should start from '/'.
+Examples are creating users or making initial configuration changes.  The author
+uses a custom version to make sure important personal steps are not forgotten.
+
+**Colorization**
+
+One final feature of [Builder] is that [Compile] is wrapped with a "colorizer"
+(based on [GoboLinux]), which makes all the output very pretty.
+
+The entire process of compiling a new system is quite a beautiful thing to
+admire.  Sit and watch it sometime, and contemplate how many human hands and
+minds are at work in front of your very eyes.
+
+**References**
+
+References to this section:
+
+  * [Compile]
+    * Init -- Strategies for build breaks
+    * Edit -- [gentoo.config]
+  * [Manage]
+    * Upgrade -- '/_gentoo'
+  * [Design]
+    * General reference -- [Linux Kernel] parameters
+  * [Repository]
+    * Heart and soul  -- [gentoo/_system]
+
+These are to make sure everything is cross-linked, and that this section is
+complete.
 
 --------------------------------------------------------------------------------
 
