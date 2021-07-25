@@ -16,7 +16,7 @@
 | [Documentation] | |
 |:---        |:---
 | [Overview] | [Quick Start] / [Requirements] / [Support]
-| [Booting]  | [Linux] / [Windows] / [GRUB] / [EFI] / [PXE]
+| [Booting]  | [Linux] / [Windows] / [GRUB] / [EFI] / [PXE] / [Virtual]
 | [Running]  | [Uses] / [Networking] / [GUI] / [Update]
 | [Building] | [Install]
 
@@ -290,6 +290,60 @@ be used directly as 'filename' without any other options.
 
 Using [Image] to create modified [Filesystem] images could form the basis of
 a completely automated and centrally managed lab or server farm.
+
+### Virtual ####################################################################
+[Virtual]: #virtual
+
+Using virtualization is is the quickest and easiest way to try out or test
+GaryOS.  On a [GNU/Linux] system, [QEMU] is high-performance and
+low-complexity, and is what the author uses for all development and testing of
+GaryOS (see [Checklist]).  However, it is not well suited for other platforms,
+such as Windows, and [VirtualBox] is the best choice there.  VirtualBox also
+runs on GNU/Linux, if desired.
+
+On systems with only 4GB of memory virtualization will push system resources to
+the limit.  Windows will exhaust them completely.  Using [GRUB] to create a USB
+drive is a better idea in that case.
+
+The instructions below use 3072MB for memory, which is the absolute minimum.
+Ideally, this should be 4096MB or greater to best emulate an actual system which
+meets the [Requirements].
+
+**QEMU**
+
+Use the distribution package manager to install QEMU.  It is available on all
+major distributions, including GaryOS.  Once installed, it is simple to get it
+running.
+
+  ```
+  modprobe kvm_intel
+  qemu-system-x86_64 -m 3072 -kernel gary-os.kernel
+  ```
+
+The [Boot] file has a pre-made QEMU image inside that is already installed with
+[GRUB] and the [Kernel].
+
+  ```
+  qemu-system-x86_64 -m 3072 loopfile.qcow2
+  ```
+
+See [Checklist] for additional information on how QEMU is used in the
+development of GaryOS.
+
+**VirtualBox**
+
+Once [VirtualBox] is installed, create a new virtual machine.
+
+  |                   | |
+  |:---               |:---
+  | Type              | Linux
+  | Version           | Other Linux (64-bit)
+  | Memory            | 3072 (or greater)
+  | Virtual disk file | loopfile.qcow2 (from [Boot] archive)
+
+This new virtual machine will run GaryOS [GRUB] and boot into the [Kernel].
+
+  [VirtualBox]: https://www.virtualbox.org
 
 --------------------------------------------------------------------------------
 
