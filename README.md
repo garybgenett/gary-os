@@ -449,40 +449,47 @@ password should be changed before enabling SSH.
 ### GUI ########################################################################
 [GUI]: #gui
 
-  * Definition:
-    * Start up and use the X.Org GUI environment
-  * Last tested with:
-    * GaryOS v3.0
+GaryOS boots to the command line by default.  To run the [X.org] graphical
+interface, use 'startx'.
 
-GaryOS boots to CLI (Command-Line Interface) by default.  To enter the
-graphical interface, run `startx`.
+  | Utility           | [Kernel]       | [Rootfs]
+  |:---               |:---            |:---
+  | Window manager    | [dwm]          | Includes [Openbox]
+  | Terminal emulator | [rxvt-unicode] | Also the default
+  | Web browser       | [Links]        | Includes [surf] and [Firefox]
 
-The Linux kernel includes driver modules for many common video cards,
-but to keep the size of GaryOS down the X.Org installation only includes
-the VESA driver (which almost all modern video cards support).  If the
-kernel driver for a video card is loaded at boot, it will prevent X.Org
-from taking over.  If you plan to run the graphical interface, use the
-`nomodeset` kernel option when booting to prevent Linux from loading any
-video card drivers.
+The dwm title bar has brief reminders for the shortcuts below.  Use
+'XSESSION=openbox startx' for Openbox instead of dwm.
 
-By default, the DWM window manager is used.  URxvt is the default
-terminal emulator, and Surf is the default browser.  Both are wrapped
-using the Tabbed utility.
+  |                    | |
+  |:---                |:---
+  | GaryOS Readme      | Alt-Left
+  | The dwm man page   | Alt-Right
+  | Command entry      | Alt-p
+  | Terminal emulator  | Alt-Shift-Enter
+  | Web browser        | Alt-Ctrl-Enter
+  | Web browser (surf) | Alt-Shift-Ctrl-Enter
 
-Keyboard shortcuts:
+The surf browser uses the [tabbed] utility for tabbed browsing.  See 'man surf'
+and 'man tabbed' for keyboard commands.  Firefox can be ran by using 'Ctrl-p',
+typing 'firefox' and hitting 'Enter'.
 
-  * Use `ALT-SHIFT-ENTER` to launch terminal emulator.
-  * Use `ALT-CTRL-ENTER` to launch web browser.
+X.org tries to auto-detect the best resolution for the display.  If it does not,
+use the 'xrandr' utility to change it.
 
-More information:
+  ```
+  xrandr --query
+  xrandr --output Virtual-0 --mode 1920x1200
+  ```
 
-  * Read `man dwm` for help on the window manager.
-  * Read `man tabbed` for help on the tabbing utility.
-  * Read `man urxvt` for help on the terminal emulator.
-  * Read `man surf` for help on the web browser.
+These are not the prettiest or most feature-rich applications.  They were
+selected for their lightweight nature and minimal dependencies, along with the
+high geek factor (see [Goals]).
 
-Thanks to the [Suckless](http://suckless.org) team for creating such
-lightweight and useful software.
+  [Openbox]: http://openbox.org
+  [surf]: https://surf.suckless.org
+  [tabbed]: https://tools.suckless.org/tabbed
+  [Firefox]: https://www.mozilla.org/firefox
 
 ### Update #####################################################################
 [Update]: #update
