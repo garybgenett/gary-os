@@ -22,7 +22,7 @@
 
 | [Information] | |
 |:---        |:---
-| [Goals]    |
+| [Goals]    | [Design]
 | [Project]  | [References] / [Contributions] / [Contributing] / [Licensing]
 | [Details]  | [Versioning] / [Repository] / [Tools] / [Ecosystem]
 | [Versions] | [v3.0 2015-03-16] / [v2.0 2014-06-19] / [v1.1 2014-03-13] / [(...)](#v10-2014-02-28)
@@ -975,6 +975,45 @@ Explicit non-goals:
   * Becoming a complete desktop environment
 
 GaryOS will continue to be a [Kernel] and [Builder] above all else.
+
+### Design #####################################################################
+[Design]: #design
+
+GaryOS uses [Linux initramfs] as a root filesystem, when it is only designed for
+minimal environments to load kernel modules, do hardware detection, and perform
+other tasks before mounting an actual root filesystem.  This approach presented
+a few challenges in the early versions of GaryOS.
+
+  * The GaryOS filesystem is a few GB, which was large and slow to boot
+  * [GNU/Linux] packages continue to grow in size and number of dependencies
+  * Repeatedly installing the same packages for a full workstation was tedious
+  * Many sizeable directories were only needed occasionally or not at all
+  * The [Linux Kernel] compression was minimal, with only minor speed gain
+
+The solutions for each of these are somewhat mutually exclusive.
+
+  * [Squashfs] is a compressed filesystem designed for live GNU/Linux systems
+  * [Busybox] and [Coreutils] are enough to find and mount a filesystem image
+  * [XZ compression] of directories, and unpacking at boot or on demand
+
+In GaryOS [v4.0] a comprehensive three-stage [Loader] infrastructure was
+developed, along with a robust, generally usable [Builder] system.
+
+  1. Linux kernel loads and uncompresses the base initramfs into memory
+  2. A minimal environment locates, mounts and boots a [Rootfs]
+  3. XZ compressed directories are unpacked or left archived
+
+This approach provides a number of advantages:
+
+  * Sizeable pre-built root filesystems can be created and used on demand
+  * Large directories are maximally compressed, and can be hosted externally
+  * Basic package management for selectively used directories
+  * Boot time is minimized, with better progress output
+
+In the default [Kernel], this all happens seamlessly.  When loading
+a [Filesystem], additional kernel parameters are required (see [Loader]).
+
+  [XZ compression]: https://tukaani.org/xz
 
 --------------------------------------------------------------------------------
 
