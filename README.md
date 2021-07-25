@@ -17,7 +17,7 @@
 |:---        |:---
 | [Overview] | [Quick Start] / [Requirements] / [Support]
 | [Booting]  | [Linux] / [Windows] / [GRUB] / [EFI] / [PXE] / [Virtual]
-| [Running]  | [Uses] / [Networking] / [GUI] / [Update]
+| [Running]  | [Networking] / [GUI] / [Update]
 | [Building] | [Install]
 
 | [Information] | |
@@ -365,25 +365,6 @@ hard drives or partitions.  This is for security, rescue and forensics.
 
 See [Support] if you wish to share any creative uses for GaryOS that you come up
 with.
-
-### Uses #######################################################################
-[Uses]: #uses
-
-  * Definition:
-    * Boot into a completely "clean" environment, so that diagnostics
-      and/or recovery can be done in a read-only manner.
-  * Last tested with:
-    * GaryOS v3.0
-
-GaryOS is in a forensics mode by default.  Hardware scanning is
-performed, but the hard drives are not mounted or otherwise touched.
-All entries in `/etc/fstab` have been commented out.  As a result, swap
-is also disabled.
-
-Linux kernel options can further be used to disable hardware scanning
-and interrogation.
-
-It is a stated goal that forensics mode continue being the default.
 
 ### Networking #################################################################
 [Networking]: #networking
