@@ -1225,6 +1225,22 @@ complete.
 ## Project #####################################################################
 [Project]: #project
 
+The project is not named GaryOS out of any delusions of grandeur or egomania.
+It was coined years before its public birth by a pair of good friends who jested
+at the amount of time and effort spent tuning and customizing a computing
+environment.  The author's workstation was jokingly called "Gary OS".
+
+GaryOS as it is today is the organic evolution of that long-ago workstation into
+the public project it has become.  It is produced directly from the same build
+the author uses on their personal system.  In all ways, it **IS** Gary's OS.
+
+That said, the name is meant to be humorously, ironically self-deprecating.
+GaryOS would not be possible if not for the incalculable, invaluable
+contributions of countless developers and enthusiasts worldwide over the course
+of many decades (as far back as the 1970s).  It is the author's hope that this
+small contribution to the universe of open source software is valuable to
+someone other than themself.
+
 ### References #################################################################
 [References]: #references
 
