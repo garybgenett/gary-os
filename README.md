@@ -494,56 +494,63 @@ high geek factor (see [Goals]).
 ### Update #####################################################################
 [Update]: #update
 
-  * Definition:
-    * Update/install packages using Funtoo tools.
-  * Last tested with:
-    * GaryOS v3.0, with 8GB memory
+GaryOS is essentially a packaged [Funtoo] system, and can be updated or modified
+just like a normal installation.
 
-A complete Funtoo environment is available.  In order to install/update
-packages, a couple of missing items need to be put into place.  A surprising
-number of packages can be installed without filling up the in-memory
-filesystem.
+  1. Set up [Networking]
+  2. Increase the size of the filesystem
+  3. Use 'make unpack' to install necessary directories
+  4. Do whatever [Portage] 'emerge' or other commands that are desired
 
-Instructions for setting up update/install of packages:
+It is important to note that 'make unpack' should not be run after making
+updates to the system, since it may remove or replace added files.
 
-  1. Install "portage" tree.
-     * **Option 1:** Synchronize tree as usual.
-         * `emerge --sync`
-     * **Option 2:** Download `portage-*` archive from one of the `v#.#`
-       version download directories; preferably from the one which
-       matches your version of GaryOS.  This option is best if you plan
-       to keep this file on the same media along side the GaryOS kernel
-       file(s).  To extract:
-         * `tar -pvvxJ -C /usr -f portage-[...].tar.xz`
-     * Generally speaking, "Option 1" is a smaller/faster download than
-       "Option 2".  However, "Option 2" has the benefit of offline
-       access, and may be simpler to update from since it is at the same
-       revision of the tree that was used to build that version of
-       GaryOS.
-  2. Perform minor hacks to get working in a RAMdisk environment.  These
-     should **NOT** be done if planning to install to disk per the
-     [Installation] section below.  They essentially disable available
-     space checks, since the "portage" scripts expect to be using
-     a physical disk.  Commands to run:
-     * ...
+**Increase Filesystem Size**
 
-        ```
-        sed -i "s%has_space = False%has_space = True%g" \
-            /usr/lib/portage/pym/portage/package/ebuild/fetch.py
-        ```
-     * `alias emerge="I_KNOW_WHAT_I_AM_DOING=true emerge"`
-         * For details, see `"There is NOT at least"` in
-           `/usr/portage/eclass/check-reqs.eclass`
-  3. Make desired edits to `/etc/portage` configuration.
-     * In particular, to complete configuration of the X.Org GUI the
-       `INPUT_DEVICES` and `VIDEO_CARDS` variables should be properly
-       configured.
-     * Starting with `bindist`, there is a list of negated `-*` options
-       at the end of the `USE` list which are necessary to build GaryOS
-       via Metro.  All of these can/should be removed to get the full
-       non-Metro configuration.
-  4. Use all "portage" commands as usual.
-     * e.g. `emerge firefox`
+The default size of the filesystem includes a minimal amount of additional
+space, but not enough to unpack the directories and make other updates.
+
+  ```
+  mount -o remount,size=6144m /.overlay
+  df -h /.overlay
+  ```
+
+Replace '6144' with the amount of MB to allocate.  This may also be specified
+as '6g' for GB.  GaryOS is tested with 6GB, to ensure this works with systems
+that have 8GB of memory.
+
+**Upack Directories**
+
+GaryOS has a basic, self-documented, packages-like system for fetching and
+unpacking additional directories (see [Design]).
+
+  ```
+  cd /.gary-os
+  nano /.unpack
+  make unpack
+  ```
+
+Nano is a basic, user-friendly text editor.  The author uses [Vim], so that
+option is also available.  The syntax to use is documented in the file.  For
+this, just remove the first character from all the 'gcc' and 'emerge' lines
+(except for 'meta-repo.git').
+
+**Emerge**
+
+At this point, GaryOS is like any other Funtoo installation.  The 'emerge'
+command can be used to install and update packages as usual.
+
+  ```
+  emerge app-misc/hello
+  ```
+
+Be mindful of how much is being installed compared to available memory.  Each
+package will collect source distribution files, require filesystem space for
+building, install new files, and generate a binary package file.  It can add up
+fast.
+
+If a large number of packages are required, building an [Image] of an updated
+[Filesystem] or doing an [Install] are good alternatives.
 
 --------------------------------------------------------------------------------
 
