@@ -18,7 +18,7 @@
 | [Overview] | [Quick Start] / [Requirements] / [Support]
 | [Booting]  | [Linux] / [Windows] / [GRUB] / [EFI] / [PXE] / [Virtual]
 | [Running]  | [Networking] / [GUI] / [Update] / [Filesystem]
-| [Building] | [Compile] / [Install]
+| [Building] | [Compile] / [Manage] / [Install]
 
 | [Information] | |
 |:---        |:---
@@ -705,6 +705,35 @@ desired.
 
   [stage3]: https://wiki.gentoo.org/wiki/Stage_tarball
   [GRUB Quick Start]: https://wiki.gentoo.org/wiki/GRUB2_Quick_Start
+
+### Manage #####################################################################
+[Manage]: #manage
+
+The GaryOS [Builder] is designed to support the "rolling release" model of
+source-based distributions, where the system is more or less constantly being
+updated and built.  Its original and ongoing purpose is to do exactly that.  It
+supports all [Funtoo] systems, regardless of how they were installed.
+
+  * [Install] from GaryOS
+  * Direct [Compile] into a partition
+  * Using the [Funtoo Installation Guide]
+
+There are a lot of steps and miscellaneous tasks that are best practice to keep
+a Funtoo (or [Gentoo]) system in good working order.  Over time, it is also
+inevitable that the [Portage] configuration will acquire cruft or not be using
+new options that are available.  GaryOS [Builder] condenses all this into
+a simple two-step process.
+
+  | Target  | Action
+  |:---     |:---
+  | update  | Update the [meta-repo] package repository and 'emerge' databases
+  | upgrade | Upgrade the system to the current packages and configuration
+
+The 'upgrade' target is completely automated, but 'upgrade' requires interaction
+at various steps to accept updates or confirm configuration file changes.
+
+At the end of 'upgrade', the '/_gentoo' directory is updated with information to
+aid in the maintenance of a healthy system.  See [Builder] for details.
 
 ### Install ####################################################################
 [Install]: #install
