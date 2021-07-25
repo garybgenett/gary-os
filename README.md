@@ -18,7 +18,7 @@
 | [Overview] | [Quick Start] / [Requirements] / [Support]
 | [Booting]  | [Linux] / [Windows] / [GRUB] / [EFI] / [PXE] / [Virtual]
 | [Running]  | [Networking] / [GUI] / [Update] / [Filesystem]
-| [Building] | [Compile] / [Manage] / [Install]
+| [Building] | [Compile] / [Manage] / [Image] / [Install]
 
 | [Information] | |
 |:---        |:---
@@ -734,6 +734,70 @@ at various steps to accept updates or confirm configuration file changes.
 
 At the end of 'upgrade', the '/_gentoo' directory is updated with information to
 aid in the maintenance of a healthy system.  See [Builder] for details.
+
+### Image ######################################################################
+[Image]: #image
+
+This is the process of creating new [Filesystem] images.  It requires
+a directory installed with GaryOS (or any [Funtoo] or [Gentoo]).  There are
+multiple sources where this can come from.
+
+  * Within GaryOS itself ([Update])
+  * GaryOS [Install]
+  * [Compile] directory
+  * Funtoo system built with the [Funtoo Installation Guide]
+
+There are two key requirements of the final image for it to work correctly.
+
+  1. That '/init' is an executable location for the startup process
+  2. Has the same [Linux Kernel] version (the '/lib*/modules' directory)
+
+[Image] tries to handle the first automatically.  Verify this, and be mindful of
+the second if the source directory is updated (such as [Compile]).
+
+It may be important to review the package file that will be used.  There are
+GaryOS variables in them which control portions of this process, such as which
+directories to package, archive or exclude and what 'rc-update' or other
+commands should be run to tailor the image filesystem (see [Loader]).  The
+defaults in [gentoo/sets/gary-os] should be reasonable.  A more complete
+configuration is in [gentoo/sets/_gary-os].
+
+  ```
+  make rootfs
+  make P=_gary-os rootfs
+  ls -adl build/.gary-os-*/*.rootfs*
+  ```
+
+It is also possible to directly build a customized [Kernel], so that the
+two-stage [Filesystem] process is not needed.
+
+  ```
+  make release
+  ls -adl build/.gary-os-*/*.kernel*
+  ```
+
+This method is a little more involved, since it creates an image and then
+compiles it into the Linux kernel.  There may also be unexpected issues when
+trying to boot a kernel with a very large [Linux initramfs] (anything bigger
+than the GaryOS [Kernel] is untested).
+
+Both will skip portions of the build if there are already output files present,
+including the final image or kernel.  This is sometimes desired when iterating,
+to avoid doing the same time-consuming steps repeatedly.  However, it can be
+problematic when the intention is to implement changes.
+
+  ```
+  make clean
+  make DOREDO=true rootfs
+  make DOREDO=true release
+  ```
+
+The 'clean' target will completely remove all GaryOS output files, restoring the
+'build' directory to its original state.  This includes all image files and
+kernels, along will all their supporting files.  The 'DOREDO' variable is
+specific to each target, and only rebuilds files for that target.  For 'release'
+this is the same as 'clean', so 'rootfs' files should be copied elsewhere if
+they need to be kept.
 
 ### Install ####################################################################
 [Install]: #install
