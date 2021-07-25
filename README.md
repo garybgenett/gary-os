@@ -2,7 +2,6 @@
 
 --------------------------------------------------------------------------------
 
-
 | ![GaryOS Icon](artifacts/images/icon.png "GaryOS Icon") | "The one file that does it all."
 |:---      |:---
 | Latest   | [v3.0 2015-03-16] -- [64-bit] / [32-bit] / [Boot]
@@ -10,8 +9,6 @@
 | Download | <https://sourceforge.net/projects/gary-os>
 
 [![GaryOS Download](https://img.shields.io/sourceforge/dm/gary-os.svg)](https://sourceforge.net/projects/gary-os/files/latest/download)
-
---------------------------------------------------------------------------------
 
 | [Documentation] | |
 |:---        |:---
