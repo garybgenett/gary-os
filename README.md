@@ -4,7 +4,7 @@
 
 | ![GaryOS Icon](artifacts/images/icon.png "GaryOS Icon") | "The one file that does it all."
 |:---      |:---
-| Latest   | [v4.0 2021-07-25] -- [Kernel] / [Rootfs] / [Boot]
+| Latest   | [v4.0 2021-07-26] -- [Kernel] / [Rootfs] / [Boot]
 | Homepage | <https://github.com/garybgenett/gary-os>
 | Download | <https://sourceforge.net/projects/gary-os>
 
@@ -23,7 +23,7 @@
 | [Project]  | [References] / [Contributions] / [Contributing] / [Licensing]
 | [Details]  | [Versioning] / [Repository] / [Tools] / [Ecosystem]
 | [Release]  | [Process] / [Checklist]
-| [Versions] | [v4.0 2021-07-25] / [v3.0 2015-03-16] / [v2.0 2014-06-19] / [(...)](#v11-2014-03-13)
+| [Versions] | [v4.0 2021-07-26] / [v3.0 2015-03-16] / [v2.0 2014-06-19] / [(...)](#v11-2014-03-13)
 
 [Gary B. Genett]: http://www.garybgenett.net
 [gary-os@garybgenett.net]: mailto:gary-os@garybgenett.net?subject=GaryOS%20Submission&body=Thank%20you%20for%20sending%20a%20message%21
@@ -1723,9 +1723,9 @@ In progress for v5.0...
 [Rootfs]: https://sourceforge.net/projects/gary-os/files/gary-os-v4.0-generic_64.rootfs
 [Boot]: https://sourceforge.net/projects/gary-os/files/gary-os-v4.0-generic_64.grub.zip
 
-### v4.0 2021-07-25 ############################################################
-[v4.0 2021-07-25]: #v40-2021-07-25
-[v4.0]: #v40-2021-07-25
+### v4.0 2021-07-26 ############################################################
+[v4.0 2021-07-26]: #v40-2021-07-26
+[v4.0]: #v40-2021-07-26
 
   **[Repository](https://github.com/garybgenett/gary-os/tree/v4.0)
   / [Readme](https://github.com/garybgenett/gary-os/blob/v4.0/README.md)
