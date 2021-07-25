@@ -1552,36 +1552,67 @@ will require re-cloning.
 ### Tools ######################################################################
 [Tools]: #tools
 
-This is a list of the primary tools and sites which are used to build and
-distribute GaryOS.  Additional honorable mentions are in [Ecosystem].
+GaryOS relies on too many open source projects to count (see [Project]).
+However, there are a few primary tools and sites which are used to build and
+distribute GaryOS.  An additional list of secondary items is in [Ecosystem].
 
-First and foremost, the projects which brought opensource into the mainstream
-need to be recognized:
+First and foremost, the projects which brought open source into the mainstream:
 
-  * GNU (GNU's Not Unix): <https://gnu.org>
-  * GNU/Linux: <https://gnu.org/gnu/linux-and-gnu.html>
-  * Linux: <https://linuxfoundation.org> -- <https://kernel.org>
+  * [FSF] & [GNU] (GNU's Not Unix)
+  * [Linux Foundation] & [Linux Kernel]
+  * [GNU/Linux]
 
-All the real heavy-lifting is accomplished using these tools/projects:
+  [FSF]: https://www.fsf.org
+  [GNU]: https://www.gnu.org
+  [Linux Foundation]: https://linuxfoundation.org
+  [Linux Kernel]: https://kernel.org
+  [GNU/Linux]: https://gnu.org/gnu/linux-and-gnu.html
 
-  * Funtoo & Ego: <https://funtoo.org> -- <https://funtoo.org/Package:Ego>
-  * Gentoo & Portage: <https://gentoo.org> -- <https://wiki.gentoo.org/wiki/Portage>
-  * Linux initramfs: <https://kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt>
-  * GNU GRUB: <https://gnu.org/software/grub>
+The backbones which do the real heavy lifting in GaryOS:
 
-Kernel configuration, package lists and acknowledgments to:
+  * [Funtoo] [Ego] & [meta-repo]
+  * [Gentoo] & [Portage]
+  * [Linux initramfs]
+    * [Squashfs]
+    * [Busybox]
+    * [Coreutils]
+  * [GNU GRUB]
+  * [GNU Make]
+  * [QEMU]
 
-  * Grml: <https://grml.org>
-  * SystemRescueCd: <http://www.system-rescue-cd.org>
+  [Funtoo]: https://www.funtoo.org
+  [Ego]: https://funtoo.org/Package:Ego
+  [meta-repo]: https://github.com/funtoo/meta-repo
+  [Gentoo]: https://www.gentoo.org
+  [Portage]: https://wiki.gentoo.org/wiki/Portage
+  [Linux initramfs]: https://kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt
+  [Squashfs]: https://www.kernel.org/doc/html/latest/filesystems/squashfs.html
+  [Busybox]: https://busybox.net
+  [Coreutils]: https://www.gnu.org/software/coreutils/coreutils.html
+  [GNU GRUB]: https://gnu.org/software/grub
+  [GNU Make]: https://www.gnu.org/software/make
+  [QEMU]: https://www.qemu.org
+
+Kernel configuration, package lists and acknowledgments:
+
+  * [Grml]
+  * [SystemRescue]
+
+  [Grml]: https://grml.org
+  [SystemRescue]: http://www.system-rescue.org
 
 Special thanks to the sites which made worldwide distribution possible:
 
-  * SourceForge: <https://sourceforge.net>
-  * GitHub: <https://github.com>
+  * [SourceForge]
+  * [GitHub] & [Git]
 
-GitHub was instrumental in inspiring the author to publish this project, but
-SourceForge provided the distribution platform which made it possible to reach
-an international audience overnight.
+  [SourceForge]: https://sourceforge.net
+  [GitHub]: https://github.com
+  [Git]: https://git-scm.com
+
+GitHub inspired the initial publication of this project, and SourceForge
+provided the distribution platform that made it possible to instantly reach an
+international audience.
 
 ### Ecosystem ##################################################################
 [Ecosystem]: #ecosystem
