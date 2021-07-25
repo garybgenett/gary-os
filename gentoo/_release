@@ -320,8 +320,6 @@ ${_GOVLY}
 ${_GUNPK}
 ${_GINST}
 \
-/${_GPACK/%.txt}*
-\
 ${ARCDIR}*
 ${GENDIR}*
 "
@@ -427,7 +425,7 @@ function common_packdirs_list {
 function _release_reset {		#{ismain}
 	${RM} ${TARGET}/.gitignore			|| return 1
 	${RM} ${TARGET}/${CMTFIL}			|| return 1
-	${RM} ${TARGET}/${_GPACK/%.txt}*		|| return 1
+	${RM} ${TARGET}/.${_GPACK/%.txt}*		|| return 1
 	if [[ -n ${TARGET} ]]; then
 		${RM} ${TARGET}/.${_TITLE}*		|| return 1
 		${RM} ${TARGET}/_${_TITLE}*		|| return 1
@@ -599,9 +597,6 @@ function prepare_config_issue {
 		FILE+="PLEASE NOTE THAT THIS BUILD HAS BEEN CUSTOMIZED AND IS NOT AN OFFICIAL RELEASE"
 		FILE+="\\\e[0;37m"
 		${SED} -i "/Some helpful notes/,/Build system/c\\${FILE}"	${TARGET}/etc/issue	|| return 1
-	fi
-	if ${ROOTFS_CUST}; then
-		${SED} -i "s|${_GPACK}|${_GPACK/%.txt/.${ROOTFS_NAME}.txt}|g"	${TARGET}/etc/issue	|| return 1
 	fi
 	if [[ ! -f ${TARGET}/usr/bin/startx ]]; then
 		${SED} -i "/startx/d"						${TARGET}/etc/issue	|| return 1
@@ -909,15 +904,10 @@ function _prepare_packdirs {		#{isexit} #{doredo}
 ########################################
 
 function _prepare_packages {
-	declare PACK_FILE="${_GPACK}"
-	if ${ROOTFS_CUST}; then
-		PACK_FILE="${_GPACK/%.txt/.${ROOTFS_NAME}.txt}"
-	fi
 	if [[ -z ${TARGET} ]]; then
-		${RM} ${TARGET}/${PACK_FILE}								|| return 1
 		return 0
 	fi
-	cat /dev/null >${TARGET}/${PACK_FILE}								|| return 1
+	cat /dev/null >${TARGET}/.${_GPACK}								|| return 1
 	for FILE in $(
 		cd ${TARGET}${PAKDIR}									&&
 		find ./ -mindepth 2 -maxdepth 2 -type f							|
@@ -927,11 +917,17 @@ function _prepare_packages {
 		declare PKG_DB="$(cd ${TARGET}${PDBDIR} && ${LS} -d ${FILE/%.tbz2}	2>/dev/null)"	|| return 1
 		declare PKG_DU="$(cd ${TARGET}${PAKDIR} && ${DU} -ks ${FILE}		2>/dev/null)"	|| return 1
 		if [[ -n ${PKG_DB} ]]; then
-			echo -en "${PKG_DU} (installed)\n"	| tee -a ${TARGET}/${PACK_FILE}		|| return 1
+			echo -en "${PKG_DU} (installed)\n"	| tee -a ${TARGET}/.${_GPACK}		|| return 1
 		else
-			echo -en "${PKG_DU} (packaged)\n"	| tee -a ${TARGET}/${PACK_FILE}		|| return 1
+			echo -en "${PKG_DU} (packaged)\n"	| tee -a ${TARGET}/.${_GPACK}		|| return 1
 		fi
 	done
+	declare PACK_FILE="${_RAMFS}.kernel.${_GPACK}"
+	if ${ROOTFS_CUST}; then
+		PACK_FILE="${_RAMFS}.rootfs.${_GPACK}"
+	fi
+	${MKDIR}			${_FINAL}							|| return 1
+	${RSYNC_U} ${TARGET}/.${_GPACK}	${PACK_FILE}							|| return 1
 	return 0
 }
 
@@ -954,8 +950,8 @@ function _prepare_symlinks {		#{isexit} #{doredo}
 	fi
 	${MKDIR} ${_FINAL}												|| return 1
 	${LN} --relative ${TARGET}/.${_TITLE}/README.md			${_RAMFS}.${_GREAD}				|| return 1
-	${LN} --relative ${TARGET}/${_GPACK}				${_RAMFS}.kernel.${_GPACK}			|| return 1
-	${LN} --relative ${TARGET}/${_GPACK/%.txt/.${ROOTFS_NAME}.txt}	${_RAMFS}.${ROOTFS_NAME}.${_GPACK}		|| return 1
+	${LN} --relative ${_RAMFS}.kernel.${_GPACK}			${_FINAL}/${_GPACK}				|| return 1
+	${LN} --relative ${_RAMFS}.rootfs.${_GPACK}			${_FINAL}/${_GPACK/%.txt/.${ROOTFS_NAME}.txt}	|| return 1
 	${LN} --relative ${TARGET}${DSTDIR}				${_FINAL}/_$(basename ${DSTDIR})		|| return 1
 	${LN} --relative ${TARGET}${PAKDIR}				${_FINAL}/_$(basename ${PAKDIR})		|| return 1
 	${LN} --relative ${TARGET}${ARCDIR}/${REP_FILE}.tar.xz		${_RAMFS}.${REP_FILE}.tar.xz			|| return 1
@@ -1802,6 +1798,7 @@ function release_install_root {
 		--filter="-_${_GOVLY}" \
 		--filter="-_${_GUNPK}" \
 		--filter="-_${_GINST}" \
+		--filter="-_/.${_GPACK/%.txt}*" \
 		$(variable_parse SKIPDIRS_GOS	"" "--filter=\"-_" "\"") \
 		$(variable_parse DEVDIRS	"" "--filter=\"-_" "/*\"") \
 		${TARGET}/	${_GINST}	|| return 1
@@ -1897,6 +1894,7 @@ function _publish_prep {
 	variable_parse DEVDIRS "" "" "/"	>${TARGET}/.gitignore			|| return 1
 	sort -u -o ${TARGET}/.gitignore		${TARGET}/.gitignore			|| return 1
 	${SED} -i "/^$/d"			${TARGET}/.gitignore			|| return 1
+	${RM}					${TARGET}/.${_GPACK/%.txt}*		|| return 1
 	${RM}					${CPIO_FILE}				|| return 1
 	${RM}					${CPIO_FILE}.dir			|| return 1
 	${RM}					${CPIO_FILE}.${ROOTFS_NAME}		|| return 1
@@ -1966,7 +1964,7 @@ function _publish_gitdir {		#{ismain}
 	SAVE_FILES+="^_config\*"
 	SAVE_FILES+="^_packages\*"
 	SAVE_FILES+="^${CMTFIL}"
-	SAVE_FILES+="^${_GPACK/%.txt}*"
+	SAVE_FILES+="^${_GPACK/%.txt}\*"
 	declare SETUP_FILES=
 	SETUP_FILES+="^gentoo"
 	SETUP_FILES+="^linux"
