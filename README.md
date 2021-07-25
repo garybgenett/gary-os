@@ -190,31 +190,32 @@ Steps for creating the bootable USB drive are in [GRUB].
 ### GRUB #######################################################################
 [GRUB]: #grub
 
-The GaryOS [Boot] file contains everything needed to create/update GRUB on both
-hard drives and USB drives.  The core of the tooling is the [scripts/grub.sh]
-script.
+The GaryOS [Boot] file contains everything needed to create and update GRUB on
+both hard drives and USB drives.  The core of the tooling is the
+[scripts/grub.sh] script.
 
 Once a drive has been set up, place the GaryOS [Kernel] in the 'gary-os'
-directory as 'gary-os.kernel'.  You can also place it in the 'gary-os.custom'
-directory and edit the 'gary-os.grub.cfg' in that directory to suit your needs.
+directory as 'gary-os.kernel'.  The 'gary-os.grub.cfg' file can also be placed
+in that directory and edited as needed.
 
-The drive can booted using the BIOS or EFI boot menu on any computer that
+The drive can be booted using the BIOS or EFI boot menu on any computer that
 supports booting from removeable media.  It provides a menu which auto-selects
 the most advanced option available.  This menu can be updated at any time using
-the [scripts/grub.sh] script within GaryOS, following the directions in "Linux"
-below.
+the [scripts/grub.sh] script within GaryOS, following the directions in
+"GNU/Linux" below.
 
 **GNU/Linux**
 
-The 'grub.sh' script can be run directly from the command line.  Running it
-without any arguments will display the usage documentation.  The latest version
-is always [scripts/grub.sh].  However, the version in the [Boot] file is going
-to be better tested and supported.
+The [scripts/grub.sh] script can be run directly from the command line.  Running
+it without any arguments will display the usage documentation.  The latest
+version is always [scripts/grub.sh].  However, the version in the [Boot] file is
+going to be better tested and supported.
 
 Be advised that this script creates a brand new partition table on whatever
-drive is targeted.  Only use this on a brand new or empty device.  The
-update option should only be used on drives that were created by the script, or
-that have a matching partition table layout.
+drive is targeted.  Only use this on a brand new or empty device.  The update
+option should only be used on drives that were created by the script or that
+have a matching partition table layout.  Only the partition numbers and types
+need to match.
 
   | Partition | Start Sector | End Sector | Size       | Code | Name
   |---:       |---:          |---:        |---:        |---:  |:---
@@ -228,11 +229,12 @@ similar output.
 **Windows**
 
 These instructions are tested on Windows 10, but should work just fine on
-anything Windows 7 or later.
+anything Windows 7 or later.  They use [Rufus] to install the [GRUB] image onto
+a USB drive.
 
   1. Insert a new or empty USB drive at least 4GB in size
   2. Download the [Boot] archive, right click and 'Extract'
-  3. Double-click 'rufus.exe', click allow, and decline updates
+  3. Double-click 'rufus*.exe', click allow, and decline updates
      1. Show advanced properties and check 'USB Drives'
      2. For 'Device', select the USB drive
      3. For 'Boot Selection', use the large 'Select' button and 'loopfile.img'
@@ -249,8 +251,8 @@ anything Windows 7 or later.
 
 There will be a new drive letter available in 'My Computer', but it will be
 empty.  Create the 'gary-os' directory and add the 'gary-os.kernel' as
-described at the at the beginning of the section ([GRUB]).  The
-'gary-os.custom' instructions are also supported.
+described at the at the beginning of [GRUB].  The 'gary-os.grub.cfg'
+instructions are also supported.
 
 ### EFI ########################################################################
 [EFI]: #efi
