@@ -1399,52 +1399,32 @@ like these.
 Starting with [v4.0], GaryOS is released under the [GNU GPL v3.0].  It was
 originally released under a [BSD-style license].
 
-The author and contributors do not offer any warranty, and you take all
-responsibility for your use of this software.
+The [FSF] and [GNU] projects are dedicated to a completely open society based
+on open source computing.  The GPL is a manifesto as much as it is a license.
 
-**Licensing**
+The [BSD] philosophy is that BSD-style licenses are yet more permissive and
+foster the innovation of new technologies by allowing them to be driven by
+profit.
 
-The author shares the same passion as the GNU project for a completely open
-society based on open computing platforms.  The GPL license is a very profound
-statement to those ends.
+The original intent was to support the BSD philosophy.  Switching to the GPL was
+predicated by a few factors.
 
-However, there is also the philosophy that BSD-style licenses are yet more
-permissive, and support innovation in the for-profit markets of our current
-world.  The author's intent was to support this philosophy.
+  * The perspective that code is a written work of art and not a product
+  * Proliferation of software patents and intellectual property enforcement
+  * GaryOS is written entirely in interpreted and not compiled languages
+  * It is unlikely that any proprietary software will be based on GaryOS
+  * Patches are sometimes submitted to GPL projects (see [Contributions])
 
-The switch was made for three reasons:
+For further details, see the current [License] or the licenses for the
+individual [Versions].
 
-  1. After reviewing and considering closely the implications of each license,
-     the decision was made to essentially switch the support in philosphy.  With
-     intellectual property protections for source code, instead of copyrights as
-     written works, in addition to software patents and the legal enforcement of
-     both, the author reverted back to the "free and open society" mindset which
-     first inspired his entry into the opensource world and GNU/Linux.
-  2. With the [v4.0] release, patches were provided publicly to GPL licensed
-     projects (see the [Contributions] section), namely the Linux kernel and
-     the Funtoo distribution.  A compatible license was necessary for these
-     components, and it was easier to just switch the overall license.
-  3. Since the majority of the project is based on interpreted scripting
-     languages, which are not compiled source, a BSD license no longer made
-     sense.  It is also highly unlikely that any proprietary software will
-     incorporate any aspect of this project.
-
-For further details, see the current [License] and/or the licenses for each
-release in the [Versions] section.
-
-**Disclaimer**
-
-Please note that both these licenses include disclaimer of warranty and
-limitation of liability statements.  The statements in the licenses are the
-final word on those subjects, but are summarized here as: use this software at
-your own risk, because if it breaks you own all the pieces.  This is unlikely,
-but the author and any contributors need to indemnify themselves.
-
-Similar to the [Contributing] section, Hopefully we can dispense with the need
-for documents and statements like these someday.
+The author and contributors do not offer any warranty.  You take all
+responsibility for your use of this software.  If it breaks, you own all the
+pieces.
 
   [GNU GPL v3.0]: https://www.gnu.org/licenses/gpl-3.0.html
   [BSD-style license]: http://opensource.org/licenses/BSD-3-Clause
+  [BSD]: https://en.wikipedia.org/wiki/Berkeley_Software_Distribution
 
 --------------------------------------------------------------------------------
 
