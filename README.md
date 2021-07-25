@@ -1362,33 +1362,36 @@ GaryOS uses dwm for [GUI] with a slightly modified configuration in
 ### Contributing ###############################################################
 [Contributing]: #contributing
 
-This is very much a personal project, but any contributions are welcome and
-will be publicly acknowledged.  For the time being, the best way is to submit
-patches using the information in [Support].  Submissions should include the
-commit hash used to create the patch.
+Contributions are welcome and will be publicly acknowledged.
 
-For best results, use the `git format-patch` command.  Bonus points for using
-the pre-made function in the "[.bashrc]" file in the repository, like so:
+**Patches**
 
-  * `[...]/.bashrc git-patch [...]`
+To create patches there is a function in [.bashrc].  Submit patches to
+[gary-os@garybgenett.net].
 
-The author is passionate about who you are, your ideas and what you manifest in
-the world.  All other attributes and circumstances are irrelevant
-considerations here.  We are all just human beings.
+  ```
+  ./.bashrc git-patch <parent commit>
+  ```
 
-It seems to be a current trend that opensource projects are adopting equality
-and conduct statements.  These are the two best documents the author could
-find, the latter of which was suggested by GitHub, which in turn inspired an
-Internet search to find the former:
+The parent commit should be the last commit hash before your changes.  This will
+create '####-*' patch files for each commit since the parent.  Email them as
+attachments.  [GitHub] pull requests or links to commits in a cloned repository
+also work.
+
+**Inclusivity**
+
+The author is passionate about who you are, your ideas, what you manifest, and
+how you carry yourself in the world.  Come as you are.  We are all just human
+beings.
 
   * [Social Protection & Human Rights Equality and Non-discrimination]
   * [Contributor Covenant Code of Conduct]
 
+Let's all just be kind to one another, so we someday won't even need documents
+like these.
+
   [Social Protection & Human Rights Equality and Non-discrimination]: https://socialprotection-humanrights.org/framework/principles/equality-and-non-discrimination
   [Contributor Covenant Code of Conduct]: https://contributor-covenant.org/version/1/4/code-of-conduct.html
-
-Hopefully that covers all the bases.  Let's all just be kind to one another, so
-we don't even need documents like these.
 
 ### Licensing ##################################################################
 [Licensing]: #licensing
