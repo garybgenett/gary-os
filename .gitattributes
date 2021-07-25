@@ -12,6 +12,7 @@ gentoo/overlay/**			linguist-vendored
 gentoo/savedconfig/**			linguist-vendored
 linux/**				linguist-vendored
 
+.vimrc					linguist-vendored
 artifacts/files/initrc			linguist-language=shell
 
 ################################################################################
