@@ -17,14 +17,14 @@
 |:---        |:---
 | [Overview] | [Quick Start] / [Requirements] / [Support]
 | [Booting]  | [Linux] / [Windows] / [GRUB] / [EFI] / [PXE]
-| [Running]  | [Uses] / [Networking] / [GUI]
-| [Building] | [Update] / [Install]
+| [Running]  | [Uses] / [Networking] / [GUI] / [Update]
+| [Building] | [Install]
 
 | [Information] | |
 |:---        |:---
-| [Project]  | [References] / [Contributions] / [Contributing] / [Licensing]
 | [Goals]    | [Advantages] / [Limitations] / [History]
-| [Details]  | [Versioning] / [Structure] / [Tools] / [Ecosystem]
+| [Project]  | [References] / [Contributions] / [Contributing] / [Licensing]
+| [Details]  | [Versioning] / [Repository] / [Tools] / [Ecosystem]
 | [Versions] | [v3.0 2015-03-16] / [v2.0 2014-06-19] / [v1.1 2014-03-13] / [(...)](#v10-2014-02-28)
 
 [Gary B. Genett]: http://www.garybgenett.net
@@ -390,18 +390,6 @@ More information:
 Thanks to the [Suckless](http://suckless.org) team for creating such
 lightweight and useful software.
 
---------------------------------------------------------------------------------
-
-## Building ####################################################################
-[Building]: #building
-
-In addition to being a live GNU/Linux system, GaryOS is also the build system
-used to produce itself.  The system can also be used to create new installations
-from scratch, or install GaryOS directly from memory to disk.
-
-Another important feature is the ability to update the system while it is
-running live, including installing new packages.
-
 ### Update #####################################################################
 [Update]: #update
 
@@ -456,6 +444,18 @@ Instructions for setting up update/install of packages:
   4. Use all "portage" commands as usual.
      * e.g. `emerge firefox`
 
+--------------------------------------------------------------------------------
+
+## Building ####################################################################
+[Building]: #building
+
+In addition to being a live GNU/Linux system, GaryOS is also the build system
+used to produce itself.  The system can also be used to create new installations
+from scratch, or install GaryOS directly from memory to disk.
+
+Another important feature is the ability to update the system while it is
+running live, including installing new packages.
+
 ### Install ####################################################################
 [Install]: #install
 
@@ -504,6 +504,184 @@ Instructions for installing to disk:
 
 # Information ##################################################################
 [Information]: #information
+
+--------------------------------------------------------------------------------
+
+## Goals #######################################################################
+[Goals]: #goals
+
+Here are the guiding principles that keep GaryOS going in a consistent
+direction, with a consistent purpose.
+
+Top requirements:
+
+  * All-purpose, multi-OS rescue environment, based on Funtoo
+  * Complete system, with all packages installed as they normally would be
+  * As close to default as possible, aside from Portage package build tuning
+  * Generic 64-bit build, supporting most modern x86 platforms
+  * Bootable from a single kernel file, using initramfs
+  * Make Funtoo installation trivial as a live media
+
+Other objectives:
+
+  * Support as many boot methods as possible, such as USB setup and PXE
+  * Minimalist, performant Portage configuration, using only what is needed
+  * Avoid non-opensource and binary licenses and packages as much as possible
+  * Example configuration/scripts for tuning and maintaining a Funtoo system
+  * Foster a DIY (Do It Yourself) approach through good documentation
+  * Learning environment for those new to GNU/Linux or Funtoo
+
+Explicit non-goals:
+
+  * Growing bigger than a single kernel file
+  * Customization or deep branding of overall system
+  * Development of a helper scripts/commands library
+  * Alteration of boot or "init" infrastructure
+  * Becoming a complete desktop environment
+
+### Advantages #################################################################
+[Advantages]: #advantages
+
+The number of live systems, for everything from basic rescue to a full
+workstation, is quite staggering.  Many of them are extremely useful and very
+well-established.  So, why create another one?
+
+The main differentiators of GaryOS:
+
+  1. A single kernel file is easier to manage and boot than an ISO file
+  2. It is a source-based Funtoo system, which is much more powerful than
+     binary distributions, like those based on Debian (Grml, Ubuntu, etc.)
+  3. Installation of Gentoo/Funtoo can be a bit of work, and having
+     a ready-made system can make the process much more approachable
+
+ISO files are the standard method of releasing live distributions, and they
+work quite well, overall.  There are a few options for using them:
+
+  1. Write directly to CD/DVD or USB media, each install or upgrade
+  2. Use a bootloader, like GRUB, which supports booting ISO images
+  3. Extract the ISO contents to USB media, and configure everything manually
+
+They do pose some challenges, however:
+
+  1. CDs/DVDs are antiquated, and not as ubiquitous as USB drives
+  2. Wiping your USB drive every upgrade makes it more or less single-purpose
+  3. Booting directly from an ISO file uses an emulated CD/DVD "loop" drive
+     that the OS can use, requiring a small portion of bootloader code to stay
+     in memory and for the boot media to stay connected
+  4. Extracting everything onto a USB drive preserves other data on the drive
+     at the expense of complexity, and upgrades are not trivial
+
+Some distributions, such as Grml, have tools that automate the process of
+extracting to USB, which makes the process much simpler.  The drawback is that
+these scripts require you to start from a Unix-like system to begin with, and
+ultimately they manage rather than remove the complexity.
+
+The GaryOS philosophy is that no complex steps or scripting should be
+necessary.  It is a single file, and upgrades are a simple matter of replacing
+it.  Once the initial bootloader is configured, it should never need to be
+touched again.  GaryOS should be a resident on the media, and not the purpose
+of it.  No major live distribution takes this approach or makes these claims.
+
+### Limitations ################################################################
+[Limitations]: #limitations
+
+Humans are not perfect, and rarely is anything we create.  While there is great
+pride in GaryOS, and the care and attention to detail which goes with it, this
+section is to be clear about its shortcomings.  The author wishes to avoid the
+appearance of ignorance or negligence by being thoughtfully forthcoming.
+
+General notes:
+
+  * Lack of progress reporting while booting feels very unpolished
+  * Portage configuration is tuned more for the author than a general audience
+
+Considerations for the build system:
+
+  * Argument processing is very rudimentary, almost archaic, and non-unique
+    environment variables are used heavily for configuration
+  * It is essentially just shell scripting, and all that comes with that
+
+General coding style and syntax:
+
+  * The coding style is organic, and not based on any standard guidelines
+  * Most of the code is self-explanatory, but there are very few comments
+  * Arbitrarily wide number of columns is not POSIX, and requires big monitors
+  * Heavy use of tabs, for non-leading space and also mixed with standard
+    spaces (a "tab stop" of "8" is required for readability)
+
+Supportability:
+
+  * This is a mostly personal project which the author aspires to update at
+    least once a year, but there is not a copious amount of free time with
+    which to support and enhance this project
+  * The history for the components of this project reside in several different
+    personal repositories which are merged together into the public GaryOS Git
+    repository (this process is performed by the "[gentoo/_release]" script),
+    meaning that even minor disruptions or inclusion of new items will result
+    in a public repository that can not use the "fast-forward" feature of Git
+    and will require re-cloning
+
+### History ####################################################################
+[History]: #history
+
+The origin of the project was experimentation with the Metro, Buildroot and
+BusyBox projects, and Metro in particular.  The goal at the time was to use
+Metro to build customized "stage3" files.  As development of the concept
+continued, the difference between a "stage3" and a system that could be run
+live began to disappear.  An inspired moment of "could the custom stage3 be
+used as an initramfs?", and GaryOS was born as a relatively unique live OS.
+
+Perusing the history of this repository and the [Downloads] directory will
+provide pretty good visibility into those floundering beginnings.
+
+Until [v1.1], it was still mostly a publicly-available experiment and not an
+actual project fit for the masses.  That release marked a turning point where
+an effort was made towards general usability.  Starting with [v2.0], releases
+were made specifically to be utilized by a general audience.  Improvements were
+made through [v3.0], but the project remained in an embryonic state.  Both
+[v2.0] and [v3.0] were primarily driven by an update in the Portage commit used
+to determine the package versions.  In particular, [v3.0] was released mostly
+on the self-imposed pressure to put out another release.
+
+In the time from 2015-2019, life took on some big changes for the author, and
+GaryOS fell by the wayside.  His own personal system languished until 2017,
+when an absolutely necessary update was forced as a matter of being able to
+accomplish critical tasks, such as using certain websites.  Another year
+whittled by, as infrequent and half-hearted investments where made until
+another upgrade in 2018.  Again it took almost a year to perform an upgrade,
+and also to complete the efforts towards another actual release of GaryOS.
+
+With the [v4.0] release, a genuine effort was made to upgrade the project to
+a production-grade distribution.  Despite over 4 years of release inactivity,
+downloads remained consistent, and even experienced a few unexplained spikes.
+The build system was switched from Metro to the one being used by the author
+for his personal builds, the build system was made much more robust, all the
+scripts were cleaned up and documented as much as possible, and a Makefile
+was written to make the system more usable.  Tuning of the system was done on
+a more granular level, and some non-intrusive branding and polish was added.
+Finally, paths to live updating or installation were formalized and wrapped
+using the Makefile.  Generally speaking, the final result was designed to be
+less "hackish".
+
+At that point in time, upgrades were still taking a year or more to complete.
+With the updated build system and release process, work began to decrease the
+time between stable builds, and continues today towards [v5.0].
+
+The project was not named GaryOS out of any delusions of grandeur or egomania.
+It was coined years before its birth by a pair of good friends who jested at
+the amount of time and effort spent tuning and customizing a computing
+environment.  The author's workstation was jokingly called "Gary OS".
+
+All the heavily personalized tools, configuration and automation are made
+possible by the dedicated efforts of thousands of developers worldwide who
+build and maintain a plethora of opensource projects.  Since GaryOS is really
+nothing more than a thin layer of wrapping and polish on the more mature work
+of these projects, it seemed fitting to name the project as such in
+a self-deprecating manner.
+
+That final point is worth re-iterating: GaryOS is 95%+ the work of other
+projects.  All that has been done is to tie things together in a way that some
+may find novel, appealing and useful.
 
 --------------------------------------------------------------------------------
 
@@ -726,184 +904,6 @@ for documents and statements like these someday.
 
 --------------------------------------------------------------------------------
 
-## Goals #######################################################################
-[Goals]: #goals
-
-Here are the guiding principles that keep GaryOS going in a consistent
-direction, with a consistent purpose.
-
-Top requirements:
-
-  * All-purpose, multi-OS rescue environment, based on Funtoo
-  * Complete system, with all packages installed as they normally would be
-  * As close to default as possible, aside from Portage package build tuning
-  * Generic 64-bit build, supporting most modern x86 platforms
-  * Bootable from a single kernel file, using initramfs
-  * Make Funtoo installation trivial as a live media
-
-Other objectives:
-
-  * Support as many boot methods as possible, such as USB setup and PXE
-  * Minimalist, performant Portage configuration, using only what is needed
-  * Avoid non-opensource and binary licenses and packages as much as possible
-  * Example configuration/scripts for tuning and maintaining a Funtoo system
-  * Foster a DIY (Do It Yourself) approach through good documentation
-  * Learning environment for those new to GNU/Linux or Funtoo
-
-Explicit non-goals:
-
-  * Growing bigger than a single kernel file
-  * Customization or deep branding of overall system
-  * Development of a helper scripts/commands library
-  * Alteration of boot or "init" infrastructure
-  * Becoming a complete desktop environment
-
-### Advantages #################################################################
-[Advantages]: #advantages
-
-The number of live systems, for everything from basic rescue to a full
-workstation, is quite staggering.  Many of them are extremely useful and very
-well-established.  So, why create another one?
-
-The main differentiators of GaryOS:
-
-  1. A single kernel file is easier to manage and boot than an ISO file
-  2. It is a source-based Funtoo system, which is much more powerful than
-     binary distributions, like those based on Debian (Grml, Ubuntu, etc.)
-  3. Installation of Gentoo/Funtoo can be a bit of work, and having
-     a ready-made system can make the process much more approachable
-
-ISO files are the standard method of releasing live distributions, and they
-work quite well, overall.  There are a few options for using them:
-
-  1. Write directly to CD/DVD or USB media, each install or upgrade
-  2. Use a bootloader, like GRUB, which supports booting ISO images
-  3. Extract the ISO contents to USB media, and configure everything manually
-
-They do pose some challenges, however:
-
-  1. CDs/DVDs are antiquated, and not as ubiquitous as USB drives
-  2. Wiping your USB drive every upgrade makes it more or less single-purpose
-  3. Booting directly from an ISO file uses an emulated CD/DVD "loop" drive
-     that the OS can use, requiring a small portion of bootloader code to stay
-     in memory and for the boot media to stay connected
-  4. Extracting everything onto a USB drive preserves other data on the drive
-     at the expense of complexity, and upgrades are not trivial
-
-Some distributions, such as Grml, have tools that automate the process of
-extracting to USB, which makes the process much simpler.  The drawback is that
-these scripts require you to start from a Unix-like system to begin with, and
-ultimately they manage rather than remove the complexity.
-
-The GaryOS philosophy is that no complex steps or scripting should be
-necessary.  It is a single file, and upgrades are a simple matter of replacing
-it.  Once the initial bootloader is configured, it should never need to be
-touched again.  GaryOS should be a resident on the media, and not the purpose
-of it.  No major live distribution takes this approach or makes these claims.
-
-### Limitations ################################################################
-[Limitations]: #limitations
-
-Humans are not perfect, and rarely is anything we create.  While there is great
-pride in GaryOS, and the care and attention to detail which goes with it, this
-section is to be clear about its shortcomings.  The author wishes to avoid the
-appearance of ignorance or negligence by being thoughtfully forthcoming.
-
-General notes:
-
-  * Lack of progress reporting while booting feels very unpolished
-  * Portage configuration is tuned more for the author than a general audience
-
-Considerations for the build system:
-
-  * Argument processing is very rudimentary, almost archaic, and non-unique
-    environment variables are used heavily for configuration
-  * It is essentially just shell scripting, and all that comes with that
-
-General coding style and syntax:
-
-  * The coding style is organic, and not based on any standard guidelines
-  * Most of the code is self-explanatory, but there are very few comments
-  * Arbitrarily wide number of columns is not POSIX, and requires big monitors
-  * Heavy use of tabs, for non-leading space and also mixed with standard
-    spaces (a "tab stop" of "8" is required for readability)
-
-Supportability:
-
-  * This is a mostly personal project which the author aspires to update at
-    least once a year, but there is not a copious amount of free time with
-    which to support and enhance this project
-  * The history for the components of this project reside in several different
-    personal repositories which are merged together into the public GaryOS Git
-    repository (this process is performed by the "[gentoo/_release]" script),
-    meaning that even minor disruptions or inclusion of new items will result
-    in a public repository that can not use the "fast-forward" feature of Git
-    and will require re-cloning
-
-### History ####################################################################
-[History]: #history
-
-The origin of the project was experimentation with the Metro, Buildroot and
-BusyBox projects, and Metro in particular.  The goal at the time was to use
-Metro to build customized "stage3" files.  As development of the concept
-continued, the difference between a "stage3" and a system that could be run
-live began to disappear.  An inspired moment of "could the custom stage3 be
-used as an initramfs?", and GaryOS was born as a relatively unique live OS.
-
-Perusing the history of this repository and the [Downloads] directory will
-provide pretty good visibility into those floundering beginnings.
-
-Until [v1.1], it was still mostly a publicly-available experiment and not an
-actual project fit for the masses.  That release marked a turning point where
-an effort was made towards general usability.  Starting with [v2.0], releases
-were made specifically to be utilized by a general audience.  Improvements were
-made through [v3.0], but the project remained in an embryonic state.  Both
-[v2.0] and [v3.0] were primarily driven by an update in the Portage commit used
-to determine the package versions.  In particular, [v3.0] was released mostly
-on the self-imposed pressure to put out another release.
-
-In the time from 2015-2019, life took on some big changes for the author, and
-GaryOS fell by the wayside.  His own personal system languished until 2017,
-when an absolutely necessary update was forced as a matter of being able to
-accomplish critical tasks, such as using certain websites.  Another year
-whittled by, as infrequent and half-hearted investments where made until
-another upgrade in 2018.  Again it took almost a year to perform an upgrade,
-and also to complete the efforts towards another actual release of GaryOS.
-
-With the [v4.0] release, a genuine effort was made to upgrade the project to
-a production-grade distribution.  Despite over 4 years of release inactivity,
-downloads remained consistent, and even experienced a few unexplained spikes.
-The build system was switched from Metro to the one being used by the author
-for his personal builds, the build system was made much more robust, all the
-scripts were cleaned up and documented as much as possible, and a Makefile
-was written to make the system more usable.  Tuning of the system was done on
-a more granular level, and some non-intrusive branding and polish was added.
-Finally, paths to live updating or installation were formalized and wrapped
-using the Makefile.  Generally speaking, the final result was designed to be
-less "hackish".
-
-At that point in time, upgrades were still taking a year or more to complete.
-With the updated build system and release process, work began to decrease the
-time between stable builds, and continues today towards [v5.0].
-
-The project was not named GaryOS out of any delusions of grandeur or egomania.
-It was coined years before its birth by a pair of good friends who jested at
-the amount of time and effort spent tuning and customizing a computing
-environment.  The author's workstation was jokingly called "Gary OS".
-
-All the heavily personalized tools, configuration and automation are made
-possible by the dedicated efforts of thousands of developers worldwide who
-build and maintain a plethora of opensource projects.  Since GaryOS is really
-nothing more than a thin layer of wrapping and polish on the more mature work
-of these projects, it seemed fitting to name the project as such in
-a self-deprecating manner.
-
-That final point is worth re-iterating: GaryOS is 95%+ the work of other
-projects.  All that has been done is to tie things together in a way that some
-may find novel, appealing and useful.
-
---------------------------------------------------------------------------------
-
 ## Details #####################################################################
 [Details]: #details
 
@@ -935,8 +935,8 @@ configuration files will also line up with major version numbers.
 
   [Semantic Versioning]: https://semver.org
 
-### Structure ##################################################################
-[Structure]: #structure
+### Repository #################################################################
+[Repository]: #repository
 
 Here is an overview of the repository contents, in order of relative importance:
 
