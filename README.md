@@ -17,7 +17,7 @@
 |:---        |:---
 | [Overview] | [Quick Start] / [Requirements] / [Support]
 | [Booting]  | [Linux] / [Windows] / [GRUB] / [EFI] / [PXE] / [Virtual]
-| [Running]  | [Networking] / [GUI] / [Update]
+| [Running]  | [Networking] / [GUI] / [Update] / [Filesystem]
 | [Building] | [Install]
 
 | [Information] | |
@@ -551,6 +551,41 @@ fast.
 
 If a large number of packages are required, building an [Image] of an updated
 [Filesystem] or doing an [Install] are good alternatives.
+
+### Filesystem #################################################################
+[Filesystem]: #filesystem
+
+GaryOS uses a three-stage process for unpacking the root filesystem into memory.
+This is covered in detail in [Design].  During this process, a filesystem image
+is selected, loaded into memory, and booted.  The default is to use the one
+packed into the [Kernel].  GaryOS has the capability to load a different
+filesystem.
+
+  * Located on a [GRUB] USB drive
+  * From a [Linux] or [EFI] configuration (if the EFI partition is large enough)
+  * Using [PXE]
+
+Fundamentally, all that is needed is the ability to pass [Linux Kernel]
+parameters and host the filesystem image.  GaryOS has a pre-made [Rootfs] that
+comes with many additional packages installed.  See [Image] to create new ones.
+
+There are a few kernel parameters specific to GaryOS that are needed to load an
+external filesystem.
+
+  |            | |
+  |:---        |:---
+  | shmem_size | Initial amount of memory reserved for the filesystem
+  | groot      | Disk or partition that the [Rootfs] resides on
+  | groot_file | Path to the [Rootfs] (default: /gary-os/gary-os.rootfs)
+  | groot_hint | Provide a hint from GRUB to [Loader], in case of error
+
+[Loader] goes into each of these in much more detail.  GaryOS provides example
+defaults in the [GRUB] configuration files.  Generally, only 'shmem_size' and
+'groot' are required to load an external [Rootfs].
+
+The 'shmem_size' value for the pre-made GaryOS [Rootfs] should be at least
+'2048m', or '2g' if that format is preferred.  The [Boot] file is already
+correctly configured (see [GRUB]).
 
 --------------------------------------------------------------------------------
 
