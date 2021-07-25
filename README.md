@@ -1618,45 +1618,75 @@ international audience.
 [Ecosystem]: #ecosystem
 
 Beyond the [Tools] used to create and publish GaryOS, there is a small universe
-of projects that either provided inspiration, see some use within GaryOS, or
-are related projects that need to be pointed out.
+of projects that either provided inspiration or are used for GaryOS.
 
-To start, homage must be paid to those who started it all (at least, these are
-the ones which the author used most over the years, after discovering tomsrtbt
-in 1998):
+To start, homage to those who started it all:
 
-  * tomsrtbt: <http://www.toms.net/rb>
-  * KNOPPIX: <https://knopper.net/knoppix>
-  * Debian Live: <https://debian.org/devel/debian-live>
+  * [tomsrtbt] (floppy disk!)
+  * [KNOPPIX]
+  * [Debian Live]
 
-Inspiration was provided by:
+Tomsrtbt was especially influential.  GaryOS is modeled very much after Tom's
+project.  Some familiar quotes straight from the [tomsrtbt FAQ]:
 
-  * Metro: <https://funtoo.org/Metro_Quick_Start_Tutorial>
-  * Buildroot: <https://buildroot.org>
-  * BusyBox: <https://busybox.net>
-  * StaticPerl: <http://software.schmorp.de/pkg/App-Staticperl.html>
+```
+1) tomsrtbt is
+   "The most GNU/Linux on one floppy disk"
+   Tomsrtbt stands for:
+     "Tom's floppy which has a root filesystem and is also bootable."
 
-There are also a few projects which are relied on for critical tasks or highly
-visible components, and deserve mention:
+2) Design goals
+   as much stuff as possible on 1 floppy disk
+   keep it self contained, build under itself
+   try to make it behave like a normal system
+   rescue and recovery functions get priority
+```
 
-  * Vim: <https://www.vim.org>
-  * Git: <https://git-scm.com>
-  * Qemu: <https://qemu.org>
-  * Suckless: <https://suckless.org>
-  * Links: <http://links.twibright.com>
-  * Rufus: <https://rufus.ie>
+Thank you so much, Tom.
 
+  [tomsrtbt]: http://www.toms.net/rb
+  [tomsrtbt FAQ]: http://www.toms.net/rb/tomsrtbt.FAQ
+  [KNOPPIX]: https://knopper.net/knoppix
+  [Debian Live]: https://debian.org/devel/debian-live
+
+Inspiration and core concepts were also provided by:
+
+  * [Metro]
+  * [Buildroot]
+  * [BusyBox]
+  * [GoboLinux]
+
+  [Metro]: https://funtoo.org/Metro_Quick_Start_Tutorial
+  [Buildroot]: https://buildroot.org
+  [BusyBox]: https://busybox.net
+  [StaticPerl]: http://software.schmorp.de/pkg/App-Staticperl.html
+  [GoboLinux]: https://gobolinux.org
+
+There are also a few projects which are relied on daily for critical tasks or
+highly visible components, and deserve mention:
+
+  * [Bash]
+    * [Vim]
+    * [OpenSSH]
+  * [X.org]
+    * [Suckless] [dwm]
+    * [rxvt-unicode]
+    * [Links]
+  * [Rufus]
+
+  [Bash]: https://www.gnu.org/software/bash
   [Vim]: https://www.vim.org
-  [Git]: https://git-scm.com
-  [Qemu]: https://qemu.org
+  [OpenSSH]: https://www.openssh.com
+  [X.org]: https://x.org
   [Suckless]: https://suckless.org
+  [dwm]: https://dwm.suckless.org
+  [rxvt-unicode]: http://software.schmorp.de/pkg/rxvt-unicode.html
   [Links]: http://links.twibright.com
   [Rufus]: https://rufus.ie
 
-It should be noted, with additional emphasis, the critical role tomsrtbt played
-in the course of the author's career, and his sustained mentality towards the
-malleability of GNU/Linux and its power and flexibility as a "run anywhere,
-anyhow" computing environment.
+Gratitude to all those who have contributed to making [GNU/Linux] the most
+powerful and flexible operating system on the planet, and a true "run
+anywhere, anyhow" computing environment.
 
 --------------------------------------------------------------------------------
 
