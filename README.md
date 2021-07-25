@@ -22,7 +22,7 @@
 
 | [Information] | |
 |:---        |:---
-| [Goals]    | [History]
+| [Goals]    |
 | [Project]  | [References] / [Contributions] / [Contributing] / [Licensing]
 | [Details]  | [Versioning] / [Repository] / [Tools] / [Ecosystem]
 | [Versions] | [v3.0 2015-03-16] / [v2.0 2014-06-19] / [v1.1 2014-03-13] / [(...)](#v10-2014-02-28)
@@ -975,68 +975,6 @@ Explicit non-goals:
   * Becoming a complete desktop environment
 
 GaryOS will continue to be a [Kernel] and [Builder] above all else.
-
-### History ####################################################################
-[History]: #history
-
-The origin of the project was experimentation with the Metro, Buildroot and
-BusyBox projects, and Metro in particular.  The goal at the time was to use
-Metro to build customized "stage3" files.  As development of the concept
-continued, the difference between a "stage3" and a system that could be run
-live began to disappear.  An inspired moment of "could the custom stage3 be
-used as an initramfs?", and GaryOS was born as a relatively unique live OS.
-
-Perusing the history of this repository and the [Downloads] directory will
-provide pretty good visibility into those floundering beginnings.
-
-Until [v1.1], it was still mostly a publicly-available experiment and not an
-actual project fit for the masses.  That release marked a turning point where
-an effort was made towards general usability.  Starting with [v2.0], releases
-were made specifically to be utilized by a general audience.  Improvements were
-made through [v3.0], but the project remained in an embryonic state.  Both
-[v2.0] and [v3.0] were primarily driven by an update in the Portage commit used
-to determine the package versions.  In particular, [v3.0] was released mostly
-on the self-imposed pressure to put out another release.
-
-In the time from 2015-2019, life took on some big changes for the author, and
-GaryOS fell by the wayside.  His own personal system languished until 2017,
-when an absolutely necessary update was forced as a matter of being able to
-accomplish critical tasks, such as using certain websites.  Another year
-whittled by, as infrequent and half-hearted investments where made until
-another upgrade in 2018.  Again it took almost a year to perform an upgrade,
-and also to complete the efforts towards another actual release of GaryOS.
-
-With the [v4.0] release, a genuine effort was made to upgrade the project to
-a production-grade distribution.  Despite over 4 years of release inactivity,
-downloads remained consistent, and even experienced a few unexplained spikes.
-The build system was switched from Metro to the one being used by the author
-for his personal builds, the build system was made much more robust, all the
-scripts were cleaned up and documented as much as possible, and a Makefile
-was written to make the system more usable.  Tuning of the system was done on
-a more granular level, and some non-intrusive branding and polish was added.
-Finally, paths to live updating or installation were formalized and wrapped
-using the Makefile.  Generally speaking, the final result was designed to be
-less "hackish".
-
-At that point in time, upgrades were still taking a year or more to complete.
-With the updated build system and release process, work began to decrease the
-time between stable builds, and continues today towards [v5.0].
-
-The project was not named GaryOS out of any delusions of grandeur or egomania.
-It was coined years before its birth by a pair of good friends who jested at
-the amount of time and effort spent tuning and customizing a computing
-environment.  The author's workstation was jokingly called "Gary OS".
-
-All the heavily personalized tools, configuration and automation are made
-possible by the dedicated efforts of thousands of developers worldwide who
-build and maintain a plethora of opensource projects.  Since GaryOS is really
-nothing more than a thin layer of wrapping and polish on the more mature work
-of these projects, it seemed fitting to name the project as such in
-a self-deprecating manner.
-
-That final point is worth re-iterating: GaryOS is 95%+ the work of other
-projects.  All that has been done is to tie things together in a way that some
-may find novel, appealing and useful.
 
 --------------------------------------------------------------------------------
 
