@@ -22,7 +22,7 @@
 
 | [Information] | |
 |:---        |:---
-| [Goals]    | [Limitations] / [History]
+| [Goals]    | [History]
 | [Project]  | [References] / [Contributions] / [Contributing] / [Licensing]
 | [Details]  | [Versioning] / [Repository] / [Tools] / [Ecosystem]
 | [Versions] | [v3.0 2015-03-16] / [v2.0 2014-06-19] / [v1.1 2014-03-13] / [(...)](#v10-2014-02-28)
@@ -975,45 +975,6 @@ Explicit non-goals:
   * Becoming a complete desktop environment
 
 GaryOS will continue to be a [Kernel] and [Builder] above all else.
-
-### Limitations ################################################################
-[Limitations]: #limitations
-
-Humans are not perfect, and rarely is anything we create.  While there is great
-pride in GaryOS, and the care and attention to detail which goes with it, this
-section is to be clear about its shortcomings.  The author wishes to avoid the
-appearance of ignorance or negligence by being thoughtfully forthcoming.
-
-General notes:
-
-  * Lack of progress reporting while booting feels very unpolished
-  * Portage configuration is tuned more for the author than a general audience
-
-Considerations for the build system:
-
-  * Argument processing is very rudimentary, almost archaic, and non-unique
-    environment variables are used heavily for configuration
-  * It is essentially just shell scripting, and all that comes with that
-
-General coding style and syntax:
-
-  * The coding style is organic, and not based on any standard guidelines
-  * Most of the code is self-explanatory, but there are very few comments
-  * Arbitrarily wide number of columns is not POSIX, and requires big monitors
-  * Heavy use of tabs, for non-leading space and also mixed with standard
-    spaces (a "tab stop" of "8" is required for readability)
-
-Supportability:
-
-  * This is a mostly personal project which the author aspires to update at
-    least once a year, but there is not a copious amount of free time with
-    which to support and enhance this project
-  * The history for the components of this project reside in several different
-    personal repositories which are merged together into the public GaryOS Git
-    repository (this process is performed by the "[gentoo/_release]" script),
-    meaning that even minor disruptions or inclusion of new items will result
-    in a public repository that can not use the "fast-forward" feature of Git
-    and will require re-cloning
 
 ### History ####################################################################
 [History]: #history
