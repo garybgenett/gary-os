@@ -172,7 +172,7 @@ PATCHES[0]="shmem-add-shmem_size-option-set-filesystem-size.v4.18-rc6.patch"
 declare PACKDIRS_LINK="packdir"
 declare PACKDIRS_DSEP="--"
 declare PACKDIRS_CSEP=":"
-declare PACKDIRS_PRNT="60"
+declare PACKDIRS_PRNT="50"
 
 #>>> for CHAR in {32..47} {58..64} {91..96} {123..126}; do printf "%3s" "${CHAR}"; printf " [\\$(printf "%0.3o" "${CHAR}")]\n"; done
 #note: these must not be "[a-z]" and category names must be "[a-z]+[:]" for regular expressions to work properly
