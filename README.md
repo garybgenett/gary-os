@@ -945,33 +945,36 @@ Finally, the 'root' password is set to 'gary-os'.
 [Goals]: #goals
 
 Here are the guiding principles that keep GaryOS going in a consistent
-direction, with a consistent purpose.
+direction with a consistent purpose.
 
 Top requirements:
 
-  * All-purpose, multi-OS rescue environment, based on Funtoo
-  * Complete system, with all packages installed as they normally would be
-  * As close to default as possible, aside from Portage package build tuning
-  * Generic 64-bit build, supporting most modern x86 platforms
-  * Bootable from a single kernel file, using initramfs
-  * Make Funtoo installation trivial as a live media
+  * Source-based, all-purpose, multi-OS rescue environment ([Funtoo])
+  * Complete system, installing packages normally with no filesystem pruning
+  * Stay as default as possible, aside from [Portage] tuning of package builds
+  * Generic 64-bit build, supporting all modern x86 platforms
+  * Bootable from a single kernel file, using [Linux initramfs]
+  * Simplify the process of installing Funtoo (or [Gentoo])
+  * Proudly demonstrate and evangelize old-school hacker geekiness
 
 Other objectives:
 
-  * Support as many boot methods as possible, such as USB setup and PXE
+  * Support as many boot methods as possible (see [Booting])
   * Minimalist, performant Portage configuration, using only what is needed
-  * Avoid non-opensource and binary licenses and packages as much as possible
-  * Example configuration/scripts for tuning and maintaining a Funtoo system
+  * Avoid closed source licenses and binary packages as much as possible
+  * Example configuration and scripts for tuning and maintaining a Funtoo system
   * Foster a DIY (Do It Yourself) approach through good documentation
-  * Learning environment for those new to GNU/Linux or Funtoo
+  * Learning environment for those new to [GNU/Linux] or Funtoo
 
 Explicit non-goals:
 
-  * Growing bigger than a single kernel file
+  * Growing bigger than a single kernel file ([Rootfs] [Filesystem] aside)
+  * Development of a helper scripts or commands library for non-GaryOS tasks
   * Customization or deep branding of overall system
-  * Development of a helper scripts/commands library
-  * Alteration of boot or "init" infrastructure
+  * Alteration of boot or 'init' infrastructure
   * Becoming a complete desktop environment
+
+GaryOS will continue to be a [Kernel] and [Builder] above all else.
 
 ### Advantages #################################################################
 [Advantages]: #advantages
