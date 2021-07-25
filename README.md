@@ -919,7 +919,7 @@ is enabled for mouse support on the console.
 As for the overall system, all configuration files for the [Linux Kernel] and
 [Portage] are in the repository.
 
-  | Configuration | Location
+  |               | |
   |:---           |:---
   | Linux kernel  | [linux/]
   | Portage       | [gentoo/]
