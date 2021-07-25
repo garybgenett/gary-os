@@ -369,42 +369,82 @@ with.
 ### Networking #################################################################
 [Networking]: #networking
 
-  * Definition:
-    * Configure networking, either wired or wireless
-  * Last tested with:
-    * GaryOS v3.0
+For security, no networking configuration or daemons are run by default, but
+several networking packages are installed.  Instructions for Ethernet, Wireless
+and [OpenSSH] sshd are below.
 
-No networking configuration or daemons are run by default, but several
-networking packages are installed to ease on-the-fly setup.
+The [Funtoo Networking] page contains full details on all the configuration
+possibilities.  For the purposes of GaryOS, a simple single-interface
+configuration is likely all that is needed.
 
-For simple DHCP, the `dhcpcd` command can be run directly on the desired
-interface, such as an Ethernet connection:
+**Ethernet**
 
-  * `dhcpcd eth0`
+The [dhcpcd] utility is the quickest and easiest to use.
 
-A more formal way of doing this would be to use the OpenRC scripts:
+  ```
+  rc-update add dhcpcd default
+  openrc
+  ```
 
-  * `rc-update add dhcpcd default ; rc`
+This should automatically detect the best interface to use and configure it with
+DHCP.  It can also be run explicitly on a specific interface using something
+like 'dhcpcd eth0'.
 
-For wireless networking, the NetworkManager package is available to
-simplify the configuration:
+In case this does not work as expected or there is no DHCP available, the 'ip'
+command from [iproute2] can be used to configure manually.  Starting with 'ip
+address' will show all the available interfaces and their status.  Use 'ip help'
+for more information on how to use this command.
 
-  * `rc-update add NetworkManager default ; rc`
+**Wireless**
 
-Wireless networks can then be scanned and configured:
+The configuration for wireless is slightly more involved, especially since it is
+done on the command line.  The [wpa_supplicant] package is very comprehensive
+and accomplishes the goal in the fewest steps.
 
-  * e.g. ...
+  ```
+  nano /etc/wpa_supplicant/wpa_supplicant.conf
+  rc-update add wpa_supplicant default
+  rc-update add dhcpcd default
+  openrc
+  ```
 
-    ```
-    nmcli device wifi rescan
-    nmcli device wifi list
-    nmcli device wifi connect [ssid] password [password]
-    nmcli device status
-    ```
+If it is required to manually discover an available network, use the 'wpa_cli'
+command.
 
-The Funtoo OpenRC scripts have all sorts of advanced networking features
-and options, covered in depth:
-<http://funtoo.org/Networking>
+  ```
+  scan
+  scan_results
+  add_network
+  list_networks
+  set_network 0 scan_ssid 1
+  set_network 0 ssid "<ssid>"
+  set_network 0 psk "<password>"
+  enable_network 0
+  select_network 0
+  status
+  save_config
+  ```
+
+The 'wpa_cli' command supports tab-completion, so it is only necessary to type
+the first few letters of each command.
+
+**OpenSSH**
+
+If remote access to GaryOS is needed, OpenSSH sshd is the absolute best option.
+
+  ```
+  passwd root
+  rc-update add sshd default
+  openrc
+  ```
+
+It is very important to note that 'root' access is enabled, which is why the
+password should be changed before enabling SSH.
+
+  [Funtoo Networking]: https://www.funtoo.org/Networking
+  [dhcpcd]: https://roy.marples.name/projects/dhcpcd
+  [iproute2]: https://wiki.linuxfoundation.org/networking/iproute2
+  [wpa_supplicant]: https://w1.fi/wpa_supplicant
 
 ### GUI ########################################################################
 [GUI]: #gui
