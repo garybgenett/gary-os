@@ -1431,13 +1431,17 @@ pieces.
 ## Details #####################################################################
 [Details]: #details
 
-This section outlines the key pieces which make GaryOS tick.  The work will
-still pretty much speak for itself, but some explanation of what all the stuff
-in this repository is will likely be beneficial to anyone curious enough to
-have read this far.
+This is additional information mostly pertaining to how the GaryOS project is
+managed.  It is not necessary reading in order to use any aspect of GaryOS, and
+is only for the curious.
 
-Most of what is needed to use the contents of this repository is contained in
-the [Structure] section.
+  * [Versioning] scheme
+  * [Repository] overview
+  * Primary [Tools] used
+  * The overall [Ecosystem] GaryOS lives in
+
+If you read this section, the author would appreciate a note at
+[gary-os@garybgenett.net].
 
 ### Versioning #################################################################
 [Versioning]: #versioning
