@@ -1720,22 +1720,14 @@ anywhere, anyhow" computing environment.
   | Source Portage  | [portage-21811b59a8484b2a6b73e0c5277f23c50a0141dc.0.tar.xz](https://sourceforge.net/projects/gary-os/files/v3.0/portage-21811b59a8484b2a6b73e0c5277f23c50a0141dc.0.tar.xz)
 
   * [Metro]
-    * Release checklist in Metro script
-    * General updates for upstream Metro changes/enhancements
-    * Minor configuration updates for LVM, Postfix and Vim
-    * Date variables for Funtoo/Grml upstream files/images
-    * Warnings for non-matching upstream files/images
-    * Miscellaneous syntax clean-up
+    * Integration of upstream Metro changes
   * [Portage]
-    * Updated to new Portage commit
-    * Minor improvements to audit/review scripting
-    * Fixed 'USE' variable, enabling Udev globally
-    * Added additional input drivers, for touch devices
-    * Added helper packages for networking and basic X.Org GUI scripting
+    * Improvements to audit and review scripting
+    * Helper packages for [Networking] and basic [X.Org] [GUI] scripting
+    * Additional input drivers
   * [scripts/grub.sh]
-    * Additional debugging option in GRUB script
-    * Updated list of GRUB rescue modules
-    * GRUB rescue options variable
+    * Updated [GNU GRUB] modules and script options
+  * Release checklist
 
 ### v2.0 2014-06-19 ############################################################
 [v2.0 2014-06-19]: #v20-2014-06-19
@@ -1756,39 +1748,17 @@ anywhere, anyhow" computing environment.
   | Source Portage  | [portage-873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d.0.tar.xz](https://sourceforge.net/projects/gary-os/files/v2.0/portage-873ca4a3a4e6ff41e510dbcf2e0fe549fb23474d.0.tar.xz)
 
   * [Metro]
-    * Added creation of package list files
-    * Added 'METRO_DEBUG' variable, for testing
-    * Improved customization of 'LDFLAGS' and 'USE' variables
-    * Better exemption handling for packages which fail to build
-    * Fixed initrd build, so that it is more generally useful/applicable
-    * Added documentation repository to commit tracking
-    * Included Git repository in root filesystem, for reference
-    * Moved Git repository handling to dedicated "git-export" function
+    * Added package lists
+    * Customization of 'LDFLAGS' and 'USE' variables
+    * Debug option and better error handling
   * [Portage]
-    * Updated to new Portage commit
-    * Complete review/revamp of USE flags
-    * Added 'LDFLAGS' variable options specific to Metro
-    * Cleaned up "_overlay" directory
-    * Improvements to audit/review scripting
-    * Minor configuration updates/improvements
-    * Localized failed package commenting to 32-bit
-    * Revised package list, adding CLI (Command-Line Interface) helpers
-      and X.Org GUI, while pruning packages that are not as generally
-      useful or widely implemented
-      * In particular, removed custom Perl modules, Funtoo
-        developer/specialized packages, document processing utilities,
-        virtualization tools and media software
-      * Previously, the X.Org GUI was a specific non-goal of the
-        project.  However, certain extremely useful packages (such as
-        Wireshark) required it.  The additional screen real-estate is
-        also useful for management of multiple terminals and
-        web-browsing for solutions to issues.  In order to meet these
-        needs, it was decided to incorporate X.Org GUI packages with
-        a minimal window manager footprint.
-      * CLI interface remains the default (see [GUI] section for information on
-        loading up and using the graphical environment).
+    * Complete review and rewrite of 'USE' flags
+    * Cleaned up [gentoo/overlay/] directory
+    * Improvements to audit and review scripting
+    * Revised package list
   * [scripts/grub.sh]
-    * Renamed example GRUB disk image to a better extension
+    * Improved naming of output files
+  * Git repository in root filesystem
 
 ### v1.1 2014-03-13 ############################################################
 [v1.1 2014-03-13]: #v11-2014-03-13
@@ -1807,13 +1777,12 @@ anywhere, anyhow" computing environment.
   | Source Portage  | [portage-95ad4fd257697618bae7402d4bc3a27499035d30.4.tar.xz](https://sourceforge.net/projects/gary-os/files/v1.1/portage-95ad4fd257697618bae7402d4bc3a27499035d30.4.tar.xz)
 
   * [Metro]
-    * Added Linux kernel configurations from Grml, to provide more
-      comprehensive and flexible hardware/feature support
-    * Syntax and formatting clean-up
+    * Added [Linux Kernel] configuration from [Grml]
+    * Formatting and Syntax
   * [Portage]
-    * Miscellaneous package changes
+    * Minor package changes
   * [scripts/grub.sh]
-    * Created GRUB script, for rescue and dual-boot
+    * Created [GNU GRUB] script
 
 ### v1.0 2014-02-28 ############################################################
 [v1.0 2014-02-28]: #v10-2014-02-28
@@ -1830,15 +1799,13 @@ anywhere, anyhow" computing environment.
   | Source Portage  | [portage-95ad4fd257697618bae7402d4bc3a27499035d30.3.tar.xz](https://sourceforge.net/projects/gary-os/files/v1.0/portage-95ad4fd257697618bae7402d4bc3a27499035d30.3.tar.xz)
 
   * [Metro]
-    * Completed support for both 64-bit and 32-bit builds
+    * Full support for both 64-bit and 32-bit builds
     * Switched to 'generic' for all builds
-    * Removed '-fomit-frame-pointer' GCC flag
-    * Removed GRUB customizations
-    * Re-added '/boot' and '/var/db/pkg' directories, so the initramfs
-      can be used as a "stage3" replacement
-    * Added release/distribution processing
+    * GCC flag tuning
   * [Portage]
-    * Commented packages that broke during 32-bit build
+    * Minor package list comments
+  * Made changes for [Linux initramfs] to be a viable [stage3]
+  * Added release process
 
 ### v0.3 2014-02-24 ############################################################
 [v0.3 2014-02-24]: #v03-2014-02-24
@@ -1853,15 +1820,12 @@ anywhere, anyhow" computing environment.
   | Source Portage | [portage-95ad4fd257697618bae7402d4bc3a27499035d30.2.tar.xz](https://sourceforge.net/projects/gary-os/files/v0.3/portage-95ad4fd257697618bae7402d4bc3a27499035d30.2.tar.xz)
 
   * [Metro]
-    * Consolidated kernel/initrd into single kernel/initramfs file
-    * Added initial support for both 64-bit and 32-bit builds
+    * Consolidated [Linux Kernel] and 'initrd' into a single [Linux initramfs]
+    * Reduced initramfs size to below 500MB Linux kernel limit
+    * Updated [stage3] with support for testing builds and fixing breaks
   * [Portage]
-    * Updated build/installation script with code to expand Metro
-      "stage3" files for testing package builds and fixing breaks
-    * Customized package list and USE flags for Metro build, to reduce
-      size of installation to below 500MB Linux kernel limit
-    * Completely removed X, Java and TeX Live / LaTeX
-    * Added sound and miscellaneous media packages
+    * Initial support for both 64-bit and 32-bit builds
+    * Tuned package list and 'USE' flags for size
 
 ### v0.2 2014-02-13 ############################################################
 [v0.2 2014-02-13]: #v02-2014-02-13
@@ -1879,8 +1843,8 @@ anywhere, anyhow" computing environment.
   * [Metro]
     * Added revision handling
   * [Portage]
-    * Added packages from Grml and SystemRescueCD package lists
-    * Enabled 'gpm' USE flag
+    * Added packages from [Grml] and [SystemRescue] lists
+    * Enabled [gpm]
 
 ### v0.1 2014-02-09 ############################################################
 [v0.1 2014-02-09]: #v01-2014-02-09
@@ -1896,10 +1860,9 @@ anywhere, anyhow" computing environment.
   | Source Portage | [portage-95ad4fd257697618bae7402d4bc3a27499035d30.0.tar.xz](https://sourceforge.net/projects/gary-os/files/v0.1/portage-95ad4fd257697618bae7402d4bc3a27499035d30.0.tar.xz)
 
   * [Metro]
-    * Initial proof of concept, with separate kernel/initrd files
+    * Initial proof of concept, with separate [Linux Kernel] and 'initrd' files
   * [Portage]
     * Active personal configuration at time of build
-    * Commented packages that broke
 
 --------------------------------------------------------------------------------
 *End Of File*
