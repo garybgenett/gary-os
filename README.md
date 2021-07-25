@@ -4,7 +4,7 @@
 
 | ![GaryOS Icon](artifacts/images/icon.png "GaryOS Icon") | "The one file that does it all."
 |:---      |:---
-| Latest   | [v3.0 2015-03-16] -- [64-bit] / [32-bit] / [Boot]
+| Latest   | [v4.0 2021-07-25] -- [Kernel] / [Rootfs] / [Boot]
 | Homepage | <https://github.com/garybgenett/gary-os>
 | Download | <https://sourceforge.net/projects/gary-os>
 
@@ -23,7 +23,7 @@
 | [Project]  | [References] / [Contributions] / [Contributing] / [Licensing]
 | [Details]  | [Versioning] / [Repository] / [Tools] / [Ecosystem]
 | [Release]  | [Process] / [Checklist]
-| [Versions] | [v3.0 2015-03-16] / [v2.0 2014-06-19] / [v1.1 2014-03-13] / [(...)](#v10-2014-02-28)
+| [Versions] | [v4.0 2021-07-25] / [v3.0 2015-03-16] / [v2.0 2014-06-19] / [(...)](#v11-2014-03-13)
 
 [Gary B. Genett]: http://www.garybgenett.net
 [gary-os@garybgenett.net]: mailto:gary-os@garybgenett.net?subject=GaryOS%20Submission&body=Thank%20you%20for%20sending%20a%20message%21
@@ -1716,10 +1716,40 @@ In progress for v5.0...
 [License]: https://github.com/garybgenett/gary-os/blob/LICENSE.md
 
 [Downloads]: https://sourceforge.net/projects/gary-os/files
+[Distfiles]: https://sourceforge.net/projects/gary-os/files/_distfiles
+[Packages]: https://sourceforge.net/projects/gary-os/files/_packages
 
-[64-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-v3.0-generic_64.kernel
-[32-bit]: http://sourceforge.net/projects/gary-os/files/gary-os-v3.0-generic_32.kernel
-[Boot]: https://github.com/garybgenett/gary-os/blob/v3.0/scripts/grub.sh
+[Kernel]: https://sourceforge.net/projects/gary-os/files/gary-os-v4.0-generic_64.kernel
+[Rootfs]: https://sourceforge.net/projects/gary-os/files/gary-os-v4.0-generic_64.rootfs
+[Boot]: https://sourceforge.net/projects/gary-os/files/gary-os-v4.0-generic_64.grub.zip
+
+### v4.0 2021-07-25 ############################################################
+[v4.0 2021-07-25]: #v40-2021-07-25
+[v4.0]: #v40-2021-07-25
+
+  **[Repository](https://github.com/garybgenett/gary-os/tree/v4.0)
+  / [Readme](https://github.com/garybgenett/gary-os/blob/v4.0/README.md)
+  / [License](https://github.com/garybgenett/gary-os/blob/v4.0/LICENSE.md)
+  / [Packages (Kernel)](https://github.com/garybgenett/gary-os/blob/v4.0/packages.txt)
+  / [Packages (Rootfs)](https://github.com/garybgenett/gary-os/blob/v4.0/packages.rootfs.txt)**
+
+  |                | |
+  |:---            |:---
+  | Kernel         | [gary-os-v4.0-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v4.0-generic_64.kernel)
+  | Rootfs         | [gary-os-v4.0-generic_64.rootfs](https://sourceforge.net/projects/gary-os/files/gary-os-v4.0-generic_64.rootfs)
+  | Boot           | [gary-os-v4.0-generic_64.grub.zip](https://sourceforge.net/projects/gary-os/files/gary-os-v4.0-generic_64.grub.zip)
+  | Source Stage3  | [stage3-core2_64-funtoo-current-2018-08-27.tar.xz](https://sourceforge.net/projects/gary-os/files/v4.0/stage3-core2_64-funtoo-current-2018-08-27.tar.xz)
+  | Source Portage | [gary-os-v4.0-generic_64.meta-repo.tar.xz](https://sourceforge.net/projects/gary-os/files/v4.0/gary-os-v4.0-generic_64.meta-repo.tar.xz)
+
+  * Put out a new release!
+  * Complete overhaul of entire system
+    * Removed 32-bit support
+    * [Portage] and [Linux Kernel] configurations
+    * Package lists and [gentoo/overlay/]
+  * Replaced [Metro] with [Builder]
+  * Created [Loader] for external [Filesystem] support
+  * Feature-rich [GNU GRUB] package in [Boot] file
+  * Rewrote [README.md] and switched [LICENSE.md] to [GNU GPL v3.0]
 
 ### v3.0 2015-03-16 ############################################################
 [v3.0 2015-03-16]: #v30-2015-03-16
