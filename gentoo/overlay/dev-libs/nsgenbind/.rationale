@@ -1,4 +1,0 @@
-emerge: there are no ebuilds to satisfy ">=dev-libs/nsgenbind-0.6".
-(dependency required by "www-client/netsurf-3.8-r2::overlay[javascript]" [ebuild])
-(dependency required by "netsurf" [argument])
-https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/nsgenbind?id=0e856edefbd36efffc141a2174e75db9afe1f204
