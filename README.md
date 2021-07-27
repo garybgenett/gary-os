@@ -22,7 +22,7 @@
 | [Goals]    | [Design] / [Builder] / [Loader]
 | [Project]  | [References] / [Contributions] / [Contributing] / [Licensing]
 | [Details]  | [Versioning] / [Repository] / [Tools] / [Ecosystem]
-| [Release]  | [Process] / [Checklist]
+| [Release]  | [Process] / [Checklist] / [Publish]
 | [Versions] | [v4.0 2021-07-26] / [v3.0 2015-03-16] / [v2.0 2014-06-19] / [(...)](#v11-2014-03-13)
 
 [Gary B. Genett]: http://www.garybgenett.net
@@ -1707,6 +1707,70 @@ In progress for v5.0...
 [Checklist]: #checklist
 
 In progress for v5.0...
+
+### Publish ####################################################################
+[Publish]: #publish
+
+**Review**
+
+  * cd coding/gary-os
+  * vi +/#WORK README.md
+    * [ ] [Versions] list in [Header](#welcome-to-garyos-gary-os)
+    * [ ] [Versions] section and release notes
+    * [ ] [Kernel], [Rootfs] and [Boot] links
+  * make TOKN="[...]" readme-github
+    * make readme-all
+        * pages GaryOS-Readme.html
+    * make DOTEST=true readme
+    * aspell -c README.md
+  * make readme-clean
+
+**Commit**
+
+  * cd .setup/gentoo.gary-os
+  * (cd coding/gary-os ; git-commit -m "Stamped v#.# release." README.md)
+  * make _publish_gitdir
+    * (cd _builds/.gary-os/.gary-os ; GIT_PAGER=cat git-list -n1)
+  * make DOREDO=true doit release
+    * cat ./build/etc/issue ./build/etc/motd ./build/_commit
+    * for FILE in coding/gary-os .setup .static ; do (cd ${FILE} ; GIT_PAGER=cat git-list -n1) ; done
+    * (cd ./build/.gary-os ; GIT_PAGER=cat git-list -n1)
+  * make DOREDO=true P=_gary-os doit rootfs
+    * make _publish_prep
+    * ll ./build/ ./build/.gary-os-\*
+  * (cd _builds ; rsync -L ./_gary-os.working/.gary-os-generic_64/ ./_gary-os)
+    * (cd _builds/_gary-os ; git-backup \<funtoo commit\>.# ; GIT_PAGER=cat git-list -n1)
+    * (cd .setup ; vi gentoo/_release ; git-commit -m "Published v#.# release." gentoo/_release)
+  * make _publish_gitdir
+    * (cd _builds/.gary-os/.gary-os ; GIT_PAGER=cat git-list -n3)
+    * (cd _builds/.gary-os/.gary-os ; GIT_PAGER=cat git tag -l)
+    * ./.validate
+
+**Upload**
+
+  * cd .setup/gentoo.gary-os
+  * (cd _builds/.gary-os.release ; rm v#.#)
+  * make _publish_export
+    * (cd _builds/.gary-os.release ; ll ./ ./v#.#)
+  * make _publish_release
+  * <https://sourceforge.net/projects/gary-os>
+    * [ ] Verify page information
+    * [ ] Verify directory contents
+    * [ ] Update download button
+  * <https://github.com/garybgenett/gary-os>
+    * [ ] Test v#.# links
+
+**Personal**
+
+  * cd .setup/gentoo.make
+  * make doit
+  * (cd _builds/_gentoo ; git-backup "gary-os v#.#" ; GIT_PAGER=cat git-list -n1)
+
+**Celebrate**
+
+  * cd coding/gary-os
+  * make TOKN="[...]" DOMODS=true DOREDO=true readme-github
+  * make TOKN="[...]" DOMODS=true readme-github
 
 --------------------------------------------------------------------------------
 
