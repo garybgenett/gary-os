@@ -1,0 +1,7 @@
+I moved this into curated because of portage-2.3.68 not liking this dependency in firefox, whereas an earlier version was happy with it:
+
+system-libvpx? ( >=media-libs/libvpx-1.7.0:0=[postproc] <media-libs/libvpx-1.8:0=[postproc] )
+
+Changed it to this, which is equivalent, and emerge is happy again:
+
+system-libvpx? ( =media-libs/libvpx-1.7*:0=[postproc] )

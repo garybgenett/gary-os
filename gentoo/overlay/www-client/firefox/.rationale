@@ -1,0 +1,4 @@
+version
+ERROR: www-client/firefox-68.7.0::overlay failed (setup phase):
+get_llvm_prefix: invalid max_slot=10
+https://gitweb.gentoo.org/repo/gentoo.git/tree/www-client/firefox?id=17b234308ca4577906324d31c31d8ded3d04d744

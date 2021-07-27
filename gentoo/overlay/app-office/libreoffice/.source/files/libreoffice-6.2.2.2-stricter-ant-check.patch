@@ -1,0 +1,11 @@
+--- libreoffice-6.2.2.2/configure.ac.orig	2019-03-31 16:30:10.591280778 +0200
++++ libreoffice-6.2.2.2/configure.ac	2019-03-31 16:30:50.394491097 +0200
+@@ -11954,7 +11954,7 @@
+     ant_minminor1=`echo $ant_minver | cut -d"." -f2`
+ 
+     AC_MSG_CHECKING([whether Ant is >= $ant_minver])
+-    ant_version=`"$ANT" -version | $AWK '{ print $4; }'`
++    ant_version=`"$ANT" -version | $AWK '$3 == "version" { print $4; }'`
+     ant_version_major=`echo $ant_version | cut -d. -f1`
+     ant_version_minor=`echo $ant_version | cut -d. -f2`
+     echo "configure: ant_version $ant_version " >&5
