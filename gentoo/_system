@@ -243,15 +243,13 @@ fi
 
 ########################################
 
-#note: athlon64 build = WRKDIR="/.g/_data/_builds/_gentoo.amd64" _CPU="CONFIG_MK8" ESUB="amd64-k8" GARC="athlon64" GSUB="athlon64" ${HOME}/setup/gentoo/_system -x -0
-
 #OPTIONS[_CPU EARC ESUB GARC GSUB GOPT]
-export _CPU_RESET="CONFIG_MCORE2"
-export _CPU="${_CPU:-${_CPU_RESET}}"
-export EARC="${EARC:-x86-64bit}"
-export ESUB="${ESUB:-core2_64}"
-export GARC="${GARC:-core2}"
-export GSUB="${GSUB:-core2}"
+export _CPU_RESET="CONFIG_GENERIC_CPU"
+export _CPU="${_CPU:-${_CPU_RESET}}"	#>>> CONFIG_MCORE2
+export EARC="${EARC:-x86-64bit}"	#>>> x86-64bit
+export ESUB="${ESUB:-generic_64}"	#>>> core2_64
+export GARC="${GARC:-x86-64}"		#>>> core2
+export GSUB="${GSUB:-generic}"		#>>> core2
 export GOPT="${GOPT:--O2}"
 
 if ${_GOS}; then
@@ -260,7 +258,7 @@ if ${_GOS}; then
 	ESUB="generic_64"
 	GARC="x86-64"
 	GSUB="generic"
-	GOPT="-Os -s"
+	GOPT="-O2"			#>>> -Os -s
 fi
 
 ########################################
