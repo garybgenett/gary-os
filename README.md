@@ -1738,7 +1738,7 @@ In progress for v5.0...
   | Kernel         | [gary-os-v4.0-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v4.0-generic_64.kernel)
   | Rootfs         | [gary-os-v4.0-generic_64.rootfs](https://sourceforge.net/projects/gary-os/files/gary-os-v4.0-generic_64.rootfs)
   | Boot           | [gary-os-v4.0-generic_64.grub.zip](https://sourceforge.net/projects/gary-os/files/gary-os-v4.0-generic_64.grub.zip)
-  | Source Stage3  | [stage3-core2_64-funtoo-current-2018-08-27.tar.xz](https://sourceforge.net/projects/gary-os/files/v4.0/stage3-core2_64-funtoo-current-2018-08-27.tar.xz)
+  | Source Stage3  | [stage3-generic_64-funtoo-current-2018-09-30.tar.xz](https://sourceforge.net/projects/gary-os/files/v4.0/stage3-generic_64-funtoo-current-2018-09-30.tar.xz)
   | Source Portage | [gary-os-v4.0-generic_64.meta-repo.tar.xz](https://sourceforge.net/projects/gary-os/files/v4.0/gary-os-v4.0-generic_64.meta-repo.tar.xz)
 
   * Put out a new release!
