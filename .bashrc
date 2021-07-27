@@ -1129,6 +1129,11 @@ function git-am {
 function git-backup {
 	declare DIR="$(realpath "${PWD}")"
 	declare FAIL=
+	declare QUICK=
+	if [[ "${1}" == -q ]]; then
+		QUICK="${1}"
+		shift
+	fi
 	if [[ "${1}" == -r ]]; then
 		shift
 		declare COMMIT="HEAD"
@@ -1136,14 +1141,14 @@ function git-backup {
 		[[ -n "$(echo "${1}" | ${GREP} "^[a-z0-9]{40}$")" ]] && COMMIT="${1}" && shift
 		[[ -z "${@}" ]] && ENTIRE="./ ${ENTIRE}"
 		${GIT} checkout ${COMMIT} ${ENTIRE} "${@}" &&
-		index-dir -0 ${DIR} -r "${@}"
+		index-dir ${QUICK} -0 ${DIR} -r "${@}"
 		return 0
 	fi
 	echo -en "* -delta\n" >${DIR}/.gitattributes
 	if [[ "${1}" == -! ]]; then
 		shift
 	else
-		index-dir -0 ${DIR} $(
+		index-dir ${QUICK} -0 ${DIR} $(
 			${GREP} "^/" .gitignore 2>/dev/null |
 			${SED} -e "s|^/|./|g" -e "s|/$||g"
 		)
