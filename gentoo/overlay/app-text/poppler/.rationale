@@ -1,0 +1,9 @@
+pandoc version
+https://gitweb.gentoo.org/repo/gentoo.git/tree/app-text/poppler?id=f5ba41c6f41b4fc109a2eb782029947c9054658c
+emerge: there are no ebuilds to satisfy ">=app-text/poppler-0.87.0:=".
+(dependency required by "app-text/texlive-core-2020-r12::overlay" [ebuild])
+* ERROR: app-text/poppler-0.90.1::overlay failed (depend phase):
+* cmake.eclass could not be found by inherit()
+https://gitweb.gentoo.org/repo/gentoo.git/tree/app-text/poppler?id=55078e96e805486eeaf44fb54a147246f17ed406
+* ERROR: app-text/poppler-0.89.0::overlay failed (prepare phase):
+* eapply_user (or default) must be called in src_prepare()!
