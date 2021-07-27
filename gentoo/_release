@@ -1965,7 +1965,7 @@ function _publish_gitdir {		#{ismain}
 	declare SAVE_FILES=
 	SAVE_FILES+="^_commit"
 	SAVE_FILES+="^_config\*"
-	SAVE_FILES+="^_packages\*"
+	SAVE_FILES+="^_packages.\*"
 	SAVE_FILES+="^${CMTFIL}"
 	SAVE_FILES+="^${_GPACK/%.txt}\*"
 	declare SETUP_FILES=
@@ -2020,7 +2020,12 @@ function publish_export_filelist {
 
 function publish_export_gitbackup {
 	declare GDIR="${1}" && shift
+	declare RELV="${1}" && shift
 	declare HASH="${1}" && shift
+	declare QUICK=
+	if [[ -n $(echo "${RELV}" | ${GREP} "^v[0-3][.][0-9]$") ]]; then
+		QUICK="-q"
+	fi
 	FILE="$(
 		for NEXT in ${PUB_FILES}; do
 			(set -o pipefail;
@@ -2033,13 +2038,13 @@ function publish_export_gitbackup {
 		done
 	)"
 	if [[ -n ${FILE} ]]; then
-		(cd ${_OUTDIR} && git-backup -r ${HASH} ${FILE})			|| return 1
+		(cd ${_OUTDIR} && git-backup ${QUICK} -r ${HASH} ${FILE})		|| return 1
 	fi
 	FILE="$(realpath --canonicalize-missing --relative-to ${GDIR} $(
 		find ${GDIR}/.${_TITLE}-*/ ${GDIR}/${_TITLE}-*/ -mindepth 1 -maxdepth 1	2>/dev/null
 	) 2>/dev/null)"
 	if [[ -n ${FILE} ]]; then
-		(cd ${_OUTDIR} && git-backup -r ${HASH} ${FILE})			|| return 1
+		(cd ${_OUTDIR} && git-backup ${QUICK} -r ${HASH} ${FILE})		|| return 1
 	fi
 	return 0
 }
@@ -2095,7 +2100,7 @@ function _publish_export {
 		else
 			continue
 		fi
-		publish_export_gitbackup ${_OUTDIR} ${CMTHASH[${INDEX}]}			|| return 1
+		publish_export_gitbackup ${_OUTDIR} ${RELEASE[${INDEX}]} ${CMTHASH[${INDEX}]}	|| return 1
 		if [[ -d $(${LS} -d ${_OUTDIR}/.${_TITLE}-* 2>/dev/null) ]]; then
 			if [[ ${RELEASE[${INDEX}]} == ${RELEASE[-1]} ]]; then
 				publish_export_underscore ${DSTDIR}				|| return 1
