@@ -2,11 +2,14 @@
 # portage set configuration file
 ################################################################################
 
-#{FUNTOO}
-#{LINPKG} sys-kernel/gentoo-sources:4.18.6
-#{KERNEL} 4.18.6
+#>>> ${SED} -i -e "s|[[:space:]]+#\{MOD\}[[:space]]*||g" -e "s|[[:space:]]+#\{rootfs\}[[:space:]]*||g" ${HOME}/setup/gentoo/sets/gary-os ; vdiff ${HOME}/setup/gentoo/sets/{packages,gary-os}
 
-#{SELECT} python:python3.6
+#{FUNTOO}
+#{LINPKG} sys-kernel/gentoo-sources:5.6.19
+#{KERNEL} 5.6.19
+
+#{SELECT} python:python3.7
+
 #{SELECT} vi:vim
 #{SELECT} mesa:--auto
 #{SELECT} opengl:xorg-x11
@@ -121,38 +124,31 @@ app-shells/bash				#{rootfs}
 app-shells/bash-completion		#{MOD}
 app-shells/bashdb			#{MOD}
 sys-apps/kbd				#{MOD}
-sys-devel/gettext			#{MOD}
 sys-libs/gpm
 
-#>>>app-crypt/efitools			# fails to build as "generic_64"
+app-crypt/efitools
 sys-apps/busybox			#{rootfs}
 sys-apps/openrc
-sys-apps/sysvinit			#{MOD}
-sys-boot/boot-update
 sys-boot/efibootmgr
 sys-boot/grub
 sys-boot/os-prober
-sys-boot/syslinux			#{MOD}
 sys-libs/efivar
 sys-power/suspend			#{MOD}
 sys-process/runit			#{MOD}
 
 sys-apps/gptfdisk
-sys-block/parted
-sys-fs/btrfs-progs			#{MOD} # requires: app-text/asciidoc
 sys-fs/cryptsetup
 sys-fs/dosfstools			#{rootfs}
 sys-fs/e2fsprogs			#{rootfs}
+sys-fs/encfs
 sys-fs/exfat-utils			#{rootfs}
-sys-fs/ext3grep
-sys-fs/ext4magic
-sys-fs/extundelete
 sys-fs/fuse				#{rootfs}
 sys-fs/fuse-exfat			#{rootfs}
 sys-fs/mdadm
-sys-fs/mtools
 sys-fs/ntfs3g				#{rootfs}
 sys-fs/squashfs-tools
+sys-fs/zfs
+sys-fs/zfs-kmod
 
 sys-apps/attr
 sys-apps/coreutils			#{rootfs}
@@ -166,6 +162,7 @@ sys-apps/sed				#{rootfs}
 sys-apps/util-linux			#{rootfs}
 sys-apps/which
 
+dev-libs/libcgroup			#{MOD}
 sys-fs/sysfsutils
 sys-process/atop
 sys-process/htop
@@ -180,18 +177,16 @@ app-admin/sysklogd			#{MOD}
 app-admin/ulogd				#{MOD}
 sys-fs/inotify-tools			#{MOD}
 
-app-admin/pwgen
 app-admin/sudo				#{MOD}
-sys-libs/cracklib
 sys-libs/pam				#{MOD}
 
 net-firewall/ebtables
 net-firewall/iptables
 net-misc/bridge-utils
 net-misc/dhcpcd
-net-misc/ifenslave
 net-misc/iputils
 net-misc/vconfig
+net-wireless/wavemon
 net-wireless/wireless-tools
 net-wireless/wpa_supplicant
 sys-apps/ethtool
@@ -202,67 +197,51 @@ net-ftp/lftp				#{MOD}
 net-misc/curl
 net-misc/rsync				#{rootfs}
 net-misc/wget
-www-client/elinks			#{MOD}
 www-client/links
-www-client/lynx				#{MOD}
 www-client/w3m
 
 app-crypt/gnupg				#{MOD}
 dev-libs/openssl
 net-misc/openssh
 
-#>>>app-editors/gvim			#{MOD} # requires: x11-libs/gtk+
+app-editors/gvim			#{MOD} # requires: x11-libs/gtk+
 app-editors/nano
-app-editors/nvi				#{MOD}
 app-editors/vim				# requires: dev-util/ctags -> dev-python/docutils -> dev-python/pygments
-app-editors/vim-core
 app-text/dos2unix
 app-vim/taglist				#{MOD} # requires: dev-util/ctags -> dev-python/docutils -> dev-python/pygments
-app-vim/vim-spell-en			#{MOD}
 dev-util/cloc				#{MOD}
-#>>>dev-util/indent			#{MOD} # fails to build as "generic_64"
-sys-apps/ed				#{MOD}
 
 app-dicts/aspell-en			#{MOD}
+app-dicts/aspell-es			#{MOD}
 app-text/aspell				#{MOD}
+app-vim/vim-spell-en			#{MOD}
+app-vim/vim-spell-es			#{MOD}
 
-app-arch/afio				#{MOD}
 app-arch/bzip2
 app-arch/cpio
 app-arch/gzip
 app-arch/lz4				#{MOD} # requires: dev-util/cmake
 app-arch/p7zip
-app-arch/rar
 app-arch/sharutils			#{MOD}
 app-arch/tar				#{rootfs}
-app-arch/unrar
-app-arch/unzip				#{MOD}
-app-arch/upx-ucl			#{MOD}
-app-arch/xar				#{MOD}
 app-arch/xz-utils
-app-arch/zip				#{MOD}
 dev-util/xdelta
 
 app-arch/cabextract			#{MOD}
-app-arch/deb2targz			#{MOD}
 app-arch/dpkg				#{MOD}
 app-arch/rpm				#{MOD}
-app-arch/rpm2targz			#{MOD}
 
 ########################################
 # gentoo
-
-sys-kernel/genkernel			#{MOD}
 
 app-admin/ego				#{MOD}
 app-admin/eselect			#{MOD}
 sys-apps/portage			#{MOD}
 
+app-portage/eix				#{MOD}
 app-portage/gentoolkit			#{MOD}
-app-shells/gentoo-bashcomp		#{MOD}
-app-vim/gentoo-syntax			#{MOD}
-
-sys-devel/gcc-config			#{MOD}
+app-portage/mirrorselect		#{MOD}
+sys-kernel/genkernel			#{MOD}
 
 ########################################
 # x11
@@ -270,16 +249,20 @@ sys-devel/gcc-config			#{MOD}
 x11-apps/xrandr				#{MOD}
 x11-base/xorg-drivers			#{MOD}
 x11-base/xorg-server			#{MOD}
-#>>>x11-misc/arandr			#{MOD} # requires: x11-libs/gtk+
+x11-base/xorg-x11			#{MOD}
+x11-misc/arandr				#{MOD} # requires: x11-libs/gtk+
 
 x11-misc/dmenu				#{MOD}
+#>>>x11-misc/obconf			#{MOD}
 x11-wm/dwm				#{MOD}
+#>>>x11-wm/openbox			#{MOD}
 
 x11-terms/rxvt-unicode			#{MOD}
 
 x11-apps/xset				#{MOD}
 x11-apps/xsetroot			#{MOD}
-#>>>x11-misc/tabbed			#{MOD} # needed by: www-client/surf
+x11-misc/xlockmore			#{MOD}
+x11-misc/xsel				#{MOD}
 
 ########################################
 # toolkits
@@ -287,23 +270,29 @@ x11-apps/xsetroot			#{MOD}
 dev-vcs/git				#{MOD}
 dev-vcs/subversion			#{MOD}
 
-app-admin/perl-cleaner			#{MOD}
 dev-lang/perl				#{MOD}
 dev-libs/libpcre
 dev-perl/JSON				#{MOD}
 dev-perl/JSON-XS			#{MOD}
 
 dev-lang/python				#{MOD}
+#>>>dev-libs/libuv			# questionable size and utility
+#>>>net-libs/nodejs			# questionable size and utility
 
+app-misc/jq				#{MOD}
+app-misc/yq				#{MOD}
 dev-db/sqlite				#{MOD}
 dev-tcltk/expect			#{MOD} # requires: dev-lang/tcl
 
-#>>>x11-libs/gtk+			#{MOD}
-#>>>x11-themes/gtk-theme-switch		#{MOD}
+sys-apps/thunderbolt-software-user-space	#{MOD}
 
 net-wireless/bluez			#{MOD}
 net-wireless/bluez-hcidump		#{MOD}
 net-wireless/bluez-tools		#{MOD}
+
+app-forensics/cmospwd
+sys-apps/flashrom			#{MOD} # requires: dev-embedded/libftdi -> dev-libs/boost
+sys-apps/memtester
 
 ########################################
 # utilities
@@ -313,21 +302,20 @@ sys-devel/bc
 
 dev-util/ltrace
 dev-util/strace
-#>>>dev-util/sysprof			#{MOD} # too many dependencies
+dev-util/sysprof			#{MOD} # requires: dev-libs/appstream-glib -> x11-libs/gtk+
+sys-apps/fakeroot-ng			#{MOD}
 sys-apps/kexec-tools			#{MOD}
 
 sys-apps/hdparm
 sys-block/blktrace
 
 sys-apps/dcfldd
-sys-block/whdd
 sys-fs/dd-rescue
 sys-fs/ddrescue
 sys-fs/ncdu
 sys-fs/safecopy
 
 sys-apps/lshw
-sys-apps/memtester
 sys-apps/pciutils
 sys-apps/usbutils
 sys-power/acpitool
@@ -335,7 +323,6 @@ sys-power/acpitool
 app-admin/procinfo-ng			#{MOD}
 app-admin/sysstat			#{MOD}
 app-misc/binwalk			#{MOD}
-app-misc/reptyr				#{MOD}
 app-text/tree				#{MOD}
 sys-apps/dstat				#{MOD}
 sys-apps/pv				#{MOD}
@@ -344,42 +331,24 @@ net-analyzer/dnstracer			#{MOD}
 net-analyzer/httping			#{MOD}
 net-analyzer/iftop			#{MOD}
 net-analyzer/iptraf-ng			#{MOD}
-net-analyzer/macchanger			#{MOD}
-net-analyzer/netcat6			#{MOD}
 net-analyzer/nethogs			#{MOD}
 net-analyzer/ngrep			#{MOD}
 net-analyzer/nmap
-net-analyzer/rrdtool			#{MOD}
-net-analyzer/snort			#{MOD}
+net-analyzer/openbsd-netcat		#{MOD}
 net-analyzer/ssldump
 net-analyzer/tcpdump
 net-analyzer/tcptrace			#{MOD}
 net-analyzer/tcptraceroute		#{MOD}
 net-analyzer/traceroute			#{MOD}
-net-analyzer/vnstat			#{MOD}
 net-analyzer/wireshark			#{MOD} # requires: x11-libs/gtk+
-net-dns/avahi				#{MOD}
 net-dns/bind-tools			#{MOD}
-net-misc/cadaver			#{MOD}
-net-misc/iperf				#{MOD}
 net-misc/netkit-telnetd			#{MOD}
-net-misc/rdate				#{MOD}
 net-misc/socat				#{MOD}
 net-misc/whois				#{MOD}
-net-wireless/kismet			#{MOD} # requires: net-misc/networkmanager, net-libs/libmicrohttpd
-
-net-misc/pipes				#{MOD}
-net-vpn/httptunnel			#{MOD}
 
 net-fs/cifs-utils			#{MOD}
-
+net-fs/sshfs				#{MOD}
 net-misc/autossh			#{MOD}
-
-app-forensics/cmospwd
-app-forensics/foremost
-app-forensics/sleuthkit
-
-sys-apps/flashrom			#{MOD} # requires: dev-embedded/libftdi -> dev-libs/boost
 
 ########################################
 # servers
@@ -394,12 +363,10 @@ net-vpn/tor				#{MOD} # requires: app-text/asciidoc
 ########################################
 # programs
 
-www-client/netsurf			#{MOD} # requires: dev-libs/libnsfb [sdl]
 #>>>www-client/surf			#{MOD} # requires: net-libs/webkit-gtk (x11-libs/gtk+) -> dev-lang/ruby -> dev-ruby/json -> dev-util/ragel -> dev-util/colm -> app-text/asciidoc
+#>>>x11-misc/tabbed			#{MOD} # needed by: www-client/surf
 
-#>>>app-text/mupdf			#{MOD}
-
-#>>>net-misc/rdesktop			#{MOD}
+#>>>net-misc/freerdp			#{MOD}
 #>>>net-misc/tigervnc			#{MOD}
 
 ########################################
