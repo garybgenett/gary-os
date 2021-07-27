@@ -48,16 +48,14 @@ if [[ ${1} == -a ]]; then
 	for FILE in $(
 		find ./${ARCHIVE} -mindepth 2 -maxdepth 2 -type d |
 		${SED} "s|^[.][/]||g" |
-		sort |
-		${GREP} -v "[.]src$"
+		sort
 	) $(
 		find ./ -mindepth 2 -maxdepth 2 -type d \( \
 				\( -path ./${ARCHIVE}/\* -prune \) \
 				-o -print \
 			\) |
 		${SED} "s|^[.][/]||g" |
-		sort |
-		${GREP} -v "[.]src$"
+		sort
 	); do
 		if [[ -n $(echo "${FILE}" | ${GREP} "^${ARCHIVE}") ]]; then
 			echo "ARCHIVED: ${FILE}"
@@ -66,7 +64,7 @@ if [[ ${1} == -a ]]; then
 		else
 			echo "ARCHIVING: ${FILE}"
 			${MKDIR} ${ARCHIVE}/$(dirname ${FILE})
-			${MV} ${FILE}{,.src} ${ARCHIVE}/$(dirname ${FILE})
+			${MV} ${FILE} ${ARCHIVE}/$(dirname ${FILE})
 		fi
 	done
 	exit 0
@@ -90,7 +88,6 @@ declare FILE
 for FILE in $(
 	find ./ -mindepth 2 -maxdepth 2 -type d \( \
 		\( -path ./${ARCHIVE} -prune \) -o \
-		\( -path ./\*/\*.src -prune \) -o \
 		\( -path ./metadata -prune \) -o \
 		\( -path ./overlay.conf -prune \) -o \
 		\( -path ./profiles -prune \) -o \
@@ -100,7 +97,7 @@ for FILE in $(
 ); do
 	declare EBUILD="$(find ./${FILE}/*.ebuild -type f | tail -n1)"
 	if ${RESET}; then
-		${RSYNC_U} /var/git/meta-repo/kits/*/${FILE}/ ./${FILE}.src		1>&2
+		${RSYNC_U} /var/git/meta-repo/kits/*/${FILE}/ ./${FILE}/.source		1>&2
 		ebuild ${EBUILD} digest							1>&2
 	fi
 	if [[ ! -f ${FILE}/.rationale ]]; then
@@ -110,9 +107,9 @@ for FILE in $(
 	review_header									${LENGTH} ${FILE} rationale
 	cat ${FILE}/.rationale								2>&1
 	review_header									${LENGTH} ${FILE} source
-	diff ${DIFF_OPTS} -r /var/git/meta-repo/kits/*/${FILE} ./${FILE}.src		2>&1
+	diff ${DIFF_OPTS} -r /var/git/meta-repo/kits/*/${FILE} ./${FILE}/.source	2>&1
 	review_header									${LENGTH} ${FILE} target
-	diff ${DIFF_OPTS} -r ./${FILE}.src ./${FILE}					2>&1
+	diff ${DIFF_OPTS} -r ./${FILE}/.source ./${FILE}				2>&1
 	review_header									${LENGTH} ${FILE} files
 	${GREP} "[\"][\$][{]FILESDIR[}]" ${EBUILD}					2>&1
 	echo										2>&1
