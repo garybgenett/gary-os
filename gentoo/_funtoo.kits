@@ -10,7 +10,11 @@ declare NICELY=
 
 if [[ -n "${@}" ]]; then
 	export REPDIR="${1}" && shift
+	export BRANCH="${1}" && shift
 	export COMMIT="${1}" && shift
+	if [[ -z "${BRANCH}" ]]; then
+		BRANCH="1.4-release"
+	fi
 	if [[ -z "${COMMIT}" ]]; then
 		COMMIT="master"
 	fi
@@ -53,13 +57,7 @@ function kit_list {
 		};
 		my $order = $info->{"kit_order"};
 		foreach my $kit (@{$order}) {
-			my $head = $info->{"kit_settings"}{$kit}{"default"};
-			if ($release->{$kit}[0]) {
-				$head = $release->{$kit}[0];
-			};
-#>>>			foreach my $key (sort(keys(%{ $sha1->{$kit} }))) {
-#>>>				$head = ${key};
-#>>>			};
+			my $head = $release->{$kit}[0];
 			my $hash = $sha1->{$kit}{$head};
 			print "${kit}|${head}|${hash}\n";
 		};
@@ -109,12 +107,12 @@ function fun_git {
 	${FUN_GIT} tag --list					|| return 1
 	${FUN_GIT} fetch --all					|| return 1
 	(
-		${FUN_GIT} reset --hard origin/${REPO_HEAD}	&&
 		${FUN_GIT} checkout --force ${REPO_HEAD}	&&
+		${FUN_GIT} reset --hard ${REPO_HEAD}		&&
 								true
 	) || (
-		${FUN_GIT} reset --hard origin/master		&&
 		${FUN_GIT} checkout --force master		&&
+		${FUN_GIT} reset --hard master			&&
 								true
 	)							|| return 1
 	(
@@ -136,7 +134,7 @@ function fun_git {
 fun_git \
 	${REPDIR} \
 	${REPDIR}.git \
-	${COMMIT} \
+	${BRANCH} \
 	${COMMIT} \
 	|| exit 1
 
