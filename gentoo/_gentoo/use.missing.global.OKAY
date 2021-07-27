@@ -2,7 +2,5 @@ build - !!internal use only!! DO NOT SET THIS FLAG YOURSELF!, used for creating 
 custom-cflags - Build with user-specified CFLAGS (unsupported)
 livecd - !!internal use only!! DO NOT SET THIS FLAG YOURSELF!, used during livecd building
 prefix - Defines if a Gentoo Prefix offset installation is used
-static - !!do not set this during bootstrap!! Causes binaries to be statically linked instead of dynamically
-static-libs - Build static versions of dynamic libraries as well
 test - Workaround to pull in packages needed to run with FEATURES=test. Portage-2.1.2 handles this internally, so don't set it in make.conf/package.use anymore
 vanilla - Do not add extra patches which change default behaviour; DO NOT USE THIS ON A GLOBAL SCALE as the severity of the meaning changes drastically
