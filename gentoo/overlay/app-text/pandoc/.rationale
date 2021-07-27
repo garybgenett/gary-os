@@ -1,0 +1,210 @@
+# pandoc rationale == https://github.com/garybgenett/composer
+# = = version selection
+# - = no source directory
+# + = add normally
+https://gitweb.gentoo.org/repo/gentoo.git/tree/app-text/pandoc?id=f5ba41c6f41b4fc109a2eb782029947c9054658c
+# versions
+=app-admin/haskell-updater-1.3.2
+=app-text/pandoc-2.9.2.1
+=dev-haskell/cabal-3.0.1.0
+=dev-haskell/pandoc-citeproc-0.17.0.1
+=dev-haskell/pandoc-types-1.20
+=dev-lang/ghc-8.8.4
+# packages
++ app-admin/haskell-updater
++ dev-haskell/cabal
++ dev-haskell/pandoc-citeproc
++ dev-haskell/pandoc-types
++ dev-lang/ghc
+# texlive
+#>>>=app-text/texlive-2020-r9
+https://gitweb.gentoo.org/repo/gentoo.git/tree/app-text/pandoc?id=23762db0655c080319df8efec02f8681dcb1d716
+=app-text/texlive-2019-r1
+#>>>
+# https://mirrors.sohu.com/gentoo
+# https://bugs.gentoo.org/379261#c5
+#	emerge -C $(qlist -I -C dev-texlive/*)
+#	emerge -C texlive texlive-core
+#	emerge -C == equery b -f "/etc/texmf/.*"
+#	emerge -C xdvik kpathsea xmltex
+#	emerge -C == eix --installed tex
+#	rm -frv /etc/texmf
+#	rm -frv /usr/share/texmf*
+#	rm -frv /var/lib/texmf
+#	emerge --update --newuse --deep --ask texlive
+# !'a sort -k2 -u
++ app-text/passivetex
++ app-text/poppler
++ app-text/psutils
++ app-text/texlive
++ app-text/texlive-core
++ app-text/xmlto
++ dev-libs/kpathsea
++ dev-libs/ptexenc
++ dev-tex/bibtexu
++ dev-tex/latex-beamer
++ dev-tex/pgf
++ dev-texlive/texlive-basic
++ dev-texlive/texlive-fontsrecommended
++ dev-texlive/texlive-fontutils
++ dev-texlive/texlive-formatsextra
++ dev-texlive/texlive-latex
++ dev-texlive/texlive-latexextra
++ dev-texlive/texlive-latexrecommended
++ dev-texlive/texlive-luatex
++ dev-texlive/texlive-mathscience
++ dev-texlive/texlive-pictures
++ dev-texlive/texlive-plaingeneric
++ dev-texlive/texlive-pstricks
++ dev-texlive/texlive-xetex
+# haskell-kit
+=dev-haskell/aeson-1.4.7.1
+=dev-haskell/conduit-1.3.2
+=dev-haskell/transformers-0.5.6.2
+# !G sort -k2 -u
++ dev-haskell/aeson
++ dev-haskell/aeson-pretty
++ dev-haskell/ansi-terminal
++ dev-haskell/asn1-encoding
++ dev-haskell/asn1-parse
++ dev-haskell/asn1-types
++ dev-haskell/async
++ dev-haskell/attoparsec
++ dev-haskell/base-compat
+- dev-haskell/base-compat-batteries
+- dev-haskell/base-noprelude
++ dev-haskell/base-orphans
++ dev-haskell/base16-bytestring
++ dev-haskell/base64-bytestring
+- dev-haskell/basement
++ dev-haskell/bifunctors
++ dev-haskell/binary
++ dev-haskell/blaze-builder
++ dev-haskell/blaze-html
++ dev-haskell/blaze-markup
++ dev-haskell/byteable
++ dev-haskell/bytestring-builder
++ dev-haskell/cabal-doctest
++ dev-haskell/case-insensitive
++ dev-haskell/cereal
+- dev-haskell/cmark-gfm
++ dev-haskell/cmdargs
++ dev-haskell/colour
++ dev-haskell/comonad
++ dev-haskell/conduit
++ dev-haskell/conduit-extra
++ dev-haskell/connection
++ dev-haskell/contravariant
++ dev-haskell/cookie
++ dev-haskell/cryptonite
++ dev-haskell/data-default
++ dev-haskell/data-default-class
++ dev-haskell/data-default-instances-base
++ dev-haskell/data-default-instances-containers
++ dev-haskell/data-default-instances-dlist
++ dev-haskell/data-default-instances-old-locale
++ dev-haskell/digest
++ dev-haskell/distributive
++ dev-haskell/dlist
+- dev-haskell/doclayout
++ dev-haskell/doctemplates
+- dev-haskell/emojis
++ dev-haskell/errors
++ dev-haskell/exceptions
++ dev-haskell/fail
++ dev-haskell/glob
++ dev-haskell/haddock-library
++ dev-haskell/hashable
++ dev-haskell/hourglass
++ dev-haskell/hs-bibutils
++ dev-haskell/hscolour
++ dev-haskell/hslua
+- dev-haskell/hslua-module-system
+- dev-haskell/hslua-module-text
+- dev-haskell/hsyaml
+- dev-haskell/hsyaml-aeson
++ dev-haskell/http
++ dev-haskell/http-client
++ dev-haskell/http-client-tls
++ dev-haskell/http-types
++ dev-haskell/hxt
++ dev-haskell/hxt-charproperties
++ dev-haskell/hxt-regex-xmlschema
++ dev-haskell/hxt-unicode
+- dev-haskell/integer-logarithms
+- dev-haskell/ipynb
+- dev-haskell/jira-wiki-markup
++ dev-haskell/juicypixels
+- dev-haskell/libyaml
++ dev-haskell/lifted-base
++ dev-haskell/memory
++ dev-haskell/mime-types
++ dev-haskell/mmorph
++ dev-haskell/monad-control
++ dev-haskell/mono-traversable
++ dev-haskell/mtl
++ dev-haskell/mwc-random
++ dev-haskell/nats
++ dev-haskell/network
++ dev-haskell/network-uri
++ dev-haskell/old-locale
++ dev-haskell/old-time
++ dev-haskell/parsec
++ dev-haskell/pem
++ dev-haskell/primitive
++ dev-haskell/quickcheck
++ dev-haskell/random
++ dev-haskell/regex-base
++ dev-haskell/regex-pcre
++ dev-haskell/resourcet
++ dev-haskell/rfc5051
++ dev-haskell/safe
++ dev-haskell/scientific
++ dev-haskell/semigroups
++ dev-haskell/setenv
++ dev-haskell/sha
++ dev-haskell/skylighting
+- dev-haskell/skylighting-core
++ dev-haskell/socks
++ dev-haskell/split
+- dev-haskell/splitmix
++ dev-haskell/statevar
++ dev-haskell/stm
++ dev-haskell/streaming-commons
++ dev-haskell/syb
++ dev-haskell/tagged
++ dev-haskell/tagsoup
++ dev-haskell/temporary
++ dev-haskell/texmath
++ dev-haskell/text
+- dev-haskell/text-conversions
++ dev-haskell/tf-random
+- dev-haskell/th-abstraction
++ dev-haskell/time-compat
++ dev-haskell/time-locale-compat
++ dev-haskell/tls
++ dev-haskell/transformers
++ dev-haskell/transformers-base
++ dev-haskell/transformers-compat
+- dev-haskell/type-equality
+- dev-haskell/typed-process
++ dev-haskell/unexceptionalio
++ dev-haskell/unicode-transforms
+- dev-haskell/unliftio-core
++ dev-haskell/unordered-containers
++ dev-haskell/utf8-string
++ dev-haskell/uuid-types
++ dev-haskell/vector
++ dev-haskell/vector-algorithms
++ dev-haskell/void
++ dev-haskell/x509
++ dev-haskell/x509-store
++ dev-haskell/x509-system
++ dev-haskell/x509-validation
++ dev-haskell/xml
++ dev-haskell/xml-conduit
++ dev-haskell/xml-types
++ dev-haskell/yaml
++ dev-haskell/zip-archive
++ dev-haskell/zlib
+# end of file
