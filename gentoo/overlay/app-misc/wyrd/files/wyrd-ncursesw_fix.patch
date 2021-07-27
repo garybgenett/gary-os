@@ -1,0 +1,180 @@
+diff -u -U10 -r wyrd-1.4.6.orig/curses/configure wyrd-1.4.6/curses/configure
+--- wyrd-1.4.6.orig/curses/configure	2013-02-02 19:40:49.000000000 -0800
++++ wyrd-1.4.6/curses/configure	2020-03-21 16:43:48.446082175 -0700
+@@ -3538,33 +3538,33 @@
+ fi
+ rm -f core conftest.err conftest.$ac_objext \
+     conftest$ac_exeext conftest.$ac_ext
+ fi
+ 
+ if test -z "$CURSES_LIB"
+ then
+ LIBS="-lncurses $ORIG_LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+-#include <ncurses/curses.h>
++#include <ncursesw/curses.h>
+ int
+ main ()
+ {
+ initscr(); use_default_colors()
+   ;
+   return 0;
+ }
+ _ACEOF
+ if ac_fn_c_try_link "$LINENO"; then :
+   CURSES_LIB=-lncurses
+ 
+-$as_echo "#define CURSES_HEADER <ncurses/curses.h>" >>confdefs.h
++$as_echo "#define CURSES_HEADER <ncursesw/curses.h>" >>confdefs.h
+ 
+ else
+ 
+ LIBS="-lncurses $ORIG_LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ #include <ncurses.h>
+ int
+ main ()
+ {
+@@ -3662,69 +3662,70 @@
+ else
+ as_fn_error $? "not found" "$LINENO" 5
+ fi
+ 
+ # Try to locate term.h, which has a sadly nonstandardized location
+ 
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for term.h" >&5
+ $as_echo_n "checking for term.h... " >&6; }
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
++#define NCURSES_INTERNALS
+ #include <term.h>
+ int
+ main ()
+ {
+ TERMINAL __dummy
+   ;
+   return 0;
+ }
+ _ACEOF
+ if ac_fn_c_try_compile "$LINENO"; then :
+   TERM_H_STRING="<term.h>"
+ 
+ $as_echo "#define CURSES_TERM_H <term.h>" >>confdefs.h
+ 
+ else
+ 
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+-#include <ncurses/term.h>
++#include <ncursesw/term.h>
+ int
+ main ()
+ {
+ TERMINAL __dummy
+   ;
+   return 0;
+ }
+ _ACEOF
+ if ac_fn_c_try_compile "$LINENO"; then :
+-  TERM_H_STRING="<ncurses/term.h>"
++  TERM_H_STRING="<ncursesw/term.h>"
+ 
+-$as_echo "#define CURSES_TERM_H <ncurses/term.h>" >>confdefs.h
++$as_echo "#define CURSES_TERM_H <ncursesw/term.h>" >>confdefs.h
+ 
+ else
+ 
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+-#include <curses/term.h>
++#include <ncursesw/term.h>
+ int
+ main ()
+ {
+ TERMINAL __dummy
+   ;
+   return 0;
+ }
+ _ACEOF
+ if ac_fn_c_try_compile "$LINENO"; then :
+-  TERM_H_STRING="<curses/term.h>"
++  TERM_H_STRING="<ncursesw/term.h>"
+ 
+-$as_echo "#define CURSES_TERM_H <curses/term.h>" >>confdefs.h
++$as_echo "#define CURSES_TERM_H <ncursesw/term.h>" >>confdefs.h
+ 
+ fi
+ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+ fi
+ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+ fi
+ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+ 
+ if test -n "$TERM_H_STRING"
+ then
+diff -u -U10 -r wyrd-1.4.6.orig/curses/configure.ac wyrd-1.4.6/curses/configure.ac
+--- wyrd-1.4.6.orig/curses/configure.ac	2013-02-02 19:40:48.000000000 -0800
++++ wyrd-1.4.6/curses/configure.ac	2020-03-21 16:30:08.437861066 -0700
+@@ -42,23 +42,23 @@
+ AC_TRY_LINK(
+   [#include <ncursesw/curses.h>], [initscr(); use_default_colors()],
+   [CURSES_LIB=-lncursesw
+    AC_DEFINE(CURSES_HEADER, <ncursesw/curses.h>, [Defined to ncurses header file])])
+ fi
+ 
+ if test -z "$CURSES_LIB"
+ then
+ LIBS="-lncurses $ORIG_LIBS"
+ AC_TRY_LINK(
+-  [#include <ncurses/curses.h>], [initscr(); use_default_colors()],
++  [#include <ncursesw/curses.h>], [initscr(); use_default_colors()],
+   [CURSES_LIB=-lncurses
+-   AC_DEFINE(CURSES_HEADER, <ncurses/curses.h>, [Defined to ncurses header file])],
++   AC_DEFINE(CURSES_HEADER, <ncursesw/curses.h>, [Defined to ncurses header file])],
+   [
+ LIBS="-lncurses $ORIG_LIBS"
+ AC_TRY_LINK(
+   [#include <ncurses.h>], [initscr(); use_default_colors()],
+   [CURSES_LIB=-lncurses
+    AC_DEFINE(CURSES_HEADER, <ncurses.h>, [Defined to ncurses header file])],
+   [
+ LIBS="-lcurses $ORIG_LIBS"
+ AC_TRY_LINK(
+   [#include <curses.h>], [initscr(); use_default_colors()],
+@@ -89,28 +89,28 @@
+ 
+ # Try to locate term.h, which has a sadly nonstandardized location
+ 
+ AC_MSG_CHECKING(for term.h)
+ AC_TRY_COMPILE(
+    [#include <term.h>], [TERMINAL __dummy],
+    [TERM_H_STRING="<term.h>"
+     AC_DEFINE(CURSES_TERM_H, <term.h>, [Defined to ncurses term.h file])],
+    [
+ AC_TRY_COMPILE(
+-   [#include <ncurses/term.h>], [TERMINAL __dummy],
+-   [TERM_H_STRING="<ncurses/term.h>"
+-    AC_DEFINE(CURSES_TERM_H, <ncurses/term.h>, [Defined to ncurses term.h file])],
++   [#include <ncursesw/term.h>], [TERMINAL __dummy],
++   [TERM_H_STRING="<ncursesw/term.h>"
++    AC_DEFINE(CURSES_TERM_H, <ncursesw/term.h>, [Defined to ncurses term.h file])],
+    [
+ AC_TRY_COMPILE(
+-   [#include <curses/term.h>], [TERMINAL __dummy],
+-   [TERM_H_STRING="<curses/term.h>"
+-    AC_DEFINE(CURSES_TERM_H, <curses/term.h>, [Defined to ncurses term.h file])],
++   [#include <ncursesw/term.h>], [TERMINAL __dummy],
++   [TERM_H_STRING="<ncursesw/term.h>"
++    AC_DEFINE(CURSES_TERM_H, <ncursesw/term.h>, [Defined to ncurses term.h file])],
+ ) ]) ])
+ 
+ if test -n "$TERM_H_STRING"
+ then
+    AC_MSG_RESULT([found in $TERM_H_STRING])
+ else
+    AC_MSG_ERROR([not found])
+ fi
+ 
+ 

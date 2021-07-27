@@ -1,7 +1,9 @@
 # Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+#>>>EAPI=5
+EAPI=6
+#>>>
 
 DESCRIPTION="Text-based front-end to Remind"
 HOMEPAGE="http://pessimization.com/software/wyrd/"
@@ -20,6 +22,9 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	>=dev-lang/ocaml-3.08
 "
+#>>>
+PATCHES=( "${FILESDIR}"/wyrd-ncursesw_fix.patch )
+#>>>
 
 src_configure() {
 	econf \
