@@ -6,7 +6,7 @@
 #NOTE: UPDATE "#SETTINGS" LINES IN "_SYSTEM" SCRIPT WHEN THESE VARIABLES CHANGE
 
 export _TITLE="gary-os"
-export _VERSN="v4.0"
+export _VERSN="v5.0"
 export _RDATE="$(date --iso=date)"
 
 export _FINAL="${TARGET}/.${_TITLE}-${ESUB}"
@@ -61,6 +61,7 @@ RELEASE[3]="v1.0"; CMTHASH[3]="f6885f3482b95fe15a688135c441f8f6391c9529"
 RELEASE[4]="v1.1"; CMTHASH[4]="9b653e64164e68873333043b41f8bbf23b0fbd55"
 RELEASE[5]="v2.0"; CMTHASH[5]="deda452a0aab311f243311b48a39b7ac60ab3fd8"
 RELEASE[6]="v3.0"; CMTHASH[6]="35141e1e20259d7d1c2f4b143c6ae4505d7d5045"
+RELEASE[7]="v4.0"; CMTHASH[7]="428ed8058597a3530ec2d0207dda6ffed6082c0f"
 
 ########################################
 
