@@ -1881,8 +1881,8 @@ function indexer {
 				fi
 			fi
 			tr '\0' '\t' | while read -r FILE; do
-				declare CHK="$(echo -en "${FILE}" | cut -d'\t' -f10)"
-				declare FIL="$(echo -en "${FILE}" | cut -d'\t' -f11)"
+				declare CHK="$(echo -en "${FILE}" | cut -d$'\t' -f10)"
+				declare FIL="$(echo -en "${FILE}" | cut -d$'\t' -f11)"
 				if [[ ${CHK} == +([0-9a-f]) ]]; then
 					if [[ $(${HASH_TYPE} "${FIL}" 2>/dev/null | ${SED} "s|[[:space:]].+$||g") == ${CHK} ]]; then
 						if ${DEBUG}; then
@@ -1909,8 +1909,8 @@ function indexer {
 			fi
 		else
 			tr '\0' '\t' | while read -r FILE; do
-				declare MD5="$(echo -en "${FILE}" | cut -d'\t' -f9)"
-				declare FIL="$(echo -en "${FILE}" | cut -d'\t' -f11)"
+				declare MD5="$(echo -en "${FILE}" | cut -d$'\t' -f9)"
+				declare FIL="$(echo -en "${FILE}" | cut -d$'\t' -f11)"
 				if [[ "${MD5}" != "${NULL_CHAR}" ]] &&
 				   [[ "${MD5}" != "!" ]] &&
 				   [[ "${MD5}" != "x" ]]; then
@@ -1936,26 +1936,26 @@ function indexer {
 			return 1
 		}
 		tr '\0' '\t' | while read -r FILE; do
-			declare    TARGET="$(echo -en "${FILE}" | cut -d'\t' -f11)"
-			declare IDX__TYPE="$(echo -en "${FILE}" | cut -d'\t' -f1 | cut -d, -f1)"
-			declare IDX_EMPTY="$(echo -en "${FILE}" | cut -d'\t' -f10)"
+			declare    TARGET="$(echo -en "${FILE}" | cut -d$'\t' -f11)"
+			declare IDX__TYPE="$(echo -en "${FILE}" | cut -d$'\t' -f1 | cut -d, -f1)"
+			declare IDX_EMPTY="$(echo -en "${FILE}" | cut -d$'\t' -f10)"
 			if ${QUICK}; then
-				   TARGET="$(echo -en "${FILE}" | cut -d'\t' -f11)"
-				IDX__TYPE="$(echo -en "${FILE}" | cut -d'\t' -f1)"
-				IDX_EMPTY="$(echo -en "${FILE}" | cut -d'\t' -f3)"
+				   TARGET="$(echo -en "${FILE}" | cut -d$'\t' -f11)"
+				IDX__TYPE="$(echo -en "${FILE}" | cut -d$'\t' -f1)"
+				IDX_EMPTY="$(echo -en "${FILE}" | cut -d$'\t' -f3)"
 				if [[ "${IDX__TYPE}" == "d" ]] && [[ "${IDX_EMPTY}" == "${NULL_CHAR}0" ]]; then
 					IDX_EMPTY="@d"
 				fi
 			fi
 			if [[ -e "${TARGET}" ]] ||
 			   [[ "${IDX_EMPTY}" == "@d" ]]; then
-				declare IDX_CHMOD="$(echo -en "${FILE}" | cut -d'\t' -f4 | cut -d, -f2)"
-				declare IDX_CHOWN="$(echo -en "${FILE}" | cut -d'\t' -f5 | cut -d, -f2)"
-				declare IDX_TOUCH="$(echo -en "${FILE}" | cut -d'\t' -f6 | cut -d, -f2 | ${SED} "s/^/@/g")"
+				declare IDX_CHMOD="$(echo -en "${FILE}" | cut -d$'\t' -f4 | cut -d, -f2)"
+				declare IDX_CHOWN="$(echo -en "${FILE}" | cut -d$'\t' -f5 | cut -d, -f2)"
+				declare IDX_TOUCH="$(echo -en "${FILE}" | cut -d$'\t' -f6 | cut -d, -f2 | ${SED} "s/^/@/g")"
 				if ${QUICK}; then
-					IDX_CHMOD="$(echo -en "${FILE}" | cut -d'\t' -f6)"
-					IDX_CHOWN="$(echo -en "${FILE}" | cut -d'\t' -f4):$(echo -en "${FILE}" | cut -d'\t' -f5)"
-					IDX_TOUCH="$(echo -en "${FILE}" | cut -d'\t' -f8 | ${SED} "s/^/@/g")"
+					IDX_CHMOD="$(echo -en "${FILE}" | cut -d$'\t' -f6)"
+					IDX_CHOWN="$(echo -en "${FILE}" | cut -d$'\t' -f4):$(echo -en "${FILE}" | cut -d$'\t' -f5)"
+					IDX_TOUCH="$(echo -en "${FILE}" | cut -d$'\t' -f8 | ${SED} "s/^/@/g")"
 				fi
 				if ${DEBUG}; then
 					echo -en "RESTORE: ${TARGET}\n"
