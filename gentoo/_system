@@ -877,6 +877,8 @@ if [[ ${1} == -s ]]; then
 			${EMERGE_TREE_OPTS}		\
 			${EMERGE_UPDT_OPTS}		\
 			--selective=n			\
+			--usepkg=n			\
+			--getbinpkg=n			\
 			${@:-\@system \@world}		|| EXIT 1
 	else
 		safe_env bash --norc ${@:+-c "${@}"}	|| EXIT 1
