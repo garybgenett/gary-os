@@ -1239,6 +1239,10 @@ if [[ ${1} == -i ]]; then
 		${RM}					${TARGET}/boot/_initrd					|| EXIT 1
 		if [[ -n ${KERN} ]]; then ${LN} ${KERN}	${TARGET}/boot/_kernel					|| EXIT 1; fi
 		if [[ -n ${INIT} ]]; then ${LN} ${INIT}	${TARGET}/boot/_initrd					|| EXIT 1; fi
+		KERN="linux-debian-sources-$(echo "${KERN}" | ${SED} "s|^.+[-]([^-]+)$|\1|g")"
+		${RM}					${TARGET}${LDIR}					|| EXIT 1
+		${LN} ${KERN}				${TARGET}${LDIR}					|| EXIT 1
+		expect_wrapper emerge ${_ASK}		\@module-rebuild --exclude "${LINPKG}"			|| EXIT 1
 	fi
 	if ${_KRN}; then for FILE in ${KERNEL}; do
 		${RM}					${TARGET}${LDIR}					|| EXIT 1
@@ -1246,7 +1250,7 @@ if [[ ${1} == -i ]]; then
 		${RSYNC_U} --copy-links			${SETDIR}/${LINDIR}/${KCFG//${KVER}/${FILE}}		\
 							${TARGET}${ARCDIR}/${KCFG//${KVER}/${FILE}}		|| EXIT 1
 		kernel_cpu				${TARGET}${ARCDIR}/${KCFG//${KVER}/${FILE}}		|| EXIT 1
-		declare GENKERNEL_OPTS="--loglevel=5 --bootloader=grub --install --symlink"
+		declare GENKERNEL_OPTS="--loglevel=5 --bootloader=grub --install --symlink --luks --zfs"
 		if [[ -z ${AUTO} ]]; then
 			expect_wrapper			genkernel ${GENKERNEL_OPTS} kernel --menuconfig		|| EXIT 1
 		else
@@ -1256,6 +1260,10 @@ if [[ ${1} == -i ]]; then
 		${RSYNC_U} --copy-links			${TARGET}${LDIR}/.config				\
 							${TARGET}${ARCDIR}/${KCFG//${KVER}/${FILE}}		|| EXIT 1
 		if ! ${_GOS}; then
+			${RM}				${TARGET}/lib/modules/build				|| EXIT 1
+			${LN} ${KDIR//${KVER}/${FILE}}	${TARGET}/lib/modules/build				|| EXIT 1
+			${RM}				${TARGET}/lib/modules/source				|| EXIT 1
+			${LN} ${KDIR//${KVER}/${FILE}}	${TARGET}/lib/modules/source				|| EXIT 1
 			${RM}				${TARGET}/boot/_cur					|| EXIT 1
 			${LN} ${KFIL//${KVER}/${FILE}}	${TARGET}/boot/_cur					|| EXIT 1
 			${RM}				${TARGET}/boot/_new					|| EXIT 1
@@ -1265,6 +1273,7 @@ if [[ ${1} == -i ]]; then
 			[[ -L				${TARGET}/boot/kernel.old				]] ||
 			${LN} ${KFIL//${KVER}/${FILE}}	${TARGET}/boot/kernel.old				|| EXIT 1
 		fi
+		expect_wrapper emerge ${_ASK}		\@module-rebuild --exclude "${LINPKG}"			|| EXIT 1
 	done; fi
 	if ${_CFG}; then
 		#note: these need to match the names in the "${MAKEIT}" script
@@ -1314,7 +1323,9 @@ if [[ ${1} == -w ]]; then
 	java-config --set-system-vm $(java-config --list-available-vm | ${GREP} -o "icedtea[-][0-9]+" | sort -n | tail -n1)
 	java-config --list-available-vms
 	for FILE in \
-		kernel:${KBAS} \
+		$(for NEXT in ${KERNEL}; do
+			echo "kernel:${KBAS//${KVER}/${NEXT}}"
+		done) \
 		${SELECT} \
 	; do
 		declare KEY="$(echo "${FILE}" | ${SED} "s|^(.+)[:](.+)$|\1|g")"
