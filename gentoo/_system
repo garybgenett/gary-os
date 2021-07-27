@@ -530,7 +530,7 @@ function print_info {
 		printf "${PRINTF}" "Chroot Configuration (Internal Only):"	"<internal>"	"${_HEART} {chroot} -r [-w]"
 		echo -en "\n"
 		printf "${PRINTF}" "Chroot Shell (Bash):"			"<interactive>"	"${_HEART} {chroot} -s"
-		printf "${PRINTF}" "Chroot Shell (Run Command):"		"<auto>"	"${_HEART} {chroot} -s {command}"
+		printf "${PRINTF}" "Chroot Shell (Run Command):"		"<auto>"	"${_HEART} {chroot} -s \"{command}\""
 		echo -en "\n"
 		printf "${PRINTF}" "Chroot Emerge Command:"			"<auto>"	"${_HEART} {chroot} -a -s -e [{command}]"
 		printf "${PRINTF}" "Chroot Emerge Command (Interactively):"	"<interactive>"	"${_HEART} {chroot} -s -e [{command}]"
