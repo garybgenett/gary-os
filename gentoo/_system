@@ -1055,8 +1055,9 @@ if [[ ${1} == -o ]]; then
 		declare ETC_DIR="${TARGET}${ETCDIR}/${LAYDIR}"
 		#note: ensuring configuration is up-to-date
 		${_SOUL} ${QUIET_OPT} ${TOOR} -r										|| EXIT 1
-		${MKDIR}	${ETC_DIR}/${FILE}			${LAY_DIR}/${FILE}.src					|| EXIT 1
-		${RSYNC_U}	${TARGET}${REPDIR}/kits/*/${FILE}/	${LAY_DIR}/${FILE}.src					|| EXIT 1
+		${MKDIR}	${ETC_DIR}/${FILE}			${LAY_DIR}/${FILE}/.source				|| EXIT 1
+		${RSYNC_U}	${TARGET}${REPDIR}/kits/*/${FILE}/	${LAY_DIR}/${FILE}/.source				||
+		touch							${LAY_DIR}/${FILE}/.source/.keep			|| EXIT 1
 		${RSYNC_U}	${LAY_DIR}/${FILE}/			${ETC_DIR}/${FILE}					|| EXIT 1
 		safe_env ${MYSELF} ${QUIET_OPT} ${TOOR} "${@}"									|| EXIT 1
 		${RSYNC_U}	${ETC_DIR}/${FILE}/Manifest		${LAY_DIR}/${FILE}/					|| EXIT 1
