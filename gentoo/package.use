@@ -198,10 +198,13 @@ dev-ruby/xmlrpc				ruby_targets_ruby24		# gentoo required
 
 sys-apps/busybox			-make-symlinks savedconfig static
 sys-apps/coreutils			multicall static
+sys-devel/gcc				ada cxx
 
+#>>>net-misc/openssh			static -pam -pie		# gentoo required: https://bugs.gentoo.org/699384
+net-misc/openssh			-pam -pie
+#>>>
 app-shells/bash				static
 dev-libs/openssl			static-libs
-net-misc/openssh			static -pam -pie
 net-misc/rsync				static
 sys-process/runit			static
 
@@ -210,27 +213,35 @@ www-client/firefox			-bindist
 
 ########################################
 
+app-arch/p7zip				-rar
+app-editors/vim				-X gpm
+app-emulation/libvirt			-libvirtd lxc qemu
 app-emulation/qemu			ncurses sdl spice
 app-emulation/spice			client gui
+app-emulation/virt-viewer		-libvirt -vnc spice
 app-emulation/virtualbox		qt5 sdk vnc
+app-misc/jq				oniguruma
+app-misc/remind				tk
 app-office/libreoffice			java
 dev-libs/openssl			rfc3779
+dev-vcs/git				tk
 dev-vcs/subversion			-apache2
-mail-client/mutt			-tokyocabinet debug gpg hcache sasl sidebar smime smtp
+mail-client/mutt			-tokyocabinet gpg hcache sasl sidebar smime smtp
 mail-client/thunderbird			-crypt -lightning -wifi ldap	# installing "enigmail" and "lightning" plugins manually
 mail-mta/msmtp				mta
+media-libs/libprojectm			qt5
 media-sound/pulseaudio			bluetooth dbus
-media-video/vlc				projectm qt5 vlm
+media-video/vlc				projectm qt5 run-as-root vlm
 net-analyzer/tcpdump			-chroot
-net-fs/samba				client cups
+net-fs/samba				client
 net-libs/gnutls				openpgp openssl tls-heartbeat tools
 net-misc/networkmanager			-elogind -introspection -modemmanager -nss dhcpcd gnutls
-net-print/cups				samba
 net-vpn/openvpn				iproute2
 net-wireless/wpa_supplicant		qt5
 sci-calculators/qalculate-gtk		-gnome
 sys-apps/iproute2			iptables
-sys-boot/grub				device-mapper efiemu mount
+sys-boot/grub				device-mapper efiemu libzfs mount
+sys-fs/zfs				-python
 virtual/wine				-gstreamer -mp3 -opengl
 www-client/firefox			-wifi
 www-servers/apache			-threads
@@ -238,13 +249,25 @@ x11-base/xorg-server			xnest xvfb
 x11-terms/rxvt-unicode			fading-colors focused-urgency font-styles mousewheel perl
 x11-wm/dwm				savedconfig
 
+app-emulation/libvirt			libvirtd	# gentoo required
+
 ########################################
 
-app-emulation/libvirt			libvirtd lxc qemu udev uml virt-network
 app-text/enchant			aspell
+dev-util/systemtap			-libvirt
 sci-libs/libqalculate			gnuplot readline
 
-games-fps/doom3				roe		# gentoo required: [games-fps/doom3-mitm-20070129] !!! All ebuilds that could satisfy "games-fps/doom3[opengl,roe]" have been masked.
+########################################
+
+#>>>sys-fs/zfs				python_targets_python3_6	# gentoo required: zfs-0.7.13-r2
+#>>>sys-kernel/spl			python_single_target_python3_6	# gentoo required: zfs-0.7.13-r2
+#>>>sys-kernel/spl			python_targets_python3_6	# gentoo required: zfs-0.7.13-r2
+
+########################################
+
+games-fps/doom3				opengl		# gentoo required
+games-fps/doom3				roe		# gentoo required
+
 games-fps/doom3				-dedicated
 games-fps/doom3-cdoom			-dedicated
 games-fps/doom3-data			-dedicated
