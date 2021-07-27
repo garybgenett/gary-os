@@ -10,7 +10,7 @@ inherit eutils cmake-utils systemd user git-r3
 DESCRIPTION="the server part of Taskwarrior, a command-line todo list manager"
 HOMEPAGE="http://taskwarrior.org/"
 #>>>SRC_URI="http://taskwarrior.org/download/${P}.tar.gz"
-EGIT_REPO_URI="git://github.com/GothenburgBitFactory/taskserver.git"
+EGIT_REPO_URI="https://github.com/GothenburgBitFactory/taskserver.git"
 EGIT_COMMIT="v1.1.0"
 #>>>
 

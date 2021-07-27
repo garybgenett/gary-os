@@ -1,0 +1,87 @@
+From b98a0fce2835a41acb75358c580e29747d5e778c Mon Sep 17 00:00:00 2001
+From: loli10K <ezomori.nozomu@gmail.com>
+Date: Sun, 26 Jan 2020 16:49:18 +0100
+Subject: zfs destroy may be unable to free space in full pools
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="------------2.24.1"
+
+This is a multi-part message in MIME format.
+--------------2.24.1
+Content-Type: text/plain; charset=UTF-8; format=fixed
+Content-Transfer-Encoding: 8bit
+
+
+Typically destroy operations result in a net free of space and should
+always be allowed to prevent situations where not even the storage
+administrator can restore a full ZFS pool to a functioning state.
+
+Signed-off-by: loli10K <ezomori.nozomu@gmail.com>
+---
+ module/zfs/dsl_synctask.c | 2 +-
+ module/zfs/zcp_synctask.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+
+--------------2.24.1
+Content-Type: text/x-patch; name="0001-zfs-destroy-may-be-unable-to-free-space-in-full-pool.patch"
+Content-Transfer-Encoding: 8bit
+Content-Disposition: attachment; filename="0001-zfs-destroy-may-be-unable-to-free-space-in-full-pool.patch"
+
+diff --git a/module/zfs/dsl_synctask.c b/module/zfs/dsl_synctask.c
+index 2d6ca8549eb9d8d74baf7d73a470f194826e2ad3..d05fcf55ccd0da7f209ec25424b69614099d2ffa 100644
+--- a/module/zfs/dsl_synctask.c
++++ b/module/zfs/dsl_synctask.c
+@@ -228,21 +228,21 @@ dsl_sync_task_sync(dsl_sync_task_t *dst, dmu_tx_t *tx)
+ 	 * in-flight accounting to get in our way, because open context
+ 	 * may have already used up various in-core limits
+ 	 * (arc_tempreserve, dsl_pool_tempreserve).
+ 	 */
+ 	if (dst->dst_space_check != ZFS_SPACE_CHECK_NONE) {
+ 		uint64_t quota = dsl_pool_unreserved_space(dp,
+ 		    dst->dst_space_check);
+ 		uint64_t used = dsl_dir_phys(dp->dp_root_dir)->dd_used_bytes;
+ 
+ 		/* MOS space is triple-dittoed, so we multiply by 3. */
+-		if (used + dst->dst_space * 3 > quota) {
++		if (dst->dst_space > 0 && used + dst->dst_space * 3 > quota) {
+ 			dst->dst_error = SET_ERROR(ENOSPC);
+ 			if (dst->dst_nowaiter)
+ 				kmem_free(dst, sizeof (*dst));
+ 			return;
+ 		}
+ 	}
+ 
+ 	/*
+ 	 * Check for errors by calling checkfunc.
+ 	 */
+diff --git a/module/zfs/zcp_synctask.c b/module/zfs/zcp_synctask.c
+index 3b6015f24e62a3fb84c44fd173ad5fc8efdff92d..57167d9736b2a8a7377aa4b65229f3bab448d93f 100644
+--- a/module/zfs/zcp_synctask.c
++++ b/module/zfs/zcp_synctask.c
+@@ -387,21 +387,21 @@ zcp_synctask_wrapper(lua_State *state)
+ 
+ 	zcp_parse_args(state, info->name, info->pargs, info->kwargs);
+ 
+ 	err = 0;
+ 	if (info->space_check != ZFS_SPACE_CHECK_NONE) {
+ 		uint64_t quota = dsl_pool_unreserved_space(dp,
+ 		    info->space_check);
+ 		uint64_t used = dsl_dir_phys(dp->dp_root_dir)->dd_used_bytes +
+ 		    ri->zri_space_used;
+ 
+-		if (used + funcspace > quota) {
++		if (funcspace > 0 && used + funcspace > quota) {
+ 			err = SET_ERROR(ENOSPC);
+ 		}
+ 	}
+ 
+ 	if (err == 0) {
+ 		err = info->func(state, sync, err_details);
+ 	}
+ 
+ 	if (err == 0) {
+ 		ri->zri_space_used += funcspace;
+
+--------------2.24.1--
+
+
