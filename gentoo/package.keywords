@@ -2,10 +2,13 @@
 # portage package keywords file
 ################################################################################
 
-sys-libs/libomp				**		# gentoo required
+=app-editors/retext-9999		**		# gentoo required
+=media-sound/picard-9999		**		# gentoo required
+=perl-core/JSON-PP-2.273*		**		# gentoo required
+
+########################################
 
 games-emulation/mekanix			**		# gentoo required
-sys-devel/binutils			**		# gentoo required
 
 ################################################################################
 
