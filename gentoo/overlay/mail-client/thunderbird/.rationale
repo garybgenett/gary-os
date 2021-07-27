@@ -1,0 +1,4 @@
+version
+ERROR: mail-client/thunderbird-68.6.0::overlay failed (setup phase):
+get_llvm_prefix: invalid max_slot=10
+https://gitweb.gentoo.org/repo/gentoo.git/tree/mail-client/thunderbird?id=17b234308ca4577906324d31c31d8ded3d04d744

@@ -1,0 +1,45 @@
+Update the default BLE connection parameters.
+
+Commit c49a8682fc5d298d44e8d911f4fa14690ea9485e introduced a bounds
+check on connection interval update requests, but the default min/max
+values were left at 24-40 (30-50ms) which caused problems for devices
+that want to negotiate connection intervals outside of those bounds.
+
+Setting the default min/max connection interval to the full allowable
+range in the bluetooth specification restores the default Linux behavior
+of allowing remote devices to negotiate their desired connection
+interval, while still permitting the system administrator to later
+narrow the range.
+
+The default supervision timeout must also be modified to accommodate
+the max connection interval increase.  The new default value meets the
+requirements of the bluetooth specification and the conditions in
+the hci_check_conn_params function.
+
+The downside to modifying the default supervision timeout is that
+it will take longer (about 10 seconds) to detect a link loss condition.
+
+Fixes c49a8682fc5d: (validate BLE connection interval updates)
+
+Signed-off-by: Carey Sonsino <csonsino@xxxxxxxxx>
+
+---
+
+diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+index 04bc79359a17..895d17ec9291 100644
+--- a/net/bluetooth/hci_core.c
++++ b/net/bluetooth/hci_core.c
+@@ -3181,10 +3181,10 @@ struct hci_dev *hci_alloc_dev(void)
+ 	hdev->le_adv_max_interval = 0x0800;
+ 	hdev->le_scan_interval = 0x0060;
+ 	hdev->le_scan_window = 0x0030;
+-	hdev->le_conn_min_interval = 0x0018;
+-	hdev->le_conn_max_interval = 0x0028;
++	hdev->le_conn_min_interval = 0x0006;
++	hdev->le_conn_max_interval = 0x0c80;
+ 	hdev->le_conn_latency = 0x0000;
+-	hdev->le_supv_timeout = 0x002a;
++	hdev->le_supv_timeout = 0x03ea;
+ 	hdev->le_def_tx_len = 0x001b;
+ 	hdev->le_def_tx_time = 0x0148;
+ 	hdev->le_max_tx_len = 0x001b;

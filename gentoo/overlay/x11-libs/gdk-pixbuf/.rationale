@@ -1,0 +1,11 @@
+FAILED: gtk/gtkresources.c
+glib-compile-resources gtk/gtk.gresources.xml --sourcedir /var/tmp/portage/x11-libs/gtk+-3.24.13/work/gtk+-3.24.13-build/gtk --sourcedir /var/tmp/portage/x11-libs/gtk+-3.24.13/work/gtk+-3.24.13/gtk --sourcedir ../gtk+-3.24.13/gtk --c-name _gtk --internal --generate --target gtk/gtkresources.c --manual-register --dependency-file gtk/gtkresources.c.d
+failed to load "/var/tmp/portage/x11-libs/gtk+-3.24.13/work/gtk+-3.24.13/gtk/theme/Adwaita/assets/bullet-symbolic.symbolic.png": Couldn?t recognize the image file format for file ?/var/tmp/portage/x11-libs/gtk+-3.24.13/work/gtk+-3.24.13/gtk/theme/Adwaita/assets/bullet-symbolic.symbolic.png?
+gtk/gtk.gresources.xml: Child process exited with code 1.
+https://bugs.gentoo.org/635040#c4
+https://bugs.gentoo.org/635040#c11
+https://forums.gentoo.org/viewtopic-t-1065896-start-0.html
+https://sourceforge.net/p/png-mng/mailman/message/6518688S
+http://drup.org/gtk-warning-error-loading-icon-couldnt-recognize-image-file-format
+https://gitweb.gentoo.org/repo/gentoo.git/tree/x11-libs/gtk+?id=f525e9a3c717237b385be90fa3e681202a67edd7
+https://gitweb.gentoo.org/repo/gentoo.git/tree/x11-libs/gdk-pixbuf?id=9db94059848c014289fb8904ad290f15a1fcb160
