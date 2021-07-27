@@ -2,6 +2,16 @@
 #>>> source ${HOME}/.bashrc
 ################################################################################
 
+if { [[ -z ${_SYSTEMED} ]] || ! ${_SYSTEMED}; }; then
+	echo -en "\n"
+	echo -en ">>> THIS SCRIPT IS NOT MEANT TO BE RUN DIRECTLY <<<\n"
+	echo -en ">>> PLEASE USE THE (_system -v) SCRIPT INSTEAD <<<\n"
+	echo -en "\n"
+	exit 1
+fi
+
+################################################################################
+
 #NOTE: SCRIPT NAME AND FUNCTION NAMES (${PREPIT}, ${MAKEIT}, ${SHIPIT}) MUST MATCH FOR "_SYSTEM" WRAPPING TO WORK
 #NOTE: UPDATE "#SETTINGS" LINES IN "_SYSTEM" SCRIPT WHEN THESE VARIABLES CHANGE
 
