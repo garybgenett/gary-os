@@ -2,16 +2,12 @@
 # portage package unmask file
 ################################################################################
 
-=dev-lang/python-3.6*			# gentoo required
-=sys-libs/glibc-2.26*			# gentoo required
-
-=media-libs/fontconfig-2.12*		# gentoo required
-=net-libs/webkit-gtk-2.4*		# gentoo required
-=sys-libs/readline-7.0*			# gentoo required
+=dev-util/android-studio-3.4*		# gentoo required
+=www-client/chromium-78*		# gentoo required
 
 ########################################
 
-=app-admin/keepassx-0.4*		# gentoo required: [app-admin/keepassx-0.4.4] Lars Wendler <polynomial-c@gentoo.org> (12 Oct 2017) Dead upstream. No qt5 release. Use app-admin/keepassxc as drop-in replacement which has very active upstream and regular releases.  Masked for removal in 30 days.
+=sys-boot/grub-2.05*			# gentoo required: allow use of overlay
 
 ################################################################################
 
