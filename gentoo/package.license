@@ -2,17 +2,31 @@
 # portage package license file
 ################################################################################
 
-sys-kernel/gentoo-sources		linux-firmware
-sys-kernel/linux-firmware		freedist linux-firmware no-source-code
+sys-kernel/linux-firmware		freedist
+sys-kernel/linux-firmware		linux-firmware
+sys-kernel/linux-firmware		linux-fw-redistributable
+sys-kernel/linux-firmware		no-source-code
 
-media-libs/faac				MPEG-4
+sys-firmware/intel-microcode		intel-ucode
+sys-firmware/nvidia-firmware		NVIDIA-r2
 
 ########################################
 
 media-fonts/font-bh-ttf			bh-luxi
 media-fonts/font-bh-type1		bh-luxi
 
+########################################
+
+media-libs/faac				MPEG-4
+media-libs/libpng			libpng2
+media-libs/quirc			AS-IS
+
 ################################################################################
+
+net-im/slack				all-rights-reserved
+net-im/zoom				all-rights-reserved
+
+########################################
 
 games-misc/fortune-mod-calvin		fairuse
 games-misc/fortune-mod-dubya		fairuse
@@ -24,11 +38,6 @@ games-misc/fortune-mod-smac		fairuse
 games-misc/fortune-mod-strangelove	fairuse
 
 ########################################
-
-app-arch/rar				RAR
-app-arch/unrar				unRAR
-
-app-text/calibre			unRAR
 
 games-emulation/mekanix			mekanix
 
