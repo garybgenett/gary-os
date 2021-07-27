@@ -1,0 +1,7 @@
+/var/tmp/portage/net-libs/webkit-gtk-2.26.2/work/webkitgtk-2.26.2/Source/WebCore/platform/glib/UserAgentGLib.cpp:150:12: error: 'isValidUserAgentHeaderValue' was not declared in this scope
+!!! One of the following masked packages is required to complete your request:
+- net-libs/webkit-gtk-2.26.2::gnome-kit (masked by: package.mask)
+- net-libs/webkit-gtk-2.24.4::overlay (masked by: missing keyword)
+emerge: there are no ebuilds to satisfy ">=app-text/enchant-0.22:2".
+(dependency required by "net-libs/webkit-gtk-2.26.4-r1::overlay[spell]" [ebuild])
+https://gitweb.gentoo.org/repo/gentoo.git/tree/net-libs/webkit-gtk?id=e2a60e3aab867b5584b099cac9ac2a2a19304b1a

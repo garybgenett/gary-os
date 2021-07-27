@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<use>
+	<flag name="bwrap">Use <pkg>sys-apps/bubblewrap</pkg> to
+	enable sandboxing capabilities</flag>
+	<flag name="webgl">Add support for WebGL</flag>
+</use>
+</pkgmetadata>

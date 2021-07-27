@@ -1,0 +1,19 @@
+--- a/dict/configure.ac.ORIG	2019-01-30 15:38:00.681655987 +0100
++++ b/dict/configure.ac	2019-01-30 15:48:20.206679090 +0100
+@@ -45,14 +45,14 @@
+ dnl spell plugin checks: enchant.
+ dnl ================================================================
+ 
+-ENCHANT_REQUIRED=1.2.0
++ENCHANT_REQUIRED=2.2.0
+ AC_ARG_ENABLE([spell],
+ 	AS_HELP_STRING([--disable-spell],[Disable spell plugin (default: enabled)]),
+ 	[enable_enchant=$enableval],
+ 	[enable_enchant=yes])
+ 
+ if test "x$enable_enchant" = "xyes" ; then
+-	PKG_CHECK_MODULES(ENCHANT, enchant >= $ENCHANT_REQUIRED, \
++	PKG_CHECK_MODULES(ENCHANT, enchant-2 >= $ENCHANT_REQUIRED, \
+ 			have_enchant=yes, have_enchant=no)
+ 	if test "x$have_enchant" = "xyes"; then
+ 		ENCHANT_CFLAGS="${ENCHANT_CFLAGS}"

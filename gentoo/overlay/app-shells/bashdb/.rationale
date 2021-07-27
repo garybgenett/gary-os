@@ -1,0 +1,2 @@
+[blocks B      ] >=app-shells/bash-4.5 (">=app-shells/bash-4.5" is blocking app-shells/bashdb-4.4.1.0.1)
+https://gitweb.gentoo.org/repo/gentoo.git/tree/app-shells/bashdb?id=4485260386ba034842b54a812f87f7133ddbd88f

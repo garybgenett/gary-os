@@ -1,0 +1,12 @@
+diff -urN debian/config/config debian.fixed/config/config
+--- debian/config/config	2019-10-19 18:35:10.000000000 -0400
++++ debian.fixed/config/config	2019-10-22 01:13:53.262687881 -0400
+@@ -68,7 +68,7 @@
+ #. Actually a file containing X.509 certificates, not keys.
+ #. Whenever the filename changes, this also needs to be updated in
+ #. debian/featureset-*/config
+-CONFIG_SYSTEM_TRUSTED_KEYS="debian/certs/debian-uefi-certs.pem"
++CONFIG_SYSTEM_TRUSTED_KEYS=""
+ #. Add secondary keyring with keys from UEFI db and MOK.
+ CONFIG_SECONDARY_TRUSTED_KEYRING=y
+ CONFIG_SYSTEM_BLACKLIST_KEYRING=y

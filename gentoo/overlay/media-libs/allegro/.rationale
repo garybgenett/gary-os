@@ -1,0 +1,6 @@
+/var/tmp/portage/media-libs/allegro-4.4.2-r2/work/allegro-4.4.2/addons/allegrogl/src/x.c: In function 'decode_fbconfig':
+/var/tmp/portage/media-libs/allegro-4.4.2-r2/work/allegro-4.4.2/addons/allegrogl/src/x.c:653:55: error: 'GLX_RGBA_FLOAT_BIT' undeclared (first use in this function); did you mean 'GLX_RGBA_FLOAT_BIT_ARB'?
+  653 |  if (!(render_type & GLX_RGBA_BIT) && !(render_type & GLX_RGBA_FLOAT_BIT)) {
+      |                                                       ^~~~~~~~~~~~~~~~~~
+      |                                                       GLX_RGBA_FLOAT_BIT_ARB
+https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/allegro?id=4d9bfacdd583ca26684aac447b9189439cb3f428

@@ -1,0 +1,211 @@
+--- a/libvaladoc/Makefile.am	2019-03-03 12:49:21.000000000 -0600
++++ b/libvaladoc/Makefile.am	2019-03-11 14:49:02.036158983 -0500
+@@ -3,8 +3,8 @@
+ NULL =
+ 
+ AM_CFLAGS = \
+-	-DPACKAGE_ICONDIR=\"$(datadir)/valadoc/icons/\" \
+-	-DPACKAGE_DATADIR=\"$(libdir)/valadoc\" \
++	-DPACKAGE_ICONDIR=\"$(datadir)/valadoc@PACKAGE_SUFFIX@/icons/\" \
++	-DPACKAGE_DATADIR=\"$(libdir)/valadoc@PACKAGE_SUFFIX@\" \
+ 	-DPACKAGE_VERSION=\"$(VERSION)\" \
+ 	$(COVERAGE_CFLAGS) \
+ 	$(LIBGVC_CFLAGS) \
+--- a/libvaladoc/Makefile.in	2019-03-03 13:31:10.000000000 -0600
++++ b/libvaladoc/Makefile.in	2019-03-11 15:51:26.477511323 -0500
+@@ -524,8 +524,8 @@
+ VALA_V_0 = @echo "  VALAC " $^;
+ NULL = 
+ AM_CFLAGS = \
+-	-DPACKAGE_ICONDIR=\"$(datadir)/valadoc/icons/\" \
+-	-DPACKAGE_DATADIR=\"$(libdir)/valadoc\" \
++	-DPACKAGE_ICONDIR=\"$(datadir)/valadoc@PACKAGE_SUFFIX@/icons/\" \
++	-DPACKAGE_DATADIR=\"$(libdir)/valadoc@PACKAGE_SUFFIX@\" \
+ 	-DPACKAGE_VERSION=\"$(VERSION)\" \
+ 	$(COVERAGE_CFLAGS) \
+ 	$(LIBGVC_CFLAGS) \
+--- a/valadoc/Makefile.am	2019-03-03 12:49:21.000000000 -0600
++++ b/valadoc/Makefile.am	2019-03-11 14:50:52.476305675 -0500
+@@ -9,7 +9,7 @@
+ 	$(NULL)
+ 
+ AM_CFLAGS = \
+-	-DPACKAGE_DATADIR=\"$(libdir)/valadoc\" \
++	-DPACKAGE_DATADIR=\"$(libdir)/valadoc@PACKAGE_SUFFIX@\" \
+ 	-DPACKAGE_VERSION=\"$(VERSION)\" \
+ 	-I$(top_srcdir)/libvaladoc/ \
+ 	-I$(top_srcdir)/gee \
+--- a/valadoc/Makefile.in	2019-03-03 13:31:11.000000000 -0600
++++ b/valadoc/Makefile.in	2019-03-11 15:54:08.893747084 -0500
+@@ -383,7 +383,7 @@
+ 	$(NULL)
+ 
+ AM_CFLAGS = \
+-	-DPACKAGE_DATADIR=\"$(libdir)/valadoc\" \
++	-DPACKAGE_DATADIR=\"$(libdir)/valadoc@PACKAGE_SUFFIX@\" \
+ 	-DPACKAGE_VERSION=\"$(VERSION)\" \
+ 	-I$(top_srcdir)/libvaladoc/ \
+ 	-I$(top_srcdir)/gee \
+--- a/valadoc/doclets/devhelp/Makefile.am	2019-03-03 12:49:21.000000000 -0600
++++ b/valadoc/doclets/devhelp/Makefile.am	2019-03-11 14:52:05.544404628 -0500
+@@ -3,7 +3,7 @@
+ NULL =
+ 
+ AM_CFLAGS = \
+-	-DPACKAGE_ICONDIR=\"$(datadir)/valadoc/icons/\" \
++	-DPACKAGE_ICONDIR=\"$(datadir)/valadoc@PACKAGE_SUFFIX@/icons/\" \
+ 	-I$(top_srcdir)/gee/ \
+ 	-I$(top_srcdir)/vala/ \
+ 	-I$(top_srcdir)/libvaladoc/ \
+@@ -16,7 +16,7 @@
+ 
+ doclet_LTLIBRARIES = libdoclet.la
+ 
+-docletdir = $(libdir)/valadoc/doclets/devhelp
++docletdir = $(libdir)/valadoc@PACKAGE_SUFFIX@/doclets/devhelp
+ 
+ libdoclet_la_LDFLAGS = -module -avoid-version -no-undefined
+ 
+--- a/valadoc/doclets/devhelp/Makefile.in	2019-03-03 13:31:11.000000000 -0600
++++ b/valadoc/doclets/devhelp/Makefile.in	2019-03-11 15:55:41.737882066 -0500
+@@ -356,7 +356,7 @@
+ VALA_V_0 = @echo "  VALAC " $^;
+ NULL = 
+ AM_CFLAGS = \
+-	-DPACKAGE_ICONDIR=\"$(datadir)/valadoc/icons/\" \
++	-DPACKAGE_ICONDIR=\"$(datadir)/valadoc@PACKAGE_SUFFIX@/icons/\" \
+ 	-I$(top_srcdir)/gee/ \
+ 	-I$(top_srcdir)/vala/ \
+ 	-I$(top_srcdir)/libvaladoc/ \
+@@ -367,7 +367,7 @@
+ 
+ BUILT_SOURCES = libdoclet.vala.stamp
+ doclet_LTLIBRARIES = libdoclet.la
+-docletdir = $(libdir)/valadoc/doclets/devhelp
++docletdir = $(libdir)/valadoc@PACKAGE_SUFFIX@/doclets/devhelp
+ libdoclet_la_LDFLAGS = -module -avoid-version -no-undefined
+ libdoclet_la_VALASOURCES = \
+ 	doclet.vala \
+--- a/valadoc/doclets/gtkdoc/Makefile.am	2019-03-03 12:49:21.000000000 -0600
++++ b/valadoc/doclets/gtkdoc/Makefile.am	2019-03-11 14:52:40.220451589 -0500
+@@ -3,7 +3,7 @@
+ NULL =
+ 
+ AM_CFLAGS = \
+-	-DPACKAGE_ICONDIR=\"$(datadir)/valadoc/icons/\" \
++	-DPACKAGE_ICONDIR=\"$(datadir)/valadoc@PACKAGE_SUFFIX@/icons/\" \
+ 	-I$(top_srcdir)/gee/ \
+ 	-I$(top_srcdir)/vala/ \
+ 	-I$(top_srcdir)/libvaladoc/ \
+@@ -16,7 +16,7 @@
+ 
+ doclet_LTLIBRARIES = libdoclet.la
+ 
+-docletdir = $(libdir)/valadoc/doclets/gtkdoc
++docletdir = $(libdir)/valadoc@PACKAGE_SUFFIX@/doclets/gtkdoc
+ 
+ libdoclet_la_LDFLAGS = -module -avoid-version -no-undefined
+ 
+--- a/valadoc/doclets/gtkdoc/Makefile.in	2019-03-03 13:31:11.000000000 -0600
++++ b/valadoc/doclets/gtkdoc/Makefile.in	2019-03-11 15:57:32.418043158 -0500
+@@ -360,7 +360,7 @@
+ VALA_V_0 = @echo "  VALAC " $^;
+ NULL = 
+ AM_CFLAGS = \
+-	-DPACKAGE_ICONDIR=\"$(datadir)/valadoc/icons/\" \
++	-DPACKAGE_ICONDIR=\"$(datadir)/valadoc@PACKAGE_SUFFIX@/icons/\" \
+ 	-I$(top_srcdir)/gee/ \
+ 	-I$(top_srcdir)/vala/ \
+ 	-I$(top_srcdir)/libvaladoc/ \
+@@ -371,7 +371,7 @@
+ 
+ BUILT_SOURCES = libdoclet.vala.stamp
+ doclet_LTLIBRARIES = libdoclet.la
+-docletdir = $(libdir)/valadoc/doclets/gtkdoc
++docletdir = $(libdir)/valadoc@PACKAGE_SUFFIX@/doclets/gtkdoc
+ libdoclet_la_LDFLAGS = -module -avoid-version -no-undefined
+ libdoclet_la_VALASOURCES = \
+ 	commentconverter.vala \
+--- a/valadoc/doclets/html/Makefile.am	2019-03-03 12:49:21.000000000 -0600
++++ b/valadoc/doclets/html/Makefile.am	2019-03-11 14:53:21.236507135 -0500
+@@ -3,7 +3,7 @@
+ NULL =
+ 
+ AM_CFLAGS = \
+-	-DPACKAGE_ICONDIR=\"$(datadir)/valadoc/icons/\" \
++	-DPACKAGE_ICONDIR=\"$(datadir)/valadoc@PACKAGE_SUFFIX@/icons/\" \
+ 	-I$(top_srcdir)/gee/ \
+ 	-I$(top_srcdir)/vala/ \
+ 	-I$(top_srcdir)/libvaladoc/ \
+@@ -16,7 +16,7 @@
+ 
+ doclet_LTLIBRARIES = libdoclet.la
+ 
+-docletdir = $(libdir)/valadoc/doclets/html
++docletdir = $(libdir)/valadoc@PACKAGE_SUFFIX@/doclets/html
+ 
+ libdoclet_la_LDFLAGS = -module -avoid-version -no-undefined
+ 
+--- a/valadoc/doclets/html/Makefile.in	2019-03-03 13:31:11.000000000 -0600
++++ b/valadoc/doclets/html/Makefile.in	2019-03-11 15:58:46.274150653 -0500
+@@ -356,7 +356,7 @@
+ VALA_V_0 = @echo "  VALAC " $^;
+ NULL = 
+ AM_CFLAGS = \
+-	-DPACKAGE_ICONDIR=\"$(datadir)/valadoc/icons/\" \
++	-DPACKAGE_ICONDIR=\"$(datadir)/valadoc@PACKAGE_SUFFIX@/icons/\" \
+ 	-I$(top_srcdir)/gee/ \
+ 	-I$(top_srcdir)/vala/ \
+ 	-I$(top_srcdir)/libvaladoc/ \
+@@ -367,7 +367,7 @@
+ 
+ BUILT_SOURCES = libdoclet.vala.stamp
+ doclet_LTLIBRARIES = libdoclet.la
+-docletdir = $(libdir)/valadoc/doclets/html
++docletdir = $(libdir)/valadoc@PACKAGE_SUFFIX@/doclets/html
+ libdoclet_la_LDFLAGS = -module -avoid-version -no-undefined
+ libdoclet_la_VALASOURCES = \
+ 	doclet.vala \
+--- a/valadoc/icons/Makefile.am	2019-02-28 13:16:57.000000000 -0600
++++ b/valadoc/icons/Makefile.am	2019-03-11 14:54:04.544565786 -0500
+@@ -1,6 +1,6 @@
+ NULL =
+ 
+-iconsdir = $(datadir)/valadoc/icons
++iconsdir = $(datadir)/valadoc@PACKAGE_SUFFIX@/icons
+ 
+ dist_icons_DATA = \
+ 	abstractclass.png \
+--- a/valadoc/icons/Makefile.in	2019-03-03 13:31:11.000000000 -0600
++++ b/valadoc/icons/Makefile.in	2019-03-11 15:48:13.689231471 -0500
+@@ -294,7 +294,7 @@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ NULL = 
+-iconsdir = $(datadir)/valadoc/icons
++iconsdir = $(datadir)/valadoc@PACKAGE_SUFFIX@/icons
+ dist_icons_DATA = \
+ 	abstractclass.png \
+ 	abstractmethod.png \
+--- a/valadoc/tests/Makefile.am	2019-03-03 12:49:21.000000000 -0600
++++ b/valadoc/tests/Makefile.am	2019-03-11 14:54:56.432636056 -0500
+@@ -22,7 +22,7 @@
+ 	G_DEBUG=fatal_warnings $(builddir)/driver
+ 
+ AM_CFLAGS = \
+-	-DPACKAGE_DATADIR=\"$(libdir)/valadoc\" \
++	-DPACKAGE_DATADIR=\"$(libdir)/valadoc@PACKAGE_SUFFIX@\" \
+ 	-DPACKAGE_VERSION=\"$(VERSION)\" \
+ 	-DTOP_SRC_DIR=\"$(abs_top_srcdir)\" \
+ 	-I$(top_srcdir)/libvaladoc/ \
+--- a/valadoc/tests/Makefile.in	2019-03-03 13:31:11.000000000 -0600
++++ b/valadoc/tests/Makefile.in	2019-03-11 16:00:55.258338384 -0500
+@@ -550,7 +550,7 @@
+ 	CFLAGS='$(CFLAGS)' CPPFLAGS='$(CPPFLAGS)' LDFLAGS='$(LDFLAGS)' CC='$(CC)' $(srcdir)/testrunner.sh
+ 
+ AM_CFLAGS = \
+-	-DPACKAGE_DATADIR=\"$(libdir)/valadoc\" \
++	-DPACKAGE_DATADIR=\"$(libdir)/valadoc@PACKAGE_SUFFIX@\" \
+ 	-DPACKAGE_VERSION=\"$(VERSION)\" \
+ 	-DTOP_SRC_DIR=\"$(abs_top_srcdir)\" \
+ 	-I$(top_srcdir)/libvaladoc/ \

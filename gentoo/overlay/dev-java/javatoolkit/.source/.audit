@@ -1,0 +1,3 @@
+It looks like mgorny broke this with this commit: https://github.com/gentoo/gentoo/commit/2db67a589e688ba866fce79132f608652bbc4cd8
+
+This ebuild isn't compatible with python2.7. So forking, and also adding python3.7 compatibility.
