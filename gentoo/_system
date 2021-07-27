@@ -482,7 +482,7 @@ function print_info {
 		echo -en ">>> ARGUMENT PROCESSING IS VERY RUDIMENTARY // OPTIONS MUST BE IN THE ORDER SHOWN <<<"
 		echo -en "${RESET}\n"
 		echo -en "\n"
-		printf "${PRINTF}" "Synchronize (Database, Sources, Metadata):"	"<auto>"	"${_HEART} [{commit_id}]" "<${FUNTOO}>"
+		printf "${PRINTF}" "Synchronize (Database, Sources, Metadata):"	"<auto>"	"${_HEART} [{branch} {commit_id}]" "<${FUNTOO}>"
 		printf "${PRINTF}" "Synchronize (Sources, Metadata):"		"<auto>"	"${_HEART} -f"
 		printf "${PRINTF}" "Synchronize (Metadata Only):"		"<auto>"	"${_HEART} -!"
 		echo -en "\n"
@@ -1212,6 +1212,9 @@ if [[ ${1} == -i ]]; then
 		#note: this needs to match the name in the "${MAKEIT}" script
 		${PREPIT}_repdir										|| EXIT 1
 		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w		|| EXIT 1
+#WORK: currently breaks all attempts to use the tree?  leaving for next release...
+		${SED} -i "/core-ui-kit/d"		${TARGET}${ETCDIR}/make.profile/parent			|| EXIT 1
+#WORK
 	fi
 	if ${_BLD}; then
 		if ${_NEW}; then
