@@ -1,0 +1,29 @@
+diff -urN javatoolkit-0.6.0/src/py/build-xml-rewrite javatoolkit-0.6.0-fixed/src/py/build-xml-rewrite
+--- javatoolkit-0.6.0/src/py/build-xml-rewrite	2017-09-08 15:36:55.000000000 -0600
++++ javatoolkit-0.6.0-fixed/src/py/build-xml-rewrite	2019-07-09 20:38:16.992315768 -0600
+@@ -1,6 +1,6 @@
+ #!/usr/bin/env python3
+ 
+-import sys
++import os, sys
+ import xml.etree.cElementTree as et
+ from optparse import OptionParser
+ 
+@@ -32,6 +32,8 @@
+     gcp_sub = et.Element('classpath', path=gcp_str)
+ 
+     for file in args:
++        if os.path.getsize(file) == 0:
++            continue
+         tree = et.ElementTree(file=file)
+         if gcp or options.encoding:
+             for javac in tree.getiterator('javac'):
+@@ -54,7 +56,7 @@
+                 junit.append(gcp_sub)
+                 junit.attrib['haltonfailure'] = 'true'
+ 
+-        with open(file, 'w') as f:
++        with open(file, 'wb') as f:
+             tree.write(f)
+ 
+ 

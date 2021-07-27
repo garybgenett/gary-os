@@ -1,0 +1,5 @@
+Buildfile: /var/tmp/portage/dev-java/oracle-javamail-1.5.6/work/build.xml
+BUILD FAILED
+Target "-push-to-maven-init" does not exist in the project "JavaMail". It is used from target "push-to-maven-prepare".
+https://bugs.gentoo.org/698954
+https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-java/javatoolkit?id=1b4957a329487b8155f2a44be2feb985d5f81bef

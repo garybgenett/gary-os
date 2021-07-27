@@ -1,0 +1,4 @@
+missing needed version
+https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-kernel/gentoo-sources?id=0df26daa5fda6e3700527c1676fac680dff86dbe (4.18.6)
+new version to support current hardware
+https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-kernel/gentoo-sources?id=53f1d73fd1b219d9c8175928ca8394779eda4050 (5.6.19)
