@@ -1318,6 +1318,21 @@ if [[ ${1} == -w ]]; then
 	ego profile subarch ${ESUB}				|| EXIT 1
 	ego profile build current				|| EXIT 1
 	ego profile flavor desktop				|| EXIT 1
+	ego profile mix-ins \
+		gfxcard-intel \
+		gfxcard-nouveau \
+		gfxcard-radeon \
+		hardened \
+		media \
+		media-pro \
+		mediadevice-audio-pro \
+		mediadevice-video-pro \
+		mediaformat-gfx-common \
+		mediaformat-video-common \
+		mediaformat-video-extra \
+		no-systemd \
+		python3-only \
+								|| EXIT 1
 	ego profile show
 	if [[ -n "$(which gcc-config 2>/dev/null)" ]]; then
 		gcc-config $(gcc-config --list-profiles				| ${SED} -n "s|^.*[[][0-9]+[]][[:space:]]+([^[:space:]]+).*$|\1|gp" | sort -uV | tail -n1)
