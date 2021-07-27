@@ -1,3 +1,4 @@
+bootstrap - !!internal use only!! DO NOT SET THIS FLAG YOURSELF!, used during original system bootstrapping [make stage2]
 build - !!internal use only!! DO NOT SET THIS FLAG YOURSELF!, used for creating build images and the first half of bootstrapping [make stage1]
 custom-cflags - Build with user-specified CFLAGS (unsupported)
 livecd - !!internal use only!! DO NOT SET THIS FLAG YOURSELF!, used during livecd building
