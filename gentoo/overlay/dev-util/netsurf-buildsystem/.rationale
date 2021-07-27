@@ -1,4 +1,0 @@
-emerge: there are no ebuilds to satisfy ">=dev-util/netsurf-buildsystem-1.7-r1".
-(dependency required by "www-client/netsurf-3.8-r2::overlay" [ebuild])
-(dependency required by "netsurf" [argument])
-https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-util/netsurf-buildsystem?id=0e856edefbd36efffc141a2174e75db9afe1f204
