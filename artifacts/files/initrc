@@ -20,17 +20,17 @@ ${ROOTFS_FUNC}() {
 	fi
 	${ROOTFS_FUNC}_note="false"
 	if [ -n "`grep -E "^overlay /.${ROOTFS_ROOT_OPT} overlay" /proc/mounts`" ]; then
-		${ROOTFS_FUNC}_note="true"
 		echo -en "# chroot environment is mounted: /.${ROOTFS_ROOT_OPT}\n"
+		${ROOTFS_FUNC}_note="true"
 	fi
 	if [ -n "`grep -E "^[^[:space:]]+ /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}" /proc/mounts`" ]; then
-		${ROOTFS_FUNC}_note="true"
 		echo -en "# device is mounted (/.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}): "
 		sed -r -n "s|^([^[:space:]]+) /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}.+$|\1|gp" /proc/mounts
+		${ROOTFS_FUNC}_note="true"
 	fi
 	if [ -n "`grep -E "^overlay ${_GOVLY} overlay" /proc/mounts`" ]; then
-		${ROOTFS_FUNC}_note="true"
 		echo -en "# ${ROOTFS_NAME} overlay is mounted: ${_GOVLY}\n"
+		${ROOTFS_FUNC}_note="true"
 	fi
 	if ${${ROOTFS_FUNC}_note}; then
 		echo -en "#\n"
@@ -168,7 +168,8 @@ select() {
 		fi
 	elif
 		[ -z "${${ROOTFS_ROOT_OPT}}" ] &&
-		! ${select_opt}
+		! ${select_opt} &&
+		! ${chroot_opt}
 	then
 		return 1
 	fi
@@ -180,11 +181,12 @@ select() {
 		[ -n "`echo "${${ROOTFS_ROOT_OPT}}" | grep -E "^[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+$"`" ] ||
 		${chroot_opt}
 	); then
-		# using "/bin/mount" to get filesystem auto-detection
+		#note: forcing use of "/bin/mount" over "busybox" to get filesystem auto-detection
 		if	[ -z "`echo "${${ROOTFS_ROOT_OPT}}" | grep -E "^/dev/.+$"`" ] ||
 			[ ! -b "${${ROOTFS_ROOT_OPT}}" ] ||
 			! mkdir -v -p /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT} ||
-			! /bin/mount -v -o ro,nonempty ${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}
+			! /bin/mount -v -o ro,nonempty ${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT} ||
+			${chroot_opt}
 		then
 			${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} ${ROOTFS_ROOT} true false true "${@}" || ${ROOTFS_FUNC}
 			mounts /.${ROOTFS_ROOT_OPT} true "${@}" || ${ROOTFS_FUNC}
