@@ -1720,15 +1720,16 @@ In progress for v5.0...
     * [ ] [Kernel], [Rootfs] and [Boot] links
   * make TOKN="[...]" readme-github
     * make readme-all
-        * pages GaryOS-Readme.html
+        * pages ./GaryOS-Readme.html
     * make DOTEST=true readme
-    * aspell -c README.md
+    * aspell -c ./README.md
+        * rm ./README.md.bak
   * make readme-clean
 
 **Commit**
 
   * cd .setup/gentoo.gary-os
-  * (cd coding/gary-os ; git-commit -m "Stamped v#.# release." README.md)
+  * (cd coding/gary-os ; git-commit -m "Stamped v#.# release." ./README.md)
   * make _publish_gitdir
     * (cd _builds/.gary-os/.gary-os ; GIT_PAGER=cat git-list -n1)
   * make DOREDO=true doit release
@@ -1749,7 +1750,7 @@ In progress for v5.0...
 **Upload**
 
   * cd .setup/gentoo.gary-os
-  * (cd _builds/.gary-os.release ; rm v#.#)
+  * (cd _builds/.gary-os.release ; rm ./v#.#)
   * make _publish_export
     * (cd _builds/.gary-os.release ; ll ./ ./v#.#)
   * make _publish_release
@@ -1769,8 +1770,11 @@ In progress for v5.0...
 **Celebrate**
 
   * cd coding/gary-os
-  * make TOKN="[...]" DOMODS=true DOREDO=true readme-github
-  * make TOKN="[...]" DOMODS=true readme-github
+    * make TOKN="[...]" DOMODS=true DOREDO=true readme-github
+    * make TOKN="[...]" DOMODS=true readme-github
+  * <https://github.com/garybgenett/gary-os/graphs/traffic>
+    * [steady stream of downloads]
+    * [ ] Downloads_2014-02_to_XXXX-XX.csv
 
 --------------------------------------------------------------------------------
 
