@@ -1165,6 +1165,7 @@ function _release_rootfs {		#{ismain} #{doredo} #{dofast} #{dotest}
 		${RM}							${ROOTFS_DEST}*		|| return 1
 	fi
 	if [[ ${ROOTFS_DEST} == ${ROOTFS_FILE} ]]; then
+		ROOTFS_CUST="true"
 		if [[ ! -f ${ROOTFS_DEST} ]]; then
 			if ${DOREDO}; then
 				#note: all "prepare_*" functions that "#{isexit}" on "${doredo}"
@@ -1172,7 +1173,6 @@ function _release_rootfs {		#{ismain} #{doredo} #{dofast} #{dotest}
 				DOREDO="true" _prepare_packdirs					|| return 1
 #>>>				DOREDO="true" _prepare_symlinks					|| return 1
 			fi
-			ROOTFS_CUST="true"
 			DOREDO="false" DOFAST="${DOFAST}" DOTEST="${DOTEST}" _prepare_build	|| return 1
 			release_rootfs_file				${ROOTFS_DEST}		|| return 1
 		else
