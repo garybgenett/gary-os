@@ -585,7 +585,7 @@ function _prepare_build {		#{doredo} #{dofast} #{dotest}
 ########################################
 
 function prepare_config_issue {
-	declare FUNTOO_DATE="$(${SED} -n "s|^#.+([0-9]{4}-[0-9]{2}-[0-9]{2}).+(${FUNTOO}).*$|\1|gp" ${SETDIR}/${FUNDIR}/${FUNCMT})"
+	declare FUNTOO_DATE="$(${SED} -n "s|^#.+([0-9]{4}-[0-9]{2}-[0-9]{2}).+(${FUNTOO/#* }).*$|\1|gp" ${SETDIR}/${FUNDIR}/${FUNCMT})"
 	${RSYNC_C} --copy-links ${ARTDIR}/files/issue				${TARGET}/etc/issue	|| return 1
 	for FILE in \
 		"GaryOS Version|${_VERSN}" \
