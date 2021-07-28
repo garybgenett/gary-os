@@ -19,13 +19,13 @@ ${ROOTFS_FUNC}() {
 		echo -en "#\n"
 	fi
 	${ROOTFS_FUNC}_note="false"
-	if [ -n "`grep -E "^overlay /.${ROOTFS_ROOT_OPT} overlay" /proc/mounts`" ]; then
-		echo -en "# chroot environment is mounted: /.${ROOTFS_ROOT_OPT}\n"
-		${ROOTFS_FUNC}_note="true"
-	fi
 	if [ -n "`grep -E "^[^[:space:]]+ /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}" /proc/mounts`" ]; then
 		echo -en "# device is mounted (/.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}): "
 		sed -r -n "s|^([^[:space:]]+) /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}.+$|\1|gp" /proc/mounts
+		${ROOTFS_FUNC}_note="true"
+	fi
+	if [ -n "`grep -E "^overlay /.${ROOTFS_ROOT_OPT} overlay" /proc/mounts`" ]; then
+		echo -en "# chroot environment is mounted: /.${ROOTFS_ROOT_OPT}\n"
 		${ROOTFS_FUNC}_note="true"
 	fi
 	if [ -n "`grep -E "^overlay ${_GOVLY} overlay" /proc/mounts`" ]; then
@@ -58,6 +58,7 @@ mounts() {
 		sed -r -n "s%^.+(${mounts}/(dev|proc|sys)/[^[:space:]]+).+$%\1%gp" /proc/mounts | sort -ru | while read -r file; do
 			umount -v ${file} || ${ROOTFS_FUNC}
 		done
+		count 1 1
 		for mount in \
 			${mounts}/dev \
 			${mounts}/proc \
@@ -99,8 +100,10 @@ ${ROOTFS_NAME}() {
 	do_pak="${1}" && shift
 	if ! ${do_mnt}; then
 		mounts ${mounts} false "${@}" || ${ROOTFS_FUNC}
+		if [ -n "`grep -E " ${mounts}/.${ROOTFS_ROOT_OPT} " /proc/mounts`" ]; then
+			umount -v ${mounts}/.${ROOTFS_ROOT_OPT} || ${ROOTFS_FUNC}
+		fi
 		for mount in \
-			${mounts}/.${ROOTFS_ROOT_OPT} \
 			${mounts}${_GOVLY} \
 			${mounts} \
 			${mounts}/lowerdir \
@@ -201,7 +204,8 @@ select() {
 			if	[ -n "`echo "${${ROOTFS_ROOT_OPT}}" | grep -E "^/dev/.+$"`" ] &&
 				[ -z "`grep -E "^${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}" /proc/mounts`" ]
 			then
-				if	! chroot /.${ROOTFS_ROOT_OPT} mount -v -o ro,nonempty ${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT} &&
+#>>>				if	! chroot /.${ROOTFS_ROOT_OPT} mount -v -o ro,nonempty ${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT} &&
+				if	! chroot /.${ROOTFS_ROOT_OPT} ${ROOTFS_BASH} -c "mount -v -o ro,nonempty ${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT}" &&
 					! ${chroot_opt}
 				then
 					${ROOTFS_FUNC}
@@ -319,8 +323,8 @@ count() {
 
 if [ "${1}" == "un${ROOTFS_NAME}" ]; then
 	shift
-	${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} "" false false false "${@}" || ${ROOTFS_FUNC}
 	${ROOTFS_NAME} ${_GOVLY} "" false false false "${@}" || ${ROOTFS_FUNC}
+	${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} "" false false false "${@}" || ${ROOTFS_FUNC}
 	${ROOTFS_FUNC} -
 else
 	if [ "${1}" == "${ROOTFS_NAME}" ]; then
