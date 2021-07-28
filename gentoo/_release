@@ -176,7 +176,7 @@ declare XZ="xz -vv --compress --stdout --format xz --check crc32"
 declare PATCH="patch --force --strip=1"
 declare PATCH_DIR="${ARTDIR}/patches"
 declare -a PATCHES
-PATCHES[0]="shmem-add-shmem_size-option-set-filesystem-size.v4.18-rc6.patch"
+PATCHES[0]="shmem-add-shmem_size-option-set-filesystem-size.v5.4-rc2.v5.6_updated.patch"
 
 ########################################
 
