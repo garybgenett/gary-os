@@ -1086,13 +1086,13 @@ function release_rootfs_cpio_utils {
 		fi
 		${RSYNC_U} --copy-links			${TARGET}${FILE}			\
 							${ROOTFS_DEST}.dir${FILE}		|| return 1
+		${MKDIR}				${ROOTFS_DEST}.dir/lib			|| return 1
 		for NEXT in $(
 			${ROOTFS_LDD}			${FILE}					|
 			${GREP} --only-matching		"[/][^[:space:]]+"			\
 		); do
-			${MKDIR}			${ROOTFS_DEST}.dir$(dirname ${NEXT})	|| return 1
 			${RSYNC_U} --copy-links		${TARGET}${NEXT}			\
-							${ROOTFS_DEST}.dir${NEXT}		|| return 1
+							${ROOTFS_DEST}.dir/lib/			|| return 1
 		done
 	done
 	return 0
@@ -1137,10 +1137,8 @@ function release_rootfs_cpio {		#>>>{dotest}
 	release_rootfs_cpio_tools			${ROOTFS_DEST}					|| return 1
 	release_rootfs_cpio_utils			${ROOTFS_DEST}					|| return 1
 	release_rootfs_cpio_files			${ROOTFS_DEST}					|| return 1
-	if [[ -d ${ROOTFS_DEST}.dir/lib64 ]]; then
-		${LN} --relative			${ROOTFS_DEST}.dir/lib64			\
-							${ROOTFS_DEST}.dir/lib				|| return 1
-	fi
+	${LN} --relative				${ROOTFS_DEST}.dir/lib				\
+							${ROOTFS_DEST}.dir/lib64			|| return 1
 	${LN} --relative				${ROOTFS_DEST}.dir${ROOTFS_BUSYBOX}		\
 							${ROOTFS_DEST}.dir/init				|| return 1
 	echo -en "\n"
