@@ -990,7 +990,7 @@ function _prepare_symlinks {		#{isexit} #{doredo}
 function _release_devel {		#{ismain} #{doredo} #{dotest}
 	DOTEST="true" _prepare_docdir								|| return 1
 	if ${DOTEST}; then
-		DOREDO="false" DOFAST="false" DOTEST="true" _release_cpio			|| return 1
+		DOREDO="false" DOFAST="true" DOTEST="true" _release_cpio			|| return 1
 	else
 		if ${DOREDO}; then
 			#note: all "prepare_*" functions that "#{isexit}" on "${doredo}"
@@ -1000,7 +1000,7 @@ function _release_devel {		#{ismain} #{doredo} #{dotest}
 			DOREDO="false" DOFAST="false" DOTEST="true" _prepare_build		|| return 1
 		fi
 		DOREDO="false" _prepare_config							|| return 1
-		DOREDO="true" DOFAST="false" DOTEST="false" _release_cpio			|| return 1
+		DOREDO="true" DOFAST="true" DOTEST="false" _release_cpio			|| return 1
 	fi
 	DOREDO="true" _release_kernel								|| return 1
 	if [[ ! -f ${_RAMFS}.rootfs ]]; then
@@ -1245,13 +1245,16 @@ function release_cpio_file {
 	return 0
 }
 
-function release_cpio_dir {		#>>>{dotest}
+function release_cpio_dir {		#>>>{dofast} #>>>{dotest}
 	if ! ${ROOTFS}; then
 		${RM}			${CPIO_FILE}.dir	|| return 1
 		${MKDIR}		${CPIO_FILE}.dir	|| return 1
 		${CPIO_OUT}		${CPIO_FILE}.dir	|| return 1
 	fi
-	if ! ${DOTEST}; then
+	if {
+		! ${DOFAST} &&
+		! ${DOTEST};
+	}; then
 		${XZ} ${CPIO_FILE}	>${CPIO_FILE}.xz	|| return 1
 	fi
 	return 0
@@ -1268,7 +1271,7 @@ function _release_cpio {		#{doredo} #{dofast} #{dotest}
 		${RM} ${_RAMFS}.kernel								|| return 1
 		DOREDO="${DOREDO}" DOFAST="${DOFAST}" DOTEST="${DOTEST}" release_cpio_nul	|| return 1
 		release_cpio_file								|| return 1
-		DOTEST="${DOTEST}" release_cpio_dir						|| return 1
+		DOFAST="${DOFAST}" DOTEST="${DOTEST}" release_cpio_dir				|| return 1
 	else
 		common_exists ${FUNCNAME} ${CPIO_FILE}*						|| return 1
 	fi
