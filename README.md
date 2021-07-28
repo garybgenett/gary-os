@@ -1665,6 +1665,7 @@ highly visible components, and deserve mention:
 
   * [Bash]
     * [Vim]
+    * [Rsync]
     * [OpenSSH]
   * [X.org]
     * [Suckless] [dwm]
@@ -1674,6 +1675,7 @@ highly visible components, and deserve mention:
 
   [Bash]: https://www.gnu.org/software/bash
   [Vim]: https://www.vim.org
+  [Rsync]: https://rsync.samba.org
   [OpenSSH]: https://www.openssh.com
   [X.org]: https://x.org
   [Suckless]: https://suckless.org
