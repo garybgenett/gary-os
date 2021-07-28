@@ -905,7 +905,6 @@ and feel for GaryOS.
   | /etc/profile.d/setterm.sh | Added    | Disabled terminal bell
   | /etc/wpa_supplicant/wpa_supplicant.conf | Replaced | [artifacts/files/wpa_supplicant.conf]
   | /etc/ssh/sshd_config      | Modified | Enabled 'root' login
-  | /usr/share/X11/xorg.conf.d/20-intel.conf | Modified | Commented all lines
   | /etc/env.d/90xsession     | Added    | Set default window manager
   | /etc/X11/Sessions/dwm     | Modified | Tune [dwm] configuration
 
