@@ -4389,6 +4389,15 @@ function task-depends {
 			"priority"	=> "0",
 			"tags"		=> "0",
 		};
+		foreach my $field (keys(%{$c_fld})) {
+			foreach my $value (qx(task _unique ${field})) {
+				chomp(${value});
+				my $len = length(${value});
+				if (${len} > $c_fld->{$field}) {
+					$c_fld->{$field} = ${len};
+				};
+			};
+		};
 		my $udas = {};
 		foreach my $line (qx(task show uda)) {
 			if ($line =~ m/^uda[.]([^.]+)[.]values\s+(.+)$/) {
@@ -4427,15 +4436,6 @@ function task-depends {
 		my $pnum = {};
 		my $onum = {};
 		my $header;
-		foreach my $field (keys(%{$c_fld})) {
-			foreach my $value (qx(task ${args} _unique ${field})) {
-				chomp(${value});
-				my $len = length(${value});
-				if (${len} > $c_fld->{$field}) {
-					$c_fld->{$field} = ${len};
-				};
-			};
-		};
 		foreach my $task (@{$data}) {
 			$list->{$task->{"uuid"}} = ${task};
 			if (exists($task->{"depends"})) {
