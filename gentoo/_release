@@ -228,6 +228,10 @@ if ! ${DOTEST}; then
 	PACKDIRS="$(variable_parse PACKDIRS "" "" "" true | sort -u)"
 fi
 
+declare PACKDIRS_SKIP="
+	$(ls ${TARGET}${LDIR}*/kernel/kheaders_data.tar.xz 2>/dev/null | ${SED} "s|^${TARGET}||g")
+"
+
 ########################################
 
 declare ROOTFS_NAME="rootfs"
@@ -866,6 +870,7 @@ function _prepare_packdirs {		#{isexit} #{doredo}
 		${RM} $(variable_parse PACKDIRS_LIST "" "${TARGET}" ".tar.xz")
 		NEXT="$(eval find ${TARGET} \
 			$(variable_parse DEVDIRS "" "\\( -path ${TARGET}" " -prune \\) -o ") \
+			$(variable_parse PACKDIRS_SKIP "" "\\( -path ${TARGET}" " -prune \\) -o ") \
 			\\\( -path ${_FINAL} -prune \\\) -o \
 			\\\( -path ${TARGET}${ARCDIR} -prune \\\) -o \
 			\\\( -path ${TARGET}${DSTDIR} -prune \\\) -o \
