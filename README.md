@@ -673,8 +673,8 @@ configuration changes.  It also handles a number of backend items key to
 keeping things clean and orderly.
 
 Once the 'init' phase reaches the point of building the package list, this phase
-can be used to resume after failed builds.  It is sometimes handy to do 'make
-DOFAST=true doit' to skip some of the ancillary but time-consuming steps until
+can be used to resume after failed builds.  It can be handy to do 'make
+DOFAST=true doit' to skip some of the ancillary time-consuming steps until
 a successful build is achieved, and then do a final 'make doit' to ensure they
 are run.  This is a real time saver.
 
