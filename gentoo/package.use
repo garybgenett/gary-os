@@ -292,13 +292,32 @@ sys-apps/busybox			-make-symlinks savedconfig static
 sys-apps/coreutils			multicall static
 sys-devel/gcc				ada cxx
 
-#>>>net-misc/openssh			static -pam -pie		# gentoo required: https://bugs.gentoo.org/699384
+#>>>net-misc/openssh			static -pam -pie	# gentoo required: https://bugs.gentoo.org/699384
 net-misc/openssh			-pam -pie
 #>>>
 app-shells/bash				static
 dev-libs/openssl			static-libs
 net-misc/rsync				static
 sys-process/runit			static
+
+#>>> for FILE in $(equery --no-color depgraph sys-apps/busybox 2>&1 | awk '{print $3;}' | ${SED} -e "/^$/d" -e "s|-[0-9].*$||g" | sort -u); do ${GREP} "${FILE}" ${TARGET}/_gentoo/.emerge; done | ${GREP} "static"
+#>>> for FILE in /bin/busybox /usr/bin/coreutils /bin/bash /usr/bin/openssl /usr/bin/ssh /usr/bin/rsync /sbin/runit ; do echo; echo "${FILE}"; ldd ${TARGET}${FILE}; done
+#>>> make emerge-busybox emerge-coreutils emerge-bash emerge-openssl emerge-openssh emerge-rsync emerge-runit
+app-arch/xz-utils			static-libs	# static: coreutils
+dev-libs/gmp				static-libs	# static: coreutils
+dev-libs/openssl			static-libs	# static: openssh
+dev-libs/popt				static-libs	# static: rsync
+sys-apps/attr				static-libs	# static: coreutils
+sys-apps/attr				static-libs	# static: rsync
+sys-apps/openrc				static-libs	# static: runit
+sys-libs/libcap				static-libs	# static: coreutils
+sys-libs/libcap-ng			static-libs	# static: coreutils
+sys-libs/ncurses			static-libs	# static: bash
+sys-libs/pam				static-libs	# static: busybox
+sys-libs/pam				static-libs	# static: openssh
+sys-libs/readline			static-libs	# static: bash
+sys-libs/zlib				static-libs	# static: openssh
+sys-libs/zlib				static-libs	# static: openssl
 
 mail-client/thunderbird			-bindist
 www-client/firefox			-bindist
