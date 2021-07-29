@@ -50,8 +50,6 @@ dev-qt/qtmultimedia			widgets		# gentoo required
 dev-qt/qtscript				scripttools	# gentoo required
 dev-qt/qtwebchannel			qml		# gentoo required
 dev-qt/qtwebengine			widgets		# gentoo required
-gnome-base/gvfs				-elogind	# gentoo required
-lxde-base/lxdm				-elogind	# gentoo required
 media-libs/libvpx			svc		# gentoo required
 net-dns/dnsmasq				script		# gentoo required
 sys-libs/ncurses			tinfo		# gentoo required
@@ -361,6 +359,13 @@ app-emulation/libvirt			libvirtd	# gentoo required
 mail-mta/msmtp				mta		# gentoo required
 
 ########################################
+
+dev-util/sysprof			-elogind
+media-sound/pulseaudio			-elogind
+sys-apps/dbus				-elogind
+sys-auth/polkit				-elogind
+sys-libs/pam				-elogind
+sys-process/procps			-elogind
 
 app-text/enchant			aspell
 dev-util/systemtap			-libvirt
