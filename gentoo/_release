@@ -916,6 +916,10 @@ function _prepare_linux {
 function _prepare_packdirs {		#{isexit} #{doredo}
 	if ${DOREDO}; then
 		${RM} $(variable_parse PACKDIRS_LIST "" "${TARGET}" ".tar.xz")
+		echo -en "\n"
+		echo -en ">>> LOCATING ANY PACKDIRS THAT MIGHT HAVE BEEN MISSED <<<\n"
+		echo -en ">>> IT IS NORMAL FOR THIS TO TAKE SEVERAL MINUTES <<<\n"
+		echo -en "\n"
 		NEXT="$(eval find ${TARGET} \
 			$(variable_parse DEVDIRS "" "\\( -path ${TARGET}" " -prune \\) -o ") \
 			$(variable_parse PACKDIRS_SKIP "" "\\( -path ${TARGET}" " -prune \\) -o ") \
