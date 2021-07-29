@@ -21,6 +21,7 @@
 #{SELECT} unison:2.51
 #{SELECT} vi:vim
 #{SELECT} visual:vi
+#{MOD} #{SELECT} vi:nvi
 
 #{WINMGR} dwm
 #{WMHELP} doc>al+lf man>al+rt / cmd>al+p trm>al+sf+en web>al+cl+en / \`date --iso=s\`
@@ -216,6 +217,7 @@ net-misc/openssh
 
 app-editors/gvim			#{MOD} # requires: x11-libs/gtk+
 app-editors/nano
+app-editors/nvi
 app-editors/vim				# requires: dev-util/ctags -> dev-python/docutils -> dev-python/pygments
 app-text/dos2unix
 app-vim/taglist				#{MOD} # requires: dev-util/ctags -> dev-python/docutils -> dev-python/pygments
