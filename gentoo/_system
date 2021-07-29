@@ -696,7 +696,9 @@ function mount_dev_dirs {
 	if [[ -z ${1} ]]; then
 		print_info marker
 		print_info mount
-		mount-robust --dev ${TARGET}		|| return 1
+		if ! mount-robust --dev ${TARGET}		2>&1 |
+			if ${QUIET}; then prompt -t; else cat; fi
+		then						return 1; fi
 		print_info marker
 	elif [[ ${1} == -u ]]; then
 		shift
@@ -719,7 +721,9 @@ function mount_dev_dirs {
 #>>>			print_info marker
 #>>>			return 1
 		else
-			mount-robust -u --dev ${TARGET}	|| return 1
+			if ! mount-robust -u --dev ${TARGET}	2>&1 |
+				if ${QUIET}; then prompt -t; else cat; fi
+			then					return 1; fi
 		fi
 		print_info marker
 	fi
@@ -872,7 +876,9 @@ if [[ ${1} == -s ]]; then
 	if [[ ${1} == -e ]]; then
 		shift
 		#note: ensuring configuration is up-to-date
-		${_SOUL} ${QUIET_OPT} ${TOOR} -r	|| EXIT 1
+		if ! ${_SOUL} ${QUIET_OPT} ${TOOR} -r	2>&1 |
+			if ${QUIET}; then prompt -t; else cat; fi
+		then					EXIT 1; fi
 		expect_wrapper emerge ${_ASK}		\
 			${EMERGE_TREE_OPTS}		\
 			${EMERGE_UPDT_OPTS}		\
@@ -896,7 +902,9 @@ if [[ ${1} == -y ]]; then
 	shift
 	if ${DO_CHROOT}; then
 		#note: ensuring configuration is up-to-date
-		${_SOUL} ${QUIET_OPT} ${TOOR} -r	|| EXIT 1
+		if ! ${_SOUL} ${QUIET_OPT} ${TOOR} -r	2>&1 |
+			if ${QUIET}; then prompt -t; else cat; fi
+		then					EXIT 1; fi
 	fi
 	if [[ ${1} == -j ]]; then
 		shift
@@ -1054,7 +1062,8 @@ if [[ ${1} == -o ]]; then
 		declare LAY_DIR="${SETDIR}/${FUNDIR}/${LAYDIR}"
 		declare ETC_DIR="${TARGET}${ETCDIR}/${LAYDIR}"
 		#note: ensuring configuration is up-to-date
-		${_SOUL} ${QUIET_OPT} ${TOOR} -r										|| EXIT 1
+		if ! ${_SOUL} ${QUIET_OPT} ${TOOR} -r										2>&1 |
+			if ${QUIET}; then prompt -t; else cat; fi; then								EXIT 1; fi
 		${MKDIR}	${ETC_DIR}/${FILE}			${LAY_DIR}/${FILE}/.source				|| EXIT 1
 		${RSYNC_U}	${TARGET}${REPDIR}/kits/*/${FILE}/	${LAY_DIR}/${FILE}/.source				||
 		touch							${LAY_DIR}/${FILE}/.source/.keep			|| EXIT 1
