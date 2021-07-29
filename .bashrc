@@ -3460,7 +3460,12 @@ function prompt {
 		                    s/(-o [^\s]+)/${MSG_COLOR}\1${DEF_COLOR}/gi;
 		                              s/$/${DEF_COLOR}/gi;
 		' -- "${@}" || return 1
-		return ${?}
+		return 0
+	fi
+	if [[ ${1} == -t ]]; then
+		${SED} "s|^.*$||g" | tr '\n' '.'
+		echo -en "\n"
+		return 0
 	fi
 	if [[ ${1} == -d ]]; then
 		export XAUTHORITY="${HOME}/.Xauthority"
