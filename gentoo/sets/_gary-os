@@ -349,17 +349,7 @@
 #{KERNEL} 5.6.19
 
 #{FLAVOR} desktop
-#{MIXINS} gfxcard-intel
-#{MIXINS} gfxcard-nouveau
-#{MIXINS} gfxcard-radeon
 #{MIXINS} hardened
-#{MIXINS} media
-#{MIXINS} media-pro
-#{MIXINS} mediadevice-audio-pro
-#{MIXINS} mediadevice-video-pro
-#{MIXINS} mediaformat-gfx-common
-#{MIXINS} mediaformat-video-common
-#{MIXINS} mediaformat-video-extra
 #{MIXINS} no-systemd
 #{MIXINS} python3-only
 
