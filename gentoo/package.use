@@ -300,8 +300,8 @@ dev-libs/openssl			static-libs
 net-misc/rsync				static
 sys-process/runit			static
 
-#>>> for FILE in $(equery --no-color depgraph sys-apps/busybox 2>&1 | awk '{print $3;}' | ${SED} -e "/^$/d" -e "s|-[0-9].*$||g" | sort -u); do ${GREP} "${FILE}" ${TARGET}/_gentoo/.emerge; done | ${GREP} "static"
-#>>> for FILE in /bin/busybox /usr/bin/coreutils /bin/bash /usr/bin/openssl /usr/bin/ssh /usr/bin/rsync /sbin/runit ; do echo; echo "${FILE}"; ldd ${TARGET}${FILE}; done
+#>>> for FILE in $(equery --no-color depgraph sys-apps/busybox 2>&1 | awk '{print $3;}' | sed -r -e "/^$/d" -e "s|-[0-9].*$||g" | sort -u); do grep "${FILE}" ./build/_gentoo/.emerge; done | grep "static"
+#>>> for FILE in /bin/busybox /usr/bin/coreutils /bin/bash /usr/bin/openssl /usr/bin/ssh /usr/bin/rsync /sbin/runit ; do echo; echo "${FILE}"; ldd ./build${FILE}; done
 #>>> make emerge-busybox emerge-coreutils emerge-bash emerge-openssl emerge-openssh emerge-rsync emerge-runit
 app-arch/xz-utils			static-libs	# static: coreutils
 dev-libs/gmp				static-libs	# static: coreutils
