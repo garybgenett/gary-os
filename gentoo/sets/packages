@@ -158,6 +158,7 @@ net-misc/openssh
 
 app-editors/gvim
 app-editors/nano
+app-editors/nvi
 app-editors/vim
 app-text/dos2unix
 app-vim/taglist
