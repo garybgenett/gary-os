@@ -394,6 +394,11 @@ games-fps/doom3-mitm			-dedicated
 
 #{NEW} media-plugins/frei0r-plugins	-facedetect	# gentoo required
 
+################################################################################
+
+#>>> grep "installed" ./build/.packages.txt | sort -nr | head -n50
+#>>> declare TOTAL="0"; for FILE in $(grep "installed" ./build/.packages.txt | awk '{print $1;}'); do TOTAL="$((${TOTAL}+${FILE}))"; done; echo "${TOTAL}"
+
 ########################################
 
 #{GOS} app-crypt/mit-krb5		-keyutils	# gentoo required
