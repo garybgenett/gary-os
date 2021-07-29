@@ -255,6 +255,28 @@ check:
 
 ########################################
 
+.PHONY: depends-%
+depends-%:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -q $(CHROOT) -y -j depends $(subst %,/,$(*))
+
+.PHONY: depgraph-%
+depgraph-%:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -q $(CHROOT) -y -j depgraph $(subst %,/,$(*))
+
+.PHONY: belongs-%
+belongs-%:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -q $(CHROOT) -y -j belongs $(subst %,/,$(*))
+
+.PHONY: overlay-%
+overlay-%:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -q $(CHROOT) -o $(subst ^, ,$(subst %,/,$(*)))
+
+.PHONY: emerge-%
+emerge-%:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -q $(CHROOT) -a -s -e $(subst %,/,$(*)) | ./.bashrc prompt -c
+
+########################################
+
 export COMPOSER		?= $(GARYOS_DIR)/.composer/Makefile
 export MARKDOWN_OUTPUT	:= GaryOS-Readme.md
 export COMPOSER_TARGETS	:= GaryOS-Readme.html GaryOS-Readme.pdf
