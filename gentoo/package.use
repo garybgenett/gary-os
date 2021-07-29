@@ -12,6 +12,7 @@ net-wireless/wpa_supplicant		-bindist	# gentoo required
 app-crypt/pinentry			gnome-keyring	# gentoo required
 app-text/ghostscript-gpl		cups		# gentoo required
 app-text/poppler			cairo		# gentoo required
+app-text/poppler			qt5		# gentoo required
 dev-dotnet/libgdiplus			cairo		# gentoo required
 dev-libs/boost				nls		# gentoo required
 dev-libs/efl				fontconfig	# gentoo required
@@ -329,7 +330,7 @@ app-emulation/libvirt			-libvirtd lxc qemu
 app-emulation/qemu			ncurses sdl spice
 app-emulation/spice			client gui
 app-emulation/virt-viewer		-libvirt -vnc spice
-app-emulation/virtualbox		sdk vnc
+app-emulation/virtualbox		qt5 sdk vnc
 app-misc/jq				oniguruma
 app-misc/remind				tk
 app-office/libreoffice			java
@@ -338,12 +339,14 @@ dev-vcs/git				tk
 dev-vcs/subversion			-apache2
 mail-client/mutt			-tokyocabinet gpg hcache sasl sidebar smime smtp
 mail-client/thunderbird			-crypt -lightning -wifi ldap	# installing "enigmail" and "lightning" plugins manually
+media-libs/libprojectm			qt5
 media-sound/pulseaudio			bluetooth dbus
-media-video/vlc				projectm run-as-root vlm
+media-video/vlc				projectm qt5 run-as-root vlm
 net-analyzer/tcpdump			-chroot
 net-fs/samba				client
 net-libs/gnutls				openpgp openssl tls-heartbeat tools
 net-vpn/openvpn				iproute2
+net-wireless/wpa_supplicant		qt5
 sci-calculators/qalculate-gtk		-gnome
 sys-apps/iproute2			iptables
 sys-boot/grub				device-mapper efiemu libzfs mount
@@ -422,6 +425,7 @@ games-fps/doom3-mitm			-dedicated
 #{GOS} app-text/asciidoc		-graphviz	# pulls in too many dependencies (required by: sys-fs/btrfs-progs)
 #{GOS} dev-libs/libnsfb			sdl		# gentoo required: www-client/netsurf
 #{GOS} dev-util/ninja			-zsh-completion	# requires: app-shells/zsh
+#{GOS} net-wireless/wpa_supplicant	-qt5		# requires: dev-qt/qtcore
 
 #{GOS} dev-vcs/subversion		-http		# requires: net-libs/serf -> dev-util/scons
 #{GOS} net-dns/avahi			-gtk3		# requires: x11-libs/gtk+
