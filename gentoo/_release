@@ -598,10 +598,10 @@ function _prepare_build {		#{doredo} #{dofast} #{dotest}
 		DOREDO="false" _prepare_config	|| return 1
 	fi
 	DOTEST="${DOTEST}" _prepare_docdir	|| return 1
+	_prepare_packages			|| return 1
 	_prepare_repdir				|| return 1
 	_prepare_linux				|| return 1
 	DOREDO="false" _prepare_packdirs	|| return 1
-	_prepare_packages			|| return 1
 	DOREDO="false" _prepare_symlinks	|| return 1
 	return 0
 }
@@ -816,6 +816,36 @@ function _prepare_docdir {		#{dotest}
 
 ########################################
 
+function _prepare_packages {
+	if [[ -z ${TARGET} ]]; then
+		return 0
+	fi
+	cat /dev/null >${TARGET}/.${_GPACK}								|| return 1
+	for FILE in $(
+		cd ${TARGET}${PAKDIR}									&&
+		find ./ -mindepth 2 -maxdepth 2 -type f							|
+			${SED} "s|^[.][/]||g"								|
+			sort -u
+	); do
+		declare PKG_DB="$(cd ${TARGET}${PDBDIR} && ${LS} -d ${FILE/%.tbz2}	2>/dev/null)"	|| return 1
+		declare PKG_DU="$(cd ${TARGET}${PAKDIR} && ${DU} -ks ${FILE}		2>/dev/null)"	|| return 1
+		if [[ -n ${PKG_DB} ]]; then
+			echo -en "${PKG_DU} (installed)\n"	| tee -a ${TARGET}/.${_GPACK}		|| return 1
+		else
+			echo -en "${PKG_DU} (packaged)\n"	| tee -a ${TARGET}/.${_GPACK}		|| return 1
+		fi
+	done
+	declare PACK_FILE="${_RAMFS}.kernel.${_GPACK}"
+	if ${ROOTFS_CUST}; then
+		PACK_FILE="${_RAMFS}.rootfs.${_GPACK}"
+	fi
+	${MKDIR}			${_FINAL}							|| return 1
+	${RSYNC_U} ${TARGET}/.${_GPACK}	${PACK_FILE}							|| return 1
+	return 0
+}
+
+########################################
+
 function _prepare_repdir {
 	if [[ -z ${TARGET} ]]; then
 		return 0
@@ -932,36 +962,6 @@ function _prepare_packdirs {		#{isexit} #{doredo}
 	done
 	shopt ${LASTPIPE} lastpipe
 	echo -en "\n"; common_packdirs_list
-	return 0
-}
-
-########################################
-
-function _prepare_packages {
-	if [[ -z ${TARGET} ]]; then
-		return 0
-	fi
-	cat /dev/null >${TARGET}/.${_GPACK}								|| return 1
-	for FILE in $(
-		cd ${TARGET}${PAKDIR}									&&
-		find ./ -mindepth 2 -maxdepth 2 -type f							|
-			${SED} "s|^[.][/]||g"								|
-			sort -u
-	); do
-		declare PKG_DB="$(cd ${TARGET}${PDBDIR} && ${LS} -d ${FILE/%.tbz2}	2>/dev/null)"	|| return 1
-		declare PKG_DU="$(cd ${TARGET}${PAKDIR} && ${DU} -ks ${FILE}		2>/dev/null)"	|| return 1
-		if [[ -n ${PKG_DB} ]]; then
-			echo -en "${PKG_DU} (installed)\n"	| tee -a ${TARGET}/.${_GPACK}		|| return 1
-		else
-			echo -en "${PKG_DU} (packaged)\n"	| tee -a ${TARGET}/.${_GPACK}		|| return 1
-		fi
-	done
-	declare PACK_FILE="${_RAMFS}.kernel.${_GPACK}"
-	if ${ROOTFS_CUST}; then
-		PACK_FILE="${_RAMFS}.rootfs.${_GPACK}"
-	fi
-	${MKDIR}			${_FINAL}							|| return 1
-	${RSYNC_U} ${TARGET}/.${_GPACK}	${PACK_FILE}							|| return 1
 	return 0
 }
 
