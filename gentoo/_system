@@ -27,7 +27,7 @@ export _SYSTEMED="true"
 
 ################################################################################
 
-#>>> ${GREP} -o "[!=][=][ ][-][^[:space:]]+" ${HOME}/setup/gentoo/_system | ${SED} "s|^[!=][=][[:space:]]+||g" | sort -u
+#>>> grep -oE "[!=][=][ ][-][^[:space:]]+" ./gentoo/_system | sed -r "s|^[!=][=][[:space:]]+||g" | sort -u
 
 export _OPTS="${@}"
 
@@ -72,8 +72,8 @@ export _TITLE="gary-os"
 
 ########################################
 
-#>>> ${GREP} -i -e "[{](ismain|isexit)[}]" -e "[{](rootfs|domods|doredo|dofast|dotest)[}]" -e "(rootfs|domods|doredo|dofast|dotest)[=]" ${HOME}/setup/gentoo/_system ${HOME}/setup/gentoo/_release ${HOME}/setup/gentoo/sets/*
-#>>> | ${GREP} "function"
+#>>> grep -iE -e "[{](ismain|isexit)[}]" -e "[{](rootfs|domods|doredo|dofast|dotest)[}]" -e "(rootfs|domods|doredo|dofast|dotest)[=]" ./gentoo/_system ./gentoo/_release ./gentoo/sets/*
+#>>> | grep "function"
 
 #OPTIONS[ROOTFS DOMODS]
 if [[ ${ROOTFS} != true ]] && [[ ${ROOTFS} != false ]]; then ROOTFS="true"; fi
@@ -263,7 +263,7 @@ fi
 
 ########################################
 
-#>>> ${GREP} -r "[#][{](NEW|MOD|GOS|CPU|GARC|GSUB|GOPT)[}]" ${HOME}/setup/gentoo
+#>>> grep -rE "[#][{](NEW|MOD|GOS|CPU|GARC|GSUB|GOPT)[}]" ./gentoo
 
 function portage_file {
 	declare PORT_SEL="${1}" && shift
@@ -1410,7 +1410,7 @@ if [[ ${1} == -u ]]; then
 
 #>>> declare DISTFILES="/.g/_data/_builds/_gentoo/var/cache/portage/distfiles"
 #>>> declare DISTFILES="/.g/_data/_builds/.gary-os.release/_distfiles"
-#>>> for FILE in ${FILELIST}; do ${RSYNC_U} ${DISTFILES}/${FILE} ./build/var/cache/portage/distfiles/ ; done
+#>>> for FILE in ${FILELIST}; do ${RSYNC_U:-rsync -avv} ${DISTFILES}/${FILE} ./build/var/cache/portage/distfiles/; done
 
 elif [[ ${1} != -! ]]; then
 	if [[ ${1} != -f ]]; then
