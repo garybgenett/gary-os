@@ -506,7 +506,7 @@ games-fps/quake1-demodata
 games-fps/quake1-killer
 games-fps/quake1-rally
 games-fps/quake1-teamfortress
-games-fps/quake1-textures
+#>>>games-fps/quake1-textures		#>>> requires: app-arch/unrar
 games-fps/quakeforge
 games-fps/quakespasm
 
