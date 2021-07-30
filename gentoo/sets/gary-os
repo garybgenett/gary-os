@@ -31,7 +31,7 @@
 #{WINMGR} dwm
 #{WMHELP} doc>al+lf man>al+rt / cmd>al+p trm>al+sf+en web>al+cl+en / \`date --iso=s\`
 
-#{RCUPDT} xdg-settings set default-web-browser links_-g_%u-links-2.desktop
+#>>>#{RCUPDT} xdg-settings set default-web-browser links_-g_%u-links-2.desktop	#{MOD}
 #{RCUPDT} rc-update add gpm default		|| true
 #{RCUPDT} rc-update del sysklogd default	|| true
 #{RCUPDT} rc-update del netmount default	|| true
@@ -54,7 +54,6 @@
 #note: size of the default "rootfs" file is not as much of a concern as the in-memory footprint
 #note: this will also keep the "$_gunpk" file and online repository less cluttered
 #{MOD} #{FSPACK} base:/usr/bin
-#{MOD} #{FSPACK} base:/usr/lib32
 #{MOD} #{FSPACK} base:/usr/lib64
 #{MOD} #{FSPACK} base:/usr/libexec
 #{MOD} #{FSPACK} base:/usr/local
@@ -119,9 +118,9 @@ sys-devel/make				#{rootfs}
 sys-devel/patch				#{MOD}
 sys-libs/glibc
 
-dev-util/ccache				#{MOD}
-dev-util/debugedit			#{MOD}
-sys-devel/gdb				#{MOD}
+#>>>dev-util/ccache				#{MOD}
+#>>>dev-util/debugedit			#{MOD}
+#>>>sys-devel/gdb				#{MOD}
 
 ########################################
 # system
@@ -152,12 +151,12 @@ sys-libs/efivar
 sys-power/suspend			#{MOD}
 sys-process/runit			#{MOD}
 
-app-forensics/sleuthkit
+#>>>app-forensics/sleuthkit			#{MOD} # requires: dev-java/openjdk | dev-java/openjdk-jre-bin | dev-db/postgresql | app-doc/doxygen
 sys-apps/gptfdisk
 sys-fs/cryptsetup
 sys-fs/dosfstools			#{rootfs}
 sys-fs/e2fsprogs			#{rootfs}
-sys-fs/encfs
+sys-fs/encfs				#{MOD} # requires: dev-util/cmake
 sys-fs/exfat-utils			#{rootfs}
 sys-fs/fuse				#{rootfs}
 sys-fs/fuse-exfat			#{rootfs}
@@ -221,10 +220,10 @@ app-crypt/gnupg				#{MOD}
 dev-libs/openssl
 net-misc/openssh
 
-app-editors/gvim			#{MOD} # requires: x11-libs/gtk+
+#>>>app-editors/gvim			#{MOD} # requires: x11-libs/gtk+
 app-editors/nano
 app-editors/nvi
-app-editors/vim				# requires: dev-util/ctags -> dev-python/docutils -> dev-python/pygments
+app-editors/vim				#{MOD} # requires: dev-util/ctags -> dev-python/docutils -> dev-python/pygments
 app-text/dos2unix
 app-vim/taglist				#{MOD} # requires: dev-util/ctags -> dev-python/docutils -> dev-python/pygments
 dev-util/cloc				#{MOD}
@@ -268,7 +267,7 @@ x11-apps/xrandr				#{MOD}
 x11-base/xorg-drivers			#{MOD}
 x11-base/xorg-server			#{MOD}
 x11-base/xorg-x11			#{MOD}
-x11-misc/arandr				#{MOD} # requires: x11-libs/gtk+
+#>>>x11-misc/arandr				#{MOD} # requires: x11-libs/gtk+
 
 x11-misc/dmenu				#{MOD}
 #>>>x11-misc/obconf			#{MOD}
@@ -286,7 +285,7 @@ x11-misc/xsel				#{MOD}
 # toolkits
 
 dev-vcs/git				#{MOD}
-dev-vcs/subversion			#{MOD}
+dev-vcs/subversion			#{MOD} # requires: app-arch/lz4 -> dev-util/cmake
 
 dev-lang/perl				#{MOD}
 dev-libs/libpcre
@@ -302,11 +301,11 @@ app-misc/yq				#{MOD}
 dev-db/sqlite				#{MOD}
 dev-tcltk/expect			#{MOD} # requires: dev-lang/tcl
 
-sys-apps/thunderbolt-software-user-space	#{MOD}
+#>>>sys-apps/thunderbolt-software-user-space	#{MOD} # requires: dev-libs/boost
 
-net-wireless/bluez			#{MOD}
-net-wireless/bluez-hcidump		#{MOD}
-net-wireless/bluez-tools		#{MOD}
+#>>>net-wireless/bluez			#{MOD} # requires: dev-python/pygobject -> x11-libs/gtk+
+#>>>net-wireless/bluez-hcidump		#{MOD}
+#>>>net-wireless/bluez-tools		#{MOD}
 
 app-forensics/cmospwd
 sys-apps/flashrom			#{MOD} # requires: dev-embedded/libftdi -> dev-libs/boost
@@ -320,7 +319,7 @@ sys-devel/bc
 
 dev-util/ltrace
 dev-util/strace
-dev-util/sysprof			#{MOD} # requires: dev-libs/appstream-glib -> x11-libs/gtk+
+#>>>dev-util/sysprof			#{MOD} # requires: dev-libs/appstream-glib -> x11-libs/gtk+
 sys-apps/fakeroot-ng			#{MOD}
 sys-apps/kexec-tools			#{MOD}
 
@@ -358,7 +357,7 @@ net-analyzer/tcpdump
 net-analyzer/tcptrace			#{MOD}
 net-analyzer/tcptraceroute		#{MOD}
 net-analyzer/traceroute			#{MOD}
-net-analyzer/wireshark			#{MOD} # requires: x11-libs/gtk+
+#>>>net-analyzer/wireshark			#{MOD} # requires: x11-libs/gtk+
 net-dns/bind-tools			#{MOD}
 net-misc/netkit-telnetd			#{MOD}
 net-misc/socat				#{MOD}
@@ -376,7 +375,7 @@ net-misc/ntp				#{MOD}
 net-vpn/openvpn				#{MOD}
 net-wireless/hostapd			#{MOD}
 
-net-vpn/tor				#{MOD} # requires: app-text/asciidoc
+#>>>net-vpn/tor				#{MOD} # requires: app-text/asciidoc
 
 ########################################
 # programs
