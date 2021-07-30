@@ -33,6 +33,7 @@ media-video/ffmpeg			x264		# gentoo required
 net-dns/avahi				dbus		# gentoo required
 net-libs/libpsl				-idn		# gentoo required
 sys-apps/busybox			-pam		# gentoo required
+sys-auth/consolekit			policykit	# gentoo required
 sys-libs/gdbm				berkdb		# gentoo required
 
 media-sound/aumix			-gpm		# gnetoo required: [media-sound/aumix-2.9.1] mouse.c:(.text+0x46): undefined reference to `Gpm_Wgetch'
@@ -67,9 +68,13 @@ dev-libs/lzo				static-libs	# gentoo required
 dev-libs/popt				static-libs	# gentoo required
 sys-apps/attr				static-libs	# gentoo required
 sys-apps/util-linux			static-libs	# gentoo required
+sys-fs/eudev				static-libs	# gentoo required
 sys-libs/zlib				static-libs	# gentoo required
 
 ########################################
+
+#>> grep "PYTHON.+[^-]python2_7" ./build/_gentoo/.emerge | grep -v "python3_[0-9]"
+#>> grep "PYTHON.+[^-]python3_6" ./build/_gentoo/.emerge | grep -v "python3_7"
 
 app-office/unoconv			python_single_target_python3_6	#{GOS} # gentoo required
 app-office/unoconv			python_targets_python3_6	#{GOS} # gentoo required
@@ -91,6 +96,8 @@ app-office/libreoffice			python_single_target_python3_7	#{GOS} # gentoo required
 dev-libs/gobject-introspection		python_single_target_python3_7	#{GOS} # gentoo required
 dev-libs/libixion			python_single_target_python3_7	#{GOS} # gentoo required
 dev-libs/liborcus			python_single_target_python3_7	#{GOS} # gentoo required
+dev-python/certifi			python_single_target_python3_7	# gentoo required
+dev-python/setuptools			python_single_target_python3_7	# gentoo required
 dev-util/gdbus-codegen			python_single_target_python3_7	#{GOS} # gentoo required
 dev-util/gtk-doc			python_single_target_python3_7	#{GOS} # gentoo required
 dev-util/itstool			python_single_target_python3_7	#{GOS} # gentoo required
@@ -154,7 +161,7 @@ app-editors/atom			python_targets_python2_7	#{GOS} # gentoo required
 app-editors/gvim			python_targets_python2_7	#{GOS} # gentoo required
 app-editors/retext			python_targets_python2_7	#{GOS} # gentoo required
 app-editors/vim				python_targets_python2_7	#{GOS} # gentoo required
-app-misc/binwalk			python_targets_python2_7	#{GOS} # gentoo required
+app-misc/binwalk			python_targets_python2_7	# gentoo required
 app-misc/golly				python_targets_python2_7	#{GOS} # gentoo required
 app-office/ledger			python_targets_python2_7	#{GOS} # gentoo required
 app-office/unoconv			python_targets_python2_7	#{GOS} # gentoo required
@@ -165,21 +172,21 @@ app-text/stardict			python_targets_python2_7	#{GOS} # gentoo required
 app-text/txt2tags			python_targets_python2_7	#{GOS} # gentoo required
 dev-embedded/libftdi			python_targets_python2_7	#{GOS} # gentoo required
 dev-java/javatoolkit			python_targets_python2_7	#{GOS} # gentoo required
-dev-lang/yasm				python_targets_python2_7	#{GOS} # gentoo required
+dev-lang/yasm				python_targets_python2_7	# gentoo required
 dev-libs/boost				python_targets_python2_7	#{GOS} # gentoo required
 dev-libs/keybinder			python_targets_python2_7	#{GOS} # gentoo required
 dev-libs/libdbusmenu			python_targets_python2_7	#{GOS} # gentoo required
 dev-libs/libdnet			python_targets_python2_7	#{GOS} # gentoo required
 dev-libs/libxml				python_targets_python2_7	#{GOS} # gentoo required
 dev-libs/libxml2			python_targets_python2_7	#{GOS} # gentoo required
-dev-libs/libxslt			python_targets_python2_7	#{GOS} # gentoo required
+dev-libs/libxslt			python_targets_python2_7	# gentoo required
 dev-python/PyQt5			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/PyQt5-sip			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/PySocks			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/apsw				python_targets_python2_7	#{GOS} # gentoo required
 dev-python/asn1crypto			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/backports			python_targets_python2_7	#{GOS} # gentoo required
-dev-python/backports-lzma		python_targets_python2_7	#{GOS} # gentoo required
+dev-python/backports-lzma		python_targets_python2_7	# gentoo required
 dev-python/beautifulsoup		python_targets_python2_7	#{GOS} # gentoo required
 dev-python/certifi			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/cffi				python_targets_python2_7	#{GOS} # gentoo required
@@ -240,7 +247,7 @@ dev-util/boost-build			python_targets_python2_7	#{GOS} # gentoo required
 dev-util/scons				python_targets_python2_7	#{GOS} # gentoo required
 dev-vcs/cvs2svn				python_targets_python2_7	#{GOS} # gentoo required
 dev-vcs/mercurial			python_targets_python2_7	#{GOS} # gentoo required
-dev-vcs/subversion			python_targets_python2_7	#{GOS} # gentoo required
+dev-vcs/subversion			python_targets_python2_7	# gentoo required
 media-gfx/gimp				python_targets_python2_7	#{GOS} # gentoo required
 media-gfx/graphviz			python_targets_python2_7	#{GOS} # gentoo required
 media-gfx/inkscape			python_targets_python2_7	#{GOS} # gentoo required
@@ -255,16 +262,16 @@ net-analyzer/rrdtool			python_targets_python2_7	#{GOS} # gentoo required
 net-dns/avahi				python_targets_python2_7	#{GOS} # gentoo required
 net-mail/offlineimap			python_targets_python2_7	#{GOS} # gentoo required
 net-wireless/kismet			python_targets_python2_7	#{GOS} # gentoo required
-net-wireless/python-wifi		python_targets_python2_7	#{GOS} # gentoo required
-sys-apps/dstat				python_targets_python2_7	#{GOS} # gentoo required
+net-wireless/python-wifi		python_targets_python2_7	# gentoo required
+sys-apps/dstat				python_targets_python2_7	# gentoo required
 sys-apps/portage			python_targets_python2_7	#{GOS} # gentoo required
 sys-devel/clang				python_targets_python2_7	#{GOS} # gentoo required
 virtual/python-cffi			python_targets_python2_7	#{GOS} # gentoo required
 virtual/python-enum34			python_targets_python2_7	#{GOS} # gentoo required
 virtual/python-ipaddress		python_targets_python2_7	#{GOS} # gentoo required
-virtual/python-typing			python_targets_python2_7	#{GOS} # gentoo required
-x11-base/xcb-proto			python_targets_python2_7	#{GOS} # gentoo required
-x11-drivers/xf86-video-qxl		python_targets_python2_7	#{GOS} # gentoo required
+virtual/python-typing			python_targets_python2_7	# gentoo required
+x11-base/xcb-proto			python_targets_python2_7	# gentoo required
+x11-drivers/xf86-video-qxl		python_targets_python2_7	# gentoo required
 x11-misc/menumaker			python_targets_python2_7	#{GOS} # gentoo required
 
 ########################################
@@ -406,48 +413,34 @@ games-fps/doom3-mitm			-dedicated
 
 ########################################
 
-#{GOS} app-crypt/mit-krb5		-keyutils	# gentoo required
+#{GOS} app-text/xmlto			-latex		# gentoo required
+#{GOS} dev-libs/libxml2			python		# gentoo required
+#{GOS} net-libs/libproxy		-webkit		# gentoo required
+
+#{GOS} media-plugins/frei0r-plugins	-facedetect	# gentoo required
+#{MOD} #{GOS} media-libs/imlib2		-shm		# gentoo required
 
 ########################################
 
-#{GOS} sys-libs/talloc			python		# gentoo required
-
-#{GOS} app-text/asciidoc		python_targets_python2_7	# gentoo required
-#{GOS} dev-python/docutils		python_targets_python2_7	# gentoo required
-#{GOS} dev-python/numpy			python_targets_python2_7	# gentoo required
-#{GOS} dev-python/pycairo		python_targets_python2_7	# gentoo required
-#{GOS} dev-python/pygments		python_targets_python2_7	# gentoo required
-#{GOS} dev-python/pygobject		python_targets_python2_7	# gentoo required
-#{GOS} dev-python/pygtk			python_targets_python2_7	# gentoo required
-#{GOS} dev-python/six			python_targets_python2_7	# gentoo required
-#{GOS} net-fs/samba			python_targets_python2_7	# gentoo required
-#{GOS} net-wireless/kismet		python_targets_python2_7	# gentoo required
-#{GOS} net-wireless/python-wifi		python_targets_python2_7	# gentoo required
-#{GOS} sys-apps/dstat			python_targets_python2_7	# gentoo required
-#{GOS} sys-devel/clang			python_targets_python2_7	# gentoo required
-#{GOS} sys-libs/talloc			python_targets_python2_7	# gentoo required
-#{GOS} x11-drivers/xf86-video-qxl	python_targets_python2_7	# gentoo required
-#{GOS} x11-misc/arandr			python_targets_python2_7	# gentoo required
-
-########################################
-
-#{GOS} app-crypt/pinentry		-gnome-keyring	# requires: gnome-base/gnome-keyring
-#{GOS} app-text/asciidoc		-graphviz	# pulls in too many dependencies (required by: sys-fs/btrfs-progs)
-#{GOS} dev-libs/libnsfb			sdl		# gentoo required: www-client/netsurf
-#{GOS} dev-util/ninja			-zsh-completion	# requires: app-shells/zsh
-#{GOS} net-wireless/wpa_supplicant	-qt5		# requires: dev-qt/qtcore
+#{GOS} app-crypt/pinentry		-gnome-keyring	# (override) gentoo required
+#{GOS} dev-libs/glib			-dbus		# (override) gentoo required
+#{GOS} dev-libs/glib			-dbus		# (override) gentoo required: gnome-base/dconf -> dev-lang/vala -> media-gfx/graphviz
+#{GOS} dev-vcs/git			-tk		# (override) requires: dev-lang/tk
+#{GOS} net-wireless/wpa_supplicant	-qt5		# (override) requires: dev-qt/qtcore
+#{MOD} #{GOS} app-admin/eselect		-doc		# requires: dev-python/docutils -> dev-python/pygments
 
 #{GOS} dev-vcs/subversion		-http		# requires: net-libs/serf -> dev-util/scons
-#{GOS} net-dns/avahi			-gtk3		# requires: x11-libs/gtk+
-#{GOS} net-misc/networkmanager		-ppp		# requires: net-dialup/ppp
+#{GOS} net-libs/gnutls			-tools		# (override) requires: sys-devel/autogen -> dev-scheme/guile
+#{GOS} net-misc/wget			-cookie_check	# requires: net-libs/libpsl -> dev-libs/icu
 #{GOS} sys-apps/flashrom		-ft2232_spi	# requires: dev-embedded/libftdi -> dev-libs/boost
 #{GOS} sys-apps/flashrom		-usbblaster_spi	# requires: dev-embedded/libftdi -> dev-libs/boost
 #{GOS} sys-fs/lvm2			-thin		# requires: sys-block/thin-provisioning-tools -> dev-libs/boost
+#{MOD} #{GOS} sys-fs/squashfs-tools	-lz4		# requires: app-arch/lz4 -> dev-util/cmake
 
 #>>>#{GOS} x11-base/xorg-server		-glamor		# requires: media-libs/mesa
-#>>>#{GOS} x11-base/xorg-server		-xnest		# not needed, keep size down
-#>>>#{GOS} x11-base/xorg-server		-xvfb		# not needed, keep size down
 #>>>#{GOS} x11-base/xorg-server		minimal		# requires: media-libs/mesa
+#{GOS} x11-base/xorg-server		-xnest		# not needed, keep size down
+#{GOS} x11-base/xorg-server		-xvfb		# not needed, keep size down
 
 ################################################################################
 # end of file
