@@ -1460,7 +1460,13 @@ function _release_kernel {		#{doredo}
 
 function release_grub_loopfile {
 	declare GRUB_DEST="${1}" && shift
+	declare GRUB_LEFI="${1}" && shift
 	declare GRUB_LOOP="${1}" && shift
+	${MKDIR}							${GRUB_DEST}/.mount-loop-efi/${_TITLE}			|| return 1
+	if ! ${RSYNC_W} --copy-links ${_RAMFS}.kernel			${GRUB_DEST}/.mount-loop-efi/${_TITLE}/${_TITLE}.efi	; then
+		${RM}							${GRUB_DEST}/.mount-loop-efi/${_TITLE}/${_TITLE}.efi	|| return 1
+		${RSYNC_W} --copy-links ${_RAMFS}.kernel		${GRUB_DEST}/.mount-loop-efi/${_TITLE}/${_TITLE}.efi	|| return 1
+	fi
 	${MKDIR}							${GRUB_DEST}/.mount-loop/${_TITLE}			|| return 1
 	${RSYNC_W} --copy-links ${GRUB_DEST}/${_TITLE}.grub.cfg		${GRUB_DEST}/.mount-loop/${_TITLE}/			|| return 1
 	if ! ${RSYNC_W} --copy-links ${_RAMFS}.kernel			${GRUB_DEST}/.mount-loop/${_TITLE}/${_TITLE}.kernel	; then
@@ -1476,33 +1482,38 @@ function release_grub_loopfile {
 		${RSYNC_W} --copy-links ${_RAMFS}.rootfs		${GRUB_DEST}/.mount-loop/${_TITLE}/${_TITLE}.rootfs	|| return 1
 	else	${RM}							${GRUB_DEST}/.mount-loop/${_TITLE}/${_TITLE}.rootfs	|| return 1
 	fi
-	${LL} --recursive						${GRUB_DEST}/.mount-loop				|| return 1
+	${LL} --recursive						${GRUB_DEST}/.mount-loop{-efi,}				|| return 1
 	return 0
 }
 
 function release_grub_qcow_mount {
 	declare GRUB_DEST="${1}" && shift
+	declare GRUB_LEFI="${1}" && shift
 	declare GRUB_LOOP="${1}" && shift
 	modprobe			nbd max_part=127					|| return 1
 	cat				/sys/module/nbd/parameters/max_part			|| return 1
 	qemu-nbd --fork -nv -f qcow2 -c	${GRUB_LOOP/%p[0-9]} ${GRUB_DEST}/loopfile.qcow2	|| return 1
 	partx -t gpt -a			${GRUB_LOOP/%p[0-9]}					#>>> || return 1
-	${MKDIR}			${GRUB_DEST}/.mount-loop				|| return 1
+	${MKDIR}			${GRUB_DEST}/.mount-loop{-efi,}				|| return 1
+	mount				${GRUB_LEFI} ${GRUB_DEST}/.mount-loop-efi		|| return 1
 	mount -o nonempty		${GRUB_LOOP} ${GRUB_DEST}/.mount-loop			|| return 1
 	return 0
 }
 
 function release_grub_qcow_unmount {
 	declare GRUB_DEST="${1}" && shift
+	declare GRUB_LEFI="${1}" && shift
 	declare GRUB_LOOP="${1}" && shift
+	umount		${GRUB_LEFI}			|| return 1
 	umount		${GRUB_LOOP}			|| return 1
 	qemu-nbd -d	${GRUB_LOOP/%p[0-9]}		|| return 1
-	${RM}		${GRUB_DEST}/.mount-loop	|| return 1
+	${RM}		${GRUB_DEST}/.mount-loop{-efi,}	|| return 1
 	return 0
 }
 
 function _release_grub {		#{doredo} #{dofast} #{dotest}
 	declare GRUB_DEST="${_RAMFS}.grub"
+	declare GRUB_LEFI="/dev/nbd9p3"
 	declare GRUB_LOOP="/dev/nbd9p1"
 	if ${DOREDO}; then
 		${RM}						${GRUB_DEST}*						|| return 1
@@ -1533,9 +1544,9 @@ function _release_grub {		#{doredo} #{dofast} #{dotest}
 				qemu-img convert -O qcow2	${GRUB_DEST}/loopfile.img ${GRUB_DEST}/loopfile.qcow2	|| return 1
 				qemu-img info			${GRUB_DEST}/loopfile.qcow2				|| return 1
 			fi
-			release_grub_qcow_mount			${GRUB_DEST} ${GRUB_LOOP}				|| return 1
+			release_grub_qcow_mount			${GRUB_DEST} ${GRUB_LEFI} ${GRUB_LOOP}			|| return 1
 			release_grub_loopfile			${GRUB_DEST}						|| return 1
-			release_grub_qcow_unmount		${GRUB_DEST} ${GRUB_LOOP}				|| return 1
+			release_grub_qcow_unmount		${GRUB_DEST} ${GRUB_LEFI} ${GRUB_LOOP}			|| return 1
 		fi
 		if {
 			! ${DOFAST} &&
