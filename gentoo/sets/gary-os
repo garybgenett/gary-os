@@ -152,6 +152,7 @@ sys-libs/efivar
 sys-power/suspend			#{MOD}
 sys-process/runit			#{MOD}
 
+app-forensics/sleuthkit
 sys-apps/gptfdisk
 sys-fs/cryptsetup
 sys-fs/dosfstools			#{rootfs}
