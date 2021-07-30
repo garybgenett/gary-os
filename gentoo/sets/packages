@@ -93,6 +93,7 @@ sys-power/nut
 sys-power/suspend
 sys-process/runit
 
+app-forensics/sleuthkit
 sys-apps/gptfdisk
 sys-fs/cryptsetup
 sys-fs/dosfstools
