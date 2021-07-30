@@ -380,7 +380,7 @@ sci-libs/libqalculate			gnuplot readline
 
 ########################################
 
-dev-util/meson				python_targets_python3_6	# gentoo required: scrcpy build
+dev-util/meson				python_targets_python3_6	#{GOS} # gentoo required: scrcpy build
 #>>>sys-fs/zfs				python_targets_python3_6	# gentoo required: zfs-0.7.13-r2
 #>>>sys-kernel/spl			python_single_target_python3_6	# gentoo required: zfs-0.7.13-r2
 #>>>sys-kernel/spl			python_targets_python3_6	# gentoo required: zfs-0.7.13-r2
