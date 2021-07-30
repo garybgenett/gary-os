@@ -328,7 +328,8 @@ ${GREP} -v \
 	-e "^These are the packages that would be merged" \
 	-e "^Calculating dependencies" \
 	-e "^[.]+[ ]done[!]" \
-	-e "^[[]ebuild" \
+	-e "^[[]ebuild[ ]" \
+	-e "^[[]binary[ ]" \
 	-e "^Total[:][ ]" \
 	-e "^Fetch Restriction[:][ ]" \
 	-e "^[ ][*][ ]IMPORTANT: [0-9]+ news items need reading for repository" \
