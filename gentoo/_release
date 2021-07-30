@@ -1462,18 +1462,18 @@ function release_grub_loopfile {
 	declare GRUB_DEST="${1}" && shift
 	declare GRUB_LOOP="${1}" && shift
 	${MKDIR}							${GRUB_DEST}/.mount-loop/${_TITLE}			|| return 1
-	${RSYNC_U} --copy-links ${GRUB_DEST}/${_TITLE}.grub.cfg		${GRUB_DEST}/.mount-loop/${_TITLE}/			|| return 1
-	if ! ${RSYNC_U} --copy-links ${_RAMFS}.kernel			${GRUB_DEST}/.mount-loop/${_TITLE}/${_TITLE}.kernel	; then
+	${RSYNC_W} --copy-links ${GRUB_DEST}/${_TITLE}.grub.cfg		${GRUB_DEST}/.mount-loop/${_TITLE}/			|| return 1
+	if ! ${RSYNC_W} --copy-links ${_RAMFS}.kernel			${GRUB_DEST}/.mount-loop/${_TITLE}/${_TITLE}.kernel	; then
 		if [[ -f						${GRUB_DEST}/.mount-loop/${_TITLE}/${_TITLE}.rootfs	]]; then
 			${RM}						${GRUB_DEST}/.mount-loop/${_TITLE}/${_TITLE}.rootfs	|| return 1
-			${RSYNC_U} --copy-links ${_RAMFS}.kernel	${GRUB_DEST}/.mount-loop/${_TITLE}/${_TITLE}.kernel	|| return 1
+			${RSYNC_W} --copy-links ${_RAMFS}.kernel	${GRUB_DEST}/.mount-loop/${_TITLE}/${_TITLE}.kernel	|| return 1
 		else														return 1
 	fi; fi
 	if {
 		${DOTEST} &&
 		[[ -f ${_RAMFS}.rootfs ]];
 	}; then
-		${RSYNC_U} --copy-links ${_RAMFS}.rootfs		${GRUB_DEST}/.mount-loop/${_TITLE}/${_TITLE}.rootfs	|| return 1
+		${RSYNC_W} --copy-links ${_RAMFS}.rootfs		${GRUB_DEST}/.mount-loop/${_TITLE}/${_TITLE}.rootfs	|| return 1
 	else	${RM}							${GRUB_DEST}/.mount-loop/${_TITLE}/${_TITLE}.rootfs	|| return 1
 	fi
 	${LL} --recursive						${GRUB_DEST}/.mount-loop				|| return 1
