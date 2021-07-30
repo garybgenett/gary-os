@@ -71,201 +71,201 @@ sys-libs/zlib				static-libs	# gentoo required
 
 ########################################
 
-app-office/unoconv			python_single_target_python3_6	# gentoo required
-app-office/unoconv			python_targets_python3_6	# gentoo required
-dev-embedded/libftdi			python_single_target_python3_6	# gentoo required
-dev-embedded/libftdi			python_targets_python3_6	# gentoo required
-media-libs/libopenshot			-python_single_target_python3_7	# gentoo required
-media-libs/libopenshot			python_single_target_python3_6	# gentoo required
-media-libs/libopenshot			python_targets_python3_6	# gentoo required
-media-libs/lv2				python_single_target_python3_6	# gentoo required
-media-libs/lv2				python_targets_python3_6	# gentoo required
-media-video/openshot			-python_single_target_python3_7	# gentoo required
-media-video/openshot			python_single_target_python3_6	# gentoo required
-media-video/openshot			python_targets_python3_6	# gentoo required
+app-office/unoconv			python_single_target_python3_6	#{GOS} # gentoo required
+app-office/unoconv			python_targets_python3_6	#{GOS} # gentoo required
+dev-embedded/libftdi			python_single_target_python3_6	#{GOS} # gentoo required
+dev-embedded/libftdi			python_targets_python3_6	#{GOS} # gentoo required
+media-libs/libopenshot			-python_single_target_python3_7	#{GOS} # gentoo required
+media-libs/libopenshot			python_single_target_python3_6	#{GOS} # gentoo required
+media-libs/libopenshot			python_targets_python3_6	#{GOS} # gentoo required
+media-libs/lv2				python_single_target_python3_6	#{GOS} # gentoo required
+media-libs/lv2				python_targets_python3_6	#{GOS} # gentoo required
+media-video/openshot			-python_single_target_python3_7	#{GOS} # gentoo required
+media-video/openshot			python_single_target_python3_6	#{GOS} # gentoo required
+media-video/openshot			python_targets_python3_6	#{GOS} # gentoo required
 
-app-admin/ego				python_single_target_python3_7	# gentoo required
-app-arch/rpm				python_single_target_python3_7	# gentoo required
-app-misc/pax-utils			python_single_target_python3_7	# gentoo required
-app-office/libreoffice			python_single_target_python3_7	# gentoo required
-dev-libs/gobject-introspection		python_single_target_python3_7	# gentoo required
-dev-libs/libixion			python_single_target_python3_7	# gentoo required
-dev-libs/liborcus			python_single_target_python3_7	# gentoo required
-dev-util/gdbus-codegen			python_single_target_python3_7	# gentoo required
-dev-util/gtk-doc			python_single_target_python3_7	# gentoo required
-dev-util/itstool			python_single_target_python3_7	# gentoo required
-dev-util/systemtap			python_single_target_python3_7	# gentoo required
-dev-vcs/git				python_single_target_python3_7	# gentoo required
-media-gfx/fontforge			python_single_target_python3_7	# gentoo required
-media-gfx/graphviz			python_single_target_python3_7	# gentoo required
-media-libs/alsa-lib			python_single_target_python3_7	# gentoo required
-media-sound/picard			python_single_target_python3_7	# gentoo required
-net-fs/samba				python_single_target_python3_7	# gentoo required
-net-libs/libpsl				python_single_target_python3_7	# gentoo required
-sys-apps/usbutils			python_single_target_python3_7	# gentoo required
-sys-devel/gdb				python_single_target_python3_7	# gentoo required
-sys-libs/ldb				python_single_target_python3_7	# gentoo required
-sys-libs/talloc				python_single_target_python3_7	# gentoo required
-sys-libs/tdb				python_single_target_python3_7	# gentoo required
-sys-libs/tevent				python_single_target_python3_7	# gentoo required
-sys-power/upower			python_single_target_python3_7	# gentoo required
-sys-process/htop			python_single_target_python3_7	# gentoo required
+app-admin/ego				python_single_target_python3_7	#{GOS} # gentoo required
+app-arch/rpm				python_single_target_python3_7	#{GOS} # gentoo required
+app-misc/pax-utils			python_single_target_python3_7	#{GOS} # gentoo required
+app-office/libreoffice			python_single_target_python3_7	#{GOS} # gentoo required
+dev-libs/gobject-introspection		python_single_target_python3_7	#{GOS} # gentoo required
+dev-libs/libixion			python_single_target_python3_7	#{GOS} # gentoo required
+dev-libs/liborcus			python_single_target_python3_7	#{GOS} # gentoo required
+dev-util/gdbus-codegen			python_single_target_python3_7	#{GOS} # gentoo required
+dev-util/gtk-doc			python_single_target_python3_7	#{GOS} # gentoo required
+dev-util/itstool			python_single_target_python3_7	#{GOS} # gentoo required
+dev-util/systemtap			python_single_target_python3_7	#{GOS} # gentoo required
+dev-vcs/git				python_single_target_python3_7	#{GOS} # gentoo required
+media-gfx/fontforge			python_single_target_python3_7	#{GOS} # gentoo required
+media-gfx/graphviz			python_single_target_python3_7	#{GOS} # gentoo required
+media-libs/alsa-lib			python_single_target_python3_7	#{GOS} # gentoo required
+media-sound/picard			python_single_target_python3_7	#{GOS} # gentoo required
+net-fs/samba				python_single_target_python3_7	#{GOS} # gentoo required
+net-libs/libpsl				python_single_target_python3_7	#{GOS} # gentoo required
+sys-apps/usbutils			python_single_target_python3_7	#{GOS} # gentoo required
+sys-devel/gdb				python_single_target_python3_7	#{GOS} # gentoo required
+sys-libs/ldb				python_single_target_python3_7	#{GOS} # gentoo required
+sys-libs/talloc				python_single_target_python3_7	#{GOS} # gentoo required
+sys-libs/tdb				python_single_target_python3_7	#{GOS} # gentoo required
+sys-libs/tevent				python_single_target_python3_7	#{GOS} # gentoo required
+sys-power/upower			python_single_target_python3_7	#{GOS} # gentoo required
+sys-process/htop			python_single_target_python3_7	#{GOS} # gentoo required
 
-app-editors/retext			python_targets_python3_6	# gentoo required
-dev-python/PyQt5			python_targets_python3_6	# gentoo required
-dev-python/PyQt5-sip			python_targets_python3_6	# gentoo required
-dev-python/PyQtWebEngine		python_targets_python3_6	# gentoo required
-dev-python/PySocks			python_targets_python3_6	# gentoo required
-dev-python/asn1crypto			python_targets_python3_6	# gentoo required
-dev-python/certifi			python_targets_python3_6	# gentoo required
-dev-python/cffi				python_targets_python3_6	# gentoo required
-dev-python/chardet			python_targets_python3_6	# gentoo required
-dev-python/cryptography			python_targets_python3_6	# gentoo required
-dev-python/cython			python_targets_python3_6	# gentoo required
-dev-python/docutils			python_targets_python3_6	# gentoo required
-dev-python/html5lib			python_targets_python3_6	# gentoo required
-dev-python/httplib2			python_targets_python3_6	# gentoo required
-dev-python/idna				python_targets_python3_6	# gentoo required
-dev-python/isodate			python_targets_python3_6	# gentoo required
-dev-python/lxml				python_targets_python3_6	# gentoo required
-dev-python/markdown			python_targets_python3_6	# gentoo required
-dev-python/markups			python_targets_python3_6	# gentoo required
-dev-python/ply				python_targets_python3_6	# gentoo required
-dev-python/py				python_targets_python3_6	# gentoo required
-dev-python/pycparser			python_targets_python3_6	# gentoo required
-dev-python/pyenchant			python_targets_python3_6	# gentoo required
-dev-python/pygments			python_targets_python3_6	# gentoo required
-dev-python/pyopenssl			python_targets_python3_6	# gentoo required
-dev-python/pyparsing			python_targets_python3_6	# gentoo required
-dev-python/python-markdown-math		python_targets_python3_6	# gentoo required
-dev-python/pyzmq			python_targets_python3_6	# gentoo required
-dev-python/rdflib			python_targets_python3_6	# gentoo required
-dev-python/requests			python_targets_python3_6	# gentoo required
-dev-python/setuptools			python_targets_python3_6	# gentoo required
-dev-python/setuptools_scm		python_targets_python3_6	# gentoo required
-dev-python/sip				python_targets_python3_6	# gentoo required
-dev-python/six				python_targets_python3_6	# gentoo required
-dev-python/urllib3			python_targets_python3_6	# gentoo required
-dev-python/webencodings			python_targets_python3_6	# gentoo required
-virtual/python-enum34			python_targets_python3_6	# gentoo required
-virtual/python-ipaddress		python_targets_python3_6	# gentoo required
+app-editors/retext			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/PyQt5			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/PyQt5-sip			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/PyQtWebEngine		python_targets_python3_6	#{GOS} # gentoo required
+dev-python/PySocks			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/asn1crypto			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/certifi			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/cffi				python_targets_python3_6	#{GOS} # gentoo required
+dev-python/chardet			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/cryptography			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/cython			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/docutils			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/html5lib			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/httplib2			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/idna				python_targets_python3_6	#{GOS} # gentoo required
+dev-python/isodate			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/lxml				python_targets_python3_6	#{GOS} # gentoo required
+dev-python/markdown			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/markups			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/ply				python_targets_python3_6	#{GOS} # gentoo required
+dev-python/py				python_targets_python3_6	#{GOS} # gentoo required
+dev-python/pycparser			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/pyenchant			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/pygments			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/pyopenssl			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/pyparsing			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/python-markdown-math		python_targets_python3_6	#{GOS} # gentoo required
+dev-python/pyzmq			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/rdflib			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/requests			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/setuptools			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/setuptools_scm		python_targets_python3_6	#{GOS} # gentoo required
+dev-python/sip				python_targets_python3_6	#{GOS} # gentoo required
+dev-python/six				python_targets_python3_6	#{GOS} # gentoo required
+dev-python/urllib3			python_targets_python3_6	#{GOS} # gentoo required
+dev-python/webencodings			python_targets_python3_6	#{GOS} # gentoo required
+virtual/python-enum34			python_targets_python3_6	#{GOS} # gentoo required
+virtual/python-ipaddress		python_targets_python3_6	#{GOS} # gentoo required
 
-app-editors/atom			python_targets_python2_7	# gentoo required
-app-editors/gvim			python_targets_python2_7	# gentoo required
-app-editors/retext			python_targets_python2_7	# gentoo required
-app-editors/vim				python_targets_python2_7	# gentoo required
-app-misc/binwalk			python_targets_python2_7	# gentoo required
-app-misc/golly				python_targets_python2_7	# gentoo required
-app-office/ledger			python_targets_python2_7	# gentoo required
-app-office/unoconv			python_targets_python2_7	# gentoo required
-app-portage/layman			python_targets_python2_7	# gentoo required
-app-text/calibre			python_targets_python2_7	# gentoo required
-app-text/gnome-doc-utils		python_targets_python2_7	# gentoo required
-app-text/stardict			python_targets_python2_7	# gentoo required
-app-text/txt2tags			python_targets_python2_7	# gentoo required
-dev-embedded/libftdi			python_targets_python2_7	# gentoo required
-dev-java/javatoolkit			python_targets_python2_7	# gentoo required
-dev-lang/yasm				python_targets_python2_7	# gentoo required
-dev-libs/boost				python_targets_python2_7	# gentoo required
-dev-libs/keybinder			python_targets_python2_7	# gentoo required
-dev-libs/libdbusmenu			python_targets_python2_7	# gentoo required
-dev-libs/libdnet			python_targets_python2_7	# gentoo required
-dev-libs/libxml				python_targets_python2_7	# gentoo required
-dev-libs/libxml2			python_targets_python2_7	# gentoo required
-dev-libs/libxslt			python_targets_python2_7	# gentoo required
-dev-python/PyQt5			python_targets_python2_7	# gentoo required
-dev-python/PyQt5-sip			python_targets_python2_7	# gentoo required
-dev-python/PySocks			python_targets_python2_7	# gentoo required
-dev-python/apsw				python_targets_python2_7	# gentoo required
-dev-python/asn1crypto			python_targets_python2_7	# gentoo required
-dev-python/backports			python_targets_python2_7	# gentoo required
-dev-python/backports-lzma		python_targets_python2_7	# gentoo required
-dev-python/beautifulsoup		python_targets_python2_7	# gentoo required
-dev-python/certifi			python_targets_python2_7	# gentoo required
-dev-python/cffi				python_targets_python2_7	# gentoo required
-dev-python/chardet			python_targets_python2_7	# gentoo required
-dev-python/cheetah			python_targets_python2_7	# gentoo required
-dev-python/cryptography			python_targets_python2_7	# gentoo required
-dev-python/cssselect			python_targets_python2_7	# gentoo required
-dev-python/cssutils			python_targets_python2_7	# gentoo required
-dev-python/cython			python_targets_python2_7	# gentoo required
-dev-python/dbus-python			python_targets_python2_7	# gentoo required
-dev-python/dnspython			python_targets_python2_7	# gentoo required
-dev-python/ecdsa			python_targets_python2_7	# gentoo required
-dev-python/eyeD3			python_targets_python2_7	# gentoo required
-dev-python/html5-parser			python_targets_python2_7	# gentoo required
-dev-python/html5lib			python_targets_python2_7	# gentoo required
-dev-python/idna				python_targets_python2_7	# gentoo required
-dev-python/isodate			python_targets_python2_7	# gentoo required
-dev-python/lesscpy			python_targets_python2_7	# gentoo required
-dev-python/lxml				python_targets_python2_7	# gentoo required
-dev-python/m2crypto			python_targets_python2_7	# gentoo required
-dev-python/markdown			python_targets_python2_7	# gentoo required
-dev-python/mechanize			python_targets_python2_7	# gentoo required
-dev-python/msgpack			python_targets_python2_7	# gentoo required
-dev-python/namespace-google		python_targets_python2_7	# gentoo required
-dev-python/ndg-httpsclient		python_targets_python2_7	# gentoo required
-dev-python/netifaces			python_targets_python2_7	# gentoo required
-dev-python/numpy			python_targets_python2_7	# gentoo required
-dev-python/olefile			python_targets_python2_7	# gentoo required
-dev-python/paver			python_targets_python2_7	# gentoo required
-dev-python/pillow			python_targets_python2_7	# gentoo required
-dev-python/ply				python_targets_python2_7	# gentoo required
-dev-python/protobuf-python		python_targets_python2_7	# gentoo required
-dev-python/psutil			python_targets_python2_7	# gentoo required
-dev-python/pyasn1			python_targets_python2_7	# gentoo required
-dev-python/pycairo			python_targets_python2_7	# gentoo required
-dev-python/pycparser			python_targets_python2_7	# gentoo required
-dev-python/pycryptodome			python_targets_python2_7	# gentoo required
-dev-python/pygments			python_targets_python2_7	# gentoo required
-dev-python/pygobject			python_targets_python2_7	# gentoo required
-dev-python/pygtk			python_targets_python2_7	# gentoo required
-dev-python/pyopenssl			python_targets_python2_7	# gentoo required
-dev-python/pyparsing			python_targets_python2_7	# gentoo required
-dev-python/python-dateutil		python_targets_python2_7	# gentoo required
-dev-python/rdflib			python_targets_python2_7	# gentoo required
-dev-python/regex			python_targets_python2_7	# gentoo required
-dev-python/requests			python_targets_python2_7	# gentoo required
-dev-python/setuptools			python_targets_python2_7	# gentoo required
-dev-python/setuptools_scm		python_targets_python2_7	# gentoo required
-dev-python/simplejson			python_targets_python2_7	# gentoo required
-dev-python/sip				python_targets_python2_7	# gentoo required
-dev-python/six				python_targets_python2_7	# gentoo required
-dev-python/ssl-fetch			python_targets_python2_7	# gentoo required
-dev-python/typing			python_targets_python2_7	# gentoo required
-dev-python/urllib3			python_targets_python2_7	# gentoo required
-dev-python/webencodings			python_targets_python2_7	# gentoo required
-dev-python/zstandard			python_targets_python2_7	# gentoo required
-dev-util/boost-build			python_targets_python2_7	# gentoo required
-dev-util/scons				python_targets_python2_7	# gentoo required
-dev-vcs/cvs2svn				python_targets_python2_7	# gentoo required
-dev-vcs/mercurial			python_targets_python2_7	# gentoo required
-dev-vcs/subversion			python_targets_python2_7	# gentoo required
-media-gfx/gimp				python_targets_python2_7	# gentoo required
-media-gfx/graphviz			python_targets_python2_7	# gentoo required
-media-gfx/inkscape			python_targets_python2_7	# gentoo required
-media-gfx/mcomix			python_targets_python2_7	# gentoo required
-media-gfx/scour				python_targets_python2_7	# gentoo required
-media-gfx/uniconvertor			python_targets_python2_7	# gentoo required
-media-libs/libcaca			python_targets_python2_7	# gentoo required
-media-libs/lv2				python_targets_python2_7	# gentoo required
-media-libs/portmidi			python_targets_python2_7	# gentoo required
-media-sound/lash			python_targets_python2_7	# gentoo required
-net-analyzer/rrdtool			python_targets_python2_7	# gentoo required
-net-dns/avahi				python_targets_python2_7	# gentoo required
-net-mail/offlineimap			python_targets_python2_7	# gentoo required
-net-wireless/kismet			python_targets_python2_7	# gentoo required
-net-wireless/python-wifi		python_targets_python2_7	# gentoo required
-sys-apps/dstat				python_targets_python2_7	# gentoo required
-sys-apps/portage			python_targets_python2_7	# gentoo required
-sys-devel/clang				python_targets_python2_7	# gentoo required
-virtual/python-cffi			python_targets_python2_7	# gentoo required
-virtual/python-enum34			python_targets_python2_7	# gentoo required
-virtual/python-ipaddress		python_targets_python2_7	# gentoo required
-virtual/python-typing			python_targets_python2_7	# gentoo required
-x11-base/xcb-proto			python_targets_python2_7	# gentoo required
-x11-drivers/xf86-video-qxl		python_targets_python2_7	# gentoo required
-x11-misc/menumaker			python_targets_python2_7	# gentoo required
+app-editors/atom			python_targets_python2_7	#{GOS} # gentoo required
+app-editors/gvim			python_targets_python2_7	#{GOS} # gentoo required
+app-editors/retext			python_targets_python2_7	#{GOS} # gentoo required
+app-editors/vim				python_targets_python2_7	#{GOS} # gentoo required
+app-misc/binwalk			python_targets_python2_7	#{GOS} # gentoo required
+app-misc/golly				python_targets_python2_7	#{GOS} # gentoo required
+app-office/ledger			python_targets_python2_7	#{GOS} # gentoo required
+app-office/unoconv			python_targets_python2_7	#{GOS} # gentoo required
+app-portage/layman			python_targets_python2_7	#{GOS} # gentoo required
+app-text/calibre			python_targets_python2_7	#{GOS} # gentoo required
+app-text/gnome-doc-utils		python_targets_python2_7	#{GOS} # gentoo required
+app-text/stardict			python_targets_python2_7	#{GOS} # gentoo required
+app-text/txt2tags			python_targets_python2_7	#{GOS} # gentoo required
+dev-embedded/libftdi			python_targets_python2_7	#{GOS} # gentoo required
+dev-java/javatoolkit			python_targets_python2_7	#{GOS} # gentoo required
+dev-lang/yasm				python_targets_python2_7	#{GOS} # gentoo required
+dev-libs/boost				python_targets_python2_7	#{GOS} # gentoo required
+dev-libs/keybinder			python_targets_python2_7	#{GOS} # gentoo required
+dev-libs/libdbusmenu			python_targets_python2_7	#{GOS} # gentoo required
+dev-libs/libdnet			python_targets_python2_7	#{GOS} # gentoo required
+dev-libs/libxml				python_targets_python2_7	#{GOS} # gentoo required
+dev-libs/libxml2			python_targets_python2_7	#{GOS} # gentoo required
+dev-libs/libxslt			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/PyQt5			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/PyQt5-sip			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/PySocks			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/apsw				python_targets_python2_7	#{GOS} # gentoo required
+dev-python/asn1crypto			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/backports			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/backports-lzma		python_targets_python2_7	#{GOS} # gentoo required
+dev-python/beautifulsoup		python_targets_python2_7	#{GOS} # gentoo required
+dev-python/certifi			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/cffi				python_targets_python2_7	#{GOS} # gentoo required
+dev-python/chardet			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/cheetah			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/cryptography			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/cssselect			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/cssutils			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/cython			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/dbus-python			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/dnspython			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/ecdsa			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/eyeD3			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/html5-parser			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/html5lib			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/idna				python_targets_python2_7	#{GOS} # gentoo required
+dev-python/isodate			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/lesscpy			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/lxml				python_targets_python2_7	#{GOS} # gentoo required
+dev-python/m2crypto			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/markdown			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/mechanize			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/msgpack			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/namespace-google		python_targets_python2_7	#{GOS} # gentoo required
+dev-python/ndg-httpsclient		python_targets_python2_7	#{GOS} # gentoo required
+dev-python/netifaces			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/numpy			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/olefile			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/paver			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/pillow			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/ply				python_targets_python2_7	#{GOS} # gentoo required
+dev-python/protobuf-python		python_targets_python2_7	#{GOS} # gentoo required
+dev-python/psutil			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/pyasn1			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/pycairo			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/pycparser			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/pycryptodome			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/pygments			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/pygobject			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/pygtk			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/pyopenssl			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/pyparsing			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/python-dateutil		python_targets_python2_7	#{GOS} # gentoo required
+dev-python/rdflib			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/regex			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/requests			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/setuptools			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/setuptools_scm		python_targets_python2_7	#{GOS} # gentoo required
+dev-python/simplejson			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/sip				python_targets_python2_7	#{GOS} # gentoo required
+dev-python/six				python_targets_python2_7	#{GOS} # gentoo required
+dev-python/ssl-fetch			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/typing			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/urllib3			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/webencodings			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/zstandard			python_targets_python2_7	#{GOS} # gentoo required
+dev-util/boost-build			python_targets_python2_7	#{GOS} # gentoo required
+dev-util/scons				python_targets_python2_7	#{GOS} # gentoo required
+dev-vcs/cvs2svn				python_targets_python2_7	#{GOS} # gentoo required
+dev-vcs/mercurial			python_targets_python2_7	#{GOS} # gentoo required
+dev-vcs/subversion			python_targets_python2_7	#{GOS} # gentoo required
+media-gfx/gimp				python_targets_python2_7	#{GOS} # gentoo required
+media-gfx/graphviz			python_targets_python2_7	#{GOS} # gentoo required
+media-gfx/inkscape			python_targets_python2_7	#{GOS} # gentoo required
+media-gfx/mcomix			python_targets_python2_7	#{GOS} # gentoo required
+media-gfx/scour				python_targets_python2_7	#{GOS} # gentoo required
+media-gfx/uniconvertor			python_targets_python2_7	#{GOS} # gentoo required
+media-libs/libcaca			python_targets_python2_7	#{GOS} # gentoo required
+media-libs/lv2				python_targets_python2_7	#{GOS} # gentoo required
+media-libs/portmidi			python_targets_python2_7	#{GOS} # gentoo required
+media-sound/lash			python_targets_python2_7	#{GOS} # gentoo required
+net-analyzer/rrdtool			python_targets_python2_7	#{GOS} # gentoo required
+net-dns/avahi				python_targets_python2_7	#{GOS} # gentoo required
+net-mail/offlineimap			python_targets_python2_7	#{GOS} # gentoo required
+net-wireless/kismet			python_targets_python2_7	#{GOS} # gentoo required
+net-wireless/python-wifi		python_targets_python2_7	#{GOS} # gentoo required
+sys-apps/dstat				python_targets_python2_7	#{GOS} # gentoo required
+sys-apps/portage			python_targets_python2_7	#{GOS} # gentoo required
+sys-devel/clang				python_targets_python2_7	#{GOS} # gentoo required
+virtual/python-cffi			python_targets_python2_7	#{GOS} # gentoo required
+virtual/python-enum34			python_targets_python2_7	#{GOS} # gentoo required
+virtual/python-ipaddress		python_targets_python2_7	#{GOS} # gentoo required
+virtual/python-typing			python_targets_python2_7	#{GOS} # gentoo required
+x11-base/xcb-proto			python_targets_python2_7	#{GOS} # gentoo required
+x11-drivers/xf86-video-qxl		python_targets_python2_7	#{GOS} # gentoo required
+x11-misc/menumaker			python_targets_python2_7	#{GOS} # gentoo required
 
 ########################################
 
