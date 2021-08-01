@@ -103,10 +103,13 @@ mounts() {
 
 ${ROOTFS_NAME}() {
 	mounts="${1}" && shift
-	${ROOTFS_NAME}="${1}" && shift
-	do_mnt="${1}" && shift
-	to_mem="${1}" && shift
-	do_pak="${1}" && shift
+	if [ "${1}" == false ]; then
+		do_mnt="${1}" && shift
+	else
+		do_mnt="true"
+		${ROOTFS_NAME}="${1}" && shift
+		to_mem="${1}" && shift
+	fi
 	if ! ${do_mnt}; then
 		mounts ${mounts} false "${@}" || ${ROOTFS_FUNC}
 		if [ -n "`grep -E " ${mounts}/.${ROOTFS_ROOT_OPT} " /proc/mounts`" ]; then
@@ -152,7 +155,7 @@ ${ROOTFS_NAME}() {
 		mkdir -v -p ${mounts}${_GOVLY} || ${ROOTFS_FUNC}
 		mount -v -o move ${mounts}.shm ${mounts}${_GOVLY} || ${ROOTFS_FUNC}
 	fi
-	if ${do_pak} && [ -d ${mounts}/.${_TITLE} ]; then
+	if [ -d ${mounts}/.${_TITLE} ]; then
 #>>>		mounts ${mounts} true "${@}" || ${ROOTFS_FUNC}
 #>>>		chroot ${mounts} make -C /.${_TITLE} O=/ unpack || ${ROOTFS_FUNC}
 		make -C ${mounts}/.${_TITLE} O=${mounts} unpack || ${ROOTFS_FUNC}
@@ -194,7 +197,7 @@ select() {
 			! /bin/mount -v -o ro,nonempty ${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT} ||
 			${chroot_opt}
 		then
-			${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} ${ROOTFS_ROOT} true false true "${@}" || ${ROOTFS_FUNC}
+			${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} ${ROOTFS_ROOT} false "${@}" || ${ROOTFS_FUNC}
 			mounts /.${ROOTFS_ROOT_OPT} true "${@}" || ${ROOTFS_FUNC}
 			if [ ! -d /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT} ]; then
 				mkdir -v -p /.${ROOTFS_ROOT_OPT}/run/openrc || ${ROOTFS_FUNC}
@@ -239,11 +242,11 @@ select() {
 			fi
 		fi
 		if [ -f "/.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}${${ROOTFS_ROOT_OPT}_file}" ]; then
-			${ROOTFS_NAME} ${_GOVLY} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}${${ROOTFS_ROOT_OPT}_file} true true true "${@}" || ${ROOTFS_FUNC}
+			${ROOTFS_NAME} ${_GOVLY} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}${${ROOTFS_ROOT_OPT}_file} true "${@}" || ${ROOTFS_FUNC}
 			if [ -n "`grep -E "^${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}" /proc/mounts`" ]; then
 				umount -v ${${ROOTFS_ROOT_OPT}} || ${ROOTFS_FUNC}
 			fi
-			${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} "" false false "${@}" || ${ROOTFS_FUNC}
+			${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} false "${@}" || ${ROOTFS_FUNC}
 			return 0
 		else
 			select - "${${ROOTFS_ROOT_OPT}}" "${${ROOTFS_ROOT_OPT}_file}" "${@}" || ${ROOTFS_FUNC}
@@ -325,8 +328,8 @@ count() {
 
 if [ "${1}" == "un${ROOTFS_NAME}" ]; then
 	shift
-	${ROOTFS_NAME} ${_GOVLY} "" false false false "${@}" || ${ROOTFS_FUNC}
-	${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} "" false false false "${@}" || ${ROOTFS_FUNC}
+	${ROOTFS_NAME} ${_GOVLY} false "${@}" || ${ROOTFS_FUNC}
+	${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} false "${@}" || ${ROOTFS_FUNC}
 	${ROOTFS_FUNC} -
 else
 	if [ "${1}" == "${ROOTFS_NAME}" ]; then
@@ -347,7 +350,7 @@ else
 		fi
 	fi
 	if ! ${${ROOTFS_NAME}_load}; then
-		${ROOTFS_NAME} ${_GOVLY} ${ROOTFS_ROOT} true true true "${@}" || ${ROOTFS_FUNC}
+		${ROOTFS_NAME} ${_GOVLY} ${ROOTFS_ROOT} true "${@}" || ${ROOTFS_FUNC}
 	fi
 fi
 
