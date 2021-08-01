@@ -1740,7 +1740,7 @@ In progress for v5.0...
   * make DOREDO=true P=_gary-os doit rootfs
     * make _publish_prep
     * ll ./build/ ./build/.gary-os-\*
-  * (cd _builds ; rsync -L ./_gary-os.working/.gary-os-generic_64/ ./_gary-os)
+  * (cd _builds ; rsync -L ./_gary-os.working/.gary-os-\*/ ./_gary-os)
     * (cd _builds/_gary-os ; git-backup \<funtoo commit\>.# ; GIT_PAGER=cat git-list -n1)
     * (cd .setup ; vi gentoo/_release ; git-commit -m "Published v#.# release." gentoo/_release)
   * make _publish_gitdir
