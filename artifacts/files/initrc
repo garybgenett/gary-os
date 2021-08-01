@@ -239,12 +239,11 @@ select() {
 			fi
 		fi
 		if [ -f "/.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}${${ROOTFS_ROOT_OPT}_file}" ]; then
-			${ROOTFS_NAME} ${_GOVLY} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}${${ROOTFS_ROOT_OPT}_file} true true false "${@}" || ${ROOTFS_FUNC}
+			${ROOTFS_NAME} ${_GOVLY} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}${${ROOTFS_ROOT_OPT}_file} true true true "${@}" || ${ROOTFS_FUNC}
 			if [ -n "`grep -E "^${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}" /proc/mounts`" ]; then
 				umount -v ${${ROOTFS_ROOT_OPT}} || ${ROOTFS_FUNC}
 			fi
 			${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} "" false false "${@}" || ${ROOTFS_FUNC}
-			${ROOTFS_NAME} ${_GOVLY} ${_GOVLY}${ROOTFS_ROOT} true false true "${@}" || ${ROOTFS_FUNC}
 			return 0
 		else
 			select - "${${ROOTFS_ROOT_OPT}}" "${${ROOTFS_ROOT_OPT}_file}" "${@}" || ${ROOTFS_FUNC}
