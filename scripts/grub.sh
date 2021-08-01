@@ -640,7 +640,7 @@ function exit_summary {
 	echo -en "${HEADER}\n"
 
 	(cd $(dirname ${GINST}) &&
-		echo -en "${GDHYB_READ}q\n" | gdisk $(basename ${GINST}) &&
+#>>>		echo -en "${GDHYB_READ}q\n" | gdisk $(basename ${GINST}) &&
 		gdisk -l $(basename ${GINST})
 	)
 	(cd ${GDEST} &&
