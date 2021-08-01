@@ -586,8 +586,6 @@ The 'shmem_size' value for the pre-made GaryOS [Rootfs] should be at least
 '3072m', or '3g' if that format is preferred.  The [Boot] file is already
 correctly configured (see [GRUB]).
 
-At least 6GB of memory is required to boot [Rootfs].
-
 --------------------------------------------------------------------------------
 
 ## Building ####################################################################
