@@ -96,11 +96,11 @@
 #{MOD} #{FSEXCL} debug:/usr/lib64/python3.6/test
 
 #{FSARCH} debug:/usr/lib64/debug				#{MOD}
-#{FSARCH} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/7.3.1/debug	#{MOD}
-#{FSARCH} debug:/usr/src/debug					#{MOD}
+#>>>#{FSARCH} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/7.3.1/debug	#{MOD}
+#>>>#{FSARCH} debug:/usr/src/debug					#{MOD}
 #{MOD} #{FSEXCL} debug:/usr/lib64/debug
-#{MOD} #{FSEXCL} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/7.3.1/debug
-#{MOD} #{FSEXCL} debug:/usr/src/debug
+#>>>#{MOD} #{FSEXCL} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/7.3.1/debug
+#>>>#{MOD} #{FSEXCL} debug:/usr/src/debug
 
 ########################################
 # firmware
