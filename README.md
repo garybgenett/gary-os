@@ -1197,7 +1197,9 @@ can be resized after boot using something like 'mount -o remount,size=6144m
 If desired, the intermediary environment used to locate and boot the
 [Filesystem] can intentionally be loaded by using 'groot=null'.  This process is
 a great learning experience for anyone interested in the [GNU/Linux] boot
-process or how live systems work.
+process or how live systems work.  In particular, there is a reference
+implementation of a completely in-memory [Squashfs] [Overlay] in
+[artifacts/files/initrc].
 
 **References**
 
