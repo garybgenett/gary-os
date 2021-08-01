@@ -410,8 +410,8 @@
 #{FSARCH} emerge:/var/git/meta-repo.git
 
 #{FSARCH} debug:/usr/lib64/debug
-#{FSARCH} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/7.3.1/debug
-#{FSARCH} debug:/usr/src/debug
+#>>>#{FSARCH} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/7.3.1/debug
+#>>>#{FSARCH} debug:/usr/src/debug
 
 #{FSEXCL}
 
@@ -426,7 +426,7 @@ sys-kernel/linux-firmware
 ########################################
 # toolchain
 
-dev-lang/gnat-gpl
+#>>>dev-lang/gnat-gpl
 sys-devel/autoconf
 sys-devel/automake
 sys-devel/binutils
@@ -614,9 +614,9 @@ x11-misc/xvkbd
 ########################################
 # toolkits
 
-net-misc/rclone
-net-misc/unison
-net-misc/unison:2.51
+#>>>net-misc/rclone			# requires: dev-lang/go
+#>>>net-misc/unison			# requires: dev-lang/ocaml
+#>>>net-misc/unison:2.51
 
 dev-vcs/cvs
 dev-vcs/git
@@ -639,9 +639,9 @@ virtual/perl-MIME-Base64
 virtual/perl-Time-Local
 
 dev-lang/python
-dev-libs/libuv
+#>>>dev-libs/libuv			# questionable size and utility
 dev-python/pypy3
-net-libs/nodejs
+#>>>net-libs/nodejs			# questionable size and utility
 
 app-misc/jq
 app-misc/yq

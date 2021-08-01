@@ -31,6 +31,7 @@ media-libs/libsdl2			sound		# gentoo required
 media-video/ffmpeg			theora		# gentoo required
 media-video/ffmpeg			x264		# gentoo required
 net-dns/avahi				dbus		# gentoo required
+net-libs/libproxy			-webkit		# gentoo required
 net-libs/libpsl				-idn		# gentoo required
 sys-apps/busybox			-pam		# gentoo required
 sys-auth/consolekit			policykit	# gentoo required
@@ -52,6 +53,7 @@ dev-qt/qtscript				scripttools	# gentoo required
 dev-qt/qtwebchannel			qml		# gentoo required
 dev-qt/qtwebengine			widgets		# gentoo required
 media-libs/libvpx			svc		# gentoo required
+media-plugins/frei0r-plugins		-facedetect	# gentoo required
 net-dns/dnsmasq				script		# gentoo required
 sys-libs/ncurses			tinfo		# gentoo required
 www-client/netsurf			fbcon_frontend_x	# gentoo required
@@ -199,10 +201,12 @@ dev-python/cython			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/dbus-python			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/dnspython			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/ecdsa			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/enum34			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/eyeD3			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/html5-parser			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/html5lib			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/idna				python_targets_python2_7	#{GOS} # gentoo required
+dev-python/ipaddress			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/isodate			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/lesscpy			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/lxml				python_targets_python2_7	#{GOS} # gentoo required
@@ -221,6 +225,7 @@ dev-python/ply				python_targets_python2_7	#{GOS} # gentoo required
 dev-python/protobuf-python		python_targets_python2_7	#{GOS} # gentoo required
 dev-python/psutil			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/pyasn1			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/pyblake2			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/pycairo			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/pycparser			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/pycryptodome			python_targets_python2_7	#{GOS} # gentoo required
@@ -230,6 +235,7 @@ dev-python/pygtk			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/pyopenssl			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/pyparsing			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/python-dateutil		python_targets_python2_7	#{GOS} # gentoo required
+dev-python/pyxattr			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/rdflib			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/regex			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/requests			python_targets_python2_7	#{GOS} # gentoo required
@@ -402,9 +408,6 @@ games-fps/doom3-mitm			-dedicated
 #{NEW} app-text/xmlto			-latex		# gentoo required
 #{NEW} dev-util/ninja			-vim-syntax	# gentoo required
 #{NEW} media-libs/tiff			-webp		# gentoo required
-#{NEW} net-libs/libproxy		-webkit		# gentoo required
-
-#{NEW} media-plugins/frei0r-plugins	-facedetect	# gentoo required
 
 ################################################################################
 
@@ -415,9 +418,7 @@ games-fps/doom3-mitm			-dedicated
 
 #{GOS} app-text/xmlto			-latex		# gentoo required
 #{GOS} dev-libs/libxml2			python		# gentoo required
-#{GOS} net-libs/libproxy		-webkit		# gentoo required
 
-#{GOS} media-plugins/frei0r-plugins	-facedetect	# gentoo required
 #{MOD} #{GOS} media-libs/imlib2		-shm		# gentoo required
 
 ########################################
