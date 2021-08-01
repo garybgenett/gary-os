@@ -1033,10 +1033,14 @@ function _release_devel {		#{ismain} #{doredo} #{dotest}
 	if [[ ! -f ${_RAMFS}.rootfs.packages.txt ]]; then
 		touch ${_RAMFS}.rootfs.packages.txt					|| return 1
 	fi
-	if [[ ! -d ${_RAMFS}.grub ]]; then
-		DOREDO="true" DOFAST="true" DOTEST="false" _release_grub		|| return 1
+	if {
+		${DOREDO} ||
+		[[ ! -d ${_RAMFS}.grub ]];
+	}; then
+		DOREDO="true" DOFAST="true" DOTEST="true" _release_grub			|| return 1
+	else
+		DOREDO="false" DOFAST="true" DOTEST="true" _release_grub		|| return 1
 	fi
-	DOREDO="false" DOFAST="true" DOTEST="true" _release_grub			|| return 1
 	DOREDO="true" _prepare_symlinks							|| return 1
 	_release_report									|| return 1
 	return 0
@@ -1458,7 +1462,7 @@ function _release_kernel {		#{doredo}
 
 ########################################
 
-function release_grub_loopfile {
+function release_grub_loopfile {	#>>>{dotest}
 	declare GRUB_DEST="${1}" && shift
 	declare GRUB_LEFI="${1}" && shift
 	declare GRUB_LOOP="${1}" && shift
@@ -1516,51 +1520,54 @@ function _release_grub {		#{doredo} #{dofast} #{dotest}
 	declare GRUB_LEFI="/dev/nbd9p3"
 	declare GRUB_LOOP="/dev/nbd9p1"
 	if ${DOREDO}; then
-		${RM}						${GRUB_DEST}*						|| return 1
+		${RM}							${GRUB_DEST}*						|| return 1
 	fi
 	if [[ ! -f ${GRUB_DEST}.tar.xz ]] && [[ ! -f ${GRUB_DEST}.zip ]]; then
 		if {
 			${DOREDO} ||
 			! ${DOTEST};
 		}; then
-			${RM}					${GRUB_DEST}*						|| return 1
-			${MKDIR}				${GRUB_DEST}						|| return 1
-			${HOME}/scripts/grub.sh			${GRUB_DEST}						|| return 1
+			${RM}						${GRUB_DEST}*						|| return 1
+			${MKDIR}					${GRUB_DEST}						|| return 1
+			${HOME}/scripts/grub.sh				${GRUB_DEST}						|| return 1
 		fi
 		if {
 			${DOTEST} ||
 			[[ ! -x $(which qemu-img) ]] ||
 			[[ ! -x $(which qemu-nbd) ]];
 		}; then
-			grub.sh					${GRUB_DEST} -m						|| return 1
-			release_grub_loopfile			${GRUB_DEST}						|| return 1
-			grub.sh					${GRUB_DEST} -u						|| return 1
+			${HOME}/scripts/grub.sh				${GRUB_DEST} -m						|| return 1
+			release_grub_loopfile				${GRUB_DEST}						|| return 1
+			${HOME}/scripts/grub.sh				${GRUB_DEST} -u						|| return 1
 		fi
 		if {
 			[[ -x $(which qemu-img) ]] &&
 			[[ -x $(which qemu-nbd) ]];
 		}; then
-			if ! ${DOTEST}; then
-				qemu-img convert -O qcow2	${GRUB_DEST}/loopfile.img ${GRUB_DEST}/loopfile.qcow2	|| return 1
-				qemu-img info			${GRUB_DEST}/loopfile.qcow2				|| return 1
+			if {
+				${DOREDO} ||
+				! ${DOTEST};
+			}; then
+				qemu-img convert -O qcow2		${GRUB_DEST}/loopfile.img ${GRUB_DEST}/loopfile.qcow2	|| return 1
+				qemu-img info				${GRUB_DEST}/loopfile.qcow2				|| return 1
 			fi
-			release_grub_qcow_mount			${GRUB_DEST} ${GRUB_LEFI} ${GRUB_LOOP}			|| return 1
-			release_grub_loopfile			${GRUB_DEST}						|| return 1
-			release_grub_qcow_unmount		${GRUB_DEST} ${GRUB_LEFI} ${GRUB_LOOP}			|| return 1
+			release_grub_qcow_mount				${GRUB_DEST} ${GRUB_LEFI} ${GRUB_LOOP}			|| return 1
+			release_grub_loopfile				${GRUB_DEST}						|| return 1
+			release_grub_qcow_unmount			${GRUB_DEST} ${GRUB_LEFI} ${GRUB_LOOP}			|| return 1
 		fi
 		if {
 			! ${DOFAST} &&
 			! ${DOTEST};
 		}; then
-			${RM}					${GRUB_DEST}/_*						|| return 1
-			${RM}					${GRUB_DEST}/*.tar					|| return 1
-			${WGET_C} -P				${GRUB_DEST} ${RUFUS_URL}				|| return 1
-#>>>			common_tar				${GRUB_DEST}						|| return 1
-			7z d					${GRUB_DEST}.zip					|| return 1
-			7z a					${GRUB_DEST}.zip ${GRUB_DEST}				|| return 1
+			${RM}						${GRUB_DEST}/_*						|| return 1
+			${RM}						${GRUB_DEST}/*.tar					|| return 1
+			${WGET_C} -P					${GRUB_DEST} ${RUFUS_URL}				|| return 1
+#>>>			common_tar					${GRUB_DEST}						|| return 1
+			7z d						${GRUB_DEST}.zip					|| return 1
+			7z a						${GRUB_DEST}.zip ${GRUB_DEST}				|| return 1
 		fi
 	else
-		common_exists ${FUNCNAME}			${GRUB_DEST}*						|| return 1
+		common_exists ${FUNCNAME}				${GRUB_DEST}*						|| return 1
 	fi
 	return 0
 }
