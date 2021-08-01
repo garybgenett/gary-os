@@ -1359,7 +1359,7 @@ function git-export {
 	if [[ -n ${EXP_GIT} ]]; then
 		(cd ${EXP_DIR}/.${EXP_NAM} &&
 			git-clean &&
-			${GIT} push --mirror ${EXP_GIT}
+			${GIT} push --force --mirror ${EXP_GIT}
 		)						|| return 1
 	fi
 
