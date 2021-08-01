@@ -2067,7 +2067,7 @@ function _publish_gitdir {		#{ismain}
 	NEXT+="exit 0;"
 	echo -en "${NEXT}\n" | ssh ${_SFRSSH}						|| return 1
 	${GIT} --git-dir=${_RELDIR}/.${_TITLE}.git --work-tree=${_RELDIR}/.${_TITLE}	\
-		push --mirror ${_SFCODE}						|| return 1
+		push --force --mirror ${_SFCODE}					|| return 1
 	return 0
 }
 
