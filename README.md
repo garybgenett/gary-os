@@ -583,8 +583,10 @@ defaults in the [GRUB] configuration files.  Generally, only 'shmem_size' and
 'groot' are required to load an external [Rootfs].
 
 The 'shmem_size' value for the pre-made GaryOS [Rootfs] should be at least
-'2048m', or '2g' if that format is preferred.  The [Boot] file is already
+'3072m', or '3g' if that format is preferred.  The [Boot] file is already
 correctly configured (see [GRUB]).
+
+At least 6GB of memory is required to boot [Rootfs].
 
 --------------------------------------------------------------------------------
 
