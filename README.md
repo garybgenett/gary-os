@@ -1732,6 +1732,7 @@ In progress for v5.0...
 
   * `cd coding/gary-os`
   * `vi ./README.md`
+    * [ ] Update links for [Contributions] patches
     * [ ] [Versions] list in [Header](#welcome-to-garyos-gary-os)
     * [ ] [Versions] section and release notes
     * [ ] [Kernel], [Rootfs] and [Boot] links
