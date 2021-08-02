@@ -275,6 +275,10 @@ overlay-%:
 emerge-%:
 	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -q $(CHROOT) -a -s -e $(subst %,/,$(*)) | ./.bashrc prompt -c
 
+.PHONY: gendir
+gendir:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -q $(CHROOT) -!
+
 ########################################
 
 export COMPOSER		?= $(GARYOS_DIR)/.composer/Makefile
