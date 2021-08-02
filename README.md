@@ -407,7 +407,7 @@ and accomplishes the goal in the fewest steps.
   ```
 
 If it is required to manually discover an available network, use the 'wpa_cli'
-command.  If preferred, the 'wpa_gui" graphical utility is available on
+command.  If preferred, the 'wpa_gui' graphical utility is available on
 [Rootfs].
 
   ```
