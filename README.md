@@ -1558,6 +1558,9 @@ will require re-cloning.
   <!-- Global Links -->
 
   [gentoo/make.conf]: https://github.com/garybgenett/gary-os/blob/master/gentoo/make.conf
+  [gentoo/package.use]: https://github.com/garybgenett/gary-os/blob/master/gentoo/package.use
+  [gentoo/sets/]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets
+  [artifacts/files/initrc]: https://github.com/garybgenett/gary-os/blob/master/artifacts/files/initrc
   [artifacts/files/issue]: https://github.com/garybgenett/gary-os/blob/master/artifacts/files/issue
   [artifacts/files/locale.gen]: https://github.com/garybgenett/gary-os/blob/master/artifacts/files/locale.gen
   [artifacts/files/wpa_supplicant.conf]: https://github.com/garybgenett/gary-os/blob/master/artifacts/files/wpa_supplicant.conf
