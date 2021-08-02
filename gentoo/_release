@@ -1435,6 +1435,8 @@ function release_kernel_build {
 	return 0
 }
 
+#note: ld: kernel image bigger than KERNEL_IMAGE_SIZE
+#note: comments at the bottom of <kernel_source>/arch/x86/include/asm/page_64_types.h
 function _release_kernel {		#{doredo}
 	if ${DOREDO}; then
 		${RM}						${_RAMFS}.kernel	|| return 1
