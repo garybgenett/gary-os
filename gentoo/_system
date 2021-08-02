@@ -1469,6 +1469,20 @@ elif [[ ${1} != -! ]]; then
 	if [[ -n ${1} ]]; then
 		EXIT 0
 	fi
+
+########################################
+
+elif {
+	${DO_CHROOT} &&
+	[[ ${1} == -! ]];
+}; then
+	mount_dev_dirs						|| EXIT 1
+	#note: ensuring configuration is up-to-date
+	if ! ${_SOUL} ${QUIET_OPT} ${TOOR} -r			2>&1 |
+		if ${QUIET}; then prompt -t; else cat; fi; then	EXIT 1; fi
+	safe_env ${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -!	|| EXIT 1
+	mount_dev_dirs -u					|| EXIT 1
+	EXIT 0
 fi
 
 ################################################################################
