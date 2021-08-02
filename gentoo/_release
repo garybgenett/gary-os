@@ -1794,7 +1794,6 @@ function _release_unpack {		#{ismain} #{doredo} #{dotest}
 					return 1
 				fi
 			fi
-			echo -en "\n"
 		fi
 		if {
 			[[ -n $(${GREP} "^[${PACKDIRS_PACK}]${FILE}${FREGEX}$" ${UNPACK}) ]] ||
