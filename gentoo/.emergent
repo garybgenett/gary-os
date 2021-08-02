@@ -50,7 +50,7 @@ fi
 
 if [[ -n ${@} ]]; then
 	for TOKEN in ${@}; do
-		if [[ ! -d $(ls -d /var/db/pkg/${TOKEN}-[0-9]* 2>/dev/null) ]]; then
+		if [[ ! -d $(ls -d ${PDBDIR}/${TOKEN}-[0-9]* 2>/dev/null) ]]; then
 			if [[ -n $(env - emerge -s ${TOKEN/#*\/} | ${GREP} "found[ ][:][ ]0") ]]; then
 				echo -en "${TOKEN}\tNONE FOUND\n"
 				continue
