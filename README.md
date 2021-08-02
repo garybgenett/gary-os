@@ -1813,7 +1813,7 @@ Everything needed to perform these steps is in the [Repository] or the
 
   * `make` ${3} `DOREDO=true DOFAST=true doit` ${4} `devel`
     * [ ] **Errors()**
-  * [ ] Target size of` ${1} `or less (check =` ${2} `)
+  * [ ] Target size of` ${1} `or less (` make check `=` ${2} `)
     * [ ] Command comments at bottom of [gentoo/package.use]
         * `make` ${3} `depends-<package atom|/|%>`
         * `make` ${3} `depgraph-<package atom|/|%>`
