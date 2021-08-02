@@ -1321,6 +1321,19 @@ this hack was coded directly into Ego.
   * Initial
     * [Funtoo Ego submission]
 
+There is a precedence conflict, though, in that the [meta-repo] tree needs to be
+set before installing the modified version of Ego.  As such, GaryOS continues to
+use [gentoo/_funtook.kits] for the initial build.
+
+The [gentoo/_funtoo.kits] script also has two advantages over Ego.
+
+  1. Can run directly on Git repositories, whereas Ego requires a Funtoo install
+  2. Kits repositories are stored in Git rather than the [meta-repo] tree
+
+The second feature is important to keep the [meta-repo] tree as small as
+possible while preserving the ability to archive all the Git information in
+'meta-repo.git'.
+
 This was submitted upstream with no response.
 
 **Suckless dwm**
