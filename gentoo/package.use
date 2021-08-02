@@ -190,7 +190,7 @@ dev-python/asn1crypto			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/backports			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/backports-lzma		python_targets_python2_7	# gentoo required
 dev-python/beautifulsoup		python_targets_python2_7	#{GOS} # gentoo required
-dev-python/certifi			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/certifi			python_targets_python2_7	# gentoo required
 dev-python/cffi				python_targets_python2_7	#{GOS} # gentoo required
 dev-python/chardet			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/cheetah			python_targets_python2_7	#{GOS} # gentoo required
@@ -239,7 +239,7 @@ dev-python/pyxattr			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/rdflib			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/regex			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/requests			python_targets_python2_7	#{GOS} # gentoo required
-dev-python/setuptools			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/setuptools			python_targets_python2_7	# gentoo required
 dev-python/setuptools_scm		python_targets_python2_7	#{GOS} # gentoo required
 dev-python/simplejson			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/sip				python_targets_python2_7	#{GOS} # gentoo required
