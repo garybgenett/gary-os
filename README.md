@@ -1250,7 +1250,7 @@ GaryOS has maintained a [steady stream of downloads] since its debut in February
   * [Gentoo family tree] ([2018-08](https://github.com/garybgenett/gary-os/raw/master/artifacts/archive/gentoo-20.08.pdf))
   * [Funtoo ecosystem page]
   * [List of non-systemd distributions] (proudly)
-  * [Softpedia review of v3.0] (not just a copy and paste of the README text)
+  * [Softpedia review of v3.0] (not just a paste of the [README.md] text)
 
 Hopefully, it will someday make these lists as well.
 
@@ -1731,11 +1731,11 @@ In progress for v5.0...
 **Review**
 
   * `cd coding/gary-os`
-  * `vi +/#WORK README.md`
+  * `vi ./README.md`
     * [ ] [Versions] list in [Header](#welcome-to-garyos-gary-os)
     * [ ] [Versions] section and release notes
     * [ ] [Kernel], [Rootfs] and [Boot] links
-  * `make TOKN="[...]" readme-github`
+  * `make TOKN=[...] readme-github`
     * `make readme-all`
         * `pages ./GaryOS-Readme.html`
     * `make DOTEST=true readme`
@@ -1787,8 +1787,8 @@ In progress for v5.0...
 **Celebrate**
 
   * `cd coding/gary-os`
-    * `make TOKN="[...]" DOMODS=true DOREDO=true readme-github`
-    * `make TOKN="[...]" DOMODS=true readme-github`
+    * `make TOKN=[...] DOMODS=true DOREDO=true readme-github`
+    * `make TOKN=[...] DOMODS=true readme-github`
   * <https://github.com/garybgenett/gary-os/graphs/traffic>
     * [steady stream of downloads]
     * [ ] Downloads_2014-02_to_XXXX-XX.csv
