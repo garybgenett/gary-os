@@ -1718,7 +1718,132 @@ Everything needed to perform these steps is in the [Repository] or the
 ### Process ####################################################################
 [Process]: #process
 
-In progress for v5.0...
+**Personal Build**
+
+  ```
+  Iterate {
+  ```
+
+  * [ ] Until '@world', at least
+    * `make DOFAST=true doit`
+    * [ ] **Errors()**
+  * `vi ./build/_gentoo/+checks`
+
+  ```
+  }
+  ```
+
+  ```
+  Errors {
+  ```
+
+   * [ ] Until success
+     * `make <package atom>`
+         * [ ] Copy "gentoo browse" link to browser
+         * [ ] Copy "gitweb" link to browser
+     * `make overlay-<package atom|*/|>^<ebuild>^<commit>`
+         * `mkdir ./gentoo/overlay/<package atom>`
+         * `(cd _build/gentoo/gentoo ; git-list -50 -l -- <package atom>)`
+         * `(cd _build/gentoo/gentoo ; git-list -2 -- <package atom>/<ebuild>)`
+     * `make emerge-<package atom|/|%>`
+
+  ```
+  }
+  ```
+
+  * `cd .setup/gentoo.make`
+    * `(cd _builds ; rm ./_gentoo.working ; ln ../../_toor ./_gentoo.working)`
+        * `(cd [...]/_toor ; rm {.[^.],}* ; ll)`
+        * `(cd _target/iso ; vi ./.urls ; ./.urls -f)`
+        * `(cd _build/funtoo/meta-repo ; git pull ; GIT_PAGER=cat git-list -n1)`
+        * `(cd _build/funtoo/meta-repo ; ll ./kits/core-kit/sys-kernel/gentoo-sources)`
+        * `(cd _build/funtoo/meta-repo ; ll ./kits/core-kit/sys-kernel/debian-sources)`
+    * `qemu-minion.bsh $(ls [...]/_target/iso/grml*.iso | tail -n1)`
+        * `zcat /proc/config.gz >./linux/default-grml[...]`
+        * `rsync ./linux/default-grml[...] ./linux/config-gentoo[...]`
+        * `rm ./linux/.config ; ln config-gentoo[...] ./linux/.config`
+    * `vi ./gentoo/_funtoo`
+        * `vi ./gentoo/sets/*`
+            * [ ] [Linux Kernel] versions
+            * [ ] Review
+        * `vi ./gentoo/packages.*`
+            * [ ] Comment all 'gentoo required'
+        * `(cd ./gentoo/overlay ; ./.review -a)`
+            * [ ] Review '.keep' packages
+  * `make init`
+    * [ ] **Iterate()**
+  * `vi ./linux/.options`
+    * `rsync -L ./linux/.config /usr/src/linux-[...]/`
+    * `(cd ./build/usr/src/linux-[...] ; make menuconfig)`
+    * `rsync /usr/src/linux-[...]/.config ./linux/config-gentoo[...]`
+  * `make doit`
+    * [ ] **Iterate()**
+  * `make redo`
+    * [ ] **Iterate()**
+    * `make doit`
+    * `(cd _builds ; rsync ../../_toor/ ./_gary-os.working)`
+  * `make edit`
+    * `(cd _builds ; rm ./_gentoo.working ; ln _gentoo ./_gentoo.working)`
+    * `(cd _builds ; rsync ../../_toor/ ./_gentoo)`
+    * [ ] Boot to "gary-os"
+        * `rsync [...]/_root/{.runit,.setup} [...]/_toor/`
+    * [ ] Boot to "_toor"
+        * [ ] Smoke test for 2-3 weeks
+        * `make doit`
+          * [ ] **Iterate()**
+        * `_sync _sys _clone _full _setup`
+    * [ ] Boot to "gary-os"
+        * `_sync _sys _chroot [...]`
+        * `rsync [...]/_toor/{.runit,.setup} [...]/_root/`
+    * [ ] Boot to "_root"
+        * `ego sync --commit $(tail -n1 ./gentoo/_funtoo | cut -d' ' -f2)`
+        * `diff -r ./build/var/git/meta-repo /var/git/meta-repo`
+  * `make doit`
+    * `(cd .setup ; git-commit ./gentoo)`
+    * `_sync _sys _clone _full _setup`
+
+**GaryOS Build**
+
+  ```
+  Validate { <kernel> <check> <option> <target>
+  ```
+
+  * `make` ${3} `DOREDO=true DOFAST=true doit` ${4} `devel`
+    * [ ] **Errors()**
+  * [ ] Target size of` ${1} `or less (check =` ${2} `)
+    * [ ] Command comments at bottom of [gentoo/package.use]
+        * `make` ${3} `depends-<package atom|/|%>`
+        * `make` ${3} `depgraph-<package atom|/|%>`
+        * `make` ${3} `belongs-<file path|/|%>`
+    * `make` ${3} `DOFAST=true DOTEST=true doit` ${4} `devel`
+        * `make` ${3} `DOTEST=true check`
+    * ${3} `./gentoo/_system -g -s -e -C pypy3 [...]`
+        * ${3} `./gentoo/_system -g -s -e [python packages]`
+    * `ll ./build/.gary-os-*`
+  * [ ] Command comments at bottom of [gentoo/make.conf]
+    * `vi ./build/_gentoo/+checks`
+
+  ```
+  }
+  ```
+
+  * `cd .setup/gentoo.gary-os`
+  * [ ] **Validate( 220MB 300.0MiB DOMODS=true )**
+    * [ ] No 'startx' in '/etc/issue'
+  * [ ] **Validate( 750MB 1.2GiB )**
+    * `make ROOTFS=false devel`
+      * [ ] Test kernel size and root filesystem resize
+    * `make DOTEST=true devel`
+      * [ ] verify '#{rootfs}' markers
+  * [ ] **Validate( 1.5GB 3.0GiB P=\_gary-os rootfs )**
+
+**Test & Publish**
+
+  * `cd .setup/gentoo.gary-os`
+  * [Checklist]
+    * `(cd _builds/.gary-os.release ; ln ../_gary-os.working/.gary-os-* ./v#.#)`
+  * [Publish]
+    * `make clean`
 
 ### Checklist ##################################################################
 [Checklist]: #checklist
