@@ -1612,7 +1612,7 @@ function _release_report {
 #note: companion to the "prepare_symlinks" function
 #note: also maps to the "release_unpack" function
 function _release_fetch {		#{ismain} #{doredo} #{dotest}
-	declare FET_DST="${_TITLE}"
+	declare FET_DST="./${_TITLE}"
 	declare FET_BAS="${_RAMFS/#${_FINAL}\/}"
 	declare FET_SRC="${RSYNC_C} --copy-links --delete ${_FINAL}"
 	declare FET_OUT=""
