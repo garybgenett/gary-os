@@ -313,19 +313,22 @@ eval exec qemu-system-x86_64 \
 
 ########################################
 
+reset
 if [[ -n ${FORK} ]]; then
 	sleep 1
 	cat "${QOUT}"
 fi
 
+reset
 if [[ ${INTERFACE} == display ]]; then
 #>>>	exec ${VNC} 127.0.0.1:599${QNUM} &
 	remote-viewer --title=SPICE:${QNUM} spice://127.0.0.1/?port=666${QNUM} &
-	exec telnet 127.0.0.1 999${QNUM}
+	telnet 127.0.0.1 999${QNUM}
 elif [[ ${INTERFACE} == console ]]; then
 	telnet 127.0.0.1 990${QNUM}
 	telnet 127.0.0.1 999${QNUM}
 fi
+reset
 
 exit 0
 ################################################################################
