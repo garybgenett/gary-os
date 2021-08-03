@@ -40,6 +40,12 @@ if [[ ${1} == ALT ]]; then
 	shift
 fi
 
+if [[ ${1} == RAW ]]; then
+	INDX_ISO=
+	INDX_FIL="1"
+	shift
+fi
+
 if [[ ${1} == BOOT ]]; then
 	INDX_ISO="3"
 	INDX_NUL="1"
@@ -132,10 +138,13 @@ else
 fi
 
 QDSK="-device virtio-scsi-pci,id=scsi0,bus=pci.0"
-QDSK+=" -drive id=cdrom0,if=none,format=raw,file=${QISO}"
-QDSK+=" -device scsi-cd,drive=cdrom0,bootindex=${INDX_ISO}"
-if [[ ! -f ${QISO} ]]; then
-	touch ${QISO}
+
+if [[ -n ${INDX_ISO} ]]; then
+	QDSK+=" -drive id=cdrom0,if=none,format=raw,file=${QISO}"
+	QDSK+=" -device scsi-cd,drive=cdrom0,bootindex=${INDX_ISO}"
+	if [[ ! -f ${QISO} ]]; then
+		touch ${QISO}
+	fi
 fi
 
 if [[ -n $(file -L ${I} 2>/dev/null | ${GREP} "Linux kernel .+ boot executable") ]]; then
