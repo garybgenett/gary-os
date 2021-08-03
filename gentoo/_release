@@ -1325,6 +1325,8 @@ function release_kernel_config {
 	return 0
 }
 
+#note: the final "shmem" needs to be more than twice the size of the final internal "rootfs" in order for the in-memory transfer to work
+#note: heavy use of "$fspack" should be enough to create this offset
 function release_kernel_shmem {
 	declare DODIR="${1}" && shift
 	#note: treating the size of the ".cpio" as the in-memory filesystem size, adding buffer and free disk space, and then rounding pages
