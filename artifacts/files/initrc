@@ -111,7 +111,7 @@ ${ROOTFS_NAME}() {
 		to_mem="${1}" && shift
 	fi
 	if ! ${do_mnt}; then
-		mounts ${mounts} false "${@}" || ${ROOTFS_FUNC}
+		mounts ${mounts} false || ${ROOTFS_FUNC}
 		if [ -n "`grep -E " ${mounts}/.${ROOTFS_ROOT_OPT} " /proc/mounts`" ]; then
 			umount -v ${mounts}/.${ROOTFS_ROOT_OPT} || ${ROOTFS_FUNC}
 		fi
@@ -136,31 +136,31 @@ ${ROOTFS_NAME}() {
 		mkdir -v -p ${mounts}.shm/upperdir || ${ROOTFS_FUNC}
 		mkdir -v -p ${mounts}.shm/workdir || ${ROOTFS_FUNC}
 	fi
-	if ${to_mem}; then
-		mkdir -v -p `dirname ${mounts}.shm${ROOTFS_ROOT}` || ${ROOTFS_FUNC}
-		rsync -avv --progress --copy-links ${${ROOTFS_NAME}} ${mounts}.shm${ROOTFS_ROOT} || ${ROOTFS_FUNC}
-		${ROOTFS_NAME}="${mounts}.shm${ROOTFS_ROOT}"
-	fi
-	if [ -z "`grep -E "^/dev/loop[0-9] ${mounts}.shm/lowerdir ${ROOTFS_TYPE}" /proc/mounts`" ]; then
-		mount -v -t ${ROOTFS_TYPE} -o ro,loop ${${ROOTFS_NAME}} ${mounts}.shm/lowerdir || ${ROOTFS_FUNC}
-	fi
-	if [ -z "`grep -E "^overlay ${mounts} overlay" /proc/mounts`" ]; then
-		mkdir -v -p ${mounts} || ${ROOTFS_FUNC}
-		lowerdir="${mounts}.shm/lowerdir"
-		upperdir="${mounts}.shm/upperdir"
-		workdir="${mounts}.shm/workdir"
-		mount -v -t overlay overlay -o lowerdir=${lowerdir},upperdir=${upperdir},workdir=${workdir} ${mounts} || ${ROOTFS_FUNC}
-	fi
-	if [ -z "`grep -E "^shm ${mounts}${_GOVLY} tmpfs" /proc/mounts`" ]; then
-		mkdir -v -p ${mounts}${_GOVLY} || ${ROOTFS_FUNC}
-		mount -v -o move ${mounts}.shm ${mounts}${_GOVLY} || ${ROOTFS_FUNC}
-	fi
-	if [ -d ${mounts}/.${_TITLE} ]; then
-#>>>		mounts ${mounts} true "${@}" || ${ROOTFS_FUNC}
-#>>>		chroot ${mounts} make -C /.${_TITLE} O=/ unpack || ${ROOTFS_FUNC}
-		make -C ${mounts}/.${_TITLE} O=${mounts} unpack || ${ROOTFS_FUNC}
-#>>>		mounts ${mounts} false "${@}" || ${ROOTFS_FUNC}
-	fi
+		if ${to_mem}; then
+			mkdir -v -p `dirname ${mounts}.shm${ROOTFS_ROOT}` || ${ROOTFS_FUNC}
+			rsync -avv --progress --copy-links ${${ROOTFS_NAME}} ${mounts}.shm${ROOTFS_ROOT} || ${ROOTFS_FUNC}
+			${ROOTFS_NAME}="${mounts}.shm${ROOTFS_ROOT}"
+		fi
+		if [ -z "`grep -E "^/dev/loop[0-9] ${mounts}.shm/lowerdir ${ROOTFS_TYPE}" /proc/mounts`" ]; then
+			mount -v -t ${ROOTFS_TYPE} -o ro,loop ${${ROOTFS_NAME}} ${mounts}.shm/lowerdir || ${ROOTFS_FUNC}
+		fi
+		if [ -z "`grep -E "^overlay ${mounts} overlay" /proc/mounts`" ]; then
+			mkdir -v -p ${mounts} || ${ROOTFS_FUNC}
+			lowerdir="${mounts}.shm/lowerdir"
+			upperdir="${mounts}.shm/upperdir"
+			workdir="${mounts}.shm/workdir"
+			mount -v -t overlay overlay -o lowerdir=${lowerdir},upperdir=${upperdir},workdir=${workdir} ${mounts} || ${ROOTFS_FUNC}
+		fi
+		if [ -z "`grep -E "^shm ${mounts}${_GOVLY} tmpfs" /proc/mounts`" ]; then
+			mkdir -v -p ${mounts}${_GOVLY} || ${ROOTFS_FUNC}
+			mount -v -o move ${mounts}.shm ${mounts}${_GOVLY} || ${ROOTFS_FUNC}
+		fi
+		if [ -d ${mounts}/.${_TITLE} ]; then
+#>>>			mounts ${mounts} true || ${ROOTFS_FUNC}
+#>>>			chroot ${mounts} make -C /.${_TITLE} O=/ unpack || ${ROOTFS_FUNC}
+			make -C ${mounts}/.${_TITLE} O=${mounts} unpack || ${ROOTFS_FUNC}
+#>>>			mounts ${mounts} false || ${ROOTFS_FUNC}
+		fi
 	return 0
 }
 
@@ -197,8 +197,8 @@ select() {
 			! /bin/mount -v -o ro,nonempty ${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT} ||
 			${chroot_opt}
 		then
-			${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} ${ROOTFS_ROOT} false "${@}" || ${ROOTFS_FUNC}
-			mounts /.${ROOTFS_ROOT_OPT} true "${@}" || ${ROOTFS_FUNC}
+			${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} ${ROOTFS_ROOT} false || ${ROOTFS_FUNC}
+			mounts /.${ROOTFS_ROOT_OPT} true || ${ROOTFS_FUNC}
 			if [ ! -d /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT} ]; then
 				mkdir -v -p /.${ROOTFS_ROOT_OPT}/run/openrc || ${ROOTFS_FUNC}
 				touch /.${ROOTFS_ROOT_OPT}/run/openrc/softlevel || ${ROOTFS_FUNC}
@@ -242,14 +242,14 @@ select() {
 			fi
 		fi
 		if [ -f "/.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}${${ROOTFS_ROOT_OPT}_file}" ]; then
-			${ROOTFS_NAME} ${_GOVLY} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}${${ROOTFS_ROOT_OPT}_file} true "${@}" || ${ROOTFS_FUNC}
+			${ROOTFS_NAME} ${_GOVLY} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}${${ROOTFS_ROOT_OPT}_file} true || ${ROOTFS_FUNC}
 			if [ -n "`grep -E "^${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}" /proc/mounts`" ]; then
 				umount -v ${${ROOTFS_ROOT_OPT}} || ${ROOTFS_FUNC}
 			fi
-			${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} false "${@}" || ${ROOTFS_FUNC}
+			${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} false || ${ROOTFS_FUNC}
 			return 0
 		else
-			select - "${${ROOTFS_ROOT_OPT}}" "${${ROOTFS_ROOT_OPT}_file}" "${@}" || ${ROOTFS_FUNC}
+			select - "${${ROOTFS_ROOT_OPT}}" "${${ROOTFS_ROOT_OPT}_file}" || ${ROOTFS_FUNC}
 			return 0
 		fi
 	else
@@ -300,7 +300,7 @@ select() {
 			select -
 			return 0
 		else
-			select ${${ROOTFS_ROOT_OPT}} "${@}" || ${ROOTFS_FUNC}
+			select ${${ROOTFS_ROOT_OPT}} || ${ROOTFS_FUNC}
 			return 0
 		fi
 	fi
@@ -328,8 +328,8 @@ count() {
 
 if [ "${1}" == "un${ROOTFS_NAME}" ]; then
 	shift
-	${ROOTFS_NAME} ${_GOVLY} false "${@}" || ${ROOTFS_FUNC}
-	${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} false "${@}" || ${ROOTFS_FUNC}
+	${ROOTFS_NAME} ${_GOVLY} false || ${ROOTFS_FUNC}
+	${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} false || ${ROOTFS_FUNC}
 	${ROOTFS_FUNC} -
 else
 	if [ "${1}" == "${ROOTFS_NAME}" ]; then
@@ -338,19 +338,19 @@ else
 	else
 		count 3 9
 	fi
-	mounts "" true "${@}" || ${ROOTFS_FUNC}
+	mounts "" true || ${ROOTFS_FUNC}
 	if ! ${${ROOTFS_NAME}_init} || [ -n "${@}" ]; then
 		export ${ROOTFS_NAME}_init="true"
 		if select "${@}"; then
 			export ${ROOTFS_NAME}_load="true"
 		fi
 	else
-		if select - "${${ROOTFS_ROOT_OPT}}" "${${ROOTFS_ROOT_OPT}_file}" "${@}"; then
+		if select - "${${ROOTFS_ROOT_OPT}}" "${${ROOTFS_ROOT_OPT}_file}"; then
 			export ${ROOTFS_NAME}_load="true"
 		fi
 	fi
 	if ! ${${ROOTFS_NAME}_load}; then
-		${ROOTFS_NAME} ${_GOVLY} ${ROOTFS_ROOT} true "${@}" || ${ROOTFS_FUNC}
+		${ROOTFS_NAME} ${_GOVLY} ${ROOTFS_ROOT} true || ${ROOTFS_FUNC}
 	fi
 fi
 
