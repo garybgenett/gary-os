@@ -108,7 +108,11 @@ ${ROOTFS_NAME}() {
 	else
 		do_mnt="true"
 		${ROOTFS_NAME}="${1}" && shift
+	fi
+	if [ "${1}" == true ]; then
 		to_mem="${1}" && shift
+	else
+		to_mem="false"
 	fi
 	if ! ${do_mnt}; then
 		mounts ${mounts} false || ${ROOTFS_FUNC}
@@ -136,6 +140,7 @@ ${ROOTFS_NAME}() {
 		mkdir -v -p ${mounts}.shm/upperdir || ${ROOTFS_FUNC}
 		mkdir -v -p ${mounts}.shm/workdir || ${ROOTFS_FUNC}
 	fi
+	if [ -f "${${ROOTFS_NAME}}" ]; then
 		if ${to_mem}; then
 			mkdir -v -p `dirname ${mounts}.shm${ROOTFS_ROOT}` || ${ROOTFS_FUNC}
 			rsync -avv --progress --copy-links ${${ROOTFS_NAME}} ${mounts}.shm${ROOTFS_ROOT} || ${ROOTFS_FUNC}
@@ -161,6 +166,7 @@ ${ROOTFS_NAME}() {
 			make -C ${mounts}/.${_TITLE} O=${mounts} unpack || ${ROOTFS_FUNC}
 #>>>			mounts ${mounts} false || ${ROOTFS_FUNC}
 		fi
+	fi
 	return 0
 }
 
@@ -222,8 +228,9 @@ select() {
 				chroot /.${ROOTFS_ROOT_OPT} rc-service dhcpcd restart || ${ROOTFS_FUNC}
 				count 9 27
 				mkdir -v -p `dirname /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}${${ROOTFS_ROOT_OPT}_file}` || ${ROOTFS_FUNC}
-#>>>				if	! chroot /.${ROOTFS_ROOT_OPT} tftp -v ${${ROOTFS_ROOT_OPT}} -c get ${${ROOTFS_ROOT_OPT}_file} /.${ROOTFS_ROOT_OPT}${${ROOTFS_ROOT_OPT}_file} &&
-				if	! tftp ${${ROOTFS_ROOT_OPT}} -g -r ${${ROOTFS_ROOT_OPT}_file} -l /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}${${ROOTFS_ROOT_OPT}_file} &&
+				${ROOTFS_NAME} ${_GOVLY} "" false || ${ROOTFS_FUNC}
+#>>>				if	! chroot /.${ROOTFS_ROOT_OPT} tftp -v ${${ROOTFS_ROOT_OPT}} -c get ${${ROOTFS_ROOT_OPT}_file} ${_GOVLY}.shm${ROOTFS_ROOT} &&
+				if	! tftp ${${ROOTFS_ROOT_OPT}} -g -r ${${ROOTFS_ROOT_OPT}_file} -l ${_GOVLY}.shm${ROOTFS_ROOT} &&
 					! ${chroot_opt}
 				then
 					${ROOTFS_FUNC}
@@ -243,6 +250,13 @@ select() {
 		fi
 		if [ -f "/.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}${${ROOTFS_ROOT_OPT}_file}" ]; then
 			${ROOTFS_NAME} ${_GOVLY} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}${${ROOTFS_ROOT_OPT}_file} true || ${ROOTFS_FUNC}
+			if [ -n "`grep -E "^${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}" /proc/mounts`" ]; then
+				umount -v ${${ROOTFS_ROOT_OPT}} || ${ROOTFS_FUNC}
+			fi
+			${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} false || ${ROOTFS_FUNC}
+			return 0
+		elif [ -f "${_GOVLY}.shm${ROOTFS_ROOT}" ]; then
+			${ROOTFS_NAME} ${_GOVLY} ${_GOVLY}.shm${ROOTFS_ROOT} false || ${ROOTFS_FUNC}
 			if [ -n "`grep -E "^${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}" /proc/mounts`" ]; then
 				umount -v ${${ROOTFS_ROOT_OPT}} || ${ROOTFS_FUNC}
 			fi
