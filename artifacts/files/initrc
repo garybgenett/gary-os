@@ -48,7 +48,7 @@ ${ROOTFS_FUNC}() {
 	echo -en "# use \"${ROOTFS_NAME} =\" to load the ${ROOTFS_NAME} chroot environment\n"
 	echo -en "# use \"${ROOTFS_NAME} [...]\" to boot using the specified ${ROOTFS_NAME} values\n"
 	echo -en "# use \"un${ROOTFS_NAME}\" to unmount all the ${ROOTFS_NAME} directories\n"
-	echo -en "# use \"dotty\" to start a psuedo-terminal (login: root / ${_TITLE})\n"
+	echo -en "# use \"dotty\" or \"dottys\" to start a psuedo-terminal (login: root / ${_TITLE})\n"
 	echo -en "#\n"
 	echo -en "# exiting the shell will return control to the \"/initrc\" script\n"
 	echo -en "#\n"
