@@ -12,6 +12,13 @@ fi
 
 ########################################
 
+declare INDX_ISO="1"
+declare INDX_FIL="2"
+declare INDX_NUL="3"
+declare INDX_NET="4"
+
+########################################
+
 declare BIOS="/usr/share/edk2-ovmf/OVMF.fd"
 if [[ ${1} == MBR ]]; then
 	BIOS="/usr/share/qemu/bios.bin"
@@ -33,9 +40,9 @@ if [[ ${1} == ALT ]]; then
 	shift
 fi
 
-declare INDX="3"
 if [[ ${1} == BOOT ]]; then
-	INDX="0"
+	INDX_ISO="3"
+	INDX_NUL="1"
 	shift
 fi
 
@@ -126,7 +133,7 @@ fi
 
 QDSK="-device virtio-scsi-pci,id=scsi0,bus=pci.0"
 QDSK+=" -drive id=cdrom0,if=none,format=raw,file=${QISO}"
-QDSK+=" -device scsi-cd,drive=cdrom0,bootindex=1"
+QDSK+=" -device scsi-cd,drive=cdrom0,bootindex=${INDX_ISO}"
 if [[ ! -f ${QISO} ]]; then
 	touch ${QISO}
 fi
@@ -145,13 +152,13 @@ if [[ -n $(file -L ${I} 2>/dev/null | ${GREP} "Linux kernel .+ boot executable")
 	fi
 elif [[ -n $(file -L ${I} 2>/dev/null | ${GREP} "(DOS/MBR boot sector|ISO 9660 CD-ROM)") ]]; then
 	QDSK+=" -drive id=cdrom1,if=none,format=raw,file=${I}"
-	QDSK+=" -device scsi-cd,drive=cdrom1,bootindex=2"
+	QDSK+=" -device scsi-cd,drive=cdrom1,bootindex=${INDX_FIL}"
 elif [[ -f ${I} ]]; then
 	QDSK+=" -drive id=drive0,if=none,file=${I}"
-	QDSK+=" -device ${DISK},drive=drive0,bootindex=2"
+	QDSK+=" -device ${DISK},drive=drive0,bootindex=${INDX_FIL}"
 elif [[ -b ${I} ]]; then
 	QDSK+=" -drive id=drive0,if=none,format=raw,file=${I}"
-	QDSK+=" -device ${DISK},drive=drive0,bootindex=2"
+	QDSK+=" -device ${DISK},drive=drive0,bootindex=${INDX_FIL}"
 fi
 
 declare QFMT="qcow2"
@@ -162,7 +169,7 @@ elif [[ -n $(file -L ${QNFL} 2>/dev/null | ${GREP} "(DOS/MBR boot sector|ISO 966
 	EXTR="${E_CD}"
 fi
 QDSK+=" -drive id=drive1,if=none,format=${QFMT},file=${QNFL}"
-QDSK+=" -device ${EXTR},drive=drive1,bootindex=${INDX}"
+QDSK+=" -device ${EXTR},drive=drive1,bootindex=${INDX_NUL}"
 
 if [[ ! -f ${QNUL} ]]; then
 	${LN} ${QNFL} ${QNUL}
@@ -255,7 +262,7 @@ for I in $(eval echo -en "{0..${NET_NUM}}"); do
 	QNET+=",netdev=${T}${I}"
 	QNET+=",mac=52:54:00:10:0${I}:0${QNUM}"
 	if [[ ${I} == 0 ]]; then
-		QNET+=",bootindex=4"
+		QNET+=",bootindex=${INDX_NET}"
 	fi
 
 	if ${NET_TAP}; then
