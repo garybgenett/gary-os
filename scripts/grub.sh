@@ -759,14 +759,14 @@ function custom_menu {
 	FILE="${GDEST}/.mount-menu"
 	${MKDIR} ${FILE}					|| return 1
 	if [[ -b ${DEV}${GPSEP}${GPART} ]]; then
-		mount-robust -u ${DEV}${GPSEP}${GPART}		|| return 1
+		mount-robust -u ${DEV}${GPSEP}${GPART}		#>>> || return 1
 	fi
 	mount-robust ${DEV}${GPSEP}${GPART} ${FILE}		|| return 1
 	if [[ ! -f ${FILE}${GMENU_CUSTOM} ]]; then
 		${MKDIR} ${FILE}$(dirname ${GMENU_CUSTOM})	|| return 1
 		echo -en "${GCUST}" >${FILE}${GMENU_CUSTOM}	|| return 1
 	fi
-	mount-robust -u ${DEV}${GPSEP}${GPART}			|| return 1
+	mount-robust -u ${DEV}${GPSEP}${GPART}			#>>> || return 1
 	${RM} ${FILE}						|| return 1
 	return 0
 }
@@ -831,7 +831,7 @@ ${RM} ${GDEST}/*.tar.tar				|| exit 1
 FILE="${GDEST}/.mount-mbr"
 ${MKDIR} ${FILE}								|| exit 1
 if [[ -b ${GINST_DO}${GPSEP}${GPART} ]]; then
-	mount-robust -u ${GINST_DO}${GPSEP}${GPART}				|| exit 1
+	mount-robust -u ${GINST_DO}${GPSEP}${GPART}				#>>> || exit 1
 fi
 mount-robust ${GINST_DO}${GPSEP}${GPART} ${FILE}				|| exit 1
 ${RSYNC_U} ${GDEST}/rescue.img ${GDEST}/_${GTYPE}/core.img			|| exit 1
@@ -851,7 +851,7 @@ grub-bios-setup \
 	--core-image="rescue.img" \
 	${GINST_DO}								|| exit_summary 1
 ${MV} ${FILE}/${SCRIPT} ${GDEST}/_${GTYPE}.boot					|| exit 1
-mount-robust -u ${GINST_DO}${GPSEP}${GPART}					|| exit 1
+mount-robust -u ${GINST_DO}${GPSEP}${GPART}					#>>> || exit 1
 ${RM} ${GDEST}/.mount-mbr							|| exit 1
 
 if [[ -b ${GINST_DO}${GPSEP}${GPEFI} ]]; then
