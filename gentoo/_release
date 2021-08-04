@@ -1626,15 +1626,8 @@ function _release_fetch {		#{ismain} #{doredo} #{dotest}
 	fi
 	${MKDIR}							${FET_DST}					|| return 1
 	${FET_SRC}/${FET_BAS}.grub.zip ${FET_OUT}			${FET_DST}/					|| return 1
-	7z e -aoa \
-		-x\!\*/loopfile\* \
-		-x\!\*/rufus\* \
-		-o${FET_DST}/${_TITLE}.grub				${FET_DST}/${FET_BAS}.grub.zip			|| return 1
-	${RM}								${FET_DST}/${_TITLE}.grub/${FET_BAS}.grub	|| return 1
 	for FILE in kernel rootfs; do
 		${FET_SRC}/${FET_BAS}.${FILE} ${FET_OUT}		${FET_DST}/					|| return 1
-		${LN}			${FET_BAS}.${FILE}		${FET_DST}/${_TITLE}.${FILE}			||
-			${RSYNC_C}	${FET_DST}/${FET_BAS}.${FILE}	${FET_DST}/${_TITLE}.${FILE}			|| return 1
 		${FET_SRC}/${FET_BAS}.${FILE}.${_GPACK} ${FET_OUT}	${FET_DST}/					|| return 1
 	done
 	${FET_SRC}/${FET_BAS}.${_GREAD} ${FET_OUT}			${FET_DST}/					|| return 1
@@ -1651,6 +1644,21 @@ function _release_fetch {		#{ismain} #{doredo} #{dotest}
 		shopt ${LASTPIPE} lastpipe
 		${FET_SRC}/stage3-${ESUB}.tar.xz ${FET_OUT}		${FET_DST}/					|| return 1
 	fi
+	if {	[[ -f							${FET_DST}/${FET_BAS}.grub.zip ]] &&
+		[[ ! -d							${FET_DST}/${_TITLE}.grub ]];
+	}; then
+		7z e -aoa \
+			-x\!\*/loopfile\* \
+			-x\!\*/rufus\* \
+			-o${FET_DST}/${_TITLE}.grub			${FET_DST}/${FET_BAS}.grub.zip			|| return 1
+		${RM}							${FET_DST}/${_TITLE}.grub/${FET_BAS}.grub	|| return 1
+	fi
+	for FILE in kernel rootfs; do
+		if [[ -f						${FET_DST}/${FET_BAS}.${FILE} ]]; then
+			${LN}		${FET_BAS}.${FILE}		${FET_DST}/${_TITLE}.${FILE}			#>>> ||
+#>>>			${RSYNC_C}	${FET_DST}/${FET_BAS}.${FILE}	${FET_DST}/${_TITLE}.${FILE}			|| return 1
+		fi
+	done
 	(cd ${FET_DST};
 		echo -en "\n"; ${LL}
 		echo -en "\n"; ${DU_L} *
