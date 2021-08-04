@@ -1231,9 +1231,6 @@ if [[ ${1} == -i ]]; then
 		#note: this needs to match the name in the "${MAKEIT}" script
 		${PREPIT}_repdir										|| EXIT 1
 		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w		|| EXIT 1
-#WORK: currently breaks all attempts to use the tree?  leaving for next release...
-		${SED} -i "/core-ui-kit/d"		${TARGET}${ETCDIR}/make.profile/parent			|| EXIT 1
-#WORK
 	fi
 	if ${_BLD}; then
 		if ${_NEW}; then
