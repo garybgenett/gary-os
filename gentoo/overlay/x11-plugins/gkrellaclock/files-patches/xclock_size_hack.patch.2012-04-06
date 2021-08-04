@@ -1,0 +1,234 @@
+--- gkrellaclock.c.orig	2012-04-02 19:12:52.000000000 -0700
++++ gkrellaclock.c	2012-04-06 15:47:31.000000000 -0700
+@@ -34,8 +34,8 @@
+ 			                /*  and gkrellmrc style name.*/ 
+ 
+ 
+-#define CHART_W 60
+-#define CHART_H 40
++#define CHART_W 120
++#define CHART_H 120
+ #define MAX_COLORS 10
+ #define MAX_DARK_BG_COLORS 8
+ 
+@@ -79,7 +79,7 @@
+ 
+ static gint d_color, s_color, cycle, clock_type, enable_dark_bg;
+ static gint prev_h = -1;
+-static gint chart_w = 60;
++static gint chart_w = CHART_W;
+ 
+ static gint		style_id;
+ 
+@@ -98,9 +98,9 @@
+ {
+   guchar *ptr;
+ 
+-  if ((((int) c) == 0) || (x < 0) || (y < 0) || (x > 59) || (y > 39))
+-    return;
+- 
++//  if ((((int) c) == 0) || (x < 0) || (y < 0) || (x > 59) || (y > 39))
++//    return;
++
+ 
+   ptr = rgbbuf + ( chart_w * 3 * (y)) + (3 * x);
+   ptr[0] = ((double) rrr / 255 * (double) c);
+@@ -609,12 +609,18 @@
+ static void
+ draw_xclock(void)
+ {
+-   gint tempX, tempY;
++   gint  begX,  begY;
++   gint  pntX,  pntY;
++   gint  endX,  endY;
+    gint h, m, s;
+-   gint half_w, i;
++   gint half_w, half_h, i;
++   gint unit_w, unit_h;
++   gint full_w, full_h;
+ 
++   gdouble two_pi = (atan(1) * 4) * 2;
+ 
+    gdouble        minutes = 20, hours = 12, seconds = 0;
++   gdouble r_hours, r_minutes, r_seconds;
+ 
+    tm = gkrellm_get_current_time();
+ 
+@@ -635,60 +641,116 @@
+ 
+    blank_buf();
+ 
+-   half_w = chart_w / 2;
+-
+-   if ( half_w > CHART_H ) { half_w = CHART_H; }
+-
+-
+-   lineBresenham(half_w, 0, half_w, 4, 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
+-
+-   set_col_pixel (half_w + 9, 4, 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
+-   set_col_pixel (half_w + 15, 10, 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
+-   set_col_pixel (half_w + 15, 28, 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
+-   set_col_pixel (half_w + 9, 34, 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
+-
+-   lineBresenham(half_w, 39, half_w, 35, 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
+-
+-   set_col_pixel (half_w - 9, 4, 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
+-   set_col_pixel (half_w - 15, 10, 255, c_red[d_color], c_green[d_color], c_blue[d_color]); 
+-   set_col_pixel (half_w - 15, 28, 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
+-   set_col_pixel (half_w - 9, 34, 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
+-
+-   lineBresenham(half_w - 20, 19, half_w - 16, 19, 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
+-
+-   lineBresenham(half_w + 20, 19, half_w + 16, 19, 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
+-   
+-   
+-   tempX =  (int)(sin((hours * 3.14159 * 2) / 12) * 12 );
+-   tempY = -(int)(cos((hours * 3.14159 * 2) / 12) * 12 );
+-   Wu_line(half_w - tempY / 4, 19 + tempX / 4, half_w + tempX, 19 + tempY, (unsigned char) 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
+-   Wu_line(half_w + tempY / 4, 19 - tempX / 4, half_w + tempX, 19 + tempY, (unsigned char) 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
+-   Wu_line(half_w - tempY / 4, 19 + tempX / 4, half_w - tempX / 4, 19 - tempY / 4, (unsigned char) 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
+-   Wu_line(half_w + tempY / 4, 19 - tempX / 4, half_w - tempX / 4, 19 - tempY / 4, (unsigned char) 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
+-   
+-   tempX =  (int)(sin((minutes * 3.14159 * 2) / 60) * 18 );
+-   tempY = -(int)(cos((minutes * 3.14159 * 2) / 60) * 18 );
+-   Wu_line(half_w - tempY / 9, 19 + tempX / 9, half_w + tempX, 19 + tempY, (unsigned char) 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
+-   Wu_line(half_w + tempY / 9, 19 - tempX / 9, half_w + tempX, 19 + tempY, (unsigned char) 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
+-
+-/* normal seconds hand
+-   tempX =  (int)(sin((seconds * 3.14159 * 2) / 60) * 19 );
+-   tempY = -(int)(cos((seconds * 3.14159 * 2) / 60) * 19 );
+-   Wu_line(half_w, 19, half_w + tempX, 19 + tempY, (unsigned char) 255, c_red[s_color], c_green[s_color], c_blue[s_color]);
++   half_w = CHART_W / 2;
++   half_h = CHART_H / 2;
++   full_w = half_w - (half_w / 6 / 2);
++   full_h = half_h - (half_h / 6 / 2);
++   unit_w = full_w / 6;
++   unit_h = full_h / 6;
++
++   // minute markers
++   gdouble minuteX;
++   gdouble minuteY;
++   for (i = 0; i < 61; i++) {
++       r_minutes = i * 6;
++       minuteX = sin(r_minutes /360 * two_pi);
++       minuteY = cos(r_minutes /360 * two_pi);
++       if (i % 15 == 0) {
++           begX = half_w + (minuteX * (full_w - unit_w));
++           endX = half_w + (minuteX * full_w);
++           begY = half_h + (minuteY * (full_h - unit_h));
++           endY = half_h + (minuteY * full_h);
++       } else if (i % 5 == 0) {
++           begX = half_w + (minuteX * (full_w - (unit_w * 2/3)));
++           endX = half_w + (minuteX * full_w);
++           begY = half_h + (minuteY * (full_h - (unit_h * 2/3)));
++           endY = half_h + (minuteY * full_h);
++       } else {
++           begX = half_w + (minuteX * (full_w - (unit_w * 1/4)));
++           endX = half_w + (minuteX * full_w);
++           begY = half_h + (minuteY * (full_h - (unit_h * 1/4)));
++           endY = half_h + (minuteY * full_h);
++       };
++       lineBresenham(begX, begY, endX, endY, 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
++   };
++
++   // hour hand
++   r_hours = hours * 30;
++    endX =  sin( r_hours       /360 * two_pi) * (unit_w * 2.5);
++    endY = -cos( r_hours       /360 * two_pi) * (unit_h * 2.5);
++    begX =  sin((r_hours +  90)/360 * two_pi) * (unit_w / 2);
++    begY = -cos((r_hours +  90)/360 * two_pi) * (unit_h / 2);
++    pntX =  sin((r_hours + 180)/360 * two_pi) * (unit_w / 2);
++    pntY = -cos((r_hours + 180)/360 * two_pi) * (unit_h / 2);
++// normal: lineBresenham(half_w + pntX, half_h + pntY, half_w +  endX, half_h +  endY, 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
++   lineBresenham(half_w + begX, half_h + begY, half_w +  endX, half_h +  endY, 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
++   lineBresenham(half_w - begX, half_h - begY, half_w +  endX, half_h +  endY, 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
++   lineBresenham(half_w + begX, half_h + begY, half_w +  pntX, half_h +  pntY, 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
++   lineBresenham(half_w - begX, half_h - begY, half_w +  pntX, half_h +  pntY, 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
++
++   // minute hand
++   r_minutes = minutes * 6;
++    endX =  sin( r_minutes       /360 * two_pi) * (unit_w * 4);
++    endY = -cos( r_minutes       /360 * two_pi) * (unit_h * 4);
++    begX =  sin((r_minutes +  90)/360 * two_pi) * (unit_w / 2);
++    begY = -cos((r_minutes +  90)/360 * two_pi) * (unit_h / 2);
++    pntX =  sin((r_minutes + 180)/360 * two_pi) * (unit_w / 2);
++    pntY = -cos((r_minutes + 180)/360 * two_pi) * (unit_h / 2);
++// normal: lineBresenham(half_w + pntX, half_h + pntY, half_w +  endX, half_h +  endY, 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
++   lineBresenham(half_w + begX, half_h + begY, half_w +  endX, half_h +  endY, 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
++   lineBresenham(half_w - begX, half_h - begY, half_w +  endX, half_h +  endY, 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
++   lineBresenham(half_w + begX, half_h + begY, half_w +  pntX, half_h +  pntY, 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
++   lineBresenham(half_w - begX, half_h - begY, half_w +  pntX, half_h +  pntY, 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
++
++   // second hand
++   gint slimX, slimY;
++   r_seconds = seconds * 6;
++   gdouble sml_rat = 0.5 * 6;
++   slimX =  sin( r_seconds       /360 * two_pi) * (unit_w * 4);
++    endX =  sin( r_seconds       /360 * two_pi) * (unit_w * 5);
++   slimY = -cos( r_seconds       /360 * two_pi) * (unit_h * 4);
++    endY = -cos( r_seconds       /360 * two_pi) * (unit_h * 5);
++    begX =  sin((r_seconds +  90)/360 * two_pi) * (unit_w / 2);
++    begY = -cos((r_seconds +  90)/360 * two_pi) * (unit_h / 2);
++    pntX =  sin((r_seconds + 180)/360 * two_pi) * (unit_w / 2);
++    pntY = -cos((r_seconds + 180)/360 * two_pi) * (unit_h / 2);
++// normal: lineBresenham(half_w + pntX, half_h + pntY, half_w +  endX, half_h +  endY, 255, c_red[s_color], c_green[s_color], c_blue[s_color]);
++//   slim: lineBresenham(half_w + slimX, half_h + slimY, half_w +  endX, half_h +  endY, 255, c_red[s_color], c_green[s_color], c_blue[s_color]);
++//   lineBresenham(half_w + begX, half_h + begY, half_w +  endX, half_h +  endY, 255, c_red[s_color], c_green[s_color], c_blue[s_color]);
++//   lineBresenham(half_w - begX, half_h - begY, half_w +  endX, half_h +  endY, 255, c_red[s_color], c_green[s_color], c_blue[s_color]);
++//   lineBresenham(half_w + begX, half_h + begY, half_w +  pntX, half_h +  pntY, 255, c_red[s_color], c_green[s_color], c_blue[s_color]);
++//   lineBresenham(half_w - begX, half_h - begY, half_w +  pntX, half_h +  pntY, 255, c_red[s_color], c_green[s_color], c_blue[s_color]);
++   gint secX, secY;
++   slimX =  sin( r_seconds           /360 * two_pi) * (unit_w * 3);
++   slimY = -cos( r_seconds           /360 * two_pi) * (unit_h * 3);
++    secX =  sin( r_seconds           /360 * two_pi) * (unit_w * 4.5);
++    secY = -cos( r_seconds           /360 * two_pi) * (unit_h * 4.5);
++    begX =  sin((r_seconds - sml_rat)/360 * two_pi) * (unit_w * 4.5);
++    begY = -cos((r_seconds - sml_rat)/360 * two_pi) * (unit_h * 4.5);
++    pntX =  sin((r_seconds + sml_rat)/360 * two_pi) * (unit_w * 4.5);
++    pntY = -cos((r_seconds + sml_rat)/360 * two_pi) * (unit_h * 4.5);
++   lineBresenham(half_w + slimX, half_h + slimY, half_w + begX, half_h + begY, 255, c_red[s_color], c_green[s_color], c_blue[s_color]);
++   lineBresenham(half_w + slimX, half_h + slimY, half_w + pntX, half_h + pntY, 255, c_red[s_color], c_green[s_color], c_blue[s_color]);
++   lineBresenham(half_w + begX, half_h + begY, half_w +  endX, half_h +  endY, 255, c_red[s_color], c_green[s_color], c_blue[s_color]);
++   lineBresenham(half_w + pntX, half_h + pntY, half_w +  endX, half_h +  endY, 255, c_red[s_color], c_green[s_color], c_blue[s_color]);
++
++/*
++   // seconds markers
++   for (i = 0; i < seconds + 1; i++) {
++        begX =  (int)(sin(i * two_pi)/60 * (full_w - (unit_w / 4)) );
++        endX =  (int)(sin(i * two_pi)/60 * full_w );
++        begY = -(int)(cos(i * two_pi)/60 * (full_h - (unit_h / 4)) );
++        endY = -(int)(cos(i * two_pi)/60 * full_h );
++       lineBresenham(half_w + begX, half_h + begY, half_w +  endX, half_h +  endY, 255, c_red[s_color], c_green[s_color], c_blue[s_color]);
++   }
+ */
+ 
+-/* BBC Clock style seconds - not so legible at this size */
+-   tempX =  (int)(sin((seconds * 3.14159 * 2) / 60) * 19 );
+-   tempY = -(int)(cos((seconds * 3.14159 * 2) / 60) * 19 );
+-   Wu_line(half_w + tempX / 2 , 19  + tempY / 2, half_w + tempX, 19 + tempY, (unsigned char) 255, c_red[s_color], c_green[s_color], c_blue[s_color]);
+-
+-   for (i = 0; i < seconds + 1; i++)
+-      {
+-       tempX =  (int)(sin((i * 3.14159 * 2) / 60) * 19 );
+-       tempY = -(int)(cos((i * 3.14159 * 2) / 60) * 19 );
+-       set_col_pixel (half_w + tempX, 19 + tempY, 255, c_red[s_color], c_green[s_color], c_blue[s_color]);
+-      }
+-
++/*
++   // reference dot: center
++   set_col_pixel(half_w, half_h, 255, c_red[s_color], c_green[s_color], c_blue[s_color]);
++   // reference dot: second-hand mid-point
++   set_col_pixel(half_w + secX, half_h + secY, 255, c_red[d_color], c_green[d_color], c_blue[d_color]);
++*/
+ }
+ 
+ static void
+@@ -757,7 +819,7 @@
+ 	  chart = gkrellm_chart_new0();
+ 	}  
+ 
+-	gkrellm_set_chart_height_default(chart, 40);
++	gkrellm_set_chart_height_default(chart, CHART_H);
+ 
+ 	gkrellm_chart_create(vbox, mon, chart, &chart_config);
+ 
