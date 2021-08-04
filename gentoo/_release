@@ -763,6 +763,9 @@ function _prepare_config {		#{isexit} #{doredo}
 
 #note: cross-reference with the "release_install" function any time this changes
 function _prepare_docdir {		#{dotest}
+	if [[ -z ${TARGET} ]]; then
+		return 0
+	fi
 	declare G_REPO_GIT="${_G_REPO}.git"
 	declare G_REPO_SRC="${_G_REPO}"
 	declare G_REPO_OPT=
