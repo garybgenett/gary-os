@@ -1,18 +1,18 @@
 
-\e[1;31m Welcome to GaryOS!
+\e[1;31m Welcome to ${_GNAME}!
 \e[1;31m ------------------
 
 \e[1;37m Thank you for your support.  Here are the details on this version...
 
-\e[1;34m GaryOS Version:	\e[1;36m v0.0
-\e[1;34m GaryOS Release Date:	\e[1;36m 1970-01-01
+\e[1;34m ${_GNAME} Version:	\e[1;36m v0.0
+\e[1;34m ${_GNAME} Release Date:	\e[1;36m 1970-01-01
 \e[1;34m Funtoo Commit Date:	\e[1;36m 1970-01-01
 \e[1;34m Funtoo Commit:		\e[1;36m 0000000000000000000000000000000000000000
 \e[1;34m Linux Kernel:		\e[1;36m 0.0.0
 
 \e[1;37m For source code, documentation and issues...
 
-\e[1;34m GaryOS:		\e[1;36m github.com/garybgenett/gary-os
+\e[1;34m ${_GNAME}:		\e[1;36m github.com/garybgenett/gary-os
 \e[1;34m Funtoo Linux:		\e[1;36m funtoo.org
 \e[1;34m Gentoo Linux:		\e[1;36m gentoo.org
 
