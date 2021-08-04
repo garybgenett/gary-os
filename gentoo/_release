@@ -230,7 +230,7 @@ if ! ${DOTEST}; then
 fi
 
 declare PACKDIRS_SKIP="
-	$(ls ${TARGET}${LDIR}*/kernel/kheaders_data.tar.xz 2>/dev/null | ${SED} "s|^${TARGET}||g")
+	${LDIR}\*/kernel/kheaders_data.tar.xz
 "
 
 ########################################
