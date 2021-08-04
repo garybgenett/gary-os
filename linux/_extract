@@ -2,23 +2,16 @@
 source ${HOME}/.bashrc
 ################################################################################
 
-declare ISO="${1}" && shift
-declare KRN="${1}" && shift
-
-if [[ -z ${ISO} ]]; then
-	ISO="64"
-fi
-if [[ ! -f ${ISO} ]]; then
-	KRN="/boot/grml${ISO}full/vmlinuz"
-	ISO="$(ls -t /.g/_data/_target/iso/grml${ISO}-*.iso | head -n1)"
-fi
+ISO="$(ls /.g/_data/_target/iso/grml*.iso | tail -n1)"
+KRN="/boot/grml64full/vmlinuz"
 
 echo -en "ISO: ${ISO}\n"
 echo -en "KRN: ${KRN}\n"
 
 ########################################
 
-declare MNT="/mnt"
+declare MNT="/mnt/${SCRIPT}"
+${MKDIR} ${MNT}
 
 ################################################################################
 
