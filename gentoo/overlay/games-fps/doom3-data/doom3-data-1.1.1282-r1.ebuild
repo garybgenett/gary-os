@@ -18,11 +18,6 @@ RDEPEND="games-fps/doom3"
 S=${WORKDIR}
 
 src_install() {
-#>>>
-	if [ -d /tmp/doom3-disk1 ]; then export CD_ROOT_1="/tmp/doom3-disk1"; fi
-	if [ -d /tmp/doom3-disk2 ]; then export CD_ROOT_2="/tmp/doom3-disk2"; fi
-	if [ -d /tmp/doom3-disk3 ]; then export CD_ROOT_3="/tmp/doom3-disk3"; fi
-#>>>
 	cdrom_get_cds \
 		Setup/Data/base/pak002.pk4 \
 		Setup/Data/base/pak000.pk4 \

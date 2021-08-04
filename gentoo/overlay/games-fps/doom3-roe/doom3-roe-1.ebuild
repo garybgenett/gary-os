@@ -22,9 +22,6 @@ dir=${GAMES_PREFIX_OPT}/doom3
 Ddir=${D}/${dir}
 
 src_unpack() {
-#>>>
-	if [ -d /tmp/doom3_roe ]; then export CD_ROOT="/tmp/doom3_roe"; fi
-#>>>
 	cdrom_get_cds Setup/Data/d3xp/pak000.pk4
 	# Change from showing "d3xp" in the "mods" menu within Doom 3
 	# The ^1 changes the text to red

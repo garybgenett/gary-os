@@ -1,7 +1,2 @@
 removed package
-multilib
-https://gitweb.gentoo.org/repo/gentoo.git/tree/games-fps/doom3?id=2cbc325ac5ed8d419eda1b666862d5e0681fd93e
-emerge: there are no ebuilds built with USE flags to satisfy "games-fps/doom3[opengl,roe]".
-!!! One of the following packages is required to complete your request:
-- games-fps/doom3-1.3.1304-r1::overlay (Missing IUSE: opengl)
-(dependency required by "games-fps/doom3-mitm-20070129::overlay" [ebuild])
+-- doom3-1.3.1304-r1.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/games-fps/doom3?id=2cbc325ac5ed8d419eda1b666862d5e0681fd93e
