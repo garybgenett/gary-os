@@ -3,16 +3,11 @@
 
 EAPI=7
 
-#>>>inherit cmake
-inherit cmake git-r3
-#>>>
+inherit cmake
 
 DESCRIPTION="Tracks your time from the command line, and generates reports"
 HOMEPAGE="https://timewarrior.net"
-#>>>SRC_URI="https://github.com/GothenburgBitFactory/timewarrior/releases/download/v${PV}/${P}.tar.gz"
-EGIT_REPO_URI="https://github.com/GothenburgBitFactory/timewarrior.git"
-EGIT_COMMIT="v1.4.3"
-#>>>
+SRC_URI="https://github.com/GothenburgBitFactory/timewarrior/releases/download/v${PV}/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
