@@ -3,17 +3,12 @@
 
 EAPI=7
 
-#>>>inherit bash-completion-r1 cmake
-inherit bash-completion-r1 cmake git-r3
-#>>>
+inherit bash-completion-r1 cmake
 
 DESCRIPTION="Taskwarrior is a command-line todo list manager"
 HOMEPAGE="https://taskwarrior.org/"
-#>>>SRC_URI="https://github.com/GothenburgBitFactory/taskwarrior/releases/download/v${PV}/${P}.tar.gz
-#>>>	https://github.com/GothenburgBitFactory/taskwarrior/releases/download/v${PV}/tests-${PV}.tar.gz"
-EGIT_REPO_URI="https://github.com/GothenburgBitFactory/taskwarrior.git"
-EGIT_COMMIT="v2.5.3"
-#>>>
+SRC_URI="https://github.com/GothenburgBitFactory/taskwarrior/releases/download/v${PV}/${P}.tar.gz
+	https://github.com/GothenburgBitFactory/taskwarrior/releases/download/v${PV}/tests-${PV}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
@@ -44,13 +39,6 @@ src_configure() {
 	)
 
 	cmake_src_configure
-
-#>>>
-	# this is for versions 2.4.4 and earlier
-#>>>	epatch "${FILESDIR}"/0001-${P}-annotations-edit-fix.patch
-	# fetch latest holidata.net
-	(cd ./doc/rc && ./refresh)
-#>>>
 }
 
 src_test() {

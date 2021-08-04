@@ -1,9 +1,9 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit cmake-utils systemd user
+inherit cmake systemd
 
 DESCRIPTION="Server part of Taskwarrior, a command-line todo list manager"
 HOMEPAGE="https://taskwarrior.org/"
@@ -12,23 +12,28 @@ SRC_URI="https://taskwarrior.org/download/${P}.tar.gz"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
 
 DEPEND="
 	net-libs/gnutls:=
 	sys-apps/util-linux
-	sys-libs/readline:0="
-RDEPEND="${DEPEND}"
+	sys-libs/readline:0=
+"
+
+RDEPEND="
+	${DEPEND}
+	acct-group/taskd
+	acct-user/taskd
+"
 
 src_configure() {
 	local mycmakeargs=(
 		-DTASKD_DOCDIR=share/doc/${PF}
 	)
-	cmake-utils_src_configure
+	cmake_src_configure
 }
 
 src_install() {
-	cmake-utils_src_install
+	cmake_src_install
 
 	systemd_dounit "${S}"/scripts/systemd/taskd.service
 
@@ -62,11 +67,6 @@ src_install() {
 
 	insinto /etc/logrotate.d
 	newins "${FILESDIR}"/taskd.logrotate taskd
-}
-
-pkg_setup() {
-	enewgroup taskd
-	enewuser taskd -1 /bin/bash /var/lib/taskd taskd
 }
 
 pkg_postinst() {
