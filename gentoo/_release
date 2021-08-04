@@ -622,10 +622,7 @@ function prepare_config_issue {
 		declare VAL="$(echo "${FILE}" | ${SED} "s|^(.+)[|](.+)$|\2|g")"
 		${SED} -i "s|^(.*${KEY}[:].*[0-9]m ).*$|\1${VAL}|g"		${TARGET}/etc/issue	|| return 1
 	done
-	if {
-		[[ -z ${COMMIT} ]] ||
-		[[ ! -d ${_G_REPO} ]];
-	}; then
+	if [[ -z ${COMMIT} ]] || [[ ! -d ${_G_REPO} ]]; then
 		FILE=" "
 #>>>		FILE+="\\\e[1;45;37m"
 		FILE+="\\\e[0;35m"
@@ -854,7 +851,7 @@ function _prepare_repdir {
 	if [[ -z ${TARGET} ]]; then
 		return 0
 	fi
-	REP_FILE="${TARGET}${ARCDIR}/$(basename ${REPDIR})"
+	declare REP_FILE="${TARGET}${ARCDIR}/$(basename ${REPDIR})"
 	if [[ -f ${REP_FILE}.tar.xz ]] && [[ -f ${REP_FILE}.git.tar.xz ]]; then
 		${RSYNC_U} ${REP_FILE}.tar.xz			${TARGET}${REPDIR}.tar.xz		|| return 1
 		${RSYNC_U} ${REP_FILE}.git.tar.xz		${TARGET}${REPDIR}.git.tar.xz		|| return 1
@@ -977,10 +974,10 @@ function _prepare_packdirs {		#{isexit} #{doredo}
 
 #note: companion to the "release_fetch" function
 function _prepare_symlinks {		#{isexit} #{doredo}
-	REP_FILE="$(basename ${REPDIR})"
 	if [[ -z ${TARGET} ]]; then
 		return 0
 	fi
+	declare REP_FILE="$(basename ${REPDIR})"
 	${RM} $(find ${_FINAL} -maxdepth 1 -type l 2>/dev/null | sort)							|| return 1
 	if ${DOREDO}; then
 		return 0
