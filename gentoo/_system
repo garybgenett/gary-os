@@ -1170,18 +1170,22 @@ if [[ ${1} == -r ]]; then
 		requires_chroot "${@}"
 	fi
 	shift
-	${MKDIR}						${TARGET}${ARCDIR}				|| EXIT 1
+	if [[ ${1} != -! ]]; then
+		${MKDIR}					${TARGET}${ARCDIR}				|| EXIT 1
+	fi
 	if [[ -n ${COMMIT} ]]
 		#note: also doing this in "${MAKEIT}" script on purpose
 		then echo -en "${COMMIT}"			>${TARGET}/${CMTFIL}				|| EXIT 1
 		else ${RM}					${TARGET}/${CMTFIL}				|| EXIT 1
 	fi
-	if [[ -f ${SETDIR}/.bashrc ]]
+	if [[ ${1} != -! ]]; then
+		if [[ -f ${SETDIR}/.bashrc ]]
 		then ${RSYNC_U} --copy-links ${SETDIR}/.bashrc	${TARGET}${ARCDIR}/				|| EXIT 1
 		else ${RSYNC_U} --copy-links ${HOME}/.bashrc	${TARGET}${ARCDIR}/				|| EXIT 1
+		fi
+		${RSYNC_U} ${SETDIR}/${LINDIR}/			${TARGET}${ARCDIR}/${LINDIR}			|| EXIT 1
+		${RSYNC_U} ${SETDIR}/${FUNDIR}/			${TARGET}${ARCDIR}/${FUNDIR}			|| EXIT 1
 	fi
-	${RSYNC_U} ${SETDIR}/${LINDIR}/				${TARGET}${ARCDIR}/${LINDIR}			|| EXIT 1
-	${RSYNC_U} ${SETDIR}/${FUNDIR}/				${TARGET}${ARCDIR}/${FUNDIR}			|| EXIT 1
 	${RSYNC_C} ${SETDIR}/${FUNDIR}/[a-z]*			${TARGET}${ETCDIR}/				|| EXIT 1
 	${RSYNC_U} ${SETDIR}/${FUNDIR}/${LAYDIR}/		${TARGET}${ETCDIR}/${LAYDIR}			|| EXIT 1
 	${LN} ../${LAYDIR}/overlay.conf				${TARGET}${ETCDIR}/repos.conf/			|| EXIT 1
