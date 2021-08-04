@@ -1290,6 +1290,13 @@ if [[ ${1} == -i ]]; then
 		fi
 		expect_wrapper emerge ${_ASK}		\@module-rebuild --exclude "${LINPKG}"			|| EXIT 1
 	done; fi
+	if ${_GOS}; then
+		${RM}					${TARGET}/boot/_kernel					|| EXIT 1
+		${RM}					${TARGET}/boot/_initrd					|| EXIT 1
+		${RM}					${TARGET}/boot/_cur					|| EXIT 1
+		${RM}					${TARGET}/boot/_new					|| EXIT 1
+		${RM}					${TARGET}/boot/_old					|| EXIT 1
+	fi
 	if ${_CFG}; then
 		#note: these need to match the names in the "${MAKEIT}" script
 		${MAKEIT}_reset											|| EXIT 1
