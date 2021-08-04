@@ -2382,8 +2382,8 @@ function mount-robust {
 		fi
 		declare DEV_DIR=
 		if ! ${UN} ]]; then
-			${MKDIR} ${DIR}${DEV_DIR}
 			for DEV_DIR in ${DEV_DIRS[@]}; do
+				${MKDIR} ${DIR}${DEV_DIR}			|| return 1
 				${FUNCNAME} ${DEV_DIR} ${DIR}${DEV_DIR}		|| return 1
 			done
 		else
