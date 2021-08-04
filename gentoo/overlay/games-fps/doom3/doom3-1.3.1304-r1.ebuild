@@ -14,24 +14,18 @@ SRC_URI="mirror://idsoftware/doom3/linux/doom3-linux-${MY_PV}.x86.run
 LICENSE="DOOM3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-#>>>IUSE="cdinstall dedicated roe"
-IUSE="cdinstall dedicated roe opengl"
-#>>>
+IUSE="cdinstall dedicated roe"
 RESTRICT="bindist mirror strip"
 
 DEPEND="app-arch/bzip2
 	app-arch/tar"
-#>>>	amd64? ( sys-libs/glibc[multilib] )
-#>>>		>=virtual/opengl-7.0-r1[abi_x86_32(-)]
-#>>>		>=x11-libs/libX11-1.6.2[abi_x86_32(-)]
-#>>>		>=x11-libs/libXext-1.3.2[abi_x86_32(-)]
-#>>>		>=media-libs/alsa-lib-1.0.27.2[abi_x86_32(-)]
 RDEPEND="sys-libs/glibc
+	amd64? ( sys-libs/glibc[multilib] )
 	!dedicated? (
-		>=virtual/opengl-7.0-r1
-		>=x11-libs/libX11-1.6.2
-		>=x11-libs/libXext-1.3.2
-		>=media-libs/alsa-lib-1.0.27.2
+		>=virtual/opengl-7.0-r1[abi_x86_32(-)]
+		>=x11-libs/libX11-1.6.2[abi_x86_32(-)]
+		>=x11-libs/libXext-1.3.2[abi_x86_32(-)]
+		>=media-libs/alsa-lib-1.0.27.2[abi_x86_32(-)]
 	)
 	cdinstall? (
 		>=games-fps/doom3-data-1.1.1282-r1
