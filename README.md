@@ -1724,36 +1724,27 @@ Everything needed to perform these steps is in the [Repository] or the
 
 **Personal Build**
 
-  ```
-  Iterate {
-  ```
+**`Iterate {`**
 
-  * [ ] Until '@world', at least
-    * `make DOFAST=true doit`
+  * `make DOFAST=true doit`
     * [x] **Errors()**
-  * `vi ./build/_gentoo/+checks`
+  * `make gendir`
+    * `vi ./build/_gentoo/+checks`
 
-  ```
-  }
-  ```
+**`}`**
 
-  ```
-  Errors {
-  ```
+**`Errors {`**
 
-   * [ ] Until success
-     * `make <package atom>`
-         * [ ] Copy "gentoo browse" link to browser
-         * [ ] Copy "gitweb" link to browser
-     * `make overlay-<package atom|*/|>^<ebuild>^<commit>`
-         * `mkdir ./gentoo/overlay/<package atom>`
-         * `(cd _build/gentoo/gentoo; git-list -50 -l -- <package atom>)`
-         * `(cd _build/gentoo/gentoo; git-list -2 -- <package atom>/<ebuild>)`
-     * `make emerge-<package atom|/|%>`
+   * `make <package atom>`
+     * [ ] Copy "gentoo browse" link to browser
+     * [ ] Copy "gitweb" link to browser
+   * `make overlay-<package atom|*/|>^<ebuild>^<commit>`
+     * `mkdir ./gentoo/overlay/<package atom>`
+     * `(cd _build/gentoo/gentoo; git-list -50 -l -- <package atom>)`
+     * `(cd _build/gentoo/gentoo; git-list -2 -- <package atom>/<ebuild>)`
+   * `make emerge-<package atom|/|%>`
 
-  ```
-  }
-  ```
+**`}`**
 
   * `cd .setup/gentoo.make`
     * `(cd _builds; rm ./_gentoo.working; ln ../../_toor ./_gentoo.working)`
@@ -1775,6 +1766,7 @@ Everything needed to perform these steps is in the [Repository] or the
         * `(cd ./gentoo/overlay; ./.review -a)`
             * [ ] Review '.keep' packages
   * `make init`
+    * [ ] Until '@world', at least
     * [x] **Iterate()**
   * `vi ./linux/.options`
     * `rsync -L ./linux/.config /usr/src/linux-[...]/`
@@ -1793,8 +1785,7 @@ Everything needed to perform these steps is in the [Repository] or the
         * `rsync [...]/_root/{.runit,.setup} [...]/_toor/`
     * [ ] Boot to "_toor"
         * [ ] Smoke test for 2-3 weeks
-        * `make doit`
-          * [x] **Iterate()**
+        * [x] **Iterate()**
         * `_sync _sys _clone _full _setup`
     * [ ] Boot to "gary-os"
         * `_sync _sys _chroot [...]`
@@ -1808,46 +1799,48 @@ Everything needed to perform these steps is in the [Repository] or the
 
 **GaryOS Build**
 
-  ```
-  Validate { <kernel> <check> <option> <target>
-  ```
+**`Validate { <kernel> <check> <target> <option>`**
 
-  * `make` ${3} `DOREDO=true DOFAST=true doit` ${4} `devel`
-    * [ ] **Errors()**
-  * [ ] Target size of` ${1} `or less (` make check `=` ${2} `)
+  * `make` **`${4}`** `DOREDO=true DOFAST=true doit` **`${3}`**
+    * [x] **Iterate()**
+  * [ ] Target size of **`${1}`** or less (`make check` = **`${2}`**)
     * [ ] Command comments at bottom of [gentoo/package.use]
-        * `make` ${3} `depends-<package atom|/|%>`
-        * `make` ${3} `depgraph-<package atom|/|%>`
-        * `make` ${3} `belongs-<file path|/|%>`
-    * `make` ${3} `DOFAST=true DOTEST=true doit` ${4} `devel`
-        * `make` ${3} `DOTEST=true check`
-    * ${3} `./gentoo/_system -g -s -e -C pypy3 [...]`
-        * ${3} `./gentoo/_system -g -s -e [python packages]`
+        * `make` **`${4}`** `depends-<package atom|/|%>`
+        * `make` **`${4}`** `depgraph-<package atom|/|%>`
+        * `make` **`${4}`** `belongs-<file path|/|%>`
+    * `make` **`${4}`** `DOFAST=true doit` **`${3}`**
+        * `make` **`${4}`** `DOTEST=true check`
+    * **`<GOSPKG=${4}>?`** `./gentoo/_system -g -s -e -C pypy3 [...]`
+        * **`<GOSPKG=${4}>?`** `./gentoo/_system -g -s -e <python packages>`
     * `ll ./build/.gary-os-*`
-  * [ ] Command comments at bottom of [gentoo/make.conf]
+  * `make` **`${4}`** `gendir`
+    * [ ] Command comments at bottom of [gentoo/make.conf]
     * `vi ./build/_gentoo/+checks`
 
-  ```
-  }
-  ```
+**`}`**
 
   * `cd .setup/gentoo.gary-os`
-  * [x] **Validate( 220MB 300.0MiB DOMODS=true )**
+  * [x] **Validate( 220MB 300.0MiB DOMODS=true devel )**
     * [ ] No 'startx' in '/etc/issue'
-  * [x] **Validate( 750MB 1.2GiB )**
-    * `make ROOTFS=false devel`
-      * [ ] Test kernel size and root filesystem resize
-    * `make DOTEST=true devel`
-      * [ ] verify '#{rootfs}' markers
+  * [x] **Validate( 750MB 1.2GiB devel )**
+  * `make ROOTFS=false devel`
+    * [ ] Test kernel size and root filesystem resize
+  * `make DOTEST=true devel`
+    * [ ] Verify '#{rootfs}' markers
   * [x] **Validate( 1.5GB 3.0GiB P=\_gary-os rootfs )**
 
 **Test & Publish**
 
   * `cd .setup/gentoo.gary-os`
   * [x] [Checklist]
-    * `(cd _builds/.gary-os.release; ln ../_gary-os.working/.gary-os-* ./v#.#)`
+    * `(cd _builds/.gary-os.release; rm ./v#.#; ln ../_gary-os.working/.gary-os-* ./v#.#)`
+        * `make DOREDO=true _release_grub`
+        * `make _prepare_symlinks`
+        * `make _publish_release`
+    * `(cd _builds; rm ./_gary-os.boot; ln _gary-os.working ./_gary-os.boot)`
+        * `_sync boot`
+    * `make DOREDO=true DOTEST=true _release_grub`
   * [x] [Publish]
-    * `make clean`
 
 ### Checklist ##################################################################
 [Checklist]: #checklist
