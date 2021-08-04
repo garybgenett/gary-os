@@ -25,7 +25,13 @@ if [[ ${1} == -l ]]; then
 	shift
 	declare FILES=
 	declare FILE=
-	for FILE in $(find ./ | sort | ${GREP} "[/][.]rationale$"); do
+	for FILE in $(find ./ \
+			\( -path ./${ARCHIVE}/\* -prune \) \
+			-o -print \
+		| ${SED} "s|^[.][/]||g" \
+		| sort \
+		| ${GREP} "[/][.]rationale$" \
+	); do
 		FILE="${FILE/%\/.rationale}"
 		echo -en "\n[${FILE}] ($(
 			${LS} ${FILE}/.keep 2>/dev/null
@@ -46,14 +52,7 @@ fi
 
 if [[ ${1} == -a ]]; then
 	for FILE in $(
-		find ./${ARCHIVE} -mindepth 2 -maxdepth 2 -type d |
-		${SED} "s|^[.][/]||g" |
-		sort
-	) $(
-		find ./ -mindepth 2 -maxdepth 2 -type d \( \
-				\( -path ./${ARCHIVE}/\* -prune \) \
-				-o -print \
-			\) |
+		find ./ -mindepth 2 -maxdepth 2 -type d |
 		${SED} "s|^[.][/]||g" |
 		sort
 	); do
@@ -67,6 +66,7 @@ if [[ ${1} == -a ]]; then
 			${MV} ${FILE} ${ARCHIVE}/$(dirname ${FILE})
 		fi
 	done
+	${RM} $(find ./ -type d -empty)
 	exit 0
 fi
 
