@@ -1,31 +1,36 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit flag-o-matic linux-info linux-mod toolchain-funcs
+inherit autotools dist-kernel-utils flag-o-matic linux-mod toolchain-funcs
 
 DESCRIPTION="Linux ZFS kernel module for sys-fs/zfs"
-HOMEPAGE="https://zfsonlinux.org/"
+HOMEPAGE="https://github.com/openzfs/zfs"
 
 if [[ ${PV} == "9999" ]]; then
-	inherit autotools git-r3
-	EGIT_REPO_URI="https://github.com/zfsonlinux/zfs.git"
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/openzfs/zfs.git"
 else
-	SRC_URI="https://github.com/zfsonlinux/zfs/releases/download/zfs-${PV}/zfs-${PV}.tar.gz"
-	KEYWORDS=""
-	S="${WORKDIR}/zfs-${PV}"
-	ZFS_KERNEL_COMPAT="5.3"
+	VERIFY_SIG_OPENPGP_KEY_PATH=${BROOT}/usr/share/openpgp-keys/openzfs.asc
+	inherit verify-sig
+
+	MY_PV="${PV/_rc/-rc}"
+	SRC_URI="https://github.com/openzfs/zfs/releases/download/zfs-${MY_PV}/zfs-${MY_PV}.tar.gz"
+	SRC_URI+=" verify-sig? ( https://github.com/openzfs/zfs/releases/download/zfs-${MY_PV}/zfs-${MY_PV}.tar.gz.asc )"
+	S="${WORKDIR}/zfs-${PV%_rc?}"
+	ZFS_KERNEL_COMPAT="5.12"
+
+	if [[ ${PV} != *_rc* ]]; then
+		KEYWORDS="amd64 arm64 ppc64"
+	fi
 fi
 
-LICENSE="CDDL debug? ( GPL-2+ )"
-SLOT="0"
+LICENSE="CDDL MIT debug? ( GPL-2+ )"
+SLOT="0/${PVR}"
 IUSE="custom-cflags debug +rootfs"
 
-DEPEND=""
-
 RDEPEND="${DEPEND}
-	!sys-fs/zfs-fuse
 	!sys-kernel/spl
 "
 
@@ -34,13 +39,30 @@ BDEPEND="
 	virtual/awk
 "
 
+if [[ ${PV} != "9999" ]] ; then
+	BDEPEND+=" verify-sig? ( app-crypt/openpgp-keys-openzfs )"
+fi
+
+# PDEPEND in this form is needed to trick portage suggest
+# enabling dist-kernel if only 1 package have it set
+PDEPEND="dist-kernel? ( ~sys-fs/zfs-${PV}[dist-kernel] )"
+
 RESTRICT="debug? ( strip ) test"
 
 DOCS=( AUTHORS COPYRIGHT META README.md )
 
-pkg_setup() {
-	linux-info_pkg_setup
+pkg_pretend() {
+	use rootfs || return 0
 
+	if has_version virtual/dist-kernel && ! use dist-kernel; then
+		ewarn "You have virtual/dist-kernel installed, but"
+		ewarn "USE=\"dist-kernel\" is not enabled for ${CATEGORY}/${PN}"
+		ewarn "It's recommended to globally enable dist-kernel USE flag"
+		ewarn "to auto-trigger initrd rebuilds with kernel updates"
+	fi
+}
+
+pkg_setup() {
 	CONFIG_CHECK="
 		!DEBUG_LOCK_ALLOC
 		EFI_PARTITION
@@ -63,11 +85,7 @@ pkg_setup() {
 			DEVTMPFS
 	"
 
-	use arm64 && CONFIG_CHECK="${CONFIG_CHECK} !PREEMPT"
-
 	kernel_is -lt 5 && CONFIG_CHECK="${CONFIG_CHECK} IOSCHED_NOOP"
-
-	kernel_is -ge 2 6 32 || die "Linux 2.6.32 or newer required"
 
 	if [[ ${PV} != "9999" ]]; then
 		local kv_major_max kv_minor_max zcompat
@@ -77,23 +95,24 @@ pkg_setup() {
 		kv_minor_max="${zcompat%%.*}"
 		kernel_is -le "${kv_major_max}" "${kv_minor_max}" || die \
 			"Linux ${kv_major_max}.${kv_minor_max} is the latest supported version"
+
 	fi
 
-	check_extra_config
+	kernel_is -ge 3 10 || die "Linux 3.10 or newer required"
+
+	linux-mod_pkg_setup
 }
 
 src_prepare() {
 	default
 
-	if [[ ${PV} == "9999" ]]; then
-		eautoreconf
-	else
+	# Run unconditionally (bug #792627)
+	eautoreconf
+
+	if [[ ${PV} != "9999" ]]; then
 		# Set module revision number
 		sed -i "s/\(Release:\)\(.*\)1/\1\2${PR}-gentoo/" META || die "Could not set Gentoo release"
 	fi
-
-	# Remove GPLv2-licensed ZPIOS unless we are debugging
-	use debug || sed -e 's/^subdir-m += zpios$//' -i module/Makefile.in
 }
 
 src_configure() {
@@ -104,6 +123,8 @@ src_configure() {
 	filter-ldflags -Wl,*
 
 	local myconf=(
+		CROSS_COMPILE="${CHOST}-"
+		HOSTCC="$(tc-getBUILD_CC)"
 		--bindir="${EPREFIX}/bin"
 		--sbindir="${EPREFIX}/sbin"
 		--with-config=kernel
@@ -118,7 +139,11 @@ src_configure() {
 src_compile() {
 	set_arch_to_kernel
 
-	myemakeargs=( V=1 )
+	myemakeargs=(
+		CROSS_COMPILE="${CHOST}-"
+		HOSTCC="$(tc-getBUILD_CC)"
+		V=1
+	)
 
 	emake "${myemakeargs[@]}"
 }
@@ -127,9 +152,9 @@ src_install() {
 	set_arch_to_kernel
 
 	myemakeargs+=(
-		DEPMOD="/bin/true"
+		DEPMOD=:
 		DESTDIR="${D}"
-		INSTALL_MOD_PATH="${INSTALL_MOD_PATH:-$EROOT}"
+		INSTALL_MOD_PATH="${EPREFIX:-/}" # lib/modules/<kver> added by KBUILD
 	)
 
 	emake "${myemakeargs[@]}" install
@@ -149,12 +174,17 @@ pkg_postinst() {
 		rmdir --ignore-fail-on-non-empty "${EROOT}/lib/modules/${KV_FULL}/addon"
 	fi
 
+	if [[ -z ${ROOT} ]] && use dist-kernel; then
+		set_arch_to_portage
+		dist-kernel_reinstall_initramfs "${KV_DIR}" "${KV_FULL}"
+	fi
+
 	if use x86 || use arm; then
 		ewarn "32-bit kernels will likely require increasing vmalloc to"
 		ewarn "at least 256M and decreasing zfs_arc_max to some value less than that."
 	fi
 
-	ewarn "This version of ZFSOnLinux includes support for new feature flags"
+	ewarn "This version of OpenZFS includes support for new feature flags"
 	ewarn "that are incompatible with previous versions. GRUB2 support for"
 	ewarn "/boot with the new feature flags is not yet available."
 	ewarn "Do *NOT* upgrade root pools to use the new feature flags."
