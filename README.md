@@ -1866,9 +1866,9 @@ In progress for v5.0...
     * [ ] [Versions] section and release notes
     * [ ] [Kernel], [Rootfs] and [Boot] links
   * `make TOKN=[...] readme-github`
+    * `make DOTEST=true readme`
     * `make readme-all`
         * `pages ./GaryOS-Readme.html`
-    * `make DOTEST=true readme`
     * `aspell -c ./README.md`
         * `rm ./README.md.bak`
   * `make readme-clean`
@@ -1897,7 +1897,7 @@ In progress for v5.0...
 **Upload**
 
   * `cd .setup/gentoo.gary-os`
-  * `(cd _builds/.gary-os.release; rm ./v#.#)`
+    * `(cd _builds/.gary-os.release; rm ./v#.#)`
   * `make _publish_export`
     * `(cd _builds/.gary-os.release; ll ./ ./v#.#)`
   * `make _publish_release`
