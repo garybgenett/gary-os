@@ -1841,6 +1841,7 @@ Everything needed to perform these steps is in the [Repository] or the
         * `_sync boot`
     * `make DOREDO=true DOTEST=true _release_grub`
   * [x] [Publish]
+    * `make clean`
 
 ### Checklist ##################################################################
 [Checklist]: #checklist
