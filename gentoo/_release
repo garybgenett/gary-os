@@ -610,6 +610,13 @@ function _prepare_build {		#{doredo} #{dofast} #{dotest}
 
 ########################################
 
+function prepare_config_empty {
+	if [[ -n $(${GREP} "${_GNAME}" ${TARGET}/etc/{issue,mod} 2>/dev/null) ]]; then
+		return 1
+	fi
+	return 0
+}
+
 function prepare_config_issue {
 	declare FUNTOO_DATE="$(${SED} -n "s|^#.+([0-9]{4}-[0-9]{2}-[0-9]{2}).+(${FUNTOO/#* }).*$|\1|gp" ${SETDIR}/${FUNDIR}/${FUNCMT})"
 	${RSYNC_C} --copy-links ${ARTDIR}/files/issue				${TARGET}/etc/issue	|| return 1
@@ -708,7 +715,13 @@ function prepare_config_restore {	#>>>{doredo}
 
 #note: this is called statically in the "_system" script
 function _prepare_config {		#{isexit} #{doredo}
-	if [[ -z ${TARGET} ]]; then
+	if {
+		! ${DOREDO} &&
+		[[ -z ${TARGET} ]];
+	}; then
+		if ! prepare_config_empty; then
+			prepare_config_issue												|| return 1
+		fi
 		return 0
 	fi
 	#note: these are from the "prepare_config_issue" function above
@@ -1882,12 +1895,7 @@ function _release_unpack {		#{ismain} #{doredo} #{dotest}
 
 #note: this function is intentionally not in the right order of usage, for readability
 function release_install_live {
-	if [[ -n $(
-		${GREP} "${_GNAME}" \
-			${_GINST}/etc/issue \
-			${_GINST}/etc/motd \
-			2>/dev/null
-	) ]]; then
+	if ! TARGET="${_GINST}" prepare_config_empty; then
 		#note: cross-reference with the "prepare_docdir" function any time this changes
 		#note: cross-reference with the "release_unpack" function any time this changes
 		TARGET="${_GINST}" prepare_config_issue			|| return 1
