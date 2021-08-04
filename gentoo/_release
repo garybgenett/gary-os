@@ -15,6 +15,7 @@ fi
 #NOTE: SCRIPT NAME AND FUNCTION NAMES (${PREPIT}, ${MAKEIT}, ${SHIPIT}) MUST MATCH FOR "_SYSTEM" WRAPPING TO WORK
 #NOTE: UPDATE "#SETTINGS" LINES IN "_SYSTEM" SCRIPT WHEN THESE VARIABLES CHANGE
 
+export _GNAME="GaryOS"
 export _TITLE="gary-os"
 export _VERSN="v5.0"
 export _RDATE="$(date --iso=date)"
@@ -292,6 +293,7 @@ declare ROOTFS_FILES="
 /initrc
 "
 declare ROOTFS_FILE_VARS="
+_GNAME
 _TITLE
 _GOVLY
 _GUNPK
@@ -612,8 +614,8 @@ function prepare_config_issue {
 	declare FUNTOO_DATE="$(${SED} -n "s|^#.+([0-9]{4}-[0-9]{2}-[0-9]{2}).+(${FUNTOO/#* }).*$|\1|gp" ${SETDIR}/${FUNDIR}/${FUNCMT})"
 	${RSYNC_C} --copy-links ${ARTDIR}/files/issue				${TARGET}/etc/issue	|| return 1
 	for FILE in \
-		"GaryOS Version|${_VERSN}" \
-		"GaryOS Release Date|${_RDATE}" \
+		"${_GNAME} Version|${_VERSN}" \
+		"${_GNAME} Release Date|${_RDATE}" \
 		"Funtoo Commit Date|${FUNTOO_DATE}" \
 		"Funtoo Commit|${FUNTOO}" \
 		"Linux Kernel|${KVER}" \
@@ -1881,7 +1883,7 @@ function _release_unpack {		#{ismain} #{doredo} #{dotest}
 #note: this function is intentionally not in the right order of usage, for readability
 function release_install_live {
 	if [[ -n $(
-		${GREP} "GaryOS" \
+		${GREP} "${_GNAME}" \
 			${_GINST}/etc/issue \
 			${_GINST}/etc/motd \
 			2>/dev/null
@@ -2020,7 +2022,7 @@ function _publish_gitdir {		#{ismain}
 #		declare GIT_RUN="${GIT} --git-dir=${_DOCDIR}.git --work-tree=${_DOCDIR}"
 #		declare GIT_MSG="Automated update of \"TODO.md\" tasks list."
 #		cat /dev/null						>${_DOCDIR}/TODO.md
-#		echo -en "### GaryOS Tasks\n"				>>${_DOCDIR}/TODO.md
+#		echo -en "### ${_GNAME} Tasks\n"			>>${_DOCDIR}/TODO.md
 #		echo -en "\n"						>>${_DOCDIR}/TODO.md
 #		task sort \
 #			rc.verbose=nothing \
