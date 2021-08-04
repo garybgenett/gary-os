@@ -1669,7 +1669,7 @@ function _release_fetch {		#{ismain} #{doredo} #{dotest}
 	${MKDIR}							${FET_DST}					|| return 1
 	DOTEST="${DOTEST}" release_fetch_list				${FET_PKG}					|| return 1
 	for FILE in $(${GREP} -v "^[#]" ${FET_PKG}); do
-		if [[ -f						${FET_DST}/${FILE} ]]; then continue; fi
+#>>>		if [[ -f						${FET_DST}/${FILE} ]] && ! ${DOTEST}; then continue; fi
 		if [[ -f						${_FINAL}/${FILE} ]]
 		then ${RSYNC_U} --copy-links ${_FINAL}/${FILE}		${FET_DST}/					|| return 1
 		else ${WGET_C} --directory-prefix			${FET_DST}/ ${_SFDOWN}/${FILE}			|| return 1
