@@ -338,7 +338,9 @@ menuentry \"${_PROJ} Install Menu\" {
 }
 menuentry \"${_PROJ} Install Boot\" {
 	linux (\${garyos_install})/boot/kernel${GOPTS} root=${GCDEV} \${options_boot}
-	initrd (\${garyos_install})/boot/initrd
+	if [ -f \"(\${garyos_install})/boot/initrd\" ]; then
+		initrd (\${garyos_install})/boot/initrd
+	fi
 }
 
 ########################################
