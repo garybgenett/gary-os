@@ -1629,22 +1629,29 @@ function _release_report {
 
 ################################################################################
 
-function release_fetch_list {
+function release_fetch_list {		#>>>{dotest}
 	declare FET_PKG="${1}" && shift
-	if [[ ! -s ${FET_PKG} ]]; then
+	declare MASK="# "
+	if ${DOTEST}; then
+		MASK=
+	fi
+	if {
+		${DOTEST} ||
+		[[ ! -s ${FET_PKG} ]];
+	}; then
 		cat /dev/null					>${FET_PKG}
 		echo "${FET_BAS}.${_GREAD}"			>>${FET_PKG}
 		echo "${FET_BAS}.kernel"			>>${FET_PKG}
 		echo "${FET_BAS}.kernel.${_GPACK}"		>>${FET_PKG}
-		echo "# ${FET_BAS}.grub.zip"			>>${FET_PKG}
-		echo "# ${FET_BAS}.rootfs"			>>${FET_PKG}
-		echo "# ${FET_BAS}.rootfs.${_GPACK}"		>>${FET_PKG}
+		echo "${MASK}${FET_BAS}.grub.zip"		>>${FET_PKG}
+		echo "${MASK}${FET_BAS}.rootfs"			>>${FET_PKG}
+		echo "${MASK}${FET_BAS}.rootfs.${_GPACK}"	>>${FET_PKG}
 		shopt -s lastpipe
 		variable_parse PACKDIRS | while read -r FILE; do
-			echo "# $(common_packdir ${FILE})"	>>${FET_PKG}
+			echo "${MASK}$(common_packdir ${FILE})"	>>${FET_PKG}
 		done
 		shopt ${LASTPIPE} lastpipe
-		echo "# stage3-${ESUB}.tar.xz"			>>${FET_PKG}
+		echo "${MASK}stage3-${ESUB}.tar.xz"		>>${FET_PKG}
 	else
 		${SED} -i					\
 			-e "s|^[[:space:]]+||g"			\
@@ -1658,7 +1665,7 @@ function release_fetch_list {
 
 #note: companion to the "prepare_symlinks" function
 #note: also maps to the "release_unpack" function
-function _release_fetch {		#{ismain} #{doredo}
+function _release_fetch {		#{ismain} #{doredo} #{dotest}
 	declare FET_DST="./${_TITLE}"
 	declare FET_BAS="${_RAMFS/#${_FINAL}\/}"
 	declare FET_PKG="${FET_DST}/${FET_BAS}.${FUNCNAME/#${MAKEIT}_}"
@@ -1666,7 +1673,7 @@ function _release_fetch {		#{ismain} #{doredo}
 		${RM}							${FET_DST}/*					|| return 1
 	fi
 	${MKDIR}							${FET_DST}					|| return 1
-	release_fetch_list						${FET_PKG}					|| return 1
+	DOTEST="${DOTEST}" release_fetch_list				${FET_PKG}					|| return 1
 	for FILE in $(${GREP} -v "^[#]" ${FET_PKG}); do
 		if [[ -f						${FET_DST}/${FILE} ]]; then continue; fi
 		if [[ -f						${_FINAL}/${FILE} ]]
