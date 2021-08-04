@@ -1730,7 +1730,7 @@ Everything needed to perform these steps is in the [Repository] or the
 
   * [ ] Until '@world', at least
     * `make DOFAST=true doit`
-    * [ ] **Errors()**
+    * [x] **Errors()**
   * `vi ./build/_gentoo/+checks`
 
   ```
@@ -1747,8 +1747,8 @@ Everything needed to perform these steps is in the [Repository] or the
          * [ ] Copy "gitweb" link to browser
      * `make overlay-<package atom|*/|>^<ebuild>^<commit>`
          * `mkdir ./gentoo/overlay/<package atom>`
-         * `(cd _build/gentoo/gentoo ; git-list -50 -l -- <package atom>)`
-         * `(cd _build/gentoo/gentoo ; git-list -2 -- <package atom>/<ebuild>)`
+         * `(cd _build/gentoo/gentoo; git-list -50 -l -- <package atom>)`
+         * `(cd _build/gentoo/gentoo; git-list -2 -- <package atom>/<ebuild>)`
      * `make emerge-<package atom|/|%>`
 
   ```
@@ -1756,45 +1756,45 @@ Everything needed to perform these steps is in the [Repository] or the
   ```
 
   * `cd .setup/gentoo.make`
-    * `(cd _builds ; rm ./_gentoo.working ; ln ../../_toor ./_gentoo.working)`
-        * `(cd [...]/_toor ; rm {.[^.],}* ; ll)`
-        * `(cd _target/iso ; vi ./.urls ; ./.urls -f)`
-        * `(cd _build/funtoo/meta-repo ; git pull ; GIT_PAGER=cat git-list -n1)`
-        * `(cd _build/funtoo/meta-repo ; ll ./kits/core-kit/sys-kernel/gentoo-sources)`
-        * `(cd _build/funtoo/meta-repo ; ll ./kits/core-kit/sys-kernel/debian-sources)`
-    * `qemu-minion.bsh $(ls [...]/_target/iso/grml*.iso | tail -n1)`
+    * `(cd _builds; rm ./_gentoo.working; ln ../../_toor ./_gentoo.working)`
+        * `(cd _toor; rm {.[^.],}*; ll)`
+        * `(cd _target/iso; vi ./.urls; ./.urls -f)`
+        * `(cd _build/funtoo/meta-repo; git pull; GIT_PAGER=cat git-list -n1)`
+        * `(cd _build/funtoo/meta-repo; ll ./kits/core-kit/sys-kernel/gentoo-sources)`
+        * `(cd _build/funtoo/meta-repo; ll ./kits/core-kit/sys-kernel/debian-sources)`
+    * `./scripts/qemu-minion.bsh $(ls [...]/_target/iso/grml*.iso | tail -n1)`
         * `zcat /proc/config.gz >./linux/default-grml[...]`
         * `rsync ./linux/default-grml[...] ./linux/config-gentoo[...]`
-        * `rm ./linux/.config ; ln config-gentoo[...] ./linux/.config`
+        * `rm ./linux/.config; ln config-gentoo[...] ./linux/.config`
     * `vi ./gentoo/_funtoo`
         * `vi ./gentoo/sets/*`
             * [ ] [Linux Kernel] versions
             * [ ] Review
         * `vi ./gentoo/packages.*`
             * [ ] Comment all 'gentoo required'
-        * `(cd ./gentoo/overlay ; ./.review -a)`
+        * `(cd ./gentoo/overlay; ./.review -a)`
             * [ ] Review '.keep' packages
   * `make init`
-    * [ ] **Iterate()**
+    * [x] **Iterate()**
   * `vi ./linux/.options`
     * `rsync -L ./linux/.config /usr/src/linux-[...]/`
-    * `(cd ./build/usr/src/linux-[...] ; make menuconfig)`
+    * `(cd ./build/usr/src/linux-[...]; make menuconfig)`
     * `rsync /usr/src/linux-[...]/.config ./linux/config-gentoo[...]`
   * `make doit`
-    * [ ] **Iterate()**
+    * [x] **Iterate()**
   * `make redo`
-    * [ ] **Iterate()**
+    * [x] **Iterate()**
     * `make doit`
-    * `(cd _builds ; rsync ../../_toor/ ./_gary-os.working)`
+    * `(cd _builds; rsync ../../_toor/ ./_gary-os.working)`
   * `make edit`
-    * `(cd _builds ; rm ./_gentoo.working ; ln _gentoo ./_gentoo.working)`
-    * `(cd _builds ; rsync ../../_toor/ ./_gentoo)`
+    * `(cd _builds; rm ./_gentoo.working; ln _gentoo ./_gentoo.working)`
+    * `(cd _builds; rsync ../../_toor/ ./_gentoo)`
     * [ ] Boot to "gary-os"
         * `rsync [...]/_root/{.runit,.setup} [...]/_toor/`
     * [ ] Boot to "_toor"
         * [ ] Smoke test for 2-3 weeks
         * `make doit`
-          * [ ] **Iterate()**
+          * [x] **Iterate()**
         * `_sync _sys _clone _full _setup`
     * [ ] Boot to "gary-os"
         * `_sync _sys _chroot [...]`
@@ -1803,7 +1803,7 @@ Everything needed to perform these steps is in the [Repository] or the
         * `ego sync --commit $(tail -n1 ./gentoo/_funtoo | cut -d' ' -f2)`
         * `diff -r ./build/var/git/meta-repo /var/git/meta-repo`
   * `make doit`
-    * `(cd .setup ; git-commit ./gentoo)`
+    * `(cd .setup; git-commit ./gentoo)`
     * `_sync _sys _clone _full _setup`
 
 **GaryOS Build**
@@ -1832,21 +1832,21 @@ Everything needed to perform these steps is in the [Repository] or the
   ```
 
   * `cd .setup/gentoo.gary-os`
-  * [ ] **Validate( 220MB 300.0MiB DOMODS=true )**
+  * [x] **Validate( 220MB 300.0MiB DOMODS=true )**
     * [ ] No 'startx' in '/etc/issue'
-  * [ ] **Validate( 750MB 1.2GiB )**
+  * [x] **Validate( 750MB 1.2GiB )**
     * `make ROOTFS=false devel`
       * [ ] Test kernel size and root filesystem resize
     * `make DOTEST=true devel`
       * [ ] verify '#{rootfs}' markers
-  * [ ] **Validate( 1.5GB 3.0GiB P=\_gary-os rootfs )**
+  * [x] **Validate( 1.5GB 3.0GiB P=\_gary-os rootfs )**
 
 **Test & Publish**
 
   * `cd .setup/gentoo.gary-os`
-  * [Checklist]
-    * `(cd _builds/.gary-os.release ; ln ../_gary-os.working/.gary-os-* ./v#.#)`
-  * [Publish]
+  * [x] [Checklist]
+    * `(cd _builds/.gary-os.release; ln ../_gary-os.working/.gary-os-* ./v#.#)`
+  * [x] [Publish]
     * `make clean`
 
 ### Checklist ##################################################################
@@ -1876,30 +1876,30 @@ In progress for v5.0...
 **Commit**
 
   * `cd .setup/gentoo.gary-os`
-  * `(cd coding/gary-os ; git-commit -m "Stamped v#.# release." ./README.md)`
+  * `(cd coding/gary-os; git-commit -m "Stamped v#.# release." ./README.md)`
   * `make _publish_gitdir`
-    * `(cd _builds/.gary-os/.gary-os ; GIT_PAGER=cat git-list -n1)`
+    * `(cd _builds/.gary-os/.gary-os; GIT_PAGER=cat git-list -n1)`
   * `make DOREDO=true doit release`
     * `cat ./build/etc/issue ./build/etc/motd ./build/_commit`
-    * `for FILE in coding/gary-os .setup .static ; do (cd ${FILE} ; GIT_PAGER=cat git-list -n1) ; done`
-    * `(cd ./build/.gary-os ; GIT_PAGER=cat git-list -n1)`
+    * `for FILE in coding/gary-os .setup .static; do (cd ${FILE}; GIT_PAGER=cat git-list -n1); done`
+    * `(cd ./build/.gary-os; GIT_PAGER=cat git-list -n1)`
   * `make DOREDO=true P=_gary-os doit rootfs`
     * `make _publish_prep`
-    * `ll ./build/ ./build/.gary-os-\*`
-  * `(cd _builds ; rsync -L ./_gary-os.working/.gary-os-\*/ ./_gary-os)`
-    * `(cd _builds/_gary-os ; git-backup \<funtoo commit\>.# ; GIT_PAGER=cat git-list -n1)`
-    * `(cd .setup ; vi gentoo/_release ; git-commit -m "Published v#.# release." gentoo/_release)`
+    * `ll ./build/ ./build/.gary-os-*`
+  * `(cd _builds; rsync -L ./_gary-os.working/.gary-os-*/ ./_gary-os)`
+    * `(cd _builds/_gary-os; git-backup <funtoo commit>.#; GIT_PAGER=cat git-list -n1)`
+    * `(cd .setup; vi gentoo/_release; git-commit -m "Published v#.# release." gentoo/_release)`
   * `make _publish_gitdir`
-    * `(cd _builds/.gary-os/.gary-os ; GIT_PAGER=cat git-list -n3)`
-    * `(cd _builds/.gary-os/.gary-os ; GIT_PAGER=cat git tag -l)`
+    * `(cd _builds/.gary-os/.gary-os; GIT_PAGER=cat git-list -n3)`
+    * `(cd _builds/.gary-os/.gary-os; GIT_PAGER=cat git tag -l)`
     * `./.validate`
 
 **Upload**
 
   * `cd .setup/gentoo.gary-os`
-  * `(cd _builds/.gary-os.release ; rm ./v#.#)`
+  * `(cd _builds/.gary-os.release; rm ./v#.#)`
   * `make _publish_export`
-    * `(cd _builds/.gary-os.release ; ll ./ ./v#.#)`
+    * `(cd _builds/.gary-os.release; ll ./ ./v#.#)`
   * `make _publish_release`
   * <https://sourceforge.net/projects/gary-os>
     * [ ] Verify page information
@@ -1912,7 +1912,7 @@ In progress for v5.0...
 
   * `cd .setup/gentoo.make`
   * `make doit`
-  * `(cd _builds/_gentoo ; git-backup "gary-os v#.#" ; GIT_PAGER=cat git-list -n1)`
+  * `(cd _builds/_gentoo; git-backup "gary-os v#.#"; GIT_PAGER=cat git-list -n1)`
 
 **Celebrate**
 
@@ -1920,7 +1920,7 @@ In progress for v5.0...
     * `make TOKN=[...] DOMODS=true DOREDO=true readme-github`
     * `make TOKN=[...] DOMODS=true readme-github`
   * <https://github.com/garybgenett/gary-os/graphs/traffic>
-    * [steady stream of downloads]
+    * [x] [steady stream of downloads]
     * [ ] Downloads_2014-02_to_XXXX-XX.csv
 
 --------------------------------------------------------------------------------
