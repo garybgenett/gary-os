@@ -24,6 +24,10 @@ PDEPEND=">=dev-python/appi-0.2[${PYTHON_USEDEP}]
 dev-python/mwparserfromhell[${PYTHON_USEDEP}]
 dev-python/requests[${PYTHON_USEDEP}]"
 
+#>>>
+PATCHES=( "${FILESDIR}"/add-commit-option-to-ego-sync.2.7.4-r1.patch )
+#>>>
+
 src_unpack() {
 	unpack ${A}
 	mv "${WORKDIR}/${GITHUB_USER}-${PN}"-??????? "${S}" || die
