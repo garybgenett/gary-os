@@ -1,3 +1,4 @@
+#>>> original version: sys-fs/zfs-0.8.1 sys-fs/zfs-kmod-0.8.1
 posterity and rescue
 https://github.com/openzfs/zfs/issues/9849
-https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-kernel/spl?id=fc82e51c0512403e2a7ce8b811d4e3534b55caea
+-- spl-0.7.13.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-kernel/spl?id=fc82e51c0512403e2a7ce8b811d4e3534b55caea
