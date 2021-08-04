@@ -259,8 +259,8 @@ Both the GaryOS [Kernel] and the GRUB 'x86_64.efi' file in [Boot] (see [GRUB])
 are EFI applications, and can be used directly from an EFI menu on an
 appropriate partition.
 
-Booting from either of these files with EFI is supported, but the necessary EFI
-configuration/steps are not tested or supported.
+Booting from either of these files with EFI is tested and supported, but the
+necessary EFI configuration/steps are not.
 
 ### PXE ########################################################################
 [PXE]: #pxe
