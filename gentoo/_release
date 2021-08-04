@@ -1927,39 +1927,44 @@ function release_install_root {
 
 function release_install_boot {
 	declare DEVICE="$(findmnt --noheadings --output SOURCE --target ${_GINST})"
-	mount-robust --dev				${_GINST}			|| return 1
-	chroot ${_GINST} boot-update --verbose						|| return 1
-	mount-robust -u --dev				${_GINST}			|| return 1
-	${SED} -i \
-		-e "s|([[:space:]])[/](kernel\|init)|\1/boot/\2|g" \
-		-e "s|(real_root=)[^[:space:]]+|\1${DEVICE} root=${DEVICE}|g" \
-							${_GINST}/boot/grub/grub.cfg	|| return 1
-	${SED} -i \
-		-e "s|^([^#].+)$|#\1|g" \
-		-e "s|^(.+)([[:space:]][/][[:space:]])|${DEVICE}\2|g" \
-							${_GINST}/etc/fstab		|| return 1
+	declare UPDATE="ego boot --verbosity 2 --check update"
+	${RSYNC_U} ${TARGET}/etc/fstab	${_GINST}/etc/fstab				|| return 1
+	${SED} -i									\
+		-e "s|^([^#].+)$|#\1|g"							\
+		-e "s|^([^[:space:]]+)([[:space:]]+[/][[:space:]])|${DEVICE}\2|g"	\
+					${_GINST}/etc/fstab				|| return 1
+	mount-robust --dev		${_GINST}					|| return 1
+	${MKDIR}			${_GINST}/boot/grub				|| return 1
+	chroot				${_GINST} grub-mkconfig -o /boot/grub/grub.cfg	|| return 1
+	chroot				${_GINST} ${UPDATE}				|| return 1
+	mount-robust -u --dev		${_GINST}					|| return 1
 	echo -en "\n"
 	echo -en ">>> EVERYTHING FOR THE GRUB BOOTLOADER SHOULD BE PROPERLY CONFIGURED <<<\n"
-	echo -en ">>> THE ROOT FILESYSTEM SHOULD BE VERIFIED/UPDATED IN THE BOOT FILES <<<\n"
+	echo -en ">>> THE ROOT FILESYSTEM SHOULD BE VERIFIED OR UPDATED IN THE BOOT FILES <<<\n"
 	echo -en "\n"
 	${LL}										\
-							${_GINST}/boot/grub/grub.cfg	\
-							${_GINST}/etc/fstab
+					${_GINST}/boot/grub/grub.cfg			\
+					${_GINST}/etc/fstab
 	echo -en "\n"
 	echo -en ">>> IF GRUB IS NOT ALREADY INSTALLED BY THE (GRUB.SH) SCRIPT OR ANOTHER SOURCE <<<\n"
 	echo -en ">>> AND THERE IS NO OTHER BOOLOADER SET UP, EXAMPLES OF NECESSARY STEPS ARE BELOW <<<\n"
 	echo -en "\n"
 	#note: cross-reference with "grub.sh" script
-	echo -en "declare GRUB_INST=\"grub-install --verbose --removable --skip-fs-probe\"\n"
+#>>>	echo -en "declare GRUB_INST=\"grub-install --verbose --removable --skip-fs-probe\"\n"
+	echo -en "declare GRUB_INST=\"grub-install --removable --skip-fs-probe\"\n"
 	echo -en "declare GRUB_DISK=\"$(echo "${DEVICE}" | ${SED} "s|p?[0-9]+$||g")\"\n"
 	echo -en "declare GRUB_PART_EFI=\"3\"\n"
+	echo -en "./.bashrc mount-robust --dev ${_GINST}\n"
 	echo -en "mount \${GRUB_DISK}\${GRUB_PART_EFI} ${_GINST}/mnt\n"
-	echo -en "GRUB_PLAT=\"i386-pc\"; \${GRUB_INST} --target=\"\${GRUB_PLAT}\" --directory=\"${_GINST}/usr/lib/grub/\${GRUB_PLAT}\" --boot-directory=\"${_GINST}/boot\" \${GRUB_DISK}\n"
-	echo -en "GRUB_PLAT=\"x86_64-efi\"; \${GRUB_INST} --target=\"\${GRUB_PLAT}\" --directory=\"${_GINST}/usr/lib/grub/\${GRUB_PLAT}\" --efi-directory=\"${_GINST}/mnt\" \${GRUB_DISK}\n"
+	echo -en "chroot ${_GINST} \${GRUB_INST} --target=\"i386-pc\" --boot-directory=\"/boot\" \${GRUB_DISK}\n"
+	echo -en "chroot ${_GINST} \${GRUB_INST} --target=\"x86_64-efi\" --efi-directory=\"/mnt\" \${GRUB_DISK}\n"
 	echo -en "chroot ${_GINST} grub-mkconfig -o /boot/grub/grub.cfg\n"
+	echo -en "chroot ${_GINST} ${UPDATE}\n"
+	echo -en "umount ${_GINST}/mnt\n"
+	echo -en "./.bashrc mount-robust -u --dev ${_GINST}\n"
 	echo -en "\n"
 	echo -en ">>> THE BOOTLOADER CONFIGURATION AND INSTALLATION IS YOUR RESPONSIBILITY <<<\n"
-	echo -en ">>> IT IS NOT SUPPORTED DUE TO THE COMPLEXITY AND VARIABLES INVOLVED <<<\n"
+	echo -en ">>> IT IS NOT AUTOMATED DUE TO THE COMPLEXITY AND VARIABLES INVOLVED <<<\n"
 	echo -en "\n"
 	return 0
 }
