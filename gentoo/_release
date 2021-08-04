@@ -259,8 +259,6 @@ declare ROOTFS_SHELL="/bin/sh"
 
 #note: update the "#{rootfs}" markers in "sets/gary-os" whenever "$rootfs_utils" changes
 #note: verify accuracy using "${dotest}" in the "release_rootfs_cpio" function
-declare ROOTFS_DIRTREE_PKG="$(ls ${TARGET}${PAKDIR}/sys-apps/baselayout-[.0-9]*.tbz2 2>/dev/null | sort | tail -n1)"
-declare ROOTFS_DIRTREE=""
 declare ROOTFS_UTILS="
 ${ROOTFS_BASH}
 \
@@ -1157,10 +1155,6 @@ function release_rootfs_cpio {		#>>>{dotest}
 		ROOTFS_DEST="${1}" && shift
 	fi
 	${RM}						${ROOTFS_DEST}.dir				|| return 1
-#>>>	tar -xvvf ${ROOTFS_DIRTREE_PKG} --directory	${ROOTFS_DEST}.dir				|| return 1
-	for FILE in ${ROOTFS_DIRTREE}; do
-		${MKDIR}				${ROOTFS_DEST}.dir${FILE}			|| return 1
-	done
 	${MKDIR}					${ROOTFS_DEST}.dir/dev				|| return 1
 	realdev						${ROOTFS_DEST}.dir/dev				|| return 1
 	release_rootfs_cpio_tools			${ROOTFS_DEST}					|| return 1
