@@ -1212,8 +1212,10 @@ if [[ ${1} == -i ]]; then
 		fi
 		${MKDIR}				${TARGET}${ARCDIR}					|| EXIT 1
 		${RSYNC_U} ${SOURCE}/stage3-*		${TARGET}${ARCDIR}/					|| EXIT 1
-		FILE="$(basename $(ls			${TARGET}${ARCDIR}/stage3-${ESUB}-*.tar.xz		| tail -n1))"
-		${LN} ${FILE}				${TARGET}${ARCDIR}/stage3-${ESUB}.tar.xz		|| EXIT 1
+		FILE="$(basename $(ls			${TARGET}${ARCDIR}/stage3-${ESUB}*.tar.xz		| tail -n1))"
+		if [[ ${FILE} != stage3-${ESUB}.tar.xz ]]; then
+			${LN} ${FILE}			${TARGET}${ARCDIR}/stage3-${ESUB}.tar.xz		|| EXIT 1
+		fi
 		tar -pvvx --xz -C ${TARGET} -f		${TARGET}${ARCDIR}/stage3-${ESUB}.tar.xz		|| EXIT 1
 	fi
 	shift
