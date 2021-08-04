@@ -706,6 +706,9 @@ function prepare_config_restore {	#>>>{doredo}
 
 #note: this is called statically in the "_system" script
 function _prepare_config {		#{isexit} #{doredo}
+	if [[ -z ${TARGET} ]]; then
+		return 0
+	fi
 	#note: these are from the "prepare_config_issue" function above
 	DOREDO="${DOREDO}" prepare_config_restore sys-apps/baselayout		/etc/issue						|| return 1
 	DOREDO="${DOREDO}" prepare_config_restore "null"			/etc/motd						|| return 1
