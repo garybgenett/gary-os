@@ -651,7 +651,7 @@ function requires_chroot {
 	echo -en ">>> IT CAN BE RUN AGAINST ROOT(/) USING THE (-g)(GOSDIR=/) OPTIONS <<<\n"
 	echo -en ">>> CURRENTLY USING (${TOOR}) CHROOT OPTION AND (${C_TARGET}) DIRECTORY <<<\n"
 	echo -en "\n"
-	${_SOUL} ${DEBUG_OPT} 2>&1 | ${GREP} " ${C_OPTION}"
+	TOOR= ${_SOUL} ${DEBUG_OPT} 2>&1 | ${GREP} " ${C_OPTION}"
 	echo -en "\n"
 	EXIT 1
 }
