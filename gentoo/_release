@@ -1893,8 +1893,10 @@ function release_install_live {
 function release_install_root {
 	eval ${RSYNC_U} \
 		--one-file-system \
-		--filter="-_/.${_TITLE}*" \
+		--filter="-_/${_TITLE}" \
+		--filter="P_/${_TITLE}" \
 		--filter="-_/_${_TITLE}*" \
+		--filter="-_/.${_TITLE}*" \
 		--filter="-_/.${_GPACK/%.txt}*" \
 		$(variable_parse SKIPDIRS_GOS	"" "--filter=\"-_" "\"") \
 		$(variable_parse DEVDIRS	"" "--filter=\"-_" "/*\"") \
@@ -1939,7 +1941,7 @@ function release_install_boot {
 	echo -en "chroot ${_GINST} grub-mkconfig -o /boot/grub/grub.cfg\n"
 	echo -en "\n"
 	echo -en ">>> THE BOOTLOADER CONFIGURATION AND INSTALLATION IS YOUR RESPONSIBILITY <<<\n"
-	echo -en ">>> DUE TO THE COMPLEXITY AND VARIABLES INVOLVED, AND IS NOT SUPPORTED <<<\n"
+	echo -en ">>> IT IS NOT SUPPORTED DUE TO THE COMPLEXITY AND VARIABLES INVOLVED <<<\n"
 	echo -en "\n"
 	return 0
 }
