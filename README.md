@@ -725,6 +725,7 @@ a simple two-step process.
 
   | Target  | Action
   |:---     |:---
+  | reset   | Reset the Portage configuration to 'packages' default
   | update  | Update the [meta-repo] package repository and 'emerge' databases
   | upgrade | Upgrade the system to the current packages and configuration
 
