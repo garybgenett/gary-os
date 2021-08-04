@@ -1204,7 +1204,7 @@ function release_rootfs_file {
 		done;										if ${SKIP}; then echo "${FILE/#\./dev}"; fi
 	done				>>${ROOTFS_DEST}.exclude				|| return 1
 	${RM}				${TARGET}/tmp/${_TITLE}.dev				|| return 1
-	mk${ROOTFS_TYPE} ${TARGET}	${ROOTFS_DEST} ${ROOTFS_OPTS} ${ROOTFS_DEST}.exclude	|| return 1
+	mk${ROOTFS_TYPE} ${TARGET:-/}	${ROOTFS_DEST} ${ROOTFS_OPTS} ${ROOTFS_DEST}.exclude	|| return 1
 	un${ROOTFS_TYPE} -lls		${ROOTFS_DEST} >${ROOTFS_DEST}.txt			|| return 1
 	return 0
 }
