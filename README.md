@@ -4,7 +4,7 @@
 
 | ![GaryOS Icon](artifacts/images/icon.png "GaryOS Icon") | "The one file that does it all."
 |:---      |:---
-| Latest   | [v4.0 2021-07-26] -- [Kernel] / [Rootfs] / [Boot]
+| Latest   | [v5.0 2021-08-04] -- [Kernel] / [Rootfs] / [Boot]
 | Homepage | <https://github.com/garybgenett/gary-os>
 | Download | <https://sourceforge.net/projects/gary-os>
 
@@ -23,7 +23,7 @@
 | [Project]  | [References] / [Contributions] / [Contributing] / [Licensing]
 | [Details]  | [Versioning] / [Repository] / [Tools] / [Ecosystem]
 | [Release]  | [Process] / [Checklist] / [Publish]
-| [Versions] | [v4.0 2021-07-26] / [v3.0 2015-03-16] / [v2.0 2014-06-19] / [(...)](#v11-2014-03-13)
+| [Versions] | [v5.0 2021-08-04] / [v4.0 2021-07-26] / [v3.0 2015-03-16] / [(...)](#v20-2014-06-19)
 
 [Gary B. Genett]: http://www.garybgenett.net
 [gary-os@garybgenett.net]: mailto:gary-os@garybgenett.net?subject=GaryOS%20Submission&body=Thank%20you%20for%20sending%20a%20message%21
@@ -2104,9 +2104,45 @@ Everything needed to perform these steps is in the [Repository] or the
 [Distfiles]: https://sourceforge.net/projects/gary-os/files/_distfiles
 [Packages]: https://sourceforge.net/projects/gary-os/files/_packages
 
-[Kernel]: https://sourceforge.net/projects/gary-os/files/gary-os-v4.0-generic_64.kernel
-[Rootfs]: https://sourceforge.net/projects/gary-os/files/gary-os-v4.0-generic_64.rootfs
-[Boot]: https://sourceforge.net/projects/gary-os/files/gary-os-v4.0-generic_64.grub.zip
+[Kernel]: https://sourceforge.net/projects/gary-os/files/gary-os-v5.0-generic_64.kernel
+[Rootfs]: https://sourceforge.net/projects/gary-os/files/gary-os-v5.0-generic_64.rootfs
+[Boot]: https://sourceforge.net/projects/gary-os/files/gary-os-v5.0-generic_64.grub.zip
+
+### v5.0 2021-08-04 ############################################################
+[v5.0 2021-08-04]: #v50-2021-08-04
+[v5.0]: #v50-2021-08-04
+
+  **[Repository](https://github.com/garybgenett/gary-os/tree/v5.0)
+  / [Readme](https://github.com/garybgenett/gary-os/blob/v5.0/README.md)
+  / [License](https://github.com/garybgenett/gary-os/blob/v5.0/LICENSE.md)
+  / [Packages (Kernel)](https://github.com/garybgenett/gary-os/blob/v5.0/packages.txt)
+  / [Packages (Rootfs)](https://github.com/garybgenett/gary-os/blob/v5.0/packages.rootfs.txt)**
+
+  |                | |
+  |:---            |:---
+  | Kernel         | [gary-os-v5.0-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v5.0-generic_64.kernel)
+  | Rootfs         | [gary-os-v5.0-generic_64.rootfs](https://sourceforge.net/projects/gary-os/files/gary-os-v5.0-generic_64.rootfs)
+  | Boot           | [gary-os-v5.0-generic_64.grub.zip](https://sourceforge.net/projects/gary-os/files/gary-os-v5.0-generic_64.grub.zip)
+  | Source Stage3  | [stage3-generic_64-1.4-release-std-2019-10-28.tar.xz](https://sourceforge.net/projects/gary-os/files/v5.0/stage3-generic_64-1.4-release-std-2019-10-28.tar.xz)
+  | Source Portage | [gary-os-v5.0-generic_64.meta-repo.tar.xz](https://sourceforge.net/projects/gary-os/files/v5.0/gary-os-v5.0-generic_64.meta-repo.tar.xz)
+
+  * Overall
+    * Unification of personal and public builds!
+    * Formalized development process and release checklist
+    * Improved [Linux initramfs] overlay in [Kernel]
+    * Included [Ego] configuration into [gentoo/sets/]
+    * Additional development helpers in [Makefile]
+    * Achieved pure 64-bit
+  * [Portage]
+    * Improved [meta-repo] set in [gentoo/_funtoo.kits]
+    * Overhauled [gentoo/sets/] and [gentoo/overlay/]
+    * Streamlined [gentoo/overlay/] management
+    * Complete debug stripping of packages
+    * Tightened up [gentoo/sets/] lists
+    * Ongoing Python management
+    * Added ZFS support
+  * [GRUB]
+    * Minor improvements and fixes
 
 ### v4.0 2021-07-26 ############################################################
 [v4.0 2021-07-26]: #v40-2021-07-26
