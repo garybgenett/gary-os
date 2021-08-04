@@ -1335,7 +1335,7 @@ if [[ ${1} == -w ]]; then
 	ego profile mix-ins ${MIXINS}				|| EXIT 1
 	ego profile show
 	if [[ -n "$(which gcc-config 2>/dev/null)" ]]; then
-		gcc-config $(gcc-config --list-profiles				| ${SED} -n "s|^.*[[][0-9]+[]][[:space:]]+([^[:space:]]+).*$|\1|gp" | sort -uV | tail -n1)
+		gcc-config --force $(gcc-config --list-profiles			| ${SED} -n "s|^.*[[][0-9]+[]][[:space:]]+([^[:space:]]+).*$|\1|gp" | sort -uV | tail -n1)
 		gcc-config --list-profiles
 	fi
 	if [[ -n "$(which java-config 2>/dev/null)" ]]; then
