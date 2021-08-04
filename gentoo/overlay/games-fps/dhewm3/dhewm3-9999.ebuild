@@ -1,11 +1,11 @@
-EAPI=5
+EAPI=7
 inherit git-r3
 
 DESCRIPTION="Source port of the original Doom3"
 HOMEPAGE="https://dhewm3.org/"
-# 2020-08-02 04:48:11 +0200 c4c72363523fc65e635c7ad7ae86247b4f082340 Fix "t->c->value.argSize == func->parmTotal" Assertion in Scripts, #303
+# 2021-07-19 17:09:36 +0200 981863788f6d9cfb0ce4bb628c2df40306ba459a Update Changelog
 EGIT_REPO_URI="https://github.com/dhewm/dhewm3"
-EGIT_COMMIT="c4c72363523fc65e635c7ad7ae86247b4f082340"
+EGIT_COMMIT="981863788f6d9cfb0ce4bb628c2df40306ba459a"
 
 LICENSE="GPL-3"
 SLOT="0"
