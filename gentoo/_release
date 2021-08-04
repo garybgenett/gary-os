@@ -763,6 +763,7 @@ function _prepare_config {		#{isexit} #{doredo}
 
 #note: cross-reference with the "release_install" function any time this changes
 function _prepare_docdir {		#{dotest}
+	declare G_REPO_GIT="${_G_REPO}.git"
 	declare G_REPO_SRC="${_G_REPO}"
 	declare G_REPO_OPT=
 	if [[ -n ${COMMIT} ]] && [[ -d ${_G_REPO} ]]; then
@@ -777,6 +778,7 @@ function _prepare_docdir {		#{dotest}
 		[[ -s ${SETDIR}/.gitignore ]] &&
 		[[ -s ${SETDIR}/Makefile ]];
 	}; then
+		G_REPO_GIT="${SETDIR}/.git"
 		G_REPO_SRC="${SETDIR}"
 		G_REPO_OPT=
 	else
@@ -793,10 +795,9 @@ function _prepare_docdir {		#{dotest}
 		done)										\
 		--filter="-_/build.${_GINST/#\/.}"						\
 		${G_REPO_SRC}/				${TARGET}/.${_TITLE}			|| return 1
-	if [[ -d ${_G_REPO}/.git ]]; then
-		${RSYNC_U} ${_G_REPO}/.git/		${TARGET}/.${_TITLE}/.git		|| return 1
-	else
-		${RSYNC_U} ${_G_REPO}.git/		${TARGET}/.${_TITLE}/.git		|| return 1
+	if [[ -d ${G_REPO_GIT} ]]
+	then ${RSYNC_U} ${G_REPO_GIT}/			${TARGET}/.${_TITLE}/.git		|| return 1
+	else ${RM}					${TARGET}/.${_TITLE}/.git		|| return 1
 	fi
 	${SED} -i "/worktree[ ][=]/d"			${TARGET}/.${_TITLE}/.git/config	|| return 1
 	#note: set the "makefile" to use "/" as the "$target" by default
