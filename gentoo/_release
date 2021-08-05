@@ -2235,9 +2235,6 @@ function _publish_export {
 			${RM} $(realpath --canonicalize-missing $(
 				publish_export_filelist ${_OUTDIR}/.${_TITLE}-*
 			))									|| return 1
-			until [[ -z $(find ${_OUTDIR} -type d -empty) ]]; do
-				${RM} $(find ${_OUTDIR} -type d -empty)				|| return 1
-			done
 			${RM} ${_OUTDIR}/.${_TITLE}-*						|| return 1
 		fi
 		(cd ${_OUTDIR} && publish_export_checksum $(publish_export_filelist .))		|| return 1
@@ -2308,8 +2305,11 @@ function _publish_upload {
 	find			${_OUTDIR} -type d -exec chmod 755 {} \;	|| return 1
 	find			${_OUTDIR} -type f -exec chmod 644 {} \;	|| return 1
 	chown -R root:root	${_OUTDIR}					|| return 1
+	until [[ -z		$(find ${_OUTDIR} -type d -empty) ]]; do
+		${RM}		$(find ${_OUTDIR} -type d -empty)		|| return 1
+	done
 	eval ${RSYNC_U} --copy-links --delete-excluded				\
-		$(for FILE in $(${LS} --directory ${_OUTDIR}/${_VERSN}/*/); do
+		$(for FILE in $(${LS} --directory ${_OUTDIR}/${_VERSN}/*/ 2>/dev/null); do
 			echo "--filter=\"-_/${_VERSN}/$(basename ${FILE})\""
 		done)		${_OUTDIR}/ ${_SFFILE}				|| return 1
 	return 0
