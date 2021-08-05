@@ -2170,6 +2170,7 @@ function publish_export_underscore {
 	if [[ -d ${_FINAL}/_${FILE} ]]; then
 		${RSYNC_U} --copy-links --delete-excluded \
 			--filter="-_/.layout.conf.*" \
+			--filter="-_/.mirror-cache.*" \
 			${_FINAL}/_${FILE}/ ${_OUTDIR}/_${FILE} || return 1
 	fi
 	return 0
