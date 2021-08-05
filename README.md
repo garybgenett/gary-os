@@ -1751,20 +1751,32 @@ Everything needed to perform these steps is in the [Repository] or the
         * `(cd _toor; rm {.[^.],}*; ll)`
         * `(cd _target/iso; vi ./.urls; ./.urls -f)`
         * `(cd _build/funtoo/meta-repo; git pull; GIT_PAGER=cat git-list -n1)`
+            * `./gentoo/_funtoo.kits _build/funtoo/meta-repo $(tail -n1 ./gentoo/_funtoo)`
+            * `(cd _build/gentoo/gentoo; git pull; GIT_PAGER=cat git-list -n1)`
         * `(cd _build/funtoo/meta-repo; ll ./kits/core-kit/sys-kernel/gentoo-sources)`
         * `(cd _build/funtoo/meta-repo; ll ./kits/core-kit/sys-kernel/debian-sources)`
-    * `./scripts/qemu-minion.bsh $(ls [...]/_target/iso/grml*.iso | tail -n1)`
-        * `zcat /proc/config.gz >./linux/default-grml[...]`
-        * `rsync ./linux/default-grml[...] ./linux/config-gentoo[...]`
-        * `rm ./linux/.config; ln config-gentoo[...] ./linux/.config`
     * `vi ./gentoo/_funtoo`
+        * [ ] Update [Funtoo] and [Gentoo] commits
         * `vi ./gentoo/sets/*`
             * [ ] [Linux Kernel] versions
             * [ ] Review
-        * `vi ./gentoo/packages.*`
-            * [ ] Comment all 'gentoo required'
+        * `vi ./gentoo/package.*`
+            * [ ] Command comments at top of [gentoo/package.use]
         * `(cd ./gentoo/overlay; ./.review -a)`
             * [ ] Review '.keep' packages
+    * `cd .setup/linux`
+        * `tar --wildcards -xvvf [...]/stage3-generic_64-*.tar.xz "./usr/src/linux-debian-sources-*/.config"`
+        * `mv ./usr/src/linux-debian-sources-*/.config ./default-debian-sources-[...]`
+        * `rm ./usr`
+        * `rsync ./default-debian-sources-[...] ./config-gentoo64-[...]`
+        * `rsync -L ./.options ./config-gentoo64-[...]-options`
+        * `rm ./.config; ln config-gentoo64-[...] ./.config`
+        * `rm ./.options; ln config-gentoo64-[...]-options ./.options`
+        * `vi ./.options`
+            * [ ] Update kernel version
+            * [ ] Review
+  * `cd .setup/gentoo.make`
+    * `(cd .setup; git-commit ./linux ./gentoo)`
   * `make init`
     * [ ] Until '@world', at least
     * [x] **Iterate()**
@@ -1794,6 +1806,7 @@ Everything needed to perform these steps is in the [Repository] or the
         * `ego sync --commit $(tail -n1 ./gentoo/_funtoo | cut -d' ' -f2)`
         * `diff -r ./build/var/git/meta-repo /var/git/meta-repo`
   * `make doit`
+    * `ll ./build/ ./build/_build`
     * `(cd .setup; git-commit ./gentoo)`
     * `_sync _sys _clone _full _setup`
 
