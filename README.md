@@ -2,7 +2,7 @@
 
 --------------------------------------------------------------------------------
 
-| ![GaryOS Icon](artifacts/images/icon.png "GaryOS Icon") | "The one file that does it all."
+| ![GaryOS Icon](artifacts/images/icon-v1.0.png "GaryOS Icon") | "The one file that does it all."
 |:---      |:---
 | Latest   | [v5.0 2021-08-04] -- [Kernel] / [Rootfs] / [Boot]
 | Homepage | <https://github.com/garybgenett/gary-os>
@@ -68,8 +68,12 @@ Unique advantages:
 No other GNU/Linux distribution takes the same approach or has the same features
 as GaryOS.
 
-<!-- ![GaryOS CLI Screenshot](artifacts/images/screenshot_cli.png "GaryOS CLI Screenshot") -->
-<!-- ![GaryOS GUI Screenshot](artifacts/images/screenshot_gui.png "GaryOS GUI Screenshot") -->
+<!-- wmctrl -i -r 0x00000000 -e 0,0,0,800,600 -->
+<!-- xrandr -s 800x600 -->
+<!-- (exiv2 *; identify -verbose *) | less -->
+
+![GaryOS CLI Screenshot](artifacts/images/screenshot_cli-v5.0.png "GaryOS CLI Screenshot")
+![GaryOS GUI Screenshot](artifacts/images/screenshot_gui-v5.0.png "GaryOS GUI Screenshot")
 
 ### Quick Start ################################################################
 [Quick Start]: #quick-start
