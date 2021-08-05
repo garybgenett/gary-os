@@ -2174,17 +2174,11 @@ function publish_export_gitbackup {
 
 function publish_export_underscore {
 	FILE="$(basename ${1})" && shift
-	if {
-		[[ ! -d ${_OUTDIR}/_${FILE} ]] ||
-		[[ -L ${_OUTDIR}/_${FILE} ]];
-	}; then
-		${RM} ${_OUTDIR}/_${FILE} \
-		|| return 1
+	if [[ -d ${_FINAL}/_${FILE} ]]; then
+		${RSYNC_U} --copy-links --delete-excluded \
+			--filter="-_/.layout.conf.*" \
+			${_FINAL}/_${FILE}/ ${_OUTDIR}/_${FILE} || return 1
 	fi
-	${RSYNC_U} --copy-links \
-		${_FINAL}/_${FILE}/ \
-		${_OUTDIR}/_${FILE} \
-		|| return 1
 	return 0
 }
 
@@ -2216,6 +2210,13 @@ function _publish_export {
 		eval echo -en "{0..$((${#RELEASE[*]}-1))}"
 	); do
 		if {
+			[[ ${RELEASE[${INDEX}]} == ${RELEASE[-1]} ]] &&
+			[[ ${RELEASE[${INDEX}]} == ${_VERSN} ]];
+		}; then
+			publish_export_underscore ${DSTDIR}					|| return 1
+			publish_export_underscore ${PAKDIR}					|| return 1
+		fi
+		if {
 			[[ -n ${RELEASE[${INDEX}]} ]] && [[ -n ${CMTHASH[${INDEX}]} ]] &&
 			[[ ! -d ${_OUTDIR}/${RELEASE[${INDEX}]} ]];
 		}; then
@@ -2225,10 +2226,6 @@ function _publish_export {
 		fi
 		publish_export_gitbackup ${_OUTDIR} ${RELEASE[${INDEX}]} ${CMTHASH[${INDEX}]}	|| return 1
 		if [[ -d $(${LS} -d ${_OUTDIR}/.${_TITLE}-* 2>/dev/null) ]]; then
-			if [[ ${RELEASE[${INDEX}]} == ${RELEASE[-1]} ]]; then
-				publish_export_underscore ${DSTDIR}				|| return 1
-				publish_export_underscore ${PAKDIR}				|| return 1
-			fi
 			${RSYNC_U} --copy-links							\
 				$(publish_export_filelist ${_OUTDIR}/.${_TITLE}-*)		\
 				${_OUTDIR}/							|| return 1
