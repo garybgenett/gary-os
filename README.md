@@ -2065,10 +2065,19 @@ Everything needed to perform these steps is in the [Repository] or the
   * `make DOREDO=true doit release`
     * `cat ./build/etc/issue ./build/etc/motd ./build/_commit`
     * `for FILE in coding/gary-os .setup .static; do (cd ${FILE}; GIT_PAGER=cat git-list -n1); done`
-    * `(cd ./build/.gary-os; GIT_PAGER=cat git-list -n1)`
+        * `(cd ./build/.gary-os; GIT_PAGER=cat git-list -n1)`
+    * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.kernel 1`
+        * `cd /.gary-os; GIT_PAGER=cat git log -n1; git status`
+        * `GIT_PAGER=cat git diff`
   * `make DOREDO=true P=_gary-os doit rootfs`
+    * `(cd _builds; rm ./_gary-os.boot; ln _gary-os.working ./_gary-os.boot)`
+        * `_sync boot`
+        * `./scripts/qemu-minion.bsh /dev/null 1`
+            * [x] PXE (uncomment variables)
+            * `cd /.gary-os; GIT_PAGER=cat git log -n1; git status`
+            * `GIT_PAGER=cat git diff`
     * `make _publish_prep`
-    * `ll ./build/ ./build/.gary-os-*`
+        * `ll ./build/ ./build/_build ./build/.gary-os-*`
   * `(cd _builds; rsync -L ./_gary-os.working/.gary-os-*/ ./_gary-os)`
     * `(cd _builds/_gary-os; git-backup <funtoo commit>.#; GIT_PAGER=cat git-list -n1)`
     * `(cd .setup; vi gentoo/_release; git-commit -m "Published v#.# release." gentoo/_release)`
@@ -2093,9 +2102,11 @@ Everything needed to perform these steps is in the [Repository] or the
 
 **Personal**
 
+  * `(cd _builds; rm ./_gary-os.boot; ln _gary-os ./_gary-os.boot)`
+    * `_sync boot`
   * `cd .setup/gentoo.make`
-  * `make doit`
-  * `(cd _builds/_gentoo; git-backup "gary-os v#.#"; GIT_PAGER=cat git-list -n1)`
+    * `make doit`
+    * `(cd _builds/_gentoo; git-backup "gary-os v#.#"; GIT_PAGER=cat git-list -n1)`
 
 **Celebrate**
 
