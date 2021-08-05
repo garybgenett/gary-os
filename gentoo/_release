@@ -2124,7 +2124,6 @@ function _publish_gitdir {		#{ismain}
 ########################################
 
 declare PUB_FILES="
-	.${_TITLE}-
 	${_TITLE}-
 	portage-
 	stage3-
@@ -2160,12 +2159,6 @@ function publish_export_gitbackup {
 			)								2>/dev/null
 		done
 	)"
-	if [[ -n ${FILE} ]]; then
-		(cd ${_OUTDIR} && git-backup ${QUICK} -r ${HASH} ${FILE})		|| return 1
-	fi
-	FILE="$(realpath --canonicalize-missing --relative-to ${GDIR} $(
-		find ${GDIR}/.${_TITLE}-*/ ${GDIR}/${_TITLE}-*/ -mindepth 1 -maxdepth 1	2>/dev/null
-	) 2>/dev/null)"
 	if [[ -n ${FILE} ]]; then
 		(cd ${_OUTDIR} && git-backup ${QUICK} -r ${HASH} ${FILE})		|| return 1
 	fi
@@ -2225,15 +2218,6 @@ function _publish_export {
 			continue
 		fi
 		publish_export_gitbackup ${_OUTDIR} ${RELEASE[${INDEX}]} ${CMTHASH[${INDEX}]}	|| return 1
-		if [[ -d $(${LS} -d ${_OUTDIR}/.${_TITLE}-* 2>/dev/null) ]]; then
-			${RSYNC_U} --copy-links							\
-				$(publish_export_filelist ${_OUTDIR}/.${_TITLE}-*)		\
-				${_OUTDIR}/							|| return 1
-			${RM} $(realpath --canonicalize-missing $(
-				publish_export_filelist ${_OUTDIR}/.${_TITLE}-*
-			))									|| return 1
-			${RM} ${_OUTDIR}/.${_TITLE}-*						|| return 1
-		fi
 		(cd ${_OUTDIR} && publish_export_checksum $(publish_export_filelist .))		|| return 1
 		${MKDIR} ${_OUTDIR}/${RELEASE[${INDEX}]}					|| return 1
 		${RSYNC_U} --copy-links								\
