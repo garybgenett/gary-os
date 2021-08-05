@@ -8,10 +8,10 @@ Icon=@ICON@
 Terminal=false
 Type=Application
 MimeType=application/pdf;application/vnd.mozilla.xul+xml;application/xhtml+xml;text/html;text/mml;text/xml;x-scheme-handler/ftp;x-scheme-handler/http;x-scheme-handler/https;
-StartupNotify=@STARTUP_NOTIFY@
+StartupNotify=true
 Categories=Network;WebBrowser;
 Keywords=web;browser;internet;
-Actions=new-window;new-private-window;
+Actions=new-window;new-private-window;profile-manager-window;
 
 [Desktop Action new-window]
 Name=Open a New Window
@@ -228,3 +228,9 @@ Name[xh]=Ifestile yangasese entsha
 Name[zh_CN]=新建隐私浏览窗口
 Name[zh_TW]=新增隱私視窗
 Exec=@EXEC@ --private-window %u
+
+[Desktop Action profile-manager-window]
+Name=Open the Profile Manager
+Name[de]=Profilverwaltung öffnen
+Name[cs]=Správa profilů
+Exec=@EXEC@ --ProfileManager
