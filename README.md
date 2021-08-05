@@ -1993,7 +1993,7 @@ Everything needed to perform these steps is in the [Repository] or the
         * `rm ./gary-os/gary-os-*.fetch`
         * `make fetch`
             * `sed -i -e "s|^[#]||g" -e "/[.]rootfs$/d" ./gary-os/gary-os-*.fetch`
-            * `for FILE in $(cat ./gary-os/gary-os-*.fetch); do rsync -tvv -L --progress root@10.0.0.254:/.g/_data/_builds/_gary-os.working/.gary-os-*/${FILE} /.install/gary-os/; done`
+            * `for FILE in $(cat ./gary-os/gary-os-*.fetch); do rsync -tvv -L --progress root@10.0.0.254:[...]/_builds/_gary-os.working/.gary-os-*/${FILE} /.install/gary-os/; done`
             * `make DOTEST=true fetch`
         * `make unpack`
     * `ls -la /.gary-os-*/`
