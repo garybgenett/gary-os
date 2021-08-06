@@ -465,7 +465,6 @@ The dwm title bar has brief reminders for the shortcuts below.  Use
 'XSESSION=openbox startx' for Openbox instead of dwm.  In Links, use the top bar
 for the menu and 'g' to open the URL bar.
 
-
   |                    | |
   |:---                |:---
   | GaryOS Readme      | Alt-Left
@@ -1113,7 +1112,7 @@ References to this section:
   * [Design]
     * General reference -- [Linux Kernel] parameters
   * [Repository]
-    * Heart and soul  -- [gentoo/_system]
+    * Heart and soul -- [gentoo/_system]
 
 These are to make sure everything is cross-linked, and that this section is
 complete.
@@ -1186,7 +1185,7 @@ During this stage, Linux kernel modules are loaded from the [Kernel] internal
 [Filesystem] if they are needed.
 
 In case of failure, a minimal shell environment will be loaded.  It is
-menu-driven and self-documenting.  Its purpose is to facilitate real-time user
+menu-driven and self-documented.  Its purpose is to facilitate real-time user
 selection of a [Filesystem] to load.
 
 Once a [Filesystem] is loaded, directories are unpacked as specified in 'Package
@@ -1292,7 +1291,7 @@ This project tries to give back to the community as much as it can.
   * [Funtoo] [Ego]
   * [dwm]
 
-This is addition to [Builder] and GaryOS itself.
+This is in addition to [Builder] and GaryOS itself.
 
 **Linux Kernel**
 
@@ -1302,7 +1301,7 @@ system, this is sometimes not enough room for a GaryOS [Filesystem] to unpack.
 For the [v4.0] rebuild of [Loader], a kernel patch was submitted to the Linux
 "mm" development team.
 
-  * Current:
+  * Current
     * [shmem_size_hack.patch]
   * Initial
     * [First shmem version]
