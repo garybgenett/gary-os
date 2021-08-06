@@ -77,6 +77,16 @@ fi
 ################################################################################
 
 function review_header {
+	if [[ ${2} == marker ]]; then
+		echo -en "\n"
+		perl -e '
+			printf(
+				"%-${ARGV[0]}.${ARGV[0]}s\n",
+				("-" x ${ARGV[0]})
+			);
+		' ${@}
+		return 0
+	fi
 	perl -e '
 		printf(
 			"%-${ARGV[0]}.${ARGV[0]}s\n",
@@ -87,6 +97,8 @@ function review_header {
 }
 
 ########################################
+
+echo -en "# vim: filetype=diff\n" >${0}.txt
 
 declare FILE
 for FILE in $(
@@ -108,6 +120,7 @@ for FILE in $(
 		echo "MISSING: ${FILE}/.rationale"					1>&2
 		exit 1
 	fi
+	review_header									${LENGTH} marker
 	review_header									${LENGTH} ${FILE} rationale
 	cat ${FILE}/.rationale								2>&1
 	review_header									${LENGTH} ${FILE} source
@@ -118,7 +131,7 @@ for FILE in $(
 	${GREP} "[\"][\$][{]FILESDIR[}]" ${EBUILD}					2>&1
 	echo										2>&1
 	${LS} -R ./${FILE}								2>&1
-done >${0}.txt
+done >>${0}.txt
 
 ########################################
 
