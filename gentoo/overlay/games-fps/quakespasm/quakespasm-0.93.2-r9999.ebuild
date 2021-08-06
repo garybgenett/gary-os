@@ -1,0 +1,1 @@
+quakespasm-0.93.2-r1.ebuild
