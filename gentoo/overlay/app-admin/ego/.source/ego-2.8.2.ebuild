@@ -1,7 +1,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-PYTHON_COMPAT=( python3_{4..7} )
+EAPI=7
+PYTHON_COMPAT=( python3+ )
 
 inherit python-single-r1
 
@@ -14,21 +14,14 @@ KEYWORDS="*"
 IUSE="zsh-completion"
 GITHUB_REPO="$PN"
 GITHUB_USER="funtoo"
-#>>>GITHUB_TAG="${PVR}"
-GITHUB_TAG="${PV}"
-#>>>
+GITHUB_TAG="${PVR}"
 SRC_URI="https://www.github.com/${GITHUB_USER}/${GITHUB_REPO}/tarball/${GITHUB_TAG} -> ${PN}-${GITHUB_TAG}.tar.gz"
 
 DEPEND=""
-RDEPEND="$PYTHON_DEPS
-!sys-boot/boot-update"
+RDEPEND="$PYTHON_DEPS !sys-boot/boot-update"
 PDEPEND=">=dev-python/appi-0.2[${PYTHON_USEDEP}]
 dev-python/mwparserfromhell[${PYTHON_USEDEP}]
 dev-python/requests[${PYTHON_USEDEP}]"
-
-#>>>
-PATCHES=( "${FILESDIR}"/add-commit-option-to-ego-sync.2.7.4-r1.patch )
-#>>>
 
 src_unpack() {
 	unpack ${A}
@@ -69,6 +62,6 @@ pkg_postinst() {
 	fi
 	[ -h $ROOT/usr/sbin/epro ] && rm $ROOT/usr/sbin/epro
 	if [ "$ROOT" = "/" ]; then
-		/usr/bin/ego sync --config-only
+		/usr/bin/ego sync --in-place
 	fi
 }
