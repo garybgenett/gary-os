@@ -1186,7 +1186,9 @@ if [[ ${1} == -r ]]; then
 		${RSYNC_U} ${SETDIR}/${LINDIR}/			${TARGET}${ARCDIR}/${LINDIR}			|| EXIT 1
 		${RSYNC_U} ${SETDIR}/${FUNDIR}/			${TARGET}${ARCDIR}/${FUNDIR}			|| EXIT 1
 	fi
-	${RSYNC_C} ${SETDIR}/${FUNDIR}/[a-z]*			${TARGET}${ETCDIR}/				|| EXIT 1
+	${RSYNC_C/--delete --delete-during} --copy-links							\
+		--filter="-_/${LAYDIR}"										\
+		${SETDIR}/${FUNDIR}/[a-z]*			${TARGET}${ETCDIR}/				|| EXIT 1
 	${RSYNC_U} ${SETDIR}/${FUNDIR}/${LAYDIR}/		${TARGET}${ETCDIR}/${LAYDIR}			|| EXIT 1
 	${LN} ../${LAYDIR}/overlay.conf				${TARGET}${ETCDIR}/repos.conf/			|| EXIT 1
 	if [[ ${1} != -! ]]; then
