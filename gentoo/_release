@@ -76,6 +76,8 @@ RELEASE[7]="v4.0"; CMTHASH[7]="428ed8058597a3530ec2d0207dda6ffed6082c0f"
 RELEASE[8]="v5.x"; CMTHASH[8]="c769c14a73b53c741ef95ff21b88d752c18e474e"
 RELEASE[9]="v5.0"; CMTHASH[9]="198fea2f4636949dad11ae710192e3fdb59ec446"
 
+declare -a RELEASE_SKIP=(8)
+
 ########################################
 
 declare CMTFIL="_commit"
@@ -2080,8 +2082,17 @@ function _publish_gitdir {		#{ismain}
 		for FILE in $(
 			git-list --reverse | ${GREP} "RELEASE" | ${GREP} -o "[a-z0-9]{40}[ ]"
 		); do
-			${GIT} tag --force ${RELEASE[${NEXT}]} ${FILE}	|| return 1
-			NEXT="$((${NEXT}+1))"				|| return 1
+			declare SKIP="false"
+			declare SNUM=
+			for SNUM in ${RELEASE_SKIP[*]}; do
+				if [[ ${NEXT} == ${SNUM} ]]; then
+					SKIP="true"
+				fi
+			done
+			if ! ${SKIP}; then
+				${GIT} tag --force ${RELEASE[${NEXT}]} ${FILE}	|| return 1
+			fi
+			NEXT="$((${NEXT}+1))"					|| return 1
 		done
 		return 0
 	}
@@ -2204,6 +2215,16 @@ function _publish_export {
 	for INDEX in $(
 		eval echo -en "{0..$((${#RELEASE[*]}-1))}"
 	); do
+		declare SKIP="false"
+		declare SNUM=
+		for SNUM in ${RELEASE_SKIP[*]}; do
+			if [[ ${INDEX} == ${SNUM} ]]; then
+				SKIP="true"
+			fi
+		done
+		if ${SKIP}; then
+			continue
+		fi
 		if {
 			[[ ${RELEASE[${INDEX}]} == ${RELEASE[-1]} ]] &&
 			[[ ${RELEASE[${INDEX}]} == ${_VERSN} ]];
