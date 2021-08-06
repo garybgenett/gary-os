@@ -1616,9 +1616,11 @@ The backbones which do the real heavy lifting in GaryOS:
 
 Kernel configuration, package lists and acknowledgments:
 
+  * [Debian Kernel]
   * [Grml]
   * [SystemRescue]
 
+  [Debian Kernel]: https://www.debian.org/doc/manuals/debian-handbook/sect.kernel-compilation.pl.html
   [Grml]: https://grml.org
   [SystemRescue]: http://www.system-rescue.org
 
