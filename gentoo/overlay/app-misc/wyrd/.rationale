@@ -1,5 +1,5 @@
-removed package
+# removed package
+>> https://bbs.archlinux.org/viewtopic.php?id=236785
 checking for term.h... configure: error: not found
 configure: error: ./configure failed for curses
-https://bbs.archlinux.org/viewtopic.php?id=236785
 -- wyrd-1.4.6-r1.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/app-misc/wyrd?id=2089dbcd558e9ceef390a747e8cf3be8f1ed1474
