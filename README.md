@@ -462,7 +462,9 @@ interface, use 'startx'.
   | Web browser       | [Links]        | Includes [surf] and [Firefox]
 
 The dwm title bar has brief reminders for the shortcuts below.  Use
-'XSESSION=openbox startx' for Openbox instead of dwm.
+'XSESSION=openbox startx' for Openbox instead of dwm.  In Links, use the top bar
+for the menu and 'g' to open the URL bar.
+
 
   |                    | |
   |:---                |:---
