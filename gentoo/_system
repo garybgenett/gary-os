@@ -1069,7 +1069,7 @@ if [[ ${1} == -o ]]; then
 			if ${QUIET}; then prompt -t; else cat; fi; then								EXIT 1; fi
 		${MKDIR}	${ETC_DIR}/${FILE}			${LAY_DIR}/${FILE}/.source				|| EXIT 1
 		${RSYNC_U}	${TARGET}${REPDIR}/kits/*/${FILE}/	${LAY_DIR}/${FILE}/.source				||
-		touch							${LAY_DIR}/${FILE}/.source/.keep			|| EXIT 1
+		touch							${LAY_DIR}/${FILE}/.source/.null			|| EXIT 1
 		${RSYNC_U}	${LAY_DIR}/${FILE}/			${ETC_DIR}/${FILE}					|| EXIT 1
 		safe_env ${MYSELF} ${QUIET_OPT} ${TOOR} "${@}"									|| EXIT 1
 		${RSYNC_U}	${ETC_DIR}/${FILE}/Manifest		${LAY_DIR}/${FILE}/					|| EXIT 1
