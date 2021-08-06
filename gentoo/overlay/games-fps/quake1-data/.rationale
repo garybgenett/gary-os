@@ -1,5 +1,5 @@
 #>>> removed package
-automation of interactive ebuild
+# automation of interactive ebuild
 usage: lha [-]<commands>[<options>] [-<options> ...] archive_file [file...]
 LHa: Error: Checksum error (LHarc file?)
 -- quake1-data-2.40-r1.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/games-fps/quake1-data?id=365e36d515a42a6dd5c847298641d263f75a9d50
