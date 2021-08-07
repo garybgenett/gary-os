@@ -752,8 +752,8 @@ net-misc/urlview
 
 mail-client/thunderbird
 www-client/firefox
-www-client/surf
-x11-misc/tabbed
+#>>>www-client/surf			# requires: net-libs/webkit-gtk -> dev-lang/ruby
+#>>>x11-misc/tabbed			# only used for: www-client/surf
 
 net-misc/freerdp
 net-misc/tigervnc
