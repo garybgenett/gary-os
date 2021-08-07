@@ -2,6 +2,10 @@
 # portage package use file
 ################################################################################
 
+#>>> sed -i -r "s|^(#WORK[ ])?(.+[ ]gentoo[ ]required.*)$|#WORK \2|g" ./gentoo/package.*
+
+################################################################################
+
 dev-libs/openssl			-bindist	# gentoo required
 dev-qt/qtnetwork			-bindist	# gentoo required
 net-misc/openssh			-bindist	# gentoo required
@@ -75,8 +79,8 @@ sys-libs/zlib				static-libs	# gentoo required
 
 ########################################
 
-#>> grep "PYTHON.+[^-]python2_7" ./build/_gentoo/.emerge | grep -v "python3_[0-9]"
-#>> grep "PYTHON.+[^-]python3_6" ./build/_gentoo/.emerge | grep -v "python3_7"
+#>>> grep "PYTHON.+[^-]python2_7" ./build/_gentoo/.emerge | grep -v "python3_[0-9]"
+#>>> grep "PYTHON.+[^-]python3_6" ./build/_gentoo/.emerge | grep -v "python3_7"
 
 app-office/unoconv			python_single_target_python3_6	#{GOS} # gentoo required
 app-office/unoconv			python_targets_python3_6	#{GOS} # gentoo required
