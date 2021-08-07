@@ -334,9 +334,6 @@ sys-libs/readline			static-libs	# static: bash
 sys-libs/zlib				static-libs	# static: openssh
 sys-libs/zlib				static-libs	# static: openssl
 
-mail-client/thunderbird			-bindist
-www-client/firefox			-bindist
-
 ########################################
 
 app-arch/p7zip				-rar
@@ -373,7 +370,10 @@ x11-terms/rxvt-unicode			fading-colors focused-urgency font-styles mousewheel pe
 x11-wm/dwm				savedconfig
 
 app-emulation/libvirt			libvirtd	# gentoo required
-mail-mta/msmtp				mta		# gentoo required
+mail-mta/msmtp				mta		# gentoo required: replace mail-mta/nullmailer
+
+mail-client/thunderbird			-bindist
+www-client/firefox			-bindist
 
 ########################################
 
