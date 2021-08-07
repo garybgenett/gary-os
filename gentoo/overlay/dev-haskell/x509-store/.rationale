@@ -1,2 +1,2 @@
-pandoc version
-https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-haskell/x509-store?id=f5ba41c6f41b4fc109a2eb782029947c9054658c
+# pandoc version
+-- x509-store-1.6.7.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-haskell/x509-store?id=74c9a6b263f40405458f77e2423cf0c57412d201
