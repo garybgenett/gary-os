@@ -1,4 +1,2 @@
-pandoc version
-https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-texlive/texlive-xetex?id=f5ba41c6f41b4fc109a2eb782029947c9054658c
-* ERROR: dev-texlive/texlive-xetex-2020::overlay failed (depend phase):
-* EAPI 7 is not supported by font.eclass.
+# pandoc version
+-- texlive-xetex-2021.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-texlive/texlive-xetex?id=74c9a6b263f40405458f77e2423cf0c57412d201
