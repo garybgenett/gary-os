@@ -380,8 +380,8 @@ net-wireless/hostapd			#{MOD}
 ########################################
 # programs
 
-#>>>www-client/surf			#{MOD} # requires: net-libs/webkit-gtk (x11-libs/gtk+) -> dev-lang/ruby -> dev-ruby/json -> dev-util/ragel -> dev-util/colm -> app-text/asciidoc
-#>>>x11-misc/tabbed			#{MOD} # needed by: www-client/surf
+#>>>www-client/surf			#{MOD} # requires: net-libs/webkit-gtk -> dev-lang/ruby 
+#>>>x11-misc/tabbed			#{MOD} # only used for: www-client/surf
 
 #>>>net-misc/freerdp			#{MOD}
 #>>>net-misc/tigervnc			#{MOD}
