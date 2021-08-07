@@ -1,8 +1,0 @@
-gen/media/audio/pulse/pulse_stubs.cc:155:27: error: conflicting declaration of C function 'pa_context_state_t pa_context_get_state(pa_context*)'
-155 | extern pa_context_state_t pa_context_get_state(pa_context* c) __attribute__((weak));
-In file included from /usr/include/pulse/pulseaudio.h:29,
-from gen/media/audio/pulse/pulse_stubs.cc:16:
-/usr/include/pulse/context.h:199:20: note: previous declaration 'pa_context_state_t pa_context_get_state(const pa_context*)'
-199 | pa_context_state_t pa_context_get_state(const pa_context *c);
-https://bugs.gentoo.org/694896
-https://gitweb.gentoo.org/repo/gentoo.git/tree/www-client/chromium?id=6b89e0d09ed3f133a3ae77bf46a0fe7bcdbc092e

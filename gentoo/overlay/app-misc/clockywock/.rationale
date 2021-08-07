@@ -1,3 +1,0 @@
-/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../x86_64-pc-linux-gnu/bin/ld: /var/tmp/portage/app-misc/clockywock-0.3.1a/temp/ccGHELZn.o: undefined reference to symbol 'stdscr'
-/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../x86_64-pc-linux-gnu/bin/ld: /lib/libtinfo.so.6: error adding symbols: DSO missing from command line
-https://gitweb.gentoo.org/repo/gentoo.git/tree/app-misc/clockywock?id=4d9bfacdd583ca26684aac447b9189439cb3f428

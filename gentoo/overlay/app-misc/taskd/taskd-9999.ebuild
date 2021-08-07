@@ -24,10 +24,10 @@ DEPEND="
 	sys-libs/readline:0=
 "
 
+#>>>	acct-group/taskd
+#>>>	acct-user/taskd
 RDEPEND="
 	${DEPEND}
-	acct-group/taskd
-	acct-user/taskd
 "
 
 src_configure() {

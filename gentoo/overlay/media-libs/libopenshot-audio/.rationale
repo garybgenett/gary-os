@@ -1,0 +1,3 @@
+# openshot version
+# remove net-libs/webkit-gtk dependency
+-- libopenshot-audio-0.2.0.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/libopenshot-audio?id=74c9a6b263f40405458f77e2423cf0c57412d201
