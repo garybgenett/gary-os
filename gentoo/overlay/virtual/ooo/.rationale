@@ -1,0 +1,3 @@
+emerge: there are no ebuilds to satisfy "virtual/ooo".
+(dependency required by "app-office/unoconv-0.8.2::desktop-kit" [ebuild])
+-- ooo-1.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/virtual/ooo?id=74c9a6b263f40405458f77e2423cf0c57412d201
