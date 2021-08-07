@@ -386,6 +386,7 @@ sys-process/procps			-elogind
 
 app-text/enchant			aspell
 dev-util/systemtap			-libvirt
+gnome-base/gnome-keyring		-caps -filecaps -pam -ssh-agent
 sci-libs/libqalculate			gnuplot readline
 
 ########################################
