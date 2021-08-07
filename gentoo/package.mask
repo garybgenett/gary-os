@@ -1,55 +1,6 @@
 ################################################################################
 # portage package mask file
 ################################################################################
-
->=dev-java/javatoolkit-0.6.0		# gentoo required: force use of overlay
->=media-libs/libvpx-1.8			# gentoo required: [...]/core-kit/profiles/package.mask/funtoo-cautionary = Allow firefox to merge cleanly
-
-########################################
-
-# ! LaTeX Error: The font size command \normalsize is not defined:
-# there is probably something wrong with the class file.
-# See the LaTeX manual or LaTeX Companion for explanation.
-# ! ==> Fatal error occurred, no output PDF file produced!
-# Transcript written on pdflatex.log.
-# fmtutil [INFO]: log file copied to: /var/tmp/portage/dev-texlive/texlive-latex-2020/work/texmf-var/web2c/pdftex/pdflatex.log
-# fmtutil [ERROR]: running `luahbtex -ini -jobname=lualatex -progname=lualatex lualatex.ini </dev/null' return status: 1
-# fmtutil [ERROR]: returning error due to option --strict
-# fmtutil [ERROR]: running `pdftex -ini -jobname=latex -progname=latex -translate-file=cp227.tcx *latex.ini </dev/null' return status: 1
-# fmtutil [ERROR]: returning error due to option --strict
-# fmtutil [ERROR]: running `luatex -ini -jobname=dvilualatex -progname=dvilualatex dvilualatex.ini </dev/null' return status: 1
-# fmtutil [ERROR]: returning error due to option --strict
-# fmtutil [ERROR]: running `pdftex -ini -jobname=pdflatex -progname=pdflatex -translate-file=cp227.tcx *pdflatex.ini </dev/null' return status: 1
-# fmtutil [ERROR]: returning error due to option --strict
-# fmtutil [INFO]: successfully rebuilt formats: 1
-# fmtutil [INFO]: failed to build: 4 (luahbtex/lualatex pdftex/latex luatex/dvilualatex pdftex/pdflatex)
-# fmtutil [INFO]: total formats: 5
-# fmtutil [INFO]: exiting with status 4
-# * ERROR: dev-texlive/texlive-latex-2020::overlay failed (compile phase):
-# * failed to build format texmf-dist/fmtutil/format.texlive-latex.cnf
->=app-tex/bibtexu-3.71_p2020
->=app-text/poppler-0.89
->=app-text/texlive-2020			# also, not ready for this version yet -- only for keeping downloaded source files
->=app-text/texlive-core-2020
->=app-text/xmlto-0.28-r3
->=dev-libs/kpathsea-6.3.2_p2020
->=dev-texlive/texlive-2020
->=dev-texlive/texlive-basic-2020
->=dev-texlive/texlive-fontsrecommended-2020
->=dev-texlive/texlive-fontutils-2020
->=dev-texlive/texlive-formatsextra-2020
->=dev-texlive/texlive-latex-2020
->=dev-texlive/texlive-latexextra-2020
->=dev-texlive/texlive-latexrecommended-2020
->=dev-texlive/texlive-luatex-2020
->=dev-texlive/texlive-mathscience-2020
->=dev-texlive/texlive-pictures-2020
->=dev-texlive/texlive-plaingeneric-2020
->=dev-texlive/texlive-pstricks-2020
->=dev-texlive/texlive-xetex-2020
-
->=www-client/firefox-69			# gentoo required: force use of overlay
-
 ################################################################################
 # end of file
 ################################################################################
