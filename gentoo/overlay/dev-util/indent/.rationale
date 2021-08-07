@@ -1,3 +1,0 @@
-indent.c:1061:7: error: expected identifier or '(' before numeric constant
-1061 | char *LC_ALL;
-https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-util/indent?id=ad8abf44b957d6f248019f00402315b0db48a0d4

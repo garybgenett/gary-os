@@ -1,5 +1,0 @@
-ERROR: app-text/stardict-4.0.0_pre20170304::text-kit failed (configure phase):
-checking for ENCHANT... no
-configure: error: Enchant library not found or too old. Use --disable-spell to build without spell plugin.
-configure: error: ./configure failed for dict
-https://bugs.gentoo.org/676920
