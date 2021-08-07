@@ -2,46 +2,7 @@
 # portage package keywords file
 ################################################################################
 
-=app-editors/retext-9999		**		# gentoo required
-=media-sound/picard-9999		**		# gentoo required
-=perl-core/JSON-PP-2.273*		**		# gentoo required
-
-########################################
-
 games-emulation/mekanix			**		# gentoo required
-
-################################################################################
-
-net-misc/rclone				~*
-
-x11-misc/dmenu				~*
-x11-terms/st				~*
-x11-wm/dwm				~*
-
-x11-misc/obconf				~*
-x11-wm/openbox				~*
-
-x11-terms/terminology			~*
-x11-wm/enlightenment:0			~*
-x11-wm/enlightenment:0.17		~*
-
-x11-misc/tabbed				~*
-
-app-text/pandoc				~*
-
-media-libs/libdvdcss			~*
-media-libs/libdvdnav			~*
-media-libs/libdvdread			~*
-
-app-misc/task				~*
-app-misc/taskd				~*
-app-misc/timew				~*
-
-mail-client/mutt			~*
-
-www-client/surf				~*
-
-app-editors/atom			~*
 
 ################################################################################
 # end of file
