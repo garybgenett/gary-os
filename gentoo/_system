@@ -1051,7 +1051,7 @@ if [[ ${1} == -o ]]; then
 				echo -en "\n"
 			fi
 		else
-			${_SOUL} ${TOOR} ${1} ${2}										|| EXIT 1
+			${_SOUL} $(if ${QUIET}; then echo "${QUIET_OPT}"; fi) ${TOOR} ${1} ${2}					|| EXIT 1
 		fi
 		echo -en "[${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/.rationale]\n"
 		cat ${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/.rationale								|| EXIT 1
