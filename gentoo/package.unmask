@@ -2,23 +2,8 @@
 # portage package unmask file
 ################################################################################
 
-=dev-util/android-studio-3.4*		# gentoo required
-=www-client/chromium-78*		# gentoo required
-
-########################################
-
-=sys-boot/grub-2.05*			# gentoo required: allow use of overlay
-
-################################################################################
-
 games-fps/doom3				# gentoo required
-games-fps/doom3-cdoom			# gentoo required
-games-fps/doom3-data			# gentoo required
-games-fps/doom3-demo			# gentoo required
 games-fps/doom3-ducttape		# gentoo required
-games-fps/doom3-lms			# gentoo required
-games-fps/doom3-mitm			# gentoo required
-games-fps/doom3-roe			# gentoo required
 
 ################################################################################
 # end of file
