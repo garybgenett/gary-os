@@ -2,7 +2,6 @@
 # portage package license file
 ################################################################################
 
-sys-kernel/linux-firmware		freedist
 sys-kernel/linux-firmware		linux-firmware
 sys-kernel/linux-firmware		linux-fw-redistributable
 sys-kernel/linux-firmware		no-source-code
@@ -12,14 +11,26 @@ sys-firmware/nvidia-firmware		NVIDIA-r2
 
 ########################################
 
+sys-devel/clang				Apache-2.0-with-LLVM-exceptions
+sys-devel/clang-common			Apache-2.0-with-LLVM-exceptions
+sys-devel/lld				Apache-2.0-with-LLVM-exceptions
+sys-devel/llvm				Apache-2.0-with-LLVM-exceptions
+sys-devel/llvm-common			Apache-2.0-with-LLVM-exceptions
+sys-libs/compiler-rt			Apache-2.0-with-LLVM-exceptions
+sys-libs/compiler-rt-sanitizers		Apache-2.0-with-LLVM-exceptions
+sys-libs/libomp				Apache-2.0-with-LLVM-exceptions
+
+########################################
+
 media-fonts/font-bh-ttf			bh-luxi
 media-fonts/font-bh-type1		bh-luxi
 
 ########################################
 
+dev-vcs/subversion			FSFAP
 media-libs/faac				MPEG-4
+media-libs/fdk-aac			FraunhoferFDK
 media-libs/libpng			libpng2
-media-libs/quirc			AS-IS
 
 ################################################################################
 
@@ -42,21 +53,9 @@ games-misc/fortune-mod-strangelove	fairuse
 games-emulation/mekanix			mekanix
 
 app-arch/lha				lha
-games-fps/doom-data			freedist
 games-fps/doom3				DOOM3
-games-fps/doom3-cdoom			GameFront
 games-fps/doom3-data			DOOM3
-games-fps/doom3-demo			DOOM3
 games-fps/doom3-ducttape		freedist
-games-fps/doom3-lms			GameFront
-games-fps/doom3-mitm			all-rights-reserved
-games-fps/doom3-roe			DOOM3
-games-fps/doomsday-resources		free-noncomm
-games-fps/quake1-data			all-rights-reserved
-games-fps/quake1-demodata		quake1-demodata
-games-fps/quake1-killer			quake1-killer
-games-fps/quake1-rally			all-rights-reserved
-games-fps/quake1-teamfortress		quake1-teamfortress
 
 ################################################################################
 # end of file
