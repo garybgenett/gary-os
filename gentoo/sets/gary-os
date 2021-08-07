@@ -137,7 +137,6 @@ sys-apps/texinfo			#{MOD}
 app-misc/screen				#{MOD}
 app-shells/bash				#{rootfs}
 app-shells/bash-completion		#{MOD}
-app-shells/bashdb			#{MOD}
 sys-apps/kbd				#{MOD}
 sys-libs/gpm
 
