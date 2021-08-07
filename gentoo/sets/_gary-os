@@ -454,7 +454,6 @@ sys-apps/texinfo
 app-misc/screen
 app-shells/bash
 app-shells/bash-completion
-app-shells/bashdb
 sys-apps/kbd
 sys-libs/gpm
 
