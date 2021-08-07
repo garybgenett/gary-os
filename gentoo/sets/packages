@@ -3,7 +3,7 @@
 ################################################################################
 
 #{FUNTOO}
-#{LINPKG} sys-kernel/debian-sources:debian-sources-5.10.46_p4.ebuild
+#{LINPKG} =sys-kernel/debian-sources-5.10.46_p2.ebuild
 #{LINPKG} sys-kernel/gentoo-sources:5.6.19
 #{LINPKG} sys-kernel/gentoo-sources:5.13.8
 #{KERNEL} 5.6.19
@@ -80,7 +80,6 @@ sys-apps/texinfo
 app-misc/screen
 app-shells/bash
 app-shells/bash-completion
-app-shells/bashdb
 sys-apps/kbd
 sys-libs/gpm
 
@@ -352,9 +351,9 @@ net-fs/cifs-utils
 net-fs/sshfs
 net-misc/autossh
 
-app-mobilephone/heimdall
-dev-util/android-studio
-dev-util/android-tools
+#>>>app-mobilephone/heimdall
+#>>>dev-util/android-studio
+#>>>dev-util/android-tools
 
 ########################################
 # servers
@@ -503,30 +502,11 @@ games-emulation/nestopia
 games-emulation/stella
 
 app-arch/lha
-games-fps/ezquake			#>>> games-fps/ezquake-bin
-games-fps/nquake			#>>> custom package
-games-fps/quake1-demodata
-games-fps/quake1-killer
-games-fps/quake1-rally
-games-fps/quake1-teamfortress
-#>>>games-fps/quake1-textures		#>>> requires: app-arch/unrar
+games-fps/dhewm3			#>>> custom package
+games-fps/doom3
+games-fps/doom3-ducttape
 games-fps/quakeforge
 games-fps/quakespasm
-
-games-fps/dhewm3			#>>> custom package
-games-fps/doom-data
-games-fps/doom3
-games-fps/doom3-demo
-games-fps/doom3-ducttape
-games-fps/doomsday
-games-fps/doomsday-resources
-games-fps/freedoom
-games-fps/prboom
-
-# manual download ebuilds
-games-fps/doom3-cdoom			#{NEW}
-games-fps/doom3-lms			#{NEW}
-games-fps/doom3-mitm			#{NEW}
 
 # interactive ebuilds, which can be automated using:
 #	TARGET="/.g/_toor" ; for FILE in quake doom3-disk1 doom3-disk2 doom3-disk3 doom3_roe ; do mkdir -v ${TARGET}/tmp/${FILE} ; mount -v -o ro,loop /.g/_data/source/id/${FILE}.iso ${TARGET}/tmp/${FILE} ; done ; mount
