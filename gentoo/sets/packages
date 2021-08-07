@@ -401,8 +401,8 @@ net-misc/urlview
 mail-client/thunderbird
 www-client/chromium
 www-client/firefox
-www-client/surf
-x11-misc/tabbed
+#>>>www-client/surf			# requires: net-libs/webkit -> dev-lang/ruby
+#>>>x11-misc/tabbed			# only used for: www-client/surf
 
 media-gfx/gimp
 media-gfx/gnuclad
