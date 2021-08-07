@@ -1,25 +1,18 @@
-# pandoc rationale == https://github.com/garybgenett/composer
+##>>> pandoc rationale == https://github.com/garybgenett/composer
 # = = version selection
 # - = no source directory
 # + = add normally
-https://gitweb.gentoo.org/repo/gentoo.git/tree/app-text/pandoc?id=f5ba41c6f41b4fc109a2eb782029947c9054658c
-# versions
+#>>>
+https://gitweb.gentoo.org/repo/gentoo.git/tree/app-text/pandoc?id=74c9a6b263f40405458f77e2423cf0c57412d201
+#>>>
 =app-admin/haskell-updater-1.3.2
-=app-text/pandoc-2.9.2.1
-=dev-haskell/cabal-3.0.1.0
-=dev-haskell/pandoc-citeproc-0.17.0.1
-=dev-haskell/pandoc-types-1.20
-=dev-lang/ghc-8.8.4
-# packages
-+ app-admin/haskell-updater
-+ dev-haskell/cabal
-+ dev-haskell/pandoc-citeproc
-+ dev-haskell/pandoc-types
-+ dev-lang/ghc
-# texlive
-#>>>=app-text/texlive-2020-r9
-https://gitweb.gentoo.org/repo/gentoo.git/tree/app-text/pandoc?id=23762db0655c080319df8efec02f8681dcb1d716
-=app-text/texlive-2019-r1
+=app-text/pandoc-2.13
+=app-text/texlive-2021
+=app-text/texlive-core-2021
+=dev-haskell/cabal-3.2.1.0-r1
+=dev-haskell/pandoc-types-1.22
+=dev-lang/ghc-9.0.1-r1
+=dev-libs/kpathsea-6.3.3_p20210325
 #>>>
 # https://mirrors.sohu.com/gentoo
 # https://bugs.gentoo.org/379261#c5
@@ -32,36 +25,11 @@ https://gitweb.gentoo.org/repo/gentoo.git/tree/app-text/pandoc?id=23762db0655c08
 #	rm -frv /usr/share/texmf*
 #	rm -frv /var/lib/texmf
 #	emerge --update --newuse --deep --ask texlive
-# !'a sort -k2 -u
-+ app-text/passivetex
-+ app-text/poppler
-+ app-text/psutils
+#>>>
+#>>> !G sort -k2 -u
++ app-admin/haskell-updater
 + app-text/texlive
 + app-text/texlive-core
-+ app-text/xmlto
-+ dev-libs/kpathsea
-+ dev-libs/ptexenc
-+ dev-tex/bibtexu
-+ dev-tex/latex-beamer
-+ dev-tex/pgf
-+ dev-texlive/texlive-basic
-+ dev-texlive/texlive-fontsrecommended
-+ dev-texlive/texlive-fontutils
-+ dev-texlive/texlive-formatsextra
-+ dev-texlive/texlive-latex
-+ dev-texlive/texlive-latexextra
-+ dev-texlive/texlive-latexrecommended
-+ dev-texlive/texlive-luatex
-+ dev-texlive/texlive-mathscience
-+ dev-texlive/texlive-pictures
-+ dev-texlive/texlive-plaingeneric
-+ dev-texlive/texlive-pstricks
-+ dev-texlive/texlive-xetex
-# haskell-kit
-=dev-haskell/aeson-1.4.7.1
-=dev-haskell/conduit-1.3.2
-=dev-haskell/transformers-0.5.6.2
-# !G sort -k2 -u
 + dev-haskell/aeson
 + dev-haskell/aeson-pretty
 + dev-haskell/ansi-terminal
@@ -71,25 +39,25 @@ https://gitweb.gentoo.org/repo/gentoo.git/tree/app-text/pandoc?id=23762db0655c08
 + dev-haskell/async
 + dev-haskell/attoparsec
 + dev-haskell/base-compat
-- dev-haskell/base-compat-batteries
-- dev-haskell/base-noprelude
++ dev-haskell/base-compat-batteries
 + dev-haskell/base-orphans
 + dev-haskell/base16-bytestring
 + dev-haskell/base64-bytestring
-- dev-haskell/basement
++ dev-haskell/basement
 + dev-haskell/bifunctors
 + dev-haskell/binary
-+ dev-haskell/blaze-builder
 + dev-haskell/blaze-html
 + dev-haskell/blaze-markup
-+ dev-haskell/byteable
 + dev-haskell/bytestring-builder
++ dev-haskell/cabal
 + dev-haskell/cabal-doctest
 + dev-haskell/case-insensitive
 + dev-haskell/cereal
-- dev-haskell/cmark-gfm
-+ dev-haskell/cmdargs
++ dev-haskell/citeproc
 + dev-haskell/colour
++ dev-haskell/commonmark
++ dev-haskell/commonmark-extensions
++ dev-haskell/commonmark-pandoc
 + dev-haskell/comonad
 + dev-haskell/conduit
 + dev-haskell/conduit-extra
@@ -98,20 +66,19 @@ https://gitweb.gentoo.org/repo/gentoo.git/tree/app-text/pandoc?id=23762db0655c08
 + dev-haskell/cookie
 + dev-haskell/cryptonite
 + dev-haskell/data-default
-+ dev-haskell/data-default-class
-+ dev-haskell/data-default-instances-base
 + dev-haskell/data-default-instances-containers
 + dev-haskell/data-default-instances-dlist
 + dev-haskell/data-default-instances-old-locale
 + dev-haskell/digest
 + dev-haskell/distributive
 + dev-haskell/dlist
-- dev-haskell/doclayout
++ dev-haskell/doclayout
 + dev-haskell/doctemplates
-- dev-haskell/emojis
++ dev-haskell/emojis
 + dev-haskell/errors
 + dev-haskell/exceptions
 + dev-haskell/fail
++ dev-haskell/file-embed
 + dev-haskell/glob
 + dev-haskell/haddock-library
 + dev-haskell/hashable
@@ -119,55 +86,47 @@ https://gitweb.gentoo.org/repo/gentoo.git/tree/app-text/pandoc?id=23762db0655c08
 + dev-haskell/hs-bibutils
 + dev-haskell/hscolour
 + dev-haskell/hslua
-- dev-haskell/hslua-module-system
-- dev-haskell/hslua-module-text
-- dev-haskell/hsyaml
-- dev-haskell/hsyaml-aeson
++ dev-haskell/hslua-module-path
++ dev-haskell/hslua-module-system
++ dev-haskell/hslua-module-text
++ dev-haskell/hsyaml
++ dev-haskell/hsyaml-aeson
 + dev-haskell/http
 + dev-haskell/http-client
-+ dev-haskell/http-client-tls
 + dev-haskell/http-types
-+ dev-haskell/hxt
-+ dev-haskell/hxt-charproperties
-+ dev-haskell/hxt-regex-xmlschema
-+ dev-haskell/hxt-unicode
-- dev-haskell/integer-logarithms
-- dev-haskell/ipynb
-- dev-haskell/jira-wiki-markup
++ dev-haskell/indexed-traversable
++ dev-haskell/integer-logarithms
++ dev-haskell/ipynb
++ dev-haskell/jira-wiki-markup
 + dev-haskell/juicypixels
-- dev-haskell/libyaml
-+ dev-haskell/lifted-base
++ dev-haskell/libyaml
 + dev-haskell/memory
 + dev-haskell/mime-types
 + dev-haskell/mmorph
 + dev-haskell/monad-control
 + dev-haskell/mono-traversable
 + dev-haskell/mtl
-+ dev-haskell/mwc-random
 + dev-haskell/nats
 + dev-haskell/network
 + dev-haskell/network-uri
 + dev-haskell/old-locale
 + dev-haskell/old-time
++ dev-haskell/pandoc-types
 + dev-haskell/parsec
 + dev-haskell/pem
 + dev-haskell/primitive
 + dev-haskell/quickcheck
 + dev-haskell/random
-+ dev-haskell/regex-base
-+ dev-haskell/regex-pcre
 + dev-haskell/resourcet
 + dev-haskell/rfc5051
 + dev-haskell/safe
 + dev-haskell/scientific
 + dev-haskell/semigroups
-+ dev-haskell/setenv
-+ dev-haskell/sha
 + dev-haskell/skylighting
-- dev-haskell/skylighting-core
++ dev-haskell/skylighting-core
 + dev-haskell/socks
 + dev-haskell/split
-- dev-haskell/splitmix
++ dev-haskell/splitmix
 + dev-haskell/statevar
 + dev-haskell/stm
 + dev-haskell/streaming-commons
@@ -177,20 +136,18 @@ https://gitweb.gentoo.org/repo/gentoo.git/tree/app-text/pandoc?id=23762db0655c08
 + dev-haskell/temporary
 + dev-haskell/texmath
 + dev-haskell/text
-- dev-haskell/text-conversions
-+ dev-haskell/tf-random
-- dev-haskell/th-abstraction
++ dev-haskell/text-conversions
++ dev-haskell/text-icu
++ dev-haskell/th-abstraction
 + dev-haskell/time-compat
-+ dev-haskell/time-locale-compat
 + dev-haskell/tls
 + dev-haskell/transformers
-+ dev-haskell/transformers-base
 + dev-haskell/transformers-compat
-- dev-haskell/type-equality
-- dev-haskell/typed-process
-+ dev-haskell/unexceptionalio
++ dev-haskell/type-equality
++ dev-haskell/typed-process
 + dev-haskell/unicode-transforms
-- dev-haskell/unliftio-core
++ dev-haskell/uniplate
++ dev-haskell/unliftio-core
 + dev-haskell/unordered-containers
 + dev-haskell/utf8-string
 + dev-haskell/uuid-types
@@ -207,4 +164,19 @@ https://gitweb.gentoo.org/repo/gentoo.git/tree/app-text/pandoc?id=23762db0655c08
 + dev-haskell/yaml
 + dev-haskell/zip-archive
 + dev-haskell/zlib
-# end of file
++ dev-lang/ghc
++ dev-libs/kpathsea
++ dev-texlive/texlive-basic
++ dev-texlive/texlive-fontsrecommended
++ dev-texlive/texlive-fontutils
++ dev-texlive/texlive-formatsextra
++ dev-texlive/texlive-latex
++ dev-texlive/texlive-latexextra
++ dev-texlive/texlive-latexrecommended
++ dev-texlive/texlive-luatex
++ dev-texlive/texlive-mathscience
++ dev-texlive/texlive-pictures
++ dev-texlive/texlive-plaingeneric
++ dev-texlive/texlive-pstricks
++ dev-texlive/texlive-xetex
+#>>> end of file

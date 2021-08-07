@@ -248,7 +248,6 @@ net-misc/unison:2.51
 
 app-text/pandoc
 app-text/texlive
-dev-haskell/pandoc-citeproc
 dev-haskell/pandoc-types
 
 app-text/grip
