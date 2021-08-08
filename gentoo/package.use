@@ -69,16 +69,6 @@ dev-libs/lzo				static-libs	# gentoo required
 #>>> grep "PYTHON.+[^-]python2_7" ./build/_gentoo/.emerge | grep -v "python3_[0-9]"
 #>>> grep "PYTHON.+[^-]python3_6" ./build/_gentoo/.emerge | grep -v "python3_7"
 
-app-arch/rpm				python_single_target_python3_7	#{GOS} # gentoo required
-app-misc/pax-utils			python_single_target_python3_7	#{GOS} # gentoo required
-app-office/libreoffice			python_single_target_python3_7	#{GOS} # gentoo required
-dev-libs/gobject-introspection		python_single_target_python3_7	#{GOS} # gentoo required
-dev-util/gdbus-codegen			python_single_target_python3_7	#{GOS} # gentoo required
-dev-util/gtk-doc			python_single_target_python3_7	#{GOS} # gentoo required
-media-libs/alsa-lib			python_single_target_python3_7	#{GOS} # gentoo required
-dev-util/itstool			python_single_target_python3_7	#{GOS} # gentoo required
-sys-apps/usbutils			python_single_target_python3_7	#{GOS} # gentoo required
-
 app-misc/golly				python_single_target_python2_7	#{GOS} # gentoo required
 app-text/txt2tags			python_single_target_python2_7	#{GOS} # gentoo required
 media-gfx/gimp				python_single_target_python2_7	#{GOS} # gentoo required
