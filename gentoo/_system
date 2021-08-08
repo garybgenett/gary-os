@@ -483,8 +483,8 @@ function print_info {
 		echo -en ">>> ARGUMENT PROCESSING IS VERY RUDIMENTARY // OPTIONS MUST BE IN THE ORDER SHOWN <<<"
 		echo -en "${RESET}\n"
 		echo -en "\n"
-		printf "${PRINTF}" "Synchronize (Database, Sources, Metadata):"	"<auto>"	"${_HEART} [{branch} {commit_id}]" "<${FUNTOO}>"
-		printf "${PRINTF}" "Synchronize (Sources, Metadata):"		"<auto>"	"${_HEART} -f"
+		printf "${PRINTF}" "Synchronize (Database, Sources, Metadata):"	"<auto>"	"${_HEART} -U [{branch} {commit_id}]" "<${FUNTOO}>"
+		printf "${PRINTF}" "Synchronize (Sources, Metadata):"		"<auto>"	"${_HEART} -U -f"
 		printf "${PRINTF}" "Synchronize (Metadata Only):"		"<auto>"	"${_HEART} -!"
 		echo -en "\n"
 		printf "${PRINTF}" "Reset Current Configuration:"		"<auto>"	"GOSDIR=/ ${_HEART} -g -r -!"
@@ -827,6 +827,13 @@ if ${DEBUG}; then
 fi
 
 ########################################
+
+if [[ -z ${_OPTS} ]]; then
+	print_info usage
+	EXIT 0
+fi
+
+################################################################################
 
 if ${DO_CHROOT} && [[ -n ${TARGET} ]] && [[ ! -d ${TARGET} ]]; then
 	echo -en "\n"
@@ -1240,7 +1247,7 @@ if [[ ${1} == -i ]]; then
 				expect_wrapper		emerge ${_ASK} dev-tcltk/expect				|| EXIT 1
 			fi
 			expect_wrapper			emerge ${_ASK} ${EMERGE_UPDT_OPTS} \@system		|| EXIT 1
-			safe_env			${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -f		|| EXIT 1
+			safe_env			${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -U -f		|| EXIT 1
 		fi
 #>>>		expect_wrapper				emerge ${_ASK} --emptytree \@system \@world		|| EXIT 1
 		expect_wrapper				emerge ${_ASK} --emptytree \@system \@${_PKG}		|| EXIT 1
@@ -1313,7 +1320,7 @@ if [[ ${1} == -i ]]; then
 		EXIT 0
 	fi
 	if ! ${DOFAST}; then
-		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -f		|| EXIT 1
+		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -U -f		|| EXIT 1
 	fi
 	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -u		|| EXIT 1
 	mount_dev_dirs -u											|| EXIT 1
@@ -1422,7 +1429,7 @@ if [[ ${1} == -u ]]; then
 #>>> declare DISTFILES="/.g/_data/_builds/.gary-os.release/_distfiles"
 #>>> for FILE in ${FILELIST}; do ${RSYNC_U:-rsync -avv} ${DISTFILES}/${FILE} ./build/var/cache/portage/distfiles/; done
 
-elif [[ ${1} != -! ]]; then
+elif [[ ${1} == -U ]]; then
 	if [[ ${1} != -f ]]; then
 		print_info update
 #>>>		expect_wrapper emerge --ask=n --verbose --sync				|| EXIT 1
