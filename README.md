@@ -278,10 +278,11 @@ can be loaded directly from PXE.  The GRUB image will automatically select and
 load GaryOS from the server, and will also pass any additional boot parameters
 to the [Linux Kernel] directly from the PXE server configuration.
 
-DHCPd and TFTPd are included in GaryOS.  An example DHCPd configuration is
-below.  GRUB must be used as the 'filename' in order to pass Linux kernel
-parameters to GaryOS via 'extensions-path'.  Otherwise, the GaryOS kernel can
-be used directly as 'filename' without any other options.
+DHCPd and TFTPd are included, so GaryOS can also act as the PXE server.  An
+example DHCPd configuration is below.  GRUB must be used as the 'filename' in
+order to pass Linux kernel parameters to GaryOS via 'extensions-path'.
+Otherwise, the GaryOS kernel can be used directly as 'filename' without any
+other options.
 
   ```
   next-server             0.0.0.0;
