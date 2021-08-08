@@ -884,7 +884,7 @@ function _prepare_repdir {
 			${MKDIR}				${TARGET}${REPDIR}.git			|| return 1
 			${RSYNC_U} ${GITDIR}/			${TARGET}${REPDIR}.git			|| return 1
 		fi
-		safe_env ${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} ${FUNTOO}				|| return 1
+		safe_env ${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -U ${FUNTOO}				|| return 1
 		common_tar					${TARGET}${REPDIR}			|| return 1
 		common_tar					${TARGET}${REPDIR}.git			|| return 1
 	fi
