@@ -153,7 +153,7 @@ reset:
 
 .PHONY: update
 update:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="/" ARTDIR="$(A)" GOSPKG="_$(P)" $(C)/gentoo/_system
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="/" ARTDIR="$(A)" GOSPKG="_$(P)" $(C)/gentoo/_system -U
 
 .PHONY: upgrade
 upgrade:
