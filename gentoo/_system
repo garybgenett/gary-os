@@ -1434,7 +1434,13 @@ if [[ ${1} == -u ]]; then
 #>>> for FILE in ${FILELIST}; do ${RSYNC_U:-rsync -avv} ${DISTFILES}/${FILE} ./build/var/cache/portage/distfiles/; done
 
 elif [[ ${1} == -U ]]; then
-	if [[ ${1} != -f ]]; then
+	shift
+	declare SYNC="true"
+	if [[ ${1} == -f ]]; then
+		SYNC="false"
+		shift
+	fi
+	if ${SYNC}; then
 		print_info update
 #>>>		expect_wrapper emerge --ask=n --verbose --sync				|| EXIT 1
 		expect_wrapper ego sync							|| EXIT 1
@@ -1451,7 +1457,6 @@ elif [[ ${1} == -U ]]; then
 				--update-use-local-desc					#>>> || EXIT 1
 		done
 	fi
-	if [[ -z ${1} ]] || [[ ${1} == -f ]]; then
 		FILE="true"
 		NEXT="--fetch-all-uri"
 		if ${_GOS}; then
@@ -1488,8 +1493,7 @@ elif [[ ${1} == -U ]]; then
 		if ! ${FILE}; then
 			EXIT 1
 		fi
-	fi
-	if [[ -n ${1} ]]; then
+	if ! ${SYNC}; then
 		EXIT 0
 	fi
 
