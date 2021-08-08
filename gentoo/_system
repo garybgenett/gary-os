@@ -1442,57 +1442,57 @@ elif [[ ${1} == -U ]]; then
 	fi
 	if ${SYNC}; then
 		print_info update
-#>>>		expect_wrapper emerge --ask=n --verbose --sync				|| EXIT 1
-		expect_wrapper ego sync							|| EXIT 1
+#>>>		expect_wrapper emerge --ask=n --verbose --sync			|| EXIT 1
+		expect_wrapper ego sync						|| EXIT 1
 		if ! perl -MJSON::XS -e 1; then
-			expect_wrapper emerge ${_ASK} dev-perl/JSON-XS			|| EXIT 1
+			expect_wrapper emerge ${_ASK} dev-perl/JSON-XS		|| EXIT 1
 		fi
-		${SETDIR}/${FUNDIR}/${FUNKIT} ${REPDIR} ${@}				|| EXIT 1
+		${SETDIR}/${FUNDIR}/${FUNKIT} ${REPDIR} ${@}			|| EXIT 1
 		if [[ -n "$(which eix-update 2>/dev/null)" ]]; then
-			expect_wrapper eix-update					|| EXIT 1
+			expect_wrapper eix-update				|| EXIT 1
 		fi
 		for FILE in ${REPDIR}/kits/*kit; do
 			echo -en "egencache: ${FILE}\n"
-			expect_wrapper egencache --repo "$(basename ${FILE})"		\
-				--update-use-local-desc					#>>> || EXIT 1
+			expect_wrapper egencache --repo "$(basename ${FILE})"	\
+				--update-use-local-desc				#>>> || EXIT 1
 		done
 	fi
-		FILE="true"
-		NEXT="--fetch-all-uri"
-		if ${_GOS}; then
-			NEXT="--fetchonly"
-		fi
-		expect_wrapper emerge --ask=n --emptytree ${NEXT}			\
-			\@system \@world						2>&1 | tee ${DSTDIR}.log
-		if [[ ${PIPESTATUS[0]} != 0 ]]; then
-			FILE="false"
-		fi
-		if ! ${FILE}; then
-			echo -en "\n"							1>&2
-			echo -en "FILELIST=\""						1>&2
-			${SED} -n \
-				-e "s/^.*Couldn[']t[ ]download[ ][']([^']+).*$/\1/gp"	\
-				-e "s/^.*Fetched[ ]file[:][ ]([^ ]+).*$/\1/gp"		\
-				-e "s/^.*Please[ ]download[ ]([^ ]+).*$/\1/gp"		\
-				-e "s/^.*and[ ]download[ ]([^ ]+).*$/\1/gp"		\
-				${DSTDIR}.log						|
-					sort --unique					|
-					tr '\n' ' '					|
-					${SED} "s|[ ]*$||g"				1>&2
-			echo -en "\"\n"							1>&2
-		fi
-		for NEXT in								\
-			$(find ${DSTDIR} -empty			2>/dev/null | sort)	\
-			$(find ${DSTDIR}/*checksum_failure*	2>/dev/null | sort)	\
-			$(find ${DSTDIR}/.*.portage_lockfile	2>/dev/null | sort)	\
-		; do
-			${RM} ${NEXT}							1>&2
-			FILE="false"
-		done
-		${RM} ${DSTDIR}.log							1>&2
-		if ! ${FILE}; then
-			EXIT 1
-		fi
+	FILE="true"
+	NEXT="--fetch-all-uri"
+	if ${_GOS}; then
+		NEXT="--fetchonly"
+	fi
+	expect_wrapper emerge --ask=n --emptytree ${NEXT}			\
+		\@system \@world						2>&1 | tee ${DSTDIR}.log
+	if [[ ${PIPESTATUS[0]} != 0 ]]; then
+		FILE="false"
+	fi
+	if ! ${FILE}; then
+		echo -en "\n"							1>&2
+		echo -en "FILELIST=\""						1>&2
+		${SED} -n \
+			-e "s/^.*Couldn[']t[ ]download[ ][']([^']+).*$/\1/gp"	\
+			-e "s/^.*Fetched[ ]file[:][ ]([^ ]+).*$/\1/gp"		\
+			-e "s/^.*Please[ ]download[ ]([^ ]+).*$/\1/gp"		\
+			-e "s/^.*and[ ]download[ ]([^ ]+).*$/\1/gp"		\
+			${DSTDIR}.log						|
+				sort --unique					|
+				tr '\n' ' '					|
+				${SED} "s|[ ]*$||g"				1>&2
+		echo -en "\"\n"							1>&2
+	fi
+	for NEXT in								\
+		$(find ${DSTDIR} -empty			2>/dev/null | sort)	\
+		$(find ${DSTDIR}/*checksum_failure*	2>/dev/null | sort)	\
+		$(find ${DSTDIR}/.*.portage_lockfile	2>/dev/null | sort)	\
+	; do
+		${RM} ${NEXT}							1>&2
+		FILE="false"
+	done
+	${RM} ${DSTDIR}.log							1>&2
+	if ! ${FILE}; then
+		EXIT 1
+	fi
 	if ! ${SYNC}; then
 		EXIT 0
 	fi
