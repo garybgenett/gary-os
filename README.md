@@ -671,7 +671,9 @@ strategies to deal with these quickly and continue building.
 
 This phase must at least reach the stage where it is building the selected
 package list after updating the base system (the '@system' set) and downloading
-all the source files.  The 'doit' target can be used after that to resume.
+all the source files.  The 'doit' target can be used after that to resume.  In
+that case, the 'redo' phase must definitely be performed, to make sure the
+skipped 'init' steps are run.
 
 **Doit**
 
@@ -696,11 +698,11 @@ resolves any mutual dependencies, filters out binary bootstrap packages, and
 guarantees that the entire system can build flawlessly with the current package
 list and configuration.
 
-Ultimately, this is probably not a completely necessary step under normal
-circumstances.  However, when performing a new build there are usually multiple
-passes with 'init' and 'doit', with lots of changes to the configuration and
-additions to [gentoo/overlay/].  The final rebuild pass is to catch any bugs
-with the build that might have slipped in.
+Ultimately, this is maybe not a necessary step under normal circumstances.
+However, when performing a new build there are usually multiple passes with
+'init' and 'doit', with lots of changes to the configuration and additions to
+[gentoo/overlay/].  The final rebuild pass is to catch any bugs with the build
+that might have slipped in.
 
 **Edit**
 
