@@ -1752,6 +1752,7 @@ Everything needed to perform these steps is in the [Repository] or the
      * `mkdir ./gentoo/overlay/<package atom>`
      * `(cd _build/gentoo/gentoo; git-list -50 -l -- <package atom>)`
      * `(cd _build/gentoo/gentoo; git-list -2 -- <package atom>/<ebuild>)`
+     * `(cd _build/gentoo/gentoo; vdiff -l -50 -- <package atom>)`
    * `make emerge-<package atom|/|%>`
 
 **`}`**
@@ -1774,6 +1775,8 @@ Everything needed to perform these steps is in the [Repository] or the
             * [ ] Command comments at top of [gentoo/package.use]
         * `(cd ./gentoo/overlay; ./.review -a)`
             * [ ] Review '.keep' packages
+            * [ ] Create new 'ego' ebuild, but comment patch
+            * [ ] Comment 'pandoc' packages in [gentoo/sets/packages]
     * `cd .setup/linux`
         * `tar --wildcards -xvvf [...]/stage3-generic_64-*.tar.xz "./usr/src/linux-debian-sources-*/.config"`
         * `mv ./usr/src/linux-debian-sources-*/.config ./default-debian-sources-[...]`
@@ -1789,6 +1792,8 @@ Everything needed to perform these steps is in the [Repository] or the
     * `(cd .setup; git-commit ./linux ./gentoo)`
   * `make init`
     * [ ] Until '@world', at least
+        * `while :; do make DOFAST=true init; inotifywait --event modify gentoo/make.* gentoo/package.* gentoo/sets/*; done`
+        * `(cd .setup; vi gentoo/make.* gentoo/package.* gentoo/sets/*; vdiff -g gentoo/make.* gentoo/package.* gentoo/sets/*)`
     * [x] **Iterate()**
   * `vi ./linux/.options`
     * `rsync -L ./linux/.config /usr/src/linux-[...]/`
