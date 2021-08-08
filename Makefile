@@ -20,6 +20,12 @@ override O	?= $(GARYOS_DIR)/build
 override A	?= $(GARYOS_DIR)/artifacts
 override P	?= $(GARYOS_TTL)
 
+override V	?=
+override Q	:= -q
+ifneq ($(V),)
+override Q	:=
+endif
+
 ########################################
 
 .NOTPARALLEL:
@@ -131,7 +137,7 @@ endif
 
 .PHONY: help
 help: usage
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -v -q $(CHROOT)
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -v $(Q) $(CHROOT)
 
 ########################################
 
@@ -139,10 +145,10 @@ help: usage
 .DEFAULT:
 	@$(MARKER)
 	@$(ECHO) "$(NOTES)>>> CURRENT SYSTEM PACKAGE LOOKUP: $(@) <<<$(RESET)\n"
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -q -l "$(@)"
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) -l "$(@)"
 	@$(ECHO) "\n"
 	@$(ECHO) "$(NOTES)>>> CHROOT SYSTEM PACKAGE LOOKUP: $(@) <<<$(RESET)\n"
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -q $(CHROOT) -l "$(@)"
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) $(CHROOT) -l "$(@)"
 	@$(MARKER)
 
 ################################################################################
@@ -257,27 +263,27 @@ check:
 
 .PHONY: depends-%
 depends-%:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -q $(CHROOT) -y -j depends $(subst %,/,$(*))
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) $(CHROOT) -y -j depends $(subst %,/,$(*))
 
 .PHONY: depgraph-%
 depgraph-%:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -q $(CHROOT) -y -j depgraph $(subst %,/,$(*))
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) $(CHROOT) -y -j depgraph $(subst %,/,$(*))
 
 .PHONY: belongs-%
 belongs-%:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -q $(CHROOT) -y -j belongs $(subst %,/,$(*))
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) $(CHROOT) -y -j belongs $(subst %,/,$(*))
 
 .PHONY: overlay-%
 overlay-%:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -q $(CHROOT) -o $(subst ^, ,$(subst %,/,$(*)))
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) $(CHROOT) -o $(subst ^, ,$(subst %,/,$(*)))
 
 .PHONY: emerge-%
 emerge-%:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -q $(CHROOT) -a -s -e $(subst %,/,$(*)) | ./.bashrc prompt -c
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) $(CHROOT) -a -s -e $(subst %,/,$(*)) | ./.bashrc prompt -c
 
 .PHONY: gendir
 gendir:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -q $(CHROOT) -!
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) $(CHROOT) -!
 
 ########################################
 
