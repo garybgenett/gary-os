@@ -264,7 +264,7 @@ are EFI applications, and can be used directly from an EFI menu on an
 appropriate partition.
 
 Booting from either of these files with EFI is tested and supported, but the
-necessary EFI configuration/steps are not.
+necessary EFI configuration steps are not.
 
 ### PXE ########################################################################
 [PXE]: #pxe
