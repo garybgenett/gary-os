@@ -717,10 +717,12 @@ function mount_dev_dirs {
 			echo -en ">>> THERE ARE STILL PROCESSES IN THE CHROOT <<<\n"
 			echo -en ">>> SKIPPING UNMOUNT <<<\n"
 			echo -en "\n"
-			echo "${LSOF}" | ${GREP} "${TARGET}"
-			echo -en "\n"
-			mount | ${GREP} "${TARGET}"
-			echo -en "\n"
+			echo "${LSOF}" | ${GREP} "${TARGET}" 2>&1 |
+				if ${QUIET}; then prompt -t; else cat; fi
+			if ! ${QUIET}; then echo -en "\n"; fi
+			mount | ${GREP} "${TARGET}" 2>&1 |
+				if ${QUIET}; then prompt -t; else cat; fi
+			if ! ${QUIET}; then echo -en "\n"; fi
 #>>>			print_info marker
 #>>>			return 1
 		else
