@@ -1457,17 +1457,15 @@ elif [[ ${1} == -U ]]; then
 				--update-use-local-desc				#>>> || EXIT 1
 		done
 	fi
-	FILE="true"
-	NEXT="--fetch-all-uri"
+	declare FAIL="false"
+	FILE="--fetch-all-uri"
 	if ${_GOS}; then
-		NEXT="--fetchonly"
+		FILE="--fetchonly"
 	fi
-	expect_wrapper emerge --ask=n --emptytree ${NEXT}			\
+	expect_wrapper emerge --ask=n --emptytree ${FILE}			\
 		\@system \@world						2>&1 | tee ${DSTDIR}.log
 	if [[ ${PIPESTATUS[0]} != 0 ]]; then
-		FILE="false"
-	fi
-	if ! ${FILE}; then
+		FAIL="true"
 		echo -en "\n"							1>&2
 		echo -en "FILELIST=\""						1>&2
 		${SED} -n \
@@ -1481,16 +1479,16 @@ elif [[ ${1} == -U ]]; then
 				${SED} "s|[ ]*$||g"				1>&2
 		echo -en "\"\n"							1>&2
 	fi
-	for NEXT in								\
+	for FILE in								\
 		$(find ${DSTDIR} -empty			2>/dev/null | sort)	\
 		$(find ${DSTDIR}/*checksum_failure*	2>/dev/null | sort)	\
 		$(find ${DSTDIR}/.*.portage_lockfile	2>/dev/null | sort)	\
 	; do
-		${RM} ${NEXT}							1>&2
-		FILE="false"
+		FAIL="true"
+		${RM} ${FILE}							1>&2
 	done
 	${RM} ${DSTDIR}.log							1>&2
-	if ! ${FILE}; then
+	if ${FAIL}; then
 		EXIT 1
 	fi
 	if ! ${SYNC}; then
