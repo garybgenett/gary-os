@@ -1245,6 +1245,16 @@ if [[ ${1} == -i ]]; then
 		${PREPIT}_repdir										|| EXIT 1
 		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w		|| EXIT 1
 	fi
+	for FILE in ${KERNEL}; do
+		if {
+			[[ -d ${TARGET}${KDIR//${KVER}/${FILE}} ]] &&
+			[[ ! -f ${TARGET}${KDIR//${KVER}/${FILE}}/.config ]];
+		}; then
+			${RSYNC_U} --copy-links		${SETDIR}/${LINDIR}/${KCFG//${KVER}/${FILE}}		\
+							${TARGET}${KDIR//${KVER}/${FILE}}/.config		|| EXIT 1
+			kernel_cpu			${TARGET}${KDIR//${KVER}/${FILE}}/.config		|| EXIT 1
+		fi
+	done
 	if ${_BLD}; then
 		if ${_NEW}; then
 			if [[ -z "$(which expect 2>/dev/null)" ]]; then
