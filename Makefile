@@ -62,8 +62,8 @@ usage:
 	@$(PRINTF) "Update Current System:"			"$(MAKE) update"
 	@$(PRINTF) "Upgrade Current System (Interactively):"	"$(MAKE) upgrade"
 	@$(ECHO) "\n"
-	@$(PRINTF) "Information Lookup (Package Data):"		"$(MAKE) {package_list}"
-	@$(PRINTF) "Information Lookup (Package Search):"	"$(MAKE) {search_list}"
+	@$(PRINTF) "Information Lookup (Package Data):"		"$(MAKE) {packages}" "[category%]name"
+	@$(PRINTF) "Information Lookup (Package Search):"	"$(MAKE) {searches}"
 	@$(PRINTF) "Information Lookup (Gentoo Bug URL):"	"$(MAKE) {bug_ids}"
 	@$(ECHO) "\n"
 	@$(PRINTF) "Chroot Build (Initial):"			"$(MAKE) init"
@@ -144,11 +144,11 @@ help: usage
 .DEFAULT_GOAL := usage
 .DEFAULT:
 	@$(MARKER)
-	@$(ECHO) "$(NOTES)>>> CURRENT SYSTEM PACKAGE LOOKUP: $(@) <<<$(RESET)\n"
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) -l "$(@)"
+	@$(ECHO) "$(NOTES)>>> CURRENT SYSTEM PACKAGE LOOKUP: $(subst %,/,$(@)) <<<$(RESET)\n"
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) -l "$(subst %,/,$(@))"
 	@$(ECHO) "\n"
-	@$(ECHO) "$(NOTES)>>> CHROOT SYSTEM PACKAGE LOOKUP: $(@) <<<$(RESET)\n"
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) $(CHROOT) -l "$(@)"
+	@$(ECHO) "$(NOTES)>>> CHROOT SYSTEM PACKAGE LOOKUP: $(subst %,/,$(@)) <<<$(RESET)\n"
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) $(CHROOT) -l "$(subst %,/,$(@))"
 	@$(MARKER)
 
 ################################################################################
