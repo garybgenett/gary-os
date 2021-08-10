@@ -613,9 +613,9 @@ a prescribed list of steps to take.
 ### Compile ####################################################################
 [Compile]: #compile
 
-The process to build and install a source-based distribution like [Funtoo] from
-scratch is long and complex.  The GaryOS [Builder] is designed to condense it
-into a small number of atomic steps using [GNU Make].
+The process to build and install a source-based distribution like [Funtoo] (or
+[Gentoo]) from scratch is long and complex.  The GaryOS [Builder] is designed to
+condense it into a small number of atomic steps using [GNU Make].
 
   | Target  | Action
   |:---     |:---
@@ -637,7 +637,7 @@ is needed to make it ready to boot into.
 
 None of the steps in this process are specific to GaryOS, other than the
 starting [Portage] configuration and the selected list of packages.  This
-process is generally applicable to all Funtoo systems.
+process is generally applicable to all Funtoo (and Gentoo) systems.
 
 **Init**
 
@@ -734,11 +734,10 @@ a simple two-step process.
 
   | Target  | Action
   |:---     |:---
-  | reset   | Reset the Portage configuration to 'packages' default
   | update  | Update the [meta-repo] package repository and 'emerge' databases
   | upgrade | Upgrade the system to the current packages and configuration
 
-The 'upgrade' target is completely automated, but 'upgrade' requires interaction
+The 'update' target is completely automated, but 'upgrade' requires interaction
 at various steps to accept updates or confirm configuration file changes.
 
 At the end of 'upgrade', the '/_gentoo' directory is updated with information to
@@ -864,6 +863,14 @@ be copied over to the installation.
 
 The above will reset the running GaryOS to a completely default system.  The
 full list of modified files is in "Modifications" below.
+
+  ```
+  cd /.gary-os
+  make reset
+  ```
+
+Somewhat similar to the above, a 'reset' will "upgrade" the Portage
+configuration to [gentoo/sets/packages].
 
 **Update** *(Optional)*
 
