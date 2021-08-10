@@ -900,10 +900,13 @@ also be a helpful starting point.
 The 'install' target can be run any number of times without issue.  Make sure to
 install GRUB as the absolute last step.
 
-  * Update '/etc/fstab' with location of the filesystem
-  * Set hostname in '/etc/conf.d/hostname'
+All that is left are a few key items to make the system ready for use.
 
-CHANGE THE PASSWORD: `passwd root`
+  * Update '/etc/fstab' with location of the root filesystem
+  * Set hostname in '/etc/conf.d/hostname'
+  * Change the password: `passwd root`
+
+Enjoy your new system!
 
 **Modifications**
 
