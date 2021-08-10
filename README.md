@@ -304,7 +304,7 @@ GaryOS (see [Checklist]).  However, it is not well suited for other platforms,
 such as Windows, and [VirtualBox] is the best choice there.  VirtualBox also
 runs on GNU/Linux, if desired.
 
-On systems with only 4GB of memory virtualization will push system resources to
+On systems with only 4GB of memory, virtualization will push system resources to
 the limit.  Windows will exhaust them completely.  Using [GRUB] to create a USB
 drive is a better idea in that case.
 
@@ -314,8 +314,8 @@ meets the [Requirements].
 
 **QEMU**
 
-Use the distribution package manager to install QEMU.  It is available on all
-major distributions, including GaryOS.  Once installed, it is simple to get it
+Use the package manager to install QEMU.  It is available on all major
+distributions, including GaryOS.  Once installed, it is simple to get it
 running.
 
   ```
