@@ -374,7 +374,7 @@ with.
 
 For security, no networking configuration or daemons are run by default, but
 several networking packages are installed.  Instructions for Ethernet, Wireless
-and [OpenSSH] sshd are below.
+and [OpenSSH] 'sshd' are below.
 
 The [Funtoo Networking] page contains full details on all the configuration
 possibilities.  For the purposes of GaryOS, a simple single-interface
@@ -434,7 +434,8 @@ the first few letters of each command.
 
 **OpenSSH**
 
-If remote access to GaryOS is needed, OpenSSH sshd is the absolute best option.
+If remote access to GaryOS is needed, OpenSSH 'sshd' is the absolute best
+option.
 
   ```
   passwd root
