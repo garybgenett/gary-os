@@ -508,8 +508,8 @@ just like a normal installation.
   3. Use 'make unpack' to install necessary directories
   4. Do whatever [Portage] 'emerge' or other commands that are desired
 
-It is important to note that 'make unpack' should not be run after making
-updates to the system, since it may remove or replace added files.
+It is important that 'make unpack' is run before making updates to the system,
+since it may remove or replace added files if done afterward.
 
 **Increase Filesystem Size**
 
