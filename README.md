@@ -454,7 +454,7 @@ password should be changed before enabling SSH.
 ### GUI ########################################################################
 [GUI]: #gui
 
-GaryOS boots to the command line by default.  To run the [X.org] graphical
+GaryOS boots to the command line by default.  To run the [X.Org] graphical
 interface, use 'startx'.
 
   | Utility           | [Kernel]       | [Rootfs]
@@ -477,10 +477,10 @@ for the menu and 'g' to open the URL bar.
   | Web browser (surf) | Alt-Shift-Ctrl-Enter
 
 The surf browser uses the [tabbed] utility for tabbed browsing.  See 'man surf'
-and 'man tabbed' for keyboard commands.  Firefox can be ran by using 'Ctrl-p',
-typing 'firefox' and hitting 'Enter'.
+and 'man tabbed' for keyboard commands.  Firefox can be run by using 'Ctrl-p',
+typing 'firefox', and hitting 'Enter'.
 
-X.org tries to auto-detect the best resolution for the display.  If it does not,
+X.Org tries to auto-detect the best resolution for the display.  If it does not,
 use the 'xrandr' utility to change it.
 
   ```
@@ -1697,7 +1697,7 @@ highly visible components, and deserve mention:
     * [Vim]
     * [Rsync]
     * [OpenSSH]
-  * [X.org]
+  * [X.Org]
     * [Suckless] [dwm]
     * [rxvt-unicode]
     * [Links]
@@ -1707,7 +1707,7 @@ highly visible components, and deserve mention:
   [Vim]: https://www.vim.org
   [Rsync]: https://rsync.samba.org
   [OpenSSH]: https://www.openssh.com
-  [X.org]: https://x.org
+  [X.Org]: https://x.org
   [Suckless]: https://suckless.org
   [dwm]: https://dwm.suckless.org
   [rxvt-unicode]: http://software.schmorp.de/pkg/rxvt-unicode.html
