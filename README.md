@@ -758,10 +758,10 @@ multiple sources where this can come from.
 There are two key requirements of the final image for it to work correctly.
 
   1. That '/init' is an executable location for the startup process
-  2. Has the same [Linux Kernel] version (the '/lib*/modules' directory)
+  2. Has the same [Linux Kernel] version (the '/lib64/modules' directory)
 
 [Image] tries to handle the first automatically.  Verify this, and be mindful of
-the second if the source directory is updated (such as [Compile]).
+the second if the source directory is updated (such as [Update] or [Compile]).
 
 It may be important to review the package file that will be used.  There are
 GaryOS variables in them which control portions of this process, such as which
@@ -801,11 +801,11 @@ problematic when the intention is to implement changes.
   ```
 
 The 'clean' target will completely remove all GaryOS output files, restoring the
-'build' directory to its original state.  This includes all image files and
-kernels, along will all their supporting files.  The 'DOREDO' variable is
-specific to each target, and only rebuilds files for that target.  For 'release'
-this is the same as 'clean', so 'rootfs' files should be copied elsewhere if
-they need to be kept.
+'build' directory to its original state.  This includes all images and kernels,
+along will all their supporting files.  The 'DOREDO' variable is specific to
+each target, and only rebuilds files for that target.  For 'release' this is the
+same as 'clean', so 'rootfs' files should be copied elsewhere if they need to be
+kept.
 
 ### Install ####################################################################
 [Install]: #install
