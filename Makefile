@@ -279,7 +279,7 @@ overlay-%:
 
 .PHONY: emerge-%
 emerge-%:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) $(CHROOT) -a -s -e $(subst %,/,$(*)) | ./.bashrc prompt -c
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) $(CHROOT) -a -s -e $(subst %,/,$(*))
 
 .PHONY: gendir
 gendir:
