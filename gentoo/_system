@@ -1150,10 +1150,8 @@ if [[ ${1} == -p ]]; then
 		${LL} -d ${FILE}
 		for NEXT in ${FILE}; do
 			NEXT="$(basename ${NEXT} | ${SED} "s|[-][0-9][^/]+$||g")"
-			echo -en "\n[${NEXT}]\n"
 			safe_env ${_SOUL} ${QUIET_OPT} -l ${NEXT}
 		done
-		echo -en "\n"					1>&2
 		echo -en "FILELIST=\""				1>&2
 		for NEXT in ${FILE}; do
 			echo -en "${NEXT}/temp/build.log "
@@ -1472,7 +1470,7 @@ elif [[ ${1} == -U ]]; then
 		\@system \@world						2>&1 | tee ${DSTDIR}.log
 	if [[ ${PIPESTATUS[0]} != 0 ]]; then
 		FAIL="true"
-		echo -en "\n"							1>&2
+		QUIET="false" print_info marker					1>&2
 		echo -en "FILELIST=\""						1>&2
 		${SED} -n \
 			-e "s/^.*Couldn[']t[ ]download[ ][']([^']+).*$/\1/gp"	\
