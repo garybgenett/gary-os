@@ -425,7 +425,6 @@ sys-kernel/linux-firmware
 ########################################
 # toolchain
 
-#>>>dev-lang/gnat-gpl
 sys-devel/autoconf
 sys-devel/automake
 sys-devel/binutils
@@ -612,10 +611,6 @@ x11-misc/xvkbd
 ########################################
 # toolkits
 
-#>>>net-misc/rclone			# requires: dev-lang/go
-#>>>net-misc/unison			# requires: dev-lang/ocaml
-#>>>net-misc/unison:2.51
-
 dev-vcs/cvs
 dev-vcs/git
 dev-vcs/subversion
@@ -637,8 +632,6 @@ virtual/perl-MIME-Base64
 virtual/perl-Time-Local
 
 dev-lang/python
-#>>>dev-libs/libuv			# questionable size and utility
-#>>>net-libs/nodejs			# questionable size and utility
 
 app-misc/jq
 app-misc/yq
@@ -750,8 +743,6 @@ net-misc/urlview
 
 mail-client/thunderbird
 www-client/firefox
-#>>>www-client/surf			# requires: net-libs/webkit-gtk -> dev-lang/ruby
-#>>>x11-misc/tabbed			# only used for: www-client/surf
 
 net-misc/freerdp
 net-misc/tigervnc
