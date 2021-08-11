@@ -179,17 +179,17 @@ games-fps/doom3-mitm			-dedicated
 
 ########################################
 
+app-text/enchant			aspell
+dev-util/systemtap			-libvirt
+gnome-base/gnome-keyring		-caps -filecaps -pam -ssh-agent
+sci-libs/libqalculate			gnuplot readline
+
 dev-util/sysprof			-elogind
 media-sound/pulseaudio			-elogind
 sys-apps/dbus				-elogind
 sys-auth/polkit				-elogind
 sys-libs/pam				-elogind
 sys-process/procps			-elogind
-
-app-text/enchant			aspell
-dev-util/systemtap			-libvirt
-gnome-base/gnome-keyring		-caps -filecaps -pam -ssh-agent
-sci-libs/libqalculate			gnuplot readline
 
 ################################################################################
 
