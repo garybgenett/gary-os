@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+source ${HOME}/.bashrc
+set -e
+################################################################################
+
+declare DIR="$(dirname ${_SELF})"
+
+declare OPT="$(realpath ${DIR}/.options)"
+declare CFG="$(realpath ${DIR}/.config)"
+
+declare SRC="${DIR}/$(head -n2 ${OPT} | tail -n1 | ${SED} "s|^[#][ ]||g")"
+
+########################################
+
+if [[ -d ${1} ]]; then
+	declare LNX="${1}"
+	shift
+else
+	exit 1
+fi
+
+################################################################################
+
+function reconfigure {
+	declare CONFIG="${1}" && shift
+	for FILE in $(
+		${SED} -n "s|^[^#].+[[:space:]](CONFIG_[A-Z_]+)[=]([ynm]).*$|\1:\2|gp" ${OPT}
+	); do
+		declare KEY="${FILE/%:*}"
+		declare VAL="${FILE/#*:}"
+		if [[ -n $(${GREP} "^${KEY}[=]" ${CONFIG}) ]]; then
+			${SED} -i "s|^(${KEY}[=]).+$|\1${VAL}|g" ${CONFIG}
+		else
+			echo "${KEY}=${VAL}" >>${CONFIG}
+		fi
+	done
+	return 0
+}
+
+################################################################################
+
+${RM} ${CFG}.${SCRIPT}.*
+
+########################################
+
+${RSYNC_U} ${CFG} ${CFG}.${SCRIPT}.ORIG
+reconfigure ${CFG}.${SCRIPT}.ORIG
+diff ${DIFF_OPTS} ${SRC} ${CFG}.${SCRIPT}.ORIG | sort -u | ${GREP} "^[+]"
+
+${RSYNC_U} ${CFG}.${SCRIPT}.ORIG ${LNX}/.config
+(cd ${LNX} && make olddefconfig)
+${RSYNC_U} ${LNX}/.config ${CFG}.${SCRIPT}.DONE
+
+${RSYNC_U} ${CFG}.${SCRIPT}.DONE ${CFG}.${SCRIPT}.TEST
+reconfigure ${CFG}.${SCRIPT}.TEST
+diff ${DIFF_OPTS} ${CFG}.${SCRIPT}.DONE ${CFG}.${SCRIPT}.TEST | sort -u | ${GREP} "^[+]"
+
+########################################
+
+echo -en "\n"
+${LL} ${CFG}*
+
+exit 0
+################################################################################
+# end of file
+################################################################################
