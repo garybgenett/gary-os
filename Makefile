@@ -144,12 +144,12 @@ help: usage
 .DEFAULT_GOAL := usage
 .DEFAULT:
 	@$(MARKER)
-	@$(ECHO) "$(NOTES)>>> CURRENT SYSTEM PACKAGE LOOKUP: $(subst %,/,$(@)) <<<$(RESET)\n"
+	@$(ECHO) "$(HOWTO)>>> CURRENT SYSTEM PACKAGE LOOKUP: $(subst %,/,$(@)) <<<$(RESET)\n"
 	@$(MARKER)
 	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) -l "$(subst %,/,$(@))"
 	@$(ECHO) "\n"
 	@$(MARKER)
-	@$(ECHO) "$(NOTES)>>> CHROOT SYSTEM PACKAGE LOOKUP: $(subst %,/,$(@)) <<<$(RESET)\n"
+	@$(ECHO) "$(HOWTO)>>> CHROOT SYSTEM PACKAGE LOOKUP: $(subst %,/,$(@)) <<<$(RESET)\n"
 	@$(MARKER)
 	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) $(CHROOT) -l "$(subst %,/,$(@))"
 
