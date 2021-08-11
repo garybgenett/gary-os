@@ -771,20 +771,16 @@ function EXIT {
 			EXIT="${1}" && shift
 			mount_dev_dirs -u || EXIT -1
 		fi
-		if ! ${QUIET}; then
-			print_info marker
-			print_info error
-			print_info marker
-		fi
+		print_info marker
+		print_info error
+		print_info marker
 	else
 		if [[ ${1} == -0 ]]; then
 			EXIT="0" && shift
 		fi
-		if ! ${QUIET}; then
-			print_info marker
-			print_info success
-			print_info marker
-		fi
+		print_info marker
+		print_info success
+		print_info marker
 	fi
 	exit ${EXIT}
 }
