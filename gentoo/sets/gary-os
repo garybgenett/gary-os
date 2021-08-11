@@ -118,10 +118,6 @@ sys-devel/make				#{rootfs}
 sys-devel/patch				#{MOD}
 sys-libs/glibc
 
-#>>>dev-util/ccache				#{MOD}
-#>>>dev-util/debugedit			#{MOD}
-#>>>sys-devel/gdb				#{MOD}
-
 ########################################
 # system
 
@@ -150,7 +146,7 @@ sys-libs/efivar
 sys-power/suspend			#{MOD}
 sys-process/runit			#{MOD}
 
-#>>>app-forensics/sleuthkit			#{MOD} # requires: dev-java/openjdk | dev-java/openjdk-jre-bin | dev-db/postgresql | app-doc/doxygen
+#>>>app-forensics/sleuthkit			#{MOD} # requires: app-doc/doxygen / virtual/jdk / virtual/jre
 sys-apps/gptfdisk
 sys-fs/cryptsetup
 sys-fs/dosfstools			#{rootfs}
@@ -219,7 +215,6 @@ app-crypt/gnupg				#{MOD}
 dev-libs/openssl
 net-misc/openssh
 
-#>>>app-editors/gvim			#{MOD} # requires: x11-libs/gtk+
 app-editors/nano
 app-editors/nvi
 app-editors/vim				#{MOD} # requires: dev-util/ctags -> dev-python/docutils -> dev-python/pygments
@@ -266,12 +261,9 @@ x11-apps/xrandr				#{MOD}
 x11-base/xorg-drivers			#{MOD}
 x11-base/xorg-server			#{MOD}
 x11-base/xorg-x11			#{MOD}
-#>>>x11-misc/arandr				#{MOD} # requires: x11-libs/gtk+
 
 x11-misc/dmenu				#{MOD}
-#>>>x11-misc/obconf			#{MOD}
 x11-wm/dwm				#{MOD}
-#>>>x11-wm/openbox			#{MOD}
 
 x11-terms/rxvt-unicode			#{MOD}
 
@@ -292,19 +284,11 @@ dev-perl/JSON				#{MOD}
 dev-perl/JSON-XS			#{MOD}
 
 dev-lang/python				#{MOD}
-#>>>dev-libs/libuv			# questionable size and utility
-#>>>net-libs/nodejs			# questionable size and utility
 
 app-misc/jq				#{MOD}
 app-misc/yq				#{MOD}
 dev-db/sqlite				#{MOD}
 dev-tcltk/expect			#{MOD} # requires: dev-lang/tcl
-
-#>>>sys-apps/thunderbolt-software-user-space	#{MOD} # requires: dev-libs/boost
-
-#>>>net-wireless/bluez			#{MOD} # requires: dev-python/pygobject -> x11-libs/gtk+
-#>>>net-wireless/bluez-hcidump		#{MOD}
-#>>>net-wireless/bluez-tools		#{MOD}
 
 app-forensics/cmospwd
 sys-apps/flashrom			#{MOD} # requires: dev-embedded/libftdi -> dev-libs/boost
@@ -356,7 +340,6 @@ net-analyzer/tcpdump
 net-analyzer/tcptrace			#{MOD}
 net-analyzer/tcptraceroute		#{MOD}
 net-analyzer/traceroute			#{MOD}
-#>>>net-analyzer/wireshark			#{MOD} # requires: x11-libs/gtk+
 net-dns/bind-tools			#{MOD}
 net-misc/netkit-telnetd			#{MOD}
 net-misc/socat				#{MOD}
@@ -374,18 +357,10 @@ net-misc/ntp				#{MOD}
 net-vpn/openvpn				#{MOD}
 net-wireless/hostapd			#{MOD}
 
-#>>>net-vpn/tor				#{MOD} # requires: app-text/asciidoc
-
 ########################################
 # programs
 
 mail-mta/msmtp
-
-#>>>www-client/surf			#{MOD} # requires: net-libs/webkit-gtk -> dev-lang/ruby 
-#>>>x11-misc/tabbed			#{MOD} # only used for: www-client/surf
-
-#>>>net-misc/freerdp			#{MOD}
-#>>>net-misc/tigervnc			#{MOD}
 
 ########################################
 # media
