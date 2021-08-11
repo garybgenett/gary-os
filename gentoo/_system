@@ -435,11 +435,14 @@ function clear_environment {
 #NOTE: OR COMMENT COLOR DECLARATIONS
 
 #NOTE: TRY TO KEEP OUTPUT IN THIS AND ${MAKEIT} SCRIPT TO 80 CHARACTERS WIDE
-#>>>	echo -en ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"
 #>>>	print_info header
 
 function print_info {
-	if ${QUIET}; then
+	if ${QUIET} && {
+		[[ ${1} != "title" ]] &&
+		[[ ${1} != "success" ]] &&
+		[[ ${1} != "error" ]];
+	}; then
 		return 0
 	fi
 	declare TITLE="\e[1;32m"	# light green
@@ -458,17 +461,23 @@ function print_info {
 		printf ">%.0s" {1..80}
 		echo -en "${RESET}\n"
 	elif [[ ${1} == "title" ]]; then
+		${QUIET} && QUIET="false" ${FUNCNAME} marker
 		echo -en "${NOTES}"
 		echo -en ">>> GARYOS BUILD SCRIPT <<<"
 		echo -en "${RESET}\n"
+		${QUIET} && QUIET="false" ${FUNCNAME} marker
 	elif [[ ${1} == "success" ]]; then
+		${QUIET} && QUIET="false" ${FUNCNAME} marker
 		echo -en "${TITLE}"
 		echo -en ">>> GARYOS BUILD SCRIPT: SUCCESS! <<<"
 		echo -en "${RESET}\n"
+		${QUIET} && QUIET="false" ${FUNCNAME} marker
 	elif [[ ${1} == "error" ]]; then
+		${QUIET} && QUIET="false" ${FUNCNAME} marker
 		echo -en "${ERROR}"
 		echo -en ">>> GARYOS BUILD SCRIPT: FAILURE! <<<"
 		echo -en "${RESET}\n"
+		${QUIET} && QUIET="false" ${FUNCNAME} marker
 	elif [[ ${1} == "usage" ]]; then
 		declare PRINTF=
 		PRINTF+="${TITLE}%-45.45s${RESET}"
