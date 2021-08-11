@@ -390,6 +390,7 @@ app-misc/taskd
 app-misc/timew
 
 mail-client/mutt
+mail-mta/msmtp
 net-mail/offlineimap
 net-mail/safecat
 net-misc/urlview
