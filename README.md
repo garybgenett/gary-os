@@ -1806,10 +1806,10 @@ Everything needed to perform these steps is in the [Repository] or the
         * `while :; do make DOFAST=true init; inotifywait --event modify gentoo/make.* gentoo/package.* gentoo/sets/*; done`
         * `(cd .setup; vi gentoo/make.* gentoo/package.* gentoo/sets/*; vdiff -g gentoo/make.* gentoo/package.* gentoo/sets/*)`
     * [x] **Iterate()**
-  * `vi ./linux/.options`
-    * `rsync -L ./linux/.config /usr/src/linux-[...]/`
-    * `(cd ./build/usr/src/linux-[...]; make menuconfig)`
-    * `rsync /usr/src/linux-[...]/.config ./linux/config-gentoo[...]`
+  * `./linux/_config ./build/usr/src/linux`
+    * [ ] Review final version
+    * `rsync $(realpath ./linux/.config).*.DONE $(realpath ./linux/.config)`
+    * `rm $(realpath ./linux/.config).*`
   * `make doit`
     * [x] **Iterate()**
   * `make redo`
