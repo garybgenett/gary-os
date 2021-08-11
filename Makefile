@@ -145,11 +145,13 @@ help: usage
 .DEFAULT:
 	@$(MARKER)
 	@$(ECHO) "$(NOTES)>>> CURRENT SYSTEM PACKAGE LOOKUP: $(subst %,/,$(@)) <<<$(RESET)\n"
+	@$(MARKER)
 	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) -l "$(subst %,/,$(@))"
 	@$(ECHO) "\n"
-	@$(ECHO) "$(NOTES)>>> CHROOT SYSTEM PACKAGE LOOKUP: $(subst %,/,$(@)) <<<$(RESET)\n"
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) $(CHROOT) -l "$(subst %,/,$(@))"
 	@$(MARKER)
+	@$(ECHO) "$(NOTES)>>> CHROOT SYSTEM PACKAGE LOOKUP: $(subst %,/,$(@)) <<<$(RESET)\n"
+	@$(MARKER)
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) $(CHROOT) -l "$(subst %,/,$(@))"
 
 ################################################################################
 
