@@ -379,6 +379,8 @@ net-wireless/hostapd			#{MOD}
 ########################################
 # programs
 
+mail-mta/msmtp
+
 #>>>www-client/surf			#{MOD} # requires: net-libs/webkit-gtk -> dev-lang/ruby 
 #>>>x11-misc/tabbed			#{MOD} # only used for: www-client/surf
 

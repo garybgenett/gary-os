@@ -744,6 +744,7 @@ games-emulation/dosbox
 app-admin/keepassxc
 
 mail-client/mutt
+mail-mta/msmtp
 net-mail/safecat
 net-misc/urlview
 
