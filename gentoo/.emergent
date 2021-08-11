@@ -282,6 +282,12 @@ ${GREP} -o "[^-(]python[0-9][_][0-9]" ${GENDIR}/.emerge |
 echo -en "."
 
 echo -en "\n"						>>${GENDIR}/+checks 2>&1
+echo -en "[binaries]"					>>${GENDIR}/+checks 2>&1
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
+${GREP} "[-]bin[-]" ${GENDIR}/.emerge			>>${GENDIR}/+checks 2>&1
+echo -en "."
+
+echo -en "\n"						>>${GENDIR}/+checks 2>&1
 echo -en "[cflags]"					>>${GENDIR}/+checks 2>&1
 echo -en "\n"						>>${GENDIR}/+checks 2>&1
 ${GREP} -v -- "${CFLAGS}" ${PDBDIR}/*/*/CFLAGS |
@@ -359,12 +365,6 @@ wc -l ${GENDIR}/_packages.db				>>${GENDIR}/+checks 2>&1
 diff ${DIFF_OPTS} ${GENDIR}/_packages.db ${GENDIR}/_packages |
 	${GREP} "^[-+]" |
 	cat						>>${GENDIR}/+checks 2>&1
-echo -en "."
-
-echo -en "\n"						>>${GENDIR}/+checks 2>&1
-echo -en "[binaries]"					>>${GENDIR}/+checks 2>&1
-echo -en "\n"						>>${GENDIR}/+checks 2>&1
-${GREP} "[-]bin[-]" ${GENDIR}/.emerge			>>${GENDIR}/+checks 2>&1
 echo -en "."
 
 echo -en "\n"						>>${GENDIR}/+checks 2>&1
