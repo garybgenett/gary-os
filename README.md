@@ -2132,6 +2132,7 @@ Everything needed to perform these steps is in the [Repository] or the
     * `_sync boot`
   * `cd .setup/gentoo.make`
     * `make doit`
+    * `make _publish_prep`
     * `(cd _builds/_gentoo; git-backup "gary-os v#.#"; GIT_PAGER=cat git-list -n1)`
 
 **Celebrate**
