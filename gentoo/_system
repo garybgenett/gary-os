@@ -1278,10 +1278,12 @@ if [[ ${1} == -i ]]; then
 		${RM}					${TARGET}/boot/_initrd					|| EXIT 1
 		if [[ -n ${KERN} ]]; then ${LN} ${KERN}	${TARGET}/boot/_kernel					|| EXIT 1; fi
 		if [[ -n ${INIT} ]]; then ${LN} ${INIT}	${TARGET}/boot/_initrd					|| EXIT 1; fi
-		KERN="linux-debian-sources-$(echo "${KERN}" | ${SED} "s|^.+[-]([^-]+)$|\1|g")"
-		${RM}					${TARGET}${LDIR}					|| EXIT 1
-		${LN} ${KERN}				${TARGET}${LDIR}					|| EXIT 1
-		expect_wrapper emerge ${_ASK}		\@module-rebuild --exclude "${LINPKG}"			|| EXIT 1
+		if [[ -n ${KERN} ]]; then
+			KERN="${KERN/#kernel/linux}"
+			${RM}				${TARGET}${LDIR}					|| EXIT 1
+			${LN} ${KERN}			${TARGET}${LDIR}					|| EXIT 1
+#>>>			expect_wrapper emerge ${_ASK}	\@module-rebuild --exclude "${LINPKG}"			|| EXIT 1
+		fi
 	fi
 	if ${_KRN}; then for FILE in ${KERNEL}; do
 		${RM}					${TARGET}${LDIR}					|| EXIT 1
@@ -1312,7 +1314,7 @@ if [[ ${1} == -i ]]; then
 			[[ -L				${TARGET}/boot/kernel.old				]] ||
 			${LN} ${KFIL//${KVER}/${FILE}}	${TARGET}/boot/kernel.old				|| EXIT 1
 		fi
-		expect_wrapper emerge ${_ASK}		\@module-rebuild --exclude "${LINPKG}"			|| EXIT 1
+#>>>		expect_wrapper emerge ${_ASK}		\@module-rebuild --exclude "${LINPKG}"			|| EXIT 1
 	done; fi
 	if ${_GOS}; then
 		${RM}					${TARGET}/boot/_kernel					|| EXIT 1
