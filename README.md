@@ -2037,7 +2037,7 @@ Everything needed to perform these steps is in the [Repository] or the
         * `ls -la ./build/ ./build/_build`
     * `ls -la /.install/`
         * `umount /.install`
-            * `mkfs.ext4 -b 4096 -jvm 0 /dev/sda1`
+            * `cd /.gary-os; mkdir /tmp/grub; HOME=/.gary-os ./scripts/grub.sh /tmp/grub -fx /dev/sda1`
             * `mount /dev/sda1 /.install`
             * `rm ./build; ln -fsv / ./build`
         * `mount -o remount,size=6144m /.overlay`
@@ -2053,7 +2053,7 @@ Everything needed to perform these steps is in the [Repository] or the
             * [ ] Default GRUB entry
         * `reboot`
             * `linux (hd1,1)/gary-os/gary-os.kernel; boot`
-            * `cd /.gary-os; mkdir /tmp/grub; HOME=/.gary-os ./scripts/grub.sh /tmp/grub /dev/sda`
+            * `cd /.gary-os; mkdir /tmp/grub; HOME=/.gary-os ./scripts/grub.sh /tmp/grub /dev/sda1`
             * `reboot`
             * [x] Install Menu
             * [ ] Default GRUB entry
