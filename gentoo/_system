@@ -906,7 +906,8 @@ if [[ ${1} == -s ]]; then
 			--selective=n			\
 			--usepkg=n			\
 			--getbinpkg=n			\
-			${@:-\@system \@world}		|| EXIT 1
+			${@:-\@system \@world}		2>&1 | prompt -c
+		[[ ${PIPESTATUS[0]} == 0 ]]		|| EXIT 1
 	else
 		safe_env bash --norc ${@:+-c "${@}"}	|| EXIT 1
 	fi
