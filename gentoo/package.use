@@ -170,6 +170,13 @@ mail-mta/msmtp				mta		# gentoo required: replace mail-mta/nullmailer
 mail-client/thunderbird			-bindist
 www-client/firefox			-bindist
 
+games-fps/doom3				-dedicated
+games-fps/doom3-cdoom			-dedicated
+games-fps/doom3-data			-dedicated
+games-fps/doom3-ducttape		-dedicated
+games-fps/doom3-lms			-dedicated
+games-fps/doom3-mitm			-dedicated
+
 ########################################
 
 dev-util/sysprof			-elogind
@@ -183,15 +190,6 @@ app-text/enchant			aspell
 dev-util/systemtap			-libvirt
 gnome-base/gnome-keyring		-caps -filecaps -pam -ssh-agent
 sci-libs/libqalculate			gnuplot readline
-
-########################################
-
-games-fps/doom3				-dedicated
-games-fps/doom3-cdoom			-dedicated
-games-fps/doom3-data			-dedicated
-games-fps/doom3-ducttape		-dedicated
-games-fps/doom3-lms			-dedicated
-games-fps/doom3-mitm			-dedicated
 
 ################################################################################
 
