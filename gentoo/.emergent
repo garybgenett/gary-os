@@ -329,7 +329,8 @@ echo -en "\n"						>>${GENDIR}/+checks 2>&1
 echo -en "[${ETCDIR}/packages.*]"			>>${GENDIR}/+checks 2>&1
 echo -en "\n"						>>${GENDIR}/+checks 2>&1
 for FILE in $(
-	${SED} -n "s|^([^a-z/]*)([^[:space:]]+).*$|\2|gp" ${ETCDIR}/package.* |
+	${GREP} -h -v "^#>>>" ${ETCDIR}/package.* |
+	${SED} -n "s|^([^[:alnum:]/_.-]*)([[:alnum:]/_.-]+).*$|\2|gp" |
 	${GREP} "/" |
 	sort -u
 ); do
