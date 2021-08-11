@@ -340,6 +340,14 @@ for FILE in $(
 done
 echo -en "."
 
+if [[ -x $(which WORK-eix-test-obsolete 2>/dev/null) ]]; then
+	echo -en "\n"					>>${GENDIR}/+checks 2>&1
+	echo -en "[eix]"				>>${GENDIR}/+checks 2>&1
+	echo -en "\n"					>>${GENDIR}/+checks 2>&1
+	eix-test-obsolete				>>${GENDIR}/+checks 2>&1
+	echo -en "."
+fi
+
 echo -en "\n"						>>${GENDIR}/+checks 2>&1
 echo -en "[emerge]"					>>${GENDIR}/+checks 2>&1
 echo -en "\n"						>>${GENDIR}/+checks 2>&1
