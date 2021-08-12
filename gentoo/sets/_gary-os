@@ -392,7 +392,6 @@
 #{MOD} #{FSUPDT} rc-update add dhcpcd default		|| true
 #{MOD} #{FSUPDT} rc-update add sshd default		|| true
 #{MOD} #{FSUPDT} rc-update add runsvdir default		|| true
-#{MOD} #{FSUPDT} rc-update add spice-vdagent default	|| true
 #{MOD} #{FSUPDT} openrc
 #{MOD} #{FSUPDT} rc-status
 
