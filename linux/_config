@@ -24,7 +24,7 @@ fi
 function reconfigure {
 	declare CONFIG="${1}" && shift
 	for FILE in $(
-		${SED} -n "s|^[^#].+[[:space:]](CONFIG_[A-Z_]+)[=]([ynm]).*$|\1:\2|gp" ${OPT}
+		${SED} -n "s|^[^#].+[[:space:]](CONFIG_[[:alnum:]_]+)[=]([ynm]).*$|\1:\2|gp" ${OPT}
 	); do
 		declare KEY="${FILE/%:*}"
 		declare VAL="${FILE/#*:}"
