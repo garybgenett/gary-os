@@ -1,2 +1,5 @@
 #>>> removed package
--- quakeforge-0.7.2_p20210722.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/games-fps/quakeforge?id=51bace7b8f0ee05bebb0c854d85fcf6857320aad
+# version management
+# custom patch
+-- quakeforge-0.7.2_p20210722.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/games-fps/quakeforge?id=74c9a6b263f40405458f77e2423cf0c57412d201
+-- quakeforge-9999.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/games-fps/quakeforge?id=74c9a6b263f40405458f77e2423cf0c57412d201
