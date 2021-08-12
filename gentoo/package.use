@@ -105,17 +105,17 @@ dev-python/six				python_targets_python2_7	#{GOS} # gentoo required: [net-mail/o
 
 ################################################################################
 
+#>>>sys-apps/coreutils			multicall static	# gentoo required: configure: error: C compiler cannot create executables
 sys-apps/busybox			-make-symlinks savedconfig static
-sys-apps/coreutils			multicall static
+sys-apps/coreutils			multicall
 sys-devel/gcc				ada cxx
 
 #>>>net-misc/openssh			static -pam -pie	# gentoo required: https://bugs.gentoo.org/699384
-net-misc/openssh			-pam -pie
-#>>>
+#>>>sys-process/runit			static			# gentoo required: make: *** [Makefile:108: socket.lib] Error 1
 app-shells/bash				static
 dev-libs/openssl			static-libs
+net-misc/openssh			-pam -pie
 net-misc/rsync				static
-#>>>sys-process/runit			static			# gentoo required: make: *** [Makefile:108: socket.lib] Error 1
 
 #>>> for FILE in $(equery --no-color depgraph sys-apps/busybox 2>&1 | awk '{print $3;}' | sed -r -e "/^$/d" -e "s|-[0-9].*$||g" | sort -u); do grep "${FILE}" ./build/_gentoo/.emerge; done | grep "static"
 #>>> for FILE in /bin/busybox /usr/bin/coreutils /bin/bash /usr/bin/openssl /usr/bin/ssh /usr/bin/rsync /sbin/runit ; do echo; echo "${FILE}"; ldd ./build${FILE}; done
