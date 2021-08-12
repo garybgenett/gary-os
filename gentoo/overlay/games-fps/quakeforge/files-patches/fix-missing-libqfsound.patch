@@ -1,0 +1,26 @@
+--- Makefile	2021-08-09 16:28:04.936083711 -0700
++++ Makefile.fixed	2021-08-09 16:38:03.813602191 -0700
+@@ -4205,21 +4205,22 @@
+ 	qflight$(EXEEXT) qflmp$(EXEEXT) qfmodelgen$(EXEEXT) \
+ 	qfspritegen$(EXEEXT) qfvis$(EXEEXT) wad$(EXEEXT) \
+ 	qfwavinfo$(EXEEXT) $(am__empty)
+ bin_SCRIPTS = tools/pak/zpak tools/qfcc/source/qfpreqcc
+ lib_LTLIBRARIES = libs/util/libQFutil.la libs/ui/libQFui.la \
+ 	libs/ruamoko/libQFruamoko.la \
+ 	libs/ruamoko/libQFruamoko_client.la libs/gib/libQFgib.la \
+ 	libs/gib/libQFgib_client.la   \
+ 	libs/image/libQFimage.la libs/models/libQFmodels.la \
+ 	libs/input/libQFinput.la  \
+-	libs/console/libQFconsole.la libs/scene/libQFscene.la
++	libs/console/libQFconsole.la libs/scene/libQFscene.la \
++	libs/audio/libQFsound.la
+ 
+ #mans=qflmp.1
+ man_MANS = doc/man/quakeforge.1 tools/pak/pak.1 tools/pak/zpak.1 \
+ 	tools/qfcc/doc/man/qfcc.1 tools/qflight/qflight.1 $(mans) \
+ 	tools/qfvis/qfvis.1 tools/wad/wad.1
+ noinst_LTLIBRARIES = $(util_asm) libs/gamecode/libQFgamecode.la \
+ 	  \
+ 	  libs/models/brush/libbrush.la \
+ 	    \
+ 	libs/video/renderer/libQFrenderer.la  \
