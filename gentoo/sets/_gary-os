@@ -384,9 +384,8 @@
 #note: see "$fsupdt" in "gentoo/sets/_gary-os"
 #note: see "$fsupdt" in "gentoo/_release" (release_unpack)
 #{FSUPDT}				#{MOD}
-#>>>#{MOD} #{FSUPDT} usermod --home /.gary-os --shell /bin/bash root	|| true
-#>>>#{MOD} #{FSUPDT} sed -i -r s,/root,/.gary-os,g /etc/passwd
-#{MOD} #{FSUPDT} rm -frv /root ; ln -fsv /.gary-os /root
+#>>>#{MOD} #{FSUPDT} usermod --home ${SETDIR} --shell /bin/bash root	|| true
+#{MOD} #{FSUPDT} rm -frv /root ; ln -fsv ${SETDIR} /root
 #{MOD} #{FSUPDT} ln -fsv /usr/share/zoneinfo/US/Pacific /etc/localtime
 #{MOD} #{FSUPDT} ln -fsv /bin/runsvdir /usr/bin/runsvdir
 #{MOD} #{FSUPDT} rc-update add wpa_supplicant default	|| true
