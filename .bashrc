@@ -4058,7 +4058,7 @@ function vpn {
 		${SED} -i "s|/.g/_data/zactive/.home/.openssl|/etc/openvpn|g"	/etc/openvpn/openvpn.conf
 		${RSYNC_U} ${SRC}/.static/.openssl/server-ca.private.net.crt	/etc/openvpn/
 		${RSYNC_U} ${SRC}/.static/.openssl/client.private.net.*		/etc/openvpn/
-		fwinit off || true
+		fwinit off
 		iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 		echo "1" >/proc/sys/net/ipv4/ip_forward
 		/etc/init.d/openvpn restart
