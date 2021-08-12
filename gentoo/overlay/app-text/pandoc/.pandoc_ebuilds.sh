@@ -67,9 +67,9 @@ if [[ ${1} == "^" ]]; then
 		while read -r FILE; do
 			echo "$(realpath --relative-to="${PWD}" ${SETDIR}/gentoo/overlay/${FILE})"
 		done
+#>>>		dev-tex \
 	for FILE in \
 		dev-haskell \
-		dev-tex \
 		dev-texlive \
 	; do
 		echo "$(realpath --relative-to="${PWD}" ${SETDIR}/gentoo/overlay/${FILE})"
