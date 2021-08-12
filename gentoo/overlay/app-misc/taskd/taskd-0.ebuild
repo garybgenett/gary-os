@@ -3,8 +3,8 @@
 
 EAPI=7
 
-#>>>inherit cmake systemd git-r3
-inherit cmake systemd
+#>>>inherit cmake systemd
+inherit cmake systemd git-r3
 #>>>
 
 DESCRIPTION="Server part of Taskwarrior, a command-line todo list manager"
