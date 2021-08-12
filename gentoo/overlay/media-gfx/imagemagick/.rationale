@@ -1,0 +1,5 @@
+# media-gfx/imagemagick-7.0.8.49
+coders/dng.c: In function 'SetDNGProperties':
+coders/dng.c:182:20: error: 'libraw_imgother_t' {aka 'const struct <anonymous>'} has no member named 'FlashEC'
+182 | raw_info->other.FlashEC);
+-- imagemagick-7.1.0.4.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/media-gfx/imagemagick?id=74c9a6b263f40405458f77e2423cf0c57412d201

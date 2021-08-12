@@ -94,19 +94,27 @@ src_install() {
 	doins -r json ringtone sip timezones translations
 	doins *.pcm *.sh Embedded.properties version.txt
 	doexe zoom zopen ZoomLauncher
-	dosym -r {"/usr/$(get_libdir)",/opt/zoom}/libmpg123.so
-	dosym -r "/usr/$(get_libdir)/libfdk-aac.so.2" /opt/zoom/libfdkaac2.so
+#>>>	dosym -r {"/usr/$(get_libdir)",/opt/zoom}/libmpg123.so
+	dosym {"/usr/$(get_libdir)",/opt/zoom}/libmpg123.so
+#>>>
+#>>>	dosym -r "/usr/$(get_libdir)/libfdk-aac.so.2" /opt/zoom/libfdkaac2.so
+	dosym "/usr/$(get_libdir)/libfdk-aac.so.2" /opt/zoom/libfdkaac2.so
+#>>>
 
 	local quazip_so="libquazip1-qt5.so"
 	if has_version "<dev-libs/quazip-1.0"; then
 		quazip_so="libquazip5.so"
 	fi
-	dosym -r "/usr/$(get_libdir)/${quazip_so}" /opt/zoom/libquazip.so
+#>>>	dosym -r "/usr/$(get_libdir)/${quazip_so}" /opt/zoom/libquazip.so
+	dosym "/usr/$(get_libdir)/${quazip_so}" /opt/zoom/libquazip.so
+#>>>
 
 	if use bundled-libjpeg-turbo; then
 		doexe libturbojpeg.so
 	else
-		dosym -r {"/usr/$(get_libdir)",/opt/zoom}/libturbojpeg.so
+#>>>		dosym -r {"/usr/$(get_libdir)",/opt/zoom}/libturbojpeg.so
+		dosym {"/usr/$(get_libdir)",/opt/zoom}/libturbojpeg.so
+#>>>
 	fi
 
 	if use bundled-qt; then
@@ -135,7 +143,7 @@ src_install() {
 		"MimeType=x-scheme-handler/zoommtg;application/x-zoom;"
 	doicon zoom-icon.svg
 	doicon -s scalable zoom-icon.svg
-	readme.gentoo_create_doc
+#>>>	readme.gentoo_create_doc
 }
 
 pkg_postinst() {
@@ -146,7 +154,7 @@ pkg_postinst() {
 	for v in ${REPLACING_VERSIONS}; do
 		ver_test ${v} -lt 5.7.28852.0718 && use wayland && FORCE_PRINT_ELOG=1
 	done
-	readme.gentoo_print_elog
+#>>>	readme.gentoo_print_elog
 }
 
 pkg_postrm() {

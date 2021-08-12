@@ -1,0 +1,1 @@
+stardict-4.0.0_pre20170304.ebuild

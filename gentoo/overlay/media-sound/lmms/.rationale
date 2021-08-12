@@ -1,0 +1,5 @@
+# media-sound/lmms-1.2.0
+/var/tmp/portage/media-sound/lmms-1.2.0/work/lmms-1.2.0/src/gui/LmmsStyle.cpp: In function 'void drawPath(QPainter*, const QPainterPath&, const QColor&, const QColor&, bool)':
+/var/tmp/portage/media-sound/lmms-1.2.0/work/lmms-1.2.0/src/gui/LmmsStyle.cpp:85:26: error: invalid use of incomplete type 'const class QPainterPath'
+85 | const QRectF pathRect = path.boundingRect();
+-- lmms-1.2.2.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/media-sound/lmms?id=74c9a6b263f40405458f77e2423cf0c57412d201
