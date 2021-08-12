@@ -438,10 +438,12 @@ function clear_environment {
 #>>>	print_info header
 
 function print_info {
-	if ${QUIET} && {
-		[[ ${1} != "title" ]] &&
-		[[ ${1} != "success" ]] &&
-		[[ ${1} != "error" ]];
+	if ${QUIET} && ! {
+		! ${IS_CHROOT} && {
+			[[ ${1} == "title" ]] ||
+			[[ ${1} == "success" ]] ||
+			[[ ${1} == "error" ]];
+		};
 	}; then
 		return 0
 	fi
@@ -1067,7 +1069,7 @@ if [[ ${1} == -o ]]; then
 		else
 			${_SOUL} $(if ${QUIET}; then echo "${QUIET_OPT}"; fi) ${TOOR} ${1} ${2}					|| EXIT 1
 		fi
-		echo -en "[${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/.rationale]\n"
+		echo -en ">>> ${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/.rationale <<<\n"
 		cat ${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/.rationale
 		if [[ -n ${FAIL} ]] || [[ -n ${SKIP} ]]; then
 			EXIT 1
@@ -1150,8 +1152,10 @@ if [[ ${1} == -p ]]; then
 		${LL} -d ${FILE}
 		for NEXT in ${FILE}; do
 			NEXT="$(basename ${NEXT} | ${SED} "s|[-][0-9][^/]+$||g")"
+			echo -en "\n>>> ${NEXT} <<<\n"		1>&2
 			safe_env ${_SOUL} ${QUIET_OPT} -l ${NEXT}
 		done
+		echo -en "\n"					1>&2
 		echo -en "FILELIST=\""				1>&2
 		for NEXT in ${FILE}; do
 			echo -en "${NEXT}/temp/build.log "
@@ -1470,7 +1474,7 @@ elif [[ ${1} == -U ]]; then
 		\@system \@world						2>&1 | tee ${DSTDIR}.log
 	if [[ ${PIPESTATUS[0]} != 0 ]]; then
 		FAIL="true"
-		QUIET="false" print_info marker					1>&2
+		echo -en "\n"							1>&2
 		echo -en "FILELIST=\""						1>&2
 		${SED} -n \
 			-e "s/^.*Couldn[']t[ ]download[ ][']([^']+).*$/\1/gp"	\
