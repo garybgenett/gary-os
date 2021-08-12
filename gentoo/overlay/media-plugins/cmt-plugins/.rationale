@@ -1,0 +1,5 @@
+# media-sound/lmms-1.2.0
+selected: (media-sound/lmms-1.2.0:0/0::media-kit, ebuild scheduled for merge)
+skipped: (media-sound/lmms-1.2.2:0/0::overlay, ebuild scheduled for merge) (see unsatisfied dependency below)
+emerge: there are no ebuilds to satisfy "media-plugins/cmt-plugins".
+-- cmt-plugins-1.17-r1.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/media-plugins/cmt-plugins?id=74c9a6b263f40405458f77e2423cf0c57412d201
