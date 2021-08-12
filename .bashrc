@@ -4042,10 +4042,11 @@ function vpn {
 			plastic@server.garybgenett.net
 	elif [[ ${1} == -v ]]; then
 		declare SRC="root@server.garybgenett.net:/.g/_data/zactive"
-		${RSYNC_U} ${SRC}/.setup/openvpn/openvpn.conf+VPN			/etc/openvpn/openvpn.conf
-		${RSYNC_U} ${SRC}/.static/.openssl/server-ca.garybgenett.net.crt	/etc/openvpn
-		${RSYNC_U} ${SRC}/.static/.openssl/vpn-client.garybgenett.net.*		/etc/openvpn
-		fwinit off
+		${RSYNC_U} ${SRC}/.setup/openvpn/openvpn.conf			/etc/openvpn/openvpn.conf
+		${SED} -i "s|/.g/_data/zactive/.home/.openssl|/etc/openvpn|g"	/etc/openvpn/openvpn.conf
+		${RSYNC_U} ${SRC}/.static/.openssl/server-ca.private.net.crt	/etc/openvpn/
+		${RSYNC_U} ${SRC}/.static/.openssl/client.private.net.*		/etc/openvpn/
+		fwinit off || true
 		iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 		echo "1" >/proc/sys/net/ipv4/ip_forward
 		/etc/init.d/openvpn restart
