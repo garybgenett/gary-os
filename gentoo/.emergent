@@ -354,15 +354,11 @@ echo -en "\n"						>>${GENDIR}/+checks 2>&1
 ${GREP} -v \
 	-e "^$" \
 	-e "^PORTAGE_BZIP2_COMMAND[ ]" \
+	-e "^[!][!][!][ ]BINPKG_COMPRESS[ ]" \
 	-e "^These are the packages that would be merged" \
 	-e "^Calculating dependencies" \
-	-e "^[.]+[ ]done[!]" \
 	-e "^[[]ebuild[ ]" \
-	-e "^[[]binary[ ]" \
 	-e "^Total[:][ ]" \
-	-e "^Fetch Restriction[:][ ]" \
-	-e "^[ ][*][ ]IMPORTANT: [0-9]+ news items need reading for repository" \
-	-e "^[ ][*][ ]Use eselect news read to view new items" \
 	${GENDIR}/.emerge				>>${GENDIR}/+checks 2>&1
 echo -en "."
 
