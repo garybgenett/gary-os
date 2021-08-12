@@ -1,1 +1,0 @@
-quakeforge-0.7.2_p20210722.ebuild
