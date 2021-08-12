@@ -3,6 +3,7 @@
 
 EAPI=7
 
+#>>>inherit autotools dist-kernel-utils flag-o-matic linux-mod toolchain-funcs
 inherit autotools flag-o-matic linux-mod toolchain-funcs
 
 DESCRIPTION="Linux ZFS kernel module for sys-fs/zfs"
@@ -12,17 +13,23 @@ if [[ ${PV} == "9999" ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/openzfs/zfs.git"
 else
-	SRC_URI="https://github.com/openzfs/zfs/releases/download/zfs-${PV}/zfs-${PV}.tar.gz"
-	KEYWORDS="amd64 arm64 ppc64"
-	S="${WORKDIR}/zfs-${PV}"
-	ZFS_KERNEL_COMPAT="5.9"
+	VERIFY_SIG_OPENPGP_KEY_PATH=${BROOT}/usr/share/openpgp-keys/openzfs.asc
+#>>>	inherit verify-sig
+
+	MY_PV="${PV/_rc/-rc}"
+	SRC_URI="https://github.com/openzfs/zfs/releases/download/zfs-${MY_PV}/zfs-${MY_PV}.tar.gz"
+#>>>	SRC_URI+=" verify-sig? ( https://github.com/openzfs/zfs/releases/download/zfs-${MY_PV}/zfs-${MY_PV}.tar.gz.asc )"
+	S="${WORKDIR}/zfs-${PV%_rc?}"
+	ZFS_KERNEL_COMPAT="5.12"
+
+	if [[ ${PV} != *_rc* ]]; then
+		KEYWORDS="amd64 arm64 ppc64"
+	fi
 fi
 
-LICENSE="CDDL debug? ( GPL-2+ )"
-SLOT="0"
+LICENSE="CDDL MIT debug? ( GPL-2+ )"
+SLOT="0/${PVR}"
 IUSE="custom-cflags debug +rootfs"
-
-DEPEND=""
 
 RDEPEND="${DEPEND}
 	!sys-kernel/spl
@@ -33,12 +40,28 @@ BDEPEND="
 	virtual/awk
 "
 
+#>>>if [[ ${PV} != "9999" ]] ; then
+#>>>	BDEPEND+=" verify-sig? ( app-crypt/openpgp-keys-openzfs )"
+#>>>fi
+
+# PDEPEND in this form is needed to trick portage suggest
+# enabling dist-kernel if only 1 package have it set
+#>>>PDEPEND="dist-kernel? ( ~sys-fs/zfs-${PV}[dist-kernel] )"
+
 RESTRICT="debug? ( strip ) test"
 
 DOCS=( AUTHORS COPYRIGHT META README.md )
 
-# https://github.com/openzfs/zfs/pull/11371
-PATCHES=( "${FILESDIR}/${PV}-copy-builtin.patch" )
+pkg_pretend() {
+	use rootfs || return 0
+
+#>>>	if has_version virtual/dist-kernel && ! use dist-kernel; then
+#>>>		ewarn "You have virtual/dist-kernel installed, but"
+#>>>		ewarn "USE=\"dist-kernel\" is not enabled for ${CATEGORY}/${PN}"
+#>>>		ewarn "It's recommended to globally enable dist-kernel USE flag"
+#>>>		ewarn "to auto-trigger initrd rebuilds with kernel updates"
+#>>>	fi
+}
 
 pkg_setup() {
 	CONFIG_CHECK="
@@ -63,10 +86,6 @@ pkg_setup() {
 			DEVTMPFS
 	"
 
-	if use arm64; then
-		kernel_is -ge 5 && CONFIG_CHECK="${CONFIG_CHECK} !PREEMPT"
-	fi
-
 	kernel_is -lt 5 && CONFIG_CHECK="${CONFIG_CHECK} IOSCHED_NOOP"
 
 	if [[ ${PV} != "9999" ]]; then
@@ -78,12 +97,9 @@ pkg_setup() {
 		kernel_is -le "${kv_major_max}" "${kv_minor_max}" || die \
 			"Linux ${kv_major_max}.${kv_minor_max} is the latest supported version"
 
-		# 0.8.x requires at least 2.6.32
-		kernel_is ge 2 6 32 || die "Linux 2.6.32 or newer required"
-	else
-		# git master requires at least 3.10
-		kernel_is -ge 3 10 || die "Linux 3.10 or newer required"
 	fi
+
+	kernel_is -ge 3 10 || die "Linux 3.10 or newer required"
 
 	linux-mod_pkg_setup
 }
@@ -91,9 +107,10 @@ pkg_setup() {
 src_prepare() {
 	default
 
-	if [[ ${PV} == "9999" ]]; then
-		eautoreconf
-	else
+	# Run unconditionally (bug #792627)
+	eautoreconf
+
+	if [[ ${PV} != "9999" ]]; then
 		# Set module revision number
 		sed -i "s/\(Release:\)\(.*\)1/\1\2${PR}-gentoo/" META || die "Could not set Gentoo release"
 	fi
@@ -117,7 +134,7 @@ src_configure() {
 		$(use_enable debug)
 	)
 
-	CONFIG_SHELL="${EPREFIX}/bin/bash" econf "${myconf[@]}"
+	econf "${myconf[@]}"
 }
 
 src_compile() {
@@ -136,9 +153,9 @@ src_install() {
 	set_arch_to_kernel
 
 	myemakeargs+=(
-		DEPMOD="/bin/true"
+		DEPMOD=:
 		DESTDIR="${D}"
-		INSTALL_MOD_PATH="${INSTALL_MOD_PATH:-$EROOT}"
+		INSTALL_MOD_PATH="${EPREFIX:-/}" # lib/modules/<kver> added by KBUILD
 	)
 
 	emake "${myemakeargs[@]}" install
@@ -157,6 +174,11 @@ pkg_postinst() {
 		rm -r "${EROOT}/lib/modules/${KV_FULL}/addon/zfs" || die "Cannot remove modules"
 		rmdir --ignore-fail-on-non-empty "${EROOT}/lib/modules/${KV_FULL}/addon"
 	fi
+
+#>>>	if [[ -z ${ROOT} ]] && use dist-kernel; then
+#>>>		set_arch_to_portage
+#>>>		dist-kernel_reinstall_initramfs "${KV_DIR}" "${KV_FULL}"
+#>>>	fi
 
 	if use x86 || use arm; then
 		ewarn "32-bit kernels will likely require increasing vmalloc to"
