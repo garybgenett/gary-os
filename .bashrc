@@ -3797,6 +3797,18 @@ function shell {
 		cd - >/dev/null
 		return 0
 	fi
+	if [[ ${DEST} == -h ]]; then
+		${MKDIR} ${HOME}/scripts
+		${RSYNC_U} root@server.garybgenett.net:/.g/_data/zactive/.static/.bashrc ${HOME}/
+		${RSYNC_U} root@server.garybgenett.net:/.g/_data/zactive/.static/scripts/_sync ${HOME}/scripts/
+		${HOME}/scripts/_sync _home ${HOME}
+		${FUNCNAME} -i
+		if [[ ! -f ${HISTFILE} ]]; then
+			${MKDIR} ${HOME}/.history/shell
+			${RSYNC_U} root@server.garybgenett.net:/.g/_data/zactive/.history/shell/${HOSTNAME}.* ${HOME}/.history/shell/
+		fi
+		return 0
+	fi
 	if [[ ${DEST} == -i ]]; then
 		${RSYNC_U} root@server.garybgenett.net:/.g/_data/zactive/.static/.ssh/id_* ${HOME}/.ssh/
 		return 0
