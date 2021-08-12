@@ -33,7 +33,9 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_P}"
 
-CABAL_CORE_LIB_GHC_PV="PM:8.10.3 PM:8.10.4 PM:9999"
+#>>>CABAL_CORE_LIB_GHC_PV="PM:8.10.3 PM:8.10.4 PM:9999"
+CABAL_CORE_LIB_GHC_PV="PM:8.10.3 PM:8.10.4 PM:8.10.5-r1 PM:9.0.1-r1 PM:9999"
+#>>>
 
 src_configure() {
 	haskell-cabal_src_configure \
