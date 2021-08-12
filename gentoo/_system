@@ -1291,10 +1291,6 @@ if [[ ${1} == -i ]]; then
 		${RSYNC_U} --copy-links			${TARGET}${LDIR}/.config				\
 							${TARGET}${ARCDIR}/${KCFG//${KVER}/${FILE}}		|| EXIT 1
 		if ! ${_GOS}; then
-			${RM}				${TARGET}/lib/modules/build				|| EXIT 1
-			${LN} ${KDIR//${KVER}/${FILE}}	${TARGET}/lib/modules/build				|| EXIT 1
-			${RM}				${TARGET}/lib/modules/source				|| EXIT 1
-			${LN} ${KDIR//${KVER}/${FILE}}	${TARGET}/lib/modules/source				|| EXIT 1
 			${RM}				${TARGET}/boot/_cur					|| EXIT 1
 			${LN} ${KFIL//${KVER}/${FILE}}	${TARGET}/boot/_cur					|| EXIT 1
 			${RM}				${TARGET}/boot/_new					|| EXIT 1
