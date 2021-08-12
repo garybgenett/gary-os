@@ -1,0 +1,6 @@
+# app-text/qpdfview-0.4.18_pre4
+/usr/include/qt5/QtGui/qmatrix.h:54:7: note: forward declaration of 'class QPainterPath'
+54 | class QPainterPath;
+* ERROR: app-text/qpdfview-0.4.18_p1::overlay failed (depend phase):
+* plocale.eclass could not be found by inherit()
+-- qpdfview-0.4.18_p1.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/app-text/qpdfview?id=c19372a283f49698a80187d32d92634a84b75244
