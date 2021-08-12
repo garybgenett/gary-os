@@ -70,9 +70,9 @@ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
 static const char *readcmd[]		= { "urxvt", "+sb", "-fn", urxvt_font, "-fb", urxvt_font, "-bg", urxvt_bgcolor, "-fg", urxvt_fgcolor, "-title", "GaryOS Readme", "-e", "less", "/.gary-os/README.md", NULL };
 static const char *mancmd[]		= { "urxvt", "+sb", "-fn", urxvt_font, "-fb", urxvt_font, "-bg", urxvt_bgcolor, "-fg", urxvt_fgcolor, "-title", "DWM Manual", "-e", "man", "dwm", NULL };
 //>>> static const char *termcmd[]	= { "tabbed", "-d", "-f", "-r", "2", "-n", "URxvt", "urxvt", "-embed", "''", "-sr", "-bg", urxvt_bgcolor, "-fg", urxvt_fgcolor, NULL };
-//>>> static const char *webcmd[]	= { "tabbed", "-d", "-f", "-r", "2", "-n", "Surf", "surf", "-e", "''", "http://www.duckduckgo.com", NULL };
 static const char *termcmd[]		= { "urxvt", "-sr", "-fn", urxvt_font, "-fb", urxvt_font, "-bg", urxvt_bgcolor, "-fg", urxvt_fgcolor, NULL };
-static const char *extcmd[]		= { "firefox", "http://www.duckduckgo.com", NULL };
+//>>> static const char *webcmd[]	= { "tabbed", "-d", "-f", "-r", "2", "-n", "Surf", "surf", "-e", "''", "http://www.duckduckgo.com", NULL };
+static const char *extcmd[]		= { "tabbed", "-d", "-f", "-r", "2", "-n", "Surf", "surf", "-e", "''", "http://www.duckduckgo.com", NULL };
 static const char *webcmd[]		= { "links", "-g",
 	"-menu-font-size",		links_fontsize,
 	"-html-user-font-size",		links_fontsize,
