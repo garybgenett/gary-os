@@ -730,6 +730,7 @@ app-emulation/libvirt
 app-emulation/lxc
 app-emulation/qemu
 app-emulation/qemu-guest-agent
+app-emulation/spice-vdagent
 app-emulation/virt-viewer
 games-emulation/dosbox
 
