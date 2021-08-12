@@ -1,13 +1,11 @@
-# original version: sys-fs/zfs-0.8.1 sys-fs/zfs-kmod-0.8.1
-# posterity and rescue
+# original: sys-fs/zfs-0.8.1 sys-fs/zfs-kmod-0.8.1
+# posterity
 >> https://github.com/openzfs/zfs/issues/9849
 >> https://github.com/openzfs/zfs/pull/9895
 >> https://github.com/loli10K/zfs/commit/b98a0fce2835a41acb75358c580e29747d5e778c
 -- zfs-kmod-0.7.13.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-fs/zfs-kmod?id=fc82e51c0512403e2a7ce8b811d4e3534b55caea
+# posterity
 -- zfs-kmod-0.8.1.ebuild -- # 2020-01-01 08:47:18 +0000 a99c1b0f084dfc8e615f56792090b5b2d8ae14b6 kit updates
-# compatibility with 5.6 linux kernel
 -- zfs-kmod-0.8.4-r1.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-fs/zfs-kmod?id=39b85c576c6d2042ea91c7bf5e038b07f1fd27f0
-# update
--- zfs-kmod-0.8.6.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-fs/zfs-kmod?id=74c9a6b263f40405458f77e2423cf0c57412d201
-dist-kernel-utils.eclass could not be found by inherit()
--- zfs-kmod-0.8.6.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-fs/zfs-kmod?id=c675d3a6dc992d0e430bb8cefde083e6360009f6
+# current
+-- zfs-kmod-2.0.5.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-fs/zfs-kmod?id=74c9a6b263f40405458f77e2423cf0c57412d201
