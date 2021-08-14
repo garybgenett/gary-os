@@ -6,6 +6,12 @@ source ${HOME}/.bashrc
 #>>> git-commit -- $(git-status gentoo/overlay 2>/dev/null | grep "modified:" | cut -d':' -f2)
 #>>> git-commit -- $(git-status gentoo/overlay 2>/dev/null | grep "deleted:" | cut -d':' -f2)
 
+#NOTE: ASSUMING LOCATION AND NAME OF THE "_SYSTEM" SCRIPT
+
+source $(dirname $(dirname "${_SELF}"))/_system
+
+########################################
+
 declare ARCHIVE="_archive"
 
 declare LENGTH="120"
@@ -22,6 +28,10 @@ if [[ ${1} == -v ]]; then
 	RVIEW="true"
 	shift
 fi
+
+################################################################################
+
+delete_empty $(realpath ${PWD})
 
 ################################################################################
 
@@ -70,7 +80,6 @@ if [[ ${1} == -a ]]; then
 			${MV} ${FILE} ${ARCHIVE}/$(dirname ${FILE})
 		fi
 	done
-	${RM} $(find ./ -type d -empty)
 	exit 0
 fi
 
@@ -132,10 +141,6 @@ for FILE in $(
 	echo										2>&1
 	${LS} -R ./${FILE}								2>&1
 done >>${0}.txt
-
-########################################
-
-${RM} $(find ./ -type d -empty)
 
 ########################################
 
