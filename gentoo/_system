@@ -1383,7 +1383,7 @@ if [[ ${1} == -w ]]; then
 		gcc-config --list-profiles
 	fi
 	if [[ -n "$(which java-config 2>/dev/null)" ]]; then
-		java-config --set-system-vm $(java-config --list-available-vm	| ${SED} -n "s|^.*[[](.+)[]].*$|\1|gp" | ${GREP} -o "icedtea[-][0-9]+" | sort -uV | tail -n1)
+		java-config $(java-config --list-available-vm	| ${SED} -n "s|^.*[[](.+)[]].*$|\1|gp" | ${GREP} -o "icedtea[-][0-9]+" | sort -uV | tail -n1)
 		java-config --list-available-vms
 	fi
 	for FILE in \
@@ -1402,9 +1402,7 @@ if [[ ${1} == -w ]]; then
 		eselect ${FILE} list
 	done
 	for FILE in \
-		$(for NEXT in ${KERNEL}; do
-			echo "kernel:${KBAS//${KVER}/${NEXT}}"
-		done) \
+		kernel:${KBAS} \
 		${SELECT} \
 	; do
 		declare KEY="$(echo "${FILE}" | ${SED} "s|^(.+)[:](.+)$|\1|g")"
