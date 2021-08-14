@@ -373,6 +373,7 @@ sys-apps/fakeroot-ng
 sys-apps/kexec-tools
 
 sys-apps/hdparm
+sys-apps/smartmontools
 sys-block/blktrace
 
 sys-apps/dcfldd
@@ -445,6 +446,7 @@ app-emulation/qemu
 app-emulation/qemu-guest-agent
 app-emulation/spice-vdagent
 app-emulation/virt-viewer
+app-emulation/wine-vanilla
 games-emulation/dosbox
 
 app-admin/keepassxc
