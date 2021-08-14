@@ -374,6 +374,9 @@ export X2VNC="x2vnc -west -tunnel -shared -noblank -lockdelay 60 -timeout 60"	; 
 #>>>export VLC="vlc --intf ncurses --no-color"					; alias vlc-c="${VLC}"
 export VLC="vlc --intf ncurses --no-color --no-playlist-tree"			; alias vlc-c="${VLC}"
 
+export LINKS="links -download-dir ${NULLDIR} -download-utime 1 -aggressive-cache 1 -save-url-history 1"
+alias links="${LINKS} http://www.duckduckgo.com"
+
 ########################################
 
 unset EMERGE_DEFAULT_OPTS
