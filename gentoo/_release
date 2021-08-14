@@ -2311,9 +2311,7 @@ function _publish_upload {
 	find			${_OUTDIR} -type d -exec chmod 755 {} \;	|| return 1
 	find			${_OUTDIR} -type f -exec chmod 644 {} \;	|| return 1
 	chown -R root:root	${_OUTDIR}					|| return 1
-	until [[ -z		$(find ${_OUTDIR} -type d -empty) ]]; do
-		${RM}		$(find ${_OUTDIR} -type d -empty)		|| return 1
-	done
+	delete_empty		${_OUTDIR}					|| return 1
 	eval ${RSYNC_U} --copy-links --delete-excluded				\
 		$(for FILE in $(${LS} --directory ${_OUTDIR}/${_VERSN}/*/ 2>/dev/null); do
 			echo "--filter=\"-_/${_VERSN}/$(basename ${FILE})\""

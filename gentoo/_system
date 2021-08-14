@@ -761,6 +761,23 @@ function kernel_cpu {
 	return 0
 }
 
+########################################
+
+function delete_empty {
+	declare TGT_DIR="${1}" && shift
+	declare TGT_TYP="-type d"
+	if [[ ${1} == -a ]]; then
+		TGT_TYP=
+		shift
+	fi
+	FILE="$(find ${TGT_DIR} ${TGT_TYP} -empty)"
+	while [[ -n ${FILE} ]]; do
+		${RM} ${FILE} || return 1
+		FILE="$(find ${TGT_DIR} ${TGT_TYP} -empty)"
+	done
+	return 0
+}
+
 ################################################################################
 
 trap "EXIT 1" SIGHUP SIGINT SIGKILL SIGTERM
@@ -1145,6 +1162,9 @@ if [[ ${1} == -p ]]; then
 		EXIT 0
 	fi
 	shift
+	${RM} ${TMPDIR}/._portage_reinstall_.*
+	${RM} ${TMPDIR}/*/repo
+	delete_empty ${TMPDIR} -a
 	${LL} -d ${TMPDIR}
 	${LL} ${TMPDIR}
 	FILE="$(find ${TMPDIR}/[a-z]* -mindepth 1 -maxdepth 1 2>/dev/null | sort --unique)"
@@ -1485,13 +1505,13 @@ elif [[ ${1} == -U ]]; then
 		echo -en "\"\n"							1>&2
 	fi
 	for FILE in								\
-		$(find ${DSTDIR} -empty			2>/dev/null | sort)	\
 		$(find ${DSTDIR}/*checksum_failure*	2>/dev/null | sort)	\
 		$(find ${DSTDIR}/.*.portage_lockfile	2>/dev/null | sort)	\
 	; do
 		FAIL="true"
 		${RM} ${FILE}							1>&2
 	done
+	delete_empty ${TMPDIR} -a						1>&2
 	${RM} ${DSTDIR}.log							1>&2
 	if ${FAIL}; then
 		EXIT 1
