@@ -770,10 +770,10 @@ function delete_empty {
 		TGT_TYP=
 		shift
 	fi
-	FILE="$(find ${TGT_DIR} ${TGT_TYP} -empty)"
+	FILE="$(find ${TGT_DIR} -mindepth 1 ${TGT_TYP} -empty)"
 	while [[ -n ${FILE} ]]; do
 		${RM} ${FILE} || return 1
-		FILE="$(find ${TGT_DIR} ${TGT_TYP} -empty)"
+		FILE="$(find ${TGT_DIR} -mindepth 1 ${TGT_TYP} -empty)"
 	done
 	return 0
 }
@@ -1163,7 +1163,7 @@ if [[ ${1} == -p ]]; then
 	fi
 	shift
 	${RM} ${TMPDIR}/._portage_reinstall_.*
-	${RM} ${TMPDIR}/*/repo
+	${RM} ${TMPDIR}/*/*/repo
 	delete_empty ${TMPDIR} -a
 	${LL} -d ${TMPDIR}
 	${LL} ${TMPDIR}
