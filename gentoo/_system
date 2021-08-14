@@ -308,10 +308,11 @@ function portage_file {
 	return 0
 }
 
-#OPTIONS[FUNTOO LINPKG KERNEL]
+#OPTIONS[FUNTOO FUNDAT LINPKG KERNEL]
 #OPTIONS[SELECT WINMGR WMHELP]
 #OPTIONS[RCUPDT FSUPDT FSPACK FSKEEP FSARCH FSEXCL]
-export FUNTOO="${FUNTOO:-$(tail -n1 ${SETDIR}/${FUNDIR}/${FUNCMT} 2>/dev/null)}"
+declare FUNTOO="${FUNTOO:-$(tail -n1 ${SETDIR}/${FUNDIR}/${FUNCMT} 2>/dev/null)}"
+declare FUNDAT="$(${SED} -n "s|^#.+([0-9]{4}-[0-9]{2}-[0-9]{2}).+(${FUNTOO/#* }).*$|\1|gp" ${SETDIR}/${FUNDIR}/${FUNCMT})"
 for FILE in	\
 	LINPKG	\
 	KERNEL	\
