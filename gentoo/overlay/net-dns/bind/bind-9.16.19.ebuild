@@ -264,7 +264,10 @@ pkg_postinst() {
 	if [ ! -f '/etc/bind/rndc.key' -a ! -f '/etc/bind/rndc.conf' ]; then
 		if use urandom; then
 			einfo "Using /dev/urandom for generating rndc.key"
-			/usr/sbin/rndc-confgen -r /dev/urandom -a
+#>>> rndc-confgen: The -r option has been deprecated.
+#>>>			/usr/sbin/rndc-confgen -r /dev/urandom -a
+			/usr/sbin/rndc-confgen -a
+#>>>
 			echo
 		else
 			einfo "Using /dev/random for generating rndc.key"
