@@ -306,6 +306,7 @@ sys-apps/fakeroot-ng			#{MOD}
 sys-apps/kexec-tools			#{MOD}
 
 sys-apps/hdparm
+sys-apps/smartmontools
 sys-block/blktrace
 
 sys-apps/dcfldd
