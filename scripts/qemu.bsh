@@ -19,7 +19,7 @@ declare INDX_NET="4"
 
 ########################################
 
-declare BIOS="/usr/share/edk2-ovmf/OVMF.fd"
+declare BIOS="/usr/share/edk2-ovmf/OVMF_CODE.fd"
 if [[ ${1} == MBR ]]; then
 	BIOS="/usr/share/qemu/bios.bin"
 	shift
@@ -89,11 +89,11 @@ if [[ -n ${QFIL} ]]; then
 else
 	QNAM="null"
 fi
-declare QOUT="/tmp/qemu.${QNAM}.txt"
+declare QOUT="/tmp/qemu.${QNAM}"
 declare QNUL="/tmp/qemu.null.qcow2"
 
-declare QISO="${QOUT/%.txt}.iso"
-declare QNFL="${QOUT/%.txt}.qcow2"
+declare QISO="${QOUT}.iso"
+declare QNFL="${QOUT}.qcow2"
 declare QNSZ="100G"
 
 declare QKRN=
@@ -120,6 +120,9 @@ if ${ROOT}; then
 		modprobe -v kvm-intel nested=1
 		modprobe -v vhost-net
 #>>>	done
+	if [[ -z $(${GREP} "^none[ ]/sys/fs/cgroup[ ]" /proc/mounts) ]]; then
+		mount -t cgroup none /sys/fs/cgroup
+	fi
 	if ! virt-host-validate; then
 		sleep 2
 	fi
@@ -198,7 +201,6 @@ fi
 
 QMCH+=" -rtc base=utc,clock=host"
 QMCH+=" -smp cpus=2,sockets=2,cores=1,threads=1"
-QMCH+=" -realtime mlock=off"
 
 ########################################
 
@@ -208,7 +210,7 @@ QMON+=" -serial telnet:127.0.0.1:990${QNUM},server,nowait"
 ########################################
 
 # http://www.linux-kvm.org/page/SPICE
-QVDA="-spice addr=127.0.0.1,port=666${QNUM},disable-ticketing"
+QVDA="-spice addr=127.0.0.1,port=666${QNUM},disable-ticketing=on"
 
 # https://www.spice-space.org/spice-user-manual.html
 QVDA+=" -chardev spicevmc,id=spicevmc0,name=vdagent"
@@ -216,7 +218,7 @@ QVDA+=" -device virtio-serial,id=virtio-serial0"
 QVDA+=" -device virtserialport,chardev=spicevmc0,bus=virtio-serial0.0,nr=1,name=com.redhat.spice.0"
 
 # https://wiki.qemu.org/Features/GuestAgent
-QVDA+=" -chardev socket,id=qga0,path=/tmp/qemu.${QNAM}.sock,server,nowait"
+QVDA+=" -chardev socket,id=qga0,path=/tmp/qemu.${QNAM}.sock,server=on,wait=off"
 QVDA+=" -device virtio-serial,id=virtio-serial1"
 QVDA+=" -device virtserialport,chardev=qga0,bus=virtio-serial1.0,nr=1,name=org.qemu.guest_agent.0"
 
@@ -294,14 +296,17 @@ QUSB+=" -device nec-usb-xhci,id=xhci0"
 # https://wiki.archlinux.org/index.php/QEMU_#Audio
 
 QSND="-device ich9-intel-hda,bus=pci.0"
-QSND+=" -device hda-duplex"
 
-#>>>	QSND+=" -audiodev spice,id=spiceaudio0"
 if [[ -n $(pgrep pulseaudio) ]]; then
-	QSND+=" -audiodev pa,id=pa0,server=/tmp/pulseaudio"
+	QSND+=" -audiodev driver=pa,id=pa0,server=/tmp/pulseaudio"
+	QSND+=" -device hda-duplex,audiodev=pa0"
 else
-	QSND+=" -audiodev alsa,id=alsa0"
+	QSND+=" -audiodev driver=alsa,id=alsa0"
+	QSND+=" -device hda-duplex,audiodev=alsa0"
 fi
+
+QSND+=" -audiodev driver=spice,id=spiceaudio0"
+QSND+=" -device hda-duplex,audiodev=spiceaudio0"
 
 ################################################################################
 
@@ -324,16 +329,9 @@ eval exec qemu-system-x86_64 \
 	${QKRN} \
 	${QDSK} \
 	\
-	-writeconfig "${QOUT}" \
 	"${@}" ${FORK}
 
 ########################################
-
-reset
-if [[ -n ${FORK} ]]; then
-	sleep 1
-	cat "${QOUT}"
-fi
 
 reset
 if [[ ${INTERFACE} == display ]]; then
