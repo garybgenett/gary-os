@@ -374,9 +374,6 @@ export X2VNC="x2vnc -west -tunnel -shared -noblank -lockdelay 60 -timeout 60"	; 
 #>>>export VLC="vlc --intf ncurses --no-color"					; alias vlc-c="${VLC}"
 export VLC="vlc --intf ncurses --no-color --no-playlist-tree"			; alias vlc-c="${VLC}"
 
-export LINKS="links -download-dir ${NULLDIR} -download-utime 1 -aggressive-cache 1 -save-url-history 1"
-alias links="${LINKS} http://www.duckduckgo.com"
-
 ########################################
 
 unset EMERGE_DEFAULT_OPTS
@@ -506,6 +503,29 @@ export WGET_R="${WGET_S} \
 	--wait=3"
 
 alias wget="${WGET_C}"
+
+########################################
+
+export LINKS_C="links \
+	-download-dir ${NULLDIR} \
+	-download-utime 1 \
+	-aggressive-cache 1 \
+	-save-url-history 1 \
+"
+export LINKS="${LINKS_C} \
+	-menu-font-size 13 \
+	-html-user-font-size 13 \
+	-html-g-background-color 0x808080 \
+	-html-g-text-color 0x000000 \
+	-html-g-link-color 0xc00000 \
+	-scroll-bar-frame-color 0x404040 \
+	-scroll-bar-area-color 0x808080 \
+	-scroll-bar-bar-color 0x404040 \
+	-menu-background-color 0x404040 \
+	-menu-foreground-color 0xc0c0c0 \
+"
+
+alias links="${LINKS} http://www.duckduckgo.com"
 
 ################################################################################
 # aliases
