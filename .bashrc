@@ -399,7 +399,8 @@ export ENCFS="encfs \
 	--nocache \
 	--standard \
 	--no-default-flags \
-	--public"
+	--public \
+"
 
 alias encfs="${ENCFS}"
 
@@ -420,7 +421,8 @@ export UNISON_U="${UNISON_W} \
 	-owner \
 	-group"
 export UNISON_F="${UNISON_U} \
-	-fastcheck=false"
+	-fastcheck=false \
+"
 
 alias unison="${UNISON_U}"
 
@@ -435,11 +437,13 @@ export RSYNC_C="reporter rsync \
 	--progress \
 	--compress \
 	--fuzzy \
-	--times"
+	--times \
+"
 export RSYNC_W="${RSYNC_C} \
 	--force \
 	--delete \
-	--delete-during"
+	--delete-during \
+"
 export RSYNC_U="${RSYNC_W} \
 	--sparse \
 	--devices \
@@ -449,11 +453,14 @@ export RSYNC_U="${RSYNC_W} \
 	--perms \
 	--numeric-ids \
 	--owner \
-	--group"
+	--group \
+"
 export RSYNC_F="${RSYNC_U} \
-	--checksum"
+	--checksum \
+"
 export RSYNC_W="${RSYNC_W} \
-	--modify-window=10"
+	--modify-window=10 \
+"
 
 alias rsync="${RSYNC_U}"
 
@@ -470,7 +477,8 @@ export RCLONE_U="${RCLONE_C} sync \
 	--stats-file-name-length=0 \
 	--delete-during \
 	--track-renames \
-	--copy-links"
+	--copy-links \
+"
 
 alias rclone="${RCLONE_U}"
 
@@ -487,20 +495,23 @@ export WGET_C="wget \
 	--timestamping \
 	--timeout=3 \
 	--tries=3 \
-	--waitretry=3"
+	--waitretry=3 \
+"
 export WGET_S="${WGET_C} \
 	--force-directories \
 	--no-host-directories \
 	--no-parent \
 	--page-requisites \
 	--convert-links \
-	--backup-converted"
+	--backup-converted \
+"
 export WGET_R="${WGET_S} \
 	--user-agent=Mozilla/5.0 \
 	--recursive \
 	--level=inf \
 	--random-wait \
-	--wait=3"
+	--wait=3 \
+"
 
 alias wget="${WGET_C}"
 
