@@ -35,7 +35,8 @@ sys-apps/busybox			-pam		# gentoo required
 sys-auth/consolekit			policykit	# gentoo required
 sys-libs/gdbm				berkdb		# gentoo required
 
-media-sound/aumix			-gpm		# gnetoo required: [media-sound/aumix-2.9.1] mouse.c:(.text+0x46): undefined reference to `Gpm_Wgetch'
+dev-python/pygobject			cairo		# gentoo required: [x11-misc/arandr-*] TypeError: Couldn't find foreign struct converter for 'cairo.Context'
+media-sound/aumix			-gpm		# gnetoo required: [media-sound/aumix-*] mouse.c:(.text+0x46): undefined reference to `Gpm_Wgetch'
 
 ########################################
 
