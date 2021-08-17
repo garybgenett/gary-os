@@ -343,6 +343,7 @@ export WMHELP="${WMHELP:-${_TITLE} / \`date --iso=s\`}"
 
 declare LDIR="/usr/src/linux"
 declare MDIR="/lib64/modules"
+declare FDIR="/lib64/firmware"
 
 declare KVER=
 declare KCFG=
