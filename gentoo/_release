@@ -200,24 +200,34 @@ declare PACKDIRS_MARK="-"
 
 declare PACKDIRS_DEFL="${PACKDIRS_INST}"
 
+FSUPDT="
+rc-service udev restart || true
+rc-service modules restart || true
+rc-service keymaps restart || true
+${FSUPDT}
+"
+FSUPDT="$(echo "${FSUPDT}" | tr '\n' ';' | ${SED} -e "s|^;+||g" -e "s|;+$||g" -e "s|;| ; |g")"
+
 #note: the "$repdir" and "$ldir" directories are packed in the "prepare_repdir" and "prepare_linux" functions, respectively
 #note: adding them here ensures they will be handled properly by functions like "release_reset" and "release_unpack", as though they were regular archives
-for FILE in ${REPDIR} ${LDIR} ${PDBDIR}	; do if ! variable_match "FSPACK FSKEEP FSARCH FSEXCL" ";" "${FILE}"; then FSPACK+="; ${_TITLE}:${FILE}"; fi; done
+#note: the "$ldir-*" directories are handled in "$skipdirs" below
+for FILE in ${MDIR} ${FDIR}		; do if ! variable_match "FSPACK FSKEEP FSARCH FSEXCL" ";" "${FILE}"; then FSPACK+="; ${_TITLE}:${FILE}"; fi; done
+for FILE in ${REPDIR} ${LDIR} ${PDBDIR}	; do if ! variable_match "FSPACK FSKEEP FSARCH FSEXCL" ";" "${FILE}"; then FSKEEP+="; ${_TITLE}:${FILE}"; fi; done
 for FILE in ${REPDIR}.git		; do if ! variable_match "FSPACK FSKEEP FSARCH FSEXCL" ";" "${FILE}"; then FSARCH+="; ${_TITLE}:${FILE}"; fi; done
-FSEXCL+="$(${LS} ${TARGET}${MDIR} 2>/dev/null | while read -r FILE; do
-	declare KEEP="false"
-	for NEXT in ${KERNEL}; do
-		if [[ ${FILE} == ${NEXT}-gentoo ]]; then
-			KEEP="true"
-		fi
-	done
-	if ! ${KEEP}			&& ! variable_match "FSPACK FSKEEP FSARCH FSEXCL" ";" "${FILE}"; then echo -en "; ${_TITLE}:${MDIR}/${FILE}"; fi
-done)"
+for FILE in $((
+		find ${TARGET}/boot/{System.map,initramfs,kernel}-*
+		find ${TARGET}/etc/kernels	-mindepth 1 -maxdepth 1
+		find ${TARGET}${MDIR}		-mindepth 1 -maxdepth 1
+	) 2>/dev/null |
+		${GREP} -v "${KVER}-gentoo$" |
+		${SED} "s|^${TARGET}||g" |
+		sort
+	)				; do if ! variable_match "FSPACK FSKEEP FSARCH FSEXCL" ";" "${FILE}"; then FSEXCL+="; ${_TITLE}:${FILE}"; fi; done
 if ! ${DOTEST}; then
-	FSPACK="$(variable_parse FSPACK ";" "" "" true | sort -u | tr '\n' ';' | ${SED} -e "s|;$||g" -e "s|;| ; |g")"
-	FSKEEP="$(variable_parse FSKEEP ";" "" "" true | sort -u | tr '\n' ';' | ${SED} -e "s|;$||g" -e "s|;| ; |g")"
-	FSARCH="$(variable_parse FSARCH ";" "" "" true | sort -u | tr '\n' ';' | ${SED} -e "s|;$||g" -e "s|;| ; |g")"
-	FSEXCL="$(variable_parse FSEXCL ";" "" "" true | sort -u | tr '\n' ';' | ${SED} -e "s|;$||g" -e "s|;| ; |g")"
+	FSPACK="$(variable_parse FSPACK ";" "" "" true | sort -u | tr '\n' ';' | ${SED} -e "s|^;+||g" -e "s|;+$||g" -e "s|;| ; |g")"
+	FSKEEP="$(variable_parse FSKEEP ";" "" "" true | sort -u | tr '\n' ';' | ${SED} -e "s|^;+||g" -e "s|;+$||g" -e "s|;| ; |g")"
+	FSARCH="$(variable_parse FSARCH ";" "" "" true | sort -u | tr '\n' ';' | ${SED} -e "s|^;+||g" -e "s|;+$||g" -e "s|;| ; |g")"
+	FSEXCL="$(variable_parse FSEXCL ";" "" "" true | sort -u | tr '\n' ';' | ${SED} -e "s|^;+||g" -e "s|;+$||g" -e "s|;| ; |g")"
 fi
 
 declare PACKDIRS="
