@@ -110,7 +110,8 @@
 #{MOD} #{FSUPDT} openrc
 #{MOD} #{FSUPDT} rc-status
 
-#{FSPACK}
+#{FSPACK} base:/lib64/modules
+#{FSPACK} base:/lib64/firmware
 
 #{FSKEEP} gcc:/usr/include
 #{FSKEEP} gcc:/usr/libexec/gcc
