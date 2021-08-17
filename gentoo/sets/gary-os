@@ -41,9 +41,7 @@
 #{RCUPDT} rc-update del dbus default		|| true
 #{RCUPDT} rc-update show
 
-#{FSUPDT} rc-service udev restart	|| true
-#{FSUPDT} rc-service modules restart	|| true
-#{FSUPDT} rc-service keymaps restart	|| true
+#{FSUPDT}
 
 #note: match these up with "release_review" output
 #note: for "release_install" to work correctly, "#{fsexcl}" must be empty
