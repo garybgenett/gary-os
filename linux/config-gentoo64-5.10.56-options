@@ -1,5 +1,5 @@
 ################################################################################
-# default-debian-sources-5.6.7_p1
+# default-debian-sources-5.10.46_p2
 ################################################################################
 
 General setup
@@ -66,11 +66,11 @@ Device Drivers
 #>>>		AMD GPU								CONFIG_DRM_AMDGPU=y
 #>>>		Nouveau (NVIDIA) cards						CONFIG_DRM_NOUVEAU=y
 #>>>		Intel 8xx/9xx/G3x/G4x/HD Graphics				CONFIG_DRM_I915=y
-		Frame buffer Devices
-			Support for frame buffer devices			CONFIG_FB=y
-				VGA 16-color graphics support			CONFIG_FB_VGA16=y
-				VESA VGA graphics support			CONFIG_FB_VESA=y
-				EFI-based Framebuffer Support			CONFIG_FB_EFI=y
+#>>>		Frame buffer Devices
+#>>>			Support for frame buffer devices			CONFIG_FB=y
+#>>>				VGA 16-color graphics support			CONFIG_FB_VGA16=y
+#>>>				VESA VGA graphics support			CONFIG_FB_VESA=y
+#>>>				EFI-based Framebuffer Support			CONFIG_FB_EFI=y
 #>>>				nVidia Framebuffer Support			CONFIG_FB_NVIDIA=y
 #>>>				Intel .../915G/945G/945GM/965G/965GM support	CONFIG_FB_INTEL=y
 #>>>				ATI Radeon display support			CONFIG_FB_RADEON=y
