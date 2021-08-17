@@ -110,6 +110,10 @@
 #{MOD} #{FSUPDT} openrc
 #{MOD} #{FSUPDT} rc-status
 
+#note: match these up with "release_review" output
+#note: for "release_install" to work correctly, "#{fsexcl}" must be empty
+#{FSEXCL}
+
 #{FSPACK} base:/lib64/modules
 #{FSPACK} base:/lib64/firmware
 
@@ -125,8 +129,6 @@
 #{FSARCH} debug:/usr/lib64/debug
 #>>>#{FSARCH} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/7.3.1/debug
 #>>>#{FSARCH} debug:/usr/src/debug
-
-#{FSEXCL}
 
 ########################################
 # firmware

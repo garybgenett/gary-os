@@ -45,8 +45,9 @@
 
 #note: match these up with "release_review" output
 #note: for "release_install" to work correctly, "#{fsexcl}" must be empty
+#{FSEXCL}
 #{MOD} #{FSKEEP}
-#{FSEXCL}	#{MOD}
+#{MOD} #{FSARCH}
 
 #note: speed up boot time by only having these in the "#{mod}" build
 #note: size of the default "rootfs" file is not as much of a concern as the in-memory footprint
@@ -59,43 +60,42 @@
 #{MOD} #{FSPACK} base:/usr/share
 
 #{FSPACK} base:/lib64/modules
-#{FSPACK} base:/lib64/firmware		#{MOD}
-#{MOD} #{FSARCH} base:/lib64/firmware
+#{FSPACK} base:/lib64/firmware
 
-#{FSPACK} docs:/usr/share/doc		#{MOD}
-#{FSPACK} docs:/usr/share/gtk-doc	#{MOD}
-#{FSPACK} docs:/usr/share/info		#{MOD}
-#{FSPACK} docs:/usr/share/man		#{MOD}
-#{FSPACK} docs:/usr/share/texmf-dist	#{MOD}
-#{MOD} #{FSARCH} docs:/usr/share/doc
-#{MOD} #{FSARCH} docs:/usr/share/gtk-doc
-#{MOD} #{FSARCH} docs:/usr/share/info
-#{MOD} #{FSARCH} docs:/usr/share/man
-#{MOD} #{FSARCH} docs:/usr/share/texmf-dist
+#{FSPACK} docs:/usr/share/doc
+#{FSPACK} docs:/usr/share/gtk-doc
+#{FSPACK} docs:/usr/share/info
+#{FSPACK} docs:/usr/share/man
+#{FSPACK} docs:/usr/share/texmf-dist
+#{MOD} #{FSEXCL} docs:/usr/share/doc
+#{MOD} #{FSEXCL} docs:/usr/share/gtk-doc
+#{MOD} #{FSEXCL} docs:/usr/share/info
+#{MOD} #{FSEXCL} docs:/usr/share/man
+#{MOD} #{FSEXCL} docs:/usr/share/texmf-dist
 
-#{FSKEEP} gcc:/usr/include		#{MOD}
-#{FSKEEP} gcc:/usr/libexec/gcc		#{MOD}
-#{FSKEEP} gcc:/usr/x86_64-pc-linux-gnu	#{MOD}
-#{MOD} #{FSARCH} gcc:/usr/include
-#{MOD} #{FSARCH} gcc:/usr/libexec/gcc
-#{MOD} #{FSARCH} gcc:/usr/x86_64-pc-linux-gnu
+#{FSKEEP} gcc:/usr/include
+#{FSKEEP} gcc:/usr/libexec/gcc
+#{FSKEEP} gcc:/usr/x86_64-pc-linux-gnu
+#{MOD} #{FSEXCL} gcc:/usr/include
+#{MOD} #{FSEXCL} gcc:/usr/libexec/gcc
+#{MOD} #{FSEXCL} gcc:/usr/x86_64-pc-linux-gnu
 
-#{FSKEEP} emerge:/usr/src/linux		#{MOD}
-#{FSKEEP} emerge:/var/db/pkg		#{MOD}
-#{FSKEEP} emerge:/var/git/meta-repo	#{MOD}
-#{FSARCH} emerge:/var/git/meta-repo.git	#{MOD}
-#{MOD} #{FSARCH} emerge:/usr/src/linux
-#{MOD} #{FSARCH} emerge:/var/db/pkg
-#{MOD} #{FSARCH} emerge:/var/git/meta-repo
+#{FSKEEP} emerge:/usr/src/linux
+#{FSKEEP} emerge:/var/db/pkg
+#{FSKEEP} emerge:/var/git/meta-repo
+#{FSARCH} emerge:/var/git/meta-repo.git
+#{MOD} #{FSEXCL} emerge:/usr/src/linux
+#{MOD} #{FSEXCL} emerge:/var/db/pkg
+#{MOD} #{FSEXCL} emerge:/var/git/meta-repo
 #{MOD} #{FSEXCL} emerge:/var/git/meta-repo.git
 
 #note: only removing these from the "#{mod}" build, for size
 #{MOD} #{FSEXCL} debug:/usr/lib64/python2.7/test
 #{MOD} #{FSEXCL} debug:/usr/lib64/python3.6/test
 
-#{FSARCH} debug:/usr/lib64/debug				#{MOD}
-#>>>#{FSARCH} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/7.3.1/debug	#{MOD}
-#>>>#{FSARCH} debug:/usr/src/debug					#{MOD}
+#{FSARCH} debug:/usr/lib64/debug
+#>>>#{FSARCH} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/7.3.1/debug
+#>>>#{FSARCH} debug:/usr/src/debug
 #{MOD} #{FSEXCL} debug:/usr/lib64/debug
 #>>>#{MOD} #{FSEXCL} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/7.3.1/debug
 #>>>#{MOD} #{FSEXCL} debug:/usr/src/debug
