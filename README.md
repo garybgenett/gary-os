@@ -1797,7 +1797,7 @@ Everything needed to perform these steps is in the [Repository] or the
         * `rm ./.config; ln config-gentoo64-[...] ./.config`
         * `rm ./.options; ln config-gentoo64-[...]-options ./.options`
         * `vi ./.options`
-            * [ ] Update kernel version
+            * [ ] Update source kernel version
             * [ ] Review
   * `cd .setup/gentoo.make`
     * `(cd .setup; git-commit ./linux ./gentoo)`
