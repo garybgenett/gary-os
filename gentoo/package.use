@@ -52,8 +52,8 @@ media-libs/libsdl2			haptic		# gentoo required
 net-dns/dnsmasq				script		# gentoo required
 net-im/zoom			bundled-libjpeg-turbo	# gentoo required
 
-mail-client/thunderbird			-system-webp	# gentoo required: [thunderbird-78.12.0] emerge: there are no ebuilds to satisfy ">=media-libs/libwebp-1.1.0:0=". // (dependency required by "mail-client/thunderbird-78.12.0::overlay[system-webp]" [ebuild])
-mail-client/thunderbird		-system-harfbuzz	# gentoo required: [thunderbird-78.12.0] emerge: there are no ebuilds to satisfy ">=media-libs/harfbuzz-2.6.8:0=". // (dependency required by "mail-client/thunderbird-78.12.0::overlay[system-harfbuzz]" [ebuild])
+mail-client/thunderbird			-system-webp	# gentoo required: [mail-client/thunderbird-78.12.0] emerge: there are no ebuilds to satisfy ">=media-libs/libwebp-1.1.0:0=". // (dependency required by "mail-client/thunderbird-78.12.0::overlay[system-webp]" [ebuild])
+mail-client/thunderbird		-system-harfbuzz	# gentoo required: [mail-client/thunderbird-78.12.0] emerge: there are no ebuilds to satisfy ">=media-libs/harfbuzz-2.6.8:0=". // (dependency required by "mail-client/thunderbird-78.12.0::overlay[system-harfbuzz]" [ebuild])
 www-client/firefox			-system-av1	# gentoo required: [www-client/firefox-90.0.2] emerge: there are no ebuilds to satisfy ">=media-libs/dav1d-0.8.1:=". // (dependency required by "www-client/firefox-90.0.2::overlay[system-av1]" [ebuild])
 www-client/firefox			-system-webp	# gentoo required: [www-client/firefox-90.0.2] emerge: there are no ebuilds to satisfy ">=media-libs/libwebp-1.1.0:0=". // (dependency required by "www-client/firefox-90.0.2::overlay[system-webp]" [ebuild])
 www-client/firefox		-system-harfbuzz	# gentoo required: [www-client/firefox-90.0.2] emerge: there are no ebuilds to satisfy ">=media-libs/harfbuzz-2.7.4:0=". // (dependency required by "www-client/firefox-90.0.2::overlay[system-harfbuzz]" [ebuild])
