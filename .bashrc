@@ -536,7 +536,8 @@ export LINKS="${LINKS_C} \
 	-menu-foreground-color 0xc0c0c0 \
 "
 
-alias links="${LINKS} http://www.duckduckgo.com"
+#>>>alias links="${LINKS} http://www.duckduckgo.com"
+alias links="${LINKS}"
 
 ################################################################################
 # aliases
