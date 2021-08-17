@@ -242,11 +242,9 @@ net-misc/rclone
 net-misc/unison
 net-misc/unison:2.51
 
+app-text/grip
 app-text/pandoc
 app-text/texlive
-dev-haskell/pandoc-types
-
-app-text/grip
 
 dev-vcs/cvs
 dev-vcs/git
