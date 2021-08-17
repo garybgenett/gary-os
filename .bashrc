@@ -2221,6 +2221,17 @@ function lf {
 		.Xauthority
 		.screen
 	"
+	declare LF_SAFE="
+		${LF_SAFE}
+		.X*
+		._menu.*
+		.tunes
+		.wpa_*
+		desktop.*
+		pulseaudio
+		qemu.*
+		syslog.conf
+	"
 	declare LF_RM="$(
 		find . -mindepth 1 -maxdepth 1 ! -type l |
 		${SED} "s|^./||g" |
@@ -2240,7 +2251,7 @@ function lf {
 		! ${REMOVE} ||
 		[[ -z ${LF_RM} ]];
 	}; then
-		${LL} -d ${LF_SAFE}
+		${LL} -d ${LF_SAFE} 2>/dev/null
 	fi
 	if [[ -n ${LF_RM} ]]; then
 		if ${REMOVE}; then
