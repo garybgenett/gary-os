@@ -3963,6 +3963,11 @@ function sync-dir {
 			${GIT} checkout --force &&
 			${GIT} pull)
 		if [[ -f ${BAS_DIR}/${REP_DST}/.gitmodules ]]; then
+			for FILE in ${@}; do
+				declare MODULE="$(echo "${FILE}" | ${SED} "s|^(.+)[:](.+)$|\1|g")"
+				declare BRANCH="$(echo "${FILE}" | ${SED} "s|^(.+)[:](.+)$|\2|g")"
+				${SED} -i "s|([/]${MODULE})$|\1\n\tbranch = ${BRANCH}|g" ${BAS_DIR}/${REP_DST}/.gitmodules
+			done
 			(cd ${BAS_DIR}/${REP_DST} &&
 				${GIT} submodule update --force --init --recursive --remote --rebase)
 		fi
