@@ -31,7 +31,7 @@ function kit_list {
 		use JSON::XS;
 		use Data::Dumper;
 		my $debug = "0";
-		if (${ARGV[0]} eq "debug") {
+		if ((${ARGV[0]}) && (${ARGV[0]} eq "debug")) {
 			$debug = "1";
 			shift
 		};
