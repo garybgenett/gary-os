@@ -72,8 +72,7 @@ sys-fs/eudev				static-libs	# gentoo required
 
 ########################################
 
-#>>> grep "PYTHON.+[^-]python2_7" ./build/_gentoo/.emerge | grep -v "python3_[0-9]"
-#>>> grep "PYTHON.+[^-]python3_6" ./build/_gentoo/.emerge | grep -v "python3_7"
+#>>> grep -e "PYTHON.+[^-]python2_[0-9]+" -e "PYTHON.+[^-]python3_[^7]" ./build/_gentoo/.emerge | grep -v "python3_7"
 
 app-misc/golly				python_single_target_python2_7	#{GOS} # gentoo required
 app-text/stardict			python_single_target_python2_7	#{GOS} # gentoo required
@@ -121,7 +120,7 @@ net-misc/openssh			-pam -pie
 net-misc/rsync				static
 sys-process/runit			static
 
-#>>> for FILE in $(equery --no-color depgraph sys-apps/busybox 2>&1 | awk '{print $3;}' | sed -r -e "/^$/d" -e "s|-[0-9].*$||g" | sort -u); do grep "${FILE}" ./build/_gentoo/.emerge; done | grep "static"
+#>>> DIR="sys-apps/busybox"; for FILE in $(./gentoo/_system -q -y -j --no-color depgraph ${DIR} 2>&1 | awk '{print $3;}' | sed -r -e "/^$/d" -e "/^BUILD$/d" -e "s|-[0-9].*$||g" | sort -u); do echo "${FILE}"; grep "${FILE}" ./build/_gentoo/.emerge; done | grep "static"
 #>>> for FILE in /bin/busybox /usr/bin/coreutils /bin/bash /usr/bin/openssl /usr/bin/ssh /usr/bin/rsync /sbin/runit ; do echo; echo "${FILE}"; ldd ./build${FILE}; done
 #>>> make emerge-busybox emerge-coreutils emerge-bash emerge-openssl emerge-openssh emerge-rsync emerge-runit
 app-arch/xz-utils			static-libs	# static: coreutils
