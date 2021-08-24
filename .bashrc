@@ -6648,13 +6648,13 @@ fi
 if [[ "${-/i}" != "${-}" ]]; then
 	echo -en "\n"
 	echo -en "\e[37;44m"
-	${LL} --directory \
+	${LL} --color=never --directory \
 		/.g/._data/.workspace* \
 		/.g/_data/.workspace* \
 		/.g/_data/zactive.workspace* \
 		/.g/_toor/.workspace* \
 		/tmp/.wpa* \
-		2>/dev/null | cat
+		2>/dev/null
 	echo -en "\e[0m"
 	echo -en "\n"
 fi
