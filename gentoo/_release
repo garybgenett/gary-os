@@ -245,6 +245,7 @@ fi
 
 declare PACKDIRS_SKIP="
 	${LDIR}\*/kernel/kheaders_data.tar.xz
+	/usr/share/calibre/hyphenation/dictionaries.tar.xz
 "
 
 ########################################
