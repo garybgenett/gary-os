@@ -1846,6 +1846,8 @@ function _release_unpack {		#{ismain} #{doredo} #{dotest}
 				if ! common_untar ${TARGET}${PFIL} 2>&1 | prompt -t; then
 					return 1
 				fi
+			else
+				echo -en "\n"
 			fi
 		fi
 		if {
