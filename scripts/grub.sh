@@ -693,7 +693,10 @@ function exit_summary {
 
 ########################################
 
-#>>>if [[ -f ${GIDEF} ]]; then
+if {
+	[[ -b ${GIDEF} ]] ||
+	[[ -f ${GIDEF} ]];
+}; then
 	FILE="${GDEST}/.mount-loop"
 	if {
 		[[ ${DO_MOUNT} == -m ]] ||
@@ -722,7 +725,7 @@ function exit_summary {
 		echo -en "\n"; ${LL} -R ${FILE}*
 		exit 0
 	fi
-#>>>fi
+fi
 
 ################################################################################
 
