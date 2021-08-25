@@ -638,32 +638,35 @@ function prepare_config_empty {
 }
 
 function prepare_config_issue {
-	${RSYNC_C} --copy-links ${ARTDIR}/files/issue				${TARGET}/etc/issue	|| return 1
+	${RSYNC_C} --copy-links ${ARTDIR}/files/issue		${TARGET}/etc/issue	|| return 1
 	for FILE in ${ROOTFS_FILE_VARS}; do
-		${SED} -i "s|[$][{]${FILE}[}]|${!FILE}|g"			${TARGET}/etc/issue	|| return 1
+		${SED} -i "s|[$][{]${FILE}[}]|${!FILE}|g"	${TARGET}/etc/issue	|| return 1
 	done
 	if {
 		{ [[ -z ${COMMIT} ]] || [[ ! -d ${_G_REPO} ]]; } ||
 		${_MOD};
 	}; then
+		declare BEG="Some helpful notes"
+		declare END="Build system"
 		FILE=" "
 #>>>		FILE+="\\\e[1;45;37m"
 		FILE+="\\\e[0;35m"
 		if ${_MOD}; then
+			BEG="A couple of commands"
 			FILE+="THIS IS THE MINIMIZED VERSION OF THE BUILD AND WILL HAVE REDUCED FUNCTIONALITY"
 		else
 			FILE+="PLEASE NOTE THAT THIS BUILD HAS BEEN CUSTOMIZED AND IS NOT AN OFFICIAL RELEASE"
 		fi
 		FILE+="\\\e[0;37m"
-		${SED} -i "/Some helpful notes/,/Build system/c\\${FILE}"	${TARGET}/etc/issue	|| return 1
+		${SED} -i "/${BEG}/,/${END}/c\\${FILE}"		${TARGET}/etc/issue	|| return 1
 	fi
 	if [[ ! -f ${TARGET}/usr/bin/startx ]]; then
-		${SED} -i "/startx/d"						${TARGET}/etc/issue	|| return 1
+		${SED} -i "/startx/d"				${TARGET}/etc/issue	|| return 1
 	fi
-	${SED}												\
-		-e "s|[\]e[[]([0-9]+[;])?[0-9]+[;][0-9]+m||g"						\
-		-e "/^[\][a-z]/d"									\
-		${TARGET}/etc/issue						>${TARGET}/etc/motd
+	${SED}										\
+		-e "s|[\]e[[]([0-9]+[;])?[0-9]+[;][0-9]+m||g"				\
+		-e "/^[\][a-z]/d"							\
+		${TARGET}/etc/issue				>${TARGET}/etc/motd
 	return 0
 }
 
@@ -1056,17 +1059,15 @@ function _release_devel {		#{ismain} #{doredo} #{dotest}
 			DOREDO="true" _prepare_packdirs					|| return 1
 #>>>			DOREDO="true" _prepare_symlinks					|| return 1
 			DOREDO="false" DOFAST="false" DOTEST="true" _prepare_build	|| return 1
+		else
+			DOREDO="false" _prepare_config					|| return 1
 		fi
-		DOREDO="false" _prepare_config						|| return 1
 		DOREDO="true" DOFAST="true" DOTEST="false" _release_cpio		|| return 1
 	fi
 	DOREDO="true" _release_kernel							|| return 1
-	if [[ ! -f ${_RAMFS}.rootfs ]]; then
-		touch ${_RAMFS}.rootfs							|| return 1
-	fi
-	if [[ ! -f ${_RAMFS}.rootfs.packages.txt ]]; then
-		touch ${_RAMFS}.rootfs.packages.txt					|| return 1
-	fi
+	DOREDO="true" _prepare_symlinks							|| return 1
+	if [[ ! -f ${_RAMFS}.rootfs			]]; then touch								${_RAMFS}.rootfs		; fi
+	if [[ ! -f ${_RAMFS}.rootfs.packages.txt	]]; then touch								${_RAMFS}.rootfs.packages.txt	; fi
 	if {
 		${DOREDO} ||
 		[[ ! -d ${_RAMFS}.grub ]];
@@ -1075,7 +1076,6 @@ function _release_devel {		#{ismain} #{doredo} #{dotest}
 	else
 		DOREDO="false" DOFAST="true" DOTEST="true" _release_grub		|| return 1
 	fi
-	DOREDO="true" _prepare_symlinks							|| return 1
 	_release_report									|| return 1
 	return 0
 }
@@ -1478,18 +1478,18 @@ function _release_kernel {		#{doredo}
 		DODIR="${LDIR}"
 	fi
 	if [[ ! -f ${_RAMFS}.kernel ]]; then
-		prepare_linux_directory		${DODIR}				|| return 1
-		release_kernel_patch		${DODIR}				|| return 1
-		release_kernel_config		${DODIR}				|| return 1
-		release_kernel_shmem		${DODIR}				|| return 1
-		release_kernel_initramfs	${DODIR}				|| return 1
-		release_kernel_diff		${DODIR}				|| return 1
-		release_kernel_build		${DODIR}	${_RAMFS}.kernel	|| return 1
+		prepare_linux_directory		${DODIR}					|| return 1
+		release_kernel_patch		${DODIR}					|| return 1
+		release_kernel_config		${DODIR}					|| return 1
+		release_kernel_shmem		${DODIR}					|| return 1
+		release_kernel_initramfs	${DODIR}					|| return 1
+		release_kernel_diff		${DODIR}					|| return 1
+		release_kernel_build		${DODIR}	${_RAMFS}.kernel		|| return 1
 	else
-		common_exists ${FUNCNAME}						\
-								${TARGET}${DODIR}	\
-								${_RAMFS}.kernel	\
-											|| return 1
+		common_exists ${FUNCNAME}							\
+								${TARGET}${DODIR}		\
+								${_RAMFS}.kernel		\
+												|| return 1
 	fi
 	return 0
 }
@@ -1649,26 +1649,26 @@ function release_fetch_list {		#>>>{dotest}
 		${DOTEST} ||
 		[[ ! -s ${FET_PKG} ]];
 	}; then
-		cat /dev/null					>${FET_PKG}
-		echo "${FET_BAS}.${_GREAD}"			>>${FET_PKG}
-		echo "${FET_BAS}.kernel"			>>${FET_PKG}
-		echo "${FET_BAS}.kernel.${_GPACK}"		>>${FET_PKG}
-		echo "${MASK}${FET_BAS}.grub.zip"		>>${FET_PKG}
-		echo "${MASK}${FET_BAS}.rootfs"			>>${FET_PKG}
-		echo "${MASK}${FET_BAS}.rootfs.${_GPACK}"	>>${FET_PKG}
+		cat /dev/null						>${FET_PKG}
+		echo "${FET_BAS}.${_GREAD}"				>>${FET_PKG}
+		echo "${FET_BAS}.kernel"				>>${FET_PKG}
+		echo "${FET_BAS}.kernel.${_GPACK}"			>>${FET_PKG}
+		echo "${MASK}${FET_BAS}.grub.zip"			>>${FET_PKG}
+		echo "${MASK}${FET_BAS}.rootfs"				>>${FET_PKG}
+		echo "${MASK}${FET_BAS}.rootfs.${_GPACK}"		>>${FET_PKG}
 		shopt -s lastpipe
 		variable_parse PACKDIRS | while read -r FILE; do
-			echo "${MASK}$(common_packdir ${FILE})"	>>${FET_PKG}
+			echo "${MASK}$(common_packdir ${FILE})"		>>${FET_PKG}
 		done
 		shopt ${LASTPIPE} lastpipe
-		echo "${MASK}stage3-${ESUB}.tar.xz"		>>${FET_PKG}
+		echo "${MASK}stage3-${ESUB}.tar.xz"			>>${FET_PKG}
 	else
-		${SED} -i					\
-			-e "s|^[[:space:]]+||g"			\
-			-e "s|[[:space:]]+$||g"			\
-			-e "/^$/d"				\
-								${FET_PKG}	|| return 1
-		sort -u -o ${FET_PKG}				${FET_PKG}	|| return 1
+		${SED} -i						\
+			-e "s|^[[:space:]]+||g"				\
+			-e "s|[[:space:]]+$||g"				\
+			-e "/^$/d"					\
+									${FET_PKG}	|| return 1
+		sort -u -o ${FET_PKG}					${FET_PKG}	|| return 1
 	fi
 	return 0
 }
