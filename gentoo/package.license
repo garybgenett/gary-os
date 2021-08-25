@@ -27,7 +27,6 @@ media-fonts/font-bh-type1		bh-luxi
 
 ########################################
 
-dev-vcs/subversion			FSFAP
 media-libs/faac				MPEG-4
 media-libs/fdk-aac			FraunhoferFDK
 media-libs/libpng			libpng2
