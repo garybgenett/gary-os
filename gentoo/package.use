@@ -156,7 +156,6 @@ app-misc/remind				tk
 app-office/libreoffice			java
 dev-libs/openssl			rfc3779
 dev-vcs/git				tk
-dev-vcs/subversion			-apache2
 mail-client/mutt			-tokyocabinet gpg hcache sasl sidebar smime smtp
 mail-client/thunderbird			-crypt -lightning -wifi ldap	# installing "enigmail" and "lightning" plugins manually
 media-libs/libprojectm			qt5
@@ -234,7 +233,6 @@ sys-auth/polkit				-spidermonkey	# requires: dev-lang/spidermonkey
 #{GOS} net-wireless/wpa_supplicant	-qt5		# (override) requires: dev-qt/qtcore
 #{MOD} #{GOS} app-admin/eselect		-doc		# requires: dev-python/docutils -> dev-python/pygments
 
-#{GOS} dev-vcs/subversion		-http		# requires: net-libs/serf -> dev-util/scons
 #{GOS} net-libs/gnutls			-tools		# (override) requires: sys-devel/autogen -> dev-scheme/guile
 #{GOS} net-misc/wget			-cookie_check	# requires: net-libs/libpsl -> dev-libs/icu
 #{GOS} sys-apps/flashrom		-ft2232_spi	# requires: dev-embedded/libftdi -> dev-libs/boost
