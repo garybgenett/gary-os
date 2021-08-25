@@ -826,6 +826,7 @@ function _prepare_docdir {		#{dotest}
 		$(${GREP} -v -e "^[#]" -e "^$" ${SETDIR}/.gitignore | while read -r FILE; do
 			echo "--filter=\"-_${FILE/%\/}\""
 		done)										\
+		--filter="-_/.${_GPACK/%.txt}*"							\
 		--filter="-_/build.${_GINST/#\/.}"						\
 		${G_REPO_SRC}/				${TARGET}/.${_TITLE}			|| return 1
 	if [[ -d ${G_REPO_GIT} ]]
