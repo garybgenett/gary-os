@@ -326,9 +326,6 @@ x11-misc/xvkbd
 ########################################
 # toolkits
 
-dev-vcs/git
-dev-vcs/subversion
-
 dev-lang/perl
 dev-libs/libpcre
 dev-perl/CGI
@@ -351,6 +348,7 @@ app-misc/jq
 app-misc/yq
 dev-db/sqlite
 dev-tcltk/expect
+dev-vcs/git
 
 sys-apps/thunderbolt-software-user-space
 
