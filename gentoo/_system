@@ -833,6 +833,9 @@ if ${DEBUG}; then
 fi
 print_info marker;		print_info title
 print_info marker;		print_info usage
+if [[ -z ${_OPTS} ]]; then
+	EXIT 0
+fi
 print_info marker;		print_info starter
 if ! ${DEBUG}; then
 	print_info marker;	print_info environment;
@@ -851,13 +854,6 @@ if ${DEBUG}; then
 		safe_env ${MYSELF} ${DEBUG_OPT} ${TOOR} "${@}" || EXIT 1
 		set +x
 	fi
-	EXIT 0
-fi
-
-########################################
-
-if [[ -z ${_OPTS} ]]; then
-	print_info usage
 	EXIT 0
 fi
 
