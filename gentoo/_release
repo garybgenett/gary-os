@@ -27,6 +27,7 @@ export _GOVLY="/.overlay"
 export _GUNPK="/.unpack"
 export _GINST="/.install"
 
+export _G_MOD="min"
 export _GREAD="readme.md"
 export _GPACK="packages.txt"
 
@@ -875,7 +876,9 @@ function _prepare_packages {
 		fi
 	done
 	declare PACK_FILE="${_RAMFS}.kernel.${_GPACK}"
-	if ${ROOTFS_CUST}; then
+	if ${_MOD}; then
+		PACK_FILE="${_RAMFS}.${_G_MOD}.kernel.${_GPACK}"
+	elif ${ROOTFS_CUST}; then
 		PACK_FILE="${_RAMFS}.rootfs.${_GPACK}"
 	fi
 	${MKDIR}			${_FINAL}							|| return 1
@@ -1029,6 +1032,7 @@ function _prepare_symlinks {		#{isexit} #{doredo}
 	[[ -n ${COMMIT} ]] && ${LN} --relative ${TARGET}/${CMTFIL}	${_FINAL}/${CMTFIL}				|| return 1
 	${LN} --relative ${TARGET}/.${_TITLE}/README.md			${_RAMFS}.${_GREAD}				|| return 1
 	${LN} --relative ${_RAMFS}.kernel.${_GPACK}			${_FINAL}/${_GPACK}				|| return 1
+	${LN} --relative ${_RAMFS}.${_G_MOD}.kernel.${_GPACK}		${_FINAL}/${_GPACK/%.txt/.${_G_MOD}.txt}	|| return 1
 	${LN} --relative ${_RAMFS}.rootfs.${_GPACK}			${_FINAL}/${_GPACK/%.txt/.${ROOTFS_NAME}.txt}	|| return 1
 	${LN} --relative ${TARGET}${ARCDIR}				${_FINAL}${ARCDIR}				|| return 1
 	${LN} --relative ${TARGET}${GENDIR}				${_FINAL}${GENDIR}				|| return 1
@@ -1066,6 +1070,8 @@ function _release_devel {		#{ismain} #{doredo} #{dotest}
 	fi
 	DOREDO="true" _release_kernel							|| return 1
 	DOREDO="true" _prepare_symlinks							|| return 1
+	if [[ ! -f ${_RAMFS}.kernel			]]; then ${LN} --relative ${_RAMFS}.${_G_MOD}.kernel			${_RAMFS}.kernel		; fi
+	if [[ ! -f ${_RAMFS}.kernel.packages.txt	]]; then ${LN} --relative ${_RAMFS}.${_G_MOD}.kernel.packages.txt	${_RAMFS}.kernel.packages.txt	; fi
 	if [[ ! -f ${_RAMFS}.rootfs			]]; then touch								${_RAMFS}.rootfs		; fi
 	if [[ ! -f ${_RAMFS}.rootfs.packages.txt	]]; then touch								${_RAMFS}.rootfs.packages.txt	; fi
 	if {
@@ -1491,6 +1497,9 @@ function _release_kernel {		#{doredo}
 								${_RAMFS}.kernel		\
 												|| return 1
 	fi
+	if ${_MOD}; then
+		${MV} ${_RAMFS}.kernel				${_RAMFS}.${_G_MOD}.kernel	|| return 1
+	fi
 	return 0
 }
 
@@ -1654,6 +1663,8 @@ function release_fetch_list {		#>>>{dotest}
 		echo "${FET_BAS}.kernel"				>>${FET_PKG}
 		echo "${FET_BAS}.kernel.${_GPACK}"			>>${FET_PKG}
 		echo "${MASK}${FET_BAS}.grub.zip"			>>${FET_PKG}
+		echo "${MASK}${FET_BAS}.${_G_MOD}.kernel"		>>${FET_PKG}
+		echo "${MASK}${FET_BAS}.${_G_MOD}.kernel.${_GPACK}"	>>${FET_PKG}
 		echo "${MASK}${FET_BAS}.rootfs"				>>${FET_PKG}
 		echo "${MASK}${FET_BAS}.rootfs.${_GPACK}"		>>${FET_PKG}
 		shopt -s lastpipe
@@ -2270,6 +2281,7 @@ function _publish_export {
 		${RM} $(publish_export_filelist ${_OUTDIR})					|| return 1
 		touch -r $(
 			${LS} -t ${_OUTDIR}/${RELEASE[${INDEX}]}/*.kernel 2>/dev/null		|
+			${GREP} -v "[.]${_G_MOD}[.]"						|
 			head -n1
 		) ${_OUTDIR}/${RELEASE[${INDEX}]}						|| return 1
 	done
