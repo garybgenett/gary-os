@@ -27,7 +27,7 @@ export _GOVLY="/.overlay"
 export _GUNPK="/.unpack"
 export _GINST="/.install"
 
-export _G_MOD="min"
+export _G_MOD="tiny"
 export _GREAD="readme.md"
 export _GPACK="packages.txt"
 
