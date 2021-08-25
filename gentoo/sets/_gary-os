@@ -326,7 +326,6 @@ x11-misc/xvkbd
 ########################################
 # toolkits
 
-dev-vcs/cvs
 dev-vcs/git
 dev-vcs/subversion
 
