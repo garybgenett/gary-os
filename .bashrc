@@ -333,6 +333,8 @@ export DU="du -b --time --time-style=long-iso"			; alias du="${DU}"
 export LU="${DU} -cms -L {.[^.],}* 2>/dev/null | sort -nr"	; alias lu="${LU}"
 export NCDU="ncdu --confirm-quit -2 -rr -x -e"			; alias ncdu="(sleep 2 && echo cmgg &); ${NCDU}"
 
+export RM_ALL="${RM} {.[^.],}*"					; alias rm-all="${RM_ALL}"
+
 ########################################
 
 export CVS="reporter cvs"			; alias cvs="${CVS}"
