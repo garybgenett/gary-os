@@ -246,7 +246,6 @@ app-text/grip
 app-text/pandoc
 app-text/texlive
 
-dev-vcs/cvs
 dev-vcs/git
 dev-vcs/subversion
 
