@@ -59,6 +59,22 @@
 #{MOD} #{FSPACK} base:/usr/sbin
 #{MOD} #{FSPACK} base:/usr/share
 
+#note: do everything possible to minimize the "#{mod}" build
+#{MOD} #{FSEXCL} mod:/.gary-os/.git
+#{MOD} #{FSEXCL} mod:/.gary-os/artifacts/archive
+#{MOD} #{FSEXCL} mod:/.gary-os/artifacts/images
+#{MOD} #{FSEXCL} mod:/.gary-os/gentoo/overlay
+#{MOD} #{FSEXCL} mod:/etc/portage/overlay
+#{MOD} #{FSEXCL} mod:/lib64/firmware
+#{MOD} #{FSEXCL} mod:/usr/lib64/python2.7/test
+#{MOD} #{FSEXCL} mod:/usr/lib64/python3.7/site-packages/gentoolkit/test
+#{MOD} #{FSEXCL} mod:/usr/lib64/python3.7/site-packages/portage/tests
+#{MOD} #{FSEXCL} mod:/usr/lib64/python3.7/test
+#{MOD} #{FSEXCL} mod:/usr/lib64/rust
+#{MOD} #{FSEXCL} mod:/usr/libexec/git-core
+#{MOD} #{FSEXCL} mod:/usr/share/cmake
+#{MOD} #{FSEXCL} mod:/usr/share/sgml
+
 #{FSPACK} base:/lib64/modules
 #{FSPACK} base:/lib64/firmware
 
@@ -88,10 +104,6 @@
 #{MOD} #{FSEXCL} emerge:/var/db/pkg
 #{MOD} #{FSEXCL} emerge:/var/git/meta-repo
 #{MOD} #{FSEXCL} emerge:/var/git/meta-repo.git
-
-#note: only removing these from the "#{mod}" build, for size
-#{MOD} #{FSEXCL} debug:/usr/lib64/python2.7/test
-#{MOD} #{FSEXCL} debug:/usr/lib64/python3.6/test
 
 #{FSARCH} debug:/usr/lib64/debug
 #>>>#{FSARCH} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/7.3.1/debug
@@ -132,7 +144,7 @@ app-misc/screen				#{MOD}
 app-shells/bash				#{rootfs}
 app-shells/bash-completion		#{MOD}
 sys-apps/kbd				#{MOD}
-sys-libs/gpm
+sys-libs/gpm				#{MOD}
 
 app-crypt/efitools
 sys-apps/busybox			#{rootfs}
@@ -144,22 +156,22 @@ sys-libs/efivar
 sys-power/suspend			#{MOD}
 sys-process/runit			#{MOD}
 
-#>>>app-forensics/sleuthkit			#{MOD} # requires: app-doc/doxygen / virtual/jdk / virtual/jre
+#>>>app-forensics/sleuthkit		#{MOD} # requires: ( app-doc/doxygen | virtual/jdk | virtual/jre )
 sys-apps/gptfdisk
 sys-fs/cryptsetup
 sys-fs/dosfstools			#{rootfs}
 sys-fs/e2fsprogs			#{rootfs}
-sys-fs/encfs				#{MOD} # requires: dev-util/cmake
+sys-fs/encfs				#{MOD}
 sys-fs/exfat-utils			#{rootfs}
 sys-fs/fuse				#{rootfs}
 sys-fs/fuse-exfat			#{rootfs}
 sys-fs/mdadm
 sys-fs/ntfs3g				#{rootfs}
-sys-fs/squashfs-tools
+sys-fs/squashfs-tools			#{MOD}
 sys-fs/zfs
 sys-fs/zfs-kmod
 
-sys-apps/attr
+sys-apps/attr				#{MOD}
 sys-apps/coreutils			#{rootfs}
 sys-apps/diffutils
 sys-apps/file
@@ -173,11 +185,11 @@ sys-apps/which
 
 dev-libs/libcgroup			#{MOD}
 sys-fs/sysfsutils
-sys-process/atop
-sys-process/htop
-sys-process/iotop
-sys-process/lsof
-sys-process/nmon
+sys-process/atop			#{MOD}
+sys-process/htop			#{MOD}
+sys-process/iotop			#{MOD}
+sys-process/lsof			#{MOD}
+sys-process/nmon			#{MOD}
 sys-process/procps
 sys-process/psmisc
 sys-process/schedtool			#{MOD}
@@ -189,34 +201,34 @@ sys-fs/inotify-tools			#{MOD}
 app-admin/sudo				#{MOD}
 sys-libs/pam				#{MOD}
 
-net-firewall/ebtables
-net-firewall/iptables
-net-misc/bridge-utils
+net-firewall/ebtables			#{MOD}
+net-firewall/iptables			#{MOD}
+net-misc/bridge-utils			#{MOD}
 net-misc/dhcpcd
 net-misc/iputils
-net-misc/vconfig
-net-wireless/wavemon
+net-misc/vconfig			#{MOD}
+net-wireless/wavemon			#{MOD}
 net-wireless/wireless-tools
 net-wireless/wpa_supplicant
-sys-apps/ethtool
+sys-apps/ethtool			#{MOD}
 sys-apps/iproute2
-sys-apps/net-tools
+sys-apps/net-tools			#{MOD}
 
 net-ftp/lftp				#{MOD}
 net-misc/curl
 net-misc/rsync				#{rootfs}
 net-misc/wget
 www-client/links
-www-client/w3m
+www-client/w3m				#{MOD}
 
 app-crypt/gnupg				#{MOD}
 dev-libs/openssl
 net-misc/openssh
 
 app-editors/nano
-app-editors/vim				#{MOD} # requires: dev-util/ctags -> dev-python/docutils -> dev-python/pygments
-app-text/dos2unix
-app-vim/taglist				#{MOD} # requires: dev-util/ctags -> dev-python/docutils -> dev-python/pygments
+app-editors/vim				#{MOD} # requires: dev-util/ctags -> dev-python/docutils
+app-text/dos2unix			#{MOD}
+app-vim/taglist				#{MOD} # requires: dev-util/ctags -> dev-python/docutils
 dev-util/cloc				#{MOD}
 
 app-dicts/aspell-en			#{MOD}
@@ -228,12 +240,12 @@ app-vim/vim-spell-es			#{MOD}
 app-arch/bzip2
 app-arch/cpio
 app-arch/gzip
-app-arch/lz4				#{MOD} # requires: dev-util/cmake
-app-arch/p7zip
+app-arch/lz4				#{MOD}
+app-arch/p7zip				#{MOD}
 app-arch/sharutils			#{MOD}
 app-arch/tar				#{rootfs}
-app-arch/xz-utils
-dev-util/xdelta
+app-arch/xz-utils			#{rootfs}
+dev-util/xdelta				#{MOD}
 
 app-arch/cabextract			#{MOD}
 app-arch/dpkg				#{MOD}
@@ -272,11 +284,8 @@ x11-misc/xsel				#{MOD}
 ########################################
 # toolkits
 
-dev-vcs/git				#{MOD}
-dev-vcs/subversion			#{MOD} # requires: app-arch/lz4 -> dev-util/cmake
-
 dev-lang/perl				#{MOD}
-dev-libs/libpcre
+dev-libs/libpcre			#{MOD}
 dev-perl/JSON				#{MOD}
 dev-perl/JSON-XS			#{MOD}
 
@@ -286,19 +295,20 @@ app-misc/jq				#{MOD}
 app-misc/yq				#{MOD}
 dev-db/sqlite				#{MOD}
 dev-tcltk/expect			#{MOD} # requires: dev-lang/tcl
+dev-vcs/git				#{MOD}
 
 app-forensics/cmospwd
-sys-apps/flashrom			#{MOD} # requires: dev-embedded/libftdi -> dev-libs/boost
+sys-apps/flashrom
 sys-apps/memtester
 
 ########################################
 # utilities
 
 sci-mathematics/calc			#{MOD}
-sys-devel/bc
+sys-devel/bc				#{MOD}
 
-dev-util/ltrace
-dev-util/strace
+dev-util/ltrace				#{MOD}
+dev-util/strace				#{MOD}
 #>>>dev-util/sysprof			#{MOD} # requires: dev-libs/appstream-glib -> x11-libs/gtk+
 sys-apps/fakeroot-ng			#{MOD}
 sys-apps/kexec-tools			#{MOD}
@@ -307,11 +317,11 @@ sys-apps/hdparm
 sys-apps/smartmontools
 sys-block/blktrace
 
-sys-apps/dcfldd
-sys-fs/dd-rescue
+sys-apps/dcfldd				#{MOD}
+sys-fs/dd-rescue			#{MOD}
 sys-fs/ddrescue
-sys-fs/ncdu
-sys-fs/safecopy
+sys-fs/ncdu				#{MOD}
+sys-fs/safecopy				#{MOD}
 
 sys-apps/lshw
 sys-apps/pciutils
@@ -331,10 +341,10 @@ net-analyzer/iftop			#{MOD}
 net-analyzer/iptraf-ng			#{MOD}
 net-analyzer/nethogs			#{MOD}
 net-analyzer/ngrep			#{MOD}
-net-analyzer/nmap
+net-analyzer/nmap			#{MOD}
 net-analyzer/openbsd-netcat		#{MOD}
-net-analyzer/ssldump
-net-analyzer/tcpdump
+net-analyzer/ssldump			#{MOD}
+net-analyzer/tcpdump			#{MOD}
 net-analyzer/tcptrace			#{MOD}
 net-analyzer/tcptraceroute		#{MOD}
 net-analyzer/traceroute			#{MOD}

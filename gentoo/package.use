@@ -82,10 +82,10 @@ media-libs/libcaca			python_single_target_python2_7	#{GOS} # gentoo required
 media-sound/lash			python_single_target_python2_7	#{GOS} # gentoo required
 net-mail/offlineimap			python_single_target_python2_7	#{GOS} # gentoo required
 net-print/cups				python_single_target_python2_7	#{GOS} # gentoo required
-x11-drivers/xf86-video-qxl		python_single_target_python2_7	#{GOS} # gentoo required
+x11-drivers/xf86-video-qxl		python_single_target_python2_7	# gentoo required
 
 dev-lang/yasm				python_targets_python2_7	#{GOS} # gentoo required
-dev-python/certifi			python_targets_python2_7	#{GOS} # gentoo required
+dev-python/certifi			python_targets_python2_7	# gentoo required
 dev-python/cython			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/m2crypto			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/olefile			python_targets_python2_7	#{GOS} # gentoo required
@@ -95,12 +95,12 @@ dev-python/pycairo			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/pycparser			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/pygobject			python_targets_python2_7	#{GOS} # gentoo required
 dev-python/pygtk			python_targets_python2_7	#{GOS} # gentoo required
-dev-python/setuptools			python_targets_python2_7	#{GOS} # gentoo required
-dev-python/setuptools-compat		python_targets_python2_7	#{GOS} # gentoo required
+dev-python/setuptools			python_targets_python2_7	# gentoo required
+dev-python/setuptools-compat		python_targets_python2_7	# gentoo required
 dev-python/typing			python_targets_python2_7	#{GOS} # gentoo required
 media-gfx/mcomix			python_targets_python2_7	#{GOS} # gentoo required
-net-wireless/python-wifi		python_targets_python2_7	#{GOS} # gentoo required
-sys-apps/dstat				python_targets_python2_7	#{GOS} # gentoo required
+net-wireless/python-wifi		python_targets_python2_7	# gentoo required
+sys-apps/dstat				python_targets_python2_7	# gentoo required
 virtual/python-typing			python_targets_python2_7	#{GOS} # gentoo required
 
 dev-python/six				python_targets_python2_7	#{GOS} # gentoo required: [net-mail/offlineimap-7.2.2] ImportError: No module named six
@@ -217,9 +217,19 @@ sys-auth/polkit				-spidermonkey	# requires: dev-lang/spidermonkey
 #>>> grep "installed" ./build/.packages.txt | sort -nr | head -n50
 #>>> declare TOTAL="0"; for FILE in $(grep "installed" ./build/.packages.txt | awk '{print $1;}'); do TOTAL="$((${TOTAL}+${FILE}))"; done; echo "${TOTAL}"
 
+#>>> app-text/docbook-xsl-stylesheets	dev-util/cmake -> x11-misc/shared-mime-info -> dev-libs/libxml2 -> dev-util/gtk-doc-am -> dev-util/gtk-doc -> app-text/docbook-xsl-stylesheets
+#>>> dev-lang/rust			app-admin/ego -> dev-python/requests -> dev-python/cryptography -> virtual/rust -> dev-lang/rust
+#>>> dev-lang/swig			net-wireless/wpa_supplicant -> net-wireless/crda -> dev-python/m2crypto -> dev-lang/swig
+#>>> dev-lang/yasm			app-arch/p7zip -> dev-lang/yasm
+#>>> dev-libs/boost			dev-lang/rust -> net-misc/curl [http2] -> net-libs/nghttp2 -> dev-libs/boost
+#>>> dev-libs/glib			dev-util/cmake -> x11-misc/shared-mime-info -> dev-libs/glib
+#>>> dev-python/pygments		dev-util/cmake -> x11-misc/shared-mime-info -> dev-libs/libxml2 -> dev-util/gtk-doc-am -> dev-util/gtk-doc -> dev-python/pygments
+#>>> dev-util/cmake			sys-devel/gcc -> dev-cpp/tbb -> dev-util/cmake
+#>>> dev-util/meson			sys-fs/fuse -> dev-util/meson
+#>>> dev-vcs/git			sys-devel/gcc -> dev-vcs/git
+
 ########################################
 
-#{GOS} app-text/xmlto			-latex		# gentoo required
 #{GOS} dev-libs/libxml2			python		# gentoo required
 
 #{MOD} #{GOS} media-libs/imlib2		-shm		# gentoo required
@@ -227,18 +237,17 @@ sys-auth/polkit				-spidermonkey	# requires: dev-lang/spidermonkey
 ########################################
 
 #{GOS} app-crypt/pinentry		-gnome-keyring	# (override) gentoo required
-#{GOS} dev-libs/glib			-dbus		# (override) gentoo required
-#{GOS} dev-libs/glib			-dbus		# (override) gentoo required: gnome-base/dconf -> dev-lang/vala -> media-gfx/graphviz
-#{GOS} dev-vcs/git			-tk		# (override) requires: dev-lang/tk
+#{GOS} dev-lang/python			-tk		# requires: dev-lang/tk -> dev-lang/tcl
+#{GOS} dev-libs/glib			-dbus		# (override) requires: gnome-base/dconf -> dev-lang/vala -> media-gfx/graphviz
+#{GOS} dev-vcs/git			-tk		# (override) requires: dev-lang/tk -> dev-lang/tcl
 #{GOS} net-wireless/wpa_supplicant	-qt5		# (override) requires: dev-qt/qtcore
-#{MOD} #{GOS} app-admin/eselect		-doc		# requires: dev-python/docutils -> dev-python/pygments
+#{MOD} #{GOS} app-admin/eselect		-doc		# requires: dev-python/docutils
 
 #{GOS} net-libs/gnutls			-tools		# (override) requires: sys-devel/autogen -> dev-scheme/guile
 #{GOS} net-misc/wget			-cookie_check	# requires: net-libs/libpsl -> dev-libs/icu
-#{GOS} sys-apps/flashrom		-ft2232_spi	# requires: dev-embedded/libftdi -> dev-libs/boost
-#{GOS} sys-apps/flashrom		-usbblaster_spi	# requires: dev-embedded/libftdi -> dev-libs/boost
-#{GOS} sys-fs/lvm2			-thin		# requires: sys-block/thin-provisioning-tools -> dev-libs/boost
-#{MOD} #{GOS} sys-fs/squashfs-tools	-lz4		# requires: app-arch/lz4 -> dev-util/cmake
+#{GOS} sys-fs/lvm2			-thin		# requires: sys-block/thin-provisioning-tools -> ( dev-lang/ruby | dev-vcs/git )
+#{MOD} #{GOS} dev-lang/python		-sqlite		# requires: dev-db/sqlite -> dev-lang/tcl
+#{MOD} #{GOS} sys-apps/lshw		-sqlite		# requires: dev-db/sqlite -> dev-lang/tcl
 
 #>>>#{GOS} x11-base/xorg-server		-glamor		# requires: media-libs/mesa
 #>>>#{GOS} x11-base/xorg-server		minimal		# requires: media-libs/mesa
