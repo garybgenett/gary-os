@@ -17,7 +17,7 @@ fi
 
 export _GNAME="GaryOS"
 export _TITLE="gary-os"
-export _VERSN="v5.0"
+export _VERSN="v6.0"
 export _RDATE="$(date --iso=date)"
 
 export _FINAL="${TARGET}/.${_TITLE}-${ESUB}"
