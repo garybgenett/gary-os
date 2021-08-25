@@ -642,11 +642,18 @@ function prepare_config_issue {
 	for FILE in ${ROOTFS_FILE_VARS}; do
 		${SED} -i "s|[$][{]${FILE}[}]|${!FILE}|g"			${TARGET}/etc/issue	|| return 1
 	done
-	if [[ -z ${COMMIT} ]] || [[ ! -d ${_G_REPO} ]]; then
+	if {
+		{ [[ -z ${COMMIT} ]] || [[ ! -d ${_G_REPO} ]]; } ||
+		${_MOD};
+	}; then
 		FILE=" "
 #>>>		FILE+="\\\e[1;45;37m"
 		FILE+="\\\e[0;35m"
-		FILE+="PLEASE NOTE THAT THIS BUILD HAS BEEN CUSTOMIZED AND IS NOT AN OFFICIAL RELEASE"
+		if ${_MOD}; then
+			FILE+="THIS IS THE MINIMIZED VERSION OF THE BUILD AND WILL HAVE REDUCED FUNCTIONALITY"
+		else
+			FILE+="PLEASE NOTE THAT THIS BUILD HAS BEEN CUSTOMIZED AND IS NOT AN OFFICIAL RELEASE"
+		fi
 		FILE+="\\\e[0;37m"
 		${SED} -i "/Some helpful notes/,/Build system/c\\${FILE}"	${TARGET}/etc/issue	|| return 1
 	fi
