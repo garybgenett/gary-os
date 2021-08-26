@@ -1072,8 +1072,8 @@ function _release_devel {		#{ismain} #{doredo} #{dotest}
 	DOREDO="true" _prepare_symlinks							|| return 1
 	if [[ ! -f ${_RAMFS}.kernel			]]; then ${LN} --relative ${_RAMFS}.${_G_MOD}.kernel			${_RAMFS}.kernel		; fi
 	if [[ ! -f ${_RAMFS}.kernel.packages.txt	]]; then ${LN} --relative ${_RAMFS}.${_G_MOD}.kernel.packages.txt	${_RAMFS}.kernel.packages.txt	; fi
-	if [[ ! -f ${_RAMFS}.rootfs			]]; then touch								${_RAMFS}.rootfs		; fi
-	if [[ ! -f ${_RAMFS}.rootfs.packages.txt	]]; then touch								${_RAMFS}.rootfs.packages.txt	; fi
+	if [[ ! -f ${_RAMFS}.rootfs			]]; then ${LN} --relative ${_RAMFS}.cpio.rootfs				${_RAMFS}.rootfs		; fi
+	if [[ ! -f ${_RAMFS}.rootfs.packages.txt	]]; then ${LN} --relative ${_RAMFS}.cpio.rootfs.txt			${_RAMFS}.rootfs.packages.txt	; fi
 	if {
 		${DOREDO} ||
 		[[ ! -d ${_RAMFS}.grub ]];
