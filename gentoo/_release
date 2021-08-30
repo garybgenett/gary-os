@@ -284,6 +284,8 @@ ${ROOTFS_BASH}
 /usr/bin/make
 /usr/bin/rsync
 /usr/bin/tftp
+/usr/bin/wget
+/usr/bin/xz
 \
 /bin/mount
 /bin/umount
