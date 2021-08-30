@@ -528,14 +528,14 @@ export LINKS_C="links \
 export LINKS="${LINKS_C} \
 	-menu-font-size 13 \
 	-html-user-font-size 13 \
-	-html-g-background-color 0x000000 \
-	-html-g-text-color 0xffffff \
-	-html-g-link-color 0xff0000 \
-	-scroll-bar-frame-color 0x808080 \
-	-scroll-bar-area-color 0x000000 \
-	-scroll-bar-bar-color 0x808080 \
-	-menu-background-color 0x808080 \
-	-menu-foreground-color 0x000000 \
+	-html-g-background-color 0x808080 \
+	-html-g-text-color 0x000000 \
+	-html-g-link-color 0x800000 \
+	-scroll-bar-frame-color 0x404040 \
+	-scroll-bar-area-color 0x808080 \
+	-scroll-bar-bar-color 0x404040 \
+	-menu-background-color 0x404040 \
+	-menu-foreground-color 0x808080 \
 "
 
 #>>>alias links="${LINKS} http://www.duckduckgo.com"
