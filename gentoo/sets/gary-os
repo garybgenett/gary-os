@@ -128,7 +128,7 @@ sys-devel/automake			#{MOD}
 sys-devel/binutils			#{MOD}
 sys-devel/gcc				#{MOD}
 sys-devel/make				#{rootfs}
-sys-devel/patch				#{MOD}
+sys-devel/patch
 sys-libs/glibc
 
 ########################################
@@ -156,8 +156,6 @@ sys-boot/efibootmgr
 sys-boot/grub
 sys-boot/os-prober
 sys-libs/efivar
-sys-power/suspend			#{MOD}
-sys-process/runit			#{MOD}
 
 #>>>app-forensics/sleuthkit		#{MOD} # requires: ( app-doc/doxygen | virtual/jdk | virtual/jre )
 sys-apps/gptfdisk
@@ -186,22 +184,12 @@ sys-apps/sed				#{rootfs}
 sys-apps/util-linux			#{rootfs}
 sys-apps/which
 
-dev-libs/libcgroup			#{MOD}
 sys-fs/sysfsutils
-sys-process/atop			#{MOD}
 sys-process/htop			#{MOD}
-sys-process/iotop			#{MOD}
 sys-process/lsof			#{MOD}
-sys-process/nmon			#{MOD}
 sys-process/procps
 sys-process/psmisc
-sys-process/schedtool			#{MOD}
 
-app-admin/sysklogd			#{MOD}
-app-admin/ulogd				#{MOD}
-sys-fs/inotify-tools			#{MOD}
-
-app-admin/sudo				#{MOD}
 sys-libs/pam				#{MOD}
 
 net-firewall/ebtables			#{MOD}
@@ -222,37 +210,23 @@ net-misc/curl
 net-misc/rsync				#{rootfs}
 net-misc/wget				#{rootfs}
 www-client/links
-www-client/w3m				#{MOD}
 
-app-crypt/gnupg				#{MOD}
 dev-libs/openssl
 net-misc/openssh
 
 app-editors/nano
 app-editors/vim				#{MOD} # requires: dev-util/ctags -> dev-python/docutils
 app-text/dos2unix			#{MOD}
-app-vim/taglist				#{MOD} # requires: dev-util/ctags -> dev-python/docutils
-dev-util/cloc				#{MOD}
-
-app-dicts/aspell-en			#{MOD}
-app-dicts/aspell-es			#{MOD}
-app-text/aspell				#{MOD}
-app-vim/vim-spell-en			#{MOD}
-app-vim/vim-spell-es			#{MOD}
 
 app-arch/bzip2
 app-arch/cpio
 app-arch/gzip
 app-arch/lz4				#{MOD}
 app-arch/p7zip				#{MOD}
-app-arch/sharutils			#{MOD}
 app-arch/tar				#{rootfs}
 app-arch/xz-utils			#{rootfs}
-dev-util/xdelta				#{MOD}
 
 app-arch/cabextract			#{MOD}
-app-arch/dpkg				#{MOD}
-app-arch/rpm				#{MOD}
 
 ########################################
 # gentoo
@@ -272,7 +246,6 @@ sys-kernel/genkernel			#{MOD}
 x11-apps/xrandr				#{MOD}
 x11-base/xorg-drivers			#{MOD}
 x11-base/xorg-server			#{MOD}
-x11-base/xorg-x11			#{MOD}
 
 x11-misc/dmenu				#{MOD}
 x11-wm/dwm				#{MOD}
@@ -281,24 +254,17 @@ x11-terms/rxvt-unicode			#{MOD}
 
 x11-apps/xset				#{MOD}
 x11-apps/xsetroot			#{MOD}
-x11-misc/xlockmore			#{MOD}
-x11-misc/xsel				#{MOD}
 
 ########################################
 # toolkits
 
 dev-lang/perl				#{MOD}
-dev-libs/libpcre			#{MOD}
 dev-perl/JSON				#{MOD}
 dev-perl/JSON-XS			#{MOD}
 
 dev-lang/python				#{MOD}
 
-app-misc/jq				#{MOD}
-app-misc/yq				#{MOD}
-dev-db/sqlite				#{MOD}
 dev-tcltk/expect			#{MOD} # requires: dev-lang/tcl
-dev-vcs/git				#{MOD}
 
 app-forensics/cmospwd
 sys-apps/flashrom
@@ -306,15 +272,6 @@ sys-apps/memtester
 
 ########################################
 # utilities
-
-sci-mathematics/calc			#{MOD}
-sys-devel/bc				#{MOD}
-
-dev-util/ltrace				#{MOD}
-dev-util/strace				#{MOD}
-#>>>dev-util/sysprof			#{MOD} # requires: dev-libs/appstream-glib -> x11-libs/gtk+
-sys-apps/fakeroot-ng			#{MOD}
-sys-apps/kexec-tools			#{MOD}
 
 sys-apps/hdparm
 sys-apps/smartmontools
@@ -331,34 +288,17 @@ sys-apps/pciutils
 sys-apps/usbutils
 sys-power/acpitool
 
-app-admin/procinfo-ng			#{MOD}
-app-admin/sysstat			#{MOD}
-app-misc/binwalk			#{MOD}
-app-text/tree				#{MOD}
-sys-apps/dstat				#{MOD}
-sys-apps/pv				#{MOD}
-
 net-analyzer/dnstracer			#{MOD}
 net-analyzer/httping			#{MOD}
-net-analyzer/iftop			#{MOD}
-net-analyzer/iptraf-ng			#{MOD}
 net-analyzer/nethogs			#{MOD}
-net-analyzer/ngrep			#{MOD}
 net-analyzer/nmap			#{MOD}
 net-analyzer/openbsd-netcat		#{MOD}
 net-analyzer/ssldump			#{MOD}
 net-analyzer/tcpdump			#{MOD}
-net-analyzer/tcptrace			#{MOD}
-net-analyzer/tcptraceroute		#{MOD}
 net-analyzer/traceroute			#{MOD}
 net-dns/bind-tools			#{MOD}
 net-misc/netkit-telnetd			#{MOD}
-net-misc/socat				#{MOD}
 net-misc/whois				#{MOD}
-
-net-fs/cifs-utils			#{MOD}
-net-fs/sshfs				#{MOD}
-net-misc/autossh			#{MOD}
 
 ########################################
 # servers
@@ -366,7 +306,6 @@ net-misc/autossh			#{MOD}
 net-ftp/tftp-hpa			#{rootfs}
 net-misc/ntp				#{MOD}
 net-vpn/openvpn				#{MOD}
-net-wireless/hostapd			#{MOD}
 
 ########################################
 # programs
