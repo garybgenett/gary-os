@@ -58,16 +58,21 @@
 #{MOD} #{FSPACK} base:/usr/sbin
 #{MOD} #{FSPACK} base:/usr/share
 
+#{FSPACK} libs:/usr/lib64/llvm
+#{FSPACK} libs:/usr/lib64/python2.7
+#{FSPACK} libs:/usr/lib64/python3.7
+#{FSPACK} libs:/usr/lib64/rust
+#{MOD} #{FSEXCL} libs:/usr/lib64/llvm
+#{MOD} #{FSEXCL} libs:/usr/lib64/python2.7/test
+#{MOD} #{FSEXCL} libs:/usr/lib64/python3.7/test
+#{MOD} #{FSEXCL} libs:/usr/lib64/rust
+
 #{FSPACK} docs:/usr/share/doc
-#{FSPACK} docs:/usr/share/gtk-doc
 #{FSPACK} docs:/usr/share/info
 #{FSPACK} docs:/usr/share/man
-#{FSPACK} docs:/usr/share/texmf-dist
 #{MOD} #{FSEXCL} docs:/usr/share/doc
-#{MOD} #{FSEXCL} docs:/usr/share/gtk-doc
 #{MOD} #{FSEXCL} docs:/usr/share/info
 #{MOD} #{FSEXCL} docs:/usr/share/man
-#{MOD} #{FSEXCL} docs:/usr/share/texmf-dist
 
 #note: do everything possible to minimize the "#{mod}" build
 #note: some of these override definitions above and below
@@ -79,14 +84,10 @@
 #{MOD} #{FSEXCL} mod:/etc/portage/overlay
 #note: build
 #{MOD} #{FSEXCL} mod:/lib64/firmware
-#{MOD} #{FSEXCL} mod:/usr/lib64/python2.7/test
 #{MOD} #{FSEXCL} mod:/usr/lib64/python3.7/site-packages/gentoolkit/test
 #{MOD} #{FSEXCL} mod:/usr/lib64/python3.7/site-packages/portage/tests
-#{MOD} #{FSEXCL} mod:/usr/lib64/python3.7/test
-#{MOD} #{FSEXCL} mod:/usr/lib64/rust
 #{MOD} #{FSEXCL} mod:/usr/libexec/git-core
 #{MOD} #{FSEXCL} mod:/usr/share/cmake
-#{MOD} #{FSEXCL} mod:/usr/share/sgml
 
 #NOTE: EVERYTHING BELOW IS MATCHED WITH "_GARY-OS"
 #NOTE: SOME OF THESE INTENTIONALLY RE-DEFINE THE DEFAULTS
@@ -101,7 +102,7 @@
 #{MOD} #{FSEXCL} gcc:/usr/libexec/gcc
 #{MOD} #{FSEXCL} gcc:/usr/x86_64-pc-linux-gnu
 
-#{FSKEEP} emerge:/usr/src/linux
+#{FSARCH} emerge:/usr/src/linux
 #{FSKEEP} emerge:/var/db/pkg
 #{FSKEEP} emerge:/var/git/meta-repo
 #{FSARCH} emerge:/var/git/meta-repo.git
