@@ -7,30 +7,25 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "monospace:size=8" };
 static const char dmenufont[]       = "monospace:size=8";
-static const char col_gray1[]       = "#404040";
-static const char col_gray2[]       = "#000000";
-static const char col_gray3[]       = "#ffffff";
-static const char col_gray4[]       = "#ffffff";
-static const char col_cyan[]        = "#800000";
-static const char col_sel[]         = "#ff0000";
-static const char urxvt_font[]		= "-misc-fixed-medium-r-semicondensed--13-*-*-*-*-*-iso8859-1";
-static const char urxvt_bold[]		= "-misc-fixed-bold-r-semicondensed--13-*-*-*-*-*-iso8859-1";
-static const char urxvt_bg[]		= "#000000";
-static const char urxvt_fg[]		= "#ffffff";
-static const char urxvt_cursor[]	= "#ff0000";
-static const char links_fontsize[]	= "13";
-static const char links_bg[]		= "0x808080";
-static const char links_text[]		= "0x000000";
-static const char links_link[]		= "0x800000";
-static const char links_bar_frame[]	= "0x404040";
-static const char links_bar_area[]	= "0x808080";
-static const char links_bar_bar[]	= "0x404040";
-static const char links_menu_bg[]	= "0x404040";
-static const char links_menu_fg[]	= "0x808080";
+static const char col_gray1[]       = "#222222";
+static const char col_gray2[]       = "#444444";
+static const char col_gray3[]       = "#bbbbbb";
+static const char col_gray4[]       = "#eeeeee";
+static const char col_cyan[]        = "#005577";
+static const char urxvt_font[]		= "x:fixed";
+static const char urxvt_bgcolor[]	= "#222222";
+static const char urxvt_fgcolor[]	= "#bbbbbb";
+static const char links_fontsize[]	= "14";
+static const char normbordercolor[]	= "0x444444";
+static const char normbgcolor[]		= "0x222222";
+static const char normfgcolor[]		= "0xbbbbbb";
+static const char selbordercolor[]	= "0x005577";
+static const char selbgcolor[]		= "0x005577";
+static const char selfgcolor[]		= "0xeeeeee";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_sel   },
+	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
 };
 
 /* tagging */
@@ -72,21 +67,23 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *readcmd[]		= { "urxvt", "+sb", "-fn", urxvt_font, "-fb", urxvt_bold, "-bg", urxvt_bg, "-fg", urxvt_fg, "-cr", urxvt_cursor, "-title", "GaryOS Readme", "-e", "less", "/.gary-os/README.md", NULL };
-static const char *mancmd[]		= { "urxvt", "+sb", "-fn", urxvt_font, "-fb", urxvt_bold, "-bg", urxvt_bg, "-fg", urxvt_fg, "-cr", urxvt_cursor, "-title", "DWM Manual", "-e", "man", "dwm", NULL };
-static const char *termcmd[]		= { "urxvt", "-sr", "-fn", urxvt_font, "-fb", urxvt_bold, "-bg", urxvt_bg, "-fg", urxvt_fg, "-cr", urxvt_cursor, NULL };
+static const char *readcmd[]		= { "urxvt", "+sb", "-fn", urxvt_font, "-fb", urxvt_font, "-bg", urxvt_bgcolor, "-fg", urxvt_fgcolor, "-title", "GaryOS Readme", "-e", "less", "/.gary-os/README.md", NULL };
+static const char *mancmd[]		= { "urxvt", "+sb", "-fn", urxvt_font, "-fb", urxvt_font, "-bg", urxvt_bgcolor, "-fg", urxvt_fgcolor, "-title", "DWM Manual", "-e", "man", "dwm", NULL };
+//>>> static const char *termcmd[]	= { "tabbed", "-d", "-f", "-r", "2", "-n", "URxvt", "urxvt", "-embed", "''", "-sr", "-bg", urxvt_bgcolor, "-fg", urxvt_fgcolor, NULL };
+//>>> static const char *webcmd[]	= { "tabbed", "-d", "-f", "-r", "2", "-n", "Surf", "surf", "-e", "''", "http://www.duckduckgo.com", NULL };
+static const char *termcmd[]		= { "urxvt", "-sr", "-fn", urxvt_font, "-fb", urxvt_font, "-bg", urxvt_bgcolor, "-fg", urxvt_fgcolor, NULL };
 static const char *extcmd[]		= { "firefox", "http://www.duckduckgo.com", NULL };
 static const char *webcmd[]		= { "links", "-g",
 	"-menu-font-size",		links_fontsize,
 	"-html-user-font-size",		links_fontsize,
-	"-html-g-background-color",	links_bg,
-	"-html-g-text-color",		links_text,
-	"-html-g-link-color",		links_link,
-	"-scroll-bar-frame-color",	links_bar_frame,
-	"-scroll-bar-area-color",	links_bar_area,
-	"-scroll-bar-bar-color",	links_bar_bar,
-	"-menu-background-color",	links_menu_bg,
-	"-menu-foreground-color",	links_menu_fg,
+	"-html-g-background-color",	normbgcolor,
+	"-html-g-text-color",		selfgcolor,
+	"-html-g-link-color",		selbgcolor,
+	"-scroll-bar-frame-color",	selbordercolor,
+	"-scroll-bar-area-color",	normbordercolor,
+	"-scroll-bar-bar-color",	selbgcolor,
+	"-menu-background-color",	normfgcolor,
+	"-menu-foreground-color",	selbgcolor,
 	"http://www.duckduckgo.com", NULL
 };
 
