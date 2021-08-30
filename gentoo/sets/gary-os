@@ -2,7 +2,7 @@
 # portage set configuration file
 ################################################################################
 
-#>>> sed -r -i "s%[[:space:]]+#[{](MOD|rootfs)[}][[:space:]]*%%g" ./gentoo/sets/gary-os; diff ./gentoo/sets/{packages,gary-os}
+#>>> cp ./gentoo/sets/gary-os{.BAK,}; sed -r -i -e "s%([[:space:]]+)#[{](MOD|rootfs)[}][[:space:]]*%\1%g" -e "s%[[:space:]]+$%%g" ./gentoo/sets/gary-os; diff ./gentoo/sets/{_,}gary-os
 
 #{FUNTOO}
 #{LINPKG} sys-kernel/gentoo-sources:5.10.56
@@ -49,34 +49,14 @@
 #{MOD} #{FSKEEP}
 #{MOD} #{FSARCH}
 
-#note: speed up boot time by only having these in the "#{mod}" build
+#note: speed up boot time, and avoid memory cost, by only having these in the "#{mod}" build
 #note: size of the default "rootfs" file is not as much of a concern as the in-memory footprint
-#note: this will also keep the "$_gunpk" file and online repository less cluttered
 #{MOD} #{FSPACK} base:/usr/bin
 #{MOD} #{FSPACK} base:/usr/lib64
 #{MOD} #{FSPACK} base:/usr/libexec
 #{MOD} #{FSPACK} base:/usr/local
 #{MOD} #{FSPACK} base:/usr/sbin
 #{MOD} #{FSPACK} base:/usr/share
-
-#note: do everything possible to minimize the "#{mod}" build
-#{MOD} #{FSEXCL} mod:/.gary-os/.git
-#{MOD} #{FSEXCL} mod:/.gary-os/artifacts/archive
-#{MOD} #{FSEXCL} mod:/.gary-os/artifacts/images
-#{MOD} #{FSEXCL} mod:/.gary-os/gentoo/overlay
-#{MOD} #{FSEXCL} mod:/etc/portage/overlay
-#{MOD} #{FSEXCL} mod:/lib64/firmware
-#{MOD} #{FSEXCL} mod:/usr/lib64/python2.7/test
-#{MOD} #{FSEXCL} mod:/usr/lib64/python3.7/site-packages/gentoolkit/test
-#{MOD} #{FSEXCL} mod:/usr/lib64/python3.7/site-packages/portage/tests
-#{MOD} #{FSEXCL} mod:/usr/lib64/python3.7/test
-#{MOD} #{FSEXCL} mod:/usr/lib64/rust
-#{MOD} #{FSEXCL} mod:/usr/libexec/git-core
-#{MOD} #{FSEXCL} mod:/usr/share/cmake
-#{MOD} #{FSEXCL} mod:/usr/share/sgml
-
-#{FSPACK} base:/lib64/modules
-#{FSPACK} base:/lib64/firmware
 
 #{FSPACK} docs:/usr/share/doc
 #{FSPACK} docs:/usr/share/gtk-doc
@@ -88,6 +68,31 @@
 #{MOD} #{FSEXCL} docs:/usr/share/info
 #{MOD} #{FSEXCL} docs:/usr/share/man
 #{MOD} #{FSEXCL} docs:/usr/share/texmf-dist
+
+#note: do everything possible to minimize the "#{mod}" build
+#note: some of these override definitions above and below
+#note: gary-os
+#{MOD} #{FSEXCL} mod:/.gary-os/.git
+#{MOD} #{FSEXCL} mod:/.gary-os/artifacts/archive
+#{MOD} #{FSEXCL} mod:/.gary-os/artifacts/images
+#{MOD} #{FSEXCL} mod:/.gary-os/gentoo/overlay
+#{MOD} #{FSEXCL} mod:/etc/portage/overlay
+#note: build
+#{MOD} #{FSEXCL} mod:/lib64/firmware
+#{MOD} #{FSEXCL} mod:/usr/lib64/python2.7/test
+#{MOD} #{FSEXCL} mod:/usr/lib64/python3.7/site-packages/gentoolkit/test
+#{MOD} #{FSEXCL} mod:/usr/lib64/python3.7/site-packages/portage/tests
+#{MOD} #{FSEXCL} mod:/usr/lib64/python3.7/test
+#{MOD} #{FSEXCL} mod:/usr/lib64/rust
+#{MOD} #{FSEXCL} mod:/usr/libexec/git-core
+#{MOD} #{FSEXCL} mod:/usr/share/cmake
+#{MOD} #{FSEXCL} mod:/usr/share/sgml
+
+#NOTE: EVERYTHING BELOW IS MATCHED WITH "_GARY-OS"
+#NOTE: SOME OF THESE INTENTIONALLY RE-DEFINE THE DEFAULTS
+
+#{FSPACK} base:/lib64/modules
+#{FSPACK} base:/lib64/firmware
 
 #{FSKEEP} gcc:/usr/include
 #{FSKEEP} gcc:/usr/libexec/gcc
@@ -112,7 +117,7 @@
 ########################################
 # firmware
 
-sys-kernel/linux-firmware		# takes up way too much space, but required
+sys-kernel/linux-firmware
 
 ########################################
 # toolchain
