@@ -617,7 +617,10 @@ function _release_review {		#{ismain}
 
 function _prepare_build {		#{doredo} #{dofast} #{dotest}
 	if ${DOREDO}; then
-		_release_reset			|| return 1
+		#note: all "prepare_*" functions that "#{isexit}" on "${doredo}"
+#>>>		DOREDO="true" _prepare_config	|| return 1
+		DOREDO="true" _prepare_packdirs	|| return 1
+#>>>		DOREDO="true" _prepare_symlinks	|| return 1
 	fi
 	if ! ${DOFAST}; then
 		DOREDO="false" _prepare_config	|| return 1
