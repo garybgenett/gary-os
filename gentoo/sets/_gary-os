@@ -126,8 +126,8 @@
 #{FSKEEP} emerge:/var/git/meta-repo
 #{FSARCH} emerge:/var/git/meta-repo.git
 
-#{FSARCH} debug:/usr/lib64/debug
-#>>>#{FSARCH} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/7.3.1/debug
+#>>>#{FSARCH} debug:/usr/lib64/debug
+#>>>#{FSARCH} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/*/debug
 #>>>#{FSARCH} debug:/usr/src/debug
 
 ########################################
