@@ -414,6 +414,7 @@ media-gfx/mcomix
 net-misc/freerdp
 net-misc/tigervnc
 x11-misc/x11vnc
+x11-misc/x2vnc
 
 #>>>net-p2p/bitcoin-cli
 #>>>net-p2p/bitcoin-qt
