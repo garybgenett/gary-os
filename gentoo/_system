@@ -1261,6 +1261,9 @@ if [[ ${1} == -i ]]; then
 	shift
 	mount_dev_dirs												|| EXIT 1
 	if ! ${_CFG}; then
+		if ${_BLD}; then
+			${RM}				${TARGET}${ETCDIR}/savedconfig				|| EXIT 1
+		fi
 							${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -r		|| EXIT 1
 	fi
 	if ${_BLD} || { ! ${DOFAST} && ! ${_CFG}; }; then
