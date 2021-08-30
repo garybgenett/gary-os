@@ -217,7 +217,7 @@ sys-apps/net-tools			#{MOD}
 net-ftp/lftp				#{MOD}
 net-misc/curl
 net-misc/rsync				#{rootfs}
-net-misc/wget
+net-misc/wget				#{rootfs}
 www-client/links
 www-client/w3m				#{MOD}
 
