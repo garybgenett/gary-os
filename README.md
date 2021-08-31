@@ -2,7 +2,7 @@
 
 --------------------------------------------------------------------------------
 
-| ![GaryOS Icon](artifacts/images/icon-v1.0.png "GaryOS Icon") | "The one file that does it all."
+| ![GaryOS Icon](artifacts/images/icon-v6.0.png "GaryOS Icon") | "The one file that does it all."
 |:---      |:---
 | Latest   | [v5.0 2021-08-04] -- [Kernel] / [Rootfs] / [Boot]
 | Homepage | <https://github.com/garybgenett/gary-os>
