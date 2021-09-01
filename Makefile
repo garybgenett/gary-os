@@ -440,9 +440,20 @@ ifeq ($(DOMODS),true)
 		$(ECHO) '{"versions":['; \
 		$(shell $(ECHO) '{') \
 		$(foreach FILE,$(shell $(subst @,,$(WGET)) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/tags | $(JSON) '$(VERS)'),\
-			$(ECHO) '"$(FILE): '; \
-			$(subst @,,$(WGET)) 'https://sourceforge.net/projects/gary-os/files/$(GARYOS_TTL)-$(FILE)-$(ARCH).kernel/stats/json?$(URI)' | $(JSON) '$(TOTL)' | tr '\n' '"'; \
-			$(ECHO) ','; \
+			$(ECHO) '"$(FILE):'; \
+			$(ECHO) ' k('; \
+				$(subst @,,$(WGET)) 'https://sourceforge.net/projects/gary-os/files/$(GARYOS_TTL)-$(FILE)-$(ARCH).kernel/stats/json?$(URI)'			| ($(GREP) '.' || $(ECHO) '{}') | $(JSON) '$(TOTL) // 0' | tr '\n' ','; \
+				$(subst @,,$(WGET)) 'https://sourceforge.net/projects/gary-os/files/$(FILE)/$(GARYOS_TTL)-$(FILE)-$(ARCH).kernel/stats/json?$(URI)'		| ($(GREP) '.' || $(ECHO) '{}') | $(JSON) '$(TOTL) // 0' | tr '\n' ')'; \
+			$(ECHO) ' t('; \
+				$(subst @,,$(WGET)) 'https://sourceforge.net/projects/gary-os/files/$(GARYOS_TTL)-$(FILE)-$(ARCH).tiny.kernel/stats/json?$(URI)'		| ($(GREP) '.' || $(ECHO) '{}') | $(JSON) '$(TOTL) // 0' | tr '\n' ','; \
+				$(subst @,,$(WGET)) 'https://sourceforge.net/projects/gary-os/files/$(FILE)/$(GARYOS_TTL)-$(FILE)-$(ARCH).tiny.kernel/stats/json?$(URI)'	| ($(GREP) '.' || $(ECHO) '{}') | $(JSON) '$(TOTL) // 0' | tr '\n' ')'; \
+			$(ECHO) ' r('; \
+				$(subst @,,$(WGET)) 'https://sourceforge.net/projects/gary-os/files/$(GARYOS_TTL)-$(FILE)-$(ARCH).rootfs/stats/json?$(URI)'			| ($(GREP) '.' || $(ECHO) '{}') | $(JSON) '$(TOTL) // 0' | tr '\n' ','; \
+				$(subst @,,$(WGET)) 'https://sourceforge.net/projects/gary-os/files/$(FILE)/$(GARYOS_TTL)-$(FILE)-$(ARCH).rootfs/stats/json?$(URI)'		| ($(GREP) '.' || $(ECHO) '{}') | $(JSON) '$(TOTL) // 0' | tr '\n' ')'; \
+			$(ECHO) ' b('; \
+				$(subst @,,$(WGET)) 'https://sourceforge.net/projects/gary-os/files/$(GARYOS_TTL)-$(FILE)-$(ARCH).grub/stats/json?$(URI)'			| ($(GREP) '.' || $(ECHO) '{}') | $(JSON) '$(TOTL) // 0' | tr '\n' ','; \
+				$(subst @,,$(WGET)) 'https://sourceforge.net/projects/gary-os/files/$(FILE)/$(GARYOS_TTL)-$(FILE)-$(ARCH).grub/stats/json?$(URI)'		| ($(GREP) '.' || $(ECHO) '{}') | $(JSON) '$(TOTL) // 0' | tr '\n' ')'; \
+			$(ECHO) '",'; \
 		) \
 			$(shell $(ECHO) '}') \
 			| sed 's|,$$||g'; \
