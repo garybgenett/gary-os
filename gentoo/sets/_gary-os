@@ -19,7 +19,7 @@
 #! declare G_RNSV="/.runit/runsvdir/system"
 #! #############################################################################
 #! mount -o remount,rw,size=6g /.overlay
-#! [[ -b /dev/sda1 ]] && mount-robust ${G_DISK} ${_GINST}
+#! [[ -b ${G_DISK} ]] && mount-robust ${G_DISK} ${_GINST}
 #! make -C ${SETDIR} DOMODS="true" unpack
 #! make -C ${SETDIR} DOREDO="true" unpack
 #! #####################################
@@ -42,7 +42,7 @@
 #! rc-update add sysklogd default || true
 #! rc-update add openvpn default || true
 #! openrc
-#! echo | vpn -v || true
+#! echo | (vpn -v || true)
 #! #####################################
 #! ${SED} -i "s|^(.+agetty.+tty[5-9].+)$|#\1|g" /etc/inittab && telinit q
 #! ${MKDIR} ${G_RNSV} && ${RM} $(dirname ${G_RNSV})/current && ${LN} $(basename ${G_RNSV}) $(dirname ${G_RNSV})/current
