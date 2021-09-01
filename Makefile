@@ -13,12 +13,17 @@ export HOME	:= $(GARYOS_DIR)
 endif
 
 override CHROOT	:= -g
-override DOMODS	?=
 override C	?= $(GARYOS_DIR)
 override S	?= $(GARYOS_DIR)/sources
 override O	?= $(GARYOS_DIR)/build
 override A	?= $(GARYOS_DIR)/artifacts
 override P	?= $(GARYOS_TTL)
+
+#>>>override ROOTFS	?=
+override DOMODS	?=
+override DOREDO	?=
+#>>>override DOFAST	?=
+override DOTEST	?=
 
 override V	?=
 override Q	:= -q
