@@ -356,6 +356,7 @@ override BEG := $(shell expr `date +%s` - \( \( 60 \* 60 \* 24 \) \* 30 \))
 override BEG := $(shell date --iso --date='@$(BEG)')
 override PRD := daily
 endif
+override URI := start_date=$(BEG)&end_date=$(END)&period=$(PRD)
 
 override ARCH := generic_64
 override VERS := .[].name | select(test("^v[1-9]"))
@@ -429,18 +430,18 @@ readme-github:
 	@$(ECHO) "TOKN: $(TOKN)\n" 1>&2
 ifeq ($(DOMODS),true)
 	@$(ECHO) '['
-	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)		| $(JSON) '$(SHOW)'; $(ECHO) ','
-	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/commits	| $(JSON) '$(LAST)'; $(ECHO) ','
-	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/branches	| $(JSON) '$(TREE)'; $(ECHO) ','
-	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/tags		| $(JSON) '$(TAGS)'; $(ECHO) ','
-	$(WGET) 'https://sourceforge.net/projects/gary-os/files/stats/json?start_date=$(BEG)&end_date=$(END)&period=$(PRD)' | $(JSON) '$(DOWN)'; $(ECHO) ','
+	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)			| $(JSON) '$(SHOW)'; $(ECHO) ','
+	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/commits		| $(JSON) '$(LAST)'; $(ECHO) ','
+	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/branches		| $(JSON) '$(TREE)'; $(ECHO) ','
+	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/tags			| $(JSON) '$(TAGS)'; $(ECHO) ','
+	$(WGET) 'https://sourceforge.net/projects/gary-os/files/stats/json?$(URI)'	| $(JSON) '$(DOWN)'; $(ECHO) ','
 	$(if $(DOTEST),,@) \
 		$(shell $(ECHO) '{') \
 		$(ECHO) '{"versions":['; \
 		$(shell $(ECHO) '{') \
 		$(foreach FILE,$(shell $(subst @,,$(WGET)) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/tags | $(JSON) '$(VERS)'),\
 			$(ECHO) '"$(FILE): '; \
-			$(subst @,,$(WGET)) 'https://sourceforge.net/projects/gary-os/files/$(GARYOS_TTL)-$(FILE)-$(ARCH).kernel/stats/json?start_date=$(BEG)&end_date=$(END)&period=$(PRD)' | $(JSON) '$(TOTL)' | tr '\n' '"'; \
+			$(subst @,,$(WGET)) 'https://sourceforge.net/projects/gary-os/files/$(GARYOS_TTL)-$(FILE)-$(ARCH).kernel/stats/json?$(URI)' | $(JSON) '$(TOTL)' | tr '\n' '"'; \
 			$(ECHO) ','; \
 		) \
 			$(shell $(ECHO) '}') \
@@ -449,7 +450,7 @@ ifeq ($(DOMODS),true)
 		$(shell $(ECHO) '}') \
 		| $(JSON)
 	@$(ECHO) ','
-	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/stargazers	| $(JSON) '$(TEAM)'; #>>> $(ECHO) ','
+	$(WGET) https://api.github.com/repos/$(ACCT)/$(GARYOS_TTL)/stargazers		| $(JSON) '$(TEAM)'; #>>> $(ECHO) ','
 	@$(ECHO) ']\n'
 else
 	@iptables -I INPUT 1 --proto tcp --dport 6419 -j ACCEPT
