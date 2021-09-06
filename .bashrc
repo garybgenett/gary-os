@@ -2638,7 +2638,8 @@ function mount-robust {
 			else
 				echo -en "- Unmounting...\n"
 				if ! ${DEBUG}; then
-					umount -drv ${TRUE_DIR}	|| return 1
+#>>>					umount -drv ${TRUE_DIR}	|| return 1
+					umount -rv ${TRUE_DIR}	|| return 1
 				fi
 			fi
 			if {
