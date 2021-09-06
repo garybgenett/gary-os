@@ -1051,6 +1051,7 @@ function _prepare_symlinks {		#{isexit} #{doredo}
 	done
 	shopt ${LASTPIPE} lastpipe
 	${LN} --relative ${TARGET}${ARCDIR}/stage3-*.tar.xz		${_FINAL}/					|| return 1
+	${MV} ${_FINAL}/stage3-${ESUB}.tar.xz				${_RAMFS}.stage3-${ESUB}.tar.xz			|| EXIT 1
 #>>>	${RM} $(find -L ${_FINAL} -maxdepth 1 -type l 2>/dev/null | sort)						|| return 1
 	return 0
 }
@@ -1677,7 +1678,7 @@ function release_fetch_list {		#>>>{dotest}
 			echo "${MASK}$(common_packdir ${FILE})"		>>${FET_PKG}
 		done
 		shopt ${LASTPIPE} lastpipe
-		echo "${MASK}stage3-${ESUB}.tar.xz"			>>${FET_PKG}
+		echo "${MASK}${FET_BAS}.stage3-${ESUB}.tar.xz"		>>${FET_PKG}
 	else
 		${SED} -i						\
 			-e "s|^[[:space:]]+||g"				\
