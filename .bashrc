@@ -526,8 +526,8 @@ export LINKS_C="links \
 	-save-url-history 1 \
 "
 export LINKS="${LINKS_C} \
-	-menu-font-size 13 \
-	-html-user-font-size 13 \
+	-menu-font-size 16 \
+	-html-user-font-size 16 \
 	-html-g-background-color 0x808080 \
 	-html-g-text-color 0x000000 \
 	-html-g-link-color 0x800000 \
