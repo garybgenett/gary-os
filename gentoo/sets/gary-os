@@ -4,7 +4,6 @@
 
 #>>> cp ./gentoo/sets/gary-os{.BAK,}; sed -r -i -e "s%([[:space:]]+)#[{](MOD|rootfs)[}][[:space:]]*%\1%g" -e "s%[[:space:]]+$%%g" ./gentoo/sets/gary-os; diff ./gentoo/sets/{_,}gary-os
 
-#{FUNTOO}
 #{LINPKG} sys-kernel/gentoo-sources:5.10.56
 #{KERNEL} 5.10.56
 

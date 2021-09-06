@@ -2,7 +2,6 @@
 # portage set configuration file
 ################################################################################
 
-#{FUNTOO}
 #>>>#{LINPKG} sys-kernel/debian-sources:debian-sources-5.10.46_p2
 #{LINPKG} sys-kernel/gentoo-sources:5.10.56
 #{KERNEL} 5.10.56
