@@ -458,6 +458,31 @@ if not exist %BCDFILE% (goto create) else (goto delete)
 
 ########################################
 
+declare MODULES_CORE="\
+	biosdisk
+	memdisk
+	tar
+	\
+	configfile
+	echo
+	\
+	fat
+	exfat
+	ext2
+	ntfs
+	part_gpt
+	part_msdos
+	\
+	chain
+	linux
+	reboot
+"
+declare MODULES_UEFI="$(
+	echo -en "${MODULES_CORE}" |
+	${GREP} -v \
+		-e "biosdisk" \
+)"
+
 declare MODULES_LIST="$(
 	ls ${GMODS}/*.{lst,mod} |
 	${GREP} -v \
@@ -531,32 +556,6 @@ declare MODULES_LIST="$(
 		-e "[/]xfs" \
 		-e "[/]xnu" \
 		-e "[/]zfs" \
-)"
-
-declare MODULES_CORE="\
-	biosdisk
-	memdisk
-	tar
-	\
-	configfile
-	echo
-	\
-	fat
-	exfat
-	ext2
-	ntfs
-	part_gpt
-	part_msdos
-	\
-	chain
-	linux
-	reboot
-"
-
-declare MODULES_UEFI="$(
-	echo -en "${MODULES_CORE}" |
-	${GREP} -v \
-		-e "biosdisk" \
 )"
 
 ########################################
@@ -693,38 +692,40 @@ function exit_summary {
 
 ########################################
 
-if {
-	[[ -b ${GIDEF} ]] ||
-	[[ -f ${GIDEF} ]];
-}; then
-	FILE="${GDEST}/.mount-loop"
+if [[ -n ${DO_MOUNT} ]]; then
 	if {
-		[[ ${DO_MOUNT} == -m ]] ||
-		[[ ${DO_MOUNT} == -u ]];
+		[[ -b ${GIDEF} ]] ||
+		[[ -f ${GIDEF} ]];
 	}; then
-		if [[ -b ${LOOP_DEVICE}p${GPDEF} ]]; then
-			mount-robust -u ${LOOP_DEVICE}p${GPDEF}		|| exit 1
+		FILE="${GDEST}/.mount-loop"
+		if {
+			[[ ${DO_MOUNT} == -m ]] ||
+			[[ ${DO_MOUNT} == -u ]];
+		}; then
+			if [[ -b ${LOOP_DEVICE}p${GPDEF} ]]; then
+				mount-robust -u ${LOOP_DEVICE}p${GPDEF}		|| exit 1
+			fi
+			if [[ -b ${LOOP_DEVICE}p${GPEFI} ]]; then
+				mount-robust -u ${LOOP_DEVICE}p${GPEFI}		|| exit 1
+			fi
+			if [[ -b ${LOOP_DEVICE} ]]; then
+				losetup -d ${LOOP_DEVICE}			#>>> || exit 1
+			fi
+			${RM} ${FILE}{,-efi}					|| exit 1
 		fi
-		if [[ -b ${LOOP_DEVICE}p${GPEFI} ]]; then
-			mount-robust -u ${LOOP_DEVICE}p${GPEFI}		|| exit 1
+		if [[ ${DO_MOUNT} == -m ]]; then
+				losetup -v -P ${LOOP_DEVICE} ${GINST}		|| exit 1
+				partx -t gpt -a ${LOOP_DEVICE}			#>>> || exit 1
+			${MKDIR} ${FILE}{,-efi}					|| exit 1
+			mount-robust ${LOOP_DEVICE}p${GPDEF} ${FILE}		|| exit 1
+			mount-robust ${LOOP_DEVICE}p${GPEFI} ${FILE}-efi	|| exit 1
+			echo -en "\n"; ${LL} -R ${FILE}*
 		fi
-		if [[ -b ${LOOP_DEVICE} ]]; then
-			losetup -d ${LOOP_DEVICE}			#>>> || exit 1
-		fi
-		${RM} ${FILE}{,-efi}					|| exit 1
-		if [[ ${DO_MOUNT} == -u ]]; then
-			exit 0
-		fi
+	else
+		print_usage
+		exit 1
 	fi
-	if [[ ${DO_MOUNT} == -m ]]; then
-		losetup -v -P ${LOOP_DEVICE} ${GINST}			|| exit 1
-		partx -t gpt -a ${LOOP_DEVICE}				#>>> || exit 1
-		${MKDIR} ${FILE}{,-efi}					|| exit 1
-		mount-robust ${LOOP_DEVICE}p${GPDEF} ${FILE}		|| exit 1
-		mount-robust ${LOOP_DEVICE}p${GPEFI} ${FILE}-efi	|| exit 1
-		echo -en "\n"; ${LL} -R ${FILE}*
-		exit 0
-	fi
+	exit 0
 fi
 
 ################################################################################
