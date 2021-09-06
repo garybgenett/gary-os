@@ -1547,6 +1547,7 @@ function release_grub_qcow_mount {	#>>>{dotest}
 	modprobe			nbd max_part=127					|| return 1
 	cat				/sys/module/nbd/parameters/max_part			|| return 1
 	qemu-nbd --fork -nv -f qcow2 -c	${GRUB_LOOP/%p[0-9]} ${GRUB_DEST}/loopfile.qcow2	|| return 1
+	sleep 1
 	if ! ${DOTEST}; then
 		partx -t gpt -a		${GRUB_LOOP/%p[0-9]}					#>>> || return 1
 		${MKDIR}		${GRUB_DEST}/.mount-loop{-efi,}				|| return 1
@@ -1565,6 +1566,7 @@ function release_grub_qcow_unmount {	#>>>{dotest}
 		umount	${GRUB_LOOP}			|| return 1
 	fi
 	qemu-nbd -d	${GRUB_LOOP/%p[0-9]}		|| return 1
+	sleep 1
 	${RM}		${GRUB_DEST}/.mount-loop{-efi,}	|| return 1
 	return 0
 }
@@ -1612,7 +1614,6 @@ function _release_grub {		#{doredo} #{dofast} #{dotest}
 				${MKDIR}				${GRUB_DEST}/${FUNCNAME}				|| return 1
 				${HOME}/scripts/grub.sh			${GRUB_DEST}/${FUNCNAME} -f ${GRUB_LOOP}		|| return 1
 				DOTEST="true" release_grub_qcow_unmount	${GRUB_DEST} ${GRUB_LEFI} ${GRUB_LOOP}			|| return 1
-				sleep 1
 			fi
 			DOTEST="false" release_grub_qcow_mount		${GRUB_DEST} ${GRUB_LEFI} ${GRUB_LOOP}			|| return 1
 			DOTEST="${DOTEST}" release_grub_loopfile	${GRUB_DEST}						|| return 1
