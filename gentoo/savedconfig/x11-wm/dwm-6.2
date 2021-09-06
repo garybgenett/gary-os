@@ -18,7 +18,7 @@ static const char urxvt_bold[]		= "-misc-fixed-bold-r-semicondensed--13-*-*-*-*-
 static const char urxvt_bg[]		= "#000000";
 static const char urxvt_fg[]		= "#ffffff";
 static const char urxvt_cursor[]	= "#ff0000";
-static const char links_fontsize[]	= "13";
+static const char links_fontsize[]	= "16";
 static const char links_bg[]		= "0x808080";
 static const char links_text[]		= "0x000000";
 static const char links_link[]		= "0x800000";
@@ -42,8 +42,9 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	{ NULL,       NULL,       NULL,       0,            0,           -1 },
+//	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
+//	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
 };
 
 /* layout(s) */
