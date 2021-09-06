@@ -1091,7 +1091,7 @@ if [[ ${1} == -o ]]; then
 				echo -en ">>> THESE FILES WERE SKIPPED: ${SKIP/# } <<<\n"
 			fi
 			echo -en "\n"
-		else
+		elif ${DO_CHROOT}; then
 			${_SOUL} $(if ${QUIET}; then echo "${QUIET_OPT}"; fi) ${TOOR} ${1} ${2}					|| EXIT 1
 		fi
 		echo -en ">>> ${SETDIR}/${FUNDIR}/${LAYDIR}/${FILE}/.rationale <<<\n"
