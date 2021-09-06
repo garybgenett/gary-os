@@ -211,6 +211,7 @@ net-misc/wget				#{rootfs}
 www-client/links
 
 dev-libs/openssl
+net-libs/gnutls
 net-misc/openssh
 
 app-editors/nano
