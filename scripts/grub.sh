@@ -842,6 +842,7 @@ fi
 ########################################
 
 FILE="${GDEST}/rescue.tar/boot/grub"
+${RM} ${FILE}/${GTYPE}					|| exit 1
 ${MKDIR} ${FILE}/${GTYPE}				|| exit 1
 ${RSYNC_U} ${MODULES_BIOS} ${FILE}/${GTYPE}/		|| exit 1
 ${RSYNC_U} ${GDEST}/rescue.cfg ${FILE}/grub.cfg		|| exit 1
@@ -889,16 +890,15 @@ grub-install \
 	--skip-fs-probe \
 	--target="${GTYPE}" \
 	--directory="${GDEST}/_${GTYPE}" \
-	--boot-directory="${FILE}/${SCRIPT}" \
+	--boot-directory="${GDEST}/_${GTYPE}.boot" \
 	${GINST_DO}								|| exit_summary 1
-${RSYNC_U} ${GDEST}/rescue.img ${FILE}/${SCRIPT}/grub/${GTYPE}/			|| exit 1
+${RSYNC_U} ${GDEST}/rescue.img ${GDEST}/_${GTYPE}.boot/grub/${GTYPE}/		|| exit 1
 grub-bios-setup \
 	--verbose \
 	--skip-fs-probe \
-	--directory="${FILE}/${SCRIPT}/grub/${GTYPE}" \
+	--directory="${GDEST}/_${GTYPE}.boot/grub/${GTYPE}" \
 	--core-image="rescue.img" \
 	${GINST_DO}								|| exit_summary 1
-${MV} ${FILE}/${SCRIPT} ${GDEST}/_${GTYPE}.boot					|| exit 1
 mount-robust -u ${GINST_DO}${GPSEP}${GPART}					#>>> || exit 1
 ${RM} ${GDEST}/.mount-mbr							|| exit 1
 
@@ -927,11 +927,10 @@ if [[ -b ${GINST_DO}${GPSEP}${GPEFI} ]]; then
 			--skip-fs-probe \
 			--target="${TYPE}" \
 			--directory="${GDEST}/_${TYPE}" \
-			--boot-directory="${GDEST}/.mount-efi/${SCRIPT}" \
+			--boot-directory="${GDEST}/_${TYPE}.boot" \
 			--efi-directory="${GDEST}/.mount-efi" \
 			${GINST_DO}						|| exit_summary 1
 		efi_cp ${FILE} ${GDEST}/.mount-efi/EFI/BOOT			|| exit 1
-		${MV} ${GDEST}/.mount-efi/${SCRIPT} ${GDEST}/_${TYPE}.boot	|| exit 1
 		mount-robust -u ${GINST_DO}${GPSEP}${GPEFI}			|| exit 1
 	done
 	${RM} ${GDEST}/.mount-efi						|| exit 1
