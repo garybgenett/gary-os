@@ -38,10 +38,12 @@ else
 	EGIT_REPO_URI="https://git.savannah.gnu.org/git/grub.git"
 fi
 
+#>>> linux_initrd_max_address.patch
 PATCHES=(
 	"${FILESDIR}"/gfxpayload.patch
 	"${FILESDIR}"/grub-2.02_beta2-KERNEL_GLOBS.patch
 	"${FILESDIR}"/grub-2.06-test-words.patch
+	"${FILESDIR}"/linux_initrd_max_address.patch
 )
 
 DEJAVU=dejavu-sans-ttf-2.37
