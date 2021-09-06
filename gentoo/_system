@@ -103,6 +103,9 @@ export GOSPKG="${GOSPKG:-${_TITLE}}"
 
 ########################################
 
+#NOTE: THE "ARCDIR/GENDIR/_SYSTEM" VALUE IS HARD-SET IN "./GENDIR/LAYDIR/.REVIEW"
+#NOTE: IT MUST BE UPDATED IF THESE VALUES CHANGE
+
 #VARIABLES[ETCDIR DSTDIR PAKDIR REPDIR TMPDIR PDBDIR]
 export ETCDIR="/etc/portage"
 export DSTDIR="/var/cache/portage/distfiles"
