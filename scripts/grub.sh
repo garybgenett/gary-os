@@ -37,8 +37,8 @@ declare GPDEF="1"
 function print_usage {
 	cat <<_EOF_
 usage:
-	${SCRIPT} {directory} [options]	= build / install
-	${SCRIPT} {directory} {-m|-u}	= mount / unmount loopfile (for testing)
+	${SCRIPT} {directory} [options]		= build / install
+	${SCRIPT} {directory} [device] {-m|-u}	= mount / unmount
 
 {directory}		target directory to use for building grub files (must already exist)
 [-d || -d<0-9+>]	show debug information || number of objects to list (default: ${HEDEF})
@@ -49,7 +49,7 @@ usage:
 	${GIBAK}	use specified device with standard data partition (default: ${GPDEF})
 	${GIBAK}<0-9+>	custom data partition number
 [kernel options]	additional custom options to pass to the kernel at boot
-[-m || -u]		mount/unmount the generated loopfile, for testing purposes
+[-m || -u]		mount/unmount the loopfile/device
 
 All arguments must be used in the order specified.
 
@@ -694,31 +694,37 @@ function exit_summary {
 
 if [[ -n ${DO_MOUNT} ]]; then
 	if {
-		[[ -b ${GIDEF} ]] ||
-		[[ -f ${GIDEF} ]];
+		[[ -b ${GINST} ]] ||
+		[[ -f ${GINST} ]];
 	}; then
 		FILE="${GDEST}/.mount-loop"
+		if [[ -f ${GINST} ]]; then
+			GINST_DO="${LOOP_DEVICE}"
+		fi
 		if {
 			[[ ${DO_MOUNT} == -m ]] ||
 			[[ ${DO_MOUNT} == -u ]];
 		}; then
-			if [[ -b ${LOOP_DEVICE}p${GPDEF} ]]; then
-				mount-robust -u ${LOOP_DEVICE}p${GPDEF}		|| exit 1
+			if [[ -b ${GINST_DO}${GPSEP}${GPEFI} ]]; then
+				mount-robust -u ${GINST_DO}${GPSEP}${GPEFI}	|| exit 1
 			fi
-			if [[ -b ${LOOP_DEVICE}p${GPEFI} ]]; then
-				mount-robust -u ${LOOP_DEVICE}p${GPEFI}		|| exit 1
+			if [[ -b ${GINST_DO}${GPSEP}${GPART} ]]; then
+				mount-robust -u ${GINST_DO}${GPSEP}${GPART}	|| exit 1
 			fi
-			if [[ -b ${LOOP_DEVICE} ]]; then
+			if [[ -f ${GINST} ]]; then
 				losetup -d ${LOOP_DEVICE}			#>>> || exit 1
 			fi
 			${RM} ${FILE}{,-efi}					|| exit 1
 		fi
 		if [[ ${DO_MOUNT} == -m ]]; then
+			if [[ -f ${GINST} ]]; then
+				losetup -d ${LOOP_DEVICE}			#>>> || exit 1
 				losetup -v -P ${LOOP_DEVICE} ${GINST}		|| exit 1
 				partx -t gpt -a ${LOOP_DEVICE}			#>>> || exit 1
+			fi
 			${MKDIR} ${FILE}{,-efi}					|| exit 1
-			mount-robust ${LOOP_DEVICE}p${GPDEF} ${FILE}		|| exit 1
-			mount-robust ${LOOP_DEVICE}p${GPEFI} ${FILE}-efi	|| exit 1
+			mount-robust ${GINST_DO}${GPSEP}${GPEFI} ${FILE}-efi	|| exit 1
+			mount-robust ${GINST_DO}${GPSEP}${GPART} ${FILE}	|| exit 1
 			echo -en "\n"; ${LL} -R ${FILE}*
 		fi
 	else
