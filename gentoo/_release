@@ -1075,7 +1075,6 @@ function _release_devel {		#{ismain} #{doredo} #{dotest}
 		DOREDO="true" DOFAST="true" DOTEST="false" _release_cpio		|| return 1
 	fi
 	DOREDO="true" _release_kernel							|| return 1
-	DOREDO="true" _prepare_symlinks							|| return 1
 	if [[ ! -f ${_RAMFS}.kernel			]]; then ${LN} --relative ${_RAMFS}.${_G_MOD}.kernel			${_RAMFS}.kernel		; fi
 	if [[ ! -f ${_RAMFS}.kernel.packages.txt	]]; then ${LN} --relative ${_RAMFS}.${_G_MOD}.kernel.packages.txt	${_RAMFS}.kernel.packages.txt	; fi
 	if [[ ! -f ${_RAMFS}.rootfs			]]; then ${LN} --relative ${_RAMFS}.cpio.rootfs				${_RAMFS}.rootfs		; fi
