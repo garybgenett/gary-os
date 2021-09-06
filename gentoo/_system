@@ -154,7 +154,7 @@ declare FUNDAT="$(${SED} -n "s|^#.+([0-9]{4}-[0-9]{2}-[0-9]{2}).+(${FUNTOO/#* })
 
 #VARIABLES[TARGET TOOR _PKG _NEW _MOD _GOS _GFG]
 export TARGET="${BLDDIR}"
-export TOOR="${TOOR}"
+export TOOR=
 export _PKG="${BLDPKG}"
 export _NEW="false"
 export _MOD="false"
@@ -162,7 +162,7 @@ export _GOS="false"
 export _GFG="false"
 
 if ! ${_BASH_SOURCED}; then
-	if [[ ${1} == -[dxtg] ]]; then
+	if [[ ${1} == -[dxg] ]]; then
 		TOOR="${1}"
 		shift
 	fi
@@ -534,7 +534,7 @@ function print_info {
 		echo -en ">>> CHROOT <<<"
 		echo -en "${RESET}\n"
 		echo -en "${STATE}"
-		echo -en ">>> DEFAULTS: TARGET=\$BLDDIR _PKG=\$BLDPKG <<<"
+		echo -en ">>> TARGET=\$*DIR _PKG=\$*PKG <<<"
 		echo -en "${RESET}\n"
 		echo -en "\n"
 		printf "${PRINTF}" "Chroot Selection [-d] (\$BLDPKG/\$BLDDIR):"	"${BLDPKG}"	"${BLDDIR}"
@@ -675,7 +675,7 @@ function requires_chroot {
 	echo -en ">>> IT CAN BE RUN AGAINST ROOT(/) USING THE (-g)(GOSDIR=/) OPTIONS <<<\n"
 	echo -en ">>> CURRENTLY USING (${TOOR}) CHROOT OPTION AND (${C_TARGET}) DIRECTORY <<<\n"
 	echo -en "\n"
-	TOOR= ${_SOUL} ${DEBUG_OPT} 2>&1 | ${GREP} " ${C_OPTION}"
+	${_SOUL} ${DEBUG_OPT} ${QUIET_OPT} 2>&1 | ${GREP} " ${C_OPTION}"
 	echo -en "\n"
 	EXIT 1
 }
