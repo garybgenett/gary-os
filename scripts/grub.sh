@@ -169,12 +169,14 @@ fi
 ########################################
 
 declare GMENU_KERNEL="/${_BASE}/${_BASE}.kernel"
+declare GMENU_MODKRN="/${_BASE}/${_BASE}.tiny.kernel"
 declare GMENU_ROOTFS="/${_BASE}/${_BASE}.rootfs"
 declare GMENU_OPTION="shmem_size=${SHMEM} groot=${GCDEV} groot_hint=\${garyos_rootfs} groot_file=${GMENU_ROOTFS}"
 declare GMENU_OPTPXE="shmem_size=${SHMEM} groot=\${garyos_server} groot_hint=${GPXE} groot_file=${GMENU_ROOTFS}"
 
 declare GMENU_CUSTOM="/${_BASE}/${_BASE}.grub.cfg"
 declare GCUST_KERNEL="$(dirname ${GMENU_CUSTOM})/$(basename ${GMENU_KERNEL})"
+declare GCUST_MODKRN="$(dirname ${GMENU_CUSTOM})/$(basename ${GMENU_MODKRN})"
 declare GCUST_ROOTFS="$(dirname ${GMENU_CUSTOM})/$(basename ${GMENU_ROOTFS})"
 declare GCUST_OPTION="shmem_size=${SHMEM} groot=${GCDEV} groot_hint=\${garyos_rootfs} groot_file=${GCUST_ROOTFS}"
 
@@ -189,6 +191,7 @@ declare GMENU_HEAD="\
 
 set debug=chain,linux,loader,relocator,tftp
 #>>>set debug=\${debug},mm,mmap
+
 set pager=0
 set timeout=-1
 
@@ -306,6 +309,9 @@ set garyos_rootfs=
 search --no-floppy --file --set garyos_custom ${GMENU_CUSTOM}
 search --no-floppy --file --set garyos_rescue ${GMENU_KERNEL}
 search --no-floppy --file --set garyos_rootfs ${GMENU_ROOTFS}
+if [ -z \"\${garyos_rescue}\" ]; then
+	search --no-floppy --file --set garyos_rescue ${GMENU_MODKRN}
+fi
 
 if [ -n \"\${garyos_custom}\" ]; then
 	set default=2
@@ -330,10 +336,16 @@ menuentry \"${_PROJ} Menu\" {
 	configfile (\${garyos_custom})${GMENU_CUSTOM}
 }
 menuentry \"${_PROJ} Boot\" {
-	linux (\${garyos_rescue})${GMENU_KERNEL}${GOPTS} \${options_boot}
+	if ! linux (\${garyos_rescue})${GMENU_KERNEL}${GOPTS} \${options_boot}; then
+		linux (\${garyos_rescue})${GMENU_MODKRN}${GOPTS} \${options_boot}
+	fi
+	boot
 }
 menuentry \"${_PROJ} Boot Rootfs\" {
-	linux (\${garyos_rootfs})${GMENU_KERNEL}${GOPTS} ${GMENU_OPTION} \${options_boot}
+	if ! linux (\${garyos_rootfs})${GMENU_KERNEL}${GOPTS} ${GMENU_OPTION} \${options_boot}; then
+		linux (\${garyos_rootfs})${GMENU_MODKRN}${GOPTS} ${GMENU_OPTION} \${options_boot}
+	fi
+	boot
 }
 
 ########################################
@@ -372,6 +384,7 @@ if [ -z \"\${garyos_source}\" ]; then set garyos_source=\"\${net_${GPXE}_dhcp_ro
 if [ -z \"\${garyos_params}\" ]; then set garyos_params=\"\${net_${GPXE}_dhcp_extensionspath}\"; fi
 
 if [ -z \"\${garyos_source}\" ]; then
+#>>>	set garyos_source=\"${GMENU_MODKRN}\"
 	set garyos_source=\"${GMENU_KERNEL}\"
 fi
 
@@ -384,6 +397,7 @@ menuentry \"${_PROJ} PXE\" {
 	echo cmd: net_dhcp
 	echo cmd: configfile (memdisk)${GFILE}
 	echo var: set garyos_server=\"\${garyos_server}\"
+#>>>	echo var: set garyos_source=\"${GMENU_MODKRN}\"
 	echo var: set garyos_source=\"${GMENU_KERNEL}\"
 	echo var: set garyos_params=\"${GMENU_OPTPXE}\"
 	echo garyos_server: \${garyos_server}
@@ -411,6 +425,9 @@ set garyos_rescue=
 set garyos_rootfs=
 search --no-floppy --file --set garyos_rescue ${GCUST_KERNEL}
 search --no-floppy --file --set garyos_rootfs ${GCUST_ROOTFS}
+if [ -z \"\${garyos_rescue}\" ]; then
+	search --no-floppy --file --set garyos_rescue ${GCUST_MODKRN}
+fi
 
 if [ -n \"\${garyos_rescue}\" ]; then
 	set default=2
@@ -426,10 +443,16 @@ else
 fi
 
 menuentry \"${_PROJ} Boot\" {
-	linux (\${garyos_rescue})${GCUST_KERNEL}${GOPTS} \${options_boot}
+	if ! linux (\${garyos_rescue})${GCUST_KERNEL}${GOPTS} \${options_boot}; then
+		linux (\${garyos_rescue})${GCUST_MODKRN}${GOPTS} \${options_boot}
+	fi
+	boot
 }
 menuentry \"${_PROJ} Boot Rootfs\" {
-	linux (\${garyos_rootfs})${GCUST_KERNEL}${GOPTS} ${GCUST_OPTION} \${options_boot}
+	if ! linux (\${garyos_rootfs})${GCUST_KERNEL}${GOPTS} ${GCUST_OPTION} \${options_boot}; then
+		linux (\${garyos_rootfs})${GCUST_MODKRN}${GOPTS} ${GCUST_OPTION} \${options_boot}
+	fi
+	boot
 }
 
 ${GMENU_FOOT}
