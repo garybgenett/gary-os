@@ -181,12 +181,14 @@ declare GCUST_OPTION="shmem_size=${SHMEM} groot=${GCDEV} groot_hint=\${garyos_ro
 declare GMENU_W_ROOT="/efi/microsoft/boot/bootmgfw.efi"
 declare GMENU_W_BOOT="/efi/boot/bootx64.efi"
 
+#>>> https://unix.stackexchange.com/questions/502931/debugging-boot-performance-issues-in-grub-before-kernel-logging-starts
 declare GMENU_HEAD="\
 ################################################################################
 # GaryOS Grub Configuration
 ################################################################################
 
-set debug=linux
+set debug=chain,linux,loader,relocator,tftp
+#>>>set debug=\${debug},mm,mmap
 set pager=0
 set timeout=-1
 
