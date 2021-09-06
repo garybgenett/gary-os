@@ -1,5 +1,5 @@
 # original: sys-fs/zfs-0.8.1 sys-fs/zfs-kmod-0.8.1
-# posterity
+# patch posterity
 >> https://github.com/openzfs/zfs/issues/9849
 -- zfs-0.7.13-r2.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-fs/zfs?id=fc82e51c0512403e2a7ce8b811d4e3534b55caea
 # posterity
