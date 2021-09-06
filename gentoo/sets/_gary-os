@@ -248,6 +248,7 @@ www-client/w3m
 
 app-crypt/gnupg
 dev-libs/openssl
+net-libs/gnutls
 net-misc/openssh
 
 app-editors/gvim

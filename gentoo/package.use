@@ -113,10 +113,9 @@ sys-libs/glibc				static-libs
 sys-apps/busybox			-make-symlinks savedconfig static
 sys-apps/coreutils			multicall static
 
-#>>>net-misc/openssh			static -pam -pie	# gentoo required: https://bugs.gentoo.org/699384
 app-shells/bash				static
 dev-libs/openssl			static-libs
-net-misc/openssh			-pam -pie
+net-misc/openssh			-pam -pie	# static -pam -pie = gentoo required: https://bugs.gentoo.org/699384
 net-misc/rsync				static
 sys-process/runit			static
 
@@ -172,7 +171,6 @@ sys-apps/iproute2			iptables
 sys-apps/smartmontools			-caps -daemon
 sys-boot/grub				device-mapper efiemu libzfs mount
 sys-fs/zfs				-python
-sys-libs/ncurses			tinfo
 www-client/firefox			-wifi
 www-servers/apache			-threads
 x11-base/xorg-server			xnest xvfb
@@ -181,6 +179,7 @@ x11-wm/dwm				savedconfig
 
 app-emulation/libvirt			libvirtd	# gentoo required
 mail-mta/msmtp				mta		# gentoo required: replace mail-mta/nullmailer
+sys-libs/ncurses			tinfo
 
 mail-client/thunderbird			-bindist
 www-client/firefox			-bindist
