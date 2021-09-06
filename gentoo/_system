@@ -1053,9 +1053,29 @@ if [[ ${1} == -o ]]; then
 		then FILE="${SETDIR}/${FUNDIR}"
 		else FILE="${ETCDIR}"
 	fi
-	FILE="$(${LS} -d ${FILE}/${LAYDIR}/*/${2} | ${SED} "s|^${FILE}/${LAYDIR}/||g")"
-	if [[ -z ${FILE} ]]; then
-		${LL} -d ${FILE}/${LAYDIR}/*/${2}
+	declare FILES=($(${LS} --directory \
+		${FILE}/${LAYDIR}/${2} \
+		${FILE}/${LAYDIR}/*/${2} \
+		2>/dev/null
+	))
+	if (( ${#FILES[*]} == 1 )); then
+		FILE="${FILES[0]/#${FILE}\/${LAYDIR}\/}"
+	elif (( ${#FILES[*]} < 1 )); then
+		echo -en "\n"
+		echo -en ">>> NO MATCHES <<<\n"
+		echo -en "\n"
+		${LL} -d \
+			${FILE}/${LAYDIR}/${2} \
+			${FILE}/${LAYDIR}/*/${2}
+		EXIT 1
+	elif (( ${#FILES[*]} > 1 )); then
+		echo -en "\n"
+		echo -en ">>> TOO MANY MATCHES <<<\n"
+		echo -en "\n"
+		${LL} -d \
+			${FILE}/${LAYDIR}/${2} \
+			${FILE}/${LAYDIR}/*/${2} \
+			2>/dev/null
 		EXIT 1
 	fi
 	if [[ -n ${3} ]]; then
