@@ -178,7 +178,8 @@ declare GCUST_KERNEL="$(dirname ${GMENU_CUSTOM})/$(basename ${GMENU_KERNEL})"
 declare GCUST_ROOTFS="$(dirname ${GMENU_CUSTOM})/$(basename ${GMENU_ROOTFS})"
 declare GCUST_OPTION="shmem_size=${SHMEM} groot=${GCDEV} groot_hint=\${garyos_rootfs} groot_file=${GCUST_ROOTFS}"
 
-declare GMENU_WINEFI="/efi/microsoft/boot/bootmgfw.efi"
+declare GMENU_W_ROOT="/efi/microsoft/boot/bootmgfw.efi"
+declare GMENU_W_BOOT="/efi/boot/bootx64.efi"
 
 declare GMENU_HEAD="\
 ################################################################################
@@ -256,12 +257,28 @@ function serial_config {
 declare GMENU_FOOT="\
 ########################################
 
-set windows_efi=\"${GMENU_WINEFI}\"
-search --no-floppy --file --set garyos_winefi \${windows_efi}
-if [ -n \"\${garyos_winefi}\" ]; then
+search --no-floppy --file --set windows_root ${GMENU_W_ROOT}
+search --no-floppy --file --set windows_boot ${GMENU_W_BOOT}
+if [ -n \"\${windows_root}\" ]; then
+	menuentry \"---\" {
+		show_env
+	}
+elif [ -n \"\${windows_boot}\" -f \"(\${windows_boot})/bootmgr.efi\" ]; then
+	menuentry \"---\" {
+		show_env
+	}
+fi
+
+if [ -n \"\${windows_root}\" ]; then
 	menuentry \"Windows\" {
-		set root=\"\${garyos_winefi}\"
-		chainloader \${windows_efi}
+		set root=\"\${windows_root}\"
+		chainloader ${GMENU_W_ROOT}
+	}
+fi
+if [ -n \"\${windows_boot}\" -f \"(\${windows_boot})/bootmgr.efi\" ]; then
+	menuentry \"Windows (Installer)\" {
+		set root=\"\${windows_boot}\"
+		chainloader ${GMENU_W_BOOT}
 	}
 fi
 
