@@ -59,7 +59,6 @@
 
 ########################################
 
-#{FUNTOO}
 #{LINPKG} sys-kernel/gentoo-sources:5.10.56
 #{KERNEL} 5.10.56
 
