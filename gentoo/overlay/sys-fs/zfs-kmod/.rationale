@@ -1,5 +1,5 @@
 # original: sys-fs/zfs-0.8.1 sys-fs/zfs-kmod-0.8.1
-# posterity
+# patch posterity
 >> https://github.com/openzfs/zfs/issues/9849
 >> https://github.com/openzfs/zfs/pull/9895
 >> https://github.com/loli10K/zfs/commit/b98a0fce2835a41acb75358c580e29747d5e778c
