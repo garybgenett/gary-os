@@ -62,10 +62,10 @@ mounts() {
 	do_mnt="${1}" && shift
 	if ! ${do_mnt}; then
 		lsof | sed -r -n "s|^([0-9]+)[[:space:]]+${mounts}.+$|\1|gp" | sort -u | while read -r file; do
-			kill -9 ${file} || ${ROOTFS_FUNC}
+			kill -9 ${file} || return 1
 		done
 		sed -r -n "s%^.+(${mounts}/(dev|proc|sys)/[^[:space:]]+).+$%\1%gp" /proc/mounts | sort -ru | while read -r file; do
-			umount -v ${file} || ${ROOTFS_FUNC}
+			umount -v ${file} || return 1
 		done
 		count 1 1
 		for mount in \
@@ -74,28 +74,28 @@ mounts() {
 			${mounts}/sys \
 		; do
 			if [ -n "`grep -E " ${mount} " /proc/mounts`" ]; then
-				umount -v ${mount} || ${ROOTFS_FUNC}
+				umount -v ${mount} || return 1
 			fi
 		done
 		return 0
 	fi
 	if [ -z "`grep -E "^none ${mounts}/dev devtmpfs" /proc/mounts`" ]; then
-		mkdir -v -p ${mounts}/dev || ${ROOTFS_FUNC}
-		mount -v -t devtmpfs none ${mounts}/dev || ${ROOTFS_FUNC}
+		mkdir -v -p ${mounts}/dev || return 1
+		mount -v -t devtmpfs none ${mounts}/dev || return 1
 	fi
 	if [ -z "`grep -E "^none ${mounts}/proc proc" /proc/mounts`" ]; then
-		mkdir -v -p ${mounts}/proc || ${ROOTFS_FUNC}
-		mount -v -t proc none ${mounts}/proc || ${ROOTFS_FUNC}
+		mkdir -v -p ${mounts}/proc || return 1
+		mount -v -t proc none ${mounts}/proc || return 1
 	fi
 	if [ -z "`grep -E "^none ${mounts}/sys sysfs" /proc/mounts`" ]; then
-		mkdir -v -p ${mounts}/sys || ${ROOTFS_FUNC}
-		mount -v -t sysfs none ${mounts}/sys || ${ROOTFS_FUNC}
+		mkdir -v -p ${mounts}/sys || return 1
+		mount -v -t sysfs none ${mounts}/sys || return 1
 	fi
 	if [ -z "${mounts}" ]; then
-		ln -v -fs /proc/mounts /etc/mtab || ${ROOTFS_FUNC}
-		mdev -s || ${ROOTFS_FUNC}
+		ln -v -fs /proc/mounts /etc/mtab || return 1
+		mdev -s || return 1
 		if [ -f "/proc/sys/kernel/hotplug" ]; then
-			echo -en "mdev\n" >/proc/sys/kernel/hotplug || ${ROOTFS_FUNC}
+			echo -en "mdev\n" >/proc/sys/kernel/hotplug
 		fi
 	fi
 	return 0
@@ -115,12 +115,12 @@ ${ROOTFS_NAME}() {
 		to_mem="false"
 	fi
 	if ! ${do_mnt}; then
-		mounts ${mounts} false || ${ROOTFS_FUNC}
+		mounts ${mounts} false || return 1
 		if [ -n "`grep -E " ${mounts}/.${ROOTFS_ROOT_OPT} " /proc/mounts`" ]; then
-			umount -v ${mounts}/.${ROOTFS_ROOT_OPT} || ${ROOTFS_FUNC}
+			umount -v ${mounts}/.${ROOTFS_ROOT_OPT} || return 1
 		fi
 		if [ -n "`grep -E " ${mounts}${_GOVLY} " /proc/mounts`" ]; then
-			mount -v -o move ${mounts}${_GOVLY} ${mounts}.shm || ${ROOTFS_FUNC}
+			mount -v -o move ${mounts}${_GOVLY} ${mounts}.shm || return 1
 		fi
 		for mount in \
 			${mounts} \
@@ -128,43 +128,43 @@ ${ROOTFS_NAME}() {
 			${mounts}.shm \
 		; do
 			if [ -n "`grep -E " ${mount} " /proc/mounts`" ]; then
-				umount -v ${mount} || ${ROOTFS_FUNC}
+				umount -v ${mount} || return 1
 			fi
 		done
 		return 0
 	fi
 	if [ -z "`grep -E "^shm ${mounts}.shm tmpfs" /proc/mounts`" ]; then
-		mkdir -v -p ${mounts}.shm || ${ROOTFS_FUNC}
-		mount -v -t tmpfs shm ${mounts}.shm || ${ROOTFS_FUNC}
-		mkdir -v -p ${mounts}.shm/lowerdir || ${ROOTFS_FUNC}
-		mkdir -v -p ${mounts}.shm/upperdir || ${ROOTFS_FUNC}
-		mkdir -v -p ${mounts}.shm/workdir || ${ROOTFS_FUNC}
+		mkdir -v -p ${mounts}.shm || return 1
+		mount -v -t tmpfs shm ${mounts}.shm || return 1
+		mkdir -v -p ${mounts}.shm/lowerdir || return 1
+		mkdir -v -p ${mounts}.shm/upperdir || return 1
+		mkdir -v -p ${mounts}.shm/workdir || return 1
 	fi
 	if [ -f "${${ROOTFS_NAME}}" ]; then
 		if ${to_mem}; then
-			mkdir -v -p `dirname ${mounts}.shm${ROOTFS_ROOT}` || ${ROOTFS_FUNC}
-			rsync -avv --progress --copy-links ${${ROOTFS_NAME}} ${mounts}.shm${ROOTFS_ROOT} || ${ROOTFS_FUNC}
+			mkdir -v -p `dirname ${mounts}.shm${ROOTFS_ROOT}` || return 1
+			rsync -avv --progress --copy-links ${${ROOTFS_NAME}} ${mounts}.shm${ROOTFS_ROOT} || return 1
 			${ROOTFS_NAME}="${mounts}.shm${ROOTFS_ROOT}"
 		fi
 		if [ -z "`grep -E "^/dev/loop[0-9] ${mounts}.shm/lowerdir ${ROOTFS_TYPE}" /proc/mounts`" ]; then
-			mount -v -t ${ROOTFS_TYPE} -o ro,loop ${${ROOTFS_NAME}} ${mounts}.shm/lowerdir || ${ROOTFS_FUNC}
+			mount -v -t ${ROOTFS_TYPE} -o ro,loop ${${ROOTFS_NAME}} ${mounts}.shm/lowerdir || return 1
 		fi
 		if [ -z "`grep -E "^overlay ${mounts} overlay" /proc/mounts`" ]; then
-			mkdir -v -p ${mounts} || ${ROOTFS_FUNC}
+			mkdir -v -p ${mounts} || return 1
 			lowerdir="${mounts}.shm/lowerdir"
 			upperdir="${mounts}.shm/upperdir"
 			workdir="${mounts}.shm/workdir"
-			mount -v -t overlay overlay -o lowerdir=${lowerdir},upperdir=${upperdir},workdir=${workdir} ${mounts} || ${ROOTFS_FUNC}
+			mount -v -t overlay overlay -o lowerdir=${lowerdir},upperdir=${upperdir},workdir=${workdir} ${mounts} || return 1
 		fi
 		if [ -z "`grep -E "^shm ${mounts}${_GOVLY} tmpfs" /proc/mounts`" ]; then
-			mkdir -v -p ${mounts}${_GOVLY} || ${ROOTFS_FUNC}
-			mount -v -o move ${mounts}.shm ${mounts}${_GOVLY} || ${ROOTFS_FUNC}
+			mkdir -v -p ${mounts}${_GOVLY} || return 1
+			mount -v -o move ${mounts}.shm ${mounts}${_GOVLY} || return 1
 		fi
 		if [ -d ${mounts}/.${_TITLE} ]; then
-#>>>			mounts ${mounts} true || ${ROOTFS_FUNC}
-#>>>			chroot ${mounts} make -C /.${_TITLE} O=/ unpack || ${ROOTFS_FUNC}
-			make -C ${mounts}/.${_TITLE} O=${mounts} unpack || ${ROOTFS_FUNC}
-#>>>			mounts ${mounts} false || ${ROOTFS_FUNC}
+#>>>			mounts ${mounts} true || return 1
+#>>>			chroot ${mounts} make -C /.${_TITLE} O=/ unpack || return 1
+			make -C ${mounts}/.${_TITLE} O=${mounts} unpack || return 1
+#>>>			mounts ${mounts} false || return 1
 		fi
 	fi
 	return 0
