@@ -317,11 +317,11 @@ ${GREP} -v -- "${LDFLAGS}" ${PDBDIR}/*/*/LDFLAGS |
 							>>${GENDIR}/+checks 2>&1
 echo -en "."
 
-for TOKEN in ${GENDIR}/*.OKAY; do
+for TOKEN in ${GENDIR}/*.check; do
 	echo -en "\n"					>>${GENDIR}/+checks 2>&1
-	echo -en "[${TOKEN/%\.OKAY}]"			>>${GENDIR}/+checks 2>&1
+	echo -en "[${TOKEN/%\.check}]"			>>${GENDIR}/+checks 2>&1
 	echo -en "\n"					>>${GENDIR}/+checks 2>&1
-	diff ${DIFF_OPTS} ${TOKEN} ${TOKEN/%\.OKAY}	>>${GENDIR}/+checks 2>&1
+	diff ${DIFF_OPTS} ${TOKEN} ${TOKEN/%\.check}	>>${GENDIR}/+checks 2>&1
 done
 echo -en "."
 
