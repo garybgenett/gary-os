@@ -879,8 +879,7 @@ function email {
 		${MKDIR} ${TMPDIR}
 	cd ${TMPDIR}
 	prompt -x ${FUNCNAME}
-	if [[ ${1} == -x ]]
-	then
+	if [[ ${1} == -x ]]; then
 		shift
 		EMAIL_MAIL="${EMAIL_MAIL:-root@garybgenett.net}"
 		EMAIL_NAME="${EMAIL_NAME:-GaryBGenett.net Automation}"
@@ -911,7 +910,7 @@ function email {
 			"${@}"
 		cat ${HOME}/.muttdebug0
 		${RM} ${HOME}/.muttdebug0
-	else
+	elif [[ ${1} == -c ]]; then
 		if [[ -d "${MAILDIR}" ]]; then
 			declare CRUFT="$(cd ${MAILDIR}; find $(find . -type d | ${GREP} "[/]tmp$") ! -empty	| sort)"
 			declare EMPTY="$(cd ${MAILDIR}; find . -type f -empty | ${GREP} -v "[./]lock$"		| sort)"
@@ -921,7 +920,13 @@ function email {
 				cd - >/dev/null
 				return 1
 			fi
+			${RM} "${MAILDIR}/_mutt"
+		else
+			${LL} "${MAILDIR}"
 		fi
+	else
+		${MKDIR} "${MAILDIR}/_mutt"
+		chown -R plastic:plastic "${MAILDIR}/_mutt"
 		${REALTIME} \
 		sudo -H -u \#1000 \
 				MAILDIR="${MAILDIR}" \
