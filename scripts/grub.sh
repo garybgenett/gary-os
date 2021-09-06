@@ -191,22 +191,22 @@ set timeout=-1
 
 ################################################################################
 
-insmod all_video
-
 insmod part_gpt
 insmod part_msdos
 
+insmod ext2
 insmod fat
 insmod exfat
-insmod ext2
+insmod ntfs
 insmod net
 
 insmod search
-insmod configfile
 insmod linux
 insmod chain
 
 ########################################
+
+insmod all_video
 
 serial --unit=0 --speed=9600 --word=8 --parity=no --stop=1
 terminal_input console serial
@@ -458,6 +458,8 @@ if not exist %BCDFILE% (goto create) else (goto delete)
 
 ########################################
 
+#>>> https://www.linux.org/threads/understanding-the-various-grub-modules.11142
+
 declare MODULES_CORE="\
 	biosdisk
 	memdisk
@@ -465,17 +467,20 @@ declare MODULES_CORE="\
 	\
 	configfile
 	echo
+	reboot
 	\
-	fat
-	exfat
-	ext2
-	ntfs
 	part_gpt
 	part_msdos
 	\
-	chain
+	ext2
+	fat
+	exfat
+	ntfs
+	net
+	\
+	search
 	linux
-	reboot
+	chain
 "
 declare MODULES_UEFI="$(
 	echo -en "${MODULES_CORE}" |
@@ -483,9 +488,28 @@ declare MODULES_UEFI="$(
 		-e "biosdisk" \
 )"
 
-declare MODULES_LIST="$(
+declare MODULES_BIOS="
+$(
+	for FILE in \
+		part_gpt \
+		part_msdos \
+		vga \
+	; do
+		echo "${GMODS}/${FILE}.mod"
+		echo "${GMODS}/${FILE}.module"
+	done
+) $(
 	ls ${GMODS}/*.{lst,mod} |
 	${GREP} -v \
+		-e "[/]regex" \
+		-e "[/]vbe" \
+		\
+		-e "[/][^/]*audio[^/]*" \
+		-e "[/][^/]*modem[^/]*" \
+		-e "[/][^/]*test[^/]*" \
+		-e "[/]efi[^/]*" \
+		-e "[/]video[^/]*" \
+		\
 		-e "[/]915resolution" \
 		-e "[/]acpi" \
 		-e "[/]adler" \
@@ -497,9 +521,9 @@ declare MODULES_LIST="$(
 		-e "[/]bsd" \
 		-e "[/]btrfs" \
 		-e "[/]cbfs" \
-		-e "[/]efiemu" \
+		-e "[/]f2fs" \
+		-e "[/]font" \
 		-e "[/]freedos" \
-		-e "[/]functional_test" \
 		-e "[/]gcry" \
 		-e "[/]gdb" \
 		-e "[/]geli" \
@@ -510,52 +534,47 @@ declare MODULES_LIST="$(
 		-e "[/]http" \
 		-e "[/]jfs" \
 		-e "[/]jpeg" \
+		-e "[/]ldm" \
 		-e "[/]legacy" \
 		-e "[/]linux16" \
 		-e "[/]lsacpi" \
 		-e "[/]lsapm" \
+		-e "[/]lzopio" \
+		-e "[/]macho" \
 		-e "[/]mda" \
 		-e "[/]minix" \
 		-e "[/]morse" \
 		-e "[/]mpi" \
 		-e "[/]multiboot" \
 		-e "[/]multiboot2" \
-		-e "[/]named-colors" \
-		-e "[/]net" \
+		-e "[/]nativedisk" \
 		-e "[/]nilfs2" \
 		-e "[/]odc" \
-		-e "[/]part_acorn" \
-		-e "[/]part_amiga" \
-		-e "[/]part_apple" \
-		-e "[/]part_bsd" \
-		-e "[/]part_dfly" \
-		-e "[/]part_dvh" \
-		-e "[/]part_plan" \
-		-e "[/]part_sun" \
-		-e "[/]part_sunpc" \
+		-e "[/]part[_]" \
+		-e "[/]parttool" \
 		-e "[/]pata" \
 		-e "[/]pbkdf2" \
+		-e "[/]pgp" \
 		-e "[/]plan9" \
 		-e "[/]play" \
 		-e "[/]png" \
 		-e "[/]random" \
 		-e "[/]reiserfs" \
 		-e "[/]romfs" \
+		-e "[/]sendkey" \
 		-e "[/]sfs" \
 		-e "[/]spkmodem" \
 		-e "[/]squash" \
-		-e "[/]syslinuxcfg" \
+		-e "[/]syslinux" \
 		-e "[/]terminfo" \
-		-e "[/]testspeed" \
 		-e "[/]tga" \
 		-e "[/]trig" \
-		-e "[/]truecrypt" \
 		-e "[/]udf" \
 		-e "[/]ufs" \
-		-e "[/]video" \
+		-e "[/]usbms" \
 		-e "[/]xfs" \
 		-e "[/]xnu" \
-		-e "[/]zfs" \
+		-e "[/]zstd" \
 )"
 
 ########################################
@@ -807,7 +826,7 @@ fi
 
 FILE="${GDEST}/rescue.tar/boot/grub"
 ${MKDIR} ${FILE}/${GTYPE}				|| exit 1
-${RSYNC_U} ${MODULES_LIST} ${FILE}/${GTYPE}/		|| exit 1
+${RSYNC_U} ${MODULES_BIOS} ${FILE}/${GTYPE}/		|| exit 1
 ${RSYNC_U} ${GDEST}/rescue.cfg ${FILE}/grub.cfg		|| exit 1
 FILE="${GDEST}/rescue.tar"
 (cd ${FILE} && tar -cvv -f ${FILE}.tar *)		|| exit 1
