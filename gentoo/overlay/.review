@@ -7,8 +7,10 @@ source ${HOME}/.bashrc
 #>>> git-commit -- $(git-status gentoo/overlay 2>/dev/null | grep "deleted:" | cut -d':' -f2)
 
 #NOTE: ASSUMING LOCATION AND NAME OF THE "_SYSTEM" SCRIPT
+#NOTE: THE HARD-SET VALUE MUST MATCH THE "_SYSTEM" VALUE
 
-source $(dirname $(dirname "${_SELF}"))/_system
+source $(dirname $(dirname "${_SELF}"))/_system ||
+source /_build/gentoo/_system
 
 ########################################
 
