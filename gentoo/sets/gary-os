@@ -185,8 +185,8 @@ sys-apps/util-linux			#{rootfs}
 sys-apps/which
 
 sys-fs/sysfsutils
-sys-process/htop			#{MOD}
-sys-process/lsof			#{MOD}
+sys-process/htop
+sys-process/lsof
 sys-process/procps
 sys-process/psmisc
 
