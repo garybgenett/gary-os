@@ -834,8 +834,7 @@ fi
 if ${DEBUG} && [[ ${1} == +([A-Z]) ]]; then
 	FILE="${1}" && shift
 	echo "${!FILE}"
-	QUIET="true"
-	EXIT 0
+	exit 0
 fi
 
 declare DEBUG_QUIET="${QUIET}"
