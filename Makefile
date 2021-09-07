@@ -106,9 +106,11 @@ usage:
 	@$(PRINTF) "Artifacts Directory:"			"A=" "$(subst $(GARYOS_DIR),(...),$(A))"
 	@$(PRINTF) "Package List:"				"P=" "$(subst $(GARYOS_DIR),(...),$(P))"
 	@$(ECHO) "\n"
+	@$(ECHO) "$(STATE)For more verbose output: $(NOTES)$(MAKE) V=1 [...]$(RESET)\n"
 ifeq ($(findstring help,$(MAKECMDGOALS)),)
 	@$(ECHO) "$(STATE)For more options and build tools: $(NOTES)$(MAKE) help$(RESET)\n"
 else
+	@$(ECHO) "\n"
 	@$(MARKER)
 ifeq ($(DOTEST),true)
 	@$(ECHO) "\n"
