@@ -1366,8 +1366,8 @@ if [[ ${1} == -i ]]; then
 		if [[ -x ${CFGSCR} ]]; then
 			${RSYNC_U} --copy-links		${CFGSCR} \
 							${TARGET}${ARCDIR}/$(basename ${CFGSCR})		|| EXIT 1
-			safe_env			${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} \
-							${ARCDIR}/$(basename ${CFGSCR}) "${@}"			|| EXIT 1
+			safe_env			${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO}			\
+							${ARCDIR}/$(basename ${CFGSCR})				|| EXIT 1
 		fi
 		mount_dev_dirs -u										|| EXIT 1
 		EXIT 0
