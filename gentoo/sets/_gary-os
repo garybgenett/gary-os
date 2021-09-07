@@ -2,7 +2,7 @@
 # portage set configuration file
 ################################################################################
 #
-#>>> sed -nr "s|^#! ||gp" /.gary-os/gentoo/sets/_gary-os
+#{CMD} sed -nr "s|^#! ||gp" ./gentoo/sets/_gary-os
 #
 #! #!/usr/bin/env bash
 #! #>>> set -x
