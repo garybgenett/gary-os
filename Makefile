@@ -176,11 +176,6 @@ package_list: .DEFAULT
 
 ########################################
 
-.PHONY: all
-all: init doit redo edit release
-
-########################################
-
 .PHONY: init
 init:
 	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) -0
