@@ -5855,6 +5855,7 @@ function task-notes {
 		use MIME::Base64;
 		my $automatic = "0";
 		my $printonly = "0";
+		my $as_mrkdwn = "0";
 		if (($ARGV[0]) && (-f $ARGV[0])) {
 			$automatic = $ARGV[0];
 			shift();
@@ -5862,6 +5863,10 @@ function task-notes {
 		elsif (($ARGV[0]) && ($ARGV[0] eq "-x")) {
 			$printonly = $ARGV[0];
 			shift();
+			if (($ARGV[0]) && ($ARGV[0] eq "-m")) {
+				$as_mrkdwn = $ARGV[0];
+				shift();
+			};
 		};
 		my $extn = ".md";
 		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
@@ -5890,6 +5895,9 @@ function task-notes {
 			my $file = ${root} . "/" . $task->{"uuid"} . ${extn};
 			my $text = "[" . $task->{"description"} . "]";
 			my $notes = "0";
+			if (${printonly}) {
+				$text = "";
+			};
 			foreach my $annotation (@{$task->{"annotations"}}) {
 #>>>				if (($task->{"kind"} eq "notes") && ($annotation->{"description"} =~ m/^[[]notes[]][:]/)) {
 				if ($annotation->{"description"} =~ m/^[[]notes[]][:]/) {
@@ -5904,12 +5912,23 @@ function task-notes {
 					$text = decode_base64(${output});
 				};
 			};
+			if ((${as_mrkdwn}) && (!${notes})) {
+				next;
+			};
 			push(@{$uuids}, $task->{"uuid"});
 			if (${printonly}) {
-				print "<!-- [ " . $task->{"uuid"} . " :: " . $task->{"description"} . " ] -->";
 				print "\n";
-				print ${text};
+				if (${as_mrkdwn}) {
+					print "#### " . $task->{"description"};
+				} else {
+					print "<!-- [ " . $task->{"uuid"} . " :: " . $task->{"description"} . " ] -->";
+				};
 				print "\n";
+				if (${text}) {
+					print "\n";
+					print ${text};
+					print "\n";
+				};
 			} else {
 				open(NOTE, ">", ${file}) || die();
 				print NOTE ${text};
