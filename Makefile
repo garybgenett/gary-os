@@ -112,16 +112,14 @@ ifeq ($(findstring help,$(MAKECMDGOALS)),)
 else
 	@$(ECHO) "\n"
 	@$(MARKER)
-ifeq ($(DOTEST),true)
 	@$(ECHO) "\n"
 	@$(ECHO) "$(STATE)Environment variables to control build behaviore (true / false):$(RESET)\n"
 	@$(ECHO) "\n"
-	@$(PRINTF) "Undocumented (Development Only):"		"ROOTFS=\"`SETDIR="$(C)" ROOTFS="$(ROOTFS)" $(C)/gentoo/_system -v $(CHROOT) ROOTFS && echo -en "$$$ROOTFS"`\""
-	@$(PRINTF) "Undocumented (Development Only):"		"DOMODS=\"`SETDIR="$(C)" DOMODS="$(DOMODS)" $(C)/gentoo/_system -v $(CHROOT) DOMODS && echo -en "$$$DOMODS"`\""
-	@$(PRINTF) "Undocumented (Development Only):"		"DOREDO=\"`SETDIR="$(C)" DOREDO="$(DOREDO)" $(C)/gentoo/_system -v $(CHROOT) DOREDO && echo -en "$$$DOREDO"`\""
-	@$(PRINTF) "Undocumented (Development Only):"		"DOFAST=\"`SETDIR="$(C)" DOFAST="$(DOFAST)" $(C)/gentoo/_system -v $(CHROOT) DOFAST && echo -en "$$$DOFAST"`\""
-	@$(PRINTF) "Undocumented (Development Only):"		"DOTEST=\"`SETDIR="$(C)" DOTEST="$(DOTEST)" $(C)/gentoo/_system -v $(CHROOT) DOTEST && echo -en "$$$DOTEST"`\""
-endif
+	@$(PRINTF) "Embedded Rootfs / Initrd (Unsupported):"	"ROOTFS=\"`SETDIR="$(C)" ROOTFS="$(ROOTFS)" $(C)/gentoo/_system -v $(CHROOT) ROOTFS && echo -en "$$$ROOTFS"`\""
+	@$(PRINTF) "Minified Build  / Standard Build:"		"DOMODS=\"`SETDIR="$(C)" DOMODS="$(DOMODS)" $(C)/gentoo/_system -v $(CHROOT) DOMODS && echo -en "$$$DOMODS"`\""
+	@$(PRINTF) "Clean Rebuild   / No Overwrite:"		"DOREDO=\"`SETDIR="$(C)" DOREDO="$(DOREDO)" $(C)/gentoo/_system -v $(CHROOT) DOREDO && echo -en "$$$DOREDO"`\""
+	@$(PRINTF) "Quick Build     / Do All Build Steps:"	"DOFAST=\"`SETDIR="$(C)" DOFAST="$(DOFAST)" $(C)/gentoo/_system -v $(CHROOT) DOFAST && echo -en "$$$DOFAST"`\""
+	@$(PRINTF) "(Unsupported)   / Standard Build:"		"DOTEST=\"`SETDIR="$(C)" DOTEST="$(DOTEST)" $(C)/gentoo/_system -v $(CHROOT) DOTEST && echo -en "$$$DOTEST"`\""
 	@$(ECHO) "\n"
 	@$(ECHO) "$(STATE)Build script pass-through targets, for advanced use:$(RESET)\n"
 	@$(ECHO) "\n"
