@@ -19,10 +19,10 @@ override O	?= $(GARYOS_DIR)/build
 override A	?= $(GARYOS_DIR)/artifacts
 override P	?= $(GARYOS_TTL)
 
-#>>>override ROOTFS	?=
+#>>> override ROOTFS	?=
 override DOMODS	?=
 override DOREDO	?=
-#>>>override DOFAST	?=
+#>>> override DOFAST	?=
 override DOTEST	?=
 
 override V	?=
@@ -290,7 +290,7 @@ export COMPOSER		?= $(GARYOS_DIR)/.composer/Makefile
 export MARKDOWN_OUTPUT	:= GaryOS-Readme.md
 export COMPOSER_TARGETS	:= GaryOS-Readme.html GaryOS-Readme.pdf
 export COMPOSER_DEBUGIT	:= 1
-#>>>export CSS		:= css_alt
+#>>> export CSS		:= css_alt
 export TOC		:= 6
 export OPT		:= --metadata title="GaryOS Readme"
 
@@ -405,7 +405,7 @@ override LAST := { \
 	}
 override TREE := $(call LIST_JSON,(.[] | [ .name, .commit.sha ]),key,)
 override TAGS := $(call LIST_JSON,(.[] | [ .name, .commit.sha ]),key,)
-#>>>override TEAM := { watchers:	([.[].html_url] | sort) }
+#>>> override TEAM := { watchers:	([.[].html_url] | sort) }
 override TEAM := { watchers:	([.[].login] | sort) }
 override DOWN := { \
 		messages:	.messages, \
