@@ -30,7 +30,7 @@
 #{WINMGR} dwm
 #{WMHELP} doc>al+lf man>al+rt / cmd>al+p trm>al+sf+en web>al+cl+en / \`date --iso=s\`
 
-#>>>#{RCUPDT} xdg-settings set default-web-browser links_-g_%u-links-2.desktop	#{MOD}
+#>>> #{RCUPDT} xdg-settings set default-web-browser links_-g_%u-links-2.desktop	#{MOD}
 #{RCUPDT} rc-update add gpm default		|| true
 #{RCUPDT} rc-update del sysklogd default	|| true
 #{RCUPDT} rc-update del netmount default	|| true
@@ -110,9 +110,9 @@
 #{MOD} #{FSEXCL} emerge:/var/git/meta-repo
 #{MOD} #{FSEXCL} emerge:/var/git/meta-repo.git
 
-#>>>#{FSARCH} debug:/usr/lib64/debug
-#>>>#{FSARCH} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/*/debug
-#>>>#{FSARCH} debug:/usr/src/debug
+#>>> #{FSARCH} debug:/usr/lib64/debug
+#>>> #{FSARCH} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/*/debug
+#>>> #{FSARCH} debug:/usr/src/debug
 
 ########################################
 # firmware
@@ -156,7 +156,7 @@ sys-boot/grub
 sys-boot/os-prober
 sys-libs/efivar
 
-#>>>app-forensics/sleuthkit		#{MOD} # requires: ( app-doc/doxygen | virtual/jdk | virtual/jre )
+#>>> app-forensics/sleuthkit		#{MOD} # requires: ( app-doc/doxygen | virtual/jdk | virtual/jre )
 sys-apps/gptfdisk
 sys-fs/cryptsetup
 sys-fs/dosfstools			#{rootfs}
