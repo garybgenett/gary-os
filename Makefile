@@ -458,7 +458,7 @@ ifeq ($(DOMODS),true)
 else
 	@iptables -I INPUT 1 --proto tcp --dport 6419 -j ACCEPT
 	$(GRIP) --clear
-	$(GRIP) --export $(GARYOS_DIR) $(firstword $(COMPOSER_TARGETS))
+#>>>	$(GRIP) --export $(GARYOS_DIR) $(firstword $(COMPOSER_TARGETS))
 	$(GRIP) 0.0.0.0:6419
 endif
 
