@@ -2,7 +2,7 @@
 # portage set configuration file
 ################################################################################
 
-#>>>#{LINPKG} sys-kernel/debian-sources:debian-sources-5.10.46_p2
+#>>> #{LINPKG} sys-kernel/debian-sources:debian-sources-5.10.46_p2
 #{LINPKG} sys-kernel/gentoo-sources:5.10.56
 #{KERNEL} 5.10.56
 
@@ -29,7 +29,7 @@
 #{WMHELP}
 
 #>>> find /usr/share | grep "[.]desktop$" | sort
-#>>>#{RCUPDT} xdg-settings set default-web-browser chromium-browser-chromium.desktop
+#>>> #{RCUPDT} xdg-settings set default-web-browser chromium-browser-chromium.desktop
 #{RCUPDT} xdg-settings set default-web-browser firefox.desktop
 #{FSUPDT}
 #{FSPACK}
@@ -48,7 +48,7 @@ sys-kernel/linux-firmware
 ########################################
 # toolchain
 
-#>>>dev-lang/gnat-gpl
+#>>> dev-lang/gnat-gpl
 sys-devel/autoconf
 sys-devel/automake
 sys-devel/binutils
@@ -265,8 +265,8 @@ virtual/perl6
 
 dev-java/icedtea			# gentoo required: force source version
 dev-lang/python
-#>>>dev-libs/libuv
-#>>>net-libs/nodejs
+#>>> dev-libs/libuv
+#>>> net-libs/nodejs
 
 app-misc/jq
 app-misc/yq
@@ -341,9 +341,9 @@ net-fs/cifs-utils
 net-fs/sshfs
 net-misc/autossh
 
-#>>>app-mobilephone/heimdall
-#>>>dev-util/android-studio
-#>>>dev-util/android-tools
+#>>> app-mobilephone/heimdall
+#>>> dev-util/android-studio
+#>>> dev-util/android-tools
 
 ########################################
 # servers
@@ -393,8 +393,8 @@ net-misc/urlview
 mail-client/thunderbird
 www-client/chromium
 www-client/firefox
-#>>>www-client/surf			# requires: net-libs/webkit -> dev-lang/ruby
-#>>>x11-misc/tabbed			# only used for: www-client/surf
+#>>> www-client/surf			# requires: net-libs/webkit -> dev-lang/ruby
+#>>> x11-misc/tabbed			# only used for: www-client/surf
 
 media-gfx/gimp
 media-gfx/gnuclad
@@ -415,9 +415,9 @@ net-misc/freerdp
 net-misc/tigervnc
 x11-misc/x11vnc
 
-#>>>net-p2p/bitcoin-cli
-#>>>net-p2p/bitcoin-qt
-#>>>net-p2p/bitcoind
+#>>> net-p2p/bitcoin-cli
+#>>> net-p2p/bitcoin-qt
+#>>> net-p2p/bitcoind
 
 net-p2p/rtorrent
 
