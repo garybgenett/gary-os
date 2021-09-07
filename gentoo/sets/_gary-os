@@ -84,7 +84,7 @@
 #{WINMGR} dwm
 #{WMHELP} doc>al+lf man>al+rt / cmd>al+p trm>al+sf+en web>al+cl+en ext>al+sf+cl+en / \`date --iso=s\`
 
-#>>>#{RCUPDT} xdg-settings set default-web-browser firefox.desktop
+#>>> #{RCUPDT} xdg-settings set default-web-browser firefox.desktop
 #{RCUPDT} rc-update add gpm default		|| true
 #{RCUPDT} rc-update del sysklogd default	|| true
 #{RCUPDT} rc-update del netmount default	|| true
@@ -98,7 +98,7 @@
 #note: see "$fsupdt" in "gentoo/sets/_gary-os"
 #note: see "$fsupdt" in "gentoo/_release" (release_unpack)
 #{FSUPDT}				#{MOD}
-#>>>#{MOD} #{FSUPDT} usermod --home ${SETDIR} --shell /bin/bash root	|| true
+#>>> #{MOD} #{FSUPDT} usermod --home ${SETDIR} --shell /bin/bash root	|| true
 #{MOD} #{FSUPDT} rm -frv /root ; ln -fsv ${SETDIR} /root
 #{MOD} #{FSUPDT} ln -fsv /usr/share/zoneinfo/US/Pacific /etc/localtime
 #{MOD} #{FSUPDT} ln -fsv /bin/runsvdir /usr/bin/runsvdir
@@ -125,9 +125,9 @@
 #{FSKEEP} emerge:/var/git/meta-repo
 #{FSARCH} emerge:/var/git/meta-repo.git
 
-#>>>#{FSARCH} debug:/usr/lib64/debug
-#>>>#{FSARCH} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/*/debug
-#>>>#{FSARCH} debug:/usr/src/debug
+#>>> #{FSARCH} debug:/usr/lib64/debug
+#>>> #{FSARCH} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/*/debug
+#>>> #{FSARCH} debug:/usr/src/debug
 
 ########################################
 # firmware
