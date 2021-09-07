@@ -88,6 +88,15 @@ usage:
 	@$(PRINTF) "Initramfs System (Live Unpack):"		"$(MAKE) O=/ unpack"
 	@$(PRINTF) "Initramfs System (Live Install):"		"$(MAKE) O=/ install"
 	@$(ECHO) "\n"
+	@$(ECHO) "$(STATE)Helper wrappers for system inspection and development:$(RESET)\n"
+	@$(ECHO) "\n"
+	@$(PRINTF) "Chroot Validation (Reverse Dependencies):"	"depends-"	"[category%]name"
+	@$(PRINTF) "Chroot Validation (Dependency Graph):"	"depgraph-"	"[category%]name"
+	@$(PRINTF) "Chroot Validation (Package Ownership):"	"belongs-"	"{file|/|%}"
+	@$(PRINTF) "Chroot Configuration (Overlay Helper):"	"overlay-"	"[category%]name"
+	@$(PRINTF) "Chroot Configuration (Overlay Downloader):"	"overlay-"	"[category%]name^file[^commit]"
+	@$(PRINTF) "Chroot Emerge Command"			"emerge-"	"[category%]name"
+	@$(ECHO) "\n"
 	@$(ECHO) "$(STATE)Use these variables to change the directories and packages:$(RESET)\n"
 	@$(ECHO) "$(HOWTO)(...) = $(GARYOS_DIR)$(RESET)\n"
 	@$(ECHO) "\n"
@@ -228,6 +237,28 @@ install:
 
 ########################################
 
+.PHONY: depends-%
+depends-%:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) $(CHROOT) -y -j depends $(subst %,/,$(*))
+
+.PHONY: depgraph-%
+depgraph-%:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) $(CHROOT) -y -j depgraph $(subst %,/,$(*))
+
+.PHONY: belongs-%
+belongs-%:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) $(CHROOT) -y -j belongs $(subst %,/,$(*))
+
+.PHONY: overlay-%
+overlay-%:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) $(CHROOT) -o $(subst ^, ,$(subst %,/,$(*)))
+
+.PHONY: emerge-%
+emerge-%:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) $(CHROOT) -a -s -e $(subst %,/,$(*))
+
+########################################
+
 .PHONY: _prepare_%
 _prepare_%:
 	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) _prepare_$(*)
@@ -253,28 +284,6 @@ devel:
 .PHONY: check
 check:
 	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) _release_review
-
-########################################
-
-.PHONY: depends-%
-depends-%:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) $(CHROOT) -y -j depends $(subst %,/,$(*))
-
-.PHONY: depgraph-%
-depgraph-%:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) $(CHROOT) -y -j depgraph $(subst %,/,$(*))
-
-.PHONY: belongs-%
-belongs-%:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) $(CHROOT) -y -j belongs $(subst %,/,$(*))
-
-.PHONY: overlay-%
-overlay-%:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) $(CHROOT) -o $(subst ^, ,$(subst %,/,$(*)))
-
-.PHONY: emerge-%
-emerge-%:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(Q) $(CHROOT) -a -s -e $(subst %,/,$(*))
 
 .PHONY: gendir
 gendir:
