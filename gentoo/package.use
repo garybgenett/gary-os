@@ -140,7 +140,7 @@ sys-libs/zlib				static-libs	# static: openssl
 
 ########################################
 
-#>>>app-emulation/virtualbox		qt5 sdk vnc
+#>>> app-emulation/virtualbox		qt5 sdk vnc
 
 app-arch/p7zip				-rar
 app-editors/vim				-X gpm
@@ -248,8 +248,8 @@ sys-auth/polkit				-spidermonkey	# requires: dev-lang/spidermonkey
 #{MOD} #{GOS} dev-lang/python		-sqlite		# requires: dev-db/sqlite -> dev-lang/tcl
 #{MOD} #{GOS} sys-apps/lshw		-sqlite		# requires: dev-db/sqlite -> dev-lang/tcl
 
-#>>>#{GOS} x11-base/xorg-server		-glamor		# requires: media-libs/mesa
-#>>>#{GOS} x11-base/xorg-server		minimal		# requires: media-libs/mesa
+#>>> #{GOS} x11-base/xorg-server	-glamor		# requires: media-libs/mesa
+#>>> #{GOS} x11-base/xorg-server	minimal		# requires: media-libs/mesa
 #{GOS} x11-base/xorg-server		-xnest		# not needed, keep size down
 #{GOS} x11-base/xorg-server		-xvfb		# not needed, keep size down
 
