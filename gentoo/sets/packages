@@ -28,7 +28,8 @@
 #{WINMGR}
 #{WMHELP}
 
-#>>> find /usr/share | grep "[.]desktop$" | sort
+#{CMD} find /usr/share | grep -E "[.]desktop$" | sort
+
 #>>> #{RCUPDT} xdg-settings set default-web-browser chromium-browser-chromium.desktop
 #{RCUPDT} xdg-settings set default-web-browser firefox.desktop
 #{FSUPDT}
