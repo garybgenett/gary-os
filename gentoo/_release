@@ -2079,16 +2079,20 @@ function _publish_prep {
 
 function _publish_gitdir {		#{ismain}
 #>>>
-#	if [[ -x $(which task 2>/dev/null) ]]; then
+#	if {
+#		{ [[ -n ${COMMIT} ]] && [[ -d ${_G_REPO} ]]; } &&
+#		[[ -x $(which task 2>/dev/null) ]];
+#	}; then
 #		declare GIT_RUN="${GIT} --git-dir=${_DOCDIR}.git --work-tree=${_DOCDIR}"
 #		declare GIT_MSG="Automated update of \"TODO.md\" tasks list."
 #		cat /dev/null						>${_DOCDIR}/TODO.md
-#		echo -en "### ${_GNAME} Tasks\n"			>>${_DOCDIR}/TODO.md
+#		echo -en "### ${_GNAME} Task List\n"			>>${_DOCDIR}/TODO.md
 #		echo -en "\n"						>>${_DOCDIR}/TODO.md
 #		task sort \
 #			rc.verbose=nothing \
-#			rc.report.sort.columns=status,description.desc \
-#			rc.report.sort.labels=status,description \
+#			rc.report.sort.columns=status,modified,description.desc \
+#			rc.report.sort.labels=status,modified,description \
+#			rc.report.sort.sort=modified+ \
 #			project:geek.gary-os \
 #			kind.none: \
 #			| ${SED} \
@@ -2099,12 +2103,10 @@ function _publish_gitdir {		#{ismain}
 #				-e "s|^(\[x\] ~~.+)$|\1~~|g" \
 #				-e "s|^|  * |g" \
 #									>>${_DOCDIR}/TODO.md
-#>>>
 #		echo -en "\n"						>>${_DOCDIR}/TODO.md
-#		task-notes -x pro:geek.gary-os kind:note		>>${_DOCDIR}/TODO.md
-#		task-export-notes project:
-#>>>
-#		if [[ -n $(GIT_PAGER=cat ${FILE} diff TODO.md 2>/dev/null) ]]; then
+#		echo -en "### ${_GNAME} Task Notes\n"			>>${_DOCDIR}/TODO.md
+#		task-notes -x -m pro:geek.gary-os			>>${_DOCDIR}/TODO.md
+#		if [[ -n $(GIT_PAGER=cat ${GIT_RUN} diff -- TODO.md 2>/dev/null) ]]; then
 #			${GIT_RUN} add					TODO.md	|| return 1
 #			${GIT_RUN} commit --message="${GIT_MSG}"	TODO.md	|| return 1
 #		fi
