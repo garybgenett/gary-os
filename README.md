@@ -1170,9 +1170,9 @@ most helpful to think of it this way.
 
 During [Image] creation (also [Kernel] and [Rootfs]), large directories are
 packaged with [XZ Compression] to maximize space savings (see [Design]).
-Commands such as 'rc-update' are run during [Image] creation or after
-directories are unpacked.  There are variables sourced from the package set file
-which define these.
+Commands such as 'rc-update' are run during [Image] creation or at boot time
+after directories are unpacked.  There are variables sourced from the package
+set file which define these.
 
   |        | |
   |:---    |:---
@@ -1239,13 +1239,13 @@ References to this section:
     * Parameters -- 'shmem_size', 'groot', 'groot_file' and 'groot_hint'
   * [Image]
     * Symbolic link -- '/init'
-    * General reference -- [Loader] directories and 'rc-update'
+    * [Loader] directories and 'rc-update'
   * [Design]
-    * General reference -- [Linux Kernel] parameters
+    * [Linux Kernel] parameters
   * [Contributions]
-    * General reference -- 'shmem_size'
+    * Parameter -- 'shmem_size'
   * [Repository]
-    * Heart and soul  -- [gentoo/_release]
+    * Heart and soul -- [gentoo/_release]
 
 These are to make sure everything is cross-linked, and that this section is
 complete.
