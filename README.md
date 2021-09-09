@@ -1347,24 +1347,21 @@ this hack was coded directly into Ego.
 
   * Current
     * [gentoo/_funtoo.kits]
-    * [ego_commit_hack.patch] in [gentoo/overlay/]
   * Initial
-    * [Funtoo Ego submission]
+    * [Funtoo Ego submission] ([ego_commit_hack.patch] in [gentoo/overlay/])
 
-There is a precedence conflict, though, in that the [meta-repo] tree needs to be
-set before installing the modified version of Ego.  As such, GaryOS continues to
-use [gentoo/_funtook.kits] for the initial build.
+The [gentoo/_funtoo.kits] script has two important advantages over Ego.
 
-The [gentoo/_funtoo.kits] script also has two advantages over Ego.
-
-  1. Can run directly on Git repositories, whereas Ego requires a Funtoo install
-  2. Kits repositories are stored in Git rather than the [meta-repo] tree
+  1. It can run directly on Git repositories without requiring a Funtoo install
+  2. Kits repositories are stored in '.git' rather than the [meta-repo] tree
 
 The second feature is important to keep the [meta-repo] tree as small as
 possible while preserving the ability to archive all the Git information in
 'meta-repo.git'.
 
-This was submitted upstream with no response.
+This was submitted upstream with no response.  Given the rate of changes to the
+Ego tool, and the advantages of [gentoo/\_funtoo.kits] over it, this patch was
+retired starting in [v6.0].
 
 **Suckless dwm**
 
