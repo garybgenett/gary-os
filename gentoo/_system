@@ -120,7 +120,8 @@ export PDBDIR="/var/db/pkg"
 export ARCDIR="/_build"
 export GENDIR="/_gentoo"
 
-#VARIABLES[LINDIR FUNDIR]
+#VARIABLES[GRBDIR LINDIR FUNDIR]
+export GRBDIR="grub"
 export LINDIR="linux"
 export FUNDIR="gentoo"
 
