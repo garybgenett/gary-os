@@ -818,9 +818,7 @@ problematic when the intention is to implement changes.
 The 'clean' target will completely remove all GaryOS output files, restoring the
 'build' directory to its original state.  This includes all images and kernels,
 along will all their supporting files.  The 'DOREDO' variable is specific to
-each target, and only rebuilds files for that target.  For 'release' this is the
-same as 'clean', so 'rootfs' files should be copied elsewhere if they need to be
-kept.
+each target, and only rebuilds the relevant files.
 
 ### Install ####################################################################
 [Install]: #install
