@@ -152,7 +152,7 @@ function variable_match {
 
 ################################################################################
 
-declare RUFUS_URL="https://github.com/pbatard/rufus/releases/download/v3.14/rufus-3.15.exe"
+declare RUFUS_URL="https://github.com/pbatard/rufus/releases/download/v3.14/rufus-3.14.exe"
 
 ########################################
 
