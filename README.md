@@ -168,12 +168,20 @@ kernel.
   ```
 
 The 'gary-os.grub.cfg' file in the [Boot] archive is a good example of
-a relatively complete GRUB configuration file.
+a complete GRUB configuration file.  It is sourced from
+[grub/grub.menu.gary-os.cfg], and provides many additional features and
+benefits over the example above.
 
-Both of the above will also work for GRUB installations on USB drives.  See
-[GRUB] to create or update a bootable USB drive.  For EFI systems, see [EFI].
-Any bootloader that can boot Linux will work, but GaryOS is not tested with them
-so no instructions or support is provided.
+  ```
+  menuentry "GaryOS Menu" {
+    configfile (hd0,1)/gary-os/gary-os.grub.cfg
+  }
+  ```
+
+Both of the these options will also work for GRUB installations on USB drives.
+See [GRUB] to create or update a bootable USB drive.  For EFI systems, see
+[EFI].  Any bootloader that can boot Linux will work, but GaryOS is not tested
+with them, so no instructions or support is provided.
 
 ### Windows ####################################################################
 [Windows]: #windows
@@ -1505,6 +1513,7 @@ Here is an overview of the repository contents, in order of relative importance:
 
   | Key Directories          | Purpose
   |:---                      |:---
+  | [grub/]                  | [GNU GRUB] menu files (for [Boot], see [GRUB])
   | [linux/]                 | [Linux Kernel] configuration files
   | [gentoo/]                | [Portage] configuration, [Builder] and [Loader]
   | [gentoo/overlay/]        | Version management and fixing broken packages
@@ -1548,6 +1557,8 @@ will require re-cloning.
   [packages.rootfs.txt]: https://github.com/garybgenett/gary-os/blob/master/packages.rootfs.txt
   [_commit]: https://github.com/garybgenett/gary-os/blob/master/_commit
 
+  [grub/]: https://github.com/garybgenett/gary-os/blob/master/grub
+  [grub/grub.menu.gary-os.cfg]: https://github.com/garybgenett/gary-os/blob/master/grub/grub.menu.gary-os.cfg
   [linux/]: https://github.com/garybgenett/gary-os/blob/master/linux
   [gentoo/]: https://github.com/garybgenett/gary-os/blob/master/gentoo
   [gentoo/overlay/]: https://github.com/garybgenett/gary-os/blob/master/gentoo/overlay
