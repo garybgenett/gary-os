@@ -551,8 +551,6 @@ for TYPE in ${GEFIS}; do
 	${RSYNC_U} ${GRUBD}/${TYPE}/ ${GDEST}/_${TYPE}	|| exit 1
 done
 
-${RSYNC_U} -L ${_SELF} ${GDEST}/$(basename ${_SELF})	|| exit 1
-
 ########################################
 
 echo -en "${GMENU_DATA}"	>${GDEST}/${GMENU_NAME}	|| exit 1
