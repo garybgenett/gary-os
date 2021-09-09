@@ -31,7 +31,7 @@ shift
 
 declare HEDEF="10"
 declare GIDEF="${GDEST}/loopfile.img"
-declare GIBAK="/dev/sdb"
+declare GIBAK="/dev/sda"
 declare GPDEF="1"
 
 function print_usage {
@@ -850,13 +850,15 @@ if [[ -b ${GINST_DO} ]]; then
 	fi
 	custom_menu ${GINST_DO}					|| exit 1
 else
-	$(which dd) \
-		status=progress \
-		bs=${BLOCKS_SIZE} \
-		count=${LOOP_BLOCKS} \
-		conv=sparse \
-		if=/dev/zero \
-		of=${GINST}					|| exit 1
+	if [[ ! -f ${GINST} ]]; then
+		$(which dd) \
+			status=progress \
+			bs=${BLOCKS_SIZE} \
+			count=${LOOP_BLOCKS} \
+			conv=sparse \
+			if=/dev/zero \
+			of=${GINST}				|| exit 1
+	fi
 	losetup -d ${LOOP_DEVICE}				#>>> || exit 1
 	losetup -v -P ${LOOP_DEVICE} ${GINST}			|| exit 1
 	GINST_DO="${LOOP_DEVICE}"
@@ -867,27 +869,27 @@ fi
 ########################################
 
 FILE="${GDEST}/rescue.tar/boot/grub"
-${RM} ${FILE}/${GTYPE}					|| exit 1
-${MKDIR} ${FILE}/${GTYPE}				|| exit 1
-${RSYNC_U} ${MODULES_BIOS} ${FILE}/${GTYPE}/		|| exit 1
-${RSYNC_U} ${GDEST}/rescue.cfg ${FILE}/grub.cfg		|| exit 1
+${RM} ${FILE}/${GTYPE}						|| exit 1
+${MKDIR} ${FILE}/${GTYPE}					|| exit 1
+${RSYNC_U} ${MODULES_BIOS} ${FILE}/${GTYPE}/			|| exit 1
+${RSYNC_U} ${GDEST}/rescue.cfg ${FILE}/grub.cfg			|| exit 1
 FILE="${GDEST}/rescue.tar"
-(cd ${FILE} && tar -cvv -f ${FILE}.tar *)		|| exit 1
+(cd ${FILE} && tar -cvv -f ${FILE}.tar *)			|| exit 1
 grub-mkimage -v \
 	-C xz \
 	-O ${GTYPE} \
 	-d ${GMODS} \
 	-o ${GDEST}/rescue.img \
 	-m ${GDEST}/rescue.tar.tar \
-	${MODULES_CORE}					|| exit_summary 1
+	${MODULES_CORE}						|| exit_summary 1
 
 for TYPE in ${GEFIS}; do
 	FILE="${GDEST}/${TYPE/%-efi}.tar/boot/grub"
-	${MKDIR} ${FILE}/${TYPE}			|| exit 1
-	${RSYNC_U} ${GRUBD}/${TYPE}/ ${FILE}/${TYPE}	|| exit 1
-	${RSYNC_U} ${GDEST}/rescue.cfg ${FILE}/grub.cfg	|| exit 1
+	${MKDIR} ${FILE}/${TYPE}				|| exit 1
+	${RSYNC_U} ${GRUBD}/${TYPE}/ ${FILE}/${TYPE}		|| exit 1
+	${RSYNC_U} ${GDEST}/rescue.cfg ${FILE}/grub.cfg		|| exit 1
 	FILE="${GDEST}/${TYPE/%-efi}.tar"
-	(cd ${FILE} && tar -cvv -f ${FILE}.tar *)	|| exit 1
+	(cd ${FILE} && tar -cvv -f ${FILE}.tar *)		|| exit 1
 	FILE="${GDEST}/${TYPE/%-efi}"
 	grub-mkimage -v \
 		-C xz \
@@ -895,20 +897,20 @@ for TYPE in ${GEFIS}; do
 		-d ${GRUBD}/${TYPE} \
 		-o ${FILE}.efi \
 		-m ${FILE}.tar.tar \
-		${MODULES_UEFI}				|| exit_summary 1
+		${MODULES_UEFI}					|| exit_summary 1
 done
 
-${RM} ${GDEST}/*.tar.tar				|| exit 1
+${RM} ${GDEST}/*.tar.tar					|| exit 1
 
 ########################################
 
 FILE="${GDEST}/.mount-mbr"
-${MKDIR} ${FILE}								|| exit 1
+${MKDIR} ${FILE}							|| exit 1
 if [[ -b ${GINST_DO}${GPSEP}${GPART} ]]; then
-	mount-robust -u ${GINST_DO}${GPSEP}${GPART}				#>>> || exit 1
+	mount-robust -u ${GINST_DO}${GPSEP}${GPART}			#>>> || exit 1
 fi
-mount-robust ${GINST_DO}${GPSEP}${GPART} ${FILE}				|| exit 1
-${RSYNC_U} ${GDEST}/rescue.img ${GDEST}/_${GTYPE}/core.img			|| exit 1
+mount-robust ${GINST_DO}${GPSEP}${GPART} ${FILE}			|| exit 1
+${RSYNC_U} ${GDEST}/rescue.img ${GDEST}/_${GTYPE}/core.img		|| exit 1
 grub-install \
 	--verbose \
 	--removable \
@@ -916,36 +918,36 @@ grub-install \
 	--target="${GTYPE}" \
 	--directory="${GDEST}/_${GTYPE}" \
 	--boot-directory="${GDEST}/_${GTYPE}.boot" \
-	${GINST_DO}								|| exit_summary 1
-${RSYNC_U} ${GDEST}/rescue.img ${GDEST}/_${GTYPE}.boot/grub/${GTYPE}/		|| exit 1
+	${GINST_DO}							|| exit_summary 1
+${RSYNC_U} ${GDEST}/rescue.img ${GDEST}/_${GTYPE}.boot/grub/${GTYPE}/	|| exit 1
 grub-bios-setup \
 	--verbose \
 	--skip-fs-probe \
 	--directory="${GDEST}/_${GTYPE}.boot/grub/${GTYPE}" \
 	--core-image="rescue.img" \
-	${GINST_DO}								|| exit_summary 1
-mount-robust -u ${GINST_DO}${GPSEP}${GPART}					#>>> || exit 1
-${RM} ${GDEST}/.mount-mbr							|| exit 1
+	${GINST_DO}							|| exit_summary 1
+mount-robust -u ${GINST_DO}${GPSEP}${GPART}				#>>> || exit 1
+${RM} ${GDEST}/.mount-mbr						|| exit 1
 
 if [[ -b ${GINST_DO}${GPSEP}${GPEFI} ]]; then
 	function efi_cp {
 		declare SRC="${1}"; shift
 		declare DST="${1}"; shift
 		if [[ ${SRC} == ${GDEST}/x86_64.efi ]]; then
-			${RSYNC_C} ${SRC} ${DST}/BOOTX64.EFI			|| exit 1
+			${RSYNC_C} ${SRC} ${DST}/BOOTX64.EFI		|| exit 1
 		fi
 		return 0
 	}
-	${MKDIR} ${GDEST}/.mount-efi						|| exit 1
+	${MKDIR} ${GDEST}/.mount-efi					|| exit 1
 	if [[ -b ${GINST_DO}${GPSEP}${GPEFI} ]]; then
-		mount-robust -u ${GINST_DO}${GPSEP}${GPEFI}			|| exit 1
+		mount-robust -u ${GINST_DO}${GPSEP}${GPEFI}		|| exit 1
 	fi
-	mount-robust ${GINST_DO}${GPSEP}${GPEFI} ${GDEST}/.mount-efi		|| exit 1
-	FILE="${GDEST}/.mount-efi/EFI/BOOT"					|| exit 1
-	${MKDIR} ${FILE}							|| exit 1
+	mount-robust ${GINST_DO}${GPSEP}${GPEFI} ${GDEST}/.mount-efi	|| exit 1
+	FILE="${GDEST}/.mount-efi/EFI/BOOT"				|| exit 1
+	${MKDIR} ${FILE}						|| exit 1
 	for TYPE in ${GEFIS}; do
 		FILE="${GDEST}/${TYPE/%-efi}.efi"
-		${RSYNC_U} ${FILE} ${GDEST}/_${TYPE}/core.efi			|| exit 1
+		${RSYNC_U} ${FILE} ${GDEST}/_${TYPE}/core.efi		|| exit 1
 		grub-install \
 			--verbose \
 			--removable \
@@ -954,11 +956,11 @@ if [[ -b ${GINST_DO}${GPSEP}${GPEFI} ]]; then
 			--directory="${GDEST}/_${TYPE}" \
 			--boot-directory="${GDEST}/_${TYPE}.boot" \
 			--efi-directory="${GDEST}/.mount-efi" \
-			${GINST_DO}						|| exit_summary 1
-		efi_cp ${FILE} ${GDEST}/.mount-efi/EFI/BOOT			|| exit 1
-		mount-robust -u ${GINST_DO}${GPSEP}${GPEFI}			|| exit 1
+			${GINST_DO}					|| exit_summary 1
+		efi_cp ${FILE} ${GDEST}/.mount-efi/EFI/BOOT		|| exit 1
+		mount-robust -u ${GINST_DO}${GPSEP}${GPEFI}		|| exit 1
 	done
-	${RM} ${GDEST}/.mount-efi						|| exit 1
+	${RM} ${GDEST}/.mount-efi					|| exit 1
 fi
 
 ########################################
