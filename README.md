@@ -1505,7 +1505,7 @@ Here is an overview of the repository contents, in order of relative importance:
   |:---                      |:---
   | [README.md]              | All documentation
   | [LICENSE.md]             | License for project and all patches
-  | [Makefile]               | [Builder] wrapper to backend worker scripts
+  | [Makefile]               | Primary interface to [Builder] and [Loader]
   | [packages.txt]           | [Kernel] packages, sizes and install information
   | [packages.rootfs.txt]    | [Rootfs] packages, sizes and install information
   | [_commit]                | Solely for author tracking of source repositories
@@ -1526,6 +1526,7 @@ Here is an overview of the repository contents, in order of relative importance:
   |:---                      |:---
   | [.bashrc]                | Scripting library (author's [Bash] configuration)
   | [scripts/grub.sh]        | [GRUB] backed worker script
+  | [linux/_config]          | Simplifies [Linux Kernel] configuration updates
   | [gentoo/_system]         | Heart and soul of [Builder], and GaryOS itself
   | [gentoo/_release]        | Heart and soul of [Loader] (and publish process)
   | [gentoo/_funtoo]         | [Funtoo] [meta-repo] commit tracking
@@ -1569,6 +1570,7 @@ will require re-cloning.
 
   [.bashrc]: https://github.com/garybgenett/gary-os/blob/master/.bashrc
   [scripts/grub.sh]: https://github.com/garybgenett/gary-os/blob/master/scripts/grub.sh
+  [linux/_config]: https://github.com/garybgenett/gary-os/blob/master/linux/_config
   [gentoo/_system]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_system
   [gentoo/_release]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_release
   [gentoo/_funtoo]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_funtoo
