@@ -135,7 +135,9 @@ ${ROOTFS_NAME}() {
 		done
 		return 0
 	fi
-	if [ -z "`grep -E "^shm ${mounts}.shm tmpfs" /proc/mounts`" ]; then
+	if	[ -z "`grep -E "^shm ${mounts}.shm tmpfs" /proc/mounts`" ] &&
+		[ -z "`grep -E "^shm ${mounts}${_GOVLY} tmpfs" /proc/mounts`" ]
+	then
 		mkdir -v -p ${mounts}.shm || return 1
 		mount -v -t tmpfs shm ${mounts}.shm || return 1
 		mkdir -v -p ${mounts}.shm/lowerdir || return 1
@@ -144,12 +146,17 @@ ${ROOTFS_NAME}() {
 	fi
 	if [ -f "${${ROOTFS_NAME}}" ]; then
 		${ROOTFS_NAME}_shm="${mounts}.shm${ROOTFS_ROOT}"
-		if ${to_mem} && [ ! -f ${${ROOTFS_NAME}_shm} ]; then
+		if ${to_mem} && (
+			[ ! -f ${${ROOTFS_NAME}_shm} ] &&
+			[ ! -f ${mounts}${_GOVLY}${ROOTFS_ROOT} ]
+		); then
 			mkdir -v -p `dirname ${${ROOTFS_NAME}_shm}` || return 1
 			rsync -avv --progress --copy-links ${${ROOTFS_NAME}} ${${ROOTFS_NAME}_shm} || return 1
 			${ROOTFS_NAME}="${${ROOTFS_NAME}_shm}"
 		fi
-		if [ -z "`grep -E "^/dev/loop[0-9] ${mounts}.shm/lowerdir ${ROOTFS_TYPE}" /proc/mounts`" ]; then
+		if	[ -z "`grep -E "^/dev/loop[0-9] ${mounts}.shm/lowerdir ${ROOTFS_TYPE}" /proc/mounts`" ] &&
+			[ -z "`grep -E "^/dev/loop[0-9] ${mounts}${_GOVLY}/lowerdir ${ROOTFS_TYPE}" /proc/mounts`" ]
+		then
 			mount -v -t ${ROOTFS_TYPE} -o ro,loop ${${ROOTFS_NAME}} ${mounts}.shm/lowerdir || return 1
 		fi
 		if [ -z "`grep -E "^overlay ${mounts} overlay" /proc/mounts`" ]; then
