@@ -1415,7 +1415,7 @@ To create patches there is a function in [.bashrc].  Submit patches to
 
 The parent commit should be the last commit hash before your changes.  This will
 create '####-*' patch files for each commit since the parent.  Email them as
-attachments.  [GitHub] pull requests or links to commits in a cloned repository
+attachments.  [GitHub] pull requests or links to commits in a forked repository
 also work.
 
 **Inclusivity**
