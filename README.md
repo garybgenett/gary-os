@@ -244,7 +244,7 @@ a USB drive.
 
   1. Insert a new or empty USB drive at least 4GB in size
   2. Download the [Boot] archive, right click and 'Extract'
-  3. Double-click 'rufus*.exe', click allow, and decline updates
+  3. Double-click 'rufus\*.exe', click allow, and decline updates
      1. Show 'advanced drive properties' and check 'USB Drives'
      2. For 'Device', select the USB drive
      3. For 'Boot Selection', use the large 'Select' button and 'loopfile.img'
@@ -666,13 +666,13 @@ For the best performance, change the 'MAKEFLAGS -j' variable in
   expr `grep "^processor" /proc/cpuinfo | wc -l` + 1
   ```
 
-The last line in [gentoo/_funtoo] must be the commit hash in [meta-repo]
+The last line in [gentoo/\_funtoo] must be the commit hash in [meta-repo]
 that it is desired to use for the Portage tree.
 
 Make any desired Portage package selection and configuration changes, and then
 start the build with 'make init'.  By default, the base GaryOS [Kernel] package
 list and configuration is used.  The full [Rootfs] build can be done with 'make
-P=_gary-os init'.  If so, be sure to add 'P=_gary-os' in all the rest of the
+P=\_gary-os init'.  If so, be sure to add 'P=\_gary-os' in all the rest of the
 steps as well.
 
 The initial build is where errors are most likely to occur.
@@ -755,8 +755,8 @@ a simple two-step process.
 The 'update' target is completely automated, but 'upgrade' requires interaction
 at various steps to accept updates or confirm configuration file changes.
 
-At the end of 'upgrade', the '/_gentoo' directory is updated with information to
-aid in the maintenance of a healthy system.  See [Builder] for details.
+At the end of 'upgrade', the '/\_gentoo' directory is updated with information
+to aid in the maintenance of a healthy system.  See [Builder] for details.
 
 ### Image ######################################################################
 [Image]: #image
@@ -783,7 +783,7 @@ GaryOS variables in them which control portions of this process, such as which
 directories to package, archive or exclude and what 'rc-update' or other
 commands should be run to tailor the image filesystem (see [Loader]).  The
 defaults in [gentoo/sets/gary-os] should be reasonable.  A more complete
-configuration is in [gentoo/sets/_gary-os].
+configuration is in [gentoo/sets/\_gary-os].
 
   ```
   make rootfs
@@ -943,7 +943,7 @@ and feel for GaryOS.
   | /etc/X11/Sessions/dwm     | Modified | Tune [dwm] configuration
 
 In cases where the files are modified or replaced, the original is kept as
-a '*.gary-os' file.
+a '\*.gary-os' file.
 
 In addition to the above, the [OpenRC] configuration is modified (see
 [Loader]).  This is primarily to disable all network daemons.  The [gpm] daemon
@@ -1064,20 +1064,20 @@ Type 'make usage' (basic) or 'make help' (advanced) to get started.
 
   * User interface for the build system
     * [GNU Make] (usage | help)
-    * [gentoo/_system] -v
+    * [gentoo/\_system] -v
   * [Building]
     * [Compile]
     * [Manage]
     * [Install]
 
-  | Component             | Purpose
-  |:---                   |:---
-  | [Makefile]            | Wrapper around the other components
-  | [gentoo/_system]      | Worker for all of [Building] (core of [Builder])
-  | [gentoo/_funtoo]      | [Funtoo] [meta-repo] commit tracking
-  | [gentoo/_funtoo.kits] | [Funtoo] [meta-repo] set (see [Contributions])
-  | [gentoo/.emergent]    | Audit script which outputs the '/_gentoo' directory
-  | [gentoo.config]       | Optional customization for 'edit' in [Compile]
+  | Component              | Purpose
+  |:---                    |:---
+  | [Makefile]             | Wrapper around the other components
+  | [gentoo/\_system]      | Worker for all of [Building] (core of [Builder])
+  | [gentoo/\_funtoo]      | [Funtoo] [meta-repo] commit tracking
+  | [gentoo/\_funtoo.kits] | [Funtoo] [meta-repo] set (see [Contributions])
+  | [gentoo/.emergent]     | Audit script which creates '/\_gentoo' directory
+  | [gentoo.config]        | Optional customization for 'edit' in [Compile]
 
 **Build Tuning**
 
@@ -1088,25 +1088,25 @@ similar tuning, and are self-explanatory.  The full list is at the top of
 
 **Build Output**
 
-The '/_build' directory is created by [Compile], which archives the [Linux
+The '/\_build' directory is created by [Compile], which archives the [Linux
 Kernel] and [Portage] configurations, along with the [stage3] tarball and
 [meta-repo] tree used.  The purpose of this directory is to centralize
 everything needed to reproduce the build.
 
-After [Compile] or [Manage], the '/_gentoo' directory will be created by
+After [Compile] or [Manage], the '/\_gentoo' directory will be created by
 [gentoo/.emergent].  It performs a number of checks of the [Portage]
 configuration and the installed system.  The results are in the
-'/_gentoo/+checks' text file.  This file is very helpful in keeping a Portage
+'/\_gentoo/+checks' text file.  This file is very helpful in keeping a Portage
 configuration in line with upstream, particularly the addition or removal of
 '$USE' flags.
 
-The '/_gentoo.log' file is created every [Compile].  It contains the complete
+The '/\_gentoo.log' file is created every [Compile].  It contains the complete
 output of the build, for troubleshooting.  Please include this file when
 reporting any issues (see [Support]).
 
 **Tooling**
 
-Another primary function of [gentoo/_system] is to provide helpful tooling for
+Another primary function of [gentoo/\_system] is to provide helpful tooling for
 the sometimes arduous process of bringing [Compile] 'init' or 'redo' through to
 a successful build.  [Process] walks through the author's workflow, and has
 examples of these helpers.
@@ -1133,9 +1133,9 @@ References to this section:
     * Init -- Strategies for build breaks
     * Edit -- [gentoo.config]
   * [Manage]
-    * Upgrade -- '/_gentoo'
+    * Upgrade -- '/\_gentoo'
   * [Repository]
-    * Heart and soul -- [gentoo/_system]
+    * Heart and soul -- [gentoo/\_system]
     * Audit script and information -- [gentoo/.emergent]
 
 These are to make sure everything is cross-linked, and that this section is
@@ -1162,8 +1162,8 @@ most helpful to think of it this way.
   | Component          | Purpose
   |:---                |:---
   | [Makefile]         | Wrapper around the other components
-  | [gentoo/_system]   | All environment and variable initialization
-  | [gentoo/_release]  | Worker for [Filesystem] [Image] (core of [Loader])
+  | [gentoo/\_system]  | All environment and variable initialization
+  | [gentoo/\_release] | Worker for [Filesystem] [Image] (core of [Loader])
   | [artifacts/files/] | [Filesystem] [Image] scripts and configuration
 
 **Package Directories**
@@ -1190,7 +1190,7 @@ lower on the list will take precedence.  For example, if the same directory is
 set in 'FSEXCL' and 'FSPACK', the directory would be 'FSEXCL'.
 
 Complete examples of usage are in [gentoo/sets/gary-os] and
-[gentoo/sets/_gary-os].
+[gentoo/sets/\_gary-os].
 
 **Overlay Environment**
 
@@ -1215,7 +1215,7 @@ selection of a [Filesystem] to load.
 Once a [Filesystem] is loaded, directories are unpacked as specified in 'Package
 Directories' above, and '/init' on the target filesystem is booted.  The
 majority of Linux kernel modules will be loaded after this point, so it is
-important that the [Filesystem] has a '/lib*/modules' directory which matches
+important that the [Filesystem] has a '/lib\*/modules' directory which matches
 the GaryOS [Kernel] version.
 
 The final in-memory filesystem is mounted on the backend at '/.overlay', so it
@@ -1245,7 +1245,7 @@ References to this section:
   * [Contributions]
     * Parameter -- 'shmem_size'
   * [Repository]
-    * Heart and soul -- [gentoo/_release]
+    * Heart and soul -- [gentoo/\_release]
 
 These are to make sure everything is cross-linked, and that this section is
 complete.
@@ -1341,16 +1341,16 @@ reasons.  However, it continues to be a key feature of GaryOS [Loader] and
 
 [Ego] keeps the [Portage] [meta-repo] tree up to date.  [Funtoo Kits] builds the
 monolithic Portage tree from a collection of smaller [Git] repositories.  The
-[gentoo/_funtoo.kits] script was written to properly set the final tree to
+[gentoo/\_funtoo.kits] script was written to properly set the final tree to
 a particular commit for stability and reproducibility.  For the [v4.0] release,
 this hack was coded directly into Ego.
 
   * Current
-    * [gentoo/_funtoo.kits]
+    * [gentoo/\_funtoo.kits]
   * Initial
     * [Funtoo Ego submission] ([ego_commit_hack.patch] in [gentoo/overlay/])
 
-The [gentoo/_funtoo.kits] script has two important advantages over Ego.
+The [gentoo/\_funtoo.kits] script has two important advantages over Ego.
 
   1. It can run directly on Git repositories without requiring a Funtoo install
   2. Kits repositories are stored in '.git' rather than the [meta-repo] tree
@@ -1414,7 +1414,7 @@ To create patches there is a function in [.bashrc].  Submit patches to
   ```
 
 The parent commit should be the last commit hash before your changes.  This will
-create '####-*' patch files for each commit since the parent.  Email them as
+create '####-\*' patch files for each commit since the parent.  Email them as
 attachments.  [GitHub] pull requests or links to commits in a forked repository
 also work.
 
@@ -1508,7 +1508,7 @@ Here is an overview of the repository contents, in order of relative importance:
   | [Makefile]               | Primary interface to [Builder] and [Loader]
   | [packages.txt]           | [Kernel] packages, sizes and install information
   | [packages.rootfs.txt]    | [Rootfs] packages, sizes and install information
-  | [_commit]                | Solely for author tracking of source repositories
+  | [\_commit]               | Solely for author tracking of source repositories
 
   | Key Directories          | Purpose
   |:---                      |:---
@@ -1526,16 +1526,15 @@ Here is an overview of the repository contents, in order of relative importance:
   |:---                      |:---
   | [.bashrc]                | Scripting library (author's [Bash] configuration)
   | [scripts/grub.sh]        | [GRUB] backed worker script
-  | [linux/_config]          | Simplifies [Linux Kernel] configuration updates
-  | [gentoo/_system]         | Heart and soul of [Builder], and GaryOS itself
-  | [gentoo/_release]        | Heart and soul of [Loader] (and publish process)
-  | [gentoo/_funtoo]         | [Funtoo] [meta-repo] commit tracking
-  | [gentoo/_funtoo.kits]    | [Funtoo] [meta-repo] set (see [Contributions])
+  | [gentoo/\_system]        | Heart and soul of [Builder], and GaryOS itself
+  | [gentoo/\_release]       | Heart and soul of [Loader] (and publish process)
+  | [gentoo/\_funtoo]        | [Funtoo] [meta-repo] commit tracking
+  | [gentoo/\_funtoo.kits]   | [Funtoo] [meta-repo] set (see [Contributions])
   | [gentoo.config]          | Example for "Edit" stage in [Compile]
   | [gentoo/.emergent]       | Audit script and information (see [Builder])
   | [gentoo/savedconfig/x11-wm/dwm] | Slightly modified [dwm] configuration
   | [gentoo/sets/gary-os]    | [Kernel] packages, [Loader] and [Image]
-  | [gentoo/sets/_gary-os]   | [Rootfs] packages, [Loader] and [Image]
+  | [gentoo/sets/\_gary-os]  | [Rootfs] packages, [Loader] and [Image]
   | [shmem_size_hack.patch]  | [Filesystem] 'shmem_size' (see [Contributions])
   | [ego_commit_hack.patch]  | [Ego] [meta-repo] set (see [Contributions])
 
@@ -1546,7 +1545,7 @@ Here is an overview of the repository contents, in order of relative importance:
 
 The commit history for all these components reside in more than one personal
 repository.  They are merged together into the public GaryOS [Git] repository by
-[gentoo/_release].  This means that even minor disruptions or the inclusion of
+[gentoo/\_release].  This means that even minor disruptions or the inclusion of
 new files will result in a public repository that can not 'fast-forward' and
 will require re-cloning.
 
@@ -1555,7 +1554,7 @@ will require re-cloning.
   [Makefile]: https://github.com/garybgenett/gary-os/blob/master/Makefile
   [packages.txt]: https://github.com/garybgenett/gary-os/blob/master/packages.txt
   [packages.rootfs.txt]: https://github.com/garybgenett/gary-os/blob/master/packages.rootfs.txt
-  [_commit]: https://github.com/garybgenett/gary-os/blob/master/_commit
+  [\_commit]: https://github.com/garybgenett/gary-os/blob/master/_commit
 
   [grub/]: https://github.com/garybgenett/gary-os/blob/master/grub
   [grub/grub.menu.gary-os.cfg]: https://github.com/garybgenett/gary-os/blob/master/grub/grub.menu.gary-os.cfg
@@ -1570,16 +1569,15 @@ will require re-cloning.
 
   [.bashrc]: https://github.com/garybgenett/gary-os/blob/master/.bashrc
   [scripts/grub.sh]: https://github.com/garybgenett/gary-os/blob/master/scripts/grub.sh
-  [linux/_config]: https://github.com/garybgenett/gary-os/blob/master/linux/_config
-  [gentoo/_system]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_system
-  [gentoo/_release]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_release
-  [gentoo/_funtoo]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_funtoo
-  [gentoo/_funtoo.kits]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_funtoo.kits
+  [gentoo/\_system]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_system
+  [gentoo/\_release]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_release
+  [gentoo/\_funtoo]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_funtoo
+  [gentoo/\_funtoo.kits]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_funtoo.kits
   [gentoo.config]: https://github.com/garybgenett/gary-os/blob/master/gentoo.config
   [gentoo/.emergent]: https://github.com/garybgenett/gary-os/blob/master/gentoo/.emergent
   [gentoo/savedconfig/x11-wm/dwm]: https://github.com/garybgenett/gary-os/blob/master/gentoo/savedconfig/x11-wm
   [gentoo/sets/gary-os]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/gary-os
-  [gentoo/sets/_gary-os]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/_gary-os
+  [gentoo/sets/\_gary-os]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/_gary-os
   [shmem_size_hack.patch]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/shmem-add-shmem_size-option-set-filesystem-size.v5.4-rc2.v5.6_updated.patch
   [ego_commit_hack.patch]: https://github.com/garybgenett/gary-os/blob/master/gentoo/overlay/app-admin/ego/files-patches/add-commit-option-to-ego-sync.2.7.4-r1.patch
 
@@ -2197,7 +2195,7 @@ Everything needed to perform these steps is in the [Repository] or the
     * Additional development helpers in [Makefile]
     * Achieved pure 64-bit
   * [Portage]
-    * Improved [meta-repo] set in [gentoo/_funtoo.kits]
+    * Improved [meta-repo] set in [gentoo/\_funtoo.kits]
     * Overhauled [gentoo/sets/] and [gentoo/overlay/]
     * Streamlined [gentoo/overlay/] management
     * Complete debug stripping of packages
@@ -2242,8 +2240,8 @@ Everything needed to perform these steps is in the [Repository] or the
   **[Repository](https://github.com/garybgenett/gary-os/tree/v3.0)
   / [Readme](https://github.com/garybgenett/gary-os/blob/v3.0/README.md)
   / [License](https://github.com/garybgenett/gary-os/blob/v3.0/LICENSE.md)
-  / [Packages (64-bit)](https://github.com/garybgenett/gary-os/blob/v3.0/_packages.64)
-  / [Packages (32-bit)](https://github.com/garybgenett/gary-os/blob/v3.0/_packages.32)**
+  / [Packages (64-bit)](https://github.com/garybgenett/gary-os/blob/v3.0/**\_**packages.64)
+  / [Packages (32-bit)](https://github.com/garybgenett/gary-os/blob/v3.0/**\_**packages.32)**
 
   |                 | |
   |:---             |:---
@@ -2270,8 +2268,8 @@ Everything needed to perform these steps is in the [Repository] or the
   **[Repository](https://github.com/garybgenett/gary-os/tree/v2.0)
   / [Readme](https://github.com/garybgenett/gary-os/blob/v2.0/README.md)
   / [License](https://github.com/garybgenett/gary-os/blob/v2.0/LICENSE.md)
-  / [Packages (64-bit)](https://github.com/garybgenett/gary-os/blob/v2.0/_packages.64)
-  / [Packages (32-bit)](https://github.com/garybgenett/gary-os/blob/v2.0/_packages.32)**
+  / [Packages (64-bit)](https://github.com/garybgenett/gary-os/blob/v2.0/**\_**packages.64)
+  / [Packages (32-bit)](https://github.com/garybgenett/gary-os/blob/v2.0/**\_**packages.32)**
 
   |                 | |
   |:---             |:---
