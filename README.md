@@ -138,7 +138,7 @@ and from anywhere that a Linux kernel can.
   | [Linux]   | Starting from any [GNU/Linux] system
   | [Windows] | Starting from a Microsoft Windows system
   | [GRUB]    | USB or hard drives, from either GNU/Linux or Windows
-  | [EFI]     | Existing EFI systems, which are an emerging default
+  | [EFI]     | Existing EFI systems, which are the contemporary default
   | [PXE]     | Networked environment, or for rapid testing with [QEMU]
   | [Virtual] | Run virtualized on any platform, for [Building] or testing
 
