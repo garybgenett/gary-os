@@ -14,7 +14,7 @@
 |:---        |:---
 | [Overview] | [Quick Start] / [Requirements] / [Support]
 | [Booting]  | [Linux] / [Windows] / [GRUB] / [EFI] / [PXE] / [Virtual]
-| [Running]  | [Networking] / [GUI] / [Update] / [Filesystem]
+| [Running]  | [Networking] / [GUI] / [Update] / [Filesystem] / [Minimal]
 | [Building] | [Compile] / [Manage] / [Image] / [Install]
 
 | [Information] | |
@@ -602,6 +602,27 @@ defaults in the [GRUB] configuration files.  Generally, only 'shmem_size' and
 The 'shmem_size' value for the pre-made GaryOS [Rootfs] should be at least
 '3072m', or '3g' if that format is preferred.  The [Boot] file is already
 correctly configured (see [GRUB]).
+
+### Minimal ####################################################################
+[Minimal]: #minimal
+
+In specific cases, it may be necessary or desirable to use a much smaller
+version of the [Kernel].
+
+  * Storage or memory constraints (see [Requirements])
+  * Faster transfer over a [PXE] network
+  * Use as a [Filesystem] [Loader] only
+
+For these situations, the "minified" [Tiny] version may be used in place of
+[Kernel].  The [Boot] file is already configured to locate it as
+'gary-os.tiny.kernel'.  If both 'gary-os.kernel' and 'gary-os.tiny.kernel'
+exist, [Boot] will first try the main [Kernel], and fall back to [Tiny] if it
+fails to load.  The [grub/grub.menu.gary-os.cfg] file also works this way.
+
+The [Tiny] version is around half the size of [Kernel], both on disk and in
+memory.  To achieve this, a significant number of packages were removed, and
+the overall functionality was greatly reduced.  It is a viable rescue system
+and [Filesystem] [Loader], but not much else should be expected of it.
 
 --------------------------------------------------------------------------------
 
