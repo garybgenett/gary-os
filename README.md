@@ -1065,8 +1065,6 @@ Type 'make usage' (basic) or 'make help' (advanced) to get started.
   * User interface for the build system
     * [GNU Make] (usage | help)
     * [gentoo/_system] -v
-  * [Running]
-    * [Filesystem]
   * [Building]
     * [Compile]
     * [Manage]
@@ -1084,16 +1082,16 @@ Type 'make usage' (basic) or 'make help' (advanced) to get started.
 **Build Tuning**
 
 The 'SELECT' variable defined in the package set file determines which 'eselect'
-values are set during the build.  There are other variables which do similar
-tuning, and are self-explanatory.  The full list is at the top of
+values are configured during the build.  There are other variables which do
+similar tuning, and are self-explanatory.  The full list is at the top of
 [gentoo/sets/gary-os].
 
 **Build Output**
 
-A '/_build' directory is created by [Compile], which archives the [Linux Kernel]
-and [Portage] configurations, along with the [stage3] tarball and [meta-repo]
-tree used.  The purpose of this directory is to centralize everything needed to
-reproduce the build.
+The '/_build' directory is created by [Compile], which archives the [Linux
+Kernel] and [Portage] configurations, along with the [stage3] tarball and
+[meta-repo] tree used.  The purpose of this directory is to centralize
+everything needed to reproduce the build.
 
 After [Compile] or [Manage], the '/_gentoo' directory will be created by
 [gentoo/.emergent].  It performs a number of checks of the [Portage]
@@ -1136,10 +1134,9 @@ References to this section:
     * Edit -- [gentoo.config]
   * [Manage]
     * Upgrade -- '/_gentoo'
-  * [Design]
-    * General reference -- [Linux Kernel] parameters
   * [Repository]
     * Heart and soul -- [gentoo/_system]
+    * Audit script and information -- [gentoo/.emergent]
 
 These are to make sure everything is cross-linked, and that this section is
 complete.
