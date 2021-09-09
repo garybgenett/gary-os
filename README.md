@@ -1027,7 +1027,7 @@ The solutions for each of these are somewhat mutually exclusive.
   * [Busybox] and [Coreutils] are enough to find and mount a filesystem image
   * [XZ compression] of directories, and unpacking at boot or on demand
 
-In GaryOS [v4.0] a comprehensive three-stage [Loader] infrastructure was
+In GaryOS [v4.0], a comprehensive three-stage [Loader] infrastructure was
 developed, along with a robust, generally usable [Builder] system.
 
   1. Linux kernel loads and uncompresses the base initramfs into memory
