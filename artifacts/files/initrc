@@ -2,6 +2,10 @@
 PATH="/usr/sbin:/usr/bin:/sbin:/bin"
 export ${ROOTFS_NAME}_init="false"
 export ${ROOTFS_NAME}_load="false"
+if [ "${1}" == "debug" ]; then
+	shift
+	set -x
+fi
 
 #note: mount locations:
 #	device:			/.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}
