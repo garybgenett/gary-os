@@ -2305,8 +2305,8 @@ Everything needed to perform these steps is in the [Repository] or the
   **[Repository](https://github.com/garybgenett/gary-os/tree/v3.0)
   / [Readme](https://github.com/garybgenett/gary-os/blob/v3.0/README.md)
   / [License](https://github.com/garybgenett/gary-os/blob/v3.0/LICENSE.md)
-  / [Packages (64-bit)](https://github.com/garybgenett/gary-os/blob/v3.0/**\_**packages.64)
-  / [Packages (32-bit)](https://github.com/garybgenett/gary-os/blob/v3.0/**\_**packages.32)**
+  / [Packages (64-bit)](https://github.com/garybgenett/gary-os/blob/v3.0/_packages.64)
+  / [Packages (32-bit)](https://github.com/garybgenett/gary-os/blob/v3.0/_packages.32)**
 
   |                 | |
   |:---             |:---
@@ -2333,8 +2333,8 @@ Everything needed to perform these steps is in the [Repository] or the
   **[Repository](https://github.com/garybgenett/gary-os/tree/v2.0)
   / [Readme](https://github.com/garybgenett/gary-os/blob/v2.0/README.md)
   / [License](https://github.com/garybgenett/gary-os/blob/v2.0/LICENSE.md)
-  / [Packages (64-bit)](https://github.com/garybgenett/gary-os/blob/v2.0/**\_**packages.64)
-  / [Packages (32-bit)](https://github.com/garybgenett/gary-os/blob/v2.0/**\_**packages.32)**
+  / [Packages (64-bit)](https://github.com/garybgenett/gary-os/blob/v2.0/_packages.64)
+  / [Packages (32-bit)](https://github.com/garybgenett/gary-os/blob/v2.0/_packages.32)**
 
   |                 | |
   |:---             |:---
