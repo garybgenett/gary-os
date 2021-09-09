@@ -438,7 +438,14 @@ command.  If preferred, the 'wpa_gui' graphical utility is available on
   ```
 
 The 'wpa_cli' command supports tab-completion, so it is only necessary to type
-the first few letters of each command.
+the first few letters of each command.  Use 'iwconfig' to verify success.
+
+  ```
+  rc-service wpa_supplicant restart
+  ```
+
+In cases where the changes do not immediately take effect, the above will
+restart the daemon and reinitialize the interface.
 
 **OpenSSH**
 
