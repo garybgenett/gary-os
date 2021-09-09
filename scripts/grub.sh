@@ -26,7 +26,7 @@ echo -en "${HEADER}\n"
 ################################################################################
 
 declare GDEST="$(realpath ${1} 2>/dev/null)"
-if [[ ! -d ${GDEST} ]]; then
+if [[ -z ${GDEST} ]]; then
 	GDEST="{directory}"
 fi
 shift
@@ -37,6 +37,11 @@ declare GIBAK="/dev/sda"
 declare GPDEF="1"
 
 function print_usage {
+	if [[ -n "${@}" ]]; then
+		echo -en "\n"
+		echo -en "${@}\n"
+		echo -en "\n"
+	fi
 	cat <<_EOF_
 usage:
 	${SCRIPT} {directory} [options]		= build / install
@@ -67,11 +72,14 @@ _EOF_
 	echo -en "${HEADER}\n"
 }
 
-if [[ ! -d ${GDEST} ]]; then
+if [[ ${GDEST} == '{directory}' ]]; then
 	print_usage
 	exit 1
+elif [[ ! -d ${GDEST} ]]; then
+	print_usage "THE TARGET DIRECTORY MUST ALREADY EXIST: ${GDEST}"
+	exit 1
 elif [[ ! -d ${GRUB_DIR} ]]; then
-	print_usage
+	print_usage "GRUB MENU FILE DIRECTORY DOES NOT EXIST: ${GRUB_DIR}"
 	exit 1
 fi
 
@@ -127,7 +135,7 @@ if [[ -b $(		echo ${1} | ${SED} "s|[p]?[0-9]*$||g") ]] || [[ ${1} == grub+([0-9]
 	fi
 	shift
 elif [[ -n $(		echo ${1} | ${GREP} "^[/]dev[/]") ]]; then
-	print_usage
+	print_usage "DEVICE DOES NOT EXIST: ${1}"
 	exit 1
 fi
 declare GINST_DO="${GINST}"
@@ -528,7 +536,7 @@ if [[ -n ${DO_MOUNT} ]]; then
 			echo -en "\n"; ${LL} -R ${FILE}*
 		fi
 	else
-		print_usage
+		print_usage "COULD NOT FIND FOR MOUNTING: ${GINST}"
 		exit 1
 	fi
 	exit 0
