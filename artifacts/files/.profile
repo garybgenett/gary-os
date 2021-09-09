@@ -6,6 +6,7 @@ alias dotty="getty tty0 0"
 alias dottys="getty ttyS0 0"
 
 if ${DOTEST}; then
+	alias debug="exec /bin/sh /initrc debug"
 	alias boot="kill -SIGQUIT 1"
 	alias ll="ls -la"
 	set -o vi
