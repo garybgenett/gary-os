@@ -145,9 +145,9 @@ ${ROOTFS_NAME}() {
 	if [ -f "${${ROOTFS_NAME}}" ]; then
 		${ROOTFS_NAME}_shm="${mounts}.shm${ROOTFS_ROOT}"
 		if ${to_mem} && [ ! -f ${${ROOTFS_NAME}_shm} ]; then
-			mkdir -v -p `dirname ${${ROOTFS_ROOT}_shm}` || return 1
-			rsync -avv --progress --copy-links ${${ROOTFS_NAME}} ${${ROOTFS_ROOT}_shm} || return 1
-			${ROOTFS_NAME}="${${ROOTFS_ROOT}_shm}"
+			mkdir -v -p `dirname ${${ROOTFS_NAME}_shm}` || return 1
+			rsync -avv --progress --copy-links ${${ROOTFS_NAME}} ${${ROOTFS_NAME}_shm} || return 1
+			${ROOTFS_NAME}="${${ROOTFS_NAME}_shm}"
 		fi
 		if [ -z "`grep -E "^/dev/loop[0-9] ${mounts}.shm/lowerdir ${ROOTFS_TYPE}" /proc/mounts`" ]; then
 			mount -v -t ${ROOTFS_TYPE} -o ro,loop ${${ROOTFS_NAME}} ${mounts}.shm/lowerdir || return 1
