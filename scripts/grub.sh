@@ -2,6 +2,10 @@
 source ${HOME}/.bashrc
 ################################################################################
 
+declare GRUB_DIR="${GRUB_DIR:-/.g/_data/zactive/.setup/grub}"
+
+################################################################################
+
 declare _PROJ="GaryOS"
 declare _NAME="${_PROJ} Grub"
 
@@ -15,11 +19,6 @@ declare _OPTS="${@}"
 echo -en "${HEADER}\n"
 echo -en "ARGUMENTS: ${_OPTS}\n"
 echo -en "${HEADER}\n"
-
-########################################
-
-declare TIMEOUT="5"
-declare SHMEM="3072m"
 
 ################################################################################
 
@@ -151,14 +150,10 @@ fi
 
 ################################################################################
 
-declare GROOT="hd0,${GPART}"
 declare GEFIS="x86_64-efi"
 declare GTYPE="i386-pc"
-declare GPXE="efinet0"
-
 declare GRUBD="/usr/lib/grub"
 declare GMODS="${GRUBD}/${GTYPE}"
-declare GFILE="/boot/grub/grub.cfg"
 
 declare GCDEV="${GINST}${GPSEP}${GPART}"
 if [[ ${GINST} == ${GIDEF} ]]; then
@@ -168,295 +163,30 @@ fi
 
 ########################################
 
-declare GMENU_KERNEL="/${_BASE}/${_BASE}.kernel"
-declare GMENU_MODKRN="/${_BASE}/${_BASE}.tiny.kernel"
-declare GMENU_ROOTFS="/${_BASE}/${_BASE}.rootfs"
-declare GMENU_OPTION="shmem_size=${SHMEM} groot=${GCDEV} groot_hint=\${garyos_rootfs} groot_file=${GMENU_ROOTFS}"
-declare GMENU_OPTPXE="shmem_size=${SHMEM} groot=\${garyos_server} groot_hint=${GPXE} groot_file=${GMENU_ROOTFS}"
-
-declare GMENU_CUSTOM="/${_BASE}/${_BASE}.grub.cfg"
-declare GCUST_KERNEL="$(dirname ${GMENU_CUSTOM})/$(basename ${GMENU_KERNEL})"
-declare GCUST_MODKRN="$(dirname ${GMENU_CUSTOM})/$(basename ${GMENU_MODKRN})"
-declare GCUST_ROOTFS="$(dirname ${GMENU_CUSTOM})/$(basename ${GMENU_ROOTFS})"
-declare GCUST_OPTION="shmem_size=${SHMEM} groot=${GCDEV} groot_hint=\${garyos_rootfs} groot_file=${GCUST_ROOTFS}"
-
-declare GMENU_W_ROOT="/efi/microsoft/boot/bootmgfw.efi"
-declare GMENU_W_BOOT="/efi/boot/bootx64.efi"
-
-#>>> https://unix.stackexchange.com/questions/502931/debugging-boot-performance-issues-in-grub-before-kernel-logging-starts
-declare GMENU_HEAD="\
+declare GMENU_NAME="${_BASE}.grub.cfg"
+declare GMENU_FILE="/${_BASE}/${GMENU_NAME}"
+declare GMENU_DATA="\
 ################################################################################
 # GaryOS Grub Configuration
 ################################################################################
 
-set debug=chain,linux,loader,relocator,tftp
-#>>>set debug=\${debug},mm,mmap
-
-set pager=0
-set timeout=-1
-
-################################################################################
-
-insmod part_gpt
-insmod part_msdos
-
-insmod ext2
-insmod fat
-insmod exfat
-insmod ntfs
-insmod net
-
-insmod search
-insmod linux
-insmod chain
-
-########################################
-
-insmod all_video
-
-serial --unit=0 --speed=9600 --word=8 --parity=no --stop=1
-terminal_input console serial
-terminal_output console serial
-
-set menu_color_normal=white/black
-set menu_color_highlight=black/red
-
-########################################
-
-set options_default=\"rootwait ro\"
-
-set options_boot=\"\${options_default}\"
-
-################################################################################
-
-function show_env {
-	set pager=1
-	set
-	set pager=0
-}
-
-########################################
-
-set options_serial_on=\"console=ttyS0,38400\"
-set options_serial_off=\"\${options_serial_on} console=tty0\"
-if [ -z \${options_serial} ]; then
-	set options_serial=\"\${options_serial_off}\"
-fi
-set options_boot=\"\${options_default} \${options_serial}\"
-
-function serial_config {
-	if [ \"\${options_serial}\" == \"\${options_serial_off}\" ]; then
-		set options_serial=\"\${options_serial_on}\"
-	else
-		set options_serial=\"\${options_serial_off}\"
-	fi
-	echo -en \"\${options_serial}> \"
-	read options_serial_set
-	if [ \${options_serial_set} != \"\" ]; then
-		set options_serial=\"\${options_serial_set}\"
-	fi
-	set options_boot=\"\${options_default} \${options_serial}\"
-}
-
-################################################################################"
-declare GMENU_FOOT="\
-########################################
-
-search --no-floppy --file --set windows_root ${GMENU_W_ROOT}
-search --no-floppy --file --set windows_boot ${GMENU_W_BOOT}
-if [ -n \"\${windows_root}\" ]; then
-	menuentry \"---\" {
-		show_env
-	}
-elif [ -n \"\${windows_boot}\" -f \"(\${windows_boot})/bootmgr.efi\" ]; then
-	menuentry \"---\" {
-		show_env
-	}
-fi
-
-if [ -n \"\${windows_root}\" ]; then
-	menuentry \"Windows\" {
-		set root=\"\${windows_root}\"
-		chainloader ${GMENU_W_ROOT}
-	}
-fi
-if [ -n \"\${windows_boot}\" -f \"(\${windows_boot})/bootmgr.efi\" ]; then
-	menuentry \"Windows (Installer)\" {
-		set root=\"\${windows_boot}\"
-		chainloader ${GMENU_W_BOOT}
-	}
-fi
-
-################################################################################
-# end of file
-################################################################################"
-
-declare GMENU="\
-${GMENU_HEAD}
-
 menuentry \"${_NAME}\" {
-	configfile (memdisk)${GFILE}
+	configfile (memdisk)\${grub_menu}
 }
 menuentry \"---\" {
 	serial_config
 }
 
-########################################
+$(cat ${GRUB_DIR}/grub.defaults.cfg)
+$(cat ${GRUB_DIR}/grub.menu.${_BASE}.cfg | ${SED} "s|${GIBAK}${GPART}|${GCDEV}|g")
+$(cat ${GRUB_DIR}/grub.menu.windows.cfg)
 
-set garyos_custom=
-set garyos_rescue=
-set garyos_rootfs=
-search --no-floppy --file --set garyos_custom ${GMENU_CUSTOM}
-search --no-floppy --file --set garyos_rescue ${GMENU_KERNEL}
-search --no-floppy --file --set garyos_rootfs ${GMENU_ROOTFS}
-if [ -z \"\${garyos_rescue}\" ]; then
-	search --no-floppy --file --set garyos_rescue ${GMENU_MODKRN}
-fi
+options_root=\"\${options_root}${GOPTS}\"
+options_boot=\"\${options_root} \${options_serial}\"
 
-if [ -n \"\${garyos_custom}\" ]; then
-	set default=2
-	set timeout=${TIMEOUT}
-else
-	set garyos_custom=\"${GROOT}\"
-fi
-if [ -n \"\${garyos_rescue}\" ]; then
-	set default=3
-	set timeout=${TIMEOUT}
-else
-	set garyos_rescue=\"${GROOT}\"
-fi
-if [ -n \"\${garyos_rootfs}\" ]; then
-	set default=4
-	set timeout=${TIMEOUT}
-else
-	set garyos_rootfs=\"${GROOT}\"
-fi
-
-menuentry \"${_PROJ} Menu\" {
-	configfile (\${garyos_custom})${GMENU_CUSTOM}
-}
-menuentry \"${_PROJ} Boot\" {
-	if ! linux (\${garyos_rescue})${GMENU_KERNEL}${GOPTS} \${options_boot}; then
-		linux (\${garyos_rescue})${GMENU_MODKRN}${GOPTS} \${options_boot}
-	fi
-	boot
-}
-menuentry \"${_PROJ} Boot Rootfs\" {
-	if ! linux (\${garyos_rootfs})${GMENU_KERNEL}${GOPTS} ${GMENU_OPTION} \${options_boot}; then
-		linux (\${garyos_rootfs})${GMENU_MODKRN}${GOPTS} ${GMENU_OPTION} \${options_boot}
-	fi
-	boot
-}
-
-########################################
-
-set garyos_install=
-search --no-floppy --file --set garyos_install /boot/kernel
-
-if [ -n \"\${garyos_install}\" ]; then
-	if [ -f \"(\${garyos_install})${GFILE}\" ]; then
-		set default=5
-	else
-		set default=6
-	fi
-	set timeout=${TIMEOUT}
-else
-	set garyos_install=\"${GROOT}\"
-fi
-
-menuentry \"${_PROJ} Install Menu\" {
-	configfile (\${garyos_install})${GFILE}
-}
-menuentry \"${_PROJ} Install Boot\" {
-	linux (\${garyos_install})/boot/kernel${GOPTS} root=${GCDEV} \${options_boot}
-	if [ -f \"(\${garyos_install})/boot/initrd\" ]; then
-		initrd (\${garyos_install})/boot/initrd
-	fi
-}
-
-########################################
-
-set garyos_server=\"\${net_${GPXE}_next_server}\"
-set garyos_source=\"\${net_${GPXE}_rootpath}\"
-set garyos_params=\"\${net_${GPXE}_extensionspath}\"
-if [ -z \"\${garyos_server}\" ]; then set garyos_server=\"\${net_${GPXE}_dhcp_next_server}\"; fi
-if [ -z \"\${garyos_source}\" ]; then set garyos_source=\"\${net_${GPXE}_dhcp_rootpath}\"; fi
-if [ -z \"\${garyos_params}\" ]; then set garyos_params=\"\${net_${GPXE}_dhcp_extensionspath}\"; fi
-
-if [ -z \"\${garyos_source}\" ]; then
-#>>>	set garyos_source=\"${GMENU_MODKRN}\"
-	set garyos_source=\"${GMENU_KERNEL}\"
-fi
-
-if [ -n \"\${garyos_server}\" ]; then
-	set default=7
-	set timeout=${TIMEOUT}
-fi
-
-menuentry \"${_PROJ} PXE\" {
-	echo cmd: net_dhcp
-	echo cmd: configfile (memdisk)${GFILE}
-	echo var: set garyos_server=\"\${garyos_server}\"
-#>>>	echo var: set garyos_source=\"${GMENU_MODKRN}\"
-	echo var: set garyos_source=\"${GMENU_KERNEL}\"
-	echo var: set garyos_params=\"${GMENU_OPTPXE}\"
-	echo garyos_server: \${garyos_server}
-	echo garyos_source: \${garyos_source}
-	echo garyos_params: \${garyos_params}
-	linux (tftp,\${garyos_server})\${garyos_source}${GOPTS} \${garyos_params} \${options_boot}
-}
-
-${GMENU_FOOT}
-"
-
-declare GCUST="\
-${GMENU_HEAD}
-
-menuentry \"${_NAME} (Custom)\" {
-	configfile (memdisk)${GFILE}
-}
-menuentry \"---\" {
-	serial_config
-}
-
-########################################
-
-set garyos_rescue=
-set garyos_rootfs=
-search --no-floppy --file --set garyos_rescue ${GCUST_KERNEL}
-search --no-floppy --file --set garyos_rootfs ${GCUST_ROOTFS}
-if [ -z \"\${garyos_rescue}\" ]; then
-	search --no-floppy --file --set garyos_rescue ${GCUST_MODKRN}
-fi
-
-if [ -n \"\${garyos_rescue}\" ]; then
-	set default=2
-	set timeout=${TIMEOUT}
-else
-	set garyos_rescue=\"${GROOT}\"
-fi
-if [ -n \"\${garyos_rootfs}\" ]; then
-	set default=3
-	set timeout=${TIMEOUT}
-else
-	set garyos_rootfs=\"${GROOT}\"
-fi
-
-menuentry \"${_PROJ} Boot\" {
-	if ! linux (\${garyos_rescue})${GCUST_KERNEL}${GOPTS} \${options_boot}; then
-		linux (\${garyos_rescue})${GCUST_MODKRN}${GOPTS} \${options_boot}
-	fi
-	boot
-}
-menuentry \"${_PROJ} Boot Rootfs\" {
-	if ! linux (\${garyos_rootfs})${GCUST_KERNEL}${GOPTS} ${GCUST_OPTION} \${options_boot}; then
-		linux (\${garyos_rootfs})${GCUST_MODKRN}${GOPTS} ${GCUST_OPTION} \${options_boot}
-	fi
-	boot
-}
-
-${GMENU_FOOT}
-"
+################################################################################
+# GaryOS End Of File
+################################################################################"
 
 ########################################
 
@@ -478,7 +208,7 @@ if not exist %BCDFILE% (goto create) else (goto delete)
 	bcdedit.exe /enum %GUID%
 	mountvol y: /s
 	mkdir y:\\${_BASE}
-	copy /y /v %CURDIR%\\$(basename ${GMENU_CUSTOM}) y:\\${_BASE}\\$(basename ${GMENU_CUSTOM})
+	copy /y /v %CURDIR%\\${GMENU_NAME} y:\\${_BASE}\\${GMENU_NAME}
 	copy /y /v %CURDIR%\\x86_64.efi y:\\${_BASE}\\${_BASE}.efi
 	goto end
 :delete
@@ -808,11 +538,9 @@ ${RSYNC_U} -L ${_SELF} ${GDEST}/$(basename ${_SELF})	|| exit 1
 
 ########################################
 
-echo -en "${GMENU}"	>${GDEST}/rescue.cfg			|| exit 1
-echo -en "${GCUST}"	>${GDEST}/$(basename ${GMENU_CUSTOM})	|| exit 1
-
-echo -n "${BCDEDIT}"	>${GDEST}/bcdedit.bat			|| exit 1
-unix2dos		${GDEST}/bcdedit.bat			|| exit 1
+echo -en "${GMENU_DATA}"	>${GDEST}/${GMENU_NAME}	|| exit 1
+echo -n "${BCDEDIT}"		>${GDEST}/bcdedit.bat	|| exit 1
+unix2dos			${GDEST}/bcdedit.bat	|| exit 1
 
 ########################################
 
@@ -835,9 +563,9 @@ function custom_menu {
 		mount-robust -u ${DEV}${GPSEP}${GPART}		#>>> || return 1
 	fi
 	mount-robust ${DEV}${GPSEP}${GPART} ${FILE}		|| return 1
-	if [[ ! -f ${FILE}${GMENU_CUSTOM} ]]; then
-		${MKDIR} ${FILE}$(dirname ${GMENU_CUSTOM})	|| return 1
-		echo -en "${GCUST}" >${FILE}${GMENU_CUSTOM}	|| return 1
+	if [[ ! -f ${FILE}${GMENU_FILE} ]]; then
+		${MKDIR} ${FILE}$(dirname ${GMENU_FILE})	|| return 1
+		echo -en "${GMENU_DATA}" >${FILE}${GMENU_FILE}	|| return 1
 	fi
 	mount-robust -u ${DEV}${GPSEP}${GPART}			#>>> || return 1
 	${RM} ${FILE}						|| return 1
@@ -872,7 +600,7 @@ FILE="${GDEST}/rescue.tar/boot/grub"
 ${RM} ${FILE}/${GTYPE}						|| exit 1
 ${MKDIR} ${FILE}/${GTYPE}					|| exit 1
 ${RSYNC_U} ${MODULES_BIOS} ${FILE}/${GTYPE}/			|| exit 1
-${RSYNC_U} ${GDEST}/rescue.cfg ${FILE}/grub.cfg			|| exit 1
+${RSYNC_U} ${GDEST}/${GMENU_NAME} ${FILE}/grub.cfg		|| exit 1
 FILE="${GDEST}/rescue.tar"
 (cd ${FILE} && tar -cvv -f ${FILE}.tar *)			|| exit 1
 grub-mkimage -v \
@@ -887,7 +615,7 @@ for TYPE in ${GEFIS}; do
 	FILE="${GDEST}/${TYPE/%-efi}.tar/boot/grub"
 	${MKDIR} ${FILE}/${TYPE}				|| exit 1
 	${RSYNC_U} ${GRUBD}/${TYPE}/ ${FILE}/${TYPE}		|| exit 1
-	${RSYNC_U} ${GDEST}/rescue.cfg ${FILE}/grub.cfg		|| exit 1
+	${RSYNC_U} ${GDEST}/${GMENU_NAME} ${FILE}/grub.cfg	|| exit 1
 	FILE="${GDEST}/${TYPE/%-efi}.tar"
 	(cd ${FILE} && tar -cvv -f ${FILE}.tar *)		|| exit 1
 	FILE="${GDEST}/${TYPE/%-efi}"
