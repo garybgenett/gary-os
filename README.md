@@ -1766,7 +1766,7 @@ Everything needed to perform these steps is in the [Repository] or the
    * `make <package atom>`
      * [ ] Copy "gentoo browse" link to browser
      * [ ] Copy "gitweb" link to browser
-   * `make overlay-<package atom|*/|>^<ebuild>^<commit>`
+   * `make overlay-<package atom|/|%>^<ebuild>^<commit>`
      * `mkdir ./gentoo/overlay/<package atom>`
      * `(cd _build/gentoo/gentoo; git-list -50 -l -- <package atom>)`
      * `(cd _build/gentoo/gentoo; git-list -2 -- <package atom>/<ebuild>)`
@@ -1813,6 +1813,13 @@ Everything needed to perform these steps is in the [Repository] or the
         * `while :; do make DOFAST=true init; inotifywait --event modify gentoo/make.* gentoo/package.* gentoo/sets/*; done`
         * `(cd .setup; vi gentoo/make.* gentoo/package.* gentoo/sets/*; vdiff -g gentoo/make.* gentoo/package.* gentoo/sets/*)`
     * [x] **Iterate()**
+  * [ ] Pandoc
+    * `vi ./gentoo/gentoo/overlay/app-text/pandoc/.rationale`
+        * [ ] Update versions
+    * `vi ./gentoo/gentoo/overlay/app-text/pandoc/.pandoc_ebuilds.sh`
+        * `rm $(./gentoo/overlay/app-text/pandoc/.pandoc_ebuilds.sh ^)`
+        * [ ] Follow command comments
+        * [ ] Ensure no packages are coming from 'haskell-kit'
   * `./linux/_config ./build/usr/src/linux`
     * [ ] Review final version
     * `rsync $(realpath ./linux/.config).*.DONE $(realpath ./linux/.config)`
@@ -1828,16 +1835,14 @@ Everything needed to perform these steps is in the [Repository] or the
     * `(cd _builds; rsync ../../_toor/ ./_gentoo)`
     * [ ] Boot to "gary-os"
         * `rsync [...]/_root/{.runit,.setup} [...]/_toor/`
-    * [ ] Boot to "_toor"
+    * [ ] Boot to "\_toor"
         * [ ] Smoke test for 2-3 weeks
         * [x] **Iterate()**
         * `_sync _sys _clone _full _setup`
     * [ ] Boot to "gary-os"
         * `_sync _sys _chroot [...]`
         * `rsync [...]/_toor/{.runit,.setup} [...]/_root/`
-    * [ ] Boot to "_root"
-        * `ego sync --commit $(tail -n1 ./gentoo/_funtoo | cut -d' ' -f2)`
-        * `diff -r ./build/var/git/meta-repo /var/git/meta-repo`
+    * [ ] Boot to "\_root"
   * `make doit`
     * `ll ./build/ ./build/_build`
     * `(cd .setup; git-commit ./gentoo)`
@@ -1845,40 +1850,41 @@ Everything needed to perform these steps is in the [Repository] or the
 
 **GaryOS Build**
 
-**`Validate { <kernel> <check> <target> <option>`**
+**`Validate { <kernel> <check> <option> <target>`**
 
-  * `make` **`${4}`** `DOREDO=true DOFAST=true doit` **`${3}`**
+  * `make` **`${3}`** `DOREDO=true doit` **`${4}`**
     * [x] **Iterate()**
-  * [ ] Target size of **`${1}`** or less (`make check` = **`${2}`**)
+  * [ ] Target size of **`${1}`** or less (`make check` = Apparent size of **`${2}`**)
     * [ ] Command comments at bottom of [gentoo/package.use]
-        * `make` **`${4}`** `depends-<package atom|/|%>`
-        * `make` **`${4}`** `depgraph-<package atom|/|%>`
-        * `make` **`${4}`** `belongs-<file path|/|%>`
-    * `make` **`${4}`** `DOFAST=true doit` **`${3}`**
-        * `make` **`${4}`** `DOTEST=true check`
-    * **`<GOSPKG=${4}>?`** `./gentoo/_system -g -s -e -C pypy3 [...]`
-        * **`<GOSPKG=${4}>?`** `./gentoo/_system -g -s -e <python packages>`
+        * `make` **`${3}`** `depends-<package atom|/|%>`
+        * `make` **`${3}`** `depgraph-<package atom|/|%>`
+        * `make` **`${3}`** `belongs-<file path|/|%>`
+    * `make` **`${3}`** `DOREDO=true DOFAST=true doit` **`${4}`**
+        * `make` **`${3}`** `DOTEST=true check`
     * `ll ./build/.gary-os-*`
-  * `make` **`${4}`** `gendir`
+  * `make` **`${3}`** `gendir`
     * [ ] Command comments at bottom of [gentoo/make.conf]
     * `vi ./build/_gentoo/+checks`
 
 **`}`**
 
   * `cd .setup/gentoo.gary-os`
-  * [x] **Validate( 220MB 300.0MiB DOMODS=true devel )**
+  * [x] **Validate( 210MB 250.0MiB DOMODS=true devel )**
+    * [ ] Minimized build note in '/etc/issue'
     * [ ] No 'startx' in '/etc/issue'
-  * [x] **Validate( 750MB 1.2GiB devel )**
-  * `make ROOTFS=false devel`
-    * [ ] Test kernel size and root filesystem resize
+  * [x] **Validate( 750MB 1.2GiB '' devel )**
   * `make DOTEST=true devel`
     * [ ] Verify '#{rootfs}' markers
-  * [x] **Validate( 1.5GB 3.0GiB P=\_gary-os rootfs )**
+  * `make ROOTFS=false devel`
+    * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1 -m 8192`
+    * [ ] Test kernel size and root filesystem resize
+  * [x] **Validate( 1.5GB 3.0GiB P=**\_**gary-os rootfs )**
+  * `(cd .setup; git-commit ./gentoo)`
+  * `make DOREDO=true doit devel`
 
 **Test & Publish**
 
   * `cd .setup/gentoo.gary-os`
-  * [x] [Checklist]
     * `(cd _builds/.gary-os.release; rm ./v#.#; ln ../_gary-os.working/.gary-os-* ./v#.#)`
         * `make DOREDO=true _release_grub`
         * `make _prepare_symlinks`
@@ -1886,8 +1892,8 @@ Everything needed to perform these steps is in the [Repository] or the
     * `(cd _builds; rm ./_gary-os.boot; ln _gary-os.working ./_gary-os.boot)`
         * `_sync boot`
     * `make DOREDO=true DOTEST=true _release_grub`
+  * [x] [Checklist]
   * [x] [Publish]
-    * `make clean`
 
 ### Checklist ##################################################################
 [Checklist]: #checklist
