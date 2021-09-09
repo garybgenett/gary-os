@@ -476,27 +476,24 @@ interface, use 'startx'.
   |:---               |:---            |:---
   | Window manager    | [dwm]          | Includes [Openbox]
   | Terminal emulator | [rxvt-unicode] | Also the default
-  | Web browser       | [Links]        | Includes [surf] and [Firefox]
+  | Web browser       | [Links]        | Includes [Firefox]
 
 The dwm title bar has brief reminders for the shortcuts below.  Use
 'XSESSION=openbox startx' for Openbox instead of dwm.  In Links, use the top bar
 for the menu and 'g' to open the URL bar.
 
-  |                    | |
-  |:---                |:---
-  | GaryOS Readme      | Alt-Left
-  | The dwm man page   | Alt-Right
-  | Command entry      | Alt-p
-  | Terminal emulator  | Alt-Shift-Enter
-  | Web browser        | Alt-Ctrl-Enter
-  | Web browser (surf) | Alt-Shift-Ctrl-Enter
-
-The surf browser uses the [tabbed] utility for tabbed browsing.  See 'man surf'
-and 'man tabbed' for keyboard commands.  Firefox can be run by using 'Ctrl-p',
-typing 'firefox', and hitting 'Enter'.
+  |                       | |
+  |:---                   |:---
+  | GaryOS Readme         | Alt-Left
+  | The dwm man page      | Alt-Right
+  | Command entry         | Alt-p
+  | Terminal emulator     | Alt-Shift-Enter
+  | Web browser           | Alt-Ctrl-Enter
+  | Web browser (Firefox) | Alt-Shift-Ctrl-Enter
 
 X.Org tries to auto-detect the best resolution for the display.  If it does not,
-use the 'xrandr' utility to change it.
+use the 'xrandr' utility to change it.  If preferred, the 'arandr' graphical
+utility is available on [Rootfs].
 
   ```
   xrandr --query
@@ -508,8 +505,6 @@ selected for their lightweight nature and minimal dependencies, along with the
 high geek factor (see [Goals]).
 
   [Openbox]: http://openbox.org
-  [surf]: https://surf.suckless.org
-  [tabbed]: https://tools.suckless.org/tabbed
   [Firefox]: https://www.mozilla.org/firefox
 
 ### Update #####################################################################
@@ -1526,6 +1521,7 @@ Here is an overview of the repository contents, in order of relative importance:
   |:---                      |:---
   | [.bashrc]                | Scripting library (author's [Bash] configuration)
   | [scripts/grub.sh]        | [GRUB] backed worker script
+  | [linux/\_config]         | Simplifies [Linux Kernel] configuration updates
   | [gentoo/\_system]        | Heart and soul of [Builder], and GaryOS itself
   | [gentoo/\_release]       | Heart and soul of [Loader] (and publish process)
   | [gentoo/\_funtoo]        | [Funtoo] [meta-repo] commit tracking
@@ -1569,6 +1565,7 @@ will require re-cloning.
 
   [.bashrc]: https://github.com/garybgenett/gary-os/blob/master/.bashrc
   [scripts/grub.sh]: https://github.com/garybgenett/gary-os/blob/master/scripts/grub.sh
+  [linux/\_config]: https://github.com/garybgenett/gary-os/blob/master/linux/_config
   [gentoo/\_system]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_system
   [gentoo/\_release]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_release
   [gentoo/\_funtoo]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_funtoo
@@ -2159,11 +2156,8 @@ Everything needed to perform these steps is in the [Repository] or the
 ## Versions ####################################################################
 [Versions]: #versions
 
-[License]: https://github.com/garybgenett/gary-os/blob/LICENSE.md
-
+[License]: https://github.com/garybgenett/gary-os/blob/master/LICENSE.md
 [Downloads]: https://sourceforge.net/projects/gary-os/files
-[Distfiles]: https://sourceforge.net/projects/gary-os/files/_distfiles
-[Packages]: https://sourceforge.net/projects/gary-os/files/_packages
 
 [Kernel]: https://sourceforge.net/projects/gary-os/files/gary-os-v5.0-generic_64.kernel
 [Rootfs]: https://sourceforge.net/projects/gary-os/files/gary-os-v5.0-generic_64.rootfs
