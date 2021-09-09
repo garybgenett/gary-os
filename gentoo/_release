@@ -1572,6 +1572,7 @@ function release_grub_qcow_unmount {	#>>>{dotest}
 }
 
 function _release_grub {		#{doredo} #{dofast} #{dotest}
+	export GRUB_DIR="${SETDIR}/${GRBDIR}"
 	declare GRUB_DEST="${_RAMFS}.grub"
 	declare GRUB_LEFI="/dev/nbd9p3"
 	declare GRUB_LOOP="/dev/nbd9p1"
@@ -2145,8 +2146,11 @@ function _publish_gitdir {		#{ismain}
 	SAVE_FILES+="^${CMTFIL}"
 	SAVE_FILES+="^${_GPACK/%.txt}\*"
 	declare SETUP_FILES=
-	SETUP_FILES+="^gentoo"
+	SETUP_FILES+="^grub/grub.defaults.cfg"
+	SETUP_FILES+="^grub/grub.menu.gary-os.cfg"
+	SETUP_FILES+="^grub/grub.menu.windows.cfg"
 	SETUP_FILES+="^linux"
+	SETUP_FILES+="^gentoo"
 	declare STATIC_FILES=
 	STATIC_FILES+="^.bashrc"
 	STATIC_FILES+="^.vimrc"
