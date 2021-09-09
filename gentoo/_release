@@ -57,7 +57,6 @@ declare _SFDOWN="https://sourceforge.net/projects/gary-os/files/${_VERSN}"
 declare _DOCDIR="/.g/_data/zactive/coding/${_TITLE}"
 declare _BLDDIR="/.g/_data/_builds"
 declare _SAVDIR="${_BLDDIR}/_${_TITLE}"
-declare _ROOTFS="${_BLDDIR}/_${_TITLE}.rootfs"
 declare _RELDIR="${_BLDDIR}/.${_TITLE}"
 declare _G_REPO="${_RELDIR}/.${_TITLE}"
 declare _OUTDIR="${_RELDIR}.release"
@@ -2339,16 +2338,6 @@ function _publish_direct {
 	; do
 		${RSYNC_U} --copy-links	${_G_REPO}/${FILE} ${_OUTDIR}/	|| return 1
 	done
-	declare ROOTFS_DIRECT="${_OUTDIR}/$(basename ${_ROOTFS})"
-	if { {
-		[[ -f ${_ROOTFS} ]];
-	} && {
-		[[ ! -f ${ROOTFS_DIRECT}.hash.txt ]] ||
-		[[ -n $(find -L ${_ROOTFS} -newer ${ROOTFS_DIRECT}.hash.txt) ]];
-	} }; then
-		${LN} --relative	${_ROOTFS}* ${_OUTDIR}/		|| return 1
-		publish_export_checksum	${ROOTFS_DIRECT}		|| return 1
-	fi
 	return 0
 }
 
