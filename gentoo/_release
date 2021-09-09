@@ -1580,7 +1580,10 @@ function _release_grub {		#{doredo} #{dofast} #{dotest}
 	if ${DOREDO}; then
 		${RM}							${GRUB_DEST}*						|| return 1
 	fi
-	if [[ ! -f ${GRUB_DEST}.tar.xz ]] && [[ ! -f ${GRUB_DEST}.zip ]]; then
+	if {
+		{ [[ ! -f ${GRUB_DEST}.tar.xz ]] && [[ ! -f ${GRUB_DEST}.zip ]]; } ||
+		${DOTEST};
+	}; then
 		if {
 			${DOREDO} ||
 			! ${DOTEST};
