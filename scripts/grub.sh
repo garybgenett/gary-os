@@ -466,7 +466,7 @@ function exit_summary {
 	)
 
 	if ${DEBUG}; then
-		FILE="${GDEST}/rescue.tar/boot/grub/${GTYPE}"
+		FILE="${GDEST}/${GTYPE/%-pc}.tar/boot/grub/${GTYPE}"
 		echo -en "\n"
 		echo -en "# objects for removal:\n"
 		(cd ${FILE} &&
@@ -611,19 +611,19 @@ fi
 
 ########################################
 
-FILE="${GDEST}/rescue.tar/boot/grub"
+FILE="${GDEST}/${GTYPE/%-pc}.tar/boot/grub"
 ${RM} ${FILE}/${GTYPE}						|| exit 1
 ${MKDIR} ${FILE}/${GTYPE}					|| exit 1
 ${RSYNC_U} ${MODULES_BIOS} ${FILE}/${GTYPE}/			|| exit 1
 ${RSYNC_U} ${GDEST}/${GMENU_NAME} ${FILE}/grub.cfg		|| exit 1
-FILE="${GDEST}/rescue.tar"
+FILE="${GDEST}/${GTYPE/%-pc}.tar"
 (cd ${FILE} && tar -cvv -f ${FILE}.tar *)			|| exit 1
 grub-mkimage -v \
 	-C xz \
 	-O ${GTYPE} \
 	-d ${GMODS} \
-	-o ${GDEST}/rescue.img \
-	-m ${GDEST}/rescue.tar.tar \
+	-o ${GDEST}/${GTYPE/%-pc}.img \
+	-m ${GDEST}/${GTYPE/%-pc}.tar.tar \
 	${MODULES_CORE}						|| exit_summary 1
 
 for TYPE in ${GEFIS}; do
@@ -653,7 +653,7 @@ if [[ -b ${GINST_DO}${GPSEP}${GPART} ]]; then
 	mount-robust -u ${GINST_DO}${GPSEP}${GPART}			#>>> || exit 1
 fi
 mount-robust ${GINST_DO}${GPSEP}${GPART} ${FILE}			|| exit 1
-${RSYNC_U} ${GDEST}/rescue.img ${GDEST}/_${GTYPE}/core.img		|| exit 1
+${RSYNC_U} ${GDEST}/${GTYPE/%-pc}.img ${GDEST}/_${GTYPE}/core.img		|| exit 1
 grub-install \
 	--verbose \
 	--removable \
@@ -662,12 +662,12 @@ grub-install \
 	--directory="${GDEST}/_${GTYPE}" \
 	--boot-directory="${GDEST}/_${GTYPE}.boot" \
 	${GINST_DO}							|| exit_summary 1
-${RSYNC_U} ${GDEST}/rescue.img ${GDEST}/_${GTYPE}.boot/grub/${GTYPE}/	|| exit 1
+${RSYNC_U} ${GDEST}/${GTYPE/%-pc}.img ${GDEST}/_${GTYPE}.boot/grub/${GTYPE}/	|| exit 1
 grub-bios-setup \
 	--verbose \
 	--skip-fs-probe \
 	--directory="${GDEST}/_${GTYPE}.boot/grub/${GTYPE}" \
-	--core-image="rescue.img" \
+	--core-image="${GTYPE/%-pc}.img" \
 	${GINST_DO}							|| exit_summary 1
 mount-robust -u ${GINST_DO}${GPSEP}${GPART}				#>>> || exit 1
 ${RM} ${GDEST}/.mount-mbr						|| exit 1
