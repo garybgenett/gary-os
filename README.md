@@ -2084,8 +2084,13 @@ Everything needed to perform these steps is in the [Repository] or the
   * `cd coding/gary-os`
   * `vi ./README.md`
     * [ ] Update links for [Contributions] patches
-    * [ ] [Versions] list in [Header](#welcome-to-garyos-gary-os)
+    * [ ] [Versions] list in [Header](#welcome-to-garyos)
     * [ ] [Versions] section and release notes
+        * `for FILE in coding/gary-os .setup .static; do [...]`
+        * `if [ ${FILE} == coding/gary-os ]; then LIST=""; fi`
+        * `if [ ${FILE} == .setup ]; then LIST="grub linux gentoo"; fi`
+        * `if [ ${FILE} == .static ]; then LIST=".bashrc .vimrc scripts/grub.sh scripts/qemu*"; fi`
+        * `(cd ${FILE}; vdiff -g $(sed -n "s|^$(basename ${FILE}): ||gp" [...]/_builds/_gary-os/_commit) ${LIST})`
     * [ ] [Kernel], [Rootfs] and [Boot] links
   * `make TOKN=[...] readme-github`
     * `make DOTEST=true readme`
@@ -2097,26 +2102,36 @@ Everything needed to perform these steps is in the [Repository] or the
 
 **Commit**
 
+**`Verify {`**
+
+  * `cat ./build/etc/issue ./build/etc/motd ./build/_commit`
+  * `for FILE in coding/gary-os .setup .static; do (cd ${FILE}; GIT_PAGER= git-list -n1); done`
+    * `(cd ./build/.gary-os; GIT_PAGER= git-list -n1)`
+  * `./scripts/qemu-minion.bsh [...]`
+    * `cd /.gary-os; GIT_PAGER= git log -n1; git status`
+    * `GIT_PAGER= git diff`
+
+**`}`**
+
   * `cd .setup/gentoo.gary-os`
+    * `make clean`
   * `(cd coding/gary-os; git-commit -m "Stamped v#.# release." ./README.md)`
-  * `make _publish_gitdir`
+    * `make _publish_gitdir`
     * `(cd _builds/.gary-os/.gary-os; GIT_PAGER= git-list -n1)`
+  * `make DOREDO=true DOMODS=true doit release`
+    * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.tiny.kernel 1`
+    * [x] **Verify()**
   * `make DOREDO=true doit release`
-    * `cat ./build/etc/issue ./build/etc/motd ./build/_commit`
-    * `for FILE in coding/gary-os .setup .static; do (cd ${FILE}; GIT_PAGER= git-list -n1); done`
-        * `(cd ./build/.gary-os; GIT_PAGER= git-list -n1)`
-    * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.kernel 1`
-        * `cd /.gary-os; GIT_PAGER= git log -n1; git status`
-        * `GIT_PAGER= git diff`
+    * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1`
+    * [x] **Verify()**
   * `make DOREDO=true P=_gary-os doit rootfs`
     * `(cd _builds; rm ./_gary-os.boot; ln _gary-os.working ./_gary-os.boot)`
         * `_sync boot`
-        * `./scripts/qemu-minion.bsh /dev/null 1`
-            * [x] PXE (uncomment variables)
-            * `cd /.gary-os; GIT_PAGER= git log -n1; git status`
-            * `GIT_PAGER= git diff`
-    * `make _publish_prep`
-        * `ll ./build/ ./build/_build ./build/.gary-os-*`
+    * `./scripts/qemu-minion.bsh /dev/null 1`
+        * [x] PXE (uncomment variables)
+    * [x] **Verify()**
+  * `make _publish_prep`
+    * `ll ./build/ ./build/_build ./build/.gary-os-*`
   * `(cd _builds; rsync -L ./_gary-os.working/.gary-os-*/ ./_gary-os)`
     * `(cd _builds/_gary-os; git-backup <funtoo commit>.#; GIT_PAGER= git-list -n1)`
     * `(cd .setup; vi gentoo/_release; git-commit -m "Published v#.# release." gentoo/_release)`
