@@ -3,6 +3,9 @@ source ${HOME}/.bashrc
 ################################################################################
 
 declare GRUB_DIR="${GRUB_DIR:-/.g/_data/zactive/.setup/grub}"
+if [[ ! -d ${GRUB_DIR} ]]; then
+	GRUB_DIR="$(realpath $(dirname ${_SELF})/../grub)"
+fi
 
 ################################################################################
 
@@ -57,11 +60,17 @@ All arguments must be used in the order specified.
 [...]	optional
 ||	select one option from the list
 <0-9+>	any numerical value
+
+The menu file directory is expected at "../grub" in relation to the script.
+It can be specified manually using the "\$GRUB_DIR" environment variable.
 _EOF_
 	echo -en "${HEADER}\n"
 }
 
 if [[ ! -d ${GDEST} ]]; then
+	print_usage
+	exit 1
+elif [[ ! -d ${GRUB_DIR} ]]; then
 	print_usage
 	exit 1
 fi
