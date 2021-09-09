@@ -12,7 +12,7 @@
 
 | [Documentation] | |
 |:---        |:---
-| [Overview] | [Quick Start] / [Requirements] / [Support]
+| [Overview] | [Quick Start] / [Requirements] / [Support] / [Issues]
 | [Booting]  | [Linux] / [Windows] / [GRUB] / [EFI] / [PXE] / [Virtual]
 | [Running]  | [Networking] / [GUI] / [Update] / [Filesystem] / [Minimal]
 | [Building] | [Compile] / [Manage] / [Image] / [Install]
@@ -123,6 +123,34 @@ you are using GaryOS, please contact the author directly at:
 
 The author will also take you out on the town if you schedule time to geek out
 with them in the Seattle area.
+
+### Issues #####################################################################
+[Issues]: #issues
+
+This is a list of current known issues.  Ideally, this section would be empty.
+
+**GNU GRUB EFI "out of memory"**
+
+On some systems, [GNU GRUB] produces an "out of memory" error when booting the
+[Kernel] with EFI.  Research into this is ongoing, and documented in the [grub
+rationale file] in [gentoo/overlay/].  The version of GNU GRUB in GaryOS
+(starting in [v6.0]) uses a custom [grub patch] to provide better debug tracing
+for when this occurs.
+
+  [grub rationale file]: https://github.com/garybgenett/gary-os/blob/master/gentoo/overlay/sys-boot/grub/.rationale
+  [grub patch]: https://github.com/garybgenett/gary-os/blob/master/gentoo/overlay/sys-boot/grub/files-patches/linux_initrd_max_address.patch
+
+It is important to note that the [Kernel] is not actually causing the "out of
+memory" error, nor is the available memory actually being exhausted.  The issue
+is occurring during the allocation of memory chunks, and more information is
+needed to provide to the GNU GRUB development team, since this issue is not
+entirely unique to GaryOS.
+
+Instructions for gathering helpful debugging information are printed out when
+this error occurs using the [GRUB] [Boot] file, or the
+[grub/grub.menu.gary-os.cfg] file in [Linux].
+
+The workaround is to use the [Tiny] kernel.  See [Minimal] for details.
 
 --------------------------------------------------------------------------------
 
@@ -612,6 +640,7 @@ version of the [Kernel].
   * Storage or memory constraints (see [Requirements])
   * Faster transfer over a [PXE] network
   * Use as a [Filesystem] [Loader] only
+  * [GNU GRUB] EFI "out of memory" issue (see [Issues])
 
 For these situations, the "minified" [Tiny] version may be used in place of
 [Kernel].  The [Boot] file is already configured to locate it as
