@@ -651,8 +651,9 @@ function prepare_config_issue {
 		{ [[ -z ${COMMIT} ]] || [[ ! -d ${_G_REPO} ]]; } ||
 		${_MOD};
 	}; then
-		declare BEG="Some helpful notes"
-		declare END="Build system"
+#>>>		declare BEG="Some helpful notes"
+#>>>		declare END="Build system"
+		declare RPL="Happy Hacking"
 		FILE=" "
 #>>>		FILE+="\\\e[1;45;37m"
 		FILE+="\\\e[0;35m"
@@ -663,7 +664,8 @@ function prepare_config_issue {
 			FILE+="PLEASE NOTE THAT THIS BUILD HAS BEEN CUSTOMIZED AND IS NOT AN OFFICIAL RELEASE"
 		fi
 		FILE+="\\\e[0;37m"
-		${SED} -i "/${BEG}/,/${END}/c\\${FILE}"		${TARGET}/etc/issue	|| return 1
+#>>>		${SED} -i "/${BEG}/,/${END}/c\\${FILE}"		${TARGET}/etc/issue	|| return 1
+		${SED} -i "s|^(.*${RPL}.*)$|${FILE}\n\n\1|g"	${TARGET}/etc/issue	|| return 1
 	fi
 	if [[ ! -f ${TARGET}/usr/bin/startx ]]; then
 		${SED} -i "/startx/d"				${TARGET}/etc/issue	|| return 1
