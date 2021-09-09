@@ -2910,9 +2910,9 @@ function mount-zfs {
 			echo -en "${TOTAL} ($((${TOTAL}-${TOTALS[6]})))"
 			echo -en "\n"
 		elif ${SN}; then
-			${Z_LIST_INF/-t all/-t filesystem,volume} "${@}"
+			${Z_LIST_INF/-r -t all/-t filesystem,volume} "${@}"
 			echo -en "\n"
-			${Z_LIST_SIZ} "${@}"
+			${Z_LIST_SIZ/-r -t all/-t snapshot} "${@}"
 		else
 			${Z_LIST_INF/-t all/-t filesystem,volume} "${@}"
 			echo -en "\n"
@@ -2952,7 +2952,7 @@ function mount-zfs {
 	declare RO="false"
 	declare UN="false"
 	declare SL="false"
-	declare SN="false"; declare SN_ALL="false"; declare SN_SKP=""; declare SN_OPT="-s"
+	declare SN="false"; declare SN_DBG="false"; declare SN_ALL="false"; declare SN_SKP=""; declare SN_OPT="-s"
 	declare DEV=
 	declare DIR=
 	if [[ ${1} == -! ]]; then		IMPORT="false";	shift; fi
@@ -2961,6 +2961,7 @@ function mount-zfs {
 	if [[ ${1} == -u ]]; then		UN="true";	shift; fi; if ${UN}; then IMPORT="false"; fi
 	if [[ ${1} == -l ]]; then		SL="true";	shift; fi; if ${SL}; then IMPORT="false"; fi
 	if [[ ${1} == ${SN_OPT} ]]; then	SN="true";	shift; fi; if ${SN}; then IMPORT="false"; fi
+		if ${SN} && [[ ${1} == -d ]]; then		SN_DBG="true"; shift; fi
 		if ${SN} && [[ ${1} == -a ]]; then		SN_ALL="true"; shift; fi
 		if ${SN} && [[ ${1} == - ]]; then		SN_SKP="${1}"; shift; fi
 		if ${SN} && [[ ${1} == +([0-9]) ]]; then	ZFS_SNAPSHOTS="${1}"; shift; fi
@@ -3159,7 +3160,9 @@ function mount-zfs {
 		if [[ -z ${SN_SKP} ]]; then
 			if [[ ${DIR} == - ]]; then
 				echo -en "- Recursive Snapshot... ${ZPOOL}@${Z_DATE}\n"
-				${Z_SNAPSHOT} -r ${ZPOOL}@${Z_DATE}	|| return 1
+				if ! ${SN_DBG}; then
+					${Z_SNAPSHOT} -r ${ZPOOL}@${Z_DATE}	|| return 1
+				fi
 			else
 				for FILE in \
 					${ZPOOL} \
@@ -3167,7 +3170,9 @@ function mount-zfs {
 					${@} \
 				; do
 					echo -en "- Creating Snapshot... ${FILE}@${Z_DATE}\n"
-					${Z_SNAPSHOT} ${FILE}@${Z_DATE}	|| return 1
+					if ! ${SN_DBG}; then
+						${Z_SNAPSHOT} ${FILE}@${Z_DATE}	|| return 1
+					fi
 				done
 			fi
 		fi
@@ -3206,12 +3211,17 @@ function mount-zfs {
 					sort -n
 				); do
 					echo -en "- Destroying Snapshot... ${Z_SNAP}\n"
-					zfs destroy ${Z_SNAP}	|| return 1
+					if ! ${SN_DBG}; then
+						zfs destroy ${Z_SNAP}	|| return 1
+					fi
 				done
 			done
+			echo -en "\n"
+			zfs_pool_status ${Z_ITEMS[@]}
+		else
+			echo -en "\n"
+			zfs_pool_status ${ZPOOL} ${DIR} ${@}
 		fi
-		echo -en "\n"
-		zfs_pool_status ${Z_ITEMS[@]}
 		return 0
 	fi
 	if ${UN}; then
