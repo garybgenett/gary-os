@@ -1245,10 +1245,7 @@ if [[ ${1} == -r ]]; then
 		else ${RM}					${TARGET}/${CMTFIL}				|| EXIT 1
 	fi
 	if [[ ${1} != -! ]]; then
-		if [[ -f ${SETDIR}/.bashrc ]]
-		then ${RSYNC_U} --copy-links ${SETDIR}/.bashrc	${TARGET}${ARCDIR}/				|| EXIT 1
-		else ${RSYNC_U} --copy-links ${HOME}/.bashrc	${TARGET}${ARCDIR}/				|| EXIT 1
-		fi
+		${RSYNC_U} --copy-links ${SETDIR}/.bashrc	${TARGET}${ARCDIR}/				|| EXIT 1
 		${RSYNC_U} ${SETDIR}/${LINDIR}/			${TARGET}${ARCDIR}/${LINDIR}			|| EXIT 1
 		${RSYNC_U} ${SETDIR}/${FUNDIR}/			${TARGET}${ARCDIR}/${FUNDIR}			|| EXIT 1
 	fi
