@@ -1591,15 +1591,15 @@ function _release_grub {		#{doredo} #{dofast} #{dotest}
 		}; then
 			${RM}						${GRUB_DEST}*						|| return 1
 			${MKDIR}					${GRUB_DEST}						|| return 1
-			${HOME}/scripts/grub.sh				${GRUB_DEST}						|| return 1
 		fi
+		${HOME}/scripts/grub.sh					${GRUB_DEST}						|| return 1
 		if {
 			${DOTEST} ||
 			[[ ! -x $(which qemu-img) ]] ||
 			[[ ! -x $(which qemu-nbd) ]];
 		}; then
 			${HOME}/scripts/grub.sh				${GRUB_DEST} -m						|| return 1
-			DOTEST="false" release_grub_loopfile		${GRUB_DEST}						|| return 1
+			DOTEST="${DOTEST}" release_grub_loopfile	${GRUB_DEST}						|| return 1
 			${HOME}/scripts/grub.sh				${GRUB_DEST} -u						|| return 1
 		fi
 		if {
