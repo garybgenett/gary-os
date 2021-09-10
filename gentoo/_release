@@ -1511,33 +1511,36 @@ function _release_kernel {		#{doredo}
 
 ########################################
 
+declare MOUNT_MBR=".mount-mbr"
+declare MOUNT_EFI=".mount-efi"
+
 function release_grub_loopfile {	#>>>{dotest}
 	declare GRUB_DEST="${1}" && shift
 	declare GRUB_LEFI="${1}" && shift
 	declare GRUB_LOOP="${1}" && shift
 	if ${DOTEST}; then
-		${MKDIR}						${GRUB_DEST}/.mount-loop-efi/${_TITLE}			|| return 1
-		if ! ${RSYNC_W} --copy-links ${_RAMFS}.kernel		${GRUB_DEST}/.mount-loop-efi/${_TITLE}/${_TITLE}.efi	; then
-			${RM}						${GRUB_DEST}/.mount-loop-efi/${_TITLE}/${_TITLE}.efi	|| return 1
-			${RSYNC_W} --copy-links ${_RAMFS}.kernel	${GRUB_DEST}/.mount-loop-efi/${_TITLE}/${_TITLE}.efi	|| return 1
+		${MKDIR}						${GRUB_DEST}/${MOUNT_EFI}/${_TITLE}			|| return 1
+		if ! ${RSYNC_W} --copy-links ${_RAMFS}.kernel		${GRUB_DEST}/${MOUNT_EFI}/${_TITLE}/${_TITLE}.efi	; then
+			${RM}						${GRUB_DEST}/${MOUNT_EFI}/${_TITLE}/${_TITLE}.efi	|| return 1
+			${RSYNC_W} --copy-links ${_RAMFS}.kernel	${GRUB_DEST}/${MOUNT_EFI}/${_TITLE}/${_TITLE}.efi	|| return 1
 		fi
 	fi
-	${MKDIR}							${GRUB_DEST}/.mount-loop/${_TITLE}			|| return 1
-	${RSYNC_W} --copy-links ${GRUB_DEST}/${_TITLE}.grub.cfg		${GRUB_DEST}/.mount-loop/${_TITLE}/			|| return 1
-	if ! ${RSYNC_W} --copy-links ${_RAMFS}.kernel			${GRUB_DEST}/.mount-loop/${_TITLE}/${_TITLE}.kernel	; then
-		if [[ -f						${GRUB_DEST}/.mount-loop/${_TITLE}/${_TITLE}.rootfs	]]; then
-			${RM}						${GRUB_DEST}/.mount-loop/${_TITLE}/${_TITLE}.rootfs	|| return 1
-			${RSYNC_W} --copy-links ${_RAMFS}.kernel	${GRUB_DEST}/.mount-loop/${_TITLE}/${_TITLE}.kernel	|| return 1
+	${MKDIR}							${GRUB_DEST}/${MOUNT_MBR}/${_TITLE}			|| return 1
+	${RSYNC_W} --copy-links ${GRUB_DEST}/${_TITLE}.grub.cfg		${GRUB_DEST}/${MOUNT_MBR}/${_TITLE}/			|| return 1
+	if ! ${RSYNC_W} --copy-links ${_RAMFS}.kernel			${GRUB_DEST}/${MOUNT_MBR}/${_TITLE}/${_TITLE}.kernel	; then
+		if [[ -f						${GRUB_DEST}/${MOUNT_MBR}/${_TITLE}/${_TITLE}.rootfs	]]; then
+			${RM}						${GRUB_DEST}/${MOUNT_MBR}/${_TITLE}/${_TITLE}.rootfs	|| return 1
+			${RSYNC_W} --copy-links ${_RAMFS}.kernel	${GRUB_DEST}/${MOUNT_MBR}/${_TITLE}/${_TITLE}.kernel	|| return 1
 		else														return 1
 	fi; fi
 	if {
 		${DOTEST} &&
 		[[ -f ${_RAMFS}.rootfs ]];
 	}; then
-		${RSYNC_W} --copy-links ${_RAMFS}.rootfs		${GRUB_DEST}/.mount-loop/${_TITLE}/${_TITLE}.rootfs	|| return 1
-	else	${RM}							${GRUB_DEST}/.mount-loop/${_TITLE}/${_TITLE}.rootfs	|| return 1
+		${RSYNC_W} --copy-links ${_RAMFS}.rootfs		${GRUB_DEST}/${MOUNT_MBR}/${_TITLE}/${_TITLE}.rootfs	|| return 1
+	else	${RM}							${GRUB_DEST}/${MOUNT_MBR}/${_TITLE}/${_TITLE}.rootfs	|| return 1
 	fi
-	${LL} --recursive						${GRUB_DEST}/.mount-loop{-efi,}				|| return 1
+	${LL} --recursive						${GRUB_DEST}/{${MOUNT_MBR},${MOUNT_EFI}}		|| return 1
 	return 0
 }
 
@@ -1551,9 +1554,9 @@ function release_grub_qcow_mount {	#>>>{dotest}
 	sleep 1
 	if ! ${DOTEST}; then
 		partx -t gpt -a		${GRUB_LOOP/%p[0-9]}					#>>> || return 1
-		${MKDIR}		${GRUB_DEST}/.mount-loop{-efi,}				|| return 1
-		mount			${GRUB_LEFI} ${GRUB_DEST}/.mount-loop-efi		|| return 1
-		mount -o nonempty	${GRUB_LOOP} ${GRUB_DEST}/.mount-loop			|| return 1
+		${MKDIR}		${GRUB_DEST}/{${MOUNT_MBR},${MOUNT_EFI}}		|| return 1
+		mount -o nonempty	${GRUB_LOOP} ${GRUB_DEST}/${MOUNT_MBR}			|| return 1
+		mount			${GRUB_LEFI} ${GRUB_DEST}/${MOUNT_EFI}			|| return 1
 	fi
 	return 0
 }
@@ -1563,12 +1566,12 @@ function release_grub_qcow_unmount {	#>>>{dotest}
 	declare GRUB_LEFI="${1}" && shift
 	declare GRUB_LOOP="${1}" && shift
 	if ! ${DOTEST}; then
-		umount	${GRUB_LEFI}			|| return 1
-		umount	${GRUB_LOOP}			|| return 1
+		umount	${GRUB_LEFI}					|| return 1
+		umount	${GRUB_LOOP}					|| return 1
 	fi
-	qemu-nbd -d	${GRUB_LOOP/%p[0-9]}		|| return 1
+	qemu-nbd -d	${GRUB_LOOP/%p[0-9]}				|| return 1
 	sleep 1
-	${RM}		${GRUB_DEST}/.mount-loop{-efi,}	|| return 1
+	${RM}		${GRUB_DEST}/{${MOUNT_MBR},${MOUNT_EFI}}	|| return 1
 	return 0
 }
 
