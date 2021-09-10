@@ -691,8 +691,8 @@ grub-install \
 	--boot-directory="${GDEST}/_${ETYPE}.boot" \
 	--efi-directory="${DO_MOUNT}" \
 	${GINST_DO}								|| exit_summary 1
-${MKDIR} ${GDEST}/_${_ETYPE}.boot/$(dirname ${FILE})				|| exit 1
-${RSYNC_C} ${DO_MOUNT}/${FILE} ${GDEST}/_${_ETYPE}.boot/${FILE}			|| exit 1
+${MKDIR} ${GDEST}/_${ETYPE}.boot/$(dirname ${FILE})				|| exit 1
+${RSYNC_C} ${DO_MOUNT}/${FILE} ${GDEST}/_${ETYPE}.boot/${FILE}			|| exit 1
 ${RSYNC_C} ${GDEST}/${ETYPE/%-efi}.efi ${DO_MOUNT}/${FILE}			|| exit 1
 mount-robust -u ${GINST_DO}${GPSEP}${GPEFI}					|| exit 1
 ${RM} ${DO_MOUNT}								|| exit 1
