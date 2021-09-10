@@ -231,26 +231,32 @@ Steps for creating the bootable USB drive are in [GRUB].
 ### GRUB #######################################################################
 [GRUB]: #grub
 
-The GaryOS [Boot] file contains everything needed to create and update GRUB on
-both hard drives and USB drives.  The core of the tooling is the
+The GaryOS [Boot] file contains everything needed to create and update [GNU
+GRUB] on both hard drives and USB drives.  The core of the tooling is the
 [scripts/grub.sh] script.
 
 Once a drive has been set up, place the GaryOS [Kernel] in the 'gary-os'
 directory as 'gary-os.kernel'.  The 'gary-os.grub.cfg' file can also be placed
 in that directory and edited as needed.
 
+  ```
+  /gary-os/gary-os.grub.cfg
+  /gary-os/gary-os.kernel
+  ```
+
 The drive can be booted using the BIOS or EFI boot menu on any computer that
 supports booting from removeable media.  It provides a menu which auto-selects
 the most advanced option available.  This menu can be updated at any time using
 the [scripts/grub.sh] script within GaryOS, following the directions in
-"GNU/Linux" below.
+"GNU/Linux" below.  The 'gary-os.grub.cfg' file can be updated anytime with the
+absolute latest version at [grub/grub.menu.gary-os.cfg].
 
 **GNU/Linux**
 
 The [scripts/grub.sh] script can be run directly from the command line.  Running
-it without any arguments will display the usage documentation.  The latest
-version is always [scripts/grub.sh].  However, the version in the [Boot] file is
-going to be better tested and supported.
+it without any arguments will display the usage documentation.  It expects to be
+run from within the GaryOS [Repository], since it requires the menu files in
+[grub/].
 
 Be advised that this script creates a brand new partition table on whatever
 drive is targeted.  Only use this on a brand new or empty device.  The update
