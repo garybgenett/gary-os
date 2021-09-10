@@ -546,10 +546,11 @@ fi
 
 ################################################################################
 
-${MKDIR} ${GDEST}/_${GTYPE}				|| exit 1
-${RSYNC_U} ${GMODS}/ ${GDEST}/_${GTYPE}/		|| exit 1
-${MKDIR} ${GDEST}/_${ETYPE}				|| exit 1
-${RSYNC_U} ${GRUBD}/${ETYPE}/ ${GDEST}/_${ETYPE}	|| exit 1
+grub-mkimage --version 2>&1 >${GDEST}/.version
+${MKDIR} ${GDEST}/_${GTYPE}			|| exit 1
+${RSYNC_U} ${GMODS}/ ${GDEST}/_${GTYPE}		|| exit 1
+${MKDIR} ${GDEST}/_${ETYPE}			|| exit 1
+${RSYNC_U} ${EMODS}/ ${GDEST}/_${ETYPE}		|| exit 1
 
 ########################################
 
