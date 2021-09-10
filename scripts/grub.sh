@@ -577,21 +577,21 @@ function custom_menu {
 	DO_MOUNT="${GDEST}/.mount-menu"
 	${MKDIR} ${DO_MOUNT}					|| return 1
 	if [[ -b ${DEV}${GPSEP}${GPART} ]]; then
-		mount-robust -u ${DEV}${GPSEP}${GPART}		#>>> || return 1
+		mount-robust -u ${DEV}${GPSEP}${GPART}		|| return 1
 	fi
 	mount-robust ${DEV}${GPSEP}${GPART} ${DO_MOUNT}		|| return 1
 	${MKDIR} ${DO_MOUNT}$(dirname ${GMENU_FILE})		|| return 1
 	echo -en "${GMENU_DATA}" >${DO_MOUNT}${GMENU_FILE}	|| return 1
-	mount-robust -u ${DEV}${GPSEP}${GPART}			#>>> || return 1
+	mount-robust -u ${DEV}${GPSEP}${GPART}			|| return 1
 	${RM} ${DO_MOUNT}					|| return 1
 	return 0
 }
 
-if [[ -b ${GINST_DO} ]]; then
+if [[ -b ${GINST} ]]; then
 	if ${GFDSK}; then
-		partition_disk ${GINST_DO}			|| exit 1
+		partition_disk ${GINST}				|| exit 1
 	fi
-	custom_menu ${GINST_DO}					|| exit 1
+	custom_menu ${GINST}					|| exit 1
 else
 	declare PART_DO="false"
 	if [[ ! -f ${GINST} ]]; then
@@ -606,6 +606,7 @@ else
 	fi
 	losetup -d ${LOOP_DEVICE}				#>>> || exit 1
 	losetup -v -P ${LOOP_DEVICE} ${GINST}			|| exit 1
+	partx -t gpt -a ${LOOP_DEVICE}				#>>> || exit 1
 	GINST_DO="${LOOP_DEVICE}"
 	if ${PART_DO}; then
 		partition_disk ${GINST_DO}			|| exit 1
@@ -674,7 +675,7 @@ grub-bios-setup \
 	--directory="${GDEST}/_${GTYPE}.boot/grub/${GTYPE}" \
 	--core-image="${GTYPE/%-pc}.img" \
 	${GINST_DO}								|| exit_summary 1
-mount-robust -u ${GINST_DO}${GPSEP}${GPART}					#>>> || exit 1
+mount-robust -u ${GINST_DO}${GPSEP}${GPART}					|| exit 1
 ${RM} ${DO_MOUNT}								|| exit 1
 
 DO_MOUNT="${GDEST}/.mount-efi"
@@ -700,7 +701,9 @@ ${RM} ${DO_MOUNT}								|| exit 1
 
 ########################################
 
-losetup -d ${LOOP_DEVICE} #>>> || exit 1
+if [[ -f ${GINST} ]]; then
+	losetup -d ${LOOP_DEVICE} #>>> || exit 1
+fi
 
 exit_summary 0
 
