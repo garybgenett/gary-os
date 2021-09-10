@@ -619,7 +619,7 @@ is selected, loaded into memory, and booted.  The default is to use the one
 packed into the [Kernel].  GaryOS has the capability to load a different
 filesystem.
 
-  * Located on a [GRUB] USB drive
+  * Located on a [GRUB] USB drive or other storage
   * From a [Linux] or [EFI] configuration (if the EFI partition is large enough)
   * Using [PXE]
 
@@ -635,11 +635,12 @@ external filesystem.
   | shmem_size | Initial amount of memory reserved for the filesystem
   | groot      | Disk or partition that the [Rootfs] resides on
   | groot_file | Path to the [Rootfs] (default: /gary-os/gary-os.rootfs)
-  | groot_hint | Provide a hint from GRUB to [Loader], in case of error
+  | groot_hint | Provide a hint to [Loader] (used by [Boot]), in case of error
 
 [Loader] goes into each of these in much more detail.  GaryOS provides example
-defaults in the [GRUB] configuration files.  Generally, only 'shmem_size' and
-'groot' are required to load an external [Rootfs].
+defaults in the [Boot] configuration file, sourced from
+[grub/grub.menu.gary-os.cfg].  Generally, only 'shmem_size' and 'groot' are
+required to load an external [Image].
 
 The 'shmem_size' value for the pre-made GaryOS [Rootfs] should be at least
 '3072m', or '3g' if that format is preferred.  The [Boot] file is already
