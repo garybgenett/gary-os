@@ -221,7 +221,7 @@ Installation for Windows systems is not complicated, but does involve a few
 steps.  Microsoft consistently changes the way their bootloader works, and what
 items are supported.  The [v3.0] version of GaryOS was the last one to support
 direct modification of the Windows 7/8 bootloader.  In Windows 10, Microsoft
-removed support for the application type required to boot the GaryOS GRUB
+removed support for the application type required to boot the GaryOS [GRUB]
 image.  As such, using a USB drive is the safest and easiest method.  There are
 alternatives to the Windows bootloader that can dual-boot Windows and
 [GNU/Linux], but they are not tested and no support is provided.
