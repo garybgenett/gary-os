@@ -347,15 +347,15 @@ GaryOS.  On a [GNU/Linux] system, [QEMU] is high-performance and
 low-complexity, and is what the author uses for all development and testing of
 GaryOS (see [Checklist]).  However, it is not well suited for other platforms,
 such as Windows, and [VirtualBox] is the best choice there.  VirtualBox also
-runs on GNU/Linux, if desired.
+runs on GNU/Linux, if desired, but it is not included in GaryOS.
 
 On systems with only 4GB of memory, virtualization will push system resources to
 the limit.  Windows will exhaust them completely.  Using [GRUB] to create a USB
 drive is a better idea in that case.
 
-The instructions below use 3072MB for memory, which is the absolute minimum.
-Ideally, this should be 4096MB or greater to best emulate an actual system which
-meets the [Requirements].
+The instructions below use 3072MB (3GB) for memory, which is the absolute
+minimum.  Ideally, this should be 4096MB (4GB) or greater to best emulate an
+actual system which meets the [Requirements].
 
 **QEMU**
 
@@ -389,7 +389,7 @@ Once [VirtualBox] is installed, create a new virtual machine.
   | Memory            | 3072 (or greater)
   | Virtual disk file | loopfile.qcow2 (from [Boot] archive)
 
-This new virtual machine will run GaryOS [GRUB] and boot into the [Kernel].
+This new virtual machine will run GaryOS [GRUB] and boot the [Kernel].
 
   [VirtualBox]: https://www.virtualbox.org
 
