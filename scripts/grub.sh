@@ -183,6 +183,7 @@ fi
 
 declare GMENU_NAME="${_BASE}.grub.cfg"
 declare GMENU_FILE="/${_BASE}/${GMENU_NAME}"
+declare GMENU_CUST="${_NAME} (Custom)"
 declare GMENU_DATA="\
 ################################################################################
 # GaryOS Grub Configuration
@@ -552,9 +553,10 @@ ${RSYNC_U} ${GRUBD}/${ETYPE}/ ${GDEST}/_${ETYPE}	|| exit 1
 
 ########################################
 
-echo -en "${GMENU_DATA}"	>${GDEST}/${GMENU_NAME}	|| exit 1
-echo -n "${BCDEDIT}"		>${GDEST}/bcdedit.bat	|| exit 1
-unix2dos			${GDEST}/bcdedit.bat	|| exit 1
+echo -en "${GMENU_DATA}"		>${GDEST}/${GMENU_NAME}	|| exit 1
+${SED} -i "s|${_NAME}|${GMENU_CUST}|g"	${GDEST}/${GMENU_NAME}	|| exit 1
+echo -n "${BCDEDIT}"			>${GDEST}/bcdedit.bat	|| exit 1
+unix2dos				${GDEST}/bcdedit.bat	|| exit 1
 
 ########################################
 
@@ -577,10 +579,8 @@ function custom_menu {
 		mount-robust -u ${DEV}${GPSEP}${GPART}		#>>> || return 1
 	fi
 	mount-robust ${DEV}${GPSEP}${GPART} ${DO_MOUNT}		|| return 1
-	if [[ ! -f ${DO_MOUNT}${GMENU_FILE} ]]; then
-		${MKDIR} ${DO_MOUNT}$(dirname ${GMENU_FILE})	|| return 1
-		echo -en "${GMENU_DATA}" >${DO_MOUNT}${GMENU_FILE}	|| return 1
-	fi
+	${MKDIR} ${DO_MOUNT}$(dirname ${GMENU_FILE})		|| return 1
+	echo -en "${GMENU_DATA}" >${DO_MOUNT}${GMENU_FILE}	|| return 1
 	mount-robust -u ${DEV}${GPSEP}${GPART}			#>>> || return 1
 	${RM} ${DO_MOUNT}					|| return 1
 	return 0
