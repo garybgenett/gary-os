@@ -143,9 +143,11 @@ for when this occurs.
 
 It is important to note that the [Kernel] is not actually causing the "out of
 memory" error, nor is the available memory actually being exhausted.  The issue
-is occurring during the allocation of memory chunks, and more information is
+is occurring during the allocation of memory blocks, and more information is
 needed to provide to the GNU GRUB development team, since this issue is not
-entirely unique to GaryOS.
+entirely unique to GaryOS.  Memory allocation is locked during this portion of
+the boot process, so debug statements can not be printed, which makes
+troubleshooting very difficult.
 
 Instructions for gathering helpful debugging information are printed out when
 this error occurs using the [GRUB] [Boot] file, or the
