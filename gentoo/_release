@@ -1578,6 +1578,7 @@ function release_grub_qcow_unmount {	#>>>{dotest}
 function _release_grub {		#{doredo} #{dofast} #{dotest}
 	#note: tell "grub.sh" where the "grub" menu files are
 	export GRUB_DIR="${SETDIR}/${GRBDIR}"
+	declare DEF_DEV="/dev/sda1"
 	declare GRUB_DEST="${_RAMFS}.grub"
 	declare GRUB_LMBR="/dev/nbd9p1"
 	declare GRUB_LEFI="/dev/nbd9p3"
@@ -1621,6 +1622,7 @@ function _release_grub {		#{doredo} #{dofast} #{dotest}
 				DOTEST="true" release_grub_qcow_mount	${GRUB_DEST} ${GRUB_LMBR} ${GRUB_LEFI}			|| return 1
 #>>>				${SETDIR}/scripts/grub.sh		${GRUB_DEST} -f ${GRUB_LEFI}				|| return 1
 				${SETDIR}/scripts/grub.sh		${GRUB_DEST} -f ${GRUB_LMBR}				|| return 1
+				${SED} -i "s|${GRUB_LMBR}|${DEF_DEV}|g"	${GRUB_LMBR}/${_TITLE}/${_TITLE}.grub.cfg		|| return 1
 				DOTEST="true" release_grub_qcow_unmount	${GRUB_DEST} ${GRUB_LEFI} ${GRUB_LEFI}			|| return 1
 			fi
 			DOTEST="false" release_grub_qcow_mount		${GRUB_DEST} ${GRUB_LMBR} ${GRUB_LEFI}			|| return 1
