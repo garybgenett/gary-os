@@ -168,8 +168,8 @@ fi
 ################################################################################
 
 declare GTYPE="i386-pc"
-declare GRUBD="/usr/lib/grub"
 declare ETYPE="x86_64-efi"
+declare GRUBD="/usr/lib/grub"
 declare GMODS="${GRUBD}/${GTYPE}"
 declare EMODS="${GRUBD}/${ETYPE}"
 
@@ -673,6 +673,7 @@ mount-robust -u ${GINST_DO}${GPSEP}${GPART}					#>>> || exit 1
 ${RM} ${DO_MOUNT}								|| exit 1
 
 DO_MOUNT="${GDEST}/.mount-efi"
+FILE="EFI/BOOT/BOOTX64.EFI"
 ${MKDIR} ${DO_MOUNT}								|| exit 1
 if [[ -b ${GINST_DO}${GPSEP}${GPEFI} ]]; then
 	mount-robust -u ${GINST_DO}${GPSEP}${GPEFI}				|| exit 1
@@ -688,8 +689,9 @@ grub-install \
 	--boot-directory="${GDEST}/_${ETYPE}.boot" \
 	--efi-directory="${DO_MOUNT}" \
 	${GINST_DO}								|| exit_summary 1
-${MKDIR} ${DO_MOUNT}/EFI/BOOT							|| exit 1
-${RSYNC_C} ${GDEST}/${ETYPE/%-efi}.efi ${DST}/BOOTX64.EFI			|| exit 1
+${MKDIR} ${GDEST}/_${_ETYPE}.boot/$(dirname ${FILE})				|| exit 1
+${RSYNC_C} ${DO_MOUNT}/${FILE} ${GDEST}/_${_ETYPE}.boot/${FILE}			|| exit 1
+${RSYNC_C} ${GDEST}/${ETYPE/%-efi}.efi ${DO_MOUNT}/${FILE}			|| exit 1
 mount-robust -u ${GINST_DO}${GPSEP}${GPEFI}					|| exit 1
 ${RM} ${DO_MOUNT}								|| exit 1
 
