@@ -167,10 +167,11 @@ fi
 
 ################################################################################
 
-declare GEFIS="x86_64-efi"
 declare GTYPE="i386-pc"
 declare GRUBD="/usr/lib/grub"
+declare ETYPE="x86_64-efi"
 declare GMODS="${GRUBD}/${GTYPE}"
+declare EMODS="${GRUBD}/${ETYPE}"
 
 declare GCDEV="${GINST}${GPSEP}${GPART}"
 if [[ ${GINST} == ${GIDEF} ]]; then
@@ -226,7 +227,7 @@ if not exist %BCDFILE% (goto create) else (goto delete)
 	mountvol y: /s
 	mkdir y:\\${_BASE}
 	copy /y /v %CURDIR%\\${GMENU_NAME} y:\\${_BASE}\\${GMENU_NAME}
-	copy /y /v %CURDIR%\\x86_64.efi y:\\${_BASE}\\${_BASE}.efi
+	copy /y /v %CURDIR%\\${ETYPE/%-efi}.efi y:\\${_BASE}\\${_BASE}.efi
 	goto end
 :delete
 	set /p GUID=<%BCDFILE%
@@ -546,10 +547,8 @@ fi
 
 ${MKDIR} ${GDEST}/_${GTYPE}				|| exit 1
 ${RSYNC_U} ${GMODS}/ ${GDEST}/_${GTYPE}/		|| exit 1
-for TYPE in ${GEFIS}; do
-	${MKDIR} ${GDEST}/_${TYPE}			|| exit 1
-	${RSYNC_U} ${GRUBD}/${TYPE}/ ${GDEST}/_${TYPE}	|| exit 1
-done
+${MKDIR} ${GDEST}/_${ETYPE}				|| exit 1
+${RSYNC_U} ${GRUBD}/${ETYPE}/ ${GDEST}/_${ETYPE}	|| exit 1
 
 ########################################
 
@@ -630,21 +629,19 @@ grub-mkimage -v \
 	-m ${GDEST}/_${GTYPE}.tar.tar \
 	${MODULES_CORE}						|| exit_summary 1
 
-for TYPE in ${GEFIS}; do
-	FILE="${GDEST}/${TYPE}.tar/boot/grub"
-	${MKDIR} ${FILE}/${TYPE}				|| exit 1
-	${RSYNC_U} ${GRUBD}/${TYPE}/ ${FILE}/${TYPE}		|| exit 1
-	${RSYNC_U} ${GDEST}/${GMENU_NAME} ${FILE}/grub.cfg	|| exit 1
-	FILE="${GDEST}/${TYPE}.tar"
-	(cd ${FILE} && tar -cvv -f ${FILE}.tar *)		|| exit 1
-	grub-mkimage -v \
-		-C xz \
-		-O ${TYPE} \
-		-d ${GRUBD}/${TYPE} \
-		-o ${GDEST}/${TYPE/%-efi}.efi \
-		-m ${GDEST}/_${TYPE}.tar.tar \
-		${MODULES_UEFI}					|| exit_summary 1
-done
+FILE="${GDEST}/${ETYPE}.tar/boot/grub"
+${MKDIR} ${FILE}/${ETYPE}					|| exit 1
+${RSYNC_U} ${GRUBD}/${ETYPE}/ ${FILE}/${ETYPE}			|| exit 1
+${RSYNC_U} ${GDEST}/${GMENU_NAME} ${FILE}/grub.cfg		|| exit 1
+FILE="${GDEST}/${ETYPE}.tar"
+(cd ${FILE} && tar -cvv -f ${FILE}.tar *)			|| exit 1
+grub-mkimage -v \
+	-C xz \
+	-O ${ETYPE} \
+	-d ${EMODS} \
+	-o ${GDEST}/${ETYPE/%-efi}.efi \
+	-m ${GDEST}/_${ETYPE}.tar.tar \
+	${MODULES_UEFI}						|| exit_summary 1
 
 ${RM} ${GDEST}/*.tar.tar					|| exit 1
 
@@ -675,40 +672,26 @@ grub-bios-setup \
 mount-robust -u ${GINST_DO}${GPSEP}${GPART}					#>>> || exit 1
 ${RM} ${DO_MOUNT}								|| exit 1
 
+DO_MOUNT="${GDEST}/.mount-efi"
+${MKDIR} ${DO_MOUNT}								|| exit 1
 if [[ -b ${GINST_DO}${GPSEP}${GPEFI} ]]; then
-	function efi_cp {
-		declare SRC="${1}"; shift
-		declare DST="${1}"; shift
-		if [[ ${SRC} == ${GDEST}/x86_64.efi ]]; then
-			${RSYNC_C} ${SRC} ${DST}/BOOTX64.EFI			|| exit 1
-		fi
-		return 0
-	}
-	DO_MOUNT="${GDEST}/.mount-efi"
-	${MKDIR} ${DO_MOUNT}							|| exit 1
-	if [[ -b ${GINST_DO}${GPSEP}${GPEFI} ]]; then
-		mount-robust -u ${GINST_DO}${GPSEP}${GPEFI}			|| exit 1
-	fi
-	mount-robust ${GINST_DO}${GPSEP}${GPEFI} ${DO_MOUNT}			|| exit 1
-	${MKDIR} ${DO_MOUNT}							|| exit 1
-	for TYPE in ${GEFIS}; do
-		FILE="${GDEST}/${TYPE/%-efi}.efi"
-		${RSYNC_U} ${FILE} ${GDEST}/_${TYPE}/core.efi			|| exit 1
-		grub-install \
-			--verbose \
-			--removable \
-			--skip-fs-probe \
-			--target="${TYPE}" \
-			--directory="${GDEST}/_${TYPE}" \
-			--boot-directory="${GDEST}/_${TYPE}.boot" \
-			--efi-directory="${DO_MOUNT}" \
-			${GINST_DO}						|| exit_summary 1
-		${MKDIR} ${DO_MOUNT}/EFI/BOOT					|| exit 1
-		efi_cp ${FILE} ${DO_MOUNT}/EFI/BOOT				|| exit 1
-		mount-robust -u ${GINST_DO}${GPSEP}${GPEFI}			|| exit 1
-	done
-	${RM} ${DO_MOUNT}							|| exit 1
+	mount-robust -u ${GINST_DO}${GPSEP}${GPEFI}				|| exit 1
 fi
+mount-robust ${GINST_DO}${GPSEP}${GPEFI} ${DO_MOUNT}				|| exit 1
+${RSYNC_U} ${GDEST}/${ETYPE/%-efi}.efi ${GDEST}/_${ETYPE}/core.efi		|| exit 1
+grub-install \
+	--verbose \
+	--removable \
+	--skip-fs-probe \
+	--target="${ETYPE}" \
+	--directory="${GDEST}/_${ETYPE}" \
+	--boot-directory="${GDEST}/_${ETYPE}.boot" \
+	--efi-directory="${DO_MOUNT}" \
+	${GINST_DO}								|| exit_summary 1
+${MKDIR} ${DO_MOUNT}/EFI/BOOT							|| exit 1
+${RSYNC_C} ${GDEST}/${ETYPE/%-efi}.efi ${DST}/BOOTX64.EFI			|| exit 1
+mount-robust -u ${GINST_DO}${GPSEP}${GPEFI}					|| exit 1
+${RM} ${DO_MOUNT}								|| exit 1
 
 ########################################
 
