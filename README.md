@@ -319,15 +319,15 @@ used in labs or environments where centralized management of infrastructure is
 critical.
 
 Both the GaryOS [Kernel] and the GRUB 'x86_64.efi' file in [Boot] (see [GRUB])
-can be loaded directly from PXE.  The GRUB image will automatically select and
+can be loaded directly from PXE.  The [Boot] image will automatically select and
 load GaryOS from the server, and will also pass any additional boot parameters
 to the [Linux Kernel] directly from the PXE server configuration.
 
 DHCPd and TFTPd are included, so GaryOS can also act as the PXE server.  An
-example DHCPd configuration is below.  GRUB must be used as the 'filename' in
-order to pass Linux kernel parameters to GaryOS via 'extensions-path'.
-Otherwise, the GaryOS kernel can be used directly as 'filename' without any
-other options.
+example DHCPd configuration is below.  The 'x86_64.efi' image must be used as
+the 'filename' in order to pass Linux kernel parameters to GaryOS via
+'extensions-path'.  Otherwise, the GaryOS kernel can be used directly as
+'filename' without any other options.
 
   ```
   next-server             0.0.0.0;
