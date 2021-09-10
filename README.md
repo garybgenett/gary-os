@@ -553,7 +553,7 @@ just like a normal installation.
   1. Set up [Networking]
   2. Increase the size of the filesystem
   3. Use 'make unpack' to install necessary directories
-  4. Do whatever [Portage] 'emerge' or other commands that are desired
+  4. Run whatever [Portage] 'emerge' or other commands that are desired
 
 It is important that 'make unpack' is run before making updates to the system,
 since it may remove or replace added files if done afterward.
@@ -602,8 +602,13 @@ package will collect source distribution files, require filesystem space for
 building, install new files, and generate a binary package file.  It can add up
 fast.
 
-If a large number of packages are required, building an [Image] of an updated
-[Filesystem] or doing an [Install] are good alternatives.
+GaryOS maintains a packages repository on [SourceForge] for the latest version.
+All packages in [gentoo/sets/packages] are included, and match the settings in
+[Rootfs] ([Kernel] may need to re-compile some of them).  Installing these
+packages should be quick and inexpensive.
+
+If a large number of non-GaryOS packages are required, building an [Image] of an
+updated [Filesystem] or doing an [Install] are good alternatives.
 
 ### Filesystem #################################################################
 [Filesystem]: #filesystem
