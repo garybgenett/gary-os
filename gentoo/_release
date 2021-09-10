@@ -1618,9 +1618,7 @@ function _release_grub {		#{doredo} #{dofast} #{dotest}
 			}; then
 				qemu-img create -f qcow2		${GRUB_DEST}/loopfile.qcow2 ${QCOW_SIZE}		|| return 1
 				DOTEST="true" release_grub_qcow_mount	${GRUB_DEST} ${GRUB_LEFI} ${GRUB_LOOP}			|| return 1
-				${RM}					${GRUB_DEST}/${FUNCNAME}				|| return 1
-				${MKDIR}				${GRUB_DEST}/${FUNCNAME}				|| return 1
-				${HOME}/scripts/grub.sh			${GRUB_DEST}/${FUNCNAME} -f ${GRUB_LOOP}		|| return 1
+				${HOME}/scripts/grub.sh			${GRUB_DEST} -f ${GRUB_LOOP}				|| return 1
 				DOTEST="true" release_grub_qcow_unmount	${GRUB_DEST} ${GRUB_LEFI} ${GRUB_LOOP}			|| return 1
 			fi
 			DOTEST="false" release_grub_qcow_mount		${GRUB_DEST} ${GRUB_LEFI} ${GRUB_LOOP}			|| return 1
