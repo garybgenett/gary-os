@@ -316,11 +316,14 @@ select() {
 		read ${ROOTFS_ROOT_OPT}
 		if [ "${${ROOTFS_ROOT_OPT}}" == "l" ]; then
 			marker
+			fdisk -l | grep -E "^(Disk|[[:space:]]*[0-9])"
+			marker
 			echo -en "#\n"
-			echo -en "# the \"c\" chroot environment may be necessary if this list is empty\n"
+			echo -en "# the \"c\" chroot environment may be necessary if there were no results\n"
+			echo -en "# hit \"enter\" to continue\n"
 			echo -en "#\n"
 			marker
-			fdisk -l | grep -E "^(Disk|[[:space:]]*[0-9])"
+			read continue
 			select - || return 1
 			return 0
 		elif [ "${${ROOTFS_ROOT_OPT}}" == "g" ]; then
