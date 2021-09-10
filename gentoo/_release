@@ -1607,7 +1607,7 @@ function _release_grub {		#{doredo} #{dofast} #{dotest}
 			[[ -x $(which qemu-nbd) ]];
 		}; then
 			if ! ${DOTEST}; then
-				qemu-img convert -O qcow2		${GRUB_DEST}/loopfile.img ${GRUB_DEST}/loopfile.qcow2	|| return 1
+				qemu-img convert -O qcow2		${GRUB_DEST}/loopfile.raw ${GRUB_DEST}/loopfile.qcow2	|| return 1
 				qemu-img info				${GRUB_DEST}/loopfile.qcow2				|| return 1
 			elif {
 				${DOTEST} &&
