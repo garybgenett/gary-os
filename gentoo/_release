@@ -1579,6 +1579,7 @@ function _release_grub {		#{doredo} #{dofast} #{dotest}
 	#note: tell "grub.sh" where the "grub" menu files are
 	export GRUB_DIR="${SETDIR}/${GRBDIR}"
 	declare DEF_DEV="/dev/sda1"
+	declare GRB_DBG="50"
 	declare GRUB_DEST="${_RAMFS}.grub"
 	declare GRUB_LMBR="/dev/nbd9p1"
 	declare GRUB_LEFI="/dev/nbd9p3"
@@ -1597,7 +1598,7 @@ function _release_grub {		#{doredo} #{dofast} #{dotest}
 			${RM}						${GRUB_DEST}*						|| return 1
 			${MKDIR}					${GRUB_DEST}						|| return 1
 		fi
-		${SETDIR}/scripts/grub.sh				${GRUB_DEST}						|| return 1
+		${SETDIR}/scripts/grub.sh				${GRUB_DEST} -d${GRB_DBG}				|| return 1
 		if {
 			${DOTEST} ||
 			[[ ! -x $(which qemu-img) ]] ||
