@@ -32,7 +32,7 @@ fi
 shift
 
 declare HEDEF="10"
-declare GIDEF="${GDEST}/loopfile.img"
+declare GIDEF="${GDEST}/loopfile.raw"
 declare GIBAK="/dev/sda"
 declare GPDEF="1"
 
