@@ -614,13 +614,24 @@ fi
 
 ########################################
 
-FILE="${GDEST}/_${GTYPE}.tar/boot/grub"
-${RM} ${FILE}/${GTYPE}						|| exit 1
-${MKDIR} ${FILE}/${GTYPE}					|| exit 1
-${RSYNC_U} ${MODULES_BIOS} ${FILE}/${GTYPE}/			|| exit 1
-${RSYNC_U} ${GDEST}/${GMENU_NAME} ${FILE}/grub.cfg		|| exit 1
-FILE="${GDEST}/_${GTYPE}.tar"
-(cd ${FILE} && tar -cvv -f ${FILE}.tar *)			|| exit 1
+function modules_menu {
+	declare KIND="${1}" && shift
+	FILE="${GDEST}/_${KIND}.tar/boot/grub"
+	if [[ ${KIND} == ${GTYPE} ]]; then
+		${RM} ${FILE}/${KIND}				|| exit 1
+		${MKDIR} ${FILE}/${KIND}			|| exit 1
+		${RSYNC_U} ${MODULES_BIOS} ${FILE}/${KIND}/	|| exit 1
+	else
+		${MKDIR} ${FILE}/${KIND}			|| exit 1
+		${RSYNC_U} ${GRUBD}/${KIND}/ ${FILE}/${KIND}	|| exit 1
+	fi
+	echo -en "${GMENU_DATA}" >${FILE}/grub.cfg
+	FILE="${GDEST}/_${KIND}.tar"
+	(cd ${FILE} && tar -cvv -f ${FILE}.tar *)		|| exit 1
+	return 0
+}
+
+modules_menu ${GTYPE}
 grub-mkimage -v \
 	-C xz \
 	-O ${GTYPE} \
@@ -629,12 +640,7 @@ grub-mkimage -v \
 	-m ${GDEST}/_${GTYPE}.tar.tar \
 	${MODULES_CORE}						|| exit_summary 1
 
-FILE="${GDEST}/${ETYPE}.tar/boot/grub"
-${MKDIR} ${FILE}/${ETYPE}					|| exit 1
-${RSYNC_U} ${GRUBD}/${ETYPE}/ ${FILE}/${ETYPE}			|| exit 1
-${RSYNC_U} ${GDEST}/${GMENU_NAME} ${FILE}/grub.cfg		|| exit 1
-FILE="${GDEST}/${ETYPE}.tar"
-(cd ${FILE} && tar -cvv -f ${FILE}.tar *)			|| exit 1
+modules_menu ${ETYPE}
 grub-mkimage -v \
 	-C xz \
 	-O ${ETYPE} \
@@ -649,10 +655,8 @@ ${RM} ${GDEST}/*.tar.tar					|| exit 1
 
 DO_MOUNT="${GDEST}/.mount-mbr"
 ${MKDIR} ${DO_MOUNT}								|| exit 1
-if [[ -b ${GINST_DO}${GPSEP}${GPART} ]]; then
-	mount-robust -u ${GINST_DO}${GPSEP}${GPART}				#>>> || exit 1
-fi
 mount-robust ${GINST_DO}${GPSEP}${GPART} ${DO_MOUNT}				|| exit 1
+${MKDIR} ${GDEST}/_${GTYPE}							|| exit 1
 ${RSYNC_U} ${GDEST}/${GTYPE/%-pc}.img ${GDEST}/_${GTYPE}/core.img		|| exit 1
 grub-install \
 	--verbose \
@@ -675,10 +679,8 @@ ${RM} ${DO_MOUNT}								|| exit 1
 DO_MOUNT="${GDEST}/.mount-efi"
 FILE="EFI/BOOT/BOOTX64.EFI"
 ${MKDIR} ${DO_MOUNT}								|| exit 1
-if [[ -b ${GINST_DO}${GPSEP}${GPEFI} ]]; then
-	mount-robust -u ${GINST_DO}${GPSEP}${GPEFI}				|| exit 1
-fi
 mount-robust ${GINST_DO}${GPSEP}${GPEFI} ${DO_MOUNT}				|| exit 1
+${MKDIR} ${GDEST}/_${ETYPE}							|| exit 1
 ${RSYNC_U} ${GDEST}/${ETYPE/%-efi}.efi ${GDEST}/_${ETYPE}/core.efi		|| exit 1
 grub-install \
 	--verbose \
