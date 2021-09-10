@@ -505,7 +505,7 @@ if [[ -n ${DO_MOUNT} ]]; then
 		[[ -b ${GINST} ]] ||
 		[[ -f ${GINST} ]];
 	}; then
-		FILE="${GDEST}/.mount-loop"
+		FILE="${GDEST}/.mount"
 		if [[ -f ${GINST} ]]; then
 			GINST_DO="${LOOP_DEVICE}"
 		fi
@@ -522,7 +522,7 @@ if [[ -n ${DO_MOUNT} ]]; then
 			if [[ -f ${GINST} ]]; then
 				losetup -d ${LOOP_DEVICE}			#>>> || exit 1
 			fi
-			${RM} ${FILE}{,-efi}					|| exit 1
+			${RM} ${FILE}{-mbr,-efi}				|| exit 1
 		fi
 		if [[ ${DO_MOUNT} == -m ]]; then
 			if [[ -f ${GINST} ]]; then
@@ -530,10 +530,10 @@ if [[ -n ${DO_MOUNT} ]]; then
 				losetup -v -P ${LOOP_DEVICE} ${GINST}		|| exit 1
 				partx -t gpt -a ${LOOP_DEVICE}			#>>> || exit 1
 			fi
-			${MKDIR} ${FILE}{,-efi}					|| exit 1
+			${MKDIR} ${FILE}{-mbr,-efi}				|| exit 1
+			mount-robust ${GINST_DO}${GPSEP}${GPART} ${FILE}-mbr	|| exit 1
 			mount-robust ${GINST_DO}${GPSEP}${GPEFI} ${FILE}-efi	|| exit 1
-			mount-robust ${GINST_DO}${GPSEP}${GPART} ${FILE}	|| exit 1
-			echo -en "\n"; ${LL} -R ${FILE}*
+			echo -en "\n"; ${LL} -R ${FILE}{-mbr,-efi}
 		fi
 	else
 		print_usage "COULD NOT FIND FOR MOUNTING: ${GINST}"
@@ -572,18 +572,18 @@ function partition_disk {
 
 function custom_menu {
 	declare DEV="${1}"
-	FILE="${GDEST}/.mount-menu"
-	${MKDIR} ${FILE}					|| return 1
+	DO_MOUNT="${GDEST}/.mount-menu"
+	${MKDIR} ${DO_MOUNT}					|| return 1
 	if [[ -b ${DEV}${GPSEP}${GPART} ]]; then
 		mount-robust -u ${DEV}${GPSEP}${GPART}		#>>> || return 1
 	fi
-	mount-robust ${DEV}${GPSEP}${GPART} ${FILE}		|| return 1
-	if [[ ! -f ${FILE}${GMENU_FILE} ]]; then
-		${MKDIR} ${FILE}$(dirname ${GMENU_FILE})	|| return 1
-		echo -en "${GMENU_DATA}" >${FILE}${GMENU_FILE}	|| return 1
+	mount-robust ${DEV}${GPSEP}${GPART} ${DO_MOUNT}		|| return 1
+	if [[ ! -f ${DO_MOUNT}${GMENU_FILE} ]]; then
+		${MKDIR} ${DO_MOUNT}$(dirname ${GMENU_FILE})	|| return 1
+		echo -en "${GMENU_DATA}" >${DO_MOUNT}${GMENU_FILE}	|| return 1
 	fi
 	mount-robust -u ${DEV}${GPSEP}${GPART}			#>>> || return 1
-	${RM} ${FILE}						|| return 1
+	${RM} ${DO_MOUNT}					|| return 1
 	return 0
 }
 
@@ -651,12 +651,12 @@ ${RM} ${GDEST}/*.tar.tar					|| exit 1
 
 ########################################
 
-FILE="${GDEST}/.mount-mbr"
-${MKDIR} ${FILE}								|| exit 1
+DO_MOUNT="${GDEST}/.mount-mbr"
+${MKDIR} ${DO_MOUNT}								|| exit 1
 if [[ -b ${GINST_DO}${GPSEP}${GPART} ]]; then
 	mount-robust -u ${GINST_DO}${GPSEP}${GPART}				#>>> || exit 1
 fi
-mount-robust ${GINST_DO}${GPSEP}${GPART} ${FILE}				|| exit 1
+mount-robust ${GINST_DO}${GPSEP}${GPART} ${DO_MOUNT}				|| exit 1
 ${RSYNC_U} ${GDEST}/${GTYPE/%-pc}.img ${GDEST}/_${GTYPE}/core.img		|| exit 1
 grub-install \
 	--verbose \
@@ -674,7 +674,7 @@ grub-bios-setup \
 	--core-image="${GTYPE/%-pc}.img" \
 	${GINST_DO}								|| exit_summary 1
 mount-robust -u ${GINST_DO}${GPSEP}${GPART}					#>>> || exit 1
-${RM} ${GDEST}/.mount-mbr							|| exit 1
+${RM} ${DO_MOUNT}								|| exit 1
 
 if [[ -b ${GINST_DO}${GPSEP}${GPEFI} ]]; then
 	function efi_cp {
@@ -685,13 +685,13 @@ if [[ -b ${GINST_DO}${GPSEP}${GPEFI} ]]; then
 		fi
 		return 0
 	}
-	${MKDIR} ${GDEST}/.mount-efi						|| exit 1
+	DO_MOUNT="${GDEST}/.mount-efi"
+	${MKDIR} ${DO_MOUNT}							|| exit 1
 	if [[ -b ${GINST_DO}${GPSEP}${GPEFI} ]]; then
 		mount-robust -u ${GINST_DO}${GPSEP}${GPEFI}			|| exit 1
 	fi
-	mount-robust ${GINST_DO}${GPSEP}${GPEFI} ${GDEST}/.mount-efi		|| exit 1
-	FILE="${GDEST}/.mount-efi/EFI/BOOT"					|| exit 1
-	${MKDIR} ${FILE}							|| exit 1
+	mount-robust ${GINST_DO}${GPSEP}${GPEFI} ${DO_MOUNT}			|| exit 1
+	${MKDIR} ${DO_MOUNT}							|| exit 1
 	for TYPE in ${GEFIS}; do
 		FILE="${GDEST}/${TYPE/%-efi}.efi"
 		${RSYNC_U} ${FILE} ${GDEST}/_${TYPE}/core.efi			|| exit 1
@@ -702,12 +702,13 @@ if [[ -b ${GINST_DO}${GPSEP}${GPEFI} ]]; then
 			--target="${TYPE}" \
 			--directory="${GDEST}/_${TYPE}" \
 			--boot-directory="${GDEST}/_${TYPE}.boot" \
-			--efi-directory="${GDEST}/.mount-efi" \
+			--efi-directory="${DO_MOUNT}" \
 			${GINST_DO}						|| exit_summary 1
-		efi_cp ${FILE} ${GDEST}/.mount-efi/EFI/BOOT			|| exit 1
+		${MKDIR} ${DO_MOUNT}/EFI/BOOT					|| exit 1
+		efi_cp ${FILE} ${DO_MOUNT}/EFI/BOOT				|| exit 1
 		mount-robust -u ${GINST_DO}${GPSEP}${GPEFI}			|| exit 1
 	done
-	${RM} ${GDEST}/.mount-efi						|| exit 1
+	${RM} ${DO_MOUNT}							|| exit 1
 fi
 
 ########################################
