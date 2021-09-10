@@ -1632,7 +1632,6 @@ function _release_grub {		#{doredo} #{dofast} #{dotest}
 			! ${DOTEST};
 		}; then
 			${RM}						${GRUB_DEST}/_*						|| return 1
-			${RM}						${GRUB_DEST}/*.tar					|| return 1
 			${WGET_C} -P					${GRUB_DEST} ${RUFUS_URL}				|| return 1
 #>>>			common_tar					${GRUB_DEST}						|| return 1
 			7z d						${GRUB_DEST}.zip					|| return 1
