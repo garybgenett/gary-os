@@ -269,6 +269,7 @@ declare MODULES_CORE="\
 	ntfs
 	net
 	\
+	test
 	search
 	linux
 	chain
@@ -282,16 +283,18 @@ declare MODULES_UEFI="$(
 declare MODULES_BIOS="
 $(
 	for FILE in \
-		part_gpt \
-		part_msdos \
 		vga \
+		vga_text \
 	; do
 		echo "${GMODS}/${FILE}.mod"
-		echo "${GMODS}/${FILE}.module"
 	done
 ) $(
-	ls ${GMODS}/*.{lst,mod} |
+	${LS} ${GMODS}/*.{lst,mod} |
 	${GREP} -v \
+		$(for FILE in ${MODULES_CORE}; do
+			echo "-e \"[/]${FILE}.mod$\""
+		done) \
+		\
 		-e "[/]regex" \
 		-e "[/]vbe" \
 		\
@@ -302,15 +305,12 @@ $(
 		-e "[/]video[^/]*" \
 		\
 		-e "[/]915resolution" \
-		-e "[/]acpi" \
 		-e "[/]adler" \
 		-e "[/]affs" \
 		-e "[/]afs" \
-		-e "[/]ahci" \
 		-e "[/]backtrace" \
 		-e "[/]bfs" \
 		-e "[/]bsd" \
-		-e "[/]btrfs" \
 		-e "[/]cbfs" \
 		-e "[/]f2fs" \
 		-e "[/]font" \
@@ -318,9 +318,7 @@ $(
 		-e "[/]gcry" \
 		-e "[/]gdb" \
 		-e "[/]geli" \
-		-e "[/]gettext" \
 		-e "[/]gfx" \
-		-e "[/]gzio" \
 		-e "[/]hfs" \
 		-e "[/]http" \
 		-e "[/]jfs" \
@@ -328,9 +326,9 @@ $(
 		-e "[/]ldm" \
 		-e "[/]legacy" \
 		-e "[/]linux16" \
-		-e "[/]lsacpi" \
 		-e "[/]lsapm" \
 		-e "[/]lzopio" \
+		-e "[/]macbless" \
 		-e "[/]macho" \
 		-e "[/]mda" \
 		-e "[/]minix" \
@@ -354,15 +352,13 @@ $(
 		-e "[/]romfs" \
 		-e "[/]sendkey" \
 		-e "[/]sfs" \
-		-e "[/]spkmodem" \
-		-e "[/]squash" \
 		-e "[/]syslinux" \
 		-e "[/]terminfo" \
 		-e "[/]tga" \
 		-e "[/]trig" \
+		-e "[/]truecrypt" \
 		-e "[/]udf" \
 		-e "[/]ufs" \
-		-e "[/]usbms" \
 		-e "[/]xfs" \
 		-e "[/]xnu" \
 		-e "[/]zstd" \
