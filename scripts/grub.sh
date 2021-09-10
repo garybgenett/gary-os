@@ -466,7 +466,7 @@ function exit_summary {
 	)
 
 	if ${DEBUG}; then
-		FILE="${GDEST}/${GTYPE/%-pc}.tar/boot/grub/${GTYPE}"
+		FILE="${GDEST}/_${GTYPE}.tar/boot/grub/${GTYPE}"
 		echo -en "\n"
 		echo -en "# objects for removal:\n"
 		(cd ${FILE} &&
@@ -615,35 +615,34 @@ fi
 
 ########################################
 
-FILE="${GDEST}/${GTYPE/%-pc}.tar/boot/grub"
+FILE="${GDEST}/_${GTYPE}.tar/boot/grub"
 ${RM} ${FILE}/${GTYPE}						|| exit 1
 ${MKDIR} ${FILE}/${GTYPE}					|| exit 1
 ${RSYNC_U} ${MODULES_BIOS} ${FILE}/${GTYPE}/			|| exit 1
 ${RSYNC_U} ${GDEST}/${GMENU_NAME} ${FILE}/grub.cfg		|| exit 1
-FILE="${GDEST}/${GTYPE/%-pc}.tar"
+FILE="${GDEST}/_${GTYPE}.tar"
 (cd ${FILE} && tar -cvv -f ${FILE}.tar *)			|| exit 1
 grub-mkimage -v \
 	-C xz \
 	-O ${GTYPE} \
 	-d ${GMODS} \
 	-o ${GDEST}/${GTYPE/%-pc}.img \
-	-m ${GDEST}/${GTYPE/%-pc}.tar.tar \
+	-m ${GDEST}/_${GTYPE}.tar.tar \
 	${MODULES_CORE}						|| exit_summary 1
 
 for TYPE in ${GEFIS}; do
-	FILE="${GDEST}/${TYPE/%-efi}.tar/boot/grub"
+	FILE="${GDEST}/${TYPE}.tar/boot/grub"
 	${MKDIR} ${FILE}/${TYPE}				|| exit 1
 	${RSYNC_U} ${GRUBD}/${TYPE}/ ${FILE}/${TYPE}		|| exit 1
 	${RSYNC_U} ${GDEST}/${GMENU_NAME} ${FILE}/grub.cfg	|| exit 1
-	FILE="${GDEST}/${TYPE/%-efi}.tar"
+	FILE="${GDEST}/${TYPE}.tar"
 	(cd ${FILE} && tar -cvv -f ${FILE}.tar *)		|| exit 1
-	FILE="${GDEST}/${TYPE/%-efi}"
 	grub-mkimage -v \
 		-C xz \
 		-O ${TYPE} \
 		-d ${GRUBD}/${TYPE} \
-		-o ${FILE}.efi \
-		-m ${FILE}.tar.tar \
+		-o ${GDEST}/${TYPE/%-efi}.efi \
+		-m ${GDEST}/_${TYPE}.tar.tar \
 		${MODULES_UEFI}					|| exit_summary 1
 done
 
