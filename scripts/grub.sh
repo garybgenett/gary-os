@@ -593,7 +593,9 @@ if [[ -b ${GINST_DO} ]]; then
 	fi
 	custom_menu ${GINST_DO}					|| exit 1
 else
+	declare PART_DO="false"
 	if [[ ! -f ${GINST} ]]; then
+		PART_DO="true"
 		$(which dd) \
 			status=progress \
 			bs=${BLOCKS_SIZE} \
@@ -605,7 +607,9 @@ else
 	losetup -d ${LOOP_DEVICE}				#>>> || exit 1
 	losetup -v -P ${LOOP_DEVICE} ${GINST}			|| exit 1
 	GINST_DO="${LOOP_DEVICE}"
-	partition_disk ${GINST_DO}				|| exit 1
+	if ${PART_DO}; then
+		partition_disk ${GINST_DO}			|| exit 1
+	fi
 	custom_menu ${GINST_DO}					|| exit 1
 fi
 
