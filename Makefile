@@ -127,7 +127,7 @@ else
 	@$(PRINTF) "Distribution Release (Internal Only):"	"_release_*"
 	@$(PRINTF) "Distribution Release (Internal Only):"	"_publish_*"
 	@$(ECHO) "\n"
-	@$(ECHO) "$(STATE)Below is information on using the \"_system\" script directly.$(RESET)\n"
+	@$(ECHO) "$(STATE)Below is information on using the \"$(HOWTO)_system$(STATE)\" script directly.$(RESET)\n"
 	@$(ECHO) "$(STATE)It is important to use the variables shown, at a minimum.$(RESET)\n"
 endif
 	@$(ECHO) "\n"
@@ -139,7 +139,7 @@ endif
 
 .PHONY: help
 help: usage
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -v $(Q) $(CHROOT)
+	HOME="$(HOME)" SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -v $(Q) $(CHROOT)
 
 ########################################
 
