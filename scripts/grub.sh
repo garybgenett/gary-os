@@ -50,6 +50,7 @@ usage:
 {directory}		target directory to use for building grub files (must already exist)
 [-d || -d<0-9+>]	show debug information || number of objects to list (default: ${HEDEF})
 [-f || -fx]		format the target block device || use ext4 instead of vfat/exfat
+[-k || -k<device>]	keep default device in configuration || use device (default: ${GIBAK}${GPDEF})
 [block device]		use target device instead of the example loopfile
 	(loopfile):	${GIDEF}
 	grub<0-9+>	alternate partition number for example loopfile (default: ${GPDEF})
@@ -118,6 +119,16 @@ fi
 
 ########################################
 
+declare KEEPD="false"
+declare KPDEV=
+if [[ ${1} == -k*(*) ]]; then
+	KEEPD="true"
+	KPDEV="${1/#-k}"
+	shift
+fi
+
+########################################
+
 declare GINST="${GIDEF}"
 declare GPART="${GPDEF}"
 declare GPSEP=
@@ -174,9 +185,17 @@ declare GMODS="${GRUBD}/${GTYPE}"
 declare EMODS="${GRUBD}/${ETYPE}"
 
 declare GCDEV="${GINST}${GPSEP}${GPART}"
-if [[ ${GINST} == ${GIDEF} ]]; then
-#>>>	GCDEV="${GIBAK}${GPSEP}${GPART}"
-	GCDEV="${GIBAK}${GPART}"
+if ! ${KEEPD}; then
+	if [[ ${GINST} == ${GIDEF} ]]; then
+#>>>		GCDEV="${GIBAK}${GPSEP}${GPART}"
+		GCDEV="${GIBAK}${GPART}"
+	fi
+else
+	if [[ -n ${KPDEV} ]]; then
+		GCDEV="${KPDEV}"
+	else
+		GCDEV="${GIBAK}${GPDEF}"
+	fi
 fi
 
 ########################################
