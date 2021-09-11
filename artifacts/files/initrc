@@ -303,7 +303,7 @@ select() {
 		echo -en "# a different file location can be specified after the source\n"
 		echo -en "#\n"
 		echo -en "# examples:\n"
-		echo -en "# /dev/sdb1  -or- /dev/sdb1  ${ROOTFS_ROOT_SRC}\n"
+		echo -en "# /dev/sda1  -or- /dev/sda1  ${ROOTFS_ROOT_SRC}\n"
 		echo -en "# 10.0.0.254 -or- 10.0.0.254 ${ROOTFS_ROOT_SRC}\n"
 		echo -en "#\n"
 		echo -en "# use \"l\" to get a list of available devices and partitions\n"
