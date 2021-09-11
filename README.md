@@ -1257,7 +1257,9 @@ Note that these can be nested one level deep.  Meaning, a directory can be
 'FSARCH' from a 'FSPACK' or 'FSEXCL' from a 'FSKEEP' and so on.  Anything nested
 deeper will produce undefined results.  They are evaluated in reverse order, so
 lower on the list will take precedence.  For example, if the same directory is
-set in 'FSEXCL' and 'FSPACK', the directory would be 'FSEXCL'.
+set in 'FSEXCL' and 'FSPACK', the directory will be 'FSEXCL'.  Take this into
+consideration when nesting, since doing things like 'FSPACK' on a 'FSKEEP'
+subdirectory will also produce undefined results.
 
 Complete examples of usage are in [gentoo/sets/gary-os] and
 [gentoo/sets/\_gary-os].
@@ -1285,8 +1287,9 @@ selection of a [Filesystem] to load.
 Once a [Filesystem] is loaded, directories are unpacked as specified in 'Package
 Directories' above, and '/init' on the target filesystem is booted.  The
 majority of Linux kernel modules will be loaded after this point, so it is
-important that the [Filesystem] has a '/lib\*/modules' directory which matches
-the GaryOS [Kernel] version.
+important that the [Filesystem] has a '/lib64/modules' directory which matches
+the GaryOS [Kernel] version.  There is a 'packdir' archive of this directory in
+[Downloads].
 
 The final in-memory filesystem is mounted on the backend at '/.overlay', so it
 can be resized after boot using something like 'mount -o remount,size=6144m
