@@ -837,6 +837,8 @@ There are two key requirements of the final image for it to work correctly.
 
 [Image] tries to handle the first automatically.  Verify this, and be mindful of
 the second if the source directory is updated (such as [Update] or [Compile]).
+If needed, there is a 'packdir' archive of the '/lib64/modules' directory in
+[Downloads].
 
 It may be important to review the package file that will be used.  There are
 GaryOS variables in them which control portions of this process, such as which
@@ -875,10 +877,10 @@ problematic when the intention is to implement changes.
   make DOREDO=true release
   ```
 
-The 'clean' target will completely remove all GaryOS output files, restoring the
-'build' directory to its original state.  This includes all images and kernels,
-along will all their supporting files.  The 'DOREDO' variable is specific to
-each target, and only rebuilds the relevant files.
+The 'clean' target will completely remove all [Builder] output files, restoring
+the 'build' directory to its original state.  This includes all images and
+kernels, along will all their supporting files.  The 'DOREDO' variable is
+specific to each target, and only rebuilds the relevant files.
 
 ### Install ####################################################################
 [Install]: #install
