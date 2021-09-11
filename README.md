@@ -1080,7 +1080,7 @@ GaryOS will continue to be a [Kernel] and [Builder] above all else.
 ### Design #####################################################################
 [Design]: #design
 
-GaryOS uses [Linux initramfs] as a root filesystem, when it is only designed for
+GaryOS uses [Linux initramfs] as a root filesystem, which was only designed for
 minimal environments to load kernel modules, do hardware detection, and perform
 other tasks before mounting an actual root filesystem.  This approach presented
 a few challenges in the early versions of GaryOS.
