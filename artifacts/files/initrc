@@ -16,7 +16,7 @@ fi
 #	root shmem:		${_GOVLY}.shm -> ${_GOVLY}${_GOVLY}
 #	root:			${_GOVLY}
 
-#>>> sed -nr -e "s/ \|\| .+$//g" -e "s|^[[:space:]]*[$][{]ROOTFS_NAME[}] ||gp" artifacts/files/initrc
+#{CMD} sed -nr -e "s/ \|\| .+$//g" -e "s|^[[:space:]]*[$][{]ROOTFS_NAME[}] ||gp" ./artifacts/files/initrc
 
 marker() {
 	echo -en "################################################################################\n"
