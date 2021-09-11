@@ -1695,6 +1695,7 @@ The backbones which do the real heavy lifting in GaryOS:
   * [Gentoo] & [Portage]
   * [Linux initramfs]
     * [Squashfs]
+    * [Overlay]
     * [Busybox]
     * [Coreutils]
   * [GNU GRUB]
@@ -1708,6 +1709,7 @@ The backbones which do the real heavy lifting in GaryOS:
   [Portage]: https://wiki.gentoo.org/wiki/Portage
   [Linux initramfs]: https://kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt
   [Squashfs]: https://www.kernel.org/doc/html/latest/filesystems/squashfs.html
+  [Overlay]: https://www.kernel.org/doc/html/latest/filesystems/overlayfs.html
   [Busybox]: https://busybox.net
   [Coreutils]: https://www.gnu.org/software/coreutils/coreutils.html
   [GNU GRUB]: https://gnu.org/software/grub
