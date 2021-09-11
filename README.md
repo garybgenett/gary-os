@@ -700,8 +700,8 @@ condense it into a small number of atomic steps using [GNU Make].
   | edit    | Wrapper around [gentoo.config] customization script
 
 To prepare for a build, create a 'sources' directory in the repository and
-download a stage3 tarball into it.  Each version of GaryOS has a link in
-[Versions] to the stage3 it was built with.  The default GaryOS settings in
+download a 'stage3' tarball into it.  Each version of GaryOS has a link in
+[Versions] to the 'stage3' it was built with.  The default GaryOS settings in
 [gentoo/make.conf] call for a 'generic_64' tarball.
 
 The 'build' directory will be created and used as a 'chroot'.  If this will be
@@ -726,8 +726,8 @@ For the best performance, change the 'MAKEFLAGS -j' variable in
   expr `grep "^processor" /proc/cpuinfo | wc -l` + 1
   ```
 
-The last line in [gentoo/\_funtoo] must be the commit hash in [meta-repo]
-that it is desired to use for the Portage tree.
+The last line in [gentoo/\_funtoo] must be the release version and commit hash
+in [meta-repo] that it is desired to use for the Portage tree.
 
 Make any desired Portage package selection and configuration changes, and then
 start the build with 'make init'.  By default, the base GaryOS [Kernel] package
