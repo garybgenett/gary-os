@@ -1754,18 +1754,18 @@ To start, homage to those who started it all:
 Tomsrtbt was especially influential.  GaryOS is modeled very much after Tom's
 project.  Some familiar quotes straight from the [tomsrtbt FAQ]:
 
-```
-1) tomsrtbt is
-   "The most GNU/Linux on one floppy disk"
-   Tomsrtbt stands for:
-     "Tom's floppy which has a root filesystem and is also bootable."
+  ```
+  1) tomsrtbt is
+     "The most GNU/Linux on one floppy disk"
+     Tomsrtbt stands for:
+       "Tom's floppy which has a root filesystem and is also bootable."
 
-2) Design goals
-   as much stuff as possible on 1 floppy disk
-   keep it self contained, build under itself
-   try to make it behave like a normal system
-   rescue and recovery functions get priority
-```
+  2) Design goals
+     as much stuff as possible on 1 floppy disk
+     keep it self contained, build under itself
+     try to make it behave like a normal system
+     rescue and recovery functions get priority
+  ```
 
 Thank you so much, Tom.
 
@@ -1777,8 +1777,7 @@ Thank you so much, Tom.
 Inspiration and core concepts were also provided by:
 
   * [Metro]
-  * [Buildroot]
-  * [BusyBox]
+  * [Buildroot] & [BusyBox]
   * [GoboLinux]
 
   [Metro]: https://funtoo.org/Metro_Quick_Start_Tutorial
@@ -1787,8 +1786,8 @@ Inspiration and core concepts were also provided by:
   [StaticPerl]: http://software.schmorp.de/pkg/App-Staticperl.html
   [GoboLinux]: https://gobolinux.org
 
-There are also a few projects which are relied on daily for critical tasks or
-highly visible components, and deserve mention:
+Projects which are relied on daily for critical tasks or highly visible
+components, and deserve mention:
 
   * [Bash]
     * [Vim]
