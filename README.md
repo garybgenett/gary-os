@@ -1603,14 +1603,13 @@ Here is an overview of the repository contents, in order of relative importance:
   | [gentoo/\_system]        | Heart and soul of [Builder], and GaryOS itself
   | [gentoo/\_release]       | Heart and soul of [Loader] (and publish process)
   | [gentoo/\_funtoo]        | [Funtoo] [meta-repo] commit tracking
-  | [gentoo/\_funtoo.kits]   | [Funtoo] [meta-repo] set (see [Contributions])
+  | [gentoo/\_funtoo.kits]   | [Funtoo] [meta-repo] tool (see [Contributions])
   | [gentoo.config]          | Example for "Edit" stage in [Compile]
   | [gentoo/.emergent]       | Audit script and information (see [Builder])
   | [gentoo/savedconfig/x11-wm/dwm] | Slightly modified [dwm] configuration
   | [gentoo/sets/gary-os]    | [Kernel] packages, [Loader] and [Image]
   | [gentoo/sets/\_gary-os]  | [Rootfs] packages, [Loader] and [Image]
   | [shmem_size_hack.patch]  | [Filesystem] 'shmem_size' (see [Contributions])
-  | [ego_commit_hack.patch]  | [Ego] [meta-repo] set (see [Contributions])
 
   | Other                    | Purpose
   |:---                      |:---
@@ -1619,8 +1618,8 @@ Here is an overview of the repository contents, in order of relative importance:
 
 The commit history for all these components reside in more than one personal
 repository.  They are merged together into the public GaryOS [Git] repository by
-[gentoo/\_release].  This means that even minor disruptions or the inclusion of
-new files will result in a public repository that can not 'fast-forward' and
+[gentoo/\_release].  This means that even minor merging issues or the inclusion
+of new files will result in a public repository that can not 'fast-forward' and
 will require re-cloning.
 
   [README.md]: https://github.com/garybgenett/gary-os/blob/master/README.md
@@ -1653,8 +1652,8 @@ will require re-cloning.
   [gentoo/savedconfig/x11-wm/dwm]: https://github.com/garybgenett/gary-os/blob/master/gentoo/savedconfig/x11-wm
   [gentoo/sets/gary-os]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/gary-os
   [gentoo/sets/\_gary-os]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/_gary-os
+  [gentoo/sets/packages]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/packages
   [shmem_size_hack.patch]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/shmem-add-shmem_size-option-set-filesystem-size.v5.4-rc2.v5.6_updated.patch
-  [ego_commit_hack.patch]: https://github.com/garybgenett/gary-os/blob/master/gentoo/overlay/app-admin/ego/files-patches/add-commit-option-to-ego-sync.2.7.4-r1.patch
 
   [.vimrc]: https://github.com/garybgenett/gary-os/blob/master/.vimrc
   [gkrellaclock]: http://gkrellm.srcbox.net
@@ -1669,6 +1668,7 @@ will require re-cloning.
   [artifacts/files/issue]: https://github.com/garybgenett/gary-os/blob/master/artifacts/files/issue
   [artifacts/files/locale.gen]: https://github.com/garybgenett/gary-os/blob/master/artifacts/files/locale.gen
   [artifacts/files/wpa_supplicant.conf]: https://github.com/garybgenett/gary-os/blob/master/artifacts/files/wpa_supplicant.conf
+  [ego_commit_hack.patch]: https://github.com/garybgenett/gary-os/blob/master/gentoo/overlay/app-admin/ego/files-patches/add-commit-option-to-ego-sync.2.7.4-r1.patch
 
 ### Tools ######################################################################
 [Tools]: #tools
