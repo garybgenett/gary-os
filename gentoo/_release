@@ -2005,7 +2005,7 @@ function release_install_boot {
 	echo -en "./.bashrc mount-robust -u --dev ${_GINST}\n"
 	echo -en "\n"
 	echo -en ">>> THE BOOTLOADER CONFIGURATION AND INSTALLATION IS YOUR RESPONSIBILITY <<<\n"
-	echo -en ">>> IT IS NOT AUTOMATED DUE TO THE COMPLEXITY AND VARIABLES INVOLVED <<<\n"
+	echo -en ">>> IT IS NOT AUTOMATED DUE TO THE IMPORTANT CONSIDERATIONS INVOLVED <<<\n"
 	echo -en "\n"
 	return 0
 }
