@@ -249,7 +249,7 @@ supports booting from removeable media.  It provides a menu which auto-selects
 the most advanced option available.  This menu can be updated at any time using
 the [scripts/grub.sh] script within GaryOS, following the directions in
 "GNU/Linux" below.  The 'gary-os.grub.cfg' file can be updated anytime with the
-absolute latest version at [grub/grub.menu.gary-os.cfg].
+latest [grub/grub.menu.gary-os.cfg].
 
 **GNU/Linux**
 
