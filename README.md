@@ -1966,11 +1966,10 @@ Everything needed to perform these steps is in the [Repository] or the
   * `cd .setup/gentoo.gary-os`
     * `(cd _builds/.gary-os.release; rm ./v#.#; ln ../_gary-os.working/.gary-os-* ./v#.#)`
         * `make DOREDO=true _release_grub`
-        * `make _prepare_symlinks`
         * `make _publish_release`
     * `(cd _builds; rm ./_gary-os.boot; ln _gary-os.working ./_gary-os.boot)`
         * `_sync boot`
-    * `make DOREDO=true DOTEST=true _release_grub`
+    * `make DOTEST=true _release_grub`
   * [x] [Checklist]
   * [x] [Publish]
 
