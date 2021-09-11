@@ -909,9 +909,13 @@ filesystem.  The base size of the in-memory filesystem will need to be at least
 6G, which can be set with 'shmem_size=6144m' before booting (see [Filesystem])
 or 'mount -o remount,size=6144m /.overlay' after booting (see [Update]).
 
+  ```
+  mount -o remount,size=6144m /.overlay
+  ```
+
 It is strongly advised to at least skim through the [Funtoo Installation Guide]
-or the [Gentoo Installation Guide].  This is meant to simplify the process, and
-is not meant to supplant all understanding of it.
+or the [Gentoo Installation Guide].  GaryOS aims to simplify the process, and is
+not meant to supplant all understanding of it.
 
 **Unpack**
 
@@ -923,8 +927,11 @@ the install will be incomplete.
   make DOREDO=true unpack
   ```
 
-The [Kernel] image will require [Networking] for this.  [Rootfs] has all the
-needed directories locally.
+Both [Kernel] and [Rootfs] require [Networking] for this, although [Rootfs]
+already has all of the absolutely necessary directories locally.  For
+a network-less install, use [Rootfs] and follow the unpacking instructions in
+[Update].  Namely, edit the '/.unpack' file to skip the external 'meta-repo.git'
+directory.
 
 **Configuration Files** *(Optional)*
 
@@ -953,7 +960,8 @@ Perform any [Update] steps that are desired to have in the final install.  If
 there are a large number of changes, it is best to wait and perform them on the
 final system after it is installed.
 
-Any changes to package configuration files can also be done at this stage.
+Any changes to package configuration files can also be done at this stage.  They
+should be done on the live [Filesystem] and not the [Repository].
 
 **Install**
 
@@ -968,9 +976,9 @@ be empty.  Anything on it will be erased.
   ```
 
 Once complete, the final step is to install the GRUB bootloader.  Some helpful
-pointers are provided at the end of the 'install' process.  Due to how
-potentially complex this can be it is not automated.  The [GRUB Quick Start] can
-also be a helpful starting point.
+pointers are provided at the end of the 'install' process.  This is a simple
+step, but has a few important considerations, so it is not automated.  The [GRUB
+Quick Start] can also be a helpful starting point.
 
 The 'install' target can be run any number of times without issue.  Make sure to
 install GRUB as the absolute last step.
@@ -1002,7 +1010,7 @@ and feel for GaryOS.
   | /etc/wpa_supplicant/wpa_supplicant.conf | Replaced | [artifacts/files/wpa_supplicant.conf]
   | /etc/ssh/sshd_config      | Modified | Enabled 'root' login
   | /etc/env.d/90xsession     | Added    | Set default window manager
-  | /etc/X11/Sessions/dwm     | Modified | Tune [dwm] configuration
+  | /etc/X11/Sessions/dwm     | Modified | Tune [dwm] running environment
 
 In cases where the files are modified or replaced, the original is kept as
 a '\*.gary-os' file.
