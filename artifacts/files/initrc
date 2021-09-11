@@ -275,7 +275,7 @@ select() {
 			#note: having both images in memory, and unpacked, all at once, is very expeensive
 			${ROOTFS_NAME} ${_GOVLY} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}${${ROOTFS_ROOT_OPT}_file} true false || ${ROOTFS_FUNC}
 			${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} false || ${ROOTFS_FUNC}
-			${ROOTFS_NAME} ${_GOVLY} ${_GOVLY}${ROOTFS_ROOT} false true || ${ROOTFS_FUNC}
+			${ROOTFS_NAME} ${_GOVLY} ${_GOVLY}${_GOVLY}${ROOTFS_ROOT} false true || ${ROOTFS_FUNC}
 			return 0
 		elif [ -f "${_GOVLY}.shm${ROOTFS_ROOT}" ]; then
 			#note: the "shm" mount was created earlier, and the image placed in the right place by "tftp"
