@@ -1120,7 +1120,7 @@ a [Filesystem], additional kernel parameters are required (see [Loader]).
 [Builder]: #builder
 
 Installing source-based [GNU/Linux] systems like [Funtoo] and [Gentoo] involves
-a large number of steps and is very error-prone.  Keeping them up to date is
+a large number of steps and is very error-prone.  Keeping them up to date can be
 equally complex.  GaryOS addresses this by applying a monolithic release model.
 The [Builder] system was developed over many years to accomplish the goal of
 a reliable process that produces repeatable builds.
@@ -1145,7 +1145,7 @@ Type 'make usage' (basic) or 'make help' (advanced) to get started.
   | [Makefile]             | Wrapper around the other components
   | [gentoo/\_system]      | Worker for all of [Building] (core of [Builder])
   | [gentoo/\_funtoo]      | [Funtoo] [meta-repo] commit tracking
-  | [gentoo/\_funtoo.kits] | [Funtoo] [meta-repo] set (see [Contributions])
+  | [gentoo/\_funtoo.kits] | [Funtoo] [meta-repo] tool (see [Contributions])
   | [gentoo/.emergent]     | Audit script which creates '/\_gentoo' directory
   | [gentoo.config]        | Optional customization for 'edit' in [Compile]
 
@@ -1176,10 +1176,10 @@ reporting any issues (see [Support]).
 
 **Tooling**
 
-Another primary function of [gentoo/\_system] is to provide helpful tooling for
-the sometimes arduous process of bringing [Compile] 'init' or 'redo' through to
-a successful build.  [Process] walks through the author's workflow, and has
-examples of these helpers.
+Another primary function of [Makefile] and [gentoo/\_system] is to provide
+helpful tooling for the sometimes arduous process of bringing [Compile] 'init'
+or 'redo' through to a successful build.  [Process] walks through the author's
+workflow, and has examples of these helpers.
 
 Use [gentoo.config] to automate any final build steps with [Compile] 'edit'.  By
 default, it is run inside the 'chroot', so all paths should start from '/'.
