@@ -218,8 +218,9 @@ if [[ -n ${PROMPT_KEY} ]] &&
 	eval "echo -en \"${PRE_PROMPT}\""
 fi
 
-# http://superuser.com/questions/175799/does-bash-have-a-hook-that-is-run-before-executing-a-command
-# http://hints.macworld.com/dlfiles/preexec.bash.txt
+# https://superuser.com/questions/175799/does-bash-have-a-hook-that-is-run-before-executing-a-command
+# https://stackoverflow.com/questions/23033502/what-is-the-bash-variable-comp-line-and-what-does-it-do#23036401
+# https://hints.macworld.com/dlfiles/preexec.bash.txt
 export IMPERSONATE_NAME
 export IMPERSONATE_MODE="false"
 export IMPERSONATE_QUIT="shopt -u extdebug; trap - DEBUG;"
