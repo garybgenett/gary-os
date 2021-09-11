@@ -1578,7 +1578,6 @@ function release_grub_qcow_unmount {	#>>>{dotest}
 function _release_grub {		#{doredo} #{dofast} #{dotest}
 	#note: tell "grub.sh" where the "grub" menu files are
 	export GRUB_DIR="${SETDIR}/${GRBDIR}"
-	declare DEF_DEV="/dev/sda1"
 	declare GRB_DBG="50"
 	declare GRUB_DEST="${_RAMFS}.grub"
 	declare GRUB_LMBR="/dev/nbd9p1"
@@ -1622,12 +1621,11 @@ function _release_grub {		#{doredo} #{dofast} #{dotest}
 				qemu-img create -f qcow2		${GRUB_DEST}/loopfile.qcow2 ${QCOW_SIZE}		|| return 1
 				DOTEST="true" release_grub_qcow_mount	${GRUB_DEST} ${GRUB_LMBR} ${GRUB_LEFI}			|| return 1
 #>>>				${SETDIR}/scripts/grub.sh		${GRUB_DEST} -f ${GRUB_LEFI}				|| return 1
-				${SETDIR}/scripts/grub.sh		${GRUB_DEST} -f ${GRUB_LMBR}				|| return 1
+				${SETDIR}/scripts/grub.sh		${GRUB_DEST} -f -k ${GRUB_LMBR}				|| return 1
 				DOTEST="true" release_grub_qcow_unmount	${GRUB_DEST} ${GRUB_LEFI} ${GRUB_LEFI}			|| return 1
 			fi
 			DOTEST="false" release_grub_qcow_mount		${GRUB_DEST} ${GRUB_LMBR} ${GRUB_LEFI}			|| return 1
 			DOTEST="${DOTEST}" release_grub_loopfile	${GRUB_DEST}						|| return 1
-			${SED} -i "s|${GRUB_LMBR}|${DEF_DEV}|g"		${GRUB_DEST}/${MOUNT_MBR}/${_TITLE}/${_TITLE}.grub.cfg	|| return 1
 			DOTEST="false" release_grub_qcow_unmount	${GRUB_DEST} ${GRUB_LMBR} ${GRUB_LEFI}			|| return 1
 		fi
 		if {
