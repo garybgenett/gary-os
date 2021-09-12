@@ -1972,39 +1972,63 @@ Everything needed to perform these steps is in the [Repository] or the
 ### Checklist ##################################################################
 [Checklist]: #checklist
 
+Everything in [Booting], [Running] and [Building] should be validated below.
+
+**[Compile]**
+
+  * (Completed in [Process])
+
 **[Linux] / [Virtual]**
 
-  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.kernel 1`
+  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1`
     * [ ] Boot time
     * `rc-status`
-    * `htop`
-    * `df -h; ls -la / /.overlay /.overlay/*`
+        * `htop`
+        * `free; df -h; ls -la / /.overlay /.overlay/*`
     * `mount -o remount,size=3072m /; df -h`
-    * `mount -o remount,size=3072m /.overlay; df -h`
+        * `mount -o remount,size=3072m /.overlay; df -h`
 
 **[GRUB] / [Filesystem]**
 
-  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.grub/loopfile.qcow2 1`
+  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.grub/loopfile.qcow2 1 MBR`
     * [x] Menu
+        * [x] Options
+            * [ ] Verify "gopts=true"
+            * [ ] Test each entry
+        * [x] Menu -> Options
+            * [ ] Verify values
+        * [x] Options -> 'reset'
+            * [ ] Verify values
         * `reboot`
     * [x] Boot
-        * [ ] Verify console
+        * [ ] Verify normal console
+        * `cat /proc/cmdline`
+            * [ ] Verify "gopts=true"
+        * `reboot`
+    * [x] Boot Rootfs
+        * [x] Options -> 'groot=null'
+        * [ ] Verify 'rootfs' menu is readable
+        * `cat /proc/cmdline`
         * `reboot`
     * [x] Boot Rootfs
         * [x] Serial console on '---' entry
-        * [ ] Verify console
-        * [ ] Verify failure
+        * [x] Options -> 'groot=null'
+        * `vi /.profile /initrc`
+            * `if true; then`
+        * `rootfs -`
+            * `g`
+            * `mount; ls -la /.overlay /.overlay/.overlay; unrootfs; mount`
         * `rootfs = /dev/null /.gary-os; exit 0`
             * `<enter>`
             * `c; exit 0`
             * `l`
+            * `<enter>`
             * `q`
-            * `rootfs -`
-            * `g`
-        * `mount; ls -la /.groot/.overlay /.overlay/.overlay; unrootfs; mount`
-            * `rootfs =; mount /dev/sda1 /.groot; exit 1`
-            * `mount; ls -la /.groot/.groot; unrootfs; mount`
+        * `rootfs =; mount /dev/sda1 /.groot; exit 1`
+            * `mount; ls -la /.groot /.groot/.groot /.groot/.overlay; unrootfs; mount`
             * `rm /usr/sbin/mount.*; rootfs /dev/sda1`
+            * [ ] Verify 'rsync' phase (may exhaust memory)
+            * [ ] If it crashes, reset and restart from here
             * `mount; ls -la /.overlay/.overlay; unrootfs; mount`
         * `dotty; exit 0`
             * `dottys`
@@ -2015,15 +2039,13 @@ Everything needed to perform these steps is in the [Repository] or the
             * `unrootfs; mount`
         * `rootfs /dev/sda1`
             * `boot`
-            * `reboot`
-    * [x] Boot Rootfs (set 'groot' to '/dev/sda1')
-        * [ ] Verify success
-        * `boot`
-        * `df -h; ls -la / /.overlay /.overlay/*`
-  * `./scripts/grub.sh ./build/.gary-os-*/gary-os-*.grub -m`
-    * `./scripts/qemu-minion.bsh /dev/loop9 1 MBR`
-        * [x] Boot
-    * `./scripts/grub.sh ./build/.gary-os-*/gary-os-*.grub -u`
+    * [ ] Validate root filesystem
+        * `rc-update add dhcpcd default; openrc`
+            * `mount -o remount,size=6144m /.overlay`
+            * `(cd /.gary-os; make DOREDO=true unpack)`
+        * `rc-status`
+            * `htop`
+            * `free; df -h; ls -la / /.overlay /.overlay/*`
 
 **[EFI]**
 
@@ -2041,16 +2063,21 @@ Everything needed to perform these steps is in the [Repository] or the
     * `(cd .store; rsync -L ./gary-os/gary-os.kernel ./_rescue)`
         * [ ] Verify direct boot
     * `(cd .store; rsync -L ./gary-os/gary-os.grub/x86_64.efi ./_rescue)`
+    * `vi [...]/dhcpd.conf; sv restart dhcpd tftpd`
+        * [ ] Uncomment 'root-path'
         * [x] PXE
         * `ls -la /.overlay`
-    * `vi [...]/dhcpd.conf; sv restart dhcpd`
+    * `vi [...]/dhcpd.conf; sv restart dhcpd tftpd`
         * [ ] Change 'root-path' location
+        * [ ] Uncomment 'extensions-path'
         * [x] PXE
         * `ls -la /.overlay`
   * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.grub/loopfile.qcow2 1`
-    * `net_dhcp`
+    * [x] Options
+        * [x] 'dhcp'
+        * [x] 'pxe: groot'
     * [x] PXE
-  * `/.setup/.setconf; sv restart dhcpd`
+  * `/.setup/.setconf; sv restart dhcpd tftpd`
 
 **[Windows] / [GRUB] / [Virtual]**
 
@@ -2065,6 +2092,8 @@ Everything needed to perform these steps is in the [Repository] or the
         * [ ] Verify boot
     * [ ] Install [GRUB]
   * `./scripts/qemu-windows.bsh / ALT BOOT -m 6144`
+    * [ ] Verify both "Windows" entries
+        * `change cdrom0 [...]/en_windows_10_*.iso`
     * [x] Boot
         * `reboot`
     * [x] Windows
@@ -2076,79 +2105,88 @@ Everything needed to perform these steps is in the [Repository] or the
     * [x] Boot Manager
         * [x] GaryOS Grub
         * [x] Windows
+  * `./scripts/qemu-minion.bsh /dev/null 1`
+    * [x] Boot
   * `(cd _systems/qemu; rm windows.img)`
     * `(cd _systems/qemu; ln windows-10.qcow2 windows.img)`
     * `sv restart qemu.windows`
 
-**[Networking] / [GUI]**
+**[Networking] / [GUI] / [Minimal]**
 
   * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.grub/loopfile.qcow2 1`
     * [x] Ethernet [Networking]
     * [x] [GUI]
   * [ ] Boot to "gary-os"
+    * [ ] Verify [Tiny]
+    * [ ] Verify failed 'Boot'
     * [x] Wireless [Networking]
     * [x] [GUI]
 
 **[Update] / [Manage] / [Image] / [Install]**
 
+  * `rm /tmp/qemu.null.qcow2`
   * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.grub/loopfile.qcow2 1 -m 8192`
     * `cd /.gary-os`
-        * `make DOMODS=true unpack`
+        * `rc-update add dhcpcd default; openrc`
+            * `mount -o remount,size=6144m /.overlay`
         * `source ./.bashrc`
-        * `shell -i`
+            * `rsync -L --filter=-_/sources --filter=-_/build --filter=-_/gary-os root@10.0.0.254:[...]/.setup/gentoo.gary-os/ /.gary-os`
+            * `shell -i`
         * `exit 0`
     * `cd /.gary-os`
+        * `mkdir /tmp/grub; HOME=/.gary-os GRUB_DIR=/.gary-os ./scripts/grub.sh /tmp/grub -fx -k/dev/sda1 /dev/sdb1`
         * `make unpack`
-        * `mount /dev/sda1 /.install`
+        * `mount /dev/sdb1 /.install`
         * `mkdir /.install/gary-os`
     * `ls -la ./gary-os/`
-        * `rc-update add dhcpcd default; openrc`
         * `rm ./gary-os/gary-os-*.fetch`
         * `make fetch`
             * `sed -i -e "s|^[#]||g" -e "/[.]rootfs$/d" ./gary-os/gary-os-*.fetch`
             * `for FILE in $(cat ./gary-os/gary-os-*.fetch); do rsync -tvv -L --progress root@10.0.0.254:[...]/_builds/_gary-os.working/.gary-os-*/${FILE} /.install/gary-os/; done`
             * `make DOTEST=true fetch`
-        * `make unpack`
     * `ls -la /.gary-os-*/`
-        * `mount -o remount,size=6144m /.overlay`
-        * `sed -i "s|^.|*|g" /.unpack`
-        * `make unpack`
-        * `emerge app-misc/hello`
-        * `hello`
+        * `make DOREDO=true unpack`
+            * `emerge app-misc/hello`
+            * [ ] Verify from [SourceForge] package
+            * `hello`
         * `rm /.gary-os-*/gary-os-*.rootfs*`
-        * `make rootfs`
+            * `make rootfs`
     * `ls -la ./sources/; ls -la /.gary-os/build.install/`
         * `rm ./build; ln -fsv /.install ./build`
+        * `mv ./gary-os/gary-os-*.stage3.tar.xz ./gary-os/stage3-generic_64.tar.xz`
         * `make init`
             * [ ] Exit with \<ctrl-c\> once unpacking the 'stage3'
         * `ls -la ./build/ ./build/_build`
+  * `rm /tmp/qemu.gary-os-v6.0-generic_64.kernel.qcow2; ln -fsv qemu.null.qcow2 /tmp/qemu.gary-os-v6.0-generic_64.kernel.qcow2`
+  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.kernel 1`
+    * `cd /.gary-os`
+        * `rc-update add dhcpcd default; openrc`
+        * `source ./.bashrc`
+            * `rsync -L --filter=-_/sources --filter=-_/build --filter=-_/gary-os root@10.0.0.254:[...]/.setup/gentoo.gary-os/ /.gary-os`
+        * `make unpack`
+        * `mount /dev/sda1 /.install`
     * `ls -la /.install/`
-        * `umount /.install`
-            * `cd /.gary-os; mkdir /tmp/grub; HOME=/.gary-os ./scripts/grub.sh /tmp/grub -fx /dev/sda1`
-            * `mount /dev/sda1 /.install`
-            * `rm ./build; ln -fsv / ./build`
-        * `mount -o remount,size=6144m /.overlay`
-            * `make DOREDO=true unpack`
-            * `make install`
+        * `make install`
             * [ ] Copy and paste GRUB instructions
             * `cat /.install/etc/issue`
             * `ls -la /.install`
             * `df -h`
         * `make DOREDO=true install`
             * `cat /etc/issue`
+  * `./scripts/qemu-minion.bsh /dev/null 1`
+    * [x] Boot
+        * `mkdir /tmp/grub; HOME=/.gary-os GRUB_DIR=/.gary-os ./scripts/grub.sh /tmp/grub /dev/sda1`
         * `reboot`
-            * [ ] Default GRUB entry
-        * `reboot`
-            * `linux (hd1,1)/gary-os/gary-os.kernel; boot`
-            * `cd /.gary-os; mkdir /tmp/grub; HOME=/.gary-os ./scripts/grub.sh /tmp/grub /dev/sda1`
-            * `reboot`
-            * [x] Install Menu
-            * [ ] Default GRUB entry
-        * `reboot`
-            * [x] Install Boot
-    * `make reset; vi /etc/portage/{make.conf,package.use}`
+    * [x] Install Menu
+        * [ ] Default GRUB entry
+        * `<escape>`
+    * [x] Install Boot
+        * `make reset; vi /etc/portage/{make.conf,package.use}`
         * `make update`
         * `make upgrade`
+        * `reboot`
+    * [x] Boot Rootfs
+        * [ ] Command comments in [gentoo/sets/\_gary-os]
 
 ### Publish ####################################################################
 [Publish]: #publish
