@@ -2207,8 +2207,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * [ ] Screenshots
         * `(cd .setup/gentoo.gary-os; ./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1)`
         * `wmctrl -i -r 0x00000000 -e 0,0,0,800,600`
-            * `vi ~/.Xresources`
-                * `URxvt.background: rgb:00/00/00`
+            * `vi ~/.Xresources` -> `URxvt.background: rgb:00/00/00`
             * `ctrl-a s, crtl-a F`
             * [x] Gimp -> File -> Create -> Screenshot
         * `remote-viewer`
@@ -2253,7 +2252,8 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * `(cd _builds; rm ./_gary-os.boot; ln _gary-os.working ./_gary-os.boot)`
         * `_sync boot`
     * `./scripts/qemu-minion.bsh /dev/null 1`
-        * [x] PXE (uncomment variables)
+        * [x] Options -> 'dhcp' -> 'rootfs'
+        * [x] PXE
     * [x] **Verify()**
   * `make _publish_prep`
     * `ll ./build/ ./build/_build ./build/.gary-os-*`
