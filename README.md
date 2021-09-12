@@ -534,7 +534,7 @@ utility is available on [Rootfs].
 
   ```
   xrandr --query
-  xrandr --output Virtual-0 --mode 1920x1200
+  xrandr --output Virtual-1 --mode 1920x1200
   ```
 
 These are not the prettiest or most feature-rich applications.  They were
