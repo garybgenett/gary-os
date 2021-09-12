@@ -2,6 +2,16 @@
 source ${HOME}/.bashrc
 ################################################################################
 
+if { [[ -z ${_BASHED} ]] || ! ${_BASHED}; }; then
+	echo -en "\n"
+	echo -en ">>> THE GARYOS BASHRC FILE MUST BE IN YOUR HOME DIRECTORY <<<\n"
+	echo -en ">>> OR YOU CAN SET THE HOME VARIABLE TO THE LOCATION WHERE IT IS <<<\n"
+	echo -en "\n"
+	exit 1
+fi
+
+########################################
+
 declare GRUB_DIR="${GRUB_DIR:-/.g/_data/zactive/.setup/grub}"
 if [[ ! -d ${GRUB_DIR} ]]; then
 	GRUB_DIR="$(realpath $(dirname ${_SELF})/../grub)"
