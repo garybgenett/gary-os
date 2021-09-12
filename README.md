@@ -4,7 +4,7 @@
 
 | ![GaryOS Icon](artifacts/images/icon-v6.0.png "GaryOS Icon") | "The one file that does it all."
 |:---      |:---
-| Latest   | [v5.0 2021-08-04] -- [Kernel] / [Rootfs] / [Boot]
+| Latest   | [v6.0 2021-09-11] -- [Kernel] / [Rootfs] / [Boot]
 | Homepage | <https://github.com/garybgenett/gary-os>
 | Download | <https://sourceforge.net/projects/gary-os>
 
@@ -23,7 +23,7 @@
 | [Project]  | [References] / [Contributions] / [Contributing] / [Licensing]
 | [Details]  | [Versioning] / [Repository] / [Tools] / [Ecosystem]
 | [Release]  | [Process] / [Checklist] / [Publish]
-| [Versions] | [v5.0 2021-08-04] / [v4.0 2021-07-26] / [v3.0 2015-03-16] / [(...)](#v20-2014-06-19)
+| [Versions] | [v6.0 2021-09-11] / [v5.0 2021-08-04] / [v4.0 2021-07-26] / [(...)](#v30-2015-03-16)
 
 [Gary B. Genett]: http://www.garybgenett.net
 [gary-os@garybgenett.net]: mailto:gary-os@garybgenett.net?subject=GaryOS%20Submission&body=Thank%20you%20for%20sending%20a%20message%21
@@ -2305,9 +2305,56 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 [License]: https://github.com/garybgenett/gary-os/blob/master/LICENSE.md
 [Downloads]: https://sourceforge.net/projects/gary-os/files
 
-[Kernel]: https://sourceforge.net/projects/gary-os/files/gary-os-v5.0-generic_64.kernel
-[Rootfs]: https://sourceforge.net/projects/gary-os/files/gary-os-v5.0-generic_64.rootfs
-[Boot]: https://sourceforge.net/projects/gary-os/files/gary-os-v5.0-generic_64.grub.zip
+[Kernel]: https://sourceforge.net/projects/gary-os/files/gary-os-v6.0-generic_64.kernel
+[Tiny]: https://sourceforge.net/projects/gary-os/files/v6.0/gary-os-v6.0-generic_64.tiny.kernel
+[Rootfs]: https://sourceforge.net/projects/gary-os/files/gary-os-v6.0-generic_64.rootfs
+[Boot]: https://sourceforge.net/projects/gary-os/files/gary-os-v6.0-generic_64.grub.zip
+
+### v6.0 2021-09-11 ############################################################
+[v6.0 2021-09-11]: #v60-2021-09-11
+[v6.0]: #v60-2021-09-11
+
+  **[Repository](https://github.com/garybgenett/gary-os/tree/v6.0)
+  / [Readme](https://github.com/garybgenett/gary-os/blob/v6.0/README.md)
+  / [License](https://github.com/garybgenett/gary-os/blob/v6.0/LICENSE.md)
+  / [Packages (Kernel)](https://github.com/garybgenett/gary-os/blob/v6.0/packages.txt)
+  / [Packages (Tiny)](https://github.com/garybgenett/gary-os/blob/v6.0/packages.tiny.txt)
+  / [Packages (Rootfs)](https://github.com/garybgenett/gary-os/blob/v6.0/packages.rootfs.txt)**
+
+  |                | |
+  |:---            |:---
+  | Kernel         | [gary-os-v6.0-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v6.0-generic_64.kernel)
+  | Kernel (Tiny)  | [gary-os-v6.0-generic_64.tiny.kernel](https://sourceforge.net/projects/gary-os/files/v6.0/gary-os-v6.0-generic_64.tiny.kernel)
+  | Rootfs         | [gary-os-v6.0-generic_64.rootfs](https://sourceforge.net/projects/gary-os/files/gary-os-v6.0-generic_64.rootfs)
+  | Boot           | [gary-os-v6.0-generic_64.grub.zip](https://sourceforge.net/projects/gary-os/files/gary-os-v6.0-generic_64.grub.zip)
+  | Source Stage3  | [gary-os-v6.0-generic_64.stage3.tar.xz](https://sourceforge.net/projects/gary-os/files/v6.0/gary-os-v6.0-generic_64.stage3.tar.xz)
+  | Source Portage | [gary-os-v6.0-generic_64.meta-repo.tar.xz](https://sourceforge.net/projects/gary-os/files/v6.0/gary-os-v6.0-generic_64.meta-repo.tar.xz)
+
+  * Overall
+    * Completely up-to-date [Funtoo] [meta-repo] commit!
+    * [Linux Kernel] configuration now from [Debian Kernel]
+    * Streamlined [Builder] [Compile] process
+    * More comprehensive 'FS\*' variable defaults
+    * Improved "rootfs" overlay process and menu system in [Kernel]
+    * Added 'tiny' kernel build
+    * Color-branded [dwm]
+  * [Portage]
+    * Promoted "FUNTOO" variable
+    * Tightened up [gentoo/sets/] package lists
+    * Consolidated and condensed Python versions
+    * Eliminated Systemd, Surf, WebKit, SpiderMonkey, Ruby and CUPS
+    * Quieter, prettier and easier to read [gentoo/\_system] output
+    * Improved [gentoo/overlay/] management
+    * Enhanced [gentoo/.emergent] output
+  * [GRUB]
+    * Extracted menus from script to [grub/] directory
+    * Added options menu
+    * Enhanced Windows support, including USB install partitions
+    * Enabled block devices for 'mount' options
+    * Updated MBR modules list
+    * Improved debugging, including custom tracing output
+    * Better usage and error output
+    * Cleaned up [Boot] archive
 
 ### v5.0 2021-08-04 ############################################################
 [v5.0 2021-08-04]: #v50-2021-08-04
