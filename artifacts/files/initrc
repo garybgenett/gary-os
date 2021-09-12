@@ -64,8 +64,8 @@ ${ROOTFS_FUNC}() {
 }
 
 mounts() {
-	mounts="${1}" && shift
-	do_mnt="${1}" && shift
+	mounts="${1}"; shift
+	do_mnt="${1}"; shift
 	if ! ${do_mnt}; then
 		lsof | sed -r -n "s|^([0-9]+)[[:space:]]+${mounts}.+$|\1|gp" | sort -u | while read -r file; do
 			kill -9 ${file} || return 1
@@ -108,8 +108,8 @@ mounts() {
 }
 
 ${ROOTFS_NAME}() {
-	mounts="${1}" && shift
-	${ROOTFS_NAME}="${1}" && shift
+	mounts="${1}"; shift
+	${ROOTFS_NAME}="${1}"; shift
 	do_mnt="false"
 	to_mem="false"
 	do_pak="false"
@@ -117,8 +117,8 @@ ${ROOTFS_NAME}() {
 		do_mnt="true"
 	elif [ -f "${${ROOTFS_NAME}}" ]; then
 		do_mnt="true"
-		[ "${1}" == true ] && to_mem="${1}" && shift
-		[ "${1}" == true ] && do_pak="${1}" && shift
+		[ "${1}" == true ] && to_mem="${1}"; shift
+		[ "${1}" == true ] && do_pak="${1}"; shift
 	fi
 	if ! ${do_mnt}; then
 		mounts ${mounts} false || return 1
@@ -191,9 +191,9 @@ select() {
 	select_opt="false"; if [ "${1}" == "-" ]; then select_opt="true"; shift; fi
 	chroot_opt="false"; if [ "${1}" == "=" ]; then chroot_opt="true"; shift; fi
 	if [ -n "${1}" ]; then
-		${ROOTFS_ROOT_OPT}="${1}" && shift
+		${ROOTFS_ROOT_OPT}="${1}"; shift
 		if [ -n "${1}" ]; then
-			${ROOTFS_ROOT_OPT}_file="${1}" && shift
+			${ROOTFS_ROOT_OPT}_file="${1}"; shift
 		fi
 	elif
 		[ -z "${${ROOTFS_ROOT_OPT}}" ] &&
@@ -347,8 +347,8 @@ select() {
 }
 
 count() {
-	time="${1}" && shift
-	line="${1}" && shift
+	time="${1}"; shift
+	line="${1}"; shift
 	wait="`expr ${time}00 / ${line}`"
 	if [ "${wait}" -lt "10" ]; then
 		wait="0.0${wait}"
