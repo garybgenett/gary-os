@@ -215,13 +215,9 @@ menuentry \"---\" {
 	serial_config
 }
 
-$(cat ${GRUB_DIR}/grub.defaults.cfg)
-$(cat ${GRUB_DIR}/grub.menu.${_BASE}.cfg | ${SED} "s|${GIBAK}${GPART}|${GCDEV}|g")
+$(cat ${GRUB_DIR}/grub.defaults.cfg		| ${SED} "s|(options_root[=][\"][^$].+)([\"])$|\1${GOPTS}\2|g")
+$(cat ${GRUB_DIR}/grub.menu.${_BASE}.cfg	| ${SED} "s|${GIBAK}${GPART}|${GCDEV}|g")
 $(cat ${GRUB_DIR}/grub.menu.windows.cfg)
-
-options_root=\"\${options_root}${GOPTS}\"
-options_boot=\"\${options_root} \${options_serial}\"
-
 ################################################################################
 # GaryOS End Of File
 ################################################################################"
