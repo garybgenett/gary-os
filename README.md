@@ -2297,7 +2297,7 @@ Everything needed to perform these steps is in the [Repository] or the
     * Additional development helpers in [Makefile]
     * Achieved pure 64-bit
   * [Portage]
-    * Improved [meta-repo] set in [gentoo/\_funtoo.kits]
+    * Improved [meta-repo] tool in [gentoo/\_funtoo.kits]
     * Overhauled [gentoo/sets/] and [gentoo/overlay/]
     * Streamlined [gentoo/overlay/] management
     * Complete debug stripping of packages
