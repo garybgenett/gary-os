@@ -68,12 +68,8 @@ Unique advantages:
 No other GNU/Linux distribution takes the same approach or has the same features
 as GaryOS.
 
-<!-- wmctrl -i -r 0x00000000 -e 0,0,0,800,600 -->
-<!-- xrandr -s 800x600 -->
-<!-- (exiv2 *; identify -verbose *) | less -->
-
-![GaryOS CLI Screenshot](artifacts/images/screenshot_cli-v5.0.png "GaryOS CLI Screenshot")
-![GaryOS GUI Screenshot](artifacts/images/screenshot_gui-v5.0.png "GaryOS GUI Screenshot")
+![GaryOS CLI Screenshot](artifacts/images/screenshot_cli-v6.0.png "GaryOS CLI Screenshot")
+![GaryOS GUI Screenshot](artifacts/images/screenshot_gui-v6.0.png "GaryOS GUI Screenshot")
 
 ### Quick Start ################################################################
 [Quick Start]: #quick-start
@@ -2162,6 +2158,7 @@ Everything needed to perform these steps is in the [Repository] or the
   * `cd coding/gary-os`
   * `vi ./README.md`
     * [ ] Update links for [Contributions] patches
+    * [ ] [Kernel], [Rootfs] and [Boot] links
     * [ ] [Versions] list in [Header](#welcome-to-garyos)
     * [ ] [Versions] section and release notes
         * `for FILE in coding/gary-os .setup .static; do [...]`
@@ -2169,7 +2166,19 @@ Everything needed to perform these steps is in the [Repository] or the
         * `if [ ${FILE} == .setup ]; then LIST="grub linux gentoo"; fi`
         * `if [ ${FILE} == .static ]; then LIST=".bashrc .vimrc scripts/grub.sh scripts/qemu*"; fi`
         * `(cd ${FILE}; vdiff -g $(sed -n "s|^$(basename ${FILE}): ||gp" [...]/_builds/_gary-os/_commit) ${LIST})`
-    * [ ] [Kernel], [Rootfs] and [Boot] links
+    * [ ] Screenshots
+        * `(cd .setup/gentoo.gary-os; ./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1)`
+        * `wmctrl -i -r 0x00000000 -e 0,0,0,800,600`
+            * `vi ~/.Xresources`
+                * `URxvt.background: rgb:00/00/00`
+            * `ctrl-a s, crtl-a F`
+            * [x] Gimp -> File -> Create -> Screenshot
+        * `remote-viewer`
+            * `startx`
+            * `xrandr -s 800x600`
+            * [x] Links -> <http://10.0.0.254:6419/#welcome-to-gary-os>
+            * [x] File -> Screenshot
+        * `(file *; exiv2 *; identify -verbose *) | less`
   * `make TOKN=[...] readme-github`
     * `make DOTEST=true readme`
     * `make readme-all`
