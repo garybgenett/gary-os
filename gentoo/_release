@@ -1524,6 +1524,8 @@ function release_grub_loopfile {	#>>>{dotest}
 			${RM}						${GRUB_DEST}/${MOUNT_EFI}/${_TITLE}/${_TITLE}.efi	|| return 1
 			${RSYNC_W} --copy-links ${_RAMFS}.kernel	${GRUB_DEST}/${MOUNT_EFI}/${_TITLE}/${_TITLE}.efi	|| return 1
 		fi
+		FILE="${SETDIR}/${GRBDIR}/grub.menu.${_TITLE}.cfg"
+		${RSYNC_W} --copy-links ${FILE}				${GRUB_DEST}/${MOUNT_EFI}/${_TITLE}/${_TITLE}.grub.cfg	|| return 1
 	fi
 	${MKDIR}							${GRUB_DEST}/${MOUNT_MBR}/${_TITLE}			|| return 1
 	${RSYNC_W} --copy-links ${GRUB_DEST}/${_TITLE}.grub.cfg		${GRUB_DEST}/${MOUNT_MBR}/${_TITLE}/			|| return 1
