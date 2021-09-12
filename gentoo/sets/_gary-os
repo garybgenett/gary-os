@@ -10,7 +10,7 @@
 #! #############################################################################
 #! declare _HOME="/.g/.home"
 #! declare SETDIR="/.gary-os"
-#! source ${SETDIR}/gentoo/_system
+#! HOME="/.gary-os" source ${SETDIR}/gentoo/_system
 #! #####################################
 #! #>>> declare G_DISK="/dev/nvme0n1p1"
 #! declare G_DISK="/dev/sda1"
@@ -18,9 +18,9 @@
 #! declare G_PACK="${_GINST}/${_TITLE}/_packages"
 #! declare G_RNSV="/.runit/runsvdir/system"
 #! #############################################################################
+#! make -C ${SETDIR} DOMODS="true" unpack
 #! mount -o remount,rw,size=6g /.overlay
 #! [[ -b ${G_DISK} ]] && mount-robust ${G_DISK} ${_GINST}
-#! make -C ${SETDIR} DOMODS="true" unpack
 #! make -C ${SETDIR} DOREDO="true" unpack
 #! #####################################
 #! ${MKDIR} ${G_DIST} ${G_PACK}
