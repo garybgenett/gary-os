@@ -209,7 +209,7 @@ declare GMENU_DATA="\
 ################################################################################
 
 menuentry \"${_NAME}\" {
-	configfile (memdisk)\${grub_menu}
+	configfile (${root})\${grub_menu}
 }
 menuentry \"---\" {
 	serial_config
