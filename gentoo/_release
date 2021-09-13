@@ -2236,10 +2236,10 @@ function publish_export_gitbackup {
 function publish_export_underscore {
 	FILE="$(basename ${1})" && shift
 	if [[ -d ${_FINAL}/_${FILE} ]]; then
-		${RSYNC_U} --copy-links --delete-excluded \
-			--filter="-_/.layout.conf.*" \
-			--filter="-_/.mirror-cache.*" \
-			${_FINAL}/_${FILE}/ ${_OUTDIR}/${FILE} || return 1
+		${RSYNC_U} --copy-links --delete-excluded	\
+			--filter="-_/*%*"			\
+			--filter="-_/.*"			\
+			${_FINAL}/_${FILE}/ ${_OUTDIR}/${FILE}	|| return 1
 	fi
 	return 0
 }
