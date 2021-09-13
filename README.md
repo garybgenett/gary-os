@@ -661,8 +661,9 @@ fails to load.  The [grub/grub.menu.gary-os.cfg] file also works this way.
 
 The [Tiny] version is roughly 25% the size of [Kernel], and only uses 50% as
 much memory.  To achieve this, a significant number of packages were removed,
-and the overall functionality was greatly reduced.  It is a viable rescue system
-and [Filesystem] [Loader], but not much else should be expected of it.
+the filesystem was heavily pruned, and the overall functionality was greatly
+reduced.  It is a viable rescue system and [Filesystem] [Loader], but not much
+else should be expected of it.
 
 --------------------------------------------------------------------------------
 
