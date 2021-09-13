@@ -1795,6 +1795,7 @@ components, and deserve mention:
     * [rxvt-unicode]
     * [Links]
   * [Rufus]
+  * [Grip]
 
   [Bash]: https://www.gnu.org/software/bash
   [Vim]: https://www.vim.org
@@ -1806,6 +1807,7 @@ components, and deserve mention:
   [rxvt-unicode]: http://software.schmorp.de/pkg/rxvt-unicode.html
   [Links]: http://links.twibright.com
   [Rufus]: https://rufus.ie
+  [Grip]: https://github.com/joeyespo/grip
 
 Gratitude to all those who have contributed to making [GNU/Linux] the most
 powerful and flexible operating system on the planet, and a true "run
