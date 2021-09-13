@@ -2317,7 +2317,8 @@ function _publish_export {
 			continue
 		fi
 		for NEXT in $(
-			${LS} ${_OUTDIR}/${INDEX}/*.{kernel,initrd,rootfs,grub.zip} 2>/dev/null
+			${LS} ${_OUTDIR}/${INDEX}/*.{kernel,initrd,rootfs,grub.zip} 2>/dev/null	|
+			${GREP} -v "[.]${_G_MOD}[.]"
 		); do
 			declare OUTFILE="$(
 				echo -en "$(basename ${NEXT})" |
