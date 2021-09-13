@@ -1096,9 +1096,9 @@ function _release_devel {		#{ismain} #{doredo} #{dotest}
 
 function _release_build {		#{ismain} #{doredo} #{dofast} #{dotest}
 	DOREDO="${DOREDO}" DOFAST="${DOFAST}" DOTEST="${DOTEST}" _prepare_build	|| return 1
-	DOREDO="false" DOFAST="${DOFAST}" DOTEST="${DOTEST}" _release_cpio	|| return 1
-	DOREDO="false" _release_kernel						|| return 1
-	DOREDO="false" DOFAST="${DOFAST}" DOTEST="${DOTEST}" _release_grub	|| return 1
+	DOREDO="${DOREDO}" DOFAST="${DOFAST}" DOTEST="${DOTEST}" _release_cpio	|| return 1
+	DOREDO="${DOREDO}" _release_kernel					|| return 1
+	DOREDO="${DOREDO}" DOFAST="${DOFAST}" DOTEST="${DOTEST}" _release_grub	|| return 1
 	_release_report								|| return 1
 	return 0
 }
