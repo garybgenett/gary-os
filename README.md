@@ -4,7 +4,7 @@
 
 | ![GaryOS Icon](artifacts/images/icon-v6.0.png "GaryOS Icon") | "The one file that does it all."
 |:---      |:---
-| Latest   | [v6.0 2021-09-11] -- [Kernel] / [Rootfs] / [Boot]
+| Latest   | [v6.0 2021-09-12] -- [Kernel] / [Rootfs] / [Boot]
 | Homepage | <https://github.com/garybgenett/gary-os>
 | Download | <https://sourceforge.net/projects/gary-os>
 
@@ -23,7 +23,7 @@
 | [Project]  | [References] / [Contributions] / [Contributing] / [Licensing]
 | [Details]  | [Versioning] / [Repository] / [Tools] / [Ecosystem]
 | [Release]  | [Process] / [Checklist] / [Publish]
-| [Versions] | [v6.0 2021-09-11] / [v5.0 2021-08-04] / [v4.0 2021-07-26] / [(...)](#v30-2015-03-16)
+| [Versions] | [v6.0 2021-09-12] / [v5.0 2021-08-04] / [v4.0 2021-07-26] / [(...)](#v30-2015-03-16)
 
 [Gary B. Genett]: http://www.garybgenett.net
 [gary-os@garybgenett.net]: mailto:gary-os@garybgenett.net?subject=GaryOS%20Submission&body=Thank%20you%20for%20sending%20a%20message%21
@@ -2315,9 +2315,9 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 [Rootfs]: https://sourceforge.net/projects/gary-os/files/gary-os-v6.0-generic_64.rootfs
 [Boot]: https://sourceforge.net/projects/gary-os/files/gary-os-v6.0-generic_64.grub.zip
 
-### v6.0 2021-09-11 ############################################################
-[v6.0 2021-09-11]: #v60-2021-09-11
-[v6.0]: #v60-2021-09-11
+### v6.0 2021-09-12 ############################################################
+[v6.0 2021-09-12]: #v60-2021-09-12
+[v6.0]: #v60-2021-09-12
 
   **[Repository](https://github.com/garybgenett/gary-os/tree/v6.0)
   / [Readme](https://github.com/garybgenett/gary-os/blob/v6.0/README.md)
