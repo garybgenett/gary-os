@@ -1518,6 +1518,9 @@ function release_grub_loopfile {	#>>>{dotest}
 	declare GRUB_DEST="${1}" && shift
 	declare GRUB_LMBR="${1}" && shift
 	declare GRUB_LEFI="${1}" && shift
+	if [[ ! -f ${_RAMFS}.kernel ]]; then
+		${LN} --relative ${_RAMFS}.${_G_MOD}.kernel		${_RAMFS}.kernel					|| return 1
+	fi
 	if ${DOTEST}; then
 		${MKDIR}						${GRUB_DEST}/${MOUNT_EFI}/${_TITLE}			|| return 1
 		if ! ${RSYNC_W} --copy-links ${_RAMFS}.kernel		${GRUB_DEST}/${MOUNT_EFI}/${_TITLE}/${_TITLE}.efi	; then
