@@ -2339,7 +2339,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * Streamlined [Builder] [Compile] process
     * More comprehensive 'FS\*' variable defaults
     * Improved "rootfs" overlay process and menu system in [Kernel]
-    * Added 'tiny' kernel build
+    * Added [Tiny] kernel build
     * Color-branded [dwm]
   * [Portage]
     * Promoted "FUNTOO" variable
