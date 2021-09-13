@@ -2241,22 +2241,21 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 **`}`**
 
   * `cd .setup/gentoo.gary-os`
+    * `(cd _builds/.gary-os.release; rm ./v#.#)`
     * `make clean`
+    * `ll ./build/ ./build/_build`
   * `(cd coding/gary-os; git-commit -m "Stamped v#.# release." ./README.md)`
-    * `make _publish_gitdir`
+    * `make _publish_release`
     * `(cd _builds/.gary-os/.gary-os; GIT_PAGER= git-list -n1)`
-  * `make DOREDO=true DOMODS=true doit release`
+  * `make DOREDO=true DOMODS=true doit release _prepare_packdirs`
     * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.tiny.kernel 1`
     * [x] **Verify()**
-  * `make DOREDO=true doit release`
+  * `make DOREDO=true doit release _prepare_packdirs`
     * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1`
     * [x] **Verify()**
   * `make DOREDO=true P=_gary-os doit rootfs`
-    * `(cd _builds; rm ./_gary-os.boot; ln _gary-os.working ./_gary-os.boot)`
-        * `_sync boot`
-    * `./scripts/qemu-minion.bsh /dev/null 1`
-        * [x] Options -> 'dhcp' -> 'rootfs'
-        * [x] PXE
+    * `_sync boot`
+    * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1 groot=10.0.0.254 -m 8192`
     * [x] **Verify()**
   * `make _publish_prep`
     * `ll ./build/ ./build/_build ./build/.gary-os-*`
@@ -2270,8 +2269,6 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 
 **Upload**
 
-  * `cd .setup/gentoo.gary-os`
-    * `(cd _builds/.gary-os.release; rm ./v#.#)`
   * `make _publish_export`
     * `(cd _builds/.gary-os.release; ll ./ ./v#.#)`
   * `make _publish_release`
@@ -2290,6 +2287,11 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * `make doit`
     * `make _publish_prep`
     * `(cd _builds/_gentoo; git-backup "gary-os v#.#"; GIT_PAGER= git-list -n1)`
+  * `cd coding/gary-os-history`
+    * `ln ../gary-os.git ./.git`
+    * `GIT_PAGER= git-list -n1`
+    * `git checkout README.md
+    * `rm ./.git`
 
 **Celebrate**
 
