@@ -2359,9 +2359,8 @@ function _publish_upload {
 	chown -R root:root	${_OUTDIR}					|| return 1
 	delete_empty		${_OUTDIR}					|| return 1
 	eval ${RSYNC_U} --copy-links --delete-excluded				\
-		$(for FILE in $(${LS} --directory ${_OUTDIR}/${_VERSN}/*/ 2>/dev/null); do
-			echo "--filter=\"-_/${_VERSN}/$(basename ${FILE})\""
-		done)		${_OUTDIR}/ ${_SFFILE}				|| return 1
+		--filter="-_/${_VERSN}/*/"					\
+		${_OUTDIR}/	${_SFFILE}					|| return 1
 	return 0
 }
 
