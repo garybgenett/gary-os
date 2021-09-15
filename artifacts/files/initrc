@@ -214,7 +214,7 @@ select() {
 		if	[ -z "`echo "${${ROOTFS_ROOT_OPT}}" | grep -E "^/dev/.+$"`" ] ||
 			[ ! -b "${${ROOTFS_ROOT_OPT}}" ] ||
 			! mkdir -v -p /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT} ||
-			! /bin/mount -v -o ro,nonempty ${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT} ||
+			! /bin/mount -v -o ro ${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT} ||
 			${chroot_opt}
 		then
 			#note: mounting and unpacking the default image in place
@@ -232,8 +232,8 @@ select() {
 			if	[ -n "`echo "${${ROOTFS_ROOT_OPT}}" | grep -E "^/dev/.+$"`" ] &&
 				[ -z "`grep -E "^${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}" /proc/mounts`" ]
 			then
-#>>>				if	! chroot /.${ROOTFS_ROOT_OPT} mount -v -o ro,nonempty ${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT} &&
-				if	! chroot /.${ROOTFS_ROOT_OPT} ${ROOTFS_BASH} -c "mount -v -o ro,nonempty ${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT}" &&
+#>>>				if	! chroot /.${ROOTFS_ROOT_OPT} mount -v -o ro ${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT} &&
+				if	! chroot /.${ROOTFS_ROOT_OPT} ${ROOTFS_BASH} -c "mount -v -o ro ${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT}" &&
 					! ${chroot_opt}
 				then
 #>>>					${ROOTFS_FUNC}
