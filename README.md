@@ -257,7 +257,7 @@ run from within the GaryOS [Repository], since it requires the menu files in
 Be advised that this script creates a brand new partition table on whatever
 drive is targeted.  Only use this on a brand new or empty device.  The update
 option should only be used on drives that were created by the script or that
-have a matching partition table layout.  Only the partition numbers and types
+have a matching partition table layout.  Only the partition numbers and codes
 need to match.
 
   | Partition | Start Sector | End Sector | Size       | Code | Name
