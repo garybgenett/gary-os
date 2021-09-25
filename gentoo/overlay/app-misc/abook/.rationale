@@ -1,0 +1,3 @@
+ioctl(1, TIOCGWINSZ, {ws_row=144, ws_col=178, ws_xpixel=1068, ws_ypixel=1885}) = 0
+SIGSEGV {si_signo=SIGSEGV, si_code=SI_KERNEL, si_addr=NULL}
+-- abook-0.6.1-r4.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/app-misc/abook?id=74c9a6b263f40405458f77e2423cf0c57412d201
