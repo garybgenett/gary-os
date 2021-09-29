@@ -1,3 +1,4 @@
 # openshot version
-# remove net-libs/webkit-gtk dependency
+# python version
+# remove net-libs/webkit-gtk dependency (failed)
 -- libopenshot-0.2.5-r1.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/libopenshot?id=74c9a6b263f40405458f77e2423cf0c57412d201
