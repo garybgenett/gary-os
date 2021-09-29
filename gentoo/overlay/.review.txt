@@ -17999,7 +17999,8 @@ alsa-oss-1.0.12-hardened.patch
 ------------------------------------------------------------------------------------------------------------------------
 diff :: media-libs/libopenshot [rationale] =============================================================================
 # openshot version
-# remove net-libs/webkit-gtk dependency
+# python version
+# remove net-libs/webkit-gtk dependency (failed)
 -- libopenshot-0.2.5-r1.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/libopenshot?id=74c9a6b263f40405458f77e2423cf0c57412d201
 diff :: media-libs/libopenshot [source] ================================================================================
 diff :: media-libs/libopenshot [target] ================================================================================
@@ -18038,7 +18039,8 @@ libopenshot-0.2.5-no-hwaccel-testfix.patch
 ------------------------------------------------------------------------------------------------------------------------
 diff :: media-libs/libopenshot-audio [rationale] =======================================================================
 # openshot version
-# remove net-libs/webkit-gtk dependency
+# python version
+# remove net-libs/webkit-gtk dependency (failed)
 -- libopenshot-audio-0.2.0.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/libopenshot-audio?id=74c9a6b263f40405458f77e2423cf0c57412d201
 diff :: media-libs/libopenshot-audio [source] ==========================================================================
 diff :: media-libs/libopenshot-audio [target] ==========================================================================
@@ -18202,7 +18204,9 @@ lmms-1.2.2-no_compress_man.patch
 
 ------------------------------------------------------------------------------------------------------------------------
 diff :: media-video/openshot [rationale] ===============================================================================
-# remove net-libs/webkit-gtk dependency
+# openshot version
+# python version
+# remove net-libs/webkit-gtk dependency (failed)
 -- openshot-2.5.1-r1.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/media-video/openshot?id=74c9a6b263f40405458f77e2423cf0c57412d201
 diff :: media-video/openshot [source] ==================================================================================
 diff :: media-video/openshot [target] ==================================================================================
@@ -18210,12 +18214,12 @@ Only in ./media-video/openshot: .rationale
 Only in ./media-video/openshot: .source
 diff -u -U10 -r ./media-video/openshot/.source/Manifest ./media-video/openshot/Manifest
 --- ./media-video/openshot/.source/Manifest	2021-08-05 18:40:17.659593702 -0700
-+++ ./media-video/openshot/Manifest	2021-08-06 13:03:27.000000000 -0700
++++ ./media-video/openshot/Manifest	2021-09-29 13:34:05.000000000 -0700
 @@ -1,2 +1,2 @@
 -DIST openshot-2.4.4.tar.gz 63065376 BLAKE2B 2ee00f24d699d5935a182c394821f215a27ba2701d493f51299c19cf99452ca4df2e5b86f7a6e5734e6194e39e5b7995eb94be168c0e9f7bc7a3b78206277304 SHA512 efa71f97a83b89e691b7dab09288ba7d3e91eb25119669fa8f6e28becb8d4cb3e60a923f936ee4ff9a593d016fe3a6b0348153cff937ab7d21a5517de5dfa10c
 -DIST openshot-qt-2.4.0.tar.gz 60710408 BLAKE2B 33c8abe7ba3122ae720163d6ab91d367ee282b94d3d8986fdccf4f9efae832f54af7f946472c781a17f7e54083028762952d02d7139e6815cd0d44e80515c728 SHA512 95778effa5b02a467c44741384b0f43bf90343d4f450d5fcc2319ff1c3bee212338435dd8c781e0ff111a704aacdce3dbfb6bdcf62afa1f59bbb0668b58074ca
 +DIST openshot-2.5.1.tar.gz 60217543 BLAKE2B 3f195b14a9fb004e845c731be64138c20da84ac0c90db43b547ee9ea059d32f85ada04aa0462b755a7ea5c3d3b30088fab35414147dded55deb9d5eab5926d2d SHA512 8254a45254bbe523b6485b9598022de2c46ec30818e606ac4665790d29486693c4efe9f5bc55ee43d6342de6782cf0090e4bc880e831c08e3b1218bca555af14
-+EBUILD openshot-2.5.1-r1.ebuild 1312 BLAKE2B 1f1417ba056b9e818f4b5f0ec5ad97906c0e6cf2b827af13a234a1a70c2741db167fa7e30f360fc2f6e739204f942216899a1ee610cfd873a34a0aacfb5be91f SHA512 6d18d8d1f3bcea1359a940885032b2d15ac86467a60e3bb149ec367778c42dd423f52e54b18f699838aa7b78f7b9ccc89a41f132a0a5d09199a97d0f629a8840
++EBUILD openshot-2.5.1-r1.ebuild 1322 BLAKE2B 9cc45c9c4db29ddb2bd54c81492a0004154ec354f350e2b99c557eab3cf8c90c7958451dc1c2ffd84db79e0b964ff607c12271beecb900c4e8f296e2b918c241 SHA512 5ea7d3ee9484ba620ce57ab3801bb391221626b21a0a4afec6685d1bc227de31828861daac035e81a600170d89b954cee8b72f38699359c4eb8770710fbc4632
 Only in ./media-video/openshot/.source: metadata.xml
 Only in ./media-video/openshot/.source: openshot-2.4.0-r1.ebuild
 Only in ./media-video/openshot/.source: openshot-2.4.4.ebuild
