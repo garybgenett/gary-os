@@ -35,6 +35,7 @@ sys-apps/busybox			-pam		# gentoo required
 sys-auth/consolekit			policykit	# gentoo required
 sys-libs/gdbm				berkdb		# gentoo required
 
+dev-python/PyQt5			webkit		# gentoo required: [dev-python/PyQt5-* / media-video/openshot-*] required by media-video/openshot-2.4.4::media-kit
 dev-python/pygobject			cairo		# gentoo required: [x11-misc/arandr-*] TypeError: Couldn't find foreign struct converter for 'cairo.Context'
 media-sound/aumix			-gpm		# gnetoo required: [media-sound/aumix-*] mouse.c:(.text+0x46): undefined reference to `Gpm_Wgetch'
 x11-drivers/xf86-video-intel		sna		# gentoo required: [x11-drivers/xf86-video-intel-2.99.917_p20210215] 100% xorg cpu, laggy screen
@@ -104,6 +105,24 @@ sys-apps/dstat				python_targets_python2_7	# gentoo required
 virtual/python-typing			python_targets_python2_7	#{GOS} # gentoo required
 
 dev-python/six				python_targets_python2_7	#{GOS} # gentoo required: [net-mail/offlineimap-7.2.2] ImportError: No module named six
+
+########################################
+
+dev-ruby/bundler			ruby_targets_ruby27		#{GOS} # gentoo required
+dev-ruby/did_you_mean			ruby_targets_ruby27		#{GOS} # gentoo required
+dev-ruby/json				ruby_targets_ruby27		#{GOS} # gentoo required
+dev-ruby/kpeg				ruby_targets_ruby27		#{GOS} # gentoo required
+dev-ruby/minitest			ruby_targets_ruby27		#{GOS} # gentoo required
+dev-ruby/net-telnet			ruby_targets_ruby27		#{GOS} # gentoo required
+dev-ruby/power_assert			ruby_targets_ruby27		#{GOS} # gentoo required
+dev-ruby/racc				ruby_targets_ruby27		#{GOS} # gentoo required
+dev-ruby/rake				ruby_targets_ruby27		#{GOS} # gentoo required
+dev-ruby/rdoc				ruby_targets_ruby27		#{GOS} # gentoo required
+dev-ruby/rubygems			ruby_targets_ruby27		#{GOS} # gentoo required
+dev-ruby/test-unit			ruby_targets_ruby27		#{GOS} # gentoo required
+dev-ruby/xmlrpc				ruby_targets_ruby27		#{GOS} # gentoo required
+virtual/ruby-ssl			ruby_targets_ruby27		#{GOS} # gentoo required
+virtual/rubygems			ruby_targets_ruby27		#{GOS} # gentoo required
 
 ################################################################################
 
@@ -238,6 +257,7 @@ sys-auth/polkit				-spidermonkey	# requires: dev-lang/spidermonkey
 #{GOS} app-crypt/pinentry		-gnome-keyring	# (override) gentoo required
 #{GOS} dev-lang/python			-tk		# requires: dev-lang/tk -> dev-lang/tcl
 #{GOS} dev-libs/glib			-dbus		# (override) requires: gnome-base/dconf -> dev-lang/vala -> media-gfx/graphviz
+#{GOS} dev-python/PyQt5			-webkit		# (override) requires: dev-qt/qtwebkit
 #{GOS} dev-vcs/git			-tk		# (override) requires: dev-lang/tk -> dev-lang/tcl
 #{GOS} net-wireless/wpa_supplicant	-qt5		# (override) requires: dev-qt/qtcore
 #{MOD} #{GOS} app-admin/eselect		-doc		# requires: dev-python/docutils
