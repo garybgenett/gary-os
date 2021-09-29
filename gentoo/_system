@@ -1458,7 +1458,6 @@ if [[ ${1} == -u ]]; then
 		safe_env ${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -w			|| EXIT 1
 	fi
 	expect_wrapper emerge ${_ASK} ${EMERGE_UPDT_OPTS} \@system \@world		|| EXIT 1
-	safe_env ${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -p				|| EXIT 1
 	if ! ${DOFAST}; then
 		# note: available on an "as needed" basis
 		# note: since gary-os is more about static builds than rolling upgrades, this is unnecessary
@@ -1478,6 +1477,7 @@ if [[ ${1} == -u ]]; then
 		expect_wrapper eclean --verbose distfiles				|| EXIT 1
 		expect_wrapper eclean --verbose packages				|| EXIT 1
 	fi
+	safe_env ${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -p				|| EXIT 1
 	expect_wrapper dispatch-conf							|| EXIT 1
 
 ########################################
