@@ -471,6 +471,7 @@ media-sound/ardour
 media-sound/audacity
 media-sound/hydrogen
 media-sound/lmms
+x11-themes/gtk-engines-murrine		# gentoo required: [media-sound/ardour-*] Gtk-WARNING <...> Unable to locate theme engine in module_path: "murrine"
 
 media-video/openshot
 
