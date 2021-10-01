@@ -6092,7 +6092,8 @@ function task-switch {
 	); then
 #>>>		if [[ "${@}" != "-" ]] && [[ "${FILE}" == *(*)[ ]*(*) ]]; then
 		if [[ "${@}" != "-" ]] && [[ -n "$(echo "${FILE}" | ${GREP} "[ ]")" ]]; then
-			task read "${FILE}"
+			task mark kind:track		"${FILE}"
+			task view kind.not:track	"${FILE}"
 		else
 			echo "no" | task $(task uuids +ACTIVE) stop rc.bulk=0
 			if [[ "${@}" != "-" ]]; then
