@@ -115,33 +115,33 @@ export CCACHE_DIR="/tmp/.ccache"
 ########################################
 
 export CDPATH=".:${HOME}"
-export CDPATH="${CDPATH}:/.g"
-export CDPATH="${CDPATH}:/.g/_data"
-export CDPATH="${CDPATH}:/.g/_data/media"
-export CDPATH="${CDPATH}:/.g/_data/zactive"
+export CDPATH+=":/.g"
+export CDPATH+=":/.g/_data"
+export CDPATH+=":/.g/_data/media"
+export CDPATH+=":/.g/_data/zactive"
 
 export PATH="${HOME}"
-export PATH="${PATH}:${HOME}/commands"
-export PATH="${PATH}:${HOME}/scripts"
+export PATH+=":${HOME}/commands"
+export PATH+=":${HOME}/scripts"
 if [[ "${UNAME}" == "Darwin" ]]; then
-	export PATH="${PATH}:/_ports/bin"
-	export PATH="${PATH}:/_ports/libexec/gnubin"
+	export PATH+=":/_ports/bin"
+	export PATH+=":/_ports/libexec/gnubin"
 fi
 if [[ -d /data/data/com.termux/files ]]; then
-	export PATH="${PATH}:/data/data/com.termux/files/usr/bin"
-	export PATH="${PATH}:/data/data/com.termux/files/usr/bin/applets"
+	export PATH+=":/data/data/com.termux/files/usr/bin"
+	export PATH+=":/data/data/com.termux/files/usr/bin/applets"
 fi
-export PATH="${PATH}:/usr/local/bin"
-export PATH="${PATH}:/usr/local/sbin"
-export PATH="${PATH}:/usr/bin"
-export PATH="${PATH}:/usr/sbin"
-export PATH="${PATH}:/bin"
-export PATH="${PATH}:/sbin"
-export PATH="${PATH}:/usr/games/bin"
-export PATH="${PATH}:/usr/lib/perl5/core_perl/bin"
+export PATH+=":/usr/local/bin"
+export PATH+=":/usr/local/sbin"
+export PATH+=":/usr/bin"
+export PATH+=":/usr/sbin"
+export PATH+=":/bin"
+export PATH+=":/sbin"
+export PATH+=":/usr/games/bin"
+export PATH+=":/usr/lib/perl5/core_perl/bin"
 if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
-	export PATH="${PATH}:/c/WINDOWS"
-	export PATH="${PATH}:/c/WINDOWS/system32"
+	export PATH+=":/c/WINDOWS"
+	export PATH+=":/c/WINDOWS/system32"
 fi
 
 if [[ "${UNAME}" == "Darwin" ]]; then
