@@ -3881,9 +3881,6 @@ function shell {
 	case ${DEST} in
 #>>>		(me)	DEST="me.garybgenett.net"
 		(me)	DEST="server.garybgenett.net"
-			[[ -z $(${PS} 2>/dev/null | ${GREP} "5900[:]") ]] && OPTS="${OPTS} -L 5900:127.0.0.1:5900"
-			[[ -z $(${PS} 2>/dev/null | ${GREP} "5901[:]") ]] && OPTS="${OPTS} -L 5901:127.0.0.1:5901"
-			[[ -z $(${PS} 2>/dev/null | ${GREP} "5902[:]") ]] && OPTS="${OPTS} -L 5902:127.0.0.1:5902"
 			if [[ ${HOSTNAME} != phoenix ]] &&
 			   [[ ${HOSTNAME} != spider ]]; then
 				[[ -z $(${PS} 2>/dev/null | ${GREP} "5909[:]") ]] && OPTS="${OPTS} -L 5909:127.0.0.1:5900"
@@ -3891,24 +3888,21 @@ function shell {
 				[[ -z $(${PS} 2>/dev/null | ${GREP} "6608[:]") ]] && OPTS="${OPTS} -L 6608:127.0.0.1:6668"
 			fi
 			;;
-		(you)	DEST="vpn-client.vpn.example.net"
-			if [[ ${HOSTNAME} != bastion ]]; then
-				[[ -z $(${PS} 2>/dev/null | ${GREP} "5909[:]") ]] && OPTS="${OPTS} -L 5909:127.0.0.1:5900"
-			fi
-			;;
-		(net:*)	DEST="${DEST/#net:}"
-			if [[ ${HOSTNAME} != phantom ]]; then
+		(you:*)	DEST="${DEST/#you:}"
+			if [[ ${HOSTNAME} != shadow ]]; then
 				[[ -z $(${PS} 2>/dev/null | ${GREP} "5910[:]") ]] && OPTS="${OPTS} -L 5910:127.0.0.1:5900"
 			fi
-			LOG="plastic"
-			OPTS="${OPTS} -t \"/_ports/bin/screen -xAR\""
 			;;
-		(0)	DEST="localhost -p6553${DEST}"
-			LOG="root"
+		(0)	DEST="127.0.0.1 -p6553${DEST}"
+			if [[ ${HOSTNAME} != shadow ]]; then
+				[[ -z $(${PS} 2>/dev/null | ${GREP} "5910[:]") ]] && OPTS="${OPTS} -L 5910:127.0.0.1:5900"
+			fi
 			;;
-		([1-4])	DEST="localhost -p6553${DEST}"
+		([1-4])	DEST="127.0.0.1 -p6553${DEST}"
+			[[ -z $(${PS} 2>/dev/null | ${GREP} "5911[:]") ]] && OPTS="${OPTS} -L 5911:127.0.0.1:5900"
+#>>>			LOG="plastic"
 			;;
-		(5)	DEST="localhost -p6553${DEST}"
+		(5)	DEST="127.0.0.1 -p6553${DEST}"
 			OPTS="${OPTS} -o \"BatchMode yes\""
 			OPTS="${OPTS} -o \"CheckHostIP no\""
 			OPTS="${OPTS} -o \"StrictHostKeyChecking no\""
