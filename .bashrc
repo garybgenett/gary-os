@@ -3840,9 +3840,12 @@ function shell {
 	declare SSH="sudo -H ssh -2"
 	declare LOG="root"
 	declare OPTS
-	if { [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; } ||
-	   [[ -d /data/data/com.termux/files ]] ||
-	   (( $(id -u) == 0 )); then
+	if {
+		{ [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; } ||
+		[[ "${UNAME}" == "Darwin" ]] ||
+		[[ -d /data/data/com.termux/files ]] ||
+		(( $(id -u) == 0 ));
+	}; then
 		SSH="${SSH/#sudo -H /}"
 	fi
 	if [[ ${DEST} == -m[0-9] ]]; then
