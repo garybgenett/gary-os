@@ -124,8 +124,11 @@ export PATH="${HOME}"
 export PATH+=":${HOME}/commands"
 export PATH+=":${HOME}/scripts"
 if [[ "${UNAME}" == "Darwin" ]]; then
-	export PATH+=":/_ports/bin"
-	export PATH+=":/_ports/libexec/gnubin"
+	export PATH+=":/opt/local/libexec/gnubin"
+	export PATH+=":/opt/local/bin"
+	export PATH+=":/opt/local/sbin"
+	export PATH+=":/Library/Developer/CommandLineTools/usr/bin"
+	export PATH+=":/Library/Apple/usr/bin"
 fi
 if [[ -d /data/data/com.termux/files ]]; then
 	export PATH+=":/data/data/com.termux/files/usr/bin"
@@ -142,10 +145,6 @@ export PATH+=":/usr/lib/perl5/core_perl/bin"
 if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
 	export PATH+=":/c/WINDOWS"
 	export PATH+=":/c/WINDOWS/system32"
-fi
-
-if [[ "${UNAME}" == "Darwin" ]]; then
-	export MANPATH="/_ports/share/man:${MANPATH}"
 fi
 
 ########################################
@@ -565,20 +564,14 @@ alias zcode="cd /.g/_data/zactive/coding ; clear ; ${LL}"
 alias zwrite="cd /.g/_data/zactive/writing ; clear ; ${LL}"
 alias zplan="IMPERSONATE_NAME=task ${HOME}/.bashrc impersonate_command %"
 
-alias s="run-mailcap"
-alias x="cd / ; clear"
 alias zdesk="cd ${NULLDIR} ; clear ; ${LL}"
 if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
-	alias s="cygstart"
-	alias x="cd / ; clear"
-#>>>	alias zdesk="cd \"${USERPROFILE}/Desktop\" ; clear ; ${LL}"
-	alias zdesk="cd \"/h/My Drive\" ; clear ; ${LL}"
+	alias do="cygstart"
+	alias zdesk="cd \"${USERPROFILE}/Desktop\" ; clear ; ${LL}"
 fi
 if [[ "${UNAME}" == "Darwin" ]]; then
-	alias s="open"
-	alias x="cd / ; clear"
-#>>>	alias zdesk="cd \"/Users/plastic/Desktop\" ; clear ; ${LL}"
-	alias zdesk="cd \"/Volumes/GoogleDrive/My\ Drive\" ; clear ; ${LL}"
+	alias do="open"
+	alias zdesk="cd \"/Users/${USER}/Desktop\" ; clear ; ${LL}"
 fi
 
 ########################################
