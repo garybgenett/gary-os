@@ -141,7 +141,6 @@ export PATH+=":/usr/sbin"
 export PATH+=":/bin"
 export PATH+=":/sbin"
 export PATH+=":/usr/games/bin"
-export PATH+=":/usr/lib/perl5/core_perl/bin"
 if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
 	export PATH+=":/c/WINDOWS"
 	export PATH+=":/c/WINDOWS/system32"
@@ -566,11 +565,11 @@ alias zplan="IMPERSONATE_NAME=task ${HOME}/.bashrc impersonate_command %"
 
 alias zdesk="cd ${NULLDIR} ; clear ; ${LL}"
 if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
-	alias do="cygstart"
+	alias run="cygstart"
 	alias zdesk="cd \"${USERPROFILE}/Desktop\" ; clear ; ${LL}"
 fi
 if [[ "${UNAME}" == "Darwin" ]]; then
-	alias do="open"
+	alias run="open"
 	alias zdesk="cd \"/Users/${USER}/Desktop\" ; clear ; ${LL}"
 fi
 
