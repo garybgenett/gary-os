@@ -166,7 +166,7 @@ app-editors/vim				-X gpm
 app-emulation/libvirt			-libvirtd lxc qemu
 app-emulation/qemu			ncurses sdl spice
 app-emulation/spice			client gui
-app-emulation/virt-viewer		-libvirt -vnc spice
+app-emulation/virt-viewer		-libvirt spice vnc
 app-emulation/wine-vanilla		-faudio -gecko -gstreamer -lcms -realtime -v4l
 app-misc/freemind			-groovy -pdf -svg
 app-misc/jq				oniguruma
