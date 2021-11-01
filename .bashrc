@@ -2295,21 +2295,21 @@ function mixer {
 	declare MIXER_CMD="(pactl|pavucontrol)"
 	declare MIXER_NUM="$(
 		${SED} -n "s|^[^0-9]*([0-9]+).+$(
-			${SED} -n "s|^.*${HOSTNAME} = ([^\t]+)\t+([^\t]+)$|\1|gp" ${HOME}/.asoundrc |
+			${SED} -n "s|^.*${HOSTNAME} = ([^\t]+)\t+([^\t]+)\t+([^\t]+)$|\1|gp" ${HOME}/.asoundrc |
 			head -n1
 		).*$|\1|gp" ${MIXER_DAT}
 	)"
 	declare MIXER_SNK="$(
 		pactl list short sinks 2>/dev/null |
 		${SED} -n "s|^([0-9]+).+$(
-			${SED} -n "s|^.*${HOSTNAME} = (.+)[[:space:]]+(.+)$|\2|gp" ${HOME}/.asoundrc |
+			${SED} -n "s|^.*${HOSTNAME} = ([^\t]+)\t+([^\t]+)\t+([^\t]+)$|\2|gp" ${HOME}/.asoundrc |
 			head -n1
 		).*$|\1|gp"
 	)"
 	declare MIXER_SRC="$(
 		pactl list short sources 2>/dev/null |
 		${SED} -n "s|^([0-9]+).+$(
-			${SED} -n "s|^.*${HOSTNAME} = (.+)[[:space:]]+(.+)$|\2|gp" ${HOME}/.asoundrc |
+			${SED} -n "s|^.*${HOSTNAME} = ([^\t]+)\t+([^\t]+)\t+([^\t]+)$|\2|gp" ${HOME}/.asoundrc |
 			head -n1
 		).*$|\1|gp"
 	)"
@@ -2338,6 +2338,15 @@ function mixer {
 			pactl move-sink-input ${FILE} ${MIXER_SNK}
 			pactl set-sink-input-mute ${FILE} false
 			pactl set-sink-input-volume ${FILE} "100%"
+		done
+		for FILE in $(
+			${SED} -n "s|^.*${HOSTNAME} = ([^\t]+)\t+([^\t]+)\t+([^\t]+)$|\2|gp" ${HOME}/.asoundrc
+		); do
+			DIR="$(${SED} -n "s|^.*${HOSTNAME} = ([^\t]+)\t+(${FILE})\t+([^\t]+)$|\3|gp" ${HOME}/.asoundrc)"
+			pactl set-card-profile $(
+				pactl list short cards |
+				${SED} -n "s|^([0-9]+)[[:space:]].+${FILE}.+$|\1|gp"
+			) ${DIR}
 		done
 		for FILE in $(
 			pactl list short sources |
