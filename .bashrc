@@ -6107,6 +6107,31 @@ function task-switch {
 
 ########################################
 
+function task-time {
+	declare FILE="tasks.csv"
+	if [[ -f ${1} ]]; then
+		FILE="${1}"
+		shift
+	fi
+	declare DATE="$(date --iso)"
+	if [[ ${1} == -m ]]; then
+		DATE="$(date +%Y-%m)"
+		shift
+	fi
+	if [[ -n ${1} ]]; then
+		DATE="${1}"
+		shift
+	fi
+	cat ${FILE} \
+		| csvgrep -c 16,19 -m "${DATE}" \
+		| csvcut -c 1,2,16,19,20 \
+		| csvsort -c 3,4,2,1 \
+		| csvlook
+	return 0
+}
+
+########################################
+
 function task-track {
 	perl -e '
 		use strict;
