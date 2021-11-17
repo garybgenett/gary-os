@@ -254,6 +254,7 @@ net-misc/openssh
 app-editors/gvim
 app-editors/nano
 app-editors/vim
+app-text/csvfix
 app-text/dos2unix
 app-vim/taglist
 dev-util/cloc
