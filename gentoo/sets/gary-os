@@ -216,6 +216,7 @@ net-misc/openssh
 
 app-editors/nano
 app-editors/vim				#{MOD} # requires: dev-util/ctags -> dev-python/docutils
+app-text/csvfix				#{MOD}
 app-text/dos2unix			#{MOD}
 
 app-arch/bzip2
