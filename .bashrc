@@ -1738,7 +1738,7 @@ function indexer {
 ####################
 #  1	type
 #  2	target_type
-#  3	empty		[0=empty, 1=non-empty]
+#  3	empty		[*=empty, .=non-empty]
 #  4	uid
 #  5	gid
 #  6	octal_mode
@@ -1762,6 +1762,7 @@ function indexer {
 # 11	name
 # 12	(target)
 ####################
+	declare FULL_CHAR="."
 	declare NULL_CHAR="*"
 	declare HASH_TYPE="sha1sum"
 	declare HASH_SIZE="40"
@@ -1823,7 +1824,7 @@ function indexer {
 		' -- "${@}" || return 1
 	elif [[ "${1}" == -l ]]; then
 		shift
-		DEBUG="${DEBUG}" QUICK="${QUICK}" perl -e '
+		DEBUG="${DEBUG}" QUICK="${QUICK}" NULL_CHAR="${NULL_CHAR}" perl -e '
 			use strict;
 			use warnings;
 			my $emp_dir = [];
@@ -1835,8 +1836,8 @@ function indexer {
 				chomp();
 				my $a = [split(/\0/)];
 				if(${ENV{QUICK}} eq "true"){
-					if($a->[0] eq "d" && $a->[2] eq "0"){ push(@{$emp_dir}, $a); };
-					if($a->[0] eq "f" && $a->[2] eq "0"){ push(@{$emp_fil}, $a); };
+					if($a->[0] eq "d" && $a->[2] eq "${ENV{NULL_CHAR}}"){ push(@{$emp_dir}, $a); };
+					if($a->[0] eq "f" && $a->[2] eq "${ENV{NULL_CHAR}}"){ push(@{$emp_fil}, $a); };
 					if($a->[0] eq "l"){
 						if($a->[1] eq "l"){ push(@{$brk_sym}, $a); };
 						push(@{$symlink}, $a); };
@@ -1984,7 +1985,7 @@ function indexer {
 				   TARGET="$(echo -en "${FILE}" | cut -d$'\t' -f11)"
 				IDX__TYPE="$(echo -en "${FILE}" | cut -d$'\t' -f1)"
 				IDX_EMPTY="$(echo -en "${FILE}" | cut -d$'\t' -f3)"
-				if [[ "${IDX__TYPE}" == "d" ]] && [[ "${IDX_EMPTY}" == "${NULL_CHAR}0" ]]; then
+				if [[ "${IDX__TYPE}" == "d" ]] && [[ "${IDX_EMPTY}" == "${NULL_CHAR}" ]]; then
 					IDX_EMPTY="@d"
 				fi
 			fi
@@ -2094,8 +2095,8 @@ function indexer {
 				\\\( \
 					-printf \"%y\\\0%Y\" \
 					\\\( \
-						\\\( -empty -printf \"\\\0${NULL_CHAR}\\\060\" \\\) -or \
-						\\\( -printf \"\\\0${NULL_CHAR}\\\061\" \\\) \
+						\\\( -empty -printf \"\\\0${NULL_CHAR}\" \\\) -or \
+						\\\( -printf \"\\\0${FULL_CHAR}\" \\\) \
 					\\\) \
 					-printf \"\\\0%U\\\0%G\\\0%m\" \
 					\\\( \
