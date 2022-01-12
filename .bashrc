@@ -3606,6 +3606,86 @@ function pso {
 
 ########################################
 
+function pull {
+	declare SSHCMD="$(which ssh) -q"
+	declare REMOTE="root@server.garybgenett.net"
+	declare PUSH="false"
+	if [[ ${1} == -p ]]; then
+		PUSH="true"
+		shift
+	fi
+	declare SRC=
+	if [[ -n ${1} ]]; then
+		SRC="${1}"
+		shift
+	fi
+	declare DST="${SRC}"
+	if [[ -n ${1} ]]; then
+		DST="${1}"
+		shift
+	fi
+	function usage {
+		echo -en "${FUNCNAME}: [-p] source [destination]\n"
+		echo -en "push: ${PUSH}\n"
+		return 0
+	}
+	if [[ -z ${SRC} ]]; then
+		usage
+		return 1
+	elif {
+		${PUSH} &&
+		[[ ! -e ${SRC} ]];
+	}; then
+		usage
+		${LL} ${SRC}
+		return 1
+	elif {
+		! ${PUSH} &&
+		! ${SSHCMD} ${REMOTE} "bash -c 'if [[ -e ${SRC} ]]; then true; else false; fi'" >/dev/null 2>&1;
+	}; then
+		usage
+		${SSHCMD} ${REMOTE} "${LL} ${SRC}"
+		return 1
+	fi
+	if {
+		[[ ${SRC} == ${DST} ]] &&
+		[[ -e ${DST} ]];
+	}; then
+		SRC="$(realpath ${SRC})"
+		DST="${SRC}"
+	fi
+	declare SEXT=
+	if { {
+		${PUSH} &&
+		[[ -d ${SRC} ]];
+	} || {
+		! ${PUSH} &&
+		${SSHCMD} ${REMOTE} "bash -c 'if [[ -d ${SRC} ]]; then true; else false; fi'";
+	}; }; then
+		SEXT="/"
+	fi
+	declare DEXT=
+	if { {
+		${PUSH} &&
+		[[ -f ${SRC} ]] &&
+		${SSHCMD} ${REMOTE} "bash -c 'if [[ -d ${DST} ]]; then true; else false; fi'";
+	} || {
+		! ${PUSH} &&
+		${SSHCMD} ${REMOTE} "bash -c 'if [[ -f ${SRC} ]]; then true; else false; fi'";
+		[[ -d ${DST} ]];
+	}; }; then
+		DEXT="/"
+	fi
+	if ${PUSH}; then
+		${RSYNC_U} --copy-links ${SRC}${SEXT} ${REMOTE}:${DST}${DEXT}
+	else
+		${RSYNC_U} --copy-links ${REMOTE}:${SRC}${SEXT} ${DST}${DEXT}
+	fi
+	return 0
+}
+
+########################################
+
 function mirror {
 	declare PREFIX="$(echo "${!#}" | ${SED} "s|^(http\|ftp)[s]?://||g" | ${SED} "s|^([^/]+).*$|\1|g")-$(date-string)"
 	${WGET_R} --directory-prefix "${PREFIX}" "${@}" 2>&1 | tee -a ${PREFIX}.log
@@ -3843,6 +3923,7 @@ function setconf {
 ########################################
 
 function shell {
+	declare REMOTE="root@server.garybgenett.net"
 	[[ -z ${1} ]] && return 0
 	declare DEST="${1}" && shift
 	declare PROMPT_NAME="${FUNCNAME}_${DEST}"
@@ -3870,18 +3951,18 @@ function shell {
 	fi
 	if [[ ${DEST} == -h ]]; then
 		${MKDIR} ${HOME}/scripts
-		${RSYNC_U} root@server.garybgenett.net:/.g/_data/zactive/.static/.bashrc ${HOME}/
-		${RSYNC_U} root@server.garybgenett.net:/.g/_data/zactive/.static/scripts/_sync ${HOME}/scripts/
+		${RSYNC_U} ${REMOTE}:/.g/_data/zactive/.static/.bashrc ${HOME}/
+		${RSYNC_U} ${REMOTE}:/.g/_data/zactive/.static/scripts/_sync ${HOME}/scripts/
 		${HOME}/scripts/_sync _home ${HOME}
 		${FUNCNAME} -i
 		if [[ ! -f ${HISTFILE} ]]; then
 			${MKDIR} ${HOME}/.history/shell
-			${RSYNC_U} root@server.garybgenett.net:/.g/_data/zactive/.history/shell/${HOSTNAME}.* ${HOME}/.history/shell/
+			${RSYNC_U} ${REMOTE}:/.g/_data/zactive/.history/shell/${HOSTNAME}.* ${HOME}/.history/shell/
 		fi
 		return 0
 	fi
 	if [[ ${DEST} == -i ]]; then
-		${RSYNC_U} root@server.garybgenett.net:/.g/_data/zactive/.static/.ssh/id_* ${HOME}/.ssh/
+		${RSYNC_U} ${REMOTE}:/.g/_data/zactive/.static/.ssh/id_* ${HOME}/.ssh/
 		return 0
 	fi
 	case ${DEST} in
@@ -4123,11 +4204,11 @@ function vpn {
 			-R 65535:127.0.0.1:22 \
 			plastic@server.garybgenett.net
 	elif [[ ${1} == -v ]]; then
-		declare SRC="root@server.garybgenett.net:/.g/_data/zactive"
-		${RSYNC_U} ${SRC}/.setup/openvpn/openvpn.conf			/etc/openvpn/openvpn.conf
+		declare REMOTE="root@server.garybgenett.net:/.g/_data/zactive"
+		${RSYNC_U} ${REMOTE}/.setup/openvpn/openvpn.conf		/etc/openvpn/openvpn.conf
 		${SED} -i "s|/.g/_data/zactive/.home/.openssl|/etc/openvpn|g"	/etc/openvpn/openvpn.conf
-		${RSYNC_U} ${SRC}/.static/.openssl/server-ca.private.net.crt	/etc/openvpn/
-		${RSYNC_U} ${SRC}/.static/.openssl/client.private.net.*		/etc/openvpn/
+		${RSYNC_U} ${REMOTE}/.static/.openssl/server-ca.private.net.crt	/etc/openvpn/
+		${RSYNC_U} ${REMOTE}/.static/.openssl/client.private.net.*	/etc/openvpn/
 		fwinit off
 		iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 		echo "1" >/proc/sys/net/ipv4/ip_forward
