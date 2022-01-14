@@ -624,6 +624,7 @@ alias vlc-play="${VLC} ${HOME}/setup/_misc/playlist.m3u"
 alias web="w3m https://www.google.com"
 alias workspace="_sync workspace"
 alias wpa="ip-setup wpa"
+alias zshow="_sync zfs show"
 alias zstatus="mount-zfs -! -?"
 
 if [[ "${UNAME}" == "Darwin" ]]; then
