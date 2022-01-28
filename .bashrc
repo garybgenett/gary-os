@@ -752,7 +752,12 @@ function contacts {
 				--outformat vcard
 		done
 		sudo -H -u \#1000 dos2unix ./${EXP_DIR}/*.{ldif,vcf}
-		cat $(${LS} ./${EXP_DIR}/*.vcf | ${GREP} -v "[-]keep") >./${EXP_DIR}.vcf
+		for FILE in ldif vcf; do
+			cat $(${LS} ./${EXP_DIR}/*.${FILE} | ${GREP} -v "[-]keep") >./${EXP_DIR}.${FILE}
+			${SED} -i \
+				-e "/^version[:][ ][0-9]+$/d" \
+				./${EXP_DIR}.${FILE}
+		done
 		chmod -R 750 ./${EXP_DIR}*
 		return 0
 	fi
