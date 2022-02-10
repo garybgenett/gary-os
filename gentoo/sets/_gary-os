@@ -410,6 +410,7 @@ net-analyzer/tcptraceroute
 net-analyzer/traceroute
 net-analyzer/wireshark
 net-dns/bind-tools
+net-dns/ddclient
 net-misc/netkit-telnetd
 net-misc/socat
 net-misc/whois
