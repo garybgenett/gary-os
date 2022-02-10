@@ -298,6 +298,7 @@ net-analyzer/ssldump			#{MOD}
 net-analyzer/tcpdump			#{MOD}
 net-analyzer/traceroute			#{MOD}
 net-dns/bind-tools			#{MOD}
+net-dns/ddclient			#{MOD}
 net-misc/netkit-telnetd			#{MOD}
 net-misc/whois				#{MOD}
 
