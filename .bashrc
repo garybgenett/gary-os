@@ -3616,8 +3616,13 @@ function pull {
 	declare SSHCMD="$(which ssh) -q"
 	declare REMOTE="root@server.garybgenett.net"
 	declare PUSH="false"
+	declare LINK=
 	if [[ ${1} == -p ]]; then
 		PUSH="true"
+		shift
+	fi
+	if [[ ${1} == -l ]]; then
+		LINK="--copy-links"
 		shift
 	fi
 	declare SRC=
@@ -3683,9 +3688,9 @@ function pull {
 		DEXT="/"
 	fi
 	if ${PUSH}; then
-		${RSYNC_U} --copy-links ${SRC}${SEXT} ${REMOTE}:${DST}${DEXT}
+		${RSYNC_U} ${LINK} ${SRC}${SEXT} ${REMOTE}:${DST}${DEXT}
 	else
-		${RSYNC_U} --copy-links ${REMOTE}:${SRC}${SEXT} ${DST}${DEXT}
+		${RSYNC_U} ${LINK} ${REMOTE}:${SRC}${SEXT} ${DST}${DEXT}
 	fi
 	return 0
 }
