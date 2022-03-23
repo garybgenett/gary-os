@@ -58,6 +58,7 @@ set hlsearch
 set ignorecase
 set incsearch
 set modeline
+set modelineexpr
 set showcmd
 set smartcase
 
@@ -86,6 +87,7 @@ set foldcolumn				=1
 set foldlevelstart			=99
 set foldminlines			=0
 set foldmethod				=indent
+">>>set foldtext				=foldtext()
 set foldtext				=v:folddashes.\"\ \".v:foldlevel.\"\ \[\".(v:foldend\ \-\ v:foldstart\ \+\ 1).\"\,\ \".v:foldstart.\"\-\".v:foldend.\"\]\ \"
 
 set nowrap
