@@ -292,7 +292,7 @@ fi
 
 ########################################
 
-export MORE="less -X"						; alias more="${MORE}"
+export MORE="less -rX"						; alias more="${MORE}"
 export VI="${REALTIME} vim -u ${HOME}/.vimrc -i NONE -p"	; alias vi="${VI}"
 export GVI="prompt -d -x ; ${VI} -g"				; alias gvim="${GVI}"
 export VIEW="${VI}"						; alias view="${VIEW}"
