@@ -113,7 +113,7 @@ else
 	@$(ECHO) "\n"
 	@$(MARKER)
 	@$(ECHO) "\n"
-	@$(ECHO) "$(STATE)Environment variables to control build behaviore (true / false):$(RESET)\n"
+	@$(ECHO) "$(STATE)Environment variables to control build behavior (true / false):$(RESET)\n"
 	@$(ECHO) "\n"
 	@$(PRINTF) "Embedded Rootfs / Initrd (Unsupported):"	"ROOTFS=\"`SETDIR="$(C)" ROOTFS="$(ROOTFS)" $(C)/gentoo/_system -v $(CHROOT) ROOTFS && echo -en "$$$ROOTFS"`\""
 	@$(PRINTF) "Minified Build  / Standard Build:"		"DOMODS=\"`SETDIR="$(C)" DOMODS="$(DOMODS)" $(C)/gentoo/_system -v $(CHROOT) DOMODS && echo -en "$$$DOMODS"`\""
