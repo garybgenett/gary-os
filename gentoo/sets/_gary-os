@@ -218,6 +218,7 @@ sys-process/nmon
 sys-process/procps
 sys-process/psmisc
 sys-process/schedtool
+sys-process/time
 
 app-admin/sysklogd
 app-admin/ulogd
