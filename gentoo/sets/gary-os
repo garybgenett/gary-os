@@ -188,6 +188,7 @@ sys-process/htop
 sys-process/lsof
 sys-process/procps
 sys-process/psmisc
+sys-process/time
 
 sys-libs/pam				#{MOD}
 
