@@ -1,4 +1,5 @@
 # GaryOS License
+
 --------------------------------------------------------------------------------
 
 ## Copyright
@@ -629,7 +630,7 @@ an absolute waiver of all civil liability in connection with the
 Program, unless a warranty or assumption of liability accompanies a
 copy of the Program in return for a fee.
 
-#### END OF TERMS AND CONDITIONS
+### END OF TERMS AND CONDITIONS
 
 How to Apply These Terms to Your New Programs
 
@@ -685,4 +686,5 @@ Public License instead of this License.  But first, please read
 <https://www.gnu.org/licenses/why-not-lgpl.html>.
 
 --------------------------------------------------------------------------------
+
 *End Of File*
