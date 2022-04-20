@@ -285,6 +285,7 @@ sys-fs/ddrescue
 sys-fs/ncdu				#{MOD}
 sys-fs/safecopy				#{MOD}
 
+sys-apps/dmidecode
 sys-apps/lshw
 sys-apps/pciutils
 sys-apps/usbutils
