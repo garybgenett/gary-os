@@ -384,6 +384,7 @@ sys-fs/ddrescue
 sys-fs/ncdu
 sys-fs/safecopy
 
+sys-apps/dmidecode
 sys-apps/lshw
 sys-apps/pciutils
 sys-apps/usbutils
