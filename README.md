@@ -1246,7 +1246,7 @@ set file which define these.
   | RCUPDT | Commands such as 'rc-update' to be run before [Image] creation
   | FSUPDT | Identical to 'RCUPDT', but are run after directories are unpacked
   | FSPACK | Included in [Image], and unpacked during boot
-  | FSKEEP | Included in [Image], but are left unpacked
+  | FSKEEP | Included in [Image], but are left packed
   | FSARCH | Excluded from [Image], but are packed for later use
   | FSEXCL | Excluded from [Image], and are not packed at all
 
@@ -2290,7 +2290,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
   * `cd coding/gary-os-history`
     * `ln ../gary-os.git ./.git`
     * `GIT_PAGER= git-list -n1`
-    * `git checkout README.md
+    * `git checkout README.md`
     * `rm ./.git`
 
 **Celebrate**
