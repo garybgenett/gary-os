@@ -5808,7 +5808,7 @@ function task-export-text {
 				. " -f ${ENV{COMPOSER}}"
 				. " -C ${ENV{PIMDIR}}"
 				. " c_css=css_alt"
-				. " c_toc=6"
+				. " c_toc=0"
 				. " ${base}${extn}.html"
 				;
 			if (system(${compose}) != 0) { die(); };
@@ -6681,7 +6681,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 					-f "${COMPOSER}"	\
 					-C "${PIMDIR}"		\
 					c_css="css_alt"		\
-					c_toc="6"		\
+					c_toc="0"		\
 					COMPOSER_TARGETS="${FILES}"
 				declare ENTER=
 				read ENTER
