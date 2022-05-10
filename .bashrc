@@ -3635,6 +3635,13 @@ function pull {
 		DST="${1}"
 		shift
 	fi
+	if {
+		[[ ${SRC} == ${DST} ]] &&
+		[[ -e ${DST} ]];
+	}; then
+		SRC="$(realpath ${SRC})"
+		DST="${SRC}"
+	fi
 	function usage {
 		echo -en "${FUNCNAME}: [-p] source [destination]\n"
 		echo -en "push: ${PUSH}\n"
@@ -3657,13 +3664,6 @@ function pull {
 		usage
 		${SSHCMD} ${REMOTE} "${LL} ${SRC}"
 		return 1
-	fi
-	if {
-		[[ ${SRC} == ${DST} ]] &&
-		[[ -e ${DST} ]];
-	}; then
-		SRC="$(realpath ${SRC})"
-		DST="${SRC}"
 	fi
 	declare SEXT=
 	if { {
