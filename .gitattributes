@@ -7,13 +7,13 @@
 # https://github.com/github/linguist/blob/master/docs/overrides.md
 ########################################
 
-artifacts/archive/**			linguist-vendored
-gentoo/overlay/**			linguist-vendored
-gentoo/savedconfig/**			linguist-vendored
-linux/**				linguist-vendored
+/artifacts/archive/**			linguist-vendored
+/gentoo/overlay/**			linguist-vendored
+/gentoo/savedconfig/**			linguist-vendored
+/linux/**				linguist-vendored
 
-.vimrc					linguist-vendored
-artifacts/files/initrc			linguist-language=shell
+/.vimrc					linguist-vendored
+/artifacts/files/initrc			linguist-language=shell
 
 ################################################################################
 # End Of File
