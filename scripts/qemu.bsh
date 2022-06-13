@@ -3,6 +3,7 @@ source ${HOME}/.bashrc
 ################################################################################
 
 declare QNUM="${1}"			; shift
+declare QCPU="${1}"			; shift
 declare QMEM="${1}"			; shift
 declare QFIL="${1}"			; shift
 declare QSYS=
@@ -200,7 +201,7 @@ else
 fi
 
 QMCH+=" -rtc base=utc,clock=host"
-QMCH+=" -smp cpus=2,sockets=2,cores=1,threads=1"
+QMCH+=" -smp cpus=${QCPU},cores=${QCPU},sockets=1,threads=1"
 
 ########################################
 
