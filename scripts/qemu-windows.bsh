@@ -3,6 +3,7 @@ source ${HOME}/.bashrc
 ################################################################################
 
 declare QNUM="8"
+declare QCPU="8"
 declare QMEM="$((1024*4))"
 declare QFIL="windows.img"
 declare QSYS="${1}"			; shift
@@ -105,7 +106,7 @@ fi
 #>>>	${LL} /tmp/qemu.windows.img.*
 #>>>	exec qemu.bsh "${QNUM}" "${QMEM}" "${QFIL}" / ALT \
 
-exec qemu.bsh "${QNUM}" "${QMEM}" "${QFIL}" "${QSYS}" \
+exec qemu.bsh "${QNUM}" "${QCPU}" "${QMEM}" "${QFIL}" "${QSYS}" \
 	"${@}" \
 	-rtc base=localtime,clock=host
 
