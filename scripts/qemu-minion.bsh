@@ -3,13 +3,14 @@ source ${HOME}/.bashrc
 ################################################################################
 
 declare QNUM="6"
+declare QCPU="8"
 declare QMEM="$((1024*4))"
 declare QFIL="${1}"			; shift
 declare QSYS="${1}"			; shift
 
 ########################################
 
-exec qemu.bsh "${QNUM}" "${QMEM}" "${QFIL}" "${QSYS}" \
+exec qemu.bsh "${QNUM}" "${QCPU}" "${QMEM}" "${QFIL}" "${QSYS}" \
 	"${@}"
 
 ################################################################################
