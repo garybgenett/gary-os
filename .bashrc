@@ -5807,9 +5807,12 @@ function task-export-text {
 			my $compose = "make"
 				. " -f ${ENV{COMPOSER}}"
 				. " -C ${ENV{PIMDIR}}"
+				. " compose"
+				. " c_type=html"
+				. " c_base=${base}${extn}"
+				. " c_list=${base}${extn}"
 				. " c_css=css_alt"
 				. " c_toc=0"
-				. " ${base}${extn}.html"
 				;
 			if (system(${compose}) != 0) { die(); };
 			unlink(${ENV{PIMDIR}} . "/.composed") || warn();
