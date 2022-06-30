@@ -66,7 +66,11 @@ if [[ "${-/i}" == "${-}" ]]; then
 	export _SELF="$(realpath -- "${0}")"
 	export SCRIPT="$(basename -- "${_SELF}")"
 fi
+
 export UNAME="$(uname -s)"
+if [[ -n "$(uname -a | grep "Microsoft")" ]]; then
+	UNAME="Windows"
+fi
 
 export COMPOSER="/.g/_data/zactive/coding/composer/Makefile";	alias composer="make -f ${COMPOSER}"
 export PIMDIR="/.g/_data/zactive/_pim"
@@ -141,6 +145,10 @@ export PATH+=":/usr/sbin"
 export PATH+=":/bin"
 export PATH+=":/sbin"
 export PATH+=":/usr/games/bin"
+if [[ ${UNAME} == "Windows" ]]; then
+	export PATH+=":/mnt/c/WINDOWS"
+	export PATH+=":/mnt/c/WINDOWS/system32"
+fi
 if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
 	export PATH+=":/c/WINDOWS"
 	export PATH+=":/c/WINDOWS/system32"
@@ -276,6 +284,7 @@ export NICELY="sudo -E ionice -c 2 -n 7 -t nice -n 19"		; alias nicely="${NICELY
 export REALTIME="sudo -E ionice -c 1 -n 0 -t nice -n -20"	; alias realtime="${REALTIME}"
 
 if {
+	[[ ${UNAME} == "Windows" ]] ||
 	{ [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; } ||
 	[[ "${UNAME}" == "Darwin" ]] ||
 	[[ -d /data/data/com.termux/files ]] ||
@@ -564,12 +573,17 @@ alias zwrite="cd /.g/_data/zactive/writing ; clear ; ${LL}"
 alias zplan="IMPERSONATE_NAME=task ${HOME}/.bashrc impersonate_command %"
 
 alias zdesk="cd ${NULLDIR} ; clear ; ${LL}"
+if [[ ${UNAME} == "Windows" ]]; then
+	alias open="/mnt/c/Windows/System32/cmd.exe /c start"
+	alias zdesk="cd \"${HOME}/Desktop\" ; clear ; ${LL}"
+	alias wsl="${RSYNC_U} root@server.garybgenett.net:/.g/_data/zactive/.static/{.bashrc,.vimrc,scripts/updebian} \"${HOME}/Desktop/_wsl/\" ; source \"${HOME}/Desktop/_wsl/.bashrc\""
+fi
 if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
-	alias run="cygstart"
+	alias open="cygstart"
 	alias zdesk="cd \"${USERPROFILE}/Desktop\" ; clear ; ${LL}"
 fi
 if [[ "${UNAME}" == "Darwin" ]]; then
-	alias run="open"
+#>>>	alias open="open"
 	alias zdesk="cd \"/Users/${USER}/Desktop\" ; clear ; ${LL}"
 fi
 
@@ -3944,6 +3958,7 @@ function shell {
 	declare LOG="root"
 	declare OPTS
 	if {
+		[[ ${UNAME} == "Windows" ]] ||
 		{ [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; } ||
 		[[ "${UNAME}" == "Darwin" ]] ||
 		[[ -d /data/data/com.termux/files ]] ||
