@@ -577,8 +577,9 @@ if [[ ${UNAME} == "Windows" ]]; then
 	alias wsl="${RSYNC_U} root@server.garybgenett.net:/.g/_data/zactive/.static/{.X*,.bashrc,.vimrc,scripts/updebian} \"${HOME}/Desktop/_wsl/\" ; source \"${HOME}/Desktop/_wsl/.bashrc\""
 	alias backup="${RSYNC_U} \"${HOME}/Desktop/data\".* root@server.garybgenett.net:/.g/_data/zactive/"
 	alias server="(urxvt -e bash -c \"${HOME}/.bash_aliases shell me\" &)"
+	alias xterm="(urxvt &)"
 	alias xclock="(xclock &)"
-	alias open="/mnt/c/Windows/System32/cmd.exe /c start"
+	alias open="/mnt/c/Windows/explorer.exe"
 	alias zdesk="cd \"${HOME}/Desktop\" ; clear ; ${LL}"
 fi
 if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
