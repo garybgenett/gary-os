@@ -68,7 +68,7 @@ if [[ "${-/i}" == "${-}" ]]; then
 fi
 
 export UNAME="$(uname -s)"
-if [[ -n "$(uname -a | grep "Microsoft")" ]]; then
+if [[ -n "$(uname -a | grep -i "Microsoft")" ]]; then
 	UNAME="Windows"
 fi
 
