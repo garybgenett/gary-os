@@ -3991,7 +3991,7 @@ function shell {
 		return 0
 	fi
 	if [[ ${DEST} == -i ]]; then
-		${RSYNC_U} ${REMOTE}:/.g/_data/zactive/.static/.ssh/id_* ${HOME}/.ssh/
+		${RSYNC_U} ${REMOTE}:/.g/_data/zactive/.static/.ssh/{config,id_ecdsa}* ${HOME}/.ssh/
 		return 0
 	fi
 	case ${DEST} in
