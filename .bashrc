@@ -284,11 +284,7 @@ export NICELY="sudo -E ionice -c 2 -n 7 -t nice -n 19"		; alias nicely="${NICELY
 export REALTIME="sudo -E ionice -c 1 -n 0 -t nice -n -20"	; alias realtime="${REALTIME}"
 
 if {
-	[[ ${UNAME} == "Windows" ]];
-}; then
-	export NICELY="sudo"
-	export REALTIME="sudo"
-elif {
+	[[ ${UNAME} == "Windows" ]] ||
 	{ [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; } ||
 	[[ "${UNAME}" == "Darwin" ]] ||
 	[[ -d /data/data/com.termux/files ]] ||
@@ -578,7 +574,7 @@ alias zplan="IMPERSONATE_NAME=task ${HOME}/.bashrc impersonate_command %"
 
 alias zdesk="cd ${NULLDIR} ; clear ; ${LL}"
 if [[ ${UNAME} == "Windows" ]]; then
-	alias wsl="${RSYNC_U} root@server.garybgenett.net:/.g/_data/zactive/.static/{.X*,.bashrc,.vimrc,scripts/updebian} \"${HOME}/Desktop/_wsl/\" ; sudo ${SED} -i \"s|[-]0[+]0|+1800+1920|g\" \"${HOME}/Desktop/_wsl/.Xresources\" ; source \"${HOME}/Desktop/_wsl/.bashrc\""
+	alias wsl="${RSYNC_U} root@server.garybgenett.net:/.g/_data/zactive/.static/{.X*,.bashrc,.vimrc,scripts/updebian} \"${HOME}/Desktop/_wsl/\" ; ${SED} -i \"s|[-]0[+]0|+1800+1920|g\" \"${HOME}/Desktop/_wsl/.Xresources\" ; source \"${HOME}/Desktop/_wsl/.bashrc\""
 	alias backup="${RSYNC_U} \"${HOME}/Desktop/data\".* root@server.garybgenett.net:/.g/_data/zactive/"
 	alias server="(urxvt -e bash -c \"${HOME}/.bash_aliases shell me\" &)"
 	alias xterm="(urxvt &)"
