@@ -478,6 +478,7 @@ media-sound/lmms
 x11-themes/gtk-engines-murrine		# gentoo required: [media-sound/ardour-*] Gtk-WARNING <...> Unable to locate theme engine in module_path: "murrine"
 
 media-video/openshot
+media-video/peek
 
 ########################################
 # games
