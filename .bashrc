@@ -574,7 +574,7 @@ alias zplan="IMPERSONATE_NAME=task ${HOME}/.bashrc impersonate_command %"
 
 alias zdesk="cd ${NULLDIR} ; clear ; ${LL}"
 if [[ ${UNAME} == "Windows" ]]; then
-	alias wsl="${RSYNC_U} root@server.garybgenett.net:{/.g/_data/zactive/.static/{.X*,.bashrc,.vimrc,scripts/updebian},${COMPOSER}} \"${HOME}/Desktop/_wsl/\" && ${SED} -i \"s|[-]0[+]0|+1800+1920|g\" \"${HOME}/Desktop/_wsl/.Xresources\" && source \"${HOME}/Desktop/_wsl/.bashrc\""
+	alias wsl="${RSYNC_U} root@server.garybgenett.net:{/.g/_data/zactive/.static/{.X*,.bash*,.htop*,.vim*,scripts/updebian},${COMPOSER}} \"${HOME}/Desktop/_wsl/\" && ${SED} -i \"s|[-]0[+]0|+1800+1920|g\" \"${HOME}/Desktop/_wsl/.Xresources\" && source \"${HOME}/Desktop/_wsl/.bashrc\""
 	alias backup="${RSYNC_U} \"${HOME}/Desktop/data\".* root@server.garybgenett.net:/.g/_data/zactive/"
 	alias server="(urxvt -e bash -c \"${HOME}/.bash_aliases shell me\" &)"
 	alias xterm="(urxvt &)"
