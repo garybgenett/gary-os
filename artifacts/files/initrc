@@ -272,7 +272,7 @@ select() {
 		fi
 		if [ -f "/.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}${${ROOTFS_ROOT_OPT}_file}" ]; then
 			#note: doing this in three steps to manage memory consumption
-			#note: having both images in memory, and unpacked, all at once, is very expeensive
+			#note: having both images in memory, and unpacked, all at once, is very expensive
 			${ROOTFS_NAME} ${_GOVLY} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}${${ROOTFS_ROOT_OPT}_file} true false || ${ROOTFS_FUNC}
 			${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} false || ${ROOTFS_FUNC}
 			${ROOTFS_NAME} ${_GOVLY} ${_GOVLY}${_GOVLY}${ROOTFS_ROOT} false true || ${ROOTFS_FUNC}
