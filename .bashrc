@@ -4260,9 +4260,7 @@ function zpim-commit {
 	sudo chmod -R 750 ${PIMDIR}{,.git}
 	sudo chmod 755 \
 		${PIMDIR} \
-		${PIMDIR}/bookmarks* \
-		${PIMDIR}/tasks* \
-		${PIMDIR}/zoho*
+		${PIMDIR}/tasks.*
 	${SED} -i \
 		-e "/^[[:space:]]+[<]DD[>]$/d" \
 		-e "s/<HR>([[:space:]])/<HR>\n\1/g" \
