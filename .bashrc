@@ -602,7 +602,7 @@ alias synctail="${GREP} -a '^ERROR[:][ ]' /.g/_data/-track/-sync/_sync.log ; ech
 
 ########################################
 
-alias astatus="zstatus ; echo ; zstatus -l gdata/zactive ; echo ; estatus"
+alias astatus="zstatus ; echo ; zstatus -l 10 gdata/zactive ; echo ; estatus"
 alias cal="cal --monday --three"
 alias clean="_sync clean"
 alias clock="clockywock"
@@ -2895,9 +2895,9 @@ function mount-zfs {
 			echo -en "\n"
 		fi
 		if ${SL}; then
-			${Z_LIST_INF} "${@}"
+			${Z_LIST_INF} "${@}" | tail -n${ZFS_SNAPSHOTS}
 			echo -en "\n"
-			${Z_LIST_SIZ} "${@}"
+			${Z_LIST_SIZ} "${@}" | tail -n${ZFS_SNAPSHOTS}
 			echo -en "\n"
 			${Z_DAT_ALL} -s local \
 				| ${GREP} --color=never "^${1}" \
@@ -2989,6 +2989,7 @@ function mount-zfs {
 	if [[ ${1} == -0 ]]; then		RO="true";	shift; fi; if ${RO}; then ZFS_ROTATE="false"; fi
 	if [[ ${1} == -u ]]; then		UN="true";	shift; fi; if ${UN}; then IMPORT="false"; fi
 	if [[ ${1} == -l ]]; then		SL="true";	shift; fi; if ${SL}; then IMPORT="false"; fi
+		if ${SL} && [[ ${1} == +([0-9]) ]]; then	ZFS_SNAPSHOTS="${1}"; shift; fi
 	if [[ ${1} == ${SN_OPT} ]]; then	SN="true";	shift; fi; if ${SN}; then IMPORT="false"; fi
 		if ${SN} && [[ ${1} == -d ]]; then		SN_DBG="true"; shift; fi
 		if ${SN} && [[ ${1} == -a ]]; then		SN_ALL="true"; shift; fi
