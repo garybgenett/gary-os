@@ -4,7 +4,7 @@
 
 | ![GaryOS Icon](artifacts/images/icon-v6.0.png "GaryOS Icon") | "The one file that does it all."
 |:---      |:---
-| Latest   | [v6.0 2021-09-12] -- [Kernel] / [Rootfs] / [Boot]
+| Latest   | [v6.0 2021-09-12] -- [Kernel], [Rootfs], [Boot]
 | Homepage | <https://github.com/garybgenett/gary-os>
 | Download | <https://sourceforge.net/projects/gary-os>
 
@@ -12,18 +12,20 @@
 
 | [Documentation] | |
 |:---        |:---
-| [Overview] | [Quick Start] / [Requirements] / [Support] / [Issues]
-| [Booting]  | [Linux] / [Windows] / [GRUB] / [EFI] / [PXE] / [Virtual]
-| [Running]  | [Networking] / [GUI] / [Update] / [Filesystem] / [Minimal]
-| [Building] | [Compile] / [Manage] / [Image] / [Install]
+| [Overview] | [Quick Start], [Requirements], [Support], [Issues]
+| [Booting]  | [Linux], [Windows], [GRUB], [EFI], [PXE], [Virtual]
+| [Running]  | [Networking], [GUI], [Update], [Filesystem], [Minimal]
+| [Building] | [Compile], [Manage], [Image], [Install]
 
 | [Information] | |
 |:---        |:---
-| [Goals]    | [Design] / [Builder] / [Loader]
-| [Project]  | [References] / [Contributions] / [Contributing] / [Licensing]
-| [Details]  | [Versioning] / [Repository] / [Tools] / [Ecosystem]
-| [Release]  | [Process] / [Checklist] / [Publish]
-| [Versions] | [v6.0 2021-09-12] / [v5.0 2021-08-04] / [v4.0 2021-07-26] / [(...)](#v30-2015-03-16)
+| [Goals]    | [Design], [Builder], [Loader]
+| [Project]  | [References], [Contributions], [Contributing], [Licensing]
+| [Details]  | [Versioning], [Repository], [Tools], [Ecosystem]
+| [Release]  | [Process], [Checklist], [Publish]
+| [Versions] | [v6.0 2021-09-12], [v5.0 2021-08-04], [v4.0 2021-07-26], [(...)]
+
+[(...)]: #v30-2015-03-16
 
 [Gary B. Genett]: http://www.garybgenett.net
 [gary-os@garybgenett.net]: mailto:gary-os@garybgenett.net?subject=GaryOS%20Submission&body=Thank%20you%20for%20sending%20a%20message%21
