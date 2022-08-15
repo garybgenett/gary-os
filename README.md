@@ -83,8 +83,8 @@ Download the latest [Kernel], and select a boot method:
   3. Configure an existing [EFI] bootloader
   4. Host on a [PXE] server
 
-Log in as 'root' with password 'gary-os'.  Any boot media can be detached.  Use
-the normal 'shutdown now' or simply power off when finished.
+Log in as `root` with password `gary-os`.  Any boot media can be detached.  Use
+the normal `shutdown now` or simply power off when finished.
 
 ### Requirements ###############################################################
 [Requirements]: #requirements
@@ -172,7 +172,7 @@ and from anywhere that a Linux kernel can.
   | [Virtual] | Run virtualized on any platform, for [Building] or testing
 
 All standard Linux kernel parameters are valid.  In addition, GaryOS has added
-'shmem_size', which specifies the initial amount of memory reserved for the
+`shmem_size`, which specifies the initial amount of memory reserved for the
 filesystem if something other than the default is desired at boot time.  Full
 details on this parameter are in [Loader].
 
@@ -186,7 +186,7 @@ There are two options.
   2. Use the GaryOS [GRUB] tooling
 
 It is recommended to use the first if it is available.  The simplest version
-for GRUB is below, with the 'linux' line matching the location of the GaryOS
+for GRUB is below, with the `linux` line matching the location of the GaryOS
 kernel.
 
   ```
@@ -196,7 +196,7 @@ kernel.
   }
   ```
 
-The 'gary-os.grub.cfg' file in the [Boot] archive is a good example of
+The `gary-os.grub.cfg` file in the [Boot] archive is a good example of
 a complete GRUB configuration file.  It is sourced from
 [grub/grub.menu.gary-os.cfg], and provides many additional features and
 benefits over the example above.
@@ -233,8 +233,8 @@ The GaryOS [Boot] file contains everything needed to create and update [GNU
 GRUB] on both hard drives and USB drives.  The core of the tooling is the
 [scripts/grub.sh] script.
 
-Once a drive has been set up, place the GaryOS [Kernel] in the 'gary-os'
-directory as 'gary-os.kernel'.  The 'gary-os.grub.cfg' file can also be placed
+Once a drive has been set up, place the GaryOS [Kernel] in the `gary-os`
+directory as `gary-os.kernel`.  The `gary-os.grub.cfg` file can also be placed
 in that directory and edited as needed.
 
   ```
@@ -246,7 +246,7 @@ The drive can be booted using the BIOS or EFI boot menu on any computer that
 supports booting from removeable media.  It provides a menu which auto-selects
 the most advanced option available.  This menu can be updated at any time using
 the [scripts/grub.sh] script within GaryOS, following the directions in
-"GNU/Linux" below.  The 'gary-os.grub.cfg' file can be updated anytime with the
+"GNU/Linux" below.  The `gary-os.grub.cfg` file can be updated anytime with the
 latest [grub/grub.menu.gary-os.cfg].
 
 **GNU/Linux**
@@ -268,7 +268,7 @@ need to match.
   | 3         |       266240 |    2363391 | 1024.0 MiB | EF00 | EFI System
   | 4         |         4096 |     266239 |  128.0 MiB | EF02 | BIOS boot partition
 
-This is the output from 'gdisk -l loopfile.img'.  Using 'fdisk -l' will produce
+This is the output from `gdisk -l loopfile.img`.  Using `fdisk -l` will produce
 similar output.
 
 **Windows**
@@ -279,10 +279,10 @@ a USB drive.
 
   1. Insert a new or empty USB drive at least 4GB in size
   2. Download the [Boot] archive, right click and 'Extract'
-  3. Double-click 'rufus\*.exe', click allow, and decline updates
+  3. Double-click `rufus\*.exe`, click allow, and decline updates
      1. Show 'advanced drive properties' and check 'USB Drives'
      2. For 'Device', select the USB drive
-     3. For 'Boot Selection', use the large 'Select' button and 'loopfile.img'
+     3. For 'Boot Selection', use the large 'Select' button and `loopfile.img`
      4. Click 'Start'
      5. Read the warning and click 'OK' when ready
      6. Click 'Close' if it completed successfully
@@ -295,14 +295,14 @@ a USB drive.
      6. Click 'Finish' when ready
 
 There will be a new drive letter available in 'My Computer', but it will be
-empty.  Create the 'gary-os' directory and add the 'gary-os.kernel' as
-described at the at the beginning of [GRUB].  The 'gary-os.grub.cfg'
+empty.  Create the `gary-os` directory and add the `gary-os.kernel` as
+described at the at the beginning of [GRUB].  The `gary-os.grub.cfg`
 instructions are also supported.
 
 ### EFI ########################################################################
 [EFI]: #efi
 
-Both the GaryOS [Kernel] and the GRUB 'x86_64.efi' file in [Boot] (see [GRUB])
+Both the GaryOS [Kernel] and the GRUB `x86_64.efi` file in [Boot] (see [GRUB])
 are EFI applications, and can be used directly from an EFI menu on an
 appropriate partition.
 
@@ -316,16 +316,16 @@ In a networked environment GaryOS can boot from a central server.  This is often
 used in labs or environments where centralized management of infrastructure is
 critical.
 
-Both the GaryOS [Kernel] and the GRUB 'x86_64.efi' file in [Boot] (see [GRUB])
+Both the GaryOS [Kernel] and the GRUB `x86_64.efi` file in [Boot] (see [GRUB])
 can be loaded directly from PXE.  The [Boot] image will automatically select and
 load GaryOS from the server, and will also pass any additional boot parameters
 to the [Linux Kernel] directly from the PXE server configuration.
 
 DHCPd and TFTPd are included, so GaryOS can also act as the PXE server.  An
-example DHCPd configuration is below.  The 'x86_64.efi' image must be used as
-the 'filename' in order to pass Linux kernel parameters to GaryOS via
-'extensions-path'.  Otherwise, the GaryOS kernel can be used directly as
-'filename' without any other options.
+example DHCPd configuration is below.  The `x86_64.efi` image must be used as
+the `filename` in order to pass Linux kernel parameters to GaryOS via
+`extensions-path`.  Otherwise, the GaryOS kernel can be used directly as
+`filename` without any other options.
 
   ```
   next-server             0.0.0.0;
@@ -417,7 +417,7 @@ with.
 
 For security, no networking configuration or daemons are run by default, but
 several networking packages are installed.  Instructions for Ethernet, Wireless
-and [OpenSSH] 'sshd' are below.
+and [OpenSSH] `sshd` are below.
 
 The [Funtoo Networking] page contains full details on all the configuration
 possibilities.  For the purposes of GaryOS, a simple single-interface
@@ -434,11 +434,11 @@ The [dhcpcd] utility is the quickest and easiest to use.
 
 This should automatically detect the best interface to use and configure it with
 DHCP.  It can also be run explicitly on a specific interface using something
-like 'dhcpcd eth0'.
+like `dhcpcd eth0`.
 
-In case this does not work as expected or there is no DHCP available, the 'ip'
-command from [iproute2] can be used to configure manually.  Starting with 'ip
-address' will show all the available interfaces and their status.  Use 'ip help'
+In case this does not work as expected or there is no DHCP available, the `ip`
+command from [iproute2] can be used to configure manually.  Starting with `ip
+address` will show all the available interfaces and their status.  Use `ip help`
 for more information on how to use this command.
 
 **Wireless**
@@ -454,8 +454,8 @@ and accomplishes the goal in the fewest steps.
   openrc
   ```
 
-If it is required to manually discover an available network, use the 'wpa_cli'
-command.  If preferred, the 'wpa_gui' graphical utility is available on
+If it is required to manually discover an available network, use the `wpa_cli`
+command.  If preferred, the `wpa_gui` graphical utility is available on
 [Rootfs].
 
   ```
@@ -472,8 +472,8 @@ command.  If preferred, the 'wpa_gui' graphical utility is available on
   save_config
   ```
 
-The 'wpa_cli' command supports tab-completion, so it is only necessary to type
-the first few letters of each command.  Use 'iwconfig' to verify success.
+The `wpa_cli` command supports tab-completion, so it is only necessary to type
+the first few letters of each command.  Use `iwconfig` to verify success.
 
   ```
   rc-service wpa_supplicant restart
@@ -484,7 +484,7 @@ restart the daemon and reinitialize the interface.
 
 **OpenSSH**
 
-If remote access to GaryOS is needed, OpenSSH 'sshd' is the absolute best
+If remote access to GaryOS is needed, OpenSSH `sshd` is the absolute best
 option.
 
   ```
@@ -493,7 +493,7 @@ option.
   openrc
   ```
 
-It is very important to note that 'root' access is enabled, which is why the
+It is very important to note that `root` access is enabled, which is why the
 password should be changed before enabling SSH.
 
   [Funtoo Networking]: https://www.funtoo.org/Networking
@@ -505,7 +505,7 @@ password should be changed before enabling SSH.
 [GUI]: #gui
 
 GaryOS boots to the command line by default.  To run the [X.Org] graphical
-interface, use 'startx'.
+interface, use `startx`.
 
   | Utility           | [Kernel]       | [Rootfs]
   |:---               |:---            |:---
@@ -514,8 +514,8 @@ interface, use 'startx'.
   | Web browser       | [Links]        | Includes [Firefox]
 
 The dwm title bar has brief reminders for the shortcuts below.  Use
-'XSESSION=openbox startx' for Openbox instead of dwm.  In Links, use the top bar
-for the menu and 'g' to open the URL bar.
+`XSESSION=openbox startx` for Openbox instead of dwm.  In Links, use the top bar
+for the menu and `g` to open the URL bar.
 
   |                       | |
   |:---                   |:---
@@ -527,7 +527,7 @@ for the menu and 'g' to open the URL bar.
   | Web browser (Firefox) | Alt-Shift-Ctrl-Enter
 
 X.Org tries to auto-detect the best resolution for the display.  If it does not,
-use the 'xrandr' utility to change it.  If preferred, the 'arandr' graphical
+use the `xrandr` utility to change it.  If preferred, the `arandr` graphical
 utility is available on [Rootfs].
 
   ```
@@ -550,10 +550,10 @@ just like a normal installation.
 
   1. Set up [Networking]
   2. Increase the size of the filesystem
-  3. Use 'make unpack' to install necessary directories
-  4. Run whatever [Portage] 'emerge' or other commands that are desired
+  3. Use `make unpack` to install necessary directories
+  4. Run whatever [Portage] `emerge` or other commands that are desired
 
-It is important that 'make unpack' is run before making updates to the system,
+It is important that `make unpack` is run before making updates to the system,
 since it may remove or replace added files if done afterward.
 
 **Increase Filesystem Size**
@@ -566,8 +566,8 @@ space, but not enough to unpack the directories and make other updates.
   df -h /.overlay
   ```
 
-Replace '6144' with the amount of MB to allocate.  This may also be specified
-as '6g' for GB.  GaryOS is tested with 6GB, to ensure this works with systems
+Replace `6144` with the amount of MB to allocate.  This may also be specified
+as `6g` for GB.  GaryOS is tested with 6GB, to ensure this works with systems
 that have 8GB of memory.
 
 **Upack Directories**
@@ -583,12 +583,12 @@ unpacking additional directories (see [Design]).
 
 Nano is a basic, user-friendly text editor.  The author uses [Vim], so that
 option is also available.  The syntax to use is documented in the file.  For
-this, just remove the first character from all the 'gcc' and 'emerge' lines
-(except for 'meta-repo.git').
+this, just remove the first character from all the `gcc` and `emerge` lines
+(except for `meta-repo.git`).
 
 **Emerge**
 
-At this point, GaryOS is like any other Funtoo installation.  The 'emerge'
+At this point, GaryOS is like any other Funtoo installation.  The `emerge`
 command can be used to install and update packages as usual.
 
   ```
@@ -637,11 +637,11 @@ external filesystem.
 
 [Loader] goes into each of these in much more detail.  GaryOS provides example
 defaults in the [Boot] configuration file, sourced from
-[grub/grub.menu.gary-os.cfg].  Generally, only 'shmem_size' and 'groot' are
+[grub/grub.menu.gary-os.cfg].  Generally, only `shmem_size` and `groot` are
 required to load an external [Image].
 
-The 'shmem_size' value for the pre-made GaryOS [Rootfs] should be at least
-'3072m', or '3g' if that format is preferred.  The [Boot] file is already
+The `shmem_size` value for the pre-made GaryOS [Rootfs] should be at least
+`3072m`, or `3g` if that format is preferred.  The [Boot] file is already
 correctly configured (see [GRUB]).
 
 ### Minimal ####################################################################
@@ -657,7 +657,7 @@ version of the [Kernel].
 
 For these situations, the "minified" [Tiny] version may be used in place of
 [Kernel].  The [Boot] file is already configured to locate it as
-'gary-os.tiny.kernel'.  If both 'gary-os.kernel' and 'gary-os.tiny.kernel'
+`gary-os.tiny.kernel`.  If both `gary-os.kernel` and `gary-os.tiny.kernel`
 exist, [Boot] will first try the main [Kernel], and fall back to [Tiny] if it
 fails to load.  The [grub/grub.menu.gary-os.cfg] file also works this way.
 
@@ -698,13 +698,13 @@ condense it into a small number of atomic steps using [GNU Make].
   | redo    | Complete start-to-finish rebuild of entire system
   | edit    | Wrapper around [gentoo.config] customization script
 
-To prepare for a build, create a 'sources' directory in the repository and
-download a 'stage3' tarball into it.  Each version of GaryOS has a link in
-[Versions] to the 'stage3' it was built with.  The default GaryOS settings in
-[gentoo/make.conf] call for a 'generic_64' tarball.
+To prepare for a build, create a `sources` directory in the repository and
+download a `stage3` tarball into it.  Each version of GaryOS has a link in
+[Versions] to the `stage3` it was built with.  The default GaryOS settings in
+[gentoo/make.conf] call for a `generic_64` tarball.
 
-The 'build' directory will be created and used as a 'chroot'.  If this will be
-a direct installation to disk, create the 'build' directory manually and mount
+The `build` directory will be created and used as a 'chroot'.  If this will be
+a direct installation to disk, create the `build` directory manually and mount
 the target partition on it.  Do not mount any subdirectories until after the
 'init' phase.  Upon completion of the build, the [GRUB Quick Start] is all that
 is needed to make it ready to boot into.
@@ -715,10 +715,10 @@ process is generally applicable to all Funtoo (and Gentoo) systems.
 
 **Init**
 
-The target directory 'build' will be created.  It will grow to many tens of GB,
+The target directory `build` will be created.  It will grow to many tens of GB,
 so having 100GB available is recommended.
 
-For the best performance, change the 'MAKEFLAGS -j' variable in
+For the best performance, change the `MAKEFLAGS -j` variable in
 [gentoo/make.conf] to the number of CPU cores your system has plus 1.
 
   ```
@@ -729,15 +729,15 @@ The last line in [gentoo/\_funtoo] must be the release version and commit hash
 in [meta-repo] that it is desired to use for the Portage tree.
 
 Make any desired Portage package selection and configuration changes, and then
-start the build with 'make init'.  By default, the base GaryOS [Kernel] package
-list and configuration is used.  The full [Rootfs] build can be done with 'make
-P=\_gary-os init'.  If so, be sure to add 'P=\_gary-os' in all the rest of the
+start the build with `make init`.  By default, the base GaryOS [Kernel] package
+list and configuration is used.  The full [Rootfs] build can be done with `make
+P=\_gary-os init`.  If so, be sure to add `P=\_gary-os` in all the rest of the
 steps as well.
 
 The initial build is where errors are most likely to occur.
 
   * Dependency conflicts
-  * Conflicting '$USE' variable values
+  * Conflicting `$USE` variable values
   * Package incompatibilities causing build breaks
   * Broken or out of date packages
 
@@ -745,7 +745,7 @@ These are all beyond the control of GaryOS.  See [Builder] and [Process] for
 strategies to deal with these quickly and continue building.
 
 This phase must at least reach the stage where it is building the selected
-package list after updating the base system (the '@system' set) and downloading
+package list after updating the base system (the `@system` set) and downloading
 all the source files.  The 'doit' target can be used after that to resume.  In
 that case, the 'redo' phase must definitely be performed, to make sure the
 skipped 'init' steps are run.
@@ -757,9 +757,9 @@ configuration changes.  It also handles a number of backend items key to
 keeping things clean and orderly.
 
 Once the 'init' phase reaches the point of building the package list, this phase
-can be used to resume after failed builds.  It can be handy to do 'make
-DOFAST=true doit' to skip some of the ancillary time-consuming steps until
-a successful build is achieved, and then do a final 'make doit' to ensure they
+can be used to resume after failed builds.  It can be handy to do `make
+DOFAST=true doit` to skip some of the ancillary time-consuming steps until
+a successful build is achieved, and then do a final `make doit` to ensure they
 are run.  This is a real time saver.
 
 Successful completion of this phase is the #1 measure of a healthy build.  It
@@ -808,13 +808,13 @@ a simple two-step process.
 
   | Target  | Action
   |:---     |:---
-  | update  | Update the [meta-repo] package repository and 'emerge' databases
+  | update  | Update the [meta-repo] package repository and `emerge` databases
   | upgrade | Upgrade the system to the current packages and configuration
 
-The 'update' target is completely automated, but 'upgrade' requires interaction
+The `update` target is completely automated, but `upgrade` requires interaction
 at various steps to accept updates or confirm configuration file changes.
 
-At the end of 'upgrade', the '/\_gentoo' directory is updated with information
+At the end of `upgrade`, the `/\_gentoo` directory is updated with information
 to aid in the maintenance of a healthy system.  See [Builder] for details.
 
 ### Image ######################################################################
@@ -831,17 +831,17 @@ multiple sources where this can come from.
 
 There are two key requirements of the final image for it to work correctly.
 
-  1. That '/init' is an executable location for the startup process
-  2. Has the same [Linux Kernel] version (the '/lib64/modules' directory)
+  1. That `/init` is an executable location for the startup process
+  2. Has the same [Linux Kernel] version (the `/lib64/modules` directory)
 
 [Image] tries to handle the first automatically.  Verify this, and be mindful of
 the second if the source directory is updated (such as [Update] or [Compile]).
-If needed, there is a 'packdir' archive of the '/lib64/modules' directory in
+If needed, there is a `packdir` archive of the `/lib64/modules` directory in
 [Downloads].
 
 It may be important to review the package file that will be used.  There are
 GaryOS variables in them which control portions of this process, such as which
-directories to package, archive or exclude and what 'rc-update' or other
+directories to package, archive or exclude and what `rc-update` or other
 commands should be run to tailor the image filesystem (see [Loader]).  The
 defaults in [gentoo/sets/gary-os] should be reasonable.  A more complete
 configuration is in [gentoo/sets/\_gary-os].
@@ -876,9 +876,9 @@ problematic when the intention is to implement changes.
   make DOREDO=true release
   ```
 
-The 'clean' target will completely remove all [Builder] output files, restoring
-the 'build' directory to its original state.  This includes all images and
-kernels, along will all their supporting files.  The 'DOREDO' variable is
+The `clean` target will completely remove all [Builder] output files, restoring
+the `build` directory to its original state.  This includes all images and
+kernels, along will all their supporting files.  The `DOREDO` variable is
 specific to each target, and only rebuilds the relevant files.
 
 ### Install ####################################################################
@@ -905,8 +905,8 @@ All of this except the [Update] will be done by [Builder].
 
 At least 8GB of memory will be required, due to the size of the fully unpacked
 filesystem.  The base size of the in-memory filesystem will need to be at least
-6G, which can be set with 'shmem_size=6144m' before booting (see [Filesystem])
-or 'mount -o remount,size=6144m /.overlay' after booting (see [Update]).
+6G, which can be set with `shmem_size=6144m` before booting (see [Filesystem])
+or `mount -o remount,size=6144m /.overlay` after booting (see [Update]).
 
   ```
   mount -o remount,size=6144m /.overlay
@@ -929,7 +929,7 @@ the install will be incomplete.
 Both [Kernel] and [Rootfs] require [Networking] for this, although [Rootfs]
 already has all of the absolutely necessary directories locally.  For
 a network-less install, use [Rootfs] and follow the unpacking instructions in
-[Update].  Namely, edit the '/.unpack' file to skip the external 'meta-repo.git'
+[Update].  Namely, edit the `/.unpack` file to skip the external `meta-repo.git`
 directory.
 
 **Configuration Files** *(Optional)*
@@ -950,7 +950,7 @@ full list of modified files is in "Modifications" below.
   make reset
   ```
 
-Somewhat similar to the above, a 'reset' will "upgrade" the Portage
+Somewhat similar to the above, a `reset` will "upgrade" the Portage
 configuration to [gentoo/sets/packages].
 
 **Update** *(Optional)*
@@ -965,7 +965,7 @@ should be done on the live [Filesystem] and not the [Repository].
 **Install**
 
 The system is ready for install.  All that is needed is to mount the target
-partition (replace '/dev/sda1' with the desired location).  This partition must
+partition (replace `/dev/sda1` with the desired location).  This partition must
 be empty.  Anything on it will be erased.
 
   ```
@@ -975,17 +975,17 @@ be empty.  Anything on it will be erased.
   ```
 
 Once complete, the final step is to install the GRUB bootloader.  Some helpful
-pointers are provided at the end of the 'install' process.  This is a simple
+pointers are provided at the end of the `install` process.  This is a simple
 step, but has a few important considerations, so it is not automated.  The [GRUB
 Quick Start] can also be a helpful starting point.
 
-The 'install' target can be run any number of times without issue.  Make sure to
+The `install` target can be run any number of times without issue.  Make sure to
 install GRUB as the absolute last step.
 
 All that is left are a few key items to make the system ready for use.
 
-  * Update '/etc/fstab' with location of the root filesystem
-  * Set hostname in '/etc/conf.d/hostname'
+  * Update `/etc/fstab` with location of the root filesystem
+  * Set hostname in `/etc/conf.d/hostname`
   * Change the password: `passwd root`
 
 Enjoy your new system!
@@ -1000,19 +1000,19 @@ and feel for GaryOS.
   |:---                       |:---      |:---
   | /etc/issue                | Replaced | [artifacts/files/issue]
   | /etc/motd                 | Added    | [artifacts/files/issue]
-  | /init                     | Added    | Symbolic link to '/sbin/init'
+  | /init                     | Added    | Symbolic link to `/sbin/init`
   | /etc/inittab              | Modified | Added serial console
   | /etc/fstab                | Modified | Commented all lines
   | /etc/locale.gen           | Replaced | [artifacts/files/locale.gen]
-  | /etc/conf.d/hostname      | Modified | Set to 'gary-os'
+  | /etc/conf.d/hostname      | Modified | Set to `gary-os`
   | /etc/profile.d/setterm.sh | Added    | Disabled terminal bell
   | /etc/wpa_supplicant/wpa_supplicant.conf | Replaced | [artifacts/files/wpa_supplicant.conf]
-  | /etc/ssh/sshd_config      | Modified | Enabled 'root' login
+  | /etc/ssh/sshd_config      | Modified | Enabled `root` login
   | /etc/env.d/90xsession     | Added    | Set default window manager
   | /etc/X11/Sessions/dwm     | Modified | Tune [dwm] running environment
 
 In cases where the files are modified or replaced, the original is kept as
-a '\*.gary-os' file.
+a `\*.gary-os` file.
 
 In addition to the above, the [OpenRC] configuration is modified (see
 [Loader]).  This is primarily to disable all network daemons.  The [gpm] daemon
@@ -1027,7 +1027,7 @@ As for the overall system, all configuration files for the [Linux Kernel] and
   | Portage       | [gentoo/]
   | Overlay       | [gentoo/overlay/]
 
-Finally, the 'root' password is set to 'gary-os'.
+Finally, the `root` password is set to `gary-os`.
 
   [Funtoo Installation Guide]: https://www.funtoo.org/Install
   [Gentoo Installation Guide]: https://wiki.gentoo.org/wiki/Handbook:AMD64/Full/Installation
@@ -1074,7 +1074,7 @@ Explicit non-goals:
   * Alteration of boot or 'init' infrastructure
   * Becoming a complete desktop environment
 
-GaryOS will continue to be a [Kernel] and [Builder] above all else.
+GaryOS will continue to be a [Builder] and [Kernel] above all else.
 
 ### Design #####################################################################
 [Design]: #design
@@ -1127,7 +1127,7 @@ a reliable process that produces repeatable builds.
 [Builder] is more of an abstract concept than it is an actual thing, but it is
 most helpful to think of it this way.  [Builder] is the very core of GaryOS.
 
-Type 'make usage' (basic) or 'make help' (advanced) to get started.
+Type `make usage` (basic) or `make help` (advanced) to get started.
 
 **Responsibilities**
 
@@ -1145,31 +1145,31 @@ Type 'make usage' (basic) or 'make help' (advanced) to get started.
   | [gentoo/\_system]      | Worker for all of [Building] (core of [Builder])
   | [gentoo/\_funtoo]      | [Funtoo] [meta-repo] commit tracking
   | [gentoo/\_funtoo.kits] | [Funtoo] [meta-repo] tool (see [Contributions])
-  | [gentoo/.emergent]     | Audit script which creates '/\_gentoo' directory
+  | [gentoo/.emergent]     | Audit script which creates `/\_gentoo` directory
   | [gentoo.config]        | Optional customization for 'edit' in [Compile]
 
 **Build Tuning**
 
-The 'SELECT' variable defined in the package set file determines which 'eselect'
+The `SELECT` variable defined in the package set file determines which `eselect`
 values are configured during the build.  There are other variables which do
 similar tuning, and are self-explanatory.  The full list is at the top of
 [gentoo/sets/gary-os].
 
 **Build Output**
 
-The '/\_build' directory is created by [Compile], which archives the [Linux
+The `/\_build` directory is created by [Compile], which archives the [Linux
 Kernel] and [Portage] configurations, along with the [stage3] tarball and
 [meta-repo] tree used.  The purpose of this directory is to centralize
 everything needed to reproduce the build.
 
-After [Compile] or [Manage], the '/\_gentoo' directory will be created by
+After [Compile] or [Manage], the `/\_gentoo` directory will be created by
 [gentoo/.emergent].  It performs a number of checks of the [Portage]
 configuration and the installed system.  The results are in the
-'/\_gentoo/+checks' text file.  This file is very helpful in keeping a Portage
+`/\_gentoo/+checks` text file.  This file is very helpful in keeping a Portage
 configuration in line with upstream, particularly the addition or removal of
-'$USE' flags.
+`$USE` flags.
 
-The '/\_gentoo.log' file is created every [Compile].  It contains the complete
+The `/\_gentoo.log` file is created every [Compile].  It contains the complete
 output of the build, for troubleshooting.  Please include this file when
 reporting any issues (see [Support]).
 
@@ -1181,7 +1181,7 @@ or 'redo' through to a successful build.  [Process] walks through the author's
 workflow, and has examples of these helpers.
 
 Use [gentoo.config] to automate any final build steps with [Compile] 'edit'.  By
-default, it is run inside the 'chroot', so all paths should start from '/'.
+default, it is run inside the 'chroot', so all paths should start from `/`.
 Examples are creating users or making initial configuration changes.  The author
 uses a custom version to make sure important personal steps are not forgotten.
 
@@ -1202,7 +1202,7 @@ References to this section:
     * Init -- Strategies for build breaks
     * Edit -- [gentoo.config]
   * [Manage]
-    * Upgrade -- '/\_gentoo'
+    * Upgrade -- `/\_gentoo`
   * [Repository]
     * Heart and soul -- [gentoo/\_system]
     * Audit script and information -- [gentoo/.emergent]
@@ -1239,25 +1239,25 @@ most helpful to think of it this way.
 
 During [Image] creation (also [Kernel] and [Rootfs]), large directories are
 packaged with [XZ Compression] to maximize space savings (see [Design]).
-Commands such as 'rc-update' are run during [Image] creation or at boot time
+Commands such as `rc-update` are run during [Image] creation or at boot time
 after directories are unpacked.  There are variables sourced from the package
 set file which define these.
 
   |        | |
   |:---    |:---
-  | RCUPDT | Commands such as 'rc-update' to be run before [Image] creation
-  | FSUPDT | Identical to 'RCUPDT', but are run after directories are unpacked
+  | RCUPDT | Commands such as `rc-update` to be run before [Image] creation
+  | FSUPDT | Identical to `RCUPDT`, but are run after directories are unpacked
   | FSPACK | Included in [Image], and unpacked during boot
   | FSKEEP | Included in [Image], but are left packed
   | FSARCH | Excluded from [Image], but are packed for later use
   | FSEXCL | Excluded from [Image], and are not packed at all
 
 Note that these can be nested one level deep.  Meaning, a directory can be
-'FSARCH' from a 'FSPACK' or 'FSEXCL' from a 'FSKEEP' and so on.  Anything nested
+`FSARCH` from a `FSPACK` or `FSEXCL` from a `FSKEEP` and so on.  Anything nested
 deeper will produce undefined results.  They are evaluated in reverse order, so
 lower on the list will take precedence.  For example, if the same directory is
-set in 'FSEXCL' and 'FSPACK', the directory will be 'FSEXCL'.  Take this into
-consideration when nesting, since doing things like 'FSPACK' on a 'FSKEEP'
+set in `FSEXCL` and `FSPACK`, the directory will be `FSEXCL`.  Take this into
+consideration when nesting, since doing things like `FSPACK` on a `FSKEEP`
 subdirectory will also produce undefined results.
 
 Complete examples of usage are in [gentoo/sets/gary-os] and
@@ -1270,10 +1270,10 @@ The [Booting] process goes through three stages (see [Design]).  In the first,
 environment designed to locate, mount and boot a [Filesystem] such as [Rootfs].
 There are [Linux Kernel] parameters which inform this environment.
 
-First, 'shmem_size' specifies how much memory to reserve for the filesystem.
+First, `shmem_size` specifies how much memory to reserve for the filesystem.
 This must be large enough to contain both [Kernel] and [Filesystem], plus
-a little extra for space needed after booting.  Then, the 'groot' partition is
-mounted and 'groot_file' is loaded into memory.  Optionally, 'groot_hint' can be
+a little extra for space needed after booting.  Then, the `groot` partition is
+mounted and `groot_file` is loaded into memory.  Optionally, `groot_hint` can be
 used to provide helpful information in case loading the [Filesystem] fails.
 
 During this stage, Linux kernel modules are loaded from the [Kernel] internal
@@ -1284,18 +1284,18 @@ menu-driven and self-documented.  Its purpose is to facilitate real-time user
 selection of a [Filesystem] to load.
 
 Once a [Filesystem] is loaded, directories are unpacked as specified in 'Package
-Directories' above, and '/init' on the target filesystem is booted.  The
+Directories' above, and `/init` on the target filesystem is booted.  The
 majority of Linux kernel modules will be loaded after this point, so it is
-important that the [Filesystem] has a '/lib64/modules' directory which matches
-the GaryOS [Kernel] version.  There is a 'packdir' archive of this directory in
+important that the [Filesystem] has a `/lib64/modules` directory which matches
+the GaryOS [Kernel] version.  There is a `packdir` archive of this directory in
 [Downloads].
 
-The final in-memory filesystem is mounted on the backend at '/.overlay', so it
-can be resized after boot using something like 'mount -o remount,size=6144m
-/.overlay' (see [Update]).
+The final in-memory filesystem is mounted on the backend at `/.overlay`, so it
+can be resized after boot using something like `mount -o remount,size=6144m
+/.overlay` (see [Update]).
 
 If desired, the intermediary environment used to locate and boot the
-[Filesystem] can intentionally be loaded by using 'groot=null'.  This process is
+[Filesystem] can intentionally be loaded by using `groot=null`.  This process is
 a great learning experience for anyone interested in the [GNU/Linux] boot
 process or how live systems work.  In particular, there is a reference
 implementation of a completely in-memory [Squashfs] [Overlay] in
@@ -1306,16 +1306,16 @@ implementation of a completely in-memory [Squashfs] [Overlay] in
 References to this section:
 
   * [Booting]
-    * Parameter -- 'shmem_size'
+    * Parameter -- `shmem_size`
   * [Filesystem]
-    * Parameters -- 'shmem_size', 'groot', 'groot_file' and 'groot_hint'
+    * Parameters -- `shmem_size`, `groot`, `groot_file` and `groot_hint`
   * [Image]
-    * Symbolic link -- '/init'
-    * [Loader] directories and 'rc-update'
+    * Symbolic link -- `/init`
+    * [Loader] directories and `rc-update`
   * [Design]
     * [Linux Kernel] parameters
   * [Contributions]
-    * Parameter -- 'shmem_size'
+    * Parameter -- `shmem_size`
   * [Repository]
     * Heart and soul -- [gentoo/\_release]
 
@@ -1383,7 +1383,7 @@ counts.
 
 This project tries to give back to the community as much as it can.
 
-  * [Linux Kernel] 'shmem' patch
+  * [Linux Kernel] `shmem` patch
   * [Funtoo] [Ego]
   * [dwm]
 
@@ -1391,7 +1391,7 @@ This is in addition to [Builder] and GaryOS itself.
 
 **Linux Kernel**
 
-The 'shmem' subsystem manages 'tmpfs' for in-memory filesystems, including
+The `shmem` subsystem manages 'tmpfs' for in-memory filesystems, including
 [Linux initramfs].  By default, half of system memory is reserved.  On a 4GB
 system, this is sometimes not enough room for a GaryOS [Filesystem] to unpack.
 For the [v4.0] rebuild of [Loader], a kernel patch was submitted to the Linux
@@ -1425,11 +1425,11 @@ this hack was coded directly into Ego.
 The [gentoo/\_funtoo.kits] script has two important advantages over Ego.
 
   1. It can run directly on Git repositories without requiring a Funtoo install
-  2. Kits repositories are stored in '.git' rather than the [meta-repo] tree
+  2. Kits repositories are stored in `.git` rather than the [meta-repo] tree
 
 The second feature is important to keep the [meta-repo] tree as small as
 possible while preserving the ability to archive all the Git information in
-'meta-repo.git'.
+`meta-repo.git`.
 
 This was submitted upstream with no response.  Given the rate of changes to the
 Ego tool, and the advantages of [gentoo/\_funtoo.kits] over it, this patch was
@@ -1486,7 +1486,7 @@ To create patches there is a function in [.bashrc].  Submit patches to
   ```
 
 The parent commit should be the last commit hash before your changes.  This will
-create '####-\*' patch files for each commit since the parent.  Email them as
+create `####-\*` patch files for each commit since the parent.  Email them as
 attachments.  [GitHub] pull requests or links to commits in a forked repository
 also work.
 
@@ -1608,12 +1608,12 @@ Here is an overview of the repository contents, in order of relative importance:
   | [gentoo/savedconfig/x11-wm/dwm] | Slightly modified [dwm] configuration
   | [gentoo/sets/gary-os]    | [Kernel] packages, [Loader] and [Image]
   | [gentoo/sets/\_gary-os]  | [Rootfs] packages, [Loader] and [Image]
-  | [shmem_size_hack.patch]  | [Filesystem] 'shmem_size' (see [Contributions])
+  | [shmem_size_hack.patch]  | [Filesystem] `shmem_size` (see [Contributions])
 
   | Other                    | Purpose
   |:---                      |:---
   | [.vimrc]                 | Keeps this handy and also published online
-  | [xclock_size_hack.patch] | Make [gkrellaclock] look like 'xclock'
+  | [xclock_size_hack.patch] | Make [gkrellaclock] look like `xclock`
 
 The commit history for all these components reside in more than one personal
 repository.  They are merged together into the public GaryOS [Git] repository by
@@ -1872,9 +1872,9 @@ Everything needed to perform these steps is in the [Repository] or the
         * `vi ./gentoo/package.*`
             * [ ] Command comments at top of [gentoo/package.use]
         * `(cd ./gentoo/overlay; ./.review -a)`
-            * [ ] Review '.keep' packages
-            * [ ] Create new 'ego' ebuild, but comment patch
-            * [ ] Comment 'pandoc' packages in [gentoo/sets/packages]
+            * [ ] Review `.keep` packages
+            * [ ] Create new `ego` ebuild, but comment patch
+            * [ ] Comment `pandoc` packages in [gentoo/sets/packages]
     * `cd .setup/linux`
         * `tar --wildcards -xvvf [...]/stage3-generic_64-*.tar.xz "./usr/src/linux-debian-sources-*/.config"`
         * `mv ./usr/src/linux-debian-sources-*/.config ./default-debian-sources-[...]`
@@ -1889,7 +1889,7 @@ Everything needed to perform these steps is in the [Repository] or the
   * `cd .setup/gentoo.make`
     * `(cd .setup; git-commit ./linux ./gentoo)`
   * `make init`
-    * [ ] Until '@world', at least
+    * [ ] Until `@world`, at least
         * `while :; do make DOFAST=true init; inotifywait --event modify gentoo/make.* gentoo/package.* gentoo/sets/*; done`
         * `(cd .setup; vi gentoo/make.* gentoo/package.* gentoo/sets/*; vdiff -g gentoo/make.* gentoo/package.* gentoo/sets/*)`
     * [x] **Iterate()**
@@ -1899,7 +1899,7 @@ Everything needed to perform these steps is in the [Repository] or the
     * `vi ./gentoo/gentoo/overlay/app-text/pandoc/.pandoc_ebuilds.sh`
         * `rm $(./gentoo/overlay/app-text/pandoc/.pandoc_ebuilds.sh ^)`
         * [ ] Follow command comments
-        * [ ] Ensure no packages are coming from 'haskell-kit'
+        * [ ] Ensure no packages are coming from `haskell-kit`
   * `./linux/_config ./build/usr/src/linux`
     * [ ] Review final version
     * `rsync $(realpath ./linux/.config).*.DONE $(realpath ./linux/.config)`
@@ -1950,11 +1950,11 @@ Everything needed to perform these steps is in the [Repository] or the
 
   * `cd .setup/gentoo.gary-os`
   * [x] **Validate( 210MB 250.0MiB DOMODS=true devel )**
-    * [ ] Minimized build note in '/etc/issue'
-    * [ ] No 'startx' in '/etc/issue'
+    * [ ] Minimized build note in `/etc/issue`
+    * [ ] No `startx` in `/etc/issue`
   * [x] **Validate( 750MB 1.2GiB '' devel )**
   * `make DOTEST=true devel`
-    * [ ] Verify '#{rootfs}' markers
+    * [ ] Verify `#{rootfs}` markers
   * `make ROOTFS=false devel`
     * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1 -m 8192`
     * [ ] Test kernel size and root filesystem resize
@@ -2002,7 +2002,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
             * [ ] Test each entry
         * [x] Menu -> Options
             * [ ] Verify values
-        * [x] Options -> 'reset'
+        * [x] Options -> `reset`
             * [ ] Verify values
         * `reboot`
     * [x] Boot
@@ -2011,13 +2011,13 @@ Everything in [Booting], [Running] and [Building] should be validated below.
             * [ ] Verify "gopts=true"
         * `reboot`
     * [x] Boot Rootfs
-        * [x] Options -> 'groot=null'
-        * [ ] Verify 'rootfs' menu is readable
+        * [x] Options -> `groot=null`
+        * [ ] Verify `rootfs` menu is readable
         * `cat /proc/cmdline`
         * `reboot`
     * [x] Boot Rootfs
-        * [x] Serial console on '---' entry
-        * [x] Options -> 'groot=null'
+        * [x] Serial console on `---` entry
+        * [x] Options -> `groot=null`
         * `vi /.profile /initrc`
             * `if true; then`
         * `rootfs -`
@@ -2032,7 +2032,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
         * `rootfs =; mount /dev/sda1 /.groot; exit 1`
             * `mount; ls -la /.groot /.groot/.groot /.groot/.overlay; unrootfs; mount`
             * `rm /usr/sbin/mount.*; rootfs /dev/sda1`
-            * [ ] Verify 'rsync' phase (may exhaust memory)
+            * [ ] Verify `rsync` phase (may exhaust memory)
             * [ ] If it crashes, reset and restart from here
             * `mount; ls -la /.overlay/.overlay; unrootfs; mount`
         * `dotty; exit 0`
@@ -2055,7 +2055,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 **[EFI]**
 
   * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.grub/loopfile.qcow2 1`
-    * [ ] EFI menu (using '\<escape\>')
+    * [ ] EFI menu (using `\<escape\>`)
         * [x] Boot Maintenance Manager
         * [x] Boot From File
         * [ ] [Boot]
@@ -2069,18 +2069,18 @@ Everything in [Booting], [Running] and [Building] should be validated below.
         * [ ] Verify direct boot
     * `(cd .store; rsync -L ./gary-os/gary-os.grub/x86_64.efi ./_rescue)`
     * `vi [...]/dhcpd.conf; sv restart dhcpd tftpd`
-        * [ ] Uncomment 'root-path'
+        * [ ] Uncomment `root-path`
         * [x] PXE
         * `ls -la /.overlay`
     * `vi [...]/dhcpd.conf; sv restart dhcpd tftpd`
-        * [ ] Change 'root-path' location
-        * [ ] Uncomment 'extensions-path'
+        * [ ] Change `root-path` location
+        * [ ] Uncomment `extensions-path`
         * [x] PXE
         * `ls -la /.overlay`
   * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.grub/loopfile.qcow2 1`
     * [x] Options
-        * [x] 'dhcp'
-        * [x] 'pxe: groot'
+        * [x] `dhcp`
+        * [x] `pxe: groot`
     * [x] PXE
   * `/.setup/.setconf; sv restart dhcpd tftpd`
 
@@ -2123,7 +2123,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * [x] [GUI]
   * [ ] Boot to "gary-os"
     * [ ] Verify [Tiny]
-    * [ ] Verify failed 'Boot'
+    * [ ] Verify failed `Boot`
     * [x] Wireless [Networking]
     * [x] [GUI]
 
@@ -2160,7 +2160,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
         * `rm ./build; ln -fsv /.install ./build`
         * `mv ./gary-os/gary-os-*.stage3.tar.xz ./gary-os/stage3-generic_64.tar.xz`
         * `make init`
-            * [ ] Exit with \<ctrl-c\> once unpacking the 'stage3'
+            * [ ] Exit with \<ctrl-c\> once unpacking the `stage3`
         * `ls -la ./build/ ./build/_build`
   * `rm /tmp/qemu.gary-os-v6.0-generic_64.kernel.qcow2; ln -fsv qemu.null.qcow2 /tmp/qemu.gary-os-v6.0-generic_64.kernel.qcow2`
   * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.kernel 1`
@@ -2341,7 +2341,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * Completely up-to-date [Funtoo] [meta-repo] commit!
     * [Linux Kernel] configuration now from [Debian Kernel]
     * Streamlined [Builder] [Compile] process
-    * More comprehensive 'FS\*' variable defaults
+    * More comprehensive `FS\*` variable defaults
     * Improved "rootfs" overlay process and menu system in [Kernel]
     * Added [Tiny] kernel build
     * Color-branded [dwm]
@@ -2357,7 +2357,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * Extracted menus from script to [grub/] directory
     * Added options menu
     * Enhanced Windows support, including USB install partitions
-    * Enabled block devices for 'mount' options
+    * Enabled block devices for `mount` options
     * Updated MBR modules list
     * Improved debugging, including custom tracing output
     * Better usage and error output
@@ -2475,10 +2475,10 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 
   * [Metro]
     * Added package lists
-    * Customization of 'LDFLAGS' and 'USE' variables
+    * Customization of `LDFLAGS` and `USE` variables
     * Debug option and better error handling
   * [Portage]
-    * Complete review and rewrite of 'USE' flags
+    * Complete review and rewrite of `USE` flags
     * Cleaned up [gentoo/overlay/] directory
     * Improvements to audit and review scripting
     * Revised package list
@@ -2526,7 +2526,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 
   * [Metro]
     * Full support for both 64-bit and 32-bit builds
-    * Switched to 'generic' for all builds
+    * Switched to `generic` for all builds
     * GCC flag tuning
   * [Portage]
     * Minor package list comments
@@ -2546,12 +2546,12 @@ Everything in [Booting], [Running] and [Building] should be validated below.
   | Source Portage | [portage-95ad4fd257697618bae7402d4bc3a27499035d30.2.tar.xz](https://sourceforge.net/projects/gary-os/files/v0.3/portage-95ad4fd257697618bae7402d4bc3a27499035d30.2.tar.xz)
 
   * [Metro]
-    * Consolidated [Linux Kernel] and 'initrd' into a single [Linux initramfs]
+    * Consolidated [Linux Kernel] and `initrd` into a single [Linux initramfs]
     * Reduced initramfs size to below 500MB Linux kernel limit
     * Updated [stage3] with support for testing builds and fixing breaks
   * [Portage]
     * Initial support for both 64-bit and 32-bit builds
-    * Tuned package list and 'USE' flags for size
+    * Tuned package list and `USE` flags for size
 
 ### v0.2 2014-02-13 ############################################################
 [v0.2 2014-02-13]: #v02-2014-02-13
@@ -2586,7 +2586,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
   | Source Portage | [portage-95ad4fd257697618bae7402d4bc3a27499035d30.0.tar.xz](https://sourceforge.net/projects/gary-os/files/v0.1/portage-95ad4fd257697618bae7402d4bc3a27499035d30.0.tar.xz)
 
   * [Metro]
-    * Initial proof of concept, with separate [Linux Kernel] and 'initrd' files
+    * Initial proof of concept, with separate [Linux Kernel] and `initrd` files
   * [Portage]
     * Active personal configuration at time of build
 
