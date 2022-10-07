@@ -5829,6 +5829,7 @@ function task-export-text {
 				. " c_type=html"
 				. " c_base=${base}${extn}"
 				. " c_list=${base}${extn}"
+				. " c_css=dark"
 				. " c_toc=0"
 				;
 			if (system(${compose}) != 0) { die(); };
@@ -6700,6 +6701,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				make all			\
 					-f "${COMPOSER}"	\
 					-C "${PIMDIR}"		\
+					c_css="dark"		\
 					c_toc="0"		\
 					COMPOSER_TARGETS="${FILES}"
 				declare ENTER=
