@@ -4271,7 +4271,7 @@ function zpim-commit {
 		declare FILE="${1}" && shift
 		declare LIST=
 		if [[ ${FILE} == tasks ]]; then
-			LIST=".auth* .token* taskd*"
+			LIST=".auth* .token* .composer.{mk,yml} taskd*"
 		fi
 		if [[ ${FILE} == zoho ]]; then
 			LIST=".zoho*"
@@ -5244,9 +5244,11 @@ function task-export-text {
 			print TIME "\n";
 			$epoch += ${wtime};
 		};
-		print NOTE "% Taskwarrior: Project List & Notes\n";
-		print NOTE "% " . ${name} . "\n";
-		print NOTE "% " . localtime() . "\n";
+		print NOTE "---\n";
+		print NOTE "title: Taskwarrior: Project List & Notes\n";
+		print NOTE "author: " . ${name} . "\n";
+		print NOTE "date: " . localtime() . "\n";
+		print NOTE "---\n";
 		my $NOTE = {}; $NOTE->{"other"} = {};
 		my $multi_tag = [];
 		my $kanban_length = (64 - 2 - 7 - 4); #>>> maximum - marker<= > - annotations< [####]> - ellipsis< ...>
@@ -5822,15 +5824,8 @@ function task-export-text {
 			warn("MULTIPLE TAGS[" . $task->{"uuid"} . " " . $task->{"description"} . "](" . join(" ", @{$task->{"tags"}}) . ")");
 		};
 		if (-f "${ENV{COMPOSER}}") {
-			my $compose = "make"
-				. " -f ${ENV{COMPOSER}}"
+			my $compose = "make all"
 				. " -C ${ENV{PIMDIR}}"
-				. " compose"
-				. " c_type=html"
-				. " c_base=${base}${extn}"
-				. " c_list=${base}${extn}"
-				. " c_css=dark"
-				. " c_toc=0"
 				;
 			if (system(${compose}) != 0) { die(); };
 			unlink(${ENV{PIMDIR}} . "/.composed") || warn();
@@ -6699,10 +6694,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			declare FILES="zoho.md.html zoho.all.md.html zoho.today.md.html"
 			if [[ -f "${COMPOSER}" ]]; then
 				make all			\
-					-f "${COMPOSER}"	\
 					-C "${PIMDIR}"		\
-					c_css="dark"		\
-					c_toc="0"		\
 					COMPOSER_TARGETS="${FILES}"
 				declare ENTER=
 				read ENTER
