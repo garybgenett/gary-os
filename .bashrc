@@ -4271,7 +4271,7 @@ function zpim-commit {
 		declare FILE="${1}" && shift
 		declare LIST=
 		if [[ ${FILE} == tasks ]]; then
-			LIST=".auth* .token* .composer.{mk,yml} taskd*"
+			LIST=".auth* .token* .composer.* taskd*"
 		fi
 		if [[ ${FILE} == zoho ]]; then
 			LIST=".zoho*"
@@ -5178,6 +5178,8 @@ function task-export-text {
 		use MIME::Base64;
 		my $name = shift();
 		my $extn = ".md";
+#>>>		my $hr_line = "\n---\n\n";
+		my $hr_line = "\n\n";
 		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $root = qx(task _get rc.data.location); chomp(${root});
 		my $data = qx(task export ${args}); $data =~ s/\n//g; $data = decode_json(${data});
@@ -5245,9 +5247,9 @@ function task-export-text {
 			$epoch += ${wtime};
 		};
 		print NOTE "---\n";
-		print NOTE "title: Taskwarrior: Project List & Notes\n";
-		print NOTE "author: " . ${name} . "\n";
-		print NOTE "date: " . localtime() . "\n";
+		print NOTE "title: \"Taskwarrior: Project List & Notes\"\n";
+		print NOTE "author: \"" . ${name} . "\"\n";
+		print NOTE "date: \"" . localtime() . "\"\n";
 		print NOTE "---\n";
 		my $NOTE = {}; $NOTE->{"other"} = {};
 		my $multi_tag = [];
@@ -5643,7 +5645,7 @@ function task-export-text {
 			} else {
 				$modified = "No Notes";
 			};
-			$note .= "\n---\n\n";
+			$note .= ${hr_line};
 			$note .= ${description} . " {#uuid-" . $task->{"uuid"} . "}\n";
 			$note .= ("-" x 40) . "\n\n";
 			$note .= "**" . ${modified} . " | UUID: [" . $task->{"uuid"} . "](#uuid-" . $task->{"uuid"} . ") | [TOC](#TOC) [GTD](#gtd) [Dir](./" . ${base} . ") [" . ${extn} . "](./" . ${base} . "/" . $task->{"uuid"} . ${extn} . ")**\n";
@@ -5792,24 +5794,24 @@ function task-export-text {
 		};
 		print PROJ $json->pretty->encode(${proj});
 		print LINE $json->pretty->encode(${line});
-		if (exists($NOTE->{"data"}))			{ print NOTE "\n---\n\n" . "Data"		. " {#list-data}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"data"}				; };
-		if (exists(${$NOTE->{"other"}}{"data"}))	{ print NOTE "\n---\n\n" . "Data (Other)"	. " {#list-data-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"data"}		; };
-		if (exists($NOTE->{"notes"}))			{ print NOTE "\n---\n\n" . "Notes"		. " {#list-notes}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"notes"}			; };
-		if (exists(${$NOTE->{"other"}}{"notes"}))	{ print NOTE "\n---\n\n" . "Notes (Other)"	. " {#list-notes-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"notes"}		; };
-		if (exists($NOTE->{"open"}))			{ print NOTE "\n---\n\n" . "Open"		. " {#list-open}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"open"}				; };
-		if (exists(${$NOTE->{"other"}}{"open"}))	{ print NOTE "\n---\n\n" . "Open (Other)"	. " {#list-open-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"open"}		; };
-		if (exists($NOTE->{"scraps"}))			{ print NOTE "\n---\n\n" . "Scraps"		. " {#list-scraps}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"scraps"}			; };
-		if (exists(${$NOTE->{"other"}}{"scraps"}))	{ print NOTE "\n---\n\n" . "Scraps (Other)"	. " {#list-scraps-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"scraps"}		; };
-		if (exists($NOTE->{"completed"}))		{ print NOTE "\n---\n\n" . "Completed"		. " {#list-completed}\n"	. ("=" x 80) . "\n"; print NOTE $NOTE->{"completed"}			; };
-		if (exists(${$NOTE->{"other"}}{"completed"}))	{ print NOTE "\n---\n\n" . "Completed (Other)"	. " {#list-completed-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"completed"}	; };
-		if (exists($NOTE->{"deleted"}))			{ print NOTE "\n---\n\n" . "Deleted"		. " {#list-deleted}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"deleted"}			; };
-		if (exists(${$NOTE->{"other"}}{"deleted"}))	{ print NOTE "\n---\n\n" . "Deleted (Other)"	. " {#list-deleted-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"deleted"}		; };
-		if (exists($NOTE->{"someday"}))			{ print NOTE "\n---\n\n" . "Someday"		. " {#list-someday}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"someday"}			; };
-		if (exists(${$NOTE->{"other"}}{"someday"}))	{ print NOTE "\n---\n\n" . "Someday (Other)"	. " {#list-someday-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"someday"}		; };
-		if (exists($NOTE->{"never"}))			{ print NOTE "\n---\n\n" . "Never"		. " {#list-never}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"never"}			; };
-		if (exists(${$NOTE->{"other"}}{"never"}))	{ print NOTE "\n---\n\n" . "Never (Other)"	. " {#list-never-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"never"}		; };
-		if (exists($NOTE->{"journal"}))			{ print NOTE "\n---\n\n" . "Journal"		. " {#list-journal}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"journal"}			; };
-		if (exists(${$NOTE->{"other"}}{"journal"}))	{ print NOTE "\n---\n\n" . "Journal (Other)"	. " {#list-journal-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"journal"}		; };
+		if (exists($NOTE->{"data"}))			{ print NOTE ${hr_line} . "Data"		. " {#list-data}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"data"}				; };
+		if (exists(${$NOTE->{"other"}}{"data"}))	{ print NOTE ${hr_line} . "Data (Other)"	. " {#list-data-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"data"}		; };
+		if (exists($NOTE->{"notes"}))			{ print NOTE ${hr_line} . "Notes"		. " {#list-notes}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"notes"}			; };
+		if (exists(${$NOTE->{"other"}}{"notes"}))	{ print NOTE ${hr_line} . "Notes (Other)"	. " {#list-notes-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"notes"}		; };
+		if (exists($NOTE->{"open"}))			{ print NOTE ${hr_line} . "Open"		. " {#list-open}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"open"}				; };
+		if (exists(${$NOTE->{"other"}}{"open"}))	{ print NOTE ${hr_line} . "Open (Other)"	. " {#list-open-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"open"}		; };
+		if (exists($NOTE->{"scraps"}))			{ print NOTE ${hr_line} . "Scraps"		. " {#list-scraps}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"scraps"}			; };
+		if (exists(${$NOTE->{"other"}}{"scraps"}))	{ print NOTE ${hr_line} . "Scraps (Other)"	. " {#list-scraps-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"scraps"}		; };
+		if (exists($NOTE->{"completed"}))		{ print NOTE ${hr_line} . "Completed"		. " {#list-completed}\n"	. ("=" x 80) . "\n"; print NOTE $NOTE->{"completed"}			; };
+		if (exists(${$NOTE->{"other"}}{"completed"}))	{ print NOTE ${hr_line} . "Completed (Other)"	. " {#list-completed-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"completed"}	; };
+		if (exists($NOTE->{"deleted"}))			{ print NOTE ${hr_line} . "Deleted"		. " {#list-deleted}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"deleted"}			; };
+		if (exists(${$NOTE->{"other"}}{"deleted"}))	{ print NOTE ${hr_line} . "Deleted (Other)"	. " {#list-deleted-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"deleted"}		; };
+		if (exists($NOTE->{"someday"}))			{ print NOTE ${hr_line} . "Someday"		. " {#list-someday}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"someday"}			; };
+		if (exists(${$NOTE->{"other"}}{"someday"}))	{ print NOTE ${hr_line} . "Someday (Other)"	. " {#list-someday-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"someday"}		; };
+		if (exists($NOTE->{"never"}))			{ print NOTE ${hr_line} . "Never"		. " {#list-never}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"never"}			; };
+		if (exists(${$NOTE->{"other"}}{"never"}))	{ print NOTE ${hr_line} . "Never (Other)"	. " {#list-never-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"never"}		; };
+		if (exists($NOTE->{"journal"}))			{ print NOTE ${hr_line} . "Journal"		. " {#list-journal}\n"		. ("=" x 80) . "\n"; print NOTE $NOTE->{"journal"}			; };
+		if (exists(${$NOTE->{"other"}}{"journal"}))	{ print NOTE ${hr_line} . "Journal (Other)"	. " {#list-journal-other}\n"	. ("=" x 80) . "\n"; print NOTE ${$NOTE->{"other"}}{"journal"}		; };
 		print NOTE "\n**End Of File**\n";
 		close(JSON) || die();
 		close(KNBN) || die();
