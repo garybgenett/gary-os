@@ -5249,8 +5249,9 @@ function task-export-text {
 		print NOTE "---\n";
 		print NOTE "title: \"Taskwarrior: Project List & Notes\"\n";
 		print NOTE "author: \"" . ${name} . "\"\n";
-		print NOTE "date: \"" . localtime() . "\"\n";
+		print NOTE "date: \"" . strftime("%Y-%m-%d", localtime(time())) . "\"\n";
 		print NOTE "---\n";
+		print NOTE "<!-- composer >> title-block box 0 >> -->\n";
 		my $NOTE = {}; $NOTE->{"other"} = {};
 		my $multi_tag = [];
 		my $kanban_length = (64 - 2 - 7 - 4); #>>> maximum - marker<= > - annotations< [####]> - ellipsis< ...>
@@ -5648,7 +5649,7 @@ function task-export-text {
 			$note .= ${hr_line};
 			$note .= ${description} . " {#uuid-" . $task->{"uuid"} . "}\n";
 			$note .= ("-" x 40) . "\n\n";
-			$note .= "**" . ${modified} . " | UUID: [" . $task->{"uuid"} . "](#uuid-" . $task->{"uuid"} . ") | [TOC](#TOC) [GTD](#gtd) [Dir](./" . ${base} . ") [" . ${extn} . "](./" . ${base} . "/" . $task->{"uuid"} . ${extn} . ")**\n";
+			$note .= "**" . ${modified} . " // [" . $task->{"uuid"} . "](#uuid-" . $task->{"uuid"} . ") // [Top](#) [Dir](./" . ${base} . ") [" . ${extn} . "](./" . ${base} . "/" . $task->{"uuid"} . ${extn} . ")**\n";
 			$note .= ${output};
 #>>>			if	((exists($task->{"project"})) && ($task->{"project"} eq ".someday"))	{
 #>>>					if ($task->{"status"} eq "pending")				{ $object->{"someday"}		.= ${note}; }
