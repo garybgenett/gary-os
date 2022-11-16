@@ -111,8 +111,8 @@
 
 #{FSKEEP} emerge:/usr/src/linux
 #{FSKEEP} emerge:/var/db/pkg
-#{FSKEEP} emerge:/var/git/meta-repo
-#{FSARCH} emerge:/var/git/meta-repo.git
+#{FSKEEP} emerge:/var/db/repos/gentoo
+#{FSARCH} emerge:/var/db/repos/gentoo.git
 
 #>>> #{FSARCH} debug:/usr/lib64/debug
 #>>> #{FSARCH} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/*/debug
