@@ -1,1 +1,123 @@
-config-gentoo64-5.10.56-options
+################################################################################
+# default-gentoo64-5.15.78
+################################################################################
+
+General setup
+	Build ID Salt								CONFIG_BUILD_SALT=""
+	Kernel compression mode							CONFIG_KERNEL_XZ=y [XZ]
+	Default hostname							CONFIG_DEFAULT_HOSTNAME=gary-os
+	Support for paging of anonymous memory (swap)				CONFIG_SWAP=y
+	Preemption Model							CONFIG_PREEMPT=y [Preemptible Kernel (Low-Latency Desktop)]
+	Kernel .config support							CONFIG_IKCONFIG=y
+		Enable access to .config through /proc/config.gz		CONFIG_IKCONFIG_PROC=y
+	Enable kernel headers through /sys/kernel/kheaders.tar.xz		CONFIG_IKHEADERS=y
+	Control Group support							CONFIG_CGROUPS=y
+		Memory controller						CONFIG_MEMCG=Y
+			Swap controller						CONFIG_MEMCG_SWAP=y
+	Support initial ramdisk/ramfs compressed using XZ			CONFIG_RD_XZ=y
+
+Processor type and features
+	Linux guest support							CONFIG_HYPERVISOR_GUEST=y
+		Enable paravirtualization code					CONFIG_PARAVIRT=y
+		KVM Guest support (including kvmclock)				CONFIG_KVM_GUEST=y
+	Processor family							CONFIG_GENERIC_CPU=y [Generic-x86-64]
+	Built-in kernel command line						CONFIG_CMDLINE_BOOL=y
+		Built-in kernel command string					CONFIG_CMDLINE="initcall_debug"
+
+Power management and ACPI options
+	Suspend to RAM and standby						CONFIG_SUSPEND=y
+	Hibernation (aka 'suspend to disk')					CONFIG_HIBERNATION=n
+
+Virtualization									CONFIG_VIRTUALIZATION=y
+	Kernel-based Virtual Machine (KVM) support				CONFIG_KVM=y
+		KVM for Intel processors support				CONFIG_KVM_INTEL=y
+		KVM for AMD processors support					CONFIG_KVM_AMD=y
+
+Device Drivers
+	Block devices								CONFIG_BLK_DEV=y
+		Loopback device support						CONFIG_BLK_DEV_LOOP=y
+			Number of loop devices to pre-create at init time	CONFIG_BLK_DEV_LOOP_MIN_COUNT=0
+		Virtio block driver						CONFIG_VIRTIO_BLK=y
+#>>>			SCSI passthrough request for the Virtio block driver	CONFIG_VIRTIO_BLK_SCSI=y
+	NVME Support
+		NVM Express block device					CONFIG_BLK_DEV_NVME=y
+		NVMe multipath support						CONFIG_NVME_MULTIPATH=y
+	SCSI device support
+		SCSI device support						CONFIG_SCSI=y
+		SCSI disk support						CONFIG_BLK_DEV_SD=y
+		SCSI CDROM support						CONFIG_BLK_DEV_SR=y
+		SCSI low-level drivers						CONFIG_SCSI_LOWLEVEL=y
+			virtio-scsi support					CONFIG_SCSI_VIRTIO=y
+	Serial ATA and Parallel ATA drivers					CONFIG_ATA=y
+		Verbose ATA error reporting					CONFIG_ATA_VERBOSE_ERROR=y
+	Multiple devices driver support (RAID and LVM)				CONFIG_MD=y
+		Device mapper support						CONFIG_BLK_DEV_DM=y
+		Crypt target support						CONFIG_DM_CRYPT=y
+	Character devices
+		Serial drivers
+			8250/16550 and compatible serial support		CONFIG_SERIAL_8250=y
+			Console on 8250/16550 and compatible serial port	CONFIG_SERIAL_8250_CONSOLE=y
+	Multifunction device drivers
+		Intel Low Power Subsystem support in PCI mode			CONFIG_MFD_INTEL_LPSS_PCI=y
+	Graphics support
+#>>>		/dev/agpgart (AGP Support)					CONFIG_AGP=y
+#>>>		Direct Rendering Manager (XFree86 4.1.0 and higher DRI support)	CONFIG_DRM=y
+#>>>		ATI Radeon							CONFIG_DRM_RADEON=y
+#>>>		AMD GPU								CONFIG_DRM_AMDGPU=y
+#>>>		Nouveau (NVIDIA) cards						CONFIG_DRM_NOUVEAU=y
+#>>>		Intel 8xx/9xx/G3x/G4x/HD Graphics				CONFIG_DRM_I915=y
+#>>>		Frame buffer Devices
+#>>>			Support for frame buffer devices			CONFIG_FB=y
+#>>>				VGA 16-color graphics support			CONFIG_FB_VGA16=y
+#>>>				VESA VGA graphics support			CONFIG_FB_VESA=y
+#>>>				EFI-based Framebuffer Support			CONFIG_FB_EFI=y
+#>>>				nVidia Framebuffer Support			CONFIG_FB_NVIDIA=y
+#>>>				Intel .../915G/945G/945GM/965G/965GM support	CONFIG_FB_INTEL=y
+#>>>				ATI Radeon display support			CONFIG_FB_RADEON=y
+		Console display driver support
+			VGA text console					CONFIG_VGA_CONSOLE=y
+			Framebuffer Console support				CONFIG_FRAMEBUFFER_CONSOLE=y
+#>>>			Framebuffer Console Deferred Takeover			CONFIG_FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER=y
+		Bootup logo							CONFIG_LOGO=n
+	HID support
+		HID bus support							CONFIG_HID=y
+		Generic HID driver						CONFIG_HID_GENERIC=y
+		USB HID support
+			USB HID transport layer					CONFIG_USB_HID=y
+	USB support								CONFIG_USB_SUPPORT=y
+		Support for Host-side USB					CONFIG_USB=y
+		USB announce new devices					CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
+		xHCI HCD (USB 3.0) support					CONFIG_USB_XHCI_HCD=y
+		EHCI HCD (USB 2.0) support					CONFIG_USB_EHCI_HCD=y
+		OHCI HCD (USB 1.1) support					CONFIG_USB_OHCI_HCD=y
+		UHCI HCD (most Intel and VIA) support				CONFIG_USB_UHCI_HCD=y
+		USB Mass Storage support					CONFIG_USB_STORAGE=y
+			USB Mass Storage verbose debug				CONFIG_USB_STORAGE_DEBUG=y
+			USB Attached SCSI					CONFIG_USB_UAS=y
+		USB Serial Converter support					CONFIG_USB_SERIAL=y
+			USB Serial Console device support			CONFIG_USB_SERIAL_CONSOLE=y
+			USB Generic Serial Driver				CONFIG_USB_SERIAL_GENERIC=y
+	Virtio drivers								CONFIG_VIRTIO_MENU=y
+		PCI driver for virtio devices					CONFIG_VIRTIO_PCI=y
+
+File systems
+	The Extended 4 (ext4) filesystem					CONFIG_EXT4_FS=y
+	FUSE (Filesystem in Userspace) support					CONFIG_FUSE_FS=y
+	Overlay filesystem support						CONFIG_OVERLAY_FS=y
+	DOS/FAT/NT Filesystems
+		VFAT (Windows-95) fs support					CONFIG_VFAT_FS=y
+	Miscellaneous filesystems
+		SquashFS 4.0 - Squashed file system support			CONFIG_SQUASHFS=y
+			File decompression options				CONFIG_SQUASHFS_FILE_DIRECT=y [Decompress files directly into the page cache]
+			Decompressor parallelisation options			CONFIG_SQUASHFS_DECOMP_MULTI_PERCPU=y [Use percpu multiple decompressors for parallel I/O]
+		Include support for XZ compressed file systems			CONFIG_SQUASHFS_XZ=y
+
+Library routines
+	Select compiled-in fonts						CONFIG_FONTS=y
+		VGA 8x8 font							CONFIG_FONT_8x8=y
+#>>>		VGA 8x16 font							CONFIG_FONT_8x16=y
+#>>>		Terminus 16x32 font (not supported by all drivers)		CONFIG_FONT_TER16x32=y
+
+################################################################################
+# end of file
+################################################################################
