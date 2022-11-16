@@ -90,7 +90,7 @@ if [[ ${DOTEST} != true ]] && [[ ${DOTEST} != false ]]; then DOTEST="false"; fi
 
 #OPTIONS[SOURCE GITDIR]
 export SOURCE="${SOURCE:-/.g/_data/_target/iso}"
-export GITDIR="${GITDIR:-/.g/_data/_build/funtoo/meta-repo.git}"
+export GITDIR="${GITDIR:-https://anongit.gentoo.org/git/repo/gentoo}"
 
 #>>> #OPTIONS[BLDDIR WRKDIR GOSDIR]
 export BLDDIR="${BLDDIR:-/.g/_data/_builds/_gentoo}"
@@ -110,9 +110,9 @@ export GOSPKG="${GOSPKG:-${_TITLE}}"
 
 #VARIABLES[ETCDIR DSTDIR PAKDIR REPDIR TMPDIR PDBDIR]
 export ETCDIR="/etc/portage"
-export DSTDIR="/var/cache/portage/distfiles"
-export PAKDIR="/var/cache/portage/packages"
-export REPDIR="/var/git/meta-repo"
+export DSTDIR="/var/cache/distfiles"
+export PAKDIR="/var/cache/binpkgs"
+export REPDIR="/var/db/repos/gentoo"
 export TMPDIR="/var/tmp/portage"
 export PDBDIR="/var/db/pkg"
 
@@ -125,9 +125,8 @@ export GRBDIR="grub"
 export LINDIR="linux"
 export FUNDIR="gentoo"
 
-#VARIABLES[FUNCMT FUNKIT AUDITS LAYDIR]
+#VARIABLES[FUNCMT AUDITS LAYDIR]
 export FUNCMT="_funtoo"
-export FUNKIT="${FUNCMT}.kits"
 export AUDITS=".emergent"
 export LAYDIR="overlay"
 
@@ -259,11 +258,11 @@ fi
 
 #OPTIONS[_CPU EARC ESUB GARC GSUB GOPT]
 export _CPU_RESET="CONFIG_GENERIC_CPU"
-export _CPU="${_CPU:-${_CPU_RESET}}"	#>>> CONFIG_MCORE2
-export EARC="${EARC:-x86-64bit}"	#>>> x86-64bit
-export ESUB="${ESUB:-generic_64}"	#>>> core2_64
-export GARC="${GARC:-x86-64}"		#>>> core2
-export GSUB="${GSUB:-generic}"		#>>> core2
+export _CPU="${_CPU:-${_CPU_RESET}}"
+export EARC="${EARC:-x86-64bit}"
+export ESUB="${ESUB:-generic_64}"
+export GARC="${GARC:-x86-64}"
+export GSUB="${GSUB:-generic}"
 export GOPT="${GOPT:--O2}"
 
 if ${_GOS}; then
@@ -272,7 +271,7 @@ if ${_GOS}; then
 	ESUB="generic_64"
 	GARC="x86-64"
 	GSUB="generic"
-	GOPT="-O2"			#>>> -Os -s
+	GOPT="-O2"
 fi
 
 ########################################
@@ -1132,7 +1131,7 @@ if [[ ${1} == -o ]]; then
 		if ! ${_SOUL} ${QUIET_OPT} ${TOOR} -r										2>&1 |
 			if ${QUIET}; then prompt -t; else cat; fi; then								EXIT 1; fi
 		${MKDIR}	${ETC_DIR}/${FILE}			${LAY_DIR}/${FILE}/.source				|| EXIT 1
-		${RSYNC_U}	${TARGET}${REPDIR}/kits/*/${FILE}/	${LAY_DIR}/${FILE}/.source				||
+		${RSYNC_U}	${TARGET}${REPDIR}/${FILE}/		${LAY_DIR}/${FILE}/.source				||
 		touch							${LAY_DIR}/${FILE}/.source/.null			|| EXIT 1
 		${RSYNC_U}	${LAY_DIR}/${FILE}/			${ETC_DIR}/${FILE}					|| EXIT 1
 		safe_env ${MYSELF} ${QUIET_OPT} ${TOOR} "${@}"									|| EXIT 1
@@ -1161,8 +1160,8 @@ if [[ ${1} == -l ]]; then
 	elif [[ ${1} == +([0-9]) ]]; then
 		echo -en "https://bugs.gentoo.org/show_bug.cgi?id=${1}\n"
 	else
-		FILE="$(${LS} -d ${REPDIR}/kits/*/*/${1} 2>/dev/null)"
-		NEXT="$(echo "${FILE}" | ${SED} "s|^${REPDIR}/kits/.+[/]([^/]+[/][^/]+)$|\1|g")"
+		FILE="$(${LS} -d ${REPDIR}/*/${1} 2>/dev/null)"
+		NEXT="$(echo "${FILE}" | ${SED} "s|^${REPDIR}/.+[/]([^/]+[/][^/]+)$|\1|g")"
 		if [[ -z ${FILE} ]]; then
 			mount_dev_dirs		|| EXIT 1
 			safe_env emerge --search "${@}"
@@ -1254,6 +1253,7 @@ if [[ ${1} == -r ]]; then
 		--filter="-_/${LAYDIR}"										\
 		${SETDIR}/${FUNDIR}/[a-z]*			${TARGET}${ETCDIR}/				|| EXIT 1
 	${RSYNC_U} ${SETDIR}/${FUNDIR}/${LAYDIR}/		${TARGET}${ETCDIR}/${LAYDIR}			|| EXIT 1
+	${MKDIR}						${TARGET}${ETCDIR}/repos.conf			|| EXIT 1
 	${LN} ../${LAYDIR}/overlay.conf				${TARGET}${ETCDIR}/repos.conf/			|| EXIT 1
 	if [[ ${1} != -! ]]; then
 		portage_file					${TARGET}${ARCDIR}/${FUNDIR}			|| EXIT 1
@@ -1286,7 +1286,8 @@ if [[ ${1} == -i ]]; then
 		if [[ ${FILE} != stage3-${ESUB}.tar.xz ]]; then
 			${LN} ${FILE}			${TARGET}${ARCDIR}/stage3-${ESUB}.tar.xz		|| EXIT 1
 		fi
-		tar -pvvx --xz -C ${TARGET} -f		${TARGET}${ARCDIR}/stage3-${ESUB}.tar.xz		|| EXIT 1
+		tar --numeric-owner --xattrs --xattrs-include='*.*' --xz -pvvx -C ${TARGET} -f \
+							${TARGET}${ARCDIR}/stage3-${ESUB}.tar.xz		|| EXIT 1
 	fi
 	shift
 	mount_dev_dirs												|| EXIT 1
@@ -1296,19 +1297,24 @@ if [[ ${1} == -i ]]; then
 		fi
 							${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -r		|| EXIT 1
 	fi
-	if ${_BLD} || { ! ${DOFAST} && ! ${_CFG}; }; then
-		#note: this needs to match the name in the "${MAKEIT}" script
-		${PREPIT}_repdir										|| EXIT 1
-		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w		|| EXIT 1
-	fi
 	if ${_BLD} && ! ${DOFAST}; then
 		if [[ -z "$(which expect 2>/dev/null)" ]]; then
 			expect_wrapper			emerge ${_ASK} dev-tcltk/expect				|| EXIT 1
 		fi
-		expect_wrapper				emerge ${_ASK} ${EMERGE_UPDT_OPTS} \@system		|| EXIT 1
+		#note: this needs to match the name in the "${MAKEIT}" script
+		${PREPIT}_repdir										|| EXIT 1
+		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w		|| EXIT 1
+	elif ${_BLD}; then
+		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -U -f		|| EXIT 1
+		echo -en "\n"
+		echo -en ">>> THE BUILD IS READY TO BE RUN WITHOUT 'DOFAST' ENABLED <<<\n"
+		echo -en ">>> YOU MUST RUN THE BUILD AGAIN FOR IT TO BE COMPLETE <<<\n"
+		echo -en "\n"
+		mount_dev_dirs -u										|| EXIT 1
+		EXIT 0
 	fi
 	if ${_KRN} && ! ${DOFAST}; then
-		${RM}					${TARGET}/boot/{_,System.map,initramfs,kernel}*		|| EXIT 1
+		${RM}					${TARGET}/boot/{_,System.map,initramfs,kernel,vmlinuz}*	|| EXIT 1
 		${RM}					${TARGET}/etc/kernels/*					|| EXIT 1
 		${RM}					${TARGET}/lib/modules/*					|| EXIT 1
 		${RM}					${TARGET}${LDIR}*					|| EXIT 1
@@ -1323,7 +1329,6 @@ if [[ ${1} == -i ]]; then
 			KERN="${KERN/#kernel/linux}"
 			${RM}				${TARGET}${LDIR}					|| EXIT 1
 			${LN} ${KERN}			${TARGET}${LDIR}					|| EXIT 1
-#>>>			expect_wrapper emerge ${_ASK}	\@module-rebuild --exclude "${LINPKG}"			|| EXIT 1
 		fi
 	fi
 	if ${_KRN} && ! ${DOFAST}; then for FILE in ${KERNEL}; do
@@ -1342,16 +1347,16 @@ if [[ ${1} == -i ]]; then
 		${RSYNC_U} --copy-links			${TARGET}${LDIR}/.config				\
 							${TARGET}${ARCDIR}/${KCFG//${KVER}/${FILE}}		|| EXIT 1
 		if ! ${_GOS}; then
+			KERN="vmlinuz-${FILE}-gentoo-x86_64"
 			${RM}				${TARGET}/boot/_cur					|| EXIT 1
-			${LN} ${KFIL//${KVER}/${FILE}}	${TARGET}/boot/_cur					|| EXIT 1
+			${LN} ${KERN}			${TARGET}/boot/_cur					|| EXIT 1
 			${RM}				${TARGET}/boot/_new					|| EXIT 1
 			${LN} kernel			${TARGET}/boot/_new					|| EXIT 1
 			${RM}				${TARGET}/boot/_old					|| EXIT 1
 			${LN} kernel.old		${TARGET}/boot/_old					|| EXIT 1
 			[[ -L				${TARGET}/boot/kernel.old				]] ||
-			${LN} ${KFIL//${KVER}/${FILE}}	${TARGET}/boot/kernel.old				|| EXIT 1
+			${LN} ${KERN}			${TARGET}/boot/kernel.old				|| EXIT 1
 		fi
-#>>>		expect_wrapper emerge ${_ASK}		\@module-rebuild --exclude "${LINPKG}"			|| EXIT 1
 	done; fi
 	if ${_GOS}; then
 		${RM}					${TARGET}/boot/_kernel					|| EXIT 1
@@ -1371,9 +1376,6 @@ if [[ ${1} == -i ]]; then
 		fi
 		mount_dev_dirs -u										|| EXIT 1
 		EXIT 0
-	fi
-	if ${_BLD} || ! ${DOFAST}; then
-		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -U -f		|| EXIT 1
 	fi
 	if ${_BLD}; then
 #>>>		expect_wrapper				emerge ${_ASK} --emptytree \@system \@world		|| EXIT 1
@@ -1402,18 +1404,12 @@ fi
 if [[ ${1} == -w ]]; then
 	shift
 	safe_env ${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -W	|| EXIT 1
-	ego profile arch ${EARC}				|| EXIT 1
-	ego profile subarch ${ESUB}				|| EXIT 1
-	ego profile build current				|| EXIT 1
-	ego profile flavor ${FLAVOR}				|| EXIT 1
-	ego profile mix-ins ${MIXINS}				|| EXIT 1
-	ego profile show
 	if [[ -n "$(which gcc-config 2>/dev/null)" ]]; then
 		gcc-config --force $(gcc-config --list-profiles			| ${SED} -n "s|^.*[[][0-9]+[]][[:space:]]+([^[:space:]]+).*$|\1|gp" | sort -uV | tail -n1)
 		gcc-config --list-profiles
 	fi
 	if [[ -n "$(which java-config 2>/dev/null)" ]]; then
-		java-config $(java-config --list-available-vm	| ${SED} -n "s|^.*[[](.+)[]].*$|\1|gp" | ${GREP} -o "icedtea[-][0-9]+" | sort -uV | tail -n1)
+		java-config $(java-config --list-available-vm	| ${SED} -n "s|^.*[[](.+)[]].*$|\1|gp" | ${GREP} -o "openjdk[-][0-9]+" | sort -uV | tail -n1)
 		java-config --list-available-vms
 	fi
 	for FILE in \
@@ -1467,7 +1463,7 @@ if [[ ${1} == -u ]]; then
 #>>>		if [[ -n "$(which haskell-updater 2>/dev/null)" ]]; then
 #>>>			expect_wrapper haskell-updater --all				|| EXIT 1
 #>>>		fi
-		expect_wrapper emerge ${_ASK} \@module-rebuild --exclude "${LINPKG}"	|| EXIT 1
+		expect_wrapper emerge ${_ASK} \@module-rebuild --exclude ${LINPKG}	|| EXIT 1
 		expect_wrapper emerge ${_ASK} \@preserved-rebuild			|| EXIT 1
 	fi
 	expect_wrapper emerge ${_ASK} --depclean					|| EXIT 1
@@ -1495,21 +1491,31 @@ elif [[ ${1} == -U ]]; then
 	fi
 	if ${SYNC}; then
 		print_info update
-#>>>		expect_wrapper emerge --ask=n --verbose --sync			|| EXIT 1
-		expect_wrapper ego sync						|| EXIT 1
-		if ! perl -MJSON::XS -e 1; then
-			expect_wrapper emerge ${_ASK} dev-perl/JSON-XS		|| EXIT 1
+		if [[ ! -d ${REPDIR}.git ]]; then
+#>>>			yes | expect_wrapper emaint sync --allrepos		|| EXIT 1
+			git-clone ${GITDIR} ${REPDIR}				|| EXIT 1
 		fi
-		#note: the "$@" is "$funtoo" as an argument (see usage)
-		${SETDIR}/${FUNDIR}/${FUNKIT} ${REPDIR} ${@}			|| EXIT 1
+		if [[ ! -d ${REPDIR} ]]; then
+			${MKDIR} ${REPDIR}					|| EXIT 1
+		fi
+		if ! git --help >/dev/null 2>&1; then
+			expect_wrapper emerge ${_ASK} dev-vcs/git		|| EXIT 1
+		fi
+		declare FUN_OPT="-c branch.autosetuprebase=always -c pull.rebase=true"
+		declare FUN_GIT="${GIT} --git-dir=${REPDIR}.git --work-tree=${REPDIR} ${FUN_OPT}"
+		${FUN_GIT} fetch --all						|| EXIT 1
+		${FUN_GIT} checkout --force ${@}				|| EXIT 1
+		${FUN_GIT} reset --hard ${@}					|| EXIT 1
+		expect_wrapper egencache --verbose				\
+			--repo gentoo						\
+			--update						\
+			--update-manifests					\
+			--update-pkg-desc-index					\
+			--update-use-local-desc					\
+										#>>> || EXIT 1
 		if [[ -n "$(which eix-update 2>/dev/null)" ]]; then
 			expect_wrapper eix-update				|| EXIT 1
 		fi
-		for FILE in ${REPDIR}/kits/*kit; do
-			echo -en "egencache: ${FILE}\n"
-			expect_wrapper egencache --repo "$(basename ${FILE})"	\
-				--update-use-local-desc				#>>> || EXIT 1
-		done
 	fi
 	declare FAIL="false"
 	FILE="--fetch-all-uri"
