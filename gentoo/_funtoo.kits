@@ -13,7 +13,7 @@ if [[ -n "${@}" ]]; then
 	export BRANCH="${1}" && shift
 	export COMMIT="${1}" && shift
 	if [[ -z "${BRANCH}" ]]; then
-		BRANCH="1.4-release"
+		BRANCH="next"
 	fi
 	if [[ -z "${COMMIT}" ]]; then
 		COMMIT="master"

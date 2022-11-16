@@ -15,6 +15,7 @@ source /_build/gentoo/_system
 ########################################
 
 declare ARCHIVE="_archive"
+declare ECLASS="eclass"
 
 declare LENGTH="120"
 
@@ -41,8 +42,10 @@ if [[ ${1} == -l ]]; then
 	shift
 	declare FILES=
 	declare FILE=
-	for FILE in $(find ./ \
-			\( -path ./${ARCHIVE}/\* -prune \) \
+	for FILE in $(
+		find ./ \
+			\( -path ./${ARCHIVE} -prune \) \
+			-o \( -path ./${ECLASS} -prune \) \
 			-o -print \
 		| ${SED} "s|^[.][/]||g" \
 		| sort \
@@ -68,9 +71,12 @@ fi
 
 if [[ ${1} == -a ]]; then
 	for FILE in $(
-		find ./ -mindepth 2 -maxdepth 2 -type d |
-		${SED} "s|^[.][/]||g" |
-		sort
+		find ./ -mindepth 2 -maxdepth 2 -type d \( \
+			\( -path "./${ECLASS}/*" -prune \) \
+			-o -print \
+		\) \
+		| ${SED} "s|^[.][/]||g" \
+		| sort
 	); do
 		if [[ -n $(echo "${FILE}" | ${GREP} "^${ARCHIVE}") ]]; then
 			echo "ARCHIVED: ${FILE}"
@@ -114,34 +120,36 @@ echo -en "# vim: filetype=diff\n" >${0}.txt
 declare FILE
 for FILE in $(
 	find ./ -mindepth 2 -maxdepth 2 -type d \( \
-		\( -path ./${ARCHIVE} -prune \) -o \
-		\( -path ./metadata -prune \) -o \
-		\( -path ./overlay.conf -prune \) -o \
-		\( -path ./profiles -prune \) -o \
-		-print \) |
-	${SED} "s|^[.]/||g" |
-	sort
+		\( -path "./${ARCHIVE}/*" -prune \) \
+		-o \( -path "./${ECLASS}/*" -prune \) \
+		-o \( -path ./metadata -prune \) \
+		-o \( -path ./overlay.conf -prune \) \
+		-o \( -path ./profiles -prune \) \
+		-o -print \
+	\) \
+	| ${SED} "s|^[.]/||g" \
+	| sort
 ); do
 	declare EBUILD="$(find ./${FILE}/*.ebuild -type f | tail -n1)"
 	if ${RESET}; then
-		${RSYNC_U} /var/git/meta-repo/kits/*/${FILE}/ ./${FILE}/.source		1>&2
-		ebuild ${EBUILD} digest							1>&2
+		${RSYNC_U} ${REPDIR}/${FILE}/ ./${FILE}/.source		1>&2
+		ebuild ${EBUILD} digest					1>&2
 	fi
 	if [[ ! -f ${FILE}/.rationale ]]; then
-		echo "MISSING: ${FILE}/.rationale"					1>&2
+		echo "MISSING: ${FILE}/.rationale"			1>&2
 		exit 1
 	fi
-	review_header									${LENGTH} marker
-	review_header									${LENGTH} ${FILE} rationale
-	cat ${FILE}/.rationale								2>&1
-	review_header									${LENGTH} ${FILE} source
-	diff ${DIFF_OPTS} -r /var/git/meta-repo/kits/*/${FILE} ./${FILE}/.source	2>&1
-	review_header									${LENGTH} ${FILE} target
-	diff ${DIFF_OPTS} -r ./${FILE}/.source ./${FILE}				2>&1
-	review_header									${LENGTH} ${FILE} files
-	${GREP} "[\"][\$][{]FILESDIR[}]" ${EBUILD}					2>&1
-	echo										2>&1
-	${LS} -R ./${FILE}								2>&1
+	review_header							${LENGTH} marker
+	review_header							${LENGTH} ${FILE} rationale
+	cat ${FILE}/.rationale						2>&1
+	review_header							${LENGTH} ${FILE} source
+	diff ${DIFF_OPTS} -r ${REPDIR}/${FILE} ./${FILE}/.source	2>&1
+	review_header							${LENGTH} ${FILE} target
+	diff ${DIFF_OPTS} -r ./${FILE}/.source ./${FILE}		2>&1
+	review_header							${LENGTH} ${FILE} files
+	${GREP} "[\"][\$][{]FILESDIR[}]" ${EBUILD}			2>&1
+	echo								2>&1
+	${LS} -R ./${FILE}						2>&1
 done >>${0}.txt
 
 ########################################
