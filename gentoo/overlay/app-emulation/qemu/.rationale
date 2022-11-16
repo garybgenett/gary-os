@@ -1,3 +1,0 @@
-!!! All ebuilds that could satisfy "~sys-firmware/ipxe-1.0.0_p20190728[binary,qemu]" have been masked.
-!!! One of the following masked packages is required to complete your request:
--- qemu-6.0.0-r52.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/app-emulation/qemu?id=74c9a6b263f40405458f77e2423cf0c57412d201
