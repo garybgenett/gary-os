@@ -1,0 +1,5 @@
+# removed package
+# 2021-04-05 20:30:36 +0000 8762a6db9a9aeef8e628e1c3d8fb809e8fc873ae games-misc/games-envd: drop s390 to ~s390 (unstable)
+emerge: there are no ebuilds to satisfy "games-misc/games-envd".
+(dependency required by "games-fps/doom3-ducttape-0007-r9999::overlay" [ebuild])
+-- games-envd-0.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/games-misc/games-envd?id=8762a6db9a9aeef8e628e1c3d8fb809e8fc873ae

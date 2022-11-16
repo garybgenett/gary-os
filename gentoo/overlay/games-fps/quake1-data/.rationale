@@ -1,5 +1,6 @@
 #>>> removed package
 # automation of interactive ebuild
+# 2021-09-11 09:55:31 +0200 38b155fa1bf907617067c98eb4ba3a5d0790eb1a **/metadata.xml: Replace http by https in DOCTYPE element
 usage: lha [-]<commands>[<options>] [-<options> ...] archive_file [file...]
 LHa: Error: Checksum error (LHarc file?)
--- quake1-data-2.40-r1.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/games-fps/quake1-data?id=365e36d515a42a6dd5c847298641d263f75a9d50
+-- quake1-data-2.40-r1.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/games-fps/quake1-data?id=38b155fa1bf907617067c98eb4ba3a5d0790eb1a
