@@ -1,3 +1,0 @@
-emerge: there are no ebuilds to satisfy "~sys-firmware/seabios-1.14.0[binary,seavgabios]".
-(dependency required by "app-emulation/qemu-6.0.0-r52::overlay[pin-upstream-blobs,-qemu_softmmu_targets_ppc64,qemu_softmmu_targets_x86_64,-qemu_softmmu_targets_ppc,-qemu_softmmu_targets_i386]" [ebuild])
--- seabios-1.14.0-r2.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-firmware/seabios?id=74c9a6b263f40405458f77e2423cf0c57412d201
