@@ -19,6 +19,9 @@ else
 	exit 1
 fi
 
+declare CHR="$(echo "${LNX}" | ${SED} "s|/usr/src/linux$||g")"
+declare CHL="$(echo "${LNX}" | ${SED} "s|^${CHR}||g")"
+
 ################################################################################
 
 function reconfigure {
@@ -48,7 +51,11 @@ reconfigure ${CFG}.${SCRIPT}.ORIG
 diff ${DIFF_OPTS} ${SRC} ${CFG}.${SCRIPT}.ORIG | sort -u | ${GREP} "^[+]"
 
 ${RSYNC_U} ${CFG}.${SCRIPT}.ORIG ${LNX}/.config
-(cd ${LNX} && make olddefconfig)
+if [[ -n "${CHR}" ]]; then
+	chroot ${CHR} bash -c "(cd ${CHL} && make olddefconfig)"
+else
+	(cd ${LNX} && make olddefconfig)
+fi
 ${RSYNC_U} ${LNX}/.config ${CFG}.${SCRIPT}.DONE
 
 ${RSYNC_U} ${CFG}.${SCRIPT}.DONE ${CFG}.${SCRIPT}.TEST
