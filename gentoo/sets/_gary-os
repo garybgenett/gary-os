@@ -59,23 +59,12 @@
 
 ########################################
 
-#{LINPKG} sys-kernel/gentoo-sources:5.10.56
-#{KERNEL} 5.10.56
+#{LINPKG} sys-kernel/gentoo-sources:5.15.78
+#{KERNEL} 5.15.78
 
-#{FLAVOR} desktop
-#{MIXINS} hardened
-#{MIXINS} no-systemd
-#{MIXINS} python3-only
-
-#{SELECT} python:python3.7
-
-#{SELECT} binutils:x86_64-pc-linux-gnu-2.36.1
 #{SELECT} cdparanoia:cdparanoia-paranoia
 #{SELECT} editor:vi
-#{SELECT} gcc:x86_64-pc-linux-gnu-9.2.0
-#{SELECT} java-vm:icedtea-8
 #{SELECT} locale:en_US.utf8
-#{SELECT} opengl:xorg-x11
 #{SELECT} pager:less
 #{SELECT} unison:2.51
 #{SELECT} vi:vim
@@ -132,9 +121,6 @@
 ########################################
 # firmware
 
-sys-apps/iucode_tool
-sys-firmware/intel-microcode
-sys-firmware/nvidia-firmware
 sys-kernel/linux-firmware
 
 ########################################
@@ -255,7 +241,6 @@ net-misc/openssh
 app-editors/gvim
 app-editors/nano
 app-editors/vim
-app-text/csvfix
 app-text/dos2unix
 app-vim/taglist
 dev-util/cloc
@@ -283,7 +268,6 @@ app-arch/rpm
 ########################################
 # gentoo
 
-app-admin/ego
 app-admin/eselect
 sys-apps/portage
 
@@ -298,9 +282,9 @@ sys-kernel/genkernel
 app-misc/evtest
 x11-apps/xev
 x11-apps/xrandr
+x11-base/xorg-apps
 x11-base/xorg-drivers
 x11-base/xorg-server
-x11-base/xorg-x11
 x11-misc/arandr
 
 x11-misc/dmenu
@@ -444,8 +428,8 @@ net-vpn/tor
 
 sci-calculators/qalculate-gtk
 
+app-containers/lxc
 app-emulation/libvirt
-app-emulation/lxc
 app-emulation/qemu
 app-emulation/qemu-guest-agent
 app-emulation/spice-vdagent
@@ -458,7 +442,6 @@ app-admin/keepassxc
 mail-client/mutt
 mail-mta/msmtp
 net-mail/safecat
-net-misc/urlview
 
 mail-client/thunderbird
 www-client/firefox

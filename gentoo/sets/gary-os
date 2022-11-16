@@ -2,25 +2,14 @@
 # portage set configuration file
 ################################################################################
 
-#{CMD} cp -a ./gentoo/sets/gary-os{.BAK,}; sed -r -i -e "s%([[:space:]]+)#[{](MOD|rootfs)[}][[:space:]]*%\1%g" -e "s%[[:space:]]+$%%g" ./gentoo/sets/gary-os; diff ./gentoo/sets/{_,}gary-os
+#{CMD} cp -a ./gentoo/sets/gary-os{.BAK,}; sed -r -i.BAK -e "s%([[:space:]]+)#[{](MOD|rootfs)[}][[:space:]]*%\1%g" -e "s%[[:space:]]+$%%g" ./gentoo/sets/gary-os; diff ./gentoo/sets/{_,}gary-os
 
-#{LINPKG} sys-kernel/gentoo-sources:5.10.56
-#{KERNEL} 5.10.56
+#{LINPKG} sys-kernel/gentoo-sources:5.15.78
+#{KERNEL} 5.15.78
 
-#{FLAVOR} desktop
-#{MIXINS} hardened
-#{MIXINS} no-systemd
-#{MIXINS} python3-only
-
-#{SELECT} python:python3.7
-
-#{SELECT} binutils:x86_64-pc-linux-gnu-2.36.1
 #{SELECT} cdparanoia:cdparanoia-paranoia
 #{SELECT} editor:vi
-#{SELECT} gcc:x86_64-pc-linux-gnu-9.2.0
-#{SELECT} java-vm:icedtea-8
 #{SELECT} locale:en_US.utf8
-#{SELECT} opengl:xorg-x11
 #{SELECT} pager:less
 #{SELECT} unison:2.51
 #{SELECT} vi:vim
@@ -58,12 +47,12 @@
 #{MOD} #{FSPACK} base:/usr/share
 
 #{FSPACK} libs:/usr/lib64/llvm
-#{FSPACK} libs:/usr/lib64/python2.7
-#{FSPACK} libs:/usr/lib64/python3.7
+#{FSPACK} libs:/usr/lib64/python3.10
+#{FSPACK} libs:/usr/lib64/python3.11
 #{FSPACK} libs:/usr/lib64/rust
 #{MOD} #{FSEXCL} libs:/usr/lib64/llvm
-#{MOD} #{FSEXCL} libs:/usr/lib64/python2.7/test
-#{MOD} #{FSEXCL} libs:/usr/lib64/python3.7/test
+#{MOD} #{FSEXCL} libs:/usr/lib64/python3.10/test
+#{MOD} #{FSEXCL} libs:/usr/lib64/python3.11/test
 #{MOD} #{FSEXCL} libs:/usr/lib64/rust
 
 #{FSPACK} docs:/usr/share/doc
@@ -83,8 +72,10 @@
 #{MOD} #{FSEXCL} mod:/etc/portage/overlay
 #note: build
 #{MOD} #{FSEXCL} mod:/lib64/firmware
-#{MOD} #{FSEXCL} mod:/usr/lib64/python3.7/site-packages/gentoolkit/test
-#{MOD} #{FSEXCL} mod:/usr/lib64/python3.7/site-packages/portage/tests
+#{MOD} #{FSEXCL} mod:/usr/lib64/python3.10/site-packages/gentoolkit/test
+#{MOD} #{FSEXCL} mod:/usr/lib64/python3.10/site-packages/portage/tests
+#{MOD} #{FSEXCL} mod:/usr/lib64/python3.11/site-packages/gentoolkit/test
+#{MOD} #{FSEXCL} mod:/usr/lib64/python3.11/site-packages/portage/tests
 #{MOD} #{FSEXCL} mod:/usr/libexec/git-core
 #{MOD} #{FSEXCL} mod:/usr/share/cmake
 
@@ -217,7 +208,6 @@ net-misc/openssh
 
 app-editors/nano
 app-editors/vim				#{MOD} # requires: dev-util/ctags -> dev-python/docutils
-app-text/csvfix				#{MOD}
 app-text/dos2unix			#{MOD}
 
 app-arch/bzip2
@@ -233,7 +223,6 @@ app-arch/cabextract			#{MOD}
 ########################################
 # gentoo
 
-app-admin/ego				#{MOD}
 app-admin/eselect			#{MOD}
 sys-apps/portage			#{MOD}
 
