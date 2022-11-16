@@ -2,24 +2,12 @@
 # portage set configuration file
 ################################################################################
 
-#>>> #{LINPKG} sys-kernel/debian-sources:debian-sources-5.10.46_p2
-#{LINPKG} sys-kernel/gentoo-sources:5.10.56
-#{KERNEL} 5.10.56
+#{LINPKG} sys-kernel/gentoo-sources:5.15.78
+#{KERNEL} 5.15.78
 
-#{FLAVOR} desktop
-#{MIXINS} hardened
-#{MIXINS} no-systemd
-#{MIXINS} python3-only
-
-#{SELECT} python:python3.7
-
-#{SELECT} binutils:x86_64-pc-linux-gnu-2.36.1
 #{SELECT} cdparanoia:cdparanoia-paranoia
 #{SELECT} editor:vi
-#{SELECT} gcc:x86_64-pc-linux-gnu-9.2.0
-#{SELECT} java-vm:icedtea-8
 #{SELECT} locale:en_US.utf8
-#{SELECT} opengl:xorg-x11
 #{SELECT} pager:less
 #{SELECT} unison:2.51
 #{SELECT} vi:vim
@@ -41,15 +29,12 @@
 ########################################
 # firmware
 
-sys-apps/iucode_tool
-sys-firmware/intel-microcode
-sys-firmware/nvidia-firmware
 sys-kernel/linux-firmware
 
 ########################################
 # toolchain
 
-#>>> dev-lang/gnat-gpl
+dev-lang/gnat-gpl
 sys-devel/autoconf
 sys-devel/automake
 sys-devel/binutils
@@ -165,7 +150,6 @@ net-misc/openssh
 app-editors/gvim
 app-editors/nano
 app-editors/vim
-app-text/csvfix
 app-text/dos2unix
 app-vim/taglist
 dev-util/cloc
@@ -193,7 +177,6 @@ app-arch/rpm
 ########################################
 # gentoo
 
-app-admin/ego
 app-admin/eselect
 sys-apps/portage
 
@@ -208,9 +191,9 @@ sys-kernel/genkernel
 app-misc/evtest
 x11-apps/xev
 x11-apps/xrandr
+x11-base/xorg-apps
 x11-base/xorg-drivers
 x11-base/xorg-server
-x11-base/xorg-x11
 x11-misc/arandr
 
 x11-misc/dmenu
@@ -264,12 +247,10 @@ dev-perl/libwww-perl
 virtual/perl-JSON-PP
 virtual/perl-MIME-Base64
 virtual/perl-Time-Local
-virtual/perl6
 
-dev-java/icedtea			# gentoo required: force source version
+dev-java/openjdk			# gentoo required: force source version
 dev-lang/python
-#>>> dev-libs/libuv
-#>>> net-libs/nodejs
+net-libs/nodejs
 
 app-misc/jq
 app-misc/yq
@@ -373,8 +354,8 @@ net-vpn/tor
 
 sci-calculators/qalculate-gtk
 
+app-containers/lxc
 app-emulation/libvirt
-app-emulation/lxc
 app-emulation/qemu
 app-emulation/qemu-guest-agent
 app-emulation/spice-vdagent
@@ -391,9 +372,8 @@ app-misc/timew
 
 mail-client/mutt
 mail-mta/msmtp
-net-mail/offlineimap
+net-mail/isync
 net-mail/safecat
-net-misc/urlview
 
 mail-client/thunderbird
 www-client/chromium
@@ -406,7 +386,6 @@ media-gfx/gnuclad
 media-gfx/graphviz
 media-gfx/inkscape
 
-app-misc/freemind
 app-office/libreoffice
 app-office/unoconv
 app-text/qpdfview
@@ -431,6 +410,7 @@ x11-plugins/gkrellaclock
 x11-plugins/gkrellsun
 x11-plugins/gkrellweather
 
+net-im/discord-bin
 net-im/slack
 net-im/zoom
 
@@ -507,7 +487,6 @@ games-fps/dhewm3			#>>> custom package
 games-fps/doom3
 games-fps/doom3-ducttape
 games-fps/quakeforge
-games-fps/quakespasm
 
 # interactive ebuilds, which can be automated using:
 #	TARGET="/.g/_toor"; for FILE in quake doom3-disk1 doom3-disk2 doom3-disk3 doom3_roe; do mkdir -v ${TARGET}/tmp/${FILE}; mount -v -o ro,loop /.g/_data/source/id/${FILE}.iso ${TARGET}/tmp/${FILE}; done
