@@ -1,7 +1,9 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+#>>> EAPI=5
+EAPI=7
+#>>>
 inherit eutils cdrom games
 
 DESCRIPTION="Doom 3 - data portion"
@@ -16,6 +18,12 @@ IUSE=""
 RDEPEND="games-fps/doom3"
 
 S=${WORKDIR}
+
+#>>>
+src_prepare() {
+	default
+}
+#>>>
 
 src_install() {
 #>>>

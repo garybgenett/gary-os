@@ -8,14 +8,10 @@ inherit autotools flag-o-matic readme.gentoo-r1 toolchain-funcs
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/quakeforge/quakeforge.git"
-#>>>	2022-09-24 18:26:25 +0900 3f0c257bc1072fafdbe061ee8243f0b3eb8608d2 [cvar] Remove reliance on line number for developer parsing
-	EGIT_COMMIT="3f0c257bc1072fafdbe061ee8243f0b3eb8608d2"
-	KEYWORDS="~amd64 ~x86"
-#>>>
 else
-	QUAKEFORGE_COMMIT=""
-	SRC_URI="https://github.com/quakeforge/quakeforge/archive/${QUAKEFORGE_COMMIT}.tar.gz -> ${P}.tar.gz"
-	S="${WORKDIR}/${PN}-${QUAKEFORGE_COMMIT}"
+	MY_COMMIT="e799a7ae45b0ab2ad7b642953277db8ccf256cf8"
+	SRC_URI="https://github.com/quakeforge/quakeforge/archive/${MY_COMMIT}.tar.gz -> ${P}.tar.gz"
+	S="${WORKDIR}/${PN}-${MY_COMMIT}"
 	KEYWORDS="~amd64 ~x86"
 fi
 
@@ -33,8 +29,6 @@ RDEPEND="
 		virtual/opengl
 		x11-libs/libX11
 		x11-libs/libXext
-		x11-libs/libXfixes
-		x11-libs/libXi
 		x11-libs/libXxf86vm
 		alsa? ( media-libs/alsa-lib )
 		flac? ( media-libs/flac:= )
@@ -62,12 +56,12 @@ BDEPEND="
 		media-gfx/transfig
 	)"
 
+PATCHES=(
+	"${FILESDIR}"/${P}-skipped-tests.patch
+)
+
 src_prepare() {
 	default
-
-	# These seem to fail at high precision and shouldn't affect normal use.
-	# quat/simd: may fail with -mavx, sebvf: random? (likely hardware related)
-	sed -i '/test-\(quat\|simd\|sebvf\)/d' libs/util/test/Makemodule.am || die
 
 	echo ${PV} > .tarball-version || die
 	eautoreconf
@@ -77,7 +71,7 @@ src_configure() {
 	filter-lto #858755
 
 	qf_client() {
-		usex client $(use_enable ${1}) --disable-${1}
+		echo $(usex client $(use_enable ${1}) --disable-${1})
 	}
 
 	local econfargs=(
@@ -98,7 +92,6 @@ src_configure() {
 		$(use_with client x)
 		--disable-Werror
 		--disable-dga
-		--disable-simd # all this does is append -mavx2 and similar
 		--enable-xdg
 		# non-x11 clients are mostly abandoned/broken (SDL1 still useful for pulseaudio)
 		--with-clients=$(usev client x11)
@@ -124,9 +117,9 @@ src_install() {
 
 	find "${ED}" -name '*.la' -delete || die
 
-	local DISABLE_AUTOFORMATTING=yes
-	local DOC_CONTENTS="\
-Before you can play (using nq-x11 or qw-client-x11), you must ensure
+	local DISABLE_AUTOFORMATTING="yes"
+	local DOC_CONTENTS=\
+"Before you can play (using nq-x11 or qw-client-x11), you must ensure
 that ${PN} can find your Quake pak0.pak (and optionally pak1.pak)
 at one of these locations with lowercase filenames:
 	- '~/.local/share/${PN}/id1/pak0.pak'
@@ -156,4 +149,17 @@ Audio/Video notes:
 
 pkg_postinst() {
 	readme.gentoo_print_elog
+
+	if [[ ${REPLACING_VERSIONS} ]] && ver_test ${REPLACING_VERSIONS} -le 0.7.2-r1; then
+		elog "Migration may be needed for ${PN}'s home paths, now using:"
+		elog "    ~/.${PN}rc -> ~/.config/${PN}/${PN}.conf"
+		elog "    ~/.${PN}/  -> ~/.local/share/${PN}/"
+		elog "Also, nq-sdl / qw-client-sdl are no longer available (use -x11 instead)."
+	fi
+
+	if use vulkan; then
+		ewarn "You've enabled the new vulkan support that is still experimental and yet"
+		ewarn "used by default. If have issues, can use '+setrom vid_render gl' command"
+		ewarn "line option to revert to GL."
+	fi
 }
