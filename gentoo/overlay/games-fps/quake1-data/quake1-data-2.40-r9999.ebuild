@@ -52,8 +52,11 @@ src_install() {
 		    dodoc "${CDROM_ROOT}"/*.txt
 		    ;;
 		1|3)
-			doins id1/*
-		    dodoc *.txt
+#>>>			doins id1/*
+#>>>		    dodoc *.txt
+			doins ID1/*
+		    dodoc *.TXT
+#>>>
 		    ;;
 		2)
 			newins "${CDROM_ROOT}"/Setup/ID1/PAK0.PAK pak0.pak

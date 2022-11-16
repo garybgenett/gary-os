@@ -1,0 +1,4 @@
+# 2019-12-10 01:59:14 +0100 7be77b11963037d72959a734f2cf8729385ab29c games-mods.eclass: Last rite
+# 2021-04-09 20:16:48 +0000 2a904f585d3d9101b889d58208936e86ec7ee287 games.eclass: last-rite eclass (mark as @DEAD)
+# 2021-04-09 20:26:31 +0000 aefacb8ad99b37106d76b4dc17de350b9e402780 base.eclass: last-rite eclass (mark as @DEAD)
+# 2021-06-21 06:40:49 +0100 fbf6afc71c4eaa29bee3862dbe8dd19dbf23ef71 cdrom.eclass: add EAPI guard

@@ -1,8 +1,10 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
-inherit eutils cdrom games
+#>>> EAPI=5
+EAPI=7
+#>>>
+inherit eutils cdrom
 
 DESCRIPTION="Doom III: Resurrection of Evil expansion pack"
 HOMEPAGE="http://www.doom3.com/"
@@ -20,6 +22,12 @@ S=${WORKDIR}
 
 dir=${GAMES_PREFIX_OPT}/doom3
 Ddir=${D}/${dir}
+
+#>>>
+src_prepare() {
+	default
+}
+#>>>
 
 src_unpack() {
 #>>>

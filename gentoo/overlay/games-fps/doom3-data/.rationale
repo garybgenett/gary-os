@@ -1,3 +1,4 @@
 # removed package
 # automation of interactive ebuild
--- doom3-data-1.1.1282-r1.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/games-fps/doom3-data?id=2cbc325ac5ed8d419eda1b666862d5e0681fd93e
+# 2017-11-18 20:48:10 +0100 c9617875332b1b9c894c850a1f8d8dcc1897f33f games-*/*: Remove stable keywords
+-- doom3-data-1.1.1282-r1.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/games-fps/doom3-data?id=c9617875332b1b9c894c850a1f8d8dcc1897f33f
