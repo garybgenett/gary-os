@@ -1,5 +1,0 @@
-# media-sound/hydrogen-1.0.0_pre20180301-r1
-/var/tmp/portage/media-sound/hydrogen-1.0.0_pre20180301-r1/work/hydrogen-1.0.0_pre20180301/src/gui/src/SplashScreen.cpp: In constructor 'SplashScreen::SplashScreen()':
-/var/tmp/portage/media-sound/hydrogen-1.0.0_pre20180301-r1/work/hydrogen-1.0.0_pre20180301/src/gui/src/SplashScreen.cpp:37:25: error: call of overloaded 'QSplashScreen(NULL)' is ambiguous
-37 | , Object( __class_name )
--- hydrogen-1.0.2.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/media-sound/hydrogen?id=74c9a6b263f40405458f77e2423cf0c57412d201

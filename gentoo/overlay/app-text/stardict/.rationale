@@ -1,3 +1,0 @@
-# app-text/stardict-4.0.0_pre20170304 / app-text/enchant-2.3.0
-# package.mask: >=app-text/enchant-2.0
-configure: error: Enchant library not found or too old. Use --disable-spell to build without spell plugin.

@@ -1,3 +1,0 @@
-emerge: there are no ebuilds to satisfy "~sys-firmware/edk2-ovmf-202105[binary]".
-(dependency required by "app-emulation/qemu-6.0.0-r52::overlay[qemu_softmmu_targets_x86_64,pin-upstream-blobs,-qemu_softmmu_targets_i386]" [ebuild])
--- edk2-ovmf-202105-r1.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-firmware/edk2-ovmf?id=74c9a6b263f40405458f77e2423cf0c57412d201

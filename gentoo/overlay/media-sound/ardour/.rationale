@@ -1,7 +1,0 @@
-# gui fails to load
-# GTK_DEBUG=all
-(ardour-5.12.0:25141): Gtk-WARNING **: 16:34:57.657: gtk_widget_create_pango_context ()) called without screen
-!!! Couldn't download 'Ardour-6.6.0.tar.bz2'. Aborting.
->> https://archive.org/download/ardour-6.0.0
-This tarball was not created correctly - it is missing libs/ardour/revision.cc
--- ardour-9999.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/media-sound/ardour?id=74c9a6b263f40405458f77e2423cf0c57412d201
