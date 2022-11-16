@@ -40,7 +40,7 @@ if [[ ${1} == -v ]]; then
 	); do
 		echo -en "\n"
 		${GREP} --only-matching "${PKG}[-][0-9][^[:space:]]*" ${CUR}${GENDIR}/.emerge
-		${GREP} --with-filename "KEYWORDS[=].*[^~]amd64" ${NEW}${REPDIR}/kits/*/${PKG}/*.ebuild |
+		${GREP} --with-filename "KEYWORDS[=].*[^~]amd64" ${NEW}${REPDIR}/${PKG}/*.ebuild |
 			${SED} -e "s|^.+/||g" -e "s|:.+$||g"
 	done
 	exit 0
@@ -122,11 +122,11 @@ cat /dev/null >${GENDIR}/_use.disabled
 cat /dev/null >${GENDIR}/_use.enabled
 for TOKEN in ${USE}; do
 	if [[ ${TOKEN} == ${TOKEN/#-} ]]; then
-		grep_token "^${TOKEN/#-}[ ][-]" ${REPDIR}/kits/*/profiles/use.desc |
+		grep_token "^${TOKEN/#-}[ ][-]" ${REPDIR}/profiles/use.desc |
 			sort \
 			>>${GENDIR}/_use.enabled
 	else
-		grep_token "^${TOKEN/#-}[ ][-]" ${REPDIR}/kits/*/profiles/use.desc |
+		grep_token "^${TOKEN/#-}[ ][-]" ${REPDIR}/profiles/use.desc |
 			sort \
 			>>${GENDIR}/_use.disabled
 	fi
@@ -135,7 +135,7 @@ echo -en "."
 
 cat /dev/null >${GENDIR}/_use.packages
 for TOKEN in $(cat ${GENDIR}/_packages); do
-	grep_token "^${TOKEN/%-[0-9].*}[:]" ${REPDIR}/kits/*/profiles/use.local.desc |
+	grep_token "^${TOKEN/%-[0-9].*}[:]" ${REPDIR}/profiles/use.local.desc |
 		sort \
 		>>${GENDIR}/_use.packages
 done
@@ -233,12 +233,12 @@ cat /dev/null >${GENDIR}/use.missing.global
 cat /dev/null >${GENDIR}/use.missing.local
 for TOKEN in $(cat ${GENDIR}/emerge.use); do
 	if [[ -z $(grep_token "^${TOKEN}$" ${GENDIR}/makeconf.use) ]]; then
-		if [[ -n $(grep_token "^${TOKEN}[ ][-]" ${REPDIR}/kits/*/profiles/use.desc) ]]; then
-			grep_token "^${TOKEN}[ ][-]" ${REPDIR}/kits/*/profiles/use.desc |
+		if [[ -n $(grep_token "^${TOKEN}[ ][-]" ${REPDIR}/profiles/use.desc) ]]; then
+			grep_token "^${TOKEN}[ ][-]" ${REPDIR}/profiles/use.desc |
 				sort \
 				>>${GENDIR}/use.missing.global
 		else
-			grep_token "[:]${TOKEN}[ ][-]" ${REPDIR}/kits/*/profiles/use.local.desc |
+			grep_token "[:]${TOKEN}[ ][-]" ${REPDIR}/profiles/use.local.desc |
 				${GREP} -v "$(${SED} -n "s/^([^[:space:]]+)[[:space:]].*(${TOKEN}).*$/\1:\2/gp" ${ETCDIR}/package.use)" |
 				sort \
 				>>${GENDIR}/use.missing.local
