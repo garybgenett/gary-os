@@ -11,6 +11,9 @@ override GARYOS_TTL := gary-os
 ifneq ($(wildcard $(GARYOS_DIR)/.bashrc),)
 export HOME	:= $(GARYOS_DIR)
 endif
+ifneq ($(wildcard $(GARYOS_DIR)/gentoo.git),)
+export GITDIR	:= $(GARYOS_DIR)/gentoo.git
+endif
 
 override CHROOT	:= -g
 override C	?= $(GARYOS_DIR)
