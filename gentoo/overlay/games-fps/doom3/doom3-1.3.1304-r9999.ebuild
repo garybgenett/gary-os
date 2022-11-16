@@ -1,7 +1,9 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+#>>> EAPI=5
+EAPI=7
+#>>>
 inherit eutils unpacker games
 
 MY_PV="1.3.1.1304"
@@ -49,6 +51,12 @@ QA_TEXTRELS="${dir:1}/pb/pbcl.so
 QA_EXECSTACK="${dir:1}/doom.x86
 	${dir:1}/doomded.x86"
 
+#>>>
+src_prepare() {
+	default
+}
+#>>>
+
 pkg_pretend() {
 	if use dedicated; then
 		ewarn "${CATEGORY}/${PN}[dedicated] will only install the dedicated game server"
@@ -70,7 +78,7 @@ src_install() {
 		doexe bin/Linux/x86/doom.x86
 
 		games_make_wrapper ${PN} ./doom.x86 "${dir}" "${dir}"
-		doicon "${DISTDIR}"/${PN}.png || die "doicon"
+#>>>		doicon "${DISTDIR}"/${PN}.png || die "doicon"
 		make_desktop_entry ${PN} "Doom III"
 	fi
 	games_make_wrapper ${PN}-ded ./doomded.x86 "${dir}" "${dir}"
