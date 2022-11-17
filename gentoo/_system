@@ -1192,7 +1192,6 @@ if [[ ${1} == -p ]]; then
 	fi
 	shift
 	${RM} ${TMPDIR}/._portage_reinstall_.*
-	${RM} ${TMPDIR}/*/*/repo
 	delete_empty ${TMPDIR} -a
 	${LL} -d ${TMPDIR}
 	${LL} ${TMPDIR}
