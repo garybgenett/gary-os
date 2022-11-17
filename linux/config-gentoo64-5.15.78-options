@@ -118,6 +118,10 @@ Library routines
 #>>>		VGA 8x16 font							CONFIG_FONT_8x16=y
 #>>>		Terminus 16x32 font (not supported by all drivers)		CONFIG_FONT_TER16x32=y
 
+Kernel hacking
+	Compile-time checks and compiler options
+		Generate BTF typeinfo						CONFIG_DEBUG_INFO_BTF=n
+
 ################################################################################
 # end of file
 ################################################################################
