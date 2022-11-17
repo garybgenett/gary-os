@@ -48,11 +48,9 @@
 
 #{FSPACK} libs:/usr/lib64/llvm
 #{FSPACK} libs:/usr/lib64/python3.10
-#{FSPACK} libs:/usr/lib64/python3.11
 #{FSPACK} libs:/usr/lib64/rust
 #{MOD} #{FSEXCL} libs:/usr/lib64/llvm
 #{MOD} #{FSEXCL} libs:/usr/lib64/python3.10/test
-#{MOD} #{FSEXCL} libs:/usr/lib64/python3.11/test
 #{MOD} #{FSEXCL} libs:/usr/lib64/rust
 
 #{FSPACK} docs:/usr/share/doc
@@ -74,8 +72,6 @@
 #{MOD} #{FSEXCL} mod:/lib64/firmware
 #{MOD} #{FSEXCL} mod:/usr/lib64/python3.10/site-packages/gentoolkit/test
 #{MOD} #{FSEXCL} mod:/usr/lib64/python3.10/site-packages/portage/tests
-#{MOD} #{FSEXCL} mod:/usr/lib64/python3.11/site-packages/gentoolkit/test
-#{MOD} #{FSEXCL} mod:/usr/lib64/python3.11/site-packages/portage/tests
 #{MOD} #{FSEXCL} mod:/usr/libexec/git-core
 #{MOD} #{FSEXCL} mod:/usr/share/cmake
 

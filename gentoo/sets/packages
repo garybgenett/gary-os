@@ -2,6 +2,7 @@
 # portage set configuration file
 ################################################################################
 
+#{LINPKG} sys-kernel/gentoo-kernel:6.0.8
 #{LINPKG} sys-kernel/gentoo-sources:5.15.78
 #{KERNEL} 5.15.78
 
