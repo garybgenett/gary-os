@@ -1303,13 +1303,11 @@ if [[ ${1} == -i ]]; then
 		#note: this needs to match the name in the "${MAKEIT}" script
 		${PREPIT}_repdir										|| EXIT 1
 	fi
-	if ${_BLD} || { ! ${DOFAST} && ! ${_CFG}; }; then
+	if ! ${DOFAST} && ! ${_CFG}; then
 		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w		|| EXIT 1
 	fi
-	if ${_BLD} && ! ${DOFAST}; then
-		if [[ -z "$(which expect 2>/dev/null)" ]]; then
-			expect_wrapper			emerge ${_ASK} dev-tcltk/expect				|| EXIT 1
-		fi
+	if [[ -z "$(which expect 2>/dev/null)" ]]; then
+		expect_wrapper				emerge ${_ASK} dev-tcltk/expect				|| EXIT 1
 	fi
 	if ${_KRN} && ! ${DOFAST}; then
 		${RM}					${TARGET}/boot/{_,System.map,vmlinuz,initramfs,config}*	|| EXIT 1
@@ -1379,6 +1377,13 @@ if [[ ${1} == -i ]]; then
 	fi
 	if ${_BLD} || ! ${DOFAST}; then
 		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -U -f		|| EXIT 1
+#WORKING
+		if ${_BLD} && ${DOFAST}; then
+			echo -en "\n"
+			echo -en ">>> READY TO RUN THE BUILD WITHOUT 'DOFAST' ENABLED <<<\n"
+			echo -en "\n"
+			EXIT 0
+		fi
 	fi
 	if ${_BLD}; then
 #>>>		expect_wrapper				emerge ${_ASK} --emptytree \@system \@world		|| EXIT 1
@@ -1501,7 +1506,7 @@ elif [[ ${1} == -U ]]; then
 		if [[ ! -d ${REPDIR} ]]; then
 			${MKDIR} ${REPDIR}					|| EXIT 1
 		fi
-		if ! git --help >/dev/null 2>&1; then
+		if [[ -n "$(which git 2>/dev/null)" ]]; then
 			expect_wrapper emerge ${_ASK} dev-vcs/git		|| EXIT 1
 		fi
 		declare FUN_OPT="-c branch.autosetuprebase=always -c pull.rebase=true"
