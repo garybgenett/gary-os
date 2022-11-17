@@ -256,6 +256,9 @@ fi
 
 ########################################
 
+#OPTIONS[STAGE]
+export STAGE="amd64-nomultilib-openrc"
+
 #OPTIONS[_CPU EARC ESUB GARC GSUB GOPT]
 export _CPU_RESET="CONFIG_GENERIC_CPU"
 export _CPU="${_CPU:-${_CPU_RESET}}"
@@ -1281,7 +1284,7 @@ if [[ ${1} == -i ]]; then
 		fi
 		${MKDIR}				${TARGET}${ARCDIR}					|| EXIT 1
 		${RSYNC_U} ${SOURCE}/stage3-*		${TARGET}${ARCDIR}/					|| EXIT 1
-		FILE="$(basename $(ls			${TARGET}${ARCDIR}/stage3-${ESUB}*.tar.xz		| tail -n1))"
+		FILE="$(basename $(ls			${TARGET}${ARCDIR}/stage3-${STAGE}-*.tar.xz		| tail -n1))"
 		if [[ ${FILE} != stage3-${ESUB}.tar.xz ]]; then
 			${LN} ${FILE}			${TARGET}${ARCDIR}/stage3-${ESUB}.tar.xz		|| EXIT 1
 		fi
