@@ -2,58 +2,36 @@
 # portage package license file
 ################################################################################
 
-sys-kernel/linux-firmware		linux-firmware
+########################################
+# firmware
+
 sys-kernel/linux-firmware		linux-fw-redistributable
 sys-kernel/linux-firmware		no-source-code
 
-sys-firmware/intel-microcode		intel-ucode
-sys-firmware/nvidia-firmware		NVIDIA-r2
+########################################
+# system
+
+sys-apps/man-pages-posix		freedist
 
 ########################################
+# programs
 
-sys-devel/clang				Apache-2.0-with-LLVM-exceptions
-sys-devel/clang-common			Apache-2.0-with-LLVM-exceptions
-sys-devel/lld				Apache-2.0-with-LLVM-exceptions
-sys-devel/llvm				Apache-2.0-with-LLVM-exceptions
-sys-devel/llvm-common			Apache-2.0-with-LLVM-exceptions
-sys-libs/compiler-rt			Apache-2.0-with-LLVM-exceptions
-sys-libs/compiler-rt-sanitizers		Apache-2.0-with-LLVM-exceptions
-sys-libs/libomp				Apache-2.0-with-LLVM-exceptions
-
-########################################
-
-media-fonts/font-bh-ttf			bh-luxi
-media-fonts/font-bh-type1		bh-luxi
-
-########################################
-
-media-libs/faac				MPEG-4
-media-libs/fdk-aac			FraunhoferFDK
-media-libs/libpng			libpng2
-
-################################################################################
-
+net-im/discord-bin			all-rights-reserved
 net-im/slack				all-rights-reserved
 net-im/zoom				all-rights-reserved
 
 ########################################
-
-games-misc/fortune-mod-calvin		fairuse
-games-misc/fortune-mod-dubya		fairuse
-games-misc/fortune-mod-familyguy	fairuse
-games-misc/fortune-mod-firefly		fairuse
-games-misc/fortune-mod-futurama		fairuse
-games-misc/fortune-mod-humorixfortunes	fairuse freedist
-games-misc/fortune-mod-smac		fairuse
-games-misc/fortune-mod-strangelove	fairuse
-
-########################################
+# games
 
 games-emulation/mekanix			mekanix
 
 app-arch/lha				lha
 games-fps/doom3				DOOM3
 games-fps/doom3-ducttape		freedist
+
+#{MOD} games-fps/doom3-data			DOOM3
+#{MOD} games-fps/doom3-roe			DOOM3
+#{MOD} games-fps/quake1-data			all-rights-reserved
 
 ################################################################################
 # end of file

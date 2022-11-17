@@ -2,7 +2,69 @@
 # portage package keywords file
 ################################################################################
 
+sys-kernel/gentoo-kernel		~amd64		# gentoo required
+sys-kernel/gentoo-sources		~amd64		# gentoo required
+virtual/dist-kernel			~amd64		# gentoo required
+
+########################################
+# toolkits
+
+app-admin/haskell-updater		~amd64		# gentoo required
+app-text/pandoc				~amd64		# gentoo required
+dev-haskell/*				~amd64		# gentoo required
+dev-lang/ghc				~amd64		# gentoo required
+
+app-misc/yq				~amd64		# gentoo required
+
+net-wireless/bluez-tools		~amd64		# gentoo required
+
+########################################
+# utilities
+
+sys-apps/fakeroot-ng			~amd64		# gentoo required
+
+########################################
+# programs
+
+app-misc/task				~amd64
+app-misc/taskd				~amd64		# gentoo required
+app-misc/timew				~amd64		# gentoo required
+
+net-im/discord-bin			~amd64		# gentoo required
+net-im/slack				~amd64		# gentoo required
+net-im/zoom				~amd64		# gentoo required
+
+########################################
+# media
+
+media-video/peek			~amd64		# gentoo required
+
+########################################
+# games
+
+games-misc/fortune-mod-*		~amd64		# gentoo required
+games-misc/fortune-mod-all		~amd64		# gentoo required
+
+games-board/cgoban			~amd64		# gentoo required
+games-board/xboard			~amd64		# gentoo required
+
+games-arcade/lbreakout2			~amd64		# gentoo required
+games-arcade/netris			~amd64		# gentoo required
+games-puzzle/ltris			~amd64		# gentoo required
+
+games-emulation/gnuboy			~amd64		# gentoo required
 games-emulation/mekanix			**		# gentoo required
+games-emulation/nestopia		~amd64		# gentoo required
+games-emulation/stella			~amd64		# gentoo required
+
+games-fps/dhewm3			~amd64		# gentoo required
+games-fps/doom3				~amd64		# gentoo required
+games-fps/doom3-ducttape		~amd64		# gentoo required
+games-fps/quakeforge			~amd64		# gentoo required
+
+#{MOD} games-fps/doom3-data			~amd64		# gentoo required
+#{MOD} games-fps/doom3-roe			~amd64		# gentoo required
+#{MOD} games-fps/quake1-data			~amd64		# gentoo required
 
 ################################################################################
 # end of file
