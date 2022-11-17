@@ -274,7 +274,7 @@ echo -en "."
 echo -en "\n"						>>${GENDIR}/+checks 2>&1
 echo -en "[python]"					>>${GENDIR}/+checks 2>&1
 echo -en "\n"						>>${GENDIR}/+checks 2>&1
-${GREP} -o "[^-(]python[0-9][_][0-9]" ${GENDIR}/.emerge |
+${GREP} -o "[^-(]python[0-9]+[_][0-9]+" ${GENDIR}/.emerge |
 	${SED} "s|^.||g" |
 	sort -r |
 	uniq -c |
@@ -353,8 +353,6 @@ echo -en "[emerge]"					>>${GENDIR}/+checks 2>&1
 echo -en "\n"						>>${GENDIR}/+checks 2>&1
 ${GREP} -v \
 	-e "^$" \
-	-e "^PORTAGE_BZIP2_COMMAND[ ]" \
-	-e "^[!][!][!][ ]BINPKG_COMPRESS[ ]" \
 	-e "^These are the packages that would be merged" \
 	-e "^Calculating dependencies" \
 	-e "^[[]ebuild[ ]" \
