@@ -15,6 +15,8 @@ ifneq ($(wildcard $(GARYOS_DIR)/gentoo.git),)
 export GITDIR	:= $(GARYOS_DIR)/gentoo.git
 endif
 
+########################################
+
 override CHROOT	:= -g
 override C	?= $(GARYOS_DIR)
 override S	?= $(GARYOS_DIR)/sources
@@ -142,7 +144,7 @@ endif
 
 .PHONY: help
 help: usage
-	HOME="$(HOME)" SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -v $(Q) $(CHROOT)
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -v $(Q) $(CHROOT)
 
 ########################################
 
