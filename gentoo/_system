@@ -1310,38 +1310,40 @@ if [[ ${1} == -i ]]; then
 		fi
 	fi
 	if ${_KRN} && ! ${DOFAST}; then
-		${RM}					${TARGET}/boot/{_,System.map,initramfs,kernel,vmlinuz}*	|| EXIT 1
+		${RM}					${TARGET}/boot/{_,System.map,vmlinuz,initramfs,config}*	|| EXIT 1
 		${RM}					${TARGET}/etc/kernels/*					|| EXIT 1
 		${RM}					${TARGET}/lib/modules/*					|| EXIT 1
 		${RM}					${TARGET}${LDIR}*					|| EXIT 1
 		expect_wrapper				emerge ${_ASK} sys-kernel/genkernel ${LINPKG}		|| EXIT 1
-		declare KERN="$(cd ${TARGET}/boot; ls kernel-debian-sources-*		2>/dev/null | sort | tail -n1)"
-		declare INIT="$(cd ${TARGET}/boot; ls initramfs-debian-sources-*	2>/dev/null | sort | tail -n1)"
+		declare KERN="$(cd ${TARGET}/boot; ls vmlinuz-*-gentoo*		2>/dev/null | sort | tail -n1)"
+		declare INIT="$(cd ${TARGET}/boot; ls initramfs-*-gentoo*	2>/dev/null | sort | tail -n1)"
 		${RM}					${TARGET}/boot/_kernel					|| EXIT 1
 		${RM}					${TARGET}/boot/_initrd					|| EXIT 1
 		if [[ -n ${KERN} ]]; then ${LN} ${KERN}	${TARGET}/boot/_kernel					|| EXIT 1; fi
 		if [[ -n ${INIT} ]]; then ${LN} ${INIT}	${TARGET}/boot/_initrd					|| EXIT 1; fi
 		if [[ -n ${KERN} ]]; then
-			KERN="${KERN/#kernel/linux}"
+			KERN="${KERN/#vmlinuz/linux}"
 			${RM}				${TARGET}${LDIR}					|| EXIT 1
 			${LN} ${KERN}			${TARGET}${LDIR}					|| EXIT 1
 		fi
 	fi
 	if ${_KRN} && ! ${DOFAST}; then for FILE in ${KERNEL}; do
+		KSRC="${KBAS//${KVER}/${FILE}}"
+		KERN="${KCFG//${KVER}/${FILE}}"
 		${RM}					${TARGET}${LDIR}					|| EXIT 1
-		${LN} ${KBAS//${KVER}/${FILE}}		${TARGET}${LDIR}					|| EXIT 1
-		${RSYNC_U} --copy-links			${SETDIR}/${LINDIR}/${KCFG//${KVER}/${FILE}}		\
-							${TARGET}${ARCDIR}/${KCFG//${KVER}/${FILE}}		|| EXIT 1
-		kernel_cpu				${TARGET}${ARCDIR}/${KCFG//${KVER}/${FILE}}		|| EXIT 1
+		${LN} ${KSRC}				${TARGET}${LDIR}					|| EXIT 1
+		${RSYNC_U} --copy-links			${SETDIR}/${LINDIR}/${KERN}				\
+							${TARGET}${ARCDIR}/${KERN}				|| EXIT 1
+		kernel_cpu				${TARGET}${ARCDIR}/${KERN}				|| EXIT 1
 		declare GENKERNEL_OPTS="--loglevel=5 --bootloader=grub --install --symlink --luks --zfs"
 		if [[ -z ${AUTO} ]]; then
 			expect_wrapper			genkernel ${GENKERNEL_OPTS} kernel --menuconfig		|| EXIT 1
 		else
 			expect_wrapper			genkernel ${GENKERNEL_OPTS} kernel			\
-							--kernel-config=${ARCDIR}/${KCFG//${KVER}/${FILE}}	|| EXIT 1
+							--kernel-config=${ARCDIR}/${KERN}			|| EXIT 1
 		fi
 		${RSYNC_U} --copy-links			${TARGET}${LDIR}/.config				\
-							${TARGET}${ARCDIR}/${KCFG//${KVER}/${FILE}}		|| EXIT 1
+							${TARGET}${ARCDIR}/${KERN}				|| EXIT 1
 		if ! ${_GOS}; then
 			KERN="vmlinuz-${FILE}-gentoo-x86_64"
 			${RM}				${TARGET}/boot/_cur					|| EXIT 1
