@@ -427,10 +427,10 @@ function common_exists {
 function common_tar {
 	declare SRC_FILE="${1}" && shift
 	if [[ ! -f ${SRC_FILE}.tar.xz ]] && [[ -d ${SRC_FILE} ]] && [[ ! -L ${SRC_FILE} ]]; then
-		tar -cvv --xz				\
+		tar --xz -cvv				\
 			-C $(dirname ${SRC_FILE})	\
 			-f ${SRC_FILE}.tar.xz		\
-			${@}				\
+			"${@}"				\
 			$(basename ${SRC_FILE})		|| return 1
 	else
 		common_exists ${FUNCNAME}		\
@@ -446,14 +446,28 @@ function common_untar {
 	if [[ -f ${SRC_FILE}.tar.xz ]] && [[ ! -d ${SRC_FILE} ]] && [[ ! -L ${SRC_FILE} ]]; then
 		FILE="$(dirname ${SRC_FILE})"
 		${MKDIR} ${FILE}			|| return 1
-		tar -vvx --xz				\
+		tar --xz -vvx				\
 			-C ${FILE}			\
 			-f ${SRC_FILE}.tar.xz		\
-			${@}				|| return 1
+			"${@}"				|| return 1
 	else
 		common_exists ${FUNCNAME}		\
 			${SRC_FILE}.tar.xz ${SRC_FILE}	|| return 1
 	fi
+	return 0
+}
+
+########################################
+
+function common_gpkg_tar {
+	declare GPKG_DIR="image"
+	declare GPKG_SRC="${1}" && shift
+	tar -xO										\
+		-f ${GPKG_SRC}								\
+		$(basename ${GPKG_SRC/%.gpkg.tar})/${GPKG_DIR}.tar.xz			\
+		| tar --xz --show-transformed-names --transform="s|^${GPKG_DIR}|.|g"	\
+			-f -								\
+			"${@/#=/${GPKG_DIR}}"						|| return 1
 	return 0
 }
 
@@ -683,7 +697,7 @@ function prepare_config_restore {	#>>>{doredo}
 	declare PACK="${1}" && shift
 	declare PFIL="${1}" && shift
 	declare PSRC="${1}" && shift
-	FILE="$(ls ${TARGET}${PAKDIR}/${PACK}-[.0-9]*.tbz2 2>/dev/null | sort | tail -n1)"
+	FILE="$(ls ${TARGET}${PAKDIR}/${PACK}-[.0-9]*.gpkg.tar 2>/dev/null | sort | tail -n1)"
 	if {
 		[[ -n ${PACK} ]] &&
 		[[ -f ${FILE} ]]
@@ -691,16 +705,16 @@ function prepare_config_restore {	#>>>{doredo}
 		echo -en "\n"
 		echo -en ">>> RESTORING (${PFIL}) FROM (${PACK}) PACKAGE FILE <<<\n"
 		echo -en "\n"
-		NEXT=".${PFIL}"
+		NEXT="${PFIL}"
 		if [[ -n ${PSRC} ]]; then
-			NEXT="$(tar -t --bzip2 --wildcards -f ${FILE} "*/${PSRC}" | sort | tail -n1)"
+			NEXT="$(common_gpkg_tar ${FILE} -t --wildcards "*/${PSRC}" | sort | tail -n1)"
+			NEXT="${NEXT/#\.}"
 			if [[ -z ${NEXT} ]]; then
 				return 1
 			fi
 		fi
-		tar -vvx --bzip2 -C ${TARGET} -f ${FILE} ${NEXT}		|| return 1
+		common_gpkg_tar ${FILE} -vvx -C ${TARGET} =${NEXT}		|| return 1
 		if [[ -n ${PSRC} ]]; then
-			NEXT="${NEXT/#.}"
 			if [[ -n $(file ${TARGET}${NEXT} | ${GREP} "bzip2") ]]; then
 				bzip2 -cd ${TARGET}${NEXT} >${TARGET}${PFIL}	|| return 1
 			else
@@ -875,7 +889,7 @@ function _prepare_packages {
 			${SED} "s|^[.][/]||g"								|
 			sort -u
 	); do
-		declare PKG_DB="$(cd ${TARGET}${PDBDIR} && ${LS} -d ${FILE/%.tbz2}	2>/dev/null)"	|| return 1
+		declare PKG_DB="$(cd ${TARGET}${PDBDIR} && ${LS} -d ${FILE/%.gpkg.tar}	2>/dev/null)"	|| return 1
 		declare PKG_DU="$(cd ${TARGET}${PAKDIR} && ${DU} -ks ${FILE}		2>/dev/null)"	|| return 1
 		if [[ -n ${PKG_DB} ]]; then
 			echo -en "${PKG_DU} (installed)\n"	| tee -a ${TARGET}/.${_GPACK}		|| return 1
@@ -935,9 +949,10 @@ function prepare_linux_directory {
 	if [[ ! -d ${TARGET}${DODIR} ]]; then
 		${RM}						${TARGET}${DODIR}.${_TITLE}	|| return 1
 		${MKDIR}					${TARGET}${DODIR}.${_TITLE}	|| return 1
-		tar -vvx --bzip2								\
+		common_gpkg_tar									\
+			${TARGET}${PAKDIR}/sys-kernel/gentoo-sources-${KVER}.gpkg.tar		\
 			-C ${TARGET}${DODIR}.${_TITLE}						\
-			-f ${TARGET}${PAKDIR}/*/gentoo-sources-${KVER}.tbz2			|| return 1
+			-vvx									|| return 1
 		${MV} ${TARGET}${DODIR}.${_TITLE}${KDIR}	${TARGET}${DODIR}		|| return 1
 		${RM}						${TARGET}${DODIR}.${_TITLE}	|| return 1
 		safe_env make -C ${DODIR}			distclean			|| return 1
