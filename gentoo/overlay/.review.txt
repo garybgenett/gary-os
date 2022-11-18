@@ -27,7 +27,6 @@ diff :: games-fps/doom3 [source] ===============================================
 diff: /var/db/repos/gentoo/games-fps/doom3: No such file or directory
 diff :: games-fps/doom3 [target] =======================================================================================
 Only in ./games-fps/doom3: .keep
-Only in ./games-fps/doom3/.source: .null
 Only in ./games-fps/doom3: .rationale
 Only in ./games-fps/doom3: .source
 diff -u -U10 -r ./games-fps/doom3/.source/Manifest ./games-fps/doom3/Manifest
