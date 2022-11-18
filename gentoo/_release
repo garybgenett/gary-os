@@ -166,6 +166,7 @@ declare DU_S="${DU} --summarize --apparent-size --block-size 1"
 
 ########################################
 
+declare REP_FILE="$(basename ${REPDIR})-repo"
 declare CPIO_FILE="${_RAMFS}.cpio"
 
 #note: this is an environment variable for "xz" and is not explicitly used in this script
@@ -899,13 +900,13 @@ function _prepare_repdir {
 	if [[ -z ${TARGET} ]]; then
 		return 0
 	fi
-	declare REP_FILE="${TARGET}${ARCDIR}/$(basename ${REPDIR})"
-	if [[ -f ${REP_FILE}.tar.xz ]] && [[ -f ${REP_FILE}.git.tar.xz ]]; then
-		${RSYNC_U} ${REP_FILE}.tar.xz			${TARGET}${REPDIR}.tar.xz		|| return 1
-		${RSYNC_U} ${REP_FILE}.git.tar.xz		${TARGET}${REPDIR}.git.tar.xz		|| return 1
+	declare ARC_FILE="${TARGET}${ARCDIR}/${REP_FILE}"
+	if [[ -f ${ARC_FILE}.tar.xz ]] && [[ -f ${ARC_FILE}.git.tar.xz ]]; then
+		${RSYNC_U} ${ARC_FILE}.tar.xz			${TARGET}${REPDIR}.tar.xz		|| return 1
+		${RSYNC_U} ${ARC_FILE}.git.tar.xz		${TARGET}${REPDIR}.git.tar.xz		|| return 1
 	fi
 	if [[ ! -f ${TARGET}${REPDIR}.tar.xz ]] || [[ ! -f ${TARGET}${REPDIR}.git.tar.xz ]]; then
-		${RM}						${REP_FILE}{,.git}.tar.xz		|| return 1
+		${RM}						${ARC_FILE}{,.git}.tar.xz		|| return 1
 		${RM}						${TARGET}${REPDIR}{,.git}{,.tar.xz}	|| return 1
 		if [[ -d ${GITDIR} ]]; then
 			${MKDIR}				${TARGET}${REPDIR}.git			|| return 1
@@ -920,9 +921,9 @@ function _prepare_repdir {
 		common_untar					${TARGET}${REPDIR}			|| return 1
 		common_untar					${TARGET}${REPDIR}.git			|| return 1
 	fi
-	if [[ ! -f ${REP_FILE}.tar.xz ]] || [[ ! -f ${REP_FILE}.git.tar.xz ]]; then
-		${RSYNC_U} ${TARGET}${REPDIR}.tar.xz		${REP_FILE}.tar.xz			|| return 1
-		${RSYNC_U} ${TARGET}${REPDIR}.git.tar.xz	${REP_FILE}.git.tar.xz			|| return 1
+	if [[ ! -f ${ARC_FILE}.tar.xz ]] || [[ ! -f ${ARC_FILE}.git.tar.xz ]]; then
+		${RSYNC_U} ${TARGET}${REPDIR}.tar.xz		${ARC_FILE}.tar.xz			|| return 1
+		${RSYNC_U} ${TARGET}${REPDIR}.git.tar.xz	${ARC_FILE}.git.tar.xz			|| return 1
 	fi
 	return 0
 }
@@ -1025,7 +1026,6 @@ function _prepare_symlinks {		#{isexit} #{doredo}
 	if [[ -z ${TARGET} ]]; then
 		return 0
 	fi
-	declare REP_FILE="$(basename ${REPDIR})"
 	${RM} $(find ${_FINAL} -maxdepth 1 -type l 2>/dev/null | sort)							|| return 1
 	if ${DOREDO}; then
 		return 0
