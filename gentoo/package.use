@@ -150,6 +150,7 @@ dev-util/librnp				-man		# requires: dev-ruby/asciidocto -> dev-lang/ruby
 
 ################################################################################
 
+#{NEW} app-arch/libarchive		-lz4		# gentoo required
 #{NEW} media-libs/libsndfile		minimal		# gentoo required
 #{NEW} media-libs/tiff			-webp		# gentoo required
 
