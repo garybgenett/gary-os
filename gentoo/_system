@@ -1383,7 +1383,6 @@ if [[ ${1} == -i ]]; then
 	fi
 	if ${_BLD} || ! ${DOFAST}; then
 		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -U -f		|| EXIT 1
-#WORKING
 		if ${_BLD} && ${DOFAST}; then
 			echo -en "\n"
 			echo -en ">>> READY TO RUN THE BUILD WITHOUT 'DOFAST' ENABLED <<<\n"
