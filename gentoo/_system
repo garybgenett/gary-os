@@ -735,6 +735,8 @@ function mount_dev_dirs {
 		shift
 		print_info marker
 		print_info umount
+		safe_env killall --verbose -9 gpg-agent 2>&1 |
+			if ${QUIET}; then prompt -t; else cat; fi
 		declare LSOF="$(
 			lsof |
 			${GREP} "${TARGET}" |
@@ -745,14 +747,18 @@ function mount_dev_dirs {
 			echo -en ">>> THERE ARE STILL PROCESSES IN THE CHROOT <<<\n"
 			echo -en ">>> SKIPPING UNMOUNT <<<\n"
 			echo -en "\n"
-			echo "${LSOF}" | ${GREP} "${TARGET}" 2>&1 |
-				if ${QUIET}; then prompt -t; else cat; fi
-			if ! ${QUIET}; then echo -en "\n"; fi
-			mount | ${GREP} "${TARGET}" 2>&1 |
-				if ${QUIET}; then prompt -t; else cat; fi
-			if ! ${QUIET}; then echo -en "\n"; fi
-#>>>			print_info marker
-#>>>			return 1
+			echo "${LSOF}" | ${GREP} "${TARGET}" 2>&1 #>>> |
+#>>>				if ${QUIET}; then prompt -t; else cat; fi
+#>>>			if ! ${QUIET}; then echo -en "\n"; fi
+				echo -en "\n"
+#>>>
+			mount | ${GREP} "${TARGET}" 2>&1 #>>> |
+#>>>				if ${QUIET}; then prompt -t; else cat; fi
+#>>>			if ! ${QUIET}; then echo -en "\n"; fi
+				echo -en "\n"
+#>>>
+			print_info marker
+			EXIT -1 #>>> return 1
 		else
 			if ! mount-robust -u --dev ${TARGET}	2>&1 |
 				if ${QUIET}; then prompt -t; else cat; fi
@@ -889,7 +895,7 @@ then
 	if ! ${DO_CHROOT}; then
 		requires_chroot "${@}"
 	fi
-	mount_dev_dirs -u	|| EXIT -1
+	mount_dev_dirs -u	|| EXIT 1
 	declare DOIT="${1}"	&& shift
 	${DOIT} "${@}"		|| EXIT -1
 	EXIT -0
