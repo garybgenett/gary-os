@@ -1512,6 +1512,9 @@ elif [[ ${1} == -U ]]; then
 		if [[ ! -d ${REPDIR}.git ]]; then
 			git-clone ${GITDIR} ${REPDIR}				|| EXIT 1
 		fi
+		if [[ ! -d ${REPDIR} ]]; then
+			${MKDIR} ${REPDIR}					|| EXIT 1
+		fi
 		declare FUN_OPT="-c branch.autosetuprebase=always -c pull.rebase=true"
 		declare FUN_GIT="${GIT} --git-dir=${REPDIR}.git --work-tree=${REPDIR} ${FUN_OPT}"
 		${FUN_GIT} fetch --all						|| EXIT 1
