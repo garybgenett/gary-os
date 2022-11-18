@@ -12,12 +12,14 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
 DEPEND="
+	media-libs/libsdl
+	media-libs/openal
+	net-misc/curl
+	sys-libs/zlib
+
 	media-libs/libjpeg-turbo
 	media-libs/libogg
 	media-libs/libvorbis
-	media-libs/openal
-	media-libs/libsdl
-	net-misc/curl
 "
 
 src_configure() {
@@ -28,7 +30,7 @@ src_configure() {
 
 src_compile() {
 	sed -ri.BAK \
-		-e "s|/(usr)/local|${D}\1|g" \
+		-e "s|(/usr)/local|${D}\1|g" \
 		${S}/build/{config.h,cmake_install.cmake}
 	cd ${S}/build
 	make
