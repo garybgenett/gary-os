@@ -1315,8 +1315,10 @@ if [[ ${1} == -i ]]; then
 	if ! ${DOFAST} && ! ${_CFG}; then
 		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w		|| EXIT 1
 	fi
-	if [[ -z "$(which expect 2>/dev/null)" ]]; then
-		expect_wrapper				emerge ${_ASK} dev-tcltk/expect				|| EXIT 1
+	if ${_BLD}; then
+		if [[ -z "$(which expect 2>/dev/null)" ]]; then
+			expect_wrapper			emerge ${_ASK} dev-tcltk/expect				|| EXIT 1
+		fi
 	fi
 	if ${_KRN} && ! ${DOFAST}; then
 		${RM}					${TARGET}/boot/{_,System.map,vmlinuz,initramfs,config}*	|| EXIT 1
@@ -1480,7 +1482,8 @@ if [[ ${1} == -u ]]; then
 #>>>		if [[ -n "$(which haskell-updater 2>/dev/null)" ]]; then
 #>>>			expect_wrapper haskell-updater --all				|| EXIT 1
 #>>>		fi
-		expect_wrapper emerge ${_ASK} \@module-rebuild --exclude ${LINPKG}	|| EXIT 1
+		expect_wrapper emerge ${_ASK} \@module-rebuild				$(
+			for FILE in ${LINPKG}; do echo -en " --exclude ${FILE}"; done)	|| EXIT 1
 		expect_wrapper emerge ${_ASK} \@preserved-rebuild			|| EXIT 1
 	fi
 	expect_wrapper emerge ${_ASK} --depclean					|| EXIT 1
@@ -1489,6 +1492,9 @@ if [[ ${1} == -u ]]; then
 		expect_wrapper emaint --fix all						|| EXIT 1
 		expect_wrapper eclean --verbose distfiles				|| EXIT 1
 		expect_wrapper eclean --verbose packages				|| EXIT 1
+		if [[ -n "$(which eix-update 2>/dev/null)" ]]; then
+			expect_wrapper eix-update					|| EXIT 1
+		fi
 	fi
 	safe_env ${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -p				|| EXIT 1
 	expect_wrapper dispatch-conf							|| EXIT 1
@@ -1530,9 +1536,6 @@ elif [[ ${1} == -U ]]; then
 			--update-pkg-desc-index					\
 			--update-use-local-desc					\
 										#>>> || EXIT 1
-		if [[ -n "$(which eix-update 2>/dev/null)" ]]; then
-			expect_wrapper eix-update				|| EXIT 1
-		fi
 	fi
 	declare FAIL="false"
 	FILE="--fetch-all-uri"
