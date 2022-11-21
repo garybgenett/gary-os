@@ -160,6 +160,7 @@ declare RUFUS_URL="https://github.com/pbatard/rufus/releases/download/v3.20/rufu
 ########################################
 
 declare SHMEM_MEM="$(((2**20)*768))"
+declare SHMEM_SET="2560m"
 
 ########################################
 
@@ -185,7 +186,7 @@ declare XZ="xz -vv --compress --stdout --format xz --check crc32"
 declare PATCH="patch --force --strip=1"
 declare PATCH_DIR="${ARTDIR}/patches"
 declare -a PATCHES
-PATCHES[0]="shmem-add-shmem_size-option-set-filesystem-size.v5.4-rc2.v5.6_updated.patch"
+#>>> PATCHES[0]="shmem-add-shmem_size-option-set-filesystem-size.v5.4-rc2.v5.6_updated.patch"
 
 ########################################
 
@@ -1453,21 +1454,27 @@ function release_kernel_shmem {
 	SHMEM="$(echo "((${SHMEM}+(${SHMEM_MEM}))/${SHMEM_PAGES})" | bc | ${SED} -r "s|[.].*$||g")"
 	SHMEM="$(echo "(${SHMEM}*${SHMEM_PAGES})" | bc)"
 	echo -en ">>> FINAL SHMEM: ${SHMEM}\n"
-	echo "CONFIG_SHMEM_SIZE=\"${SHMEM}\"" >>${TARGET}${DODIR}/.config	|| return 1
+	if [[ -n "${SHMEM_SET}" ]]; then
+		SHMEM="${SHMEM_SET}"
+	fi
+	echo -en ">>> SET SHMEM: ${SHMEM}\n"
+#>>>	echo "CONFIG_SHMEM_SIZE=\"${SHMEM}\"" >>${TARGET}${DODIR}/.config				|| return 1
+	CMDLINE_CONFIG="${ROOTFS_ROOT_OPT}_size=${SHMEM}"
+	${SED} -i "s|^.*(CONFIG_CMDLINE)[^_].*$|\1=\"${CMDLINE_CONFIG}\"|g" ${TARGET}${DODIR}/.config	|| return 1
 	return 0
 }
 
 function release_kernel_initramfs {
 	declare DODIR="${1}" && shift
 	declare INITRAMFS_CONFIG=
-	INITRAMFS_CONFIG+="CONFIG_INITRAMFS_SOURCE=\"${CPIO_FILE/#${TARGET}}\"\n"
-#>>>	INITRAMFS_CONFIG+="CONFIG_INITRAMFS_ROOT_GID=0\n"
-#>>>	INITRAMFS_CONFIG+="CONFIG_INITRAMFS_ROOT_UID=0\n"
+	INITRAMFS_CONFIG+="CONFIG_INITRAMFS_SOURCE=\"${CPIO_FILE/#${TARGET}}\""
+#>>>	INITRAMFS_CONFIG+="\nCONFIG_INITRAMFS_ROOT_GID=0"
+#>>>	INITRAMFS_CONFIG+="\nCONFIG_INITRAMFS_ROOT_UID=0"
 	if ${ROOTFS}; then
-		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_COMPRESSION_NONE=y\n"
+		INITRAMFS_CONFIG+="\nCONFIG_INITRAMFS_COMPRESSION_NONE=y"
 	else
-		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_COMPRESSION_XZ=y\n"
-#>>>		INITRAMFS_CONFIG+="CONFIG_INITRAMFS_COMPRESSION=\".xz\"\n"
+		INITRAMFS_CONFIG+="\nCONFIG_INITRAMFS_COMPRESSION_XZ=y"
+#>>>		INITRAMFS_CONFIG+="\nCONFIG_INITRAMFS_COMPRESSION=\".xz\""
 	fi
 	${SED} -i \
 		-e "/CONFIG_INITRAMFS_COMPRESSION/d" \
@@ -1479,9 +1486,10 @@ function release_kernel_initramfs {
 
 function release_kernel_diff {
 	declare DODIR="${1}" && shift
-	${RSYNC_U} ${TARGET}${DODIR}/.config		${TARGET}${ARCDIR}/${KCFG}.initramfs	|| return 1
-	${GREP} "CONFIG_(SHMEM|KERNEL|INITRAMFS|RD)_"	${TARGET}${ARCDIR}/${KCFG}.initramfs	|| return 1
-	diff ${DIFF_OPTS} ${TARGET}${ARCDIR}/${KCFG}	${TARGET}${ARCDIR}/${KCFG}.initramfs	| ${GREP} "^[-+]"
+	${RSYNC_U} ${TARGET}${DODIR}/.config			${TARGET}${ARCDIR}/${KCFG}.initramfs	|| return 1
+#>>>	${GREP} "CONFIG_(SHMEM|KERNEL|INITRAMFS|RD)_"		${TARGET}${ARCDIR}/${KCFG}.initramfs	|| return 1
+	${GREP} "CONFIG_(CMDLINE|KERNEL|INITRAMFS|RD)[=_]"	${TARGET}${ARCDIR}/${KCFG}.initramfs	|| return 1
+	diff ${DIFF_OPTS} ${TARGET}${ARCDIR}/${KCFG}		${TARGET}${ARCDIR}/${KCFG}.initramfs	| ${GREP} "^[-+]"
 	return 0
 }
 
