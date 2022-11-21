@@ -22,6 +22,7 @@ media-libs/opencv			qt5		# gentoo required
 media-libs/suil				gtk2		# gentoo required
 media-video/ffmpeg			theora		# gentoo required
 media-video/ffmpeg			x264		# gentoo required
+sys-libs/gdbm				berkdb		# gentoo required
 
 media-sound/aumix			-gpm		# gnetoo required: [media-sound/aumix-*] mouse.c:(.text+0x46): undefined reference to `Gpm_Wgetch'
 sys-process/atop			-modules	# gentoo required: make[1]: *** /lib/modules/<uname -r>/build: No such file or directory.  Stop.
@@ -121,7 +122,7 @@ sci-calculators/qalculate-gtk		-gnome
 sys-apps/iproute2			iptables
 sys-apps/smartmontools			-caps -daemon
 sys-boot/grub				device-mapper efiemu libzfs mount
-sys-fs/zfs				-python
+sys-fs/zfs				-python rootfs
 www-client/firefox			-wifi
 www-servers/apache			-threads
 x11-base/xorg-server			xnest xvfb
@@ -156,43 +157,57 @@ dev-util/librnp				-man		# requires: dev-ruby/asciidocto -> dev-lang/ruby
 
 ################################################################################
 
-#{CMD} grep "installed" ./build/.packages.txt | sort -nr | head -n50
+#{CMD} make _prepare_packages ; grep "installed" ./build/.packages.txt | sort -nr | head -n50
 #{CMD} declare TOTAL="0"; for FILE in $(grep "installed" ./build/.packages.txt | awk '{print $1;}'); do TOTAL="$((${TOTAL}+${FILE}))"; done; echo "${TOTAL}"
 
-#>>> app-text/docbook-xsl-stylesheets	dev-util/cmake -> x11-misc/shared-mime-info -> dev-libs/libxml2 -> dev-util/gtk-doc-am -> dev-util/gtk-doc -> app-text/docbook-xsl-stylesheets
-#>>> dev-lang/rust			app-admin/ego -> dev-python/requests -> dev-python/cryptography -> virtual/rust -> dev-lang/rust
-#>>> dev-lang/swig			net-wireless/wpa_supplicant -> net-wireless/crda -> dev-python/m2crypto -> dev-lang/swig
-#>>> dev-lang/yasm			app-arch/p7zip -> dev-lang/yasm
-#>>> dev-libs/boost			dev-lang/rust -> net-misc/curl [http2] -> net-libs/nghttp2 -> dev-libs/boost
-#>>> dev-libs/glib			dev-util/cmake -> x11-misc/shared-mime-info -> dev-libs/glib
-#>>> dev-python/pygments		dev-util/cmake -> x11-misc/shared-mime-info -> dev-libs/libxml2 -> dev-util/gtk-doc-am -> dev-util/gtk-doc -> dev-python/pygments
-#>>> dev-util/cmake			sys-devel/gcc -> dev-cpp/tbb -> dev-util/cmake
-#>>> dev-util/meson			sys-fs/fuse -> dev-util/meson
-#>>> dev-vcs/git			sys-devel/gcc -> dev-vcs/git
+#>>> * = required
+#>>> - = remove
+#>>> / = remove (temporary)
+# * app-text/docbook-xsl-stylesheets
+# * dev-lang/python
+# * dev-libs/glib
+# * dev-python/docutils = dev-python/pygments
+# * dev-python/pygments
+# * dev-util/cmake
+# * dev-util/meson
+# * media-libs/fontconfig
+# * media-libs/freetype = media-libs/fontconfig
+# * media-libs/mesa
+# * sys-apps/systemd-utils
+# + sys-kernel/linux-firmware
+# - dev-lang/ruby
+# - dev-lang/rust = gnome-base/librsvg
+# - dev-lang/tcl = dev-lang/tk
+# - dev-libs/boost = sys-block/thin-provisioning-tools
+# - dev-libs/gobject-introspection
+# - dev-libs/icu
+# - dev-python/cython
+# - dev-qt/qtcore
+# - dev-scheme/guile
+# - media-libs/harfbuzz = gnome-base/librsvg
+# - sys-apps/dbus
+# - sys-devel/llvm = dev-lang/rust
+# - x11-libs/cairo = gnome-base/librsvg
+# - x11-libs/gtk+ = x11-themes/adwaita-icon-theme
+# - x11-libs/pango = x11-libs/gtk+ ; gnome-base/librsvg
+# / dev-python/ensurepip-pip
+# / net-libs/libsmi
 
 ########################################
 
-#{GOS} dev-libs/libxml2			python		# gentoo required
+#{GOS} dev-embedded/libftdi		-cxx		# dev-libs/boost
+#{GOS} dev-vcs/git			-tk		# dev-lang/tcl (dev-lang/tk)
+#{GOS} media-libs/freetype		-svg		# gnome-base/librsvg -> x11-libs/pango
+#{GOS} net-libs/nghttp2			-cxx		# dev-libs/boost
+#{GOS} net-wireless/wpa_supplicant	-qt5		# dev-qt/qtcore
 
-#{MOD} #{GOS} media-libs/imlib2		-shm		# gentoo required
+#{GOS} dev-lang/python			-ensurepip	# dev-python/ensurepip-wheels -> dev-python/ensurepip-pip
+#{GOS} dev-python/pydantic		-native-extensions	# dev-python/cython
+#{GOS} media-libs/freetype		-harfbuzz	# media-libs/harfbuzz
+#{GOS} media-libs/libcanberra		-gtk3		# x11-libs/gtk+
+#{GOS} net-analyzer/tcpdump		-smi		# net-libs/libsmi
+#{GOS} sys-fs/lvm2			-thin		# sys-block/thin-provisioning-tools -> dev-libs/boost
 
-########################################
-
-#{GOS} dev-lang/python			-tk		# requires: dev-lang/tk -> dev-lang/tcl
-#{GOS} dev-libs/glib			-dbus		# (override) requires: gnome-base/dconf -> dev-lang/vala -> media-gfx/graphviz
-#{GOS} dev-python/PyQt5			-webkit		# (override) requires: dev-qt/qtwebkit
-#{GOS} dev-vcs/git			-tk		# (override) requires: dev-lang/tk -> dev-lang/tcl
-#{GOS} net-wireless/wpa_supplicant	-qt5		# (override) requires: dev-qt/qtcore
-#{MOD} #{GOS} app-admin/eselect		-doc		# requires: dev-python/docutils
-
-#{GOS} net-libs/gnutls			-tools		# (override) requires: sys-devel/autogen -> dev-scheme/guile
-#{GOS} net-misc/wget			-cookie_check	# requires: net-libs/libpsl -> dev-libs/icu
-#{GOS} sys-fs/lvm2			-thin		# requires: sys-block/thin-provisioning-tools -> ( dev-lang/ruby | dev-vcs/git )
-#{MOD} #{GOS} dev-lang/python		-sqlite		# requires: dev-db/sqlite -> dev-lang/tcl
-#{MOD} #{GOS} sys-apps/lshw		-sqlite		# requires: dev-db/sqlite -> dev-lang/tcl
-
-#>>> #{GOS} x11-base/xorg-server	-glamor		# requires: media-libs/mesa
-#>>> #{GOS} x11-base/xorg-server	minimal		# requires: media-libs/mesa
 #{GOS} x11-base/xorg-server		-xnest		# not needed, keep size down
 #{GOS} x11-base/xorg-server		-xvfb		# not needed, keep size down
 
