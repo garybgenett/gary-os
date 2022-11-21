@@ -1819,9 +1819,9 @@ function _release_unpack {		#{ismain} #{doredo} #{dotest}
 		shopt ${LASTPIPE} lastpipe
 	fi
 	echo "# ${PACKDIRS_KEEP}<directory> = fetch/unpack directory, keep archive"		>>${UNPACK}		|| return 1
-	echo "# ${PACKDIRS_INST}<directory> = fetch/unpack directory, remove archive"		>>${UNPACK}		|| return 1
+	echo "# ${PACKDIRS_INST}<directory> = fetch/unpack directory, remote archive"		>>${UNPACK}		|| return 1
 	echo "# ${PACKDIRS_PACK}<directory> = remove directory, keep archive"			>>${UNPACK}		|| return 1
-	echo "# ${PACKDIRS_GONE}<directory> = remove directory, remove archive"			>>${UNPACK}		|| return 1
+	echo "# ${PACKDIRS_GONE}<directory> = remove directory, remote archive"			>>${UNPACK}		|| return 1
 	printf "${PRINTF}"												\
 		"#${PACKDIRS_MARK} <none><directory> = ${PACKDIRS_DEFL}<directory>"					\
 		"(<file>) = local archive"										\
