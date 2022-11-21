@@ -463,13 +463,13 @@ function print_info {
 	}; then
 		return 0
 	fi
-	declare TITLE="\e[1;32m"	# light green
+	declare TITLE="\e[0;32m"	# green
 	declare STATE="\e[0;35m"	# magenta
 	declare HOWTO="\e[0;36m"	# cyan
 	declare NOTES="\e[0;33m"	# yellow
-	declare ERROR="\e[1;31m"	# red
-	declare OTHER="\e[1;34m"	# dark blue
-	declare RESET="\e[0;37m"	# light gray
+	declare ERROR="\e[0;31m"	# red
+	declare OTHER="\e[0;34m"	# blue
+	declare RESET="\e[0;37m"	# white
 	if [[ ${1} == "marker" ]]; then
 		echo -en "${OTHER}"
 		printf "~%.0s" {1..80}
@@ -482,22 +482,25 @@ function print_info {
 		${QUIET} && QUIET="false" ${FUNCNAME} marker
 		echo -en "${NOTES}"
 		echo -en ">>> GARYOS BUILD SCRIPT <<<"
-		echo -en "${RESET}"
+		echo -en "${OTHER}"
 		echo -en " "; date --iso=seconds
+		echo -en "${RESET}"
 		${QUIET} && QUIET="false" ${FUNCNAME} marker
 	elif [[ ${1} == "success" ]]; then
 		${QUIET} && QUIET="false" ${FUNCNAME} marker
 		echo -en "${TITLE}"
 		echo -en ">>> GARYOS BUILD SCRIPT: SUCCESS! <<<"
-		echo -en "${RESET}"
+		echo -en "${OTHER}"
 		echo -en " "; date --iso=seconds
+		echo -en "${RESET}"
 		${QUIET} && QUIET="false" ${FUNCNAME} marker
 	elif [[ ${1} == "error" ]]; then
 		${QUIET} && QUIET="false" ${FUNCNAME} marker
 		echo -en "${ERROR}"
 		echo -en ">>> GARYOS BUILD SCRIPT: FAILURE! <<<"
-		echo -en "${RESET}"
+		echo -en "${OTHER}"
 		echo -en " "; date --iso=seconds
+		echo -en "${RESET}"
 		${QUIET} && QUIET="false" ${FUNCNAME} marker
 	elif [[ ${1} == "usage" ]]; then
 		declare PRINTF=
