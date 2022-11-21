@@ -5,10 +5,11 @@
 | ![GaryOS Icon](artifacts/images/icon-v6.0.png "GaryOS Icon") | "The one file that does it all."
 |:---      |:---
 | Latest   | [v6.0 2021-09-12] -- [Kernel], [Rootfs], [Boot]
-| Homepage | <https://github.com/garybgenett/gary-os>
+| Homepage | <http://www.garybgenett.net/projects/gary-os>
 | Download | <https://sourceforge.net/projects/gary-os>
+| Source   | <https://github.com/garybgenett/gary-os>
 
-[![GaryOS Download](https://img.shields.io/sourceforge/dw/gary-os.svg)](https://sourceforge.net/projects/gary-os/files/latest/download)
+[![GaryOS Download](https://img.shields.io/sourceforge/dw/gary-os.svg "GaryOS Download")](https://sourceforge.net/projects/gary-os/files/latest/download)
 
 | [Documentation] | |
 |:---        |:---
@@ -40,8 +41,8 @@
 ## Overview ####################################################################
 [Overview]: #overview
 
-GaryOS is an entire [GNU/Linux] system in a single bootable file.  It is also
-a [Builder] system to create and package [Gentoo] installations.
+**GaryOS is an entire [GNU/Linux] system in a single bootable file.**  It is
+also a [Builder] system to create and package [Gentoo] installations.
 
 [Builder] creates custom root filesystems that GaryOS can load into memory in
 place of its own.  GaryOS can build new or updated versions of itself from
@@ -83,8 +84,8 @@ Download the latest [Kernel], and select a boot method:
   3. Configure an existing [EFI] bootloader
   4. Host on a [PXE] server
 
-Log in as `root` with password `gary-os`.  Any boot media can be detached.  Use
-the normal `shutdown now` or simply power off when finished.
+Log in as `root` with password `p@ssw0rd!`.  Any boot media can be detached.
+Use the normal `shutdown now` or simply power off when finished.
 
 ### Requirements ###############################################################
 [Requirements]: #requirements
@@ -172,9 +173,9 @@ and from anywhere that a Linux kernel can.
   | [Virtual] | Run virtualized on any platform, for [Building] or testing
 
 All standard Linux kernel parameters are valid.  In addition, GaryOS has added
-`groot_size`, which specifies the initial amount of memory reserved for the
-filesystem if something other than the default is desired at boot time.  Full
-details on this parameter are in [Loader].
+a number of `groot*` options, which specify the initial amount of memory
+reserved for the filesystem and other aspects of the boot process.  Full
+details on these parameters are in [Filesystem] and [Loader].
 
 ### Linux ######################################################################
 [Linux]: #linux
@@ -637,7 +638,7 @@ external filesystem.
 
 [Loader] goes into each of these in much more detail.  GaryOS provides example
 defaults in the [Boot] configuration file, sourced from
-[grub/grub.menu.gary-os.cfg].  Generally, only `groot_size` and `groot` are
+[grub/grub.menu.gary-os.cfg].  Generally, only `groot` and `groot_size` are
 required to load an external [Image].
 
 The `groot_size` value for the pre-made GaryOS [Rootfs] should be at least
