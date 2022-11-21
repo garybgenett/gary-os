@@ -1061,8 +1061,10 @@ function _prepare_symlinks {		#{isexit} #{doredo}
 	${LN} --relative ${_RAMFS}.rootfs.${_GPACK}			${_FINAL}/${_GPACK/%.txt/.${ROOTFS_NAME}.txt}	|| return 1
 	${LN} --relative ${TARGET}${ARCDIR}				${_FINAL}${ARCDIR}				|| return 1
 	${LN} --relative ${TARGET}${GENDIR}				${_FINAL}${GENDIR}				|| return 1
-	${LN} --relative ${TARGET}${DSTDIR}				${_FINAL}/_$(basename ${DSTDIR})		|| return 1
-	${LN} --relative ${TARGET}${PAKDIR}				${_FINAL}/_$(basename ${PAKDIR})		|| return 1
+#>>>	${LN} --relative ${TARGET}${DSTDIR}				${_FINAL}/_$(basename ${DSTDIR})		|| return 1
+#>>>	${LN} --relative ${TARGET}${PAKDIR}				${_FINAL}/_$(basename ${PAKDIR})		|| return 1
+	${LN} --relative ${TARGET}${DSTDIR}				${_FINAL}/_distfiles				|| return 1
+	${LN} --relative ${TARGET}${PAKDIR}				${_FINAL}/_packages				|| return 1
 	${LN} --relative ${TARGET}${ARCDIR}/${REP_FILE}.tar.xz		${_RAMFS}.${REP_FILE}.tar.xz			|| return 1
 	${LN} --relative ${TARGET}${ARCDIR}/${REP_FILE}.git.tar.xz	${_RAMFS}.${REP_FILE}.git.tar.xz		|| return 1
 	shopt -s lastpipe
