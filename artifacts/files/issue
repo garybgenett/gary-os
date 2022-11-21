@@ -18,7 +18,7 @@
 
 \e[1;37m Some helpful notes...
 
-\e[1;33m Username / password:	\e[1;32m root \e[1;30m/\e[1;32m ${_TITLE}
+\e[1;33m Username / password:	\e[1;32m root \e[1;30m/\e[1;32m ${_GPASS}
 \e[1;33m More information:	\e[1;32m less /.${_TITLE}/README.md
 \e[1;33m Packages list:		\e[1;32m less /.${_GPACK}
 
