@@ -494,6 +494,14 @@ function print_info {
 		echo -en " "; date --iso=seconds
 		echo -en "${RESET}"
 		${QUIET} && QUIET="false" ${FUNCNAME} marker
+	elif [[ ${1} == "warning" ]]; then
+		${QUIET} && QUIET="false" ${FUNCNAME} marker
+		echo -en "${NOTES}"
+		echo -en ">>> GARYOS BUILD SCRIPT: WARNING! <<<"
+		echo -en "${OTHER}"
+		echo -en " "; date --iso=seconds
+		echo -en "${RESET}"
+		${QUIET} && QUIET="false" ${FUNCNAME} marker
 	elif [[ ${1} == "error" ]]; then
 		${QUIET} && QUIET="false" ${FUNCNAME} marker
 		echo -en "${ERROR}"
@@ -727,7 +735,10 @@ function expect_wrapper {
 ########################################
 
 function mount_dev_dirs {
-	if ! ${DO_CHROOT} || [[ ! -d ${TARGET} ]] || [[ -z ${TARGET} ]]; then
+	if {
+		! ${DO_CHROOT} || [[ ! -d ${TARGET} ]] || [[ -z ${TARGET} ]] ||
+		[[ ${TARGET} == ${_GOVLY} ]] || [[ ${TARGET} == /.${ROOTFS_ROOT_OPT} ]];
+	}; then
 		return 0
 	fi
 	if [[ -z ${1} ]]; then
@@ -758,13 +769,17 @@ function mount_dev_dirs {
 #>>>			if ! ${QUIET}; then echo -en "\n"; fi
 				echo -en "\n"
 #>>>
-			mount | ${GREP} "${TARGET}" 2>&1 #>>> |
-#>>>				if ${QUIET}; then prompt -t; else cat; fi
-#>>>			if ! ${QUIET}; then echo -en "\n"; fi
-				echo -en "\n"
+			if [[ -n $(mount | ${GREP} "${TARGET}" 2>&1) ]]; then
+				mount | ${GREP} "${TARGET}" 2>&1 #>>> |
+#>>>					if ${QUIET}; then prompt -t; else cat; fi
+#>>>				if ! ${QUIET}; then echo -en "\n"; fi
+					echo -en "\n"
 #>>>
-			print_info marker
-			EXIT -1 #>>> return 1
+				EXIT -1 #>>> return 1
+			else
+				EXIT -X #>>> return 0
+				return 0
+			fi
 		else
 			if ! mount-robust -u --dev ${TARGET}	2>&1 |
 				if ${QUIET}; then prompt -t; else cat; fi
@@ -813,14 +828,20 @@ trap "EXIT 1" SIGHUP SIGINT SIGKILL SIGTERM
 function EXIT {
 	declare EXIT="0"
 	if [[ ${1} != 0 ]] && [[ ${1} != -0 ]]; then
-		if [[ ${1} == -1 ]]; then
+		if [[ ${1} == -X ]]; then
+			EXIT="X" && shift
+		elif [[ ${1} == -1 ]]; then
 			EXIT="1" && shift
 		else
 			EXIT="${1}" && shift
 			mount_dev_dirs -u || EXIT -1
 		fi
 		print_info marker
-		print_info error
+		if [[ ${EXIT} != 1 ]]; then
+			print_info warning
+		else
+			print_info error
+		fi
 		print_info marker
 	else
 		if [[ ${1} == -0 ]]; then
@@ -830,7 +851,11 @@ function EXIT {
 		print_info success
 		print_info marker
 	fi
-	exit ${EXIT}
+	if [[ ${EXIT} == "X" ]]; then
+		return 0
+	else
+		exit ${EXIT}
+	fi
 }
 
 ########################################
@@ -1580,10 +1605,7 @@ elif [[ ${1} == -U ]]; then
 
 ########################################
 
-elif {
-	${DO_CHROOT} &&
-	[[ ${1} == -! ]];
-}; then
+elif { ${DO_CHROOT} && [[ ${1} == -! ]]; }; then
 	mount_dev_dirs						|| EXIT 1
 	#note: ensuring configuration is up-to-date
 	if ! ${_SOUL} ${QUIET_OPT} ${TOOR} -r			2>&1 |
