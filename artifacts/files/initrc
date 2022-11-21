@@ -143,7 +143,7 @@ ${ROOTFS_NAME}() {
 		[ -z "`grep -E "^shm ${mounts}${_GOVLY} tmpfs" /proc/mounts`" ]
 	then
 		mkdir -v -p ${mounts}.shm || return 1
-		mount -v -t tmpfs shm ${mounts}.shm || return 1
+		mount -v -o size=${${ROOTFS_ROOT_OPT}_size} -t tmpfs shm ${mounts}.shm || return 1
 		mkdir -v -p ${mounts}.shm/lowerdir || return 1
 		mkdir -v -p ${mounts}.shm/upperdir || return 1
 		mkdir -v -p ${mounts}.shm/workdir || return 1
@@ -185,9 +185,10 @@ ${ROOTFS_NAME}() {
 }
 
 select() {
-	${ROOTFS_ROOT_OPT}_hint="`sed -r -n "s|^.*${ROOTFS_ROOT_OPT}_hint=([^ ]+).*$|\1|gp" /proc/cmdline`"
-	${ROOTFS_ROOT_OPT}_file="`sed -r -n "s|^.*${ROOTFS_ROOT_OPT}_file=([^ ]+).*$|\1|gp" /proc/cmdline`"
 	${ROOTFS_ROOT_OPT}="`sed -r -n "s|^.*${ROOTFS_ROOT_OPT}=([^ ]+).*$|\1|gp" /proc/cmdline`"
+	${ROOTFS_ROOT_OPT}_size="`sed -r -n "s|^.*${ROOTFS_ROOT_OPT}_size=([^ ]+).*$|\1|gp" /proc/cmdline`"
+	${ROOTFS_ROOT_OPT}_file="`sed -r -n "s|^.*${ROOTFS_ROOT_OPT}_file=([^ ]+).*$|\1|gp" /proc/cmdline`"
+	${ROOTFS_ROOT_OPT}_hint="`sed -r -n "s|^.*${ROOTFS_ROOT_OPT}_hint=([^ ]+).*$|\1|gp" /proc/cmdline`"
 	select_opt="false"; if [ "${1}" == "-" ]; then select_opt="true"; shift; fi
 	chroot_opt="false"; if [ "${1}" == "=" ]; then chroot_opt="true"; shift; fi
 	if [ -n "${1}" ]; then
