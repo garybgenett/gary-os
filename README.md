@@ -41,7 +41,7 @@
 [Overview]: #overview
 
 GaryOS is an entire [GNU/Linux] system in a single bootable file.  It is also
-a [Builder] system to create and package [Funtoo] installations.
+a [Builder] system to create and package [Gentoo] installations.
 
 [Builder] creates custom root filesystems that GaryOS can load into memory in
 place of its own.  GaryOS can build new or updated versions of itself from
@@ -49,7 +49,7 @@ within itself.
 
 Key features:
 
-  * Optimized source-based Funtoo system with [GNU] toolchain
+  * Optimized source-based Gentoo system with [GNU] toolchain
   * Fast in-memory filesystem does not require a physical device
   * Can be booted from anywhere a [Linux Kernel] can
   * Upgrades are as simple as replacing the file
@@ -59,7 +59,7 @@ Primary uses:
   * System rescue and recovery
   * Anonymous and secure workstation
   * GNU/Linux learning environment
-  * Installation of Funtoo (or [Gentoo])
+  * Installation of Gentoo
 
 Unique advantages:
 
@@ -397,7 +397,7 @@ This new virtual machine will run GaryOS [GRUB] and boot the [Kernel].
 [Running]: #running
 
 There are many things that can be done with GaryOS once it is booted, some of
-which are outlined in [Overview].  It is essentially a packaged [Funtoo]
+which are outlined in [Overview].  It is essentially a packaged [Gentoo]
 installation.  There are a few common tasks that are documented to make them
 easier, and some additional capabilities specific to GaryOS.
 
@@ -419,7 +419,7 @@ For security, no networking configuration or daemons are run by default, but
 several networking packages are installed.  Instructions for Ethernet, Wireless
 and [OpenSSH] `sshd` are below.
 
-The [Funtoo Networking] page contains full details on all the configuration
+The [Gentoo Networking] page contains full details on all the configuration
 possibilities.  For the purposes of GaryOS, a simple single-interface
 configuration is likely all that is needed.
 
@@ -496,7 +496,7 @@ option.
 It is very important to note that `root` access is enabled, which is why the
 password should be changed before enabling SSH.
 
-  [Funtoo Networking]: https://www.funtoo.org/Networking
+  [Gentoo Networking]: https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Networking
   [dhcpcd]: https://roy.marples.name/projects/dhcpcd
   [iproute2]: https://wiki.linuxfoundation.org/networking/iproute2
   [wpa_supplicant]: https://w1.fi/wpa_supplicant
@@ -545,7 +545,7 @@ high geek factor (see [Goals]).
 ### Update #####################################################################
 [Update]: #update
 
-GaryOS is essentially a packaged [Funtoo] system, and can be updated or modified
+GaryOS is essentially a packaged [Gentoo] system, and can be updated or modified
 just like a normal installation.
 
   1. Set up [Networking]
@@ -584,11 +584,11 @@ unpacking additional directories (see [Design]).
 Nano is a basic, user-friendly text editor.  The author uses [Vim], so that
 option is also available.  The syntax to use is documented in the file.  For
 this, just remove the first character from all the `gcc` and `emerge` lines
-(except for `meta-repo.git`).
+(except for `gentoo-repo.git`).
 
 **Emerge**
 
-At this point, GaryOS is like any other Funtoo installation.  The `emerge`
+At this point, GaryOS is like any other Gentoo installation.  The `emerge`
 command can be used to install and update packages as usual.
 
   ```
@@ -675,7 +675,7 @@ else should be expected of it.
 In addition to being a [GNU/Linux] system, GaryOS is the [Builder] system used
 to produce itself.  It has three main purposes.
 
-  * [Compile] and [Manage] [Funtoo] installations
+  * [Compile] and [Manage] [Gentoo] installations
   * Make an [Image] of a root [Filesystem]
   * [Install] GaryOS to disk directly from memory
 
@@ -687,9 +687,9 @@ a prescribed list of steps to take.
 ### Compile ####################################################################
 [Compile]: #compile
 
-The process to build and install a source-based distribution like [Funtoo] (or
-[Gentoo]) from scratch is long and complex.  The GaryOS [Builder] is designed to
-condense it into a small number of atomic steps using [GNU Make].
+The process to build and install a source-based distribution like [Gentoo] from
+scratch is long and complex.  The GaryOS [Builder] is designed to condense it
+into a small number of atomic steps using [GNU Make].
 
   | Target  | Action
   |:---     |:---
@@ -711,7 +711,7 @@ is needed to make it ready to boot into.
 
 None of the steps in this process are specific to GaryOS, other than the
 starting [Portage] configuration and the selected list of packages.  This
-process is generally applicable to all Funtoo (and Gentoo) systems.
+process is generally applicable to all Gentoo systems.
 
 **Init**
 
@@ -726,7 +726,7 @@ For the best performance, change the `MAKEFLAGS -j` variable in
   ```
 
 The last line in [gentoo/\_funtoo] must be the release version and commit hash
-in [meta-repo] that it is desired to use for the Portage tree.
+in [Portage] that it is desired to use for the packages repository.
 
 Make any desired Portage package selection and configuration changes, and then
 start the build with `make init`.  By default, the base GaryOS [Kernel] package
@@ -794,21 +794,21 @@ desired.
 The GaryOS [Builder] is designed to support the "rolling release" model of
 source-based distributions, where the system is more or less constantly being
 updated and built.  Its original and ongoing purpose is to do exactly that.  It
-supports all [Funtoo] systems, regardless of how they were installed.
+supports all [Gentoo] systems, regardless of how they were installed.
 
   * [Install] from GaryOS
   * Direct [Compile] into a partition
-  * Using the [Funtoo Installation Guide]
+  * Using the [Gentoo Installation Guide]
 
 There are a lot of steps and miscellaneous tasks that are best practice to keep
-a Funtoo (or [Gentoo]) system in good working order.  Over time, it is also
-inevitable that the [Portage] configuration will acquire cruft or not be using
-new options that are available.  GaryOS [Builder] condenses all this into
-a simple two-step process.
+a Gentoo system in good working order.  Over time, it is also inevitable that
+the [Portage] configuration will acquire cruft or not be using new options that
+are available.  GaryOS [Builder] condenses all this into a simple two-step
+process.
 
   | Target  | Action
   |:---     |:---
-  | update  | Update the [meta-repo] package repository and `emerge` databases
+  | update  | Update the [Portage] packages repository and `emerge` databases
   | upgrade | Upgrade the system to the current packages and configuration
 
 The `update` target is completely automated, but `upgrade` requires interaction
@@ -821,13 +821,13 @@ to aid in the maintenance of a healthy system.  See [Builder] for details.
 [Image]: #image
 
 This is the process of creating new [Filesystem] images.  It requires
-a directory installed with GaryOS (or any [Funtoo] or [Gentoo]).  There are
-multiple sources where this can come from.
+a directory installed with GaryOS (or [Gentoo]).  There are multiple sources
+where this can come from.
 
   * Within GaryOS itself ([Update])
   * GaryOS [Install]
   * [Compile] directory
-  * Funtoo system built with the [Funtoo Installation Guide]
+  * Gentoo system built with the [Gentoo Installation Guide]
 
 There are two key requirements of the final image for it to work correctly.
 
@@ -884,9 +884,8 @@ specific to each target, and only rebuilds the relevant files.
 ### Install ####################################################################
 [Install]: #install
 
-One of the [Goals] of GaryOS is to simplify the process of installing [Funtoo]
-(or [Gentoo]).  This can be done using [Compile] or from directly within
-GaryOS.
+One of the [Goals] of GaryOS is to simplify the process of installing [Gentoo].
+This can be done using [Compile] or from directly within GaryOS.
 
   | Image    | Packages              | Configuration
   |:---      |:---                   |:---
@@ -912,7 +911,7 @@ or `mount -o remount,size=6144m /.overlay` after booting (see [Update]).
   mount -o remount,size=6144m /.overlay
   ```
 
-It is strongly advised to at least skim through the [Funtoo Installation Guide]
+It is strongly advised to at least skim through the [Gentoo Installation Guide]
 or the [Gentoo Installation Guide].  GaryOS aims to simplify the process, and is
 not meant to supplant all understanding of it.
 
@@ -929,8 +928,8 @@ the install will be incomplete.
 Both [Kernel] and [Rootfs] require [Networking] for this, although [Rootfs]
 already has all of the absolutely necessary directories locally.  For
 a network-less install, use [Rootfs] and follow the unpacking instructions in
-[Update].  Namely, edit the `/.unpack` file to skip the external `meta-repo.git`
-directory.
+[Update].  Namely, edit the `/.unpack` file to skip the external
+`gentoo-repo.git` directory.
 
 **Configuration Files** *(Optional)*
 
@@ -1029,7 +1028,6 @@ As for the overall system, all configuration files for the [Linux Kernel] and
 
 Finally, the `root` password is set to `gary-os`.
 
-  [Funtoo Installation Guide]: https://www.funtoo.org/Install
   [Gentoo Installation Guide]: https://wiki.gentoo.org/wiki/Handbook:AMD64/Full/Installation
   [OpenRC]: https://wiki.gentoo.org/wiki/OpenRC
   [gpm]: https://www.nico.schottelius.org/software/gpm
@@ -1049,12 +1047,12 @@ direction with a consistent purpose.
 
 Top requirements:
 
-  * Source-based, all-purpose, multi-OS rescue environment ([Funtoo])
+  * Source-based, all-purpose, multi-OS rescue environment ([Gentoo])
   * Complete system, installing packages normally with no filesystem pruning
   * Stay as default as possible, aside from [Portage] tuning of package builds
   * Generic 64-bit build, supporting all modern x86 platforms
   * Bootable from a single kernel file, using [Linux initramfs]
-  * Simplify the process of installing Funtoo (or [Gentoo])
+  * Simplify the process of installing Gentoo
   * Proudly demonstrate and evangelize old-school hacker geekiness
 
 Other objectives:
@@ -1062,9 +1060,9 @@ Other objectives:
   * Support as many boot methods as possible (see [Booting])
   * Minimalist, performant Portage configuration, using only what is needed
   * Avoid closed source licenses and binary packages as much as possible
-  * Example configuration and scripts for tuning and maintaining a Funtoo system
+  * Example configuration and scripts for tuning and maintaining a Gentoo system
   * Foster a DIY (Do It Yourself) approach through good documentation
-  * Learning environment for those new to [GNU/Linux] or Funtoo
+  * Learning environment for those new to [GNU/Linux] or Gentoo
 
 Explicit non-goals:
 
@@ -1118,8 +1116,8 @@ a [Filesystem], additional kernel parameters are required (see [Loader]).
 ### Builder ####################################################################
 [Builder]: #builder
 
-Installing source-based [GNU/Linux] systems like [Funtoo] and [Gentoo] involves
-a large number of steps and is very error-prone.  Keeping them up to date can be
+Installing source-based [GNU/Linux] systems like [Gentoo] involves a large
+number of steps and is very error-prone.  Keeping them up to date can be
 equally complex.  GaryOS addresses this by applying a monolithic release model.
 The [Builder] system was developed over many years to accomplish the goal of
 a reliable process that produces repeatable builds.
@@ -1143,8 +1141,7 @@ Type `make usage` (basic) or `make help` (advanced) to get started.
   |:---                    |:---
   | [Makefile]             | Wrapper around the other components
   | [gentoo/\_system]      | Worker for all of [Building] (core of [Builder])
-  | [gentoo/\_funtoo]      | [Funtoo] [meta-repo] commit tracking
-  | [gentoo/\_funtoo.kits] | [Funtoo] [meta-repo] tool (see [Contributions])
+  | [gentoo/\_funtoo]      | [Gentoo] [Portage] commit tracking
   | [gentoo/.emergent]     | Audit script which creates `/\_gentoo` directory
   | [gentoo.config]        | Optional customization for 'edit' in [Compile]
 
@@ -1159,8 +1156,8 @@ similar tuning, and are self-explanatory.  The full list is at the top of
 
 The `/\_build` directory is created by [Compile], which archives the [Linux
 Kernel] and [Portage] configurations, along with the [stage3] tarball and
-[meta-repo] tree used.  The purpose of this directory is to centralize
-everything needed to reproduce the build.
+[Portage] tree used.  The purpose of this directory is to centralize everything
+needed to reproduce the build.
 
 After [Compile] or [Manage], the `/\_gentoo` directory will be created by
 [gentoo/.emergent].  It performs a number of checks of the [Portage]
@@ -1349,8 +1346,7 @@ someone other than themself.
 GaryOS has maintained a [steady stream of downloads] since its debut in February
 2014.  It has also shown up in some notable places.
 
-  * [Gentoo family tree] ([2018-08](https://github.com/garybgenett/gary-os/raw/master/artifacts/archive/gentoo-20.08.pdf))
-  * [Funtoo ecosystem page]
+  * [Gentoo ecosystem] ([2018-08](https://github.com/garybgenett/gary-os/raw/master/artifacts/archive/gentoo-20.08.pdf))
   * [List of non-systemd distributions] (proudly)
   * [Softpedia review of v3.0] (not just a paste of the [README.md] text)
 
@@ -1365,8 +1361,7 @@ with any other acknowledgments you find.  The fact that you are reading this
 counts.
 
   [steady stream of downloads]: https://sourceforge.net/projects/gary-os/files/stats/timeline?dates=2014-02-28+to+2038-01-19
-  [Gentoo family tree]: https://github.com/gentoo/gentoo-ecosystem
-  [Funtoo ecosystem page]: https://funtoo.org/Gentoo_Ecosystem
+  [Gentoo ecosystem]: https://github.com/gentoo/gentoo-ecosystem
   [List of non-systemd distributions]: https://sysdfree.wordpress.com/2019/03/09/135
   [Softpedia review of v3.0]: https://linux.softpedia.com/get/Linux-Distributions/GaryOS-103629.shtml
 
@@ -1411,7 +1406,7 @@ and [Loader]).
 
 **Funtoo Ego**
 
-[Ego] keeps the [Portage] [meta-repo] tree up to date.  [Funtoo Kits] builds the
+[Ego] keeps the [Funtoo] [meta-repo] tree up to date.  [Funtoo Kits] builds the
 monolithic Portage tree from a collection of smaller [Git] repositories.  The
 [gentoo/\_funtoo.kits] script was written to properly set the final tree to
 a particular commit for stability and reproducibility.  For the [v4.0] release,
@@ -1424,7 +1419,7 @@ this hack was coded directly into Ego.
 
 The [gentoo/\_funtoo.kits] script has two important advantages over Ego.
 
-  1. It can run directly on Git repositories without requiring a Funtoo install
+  1. It can run directly on Git repositories without requiring Funtoo
   2. Kits repositories are stored in `.git` rather than the [meta-repo] tree
 
 The second feature is important to keep the [meta-repo] tree as small as
@@ -1462,8 +1457,12 @@ GaryOS uses dwm for [GUI] with a slightly modified configuration in
   [shmem v3 patch]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/shmem-make-shmem-default-size-a-define-value.v5.4-rc2.patch
   [shmem_size_hack.patch]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/shmem-add-shmem_size-option-set-filesystem-size.v5.4-rc2.v5.6_updated.patch
 
+  [Funtoo]: https://www.funtoo.org
+  [Ego]: https://funtoo.org/Package:Ego
   [Funtoo Kits]: https://www.funtoo.org/Funtoo_Kits
+  [meta-repo]: https://github.com/funtoo/meta-repo
   [Funtoo Ego submission]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/add-commit-option-to-ego-sync.2.7.4-r1.patch
+  [gentoo/\_funtoo.kits]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_funtoo.kits
 
   [dwm multimon patches]: http://dwm.suckless.org/patches/historical/multimon
   [dwm multimon submission]: https://lists.suckless.org/dev/1403/20488.html
@@ -1602,8 +1601,7 @@ Here is an overview of the repository contents, in order of relative importance:
   | [linux/\_config]         | Simplifies [Linux Kernel] configuration updates
   | [gentoo/\_system]        | Heart and soul of [Builder], and GaryOS itself
   | [gentoo/\_release]       | Heart and soul of [Loader] (and publish process)
-  | [gentoo/\_funtoo]        | [Funtoo] [meta-repo] commit tracking
-  | [gentoo/\_funtoo.kits]   | [Funtoo] [meta-repo] tool (see [Contributions])
+  | [gentoo/\_funtoo]        | [Gentoo] [Portage] commit tracking
   | [gentoo.config]          | Example for "Edit" stage in [Compile]
   | [gentoo/.emergent]       | Audit script and information (see [Builder])
   | [gentoo/savedconfig/x11-wm/dwm] | Slightly modified [dwm] configuration
@@ -1645,7 +1643,6 @@ will require re-cloning.
   [gentoo/\_system]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_system
   [gentoo/\_release]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_release
   [gentoo/\_funtoo]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_funtoo
-  [gentoo/\_funtoo.kits]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_funtoo.kits
   [gentoo.config]: https://github.com/garybgenett/gary-os/blob/master/gentoo.config
   [gentoo/.emergent]: https://github.com/garybgenett/gary-os/blob/master/gentoo/.emergent
   [gentoo/savedconfig/x11-wm/dwm]: https://github.com/garybgenett/gary-os/blob/master/gentoo/savedconfig/x11-wm
@@ -1689,7 +1686,6 @@ First and foremost, the projects which brought open source into the mainstream:
 
 The backbones which do the real heavy lifting in GaryOS:
 
-  * [Funtoo] [Ego] & [meta-repo]
   * [Gentoo] & [Portage]
   * [Linux initramfs]
     * [Squashfs]
@@ -1700,9 +1696,6 @@ The backbones which do the real heavy lifting in GaryOS:
   * [GNU Make]
   * [QEMU]
 
-  [Funtoo]: https://www.funtoo.org
-  [Ego]: https://funtoo.org/Package:Ego
-  [meta-repo]: https://github.com/funtoo/meta-repo
   [Gentoo]: https://www.gentoo.org
   [Portage]: https://wiki.gentoo.org/wiki/Portage
   [Linux initramfs]: https://kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt
@@ -1716,11 +1709,11 @@ The backbones which do the real heavy lifting in GaryOS:
 
 Kernel configuration, package lists and acknowledgments:
 
-  * [Debian Kernel]
+  * [Gentoo Kernel]
   * [Grml]
   * [SystemRescue]
 
-  [Debian Kernel]: https://www.debian.org/doc/manuals/debian-handbook/sect.kernel-compilation.pl.html
+  [Gentoo Kernel]: https://wiki.gentoo.org/wiki/Kernel
   [Grml]: https://grml.org
   [SystemRescue]: http://www.system-rescue.org
 
@@ -1858,13 +1851,11 @@ Everything needed to perform these steps is in the [Repository] or the
     * `(cd _builds; rm ./_gentoo.working; ln ../../_toor ./_gentoo.working)`
         * `(cd _toor; rm {.[^.],}*; ll)`
         * `(cd _target/iso; vi ./.urls; ./.urls -f)`
-        * `(cd _build/funtoo/meta-repo; git pull; GIT_PAGER= git-list -n1)`
-            * `./gentoo/_funtoo.kits _build/funtoo/meta-repo $(tail -n1 ./gentoo/_funtoo)`
-            * `(cd _build/gentoo/gentoo; git pull; GIT_PAGER= git-list -n1)`
-        * `(cd _build/funtoo/meta-repo; ll ./kits/core-kit/sys-kernel/gentoo-sources)`
-        * `(cd _build/funtoo/meta-repo; ll ./kits/core-kit/sys-kernel/debian-sources)`
+        * `(cd _build/gentoo/gentoo; git pull; GIT_PAGER= git-list -n1)`
+        * `(cd _build/gentoo/gentoo; ll ./sys-kernel/gentoo-sources)`
+        * `(cd _build/gentoo/gentoo; ll ./sys-kernel/gentoo-kernel)`
     * `vi ./gentoo/_funtoo`
-        * [ ] Update [Funtoo] and [Gentoo] commits
+        * [ ] Update [Gentoo] commit
         * `vi ./gentoo/sets/*`
             * [ ] [Linux Kernel] versions
             * [ ] Review
@@ -1872,21 +1863,19 @@ Everything needed to perform these steps is in the [Repository] or the
             * [ ] Command comments at top of [gentoo/package.use]
         * `(cd ./gentoo/overlay; ./.review -a)`
             * [ ] Review `.keep` packages
-            * [ ] Create new `ego` ebuild, but comment patch
             * [ ] Comment `pandoc` packages in [gentoo/sets/packages]
     * `cd .setup/linux`
-        * `tar --wildcards -xvvf [...]/stage3-generic_64-*.tar.xz "./usr/src/linux-debian-sources-*/.config"`
-        * `mv ./usr/src/linux-debian-sources-*/.config ./default-debian-sources-[...]`
-        * `rm ./usr`
-        * `rsync ./default-debian-sources-[...] ./config-gentoo64-[...]`
+        * `(cd _build/gentoo/gentoo; grep -A10 SRC_URI ./sys-kernel/gentoo-kernel/gentoo-kernel-*.ebuild)`
+            * `wget [...]`
+        * `mv ./kernel-x86_64-fedora.config ./default-gentoo64-[...]`
+            * `rm ./.default; ln default-gentoo64-[...] ./.default`
+            * `rsync $(realpath ./.default) ./config-gentoo64-[...]`
         * `rsync -L ./.options ./config-gentoo64-[...]-options`
-        * `rm ./.config; ln config-gentoo64-[...] ./.config`
-        * `rm ./.options; ln config-gentoo64-[...]-options ./.options`
+            * `rm ./.config; ln config-gentoo64-[...] ./.config`
+            * `rm ./.options; ln config-gentoo64-[...]-options ./.options`
         * `vi ./.options`
             * [ ] Update source kernel version
             * [ ] Review
-  * `cd .setup/gentoo.make`
-    * `(cd .setup; git-commit ./linux ./gentoo)`
   * `make init`
     * [ ] Until `@world`, at least
         * `while :; do make DOFAST=true init; inotifywait --event modify gentoo/make.* gentoo/package.* gentoo/sets/*; done`
@@ -1900,9 +1889,15 @@ Everything needed to perform these steps is in the [Repository] or the
         * [ ] Follow command comments
         * [ ] Ensure no packages are coming from `haskell-kit`
   * `./linux/_config ./build/usr/src/linux`
+        * `rsync $(realpath ./linux/.default) ./build/usr/src/linux/.config`
+        * `chroot ./build bash -c "(cd /usr/src/linux && make olddefconfig)"`
+        * `rsync ./build/usr/src/linux/.config $(realpath ./linux/.default)`
     * [ ] Review final version
-    * `rsync $(realpath ./linux/.config).*.DONE $(realpath ./linux/.config)`
-    * `rm $(realpath ./linux/.config).*`
+        * `vdiff $(realpath ./linux/.default) $(realpath ./linux/.config).*.DONE`
+        * `rsync $(realpath ./linux/.config).*.DONE $(realpath ./linux/.config)`
+        * `rm $(realpath ./linux/.config).*`
+  * `cd .setup/gentoo.make`
+    * `(cd .setup; git-commit ./linux ./gentoo)`
   * `make doit`
     * [x] **Iterate()**
   * `make redo`
@@ -2261,7 +2256,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
   * `make _publish_prep`
     * `ll ./build/ ./build/_build ./build/.gary-os-*`
   * `(cd _builds; rsync -L ./_gary-os.working/.gary-os-*/ ./_gary-os)`
-    * `(cd _builds/_gary-os; git-backup <funtoo commit>.#; GIT_PAGER= git-list -n1)`
+    * `(cd _builds/_gary-os; git-backup <gentoo commit>.#; GIT_PAGER= git-list -n1)`
     * `(cd .setup; vi gentoo/_release; git-commit -m "Published v#.# release." gentoo/_release)`
   * `make _publish_gitdir`
     * `(cd _builds/.gary-os/.gary-os; GIT_PAGER= git-list -n3)`
@@ -2361,6 +2356,8 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * Improved debugging, including custom tracing output
     * Better usage and error output
     * Cleaned up [Boot] archive
+
+  [Debian Kernel]: https://www.debian.org/doc/manuals/debian-handbook/sect.kernel-compilation.pl.html
 
 ### v5.0 2021-08-04 ############################################################
 [v5.0 2021-08-04]: #v50-2021-08-04
