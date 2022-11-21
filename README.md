@@ -172,7 +172,7 @@ and from anywhere that a Linux kernel can.
   | [Virtual] | Run virtualized on any platform, for [Building] or testing
 
 All standard Linux kernel parameters are valid.  In addition, GaryOS has added
-`shmem_size`, which specifies the initial amount of memory reserved for the
+`groot_size`, which specifies the initial amount of memory reserved for the
 filesystem if something other than the default is desired at boot time.  Full
 details on this parameter are in [Loader].
 
@@ -630,17 +630,17 @@ external filesystem.
 
   |            | |
   |:---        |:---
-  | shmem_size | Initial amount of memory reserved for the filesystem
   | groot      | Disk or partition that the [Rootfs] resides on
+  | groot_size | Initial amount of memory reserved for the filesystem
   | groot_file | Path to the [Rootfs] (default: /gary-os/gary-os.rootfs)
   | groot_hint | Provide a hint to [Loader] (used by [Boot]), in case of error
 
 [Loader] goes into each of these in much more detail.  GaryOS provides example
 defaults in the [Boot] configuration file, sourced from
-[grub/grub.menu.gary-os.cfg].  Generally, only `shmem_size` and `groot` are
+[grub/grub.menu.gary-os.cfg].  Generally, only `groot_size` and `groot` are
 required to load an external [Image].
 
-The `shmem_size` value for the pre-made GaryOS [Rootfs] should be at least
+The `groot_size` value for the pre-made GaryOS [Rootfs] should be at least
 `3072m`, or `3g` if that format is preferred.  The [Boot] file is already
 correctly configured (see [GRUB]).
 
@@ -905,7 +905,7 @@ All of this except the [Update] will be done by [Builder].
 
 At least 8GB of memory will be required, due to the size of the fully unpacked
 filesystem.  The base size of the in-memory filesystem will need to be at least
-6G, which can be set with `shmem_size=6144m` before booting (see [Filesystem])
+6G, which can be set with `groot_size=6144m` before booting (see [Filesystem])
 or `mount -o remount,size=6144m /.overlay` after booting (see [Update]).
 
   ```
@@ -1270,7 +1270,7 @@ The [Booting] process goes through three stages (see [Design]).  In the first,
 environment designed to locate, mount and boot a [Filesystem] such as [Rootfs].
 There are [Linux Kernel] parameters which inform this environment.
 
-First, `shmem_size` specifies how much memory to reserve for the filesystem.
+First, `groot_size` specifies how much memory to reserve for the filesystem.
 This must be large enough to contain both [Kernel] and [Filesystem], plus
 a little extra for space needed after booting.  Then, the `groot` partition is
 mounted and `groot_file` is loaded into memory.  Optionally, `groot_hint` can be
@@ -1306,16 +1306,16 @@ implementation of a completely in-memory [Squashfs] [Overlay] in
 References to this section:
 
   * [Booting]
-    * Parameter -- `shmem_size`
+    * Parameter -- `groot_size`
   * [Filesystem]
-    * Parameters -- `shmem_size`, `groot`, `groot_file` and `groot_hint`
+    * Parameters -- `groot_size`, `groot`, `groot_file` and `groot_hint`
   * [Image]
     * Symbolic link -- `/init`
     * [Loader] directories and `rc-update`
   * [Design]
     * [Linux Kernel] parameters
   * [Contributions]
-    * Parameter -- `shmem_size`
+    * Parameter -- `groot_size`
   * [Repository]
     * Heart and soul -- [gentoo/\_release]
 
@@ -1397,7 +1397,7 @@ system, this is sometimes not enough room for a GaryOS [Filesystem] to unpack.
 For the [v4.0] rebuild of [Loader], a kernel patch was submitted to the Linux
 "mm" development team.
 
-  * Current
+  * Final
     * [shmem_size_hack.patch]
   * Initial
     * [First shmem version]
@@ -1406,8 +1406,8 @@ For the [v4.0] rebuild of [Loader], a kernel patch was submitted to the Linux
     * [Linux shmem submission v3] ([shmem v3 patch])
 
 Alas, all three were rejected from the mainline kernel for perfectly good
-reasons.  However, it continues to be a key feature of GaryOS [Loader] and
-[Filesystem].
+reasons.  This patch was replaced with `groot_size` in [v7.0] (see [Filesystem]
+and [Loader]).
 
 **Funtoo Ego**
 
@@ -1460,6 +1460,7 @@ GaryOS uses dwm for [GUI] with a slightly modified configuration in
   [shmem v1 patch]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/shmem-add-shmem_size-option-set-filesystem-size.v5.4-rc2.patch
   [shmem v2 patch]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/shmem-add-shmem_size-option-for-full-filesystem.v5.4-rc2.patch
   [shmem v3 patch]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/shmem-make-shmem-default-size-a-define-value.v5.4-rc2.patch
+  [shmem_size_hack.patch]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/shmem-add-shmem_size-option-set-filesystem-size.v5.4-rc2.v5.6_updated.patch
 
   [Funtoo Kits]: https://www.funtoo.org/Funtoo_Kits
   [Funtoo Ego submission]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/add-commit-option-to-ego-sync.2.7.4-r1.patch
@@ -1608,7 +1609,6 @@ Here is an overview of the repository contents, in order of relative importance:
   | [gentoo/savedconfig/x11-wm/dwm] | Slightly modified [dwm] configuration
   | [gentoo/sets/gary-os]    | [Kernel] packages, [Loader] and [Image]
   | [gentoo/sets/\_gary-os]  | [Rootfs] packages, [Loader] and [Image]
-  | [shmem_size_hack.patch]  | [Filesystem] `shmem_size` (see [Contributions])
 
   | Other                    | Purpose
   |:---                      |:---
@@ -1652,7 +1652,6 @@ will require re-cloning.
   [gentoo/sets/gary-os]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/gary-os
   [gentoo/sets/\_gary-os]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/_gary-os
   [gentoo/sets/packages]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/packages
-  [shmem_size_hack.patch]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/shmem-add-shmem_size-option-set-filesystem-size.v5.4-rc2.v5.6_updated.patch
 
   [.vimrc]: https://github.com/garybgenett/gary-os/blob/master/.vimrc
   [gkrellaclock]: http://gkrellm.srcbox.net
