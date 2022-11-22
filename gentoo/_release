@@ -220,11 +220,11 @@ for FILE in ${MDIR} ${FDIR}		; do if ! variable_match "FSPACK FSKEEP FSARCH FSEX
 for FILE in ${REPDIR} ${LDIR} ${PDBDIR}	; do if ! variable_match "FSPACK FSKEEP FSARCH FSEXCL" ";" "${FILE}"; then FSKEEP+="; ${_TITLE}:${FILE}"; fi; done
 for FILE in ${REPDIR}.git		; do if ! variable_match "FSPACK FSKEEP FSARCH FSEXCL" ";" "${FILE}"; then FSARCH+="; ${_TITLE}:${FILE}"; fi; done
 for FILE in $((
-		find ${TARGET}/boot/{System.map,initramfs,kernel}-*
+		find ${TARGET}/boot/{_,System.map,vmlinuz,initramfs,config}-*
 		find ${TARGET}/etc/kernels	-mindepth 1 -maxdepth 1
 		find ${TARGET}${MDIR}		-mindepth 1 -maxdepth 1
 	) 2>/dev/null |
-		${GREP} -v "${KVER}-gentoo$" |
+		${GREP} -v "${KVER}-gentoo" |
 		${SED} "s|^${TARGET}||g" |
 		sort
 	)				; do if ! variable_match "FSPACK FSKEEP FSARCH FSEXCL" ";" "${FILE}"; then FSEXCL+="; ${_TITLE}:${FILE}"; fi; done
@@ -250,7 +250,8 @@ fi
 
 declare PACKDIRS_SKIP="
 	${LDIR}\*/kernel/kheaders_data.tar.xz
-	/usr/share/calibre/hyphenation/dictionaries.tar.xz
+	/usr/lib/python3.10/test/\*.tar.xz
+	/usr/share/genkernel/distfiles/\*.tar.xz
 "
 
 ########################################
