@@ -251,6 +251,7 @@ fi
 declare PACKDIRS_SKIP="
 	${LDIR}\*/kernel/kheaders_data.tar.xz
 	/usr/lib/python3.10/test/\*.tar.xz
+	/usr/share/calibre/hyphenation/dictionaries.tar.xz
 	/usr/share/genkernel/distfiles/\*.tar.xz
 	/usr/share/gettext/\*.tar.xz
 "
@@ -2107,13 +2108,7 @@ function _publish_prep {
 	${RM}					${_RAMFS}.grub				|| return 1
 	${RM}					${TARGET}${DSTDIR}/{.[^.],}*checksum*	|| return 1
 	${RM}					${TARGET}/tmp/.ccache			|| return 1
-	${RM}					${TARGET}/tmp/cc*			|| return 1
-	${RM}					${TARGET}/tmp/glew.*			|| return 1
-	${RM}					${TARGET}/tmp/hsperfdata_*		|| return 1
-	${RM}					${TARGET}/tmp/run-ag-*			|| return 1
-	${RM}					${TARGET}/tmp/shdefs-*			|| return 1
-	${RM}					${TARGET}/tmp/tmp*			|| return 1
-	${RM}					${TARGET}/var/tmp/tmp*			|| return 1
+	${RM}					${TARGET}/tmp/*				|| return 1
 	return 0
 }
 
