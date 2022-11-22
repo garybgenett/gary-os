@@ -1841,16 +1841,16 @@ Everything needed to perform these steps is in the [Repository] or the
      * [ ] Copy "gitweb" link to browser
    * `make overlay-<package atom|/|%>^<ebuild>^<commit>`
      * `mkdir ./gentoo/overlay/<package atom>`
-     * `(cd _build/gentoo/gentoo; git-list -50 -l -- <package atom>)`
+     * `(cd _build/gentoo/gentoo; git-list -20 -l -- <package atom>)`
      * `(cd _build/gentoo/gentoo; git-list -2 -- <package atom>/<ebuild>)`
-     * `(cd _build/gentoo/gentoo; vdiff -l -50 -- <package atom>)`
+     * `(cd _build/gentoo/gentoo; vdiff -l -20 -- <package atom>)`
    * `make emerge-<package atom|/|%>`
 
 **`}`**
 
   * `cd .setup/gentoo.make`
     * `(cd _builds; rm ./_gentoo.working; ln ../../_toor ./_gentoo.working)`
-        * `(cd _toor; rm {.[^.],}*; ll)`
+        * `(cd _toor; rm-all; ll)`
         * `(cd _target/iso; vi ./.urls; ./.urls -f)`
         * `(cd _build/gentoo/gentoo; git pull; GIT_PAGER= git-list -n1)`
         * `(cd _build/gentoo/gentoo; ll ./sys-kernel/gentoo-sources)`
@@ -1864,7 +1864,6 @@ Everything needed to perform these steps is in the [Repository] or the
             * [ ] Command comments at top of [gentoo/package.use]
         * `(cd ./gentoo/overlay; ./.review -a)`
             * [ ] Review `.keep` packages
-            * [ ] Comment `pandoc` packages in [gentoo/sets/packages]
     * `cd .setup/linux`
         * `(cd _build/gentoo/gentoo; grep -A10 SRC_URI ./sys-kernel/gentoo-kernel/gentoo-kernel-*.ebuild)`
             * `wget [...]`
@@ -1882,13 +1881,6 @@ Everything needed to perform these steps is in the [Repository] or the
         * `while :; do make DOFAST=true init; inotifywait --event modify gentoo/make.* gentoo/package.* gentoo/sets/*; done`
         * `(cd .setup; vi gentoo/make.* gentoo/package.* gentoo/sets/*; vdiff -g gentoo/make.* gentoo/package.* gentoo/sets/*)`
     * [x] **Iterate()**
-  * [ ] Pandoc
-    * `vi ./gentoo/gentoo/overlay/app-text/pandoc/.rationale`
-        * [ ] Update versions
-    * `vi ./gentoo/gentoo/overlay/app-text/pandoc/.pandoc_ebuilds.sh`
-        * `rm $(./gentoo/overlay/app-text/pandoc/.pandoc_ebuilds.sh ^)`
-        * [ ] Follow command comments
-        * [ ] Ensure no packages are coming from `haskell-kit`
   * `./linux/_config ./build/usr/src/linux`
         * `rsync $(realpath ./linux/.default) ./build/usr/src/linux/.config`
         * `chroot ./build bash -c "(cd /usr/src/linux && make olddefconfig)"`
@@ -1903,7 +1895,6 @@ Everything needed to perform these steps is in the [Repository] or the
     * [x] **Iterate()**
   * `make redo`
     * [x] **Iterate()**
-    * `make doit`
     * `(cd _builds; rsync ../../_toor/ ./_gary-os.working)`
   * `make edit`
     * `(cd _builds; rm ./_gentoo.working; ln _gentoo ./_gentoo.working)`
