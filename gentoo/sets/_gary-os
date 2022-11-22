@@ -102,21 +102,14 @@
 #note: for "release_install" to work correctly, "#{fsexcl}" must be empty
 #{FSEXCL}
 
-#{FSPACK} base:/lib64/modules
-#{FSPACK} base:/lib64/firmware
+#{FSPACK} base:/lib/modules
+#{FSPACK} base:/lib/firmware
 
-#{FSKEEP} gcc:/usr/include
-#{FSKEEP} gcc:/usr/libexec/gcc
-#{FSKEEP} gcc:/usr/x86_64-pc-linux-gnu
-
+#{FSKEEP} emerge:/usr/share/genkernel/distfiles
 #{FSKEEP} emerge:/usr/src/linux
 #{FSKEEP} emerge:/var/db/pkg
 #{FSKEEP} emerge:/var/db/repos/gentoo
 #{FSARCH} emerge:/var/db/repos/gentoo.git
-
-#>>> #{FSARCH} debug:/usr/lib64/debug
-#>>> #{FSARCH} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/*/debug
-#>>> #{FSARCH} debug:/usr/src/debug
 
 ########################################
 # firmware
