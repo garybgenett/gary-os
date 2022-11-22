@@ -236,6 +236,7 @@ dev-perl/JSON-XS			#{MOD}
 dev-lang/python				#{MOD}
 
 dev-tcltk/expect			#{MOD} # requires: dev-lang/tcl
+dev-vcs/git				#{MOD}
 
 app-forensics/cmospwd
 sys-apps/flashrom
