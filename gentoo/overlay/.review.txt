@@ -205,6 +205,7 @@ emerge: there are no ebuilds to satisfy "games-misc/games-envd".
 diff :: games-misc/games-envd [source] =================================================================================
 diff: /var/db/repos/gentoo/games-misc/games-envd: No such file or directory
 diff :: games-misc/games-envd [target] =================================================================================
+Only in ./games-misc/games-envd: .keep
 Only in ./games-misc/games-envd: .rationale
 Only in ./games-misc/games-envd: .source
 Only in ./games-misc/games-envd: Manifest
@@ -260,6 +261,67 @@ diff :: games-misc/games-envd [files] ==========================================
 ./games-misc/games-envd:
 Manifest
 games-envd-0.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: sys-boot/grub [rationale] ======================================================================================
+# custom patch
+error: out of memory.
+>> https://lists.gnu.org/archive/html/help-grub/2018-11/msg00003.html
+>> https://lists.gnu.org/archive/html/bug-grub/2019-07/msg00022.html
+>> https://bugzilla.redhat.com/show_bug.cgi?id=1572126
+>> https://bugzilla.redhat.com/show_bug.cgi?id=1838633#c9
+>> https://github.com/raspberrypi/firmware/issues/124
+-- grub-2.06-r3.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-boot/grub?id=19a28412bab445e6c35db9fd14702efbbef22c74
+diff :: sys-boot/grub [source] =========================================================================================
+diff :: sys-boot/grub [target] =========================================================================================
+Only in ./sys-boot/grub: .keep
+Only in ./sys-boot/grub: .rationale
+Only in ./sys-boot/grub: .source
+diff -u -U10 -r ./sys-boot/grub/.source/Manifest ./sys-boot/grub/Manifest
+--- ./sys-boot/grub/.source/Manifest	2022-11-17 10:07:14.945989235 -0000
++++ ./sys-boot/grub/Manifest	2022-11-22 17:50:14.236178291 -0000
+@@ -1,4 +1,11 @@
++AUX gfxpayload.patch 1118 BLAKE2B 4104fc696535b1c3feba5876bccc64f9b2e52319ee992c59e7f17b8310cc9addf7545630fff78c73ca3f4b0dcd44e1bf69f4df5264d6f58777f7e5aeae93cbcb SHA512 00324825c369902a0383b792cd21e161853eadccbdc5abe2420f2d443bf6a74f72be6c15243107b936acd38c3547387c3771dc2cb566003c4c754c9260b4aa00
++AUX grub-2.02_beta2-KERNEL_GLOBS.patch 2355 BLAKE2B c120f06d3597a2ff9566778afd69d80a814904726e47766b7582626d182a2703e54fd69ecf00b54bcc5541e22a3d93ff8b85c9cf8d0440623454e8e7da3aaa91 SHA512 23416ac17838f101ed73103af6aa7305609667f47288bfa3bd5ae80d1123da664ba6f9b518451b0bd5f528e069893a51444d203953be0b0644790cea0b4b9cf0
++AUX grub-2.06-grub-mkconfig-restore-umask.patch 1377 BLAKE2B ea5369b79a1ec0dbb4e212749a406aa361a5f12baf38737e273b19fb94eba78d7734bd532d91f40889f0cc7f0573d1a247baa548b6ac1963961181a85ff928ce SHA512 e899e6f0575e35b747aae6d14140dcecb453485abf0f7d53649fe35301313d7de16a350301a53e476d4b18ad1909ed4d4ce26cbd986728154137c970c7ce3bca
++AUX grub-2.06-test-words.patch 2553 BLAKE2B 21d6167945b461be7cc73198451ae0dc15ce0dfe2a301342f1a3bb75d6fcb5d73da9997fb8a93f36dffb43a351f056a1a4db9eed3147b0f3e77c65034b805c64 SHA512 627422377bdad97d0197f178814d6616a0f7ec07357182b00166a455d38ba0c5a60185c5febf4dfb7a11b35f26c7af607508cb5f418acdb7290517240fbd99e4
++AUX grub.default-3 2528 BLAKE2B c32de43644eca5fae8d8d727ff443600917a93e015f8a83dde555e3bca7506a817b08a2fc926970eeb5b7f40028f4951c6cdcd281f9fc0b6504f26c8e76bf0c5 SHA512 505960e62b44c70af0a90c7ff486bd57101831d7c6e9d80084013e374070ff02b40f77b0790aebb926e1e0854e375867cba1d4977dbb00c2ba54ebaa9f6a1a0b
++AUX linux_initrd_max_address.patch 4421 BLAKE2B edf8a7485c8e07c5c7908d6d8c27ac9fdd591b460b32594845c263eef99e2e67ac281f082d33f4d357b33f10ac6623d900d51acc1fbc93dfd36d150a9db8b004 SHA512 ef80b3c8ab8f07d141cc6f301aac4675466f5157d670e87337faf7a24c61d1b52b26ec190cd3f0195d26848a5b4a5c8eb5b31dd81701b7a1ea1785a42e16c930
+ DIST dejavu-sans-ttf-2.37.zip 417746 BLAKE2B c8904f3cd5a49370a7dc10e456684c88aeae998a99090bf4d0a5baa4f36cc8fb8f70586cf6d610a5ffeee97261d28c80f55bbe9dcfc3ed796d5c2d60e79adb58 SHA512 ede5899daa1984c5aa8cacb1c850eb53f189dddef3d9bb78bf9774d8976b7c0d6eb0bcf86237cd7d11f5b36cf5b5058d42cd94d3bd76f2bd0931c7ceb1271fae
+ DIST grub-2.06-backports-r1.tar.xz 31900 BLAKE2B d8320eff8cebc408b7c4845d17adf82470407fd3837ab8508703f0f3b2bf5271d6ea8ec2cdf57461e77dd9b69458e9a9d197b533029df3637aad3656b2968b65 SHA512 2487a305ca3f969ed735df0ef181cc7caceffcfaf0126dbd8cceb19ce1062952404f0e5deeaa4f9431cafa94c40c2d57c77da17ea3da4ff62592e42e852b107a
+ DIST grub-2.06.tar.xz 6581924 BLAKE2B 2a40b9b03d7bb3b9e7b1309ab274d686f01b3c42e7035ebc6e5a0e59a59c3b7362ba518341664b314cb0dbc8222bb10ea05ce09f08ce9d58a293207cb909e417 SHA512 4f11c648f3078567e53fc0c74d5026fdc6da4be27d188975e79d9a4df817ade0fe5ad2ddd694238a07edc45adfa02943d83c57767dd51548102b375e529e8efe
+ DIST unifont-12.1.02.pcf.gz 1335424 BLAKE2B 97080312468e3f3c8aa6f49cef08f5622641e8c9c035f3ede1e09d8d98de4e78d3b23c8aba2e8070eb46cbebd2d55e8568e467d7f15f35aa8fc8db792b7e5f14 SHA512 b280b2db7cf5f480b0668c331130dede2c0cc87d5e02e44566b77787113d0f6604d0105522858288f2ac6b8e77df7a2d9878725013a6c778dc5bfb183156e2f0
++EBUILD grub-2.06-r9999.ebuild 8378 BLAKE2B 3f1e2e5120947021ceb153f5307d8ad8721e138cdcd1944a20dbcf4772d5daa7f3c93a746ed1902641e80e7c986d91df4b61035c335129a1ba0fae74d23c3e43 SHA512 ea8f318d71881f599eff0f1e2fad1f0c72684610479525cfbddea7a474460fffad6690c785fdae10ea5454cdb60e4258a39e9706f1e1836f731f74ecf6b45565
+Only in ./sys-boot/grub/files: linux_initrd_max_address.patch
+Only in ./sys-boot/grub: files-patches
+Only in ./sys-boot/grub/.source: grub-2.06-r3.ebuild
+Only in ./sys-boot/grub: grub-2.06-r9999.ebuild
+Only in ./sys-boot/grub/.source: grub-9999.ebuild
+Only in ./sys-boot/grub/.source: metadata.xml
+diff :: sys-boot/grub [files] ==========================================================================================
+	"${FILESDIR}"/gfxpayload.patch
+	"${FILESDIR}"/grub-2.02_beta2-KERNEL_GLOBS.patch
+	"${FILESDIR}"/grub-2.06-test-words.patch
+	"${FILESDIR}"/grub-2.06-grub-mkconfig-restore-umask.patch
+	"${FILESDIR}"/linux_initrd_max_address.patch
+	newins "${FILESDIR}"/grub.default-3 grub
+
+./sys-boot/grub:
+Manifest
+files
+files-patches
+grub-2.06-r9999.ebuild
+
+./sys-boot/grub/files:
+gfxpayload.patch
+grub-2.02_beta2-KERNEL_GLOBS.patch
+grub-2.06-grub-mkconfig-restore-umask.patch
+grub-2.06-test-words.patch
+grub.default-3
+linux_initrd_max_address.patch
+
+./sys-boot/grub/files-patches:
+linux_initrd_max_address.patch
 
 ------------------------------------------------------------------------------------------------------------------------
 diff :: x11-plugins/gkrellaclock [rationale] ===========================================================================
