@@ -39,19 +39,27 @@
 
 #note: speed up boot time, and avoid memory cost, by only having these in the "#{mod}" build
 #note: size of the default "rootfs" file is not as much of a concern as the in-memory footprint
+#note: for the "#{mod}" build, the primary consideration is the kernel size
 #{MOD} #{FSPACK} base:/usr/bin
+#{MOD} #{FSPACK} base:/usr/lib
 #{MOD} #{FSPACK} base:/usr/lib64
 #{MOD} #{FSPACK} base:/usr/libexec
-#{MOD} #{FSPACK} base:/usr/local
 #{MOD} #{FSPACK} base:/usr/sbin
 #{MOD} #{FSPACK} base:/usr/share
 
-#{FSPACK} libs:/usr/lib64/llvm
-#{FSPACK} libs:/usr/lib64/python3.10
-#{FSPACK} libs:/usr/lib64/rust
-#{MOD} #{FSEXCL} libs:/usr/lib64/llvm
-#{MOD} #{FSEXCL} libs:/usr/lib64/python3.10/test
-#{MOD} #{FSEXCL} libs:/usr/lib64/rust
+#note: do everything possible to minimize the "#{mod}" build
+#note: some of these override definitions above and below
+#note: gary-os
+#{MOD} #{FSEXCL} mod:/.gary-os/.git
+#{MOD} #{FSEXCL} mod:/.gary-os/artifacts/archive
+#{MOD} #{FSEXCL} mod:/.gary-os/artifacts/images
+#note: build
+#{MOD} #{FSEXCL} mod:/lib/firmware
+#{MOD} #{FSEXCL} mod:/usr/include
+#{MOD} #{FSEXCL} mod:/usr/lib/llvm
+#{MOD} #{FSEXCL} mod:/usr/lib/python3.10/test
+#{MOD} #{FSEXCL} mod:/usr/libexec/gcc
+#{MOD} #{FSEXCL} mod:/usr/x86_64-pc-linux-gnu
 
 #{FSPACK} docs:/usr/share/doc
 #{FSPACK} docs:/usr/share/info
@@ -60,46 +68,22 @@
 #{MOD} #{FSEXCL} docs:/usr/share/info
 #{MOD} #{FSEXCL} docs:/usr/share/man
 
-#note: do everything possible to minimize the "#{mod}" build
-#note: some of these override definitions above and below
-#note: gary-os
-#{MOD} #{FSEXCL} mod:/.gary-os/.git
-#{MOD} #{FSEXCL} mod:/.gary-os/artifacts/archive
-#{MOD} #{FSEXCL} mod:/.gary-os/artifacts/images
-#{MOD} #{FSEXCL} mod:/.gary-os/gentoo/overlay
-#{MOD} #{FSEXCL} mod:/etc/portage/overlay
-#note: build
-#{MOD} #{FSEXCL} mod:/lib64/firmware
-#{MOD} #{FSEXCL} mod:/usr/lib64/python3.10/site-packages/gentoolkit/test
-#{MOD} #{FSEXCL} mod:/usr/lib64/python3.10/site-packages/portage/tests
-#{MOD} #{FSEXCL} mod:/usr/libexec/git-core
-#{MOD} #{FSEXCL} mod:/usr/share/cmake
-
 #NOTE: EVERYTHING BELOW IS MATCHED WITH "_GARY-OS"
 #NOTE: SOME OF THESE INTENTIONALLY RE-DEFINE THE DEFAULTS
 
-#{FSPACK} base:/lib64/modules
-#{FSPACK} base:/lib64/firmware
+#{FSPACK} base:/lib/modules
+#{FSPACK} base:/lib/firmware
 
-#{FSKEEP} gcc:/usr/include
-#{FSKEEP} gcc:/usr/libexec/gcc
-#{FSKEEP} gcc:/usr/x86_64-pc-linux-gnu
-#{MOD} #{FSEXCL} gcc:/usr/include
-#{MOD} #{FSEXCL} gcc:/usr/libexec/gcc
-#{MOD} #{FSEXCL} gcc:/usr/x86_64-pc-linux-gnu
-
+#{FSARCH} emerge:/usr/share/genkernel/distfiles
 #{FSARCH} emerge:/usr/src/linux
 #{FSKEEP} emerge:/var/db/pkg
 #{FSKEEP} emerge:/var/db/repos/gentoo
 #{FSARCH} emerge:/var/db/repos/gentoo.git
+#{MOD} #{FSEXCL} emerge:/usr/share/genkernel/distfiles
 #{MOD} #{FSEXCL} emerge:/usr/src/linux
 #{MOD} #{FSEXCL} emerge:/var/db/pkg
 #{MOD} #{FSEXCL} emerge:/var/db/repos/gentoo
 #{MOD} #{FSEXCL} emerge:/var/db/repos/gentoo.git
-
-#>>> #{FSARCH} debug:/usr/lib64/debug
-#>>> #{FSARCH} debug:/usr/lib64/gcc/x86_64-pc-linux-gnu/*/debug
-#>>> #{FSARCH} debug:/usr/src/debug
 
 ########################################
 # firmware
