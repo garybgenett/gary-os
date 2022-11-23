@@ -42,7 +42,7 @@ fi
 shift
 
 declare HEDEF="10"
-declare GIDEF="${GDEST}/loopfile.img"
+declare GIDEF="${GDEST}/loopfile.img"; declare LSIZE="4"
 declare GIBAK="/dev/sda"
 declare GPDEF="1"
 
@@ -61,6 +61,7 @@ usage:
 [-d || -d<0-9+>]	show debug information || number of objects to list (default: ${HEDEF})
 [-f || -fx]		format the target block device || use ext4 instead of vfat/exfat
 [-k || -k<device>]	keep default device in configuration || use device (default: ${GIBAK}${GPDEF})
+[-s<0-9+>]		loopfile image size in GB (default: ${LSIZE})
 [block device]		use target device instead of the example loopfile
 	(loopfile):	${GIDEF}
 	grub<0-9+>	alternate partition number for example loopfile (default: ${GPDEF})
@@ -134,6 +135,13 @@ declare KPDEV=
 if [[ ${1} == -k*(*) ]]; then
 	KEEPD="true"
 	KPDEV="${1/#-k}"
+	shift
+fi
+
+########################################
+
+if [[ ${1} == -s*([0-9]) ]]; then
+	LSIZE="${1/#-s}"
 	shift
 fi
 
@@ -397,7 +405,7 @@ declare BCALC_SCALE="9"
 declare GB_BIT_SIZE="$(( ( (10**3)**3 ) ))"
 declare GB_BYTESIZE="$(( ( (2**10)**3 ) ))"
 declare GB_ISACTUAL="$(echo "scale=${BCALC_SCALE} ; ( ${GB_BIT_SIZE} / ${GB_BYTESIZE} ) * ${GB_BIT_SIZE}" | bc | ${SED} "s|[.].*$||g")"
-declare GB_DISKSIZE="$(( ${GB_ISACTUAL} * 4 ))"
+declare GB_DISKSIZE="$(( ${GB_ISACTUAL} * ${LSIZE} ))"
 
 declare BLOCKS_ROOM="$(( ( (2**10)*4		) ))"
 declare BLOCKS_GMBR="$(( ( ${GB_BYTESIZE}/8	) / ${BLOCKS_SIZE} ))"
