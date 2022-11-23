@@ -399,7 +399,7 @@ $(
 
 ########################################
 
-declare BLOCKS_SIZE="512"
+declare BLOCKS_SIZE="4096"
 
 declare BCALC_SCALE="9"
 declare GB_BIT_SIZE="$(( ( (10**3)**3 ) ))"
