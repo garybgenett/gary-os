@@ -111,8 +111,9 @@ mail-client/mutt			-tokyocabinet gpg hcache sasl sidebar smime smtp
 mail-client/thunderbird			-crypt -lightning -wifi ldap	# installing "enigmail" and "lightning" plugins manually
 media-libs/libprojectm			qt5
 media-sound/pulseaudio			bluetooth dbus
-media-video/vlc				projectm qt5 run-as-root vlm
+media-video/vlc				gui projectm run-as-root vlm
 net-analyzer/tcpdump			-chroot
+net-analyzer/wireshark			qt5
 net-fs/samba				client
 net-libs/gnutls				openpgp openssl tls-heartbeat tools
 net-misc/unison				-gtk
@@ -174,7 +175,8 @@ dev-util/librnp				-man		# requires: dev-ruby/asciidocto -> dev-lang/ruby
 # * media-libs/freetype = media-libs/fontconfig
 # * media-libs/mesa
 # * sys-apps/systemd-utils
-# + sys-kernel/linux-firmware
+# * sys-kernel/linux-firmware
+# - app-text/texlive-core
 # - dev-lang/ruby
 # - dev-lang/rust = gnome-base/librsvg
 # - dev-lang/tcl = dev-lang/tk
@@ -189,7 +191,7 @@ dev-util/librnp				-man		# requires: dev-ruby/asciidocto -> dev-lang/ruby
 # - sys-devel/llvm = dev-lang/rust
 # - x11-libs/cairo = gnome-base/librsvg
 # - x11-libs/gtk+ = x11-themes/adwaita-icon-theme
-# - x11-libs/pango = x11-libs/gtk+ ; gnome-base/librsvg
+# - x11-libs/pango = ( x11-libs/gtk+ | gnome-base/librsvg )
 # / dev-python/ensurepip-pip
 # / net-libs/libsmi
 
