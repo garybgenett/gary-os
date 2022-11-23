@@ -1616,8 +1616,9 @@ function release_grub_qcow_unmount {	#>>>{dotest}
 function _release_grub {		#{doredo} #{dofast} #{dotest}
 	#note: tell "grub.sh" where the "grub" menu files are
 	export GRUB_DIR="${SETDIR}/${GRBDIR}"
-	declare GRB_OPT= ; if ${DOTEST}; then GRB_OPT="gopts=true"	; fi
 	declare GRB_DBG= ; if ${DOTEST}; then GRB_DBG="-d50"		; fi
+	declare GRB_SIZ= ; if ${DOTEST}; then GRB_SIZ="-s8"		; fi
+	declare GRB_OPT= ; if ${DOTEST}; then GRB_OPT="gopts=true"	; fi
 	declare GRUB_DEST="${_RAMFS}.grub"
 	declare GRUB_LMBR="/dev/nbd9p1"
 	declare GRUB_LEFI="/dev/nbd9p3"
@@ -1636,7 +1637,7 @@ function _release_grub {		#{doredo} #{dofast} #{dotest}
 			${RM}						${GRUB_DEST}*						|| return 1
 			${MKDIR}					${GRUB_DEST}						|| return 1
 		fi
-		${SETDIR}/scripts/grub.sh				${GRUB_DEST} ${GRB_DBG}					|| return 1
+		${SETDIR}/scripts/grub.sh				${GRUB_DEST} ${GRB_DBG} ${GRB_SIZ}			|| return 1
 		if {
 			${DOTEST} ||
 			[[ ! -x $(which qemu-img) ]] ||
