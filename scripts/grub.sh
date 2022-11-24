@@ -113,17 +113,22 @@ fi
 declare GPMBR="4"; declare GNMBR="ef02"; declare GFMBR="-d"	# vfat
 declare GPEFI="3"; declare GNEFI="ef00"; declare GFEFI="-d"	# vfat
 
+declare SFMBR="21686148-6449-6E6F-744E-656564454649"; declare SFMBR_NAME="BIOS boot partition"
+declare SFEFI="C12A7328-F81F-11D2-BA4B-00A0C93EC93B"; declare SFEFI_NAME="EFI System"
+
 ########################################
 
 declare GFDSK="false"
 #>>>declare GFFMT="-d"			# vfat
 declare GFFMT="-f"			# exfat
 declare GFNUM="0700"
+declare SFNUM="EBD0A0A2-B9E5-4433-87C0-68B6B72699C7"; declare SFNUM_NAME="Microsoft basic data"
 if [[ ${1} == -f*(x) ]]; then
 	GFDSK="true"
 	if [[ ${1/#-f} == x ]]; then
 		GFFMT=""		# ext4
 		GFNUM="8300"
+		SFNUM="0FC63DAF-8483-4772-8E79-3D69D8477DE4"; SFNUM_NAME="Linux filesystem"
 	fi
 	shift
 fi
@@ -399,7 +404,12 @@ $(
 
 ########################################
 
-declare BLOCKS_SIZE="4096"
+#>>> declare BLOCKS_SIZE="4096"
+declare BLOCKS_SIZE="512"
+declare SFDSK="\
+label: gpt
+sector-size: ${BLOCKS_SIZE}
+"
 
 declare BCALC_SCALE="9"
 declare GB_BIT_SIZE="$(( ( (10**3)**3 ) ))"
@@ -408,11 +418,10 @@ declare GB_ISACTUAL="$(echo "scale=${BCALC_SCALE} ; ( ${GB_BIT_SIZE} / ${GB_BYTE
 declare GB_DISKSIZE="$(( ${GB_ISACTUAL} * ${LSIZE} ))"
 
 declare BLOCKS_ROOM="$(( ( (2**10)*4		) ))"
+declare BLOCKS_NULL="$(( ( ${GB_BYTESIZE}/16	) / ${BLOCKS_SIZE} ))"; BLOCKS_NULL="0"
 declare BLOCKS_GMBR="$(( ( ${GB_BYTESIZE}/8	) / ${BLOCKS_SIZE} ))"
 declare BLOCKS_GEFI="$(( ( ${GB_BYTESIZE}	) / ${BLOCKS_SIZE} ))"
-
-declare BLOCKS_NULL="$(( ( ${GB_BYTESIZE}/16	) / ${BLOCKS_SIZE} ))"
-	BLOCKS_NULL="0"
+declare BLOCKS_DATA="$(( ( ${GB_DISKSIZE}	/ ${BLOCKS_SIZE} ) - ( ${BLOCKS_ROOM} * 2 ) - ( ${BLOCKS_NULL} * 2 ) - ${BLOCKS_GMBR} - ${BLOCKS_GEFI} ))"
 
 declare LOOP_DEVICE="/dev/loop9"
 declare LOOP_BLOCKS="$(( ${GB_DISKSIZE} / ${BLOCKS_SIZE} ))"
@@ -430,6 +439,7 @@ GDISK+="p\n"
 GDISK+="n\n"
 GDISK+="${GPMBR}\n"
 NEWBLOCK="${BLOCKS_ROOM}"				; GDISK+="${NEWBLOCK}\n"
+SFDSK+="${GIBAK}${GPMBR} : start=${NEWBLOCK}, size=${BLOCKS_GMBR}, type=${SFMBR}, name=\"${SFMBR_NAME}\"\n"
 NEWBLOCK="$(( ${NEWBLOCK} + ${BLOCKS_GMBR} -1 ))"	; GDISK+="${NEWBLOCK}\n"
 GDISK+="${GNMBR}\n"
 GDISK+="p\n"
@@ -437,6 +447,7 @@ GDISK+="p\n"
 GDISK+="n\n"
 GDISK+="${GPEFI}\n"
 NEWBLOCK="$(( ${NEWBLOCK} + ${BLOCKS_NULL} +1 ))"	; GDISK+="${NEWBLOCK}\n"
+SFDSK+="${GIBAK}${GPEFI} : start=${NEWBLOCK}, size=${BLOCKS_GEFI}, type=${SFEFI}, name=\"${SFEFI_NAME}\"\n"
 NEWBLOCK="$(( ${NEWBLOCK} + ${BLOCKS_GEFI} -1 ))"	; GDISK+="${NEWBLOCK}\n"
 GDISK+="${GNEFI}\n"
 GDISK+="p\n"
@@ -444,6 +455,7 @@ GDISK+="p\n"
 GDISK+="n\n"
 GDISK+="${GPART}\n"
 NEWBLOCK="$(( ${NEWBLOCK} + ${BLOCKS_NULL} +1 ))"	; GDISK+="${NEWBLOCK}\n"
+SFDSK+="${GIBAK}${GPART} : start=${NEWBLOCK}, size=${BLOCKS_DATA}, type=${SFNUM}, name=\"${SFNUM_NAME}\"\n"
 NEWBLOCK=""						; GDISK+="${NEWBLOCK}\n"
 GDISK+="${GFNUM}\n"
 GDISK+="p\n"
@@ -487,7 +499,8 @@ function exit_summary {
 
 	(cd $(dirname ${GINST}) &&
 #>>>		echo -en "${GDHYB_READ}q\n" | gdisk $(basename ${GINST}) &&
-		gdisk -l $(basename ${GINST})
+#>>>		gdisk -l $(basename ${GINST})
+		sfdisk --list $(basename ${GINST})
 	)
 	(cd ${GDEST} &&
 		echo -en "\n" &&
@@ -593,8 +606,10 @@ unix2dos				${GDEST}/bcdedit.bat	|| exit 1
 function partition_disk {
 	declare DEV="${1}"
 	shift
-	echo -en "${GDISK}" | gdisk ${DEV}			|| return 1
+#>>>	echo -en "${GDISK}" | gdisk ${DEV}			|| return 1
 #>>>	echo -en "${GDHYB}" | gdisk ${DEV}			|| return 1
+	echo -en "${SFDSK}" | sfdisk ${DEV}			|| return 1
+	echo -en "\n"; sfdisk --list ${DEV}			|| return 1
 #>>>	yes | format ${GFMBR} ${DEV}${GPSEP}${GPMBR}		|| return 1
 	yes | format ${GFEFI} ${DEV}${GPSEP}${GPEFI}		|| return 1
 	yes | format ${GFFMT} ${DEV}${GPSEP}${GPART}		|| return 1
