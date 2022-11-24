@@ -418,8 +418,8 @@ declare GB_ISACTUAL="$(echo "scale=${BCALC_SCALE} ; ( ${GB_BIT_SIZE} / ${GB_BYTE
 declare GB_DISKSIZE="$(( ${GB_ISACTUAL} * ${LSIZE} ))"
 
 declare BLOCKS_ROOM="$(( ( (2**10)*4		) ))"
-declare BLOCKS_NULL="$(( ( ${GB_BYTESIZE}/16	) / ${BLOCKS_SIZE} ))"; BLOCKS_NULL="0"
-declare BLOCKS_GMBR="$(( ( ${GB_BYTESIZE}/8	) / ${BLOCKS_SIZE} ))"
+declare BLOCKS_NULL="$(( ( ( (2**10)**2 ) * 100	) / ${BLOCKS_SIZE} ))"; BLOCKS_NULL="0"
+declare BLOCKS_GMBR="$(( ( ( (2**10)**2 ) * 10	) / ${BLOCKS_SIZE} ))"
 declare BLOCKS_GEFI="$(( ( ${GB_BYTESIZE}	) / ${BLOCKS_SIZE} ))"
 declare BLOCKS_DATA="$(( ( ${GB_DISKSIZE}	/ ${BLOCKS_SIZE} ) - ( ${BLOCKS_ROOM} * 2 ) - ( ${BLOCKS_NULL} * 2 ) - ${BLOCKS_GMBR} - ${BLOCKS_GEFI} ))"
 
