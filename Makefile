@@ -66,8 +66,9 @@ usage:
 	@$(ECHO) "$(NOTES)>>> GARYOS BUILD SYSTEM <<<$(RESET)\n"
 	@$(MARKER)
 	@$(ECHO) "\n"
+	@$(PRINTF) "Synchronize (Database, Sources, Metadata):"	"$(MAKE) update"
+	@$(ECHO) "\n"
 	@$(PRINTF) "Reset Current Configuration:"		"$(MAKE) reset"
-	@$(PRINTF) "Update Current System:"			"$(MAKE) update"
 	@$(PRINTF) "Upgrade Current System (Interactively):"	"$(MAKE) upgrade"
 	@$(ECHO) "\n"
 	@$(PRINTF) "Information Lookup (Package Data):"		"$(MAKE) {packages}" "" " <[category%]name>"
@@ -162,13 +163,15 @@ help: usage
 
 ################################################################################
 
-.PHONY: reset
-reset:
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="/" ARTDIR="$(A)" GOSPKG="_$(P)" $(C)/gentoo/_system $(CHROOT) -r -!
-
 .PHONY: update
 update:
 	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="/" ARTDIR="$(A)" GOSPKG="_$(P)" $(C)/gentoo/_system -U
+
+########################################
+
+.PHONY: reset
+reset:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="/" ARTDIR="$(A)" GOSPKG="_$(P)" $(C)/gentoo/_system $(CHROOT) -r -!
 
 .PHONY: upgrade
 upgrade:
