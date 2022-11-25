@@ -529,7 +529,6 @@ function print_info {
 		printf "${PRINTF}" "Synchronize (Metadata Only):"		"<auto>"	"${_HEART} -!"
 		echo -en "\n"
 		printf "${PRINTF}" "Reset Current Configuration:"		"<auto>"	"GOSDIR=/ ${_HEART} -g -r -!"
-		printf "${PRINTF}" "Update Current System:"			"<auto>"	"${_HEART}"
 		printf "${PRINTF}" "Upgrade Current System:"			"<auto>"	"${_HEART} -a -u"
 		printf "${PRINTF}" "Upgrade Current System (Interactively):"	"<interactive>"	"${_HEART} -u"
 		echo -en "\n"
