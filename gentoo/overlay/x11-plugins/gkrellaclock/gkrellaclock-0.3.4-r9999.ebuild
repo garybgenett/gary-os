@@ -20,7 +20,7 @@ DEPEND="${RDEPEND}"
 S="${WORKDIR}/${P/a/A}"
 #>>> PATCHES=( "${FILESDIR}"/${PN}-makefile.patch )
 PATCHES=(
-	"${FILESDIR}"/${PN}-makefile.patch
+	"${FILESDIR}"/${PN}-makefile.fixed.patch
 	"${FILESDIR}"/xclock_size_hack.patch
 )
 #>>>
