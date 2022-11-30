@@ -453,6 +453,7 @@ app-cdr/dvd+rw-tools
 
 media-libs/alsa-lib
 media-libs/alsa-oss
+media-plugins/alsa-plugins
 media-sound/alsa-utils
 
 media-sound/aumix
