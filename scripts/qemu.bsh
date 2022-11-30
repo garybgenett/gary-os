@@ -227,7 +227,6 @@ QVDA+=" -device virtserialport,chardev=qga0,bus=virtio-serial1.0,nr=1,name=org.q
 
 QVGA="-display curses"
 if [[ ${INTERFACE} == console ]]; then
-	QVGA+=" -curses"
 	QVGA+=" -vga std"
 else
 	QVGA+=" -vga qxl"
