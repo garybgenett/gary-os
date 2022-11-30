@@ -573,6 +573,7 @@ if [[ -n ${DO_MOUNT} ]]; then
 				losetup -d ${LOOP_DEVICE}			#>>> || exit 1
 				losetup -v -P ${LOOP_DEVICE} ${GINST}		|| exit 1
 				partx -t gpt -a ${LOOP_DEVICE}			#>>> || exit 1
+				sleep 3
 			fi
 			${MKDIR} ${FILE}{-mbr,-efi}				|| exit 1
 			mount-robust ${GINST_DO}${GPSEP}${GPART} ${FILE}-mbr	|| exit 1
@@ -651,6 +652,7 @@ else
 	losetup -d ${LOOP_DEVICE}				#>>> || exit 1
 	losetup -v -P ${LOOP_DEVICE} ${GINST}			|| exit 1
 	partx -t gpt -a ${LOOP_DEVICE}				#>>> || exit 1
+	sleep 3
 	GINST_DO="${LOOP_DEVICE}"
 	if ${PART_DO}; then
 		partition_disk ${GINST_DO}			|| exit 1
