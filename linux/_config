@@ -26,16 +26,14 @@ declare CHL="$(echo "${LNX}" | ${SED} "s|^${CHR}||g")"
 
 function reconfigure {
 	declare CONFIG="${1}" && shift
-	for FILE in $(
-		${SED} -n "s|^[^#].+[[:space:]](CONFIG_[[:alnum:]_]+)[=]([ynm]).*$|\1:\2|gp" ${OPT}
-	); do
+	{
+		${SED} -n "s|^[^#].+[[:space:]](CONFIG_[[:alnum:]_]+)[=]([\"][^\"]+[\"]).*$|\1:\2|gp" ${OPT};
+		${SED} -n "s|^[^#].+[[:space:]](CONFIG_[[:alnum:]_]+)[=]([ynm]).*$|\1:\2|gp" ${OPT};
+	} | while read -r FILE; do
 		declare KEY="${FILE/%:*}"
 		declare VAL="${FILE/#*:}"
-		if [[ -n $(${GREP} "^${KEY}[=]" ${CONFIG}) ]]; then
-			${SED} -i "s|^(${KEY}[=]).+$|\1${VAL}|g" ${CONFIG}
-		else
-			echo "${KEY}=${VAL}" >>${CONFIG}
-		fi
+		echo "${KEY} -> ${VAL}"
+		${SED} -i "s|^([#][ ])?(${KEY})[= ].+$|\2=${VAL}|g" ${CONFIG}
 	done
 	return 0
 }
