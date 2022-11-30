@@ -2,6 +2,10 @@
 # portage package keywords file
 ################################################################################
 
+=sys-boot/grub-9999			~amd64		# enable overlay version
+
+################################################################################
+
 sys-kernel/gentoo-kernel		~amd64		# gentoo required
 sys-kernel/gentoo-sources		~amd64		# gentoo required
 virtual/dist-kernel			~amd64		# gentoo required
