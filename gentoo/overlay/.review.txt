@@ -266,12 +266,15 @@ games-envd-0.ebuild
 diff :: sys-boot/grub [rationale] ======================================================================================
 # custom patch
 error: out of memory.
+>> https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1842320
+>> https://lists.gnu.org/archive/html/help-grub/2021-03/msg00000.html
+>> https://forum.manjaro.org/t/cannot-switch-kernel-errors-out-of-memory-and-you-need-to-load-the-kernel-first/62575
 >> https://lists.gnu.org/archive/html/help-grub/2018-11/msg00003.html
 >> https://lists.gnu.org/archive/html/bug-grub/2019-07/msg00022.html
 >> https://bugzilla.redhat.com/show_bug.cgi?id=1572126
 >> https://bugzilla.redhat.com/show_bug.cgi?id=1838633#c9
 >> https://github.com/raspberrypi/firmware/issues/124
--- grub-2.06-r3.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-boot/grub?id=19a28412bab445e6c35db9fd14702efbbef22c74
+-- grub-9999.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-boot/grub?id=19a28412bab445e6c35db9fd14702efbbef22c74
 diff :: sys-boot/grub [source] =========================================================================================
 diff :: sys-boot/grub [target] =========================================================================================
 Only in ./sys-boot/grub: .keep
@@ -279,8 +282,8 @@ Only in ./sys-boot/grub: .rationale
 Only in ./sys-boot/grub: .source
 diff -u -U10 -r ./sys-boot/grub/.source/Manifest ./sys-boot/grub/Manifest
 --- ./sys-boot/grub/.source/Manifest	2022-11-17 10:07:14.945989235 -0000
-+++ ./sys-boot/grub/Manifest	2022-11-22 17:50:14.236178291 -0000
-@@ -1,4 +1,11 @@
++++ ./sys-boot/grub/Manifest	2022-11-30 01:48:26.255195982 -0000
+@@ -1,4 +1,12 @@
 +AUX gfxpayload.patch 1118 BLAKE2B 4104fc696535b1c3feba5876bccc64f9b2e52319ee992c59e7f17b8310cc9addf7545630fff78c73ca3f4b0dcd44e1bf69f4df5264d6f58777f7e5aeae93cbcb SHA512 00324825c369902a0383b792cd21e161853eadccbdc5abe2420f2d443bf6a74f72be6c15243107b936acd38c3547387c3771dc2cb566003c4c754c9260b4aa00
 +AUX grub-2.02_beta2-KERNEL_GLOBS.patch 2355 BLAKE2B c120f06d3597a2ff9566778afd69d80a814904726e47766b7582626d182a2703e54fd69ecf00b54bcc5541e22a3d93ff8b85c9cf8d0440623454e8e7da3aaa91 SHA512 23416ac17838f101ed73103af6aa7305609667f47288bfa3bd5ae80d1123da664ba6f9b518451b0bd5f528e069893a51444d203953be0b0644790cea0b4b9cf0
 +AUX grub-2.06-grub-mkconfig-restore-umask.patch 1377 BLAKE2B ea5369b79a1ec0dbb4e212749a406aa361a5f12baf38737e273b19fb94eba78d7734bd532d91f40889f0cc7f0573d1a247baa548b6ac1963961181a85ff928ce SHA512 e899e6f0575e35b747aae6d14140dcecb453485abf0f7d53649fe35301313d7de16a350301a53e476d4b18ad1909ed4d4ce26cbd986728154137c970c7ce3bca
@@ -292,18 +295,44 @@ diff -u -U10 -r ./sys-boot/grub/.source/Manifest ./sys-boot/grub/Manifest
  DIST grub-2.06.tar.xz 6581924 BLAKE2B 2a40b9b03d7bb3b9e7b1309ab274d686f01b3c42e7035ebc6e5a0e59a59c3b7362ba518341664b314cb0dbc8222bb10ea05ce09f08ce9d58a293207cb909e417 SHA512 4f11c648f3078567e53fc0c74d5026fdc6da4be27d188975e79d9a4df817ade0fe5ad2ddd694238a07edc45adfa02943d83c57767dd51548102b375e529e8efe
  DIST unifont-12.1.02.pcf.gz 1335424 BLAKE2B 97080312468e3f3c8aa6f49cef08f5622641e8c9c035f3ede1e09d8d98de4e78d3b23c8aba2e8070eb46cbebd2d55e8568e467d7f15f35aa8fc8db792b7e5f14 SHA512 b280b2db7cf5f480b0668c331130dede2c0cc87d5e02e44566b77787113d0f6604d0105522858288f2ac6b8e77df7a2d9878725013a6c778dc5bfb183156e2f0
 +EBUILD grub-2.06-r9999.ebuild 8378 BLAKE2B 3f1e2e5120947021ceb153f5307d8ad8721e138cdcd1944a20dbcf4772d5daa7f3c93a746ed1902641e80e7c986d91df4b61035c335129a1ba0fae74d23c3e43 SHA512 ea8f318d71881f599eff0f1e2fad1f0c72684610479525cfbddea7a474460fffad6690c785fdae10ea5454cdb60e4258a39e9706f1e1836f731f74ecf6b45565
++EBUILD grub-9999.ebuild 8214 BLAKE2B 9b296295ab260a16c4dca355e4dd093f3415d7edbfdd1b625ff10e45901bf948e5ec81f01d225cc0895741ebabc384b35dc823944f92c82585b39e6f673c031d SHA512 c5053be2735114261b751a0c10409b8759fed5d9b7f5fdc25ccd9e1e670e43c0ab05cbcd4bc885724e6600ddb45020b9d4e672812e5a5c309a832c025e92e47b
 Only in ./sys-boot/grub/files: linux_initrd_max_address.patch
 Only in ./sys-boot/grub: files-patches
 Only in ./sys-boot/grub/.source: grub-2.06-r3.ebuild
 Only in ./sys-boot/grub: grub-2.06-r9999.ebuild
-Only in ./sys-boot/grub/.source: grub-9999.ebuild
+diff -u -U10 -r ./sys-boot/grub/.source/grub-9999.ebuild ./sys-boot/grub/grub-9999.ebuild
+--- ./sys-boot/grub/.source/grub-9999.ebuild	2022-11-17 10:07:14.945989235 -0000
++++ ./sys-boot/grub/grub-9999.ebuild	2022-11-28 06:18:33.176776273 -0000
+@@ -41,20 +41,24 @@
+ 		SRC_URI="https://alpha.gnu.org/gnu/${PN}/${MY_P}.tar.xz"
+ 		S=${WORKDIR}/${MY_P}
+ 	else
+ 		SRC_URI="mirror://gnu/${PN}/${P}.tar.xz"
+ 		S=${WORKDIR}/${P%_*}
+ 	fi
+ 	KEYWORDS="~amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+ else
+ 	inherit git-r3
+ 	EGIT_REPO_URI="https://git.savannah.gnu.org/git/grub.git"
++#>>>
++	EGIT_COMMIT="1514678888595ef41a968a0c69b7ff769edd1e9c"
++	KEYWORDS="~amd64"
++#>>>
+ fi
+ 
+ PATCHES=(
+ 	"${FILESDIR}"/gfxpayload.patch
+ 	"${FILESDIR}"/grub-2.02_beta2-KERNEL_GLOBS.patch
+ 	"${FILESDIR}"/grub-2.06-test-words.patch
+ )
+ 
+ DEJAVU=dejavu-sans-ttf-2.37
+ UNIFONT=unifont-12.1.02
 Only in ./sys-boot/grub/.source: metadata.xml
 diff :: sys-boot/grub [files] ==========================================================================================
 	"${FILESDIR}"/gfxpayload.patch
 	"${FILESDIR}"/grub-2.02_beta2-KERNEL_GLOBS.patch
 	"${FILESDIR}"/grub-2.06-test-words.patch
-	"${FILESDIR}"/grub-2.06-grub-mkconfig-restore-umask.patch
-	"${FILESDIR}"/linux_initrd_max_address.patch
 	newins "${FILESDIR}"/grub.default-3 grub
 
 ./sys-boot/grub:
@@ -311,6 +340,7 @@ Manifest
 files
 files-patches
 grub-2.06-r9999.ebuild
+grub-9999.ebuild
 
 ./sys-boot/grub/files:
 gfxpayload.patch
@@ -335,7 +365,7 @@ Only in ./x11-plugins/gkrellaclock: .keep
 Only in ./x11-plugins/gkrellaclock: .rationale
 Only in ./x11-plugins/gkrellaclock: .source
 diff -u -U10 -r ./x11-plugins/gkrellaclock/.source/Manifest ./x11-plugins/gkrellaclock/Manifest
---- ./x11-plugins/gkrellaclock/.source/Manifest	2022-11-17 10:07:15.161986171 -0000
+--- ./x11-plugins/gkrellaclock/.source/Manifest	2022-11-14 21:14:58.184284302 -0000
 +++ ./x11-plugins/gkrellaclock/Manifest	2022-11-25 19:22:02.007145960 -0000
 @@ -1 +1,13 @@
 +AUX _gkrellaclock.c 33385 BLAKE2B 16d9a7fdfe2031dfa3544964b55c6eed046d4e764ca62f09ea94d2cee06756cab8344c52caca240f9c9bd7f2cf1da2fdda3242210636f2597b336efcaae89abc SHA512 fc5c8b50ed8785d5581108d594904c098e16b2987b92b60cd695149804060181dabe807bb2d7810968d199ba0293f4bde21dbefee05261e160ba92055ce7458a
