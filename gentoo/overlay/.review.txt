@@ -22,7 +22,6 @@ dhewm3-9999.ebuild
 diff :: games-fps/doom3 [rationale] ====================================================================================
 # removed package
 # 2019-09-24 22:25:40 +0200 2cbc325ac5ed8d419eda1b666862d5e0681fd93e games-fps/doom3: Add RESTRICT="bindist mirror"
--- doom3-1.3.1304-r1.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/games-fps/doom3?id=2cbc325ac5ed8d419eda1b666862d5e0681fd93e
 diff :: games-fps/doom3 [source] =======================================================================================
 diff: /var/db/repos/gentoo/games-fps/doom3: No such file or directory
 diff :: games-fps/doom3 [target] =======================================================================================
@@ -50,7 +49,6 @@ diff :: games-fps/doom3-data [rationale] =======================================
 # removed package
 # automation of interactive ebuild
 # 2017-11-18 20:48:10 +0100 c9617875332b1b9c894c850a1f8d8dcc1897f33f games-*/*: Remove stable keywords
--- doom3-data-1.1.1282-r1.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/games-fps/doom3-data?id=c9617875332b1b9c894c850a1f8d8dcc1897f33f
 diff :: games-fps/doom3-data [source] ==================================================================================
 diff: /var/db/repos/gentoo/games-fps/doom3-data: No such file or directory
 diff :: games-fps/doom3-data [target] ==================================================================================
@@ -71,7 +69,6 @@ doom3-data-1.1.1282-r9999.ebuild
 diff :: games-fps/doom3-ducttape [rationale] ===========================================================================
 # removed package
 # 2017-12-10 01:03:41 +0100 8ea907ecf4a67a652f8aea0e20d78061b7c85d4c games-fps/*: Update Manifest hashes
--- doom3-ducttape-0007.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/games-fps/doom3-ducttape?id=8ea907ecf4a67a652f8aea0e20d78061b7c85d4c
 diff :: games-fps/doom3-ducttape [source] ==============================================================================
 diff: /var/db/repos/gentoo/games-fps/doom3-ducttape: No such file or directory
 diff :: games-fps/doom3-ducttape [target] ==============================================================================
@@ -98,7 +95,6 @@ diff :: games-fps/doom3-roe [rationale] ========================================
 # removed package
 # automation of interactive ebuild
 # 2017-11-18 20:48:10 +0100 c9617875332b1b9c894c850a1f8d8dcc1897f33f games-*/*: Remove stable keywords
--- doom3-roe-1.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/games-fps/doom3-roe?id=c9617875332b1b9c894c850a1f8d8dcc1897f33f
 diff :: games-fps/doom3-roe [source] ===================================================================================
 diff: /var/db/repos/gentoo/games-fps/doom3-roe: No such file or directory
 diff :: games-fps/doom3-roe [target] ===================================================================================
@@ -119,10 +115,9 @@ doom3-roe-1-r9999.ebuild
 diff :: games-fps/quake1-data [rationale] ==============================================================================
 #>>> removed package
 # automation of interactive ebuild
-# 2021-09-11 09:55:31 +0200 38b155fa1bf907617067c98eb4ba3a5d0790eb1a **/metadata.xml: Replace http by https in DOCTYPE element
 usage: lha [-]<commands>[<options>] [-<options> ...] archive_file [file...]
 LHa: Error: Checksum error (LHarc file?)
--- quake1-data-2.40-r1.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/games-fps/quake1-data?id=38b155fa1bf907617067c98eb4ba3a5d0790eb1a
+# 2021-09-11 09:55:31 +0200 38b155fa1bf907617067c98eb4ba3a5d0790eb1a **/metadata.xml: Replace http by https in DOCTYPE element
 diff :: games-fps/quake1-data [source] =================================================================================
 diff :: games-fps/quake1-data [target] =================================================================================
 Only in ./games-fps/quake1-data: .keep
@@ -142,7 +137,6 @@ quake1-data-2.40-r9999.ebuild
 diff :: games-fps/quakeforge [rationale] ===============================================================================
 #>>> removed package
 # 2022-09-10 09:35:06 +0100 cda8d74c42851638c75005afa77eadc4aa51330b games-fps/quakeforge: add media-libs/flac subslot dep
--- quakeforge-0.7.2_p20210722-r1.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/games-fps/quakeforge?id=cda8d74c42851638c75005afa77eadc4aa51330b
 diff :: games-fps/quakeforge [source] ==================================================================================
 diff :: games-fps/quakeforge [target] ==================================================================================
 Only in ./games-fps/quakeforge: .keep
@@ -198,10 +192,9 @@ quakeforge-0.7.2_p20210722-skipped-tests.patch
 ------------------------------------------------------------------------------------------------------------------------
 diff :: games-misc/games-envd [rationale] ==============================================================================
 # removed package
-# 2021-04-05 20:30:36 +0000 8762a6db9a9aeef8e628e1c3d8fb809e8fc873ae games-misc/games-envd: drop s390 to ~s390 (unstable)
 emerge: there are no ebuilds to satisfy "games-misc/games-envd".
 (dependency required by "games-fps/doom3-ducttape-0007-r9999::overlay" [ebuild])
--- games-envd-0.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/games-misc/games-envd?id=8762a6db9a9aeef8e628e1c3d8fb809e8fc873ae
+# 2021-04-05 20:30:36 +0000 8762a6db9a9aeef8e628e1c3d8fb809e8fc873ae games-misc/games-envd: drop s390 to ~s390 (unstable)
 diff :: games-misc/games-envd [source] =================================================================================
 diff: /var/db/repos/gentoo/games-misc/games-envd: No such file or directory
 diff :: games-misc/games-envd [target] =================================================================================
@@ -274,7 +267,7 @@ error: out of memory.
 >> https://bugzilla.redhat.com/show_bug.cgi?id=1572126
 >> https://bugzilla.redhat.com/show_bug.cgi?id=1838633#c9
 >> https://github.com/raspberrypi/firmware/issues/124
--- grub-9999.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-boot/grub?id=19a28412bab445e6c35db9fd14702efbbef22c74
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
 diff :: sys-boot/grub [source] =========================================================================================
 diff :: sys-boot/grub [target] =========================================================================================
 Only in ./sys-boot/grub: .keep
@@ -356,9 +349,8 @@ linux_initrd_max_address.patch
 ------------------------------------------------------------------------------------------------------------------------
 diff :: x11-plugins/gkrellaclock [rationale] ===========================================================================
 # custom patch
-# 2022-03-03 22:20:27 +0100 f46bd80082128d385618cbb0476e6bcc3d25c670 x11-plugins/gkrellaclock: destabilise for ppc
 Error: 'gkrellm_init_plugin': /usr/lib64/gkrellm2/plugins/gkrellaclock.so: undefined symbol: gkrellm_init_plugin
--- gkrellaclock-0.3.4-r1.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/x11-plugins/gkrellaclock?id=f46bd80082128d385618cbb0476e6bcc3d25c670
+# 2022-03-03 22:20:27 +0100 f46bd80082128d385618cbb0476e6bcc3d25c670 x11-plugins/gkrellaclock: destabilise for ppc
 diff :: x11-plugins/gkrellaclock [source] ==============================================================================
 diff :: x11-plugins/gkrellaclock [target] ==============================================================================
 Only in ./x11-plugins/gkrellaclock: .keep
