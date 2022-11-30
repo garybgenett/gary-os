@@ -4266,7 +4266,8 @@ function zpim-commit {
 		-e "s/<HR>([[:space:]])/<HR>\n\1/g" \
 		bookmarks.html
 	${RM} \
-		passwords.kdb.lock
+		passwords.kdbx.lock \
+		passwords.old.kdbx
 	if [[ -n "${@}" ]]; then
 		declare FILE="${1}" && shift
 		declare LIST=
