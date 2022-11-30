@@ -1462,9 +1462,12 @@ function release_kernel_shmem {
 		SHMEM="${SHMEM_SET}"
 	fi
 	echo -en ">>> SET SHMEM: ${SHMEM}\n"
-#>>>	echo "CONFIG_SHMEM_SIZE=\"${SHMEM}\"" >>${TARGET}${DODIR}/.config				|| return 1
+#>>>	echo "CONFIG_SHMEM_SIZE=\"${SHMEM}\"" >>${TARGET}${DODIR}/.config	|| return 1
 	CMDLINE_CONFIG="${ROOTFS_ROOT_OPT}_size=${SHMEM}"
-	${SED} -i "s|^.*(CONFIG_CMDLINE)[^_].*$|\1=\"${CMDLINE_CONFIG}\"|g" ${TARGET}${DODIR}/.config	|| return 1
+	${SED} -i \
+		-e "s|^[#][ ](CONFIG_CMDLINE)[ ].+$|\1=\"${CMDLINE_CONFIG}\"|g"	\
+		-e "s|^(CONFIG_CMDLINE[=][\"].*)[\"]$|\1 ${CMDLINE_CONFIG}\"|g"	\
+		${TARGET}${DODIR}/.config					|| return 1
 	return 0
 }
 
