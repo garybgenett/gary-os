@@ -19,7 +19,7 @@
 #{WINMGR} dwm
 #{WMHELP} doc>al+lf man>al+rt / cmd>al+p trm>al+sf+en web>al+cl+en / \`date --iso=s\`
 
-#{RCUPDT} xdg-settings set default-web-browser links-links-2.desktop
+#>>> #{RCUPDT} xdg-settings set default-web-browser links-links-2.desktop
 #{RCUPDT} rc-update add gpm default		|| true
 #{RCUPDT} rc-update del sysklogd default	|| true
 #{RCUPDT} rc-update del netmount default	|| true
@@ -230,8 +230,6 @@ x11-apps/xsetroot			#{MOD}
 # toolkits
 
 dev-lang/perl				#{MOD}
-dev-perl/JSON				#{MOD}
-dev-perl/JSON-XS			#{MOD}
 
 dev-lang/python				#{MOD}
 
@@ -240,8 +238,8 @@ dev-vcs/git				#{MOD}
 
 app-forensics/cmospwd
 sys-apps/flashrom
-sys-apps/fwupd
-sys-apps/fwupd-efi
+sys-apps/fwupd				#{MOD} # requires: dev-lang/vala
+sys-apps/fwupd-efi			#{MOD}
 sys-apps/memtester
 
 ########################################

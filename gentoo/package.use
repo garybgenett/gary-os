@@ -173,11 +173,13 @@ dev-util/librnp				-man		# requires: dev-ruby/asciidocto -> dev-lang/ruby
 #>>> / = remove (temporary)
 # * app-text/docbook-xsl-stylesheets
 # * dev-lang/python
+# * dev-lang/vala
 # * dev-libs/glib
 # * dev-python/docutils = dev-python/pygments
 # * dev-python/pygments
 # * dev-util/cmake
 # * dev-util/meson
+# * media-fonts/dejavu = virtual/ttf-fonts
 # * media-libs/fontconfig
 # * media-libs/freetype = media-libs/fontconfig
 # * media-libs/mesa
