@@ -362,13 +362,11 @@ declare FDIR="/lib/firmware"
 declare KVER=
 declare KCFG=
 declare KBAS=
-declare KFIL=
 declare KDIR=
 for FILE in ${KERNEL}; do
 	KVER="${FILE}"
 	KCFG="config-gentoo64-${KVER}"
 	KBAS="linux-${KVER}-gentoo"
-	KFIL="kernel-genkernel-x86_64-${KVER}-gentoo"
 	KDIR="/usr/src/${KBAS}"
 done
 
@@ -559,6 +557,7 @@ function print_info {
 		echo -en "\n"
 		printf "${PRINTF}" "Chroot Build (Initial):"			"<auto>"	"${_HEART} {chroot} -0" "<-n -a -b -k -i>"
 		printf "${PRINTF}" "Chroot Build (Update Only):"		"<auto>"	"${_HEART} {chroot} -/" "<-a -i>"
+		printf "${PRINTF}" "Chroot Build (Kernel Rebuild):"		"<auto>"	"${_HEART} {chroot} -." "<-a -k -i>"
 		printf "${PRINTF}" "Chroot Build (Complete Rebuild):"		"<auto>"	"${_HEART} {chroot} -1" "<-a -b -k -i>"
 		printf "${PRINTF}" "Chroot Build (Configuration):"		"<custom>"	"${_HEART} {chroot} -2" "<-c -i>"
 		printf "${PRINTF}" "Chroot Build (Internal Only):"		"<internal>"	"${_HEART} {chroot} [-m|-n|-a|-b|-k|-c] -i"
@@ -1264,6 +1263,7 @@ fi
 
 if [[ ${1} == -0 ]]; then shift; ${_SOUL} ${TOOR} -n -a -b -k	-i 2>&1 | tee --append ${TARGET}${GENDIR}.log | prompt -c	; exit ${PIPESTATUS[0]}; fi
 if [[ ${1} == -/ ]]; then shift; ${_SOUL} ${TOOR} -a		-i 2>&1 | tee --append ${TARGET}${GENDIR}.log | prompt -c	; exit ${PIPESTATUS[0]}; fi
+if [[ ${1} == -. ]]; then shift; ${_SOUL} ${TOOR} -a -k		-i 2>&1 | tee --append ${TARGET}${GENDIR}.log | prompt -c	; exit ${PIPESTATUS[0]}; fi
 if [[ ${1} == -1 ]]; then shift; ${_SOUL} ${TOOR} -a -b -k	-i 2>&1 | tee --append ${TARGET}${GENDIR}.log | prompt -c	; exit ${PIPESTATUS[0]}; fi
 if [[ ${1} == -2 ]]; then shift; ${_SOUL} ${TOOR} -c		-i								; exit ${PIPESTATUS[0]}; fi
 
@@ -1348,7 +1348,8 @@ if [[ ${1} == -i ]]; then
 		fi
 	fi
 	if ${_KRN} && ! ${DOFAST}; then
-		${RM}					${TARGET}/boot/{_,System.map,vmlinuz,initramfs,config}*	|| EXIT 1
+		${RM}					${TARGET}/boot/{System.map,vmlinuz,initramfs,config}-*	|| EXIT 1
+		${RM}					${TARGET}/boot/{_*,kernel{,.old}}			|| EXIT 1
 		${RM}					${TARGET}/etc/kernels/*					|| EXIT 1
 		${RM}					${TARGET}/lib/modules/*					|| EXIT 1
 		${RM}					${TARGET}${LDIR}*					|| EXIT 1
@@ -1373,17 +1374,18 @@ if [[ ${1} == -i ]]; then
 		${RSYNC_U} --copy-links			${SETDIR}/${LINDIR}/${KERN}				\
 							${TARGET}${ARCDIR}/${KERN}				|| EXIT 1
 		kernel_cpu				${TARGET}${ARCDIR}/${KERN}				|| EXIT 1
-		declare GENKERNEL_OPTS="--loglevel=5 --bootloader=grub --install --symlink --luks --zfs"
+		declare GEN_OPTS="--kernel-localversion=.${_TITLE} --loglevel=5 --bootloader=grub --install --symlink --luks --zfs"
+		declare GEN_ACTS="kernel"
 		if [[ -z ${AUTO} ]]; then
-			expect_wrapper			genkernel ${GENKERNEL_OPTS} kernel --menuconfig		|| EXIT 1
+			expect_wrapper			genkernel ${GEN_OPTS} ${GEN_ACTS} --menuconfig		|| EXIT 1
 		else
-			expect_wrapper			genkernel ${GENKERNEL_OPTS} kernel			\
+			expect_wrapper			genkernel ${GEN_OPTS} ${GEN_ACTS}			\
 							--kernel-config=${ARCDIR}/${KERN}			|| EXIT 1
 		fi
 		${RSYNC_U} --copy-links			${TARGET}${LDIR}/.config				\
 							${TARGET}${ARCDIR}/${KERN}				|| EXIT 1
 		if ! ${_GOS}; then
-			KERN="vmlinuz-${FILE}-gentoo-x86_64"
+			KERN="vmlinuz-${FILE}-gentoo.${_TITLE}"
 			${RM}				${TARGET}/boot/_cur					|| EXIT 1
 			${LN} ${KERN}			${TARGET}/boot/_cur					|| EXIT 1
 			${RM}				${TARGET}/boot/_new					|| EXIT 1
