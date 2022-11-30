@@ -19,6 +19,7 @@
 #{WINMGR} dwm
 #{WMHELP} doc>al+lf man>al+rt / cmd>al+p trm>al+sf+en web>al+cl+en / \`date --iso=s\`
 
+#{RCUPDT} xdg-settings set default-web-browser links-links-2.desktop
 #{RCUPDT} rc-update add gpm default		|| true
 #{RCUPDT} rc-update del sysklogd default	|| true
 #{RCUPDT} rc-update del netmount default	|| true
