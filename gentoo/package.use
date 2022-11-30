@@ -23,6 +23,7 @@ media-libs/opencv			qt5		# gentoo required
 media-libs/suil				gtk2		# gentoo required
 media-video/ffmpeg			theora		# gentoo required
 media-video/ffmpeg			x264		# gentoo required
+sys-apps/fwupd				-introspection	# gentoo required
 sys-libs/gdbm				berkdb		# gentoo required
 
 media-sound/aumix			-gpm		# gnetoo required: [media-sound/aumix-*] mouse.c:(.text+0x46): undefined reference to `Gpm_Wgetch'
@@ -124,6 +125,7 @@ net-misc/unison				-gtk
 net-vpn/openvpn				iproute2
 net-wireless/wpa_supplicant		qt5
 sci-calculators/qalculate-gtk		-gnome
+sys-apps/fwupd				bluetooth flashrom nvme synaptics uefi
 sys-apps/iproute2			iptables
 sys-apps/smartmontools			-caps -daemon
 sys-boot/grub				device-mapper efiemu libzfs mount
@@ -136,6 +138,9 @@ x11-wm/dwm				savedconfig
 
 app-emulation/libvirt			libvirtd	# gentoo required
 mail-mta/msmtp				mta		# gentoo required: replace mail-mta/nullmailer
+sys-apps/fwupd				minimal		# gentoo required: ( sys-apps/systemd | sys-auth/elogind ) -> sys-auth/polkit (!systemd ? sys-auth/elogind)
+
+*/*					-tpm
 
 mail-client/thunderbird			-bindist
 www-client/firefox			-bindist

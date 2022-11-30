@@ -338,6 +338,8 @@ net-wireless/bluez-tools
 
 app-forensics/cmospwd
 sys-apps/flashrom
+sys-apps/fwupd
+sys-apps/fwupd-efi
 sys-apps/memtester
 
 ########################################
