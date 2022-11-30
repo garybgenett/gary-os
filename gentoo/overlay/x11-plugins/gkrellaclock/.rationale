@@ -1,4 +1,3 @@
 # custom patch
-# 2022-03-03 22:20:27 +0100 f46bd80082128d385618cbb0476e6bcc3d25c670 x11-plugins/gkrellaclock: destabilise for ppc
 Error: 'gkrellm_init_plugin': /usr/lib64/gkrellm2/plugins/gkrellaclock.so: undefined symbol: gkrellm_init_plugin
--- gkrellaclock-0.3.4-r1.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/x11-plugins/gkrellaclock?id=f46bd80082128d385618cbb0476e6bcc3d25c670
+# 2022-03-03 22:20:27 +0100 f46bd80082128d385618cbb0476e6bcc3d25c670 x11-plugins/gkrellaclock: destabilise for ppc

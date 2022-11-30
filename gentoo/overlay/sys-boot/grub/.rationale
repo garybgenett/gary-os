@@ -8,4 +8,4 @@ error: out of memory.
 >> https://bugzilla.redhat.com/show_bug.cgi?id=1572126
 >> https://bugzilla.redhat.com/show_bug.cgi?id=1838633#c9
 >> https://github.com/raspberrypi/firmware/issues/124
--- grub-9999.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-boot/grub?id=19a28412bab445e6c35db9fd14702efbbef22c74
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
