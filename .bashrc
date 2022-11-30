@@ -2704,15 +2704,15 @@ function mount-robust {
 		if ${IS_LUKS} && [[ -b ${DEV} ]]; then
 			echo -en "- Closing Encryption...\n"
 			if ! ${DEBUG}; then
-				cryptsetup luksClose ${DEV} || return 1
+				cryptsetup --verbose luksClose ${DEV} || return 1
 			fi
 		fi
 	else
 		if ${IS_LUKS} && [[ ! -b ${DEV} ]]; then
 			echo -en "- Opening Encrypton...\n"
 			if ! ${DEBUG}; then
-				cryptsetup luksOpen ${LUKS_DEV} $(basename ${DEV})	|| return 1
-				cryptsetup luksDump ${LUKS_DEV}				|| return 1
+				cryptsetup --verbose luksOpen ${LUKS_DEV} $(basename ${DEV})	|| return 1
+				cryptsetup --verbose luksDump ${LUKS_DEV}			|| return 1
 				if ${ZFS_CHECK_IMPORT} ${DEV} 2>&1 >/dev/null | ${GREP} -v "Failed Detection"; then IS_ZFS="true"; fi
 			fi
 		fi
