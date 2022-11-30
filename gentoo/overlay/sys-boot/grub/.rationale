@@ -1,8 +1,11 @@
 # custom patch
 error: out of memory.
+>> https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1842320
+>> https://lists.gnu.org/archive/html/help-grub/2021-03/msg00000.html
+>> https://forum.manjaro.org/t/cannot-switch-kernel-errors-out-of-memory-and-you-need-to-load-the-kernel-first/62575
 >> https://lists.gnu.org/archive/html/help-grub/2018-11/msg00003.html
 >> https://lists.gnu.org/archive/html/bug-grub/2019-07/msg00022.html
 >> https://bugzilla.redhat.com/show_bug.cgi?id=1572126
 >> https://bugzilla.redhat.com/show_bug.cgi?id=1838633#c9
 >> https://github.com/raspberrypi/firmware/issues/124
--- grub-2.06-r3.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-boot/grub?id=19a28412bab445e6c35db9fd14702efbbef22c74
+-- grub-9999.ebuild -- https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-boot/grub?id=19a28412bab445e6c35db9fd14702efbbef22c74
