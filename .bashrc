@@ -2318,26 +2318,48 @@ function mixer {
 	declare MIXER_DAT="/proc/asound/cards"
 	declare MIXER_DEV="/dev/mixer"
 	declare MIXER_CMD="(pactl|pavucontrol)"
+	declare MIXER_LVL=
+	if [[ ${1} == +([0-9]) ]]; then
+		MIXER_LVL="${1}"
+		shift
+	fi
 	declare MIXER_NUM="$(
 		${SED} -n "s|^[^0-9]*([0-9]+).+$(
-			${SED} -n "s|^.*${HOSTNAME} = ([^\t]+)\t+([^\t]+)\t+([^\t]+)$|\1|gp" ${HOME}/.asoundrc |
+			${SED} -n "s|^.*${HOSTNAME} = ([^\t]+)\t+([^\t]+)\t+([^\t]+)\t+([^\t]+)\t+([^\t]+)$|\1|gp" ${HOME}/.asoundrc |
 			head -n1
 		).*$|\1|gp" ${MIXER_DAT}
+	)"
+	declare MIXER_CRD="$(
+		pactl list short cards 2>/dev/null |
+		${SED} -n "s|^([0-9]+).+$(
+			${SED} -n "s|^.*${HOSTNAME} = ([^\t]+)\t+([^\t]+)\t+([^\t]+)\t+([^\t]+)\t+([^\t]+)$|\2|gp" ${HOME}/.asoundrc |
+			head -n1
+		).*$|\1|gp"
 	)"
 	declare MIXER_SNK="$(
 		pactl list short sinks 2>/dev/null |
 		${SED} -n "s|^([0-9]+).+$(
-			${SED} -n "s|^.*${HOSTNAME} = ([^\t]+)\t+([^\t]+)\t+([^\t]+)$|\2|gp" ${HOME}/.asoundrc |
+			${SED} -n "s|^.*${HOSTNAME} = ([^\t]+)\t+([^\t]+)\t+([^\t]+)\t+([^\t]+)\t+([^\t]+)$|\3|gp" ${HOME}/.asoundrc |
 			head -n1
 		).*$|\1|gp"
 	)"
 	declare MIXER_SRC="$(
 		pactl list short sources 2>/dev/null |
 		${SED} -n "s|^([0-9]+).+$(
-			${SED} -n "s|^.*${HOSTNAME} = ([^\t]+)\t+([^\t]+)\t+([^\t]+)$|\2|gp" ${HOME}/.asoundrc |
+			${SED} -n "s|^.*${HOSTNAME} = ([^\t]+)\t+([^\t]+)\t+([^\t]+)\t+([^\t]+)\t+([^\t]+)$|\4|gp" ${HOME}/.asoundrc |
 			head -n1
 		).*$|\1|gp"
 	)"
+	cat ${MIXER_DAT}		2>/dev/null | ${GREP} --color=never -A1 "^[[:space:]]*${MIXER_NUM}[[:space:]]"
+	pactl list short cards		2>/dev/null | ${GREP} --color=never "^${MIXER_CRD}[[:space:]]"
+	pactl list short sinks		2>/dev/null | ${GREP} --color=never "^${MIXER_SNK}[[:space:]]"
+	pactl list short sources	2>/dev/null | ${GREP} --color=never "^${MIXER_SRC}[[:space:]]"
+	pactl list short clients	2>/dev/null
+	pactl list sink-inputs		2>/dev/null | ${GREP} --color=never -A1 \
+						-e "^Sink" \
+						-e "Volume" \
+						-e "application[.]name" \
+						| ${SED} "/^--$/d"
 	if [[ -n ${MIXER_NUM} ]]; then
 		#>>> & == avoid delay on disk i/o
 		sudo ${SED} -i "s%^(defaults.(pcm|ctl).card[[:space:]]+)([0-9]+)$%\1${MIXER_NUM}%g" ${HOME}/.asoundrc &
@@ -2355,7 +2377,15 @@ function mixer {
 		#>>>	output devices	= sinks
 		#>>>	input devices	= sources
 		pactl set-default-sink ${MIXER_SNK}
-		pactl set-sink-mute ${MIXER_SNK} false
+		for FILE in $(
+			${SED} -n "s|^.*${HOSTNAME} = ([^\t]+)\t+([^\t]+)\t+([^\t]+)\t+([^\t]+)\t+([^\t]+)$|\2|gp" ${HOME}/.asoundrc
+		); do
+			DIR="$(${SED} -n "s|^.*${HOSTNAME} = ([^\t]+)\t+(${FILE})\t+([^\t]+)\t+([^\t]+)\t+([^\t]+)$|\5|gp" ${HOME}/.asoundrc)"
+			pactl set-card-profile $(
+				pactl list short cards |
+				${SED} -n "s|^([0-9]+)[[:space:]].+${FILE}.+$|\1|gp"
+			) ${DIR}
+		done
 		for FILE in $(
 			pactl list short sink-inputs |
 			${SED} -n "s|^([0-9]+).+$|\1|gp"
@@ -2363,28 +2393,6 @@ function mixer {
 			pactl move-sink-input ${FILE} ${MIXER_SNK}
 			pactl set-sink-input-mute ${FILE} false
 			pactl set-sink-input-volume ${FILE} "100%"
-		done
-		for FILE in $(
-			${SED} -n "s|^.*${HOSTNAME} = ([^\t]+)\t+([^\t]+)\t+([^\t]+)$|\2|gp" ${HOME}/.asoundrc
-		); do
-			DIR="$(${SED} -n "s|^.*${HOSTNAME} = ([^\t]+)\t+(${FILE})\t+([^\t]+)$|\3|gp" ${HOME}/.asoundrc)"
-			pactl set-card-profile $(
-				pactl list short cards |
-				${SED} -n "s|^([0-9]+)[[:space:]].+${FILE}.+$|\1|gp"
-			) ${DIR}
-		done
-		for FILE in $(
-			pactl list short sources |
-			${SED} -n "s|^([0-9]+).+$|\1|gp"
-		); do
-			pactl set-source-mute ${FILE} $(
-				if [[ ${FILE} == ${MIXER_SRC} ]]; then
-					echo "false"
-				else
-					echo "true"
-				fi
-			)
-			pactl set-source-volume ${FILE} "100%"
 		done
 		for FILE in $(
 			pactl list short clients |
@@ -2401,23 +2409,65 @@ function mixer {
 				pactl set-source-output-volume ${DIR} "100%"
 			done
 		done
+		for FILE in $(
+			pactl list short sinks |
+			${SED} -n "s|^([0-9]+).+$|\1|gp"
+		); do
+			pactl set-sink-mute ${FILE} $(
+				if [[ ${FILE} == ${MIXER_SNK} ]]; then
+					echo "false"
+				else
+					echo "true"
+				fi
+			)
+			MATCH="false"
+			for DIR in $(
+				${SED} -n "s|^.*${HOSTNAME} = ([^\t]+)\t+([^\t]+)\t+([^\t]+)\t+([^\t]+)\t+([^\t]+)$|\3|gp" ${HOME}/.asoundrc
+			); do
+				DIR="$(
+					pactl list short sinks 2>/dev/null |
+					${SED} -n "s|^([0-9]+).+${DIR}.*$|\1|gp"
+				)"
+				if [[ ${FILE} == ${DIR} ]]; then
+					MATCH="true"
+					break
+				fi
+			done
+			if ! ${MATCH}; then
+				pactl set-sink-volume ${FILE} "100%"
+			elif [[ -n ${MIXER_LVL} ]]; then
+				pactl set-sink-volume ${FILE} "${MIXER_LVL}%"
+			fi
+		done
+		for FILE in $(
+			pactl list short sources |
+			${SED} -n "s|^([0-9]+).+$|\1|gp"
+		); do
+			pactl set-source-mute ${FILE} $(
+				if [[ ${FILE} == ${MIXER_SRC} ]]; then
+					echo "false"
+				else
+					echo "true"
+				fi
+			)
+			pactl set-source-volume ${FILE} "100%"
+		done
 	fi
-	if [[ ${1} == +([0-9]) ]]; then
-		if [[ -n ${MIXER_SNK} ]]; then
-			pactl set-sink-volume ${MIXER_SNK} "${1}%"
+	if [[ -z ${MIXER_SNK} ]] || [[ ${1} == -a ]]; then
+		[[ ${1} == -a ]] && shift
+		if [[ -n ${MIXER_LVL} ]]; then
+			echo -en "\n"
+			aumix -d ${MIXER_DEV} -L -v ${MIXER_LVL} -w ${MIXER_LVL}
+		elif [[ -n ${@} ]]; then
+			echo -en "\n"
+			aumix -d ${MIXER_DEV} "${@}"
+		else
+			aumix -d ${MIXER_DEV} -C ansi
 		fi
-		aumix -d ${MIXER_DEV} -L -v ${1} -w ${1}
-	elif [[ -n ${@} ]] && [[ ${1} != - ]]; then
-		aumix -d ${MIXER_DEV} "${@}"
-	elif [[ -z ${@} ]]; then
-		aumix -d ${MIXER_DEV} -C ansi
+	elif [[ -z ${MIXER_LVL} ]] && [[ -z ${@} ]]; then
+		pulsemixer --color 2 || pamix
 	fi
-	if [[ -n ${MIXER_SNK} ]]; then
-		pactl list short clients
-		pactl list sinks |
-			${SED} -n "/^Sink[ ][#]${MIXER_SNK}/,/^$/p" |
-			${GREP} --color=never -A1 "Volume"
-	fi
+	echo -en "\n"
 	aumix -d ${MIXER_DEV} -q
 	return 0
 }
