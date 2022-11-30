@@ -16,6 +16,7 @@ dev-qt/qtwidgets			dbus		# gentoo required
 media-gfx/graphviz			cairo		# gentoo required
 media-libs/gd				fontconfig	# gentoo required
 media-libs/gegl				cairo		# gentoo required
+media-libs/libpulse			dbus		# gentoo required
 media-libs/libsdl			joystick	# gentoo required
 media-libs/libsdl2			joystick	# gentoo required
 media-libs/opencv			qt5		# gentoo required
@@ -112,7 +113,8 @@ dev-vcs/git				tk
 mail-client/mutt			-tokyocabinet gpg hcache sasl sidebar smime smtp
 mail-client/thunderbird			-crypt -lightning -wifi ldap	# installing "enigmail" and "lightning" plugins manually
 media-libs/libprojectm			qt5
-media-sound/pulseaudio			bluetooth dbus
+media-sound/pulseaudio			bluetooth daemon
+media-sound/pulseaudio-daemon		alsa bluetooth dbus oss
 media-video/vlc				gui projectm run-as-root vlm
 net-analyzer/tcpdump			-chroot
 net-analyzer/wireshark			qt5
@@ -144,6 +146,7 @@ games-fps/doom3-ducttape		-dedicated
 ########################################
 
 app-text/enchant			aspell
+media-plugins/alsa-plugins		oss
 sci-libs/libqalculate			gnuplot readline
 sys-libs/ncurses			tinfo
 
