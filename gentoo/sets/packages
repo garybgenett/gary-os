@@ -19,7 +19,8 @@
 
 #{CMD} find /usr/share | grep -E "[.]desktop$" | sort
 
-#{RCUPDT}
+#>>> #{RCUPDT} xdg-settengs set default-web-browser chromium-browser-chromium.desktop
+#{RCUPDT} xdg-settengs set default-web-browser firefox-esr.desktop
 #{FSUPDT}
 #{FSPACK}
 #{FSKEEP}
