@@ -73,6 +73,8 @@ virtual/libcrypt			static-libs	# gentoo required
 #{CMD} for FILE in /bin/busybox /usr/bin/coreutils /bin/bash /usr/bin/openssl /usr/bin/ssh /usr/bin/rsync /sbin/runit ; do echo ; echo "${FILE}"; ldd ./build${FILE}; done
 #{CMD} make emerge-busybox emerge-coreutils emerge-bash emerge-openssl emerge-openssh emerge-rsync emerge-runit
 
+sys-kernel/gentoo-kernel		hardened initramfs
+
 dev-java/openjdk			-system-bootstrap
 dev-lang/gnat-gpl			ada
 sys-devel/gcc				-ada cxx
