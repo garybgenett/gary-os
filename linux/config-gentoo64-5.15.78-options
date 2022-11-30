@@ -1,11 +1,12 @@
 ################################################################################
-# default-gentoo64-5.15.78
+# default-gentoo64.config-5.15.78-gentoo-dist-hardened
 ################################################################################
 
 General setup
+	Local version - append to kernel release				CONFIG_LOCALVERSION=".gary-os"
 	Build ID Salt								CONFIG_BUILD_SALT=""
 	Kernel compression mode							CONFIG_KERNEL_XZ=y [XZ]
-	Default hostname							CONFIG_DEFAULT_HOSTNAME=gary-os
+	Default hostname							CONFIG_DEFAULT_HOSTNAME="gary-os"
 	Support for paging of anonymous memory (swap)				CONFIG_SWAP=y
 	Preemption Model							CONFIG_PREEMPT=y [Preemptible Kernel (Low-Latency Desktop)]
 	Kernel .config support							CONFIG_IKCONFIG=y
@@ -32,6 +33,9 @@ Virtualization									CONFIG_VIRTUALIZATION=y
 	Kernel-based Virtual Machine (KVM) support				CONFIG_KVM=y
 		KVM for Intel processors support				CONFIG_KVM_INTEL=y
 		KVM for AMD processors support					CONFIG_KVM_AMD=y
+
+Enable loadable module support							CONFIG_MODULES=y
+	Path to modprobe binary							CONFIG_MODPROBE_PATH="/sbin/modprobe"
 
 Device Drivers
 	Block devices								CONFIG_BLK_DEV=y
@@ -111,6 +115,10 @@ File systems
 			File decompression options				CONFIG_SQUASHFS_FILE_DIRECT=y [Decompress files directly into the page cache]
 			Decompressor parallelisation options			CONFIG_SQUASHFS_DECOMP_MULTI_PERCPU=y [Use percpu multiple decompressors for parallel I/O]
 		Include support for XZ compressed file systems			CONFIG_SQUASHFS_XZ=y
+
+Security options
+	TRUSTED_KEYS								CONFIG_TRUSTED_KEYS=y
+	ENCRYPTED_KEYS								CONFIG_ENCRYPTED_KEYS=y
 
 Library routines
 	Select compiled-in fonts						CONFIG_FONTS=y
