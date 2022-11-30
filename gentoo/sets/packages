@@ -435,11 +435,14 @@ media-video/lsdvd
 
 media-libs/alsa-lib
 media-libs/alsa-oss
+media-plugins/alsa-plugins
 media-sound/alsa-utils
 media-sound/aumix
 media-sound/pamix
 media-sound/pavucontrol
 media-sound/pulseaudio
+media-sound/pulseaudio-daemon
+media-sound/pulsemixer
 
 app-cdr/cuetools
 media-sound/cdparanoia
