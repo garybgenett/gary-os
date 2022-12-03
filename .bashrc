@@ -4581,7 +4581,7 @@ function task-copy {
 		};
 		my $orig = shift();
 		chomp($orig = qx(task uuids ${orig}));
-		my $data = qx(task export ${orig}); $data =~ s/\n//g; $data = decode_json(${data});
+		my $data = qx(task ${orig} export); $data =~ s/\n//g; $data = decode_json(${data});
 		$data = @{$data}[0];
 		while (@{ARGV}) {
 			my $field = shift();
@@ -4676,7 +4676,7 @@ function task-depends {
 		};
 		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $data = qx(task export);		$data =~ s/\n//g; $data = decode_json(${data});
-		my $show = qx(task export ${args});	$show =~ s/\n//g; $show = decode_json(${show});
+		my $show = qx(task ${args} export);	$show =~ s/\n//g; $show = decode_json(${show});
 		my $list = {};
 		my $rdep = {};
 		my $filt = {};
@@ -5233,7 +5233,7 @@ function task-export-text {
 		my $hr_line = "\n\n";
 		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $root = qx(task _get rc.data.location); chomp(${root});
-		my $data = qx(task export ${args}); $data =~ s/\n//g; $data = decode_json(${data});
+		my $data = qx(task ${args} export); $data =~ s/\n//g; $data = decode_json(${data});
 		my $base = ${root}; $base =~ s|^.*/||g;
 		open(JSON, ">", ${root} . ".json")			|| die();
 		open(KNBN, ">", ${root} . ".kanban.csv")		|| die();
@@ -5380,7 +5380,7 @@ function task-export-text {
 				$kanban_args =
 					((${kanban_args}) ? "\"${kanban_args}\"" : "");
 				$kanban_args =~ s|\\||g;
-				my $kanban_task = qx(task export ${kanban_args}); $kanban_task =~ s/\n//g; $kanban_task = decode_json(${kanban_task});
+				my $kanban_task = qx(task ${kanban_args} export); $kanban_task =~ s/\n//g; $kanban_task = decode_json(${kanban_task});
 				$kanban_export .= " " . ($#{$kanban_task}+1);
 				foreach my $task (@{$kanban_task}) {
 					$kanban->{$key}{ $task->{"uuid"} } = ${task};
@@ -6048,7 +6048,7 @@ function task-notes {
 		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
 		my $root = qx(task _get rc.data.location); chomp(${root});
 #>>>		my $data = qx(task export kind:notes ${args}); $data =~ s/\n//g; $data = decode_json(${data});
-		my $data = qx(task export ${args}); $data =~ s/\n//g; $data = decode_json(${data});
+		my $data = qx(task ${args} export); $data =~ s/\n//g; $data = decode_json(${data});
 		my $edit = ${args}; $edit =~ s/\"/\\\"/g; $edit = "${ENV{EDITOR}} -c \"map \~ <ESC>:!task read ${edit}<CR>\" -c \"map \\ <ESC>:!task \"";
 		my $mark = "DELETE";
 		my $rsync_u = ${ENV{RSYNC_U}}; $rsync_u =~ s/^reporter //g;
@@ -6190,7 +6190,7 @@ function task-recur {
 			};
 		};
 		my $args = join("\" \"", @ARGV); if (${args}) { $args = "\"${args}\""; };
-		my $data = qx(task export ${args}); $data =~ s/\n//g; $data = decode_json(${data});
+		my $data = qx(task ${args} export); $data =~ s/\n//g; $data = decode_json(${data});
 		my $list = {};
 		my $keys = [];
 		my $count = {};
