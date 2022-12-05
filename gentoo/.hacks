@@ -10,6 +10,7 @@ rm -frv /root
 chmod -v 000 /usr/bin/dbus-daemon
 chmod -v 000 /usr/bin/dbus-launch
 chmod -v 000 /usr/lib/polkit*/polkitd
+chmod -v 000 /usr/libexec/samba/samba-bgqd
 chmod -v 000 /usr/sbin/console-kit-daemon
 
 ########################################
