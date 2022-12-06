@@ -61,6 +61,7 @@
 
 #{LINPKG} sys-kernel/gentoo-sources:5.10.154
 #{KERNEL} 5.10.154
+#{KRNLNK}
 
 #{SELECT} cdparanoia:cdparanoia-paranoia
 #{SELECT} editor:vi
