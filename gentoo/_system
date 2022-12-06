@@ -324,12 +324,13 @@ function portage_file {
 	return 0
 }
 
-#OPTIONS[LINPKG KERNEL]
+#OPTIONS[LINPKG KERNEL KRNLNK]
 #OPTIONS[SELECT WINMGR WMHELP]
 #OPTIONS[RCUPDT FSUPDT FSPACK FSKEEP FSARCH FSEXCL]
 for FILE in	\
 	LINPKG	\
 	KERNEL	\
+	KRNLNK	\
 	\
 	FLAVOR	\
 	MIXINS	\
@@ -1354,8 +1355,9 @@ if [[ ${1} == -i ]]; then
 		${RM}					${TARGET}/lib/modules/*					|| EXIT 1
 		${RM}					${TARGET}${LDIR}*					|| EXIT 1
 		expect_wrapper				emerge ${_ASK} sys-kernel/genkernel ${LINPKG}		|| EXIT 1
-		declare KERN="$(cd ${TARGET}/boot; ls vmlinuz-*-gentoo*		2>/dev/null | sort | tail -n1)"
-		declare INIT="$(cd ${TARGET}/boot; ls initramfs-*-gentoo*	2>/dev/null | sort | tail -n1)"
+		if [[ -z ${KRNLNK} ]]; then KRNLNK="*"; fi
+		declare KERN="$(cd ${TARGET}/boot; ls vmlinuz-${KRNLNK}-gentoo*		2>/dev/null | ${GREP} -v "${_TITLE}" | sort | tail -n1)"
+		declare INIT="$(cd ${TARGET}/boot; ls initramfs-${KRNLNK}-gentoo*	2>/dev/null | ${GREP} -v "${_TITLE}" | sort | tail -n1)"
 		${RM}					${TARGET}/boot/_kernel					|| EXIT 1
 		${RM}					${TARGET}/boot/_initrd					|| EXIT 1
 		if [[ -n ${KERN} ]]; then ${LN} ${KERN}	${TARGET}/boot/_kernel					|| EXIT 1; fi
