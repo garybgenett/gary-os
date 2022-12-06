@@ -48,10 +48,10 @@ update_process_names=1
 
 ########################################
 
-column_meters_0=Battery CPU Memory Swap Zram AllCPUs4
-column_meter_modes_0=1 1 1 1 1 1
-column_meters_1=Hostname System DateTime Uptime LoadAverage Memory Tasks NetworkIO DiskIO ZFSARC ZFSCARC
-column_meter_modes_1=2 2 2 2 2 2 2 2 2 2 2
+column_meters_0=Battery CPU Memory Swap AllCPUs2
+column_meter_modes_0=1 1 1 1 1
+column_meters_1=Hostname System DateTime Uptime LoadAverage Memory Tasks NetworkIO DiskIO
+column_meter_modes_1=2 2 2 2 2 2 2 2 2
 
 ########################################
 
