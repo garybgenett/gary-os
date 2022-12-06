@@ -6440,15 +6440,10 @@ function zfs-snap {
 		SNAPNUM="${1}"
 		shift
 	fi
-	if ${LISTING}; then
-		if [[ -n ${1} ]]; then
-			${LL} ${SNAPDIR}/${SNAPNUM}/${1}
-		else
+	if [[ -z ${@} ]]; then
+		if ${LISTING}; then
 			${LS} ${SNAPDIR}
 		fi
-		return 0
-	fi
-	if [[ -z ${@} ]]; then
 		return 0
 	fi
 	declare FILE
@@ -6464,7 +6459,9 @@ function zfs-snap {
 		fi
 		FILE="${PWD/#${ZACTDIR}}${FILE}"
 		DIR="${SNAPDIR}/${SNAPNUM}${FILE}"
-		if ${RESTORE}; then
+		if ${LISTING}; then
+			${LL} ${DIR} ${ZACTDIR}${FILE}
+		elif ${RESTORE}; then
 			rsync $(
 				if [[ -d ${DIR} ]]; then
 					echo "${DIR}/"
