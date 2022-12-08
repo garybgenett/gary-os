@@ -285,7 +285,6 @@ sys-devel/bc
 dev-util/ltrace
 dev-util/strace
 dev-util/sysprof
-sys-apps/fakeroot-ng
 sys-apps/kexec-tools
 
 sys-apps/hdparm
