@@ -6,23 +6,25 @@ rm -frv /media
 rm -frv /root
 
 ########################################
+echo -en "\n"
 
 chmod -v 000 /usr/bin/dbus-daemon
 chmod -v 000 /usr/bin/dbus-launch
 chmod -v 000 /usr/lib/polkit*/polkitd
 chmod -v 000 /usr/libexec/samba/samba-bgqd
-chmod -v 000 /usr/sbin/console-kit-daemon
 
 ########################################
-
-chmod -v 1777 /dev/shm
-ipcrm --all=shm
-
-########################################
+echo -en "\n"
 
 find /etc			-name '*.swp'	| sort -u
 find /etc			-name '._cfg.*'	| sort -u
 find /etc/config-archive	-type f		| sort -u
+
+########################################
+echo -en "\n"
+
+chmod -v 1777 /dev/shm
+ipcrm --all=shm
 
 exit 0
 ################################################################################
