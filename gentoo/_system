@@ -277,8 +277,8 @@ if ${_GOS}; then
 	GOPT="-O2"
 fi
 
-CPUS="$(grep "^processor" /proc/cpuinfo | wc -l)"
-MEMS="$(sed -nr "s|^MemTotal[:][^0-9]+([0-9]+)[^0-9]+$|\1|gp" /proc/meminfo)"
+CPUS="$(${GREP} "^processor" /proc/cpuinfo | wc -l)"
+MEMS="$(${SED} -n "s|^MemTotal[:][^0-9]+([0-9]+)[^0-9]+$|\1|gp" /proc/meminfo)"
 MSAV="$(expr 4 \* 1024 \* 1024)"
 MPER="$(expr 2 \* 1024 \* 1024)"
 JOBS="$(expr \( ${MEMS} - ${MSAV} \) / ${MPER})"
