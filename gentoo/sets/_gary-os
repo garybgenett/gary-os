@@ -75,7 +75,7 @@
 #{WMHELP} doc>al+lf man>al+rt / cmd>al+p trm>al+sf+en web>al+cl+en ext>al+sf+cl+en / \`date --iso=s\`
 
 #>>> #{RCUPDT} xdg-settings set default-web-browser links-links-2.desktop
-#{RCUPDT} xdg-settengs set default-web-browser firefox-esr.desktop
+#>>> #{RCUPDT} xdg-settengs set default-web-browser firefox-esr.desktop
 #{RCUPDT} rc-update add gpm default		|| true
 #{RCUPDT} rc-update del sysklogd default	|| true
 #{RCUPDT} rc-update del netmount default	|| true
