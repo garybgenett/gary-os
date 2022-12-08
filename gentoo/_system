@@ -277,6 +277,14 @@ if ${_GOS}; then
 	GOPT="-O2"
 fi
 
+CPUS="$(grep "^processor" /proc/cpuinfo | wc -l)"
+MEMS="$(sed -nr "s|^MemTotal[:][^0-9]+([0-9]+)[^0-9]+$|\1|gp" /proc/meminfo)"
+MSAV="$(expr 4 \* 1024 \* 1024)"
+MPER="$(expr 2 \* 1024 \* 1024)"
+JOBS="$(expr \( ${MEMS} - ${MSAV} \) / ${MPER})"
+if [[ "${JOBS}" -gt "${CPUS}"	]]; then JOBS="${CPUS}"	; fi
+if [[ "${JOBS}" -le "0"		]]; then JOBS="1"	; fi
+
 ########################################
 
 #{CMD} grep -rE "[#][{](NEW|MOD|GOS|CPU|GARC|GSUB|GOPT)[}]" ./gentoo
@@ -287,6 +295,7 @@ function portage_file {
 	declare P_SPACER="${1}" && shift
 	if [[ -d ${PORT_SEL} ]]; then
 		for FILE in $(${LS}		\
+			${PORT_SEL}/env/*	\
 			${PORT_SEL}/make.conf	\
 			${PORT_SEL}/package.*	\
 			${PORT_SEL}/sets/*	\
@@ -303,9 +312,11 @@ function portage_file {
 			{ { ${_GOS} && ! ${_GFG} &&	{ ${SED} -e "s|^[#][{]GFG[}][ ](.+)$|\1|g" -e "/[#][{]GFG[}]/d" || return 1; }; } || cat; } |
 			{ {				{ ${SED} -e "s|^[#][{]CPU[}][ ](.+)$|\1|g" -e "/[#][{]CPU[}]/d" || return 1; }; } || cat; } |
 			{ ${SED} \
-				-e "s|[#][{]GARC[}]|${GARC}|g"	\
-				-e "s|[#][{]GSUB[}]|${GSUB}|g"	\
-				-e "s|[#][{]GOPT[}]|${GOPT}|g"	\
+				-e "s|[#][{]GARC[}]|${GARC}|g"		\
+				-e "s|[#][{]GSUB[}]|${GSUB}|g"		\
+				-e "s|[#][{]GOPT[}]|${GOPT}|g"		\
+				-e "s|(MAKE.+)-j4|\1-j${CPUS}|g"	\
+				-e "s|(MAKE.+)-j2|\1-j${JOBS}|g"	\
 				|| return 1;
 			} |
 			{ {
