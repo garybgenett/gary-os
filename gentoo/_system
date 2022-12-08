@@ -523,7 +523,7 @@ function print_info {
 		echo -en ">>> ARGUMENT PROCESSING IS VERY RUDIMENTARY // OPTIONS MUST BE IN THE ORDER SHOWN <<<"
 		echo -en "${RESET}\n"
 		echo -en "\n"
-		printf "${PRINTF}" "Synchronize (Database, Sources, Metadata):"	"<auto>"	"${_HEART} -U [{branch} {commit_id}]" "<${FUNTOO}>"
+		printf "${PRINTF}" "Synchronize (Database, Sources, Metadata):"	"<auto>"	"${_HEART} -U [{branch}|{commit_id}]" "<${FUNTOO}>"
 		printf "${PRINTF}" "Synchronize (Sources, Metadata):"		"<auto>"	"${_HEART} -U -f"
 		printf "${PRINTF}" "Synchronize (Metadata Only):"		"<auto>"	"${_HEART} -!"
 		echo -en "\n"
@@ -656,11 +656,7 @@ function print_info {
 		echo -en "${RESET}\n"
 	elif [[ ${1} == "update" ]]; then
 		echo -en "${NOTES}"
-		echo -en "Preparing To Update All Data"
-		for FILE in {1..10}; do
-			echo -en "."
-			sleep 1
-		done
+		echo -en "Updating Databases..."
 		echo -en "${RESET}\n"
 	elif [[ ${1} == "mount" ]]; then
 		echo -en "${NOTES}"
@@ -1557,9 +1553,13 @@ elif [[ ${1} == -U ]]; then
 		fi
 		declare FUN_OPT="-c branch.autosetuprebase=always -c pull.rebase=true"
 		declare FUN_GIT="${GIT} --git-dir=${REPDIR}.git --work-tree=${REPDIR} ${FUN_OPT}"
+		declare MARK="master"
+		if [[ -n ${1} ]]; then
+			MARK="${1}" && shift
+		fi
 		${FUN_GIT} fetch --all						|| EXIT 1
-		${FUN_GIT} checkout --force ${@}				|| EXIT 1
-		${FUN_GIT} reset --hard ${@}					|| EXIT 1
+		${FUN_GIT} checkout --force ${MARK}				|| EXIT 1
+		${FUN_GIT} reset --hard ${MARK}					|| EXIT 1
 		expect_wrapper egencache --verbose				\
 			--repo gentoo						\
 			--update						\
