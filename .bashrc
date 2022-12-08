@@ -2840,8 +2840,8 @@ function mount-zfs {
 	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#zfs-arc-min
 	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#zfs-arc-max
 	# https://serverfault.com/questions/581669/why-isnt-the-arc-max-setting-honoured-on-zfs-on-linux
-	declare ZFS_ARC_MIN="$(( (2**30) / 2 ))"	# default: dynamic	512M
-	declare ZFS_ARC_MAX="$(( (2**30) * 2 ))"	# default: dynamic	2G
+	declare ZFS_ARC_MIN="$(( (2**30) * 2 ))"	# default: dynamic	2G
+	declare ZFS_ARC_MAX="$(( (2**30) * 8 ))"	# default: dynamic	8G
 	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#zfs-prefetch-disable
 	# /proc/spl/kstat/zfs/arcstats
 	declare ZFS_PRE_DIS="1"				# default: 0
