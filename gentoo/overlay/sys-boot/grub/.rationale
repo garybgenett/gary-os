@@ -1,5 +1,6 @@
 # custom patch
 error: out of memory.
+>> https://github.com/rhboot/grub2/pull/114/commits/cf6516128ea03294156fc59a50ce90856bd3ebd2
 >> https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1842320
 >> https://lists.gnu.org/archive/html/help-grub/2021-03/msg00000.html
 >> https://forum.manjaro.org/t/cannot-switch-kernel-errors-out-of-memory-and-you-need-to-load-the-kernel-first/62575

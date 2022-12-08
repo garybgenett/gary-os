@@ -1,0 +1,2 @@
+# version archiving
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
