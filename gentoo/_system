@@ -312,11 +312,11 @@ function portage_file {
 			{ { ${_GOS} && ! ${_GFG} &&	{ ${SED} -e "s|^[#][{]GFG[}][ ](.+)$|\1|g" -e "/[#][{]GFG[}]/d" || return 1; }; } || cat; } |
 			{ {				{ ${SED} -e "s|^[#][{]CPU[}][ ](.+)$|\1|g" -e "/[#][{]CPU[}]/d" || return 1; }; } || cat; } |
 			{ ${SED} \
-				-e "s|[#][{]GARC[}]|${GARC}|g"		\
-				-e "s|[#][{]GSUB[}]|${GSUB}|g"		\
-				-e "s|[#][{]GOPT[}]|${GOPT}|g"		\
-				-e "s|(MAKE.+)-j4|\1-j${CPUS}|g"	\
-				-e "s|(MAKE.+)-j2|\1-j${JOBS}|g"	\
+				-e "s|[#][{]GARC[}]|${GARC}|g"			\
+				-e "s|[#][{]GSUB[}]|${GSUB}|g"			\
+				-e "s|[#][{]GOPT[}]|${GOPT}|g"			\
+				-e "s|(MAKE.+)-j4([^0-9])|\1-j${CPUS}\2|g"	\
+				-e "s|(MAKE.+)-j2([^0-9])|\1-j${JOBS}\2|g"	\
 				|| return 1;
 			} |
 			{ {
