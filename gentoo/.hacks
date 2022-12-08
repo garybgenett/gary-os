@@ -26,6 +26,28 @@ echo -en "\n"
 chmod -v 1777 /dev/shm
 ipcrm --all=shm
 
+########################################
+echo -en "\n"
+
+modprobe zram num_devices="1"
+ZRAM="$(swapon --noheadings --output-all | grep "^/dev/zram" | cut -d' ' -f1 | head -n1)"
+if [[ ${1} == -z ]]; then shift
+	if [[ -z ${ZRAM} ]]; then
+		ZRAM="$(zramctl --find --algorithm lz4 --streams 21 --size 16GB)"
+	fi
+	echo -en "8GB" >/sys/block/$(basename ${ZRAM})/mem_limit
+	mkswap ${ZRAM}
+	swapon ${ZRAM}
+elif [[ -n ${ZRAM} ]]; then
+	swapoff ${ZRAM}
+	echo -en "1" >/sys/block/$(basename ${ZRAM})/reset
+	echo -en "${ZRAM}" | sed "s|^/dev/zram||g" >/sys/class/zram-control/hot_remove
+fi
+if [[ -n ${ZRAM} ]]; then
+	zramctl --output-all
+	swapon --output-all
+fi
+
 exit 0
 ################################################################################
 # end of file
