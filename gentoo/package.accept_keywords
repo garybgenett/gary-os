@@ -23,11 +23,6 @@ app-misc/yq				~amd64		# gentoo required
 net-wireless/bluez-tools		~amd64		# gentoo required
 
 ########################################
-# utilities
-
-sys-apps/fakeroot-ng			~amd64		# gentoo required
-
-########################################
 # programs
 
 app-misc/task				~amd64
