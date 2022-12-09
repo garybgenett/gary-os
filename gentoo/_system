@@ -1466,7 +1466,7 @@ if [[ ${1} == -w ]]; then
 		gcc-config --list-profiles
 	fi
 	if [[ -n "$(which java-config 2>/dev/null)" ]]; then
-		java-config $(java-config --list-available-vm	| ${SED} -n "s|^.*[[](.+)[]].*$|\1|gp" | ${GREP} -o "openjdk[-][0-9]+" | sort -uV | tail -n1)
+		java-config $(java-config --list-available-vm			| ${SED} -n "s|^.*[[](.+)[]].*$|\1|gp" | ${GREP} -o "openjdk[-][0-9]+" | sort -uV | tail -n1)
 		java-config --list-available-vms
 	fi
 	for FILE in \
@@ -1568,7 +1568,8 @@ elif [[ ${1} == -U ]]; then
 		if [[ -n ${1} ]]; then
 			MARK="${1}" && shift
 		fi
-		${FUN_GIT} fetch --all						|| EXIT 1
+		${FUN_GIT} checkout --force master				|| EXIT 1
+		${FUN_GIT} pull --ff-only --all					|| EXIT 1
 		${FUN_GIT} checkout --force ${MARK}				|| EXIT 1
 		${FUN_GIT} reset --hard ${MARK}					|| EXIT 1
 		expect_wrapper egencache --verbose				\
