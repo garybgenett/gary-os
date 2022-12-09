@@ -1631,19 +1631,23 @@ function hd-sn-list {
 ########################################
 
 function hist-grep {
+	declare LISTING="false"
+	export HIST_DATES="."
+	export HIST_FINDS="."
 	if [[ ${1} == -l ]]; then
-		shift
-		export HIST_DATES="."
-		export HIST_FINDS="."
-		if [[ -n $(echo "${1}" | ${GREP} "^[][(|)^.*0-9T:+-]+$") ]]; then
-			HIST_DATES="${1}" && shift
-		fi
-		if [[ -n ${1} ]]; then
-			HIST_FINDS="${1}" && shift
-		fi
-		echo "DATES: ${HIST_DATES}"
-		echo "FINDS: ${HIST_FINDS}"
-		cat ${HOME}/.history/shell/${HOSTNAME}.${USER}.$(basename ${SHELL}).* |
+		LISTING="true" && shift
+	fi
+	if [[ -n $(echo "${1}" | ${GREP} "^[][(|)^.*0-9T:+-]+$") ]]; then
+		HIST_DATES="${1}" && shift
+	fi
+	if [[ -n ${1} ]]; then
+		HIST_FINDS="${1}" && shift
+	fi
+	echo "DATES: ${HIST_DATES}"
+	echo "FINDS: ${HIST_FINDS}"
+	${LL} ${HOME}/.history/shell/${HOSTNAME}.${USER}.$(basename ${SHELL}).${HIST_DATES/#.}*
+	if ${LISTING}; then
+		cat ${HOME}/.history/shell/${HOSTNAME}.${USER}.$(basename ${SHELL}).${HIST_DATES/#.}* |
 			perl -e '
 				use strict;
 				use warnings;
@@ -1659,16 +1663,16 @@ function hist-grep {
 						print "${datetime} ${command}\n";
 					};
 				};
-			' -- "${@}" |
+			' |
 			sort |
-			${GREP} -a "${@}" -e "${HIST_FINDS/#^/\ }"
+			${GREP} -a "${HIST_FINDS}"
 	else
-		${GREP} "${@}" ${HOME}/.history/shell/${HOSTNAME}.${USER}.$(basename ${SHELL}).* |
+		${GREP} "${HIST_FINDS}" ${HOME}/.history/shell/${HOSTNAME}.${USER}.$(basename ${SHELL}).${HIST_DATES/#.}* |
 			cut -d: -f2- |
 			sort |
 			uniq --count |
 			sort --numeric-sort |
-			${GREP} -a "${@}"
+			${GREP} -a "${HIST_FINDS}"
 	fi
 }
 
