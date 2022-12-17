@@ -3,7 +3,17 @@
 ################################################################################
 
 >sys-kernel/gentoo-kernel-5.15.78	# force version
+
+########################################
+# toolkits
+
 >=dev-lang/python-3.11			# force version
+
+########################################
+# games
+
+games-misc/fortune-mod-mormon
+games-misc/fortune-mod-scriptures
 
 ################################################################################
 # end of file
