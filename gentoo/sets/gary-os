@@ -20,7 +20,7 @@
 #{WINMGR} dwm
 #{WMHELP} doc>al+lf man>al+rt / cmd>al+p trm>al+sf+en web>al+cl+en / \`date --iso=s\`
 
-#>>> #{RCUPDT} xdg-settings set default-web-browser links-links-2.desktop
+#{RCUPDT} xdg-settings set default-web-browser links-links-2.desktop	#{MOD}
 #{RCUPDT} rc-update add gpm default		|| true
 #{RCUPDT} rc-update del sysklogd default	|| true
 #{RCUPDT} rc-update del netmount default	|| true
@@ -218,6 +218,7 @@ sys-kernel/genkernel			#{MOD}
 x11-apps/xrandr				#{MOD}
 x11-base/xorg-drivers			#{MOD}
 x11-base/xorg-server			#{MOD}
+x11-misc/xdg-utils			#{MOD}
 
 x11-misc/dmenu				#{MOD}
 x11-wm/dwm				#{MOD}
