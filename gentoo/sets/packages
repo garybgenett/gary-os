@@ -22,8 +22,8 @@
 
 #{CMD} find /usr/share | grep -E "[.]desktop$" | sort
 
-#>>> #{RCUPDT} xdg-settengs set default-web-browser chromium-browser-chromium.desktop
-#{RCUPDT} xdg-settengs set default-web-browser firefox-esr.desktop
+#>>> #{RCUPDT} xdg-settings set default-web-browser chromium-browser-chromium.desktop
+#{RCUPDT} xdg-settings set default-web-browser firefox-esr.desktop
 #{FSUPDT}
 #{FSPACK}
 #{FSKEEP}
@@ -201,6 +201,7 @@ x11-base/xorg-apps
 x11-base/xorg-drivers
 x11-base/xorg-server
 x11-misc/arandr
+x11-misc/xdg-utils
 
 x11-misc/dmenu
 x11-misc/obconf
