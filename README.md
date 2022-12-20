@@ -28,6 +28,7 @@
 
 [(...)]: #v30-2015-03-16
 
+[GaryOS]: http://www.garybgenett.net/projects/gary-os
 [Gary B. Genett]: http://www.garybgenett.net
 [gary-os@garybgenett.net]: mailto:gary-os@garybgenett.net?subject=GaryOS%20Submission&body=Thank%20you%20for%20sending%20a%20message%21
 
@@ -41,7 +42,7 @@
 ## Overview ####################################################################
 [Overview]: #overview
 
-**GaryOS is an entire [GNU/Linux] system in a single bootable file.**  It is
+**[GaryOS] is an entire [GNU/Linux] system in a single bootable file.**  It is
 also a [Builder] system to create and package [Gentoo] installations.
 
 [Builder] creates custom root filesystems that GaryOS can load into memory in
@@ -90,7 +91,7 @@ Use the normal `shutdown now` or simply power off when finished.
 ### Requirements ###############################################################
 [Requirements]: #requirements
 
-A 64-bit x86 CPU is required.  GaryOS is not built for any other platforms.
+A 64-bit x86 CPU is required.  [GaryOS] is not built for any other platforms.
 Intel and AMD x86 processors are by far the most common for desktop and laptop
 computers, which is what GaryOS was designed for.
 
@@ -108,7 +109,7 @@ a serial terminal will work just fine.
 ### Support ####################################################################
 [Support]: #support
 
-[Gary B. Genett] is the sole developer and maintainer of GaryOS.  It is
+[Gary B. Genett] is the sole developer and maintainer of [GaryOS].  It is
 a personal project with aspirations of recognition as an actual distribution,
 however misguided.
 
@@ -133,7 +134,7 @@ This is a list of current known issues.  Ideally, this section would be empty.
 
 On some systems, [GNU GRUB] produces an "out of memory" error when booting the
 [Kernel] with EFI.  Research into this is ongoing, and documented in the [grub
-rationale file] in [gentoo/overlay/].  The version of GNU GRUB in GaryOS
+rationale file] in [gentoo/overlay/].  The version of GNU GRUB in [GaryOS]
 (starting in [v6.0]) uses a custom [grub patch] to provide better debug tracing
 for when this occurs.
 
@@ -159,7 +160,7 @@ The workaround is to use the [Tiny] kernel.  See [Minimal] for details.
 ## Booting #####################################################################
 [Booting]: #booting
 
-GaryOS is a [Linux Kernel] with a large embedded [Linux initramfs] (see
+[GaryOS] is a [Linux Kernel] with a large embedded [Linux initramfs] (see
 [Design]).  It can be booted in the exact same way as a standard Linux kernel,
 and from anywhere that a Linux kernel can.
 
@@ -184,7 +185,7 @@ Starting from [GNU/Linux] is easier than with [Windows], for obvious reasons.
 There are two options.
 
   1. Use an existing booloader configuration
-  2. Use the GaryOS [GRUB] tooling
+  2. Use the [GaryOS] [GRUB] tooling
 
 It is recommended to use the first if it is available.  The simplest version
 for GRUB is below, with the `linux` line matching the location of the GaryOS
@@ -218,7 +219,7 @@ with them, so no instructions or support is provided.
 
 Installation for Windows systems is not complicated, but does involve a few
 steps.  Microsoft consistently changes the way their bootloader works, and what
-items are supported.  The [v3.0] version of GaryOS was the last one to support
+items are supported.  The [v3.0] version of [GaryOS] was the last one to support
 direct modification of the Windows 7/8 bootloader.  In Windows 10, Microsoft
 removed support for the application type required to boot the GaryOS [GRUB]
 image.  As such, using a USB drive is the safest and easiest method.  There are
@@ -230,7 +231,7 @@ Steps for creating the bootable USB drive are in [GRUB].
 ### GRUB #######################################################################
 [GRUB]: #grub
 
-The GaryOS [Boot] file contains everything needed to create and update [GNU
+The [GaryOS] [Boot] file contains everything needed to create and update [GNU
 GRUB] on both hard drives and USB drives.  The core of the tooling is the
 [scripts/grub.sh] script.
 
@@ -303,7 +304,7 @@ instructions are also supported.
 ### EFI ########################################################################
 [EFI]: #efi
 
-Both the GaryOS [Kernel] and the GRUB `x86_64.efi` file in [Boot] (see [GRUB])
+Both the [GaryOS] [Kernel] and the GRUB `x86_64.efi` file in [Boot] (see [GRUB])
 are EFI applications, and can be used directly from an EFI menu on an
 appropriate partition.
 
@@ -313,9 +314,9 @@ necessary EFI configuration steps are not.
 ### PXE ########################################################################
 [PXE]: #pxe
 
-In a networked environment GaryOS can boot from a central server.  This is often
-used in labs or environments where centralized management of infrastructure is
-critical.
+In a networked environment [GaryOS] can boot from a central server.  This is
+often used in labs or environments where centralized management of
+infrastructure is critical.
 
 Both the GaryOS [Kernel] and the GRUB `x86_64.efi` file in [Boot] (see [GRUB])
 can be loaded directly from PXE.  The [Boot] image will automatically select and
@@ -342,7 +343,7 @@ a completely automated and centrally managed lab or server farm.
 [Virtual]: #virtual
 
 Using virtualization is is the quickest and easiest way to try out or test
-GaryOS.  On a [GNU/Linux] system, [QEMU] is high-performance and
+[GaryOS].  On a [GNU/Linux] system, [QEMU] is high-performance and
 low-complexity, and is what the author uses for all development and testing of
 GaryOS (see [Checklist]).  However, it is not well suited for other platforms,
 such as Windows, and [VirtualBox] is the best choice there.  VirtualBox also
@@ -397,7 +398,7 @@ This new virtual machine will run GaryOS [GRUB] and boot the [Kernel].
 ## Running #####################################################################
 [Running]: #running
 
-There are many things that can be done with GaryOS once it is booted, some of
+There are many things that can be done with [GaryOS] once it is booted, some of
 which are outlined in [Overview].  It is essentially a packaged [Gentoo]
 installation.  There are a few common tasks that are documented to make them
 easier, and some additional capabilities specific to GaryOS.
@@ -421,7 +422,7 @@ several networking packages are installed.  Instructions for Ethernet, Wireless
 and [OpenSSH] `sshd` are below.
 
 The [Gentoo Networking] page contains full details on all the configuration
-possibilities.  For the purposes of GaryOS, a simple single-interface
+possibilities.  For the purposes of [GaryOS], a simple single-interface
 configuration is likely all that is needed.
 
 **Ethernet**
@@ -505,7 +506,7 @@ password should be changed before enabling SSH.
 ### GUI ########################################################################
 [GUI]: #gui
 
-GaryOS boots to the command line by default.  To run the [X.Org] graphical
+[GaryOS] boots to the command line by default.  To run the [X.Org] graphical
 interface, use `startx`.
 
   | Utility           | [Kernel]       | [Rootfs]
@@ -546,8 +547,8 @@ high geek factor (see [Goals]).
 ### Update #####################################################################
 [Update]: #update
 
-GaryOS is essentially a packaged [Gentoo] system, and can be updated or modified
-just like a normal installation.
+[GaryOS] is essentially a packaged [Gentoo] system, and can be updated or
+modified just like a normal installation.
 
   1. Set up [Networking]
   2. Increase the size of the filesystem
@@ -612,11 +613,11 @@ updated [Filesystem] or doing an [Install] are good alternatives.
 ### Filesystem #################################################################
 [Filesystem]: #filesystem
 
-GaryOS uses a three-stage process for unpacking the root filesystem into memory.
-This is covered in detail in [Design].  During this process, a filesystem image
-is selected, loaded into memory, and booted.  The default is to use the one
-packed into the [Kernel].  GaryOS has the capability to load a different
-filesystem.
+[GaryOS] uses a three-stage process for unpacking the root filesystem into
+memory.  This is covered in detail in [Design].  During this process,
+a filesystem image is selected, loaded into memory, and booted.  The default is
+to use the one packed into the [Kernel].  GaryOS has the capability to load
+a different filesystem.
 
   * Located on a [GRUB] USB drive or other storage
   * From a [Linux] or [EFI] configuration (if the EFI partition is large enough)
@@ -673,7 +674,7 @@ else should be expected of it.
 ## Building ####################################################################
 [Building]: #building
 
-In addition to being a [GNU/Linux] system, GaryOS is the [Builder] system used
+In addition to being a [GNU/Linux] system, [GaryOS] is the [Builder] system used
 to produce itself.  It has three main purposes.
 
   * [Compile] and [Manage] [Gentoo] installations
@@ -689,7 +690,7 @@ a prescribed list of steps to take.
 [Compile]: #compile
 
 The process to build and install a source-based distribution like [Gentoo] from
-scratch is long and complex.  The GaryOS [Builder] is designed to condense it
+scratch is long and complex.  The [GaryOS] [Builder] is designed to condense it
 into a small number of atomic steps using [GNU Make].
 
   | Target  | Action
@@ -792,7 +793,7 @@ desired.
 ### Manage #####################################################################
 [Manage]: #manage
 
-The GaryOS [Builder] is designed to support the "rolling release" model of
+The [GaryOS] [Builder] is designed to support the "rolling release" model of
 source-based distributions, where the system is more or less constantly being
 updated and built.  Its original and ongoing purpose is to do exactly that.  It
 supports all [Gentoo] systems, regardless of how they were installed.
@@ -822,7 +823,7 @@ to aid in the maintenance of a healthy system.  See [Builder] for details.
 [Image]: #image
 
 This is the process of creating new [Filesystem] images.  It requires
-a directory installed with GaryOS (or [Gentoo]).  There are multiple sources
+a directory installed with [GaryOS] (or [Gentoo]).  There are multiple sources
 where this can come from.
 
   * Within GaryOS itself ([Update])
@@ -885,8 +886,8 @@ specific to each target, and only rebuilds the relevant files.
 ### Install ####################################################################
 [Install]: #install
 
-One of the [Goals] of GaryOS is to simplify the process of installing [Gentoo].
-This can be done using [Compile] or from directly within GaryOS.
+One of the [Goals] of [GaryOS] is to simplify the process of installing
+[Gentoo].  This can be done using [Compile] or from directly within GaryOS.
 
   | Image    | Packages              | Configuration
   |:---      |:---                   |:---
@@ -1043,7 +1044,7 @@ Finally, the `root` password is set to `gary-os`.
 ## Goals #######################################################################
 [Goals]: #goals
 
-Here are the guiding principles that keep GaryOS going in a consistent
+Here are the guiding principles that keep [GaryOS] going in a consistent
 direction with a consistent purpose.
 
 Top requirements:
@@ -1078,10 +1079,10 @@ GaryOS will continue to be a [Builder] and [Kernel] above all else.
 ### Design #####################################################################
 [Design]: #design
 
-GaryOS uses [Linux initramfs] as a root filesystem, which was only designed for
-minimal environments to load kernel modules, do hardware detection, and perform
-other tasks before mounting an actual root filesystem.  This approach presented
-a few challenges in the early versions of GaryOS.
+[GaryOS] uses [Linux initramfs] as a root filesystem, which was only designed
+for minimal environments to load kernel modules, do hardware detection, and
+perform other tasks before mounting an actual root filesystem.  This approach
+presented a few challenges in the early versions of GaryOS.
 
   * The GaryOS filesystem is a few GB, which was large and slow to boot
   * [GNU/Linux] packages continue to grow in size and number of dependencies
@@ -1118,9 +1119,9 @@ a [Filesystem], additional kernel parameters are required (see [Loader]).
 [Builder]: #builder
 
 Installing source-based [GNU/Linux] systems like [Gentoo] involves a large
-number of steps and is very error-prone.  Keeping them up to date can be
-equally complex.  GaryOS addresses this by applying a monolithic release model.
-The [Builder] system was developed over many years to accomplish the goal of
+number of steps and is very error-prone.  Keeping them up to date can be equally
+complex.  [GaryOS] addresses this by applying a monolithic release model.  The
+[Builder] system was developed over many years to accomplish the goal of
 a reliable process that produces repeatable builds.
 
 [Builder] is more of an abstract concept than it is an actual thing, but it is
@@ -1285,8 +1286,8 @@ Once a [Filesystem] is loaded, directories are unpacked as specified in 'Package
 Directories' above, and `/init` on the target filesystem is booted.  The
 majority of Linux kernel modules will be loaded after this point, so it is
 important that the [Filesystem] has a `/lib64/modules` directory which matches
-the GaryOS [Kernel] version.  There is a `packdir` archive of this directory in
-[Downloads].
+the [GaryOS] [Kernel] version.  There is a `packdir` archive of this directory
+in [Downloads].
 
 The final in-memory filesystem is mounted on the backend at `/.overlay`, so it
 can be resized after boot using something like `mount -o remount,size=6144m
@@ -1325,7 +1326,7 @@ complete.
 ## Project #####################################################################
 [Project]: #project
 
-The project is not named GaryOS out of any delusions of grandeur or egomania.
+The project is not named [GaryOS] out of any delusions of grandeur or egomania.
 It was coined years before its public birth by a pair of good friends who jested
 at the amount of time and effort spent tuning and customizing a computing
 environment.  The author's workstation was jokingly called "Gary OS".
@@ -1344,8 +1345,8 @@ someone other than themself.
 ### References #################################################################
 [References]: #references
 
-GaryOS has maintained a [steady stream of downloads] since its debut in February
-2014.  It has also shown up in some notable places.
+[GaryOS] has maintained a [steady stream of downloads] since its debut in
+February 2014.  It has also shown up in some notable places.
 
   * [Gentoo ecosystem] ([2018-08](https://github.com/garybgenett/gary-os/raw/master/artifacts/archive/gentoo-20.08.pdf))
   * [List of non-systemd distributions] (proudly)
@@ -1383,7 +1384,7 @@ This project tries to give back to the community as much as it can.
   * [Funtoo] [Ego]
   * [dwm]
 
-This is in addition to [Builder] and GaryOS itself.
+This is in addition to [Builder] and [GaryOS] itself.
 
 **Linux Kernel**
 
@@ -1509,7 +1510,7 @@ like these.
 ### Licensing ##################################################################
 [Licensing]: #licensing
 
-Starting with [v4.0], GaryOS is released under the [GNU GPL v3.0].  It was
+Starting with [v4.0], [GaryOS] is released under the [GNU GPL v3.0].  It was
 originally released under a [BSD-style license].
 
 The [FSF] and [GNU] projects are dedicated to a completely open society based
@@ -1544,7 +1545,7 @@ pieces.
 ## Details #####################################################################
 [Details]: #details
 
-This is additional information mostly pertaining to how the GaryOS project is
+This is additional information mostly pertaining to how the [GaryOS] project is
 managed.  It is not necessary reading in order to use any aspect of GaryOS, and
 is only for the curious.
 
@@ -1563,9 +1564,9 @@ Version numbers follow [Semantic Versioning].  The major version number
 increments whenever the [Portage] tree commit is updated.  Minor version numbers
 increment for release updates that are on the same Portage tree.
 
-Revisions to the GaryOS [Builder], [Loader] and Portage configuration will also
-line up with the Portage tree, since they can only be validated by doing a full
-build or a build update.
+Revisions to the [GaryOS] [Builder], [Loader] and Portage configuration will
+also line up with the Portage tree, since they can only be validated by doing
+a full build or a build update.
 
   [Semantic Versioning]: https://semver.org
 
@@ -1591,7 +1592,7 @@ Here is an overview of the repository contents, in order of relative importance:
   | [gentoo/overlay/]        | Version management and fixing broken packages
   | [scripts/]               | [GRUB] and [QEMU]
   | [artifacts/files/]       | [Loader] scripts and [Image] configuration files
-  | [artifacts/patches/]     | GaryOS improvements (see [Contributions])
+  | [artifacts/patches/]     | [GaryOS] improvements (see [Contributions])
   | [artifacts/archive/]     | Miscellaneous stash space, including [References]
   | [artifacts/images/]      | Icons and screenshots
 
@@ -1669,7 +1670,7 @@ will require re-cloning.
 ### Tools ######################################################################
 [Tools]: #tools
 
-GaryOS relies on too many open source projects to count (see [Project]).
+[GaryOS] relies on too many open source projects to count (see [Project]).
 However, there are a few primary tools and sites which are used to build and
 distribute GaryOS.  An additional list of secondary items is in [Ecosystem].
 
@@ -1734,8 +1735,8 @@ international audience.
 ### Ecosystem ##################################################################
 [Ecosystem]: #ecosystem
 
-Beyond the [Tools] used to create and publish GaryOS, there is a small universe
-of projects that either provided inspiration or are used for GaryOS.
+Beyond the [Tools] used to create and publish [GaryOS], there is a small
+universe of projects that either provided inspiration or are used for GaryOS.
 
 To start, homage to those who started it all:
 
@@ -1813,7 +1814,7 @@ anywhere, anyhow" computing environment.
 ## Release #####################################################################
 [Release]: #release
 
-This is additional information pertaining exclusively to how GaryOS is
+This is additional information pertaining exclusively to how [GaryOS] is
 developed, tested and released.  As the author evolved an ever more formal and
 repeatable process, it made sense to make this part of the public documentation.
 
