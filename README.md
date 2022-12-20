@@ -720,11 +720,11 @@ process is generally applicable to all Gentoo systems.
 The target directory `build` will be created.  It will grow to many tens of GB,
 so having 100GB available is recommended.
 
-For the best performance, change the `MAKEFLAGS -j` variable in
-[gentoo/make.conf] to the number of CPU cores your system has plus 1.
+For the best performance, change the `MAKEOPTS -j` variable in
+[gentoo/make.conf] to the number of CPU threads your system has.
 
   ```
-  expr `grep "^processor" /proc/cpuinfo | wc -l` + 1
+  grep "^processor" /proc/cpuinfo | wc -l
   ```
 
 The last line in [gentoo/\_funtoo] must be the release version and commit hash
