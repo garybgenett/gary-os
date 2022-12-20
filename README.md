@@ -266,9 +266,9 @@ need to match.
 
   | Partition | Start Sector | End Sector | Size       | Code | Name
   |---:       |---:          |---:        |---:        |---:  |:---
-  | 1         |      2363392 |    7275923 |    2.3 GiB | 0700 | Microsoft basic data
-  | 3         |       266240 |    2363391 | 1024.0 MiB | EF00 | EFI System
-  | 4         |         4096 |     266239 |  128.0 MiB | EF02 | BIOS boot partition
+  | 1         |      2121728 |    7271860 |    2.5 GiB | 0700 | Microsoft basic data
+  | 3         |        24576 |    2121727 | 1024.0 MiB | EF00 | EFI System
+  | 4         |         4096 |      24575 |   10.0 MiB | EF02 | BIOS boot partition
 
 This is the output from `gdisk -l loopfile.img`.  Using `fdisk -l` will produce
 similar output.
