@@ -140,17 +140,9 @@ endfunction
 "#######################################
 
 " date/time stamps
-iab @-e 1970-01-01
-iab @-d 2038-01-19
-iab @-t 2038-01-19T03:14:07-0000
 iab @@d <C-R>=strftime("%F")<CR>
-iab @@t <C-R>=strftime("%FT%T%z")<CR>
 iab @@a <C-R>=strftime("%F %T")<CR>
-iab @@j <C-R>=strftime("%F, %a")<CR>
-
-" new items
-iab @.n ====-==-==T==:==:==-==== ====-==-== ====-==-==T==:==:==-==== <C-R>=strftime("%F")<CR> ~ __ +VIM+ ~ +VIM+<ESC>0
-iab @.s ====-==-==T==:==:==-==== ====-==-== <C-R>=strftime("%FT%T%z")<CR> <C-R>=strftime("%F")<CR> ~ __ +VIM+ ~ +VIM+<ESC>0
+iab @@t <C-R>=strftime("%FT%T%z")<CR>
 
 "#######################################
 " maps
@@ -159,20 +151,14 @@ iab @.s ====-==-==T==:==:==-==== ====-==-== <C-R>=strftime("%FT%T%z")<CR> <C-R>=
 " non-ascii characters
 map na <ESC>/[^	 A-Za-z0-9`~!@#$%^&*()_=+\[{\]}\\\|;:'",<.>/?-]<CR>
 
-" clean up folding
+" folding
 map z. <ESC>:set foldlevel=0<CR>zv
-map z1 <ESC>:set foldlevel=0<CR>/\[personal\]<CR>
-map z2 <ESC>:set foldlevel=0<CR>/\[work\]<CR>
 
-" jump/edit next token
-map  <C-J> <ESC>/+VIM+<CR>c5l
-map! <C-J> <C-O>/+VIM+<CR><C-O>c5l
-
-" turn swapfile off
+" swapfile
 map <F3> <ESC>:set swapfile<CR>
 
-" convert tab-delimited file to properly formatted csv
-map <F4> <ESC>:%s/^/\"/g<CR>:%s/\t/\"\,\"/g<CR>:%s/$/\"/g<CR>
+" convert tab-delimited to csv
+map <F4> <ESC>:%s/"/\\"/g<CR>:%s/^/\"/g<CR>:%s/\t/\"\,\"/g<CR>:%s/$/\"/g<CR>
 
 " folding, columns, pasting and wrapping
 map <F5> <ESC>:set foldmethod=marker<CR>
@@ -183,7 +169,7 @@ map <F8> <ESC>:set invwrap<CR>
 " remove all spaces from the end of all lines
 map <F9> <ESC>:%s/[ \t]*$//g<CR>1G
 
-" (un)set automatic formatting
+" automatic formatting
 map <F10> <ESC>:set formatoptions+=a<CR><ESC>:set   spell<CR><ESC>:set   expandtab<CR><ESC>:set shiftwidth=2<CR><ESC>:set tabstop=2<CR><ESC>:set textwidth=80<CR>
 map <F11> <ESC>:set formatoptions-=a<CR><ESC>:set   spell<CR><ESC>:set   expandtab<CR><ESC>:set shiftwidth=2<CR><ESC>:set tabstop=2<CR><ESC>:set textwidth=0 <CR>
 map <F12> <ESC>:source ${HOME}/.vimrc<CR>
