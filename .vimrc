@@ -87,8 +87,8 @@ set foldcolumn				=1
 set foldlevelstart			=99
 set foldminlines			=0
 set foldmethod				=indent
-">>>set foldtext				=foldtext()
-set foldtext				=v:folddashes.\"\ \".v:foldlevel.\"\ \[\".(v:foldend\ \-\ v:foldstart\ \+\ 1).\"\,\ \".v:foldstart.\"\-\".v:foldend.\"\]\ \"
+"set foldtext				=foldtext()
+set foldtext				=printf('%2s\ [%3s\ %4s-%4s]\ %-0.9s\ %s\ ',v:foldlevel,(v:foldend\ \-\ v:foldstart\ \+\ 1),v:foldstart,v:foldend,v:folddashes,substitute(getline(v:foldstart),'\ {{{\\d\\\+\ \\\|\\s\\\+','\ ','g'))
 
 set nowrap
 set whichwrap				=b,s
@@ -174,8 +174,8 @@ map <F3> <ESC>:set swapfile<CR>
 " convert tab-delimited file to properly formatted csv
 map <F4> <ESC>:%s/^/\"/g<CR>:%s/\t/\"\,\"/g<CR>:%s/$/\"/g<CR>
 
-" (re)set folding, columns, pasting and wrapping
-map <F5> <ESC>:set foldlevel=1<CR>
+" folding, columns, pasting and wrapping
+map <F5> <ESC>:set foldmethod=marker<CR>
 map <F6> <ESC>:set filetype=markdown<CR><ESC>:set virtualedit=all<ESC>:set foldcolumn=0<CR>:set columns=80<CR>
 map <F7> <ESC>:set invpaste<CR>
 map <F8> <ESC>:set invwrap<CR>
