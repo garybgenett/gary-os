@@ -88,7 +88,7 @@ set foldlevelstart			=99
 set foldminlines			=0
 set foldmethod				=indent
 "set foldtext				=foldtext()
-set foldtext				=printf('%2s\ [%3s\ %4s-%4s]\ %-0.9s\ %s\ ',v:foldlevel,(v:foldend\ \-\ v:foldstart\ \+\ 1),v:foldstart,v:foldend,v:folddashes,substitute(getline(v:foldstart),'\ {{{\\d\\\+\ \\\|\\s\\\+','\ ','g'))
+set foldtext				=printf('%2s\ [%3s\ %4s-%4s]\ %-0.9s\ %s\ ',v:foldlevel,(v:foldend\ \-\ v:foldstart\ \+\ 1),v:foldstart,v:foldend,v:folddashes,substitute(getline(v:foldstart),'\ \{\{\{\\d\\\+\ \\\|\\s\\\+','\ ','g'))
 
 set nowrap
 set whichwrap				=b,s
