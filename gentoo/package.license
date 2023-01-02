@@ -23,6 +23,17 @@ net-im/zoom				all-rights-reserved
 ########################################
 # games
 
+games-misc/fortune-mod-calvin		fairuse
+games-misc/fortune-mod-discworld	fairuse
+games-misc/fortune-mod-dubya		fairuse
+games-misc/fortune-mod-dune		free-noncomm
+games-misc/fortune-mod-firefly		fairuse
+games-misc/fortune-mod-futurama		fairuse
+games-misc/fortune-mod-humorixfortunes	fairuse
+games-misc/fortune-mod-humorixfortunes	freedist
+games-misc/fortune-mod-smac		fairuse
+games-misc/fortune-mod-strangelove	fairuse
+
 games-emulation/mekanix			mekanix
 
 app-arch/lha				lha

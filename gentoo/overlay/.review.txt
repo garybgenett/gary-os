@@ -190,6 +190,1133 @@ quakeforge-9999.ebuild
 quakeforge-0.7.2_p20210722-skipped-tests.patch
 
 ------------------------------------------------------------------------------------------------------------------------
+diff :: games-misc/fortune-mod-all [rationale] =========================================================================
+# custom selections
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
+# games-misc/fortune-mod-bofh-excuses		*
+# games-misc/fortune-mod-calvin			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-chucknorris		*
+# games-misc/fortune-mod-dubya			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-firefly		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-futurama		2019-12-25 22:47:40 +0100 e0992fcfb0637f29b3dd9619861c2d93fdcb03ac games-misc/fortune-mod-futurama: Fix checksum in Manifest.
+# games-misc/fortune-mod-gentoo-dev		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-gentoo-forums		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-kernelcookies		*
+# games-misc/fortune-mod-slackware		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-starwars		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-strangelove		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-dune			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-debilneho		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-discworld		2017-12-10 09:09:04 +0100 5889c86307f9c6f61372ea8d0075a6d7d0171a0b games-misc/*: Update Manifest hashes
+# games-misc/fortune-mod-flashrider		*
+# games-misc/fortune-mod-hitchhiker		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-homer			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-humorixfortunes	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-osfortune		*
+# games-misc/fortune-mod-pqf			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-simpsons-chalkboard	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-smac			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-sp-fortunes		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-tao			2021-12-03 23:48:11 +0000 8ae498702ade8271624f069b7c95be40879e4dca games-misc/fortune-mod-tao: block newer games-misc/fortune-mod
+# games-misc/fortune-mod-taow			*
+# games-misc/fortune-mod-zx-error		*
+diff :: games-misc/fortune-mod-all [source] ============================================================================
+diff :: games-misc/fortune-mod-all [target] ============================================================================
+Only in ./games-misc/fortune-mod-all: .keep
+Only in ./games-misc/fortune-mod-all: .rationale
+Only in ./games-misc/fortune-mod-all: .source
+Only in ./games-misc/fortune-mod-all: Manifest
+Only in ./games-misc/fortune-mod-all/.source: fortune-mod-all-4.ebuild
+diff -u -U10 -r ./games-misc/fortune-mod-all/.source/fortune-mod-all-5.ebuild ./games-misc/fortune-mod-all/fortune-mod-all-5.ebuild
+--- ./games-misc/fortune-mod-all/.source/fortune-mod-all-5.ebuild	2022-11-17 10:07:14.018002398 -0000
++++ ./games-misc/fortune-mod-all/fortune-mod-all-5.ebuild	2023-01-02 23:12:52.895734948 -0000
+@@ -4,29 +4,58 @@
+ EAPI=7
+ 
+ DESCRIPTION="Meta package for all fortune-mod packages"
+ HOMEPAGE="https://wiki.gentoo.org/wiki/No_homepage"
+ 
+ LICENSE="metapackage"
+ SLOT="0"
+ KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~m68k ~mips ~ppc64 ~riscv ~x86"
+ IUSE="l10n_cs l10n_de l10n_it"
+ 
++#>>>	games-misc/fortune-mod-mormon
++#>>>	games-misc/fortune-mod-scriptures
+ RDEPEND=">=games-misc/fortune-mod-3.6.1-r1
+ 	games-misc/fortune-mod-bofh-excuses
+ 	games-misc/fortune-mod-chucknorris
+ 	games-misc/fortune-mod-flashrider
+ 	games-misc/fortune-mod-kernelcookies
+-	games-misc/fortune-mod-mormon
+ 	games-misc/fortune-mod-osfortune
+-	games-misc/fortune-mod-scriptures
+ 	games-misc/fortune-mod-taow
+ 	games-misc/fortune-mod-zx-error
+ 	l10n_cs? ( games-misc/fortune-mod-cs )
+ 	l10n_de? (
+ 		games-misc/fortune-mod-at-linux
+ 		games-misc/fortune-mod-fvl
+ 		games-misc/fortune-mod-norbert-tretkowski
+ 		games-misc/fortune-mod-thomas-ogrisegg
+ 		games-misc/fortune-mod-rss
+ 	)
+-	l10n_it? ( games-misc/fortune-mod-it )"
++	l10n_it? ( games-misc/fortune-mod-it )
++
++	games-misc/fortune-mod-bofh-excuses
++	games-misc/fortune-mod-calvin
++	games-misc/fortune-mod-chucknorris
++	games-misc/fortune-mod-dubya
++	games-misc/fortune-mod-firefly
++	games-misc/fortune-mod-futurama
++	games-misc/fortune-mod-gentoo-dev
++	games-misc/fortune-mod-gentoo-forums
++	games-misc/fortune-mod-kernelcookies
++	games-misc/fortune-mod-slackware
++	games-misc/fortune-mod-starwars
++	games-misc/fortune-mod-strangelove
++	games-misc/fortune-mod-dune
++	games-misc/fortune-mod-debilneho
++	games-misc/fortune-mod-discworld
++	games-misc/fortune-mod-flashrider
++	games-misc/fortune-mod-hitchhiker
++	games-misc/fortune-mod-homer
++	games-misc/fortune-mod-humorixfortunes
++	games-misc/fortune-mod-osfortune
++	games-misc/fortune-mod-pqf
++	games-misc/fortune-mod-simpsons-chalkboard
++	games-misc/fortune-mod-smac
++	games-misc/fortune-mod-sp-fortunes
++	games-misc/fortune-mod-taow
++	games-misc/fortune-mod-zx-error
++"
++#>>>	games-misc/fortune-mod-tao
+Only in ./games-misc/fortune-mod-all/.source: metadata.xml
+diff :: games-misc/fortune-mod-all [files] =============================================================================
+
+./games-misc/fortune-mod-all:
+Manifest
+fortune-mod-all-5.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: games-misc/fortune-mod-calvin [rationale] ======================================================================
+# custom selections
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
+# games-misc/fortune-mod-bofh-excuses		*
+# games-misc/fortune-mod-calvin			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-chucknorris		*
+# games-misc/fortune-mod-dubya			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-firefly		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-futurama		2019-12-25 22:47:40 +0100 e0992fcfb0637f29b3dd9619861c2d93fdcb03ac games-misc/fortune-mod-futurama: Fix checksum in Manifest.
+# games-misc/fortune-mod-gentoo-dev		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-gentoo-forums		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-kernelcookies		*
+# games-misc/fortune-mod-slackware		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-starwars		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-strangelove		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-dune			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-debilneho		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-discworld		2017-12-10 09:09:04 +0100 5889c86307f9c6f61372ea8d0075a6d7d0171a0b games-misc/*: Update Manifest hashes
+# games-misc/fortune-mod-flashrider		*
+# games-misc/fortune-mod-hitchhiker		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-homer			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-humorixfortunes	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-osfortune		*
+# games-misc/fortune-mod-pqf			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-simpsons-chalkboard	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-smac			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-sp-fortunes		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-tao			2021-12-03 23:48:11 +0000 8ae498702ade8271624f069b7c95be40879e4dca games-misc/fortune-mod-tao: block newer games-misc/fortune-mod
+# games-misc/fortune-mod-taow			*
+# games-misc/fortune-mod-zx-error		*
+diff :: games-misc/fortune-mod-calvin [source] =========================================================================
+diff: /var/db/repos/gentoo/games-misc/fortune-mod-calvin: No such file or directory
+diff :: games-misc/fortune-mod-calvin [target] =========================================================================
+Only in ./games-misc/fortune-mod-calvin: .keep
+Only in ./games-misc/fortune-mod-calvin: .rationale
+Only in ./games-misc/fortune-mod-calvin: .source
+diff -u -U10 -r ./games-misc/fortune-mod-calvin/.source/Manifest ./games-misc/fortune-mod-calvin/Manifest
+--- ./games-misc/fortune-mod-calvin/.source/Manifest	2023-01-02 22:29:22.369373206 -0000
++++ ./games-misc/fortune-mod-calvin/Manifest	2023-01-02 22:39:52.257259644 -0000
+@@ -1 +1,2 @@
+ DIST fortune-mod-calvin-0.1.1.tar.gz 6787 BLAKE2B 73814edf08c7fdd0603980e353f9e2fe79cf135c642650e3e6f08662a036057238f51276ae7fe0f41070ed26ac47d434e87c77a81384fda8a28873dc61b82098 SHA512 047e9694aca702b93661ac252ca8599d6b3778116907fce93ad2b9eca79e9af497b9f2dc188223d19eff8109691cbf66248cea259786c5504446eee3cd3b8245
++EBUILD fortune-mod-calvin-0.1.1.ebuild 543 BLAKE2B b71b822f9da0845d5da52a20da1173cf8756d27ce4e3715389fb024b140534f1b7e3a49324557511a960ab045074dc7c8e106ee2c75332c7e917674440d2ca5b SHA512 cd5b3f81cccabd41f9efa317bcf8f26fdcacc02a09c08d8a98dba106737add61b0998c977e14edc49b00c5f8e9021c126f53a8bddd099ed892320cb5bb13f46f
+Only in ./games-misc/fortune-mod-calvin/.source: metadata.xml
+diff :: games-misc/fortune-mod-calvin [files] ==========================================================================
+
+./games-misc/fortune-mod-calvin:
+Manifest
+fortune-mod-calvin-0.1.1.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: games-misc/fortune-mod-debilneho [rationale] ===================================================================
+# custom selections
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
+# games-misc/fortune-mod-bofh-excuses		*
+# games-misc/fortune-mod-calvin			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-chucknorris		*
+# games-misc/fortune-mod-dubya			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-firefly		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-futurama		2019-12-25 22:47:40 +0100 e0992fcfb0637f29b3dd9619861c2d93fdcb03ac games-misc/fortune-mod-futurama: Fix checksum in Manifest.
+# games-misc/fortune-mod-gentoo-dev		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-gentoo-forums		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-kernelcookies		*
+# games-misc/fortune-mod-slackware		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-starwars		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-strangelove		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-dune			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-debilneho		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-discworld		2017-12-10 09:09:04 +0100 5889c86307f9c6f61372ea8d0075a6d7d0171a0b games-misc/*: Update Manifest hashes
+# games-misc/fortune-mod-flashrider		*
+# games-misc/fortune-mod-hitchhiker		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-homer			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-humorixfortunes	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-osfortune		*
+# games-misc/fortune-mod-pqf			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-simpsons-chalkboard	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-smac			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-sp-fortunes		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-tao			2021-12-03 23:48:11 +0000 8ae498702ade8271624f069b7c95be40879e4dca games-misc/fortune-mod-tao: block newer games-misc/fortune-mod
+# games-misc/fortune-mod-taow			*
+# games-misc/fortune-mod-zx-error		*
+diff :: games-misc/fortune-mod-debilneho [source] ======================================================================
+diff: /var/db/repos/gentoo/games-misc/fortune-mod-debilneho: No such file or directory
+diff :: games-misc/fortune-mod-debilneho [target] ======================================================================
+Only in ./games-misc/fortune-mod-debilneho: .keep
+Only in ./games-misc/fortune-mod-debilneho: .rationale
+Only in ./games-misc/fortune-mod-debilneho: .source
+diff -u -U10 -r ./games-misc/fortune-mod-debilneho/.source/Manifest ./games-misc/fortune-mod-debilneho/Manifest
+--- ./games-misc/fortune-mod-debilneho/.source/Manifest	2023-01-02 22:29:22.369373206 -0000
++++ ./games-misc/fortune-mod-debilneho/Manifest	2023-01-02 22:46:44.575933967 -0000
+@@ -1 +1,2 @@
+ DIST fortune-debilneho.tar.bz2 16982 BLAKE2B 1c4a7d8f42809cd4dd3bb8a3417dd8c5004831cf4ad38d0466bbccef5cabbd516146555f27abdc5dfbd2df7b66427a7dd56bd44c81b9fa4e4a1f46978787578d SHA512 88ff97a50f512d4e0f52c93546939d1ef168e86d6e92996e6b3674ce5ef03581d20cdcea497869975c0b77a2a1936b142903c248f7c5cab69fd322f207801696
++EBUILD fortune-mod-debilneho-0.1.ebuild 582 BLAKE2B 5e47e2db4e80d604cfe621336e4f1a494627a74b8f30ad3297627094179357d29a6198638b77376f2f2528d82e67fab76f9956cbd21a49a24d41c4d27c6ee121 SHA512 dfe47edf599173acc28bf39bfa8a78d8ffe32f5dd9c3b8bdc879287eac07b186e2666b46dbd6350446e9e9f5887c4671af822419e9887b34ab7ca4878f3a9d67
+Only in ./games-misc/fortune-mod-debilneho/.source: metadata.xml
+diff :: games-misc/fortune-mod-debilneho [files] =======================================================================
+
+./games-misc/fortune-mod-debilneho:
+Manifest
+fortune-mod-debilneho-0.1.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: games-misc/fortune-mod-discworld [rationale] ===================================================================
+# custom selections
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
+# games-misc/fortune-mod-bofh-excuses		*
+# games-misc/fortune-mod-calvin			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-chucknorris		*
+# games-misc/fortune-mod-dubya			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-firefly		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-futurama		2019-12-25 22:47:40 +0100 e0992fcfb0637f29b3dd9619861c2d93fdcb03ac games-misc/fortune-mod-futurama: Fix checksum in Manifest.
+# games-misc/fortune-mod-gentoo-dev		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-gentoo-forums		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-kernelcookies		*
+# games-misc/fortune-mod-slackware		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-starwars		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-strangelove		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-dune			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-debilneho		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-discworld		2017-12-10 09:09:04 +0100 5889c86307f9c6f61372ea8d0075a6d7d0171a0b games-misc/*: Update Manifest hashes
+# games-misc/fortune-mod-flashrider		*
+# games-misc/fortune-mod-hitchhiker		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-homer			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-humorixfortunes	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-osfortune		*
+# games-misc/fortune-mod-pqf			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-simpsons-chalkboard	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-smac			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-sp-fortunes		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-tao			2021-12-03 23:48:11 +0000 8ae498702ade8271624f069b7c95be40879e4dca games-misc/fortune-mod-tao: block newer games-misc/fortune-mod
+# games-misc/fortune-mod-taow			*
+# games-misc/fortune-mod-zx-error		*
+diff :: games-misc/fortune-mod-discworld [source] ======================================================================
+diff: /var/db/repos/gentoo/games-misc/fortune-mod-discworld: No such file or directory
+diff :: games-misc/fortune-mod-discworld [target] ======================================================================
+Only in ./games-misc/fortune-mod-discworld: .keep
+Only in ./games-misc/fortune-mod-discworld: .rationale
+Only in ./games-misc/fortune-mod-discworld: .source
+diff -u -U10 -r ./games-misc/fortune-mod-discworld/.source/Manifest ./games-misc/fortune-mod-discworld/Manifest
+--- ./games-misc/fortune-mod-discworld/.source/Manifest	2023-01-02 22:29:22.489371665 -0000
++++ ./games-misc/fortune-mod-discworld/Manifest	2023-01-02 22:46:47.583895141 -0000
+@@ -1 +1,2 @@
+ DIST fortune-discworld.tgz 81396 BLAKE2B ab0feaff9ebbc547bd3accdb0efd6b5f49bae732d8f8fd40495eadb35db98d39155cb7cf6046eb2c64ecd3510b8750075ff7b7bd1c0e3b72e05b351c7ae30c9a SHA512 62a8995cc197557942e69cb4a31ef05de7b37130194753333715f476f0da9db455482dfe31803018e4d2febaf7ecf3a5785f616203354388dbc7bc9cfbb8ab95
++EBUILD fortune-mod-discworld-0.1.ebuild 583 BLAKE2B 4d7bc5ea4f53ffbd54a4e1435a387544fb0f92cd537da47208b040bb00b88ea53a896e813d15bd380c4a32829dc815699c887554d676106dfea1744871390f9d SHA512 28acb3a931a294c09b47deac1226cf6717d427621dc2ee481bb2069ef286e741756f37aa48faafdc211ae783f5a23381fcb43f03cd1e678cb8e9706452c76599
+Only in ./games-misc/fortune-mod-discworld/.source: metadata.xml
+diff :: games-misc/fortune-mod-discworld [files] =======================================================================
+
+./games-misc/fortune-mod-discworld:
+Manifest
+fortune-mod-discworld-0.1.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: games-misc/fortune-mod-dubya [rationale] =======================================================================
+# custom selections
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
+# games-misc/fortune-mod-bofh-excuses		*
+# games-misc/fortune-mod-calvin			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-chucknorris		*
+# games-misc/fortune-mod-dubya			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-firefly		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-futurama		2019-12-25 22:47:40 +0100 e0992fcfb0637f29b3dd9619861c2d93fdcb03ac games-misc/fortune-mod-futurama: Fix checksum in Manifest.
+# games-misc/fortune-mod-gentoo-dev		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-gentoo-forums		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-kernelcookies		*
+# games-misc/fortune-mod-slackware		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-starwars		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-strangelove		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-dune			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-debilneho		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-discworld		2017-12-10 09:09:04 +0100 5889c86307f9c6f61372ea8d0075a6d7d0171a0b games-misc/*: Update Manifest hashes
+# games-misc/fortune-mod-flashrider		*
+# games-misc/fortune-mod-hitchhiker		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-homer			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-humorixfortunes	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-osfortune		*
+# games-misc/fortune-mod-pqf			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-simpsons-chalkboard	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-smac			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-sp-fortunes		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-tao			2021-12-03 23:48:11 +0000 8ae498702ade8271624f069b7c95be40879e4dca games-misc/fortune-mod-tao: block newer games-misc/fortune-mod
+# games-misc/fortune-mod-taow			*
+# games-misc/fortune-mod-zx-error		*
+diff :: games-misc/fortune-mod-dubya [source] ==========================================================================
+diff: /var/db/repos/gentoo/games-misc/fortune-mod-dubya: No such file or directory
+diff :: games-misc/fortune-mod-dubya [target] ==========================================================================
+Only in ./games-misc/fortune-mod-dubya: .keep
+Only in ./games-misc/fortune-mod-dubya: .rationale
+Only in ./games-misc/fortune-mod-dubya: .source
+diff -u -U10 -r ./games-misc/fortune-mod-dubya/.source/Manifest ./games-misc/fortune-mod-dubya/Manifest
+--- ./games-misc/fortune-mod-dubya/.source/Manifest	2023-01-02 22:29:22.373373155 -0000
++++ ./games-misc/fortune-mod-dubya/Manifest	2023-01-02 22:39:57.773188352 -0000
+@@ -1 +1,2 @@
+ DIST Dubya-20050118.tar.gz 27385 BLAKE2B dbad7409be78d4c741e32d49075d37f59439cbd04d0772d54788a9a7085779bb0cba969576806f7d842eac3ef13ea82d851380f831da9349f39b5b3fcada927b SHA512 19609f79bc12cf74aeef51f3e16a689790ad6ab316924d5726c22e2b1cc7f5007bcaee494da7485d2c34b94ebc071cf62aa042b6156f5f957e55a5e85d1ad5b9
++EBUILD fortune-mod-dubya-20050118.ebuild 558 BLAKE2B f35c51a2fafb52576753829b5e5fe910b918e6f47a1dba49cf1934845f3d299694d23e077a81884eb6f657a17cec65d1bbb7b21253dd497dbf8046be62b6667c SHA512 f7862f5bd4975fe99bdd9fae8f44e79d27ff501c5b8a6b72269a767cc5374166dbdea3e1f6464909dd4ddfa71d1ab0e5af57002bb2615415ea2c8e2ee2564a13
+Only in ./games-misc/fortune-mod-dubya/.source: metadata.xml
+diff :: games-misc/fortune-mod-dubya [files] ===========================================================================
+
+./games-misc/fortune-mod-dubya:
+Manifest
+fortune-mod-dubya-20050118.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: games-misc/fortune-mod-dune [rationale] ========================================================================
+# custom selections
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
+# games-misc/fortune-mod-bofh-excuses		*
+# games-misc/fortune-mod-calvin			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-chucknorris		*
+# games-misc/fortune-mod-dubya			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-firefly		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-futurama		2019-12-25 22:47:40 +0100 e0992fcfb0637f29b3dd9619861c2d93fdcb03ac games-misc/fortune-mod-futurama: Fix checksum in Manifest.
+# games-misc/fortune-mod-gentoo-dev		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-gentoo-forums		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-kernelcookies		*
+# games-misc/fortune-mod-slackware		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-starwars		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-strangelove		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-dune			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-debilneho		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-discworld		2017-12-10 09:09:04 +0100 5889c86307f9c6f61372ea8d0075a6d7d0171a0b games-misc/*: Update Manifest hashes
+# games-misc/fortune-mod-flashrider		*
+# games-misc/fortune-mod-hitchhiker		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-homer			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-humorixfortunes	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-osfortune		*
+# games-misc/fortune-mod-pqf			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-simpsons-chalkboard	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-smac			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-sp-fortunes		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-tao			2021-12-03 23:48:11 +0000 8ae498702ade8271624f069b7c95be40879e4dca games-misc/fortune-mod-tao: block newer games-misc/fortune-mod
+# games-misc/fortune-mod-taow			*
+# games-misc/fortune-mod-zx-error		*
+diff :: games-misc/fortune-mod-dune [source] ===========================================================================
+diff: /var/db/repos/gentoo/games-misc/fortune-mod-dune: No such file or directory
+diff :: games-misc/fortune-mod-dune [target] ===========================================================================
+Only in ./games-misc/fortune-mod-dune: .keep
+Only in ./games-misc/fortune-mod-dune: .rationale
+Only in ./games-misc/fortune-mod-dune: .source
+diff -u -U10 -r ./games-misc/fortune-mod-dune/.source/Manifest ./games-misc/fortune-mod-dune/Manifest
+--- ./games-misc/fortune-mod-dune/.source/Manifest	2023-01-02 22:29:22.373373155 -0000
++++ ./games-misc/fortune-mod-dune/Manifest	2023-01-02 22:46:41.623972070 -0000
+@@ -1 +1,2 @@
+ DIST fortune-mod-dune-quotes.2.0.1.tar.gz 66579 BLAKE2B 144114b48c872b6c71eb9a82ee4b09aeeb651a28e2df5502008ecd6e99a314f3474e54171db75b503856e2183a4eb64cb4c32b9ac6be6df1d4861f422b1770f2 SHA512 fa40ba975f8a3dd53cc5af7803fd18bc849bd7ea996c03031c3800b3dc42b33dfa540ad1826a0dc94c2284ada9ed6c1b411e314b11a94bad427e080af52b23e9
++EBUILD fortune-mod-dune-2.0.1.ebuild 548 BLAKE2B 547c307e6f35a0b39d694cbe1fdff50f23488f0d18a0ee7ee72782eb797ee08c0b98f67708755a6bedc1bd05c11b3ec851de45a482df4f3204d8e34ab91be38c SHA512 0d3039b79d034a95e01eb6b7a26a965b0f89610304614280c7df82e39618da740a697899e0c10a05d1d7c0fb842ab447b6ebd43154d2e080332b543a62c6ffe6
+Only in ./games-misc/fortune-mod-dune/.source: metadata.xml
+diff :: games-misc/fortune-mod-dune [files] ============================================================================
+
+./games-misc/fortune-mod-dune:
+Manifest
+fortune-mod-dune-2.0.1.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: games-misc/fortune-mod-firefly [rationale] =====================================================================
+# custom selections
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
+# games-misc/fortune-mod-bofh-excuses		*
+# games-misc/fortune-mod-calvin			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-chucknorris		*
+# games-misc/fortune-mod-dubya			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-firefly		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-futurama		2019-12-25 22:47:40 +0100 e0992fcfb0637f29b3dd9619861c2d93fdcb03ac games-misc/fortune-mod-futurama: Fix checksum in Manifest.
+# games-misc/fortune-mod-gentoo-dev		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-gentoo-forums		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-kernelcookies		*
+# games-misc/fortune-mod-slackware		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-starwars		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-strangelove		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-dune			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-debilneho		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-discworld		2017-12-10 09:09:04 +0100 5889c86307f9c6f61372ea8d0075a6d7d0171a0b games-misc/*: Update Manifest hashes
+# games-misc/fortune-mod-flashrider		*
+# games-misc/fortune-mod-hitchhiker		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-homer			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-humorixfortunes	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-osfortune		*
+# games-misc/fortune-mod-pqf			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-simpsons-chalkboard	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-smac			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-sp-fortunes		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-tao			2021-12-03 23:48:11 +0000 8ae498702ade8271624f069b7c95be40879e4dca games-misc/fortune-mod-tao: block newer games-misc/fortune-mod
+# games-misc/fortune-mod-taow			*
+# games-misc/fortune-mod-zx-error		*
+diff :: games-misc/fortune-mod-firefly [source] ========================================================================
+diff: /var/db/repos/gentoo/games-misc/fortune-mod-firefly: No such file or directory
+diff :: games-misc/fortune-mod-firefly [target] ========================================================================
+Only in ./games-misc/fortune-mod-firefly: .keep
+Only in ./games-misc/fortune-mod-firefly: .rationale
+Only in ./games-misc/fortune-mod-firefly: .source
+diff -u -U10 -r ./games-misc/fortune-mod-firefly/.source/Manifest ./games-misc/fortune-mod-firefly/Manifest
+--- ./games-misc/fortune-mod-firefly/.source/Manifest	2023-01-02 22:29:22.373373155 -0000
++++ ./games-misc/fortune-mod-firefly/Manifest	2023-01-02 22:44:50.841402286 -0000
+@@ -1 +1,2 @@
+ DIST fortune-firefly-2.1.1.tar.bz2 36649 BLAKE2B 1ad5519cd12f24cf00782d2dee7b62e99653752f795cb226d31f4c4dfe5ac1736be324425ef9b1082eeb3b53fe687bf448ad3e8cc99cc8f114d8ba6dd57a13a7 SHA512 17d659a215598915228a494337f2a49878d2f238e2fc709559bc3dfdf58ff15ae5bf35a2051bd3abdf6dc3608bbbba6b5619737e0cb94a0aa8905fd05e4abca0
++EBUILD fortune-mod-firefly-2.1.1.ebuild 575 BLAKE2B a03e96632e31aabbde7dc7b3091740241aa1905796edfb9cfba14eb5424247ed83eddc857a1b70400d9d6a43bc10c4481061f088f313dd6b4635d81cb52151e4 SHA512 c5ecb22af8e56d5ff68332e9de637a662a8887348e2211c5bacb1dcc4bcbc3dcce5b1ee60664762d4010df4f55b0d820fbc8d794fcea43ac99a36f8134c387c2
+Only in ./games-misc/fortune-mod-firefly/.source: metadata.xml
+diff :: games-misc/fortune-mod-firefly [files] =========================================================================
+
+./games-misc/fortune-mod-firefly:
+Manifest
+fortune-mod-firefly-2.1.1.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: games-misc/fortune-mod-futurama [rationale] ====================================================================
+# custom selections
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
+# games-misc/fortune-mod-bofh-excuses		*
+# games-misc/fortune-mod-calvin			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-chucknorris		*
+# games-misc/fortune-mod-dubya			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-firefly		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-futurama		2019-12-25 22:47:40 +0100 e0992fcfb0637f29b3dd9619861c2d93fdcb03ac games-misc/fortune-mod-futurama: Fix checksum in Manifest.
+# games-misc/fortune-mod-gentoo-dev		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-gentoo-forums		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-kernelcookies		*
+# games-misc/fortune-mod-slackware		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-starwars		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-strangelove		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-dune			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-debilneho		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-discworld		2017-12-10 09:09:04 +0100 5889c86307f9c6f61372ea8d0075a6d7d0171a0b games-misc/*: Update Manifest hashes
+# games-misc/fortune-mod-flashrider		*
+# games-misc/fortune-mod-hitchhiker		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-homer			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-humorixfortunes	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-osfortune		*
+# games-misc/fortune-mod-pqf			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-simpsons-chalkboard	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-smac			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-sp-fortunes		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-tao			2021-12-03 23:48:11 +0000 8ae498702ade8271624f069b7c95be40879e4dca games-misc/fortune-mod-tao: block newer games-misc/fortune-mod
+# games-misc/fortune-mod-taow			*
+# games-misc/fortune-mod-zx-error		*
+diff :: games-misc/fortune-mod-futurama [source] =======================================================================
+diff: /var/db/repos/gentoo/games-misc/fortune-mod-futurama: No such file or directory
+diff :: games-misc/fortune-mod-futurama [target] =======================================================================
+Only in ./games-misc/fortune-mod-futurama: .keep
+Only in ./games-misc/fortune-mod-futurama: .rationale
+Only in ./games-misc/fortune-mod-futurama: .source
+diff -u -U10 -r ./games-misc/fortune-mod-futurama/.source/Manifest ./games-misc/fortune-mod-futurama/Manifest
+--- ./games-misc/fortune-mod-futurama/.source/Manifest	2023-01-02 22:29:22.721368684 -0000
++++ ./games-misc/fortune-mod-futurama/Manifest	2023-01-02 22:44:53.797364120 -0000
+@@ -1 +1,2 @@
+ DIST fortune-mod-futurama-0.2.tar.gz 19282 BLAKE2B 234a1a5800c79de64188b0bd97be60acad74cc5ed1913bf0d96aab30927c57429c4dae968c8322600ed3c40a6f4036c3a379a5c3ad19c1bdb2e4293bfae29ad4 SHA512 2085bed2a0c716960428d119474c667024fac4ba269fd10c9651da9f0997cc5f197cf591896432267e8451d4018772cc01ce8a9959a7b4293fb26a262ba62a29
++EBUILD fortune-mod-futurama-0.2.ebuild 542 BLAKE2B acddf08331292488cb7412ae0886e4dfd0fe9ff96b7a1296a950afd4558df1a482298404e85b3a9632dd9d8769be4fb2a206f555483c5054ceb135458f2a8577 SHA512 46e26cf6d6f2f26361a15f9fa86233e2afcdc69f0f105ee3e17c8e92d2af6be2750169776e514e3473e4b2d96c2a8974c97ec92e50a93348f875533185c7658f
+Only in ./games-misc/fortune-mod-futurama/.source: metadata.xml
+diff :: games-misc/fortune-mod-futurama [files] ========================================================================
+
+./games-misc/fortune-mod-futurama:
+Manifest
+fortune-mod-futurama-0.2.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: games-misc/fortune-mod-gentoo-dev [rationale] ==================================================================
+# custom selections
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
+# games-misc/fortune-mod-bofh-excuses		*
+# games-misc/fortune-mod-calvin			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-chucknorris		*
+# games-misc/fortune-mod-dubya			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-firefly		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-futurama		2019-12-25 22:47:40 +0100 e0992fcfb0637f29b3dd9619861c2d93fdcb03ac games-misc/fortune-mod-futurama: Fix checksum in Manifest.
+# games-misc/fortune-mod-gentoo-dev		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-gentoo-forums		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-kernelcookies		*
+# games-misc/fortune-mod-slackware		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-starwars		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-strangelove		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-dune			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-debilneho		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-discworld		2017-12-10 09:09:04 +0100 5889c86307f9c6f61372ea8d0075a6d7d0171a0b games-misc/*: Update Manifest hashes
+# games-misc/fortune-mod-flashrider		*
+# games-misc/fortune-mod-hitchhiker		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-homer			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-humorixfortunes	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-osfortune		*
+# games-misc/fortune-mod-pqf			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-simpsons-chalkboard	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-smac			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-sp-fortunes		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-tao			2021-12-03 23:48:11 +0000 8ae498702ade8271624f069b7c95be40879e4dca games-misc/fortune-mod-tao: block newer games-misc/fortune-mod
+# games-misc/fortune-mod-taow			*
+# games-misc/fortune-mod-zx-error		*
+diff :: games-misc/fortune-mod-gentoo-dev [source] =====================================================================
+diff: /var/db/repos/gentoo/games-misc/fortune-mod-gentoo-dev: No such file or directory
+diff :: games-misc/fortune-mod-gentoo-dev [target] =====================================================================
+Only in ./games-misc/fortune-mod-gentoo-dev: .keep
+Only in ./games-misc/fortune-mod-gentoo-dev: .rationale
+Only in ./games-misc/fortune-mod-gentoo-dev: .source
+diff -u -U10 -r ./games-misc/fortune-mod-gentoo-dev/.source/Manifest ./games-misc/fortune-mod-gentoo-dev/Manifest
+--- ./games-misc/fortune-mod-gentoo-dev/.source/Manifest	2023-01-02 22:29:22.373373155 -0000
++++ ./games-misc/fortune-mod-gentoo-dev/Manifest	2023-01-02 22:44:56.637327446 -0000
+@@ -1 +1,2 @@
+ DIST fortune-gentoo-dev-20090306.tar.bz2 50355 BLAKE2B 1acc5d799b310ce9b655baa2aa33547ea9b20cd940dcc8c13b40fb2b5e930351bc67c4353ac559234e20211a82daf7a51b3454374ea81991514eeb99a7bbf789 SHA512 2a6014d1dc95cae8a50c8f502f8271a9b7bf349cb49076ac3e76f3da55f0e509caf27ee04827b1b42add1b42ae07824173495bb0dbed5421693508fff9f36acc
++EBUILD fortune-mod-gentoo-dev-20090306.ebuild 718 BLAKE2B b54c33d97a8994a64f6b66f61e1302076d1658947bd23fd7c07e3d9fa465a9f5766c5b0eb451cff92b02790b07f882abc646bfad4e3fae9607fcd30316674029 SHA512 6f9619d6e20e0358474e544e6f93acfb494acb39d064c9ef37d5eb94ca07f4205f630f5cacc1dda7a8bccc0c4a63396c3372348613c3ce05cdd62fb704f4caaf
+Only in ./games-misc/fortune-mod-gentoo-dev/.source: metadata.xml
+diff :: games-misc/fortune-mod-gentoo-dev [files] ======================================================================
+
+./games-misc/fortune-mod-gentoo-dev:
+Manifest
+fortune-mod-gentoo-dev-20090306.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: games-misc/fortune-mod-gentoo-forums [rationale] ===============================================================
+# custom selections
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
+# games-misc/fortune-mod-bofh-excuses		*
+# games-misc/fortune-mod-calvin			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-chucknorris		*
+# games-misc/fortune-mod-dubya			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-firefly		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-futurama		2019-12-25 22:47:40 +0100 e0992fcfb0637f29b3dd9619861c2d93fdcb03ac games-misc/fortune-mod-futurama: Fix checksum in Manifest.
+# games-misc/fortune-mod-gentoo-dev		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-gentoo-forums		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-kernelcookies		*
+# games-misc/fortune-mod-slackware		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-starwars		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-strangelove		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-dune			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-debilneho		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-discworld		2017-12-10 09:09:04 +0100 5889c86307f9c6f61372ea8d0075a6d7d0171a0b games-misc/*: Update Manifest hashes
+# games-misc/fortune-mod-flashrider		*
+# games-misc/fortune-mod-hitchhiker		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-homer			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-humorixfortunes	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-osfortune		*
+# games-misc/fortune-mod-pqf			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-simpsons-chalkboard	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-smac			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-sp-fortunes		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-tao			2021-12-03 23:48:11 +0000 8ae498702ade8271624f069b7c95be40879e4dca games-misc/fortune-mod-tao: block newer games-misc/fortune-mod
+# games-misc/fortune-mod-taow			*
+# games-misc/fortune-mod-zx-error		*
+diff :: games-misc/fortune-mod-gentoo-forums [source] ==================================================================
+diff: /var/db/repos/gentoo/games-misc/fortune-mod-gentoo-forums: No such file or directory
+diff :: games-misc/fortune-mod-gentoo-forums [target] ==================================================================
+Only in ./games-misc/fortune-mod-gentoo-forums: .keep
+Only in ./games-misc/fortune-mod-gentoo-forums: .rationale
+Only in ./games-misc/fortune-mod-gentoo-forums: .source
+diff -u -U10 -r ./games-misc/fortune-mod-gentoo-forums/.source/Manifest ./games-misc/fortune-mod-gentoo-forums/Manifest
+--- ./games-misc/fortune-mod-gentoo-forums/.source/Manifest	2023-01-02 22:29:22.373373155 -0000
++++ ./games-misc/fortune-mod-gentoo-forums/Manifest	2023-01-02 22:44:59.497290520 -0000
+@@ -1,2 +1,3 @@
+ DIST gentoo-forums-20041207.gz 8809 BLAKE2B 1586eaae8b9af3e5e230daca8a7993c268a03a511fa5a4b93013efbb0538612131c589bcf50a613b8f132499cee4154c8b0a65844ec06f0eecabc025a5036c6c SHA512 55f1da4dd6c37778ebb46de5436a8f69475cd9a25a5bd01a325cbd825cae4bc6ecaeda94d6b38104fb71a4baa56577f12390884aac545c5d891895aa7ee1738a
+ DIST gentoo-forums-offensive-20041207.gz 1510 BLAKE2B 827b1b6bf17c31296734972648be202b0b78b146f4c31d4ab8b31c0a56f59008670e958ce77061b385d3c67bceec3bd19acd52be21db06f5fcb75a2454ad7d92 SHA512 244b4e7f5c5feaa217298f79d2f157999c71d89824f25d89d7a234ec72950bef93a4c0fa23ce1fb385c5c6788c62f09d6b17f454e70cba0052870f4267522dbb
++EBUILD fortune-mod-gentoo-forums-20041207.ebuild 820 BLAKE2B 95117e109e48d91b6afff7e8c91a85cdd9f53e797ecb88201becf62c70767d1feb93af98e2b3348d6835b702e3ad0b15db725dcd796fc4649024838acc3dd153 SHA512 50775d7b6f1315cb54b4df403dd71c1113963443f5d6deabbde27f1bf705cc082177ff058ea0e9f2142868c16fbc6a6fd8907f633be8d3e535d1c4aadd52775d
+Only in ./games-misc/fortune-mod-gentoo-forums/.source: metadata.xml
+diff :: games-misc/fortune-mod-gentoo-forums [files] ===================================================================
+
+./games-misc/fortune-mod-gentoo-forums:
+Manifest
+fortune-mod-gentoo-forums-20041207.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: games-misc/fortune-mod-hitchhiker [rationale] ==================================================================
+# custom selections
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
+# games-misc/fortune-mod-bofh-excuses		*
+# games-misc/fortune-mod-calvin			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-chucknorris		*
+# games-misc/fortune-mod-dubya			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-firefly		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-futurama		2019-12-25 22:47:40 +0100 e0992fcfb0637f29b3dd9619861c2d93fdcb03ac games-misc/fortune-mod-futurama: Fix checksum in Manifest.
+# games-misc/fortune-mod-gentoo-dev		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-gentoo-forums		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-kernelcookies		*
+# games-misc/fortune-mod-slackware		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-starwars		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-strangelove		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-dune			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-debilneho		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-discworld		2017-12-10 09:09:04 +0100 5889c86307f9c6f61372ea8d0075a6d7d0171a0b games-misc/*: Update Manifest hashes
+# games-misc/fortune-mod-flashrider		*
+# games-misc/fortune-mod-hitchhiker		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-homer			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-humorixfortunes	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-osfortune		*
+# games-misc/fortune-mod-pqf			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-simpsons-chalkboard	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-smac			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-sp-fortunes		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-tao			2021-12-03 23:48:11 +0000 8ae498702ade8271624f069b7c95be40879e4dca games-misc/fortune-mod-tao: block newer games-misc/fortune-mod
+# games-misc/fortune-mod-taow			*
+# games-misc/fortune-mod-zx-error		*
+diff :: games-misc/fortune-mod-hitchhiker [source] =====================================================================
+diff: /var/db/repos/gentoo/games-misc/fortune-mod-hitchhiker: No such file or directory
+diff :: games-misc/fortune-mod-hitchhiker [target] =====================================================================
+Only in ./games-misc/fortune-mod-hitchhiker: .keep
+Only in ./games-misc/fortune-mod-hitchhiker: .rationale
+Only in ./games-misc/fortune-mod-hitchhiker: .source
+diff -u -U10 -r ./games-misc/fortune-mod-hitchhiker/.source/Manifest ./games-misc/fortune-mod-hitchhiker/Manifest
+--- ./games-misc/fortune-mod-hitchhiker/.source/Manifest	2023-01-02 22:29:22.373373155 -0000
++++ ./games-misc/fortune-mod-hitchhiker/Manifest	2023-01-02 22:48:55.494244463 -0000
+@@ -1 +1,2 @@
+ DIST fortune-hitchhiker.tgz 11560 BLAKE2B 95561be94c39b0f83ec2a4864c34c8dac743a94288318a2ad1147e4ec78dc2eff1d1521386a489238be71d7ab6ac40b3883d168c11290915d79e20ae3dad4c28 SHA512 a4f4a99c33764e6d4ec823a57f9d2d40168ddf3cb9506e85fb0f6f10b11673abd76d02e9af8a95926ba758a28fbbe895a427b40c36bd31bc43252c4e6dd610b0
++EBUILD fortune-mod-hitchhiker-0.1.ebuild 641 BLAKE2B 0b75ef8fc4fef9534c6d316f5618a4f67859037686308e2757e38ae948f140c5f166b03e56ddb0070396870b047aaeecbadc01da490f6a1767e22ac58fdd37b5 SHA512 1b8150b3341c5974f0781bba6921205b7c777a1ff6efcce3bea6253b251ac57c4c074fc23416ca9b0ab035e4b07b1555c02ee1d519351451a063ca22e04e1eba
+Only in ./games-misc/fortune-mod-hitchhiker/.source: metadata.xml
+diff :: games-misc/fortune-mod-hitchhiker [files] ======================================================================
+
+./games-misc/fortune-mod-hitchhiker:
+Manifest
+fortune-mod-hitchhiker-0.1.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: games-misc/fortune-mod-homer [rationale] =======================================================================
+# custom selections
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
+# games-misc/fortune-mod-bofh-excuses		*
+# games-misc/fortune-mod-calvin			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-chucknorris		*
+# games-misc/fortune-mod-dubya			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-firefly		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-futurama		2019-12-25 22:47:40 +0100 e0992fcfb0637f29b3dd9619861c2d93fdcb03ac games-misc/fortune-mod-futurama: Fix checksum in Manifest.
+# games-misc/fortune-mod-gentoo-dev		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-gentoo-forums		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-kernelcookies		*
+# games-misc/fortune-mod-slackware		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-starwars		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-strangelove		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-dune			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-debilneho		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-discworld		2017-12-10 09:09:04 +0100 5889c86307f9c6f61372ea8d0075a6d7d0171a0b games-misc/*: Update Manifest hashes
+# games-misc/fortune-mod-flashrider		*
+# games-misc/fortune-mod-hitchhiker		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-homer			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-humorixfortunes	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-osfortune		*
+# games-misc/fortune-mod-pqf			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-simpsons-chalkboard	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-smac			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-sp-fortunes		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-tao			2021-12-03 23:48:11 +0000 8ae498702ade8271624f069b7c95be40879e4dca games-misc/fortune-mod-tao: block newer games-misc/fortune-mod
+# games-misc/fortune-mod-taow			*
+# games-misc/fortune-mod-zx-error		*
+diff :: games-misc/fortune-mod-homer [source] ==========================================================================
+diff: /var/db/repos/gentoo/games-misc/fortune-mod-homer: No such file or directory
+diff :: games-misc/fortune-mod-homer [target] ==========================================================================
+Only in ./games-misc/fortune-mod-homer: .keep
+Only in ./games-misc/fortune-mod-homer: .rationale
+Only in ./games-misc/fortune-mod-homer: .source
+diff -u -U10 -r ./games-misc/fortune-mod-homer/.source/Manifest ./games-misc/fortune-mod-homer/Manifest
+--- ./games-misc/fortune-mod-homer/.source/Manifest	2023-01-02 22:29:22.373373155 -0000
++++ ./games-misc/fortune-mod-homer/Manifest	2023-01-02 22:48:58.610204258 -0000
+@@ -1 +1,2 @@
+ DIST homer-quotes.tar.gz 23142 BLAKE2B e5f9c14bf9eeb3bc88609fa72a71b5dd656c90074ba0e2fd8f3bbbe43068263d725f3bad2e5f4d5a92c3e6dbe17e97e65a0000a6b6a41fb18d532cfe2ea602b1 SHA512 babe8ce488f08bfba77dbed8e6ef28afb50952b48540c62c3b9211ff7504e3d0da0ea05a116f096aed3dbbd732afaf1ad60bb88772305dc43ecb0c2f721a7e33
++EBUILD fortune-mod-homer-0.1.ebuild 585 BLAKE2B 7fb547f84428bf9d671f1ab58d17865e8fb9751b15c9d2d8e81ceab960ec9d667ffe1c8c68817e2401e0de5e159973e47580c0d5b050125c22fb111cdb865d58 SHA512 bbdaaea9a94a6329a6338dda671a55a7aaecce092a5df82f60452a64e597fd2db9fb179a76be73283b383461feec0902604909353371913476898a760e118889
+Only in ./games-misc/fortune-mod-homer/.source: metadata.xml
+diff :: games-misc/fortune-mod-homer [files] ===========================================================================
+
+./games-misc/fortune-mod-homer:
+Manifest
+fortune-mod-homer-0.1.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: games-misc/fortune-mod-humorixfortunes [rationale] =============================================================
+# custom selections
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
+# games-misc/fortune-mod-bofh-excuses		*
+# games-misc/fortune-mod-calvin			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-chucknorris		*
+# games-misc/fortune-mod-dubya			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-firefly		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-futurama		2019-12-25 22:47:40 +0100 e0992fcfb0637f29b3dd9619861c2d93fdcb03ac games-misc/fortune-mod-futurama: Fix checksum in Manifest.
+# games-misc/fortune-mod-gentoo-dev		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-gentoo-forums		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-kernelcookies		*
+# games-misc/fortune-mod-slackware		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-starwars		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-strangelove		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-dune			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-debilneho		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-discworld		2017-12-10 09:09:04 +0100 5889c86307f9c6f61372ea8d0075a6d7d0171a0b games-misc/*: Update Manifest hashes
+# games-misc/fortune-mod-flashrider		*
+# games-misc/fortune-mod-hitchhiker		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-homer			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-humorixfortunes	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-osfortune		*
+# games-misc/fortune-mod-pqf			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-simpsons-chalkboard	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-smac			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-sp-fortunes		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-tao			2021-12-03 23:48:11 +0000 8ae498702ade8271624f069b7c95be40879e4dca games-misc/fortune-mod-tao: block newer games-misc/fortune-mod
+# games-misc/fortune-mod-taow			*
+# games-misc/fortune-mod-zx-error		*
+diff :: games-misc/fortune-mod-humorixfortunes [source] ================================================================
+diff: /var/db/repos/gentoo/games-misc/fortune-mod-humorixfortunes: No such file or directory
+diff :: games-misc/fortune-mod-humorixfortunes [target] ================================================================
+Only in ./games-misc/fortune-mod-humorixfortunes: .keep
+Only in ./games-misc/fortune-mod-humorixfortunes: .rationale
+Only in ./games-misc/fortune-mod-humorixfortunes: .source
+diff -u -U10 -r ./games-misc/fortune-mod-humorixfortunes/.source/Manifest ./games-misc/fortune-mod-humorixfortunes/Manifest
+--- ./games-misc/fortune-mod-humorixfortunes/.source/Manifest	2023-01-02 22:29:22.373373155 -0000
++++ ./games-misc/fortune-mod-humorixfortunes/Manifest	2023-01-02 22:49:01.506166895 -0000
+@@ -1 +1,2 @@
+ DIST humorixfortunes-1.4.tar.gz 97053 BLAKE2B a86746f5a810c1db6b310227f1855b88d6b8f6359b01973933ace6cc8d4af03a4c4349638ce399f7327800812f2e83464fe2652c7790dd33c3163be0646ab252 SHA512 beac030bb3d7bbfa9286c41cd7a40fce2166fcb058443af0be7ab3f8897220ed4ed1e259fd642554f4b38554351e1bfc2e5eb660a4612cdc23269dbf40163c7c
++EBUILD fortune-mod-humorixfortunes-1.4-r1.ebuild 666 BLAKE2B bb8c07fb18a7f7d5983308ab65023ee2f48a227b30ac0ae03f081777dfee68de5aa3a4255d0ae1b90de6e00d32f44536a887aff15f4ce393f35195cf45b937e4 SHA512 c41bf1610507795e3337009a07e0f43356a97416564eba55707b62259966e14663618f04cb540904b4852db6c52a3a5d04b94a88d32da539bda0fe7eb061d01e
+Only in ./games-misc/fortune-mod-humorixfortunes/.source: metadata.xml
+diff :: games-misc/fortune-mod-humorixfortunes [files] =================================================================
+
+./games-misc/fortune-mod-humorixfortunes:
+Manifest
+fortune-mod-humorixfortunes-1.4-r1.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: games-misc/fortune-mod-pqf [rationale] =========================================================================
+# custom selections
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
+# games-misc/fortune-mod-bofh-excuses		*
+# games-misc/fortune-mod-calvin			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-chucknorris		*
+# games-misc/fortune-mod-dubya			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-firefly		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-futurama		2019-12-25 22:47:40 +0100 e0992fcfb0637f29b3dd9619861c2d93fdcb03ac games-misc/fortune-mod-futurama: Fix checksum in Manifest.
+# games-misc/fortune-mod-gentoo-dev		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-gentoo-forums		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-kernelcookies		*
+# games-misc/fortune-mod-slackware		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-starwars		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-strangelove		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-dune			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-debilneho		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-discworld		2017-12-10 09:09:04 +0100 5889c86307f9c6f61372ea8d0075a6d7d0171a0b games-misc/*: Update Manifest hashes
+# games-misc/fortune-mod-flashrider		*
+# games-misc/fortune-mod-hitchhiker		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-homer			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-humorixfortunes	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-osfortune		*
+# games-misc/fortune-mod-pqf			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-simpsons-chalkboard	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-smac			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-sp-fortunes		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-tao			2021-12-03 23:48:11 +0000 8ae498702ade8271624f069b7c95be40879e4dca games-misc/fortune-mod-tao: block newer games-misc/fortune-mod
+# games-misc/fortune-mod-taow			*
+# games-misc/fortune-mod-zx-error		*
+diff :: games-misc/fortune-mod-pqf [source] ============================================================================
+diff: /var/db/repos/gentoo/games-misc/fortune-mod-pqf: No such file or directory
+diff :: games-misc/fortune-mod-pqf [target] ============================================================================
+Only in ./games-misc/fortune-mod-pqf: .keep
+Only in ./games-misc/fortune-mod-pqf: .rationale
+Only in ./games-misc/fortune-mod-pqf: .source
+diff -u -U10 -r ./games-misc/fortune-mod-pqf/.source/Manifest ./games-misc/fortune-mod-pqf/Manifest
+--- ./games-misc/fortune-mod-pqf/.source/Manifest	2023-01-02 22:29:22.373373155 -0000
++++ ./games-misc/fortune-mod-pqf/Manifest	2023-01-02 22:49:04.526127929 -0000
+@@ -1 +1,2 @@
+ DIST pqf-6.0 146363 BLAKE2B 61122f9710f010eb709064bba259d009dd5ee8f8e182827dbd08b93f0c284d0ca6d77c295df9380ae8046830eb014e502ff6fc8c6cb5bb22009ef0e749cd3839 SHA512 c38be09c945c20454cd0ca4d1a4dce18b40bae1ed2c71d093c7d9e4fb2de444425d50a35c7dad5535ed38b5ea52c6c9e8f6035221c08e0485145fc169cb9186e
++EBUILD fortune-mod-pqf-6.0.ebuild 748 BLAKE2B 424ce4c0b31483e06e2152e1bcd6e32b33db2f6fe427d4d27f3f1417e4cf225873efb7c4187cb6def58e8da0e3dc71687c35c39382247f969f0d9226e9c0cb25 SHA512 2a64961fc64c7f9b8398c7552a83194d494258c0bd7f95303632c9c203a9decd16fab41bb44789b34a2e9027ed35f3941703078190b5a63e62d4e2b80e4910dd
+Only in ./games-misc/fortune-mod-pqf/.source: metadata.xml
+diff :: games-misc/fortune-mod-pqf [files] =============================================================================
+
+./games-misc/fortune-mod-pqf:
+Manifest
+fortune-mod-pqf-6.0.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: games-misc/fortune-mod-simpsons-chalkboard [rationale] =========================================================
+# custom selections
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
+# games-misc/fortune-mod-bofh-excuses		*
+# games-misc/fortune-mod-calvin			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-chucknorris		*
+# games-misc/fortune-mod-dubya			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-firefly		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-futurama		2019-12-25 22:47:40 +0100 e0992fcfb0637f29b3dd9619861c2d93fdcb03ac games-misc/fortune-mod-futurama: Fix checksum in Manifest.
+# games-misc/fortune-mod-gentoo-dev		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-gentoo-forums		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-kernelcookies		*
+# games-misc/fortune-mod-slackware		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-starwars		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-strangelove		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-dune			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-debilneho		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-discworld		2017-12-10 09:09:04 +0100 5889c86307f9c6f61372ea8d0075a6d7d0171a0b games-misc/*: Update Manifest hashes
+# games-misc/fortune-mod-flashrider		*
+# games-misc/fortune-mod-hitchhiker		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-homer			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-humorixfortunes	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-osfortune		*
+# games-misc/fortune-mod-pqf			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-simpsons-chalkboard	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-smac			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-sp-fortunes		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-tao			2021-12-03 23:48:11 +0000 8ae498702ade8271624f069b7c95be40879e4dca games-misc/fortune-mod-tao: block newer games-misc/fortune-mod
+# games-misc/fortune-mod-taow			*
+# games-misc/fortune-mod-zx-error		*
+diff :: games-misc/fortune-mod-simpsons-chalkboard [source] ============================================================
+diff: /var/db/repos/gentoo/games-misc/fortune-mod-simpsons-chalkboard: No such file or directory
+diff :: games-misc/fortune-mod-simpsons-chalkboard [target] ============================================================
+Only in ./games-misc/fortune-mod-simpsons-chalkboard: .keep
+Only in ./games-misc/fortune-mod-simpsons-chalkboard: .rationale
+Only in ./games-misc/fortune-mod-simpsons-chalkboard: .source
+diff -u -U10 -r ./games-misc/fortune-mod-simpsons-chalkboard/.source/Manifest ./games-misc/fortune-mod-simpsons-chalkboard/Manifest
+--- ./games-misc/fortune-mod-simpsons-chalkboard/.source/Manifest	2023-01-02 22:29:22.401372794 -0000
++++ ./games-misc/fortune-mod-simpsons-chalkboard/Manifest	2023-01-02 22:49:07.494089639 -0000
+@@ -1 +1,2 @@
+ DIST fortune-simpsons-chalkboard.tgz 5803 BLAKE2B d2b659439b650f7d697ce3d1c9ba230bd0f3ccd2e66193fa09c92fd3d914cee71adae0e850771ddbfff1f99dc4eeeb4db7a6328c47bb9337d35f26e8c919e2d1 SHA512 0ce3e8fea577f018d933c64aa3aaeac859ebbb9d0faba28f6c1f5f330781109ad43f4e317281d75b95f87cdb6476e6393219eff5f7ee5201219ff7e007452255
++EBUILD fortune-mod-simpsons-chalkboard-0.1.ebuild 683 BLAKE2B c7c992e29ae5c488fd61ff23d3aa88e97bf26d3f35f5f9049a3df83be0e49f002189dca1de02373d40aaf25e0f92ee6707076c93cc7d90b603addb1e01c1bfe2 SHA512 18e4b88b0b5e212a6d0bb9cf1e54c1c3bb466c21aa11d91d130cc509b76c069b048469bcbe3d2c34e42364eb4527f46433c71ee7a47ad4733f951b4b37769e3c
+Only in ./games-misc/fortune-mod-simpsons-chalkboard/.source: metadata.xml
+diff :: games-misc/fortune-mod-simpsons-chalkboard [files] =============================================================
+
+./games-misc/fortune-mod-simpsons-chalkboard:
+Manifest
+fortune-mod-simpsons-chalkboard-0.1.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: games-misc/fortune-mod-slackware [rationale] ===================================================================
+# custom selections
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
+# games-misc/fortune-mod-bofh-excuses		*
+# games-misc/fortune-mod-calvin			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-chucknorris		*
+# games-misc/fortune-mod-dubya			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-firefly		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-futurama		2019-12-25 22:47:40 +0100 e0992fcfb0637f29b3dd9619861c2d93fdcb03ac games-misc/fortune-mod-futurama: Fix checksum in Manifest.
+# games-misc/fortune-mod-gentoo-dev		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-gentoo-forums		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-kernelcookies		*
+# games-misc/fortune-mod-slackware		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-starwars		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-strangelove		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-dune			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-debilneho		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-discworld		2017-12-10 09:09:04 +0100 5889c86307f9c6f61372ea8d0075a6d7d0171a0b games-misc/*: Update Manifest hashes
+# games-misc/fortune-mod-flashrider		*
+# games-misc/fortune-mod-hitchhiker		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-homer			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-humorixfortunes	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-osfortune		*
+# games-misc/fortune-mod-pqf			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-simpsons-chalkboard	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-smac			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-sp-fortunes		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-tao			2021-12-03 23:48:11 +0000 8ae498702ade8271624f069b7c95be40879e4dca games-misc/fortune-mod-tao: block newer games-misc/fortune-mod
+# games-misc/fortune-mod-taow			*
+# games-misc/fortune-mod-zx-error		*
+diff :: games-misc/fortune-mod-slackware [source] ======================================================================
+diff: /var/db/repos/gentoo/games-misc/fortune-mod-slackware: No such file or directory
+diff :: games-misc/fortune-mod-slackware [target] ======================================================================
+Only in ./games-misc/fortune-mod-slackware: .keep
+Only in ./games-misc/fortune-mod-slackware: .rationale
+Only in ./games-misc/fortune-mod-slackware: .source
+diff -u -U10 -r ./games-misc/fortune-mod-slackware/.source/Manifest ./games-misc/fortune-mod-slackware/Manifest
+--- ./games-misc/fortune-mod-slackware/.source/Manifest	2023-01-02 22:29:22.401372794 -0000
++++ ./games-misc/fortune-mod-slackware/Manifest	2023-01-02 22:46:32.620088292 -0000
+@@ -1 +1,2 @@
+ DIST slack-fortunes-all-1.15.tgz 122880 BLAKE2B 9c77d81f117f72ce9bc7b87db1f59e071274f6e4d9fe62e5e2053faedc347e8d4def852b34d59e5e8a6de68ab2e3a66ed6b70bae64f31224c116eb0e236df8e0 SHA512 18c756b2d81d1e2f0f031c3f799c872b5e73ccd70b6df976644fcd657bd181d794b1a977a49554fe806aa595046c10f33ebea1dc70fccf5e58b8df15f3db7c3e
++EBUILD fortune-mod-slackware-1.15.ebuild 1114 BLAKE2B b543311aa4ca3ed322b91ae0393c9ac02c9dd3f587a1fe3883258ad9983f628a612121ef77ba9ac8de002dafab0f968f35645b9931b6fe8ee6017fc11176701d SHA512 75e066441f8f62ad14f1ad600e56cd27199a956f92f8b0d30cfd52202b03f0e6bcbe491f36470a75c2b62de5e7b3389b618e08386fb51f8477b2169976ed183b
+Only in ./games-misc/fortune-mod-slackware/.source: metadata.xml
+diff :: games-misc/fortune-mod-slackware [files] =======================================================================
+
+./games-misc/fortune-mod-slackware:
+Manifest
+fortune-mod-slackware-1.15.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: games-misc/fortune-mod-smac [rationale] ========================================================================
+# custom selections
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
+# games-misc/fortune-mod-bofh-excuses		*
+# games-misc/fortune-mod-calvin			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-chucknorris		*
+# games-misc/fortune-mod-dubya			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-firefly		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-futurama		2019-12-25 22:47:40 +0100 e0992fcfb0637f29b3dd9619861c2d93fdcb03ac games-misc/fortune-mod-futurama: Fix checksum in Manifest.
+# games-misc/fortune-mod-gentoo-dev		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-gentoo-forums		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-kernelcookies		*
+# games-misc/fortune-mod-slackware		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-starwars		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-strangelove		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-dune			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-debilneho		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-discworld		2017-12-10 09:09:04 +0100 5889c86307f9c6f61372ea8d0075a6d7d0171a0b games-misc/*: Update Manifest hashes
+# games-misc/fortune-mod-flashrider		*
+# games-misc/fortune-mod-hitchhiker		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-homer			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-humorixfortunes	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-osfortune		*
+# games-misc/fortune-mod-pqf			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-simpsons-chalkboard	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-smac			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-sp-fortunes		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-tao			2021-12-03 23:48:11 +0000 8ae498702ade8271624f069b7c95be40879e4dca games-misc/fortune-mod-tao: block newer games-misc/fortune-mod
+# games-misc/fortune-mod-taow			*
+# games-misc/fortune-mod-zx-error		*
+diff :: games-misc/fortune-mod-smac [source] ===========================================================================
+diff: /var/db/repos/gentoo/games-misc/fortune-mod-smac: No such file or directory
+diff :: games-misc/fortune-mod-smac [target] ===========================================================================
+Only in ./games-misc/fortune-mod-smac: .keep
+Only in ./games-misc/fortune-mod-smac: .rationale
+Only in ./games-misc/fortune-mod-smac: .source
+diff -u -U10 -r ./games-misc/fortune-mod-smac/.source/Manifest ./games-misc/fortune-mod-smac/Manifest
+--- ./games-misc/fortune-mod-smac/.source/Manifest	2023-01-02 22:29:22.401372794 -0000
++++ ./games-misc/fortune-mod-smac/Manifest	2023-01-02 22:49:10.454051450 -0000
+@@ -1 +1,2 @@
+ DIST fortune-mod-smac-0.1.tar.gz 22205 BLAKE2B 383cd7bd752295ab26f8b49d9ac8e35b3bb4b317cdf9b36493adf867de66bf33e5b4c4727af53f8bc4997b445668430154390bb912c42329a5b6fa68e43a392a SHA512 cd837bc96e02f46b310ca264439e6e3753975e0613f05b41faf95fc2d9067f42b62a5af448586befd22e0b1c5e30754a4ae4bd34569c9bda434311ce82ac6697
++EBUILD fortune-mod-smac-0.1.ebuild 551 BLAKE2B 7edd62524f4d46043e55de0c830cdd5beb8654a7b3d7a8a4b1f38d6788405da80bef16ce251734ecb57b9eb0d8493ff119fad8c1452b6c48b6e22a7f60d5b8f8 SHA512 830380f4501d3722baf083beb661930270c79c71dbf9efc733c32b81fbb8fda1fdeb86dee88d403abdddebca6447dca542a2a39b37890603bc78a18323b0beb2
+Only in ./games-misc/fortune-mod-smac/.source: metadata.xml
+diff :: games-misc/fortune-mod-smac [files] ============================================================================
+
+./games-misc/fortune-mod-smac:
+Manifest
+fortune-mod-smac-0.1.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: games-misc/fortune-mod-sp-fortunes [rationale] =================================================================
+# custom selections
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
+# games-misc/fortune-mod-bofh-excuses		*
+# games-misc/fortune-mod-calvin			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-chucknorris		*
+# games-misc/fortune-mod-dubya			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-firefly		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-futurama		2019-12-25 22:47:40 +0100 e0992fcfb0637f29b3dd9619861c2d93fdcb03ac games-misc/fortune-mod-futurama: Fix checksum in Manifest.
+# games-misc/fortune-mod-gentoo-dev		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-gentoo-forums		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-kernelcookies		*
+# games-misc/fortune-mod-slackware		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-starwars		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-strangelove		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-dune			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-debilneho		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-discworld		2017-12-10 09:09:04 +0100 5889c86307f9c6f61372ea8d0075a6d7d0171a0b games-misc/*: Update Manifest hashes
+# games-misc/fortune-mod-flashrider		*
+# games-misc/fortune-mod-hitchhiker		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-homer			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-humorixfortunes	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-osfortune		*
+# games-misc/fortune-mod-pqf			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-simpsons-chalkboard	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-smac			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-sp-fortunes		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-tao			2021-12-03 23:48:11 +0000 8ae498702ade8271624f069b7c95be40879e4dca games-misc/fortune-mod-tao: block newer games-misc/fortune-mod
+# games-misc/fortune-mod-taow			*
+# games-misc/fortune-mod-zx-error		*
+diff :: games-misc/fortune-mod-sp-fortunes [source] ====================================================================
+diff: /var/db/repos/gentoo/games-misc/fortune-mod-sp-fortunes: No such file or directory
+diff :: games-misc/fortune-mod-sp-fortunes [target] ====================================================================
+Only in ./games-misc/fortune-mod-sp-fortunes: .keep
+Only in ./games-misc/fortune-mod-sp-fortunes: .rationale
+Only in ./games-misc/fortune-mod-sp-fortunes: .source
+diff -u -U10 -r ./games-misc/fortune-mod-sp-fortunes/.source/Manifest ./games-misc/fortune-mod-sp-fortunes/Manifest
+--- ./games-misc/fortune-mod-sp-fortunes/.source/Manifest	2023-01-02 22:29:22.401372794 -0000
++++ ./games-misc/fortune-mod-sp-fortunes/Manifest	2023-01-02 22:49:13.458012691 -0000
+@@ -1 +1,2 @@
+ DIST SP-0.2.tar.gz 11093 BLAKE2B d54196a7e567a8fd7c5476e4c55f77cab46325e4ec524103267677337cfdf94357d75cd9094227f445d2c971b506add8c9eabe5781b73a79c366cef02bb773c0 SHA512 846c469cc46e05a8314c92b609af3d049fe7e90c7b6c5aeb0c43c1ee12b8c8a3eab22be4aca3c79f64de53cff3d75152feb268f0e6ea80eaf8028f51827bd1d7
++EBUILD fortune-mod-sp-fortunes-0.2.ebuild 630 BLAKE2B 54cae19997a5ce0f5bb44e8638f5e6ca7f1c75c7a9778c1f08663f9ec6b99e296ba6020bd340fff332abc14b7e476de7d49de94445515dd8f18cc2e8622d6b0f SHA512 09b0bd749d98ef438d41f1ee654a1b8abb526c8e11e35c866558fdbbe7d072216eab6416820d362ae9f09fad55ca4bce0f9a8e1cd7c053919505efd2d0aab45a
+Only in ./games-misc/fortune-mod-sp-fortunes/.source: metadata.xml
+diff :: games-misc/fortune-mod-sp-fortunes [files] =====================================================================
+
+./games-misc/fortune-mod-sp-fortunes:
+Manifest
+fortune-mod-sp-fortunes-0.2.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: games-misc/fortune-mod-starwars [rationale] ====================================================================
+# custom selections
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
+# games-misc/fortune-mod-bofh-excuses		*
+# games-misc/fortune-mod-calvin			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-chucknorris		*
+# games-misc/fortune-mod-dubya			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-firefly		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-futurama		2019-12-25 22:47:40 +0100 e0992fcfb0637f29b3dd9619861c2d93fdcb03ac games-misc/fortune-mod-futurama: Fix checksum in Manifest.
+# games-misc/fortune-mod-gentoo-dev		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-gentoo-forums		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-kernelcookies		*
+# games-misc/fortune-mod-slackware		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-starwars		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-strangelove		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-dune			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-debilneho		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-discworld		2017-12-10 09:09:04 +0100 5889c86307f9c6f61372ea8d0075a6d7d0171a0b games-misc/*: Update Manifest hashes
+# games-misc/fortune-mod-flashrider		*
+# games-misc/fortune-mod-hitchhiker		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-homer			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-humorixfortunes	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-osfortune		*
+# games-misc/fortune-mod-pqf			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-simpsons-chalkboard	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-smac			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-sp-fortunes		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-tao			2021-12-03 23:48:11 +0000 8ae498702ade8271624f069b7c95be40879e4dca games-misc/fortune-mod-tao: block newer games-misc/fortune-mod
+# games-misc/fortune-mod-taow			*
+# games-misc/fortune-mod-zx-error		*
+diff :: games-misc/fortune-mod-starwars [source] =======================================================================
+diff: /var/db/repos/gentoo/games-misc/fortune-mod-starwars: No such file or directory
+diff :: games-misc/fortune-mod-starwars [target] =======================================================================
+Only in ./games-misc/fortune-mod-starwars: .keep
+Only in ./games-misc/fortune-mod-starwars: .rationale
+Only in ./games-misc/fortune-mod-starwars: .source
+diff -u -U10 -r ./games-misc/fortune-mod-starwars/.source/Manifest ./games-misc/fortune-mod-starwars/Manifest
+--- ./games-misc/fortune-mod-starwars/.source/Manifest	2023-01-02 22:29:22.401372794 -0000
++++ ./games-misc/fortune-mod-starwars/Manifest	2023-01-02 22:46:35.692048639 -0000
+@@ -1 +1,2 @@
+ DIST fortune-starwars.tgz 5547 BLAKE2B 3f1800239bef03fc0adba4bbfc8d1f3a82f39c7240114b2aab40e3d411b30fa05d0fc3dffb1779be0e0b045303ebe47f78e545b96a6bb66201baa105c1593c0a SHA512 7c829f367b71a56f442045e63ece9b5bf774447de2535e41d6d43ace4c88a0c6e907546bcdef388110998d069b77c24bde39a97a86c89a2693bb089e65b89627
++EBUILD fortune-mod-starwars-0.1.ebuild 667 BLAKE2B 32ddb1b27596631f1014ec24dbc77ab20e6f12aba3439250bd6d7001b1aeb61ffedc60fb09ee50a9f5c3d8b67290793dedec9063eaef1b866f186ee266774e0e SHA512 fdad745fddb876747ce4dfa0efa3e2575a31472b56e3a09622683b464d9994fc20bc073c9b10b85eca9240131d10f6ffe0e230fc6bfe9e28a95b715ffa079e46
+Only in ./games-misc/fortune-mod-starwars/.source: metadata.xml
+diff :: games-misc/fortune-mod-starwars [files] ========================================================================
+
+./games-misc/fortune-mod-starwars:
+Manifest
+fortune-mod-starwars-0.1.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: games-misc/fortune-mod-strangelove [rationale] =================================================================
+# custom selections
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
+# games-misc/fortune-mod-bofh-excuses		*
+# games-misc/fortune-mod-calvin			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-chucknorris		*
+# games-misc/fortune-mod-dubya			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-firefly		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-futurama		2019-12-25 22:47:40 +0100 e0992fcfb0637f29b3dd9619861c2d93fdcb03ac games-misc/fortune-mod-futurama: Fix checksum in Manifest.
+# games-misc/fortune-mod-gentoo-dev		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-gentoo-forums		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-kernelcookies		*
+# games-misc/fortune-mod-slackware		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-starwars		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-strangelove		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-dune			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-debilneho		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-discworld		2017-12-10 09:09:04 +0100 5889c86307f9c6f61372ea8d0075a6d7d0171a0b games-misc/*: Update Manifest hashes
+# games-misc/fortune-mod-flashrider		*
+# games-misc/fortune-mod-hitchhiker		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-homer			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-humorixfortunes	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-osfortune		*
+# games-misc/fortune-mod-pqf			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-simpsons-chalkboard	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-smac			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-sp-fortunes		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-tao			2021-12-03 23:48:11 +0000 8ae498702ade8271624f069b7c95be40879e4dca games-misc/fortune-mod-tao: block newer games-misc/fortune-mod
+# games-misc/fortune-mod-taow			*
+# games-misc/fortune-mod-zx-error		*
+diff :: games-misc/fortune-mod-strangelove [source] ====================================================================
+diff: /var/db/repos/gentoo/games-misc/fortune-mod-strangelove: No such file or directory
+diff :: games-misc/fortune-mod-strangelove [target] ====================================================================
+Only in ./games-misc/fortune-mod-strangelove: .keep
+Only in ./games-misc/fortune-mod-strangelove: .rationale
+Only in ./games-misc/fortune-mod-strangelove: .source
+diff -u -U10 -r ./games-misc/fortune-mod-strangelove/.source/Manifest ./games-misc/fortune-mod-strangelove/Manifest
+--- ./games-misc/fortune-mod-strangelove/.source/Manifest	2023-01-02 22:29:22.401372794 -0000
++++ ./games-misc/fortune-mod-strangelove/Manifest	2023-01-02 22:46:38.708009709 -0000
+@@ -1 +1,2 @@
+ DIST Strangelove_20041203.tar.gz 2103 BLAKE2B 3abc932f46e684a15f53648e8217ccc8f93fc32c9a7af8eaba73609b3189011068334dbf8d76ff8657677b8e1ab2e0f3784c7b24129e391d7db5af0c6e1a70a2 SHA512 c2e561a7556b50c6a281e3dbeb442034e61342ff1ec9d9d3ff9428b86b67d58ed378f9dd9cf7401bac70e5015a2eb2ae06e681fed323f502f6eba7ff648a5d08
++EBUILD fortune-mod-strangelove-20041203.ebuild 597 BLAKE2B 7d9815ac4f915d13710cff3f19b141ed9f12dd59b43b8191d6a242843b93136dfd41eb1d984856b59fa51b8a3a265d29541637f193b7011c920b8a37e2512fbe SHA512 0e1163981042bbcdedb1a72888a8fbf08d34816a8a7a7829cc27b1f4cb315ac65c6dd2a98a4981b435fb0b3c1349aa0e4d9171963b1c5ac2963036a528c28bb2
+Only in ./games-misc/fortune-mod-strangelove/.source: metadata.xml
+diff :: games-misc/fortune-mod-strangelove [files] =====================================================================
+
+./games-misc/fortune-mod-strangelove:
+Manifest
+fortune-mod-strangelove-20041203.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: games-misc/fortune-mod-tao [rationale] =========================================================================
+# custom selections
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
+# games-misc/fortune-mod-bofh-excuses		*
+# games-misc/fortune-mod-calvin			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-chucknorris		*
+# games-misc/fortune-mod-dubya			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-firefly		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-futurama		2019-12-25 22:47:40 +0100 e0992fcfb0637f29b3dd9619861c2d93fdcb03ac games-misc/fortune-mod-futurama: Fix checksum in Manifest.
+# games-misc/fortune-mod-gentoo-dev		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-gentoo-forums		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-kernelcookies		*
+# games-misc/fortune-mod-slackware		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-starwars		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-strangelove		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-dune			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-debilneho		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-discworld		2017-12-10 09:09:04 +0100 5889c86307f9c6f61372ea8d0075a6d7d0171a0b games-misc/*: Update Manifest hashes
+# games-misc/fortune-mod-flashrider		*
+# games-misc/fortune-mod-hitchhiker		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-homer			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-humorixfortunes	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-osfortune		*
+# games-misc/fortune-mod-pqf			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-simpsons-chalkboard	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-smac			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-sp-fortunes		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-tao			2021-12-03 23:48:11 +0000 8ae498702ade8271624f069b7c95be40879e4dca games-misc/fortune-mod-tao: block newer games-misc/fortune-mod
+# games-misc/fortune-mod-taow			*
+# games-misc/fortune-mod-zx-error		*
+diff :: games-misc/fortune-mod-tao [source] ============================================================================
+diff -u -U10 -r /var/db/repos/gentoo/games-misc/fortune-mod-tao/metadata.xml ./games-misc/fortune-mod-tao/.source/metadata.xml
+--- /var/db/repos/gentoo/games-misc/fortune-mod-tao/metadata.xml	2022-11-17 10:07:14.018002398 -0000
++++ ./games-misc/fortune-mod-tao/.source/metadata.xml	2023-01-02 22:29:22.593370331 -0000
+@@ -1,9 +1,8 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+ <pkgmetadata>
+-	<maintainer type="project">
+-		<email>games@gentoo.org</email>
+-		<name>Gentoo Games Project</name>
+-	</maintainer>
+-	<stabilize-allarches/>
++<maintainer type="project">
++	<email>games@gentoo.org</email>
++	<name>Gentoo Games Project</name>
++</maintainer>
+ </pkgmetadata>
+diff :: games-misc/fortune-mod-tao [target] ============================================================================
+Only in ./games-misc/fortune-mod-tao: .keep
+Only in ./games-misc/fortune-mod-tao: .rationale
+Only in ./games-misc/fortune-mod-tao: .source
+diff -u -U10 -r ./games-misc/fortune-mod-tao/.source/Manifest ./games-misc/fortune-mod-tao/Manifest
+--- ./games-misc/fortune-mod-tao/.source/Manifest	2022-11-14 20:49:55.967480868 -0000
++++ ./games-misc/fortune-mod-tao/Manifest	2023-01-02 22:49:16.469973831 -0000
+@@ -1 +1,2 @@
+ DIST fortune-tao.tar.gz 15381 BLAKE2B f1ee9c670ad2b849717a2a2c5158dfaf59b94ba7d9d501152b90aef7d63923d2fcaa2c6264d9d4ec8d11cad0d6116042bcb9c60fd4696d97a833a9b5b4a8443b SHA512 ec8d8b679962e9a1af4fb74600d7d7d348efcda0fd9c4f08db881835f8e1665688f77a77b0eb8231274ab5ecc93443f5348976100031d5b0c4b6245f647db0e0
++EBUILD fortune-mod-tao-1-r1.ebuild 608 BLAKE2B 2dc70096f12cf29ebfffc0033ce924fa4114c147a3c4c7486d0c78375eb2bf5d7c4f22be6930107fd0ae4c6e2adeff43823dcff9bb8638ee83dd8b7b1c950a8d SHA512 07b35fc78f69c8ef8119e9f5d27ee3f91147ef81e440fbff10505006c35389725392088e43f7e6120fab0c0f292a551b609987e859705e1692da895cfa6b2cbe
+Only in ./games-misc/fortune-mod-tao/.source: metadata.xml
+diff :: games-misc/fortune-mod-tao [files] =============================================================================
+
+./games-misc/fortune-mod-tao:
+Manifest
+fortune-mod-tao-1-r1.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
 diff :: games-misc/games-envd [rationale] ==============================================================================
 # removed package
 emerge: there are no ebuilds to satisfy "games-misc/games-envd".
