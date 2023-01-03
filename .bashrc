@@ -79,8 +79,8 @@ export MAILDIR="${HOME}/Maildir"
 export MAILCAPS="${HOME}/.mailcap"
 
 export GDRIVE_REMOTE="gdrive"
-export NOTES_MD="/.g/_data/zactive/_pim/tasks.notes.md";	export NOTES_MD_ID="1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e"
-export IDEAS_MD="/.g/_data/zactive/writing/_imagination.md";	export IDEAS_MD_ID="1_p06qeX31eFRTUJ2VKWhdfGUhaQBqF5k"
+export NOTES_MD="/.g/_data/zactive/_pim/tasks.notes.md";	export NOTES_MD_ID="gdrive:_notes.md" #>>> 1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e
+export IDEAS_MD="/.g/_data/zactive/writing/_imagination.md";	export IDEAS_MD_ID="gdrive:_write.md" #>>> 1_p06qeX31eFRTUJ2VKWhdfGUhaQBqF5k
 export SALES_MD="/.g/_data/zactive/_pim/zoho.today.md";		#>>>export SALES_MD_ID="1wQrnTw0I5pDfzlqeuKdBNCNvFH9Ifulz"
 
 ########################################
@@ -478,7 +478,7 @@ alias rsync="${RSYNC_U}"
 
 export RCLONE_C="reporter rclone"
 #>>>	--fast-list \
-export RCLONE_U="${RCLONE_C} sync \
+export RCLONE_U="${RCLONE_C} \
 	-vv \
 	--config ${HOME}/.rclone.conf \
 	--progress \
@@ -5026,11 +5026,16 @@ function task-export-drive {
 #>>>		"${NOTES_MD}:${NOTES_MD_ID}" \
 #>>>		"${IDEAS_MD}:${IDEAS_MD_ID}" \
 #>>>		"${SALES_MD}:${SALES_MD_ID}"
-	gdrive_export.pl \
-		"${NOTES_MD}:${NOTES_MD_ID}" \
-		"${IDEAS_MD}:${IDEAS_MD_ID}" \
-		${@} || return 1
+#>>>	gdrive_export.pl \
+#>>>		"${NOTES_MD}:${NOTES_MD_ID}" \
+#>>>		"${IDEAS_MD}:${IDEAS_MD_ID}" \
+#>>>		${@} || return 1
 #>>>		"${SALES_MD}:${SALES_MD_ID}" \
+	if [[ ${1} == upload ]]; then
+		${RCLONE_U} copyto ${NOTES_MD} ${NOTES_MD_ID}
+	else
+		${RCLONE_U} copyto ${NOTES_MD_ID} ${NOTES_MD}
+	fi
 	cd - >/dev/null
 	return 0
 }
@@ -5038,21 +5043,21 @@ function task-export-drive {
 ########################################
 
 function task-export-drive-sync {
-	${RCLONE_U} \
+	${RCLONE_U} sync \
 		--delete-excluded \
 		--filter "- /_pim/taskd/orgs/local/users/*/tx.data" \
 		--filter "- /_pim/tasks/undo.*" \
 		/.g/_data/zactive/_drive/_sync/ \
 		${GDRIVE_REMOTE}:/_sync \
 		&&
-	${RCLONE_U} \
+	${RCLONE_U} sync \
 		--drive-shared-with-me \
 		--filter "- /The Ultimate Onewheel Knowledge Base*" \
 		--filter "- /email from*" \
 		${GDRIVE_REMOTE}:/ \
 		/.g/_data/zactive/_drive/_shared.all \
 		&&
-	${RCLONE_U} \
+	${RCLONE_U} sync \
 		--filter "- /_share/*/gary/**" \
 		--filter "- /_share/transmetropolitan**" \
 		--filter "- /_sync/**" \
