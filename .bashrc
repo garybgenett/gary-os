@@ -4589,26 +4589,26 @@ function task-copy {
 		$data = @{$data}[0];
 		while (@{ARGV}) {
 			my $field = shift();
-			if (${field} =~ m/^(p(ro(ject)?)?[:])(.*)$/)		{ $data->{"project"}	= ${4}; }
-			elsif (${field} =~ m/^(k(ind)?[:])(.*)$/)		{ $data->{"kind"}	= ${3}; }
-			elsif (${field} =~ m/^(a(rea)?[:])(.*)$/)		{ $data->{"area"}	= ${3}; }
-			elsif (${field} =~ m/^(t(ag(s)?)?[:])(.*)$/)		{ ${$data->{"tags"}}[0]	= ${4}; }
-			elsif (${field} =~ m/^(d(ue)?[:])(.*)$/)		{ $data->{"due"}	= ${3}; }
-			elsif (${field} =~ m/^(dep(ends)?[:])(.*)$/)		{ $data->{"depends"}	= ${3}; }
-			elsif (${field} =~ m/^(p(ri(ority)?)?[:])(.*)$/)	{ $data->{"priority"}	= ${4}; }
+			if (${field} =~ m/^(p(ro(ject)?)?[:])(.*)$/)		{ $data->{"project"}		= ${4}; }
+			elsif (${field} =~ m/^(k(ind)?[:])(.*)$/)		{ $data->{"kind"}		= ${3}; }
+			elsif (${field} =~ m/^(a(rea)?[:])(.*)$/)		{ $data->{"area"}		= ${3}; }
+			elsif (${field} =~ m/^(t(ag(s)?)?[:])(.*)$/)		{ ${$data->{"tags"}}[0]		= ${4}; }
+			elsif (${field} =~ m/^(d(ue)?[:])(.*)$/)		{ $data->{"due"}		= ${3}; }
+			elsif (${field} =~ m/^(dep(ends)?[:])(.*)$/)		{ ${$data->{"depends"}}[0]	= ${3}; }
+			elsif (${field} =~ m/^(p(ri(ority)?)?[:])(.*)$/)	{ $data->{"priority"}		= ${4}; }
 			elsif (${field} =~ m/^[-][-]$/)				{ last; };
 		};
 		if (@{ARGV}) {
 			$data->{"description"} = join(" ", @{ARGV});
 		};
 		system("task add"
-			. " " . ($data->{"project"}	? "project:"	. $data->{"project"}		: "")
-			. " " . ($data->{"kind"}	? "kind:"	. $data->{"kind"}		: "")
-			. " " . ($data->{"area"}	? "area:"	. $data->{"area"}		: "")
-			. " " . ($data->{"tags"}	? "tags:"	. join(",", @{$data->{"tags"}})	: "")
-			. " " . ($data->{"due"}		? "due:"	. $data->{"due"}		: "")
-			. " " . ($data->{"depends"}	? "depends:"	. $data->{"depends"}		: "")
-			. " " . ($data->{"priority"}	? "priority:"	. $data->{"priority"}		: "")
+			. " " . ($data->{"project"}	? "project:"	. $data->{"project"}			: "")
+			. " " . ($data->{"kind"}	? "kind:"	. $data->{"kind"}			: "")
+			. " " . ($data->{"area"}	? "area:"	. $data->{"area"}			: "")
+			. " " . ($data->{"tags"}	? "tags:"	. join(",", @{$data->{"tags"}})		: "")
+			. " " . ($data->{"due"}		? "due:"	. $data->{"due"}			: "")
+			. " " . ($data->{"depends"}	? "depends:"	. join(",", @{$data->{"depends"}})	: "")
+			. " " . ($data->{"priority"}	? "priority:"	. $data->{"priority"}			: "")
 			. " -- " . $data->{"description"}
 		);
 		if (${?} == 0) {
@@ -4692,7 +4692,7 @@ function task-depends {
 		foreach my $task (@{$data}) {
 			$list->{$task->{"uuid"}} = ${task};
 			if (exists($task->{"depends"})) {
-				foreach my $uuid (split(",", $task->{"depends"})) {
+				foreach my $uuid (@{$task->{"depends"}}) {
 					push(@{$rdep->{$uuid}}, $task->{"uuid"});
 				};
 			};
@@ -4861,7 +4861,7 @@ function task-depends {
 			};
 			if (${deep} >= 0) {
 				if ($task->{"depends"}) {
-					foreach my $uuid (sort(print_task_sorter split(",", $task->{"depends"}))) {
+					foreach my $uuid (sort(print_task_sorter @{$task->{"depends"}})) {
 						&print_task(${uuid}, (${deep} + 1));
 					};
 				};
@@ -5376,7 +5376,7 @@ function task-export-text {
 				my $kanban_args = ${2}; $kanban_args =~ s|rc.context=([^\s]+)||g;
 				my $kanban_cont = ${1};
 				$kanban_filt = qx(task _get rc.report.${kanban_filt}.filter); chomp(${kanban_filt});
-				$kanban_cont = qx(task _get rc.context.${kanban_cont}); chomp(${kanban_cont});
+				$kanban_cont = qx(task _get rc.context.${kanban_cont}.read); chomp(${kanban_cont});
 				$kanban_args =
 					((${kanban_filt}) ? "( ${kanban_filt} )" : "") .
 					((${kanban_args}) ? "( ${kanban_args} )" : "") .
@@ -5533,7 +5533,7 @@ function task-export-text {
 				$clr_t		= "gray"							if (!${main});
 			my $due_l;
 			if (exists($task->{"depends"})) {
-				foreach my $dep (sort(split(",", $task->{"depends"}))) {
+				foreach my $dep (sort(@{$task->{"depends"}})) {
 					my $item = &get_by_uuid(${dep});
 					if (!${item}) {
 						warn("UUID NOT INCLUDED: ${dep}");
