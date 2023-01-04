@@ -4761,11 +4761,11 @@ function task-depends {
 		};
 		# report.skim.sort=project+,kind-,depends-,description+,entry+
 		sub print_task_sorter {
-			(($list->{$a}{"project"}		|| "") cmp ($list->{$b}{"project"}	|| "")) ||
-			(&print_task_sorter_udas("kind",	${b}, ${a})				) ||
-			(($list->{$b}{"depends"}		|| "") cmp ($list->{$a}{"depends"}	|| "")) ||
-			(($list->{$a}{"description"}		|| "") cmp ($list->{$b}{"description"}	|| "")) ||
-			(($list->{$a}{"entry"}			|| "") cmp ($list->{$b}{"entry"}	|| ""))
+			(($list->{$a}{"project"}		|| "") cmp ($list->{$b}{"project"}		|| "")) ||
+			(&print_task_sorter_udas("kind",	${b}, ${a})					) ||
+			((${$list->{$b}{"depends"}}[0]		|| "") cmp (${$list->{$a}{"depends"}}[0]	|| "")) ||
+			(($list->{$a}{"description"}		|| "") cmp ($list->{$b}{"description"}		|| "")) ||
+			(($list->{$a}{"entry"}			|| "") cmp ($list->{$b}{"entry"}		|| ""))
 		};
 		sub print_header {
 			$header = "1";
