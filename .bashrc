@@ -4974,29 +4974,36 @@ function task-export-calendar {
 #>>>		"c|export.present:tresobis.org_o3dpp5csnb3hmhpevs31d2kdio@group.calendar.google.com" \
 #>>>		"c|export.past:tresobis.org_tha1ur1go2id4edlddtg9otc9o@group.calendar.google.com" \
 #>>>		${@}
-	for FILE in \
-		"|export.gtd:tresobis.org_1fcog23c1a099apgju9o7vfm18@group.calendar.google.com" \
-		"|export.default:gary@tresobis.org" \
-		"|export.personal:tresobis.org_g8v0pktsnt84eots8hkijtsjvg@group.calendar.google.com" \
-		"|export.orion:tresobis.org_abfopsu1tvf44bc0je7mdqs6co@group.calendar.google.com" \
-		"|export.present:tresobis.org_o3dpp5csnb3hmhpevs31d2kdio@group.calendar.google.com" \
-		"|export.past:tresobis.org_tha1ur1go2id4edlddtg9otc9o@group.calendar.google.com" \
-	; do
-		declare PROF="$(echo "${FILE}" | ${SED} "s/^(.*)[|](.+)$/\1/g")"
-		declare GCAL="$(echo "${FILE}" | ${SED} "s/^(.*)[|](.+)$/\2/g")"
-		declare CNAM="$(echo "${GCAL}" | ${SED} "s/^(.+)[:](.+)$/\1/g")"
-		declare CSRC="$(echo "${GCAL}" | ${SED} "s/^(.+)[:](.+)$/\2/g")"
-		declare ACCS="$(oauth2.sh ${PROF} -c)"
-		${WGET_C} --output-document \
-			${PIMDIR}/calendar-${CNAM}.ics \
-			"https://apidata.googleusercontent.com/caldav/v2/${CSRC}/events?access_token=${ACCS}"
-	done
+#>>>	for FILE in \
+#>>>		"|export.gtd:tresobis.org_1fcog23c1a099apgju9o7vfm18@group.calendar.google.com" \
+#>>>		"|export.default:gary@tresobis.org" \
+#>>>		"|export.personal:tresobis.org_g8v0pktsnt84eots8hkijtsjvg@group.calendar.google.com" \
+#>>>		"|export.orion:tresobis.org_abfopsu1tvf44bc0je7mdqs6co@group.calendar.google.com" \
+#>>>		"|export.present:tresobis.org_o3dpp5csnb3hmhpevs31d2kdio@group.calendar.google.com" \
+#>>>		"|export.past:tresobis.org_tha1ur1go2id4edlddtg9otc9o@group.calendar.google.com" \
+#>>>	; do
+#>>>		declare PROF="$(echo "${FILE}" | ${SED} "s/^(.*)[|](.+)$/\1/g")"
+#>>>		declare GCAL="$(echo "${FILE}" | ${SED} "s/^(.*)[|](.+)$/\2/g")"
+#>>>		declare CNAM="$(echo "${GCAL}" | ${SED} "s/^(.+)[:](.+)$/\1/g")"
+#>>>		declare CSRC="$(echo "${GCAL}" | ${SED} "s/^(.+)[:](.+)$/\2/g")"
+#>>>		declare ACCS="$(oauth2.sh ${PROF} -c)"
+#>>>		${WGET_C} --output-document \
+#>>>			${PIMDIR}/calendar-${CNAM}.ics \
+#>>>			"https://apidata.googleusercontent.com/caldav/v2/${CSRC}/events?access_token=${ACCS}"
+#>>>	done
+	if [[ -f ${PIMDIR}/gary@tresobis.org.ical.zip ]]; then
+		${MKDIR} ${PIMDIR}/calendar-google
+		7z e -aoa -o${PIMDIR}/calendar-google $(ls -rt ${PIMDIR}/gary@tresobis.org.ical* | tail -n1)
+		${RM} ${PIMDIR}/gary@tresobis.org.ical*
+	fi
 	${WGET_C} --output-document \
 		${PIMDIR}/calendar-export.doodle.ics \
 		https://doodle.com/ics/mydoodle/j4afu5q0krixfr0gfm1iltcnl1rdpry9.ics
+#>>>		calendar-export.*.ics
 	${SED} -i \
 		-e "s/^(DTSTAMP[:]).+$/\119700101T000000Z/g" \
-		calendar-export.*.ics
+		calendar-google/*.ics \
+		calendar-export.doodle.ics
 	sudo chown -vR plastic:plastic calendar*
 	sudo chmod -vR 750 calendar*
 	cd - >/dev/null
