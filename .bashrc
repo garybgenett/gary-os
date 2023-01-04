@@ -938,13 +938,13 @@ function email {
 				cd - >/dev/null
 				return 1
 			fi
-			${RM} "${MAILDIR}/_mutt"
+			${RM} "${MAILDIR}/-mutt"
 		else
 			${LL} "${MAILDIR}"
 		fi
 	else
-		${MKDIR} "${MAILDIR}/_mutt"
-		chown -R plastic:plastic "${MAILDIR}/_mutt"
+		${MKDIR} "${MAILDIR}/-mutt"
+		chown -R plastic:plastic "${MAILDIR}/-mutt"
 		${REALTIME} \
 		sudo -H -u \#1000 \
 				MAILDIR="${MAILDIR}" \
