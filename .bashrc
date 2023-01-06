@@ -593,7 +593,7 @@ fi
 
 ########################################
 
-alias rsynclook="${GREP} -v '^[.<>][fdDLS][ ]'"
+alias rsynclook="${GREP} -v -e '^[.<>][fdDLS][ ]' -e '^[[]generator[]]' -e '^[[]sender[]]' -e '^[[]receiver[]]'"
 
 alias dmesgtail="dmesg --kernel --human --decode --ctime --follow"
 alias logtail="tail --follow /.runit/log/syslogd"
