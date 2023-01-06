@@ -407,6 +407,9 @@ net-misc/freerdp
 net-misc/tigervnc
 x11-misc/x11vnc
 
+app-mobilephone/scrcpy
+dev-util/android-tools
+
 #>>> net-p2p/bitcoin-cli
 #>>> net-p2p/bitcoin-qt
 #>>> net-p2p/bitcoind
