@@ -10,6 +10,7 @@ echo -en "\n"
 
 chmod -v 000 /usr/bin/dbus-daemon
 chmod -v 000 /usr/bin/dbus-launch
+chmod -v 000 /usr/bin/speech-dispatcher
 chmod -v 000 /usr/lib/polkit*/polkitd
 chmod -v 000 /usr/libexec/samba/samba-bgqd
 
