@@ -1,6 +1,24 @@
 # vim: filetype=diff
 
 ------------------------------------------------------------------------------------------------------------------------
+diff :: app-misc/atomicwallet [rationale] ==============================================================================
+# custom package
+diff :: app-misc/atomicwallet [source] =================================================================================
+diff: /var/db/repos/gentoo/app-misc/atomicwallet: No such file or directory
+diff :: app-misc/atomicwallet [target] =================================================================================
+Only in ./app-misc/atomicwallet: .keep
+Only in ./app-misc/atomicwallet/.source: .null
+Only in ./app-misc/atomicwallet: .rationale
+Only in ./app-misc/atomicwallet: .source
+Only in ./app-misc/atomicwallet: Manifest
+Only in ./app-misc/atomicwallet: atomicwallet-2.62.3.ebuild
+diff :: app-misc/atomicwallet [files] ==================================================================================
+
+./app-misc/atomicwallet:
+Manifest
+atomicwallet-2.62.3.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
 diff :: games-fps/dhewm3 [rationale] ===================================================================================
 # custom package
 diff :: games-fps/dhewm3 [source] ======================================================================================

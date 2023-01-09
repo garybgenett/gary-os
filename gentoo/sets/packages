@@ -407,6 +407,7 @@ x11-misc/x11vnc
 app-mobilephone/scrcpy
 dev-util/android-tools
 
+app-misc/atomicwallet
 #>>> net-p2p/bitcoin-cli
 #>>> net-p2p/bitcoin-qt
 #>>> net-p2p/bitcoind

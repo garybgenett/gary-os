@@ -16,6 +16,8 @@ sys-apps/man-pages-posix		freedist
 ########################################
 # programs
 
+app-misc/atomicwallet			all-rights-reserved
+
 net-im/discord-bin			all-rights-reserved
 net-im/slack				all-rights-reserved
 net-im/zoom				all-rights-reserved
