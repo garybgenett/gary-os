@@ -31,6 +31,8 @@ app-misc/timew				~amd64		# gentoo required
 
 app-mobilephone/scrcpy			~amd64		# gentoo required
 
+app-misc/atomicwallet			~amd64		# gentoo required
+
 net-im/discord-bin			~amd64		# gentoo required
 net-im/slack				~amd64		# gentoo required
 net-im/zoom				~amd64		# gentoo required
