@@ -189,6 +189,7 @@ sys-apps/portage
 app-portage/eix
 app-portage/gentoolkit
 app-portage/mirrorselect
+dev-util/pkgcheck
 sys-kernel/genkernel
 
 ########################################
@@ -334,10 +335,6 @@ net-misc/whois
 net-fs/cifs-utils
 net-fs/sshfs
 net-misc/autossh
-
-#>>> app-mobilephone/heimdall
-#>>> dev-util/android-studio
-#>>> dev-util/android-tools
 
 ########################################
 # servers
