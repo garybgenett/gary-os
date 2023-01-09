@@ -210,7 +210,6 @@ sys-apps/portage			#{MOD}
 app-portage/eix				#{MOD}
 app-portage/gentoolkit			#{MOD}
 app-portage/mirrorselect		#{MOD}
-dev-util/pkgcheck			#{MOD}
 sys-kernel/genkernel			#{MOD}
 
 ########################################
