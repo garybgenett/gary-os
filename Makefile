@@ -125,7 +125,7 @@ else
 	@$(PRINTF) "Minified Build  / Standard Build:"		"DOMODS=\"`SETDIR="$(C)" DOMODS="$(DOMODS)" $(C)/gentoo/_system -v $(CHROOT) DOMODS && echo -en "$$$DOMODS"`\""
 	@$(PRINTF) "Clean Rebuild   / No Overwrite:"		"DOREDO=\"`SETDIR="$(C)" DOREDO="$(DOREDO)" $(C)/gentoo/_system -v $(CHROOT) DOREDO && echo -en "$$$DOREDO"`\""
 	@$(PRINTF) "Quick Build     / Do All Build Steps:"	"DOFAST=\"`SETDIR="$(C)" DOFAST="$(DOFAST)" $(C)/gentoo/_system -v $(CHROOT) DOFAST && echo -en "$$$DOFAST"`\""
-	@$(PRINTF) "(Unsupported)   / Standard Build:"		"DOTEST=\"`SETDIR="$(C)" DOTEST="$(DOTEST)" $(C)/gentoo/_system -v $(CHROOT) DOTEST && echo -en "$$$DOTEST"`\""
+	@$(PRINTF) "(Unsupported)   / Validation Build:"	"DOTEST=\"`SETDIR="$(C)" DOTEST="$(DOTEST)" $(C)/gentoo/_system -v $(CHROOT) DOTEST && echo -en "$$$DOTEST"`\""
 	@$(ECHO) "\n"
 	@$(ECHO) "$(STATE)Build script pass-through targets, for advanced use:$(RESET)\n"
 	@$(ECHO) "\n"
