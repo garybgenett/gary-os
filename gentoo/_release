@@ -776,6 +776,9 @@ function _prepare_config {		#{isexit} #{doredo}
 	#note: these are from the "prepare_config_issue" function above
 	DOREDO="${DOREDO}" prepare_config_restore sys-apps/baselayout		/etc/issue						|| return 1
 	DOREDO="${DOREDO}" prepare_config_restore "null"			/etc/motd						|| return 1
+	#note: these are to restore "$cfgscr" customizations
+	DOREDO="${DOREDO}" prepare_config_restore sys-auth/pambase		/etc/pam.d/su						|| return 1
+	DOREDO="${DOREDO}" prepare_config_restore app-admin/sudo		/etc/sudoers						|| return 1
 	#note: these are all directly below
 	DOREDO="${DOREDO}" prepare_config_restore "null"			/init							|| return 1
 	DOREDO="${DOREDO}" prepare_config_restore sys-apps/sysvinit		/etc/inittab						|| return 1
