@@ -224,7 +224,7 @@ for FILE in $((
 		find ${TARGET}/etc/kernels	-mindepth 1 -maxdepth 1
 		find ${TARGET}${MDIR}		-mindepth 1 -maxdepth 1
 	) 2>/dev/null |
-		${GREP} -v "${KVER}-gentoo" |
+		${GREP} -v "${KVER}-gentoo.${_TITLE}$" |
 		${SED} "s|^${TARGET}||g" |
 		sort
 	)				; do if ! variable_match "FSPACK FSKEEP FSARCH FSEXCL" ";" "${FILE}"; then FSEXCL+="; ${_TITLE}:${FILE}"; fi; done
