@@ -240,7 +240,7 @@ dev-vcs/git				#{MOD}
 
 app-forensics/cmospwd
 sys-apps/flashrom
-sys-apps/fwupd				#{MOD} # requires: dev-lang/vala
+#>>> sys-apps/fwupd			#{MOD} # requires: ( x11-libs/pango +introspection | dev-lang/vala )
 sys-apps/fwupd-efi			#{MOD}
 sys-apps/memtester
 
