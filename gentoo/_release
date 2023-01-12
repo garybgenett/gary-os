@@ -877,8 +877,8 @@ function _prepare_docdir {		#{dotest}
 	#note: except if this is being called by the "release_install" function
 	if [[ ${TARGET} != ${_GINST} ]]; then
 		${SED} -i									\
-			-e "s|^(override DOMODS[[:space:]]+[?][=][ ]).+$|\1${DOMODS}|g"		\
-			-e "s|^(override P[[:space:]]+[?][=][ ]).+$|\1${_PKG}|g"		\
+			-e "s|^(override DOMODS[[:space:]]+[?][=]).*$|\1 ${DOMODS}|g"		\
+			-e "s|^(override P[[:space:]]+[?][=]).*$|\1 ${_PKG}|g"			\
 							${TARGET}/.${_TITLE}/Makefile		|| return 1
 		portage_file				${TARGET}/.${_TITLE}/gentoo		|| return 1
 	fi
