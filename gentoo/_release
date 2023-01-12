@@ -309,6 +309,8 @@ ${ROOTFS_BASH}
 /usr/sbin/fsck.vfat
 /usr/sbin/mount.exfat
 /usr/sbin/mount.exfat-fuse
+/usr/sbin/mount.ntfs
+/usr/sbin/mount.ntfs-3g
 "
 
 declare ROOTFS_FILES="
