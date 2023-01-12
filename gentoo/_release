@@ -511,7 +511,6 @@ function _release_reset {		#{ismain}
 	${RM} ${TARGET}/.${_GPACK/%.txt}*		|| return 1
 	if [[ -n ${TARGET} ]]; then
 		${RM} ${TARGET}/.${_TITLE}*		|| return 1
-		${RM} ${TARGET}/_${_TITLE}*		|| return 1
 	fi
 	#note: checking if the output directory is a mounted filesystem or symlink
 	#note: this is created in the "release_unpack" function
@@ -2001,7 +2000,6 @@ function release_install_root {
 		--one-file-system \
 		--filter="-_/${_TITLE}" \
 		--filter="P_/${_TITLE}" \
-		--filter="-_/_${_TITLE}*" \
 		--filter="-_/.${_TITLE}*" \
 		--filter="-_/.${_GPACK/%.txt}*" \
 		$(variable_parse SKIPDIRS_GOS	"" "--filter=\"-_" "\"") \
