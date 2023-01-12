@@ -2,6 +2,13 @@
 error: out of memory.
 >> https://github.com/rhboot/grub2/pull/114/commits/cf6516128ea03294156fc59a50ce90856bd3ebd2
 >> https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1842320
+>>	https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1842320/comments/137
+>>		https://git.launchpad.net/~ubuntu-core-dev/grub/+git/ubuntu/commit/?id=844522bc383941baceb35e9c65c670002838ca87
+>>		https://git.launchpad.net/~ubuntu-core-dev/grub/+git/ubuntu/commit/?id=3268480db6655ebadf798a833e075186aeeb320e
+>>		https://git.launchpad.net/~ubuntu-core-dev/grub/+git/ubuntu/commit/?id=4f5530f529889cf984c620c882e269df3e301046
+>>		https://git.launchpad.net/~ubuntu-core-dev/grub/+git/ubuntu/commit/?id=a0ee822f1c85fcf55066996ab51c5cf77e2728b2
+>>	https://savannah.gnu.org/bugs/?61058#comment4
+>>		https://www.mail-archive.com/grub-devel@gnu.org/msg35526.html
 >> https://lists.gnu.org/archive/html/help-grub/2021-03/msg00000.html
 >> https://forum.manjaro.org/t/cannot-switch-kernel-errors-out-of-memory-and-you-need-to-load-the-kernel-first/62575
 >> https://lists.gnu.org/archive/html/help-grub/2018-11/msg00003.html

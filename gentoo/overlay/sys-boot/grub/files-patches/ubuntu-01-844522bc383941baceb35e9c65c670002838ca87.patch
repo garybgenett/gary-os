@@ -1,0 +1,1105 @@
+From 844522bc383941baceb35e9c65c670002838ca87 Mon Sep 17 00:00:00 2001
+From: Julian Andres Klode <julian.klode@canonical.com>
+Date: Tue, 6 Dec 2022 14:26:53 +0100
+Subject: Cherry-pick all memory patches from rhboot
+
+- Allocate initrd > 4 GB (LP: #1842320)
+- Allocate kernels as code, not data (needed for newer firmware)
+
+Gbp-Dch: full
+---
+ .../rhboot-efi-allocate-in-kernel-bounds.patch     |  55 +++++
+ ...boot-efi-allocate-kernel-as-code-for-real.patch |  59 +++++
+ .../rhboot-efi-allocate-kernel-as-code.patch       |  87 +++++++
+ ...fi-enumerated-array-for-allocation-choice.patch |  79 +++++++
+ .../rhboot-efi-fix-incorrect-array-size.patch      |  35 +++
+ debian/patches/rhboot-efi-initrd-above-4gb.patch   | 169 ++++++++++++++
+ debian/patches/rhboot-efi-kernel-allocator.patch   | 253 +++++++++++++++++++++
+ .../rhboot-efi-rearrange-grub-cmd-linux.patch      | 137 +++++++++++
+ .../rhboot-efi-split-allocation-policy.patch       | 126 ++++++++++
+ debian/patches/series                              |   9 +
+ 10 files changed, 1009 insertions(+)
+ create mode 100644 debian/patches/rhboot-efi-allocate-in-kernel-bounds.patch
+ create mode 100644 debian/patches/rhboot-efi-allocate-kernel-as-code-for-real.patch
+ create mode 100644 debian/patches/rhboot-efi-allocate-kernel-as-code.patch
+ create mode 100644 debian/patches/rhboot-efi-enumerated-array-for-allocation-choice.patch
+ create mode 100644 debian/patches/rhboot-efi-fix-incorrect-array-size.patch
+ create mode 100644 debian/patches/rhboot-efi-initrd-above-4gb.patch
+ create mode 100644 debian/patches/rhboot-efi-kernel-allocator.patch
+ create mode 100644 debian/patches/rhboot-efi-rearrange-grub-cmd-linux.patch
+ create mode 100644 debian/patches/rhboot-efi-split-allocation-policy.patch
+
+diff --git a/debian/patches/rhboot-efi-allocate-in-kernel-bounds.patch b/debian/patches/rhboot-efi-allocate-in-kernel-bounds.patch
+new file mode 100644
+index 0000000..d639096
+--- /dev/null
++++ b/debian/patches/rhboot-efi-allocate-in-kernel-bounds.patch
+@@ -0,0 +1,55 @@
++From: Peter Jones <pjones@redhat.com>
++Date: Mon, 1 Aug 2022 14:07:50 -0400
++Subject: efi: allocate the initrd within the bounds expressed by the kernel
++
++Currently on x86, only linux kernels built with CONFIG_RELOCATABLE for
++x86_64 can be loaded above 4G, but the maximum address for the initramfs
++is specified via a HdrS field.  This allows us to utilize that value,
++and unless loading the kernel above 4G, uses the value present there.
++If loading kernel above 4G is allowed, we assume loading the initramfs
++above 4G also works; in practice this has been true in the kernel code
++for quite some time.
++
++Resolves: rhbz#2112134
++
++Signed-off-by: Peter Jones <pjones@redhat.com>
++---
++ grub-core/loader/i386/efi/linux.c | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/grub-core/loader/i386/efi/linux.c b/grub-core/loader/i386/efi/linux.c
++index 65b6c30..78e8c07 100644
++--- a/grub-core/loader/i386/efi/linux.c
+++++ b/grub-core/loader/i386/efi/linux.c
++@@ -185,6 +185,8 @@ grub_linuxefi_unload (void *data)
++   cmd_initrd->data = 0;
++   grub_free (context);
++ 
+++  max_addresses[INITRD_MAX_ADDRESS].addr = GRUB_EFI_MAX_ALLOCATION_ADDRESS;
+++
++   return GRUB_ERR_NONE;
++ }
++ 
++@@ -415,11 +417,13 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
++     }
++ #endif
++ 
+++  max_addresses[INITRD_MAX_ADDRESS].addr = lh->initrd_addr_max;
++ #if defined(__x86_64__)
++   if (lh->xloadflags & LINUX_XLF_CAN_BE_LOADED_ABOVE_4G)
++     {
++       grub_dprintf ("linux", "Loading kernel above 4GB is supported; enabling.\n");
++       max_addresses[KERNEL_NO_LIMIT].addr = GRUB_EFI_MAX_USABLE_ADDRESS;
+++      max_addresses[INITRD_MAX_ADDRESS].addr = GRUB_EFI_MAX_USABLE_ADDRESS;
++     }
++   else
++     {
++@@ -547,6 +551,8 @@ fail:
++ 
++   grub_dl_unref (my_mod);
++ 
+++  max_addresses[INITRD_MAX_ADDRESS].addr = GRUB_EFI_MAX_ALLOCATION_ADDRESS;
+++
++   if (cmdline && lh)
++     kernel_free (cmdline, lh->cmdline_size + 1);
++ 
+diff --git a/debian/patches/rhboot-efi-allocate-kernel-as-code-for-real.patch b/debian/patches/rhboot-efi-allocate-kernel-as-code-for-real.patch
+new file mode 100644
+index 0000000..1040051
+--- /dev/null
++++ b/debian/patches/rhboot-efi-allocate-kernel-as-code-for-real.patch
+@@ -0,0 +1,59 @@
++From: Peter Jones <pjones@redhat.com>
++Date: Mon, 1 Aug 2022 13:04:43 -0400
++Subject: efi: use EFI_LOADER_(CODE|DATA) for kernel and initrd allocations
++
++At some point due to an erroneous kernel warning, we switched kernel and
++initramfs to being loaded in EFI_RUNTIME_SERVICES_CODE and
++EFI_RUNTIME_SERVICES_DATA memory pools.  This doesn't appear to be
++correct according to the spec, and that kernel warning has gone away.
++
++This patch puts them back in EFI_LOADER_CODE and EFI_LOADER_DATA
++allocations, respectively.
++
++Resolves: rhbz#2108456
++
++Signed-off-by: Peter Jones <pjones@redhat.com>
++---
++ grub-core/loader/i386/efi/linux.c | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/grub-core/loader/i386/efi/linux.c b/grub-core/loader/i386/efi/linux.c
++index 78e8c07..e9962ea 100644
++--- a/grub-core/loader/i386/efi/linux.c
+++++ b/grub-core/loader/i386/efi/linux.c
++@@ -274,7 +274,7 @@ grub_cmd_initrd (grub_command_t cmd, int argc, char *argv[])
++     }
++ 
++   grub_dprintf ("linux", "Trying to allocate initrd mem\n");
++-  initrd_mem = kernel_alloc(INITRD_MEM, size, GRUB_EFI_RUNTIME_SERVICES_DATA,
+++  initrd_mem = kernel_alloc(INITRD_MEM, size, GRUB_EFI_LOADER_DATA,
++ 			    N_("can't allocate initrd"));
++   if (initrd_mem == NULL)
++     goto fail;
++@@ -432,7 +432,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
++ #endif
++ 
++   params = kernel_alloc (KERNEL_MEM, sizeof(*params),
++-			 GRUB_EFI_RUNTIME_SERVICES_DATA,
+++			 GRUB_EFI_LOADER_DATA,
++ 			 "cannot allocate kernel parameters");
++   if (!params)
++     goto fail;
++@@ -455,7 +455,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
++ 
++   grub_dprintf ("linux", "setting up cmdline\n");
++   cmdline = kernel_alloc (KERNEL_MEM, lh->cmdline_size + 1,
++-			  GRUB_EFI_RUNTIME_SERVICES_DATA,
+++			  GRUB_EFI_LOADER_DATA,
++ 			  N_("can't allocate cmdline"));
++   if (!cmdline)
++     goto fail;
++@@ -504,7 +504,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
++   kernel_size = lh->init_size;
++   grub_dprintf ("linux", "Trying to allocate kernel mem\n");
++   kernel_mem = kernel_alloc (KERNEL_MEM, kernel_size,
++-			     GRUB_EFI_RUNTIME_SERVICES_CODE,
+++			     GRUB_EFI_LOADER_CODE,
++ 			     N_("can't allocate kernel"));
++   restore_addresses();
++   if (!kernel_mem)
+diff --git a/debian/patches/rhboot-efi-allocate-kernel-as-code.patch b/debian/patches/rhboot-efi-allocate-kernel-as-code.patch
+new file mode 100644
+index 0000000..1cb5899
+--- /dev/null
++++ b/debian/patches/rhboot-efi-allocate-kernel-as-code.patch
+@@ -0,0 +1,87 @@
++From: Peter Jones <pjones@redhat.com>
++Date: Wed, 9 Feb 2022 16:08:20 -0500
++Subject: EFI: allocate kernel in EFI_RUNTIME_SERVICES_CODE instead of
++ EFI_LOADER_DATA.
++
++On some of the firmwares with more security mitigations, EFI_LOADER_DATA
++doesn't get you executable memory, and we take a fault and reboot when
++we enter kernel.
++
++This patch correctly allocates the kernel code as EFI_RUNTIME_SERVICES_CODE
++rather than EFI_LOADER_DATA.
++
++Signed-off-by: Peter Jones <pjones@redhat.com>
++[rharwood: use kernel_size]
++Signed-off-by: Robbie Harwood <rharwood@redhat.com>
++---
++ grub-core/loader/i386/efi/linux.c | 22 +++++++++++++++-------
++ 1 file changed, 15 insertions(+), 7 deletions(-)
++
++diff --git a/grub-core/loader/i386/efi/linux.c b/grub-core/loader/i386/efi/linux.c
++index 819c6ec..9ba9b25 100644
++--- a/grub-core/loader/i386/efi/linux.c
+++++ b/grub-core/loader/i386/efi/linux.c
++@@ -84,7 +84,9 @@ kernel_free(void *addr, grub_efi_uintn_t size)
++ }
++ 
++ static void *
++-kernel_alloc(grub_efi_uintn_t size, const char * const errmsg)
+++kernel_alloc(grub_efi_uintn_t size,
+++	     grub_efi_memory_type_t memtype,
+++	     const char * const errmsg)
++ {
++   void *addr = 0;
++   unsigned int i;
++@@ -110,7 +112,7 @@ kernel_alloc(grub_efi_uintn_t size, const char * const errmsg)
++       prev_max = max;
++       addr = grub_efi_allocate_pages_real (max, pages,
++ 					   max_addresses[i].alloc_type,
++-					   GRUB_EFI_LOADER_DATA);
+++					   memtype);
++       if (addr)
++ 	grub_dprintf ("linux", "Allocated at %p\n", addr);
++     }
++@@ -245,7 +247,8 @@ grub_cmd_initrd (grub_command_t cmd, int argc, char *argv[])
++ 	}
++     }
++ 
++-  initrd_mem = kernel_alloc(size, N_("can't allocate initrd"));
+++  initrd_mem = kernel_alloc(size, GRUB_EFI_RUNTIME_SERVICES_DATA,
+++			    N_("can't allocate initrd"));
++   if (initrd_mem == NULL)
++     goto fail;
++   grub_dprintf ("linuxefi", "initrd_mem = %p\n", initrd_mem);
++@@ -399,7 +402,8 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
++     }
++ #endif
++ 
++-  params = kernel_alloc (sizeof(*params), "cannot allocate kernel parameters");
+++  params = kernel_alloc (sizeof(*params), GRUB_EFI_RUNTIME_SERVICES_DATA,
+++			 "cannot allocate kernel parameters");
++   if (!params)
++     goto fail;
++   grub_dprintf ("linuxefi", "params = %p\n", params);
++@@ -419,8 +423,10 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
++   lh = (struct linux_i386_kernel_header *)params;
++   grub_dprintf ("linuxefi", "new lh is at %p\n", lh);
++ 
++-  grub_dprintf ("linuxefi", "setting up cmdline\n");
++-  cmdline = kernel_alloc (lh->cmdline_size + 1, N_("can't allocate cmdline"));
+++  grub_dprintf ("linux", "setting up cmdline\n");
+++  cmdline = kernel_alloc (lh->cmdline_size + 1,
+++			  GRUB_EFI_RUNTIME_SERVICES_DATA,
+++			  N_("can't allocate cmdline"));
++   if (!cmdline)
++     goto fail;
++   grub_dprintf ("linuxefi", "linux_cmdline = %p\n", cmdline);
++@@ -465,7 +471,9 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
++     }
++   max_addresses[1].addr = GRUB_EFI_MAX_ALLOCATION_ADDRESS;
++   max_addresses[2].addr = GRUB_EFI_MAX_ALLOCATION_ADDRESS;
++-  kernel_mem = kernel_alloc (lh->init_size, N_("can't allocate kernel"));
+++  kernel_size = lh->init_size;
+++  kernel_mem = kernel_alloc (kernel_size, GRUB_EFI_RUNTIME_SERVICES_CODE,
+++			     N_("can't allocate kernel"));
++   restore_addresses();
++   if (!kernel_mem)
++     goto fail;
+diff --git a/debian/patches/rhboot-efi-enumerated-array-for-allocation-choice.patch b/debian/patches/rhboot-efi-enumerated-array-for-allocation-choice.patch
+new file mode 100644
+index 0000000..f112890
+--- /dev/null
++++ b/debian/patches/rhboot-efi-enumerated-array-for-allocation-choice.patch
+@@ -0,0 +1,79 @@
++From: Peter Jones <pjones@redhat.com>
++Date: Mon, 1 Aug 2022 14:06:30 -0400
++Subject: efi: use enumerated array positions for our allocation choices
++
++In our kernel allocator on EFI systems, we currently have a growing
++amount of code that references the various allocation policies by
++position in the array, and of course maintenance of this code scales
++very poorly.
++
++This patch changes them to be enumerated, so they're easier to refer to
++farther along in the code without confusion.
++
++Signed-off-by: Peter Jones <pjones@redhat.com>
++---
++ grub-core/loader/i386/efi/linux.c | 31 ++++++++++++++++++++-----------
++ 1 file changed, 20 insertions(+), 11 deletions(-)
++
++diff --git a/grub-core/loader/i386/efi/linux.c b/grub-core/loader/i386/efi/linux.c
++index 9ba9b25..42886e8 100644
++--- a/grub-core/loader/i386/efi/linux.c
+++++ b/grub-core/loader/i386/efi/linux.c
++@@ -58,17 +58,26 @@ struct allocation_choice {
++     grub_efi_allocate_type_t alloc_type;
++ };
++ 
++-static struct allocation_choice max_addresses[4] =
+++enum {
+++    KERNEL_PREF_ADDRESS,
+++    KERNEL_4G_LIMIT,
+++    KERNEL_NO_LIMIT,
+++};
+++
+++static struct allocation_choice max_addresses[] =
++   {
++     /* the kernel overrides this one with pref_address and
++      * GRUB_EFI_ALLOCATE_ADDRESS */
++-    { GRUB_EFI_MAX_ALLOCATION_ADDRESS, GRUB_EFI_ALLOCATE_MAX_ADDRESS },
+++    [KERNEL_PREF_ADDRESS] =
+++      { GRUB_EFI_MAX_ALLOCATION_ADDRESS, GRUB_EFI_ALLOCATE_MAX_ADDRESS },
+++    /* If the flag in params is set, this one gets changed to be above 4GB. */
+++    [KERNEL_4G_LIMIT] =
+++      { GRUB_EFI_MAX_ALLOCATION_ADDRESS, GRUB_EFI_ALLOCATE_MAX_ADDRESS },
++     /* this one is always below 4GB, which we still *prefer* even if the flag
++      * is set. */
++-    { GRUB_EFI_MAX_ALLOCATION_ADDRESS, GRUB_EFI_ALLOCATE_MAX_ADDRESS },
++-    /* If the flag in params is set, this one gets changed to be above 4GB. */
++-    { GRUB_EFI_MAX_ALLOCATION_ADDRESS, GRUB_EFI_ALLOCATE_MAX_ADDRESS },
++-    { 0, 0 }
+++    [KERNEL_NO_LIMIT] =
+++      { GRUB_EFI_MAX_ALLOCATION_ADDRESS, GRUB_EFI_ALLOCATE_MAX_ADDRESS },
+++    { NO_MEM, 0, 0 }
++   };
++ static struct allocation_choice saved_addresses[4];
++ 
++@@ -394,7 +403,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
++   if (lh->xloadflags & LINUX_XLF_CAN_BE_LOADED_ABOVE_4G)
++     {
++       grub_dprintf ("linux", "Loading kernel above 4GB is supported; enabling.\n");
++-      max_addresses[2].addr = GRUB_EFI_MAX_USABLE_ADDRESS;
+++      max_addresses[KERNEL_NO_LIMIT].addr = GRUB_EFI_MAX_USABLE_ADDRESS;
++     }
++   else
++     {
++@@ -466,11 +475,11 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
++   grub_dprintf ("linuxefi", "lh->pref_address: %p\n", (void *)(grub_addr_t)lh->pref_address);
++   if (lh->pref_address < (grub_uint64_t)GRUB_EFI_MAX_ALLOCATION_ADDRESS)
++     {
++-      max_addresses[0].addr = lh->pref_address;
++-      max_addresses[0].alloc_type = GRUB_EFI_ALLOCATE_ADDRESS;
+++      max_addresses[KERNEL_PREF_ADDRESS].addr = lh->pref_address;
+++      max_addresses[KERNEL_PREF_ADDRESS].alloc_type = GRUB_EFI_ALLOCATE_ADDRESS;
++     }
++-  max_addresses[1].addr = GRUB_EFI_MAX_ALLOCATION_ADDRESS;
++-  max_addresses[2].addr = GRUB_EFI_MAX_ALLOCATION_ADDRESS;
+++  max_addresses[KERNEL_4G_LIMIT].addr = GRUB_EFI_MAX_ALLOCATION_ADDRESS;
+++  max_addresses[KERNEL_NO_LIMIT].addr = GRUB_EFI_MAX_ALLOCATION_ADDRESS;
++   kernel_size = lh->init_size;
++   kernel_mem = kernel_alloc (kernel_size, GRUB_EFI_RUNTIME_SERVICES_CODE,
++ 			     N_("can't allocate kernel"));
+diff --git a/debian/patches/rhboot-efi-fix-incorrect-array-size.patch b/debian/patches/rhboot-efi-fix-incorrect-array-size.patch
+new file mode 100644
+index 0000000..ca427cf
+--- /dev/null
++++ b/debian/patches/rhboot-efi-fix-incorrect-array-size.patch
+@@ -0,0 +1,35 @@
++From: Peter Jones <pjones@redhat.com>
++Date: Tue, 11 Oct 2022 17:00:50 -0400
++Subject: x86-efi: Fix an incorrect array size in kernel allocation
++
++In 81a6ebf62bbe166ddc968463df2e8bd481bf697c ("efi: split allocation
++policy for kernel vs initrd memories."), I introduced a split in the
++kernel allocator to allow for different dynamic policies for the kernel
++and the initrd allocations.
++
++Unfortunately, that change increased the size of the policy data used to
++make decisions, but did not change the size of the temporary storage we
++use to back it up and restore.  This results in some of .data getting
++clobbered at runtime, and hilarity ensues.
++
++This patch makes the size of the backup storage be based on the size of
++the initial policy data.
++
++Signed-off-by: Peter Jones <pjones@redhat.com>
++---
++ grub-core/loader/i386/efi/linux.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/grub-core/loader/i386/efi/linux.c b/grub-core/loader/i386/efi/linux.c
++index e9962ea..33565ed 100644
++--- a/grub-core/loader/i386/efi/linux.c
+++++ b/grub-core/loader/i386/efi/linux.c
++@@ -90,7 +90,7 @@ static struct allocation_choice max_addresses[] =
++       { INITRD_MEM, GRUB_EFI_MAX_ALLOCATION_ADDRESS, GRUB_EFI_ALLOCATE_MAX_ADDRESS },
++     { NO_MEM, 0, 0 }
++   };
++-static struct allocation_choice saved_addresses[4];
+++static struct allocation_choice saved_addresses[sizeof(max_addresses) / sizeof(max_addresses[0])];
++ 
++ #define save_addresses() grub_memcpy(saved_addresses, max_addresses, sizeof(max_addresses))
++ #define restore_addresses() grub_memcpy(max_addresses, saved_addresses, sizeof(max_addresses))
+diff --git a/debian/patches/rhboot-efi-initrd-above-4gb.patch b/debian/patches/rhboot-efi-initrd-above-4gb.patch
+new file mode 100644
+index 0000000..f64c6f3
+--- /dev/null
++++ b/debian/patches/rhboot-efi-initrd-above-4gb.patch
+@@ -0,0 +1,169 @@
++From: Peter Jones <pjones@redhat.com>
++Date: Wed, 12 Sep 2018 16:12:27 -0400
++Subject: x86-efi: Allow initrd+params+cmdline allocations above 4GB.
++
++This enables everything except the kernel itself to be above 4GB.
++Putting the kernel up there still doesn't work, because of the way
++params->code32_start is used.
++
++Signed-off-by: Peter Jones <pjones@redhat.com>
++---
++ grub-core/loader/i386/efi/linux.c | 69 ++++++++++++++++++++++++++++++++++-----
++ include/grub/i386/linux.h         |  6 +++-
++ 2 files changed, 66 insertions(+), 9 deletions(-)
++
++diff --git a/grub-core/loader/i386/efi/linux.c b/grub-core/loader/i386/efi/linux.c
++index 81de6fa..819c6ec 100644
++--- a/grub-core/loader/i386/efi/linux.c
+++++ b/grub-core/loader/i386/efi/linux.c
++@@ -58,13 +58,22 @@ struct allocation_choice {
++     grub_efi_allocate_type_t alloc_type;
++ };
++ 
++-static struct allocation_choice max_addresses[] =
+++static struct allocation_choice max_addresses[4] =
++   {
+++    /* the kernel overrides this one with pref_address and
+++     * GRUB_EFI_ALLOCATE_ADDRESS */
++     { GRUB_EFI_MAX_ALLOCATION_ADDRESS, GRUB_EFI_ALLOCATE_MAX_ADDRESS },
+++    /* this one is always below 4GB, which we still *prefer* even if the flag
+++     * is set. */
++     { GRUB_EFI_MAX_ALLOCATION_ADDRESS, GRUB_EFI_ALLOCATE_MAX_ADDRESS },
+++    /* If the flag in params is set, this one gets changed to be above 4GB. */
++     { GRUB_EFI_MAX_ALLOCATION_ADDRESS, GRUB_EFI_ALLOCATE_MAX_ADDRESS },
++     { 0, 0 }
++   };
+++static struct allocation_choice saved_addresses[4];
+++
+++#define save_addresses() grub_memcpy(saved_addresses, max_addresses, sizeof(max_addresses))
+++#define restore_addresses() grub_memcpy(max_addresses, saved_addresses, sizeof(max_addresses))
++ 
++ static inline void
++ kernel_free(void *addr, grub_efi_uintn_t size)
++@@ -86,6 +95,11 @@ kernel_alloc(grub_efi_uintn_t size, const char * const errmsg)
++       grub_uint64_t max = max_addresses[i].addr;
++       grub_efi_uintn_t pages;
++ 
+++      /*
+++       * When we're *not* loading the kernel, or >4GB allocations aren't
+++       * supported, these entries are basically all the same, so don't re-try
+++       * the same parameters.
+++       */
++       if (max == prev_max)
++ 	continue;
++ 
++@@ -186,6 +200,9 @@ read(grub_file_t file, grub_uint8_t *bufp, grub_size_t len)
++   return bufpos;
++ }
++ 
+++#define LOW_U32(val) ((grub_uint32_t)(((grub_addr_t)(val)) & 0xffffffffull))
+++#define HIGH_U32(val) ((grub_uint32_t)(((grub_addr_t)(val) >> 32) & 0xffffffffull))
+++
++ static grub_err_t
++ grub_cmd_initrd (grub_command_t cmd, int argc, char *argv[])
++ {
++@@ -233,8 +250,12 @@ grub_cmd_initrd (grub_command_t cmd, int argc, char *argv[])
++     goto fail;
++   grub_dprintf ("linuxefi", "initrd_mem = %p\n", initrd_mem);
++ 
++-  params->ramdisk_size = size;
++-  params->ramdisk_image = (grub_uint32_t) (grub_addr_t) initrd_mem; /* FIXME: casts are not in rhboot */
+++  params->ramdisk_size = LOW_U32(size);
+++  params->ramdisk_image = LOW_U32(initrd_mem);
+++#if defined(__x86_64__)
+++  params->ext_ramdisk_size = HIGH_U32(size);
+++  params->ext_ramdisk_image = HIGH_U32(initrd_mem);
+++#endif
++ 
++   ptr = initrd_mem;
++ 
++@@ -366,6 +387,18 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
++     }
++ #endif
++ 
+++#if defined(__x86_64__)
+++  if (lh->xloadflags & LINUX_XLF_CAN_BE_LOADED_ABOVE_4G)
+++    {
+++      grub_dprintf ("linux", "Loading kernel above 4GB is supported; enabling.\n");
+++      max_addresses[2].addr = GRUB_EFI_MAX_USABLE_ADDRESS;
+++    }
+++  else
+++    {
+++      grub_dprintf ("linux", "Loading kernel above 4GB is not supported\n");
+++    }
+++#endif
+++
++   params = kernel_alloc (sizeof(*params), "cannot allocate kernel parameters");
++   if (!params)
++     goto fail;
++@@ -399,28 +432,48 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
++ 			      GRUB_VERIFY_KERNEL_CMDLINE);
++ 
++   grub_dprintf ("linuxefi", "cmdline:%s\n", cmdline);
++-  grub_dprintf ("linuxefi", "setting lh->cmd_line_ptr to %p\n",
++-		cmdline);
++-  lh->cmd_line_ptr = (grub_uint32_t) (grub_addr_t) cmdline;
+++  grub_dprintf ("linuxefi", "setting lh->cmd_line_ptr to 0x%08x\n",
+++		LOW_U32(cmdline));
+++  lh->cmd_line_ptr = LOW_U32(cmdline);
+++#if defined(__x86_64__)
+++  if ((grub_efi_uintn_t)cmdline > 0xffffffffull)
+++    {
+++      grub_dprintf ("linuxefi", "setting params->ext_cmd_line_ptr to 0x%08x\n",
+++		    HIGH_U32(cmdline));
+++      params->ext_cmd_line_ptr = HIGH_U32(cmdline);
+++    }
+++#endif
++ 
++   handover_offset = lh->handover_offset;
++   grub_dprintf("linuxefi", "handover_offset: 0x%08x\n", handover_offset);
++ 
++   start = (lh->setup_sects + 1) * 512;
++ 
+++  /*
+++   * AFAICS >4GB for kernel *cannot* work because of params->code32_start being
+++   * 32-bit and getting called unconditionally in head_64.S from either entry
+++  * point.
+++   *
+++   * so nerf that out here...
+++   */
+++  save_addresses();
++   grub_dprintf ("linuxefi", "lh->pref_address: %p\n", (void *)(grub_addr_t)lh->pref_address);
++   if (lh->pref_address < (grub_uint64_t)GRUB_EFI_MAX_ALLOCATION_ADDRESS)
++     {
++       max_addresses[0].addr = lh->pref_address;
++       max_addresses[0].alloc_type = GRUB_EFI_ALLOCATE_ADDRESS;
++     }
+++  max_addresses[1].addr = GRUB_EFI_MAX_ALLOCATION_ADDRESS;
+++  max_addresses[2].addr = GRUB_EFI_MAX_ALLOCATION_ADDRESS;
++   kernel_mem = kernel_alloc (lh->init_size, N_("can't allocate kernel"));
+++  restore_addresses();
++   if (!kernel_mem)
++     goto fail;
++   grub_dprintf("linux", "kernel_mem = %p\n", kernel_mem);
++ 
++-  grub_dprintf ("linuxefi", "setting lh->code32_start to %p\n", kernel_mem);
++-  lh->code32_start = (grub_uint32_t)(grub_addr_t) kernel_mem;
+++  grub_dprintf ("linuxefi", "setting lh->code32_start to 0x%08x\n",
+++		LOW_U32(kernel_mem));
+++  lh->code32_start = LOW_U32(kernel_mem);
++ 
++   grub_memcpy (kernel_mem, (char *)kernel + start, filelen - start);
++ 
++diff --git a/include/grub/i386/linux.h b/include/grub/i386/linux.h
++index 25ef52c..fac2247 100644
++--- a/include/grub/i386/linux.h
+++++ b/include/grub/i386/linux.h
++@@ -236,7 +236,11 @@ struct linux_kernel_params
++   grub_uint32_t ofw_cif_handler;	/* b8 */
++   grub_uint32_t ofw_idt;		/* bc */
++ 
++-  grub_uint8_t padding7[0x1b8 - 0xc0];
+++  grub_uint32_t ext_ramdisk_image;	/* 0xc0 */
+++  grub_uint32_t ext_ramdisk_size;	/* 0xc4 */
+++  grub_uint32_t ext_cmd_line_ptr;	/* 0xc8 */
+++
+++  grub_uint8_t padding7[0x1b8 - 0xcc];
++ 
++   union
++     {
+diff --git a/debian/patches/rhboot-efi-kernel-allocator.patch b/debian/patches/rhboot-efi-kernel-allocator.patch
+new file mode 100644
+index 0000000..2c34acf
+--- /dev/null
++++ b/debian/patches/rhboot-efi-kernel-allocator.patch
+@@ -0,0 +1,253 @@
++From: Peter Jones <pjones@redhat.com>
++Date: Wed, 12 Sep 2018 16:03:55 -0400
++Subject: x86-efi: Make our own allocator for kernel stuff
++
++This helps enable allocations above 4GB.
++
++Signed-off-by: Peter Jones <pjones@redhat.com>
++---
++ grub-core/loader/i386/efi/linux.c | 156 ++++++++++++++++++++++----------------
++ 1 file changed, 89 insertions(+), 67 deletions(-)
++
++diff --git a/grub-core/loader/i386/efi/linux.c b/grub-core/loader/i386/efi/linux.c
++index 9044700..81de6fa 100644
++--- a/grub-core/loader/i386/efi/linux.c
+++++ b/grub-core/loader/i386/efi/linux.c
++@@ -53,6 +53,65 @@ struct grub_linuxefi_context {
++ 
++ #define BYTES_TO_PAGES(bytes)   (((bytes) + 0xfff) >> 12)
++ 
+++struct allocation_choice {
+++    grub_efi_physical_address_t addr;
+++    grub_efi_allocate_type_t alloc_type;
+++};
+++
+++static struct allocation_choice max_addresses[] =
+++  {
+++    { GRUB_EFI_MAX_ALLOCATION_ADDRESS, GRUB_EFI_ALLOCATE_MAX_ADDRESS },
+++    { GRUB_EFI_MAX_ALLOCATION_ADDRESS, GRUB_EFI_ALLOCATE_MAX_ADDRESS },
+++    { GRUB_EFI_MAX_ALLOCATION_ADDRESS, GRUB_EFI_ALLOCATE_MAX_ADDRESS },
+++    { 0, 0 }
+++  };
+++
+++static inline void
+++kernel_free(void *addr, grub_efi_uintn_t size)
+++{
+++  if (addr && size)
+++    grub_efi_free_pages ((grub_efi_physical_address_t)(grub_addr_t)addr,
+++			 BYTES_TO_PAGES(size));
+++}
+++
+++static void *
+++kernel_alloc(grub_efi_uintn_t size, const char * const errmsg)
+++{
+++  void *addr = 0;
+++  unsigned int i;
+++  grub_efi_physical_address_t prev_max = 0;
+++
+++  for (i = 0; max_addresses[i].addr != 0 && addr == 0; i++)
+++    {
+++      grub_uint64_t max = max_addresses[i].addr;
+++      grub_efi_uintn_t pages;
+++
+++      if (max == prev_max)
+++	continue;
+++
+++      pages = BYTES_TO_PAGES(size);
+++      grub_dprintf ("linux", "Trying to allocate %lu pages from %p\n",
+++		    pages, (void *)max);
+++
+++      prev_max = max;
+++      addr = grub_efi_allocate_pages_real (max, pages,
+++					   max_addresses[i].alloc_type,
+++					   GRUB_EFI_LOADER_DATA);
+++      if (addr)
+++	grub_dprintf ("linux", "Allocated at %p\n", addr);
+++    }
+++
+++  while (grub_error_pop ())
+++    {
+++      ;
+++    }
+++
+++  if (addr == NULL)
+++    grub_error (GRUB_ERR_OUT_OF_MEMORY, "%s", errmsg);
+++
+++  return addr;
+++}
+++
++ static grub_err_t
++ grub_linuxefi_boot (void *data)
++ {
++@@ -75,17 +134,13 @@ grub_linuxefi_unload (void *data)
++   grub_dl_unref (my_mod);
++ 
++   if (context->initrd_mem)
++-    grub_efi_free_pages ((grub_efi_physical_address_t)(grub_addr_t)context->initrd_mem,
++-			 BYTES_TO_PAGES(params->ramdisk_size));
+++    kernel_free(context->initrd_mem, params->ramdisk_size);
++   if (context->cmdline)
++-    grub_efi_free_pages ((grub_efi_physical_address_t)(grub_addr_t)context->cmdline,
++-			 BYTES_TO_PAGES(params->cmdline_size + 1));
+++    kernel_free(context->cmdline, params->cmdline_size + 1);
++   if (context->kernel_mem)
++-    grub_efi_free_pages ((grub_efi_physical_address_t)(grub_addr_t)context->kernel_mem,
++-			 BYTES_TO_PAGES(context->kernel_size));
+++    kernel_free(context->kernel_mem, context->kernel_size);
++   if (params)
++-    grub_efi_free_pages ((grub_efi_physical_address_t)(grub_addr_t)params,
++-			 BYTES_TO_PAGES(16384));
+++    kernel_free(params, sizeof(*params));
++ 
++   cmd_initrd->data = 0;
++   grub_free (context);
++@@ -173,19 +228,13 @@ grub_cmd_initrd (grub_command_t cmd, int argc, char *argv[])
++ 	}
++     }
++ 
++-  initrd_mem = grub_efi_allocate_pages_max (GRUB_EFI_MAX_ALLOCATION_ADDRESS, BYTES_TO_PAGES(size));
++-  if (!initrd_mem)
++-    initrd_mem = grub_efi_allocate_pages_max (GRUB_EFI_MAX_USABLE_ADDRESS, BYTES_TO_PAGES(size));
++-  if (!initrd_mem)
++-    {
++-      grub_error (GRUB_ERR_OUT_OF_MEMORY, N_("can't allocate initrd"));
++-      goto fail;
++-    }
++-
++-  grub_dprintf ("linuxefi", "initrd_mem = %lx\n", (unsigned long) context->initrd_mem);
+++  initrd_mem = kernel_alloc(size, N_("can't allocate initrd"));
+++  if (initrd_mem == NULL)
+++    goto fail;
+++  grub_dprintf ("linuxefi", "initrd_mem = %p\n", initrd_mem);
++ 
++   params->ramdisk_size = size;
++-  params->ramdisk_image = (grub_uint32_t)(grub_addr_t) initrd_mem;
+++  params->ramdisk_image = (grub_uint32_t) (grub_addr_t) initrd_mem; /* FIXME: casts are not in rhboot */
++ 
++   ptr = initrd_mem;
++ 
++@@ -254,7 +303,6 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
++   filelen = grub_file_size (file);
++ 
++   kernel = grub_malloc(filelen);
++-
++   if (!kernel)
++     {
++       grub_error (GRUB_ERR_OUT_OF_MEMORY, N_("cannot allocate kernel buffer"));
++@@ -299,7 +347,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
++       goto fail;
++     }
++ 
++-#if defined(__x86_64__) || defined(__aarch64__)
+++#if defined(__x86_64__)
++   grub_dprintf ("linuxefi", "checking lh->xloadflags\n");
++   if (!(lh->xloadflags & LINUX_XLF_KERNEL_64))
++     {
++@@ -318,17 +366,9 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
++     }
++ #endif
++ 
++-  params = grub_efi_allocate_pages_max (GRUB_EFI_MAX_ALLOCATION_ADDRESS,
++-					BYTES_TO_PAGES(sizeof(*params)));
+++  params = kernel_alloc (sizeof(*params), "cannot allocate kernel parameters");
++   if (!params)
++-    params = grub_efi_allocate_pages_max (GRUB_EFI_MAX_USABLE_ADDRESS,
++-					  BYTES_TO_PAGES(sizeof(*params)));
++-  if (! params)
++-    {
++-      grub_error (GRUB_ERR_OUT_OF_MEMORY, "cannot allocate kernel parameters");
++-      goto fail;
++-    }
++-
+++    goto fail;
++   grub_dprintf ("linuxefi", "params = %p\n", params);
++ 
++   grub_memset (params, 0, sizeof(*params));
++@@ -347,18 +387,10 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
++   grub_dprintf ("linuxefi", "new lh is at %p\n", lh);
++ 
++   grub_dprintf ("linuxefi", "setting up cmdline\n");
++-  cmdline = grub_efi_allocate_pages_max(GRUB_EFI_MAX_ALLOCATION_ADDRESS,
++-					BYTES_TO_PAGES(lh->cmdline_size + 1));
+++  cmdline = kernel_alloc (lh->cmdline_size + 1, N_("can't allocate cmdline"));
++   if (!cmdline)
++-    cmdline = grub_efi_allocate_pages_max(GRUB_EFI_MAX_USABLE_ADDRESS,
++-					  BYTES_TO_PAGES(lh->cmdline_size + 1));
++-  if (!cmdline)
++-    {
++-      grub_error (GRUB_ERR_OUT_OF_MEMORY, N_("can't allocate cmdline"));
++-      goto fail;
++-    }
++-
++-  grub_dprintf ("linuxefi", "cmdline = %lx\n", (unsigned long)cmdline);
+++    goto fail;
+++  grub_dprintf ("linuxefi", "linux_cmdline = %p\n", cmdline);
++ 
++   grub_memcpy (cmdline, LINUX_IMAGE, sizeof (LINUX_IMAGE));
++   grub_create_loader_cmdline (argc, argv,
++@@ -366,33 +398,26 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
++ 			      lh->cmdline_size - (sizeof (LINUX_IMAGE) - 1),
++ 			      GRUB_VERIFY_KERNEL_CMDLINE);
++ 
++-  grub_dprintf ("linuxefi", "setting lh->cmd_line_ptr\n");
++-  lh->cmd_line_ptr = (grub_uint32_t)(grub_addr_t)cmdline;
+++  grub_dprintf ("linuxefi", "cmdline:%s\n", cmdline);
+++  grub_dprintf ("linuxefi", "setting lh->cmd_line_ptr to %p\n",
+++		cmdline);
+++  lh->cmd_line_ptr = (grub_uint32_t) (grub_addr_t) cmdline;
++ 
++   handover_offset = lh->handover_offset;
++-  grub_dprintf ("linuxefi", "handover offset: %08x\n", handover_offset);
+++  grub_dprintf("linuxefi", "handover_offset: 0x%08x\n", handover_offset);
++ 
++   start = (lh->setup_sects + 1) * 512;
++ 
++-  kernel_size = lh->init_size;
++-  kernel_mem = grub_efi_allocate_fixed(lh->pref_address,
++-				       BYTES_TO_PAGES(kernel_size));
++-
++-  if (!kernel_mem)
+++  grub_dprintf ("linuxefi", "lh->pref_address: %p\n", (void *)(grub_addr_t)lh->pref_address);
+++  if (lh->pref_address < (grub_uint64_t)GRUB_EFI_MAX_ALLOCATION_ADDRESS)
++     {
++-      grub_error_pop();
++-      kernel_mem = grub_efi_allocate_pages_max(GRUB_EFI_MAX_ALLOCATION_ADDRESS,
++-					       BYTES_TO_PAGES(kernel_size));
+++      max_addresses[0].addr = lh->pref_address;
+++      max_addresses[0].alloc_type = GRUB_EFI_ALLOCATE_ADDRESS;
++     }
+++  kernel_mem = kernel_alloc (lh->init_size, N_("can't allocate kernel"));
++   if (!kernel_mem)
++-    kernel_mem = grub_efi_allocate_pages_max(GRUB_EFI_MAX_USABLE_ADDRESS,
++-					     BYTES_TO_PAGES(kernel_size));
++-  if (!kernel_mem)
++-    {
++-      grub_error (GRUB_ERR_OUT_OF_MEMORY, N_("can't allocate kernel"));
++-      goto fail;
++-    }
++-  grub_dprintf ("linuxefi", "kernel_mem = %p\n", kernel_mem);
+++    goto fail;
+++  grub_dprintf("linux", "kernel_mem = %p\n", kernel_mem);
++ 
++   grub_dprintf ("linuxefi", "setting lh->code32_start to %p\n", kernel_mem);
++   lh->code32_start = (grub_uint32_t)(grub_addr_t) kernel_mem;
++@@ -434,16 +459,13 @@ fail:
++   grub_dl_unref (my_mod);
++ 
++   if (cmdline && lh)
++-    grub_efi_free_pages ((grub_efi_physical_address_t)(grub_addr_t)cmdline,
++-			 BYTES_TO_PAGES(lh->cmdline_size + 1));
+++    kernel_free (cmdline, lh->cmdline_size + 1);
++ 
++   if (kernel_mem)
++-    grub_efi_free_pages ((grub_efi_physical_address_t)(grub_addr_t)kernel_mem,
++-			 BYTES_TO_PAGES(kernel_size));
+++    kernel_free (kernel_mem, kernel_size);
++ 
++   if (params)
++-    grub_efi_free_pages ((grub_efi_physical_address_t)(grub_addr_t)params,
++-			 sizeof(*params));
+++    kernel_free (params, sizeof(*params));
++ 
++   grub_free (context);
++ 
+diff --git a/debian/patches/rhboot-efi-rearrange-grub-cmd-linux.patch b/debian/patches/rhboot-efi-rearrange-grub-cmd-linux.patch
+new file mode 100644
+index 0000000..70d933c
+--- /dev/null
++++ b/debian/patches/rhboot-efi-rearrange-grub-cmd-linux.patch
+@@ -0,0 +1,137 @@
++From: Peter Jones <pjones@redhat.com>
++Date: Thu, 13 Sep 2018 14:42:34 -0400
++Subject: x86-efi: Re-arrange grub_cmd_linux() a little bit.
++
++This just helps the next patch be easier to read.
++
++Signed-off-by: Peter Jones <pjones@redhat.com>
++
++(reconstructed manually by hand)
++
++Signed-off-by: Julian Andres Klode <julian.klode@canonical.com>
++---
++ grub-core/loader/i386/efi/linux.c | 71 ++++++++++++++++++++-------------------
++ 1 file changed, 37 insertions(+), 34 deletions(-)
++
++diff --git a/grub-core/loader/i386/efi/linux.c b/grub-core/loader/i386/efi/linux.c
++index 5448dcd..9044700 100644
++--- a/grub-core/loader/i386/efi/linux.c
+++++ b/grub-core/loader/i386/efi/linux.c
++@@ -268,32 +268,9 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
++       goto fail;
++     }
++ 
++-  params = grub_efi_allocate_pages_max (GRUB_EFI_MAX_ALLOCATION_ADDRESS,
++-					BYTES_TO_PAGES(sizeof(*params)));
++-  if (!params)
++-    params = grub_efi_allocate_pages_max (GRUB_EFI_MAX_USABLE_ADDRESS,
++-					  BYTES_TO_PAGES(sizeof(*params)));
++-  if (! params)
++-    {
++-      grub_error (GRUB_ERR_OUT_OF_MEMORY, "cannot allocate kernel parameters");
++-      goto fail;
++-    }
++-
++-  grub_dprintf ("linuxefi", "params = %p\n", params);
++-
++-  grub_memset (params, 0, sizeof(*params));
+++  lh = (struct linux_i386_kernel_header *)kernel;
+++  grub_dprintf ("linuxefi", "original lh is at %p\n", kernel);
++ 
++-  setup_header_end_offset = *((grub_uint8_t *)kernel + 0x201);
++-  grub_dprintf ("linuxefi", "copying %" PRIuGRUB_SIZE " bytes from %p to %p\n",
++-		MIN((grub_size_t)0x202+setup_header_end_offset,
++-		    sizeof (*params)) - 0x1f1,
++-		(grub_uint8_t *)kernel + 0x1f1,
++-		(grub_uint8_t *)params + 0x1f1);
++-  grub_memcpy ((grub_uint8_t *)params + 0x1f1,
++-	       (grub_uint8_t *)kernel + 0x1f1,
++-		MIN((grub_size_t)0x202+setup_header_end_offset,sizeof (*params)) - 0x1f1);
++-  lh = (struct linux_i386_kernel_header *)params;
++-  grub_dprintf ("linuxefi", "lh is at %p\n", lh);
++   grub_dprintf ("linuxefi", "checking lh->boot_flag\n");
++   if (lh->boot_flag != grub_cpu_to_le16 (0xaa55))
++     {
++@@ -341,6 +318,34 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
++     }
++ #endif
++ 
+++  params = grub_efi_allocate_pages_max (GRUB_EFI_MAX_ALLOCATION_ADDRESS,
+++					BYTES_TO_PAGES(sizeof(*params)));
+++  if (!params)
+++    params = grub_efi_allocate_pages_max (GRUB_EFI_MAX_USABLE_ADDRESS,
+++					  BYTES_TO_PAGES(sizeof(*params)));
+++  if (! params)
+++    {
+++      grub_error (GRUB_ERR_OUT_OF_MEMORY, "cannot allocate kernel parameters");
+++      goto fail;
+++    }
+++
+++  grub_dprintf ("linuxefi", "params = %p\n", params);
+++
+++  grub_memset (params, 0, sizeof(*params));
+++
+++  setup_header_end_offset = *((grub_uint8_t *)kernel + 0x201);
+++  grub_dprintf ("linuxefi", "copying %" PRIuGRUB_SIZE " bytes from %p to %p\n",
+++		MIN((grub_size_t)0x202+setup_header_end_offset,
+++		    sizeof (*params)) - 0x1f1,
+++		(grub_uint8_t *)kernel + 0x1f1,
+++		(grub_uint8_t *)params + 0x1f1);
+++  grub_memcpy ((grub_uint8_t *)params + 0x1f1,
+++	       (grub_uint8_t *)kernel + 0x1f1,
+++		MIN((grub_size_t)0x202+setup_header_end_offset,sizeof (*params)) - 0x1f1);
+++
+++  lh = (struct linux_i386_kernel_header *)params;
+++  grub_dprintf ("linuxefi", "new lh is at %p\n", lh);
+++
++   grub_dprintf ("linuxefi", "setting up cmdline\n");
++   cmdline = grub_efi_allocate_pages_max(GRUB_EFI_MAX_ALLOCATION_ADDRESS,
++ 					BYTES_TO_PAGES(lh->cmdline_size + 1));
++@@ -364,8 +369,8 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
++   grub_dprintf ("linuxefi", "setting lh->cmd_line_ptr\n");
++   lh->cmd_line_ptr = (grub_uint32_t)(grub_addr_t)cmdline;
++ 
++-  grub_dprintf ("linuxefi", "computing handover offset\n");
++   handover_offset = lh->handover_offset;
+++  grub_dprintf ("linuxefi", "handover offset: %08x\n", handover_offset);
++ 
++   start = (lh->setup_sects + 1) * 512;
++ 
++@@ -387,23 +392,21 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
++       grub_error (GRUB_ERR_OUT_OF_MEMORY, N_("can't allocate kernel"));
++       goto fail;
++     }
++-
++-  grub_dprintf ("linuxefi", "kernel_mem = %lx\n", (unsigned long) kernel_mem);
+++  grub_dprintf ("linuxefi", "kernel_mem = %p\n", kernel_mem);
++ 
++   grub_dprintf ("linuxefi", "setting lh->code32_start to %p\n", kernel_mem);
++   lh->code32_start = (grub_uint32_t)(grub_addr_t) kernel_mem;
++ 
++   grub_memcpy (kernel_mem, (char *)kernel + start, filelen - start);
++ 
++-  grub_dprintf ("linuxefi", "setting lh->type_of_loader\n");
++   lh->type_of_loader = 0x6;
+++  grub_dprintf ("linuxefi", "setting lh->type_of_loader = 0x%02x\n",											lh->type_of_loader);
++ 
++-  grub_dprintf ("linuxefi", "setting lh->ext_loader_{type,ver}\n");
++   params->ext_loader_type = 0;
++   params->ext_loader_ver = 2;
++-  grub_dprintf("linuxefi", "kernel_mem: %p handover_offset: %08x\n",
++-	       kernel_mem, handover_offset);
++-
+++  grub_dprintf ("linuxefi",
+++		"setting lh->ext_loader_{type,ver} = {0x%02x,0x%02x}\n",
+++		params->ext_loader_type, params->ext_loader_ver);
++   context = grub_zalloc (sizeof (*context));
++   if (!context)
++     goto fail;
++@@ -421,7 +424,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
++   grub_free (kernel);
++   return 0;
++ 
++- fail:
+++fail:
++   if (file)
++     grub_file_close (file);
++ 
+diff --git a/debian/patches/rhboot-efi-split-allocation-policy.patch b/debian/patches/rhboot-efi-split-allocation-policy.patch
+new file mode 100644
+index 0000000..0be6b58
+--- /dev/null
++++ b/debian/patches/rhboot-efi-split-allocation-policy.patch
+@@ -0,0 +1,126 @@
++From: Peter Jones <pjones@redhat.com>
++Date: Mon, 1 Aug 2022 14:24:39 -0400
++Subject: efi: split allocation policy for kernel vs initrd memories.
++
++Currently in our kernel allocator, we use the same set of choices for
++all of our various kernel and initramfs allocations, though they do not
++have exactly the same constraints.
++
++This patch adds the concept of an allocation purpose, which currently
++can be KERNEL_MEM or INITRD_MEM, and updates kernel_alloc() calls
++appropriately, but does not change any current policy decision.  It
++also adds a few debug prints.
++
++Signed-off-by: Peter Jones <pjones@redhat.com>
++---
++ grub-core/loader/i386/efi/linux.c | 35 +++++++++++++++++++++++++++--------
++ 1 file changed, 27 insertions(+), 8 deletions(-)
++
++diff --git a/grub-core/loader/i386/efi/linux.c b/grub-core/loader/i386/efi/linux.c
++index 42886e8..65b6c30 100644
++--- a/grub-core/loader/i386/efi/linux.c
+++++ b/grub-core/loader/i386/efi/linux.c
++@@ -53,7 +53,14 @@ struct grub_linuxefi_context {
++ 
++ #define BYTES_TO_PAGES(bytes)   (((bytes) + 0xfff) >> 12)
++ 
+++typedef enum {
+++    NO_MEM,
+++    KERNEL_MEM,
+++    INITRD_MEM,
+++} kernel_alloc_purpose_t;
+++
++ struct allocation_choice {
+++    kernel_alloc_purpose_t purpose;
++     grub_efi_physical_address_t addr;
++     grub_efi_allocate_type_t alloc_type;
++ };
++@@ -62,6 +69,7 @@ enum {
++     KERNEL_PREF_ADDRESS,
++     KERNEL_4G_LIMIT,
++     KERNEL_NO_LIMIT,
+++    INITRD_MAX_ADDRESS,
++ };
++ 
++ static struct allocation_choice max_addresses[] =
++@@ -69,14 +77,17 @@ static struct allocation_choice max_addresses[] =
++     /* the kernel overrides this one with pref_address and
++      * GRUB_EFI_ALLOCATE_ADDRESS */
++     [KERNEL_PREF_ADDRESS] =
++-      { GRUB_EFI_MAX_ALLOCATION_ADDRESS, GRUB_EFI_ALLOCATE_MAX_ADDRESS },
+++      { KERNEL_MEM, GRUB_EFI_MAX_ALLOCATION_ADDRESS, GRUB_EFI_ALLOCATE_MAX_ADDRESS },
++     /* If the flag in params is set, this one gets changed to be above 4GB. */
++     [KERNEL_4G_LIMIT] =
++-      { GRUB_EFI_MAX_ALLOCATION_ADDRESS, GRUB_EFI_ALLOCATE_MAX_ADDRESS },
+++      { KERNEL_MEM, GRUB_EFI_MAX_ALLOCATION_ADDRESS, GRUB_EFI_ALLOCATE_MAX_ADDRESS },
++     /* this one is always below 4GB, which we still *prefer* even if the flag
++      * is set. */
++     [KERNEL_NO_LIMIT] =
++-      { GRUB_EFI_MAX_ALLOCATION_ADDRESS, GRUB_EFI_ALLOCATE_MAX_ADDRESS },
+++      { KERNEL_MEM, GRUB_EFI_MAX_ALLOCATION_ADDRESS, GRUB_EFI_ALLOCATE_MAX_ADDRESS },
+++    /* this is for the initrd */
+++    [INITRD_MAX_ADDRESS] =
+++      { INITRD_MEM, GRUB_EFI_MAX_ALLOCATION_ADDRESS, GRUB_EFI_ALLOCATE_MAX_ADDRESS },
++     { NO_MEM, 0, 0 }
++   };
++ static struct allocation_choice saved_addresses[4];
++@@ -93,7 +104,8 @@ kernel_free(void *addr, grub_efi_uintn_t size)
++ }
++ 
++ static void *
++-kernel_alloc(grub_efi_uintn_t size,
+++kernel_alloc(kernel_alloc_purpose_t purpose,
+++	     grub_efi_uintn_t size,
++ 	     grub_efi_memory_type_t memtype,
++ 	     const char * const errmsg)
++ {
++@@ -106,6 +118,9 @@ kernel_alloc(grub_efi_uintn_t size,
++       grub_uint64_t max = max_addresses[i].addr;
++       grub_efi_uintn_t pages;
++ 
+++      if (purpose != max_addresses[i].purpose)
+++	continue;
+++
++       /*
++        * When we're *not* loading the kernel, or >4GB allocations aren't
++        * supported, these entries are basically all the same, so don't re-try
++@@ -256,7 +271,8 @@ grub_cmd_initrd (grub_command_t cmd, int argc, char *argv[])
++ 	}
++     }
++ 
++-  initrd_mem = kernel_alloc(size, GRUB_EFI_RUNTIME_SERVICES_DATA,
+++  grub_dprintf ("linux", "Trying to allocate initrd mem\n");
+++  initrd_mem = kernel_alloc(INITRD_MEM, size, GRUB_EFI_RUNTIME_SERVICES_DATA,
++ 			    N_("can't allocate initrd"));
++   if (initrd_mem == NULL)
++     goto fail;
++@@ -411,7 +427,8 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
++     }
++ #endif
++ 
++-  params = kernel_alloc (sizeof(*params), GRUB_EFI_RUNTIME_SERVICES_DATA,
+++  params = kernel_alloc (KERNEL_MEM, sizeof(*params),
+++			 GRUB_EFI_RUNTIME_SERVICES_DATA,
++ 			 "cannot allocate kernel parameters");
++   if (!params)
++     goto fail;
++@@ -433,7 +450,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
++   grub_dprintf ("linuxefi", "new lh is at %p\n", lh);
++ 
++   grub_dprintf ("linux", "setting up cmdline\n");
++-  cmdline = kernel_alloc (lh->cmdline_size + 1,
+++  cmdline = kernel_alloc (KERNEL_MEM, lh->cmdline_size + 1,
++ 			  GRUB_EFI_RUNTIME_SERVICES_DATA,
++ 			  N_("can't allocate cmdline"));
++   if (!cmdline)
++@@ -481,7 +498,9 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
++   max_addresses[KERNEL_4G_LIMIT].addr = GRUB_EFI_MAX_ALLOCATION_ADDRESS;
++   max_addresses[KERNEL_NO_LIMIT].addr = GRUB_EFI_MAX_ALLOCATION_ADDRESS;
++   kernel_size = lh->init_size;
++-  kernel_mem = kernel_alloc (kernel_size, GRUB_EFI_RUNTIME_SERVICES_CODE,
+++  grub_dprintf ("linux", "Trying to allocate kernel mem\n");
+++  kernel_mem = kernel_alloc (KERNEL_MEM, kernel_size,
+++			     GRUB_EFI_RUNTIME_SERVICES_CODE,
++ 			     N_("can't allocate kernel"));
++   restore_addresses();
++   if (!kernel_mem)
+diff --git a/debian/patches/series b/debian/patches/series
+index 3cc8509..b5cde84 100644
+--- a/debian/patches/series
++++ b/debian/patches/series
+@@ -181,3 +181,12 @@ commands-efi-tpm-Refine-the-status-of-log-event.patch
+ commands-efi-tpm-Use-grub_strcpy-instead-of-grub_memcpy.patch
+ efi-tpm-Add-EFI_CC_MEASUREMENT_PROTOCOL-support.patch
+ tests-Explicitly-unset-SOURCE_DATE_EPOCH-before-running-f.patch
++rhboot-efi-rearrange-grub-cmd-linux.patch
++rhboot-efi-kernel-allocator.patch
++rhboot-efi-initrd-above-4gb.patch
++rhboot-efi-allocate-kernel-as-code.patch
++rhboot-efi-enumerated-array-for-allocation-choice.patch
++rhboot-efi-split-allocation-policy.patch
++rhboot-efi-allocate-in-kernel-bounds.patch
++rhboot-efi-allocate-kernel-as-code-for-real.patch
++rhboot-efi-fix-incorrect-array-size.patch
+-- 
+cgit v1.1
+
