@@ -2032,19 +2032,15 @@ Everything in [Booting], [Running] and [Building] should be validated below.
         * `dotty; exit 0`
             * `dottys`
             * `rootfs =`
-            * `dhcpcd eth0`
+            * `modprobe e1000; dhcpcd eth0`
             * `ssh -vv root@10.0.0.254`
             * `exit 1`
             * `unrootfs; mount`
         * `rootfs /dev/sda1`
             * `boot`
-    * [ ] Validate root filesystem
-        * `rc-update add dhcpcd default; openrc`
-            * `mount -o remount,size=6144m /.overlay`
-            * `(cd /.gary-os; make DOREDO=true unpack)`
-        * `rc-status`
-            * `htop`
-            * `free; df -h; ls -la / /.overlay /.overlay/*`
+    * `rc-status`
+        * `htop`
+        * `free; df -h; ls -la / /.overlay /.overlay/*`
 
 **[EFI]**
 
@@ -2113,13 +2109,13 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 **[Networking] / [GUI] / [Minimal]**
 
   * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.grub/loopfile.qcow2 1`
-    * [x] Ethernet [Networking]
-    * [x] [GUI]
+    * [ ] Ethernet [Networking]
+    * [ ] [GUI]
   * [ ] Boot to "gary-os"
     * [ ] Verify [Tiny]
     * [ ] Verify failed `Boot`
-    * [x] Wireless [Networking]
-    * [x] [GUI]
+    * [ ] Wireless [Networking]
+    * [ ] [GUI]
 
 **[Update] / [Manage] / [Image] / [Install]**
 
@@ -2134,6 +2130,9 @@ Everything in [Booting], [Running] and [Building] should be validated below.
         * `exit 0`
     * `cd /.gary-os`
         * `mkdir /tmp/grub; HOME=/.gary-os GRUB_DIR=/.gary-os ./scripts/grub.sh /tmp/grub -fx -k/dev/sda1 /dev/sdb1`
+            * `umount /dev/sdb*`
+            * `gdisk /dev/sdb`
+            * `./.bashrc format /dev/sdb1`
         * `make unpack`
         * `mount /dev/sdb1 /.install`
         * `mkdir /.install/gary-os`
@@ -2146,8 +2145,9 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * `ls -la /.gary-os-*/`
         * `make DOREDO=true unpack`
             * `emerge app-misc/hello`
-            * [ ] Verify from [SourceForge] package
-            * `hello`
+                * `hello`
+            * `emerge app-text/aspell`
+                * [ ] Verify from [SourceForge] package
         * `rm /.gary-os-*/gary-os-*.rootfs*`
             * `make rootfs`
     * `ls -la ./sources/; ls -la /.gary-os/build.install/`
@@ -2156,15 +2156,8 @@ Everything in [Booting], [Running] and [Building] should be validated below.
         * `make init`
             * [ ] Exit with \<ctrl-c\> once unpacking the `stage3`
         * `ls -la ./build/ ./build/_build`
-  * `rm /tmp/qemu.gary-os-v6.0-generic_64.kernel.qcow2; ln -fsv qemu.null.qcow2 /tmp/qemu.gary-os-v6.0-generic_64.kernel.qcow2`
-  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.kernel 1`
-    * `cd /.gary-os`
-        * `rc-update add dhcpcd default; openrc`
-        * `source ./.bashrc`
-            * `rsync -L --filter=-_/sources --filter=-_/build --filter=-_/gary-os root@10.0.0.254:[...]/.setup/gentoo.gary-os/ /.gary-os`
-        * `make unpack`
-        * `mount /dev/sda1 /.install`
     * `ls -la /.install/`
+        * `rm ./build; ln -fsv / ./build`
         * `make install`
             * [ ] Copy and paste GRUB instructions
             * `cat /.install/etc/issue`
@@ -2173,17 +2166,20 @@ Everything in [Booting], [Running] and [Building] should be validated below.
         * `make DOREDO=true install`
             * `cat /etc/issue`
   * `./scripts/qemu-minion.bsh /dev/null 1`
-    * [x] Boot
+    * [ ] Verify default boot
+        * `reboot`
+    * [x] Boot (manually from GRUB command line)
+        * `cd /.gary-os`
         * `mkdir /tmp/grub; HOME=/.gary-os GRUB_DIR=/.gary-os ./scripts/grub.sh /tmp/grub /dev/sda1`
         * `reboot`
     * [x] Install Menu
-        * [ ] Default GRUB entry
         * `<escape>`
     * [x] Install Boot
+        * `cd /.gary-os`
         * `make reset; vi /etc/portage/{make.conf,package.use}`
         * `make update`
         * `make upgrade`
-        * `reboot`
+  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.grub/loopfile.qcow2 1 -m 8192`
     * [x] Boot Rootfs
         * [ ] Command comments in [gentoo/sets/\_gary-os]
 
