@@ -349,13 +349,10 @@ GaryOS (see [Checklist]).  However, it is not well suited for other platforms,
 such as Windows, and [VirtualBox] is the best choice there.  VirtualBox also
 runs on GNU/Linux, if desired, but it is not included in GaryOS.
 
-On systems with only 4GB of memory, virtualization will push system resources to
-the limit.  Windows will exhaust them completely.  Using [GRUB] to create a USB
-drive is a better idea in that case.
-
-The instructions below use 3072MB (3GB) for memory, which is the absolute
-minimum.  Ideally, this should be 4096MB (4GB) or greater to best emulate an
-actual system which meets the [Requirements].
+The instructions below use 4096MB (4GB) for memory, to emulate a minimal system
+which meets the [Requirements].  On systems with only 4GB of memory,
+virtualization will not work, and using [GRUB] to create a USB drive is the best
+path.
 
 **QEMU**
 
@@ -365,14 +362,14 @@ running.
 
   ```
   modprobe kvm_intel
-  qemu-system-x86_64 -m 3072 -kernel gary-os.kernel
+  qemu-system-x86_64 -m 4096 -kernel gary-os.kernel
   ```
 
 The [Boot] file has a pre-made QEMU image inside that is already installed with
 [GRUB] and the [Kernel].
 
   ```
-  qemu-system-x86_64 -m 3072 loopfile.qcow2
+  qemu-system-x86_64 -m 4096 loopfile.qcow2
   ```
 
 See [Checklist] for additional information on how QEMU is used in the
@@ -386,7 +383,7 @@ Once [VirtualBox] is installed, create a new virtual machine.
   |:---               |:---
   | Type              | Linux
   | Version           | Other Linux (64-bit)
-  | Memory            | 3072 (or greater)
+  | Memory            | 4096 (or greater)
   | Virtual disk file | loopfile.qcow2 (from [Boot] archive)
 
 This new virtual machine will run GaryOS [GRUB] and boot the [Kernel].
@@ -643,7 +640,7 @@ defaults in the [Boot] configuration file, sourced from
 required to load an external [Image].
 
 The `groot_size` value for the pre-made GaryOS [Rootfs] should be at least
-`3072m`, or `3g` if that format is preferred.  The [Boot] file is already
+`4096m`, or `4g` if that format is preferred.  The [Boot] file is already
 correctly configured (see [GRUB]).
 
 ### Minimal ####################################################################
