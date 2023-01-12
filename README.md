@@ -1929,13 +1929,13 @@ Everything needed to perform these steps is in the [Repository] or the
 
   * `make` **`${3}`** `DOREDO=true doit` **`${4}`**
     * [x] **Iterate()**
-  * [ ] Target size of **`${1}`** or less (`make check` = Apparent size of **`${2}`**)
+  * [ ] Target size of **`${1}`** or less (`make check` = Total disk usage: **`${2}`**)
     * [ ] Command comments at bottom of [gentoo/package.use]
         * `make` **`${3}`** `depends-<package atom|/|%>`
         * `make` **`${3}`** `depgraph-<package atom|/|%>`
         * `make` **`${3}`** `belongs-<file path|/|%>`
     * `make` **`${3}`** `DOREDO=true DOFAST=true doit` **`${4}`**
-        * `make` **`${3}`** `DOTEST=true check`
+        * `make` **`${3}`** `check`
     * `ll ./build/.gary-os-*`
   * `make` **`${3}`** `gendir`
     * [ ] Command comments at bottom of [gentoo/make.conf]
@@ -1944,16 +1944,18 @@ Everything needed to perform these steps is in the [Repository] or the
 **`}`**
 
   * `cd .setup/gentoo.gary-os`
-  * [x] **Validate( 210MB 250.0MiB DOMODS=true devel )**
+    * `(cd .setup; vi gentoo/_release)`
+    * [ ] Update `${_VERSN}` number
+  * [x] **Validate( 210MB 240MiB DOMODS=true devel )**
     * [ ] Minimized build note in `/etc/issue`
     * [ ] No `startx` in `/etc/issue`
-  * [x] **Validate( 750MB 1.2GiB '' devel )**
+  * [x] **Validate( 850MB 1.4GiB '' devel )**
   * `make DOTEST=true devel`
     * [ ] Verify `#{rootfs}` markers
   * `make ROOTFS=false devel`
     * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1 -m 8192`
     * [ ] Test kernel size and root filesystem resize
-  * [x] **Validate( 1.5GB 3.0GiB P=**\_**gary-os rootfs )**
+  * [x] **Validate( 1.8GB 3.4GiB P=**\_**gary-os rootfs )**
   * `(cd .setup; git-commit ./gentoo)`
   * `make DOREDO=true doit devel`
 
@@ -1965,7 +1967,7 @@ Everything needed to perform these steps is in the [Repository] or the
         * `make _publish_release`
     * `(cd _builds; rm ./_gary-os.boot; ln _gary-os.working ./_gary-os.boot)`
         * `_sync boot`
-    * `make DOTEST=true _release_grub`
+    * `make DOREDO=true DOTEST=true _release_grub`
   * [x] [Checklist]
   * [x] [Publish]
 
