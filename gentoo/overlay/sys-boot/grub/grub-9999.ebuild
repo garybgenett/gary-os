@@ -49,7 +49,7 @@ else
 	inherit git-r3
 	EGIT_REPO_URI="https://git.savannah.gnu.org/git/grub.git"
 #>>>
-	EGIT_COMMIT="1514678888595ef41a968a0c69b7ff769edd1e9c"
+	EGIT_COMMIT="1a241e050652472efa62b2b36ad2fa7f82427b83"
 	KEYWORDS="~amd64"
 #>>>
 fi
@@ -58,6 +58,38 @@ PATCHES=(
 	"${FILESDIR}"/gfxpayload.patch
 	"${FILESDIR}"/grub-2.02_beta2-KERNEL_GLOBS.patch
 	"${FILESDIR}"/grub-2.06-test-words.patch
+#>>>
+#	"${FILESDIR}"/ubuntu-patches/rhboot-efi-allocate-in-kernel-bounds.patch
+#	"${FILESDIR}"/ubuntu-patches/rhboot-efi-allocate-kernel-as-code-for-real.patch
+#	"${FILESDIR}"/ubuntu-patches/rhboot-efi-allocate-kernel-as-code.patch
+#	"${FILESDIR}"/ubuntu-patches/rhboot-efi-enumerated-array-for-allocation-choice.patch
+#	"${FILESDIR}"/ubuntu-patches/rhboot-efi-fix-incorrect-array-size.patch
+#	"${FILESDIR}"/ubuntu-patches/rhboot-efi-initrd-above-4gb.patch
+#	"${FILESDIR}"/ubuntu-patches/rhboot-efi-kernel-allocator.patch
+#	"${FILESDIR}"/ubuntu-patches/rhboot-efi-rearrange-grub-cmd-linux.patch
+#	"${FILESDIR}"/ubuntu-patches/rhboot-efi-split-allocation-policy.patch
+#	"${FILESDIR}"/ubuntu-patches/ubuntu-rhboot-cast-fixups.patch
+#	"${FILESDIR}"/ubuntu-patches/0194-mm-Clarify-grub_real_malloc.patch
+#	"${FILESDIR}"/ubuntu-patches/0195-mm-grub_real_malloc-Make-small-allocs-comment-match-.patch
+#	"${FILESDIR}"/ubuntu-patches/0196-mm-Document-grub_free.patch
+#	"${FILESDIR}"/ubuntu-patches/0197-mm-Document-grub_mm_init_region.patch
+#	"${FILESDIR}"/ubuntu-patches/0198-kern-Remove-trailing-whitespaces.patch
+#	"${FILESDIR}"/ubuntu-patches/0199-mm-Document-GRUB-internal-memory-management-structur.patch
+#	"${FILESDIR}"/ubuntu-patches/0200-mm-Assert-that-we-preserve-header-vs-region-alignmen.patch
+#	"${FILESDIR}"/ubuntu-patches/0201-mm-When-adding-a-region-merge-with-region-after-as-w.patch
+#	"${FILESDIR}"/ubuntu-patches/0202-mm-Debug-support-for-region-operations.patch
+#	"${FILESDIR}"/ubuntu-patches/0203-mm-Drop-unused-unloading-of-modules-on-OOM.patch
+#	"${FILESDIR}"/ubuntu-patches/0204-mm-Allow-dynamically-requesting-additional-memory-re.patch
+#	"${FILESDIR}"/ubuntu-patches/0205-kern-efi-mm-Always-request-a-fixed-number-of-pages-o.patch
+#	"${FILESDIR}"/ubuntu-patches/0206-kern-efi-mm-Extract-function-to-add-memory-regions.patch
+#	"${FILESDIR}"/ubuntu-patches/0207-kern-efi-mm-Pass-up-errors-from-add_memory_regions.patch
+#	"${FILESDIR}"/ubuntu-patches/0208-kern-efi-mm-Implement-runtime-addition-of-pages.patch
+#	"${FILESDIR}"/ubuntu-patches/0209-efi-Increase-default-memory-allocation-to-32-MiB.patch
+#	"${FILESDIR}"/ubuntu-patches/0210-mm-Try-invalidate-disk-caches-last-when-out-of-memor.patch
+#	"${FILESDIR}"/ubuntu-patches/ubuntu-efi-loader-code.patch
+#>>>
+	"${FILESDIR}"/introduce_mmunlimited.patch
+#>>>
 )
 
 DEJAVU=dejavu-sans-ttf-2.37

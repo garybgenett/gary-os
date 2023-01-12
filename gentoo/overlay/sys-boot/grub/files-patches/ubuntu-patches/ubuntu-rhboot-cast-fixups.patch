@@ -1,0 +1,11 @@
+--- a/grub-core/loader/i386/efi/linux.c
++++ b/grub-core/loader/i386/efi/linux.c
+@@ -131,7 +131,7 @@ kernel_alloc(kernel_alloc_purpose_t purpose,
+ 
+       pages = BYTES_TO_PAGES(size);
+       grub_dprintf ("linux", "Trying to allocate %lu pages from %p\n",
+-		    pages, (void *)max);
++		    (unsigned long) pages, (void *) (grub_addr_t) max);
+ 
+       prev_max = max;
+       addr = grub_efi_allocate_pages_real (max, pages,

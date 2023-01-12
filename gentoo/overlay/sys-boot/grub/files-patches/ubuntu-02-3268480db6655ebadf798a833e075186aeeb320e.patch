@@ -1,0 +1,78 @@
+From 3268480db6655ebadf798a833e075186aeeb320e Mon Sep 17 00:00:00 2001
+From: Julian Andres Klode <julian.klode@canonical.com>
+Date: Fri, 9 Dec 2022 15:53:42 +0100
+Subject: ubuntu: Fix casts on i386-efi target
+
+---
+ debian/patches/series                          |  1 +
+ debian/patches/ubuntu-rhboot-cast-fixups.patch | 49 ++++++++++++++++++++++++++
+ 2 files changed, 50 insertions(+)
+ create mode 100644 debian/patches/ubuntu-rhboot-cast-fixups.patch
+
+diff --git a/debian/patches/series b/debian/patches/series
+index b5cde84..91c78ef 100644
+--- a/debian/patches/series
++++ b/debian/patches/series
+@@ -190,3 +190,4 @@ rhboot-efi-split-allocation-policy.patch
+ rhboot-efi-allocate-in-kernel-bounds.patch
+ rhboot-efi-allocate-kernel-as-code-for-real.patch
+ rhboot-efi-fix-incorrect-array-size.patch
++ubuntu-rhboot-cast-fixups.patch
+diff --git a/debian/patches/ubuntu-rhboot-cast-fixups.patch b/debian/patches/ubuntu-rhboot-cast-fixups.patch
+new file mode 100644
+index 0000000..dc5008b
+--- /dev/null
++++ b/debian/patches/ubuntu-rhboot-cast-fixups.patch
+@@ -0,0 +1,49 @@
++From: Julian Andres Klode <julian.klode@canonical.com>
++Date: Tue, 6 Dec 2022 15:00:17 +0100
++Subject: Fix casts on i386-efi
++MIME-Version: 1.0
++Content-Type: text/plain; charset="utf-8"
++Content-Transfer-Encoding: 8bit
++
++These triggered a couple of failures on the Ubuntu tree:
++
++../../../grub-core/loader/i386/efi/linux.c: In function ‘kernel_alloc’:
++../../../grub-core/loader/i386/efi/linux.c:134:14: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
++  134 |       pages, (void *)max);
++      |              ^
++../../../include/grub/misc.h:38:88: note: in definition of macro ‘grub_dprintf’
++   38 | #define grub_dprintf(condition, ...) grub_real_dprintf(GRUB_FILE, __LINE__, condition, __VA_ARGS__)
++      |                                                                                        ^~~~~~~~~~~
++../../../grub-core/loader/i386/efi/linux.c:133:30: error: format ‘%lu’ expects argument of type ‘long unsigned int’, but argument 5 has type ‘grub_efi_uintn_t’ {aka ‘unsigned int’} [-Werror=format=]
++  133 |       grub_dprintf ("linux", "Trying to allocate %lu pages from %p\n",
++      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++  134 |       pages, (void *)max);
++      |       ~~~~~
++      |       |
++      |       grub_efi_uintn_t {aka unsigned int}
++../../../include/grub/misc.h:38:88: note: in definition of macro ‘grub_dprintf’
++   38 | #define grub_dprintf(condition, ...) grub_real_dprintf(GRUB_FILE, __LINE__, condition, __VA_ARGS__)
++      |                                                                                        ^~~~~~~~~~~
++../../../grub-core/loader/i386/efi/linux.c:133:52: note: format string is defined here
++  133 |       grub_dprintf ("linux", "Trying to allocate %lu pages from %p\n",
++      |                                                  ~~^
++      |                                                    |
++      |                                                    long unsigned int
++      |                                                  %u
++---
++ grub-core/loader/i386/efi/linux.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/grub-core/loader/i386/efi/linux.c b/grub-core/loader/i386/efi/linux.c
++index 33565ed..bfe1f43 100644
++--- a/grub-core/loader/i386/efi/linux.c
+++++ b/grub-core/loader/i386/efi/linux.c
++@@ -131,7 +131,7 @@ kernel_alloc(kernel_alloc_purpose_t purpose,
++ 
++       pages = BYTES_TO_PAGES(size);
++       grub_dprintf ("linux", "Trying to allocate %lu pages from %p\n",
++-		    pages, (void *)max);
+++		    (unsigned long) pages, (void *) (grub_addr_t) max);
++ 
++       prev_max = max;
++       addr = grub_efi_allocate_pages_real (max, pages,
+-- 
+cgit v1.1
+
