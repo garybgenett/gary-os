@@ -1,0 +1,566 @@
+--- a/grub-core/kern/acpi.c
++++ b/grub-core/kern/acpi.c
+@@ -1,4 +1,4 @@
+-/* 
++/*
+  *  GRUB  --  GRand Unified Bootloader
+  *  Copyright (C) 2012  Free Software Foundation, Inc.
+  *
+--- a/grub-core/kern/arm/efi/init.c
++++ b/grub-core/kern/arm/efi/init.c
+@@ -34,7 +34,7 @@ grub_efi_get_time_ms (void)
+   return tmr;
+ }
+ 
+-static void 
++static void
+ increment_timer (grub_efi_event_t event __attribute__ ((unused)),
+ 		 void *context __attribute__ ((unused)))
+ {
+--- a/grub-core/kern/arm64/dl.c
++++ b/grub-core/kern/arm64/dl.c
+@@ -49,7 +49,7 @@ grub_arch_dl_check_header (void *ehdr)
+ #pragma GCC diagnostic ignored "-Wcast-align"
+ 
+ /*
+- * Unified function for both REL and RELA 
++ * Unified function for both REL and RELA
+  */
+ grub_err_t
+ grub_arch_dl_relocate_symbols (grub_dl_t mod, void *ehdr,
+--- a/grub-core/kern/arm64/dl_helper.c
++++ b/grub-core/kern/arm64/dl_helper.c
+@@ -69,9 +69,9 @@ grub_arm64_set_hi21 (grub_uint32_t *place, grub_int64_t offset)
+   grub_uint32_t val;
+ 
+   offset >>= 12;
+-  
++
+   val = ((offset & 3) << 29) | (((offset >> 2) & 0x7ffff) << 5);
+-  
++
+   *place &= insmask;
+   *place |= grub_cpu_to_le32 (val) & ~insmask;
+ }
+--- a/grub-core/kern/command.c
++++ b/grub-core/kern/command.c
+@@ -46,7 +46,7 @@ grub_register_command_prio (const char *name,
+ 
+   cmd->flags = 0;
+   cmd->prio = prio;
+-    
++
+   for (p = &grub_command_list, q = *p; q; p = &(q->next), q = q->next)
+     {
+       int r;
+--- a/grub-core/kern/coreboot/cbtable.c
++++ b/grub-core/kern/coreboot/cbtable.c
+@@ -62,7 +62,7 @@ signature_found:
+        {
+          table_header = (grub_linuxbios_table_header_t) (grub_addr_t)
+            *(grub_uint64_t *) (table_item + 1);
+-         goto signature_found;   
++         goto signature_found;
+        }
+       if (hook (table_item, hook_data))
+        return 1;
+--- a/grub-core/kern/device.c
++++ b/grub-core/kern/device.c
+@@ -56,7 +56,7 @@ grub_device_open (const char *name)
+   if (grub_net_open && grub_errno == GRUB_ERR_UNKNOWN_DEVICE)
+     {
+       grub_errno = GRUB_ERR_NONE;
+-      dev->net = grub_net_open (name); 
++      dev->net = grub_net_open (name);
+     }
+ 
+   if (dev->net)
+--- a/grub-core/kern/disk.c
++++ b/grub-core/kern/disk.c
+@@ -376,7 +376,7 @@ grub_disk_read_small_real (grub_disk_t disk, grub_disk_addr_t sector,
+     tmp_buf = grub_malloc (num << disk->log_sector_size);
+     if (!tmp_buf)
+       return grub_errno;
+-    
++
+     if ((disk->dev->disk_read) (disk, transform_sector (disk, aligned_sector),
+ 				num, tmp_buf))
+       {
+@@ -490,7 +490,7 @@ grub_disk_read (grub_disk_t disk, grub_disk_addr_t sector,
+ 					buf);
+ 	  if (err)
+ 	    return err;
+-	  
++
+ 	  for (i = 0; i < agglomerate; i ++)
+ 	    grub_disk_cache_store (disk->dev->id, disk->id,
+ 				   sector + (i << GRUB_DISK_CACHE_BITS),
+@@ -505,7 +505,7 @@ grub_disk_read (grub_disk_t disk, grub_disk_addr_t sector,
+ 
+ 	  sector += agglomerate << GRUB_DISK_CACHE_BITS;
+ 	  size -= agglomerate << (GRUB_DISK_CACHE_BITS + GRUB_DISK_SECTOR_BITS);
+-	  buf = (char *) buf 
++	  buf = (char *) buf
+ 	    + (agglomerate << (GRUB_DISK_CACHE_BITS + GRUB_DISK_SECTOR_BITS));
+ 	}
+ 
+--- a/grub-core/kern/dl.c
++++ b/grub-core/kern/dl.c
+@@ -480,7 +480,7 @@ grub_dl_resolve_name (grub_dl_t mod, Elf_Ehdr *e)
+   s = grub_dl_find_section (e, ".modname");
+   if (!s)
+     return grub_error (GRUB_ERR_BAD_MODULE, "no module name found");
+-  
++
+   mod->name = grub_strdup ((char *) e + s->sh_offset);
+   if (! mod->name)
+     return grub_errno;
+--- a/grub-core/kern/efi/efi.c
++++ b/grub-core/kern/efi/efi.c
+@@ -228,7 +228,7 @@ grub_efi_set_variable(const char *var, const grub_efi_guid_t *guid,
+ 
+   r = grub_efi_system_table->runtime_services;
+ 
+-  status = efi_call_5 (r->set_variable, var16, guid, 
++  status = efi_call_5 (r->set_variable, var16, guid,
+ 		       (GRUB_EFI_VARIABLE_NON_VOLATILE
+ 			| GRUB_EFI_VARIABLE_BOOTSERVICE_ACCESS
+ 			| GRUB_EFI_VARIABLE_RUNTIME_ACCESS),
+--- a/grub-core/kern/efi/init.c
++++ b/grub-core/kern/efi/init.c
+@@ -111,7 +111,7 @@ grub_efi_init (void)
+   grub_efidisk_init ();
+ }
+ 
+-void (*grub_efi_net_config) (grub_efi_handle_t hnd, 
++void (*grub_efi_net_config) (grub_efi_handle_t hnd,
+ 			     char **device,
+ 			     char **path);
+ 
+--- a/grub-core/kern/efi/mm.c
++++ b/grub-core/kern/efi/mm.c
+@@ -554,7 +554,7 @@ add_memory_regions (grub_efi_memory_descriptor_t *memory_map,
+ 
+       addr = grub_efi_allocate_pages_real (start, pages,
+ 					   GRUB_EFI_ALLOCATE_ADDRESS,
+-					   GRUB_EFI_LOADER_CODE);      
++					   GRUB_EFI_LOADER_CODE);
+       if (! addr)
+ 	grub_fatal ("cannot allocate conventional memory %p with %u pages",
+ 		    (void *) ((grub_addr_t) start),
+--- a/grub-core/kern/emu/hostdisk.c
++++ b/grub-core/kern/emu/hostdisk.c
+@@ -550,7 +550,7 @@ read_device_map (const char *dev_map)
+       map[drive].device = grub_canonicalize_file_name (p);
+       if (! map[drive].device)
+ 	map[drive].device = xstrdup (p);
+-      
++
+       if (!map[drive].drive)
+ 	{
+ 	  char c;
+--- a/grub-core/kern/emu/hostfs.c
++++ b/grub-core/kern/emu/hostfs.c
+@@ -122,7 +122,7 @@ grub_hostfs_open (struct grub_file *file, const char *name)
+       return grub_errno;
+     }
+ 
+-  data->f = f;  
++  data->f = f;
+ 
+   file->data = data;
+ 
+--- a/grub-core/kern/emu/main.c
++++ b/grub-core/kern/emu/main.c
+@@ -194,7 +194,7 @@ int
+ main (int argc, char *argv[])
+ {
+   struct arguments arguments =
+-    { 
++    {
+       .dev_map = DEFAULT_DEVICE_MAP,
+       .hold = 0,
+       .mem_disk = 0,
+--- a/grub-core/kern/emu/misc.c
++++ b/grub-core/kern/emu/misc.c
+@@ -135,16 +135,16 @@ xstrdup (const char *str)
+ #if !defined (GRUB_MKFONT) && !defined (GRUB_BUILD)
+ char *
+ xasprintf (const char *fmt, ...)
+-{ 
++{
+   va_list ap;
+   char *result;
+-  
++
+   va_start (ap, fmt);
+   result = grub_xvasprintf (fmt, ap);
+   va_end (ap);
+   if (!result)
+     grub_util_error ("%s", _("out of memory"));
+-  
++
+   return result;
+ }
+ #endif
+@@ -181,7 +181,7 @@ grub_util_get_image_size (const char *path)
+     grub_util_error (_("cannot open `%s': %s"), path, strerror (errno));
+ 
+   fseeko (f, 0, SEEK_END);
+-  
++
+   sz = ftello (f);
+   if (sz < 0)
+     grub_util_error (_("cannot open `%s': %s"), path, strerror (errno));
+--- a/grub-core/kern/env.c
++++ b/grub-core/kern/env.c
+@@ -226,12 +226,12 @@ grub_env_export (const char *name)
+   if (! var)
+     {
+       grub_err_t err;
+-      
++
+       err = grub_env_set (name, "");
+       if (err)
+ 	return err;
+       var = grub_env_find (name);
+-    }    
++    }
+   var->global = 1;
+ 
+   return GRUB_ERR_NONE;
+--- a/grub-core/kern/file.c
++++ b/grub-core/kern/file.c
+@@ -212,9 +212,9 @@ grub_file_seek (grub_file_t file, grub_off_t offset)
+ 		  N_("attempt to seek outside of the file"));
+       return -1;
+     }
+-  
++
+   old = file->offset;
+   file->offset = offset;
+-    
++
+   return old;
+ }
+--- a/grub-core/kern/i386/coreboot/init.c
++++ b/grub-core/kern/i386/coreboot/init.c
+@@ -77,7 +77,7 @@ heap_init (grub_uint64_t addr, grub_uint64_t size, grub_memory_type_t type,
+ 
+   if (modend && begin < modend)
+     begin = modend;
+-  
++
+   if (end <= begin)
+     return 0;
+ 
+--- a/grub-core/kern/i386/pc/mmap.c
++++ b/grub-core/kern/i386/pc/mmap.c
+@@ -73,9 +73,9 @@ grub_get_ext_memsize (void)
+    in 1KB parts, and upper 16 bits are above 16MB in 64KB parts. If error, return zero.
+    BIOS call "INT 15H, AH=E801H" to get EISA memory map,
+      AX = memory between 1M and 16M in 1K parts.
+-     BX = memory above 16M in 64K parts. 
++     BX = memory above 16M in 64K parts.
+ */
+- 
++
+ static inline grub_uint32_t
+ grub_get_eisa_mmap (void)
+ {
+@@ -114,7 +114,7 @@ grub_get_mmap_entry (struct grub_machine_mmap_entry *entry,
+   /* place address (+4) in ES:DI */
+   regs.es = ((grub_addr_t) &entry->addr) >> 4;
+   regs.edi = ((grub_addr_t) &entry->addr) & 0xf;
+-	
++
+   /* set continuation value */
+   regs.ebx = cont;
+ 
+@@ -127,7 +127,7 @@ grub_get_mmap_entry (struct grub_machine_mmap_entry *entry,
+   regs.eax = 0xe820;
+   grub_bios_interrupt (0x15, &regs);
+ 
+-  /* write length of buffer (zero if error) into ADDR */	
++  /* write length of buffer (zero if error) into ADDR */
+   if ((regs.flags & GRUB_CPU_INT_FLAGS_CARRY) || regs.eax != 0x534d4150
+       || regs.ecx < 0x14 || regs.ecx > 0x400)
+     entry->size = 0;
+--- a/grub-core/kern/i386/qemu/init.c
++++ b/grub-core/kern/i386/qemu/init.c
+@@ -174,7 +174,7 @@ enable_cards (grub_pci_device_t dev,
+ 
+   if (class == GRUB_PCI_CLASS_SUBCLASS_USB)
+     return 0;
+-  
++
+   addr = grub_pci_make_address (dev, GRUB_PCI_REG_COMMAND);
+   grub_pci_write (addr, cmd);
+ 
+@@ -237,7 +237,7 @@ grub_pci_assign_addresses (void)
+ 					      + 4 * resources[i].bar + 4);
+ 		grub_pci_write (addr, 0);
+ 	      }
+-	  }	  
++	  }
+       }
+     grub_pci_iterate (enable_cards, NULL);
+   }
+--- a/grub-core/kern/ia64/dl_helper.c
++++ b/grub-core/kern/ia64/dl_helper.c
+@@ -73,7 +73,7 @@ grub_ia64_add_value_to_slot_20b (grub_addr_t addr, grub_uint32_t value)
+     case 0:
+       val = grub_le_to_cpu32 (grub_get_unaligned32 (((grub_uint8_t *)
+ 						     (addr & MASK3) + 2)));
+-      val = (((((val & MASK20) + value) & MASK20) << 2) 
++      val = (((((val & MASK20) + value) & MASK20) << 2)
+ 	    | (val & ~(MASK20 << 2)));
+       grub_set_unaligned32 (((grub_uint8_t *) (addr & MASK3) + 2),
+ 			    grub_cpu_to_le32 (val));
+@@ -161,9 +161,9 @@ static grub_uint8_t jump[0x20] =
+     /* 	[MIB]       ld8 r1=[r15] */
+     0x11, 0x08, 0x00, 0x1e, 0x18, 0x10,
+     /* mov b6=r16 */
+-    0x60, 0x80, 0x04, 0x80, 0x03, 0x00, 
++    0x60, 0x80, 0x04, 0x80, 0x03, 0x00,
+     /* br.few b6;; */
+-    0x60, 0x00, 0x80, 0x00       	            
++    0x60, 0x00, 0x80, 0x00
+   };
+ #else
+ static const grub_uint8_t jump[0x20] =
+--- a/grub-core/kern/ieee1275/ieee1275.c
++++ b/grub-core/kern/ieee1275/ieee1275.c
+@@ -306,7 +306,7 @@ grub_ieee1275_seek (grub_ieee1275_ihandle_t ihandle, grub_disk_addr_t pos,
+   args.pos_lo = pos;
+ #else
+   args.pos_hi = (grub_ieee1275_cell_t) (pos >> (8 * GRUB_IEEE1275_CELL_SIZEOF));
+-  args.pos_lo = (grub_ieee1275_cell_t) 
++  args.pos_lo = (grub_ieee1275_cell_t)
+     (pos & ((1ULL << (8 * GRUB_IEEE1275_CELL_SIZEOF)) - 1));
+ #endif
+ 
+--- a/grub-core/kern/ieee1275/init.c
++++ b/grub-core/kern/ieee1275/init.c
+@@ -160,7 +160,7 @@ grub_machine_get_bootlocation (char **device, char **path)
+ 
+ /* Claim some available memory in the first /memory node. */
+ #ifdef __sparc__
+-static void 
++static void
+ grub_claim_heap (void)
+ {
+   grub_mm_init_region ((void *) (grub_modules_get_end ()
+@@ -228,7 +228,7 @@ heap_init (grub_uint64_t addr, grub_uint64_t len, grub_memory_type_t type,
+   return 0;
+ }
+ 
+-static void 
++static void
+ grub_claim_heap (void)
+ {
+   unsigned long total = 0;
+@@ -286,7 +286,7 @@ grub_addr_t grub_modbase;
+ void
+ grub_machine_init (void)
+ {
+-  grub_modbase = ALIGN_UP((grub_addr_t) _end 
++  grub_modbase = ALIGN_UP((grub_addr_t) _end
+ 			  + GRUB_KERNEL_MACHINE_MOD_GAP,
+ 			  GRUB_KERNEL_MACHINE_MOD_ALIGN);
+   grub_ieee1275_init ();
+--- a/grub-core/kern/ieee1275/openfw.c
++++ b/grub-core/kern/ieee1275/openfw.c
+@@ -404,7 +404,7 @@ grub_ieee1275_parse_args (const char *path, enum grub_ieee1275_parse_type ptype)
+ 	if (comma)
+ 	  {
+ 	    char *filepath = comma + 1;
+-	    
++
+ 	    /* Make sure filepath has leading backslash.  */
+ 	    if (filepath[0] != '\\')
+ 	      ret = grub_xasprintf ("\\%s", filepath);
+--- a/grub-core/kern/main.c
++++ b/grub-core/kern/main.c
+@@ -210,7 +210,7 @@ grub_set_prefix_and_root (void)
+   if (device)
+     {
+       char *prefix_set;
+-    
++
+       prefix_set = grub_xasprintf ("(%s)%s", device, path ? : "");
+       if (prefix_set)
+ 	{
+@@ -300,7 +300,7 @@ grub_main (void)
+   grub_register_exported_symbols ();
+ #ifdef GRUB_LINKER_HAVE_INIT
+   grub_arch_dl_init_linker ();
+-#endif  
++#endif
+   grub_load_modules ();
+ 
+   grub_boot_time ("After loading embedded modules.");
+--- a/grub-core/kern/mips/dl.c
++++ b/grub-core/kern/mips/dl.c
+@@ -164,7 +164,7 @@ grub_arch_dl_relocate_symbols (grub_dl_t mod, void *ehdr,
+ #endif
+ 
+ 	    /* Handle partner lo16 relocation. Lower part is
+-	       treated as signed. Hence add 0x8000 to compensate. 
++	       treated as signed. Hence add 0x8000 to compensate.
+ 	    */
+ 	    value = (*(grub_uint16_t *) addr << 16)
+ 	      + sym_value + 0x8000;
+@@ -206,8 +206,8 @@ grub_arch_dl_relocate_symbols (grub_dl_t mod, void *ehdr,
+ 	    value = raw << 2;
+ 	    value += sym_value;
+ 	    raw = (value >> 2) & 0x3ffffff;
+-			
+-	    *(grub_uint32_t *) addr = 
++
++	    *(grub_uint32_t *) addr =
+ 	      raw | ((*(grub_uint32_t *) addr) & 0xfc000000);
+ 	  }
+ 	  break;
+@@ -265,7 +265,7 @@ grub_arch_dl_relocate_symbols (grub_dl_t mod, void *ehdr,
+   return GRUB_ERR_NONE;
+ }
+ 
+-void 
++void
+ grub_arch_dl_init_linker (void)
+ {
+   grub_dl_register_symbol ("__gnu_local_gp", &__gnu_local_gp_dummy, 0, 0);
+--- a/grub-core/kern/mips/loongson/init.c
++++ b/grub-core/kern/mips/loongson/init.c
+@@ -107,10 +107,10 @@ init_pci (void)
+ 
+   *((volatile grub_uint32_t *) (GRUB_MACHINE_PCI_CONTROLLER_HEADER
+ 				+ GRUB_PCI_REG_CACHELINE)) = 0xff;
+-  *((volatile grub_uint32_t *) (GRUB_MACHINE_PCI_CONTROLLER_HEADER 
++  *((volatile grub_uint32_t *) (GRUB_MACHINE_PCI_CONTROLLER_HEADER
+ 				+ GRUB_PCI_REG_ADDRESS_REG0))
+     = 0x80000000 | GRUB_PCI_ADDR_MEM_TYPE_64 | GRUB_PCI_ADDR_MEM_PREFETCH;
+-  *((volatile grub_uint32_t *) (GRUB_MACHINE_PCI_CONTROLLER_HEADER 
++  *((volatile grub_uint32_t *) (GRUB_MACHINE_PCI_CONTROLLER_HEADER
+ 				+ GRUB_PCI_REG_ADDRESS_REG1)) = 0;
+ 
+   grub_pci_iterate (set_card, NULL);
+@@ -183,7 +183,7 @@ grub_machine_init (void)
+       else
+ 	totalmem = ((spd.ddr2.num_of_ranks
+ 		     & GRUB_SMBUS_SPD_MEMORY_NUM_OF_RANKS_MASK) + 1) << (i + 2);
+-      
++
+       if (totalmem >= 256)
+ 	{
+ 	  grub_arch_memsize = 256;
+--- a/grub-core/kern/mips/qemu_mips/init.c
++++ b/grub-core/kern/mips/qemu_mips/init.c
+@@ -41,7 +41,7 @@ grub_machine_init (void)
+   if (grub_arch_memsize == 0)
+     {
+       int i;
+-      
++
+       for (i = 27; i >= 0; i--)
+ 	if (probe_mem (grub_arch_memsize | (1 << i)))
+ 	  grub_arch_memsize |= (1 << i);
+@@ -87,7 +87,7 @@ grub_halt (void)
+   while (1);
+ }
+ 
+-grub_err_t 
++grub_err_t
+ grub_machine_mmap_iterate (grub_memory_hook_t hook, void *hook_data)
+ {
+   hook (0, grub_arch_memsize, GRUB_MEMORY_AVAILABLE, hook_data);
+--- a/grub-core/kern/misc.c
++++ b/grub-core/kern/misc.c
+@@ -1200,7 +1200,7 @@ static void __attribute__ ((noreturn))
+ grub_abort (void)
+ {
+   grub_printf ("\nAborted.");
+-  
++
+ #ifndef GRUB_UTIL
+   if (grub_term_inputs)
+ #endif
+@@ -1264,7 +1264,7 @@ grub_real_boot_time (const char *file,
+   n->next = 0;
+ 
+   va_start (args, fmt);
+-  n->msg = grub_xvasprintf (fmt, args);    
++  n->msg = grub_xvasprintf (fmt, args);
+   va_end (args);
+ 
+   *boot_time_last = n;
+--- a/grub-core/kern/mm.c
++++ b/grub-core/kern/mm.c
+@@ -283,7 +283,7 @@ grub_real_malloc (grub_mm_header_t *first, grub_size_t n, grub_size_t align)
+ 	  else if (extra == 0)
+ 	    {
+ 	      grub_mm_header_t r;
+-	      
++
+ 	      r = cur + extra + n;
+ 	      r->magic = GRUB_MM_FREE_MAGIC;
+ 	      r->size = cur->size - extra - n;
+@@ -707,7 +707,7 @@ grub_debug_memalign (const char *file, int line, grub_size_t align,
+   void *ptr;
+ 
+   if (grub_mm_debug)
+-    grub_printf ("%s:%d: memalign (0x%" PRIxGRUB_SIZE  ", 0x%" PRIxGRUB_SIZE  
++    grub_printf ("%s:%d: memalign (0x%" PRIxGRUB_SIZE  ", 0x%" PRIxGRUB_SIZE
+ 		 ") = ", file, line, align, size);
+   ptr = grub_memalign (align, size);
+   if (grub_mm_debug)
+--- a/grub-core/kern/partition.c
++++ b/grub-core/kern/partition.c
+@@ -128,7 +128,7 @@ grub_partition_probe (struct grub_disk *disk, const char *str)
+       partname = ptr;
+       while (*ptr && grub_isalpha (*ptr))
+ 	ptr++;
+-      partname_end = ptr; 
++      partname_end = ptr;
+       num = grub_strtoul (ptr, &ptr, 0) - 1;
+ 
+       curpart = 0;
+--- a/grub-core/kern/powerpc/dl.c
++++ b/grub-core/kern/powerpc/dl.c
+@@ -47,7 +47,7 @@ struct trampoline
+   grub_uint32_t bctr;
+ };
+ 
+-static const struct trampoline trampoline_template = 
++static const struct trampoline trampoline_template =
+   {
+     0x3d800000,
+     0x618c0000,
+@@ -74,7 +74,7 @@ grub_arch_dl_get_tramp_got_size (const void *ehdr, grub_size_t *tramp,
+     if (s->sh_type == SHT_RELA)
+       {
+ 	const Elf_Rela *rel, *max;
+-	
++
+ 	for (rel = (const Elf_Rela *) ((const char *) e + s->sh_offset),
+ 	       max = rel + s->sh_size / s->sh_entsize;
+ 	     rel < max;
+@@ -82,7 +82,7 @@ grub_arch_dl_get_tramp_got_size (const void *ehdr, grub_size_t *tramp,
+ 	  if (ELF_R_TYPE (rel->r_info) == GRUB_ELF_R_PPC_REL24
+ 	      || ELF_R_TYPE (rel->r_info) == GRUB_ELF_R_PPC_PLTREL24)
+ 	    (*tramp)++;
+-	
++
+       }
+ 
+   *tramp *= sizeof (struct trampoline);
+@@ -138,7 +138,7 @@ grub_arch_dl_relocate_symbols (grub_dl_t mod, void *ehdr,
+ 		tptr->ori |= ((value) & 0xffff);
+ 		mod->trampptr = tptr + 1;
+ 	      }
+-			
++
+ 	    if (delta << 6 >> 6 != delta)
+ 	      return grub_error (GRUB_ERR_BAD_MODULE,
+ 				 "relocation overflow");

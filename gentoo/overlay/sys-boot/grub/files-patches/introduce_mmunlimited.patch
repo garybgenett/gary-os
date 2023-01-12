@@ -1,0 +1,702 @@
+# https://lists.gnu.org/archive/html/grub-devel/2022-12/msg00076.html
+# patch -l -p1 < ...
+
+ grub-core/kern/efi/mm.c          |  39 +++++++++++++++++++++++++-------
+ grub-core/loader/i386/linux.c    | 105 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----
+ include/grub/efi/api.h           |   2 ++
+ include/grub/i386/linux.h        |  36 ++++++++++++++++++++++++++----
+ include/grub/x86_64/efi/memory.h |   8 +++++--
+ 5 files changed, 170 insertions(+), 20 deletions(-)
+
+diff --git c/grub-core/kern/efi/mm.c w/grub-core/kern/efi/mm.c
+index 3705b8b1b465d00ee519c4af5bed90e4d39672d0..5e53460015265f0e0cb647e954814cd3cfb59cc1 100644
+--- c/grub-core/kern/efi/mm.c
++++ w/grub-core/kern/efi/mm.c
+@@ -13,20 +13,21 @@
+  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  *  GNU General Public License for more details.
+  *
+  *  You should have received a copy of the GNU General Public License
+  *  along with GRUB.  If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+ #include <grub/misc.h>
+ #include <grub/mm.h>
+ #include <grub/efi/api.h>
++#include <grub/env.h>
+ #include <grub/efi/efi.h>
+ #include <grub/cpu/efi/memory.h>
+ 
+ #if defined (__i386__) || defined (__x86_64__)
+ #include <grub/pci.h>
+ #endif
+ 
+ #define NEXT_MEMORY_DESCRIPTOR(desc, size)	\
+   ((grub_efi_memory_descriptor_t *) ((char *) (desc) + (size)))
+ 
+@@ -112,68 +113,81 @@ grub_efi_drop_alloc (grub_efi_physical_address_t address,
+     }
+ }
+ 
+ /* Allocate pages. Return the pointer to the first of allocated pages.  */
+ void *
+ grub_efi_allocate_pages_real (grub_efi_physical_address_t address,
+ 			      grub_efi_uintn_t pages,
+ 			      grub_efi_allocate_type_t alloctype,
+ 			      grub_efi_memory_type_t memtype)
+ {
++  grub_efi_physical_address_t max_usable_addr = GRUB_EFI_MAX_USABLE_ADDRESS;
+   grub_efi_status_t status;
+   grub_efi_boot_services_t *b;
+ 
++#if defined (__x86_64__)
++  if (grub_env_get_bool("mmunlimited", false))
++    max_usable_addr = GRUB_EFI_MAX_USABLE_ADDRESS_64;
++#endif
++
+   /* Limit the memory access to less than 4GB for 32-bit platforms.  */
+-  if (address > GRUB_EFI_MAX_USABLE_ADDRESS)
++  if (address > max_usable_addr)
+     {
+       char inv_addr[17], max_addr[17]; /* log16(2^64) = 16, plus NUL. */
+ 
+       grub_snprintf (inv_addr, sizeof (inv_addr) - 1, "%" PRIxGRUB_UINT64_T,
+ 		     address);
+       grub_snprintf (max_addr, sizeof (max_addr) - 1, "%" PRIxGRUB_UINT64_T,
+-		     (grub_efi_uint64_t) GRUB_EFI_MAX_USABLE_ADDRESS);
++                    (grub_efi_uint64_t) max_usable_addr);
+       grub_error (GRUB_ERR_BAD_ARGUMENT,
+ 		  N_("invalid memory address (0x%s > 0x%s)"), inv_addr, max_addr);
+       return NULL;
+     }
+ 
+   b = grub_efi_system_table->boot_services;
+   status = efi_call_4 (b->allocate_pages, alloctype, memtype, pages, &address);
+   if (status != GRUB_EFI_SUCCESS)
+     {
+       grub_error (GRUB_ERR_OUT_OF_MEMORY, N_("out of memory"));
+       return NULL;
+     }
+ 
+   if (address == 0)
+     {
+       /* Uggh, the address 0 was allocated... This is too annoying,
+ 	 so reallocate another one.  */
+-      address = GRUB_EFI_MAX_USABLE_ADDRESS;
++      address = max_usable_addr;
+       status = efi_call_4 (b->allocate_pages, alloctype, memtype, pages, &address);
+       grub_efi_free_pages (0, pages);
+       if (status != GRUB_EFI_SUCCESS)
+ 	{
+ 	  grub_error (GRUB_ERR_OUT_OF_MEMORY, N_("out of memory"));
+ 	  return NULL;
+ 	}
+     }
+ 
+   grub_efi_store_alloc (address, pages);
+ 
+   return (void *) ((grub_addr_t) address);
+ }
+ 
+ void *
+ grub_efi_allocate_any_pages (grub_efi_uintn_t pages)
+ {
+-  return grub_efi_allocate_pages_real (GRUB_EFI_MAX_USABLE_ADDRESS,
++  grub_efi_physical_address_t max_usable_addr = GRUB_EFI_MAX_USABLE_ADDRESS;
++
++#if defined (__x86_64__)
++  if (grub_env_get_bool("mmunlimited", false))
++    max_usable_addr = GRUB_EFI_MAX_USABLE_ADDRESS_64;
++#endif
++
++  return grub_efi_allocate_pages_real (max_usable_addr,
+ 				       pages, GRUB_EFI_ALLOCATE_MAX_ADDRESS,
+ 				       GRUB_EFI_LOADER_DATA);
+ }
+ 
+ void *
+ grub_efi_allocate_fixed (grub_efi_physical_address_t address,
+ 			 grub_efi_uintn_t pages)
+ {
+   return grub_efi_allocate_pages_real (address, pages,
+ 				       GRUB_EFI_ALLOCATE_ADDRESS,
+@@ -427,50 +441,56 @@ sort_memory_map (grub_efi_memory_descriptor_t *memory_map,
+     }
+ }
+ 
+ /* Filter the descriptors. GRUB needs only available memory.  */
+ static grub_efi_memory_descriptor_t *
+ filter_memory_map (grub_efi_memory_descriptor_t *memory_map,
+ 		   grub_efi_memory_descriptor_t *filtered_memory_map,
+ 		   grub_efi_uintn_t desc_size,
+ 		   grub_efi_memory_descriptor_t *memory_map_end)
+ {
++  grub_efi_physical_address_t max_usable_addr = GRUB_EFI_MAX_USABLE_ADDRESS;
+   grub_efi_memory_descriptor_t *desc;
+   grub_efi_memory_descriptor_t *filtered_desc;
+ 
++#if defined (__x86_64__)
++  if (grub_env_get_bool("mmunlimited", false))
++    max_usable_addr = GRUB_EFI_MAX_USABLE_ADDRESS_64;
++#endif
++
+   for (desc = memory_map, filtered_desc = filtered_memory_map;
+        desc < memory_map_end;
+        desc = NEXT_MEMORY_DESCRIPTOR (desc, desc_size))
+     {
+       if (desc->type == GRUB_EFI_CONVENTIONAL_MEMORY
+ #if 1
+-	  && desc->physical_start <= GRUB_EFI_MAX_USABLE_ADDRESS
++         && desc->physical_start <= max_usable_addr
+ #endif
+ 	  && desc->physical_start + PAGES_TO_BYTES (desc->num_pages) > 0x100000
+ 	  && desc->num_pages != 0)
+ 	{
+ 	  grub_memcpy (filtered_desc, desc, desc_size);
+ 
+ 	  /* Avoid less than 1MB, because some loaders seem to be confused.  */
+ 	  if (desc->physical_start < 0x100000)
+ 	    {
+ 	      desc->num_pages -= BYTES_TO_PAGES (0x100000
+ 						 - desc->physical_start);
+ 	      desc->physical_start = 0x100000;
+ 	    }
+ 
+ #if 1
+ 	  if (BYTES_TO_PAGES (filtered_desc->physical_start)
+ 	      + filtered_desc->num_pages
+-	      > BYTES_TO_PAGES_DOWN (GRUB_EFI_MAX_USABLE_ADDRESS))
++             > BYTES_TO_PAGES_DOWN (max_usable_addr))
+ 	    filtered_desc->num_pages
+-	      = (BYTES_TO_PAGES_DOWN (GRUB_EFI_MAX_USABLE_ADDRESS)
++             = (BYTES_TO_PAGES_DOWN (max_usable_addr)
+ 		 - BYTES_TO_PAGES (filtered_desc->physical_start));
+ #endif
+ 
+ 	  if (filtered_desc->num_pages == 0)
+ 	    continue;
+ 
+ 	  filtered_desc = NEXT_MEMORY_DESCRIPTOR (filtered_desc, desc_size);
+ 	}
+     }
+ 
+@@ -551,21 +571,24 @@ print_memory_map (grub_efi_memory_descriptor_t *memory_map,
+ 		  grub_efi_uintn_t desc_size,
+ 		  grub_efi_memory_descriptor_t *memory_map_end)
+ {
+   grub_efi_memory_descriptor_t *desc;
+   int i;
+ 
+   for (desc = memory_map, i = 0;
+        desc < memory_map_end;
+        desc = NEXT_MEMORY_DESCRIPTOR (desc, desc_size), i++)
+     {
+-      grub_printf ("MD: t=%x, p=%llx, v=%llx, n=%llx, a=%llx\n",
++      grub_printf ("MD: t=%x, p=%" PRIxGRUB_EFI_UINT64_T \
++                  ", v=%" PRIxGRUB_EFI_UINT64_T \
++                  ", n=%" PRIxGRUB_EFI_UINT64_T \
++                  ", a=%" PRIxGRUB_EFI_UINT64_T "\n",
+ 		   desc->type, desc->physical_start, desc->virtual_start,
+ 		   desc->num_pages, desc->attribute);
+     }
+ }
+ #endif
+ 
+ static grub_err_t
+ grub_efi_mm_add_regions (grub_size_t required_bytes, unsigned int flags)
+ {
+   grub_efi_memory_descriptor_t *memory_map;
+diff --git c/grub-core/loader/i386/linux.c w/grub-core/loader/i386/linux.c
+index 10a367629dfa9282dfb2afb8e1a1cc0f7bb45e05..6ec260ef51b6db1c41323d27bcc15058f5f282c4 100644
+--- c/grub-core/loader/i386/linux.c
++++ w/grub-core/loader/i386/linux.c
+@@ -648,20 +648,24 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+ 		int argc, char *argv[])
+ {
+   grub_file_t file = 0;
+   struct linux_i386_kernel_header lh;
+   grub_uint8_t setup_sects;
+   grub_size_t real_size, prot_size, prot_file_size;
+   grub_ssize_t len;
+   int i;
+   grub_size_t align, min_align;
+   int relocatable;
++#if defined (GRUB_MACHINE_EFI)
++  int kernel_can_above_4g = 0;
++  grub_addr_t max_usable_addr = GRUB_LINUX_MAX_ADDR_32;
++#endif
+   grub_uint64_t preferred_address = GRUB_LINUX_BZIMAGE_ADDR;
+ 
+   grub_dl_ref (my_mod);
+ 
+   if (argc == 0)
+     {
+       grub_error (GRUB_ERR_BAD_ARGUMENT, N_("filename expected"));
+       goto fail;
+     }
+ 
+@@ -798,40 +802,48 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+   linux_params.ps_mouse = linux_params.padding11 = 0;
+   linux_params.type_of_loader = GRUB_LINUX_BOOT_LOADER_TYPE;
+ 
+   /* These two are used (instead of cmd_line_ptr) by older versions of Linux,
+      and otherwise ignored.  */
+   linux_params.cl_magic = GRUB_LINUX_CL_MAGIC;
+   linux_params.cl_offset = 0x1000;
+ 
+   linux_params.ramdisk_image = 0;
+   linux_params.ramdisk_size = 0;
++  linux_params.ext_ramdisk_image = 0;
++  linux_params.ext_ramdisk_size = 0;
+ 
+   linux_params.heap_end_ptr = GRUB_LINUX_HEAP_END_OFFSET;
+   linux_params.loadflags |= GRUB_LINUX_FLAG_CAN_USE_HEAP;
+ 
+   /* These are not needed to be precise, because Linux uses these values
+      only to raise an error when the decompression code cannot find good
+      space.  */
+   linux_params.ext_mem = ((32 * 0x100000) >> 10);
+   linux_params.alt_mem = ((32 * 0x100000) >> 10);
+ 
+   /* Ignored by Linux.  */
+   linux_params.video_page = 0;
+ 
+   /* Only used when `video_mode == 0x7', otherwise ignored.  */
+   linux_params.video_ega_bx = 0;
+ 
+   linux_params.font_size = 16; /* XXX */
+ 
+ #ifdef GRUB_MACHINE_EFI
+ #ifdef __x86_64__
++  if (grub_le_to_cpu16 (linux_params.version) >= 0x020c)
++    {
++      if (linux_params.xloadflags & LINUX_XLF_CAN_BE_LOADED_ABOVE_4G)
++        kernel_can_above_4g = 1;
++    }
++
+   if (grub_le_to_cpu16 (linux_params.version) < 0x0208 &&
+       ((grub_addr_t) grub_efi_system_table >> 32) != 0)
+     return grub_error(GRUB_ERR_BAD_OS,
+ 		      "kernel does not support 64-bit addressing");
+ #endif
+ 
+   if (grub_le_to_cpu16 (linux_params.version) >= 0x0208)
+     {
+       linux_params.v0208.efi_signature = GRUB_LINUX_EFI_SIGNATURE;
+       linux_params.v0208.efi_system_table = (grub_uint32_t) (grub_addr_t) grub_efi_system_table;
+@@ -1004,20 +1016,52 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+ 				      GRUB_VERIFY_KERNEL_CMDLINE);
+     if (err)
+       goto fail;
+   }
+ 
+   len = prot_file_size;
+   if (grub_file_read (file, prot_mode_mem, len) != len && !grub_errno)
+     grub_error (GRUB_ERR_BAD_OS, N_("premature end of file %s"),
+ 		argv[0]);
+ 
++#if defined (GRUB_MACHINE_EFI)
++  /* If user don't want to use memory over 4g. */
++  if (grub_env_get_bool("mmunlimited", false) == false) {
++      max_usable_addr = GRUB_LINUX_MAX_ADDR_32;
++  }
++  /* Else if user wants. */
++  else {
++    /* If kernel supports be allocated over 4g. */
++    if (kernel_can_above_4g == 1) {
++#ifdef __x86_64__
++      /* If machine is 64 bits. */
++      max_usable_addr = GRUB_LINUX_MAX_ADDR_64;
++#else
++      /* The target device doesn't support 4G. */
++      max_usable_addr = GRUB_LINUX_MAX_ADDR_32;
++#endif
++    }
++    /* Kernel doesn't support be loaded over 4G. */
++    else {
++      max_usable_addr = GRUB_LINUX_MAX_ADDR_32;
++    }
++  }
++  grub_dprintf ("linux", "max_usable_addr = 0x%" PRIxGRUB_ADDR "\n",
++                       max_usable_addr);
++  if (prot_mode_mem > (void*) (max_usable_addr - len)) {
++    grub_error (GRUB_ERR_BAD_OS,
++                "Doesn't support load kernel above 0x%lx.",
++                max_usable_addr);
++    goto fail;
++  }
++#endif
++
+   if (grub_errno == GRUB_ERR_NONE)
+     {
+       grub_loader_set (grub_linux_boot, grub_linux_unload,
+ 		       0 /* set noreturn=0 in order to avoid grub_console_fini() */);
+       loaded = 1;
+     }
+ 
+  fail:
+ 
+   if (file)
+@@ -1034,49 +1078,81 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+ 
+ static grub_err_t
+ grub_cmd_initrd (grub_command_t cmd __attribute__ ((unused)),
+ 		 int argc, char *argv[])
+ {
+   grub_size_t size = 0, aligned_size = 0;
+   grub_addr_t addr_min, addr_max;
+   grub_addr_t addr;
+   grub_err_t err;
+   struct grub_linux_initrd_context initrd_ctx = { 0, 0, 0 };
++  int initrd_can_above_4g = 0;
+ 
+   if (argc == 0)
+     {
+       grub_error (GRUB_ERR_BAD_ARGUMENT, N_("filename expected"));
+       goto fail;
+     }
+ 
+   if (! loaded)
+     {
+       grub_error (GRUB_ERR_BAD_ARGUMENT, N_("you need to load the kernel first"));
+       goto fail;
+     }
+ 
+   if (grub_initrd_init (argc, argv, &initrd_ctx))
+     goto fail;
+ 
+   size = grub_get_initrd_size (&initrd_ctx);
+   aligned_size = ALIGN_UP (size, 4096);
+ 
++#if defined (GRUB_MACHINE_EFI) && defined (__x86_64__)
++  /* Check if initrd can be loaded above 4G */
++  if (grub_le_to_cpu16 (linux_params.version) >= 0x020c)
++    {
++      if (linux_params.xloadflags & LINUX_XLF_CAN_BE_LOADED_ABOVE_4G)
++        initrd_can_above_4g = 1;
++    }
++#endif
++
+   /* Get the highest address available for the initrd.  */
+   if (grub_le_to_cpu16 (linux_params.version) >= 0x0203)
+     {
+       addr_max = grub_cpu_to_le32 (linux_params.initrd_addr_max);
+ 
+       /* XXX in reality, Linux specifies a bogus value, so
+ 	 it is necessary to make sure that ADDR_MAX does not exceed
+-	 0x3fffffff.  */
+-      if (addr_max > GRUB_LINUX_INITRD_MAX_ADDRESS)
+-	addr_max = GRUB_LINUX_INITRD_MAX_ADDRESS;
++        0x3fffffff except users prefer to unlimit it.  */
++      if (grub_env_get_bool("mmunlimited", false) == false)
++       {
++         if (addr_max > GRUB_LINUX_INITRD_MAX_ADDRESS)
++           addr_max = GRUB_LINUX_INITRD_MAX_ADDRESS;
++       }
++      /* If user don't want memory allocation be limited. */
++      else
++      {
++        /* Maximum memory shouldn't exceed 4G unless kerenl supports it. */
++        if (initrd_can_above_4g == 0) {
++             if (addr_max > GRUB_LINUX_MAX_ADDR_32)
++               addr_max = GRUB_LINUX_MAX_ADDR_32;
++        }
++        /* If initrd can be loaded above 4G, overwrite inird_addr_max. */
++        else {
++#ifdef __x86_64__
++          /* If machine is 64 bits. */
++          addr_max = GRUB_LINUX_MAX_ADDR_64;
++#else
++          /* The target device doesn't support 4G. */
++          addr_max = GRUB_LINUX_MAX_ADDR_32;
++#endif
++        }
++      }
+     }
+   else
+     addr_max = GRUB_LINUX_INITRD_MAX_ADDRESS;
+ 
+   if (linux_mem_size != 0 && linux_mem_size < addr_max)
+     addr_max = linux_mem_size;
+ 
+   /* Linux 2.3.xx has a bug in the memory range check, so avoid
+      the last page.
+      Linux 2.2.xx has a bug in the memory range check, which is
+@@ -1087,21 +1163,34 @@ grub_cmd_initrd (grub_command_t cmd __attribute__ ((unused)),
+ 
+   /* Make sure the maximum address is able to store the initrd. */
+   if (addr_max < aligned_size)
+     {
+       grub_error (GRUB_ERR_OUT_OF_RANGE,
+                   N_("the size of initrd is bigger than addr_max"));
+       goto fail;
+     }
+ 
+   /* Put the initrd as high as possible, 4KiB aligned.  */
+-  addr = (addr_max - aligned_size) & ~0xFFF;
++  addr = (addr_max - aligned_size) & (grub_addr_t) ~0xFFF;
++
++  grub_dprintf ("linux",
++                "Initrd at addr 0x%" PRIxGRUB_ADDR " which is expected in"
++                " ranger 0x%" PRIxGRUB_ADDR    " ~ 0x%" PRIxGRUB_ADDR "\n",
++                addr, addr_min, addr_max);
++
++  /* If kernel doesn't support memory be allocated over 4G. */
++  if (initrd_can_above_4g == 0 &&
++      addr > GRUB_LINUX_MAX_ADDR_32) {
++      grub_error (GRUB_ERR_OUT_OF_RANGE,
++                  "the addr is over 4G but unsupported.");
++      goto fail;
++  }
+ 
+   grub_dprintf ("linux",
+                 "Initrd at addr 0x%" PRIxGRUB_ADDR " which is expected in"
+                 " ranger 0x%" PRIxGRUB_ADDR " ~ 0x%" PRIxGRUB_ADDR "\n",
+                 addr, addr_min, addr_max);
+ 
+   if (addr < addr_min)
+     {
+       grub_error (GRUB_ERR_OUT_OF_RANGE, "the initrd is too big");
+       goto fail;
+@@ -1119,23 +1208,27 @@ grub_cmd_initrd (grub_command_t cmd __attribute__ ((unused)),
+     initrd_mem = get_virtual_current_address (ch);
+     initrd_mem_target = get_physical_target_address (ch);
+   }
+ 
+   if (grub_initrd_load (&initrd_ctx, initrd_mem))
+     goto fail;
+ 
+   grub_dprintf ("linux", "Initrd, addr=0x%x, size=0x%x\n",
+ 		(unsigned) addr, (unsigned) size);
+ 
+-  linux_params.ramdisk_image = initrd_mem_target;
+-  linux_params.ramdisk_size = size;
++  linux_params.ramdisk_image = GRUB_LINUX_ADDR_LOW_U32(initrd_mem_target);
++  linux_params.ramdisk_size = GRUB_LINUX_SIZE_LOW_U32(size);
+   linux_params.root_dev = 0x0100; /* XXX */
++#ifdef __x86_64__
++  linux_params.ext_ramdisk_image = GRUB_LINUX_ADDR_HIGH_U32(initrd_mem_target);
++  linux_params.ext_ramdisk_size = GRUB_LINUX_SIZE_HIGH_U32(size);
++#endif
+ 
+  fail:
+   grub_initrd_close (&initrd_ctx);
+ 
+   return grub_errno;
+ }
+ 
+ static grub_command_t cmd_linux, cmd_initrd;
+ 
+ GRUB_MOD_INIT(linux)
+diff --git c/include/grub/efi/api.h w/include/grub/efi/api.h
+index b1a7259b92c86d8dcc37903098190c89cac96dd8..66b08d6469928744f1e9443866e55968077a9a5d 100644
+--- c/include/grub/efi/api.h
++++ w/include/grub/efi/api.h
+@@ -562,20 +562,22 @@ typedef grub_uint32_t grub_efi_uintn_t;
+ typedef grub_int8_t grub_efi_int8_t;
+ typedef grub_uint8_t grub_efi_uint8_t;
+ typedef grub_int16_t grub_efi_int16_t;
+ typedef grub_uint16_t grub_efi_uint16_t;
+ typedef grub_int32_t grub_efi_int32_t;
+ typedef grub_uint32_t grub_efi_uint32_t;
+ #define PRIxGRUB_EFI_UINT32_T	PRIxGRUB_UINT32_T
+ #define PRIuGRUB_EFI_UINT32_T	PRIuGRUB_UINT32_T
+ typedef grub_int64_t grub_efi_int64_t;
+ typedef grub_uint64_t grub_efi_uint64_t;
++#define PRIxGRUB_EFI_UINT64_T  PRIxGRUB_UINT64_T
++#define PRIuGRUB_EFI_UINT64_T  PRIuGRUB_UINT64_T
+ typedef grub_uint8_t grub_efi_char8_t;
+ typedef grub_uint16_t grub_efi_char16_t;
+ 
+ typedef grub_efi_uintn_t grub_efi_status_t;
+ 
+ /*
+  * On x86, the EFI calling convention may deviate from the local one, so
+  * callback functions exposed to the firmware must carry the follow attribute
+  * annotation. (This includes protocols implemented by GRUB that are installed
+  * into the EFI protocol database.)
+diff --git c/include/grub/i386/linux.h w/include/grub/i386/linux.h
+index 0fd6e1212fd2fa86eaf882a96ae534dc3453034a..aea06f6a71a81929df7f664e6f33fafd6dcbc69f 100644
+--- c/include/grub/i386/linux.h
++++ w/include/grub/i386/linux.h
+@@ -41,30 +41,47 @@
+ #define GRUB_LINUX_VID_MODE_NORMAL	0xFFFF
+ #define GRUB_LINUX_VID_MODE_EXTENDED	0xFFFE
+ #define GRUB_LINUX_VID_MODE_ASK		0xFFFD
+ #define GRUB_LINUX_VID_MODE_VESA_START	0x0300
+ 
+ #define GRUB_LINUX_CL_MAGIC		0xA33F
+ 
+ #define VIDEO_CAPABILITY_SKIP_QUIRKS	(1 << 0)
+ #define VIDEO_CAPABILITY_64BIT_BASE	(1 << 1)	/* Frame buffer base is 64-bit. */
+ 
++#define GRUB_LINUX_ADDR_LOW_U32(addr)  \
++       ((grub_uint32_t)(((grub_addr_t)addr) & 0xffffffffull))
++#ifdef __x86_64__
++#define GRUB_LINUX_ADDR_HIGH_U32(addr) \
++       ((grub_uint32_t)((((grub_addr_t)addr) >> 32) & 0xffffffffull))
++#endif
++
++#define GRUB_LINUX_SIZE_LOW_U32(addr)  \
++       ((grub_uint32_t)(((grub_size_t)size) & 0xffffffffull))
++#ifdef __x86_64__
++#define GRUB_LINUX_SIZE_HIGH_U32(addr) \
++       ((grub_uint32_t)((((grub_size_t)size) >> 32) & 0xffffffffull))
++#endif
++
+ /* Maximum number of MBR signatures to store. */
+ #define EDD_MBR_SIG_MAX			16
+ 
+ #ifdef __x86_64__
+ 
++#define GRUB_LINUX_MAX_ADDR_32     0xffffffff
++#define GRUB_LINUX_MAX_ADDR_64       0xffffffffffffull
+ #define GRUB_LINUX_EFI_SIGNATURE	\
+   ('4' << 24 | '6' << 16 | 'L' << 8 | 'E')
+ 
+ #else
+ 
++#define GRUB_LINUX_MAX_ADDR_32     0xffffffff
+ #define GRUB_LINUX_EFI_SIGNATURE	\
+   ('2' << 24 | '3' << 16 | 'L' << 8 | 'E')
+ 
+ #endif
+ 
+ #define GRUB_LINUX_EFI_SIGNATURE_0204	\
+   ('L' << 24 | 'I' << 16 | 'F' << 8 | 'E')
+ 
+ #define GRUB_LINUX_OFW_SIGNATURE	\
+   (' ' << 24 | 'W' << 16 | 'F' << 8 | 'O')
+@@ -85,21 +102,21 @@ struct grub_e820_mmap
+ } GRUB_PACKED;
+ 
+ enum
+   {
+     GRUB_VIDEO_LINUX_TYPE_TEXT = 0x01,
+     GRUB_VIDEO_LINUX_TYPE_VESA = 0x23,    /* VESA VGA in graphic mode.  */
+     GRUB_VIDEO_LINUX_TYPE_EFIFB = 0x70,    /* EFI Framebuffer.  */
+     GRUB_VIDEO_LINUX_TYPE_SIMPLE = 0x70    /* Linear framebuffer without any additional functions.  */
+   };
+ 
+-/* For the Linux/i386 boot protocol version 2.10.  */
++/* For the Linux/i386 boot protocol version 2.13.  */
+ struct linux_i386_kernel_header
+ {
+   grub_uint8_t code1[0x0020];
+   grub_uint16_t cl_magic;		/* Magic number 0xA33F */
+   grub_uint16_t cl_offset;		/* The offset of command line */
+   grub_uint8_t code2[0x01F1 - 0x0020 - 2 - 2];
+   grub_uint8_t setup_sects;		/* The size of the setup in sectors */
+   grub_uint16_t root_flags;		/* If the root is mounted readonly */
+   grub_uint16_t syssize;		/* obsolete */
+   grub_uint16_t swap_dev;		/* obsolete */
+@@ -131,30 +148,36 @@ struct linux_i386_kernel_header
+   grub_uint32_t ramdisk_image;		/* initrd load address */
+   grub_uint32_t ramdisk_size;		/* initrd size */
+   grub_uint32_t bootsect_kludge;	/* obsolete */
+   grub_uint16_t heap_end_ptr;		/* Free memory after setup end */
+   grub_uint16_t pad1;			/* Unused */
+   grub_uint32_t cmd_line_ptr;		/* Points to the kernel command line */
+   grub_uint32_t initrd_addr_max;        /* Highest address for initrd */
+   grub_uint32_t kernel_alignment;
+   grub_uint8_t relocatable;
+   grub_uint8_t min_alignment;
++  grub_uint16_t xloadflags;            /* Boot protocol option flags */
++#define LINUX_XLF_KERNEL_64                 (1 << 0)
++#define LINUX_XLF_CAN_BE_LOADED_ABOVE_4G    (1 << 1)
++#define LINUX_XLF_EFI_HANDOVER_32           (1 << 2)
++#define LINUX_XLF_EFI_HANDOVER_64           (1 << 3)
++#define LINUX_XLF_EFI_KEXEC                 (1 << 4)
+   grub_uint8_t pad[2];
+   grub_uint32_t cmdline_size;
+   grub_uint32_t hardware_subarch;
+   grub_uint64_t hardware_subarch_data;
+   grub_uint32_t payload_offset;
+   grub_uint32_t payload_length;
+   grub_uint64_t setup_data;
+   grub_uint64_t pref_address;
+   grub_uint32_t init_size;
+-  grub_uint32_t handover_offset;
++  grub_uint32_t handover_offset;       /* Protocal 2.11 (deprecated) */
+ } GRUB_PACKED;
+ 
+ /* Boot parameters for Linux based on 2.6.12. This is used by the setup
+    sectors of Linux, and must be simulated by GRUB on EFI, because
+    the setup sectors depend on BIOS.  */
+ struct linux_kernel_params
+ {
+   grub_uint8_t video_cursor_x;		/* 0 */
+   grub_uint8_t video_cursor_y;
+ 
+@@ -224,21 +247,25 @@ struct linux_kernel_params
+   grub_uint8_t hd1_drive_info[0x10];	/* 90 */
+   grub_uint16_t rom_config_len;		/* a0 */
+ 
+   grub_uint8_t padding6[0xb0 - 0xa2];
+ 
+   grub_uint32_t ofw_signature;		/* b0 */
+   grub_uint32_t ofw_num_items;		/* b4 */
+   grub_uint32_t ofw_cif_handler;	/* b8 */
+   grub_uint32_t ofw_idt;		/* bc */
+ 
+-  grub_uint8_t padding7[0x1b8 - 0xc0];
++  grub_uint32_t ext_ramdisk_image;      /* c0 */
++  grub_uint32_t ext_ramdisk_size;       /* c4 */
++  grub_uint32_t ext_cmd_line_ptr;       /* c8 */
++
++  grub_uint8_t padding7[0x1b8 - 0xcc];
+ 
+   union
+     {
+       struct
+         {
+           grub_uint32_t efi_system_table;	/* 1b8 */
+           grub_uint32_t padding7_1;		/* 1bc */
+           grub_uint32_t efi_signature;		/* 1c0 */
+           grub_uint32_t efi_mem_desc_size;	/* 1c4 */
+           grub_uint32_t efi_mem_desc_version;	/* 1c8 */
+@@ -308,21 +335,22 @@ struct linux_kernel_params
+   grub_uint32_t ramdisk_image;		/* initrd load address */
+   grub_uint32_t ramdisk_size;		/* initrd size */
+   grub_uint32_t bootsect_kludge;	/* obsolete */
+   grub_uint16_t heap_end_ptr;		/* Free memory after setup end */
+   grub_uint8_t ext_loader_ver;		/* Extended loader version */
+   grub_uint8_t ext_loader_type;		/* Extended loader type */
+   grub_uint32_t cmd_line_ptr;		/* Points to the kernel command line */
+   grub_uint32_t initrd_addr_max;	/* Maximum initrd address */
+   grub_uint32_t kernel_alignment;	/* Alignment of the kernel */
+   grub_uint8_t relocatable_kernel;	/* Is the kernel relocatable */
+-  grub_uint8_t pad1[3];
++  grub_uint8_t min_alignment;
++  grub_uint16_t xloadflags;            /* Boot protocol option flags */
+   grub_uint32_t cmdline_size;		/* Size of the kernel command line */
+   grub_uint32_t hardware_subarch;
+   grub_uint64_t hardware_subarch_data;
+   grub_uint32_t payload_offset;
+   grub_uint32_t payload_length;
+   grub_uint64_t setup_data;
+   grub_uint64_t pref_address;
+   grub_uint32_t init_size;
+   grub_uint32_t handover_offset;
+   /* Linux setup header copy - END. */
+diff --git c/include/grub/x86_64/efi/memory.h w/include/grub/x86_64/efi/memory.h
+index 46e9145a308fd8a14c5cab29416df37e85635eee..d8c1273b143594a2ec5815cafac49dcc893d94f0 100644
+--- c/include/grub/x86_64/efi/memory.h
++++ w/include/grub/x86_64/efi/memory.h
+@@ -1,10 +1,14 @@
+ #ifndef GRUB_MEMORY_CPU_HEADER
+ #include <grub/efi/memory.h>
+ 
+ #if defined (__code_model_large__)
+-#define GRUB_EFI_MAX_USABLE_ADDRESS 0xffffffff
++#define GRUB_EFI_MAX_USABLE_ADDRESS_32 0xffffffff
++#define GRUB_EFI_MAX_USABLE_ADDRESS_64 __UINTPTR_MAX__
++#define GRUB_EFI_MAX_USABLE_ADDRESS GRUB_EFI_MAX_USABLE_ADDRESS_32
+ #else
+-#define GRUB_EFI_MAX_USABLE_ADDRESS 0x7fffffff
++#define GRUB_EFI_MAX_USABLE_ADDRESS_32 0x7fffffff
++#define GRUB_EFI_MAX_USABLE_ADDRESS_64 GRUB_EFI_MAX_USABLE_ADDRESS_32
++#define GRUB_EFI_MAX_USABLE_ADDRESS GRUB_EFI_MAX_USABLE_ADDRESS_32
+ #endif
+ 
+ #endif /* ! GRUB_MEMORY_CPU_HEADER */

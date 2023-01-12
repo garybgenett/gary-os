@@ -1,0 +1,22 @@
+--- a/grub-core/loader/efi/chainloader.c
++++ b/grub-core/loader/efi/chainloader.c
+@@ -596,7 +596,7 @@ handle_image (struct grub_secureboot_chainloader_context *load_context)
+   grub_dprintf ("chain", "image size is %08" PRIuGRUB_UINT64_T ", datasize is %08x\n",
+ 	       context.image_size, datasize);
+ 
+-  efi_status = efi_call_3 (b->allocate_pool, GRUB_EFI_LOADER_DATA,
++  efi_status = efi_call_3 (b->allocate_pool, GRUB_EFI_LOADER_CODE,
+ 			   buffer_size, (void**)&buffer);
+ 
+   if (efi_status != GRUB_EFI_SUCCESS)
+--- a/grub-core/loader/efi/peimage.c
++++ b/grub-core/loader/efi/peimage.c
+@@ -243,7 +243,7 @@ static grub_efi_status_t load_sections(struct image_info *info)
+ 
+ 	info->alloc_addr = grub_efi_allocate_pages_real(
+ 			GRUB_EFI_MAX_USABLE_ADDRESS, info->alloc_pages,
+-			GRUB_EFI_ALLOCATE_MAX_ADDRESS, GRUB_EFI_LOADER_DATA);
++			GRUB_EFI_ALLOCATE_MAX_ADDRESS, GRUB_EFI_LOADER_CODE);
+ 	if (!info->alloc_addr)
+ 		return GRUB_EFI_OUT_OF_RESOURCES;
+ 
