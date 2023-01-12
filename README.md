@@ -697,6 +697,7 @@ into a small number of atomic steps using [GNU Make].
   |:---     |:---
   | init    | Initial build from a [stage3] tarball
   | doit    | Update a build with any package or configuration changes
+  | krnl    | Recompile [Linux Kernel] list, and 'doit' once complete
   | redo    | Complete start-to-finish rebuild of entire system
   | edit    | Wrapper around [gentoo.config] customization script
 
@@ -766,6 +767,13 @@ are run.  This is a real time saver.
 
 Successful completion of this phase is the #1 measure of a healthy build.  It
 can't be run too often.
+
+**Krnl**
+
+Somewhere between a 'doit' and a 'redo', this rebuilds the [Linux Kernel] list
+and completes the 'doit' process, without performing a full system rebuild as is
+done with 'init' or 'redo'.  Primarily used during development to build and test
+new kernels and configurations.
 
 **Redo**
 
