@@ -2013,7 +2013,6 @@ function release_install_root {
 
 function release_install_boot {
 	declare DEVICE="$(findmnt --noheadings --output SOURCE --target ${_GINST})"
-	declare UPDATE="ego boot --verbosity 2 --check update"
 	${RSYNC_U} ${TARGET}/etc/fstab	${_GINST}/etc/fstab				|| return 1
 	${SED} -i									\
 		-e "s|^([^#].+)$|#\1|g"							\
@@ -2022,7 +2021,6 @@ function release_install_boot {
 	mount-robust --dev		${_GINST}					|| return 1
 	${MKDIR}			${_GINST}/boot/grub				|| return 1
 	chroot				${_GINST} grub-mkconfig -o /boot/grub/grub.cfg	|| return 1
-	chroot				${_GINST} ${UPDATE}				|| return 1
 	mount-robust -u --dev		${_GINST}					|| return 1
 	echo -en "\n"
 	echo -en ">>> EVERYTHING FOR THE GRUB BOOTLOADER SHOULD BE PROPERLY CONFIGURED <<<\n"
