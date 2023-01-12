@@ -2316,8 +2316,10 @@ function _publish_export {
 			[[ ${RELEASE[${INDEX}]} == ${RELEASE[-1]} ]] &&
 			[[ ${RELEASE[${INDEX}]} == ${_VERSN} ]];
 		}; then
-			publish_export_underscore ${DSTDIR}					|| return 1
-			publish_export_underscore ${PAKDIR}					|| return 1
+#>>>			publish_export_underscore ${DSTDIR}					|| return 1
+#>>>			publish_export_underscore ${PAKDIR}					|| return 1
+			publish_export_underscore distfiles					|| return 1
+			publish_export_underscore packages					|| return 1
 		fi
 		if {
 			[[ -n ${RELEASE[${INDEX}]} ]] && [[ -n ${CMTHASH[${INDEX}]} ]] &&
