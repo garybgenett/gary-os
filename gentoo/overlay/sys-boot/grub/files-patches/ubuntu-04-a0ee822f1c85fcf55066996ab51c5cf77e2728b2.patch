@@ -1,0 +1,68 @@
+From a0ee822f1c85fcf55066996ab51c5cf77e2728b2 Mon Sep 17 00:00:00 2001
+From: Julian Andres Klode <julian.klode@canonical.com>
+Date: Fri, 9 Dec 2022 16:00:25 +0100
+Subject: Allocate executables as CODE, not DATA in chainloader and arm64
+
+Other places seem patched already.
+
+Gbp-Pq: Name ubuntu-efi-loader-code.patch
+---
+ debian/patches/series                       |  1 +
+ debian/patches/ubuntu-efi-loader-code.patch | 36 +++++++++++++++++++++++++++++
+ 2 files changed, 37 insertions(+)
+ create mode 100644 debian/patches/ubuntu-efi-loader-code.patch
+
+diff --git a/debian/patches/series b/debian/patches/series
+index ea78113..21fe4ca 100644
+--- a/debian/patches/series
++++ b/debian/patches/series
+@@ -208,3 +208,4 @@ ubuntu-rhboot-cast-fixups.patch
+ 2.12-mm/0208-kern-efi-mm-Implement-runtime-addition-of-pages.patch
+ 2.12-mm/0209-efi-Increase-default-memory-allocation-to-32-MiB.patch
+ 2.12-mm/0210-mm-Try-invalidate-disk-caches-last-when-out-of-memor.patch
++ubuntu-efi-loader-code.patch
+diff --git a/debian/patches/ubuntu-efi-loader-code.patch b/debian/patches/ubuntu-efi-loader-code.patch
+new file mode 100644
+index 0000000..489cf38
+--- /dev/null
++++ b/debian/patches/ubuntu-efi-loader-code.patch
+@@ -0,0 +1,36 @@
++From: Julian Andres Klode <julian.klode@canonical.com>
++Date: Fri, 9 Dec 2022 16:00:25 +0100
++Subject: Allocate executables as CODE, not DATA in chainloader and arm64
++
++Other places seem patched already.
++---
++ grub-core/loader/efi/chainloader.c | 2 +-
++ grub-core/loader/efi/peimage.c     | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/grub-core/loader/efi/chainloader.c b/grub-core/loader/efi/chainloader.c
++index fbd14eb..7e00117 100644
++--- a/grub-core/loader/efi/chainloader.c
+++++ b/grub-core/loader/efi/chainloader.c
++@@ -596,7 +596,7 @@ handle_image (struct grub_secureboot_chainloader_context *load_context)
++   grub_dprintf ("chain", "image size is %08" PRIuGRUB_UINT64_T ", datasize is %08x\n",
++ 	       context.image_size, datasize);
++ 
++-  efi_status = efi_call_3 (b->allocate_pool, GRUB_EFI_LOADER_DATA,
+++  efi_status = efi_call_3 (b->allocate_pool, GRUB_EFI_LOADER_CODE,
++ 			   buffer_size, (void**)&buffer);
++ 
++   if (efi_status != GRUB_EFI_SUCCESS)
++diff --git a/grub-core/loader/efi/peimage.c b/grub-core/loader/efi/peimage.c
++index fffdf65..46cb7cd 100644
++--- a/grub-core/loader/efi/peimage.c
+++++ b/grub-core/loader/efi/peimage.c
++@@ -243,7 +243,7 @@ static grub_efi_status_t load_sections(struct image_info *info)
++ 
++ 	info->alloc_addr = grub_efi_allocate_pages_real(
++ 			GRUB_EFI_MAX_USABLE_ADDRESS, info->alloc_pages,
++-			GRUB_EFI_ALLOCATE_MAX_ADDRESS, GRUB_EFI_LOADER_DATA);
+++			GRUB_EFI_ALLOCATE_MAX_ADDRESS, GRUB_EFI_LOADER_CODE);
++ 	if (!info->alloc_addr)
++ 		return GRUB_EFI_OUT_OF_RESOURCES;
++ 
+-- 
+cgit v1.1
+
