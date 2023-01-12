@@ -25,9 +25,9 @@
 #! #####################################
 #! ${MKDIR} ${G_DIST} ${G_PACK}
 #! ${MKDIR} /var/cache/portage
-#! ${RM} /var/cache/portage/{distfiles,packages}
-#! ${LN} ${G_DIST} /var/cache/portage/distfiles
-#! ${LN} ${G_PACK} /var/cache/portage/packages
+#! ${RM} /var/cache/{distfiles,binpkgs}
+#! ${LN} ${G_DIST} /var/cache/distfiles
+#! ${LN} ${G_PACK} /var/cache/binpkgs
 #! #####################################
 #! export HOME="${_HOME}"
 #! cd / && ${MKDIR} ${HOME} && ${RM} /root && ${LN} ${HOME} /root && cd -
