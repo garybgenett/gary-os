@@ -77,6 +77,7 @@ usage:
 	@$(ECHO) "\n"
 	@$(PRINTF) "Chroot Build (Initial):"			"$(MAKE) init"
 	@$(PRINTF) "Chroot Build (Update Only):"		"$(MAKE) doit"
+	@$(PRINTF) "Chroot Build (Kernel Rebuild):"		"$(MAKE) krnl"
 	@$(PRINTF) "Chroot Build (Complete Rebuild):"		"$(MAKE) redo"
 	@$(PRINTF) "Chroot Build (Configuration):"		"$(MAKE) edit"
 	@$(ECHO) "\n"
@@ -191,6 +192,10 @@ init:
 .PHONY: doit
 doit:
 	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) -/
+
+.PHONY: krnl
+krnl:
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(CHROOT) -.
 
 .PHONY: redo
 redo:
