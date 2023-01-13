@@ -781,10 +781,9 @@ function mount_dev_dirs {
 #>>>				if ! ${QUIET}; then echo -en "\n"; fi
 					echo -en "\n"
 #>>>
-				EXIT -1 #>>> return 1
+				EXIT -1
 			else
-				EXIT -X #>>> return 0
-				return 0
+				EXIT -X
 			fi
 		else
 			if ! mount-robust -u --dev ${TARGET}	2>&1 |
@@ -858,7 +857,7 @@ function EXIT {
 		print_info marker
 	fi
 	if [[ ${EXIT} == "X" ]]; then
-		return 0
+		exit 0
 	else
 		exit ${EXIT}
 	fi
@@ -1431,7 +1430,7 @@ if [[ ${1} == -i ]]; then
 			echo -en "\n"
 			echo -en ">>> READY TO RUN THE BUILD WITHOUT 'DOFAST' ENABLED <<<\n"
 			echo -en "\n"
-			EXIT 0
+			EXIT -X
 		fi
 	fi
 	if ${_BLD}; then
