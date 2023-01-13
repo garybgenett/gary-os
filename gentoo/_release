@@ -302,15 +302,17 @@ ${ROOTFS_BASH}
 /sbin/fsck.ext3
 /sbin/fsck.ext4
 /sbin/mount.fuse
+/sbin/mount.ntfs
+/sbin/mount.ntfs-3g
 /usr/bin/ntfs-3g
-/usr/bin/ntfs-3g.probe
+/usr/bin/ntfsfix
+/usr/sbin/exfatfsck
 /usr/sbin/fsck.exfat
 /usr/sbin/fsck.fat
 /usr/sbin/fsck.vfat
 /usr/sbin/mount.exfat
 /usr/sbin/mount.exfat-fuse
-/usr/sbin/mount.ntfs
-/usr/sbin/mount.ntfs-3g
+/usr/sbin/mount.fuse3
 "
 
 declare ROOTFS_FILES="
