@@ -2468,10 +2468,10 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 
   * [Metro]
     * Added package lists
-    * Customization of `LDFLAGS` and `USE` variables
+    * Customization of `LDFLAGS` and `$USE` variables
     * Debug option and better error handling
   * [Portage]
-    * Complete review and rewrite of `USE` flags
+    * Complete review and rewrite of `$USE` flags
     * Cleaned up [gentoo/overlay/] directory
     * Improvements to audit and review scripting
     * Revised package list
@@ -2544,7 +2544,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * Updated [stage3] with support for testing builds and fixing breaks
   * [Portage]
     * Initial support for both 64-bit and 32-bit builds
-    * Tuned package list and `USE` flags for size
+    * Tuned package list and `$USE` flags for size
 
 ### v0.2 2014-02-13 ############################################################
 [v0.2 2014-02-13]: #v02-2014-02-13
