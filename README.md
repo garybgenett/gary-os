@@ -1027,11 +1027,11 @@ is enabled for mouse support on the console.
 As for the overall system, all configuration files for the [Linux Kernel] and
 [Portage] are in the repository.
 
-  |               | |
-  |:---           |:---
-  | Linux kernel  | [linux/]
-  | Portage       | [gentoo/]
-  | Overlay       | [gentoo/overlay/]
+  |                    | |
+  |:---                |:---
+  | [Linux Kernel]     | [linux/]
+  | [Portage]          | [gentoo/]
+  | [Portage Overlays] | [gentoo/overlay/]
 
 Finally, the `root` password is set to `gary-os`.
 
@@ -1693,7 +1693,7 @@ First and foremost, the projects which brought open source into the mainstream:
 
 The backbones which do the real heavy lifting in GaryOS:
 
-  * [Gentoo] & [Portage]
+  * [Gentoo], [Portage] & [Portage Overlays]
   * [Linux initramfs]
     * [Squashfs]
     * [Overlay]
@@ -1705,6 +1705,7 @@ The backbones which do the real heavy lifting in GaryOS:
 
   [Gentoo]: https://www.gentoo.org
   [Portage]: https://wiki.gentoo.org/wiki/Portage
+  [Portage Overlays]: https://wiki.gentoo.org/wiki/Project:Overlays
   [Linux initramfs]: https://kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt
   [Squashfs]: https://www.kernel.org/doc/html/latest/filesystems/squashfs.html
   [Overlay]: https://www.kernel.org/doc/html/latest/filesystems/overlayfs.html
