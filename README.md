@@ -4,7 +4,7 @@
 
 | ![GaryOS Icon](artifacts/images/icon-v6.0.png "GaryOS Icon") | "The one file that does it all."
 |:---      |:---
-| Latest   | [v6.0 2021-09-12] -- [Kernel], [Rootfs], [Boot]
+| Latest   | [v7.0 2023-01-14] -- [Kernel], [Rootfs], [Boot]
 | Homepage | <http://www.garybgenett.net/projects/gary-os>
 | Download | <https://sourceforge.net/projects/gary-os>
 | Source   | <https://github.com/garybgenett/gary-os>
@@ -24,9 +24,9 @@
 | [Project]  | [References], [Contributing], [Licensing]
 | [Details]  | [Versioning], [Repository], [Tools], [Ecosystem]
 | [Release]  | [Process], [Checklist], [Publish]
-| [Versions] | [v6.0 2021-09-12], [v5.0 2021-08-04], [v4.0 2021-07-26], [(...)]
+| [Versions] | [v7.0 2023-01-14], [v6.0 2021-09-12], [v5.0 2021-08-04], [(...)]
 
-[(...)]: #v30-2015-03-16
+[(...)]: #v40-2021-07-26
 
 [GaryOS]: http://www.garybgenett.net/projects/gary-os
 [Gary B. Genett]: http://www.garybgenett.net
@@ -72,8 +72,9 @@ Unique advantages:
 No other GNU/Linux distribution takes the same approach or has the same features
 as GaryOS.
 
-![GaryOS CLI Screenshot](artifacts/images/screenshot_cli-v6.0.png "GaryOS CLI Screenshot")
-![GaryOS GUI Screenshot](artifacts/images/screenshot_gui-v6.0.png "GaryOS GUI Screenshot")
+<!-- ![GaryOS CLI Screenshot](artifacts/images/screenshot_cli-v7.0.png "GaryOS CLI Screenshot") -->
+![GaryOS CLI Screenshot](artifacts/images/screenshot_cli-v7.0.gif "GaryOS CLI Screenshot")
+![GaryOS GUI Screenshot](artifacts/images/screenshot_gui-v7.0.gif "GaryOS GUI Screenshot")
 
 ### Quick Start ################################################################
 [Quick Start]: #quick-start
@@ -2195,11 +2196,50 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 [License]: https://github.com/garybgenett/gary-os/blob/master/LICENSE.md
 [Downloads]: https://sourceforge.net/projects/gary-os/files
 
-[Kernel]: https://sourceforge.net/projects/gary-os/files/gary-os-v6.0-generic_64.kernel
-[Tiny]: https://sourceforge.net/projects/gary-os/files/v6.0/gary-os-v6.0-generic_64.tiny.kernel
-[Rootfs]: https://sourceforge.net/projects/gary-os/files/gary-os-v6.0-generic_64.rootfs
-[Boot]: https://sourceforge.net/projects/gary-os/files/gary-os-v6.0-generic_64.grub.zip
+[Kernel]: https://sourceforge.net/projects/gary-os/files/gary-os-v7.0-generic_64.kernel
+[Tiny]: https://sourceforge.net/projects/gary-os/files/v7.0/gary-os-v7.0-generic_64.tiny.kernel
+[Rootfs]: https://sourceforge.net/projects/gary-os/files/gary-os-v7.0-generic_64.rootfs
+[Boot]: https://sourceforge.net/projects/gary-os/files/gary-os-v7.0-generic_64.grub.zip
 
+### v7.0 2023-01-14 ############################################################
+[v7.0 2023-01-14]: #v70-2023-01-14
+[v7.0]: #v70-2023-01-14
+
+  **[Repository](https://github.com/garybgenett/gary-os/tree/v7.0)
+  / [Readme](https://github.com/garybgenett/gary-os/blob/v7.0/README.md)
+  / [License](https://github.com/garybgenett/gary-os/blob/v7.0/LICENSE.md)
+  / [Packages (Kernel)](https://github.com/garybgenett/gary-os/blob/v7.0/packages.txt)
+  / [Packages (Tiny)](https://github.com/garybgenett/gary-os/blob/v7.0/packages.tiny.txt)
+  / [Packages (Rootfs)](https://github.com/garybgenett/gary-os/blob/v7.0/packages.rootfs.txt)**
+
+  |                | |
+  |:---            |:---
+  | Kernel         | [gary-os-v7.0-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v7.0-generic_64.kernel)
+  | Kernel (Tiny)  | [gary-os-v7.0-generic_64.tiny.kernel](https://sourceforge.net/projects/gary-os/files/v7.0/gary-os-v7.0-generic_64.tiny.kernel)
+  | Rootfs         | [gary-os-v7.0-generic_64.rootfs](https://sourceforge.net/projects/gary-os/files/gary-os-v7.0-generic_64.rootfs)
+  | Boot           | [gary-os-v7.0-generic_64.grub.zip](https://sourceforge.net/projects/gary-os/files/gary-os-v7.0-generic_64.grub.zip)
+  | Source Stage3  | [gary-os-v7.0-generic_64.stage3.tar.xz](https://sourceforge.net/projects/gary-os/files/v7.0/gary-os-v7.0-generic_64.stage3.tar.xz)
+  | Source Portage | [gary-os-v7.0-generic_64.gentoo-repo.tar.xz](https://sourceforge.net/projects/gary-os/files/v7.0/gary-os-v7.0-generic_64.gentoo-repo.tar.xz)
+
+  * Overall
+    * Switched to [Gentoo] proper, for better stability and support
+    * [Linux Kernel] configuration now from [Gentoo Kernel]
+    * Enhancements and optimizations to [Builder] and the [Compile] process
+    * Replaced `shmem_size` with `groot_size` for [Rootfs] [Overlay] process
+    * Minimized [Loader] packages list
+  * [Portage]
+    * Upgraded to new [GPKG binary package] format
+    * Finally consolidated to single version of Python, and eliminated Ruby
+    * Created closer tracking of `$USE` variables for [Kernel] build
+    * Minimized proprietary firmware and binary packages
+    * Minor changes to package lists
+  * [GRUB]
+    * Latest development version of [GNU GRUB] (see [grub rationale file])
+    * At last, fixed the need for [Minimal] with upstream patch! (see [Issues])
+    * Switched to `sfdisk` for partitioning
+    * Upgraded to new version of [Rufus]
+
+  [GPKG binary package]: https://wiki.gentoo.org/wiki/Binary_package_guide
   [grub rationale file]: https://github.com/garybgenett/gary-os/blob/master/gentoo/overlay/sys-boot/grub/.rationale
 
 ### v6.0 2021-09-12 ############################################################
