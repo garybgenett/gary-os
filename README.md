@@ -132,28 +132,18 @@ This is a list of current known issues.  Ideally, this section would be empty.
 
 **GNU GRUB EFI "out of memory"**
 
-On some systems, [GNU GRUB] produces an "out of memory" error when booting the
-[Kernel] with EFI.  Research into this is ongoing, and documented in the [grub
-rationale file] in [gentoo/overlay/].  The version of GNU GRUB in [GaryOS]
-(starting in [v6.0]) uses a custom [grub patch] to provide better debug tracing
-for when this occurs.
+On some systems, earlier versions of [GNU GRUB] produced an "out of memory"
+error when booting a sufficiently large [Linux Kernel] or `initrd`, and this
+included [GaryOS].  The only workaround was to use the [Tiny] kernel.
 
-  [grub rationale file]: https://github.com/garybgenett/gary-os/blob/master/gentoo/overlay/sys-boot/grub/.rationale
-  [grub patch]: https://github.com/garybgenett/gary-os/blob/master/gentoo/overlay/sys-boot/grub/files-patches/linux_initrd_max_address.patch
+Just prior to [v7.0], an experimental patch was released upstream which
+corrected the issue, at least for GaryOS, and it was included in the version of
+GNU GRUB in [gentoo/overlay/] (see the [grub rationale file]) and the [Boot]
+file.  Since GaryOS is often booted by existing GNU GRUB installations, which
+would not yet have the fix, a [Tiny] kernel was also released.
 
-It is important to note that the [Kernel] is not actually causing the "out of
-memory" error, nor is the available memory actually being exhausted.  The issue
-is occurring during the allocation of memory blocks, and more information is
-needed to provide to the GNU GRUB development team, since this issue is not
-entirely unique to GaryOS.  Memory allocation is locked during this portion of
-the boot process, so debug statements can not be printed, which makes
-troubleshooting very difficult.
-
-Instructions for gathering helpful debugging information are printed out when
-this error occurs using the [GRUB] [Boot] file, or the
-[grub/grub.menu.gary-os.cfg] file in [Linux].
-
-The workaround is to use the [Tiny] kernel.  See [Minimal] for details.
+Once the updated GNU GRUB version is in general use, this issue will be removed,
+along with the [Minimal] section and the [Tiny] kernel.
 
 --------------------------------------------------------------------------------
 
@@ -646,25 +636,27 @@ correctly configured (see [GRUB]).
 ### Minimal ####################################################################
 [Minimal]: #minimal
 
-In specific cases, it may be necessary or desirable to use a much smaller
-version of the [Kernel].
+On some systems, earlier versions of [GNU GRUB] produced an "out of memory"
+error when booting a sufficiently large [Linux Kernel] or `initrd`, and this
+included [GaryOS].  The only workaround was to create a "minified" [Tiny]
+version which could be used in place of [Kernel].  This version is roughly 25%
+the size of [Kernel], and a significant amount of packages and functionality was
+removed to achieve this.  It is a viable rescue system and [Filesystem]
+[Loader], but not much else should be expected of it.
 
-  * Storage or memory constraints (see [Requirements])
-  * Faster transfer over a [PXE] network
-  * Use as a [Filesystem] [Loader] only
-  * [GNU GRUB] EFI "out of memory" issue (see [Issues])
+The [Boot] file is configured to locate it as `gary-os.tiny.kernel`.  If both
+`gary-os.kernel` and `gary-os.tiny.kernel` exist, [Boot] will first try the main
+[Kernel], and fall back to [Tiny] if it fails to load.  The
+[grub/grub.menu.gary-os.cfg] file also works this way.
 
-For these situations, the "minified" [Tiny] version may be used in place of
-[Kernel].  The [Boot] file is already configured to locate it as
-`gary-os.tiny.kernel`.  If both `gary-os.kernel` and `gary-os.tiny.kernel`
-exist, [Boot] will first try the main [Kernel], and fall back to [Tiny] if it
-fails to load.  The [grub/grub.menu.gary-os.cfg] file also works this way.
+Just prior to [v7.0], an experimental patch was released upstream which
+corrected the issue, at least for GaryOS, and it was included in the version of
+GNU GRUB in [gentoo/overlay/] (see the [grub rationale file]) and the [Boot]
+file.  Since GaryOS is often booted by existing GNU GRUB installations, which
+would not yet have the fix, a [Tiny] kernel was also released.
 
-The [Tiny] version is roughly 25% the size of [Kernel], and only uses 50% as
-much memory.  To achieve this, a significant number of packages were removed,
-the filesystem was heavily pruned, and the overall functionality was greatly
-reduced.  It is a viable rescue system and [Filesystem] [Loader], but not much
-else should be expected of it.
+Once the updated GNU GRUB version is in general use, the [Tiny] kernel will no
+longer be released with GaryOS, and this section will be removed.
 
 --------------------------------------------------------------------------------
 
@@ -2307,6 +2299,8 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 [Tiny]: https://sourceforge.net/projects/gary-os/files/v6.0/gary-os-v6.0-generic_64.tiny.kernel
 [Rootfs]: https://sourceforge.net/projects/gary-os/files/gary-os-v6.0-generic_64.rootfs
 [Boot]: https://sourceforge.net/projects/gary-os/files/gary-os-v6.0-generic_64.grub.zip
+
+  [grub rationale file]: https://github.com/garybgenett/gary-os/blob/master/gentoo/overlay/sys-boot/grub/.rationale
 
 ### v6.0 2021-09-12 ############################################################
 [v6.0 2021-09-12]: #v60-2021-09-12
