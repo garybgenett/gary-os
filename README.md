@@ -2092,14 +2092,15 @@ Everything in [Booting], [Running] and [Building] should be validated below.
         * `if [ ${FILE} == .static ]; then LIST=".bashrc .vimrc scripts/grub.sh scripts/qemu*"; fi`
         * `(cd ${FILE}; vdiff -g $(sed -n "s|^$(basename ${FILE}): ||gp" [...]/_builds/_gary-os/_commit) ${LIST})`
     * [ ] Screenshots
-        * `(cd .setup/gentoo.gary-os; ./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1)`
+        * `(cd .setup/gentoo.gary-os; ./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.grub/loopfile.qcow2 1)`
+            * [x] Peek
         * `wmctrl -i -r 0x00000000 -e 0,0,0,800,600`
             * `vi ~/.Xresources` -> `URxvt.background: rgb:00/00/00`
             * `ctrl-a s, crtl-a F`
             * [x] Gimp -> File -> Create -> Screenshot
         * `remote-viewer`
             * `startx`
-            * `xrandr -s 800x600`
+            * `xrandr -s 1024x768`
             * [x] Links -> <http://10.0.0.254:6419/#welcome-to-gary-os>
             * [x] File -> Screenshot
         * `(file *; exiv2 *; identify -verbose *) | less`
@@ -2129,7 +2130,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * `make clean`
     * `ll ./build/ ./build/_build`
   * `(cd coding/gary-os; git-commit -m "Stamped v#.# release." ./README.md)`
-    * `make _publish_release`
+    * `make _publish_gitdir`
     * `(cd _builds/.gary-os/.gary-os; GIT_PAGER= git-list -n1)`
   * `make DOREDO=true DOMODS=true doit release _prepare_packdirs`
     * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.tiny.kernel 1`
