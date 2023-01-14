@@ -299,7 +299,7 @@ gendir:
 
 ########################################
 
-export COMPOSER		?= $(GARYOS_DIR)/.composer/Makefile
+export COMPOSER		?= $(GARYOS_DIR)/.Composer/Makefile
 export MARKDOWN_OUTPUT	:= GaryOS-Readme.md
 export COMPOSER_TARGETS	:= GaryOS-Readme.html GaryOS-Readme.pdf
 export COMPOSER_DEBUGIT	:= 1
