@@ -21,7 +21,7 @@
 | [Information] | |
 |:---        |:---
 | [Goals]    | [Design], [Builder], [Loader]
-| [Project]  | [References], [Contributions], [Contributing], [Licensing]
+| [Project]  | [References], [Contributing], [Licensing]
 | [Details]  | [Versioning], [Repository], [Tools], [Ecosystem]
 | [Release]  | [Process], [Checklist], [Publish]
 | [Versions] | [v6.0 2021-09-12], [v5.0 2021-08-04], [v4.0 2021-07-26], [(...)]
@@ -1310,8 +1310,6 @@ References to this section:
     * [Loader] directories and `rc-update`
   * [Design]
     * [Linux Kernel] parameters
-  * [Contributions]
-    * Parameter -- `groot_size`
   * [Repository]
     * Heart and soul -- [gentoo/\_release]
 
@@ -1372,104 +1370,6 @@ counts.
   [Gentoo pamphlet]: https://download.sumptuouscapital.com/gentoo/fosdem2018/gentoo-fosdem2018-flyer.pdf
   [Random blog mention]: https://josesfreelinux.blogspot.com/2015/03
 
-### Contributions ##############################################################
-[Contributions]: #contributions
-
-This project tries to give back to the community as much as it can.
-
-  * [Linux Kernel] `shmem` patch
-  * [Funtoo] [Ego]
-  * [dwm]
-
-This is in addition to [Builder] and [GaryOS] itself.
-
-**Linux Kernel**
-
-The `shmem` subsystem manages 'tmpfs' for in-memory filesystems, including
-[Linux initramfs].  By default, half of system memory is reserved.  On a 4GB
-system, this is sometimes not enough room for a GaryOS [Filesystem] to unpack.
-For the [v4.0] rebuild of [Loader], a kernel patch was submitted to the Linux
-"mm" development team.
-
-  * Final
-    * [shmem_size_hack.patch]
-  * Initial
-    * [First shmem version]
-    * [Linux shmem submission v1] ([shmem v1 patch])
-    * [Linux shmem submission v2] ([shmem v2 patch])
-    * [Linux shmem submission v3] ([shmem v3 patch])
-
-Alas, all three were rejected from the mainline kernel for perfectly good
-reasons.  This patch was replaced with `groot_size` in [v7.0] (see [Filesystem]
-and [Loader]).
-
-**Funtoo Ego**
-
-[Ego] keeps the [Funtoo] [meta-repo] tree up to date.  [Funtoo Kits] builds the
-monolithic Portage tree from a collection of smaller [Git] repositories.  The
-[gentoo/\_funtoo.kits] script was written to properly set the final tree to
-a particular commit for stability and reproducibility.  For the [v4.0] release,
-this hack was coded directly into Ego.
-
-  * Current
-    * [gentoo/\_funtoo.kits]
-  * Initial
-    * [Funtoo Ego submission] ([ego_commit_hack.patch] in [gentoo/overlay/])
-
-The [gentoo/\_funtoo.kits] script has two important advantages over Ego.
-
-  1. It can run directly on Git repositories without requiring Funtoo
-  2. Kits repositories are stored in `.git` rather than the [meta-repo] tree
-
-The second feature is important to keep the [meta-repo] tree as small as
-possible while preserving the ability to archive all the Git information in
-`meta-repo.git`.
-
-This was submitted upstream with no response.  Given the rate of changes to the
-Ego tool, and the advantages of [gentoo/\_funtoo.kits] over it, this patch was
-retired starting in [v6.0].
-
-**Suckless dwm**
-
-Tangentially related to GaryOS are patches the author uses to make multiple
-monitors more effective in dwm.  [Suckless] accepts patches as entries on their
-website.
-
-  * Current
-    * [dwm multimon patches]
-  * Initial
-    * [dwm multimon submission]
-        * [added monitor marker to bar]
-        * [added n*view wrappers, for unified multi-monitor]
-        * [added reset_view function]
-        * [added statusall toggle, replacing need for patch]
-
-GaryOS uses dwm for [GUI] with a slightly modified configuration in
-[gentoo/savedconfig/x11-wm/dwm], but does not implement the above patches.
-
-  [First shmem version]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/shmem-add-shmem_size-option-set-filesystem-size.v4.18-rc6.patch
-  [Linux shmem submission v1]: https://marc.info/?l=linux-mm&m=157048756423988
-  [Linux shmem submission v2]: https://marc.info/?l=linux-mm&m=157056583814243
-  [Linux shmem submission v3]: https://marc.info/?l=linux-mm&m=157064677005638
-  [shmem v1 patch]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/shmem-add-shmem_size-option-set-filesystem-size.v5.4-rc2.patch
-  [shmem v2 patch]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/shmem-add-shmem_size-option-for-full-filesystem.v5.4-rc2.patch
-  [shmem v3 patch]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/shmem-make-shmem-default-size-a-define-value.v5.4-rc2.patch
-  [shmem_size_hack.patch]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/shmem-add-shmem_size-option-set-filesystem-size.v5.4-rc2.v5.6_updated.patch
-
-  [Funtoo]: https://www.funtoo.org
-  [Ego]: https://funtoo.org/Package:Ego
-  [Funtoo Kits]: https://www.funtoo.org/Funtoo_Kits
-  [meta-repo]: https://github.com/funtoo/meta-repo
-  [Funtoo Ego submission]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches/add-commit-option-to-ego-sync.2.7.4-r1.patch
-  [gentoo/\_funtoo.kits]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_funtoo.kits
-
-  [dwm multimon patches]: http://dwm.suckless.org/patches/historical/multimon
-  [dwm multimon submission]: https://lists.suckless.org/dev/1403/20488.html
-  [added monitor marker to bar]: https://github.com/garybgenett/.dwm/commit/143e7f2f3caa047469c7219cd6b0cb704466683f
-  [added n*view wrappers, for unified multi-monitor]: https://github.com/garybgenett/.dwm/commit/2521a74714bb7c4b8787f30584f1565cc582928b
-  [added reset_view function]: https://github.com/garybgenett/.dwm/commit/b9f79c3dd07b285e974b2dfdf2371a72467539bb
-  [added statusall toggle, replacing need for patch]: https://github.com/garybgenett/.dwm/commit/d318ffdc7ab7a365e548776a1d8ed5ccbd67cd42
-
 ### Contributing ###############################################################
 [Contributing]: #contributing
 
@@ -1524,7 +1424,7 @@ predicated by a few factors.
   * Proliferation of software patents and intellectual property enforcement
   * GaryOS is written entirely in interpreted and not compiled languages
   * It is unlikely that any proprietary software will be based on GaryOS
-  * Patches are sometimes submitted to GPL projects (see [Contributions])
+  * Patches are sometimes submitted to GPL projects
 
 For further details, see the current [License] or the licenses for the
 individual [Versions].
@@ -1589,7 +1489,7 @@ Here is an overview of the repository contents, in order of relative importance:
   | [gentoo/overlay/]        | Version management and fixing broken packages
   | [scripts/]               | [GRUB] and [QEMU]
   | [artifacts/files/]       | [Loader] scripts and [Image] configuration files
-  | [artifacts/patches/]     | [GaryOS] improvements (see [Contributions])
+  | [artifacts/patches/]     | [GaryOS] features and improvements
   | [artifacts/archive/]     | Miscellaneous stash space, including [References]
   | [artifacts/images/]      | Icons and screenshots
 
@@ -2183,7 +2083,6 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 
   * `cd coding/gary-os`
   * `vi ./README.md`
-    * [ ] Update links for [Contributions] patches
     * [ ] [Kernel], [Rootfs] and [Boot] links
     * [ ] [Versions] list in [Header](#welcome-to-garyos)
     * [ ] [Versions] section and release notes
