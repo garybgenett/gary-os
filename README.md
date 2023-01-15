@@ -1755,8 +1755,10 @@ Everything needed to perform these steps is in the [Repository] or the
         * `(cd _build/gentoo/gentoo; git pull; GIT_PAGER= git-list -n1)`
         * `(cd _build/gentoo/gentoo; ll ./sys-kernel/gentoo-sources)`
         * `(cd _build/gentoo/gentoo; ll ./sys-kernel/gentoo-kernel)`
-    * `vi ./gentoo/_funtoo`
-        * [ ] Update [Gentoo] commit
+    * `vi ./gentoo/_release`
+        * [ ] Update `${_VERSN}` number
+        * `vi ./gentoo/_funtoo`
+            * [ ] Update [Gentoo] commit
         * `vi ./gentoo/sets/*`
             * [ ] [Linux Kernel] versions
             * [ ] Review
@@ -1835,8 +1837,6 @@ Everything needed to perform these steps is in the [Repository] or the
 **`}`**
 
   * `cd .setup/gentoo.gary-os`
-    * `(cd .setup; vi gentoo/_release)`
-    * [ ] Update `${_VERSN}` number
   * [x] **Validate( 210MB 240MiB DOMODS=true devel )**
     * [ ] Minimized build note in `/etc/issue`
     * [ ] No `startx` in `/etc/issue`
