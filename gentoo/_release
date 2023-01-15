@@ -17,7 +17,7 @@ fi
 
 export _GNAME="GaryOS"
 export _TITLE="gary-os"
-export _VERSN="v6.0"
+export _VERSN="v7.0"
 export _RDATE="$(date --iso=date)"
 
 export _FINAL="${TARGET}/.${_TITLE}-${ESUB}"
@@ -78,6 +78,7 @@ RELEASE[7]="v4.0"; CMTHASH[7]="428ed8058597a3530ec2d0207dda6ffed6082c0f"
 RELEASE[8]="v5.x"; CMTHASH[8]="c769c14a73b53c741ef95ff21b88d752c18e474e"
 RELEASE[9]="v5.0"; CMTHASH[9]="198fea2f4636949dad11ae710192e3fdb59ec446"
 RELEASE[10]="v6.0"; CMTHASH[10]="6ab204b331ef4d6a5dc3fcc8c817b72147207af8"
+RELEASE[11]="v7.0"; CMTHASH[11]="3e7b42964d34777a8d644b4602ea36132a8a6124"
 
 declare -a RELEASE_SKIP=(8)
 
