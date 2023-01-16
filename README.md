@@ -120,11 +120,8 @@ supported.  See [Checklist] for details on the final testing done every release.
 
 While there appears to be some adoption of GaryOS, it is not yet enough to
 warrant a formal ticket system.  For any issues, or to share the creative ways
-you are using GaryOS, please contact the author directly at:
-[gary-os@garybgenett.net]
-
-The author will also take you out on the town if you schedule time to geek out
-with them in the Seattle area.
+you are using GaryOS, please contact the author directly at
+[gary-os@garybgenett.net].
 
 ### Issues #####################################################################
 [Issues]: #issues
@@ -724,7 +721,7 @@ in [Portage] that it is desired to use for the packages repository.
 Make any desired Portage package selection and configuration changes, and then
 start the build with `make init`.  By default, the base GaryOS [Kernel] package
 list and configuration is used.  The full [Rootfs] build can be done with `make
-P=\_gary-os init`.  If so, be sure to add `P=\_gary-os` in all the rest of the
+P=_gary-os init`.  If so, be sure to add `P=_gary-os` in all the rest of the
 steps as well.
 
 The initial build is where errors are most likely to occur.
@@ -814,7 +811,7 @@ process.
 The `update` target is completely automated, but `upgrade` requires interaction
 at various steps to accept updates or confirm configuration file changes.
 
-At the end of `upgrade`, the `/\_gentoo` directory is updated with information
+At the end of `upgrade`, the `/_gentoo` directory is updated with information
 to aid in the maintenance of a healthy system.  See [Builder] for details.
 
 ### Image ######################################################################
@@ -1026,7 +1023,7 @@ As for the overall system, all configuration files for the [Linux Kernel] and
   | [Portage]          | [gentoo/]
   | [Portage Overlays] | [gentoo/overlay/]
 
-Finally, the `root` password is set to `gary-os`.
+Finally, the `root` password is set to `p@ssw0rd!`.
 
   [Gentoo Installation Guide]: https://wiki.gentoo.org/wiki/Handbook:AMD64/Full/Installation
   [OpenRC]: https://wiki.gentoo.org/wiki/OpenRC
@@ -1142,7 +1139,7 @@ Type `make usage` (basic) or `make help` (advanced) to get started.
   | [Makefile]             | Wrapper around the other components
   | [gentoo/\_system]      | Worker for all of [Building] (core of [Builder])
   | [gentoo/\_funtoo]      | [Gentoo] [Portage] commit tracking
-  | [gentoo/.emergent]     | Audit script which creates `/\_gentoo` directory
+  | [gentoo/.emergent]     | Audit script which creates `/_gentoo` directory
   | [gentoo.config]        | Optional customization for 'edit' in [Compile]
 
 **Build Tuning**
@@ -1154,19 +1151,19 @@ similar tuning, and are self-explanatory.  The full list is at the top of
 
 **Build Output**
 
-The `/\_build` directory is created by [Compile], which archives the [Linux
+The `/_build` directory is created by [Compile], which archives the [Linux
 Kernel] and [Portage] configurations, along with the [stage3] tarball and
 [Portage] tree used.  The purpose of this directory is to centralize everything
 needed to reproduce the build.
 
-After [Compile] or [Manage], the `/\_gentoo` directory will be created by
+After [Compile] or [Manage], the `/_gentoo` directory will be created by
 [gentoo/.emergent].  It performs a number of checks of the [Portage]
 configuration and the installed system.  The results are in the
-`/\_gentoo/+checks` text file.  This file is very helpful in keeping a Portage
+`/_gentoo/+checks` text file.  This file is very helpful in keeping a Portage
 configuration in line with upstream, particularly the addition or removal of
 `$USE` flags.
 
-The `/\_gentoo.log` file is created every [Compile].  It contains the complete
+The `/_gentoo.log` file is created every [Compile].  It contains the complete
 output of the build, for troubleshooting.  Please include this file when
 reporting any issues (see [Support]).
 
@@ -1199,7 +1196,7 @@ References to this section:
     * Init -- Strategies for build breaks
     * Edit -- [gentoo.config]
   * [Manage]
-    * Upgrade -- `/\_gentoo`
+    * Upgrade -- `/_gentoo`
   * [Repository]
     * Heart and soul -- [gentoo/\_system]
     * Audit script and information -- [gentoo/.emergent]
