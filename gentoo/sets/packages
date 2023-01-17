@@ -268,7 +268,6 @@ dev-vcs/git
 sys-apps/thunderbolt-software-user-space
 
 net-wireless/bluez
-net-wireless/bluez-hcidump
 net-wireless/bluez-tools
 
 app-forensics/cmospwd
@@ -418,7 +417,7 @@ x11-plugins/gkrellaclock
 x11-plugins/gkrellsun
 x11-plugins/gkrellweather
 
-net-im/discord-bin
+net-im/discord
 net-im/slack
 net-im/zoom
 
