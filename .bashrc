@@ -5196,7 +5196,8 @@ That's it!  Please see me with any comments or questions.
 END_OF_FILE
 	if [[ -f "${COMPOSER}" ]]; then
 		${MV} ${REPORT}.txt				${REPORT}.md
-		make -f "${COMPOSER}" -C "${REPORT_DIR}"	${REPORT}.txt
+		make -f "${COMPOSER}" -C "${REPORT_DIR}"	\
+			COMPOSER_DEBUGIT=1			${REPORT}.txt
 	fi
 	if [[ -f ${EMAIL_SIGN} ]]; then
 		echo -en "\n"					>>${REPORT}.txt
@@ -5209,7 +5210,8 @@ END_OF_FILE
 			echo -en "\t-- \n"			>>${REPORT}.md
 			${SED} "s|^|\t|g" ${EMAIL_SIGN}		>>${REPORT}.md
 		fi
-		make -f "${COMPOSER}" -C "${REPORT_DIR}"	${REPORT}.html
+		make -f "${COMPOSER}" -C "${REPORT_DIR}"	\
+			COMPOSER_DEBUGIT=1			${REPORT}.html
 		${SED} -i "/text\/css/d"			${REPORT}.html
 		${RM}						${REPORT_DIR}/.composed
 	fi
@@ -5900,6 +5902,7 @@ function task-export-text {
 		if (-f "${ENV{COMPOSER}}") {
 			my $compose = "make all"
 				. " -C ${ENV{PIMDIR}}"
+				. " COMPOSER_DEBUGIT=1"
 				;
 			if (system(${compose}) != 0) { die(); };
 			unlink(${ENV{PIMDIR}} . "/.composed") || warn();
@@ -6766,6 +6769,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			if [[ -f "${COMPOSER}" ]]; then
 				make all			\
 					-C "${PIMDIR}"		\
+					COMPOSER_DEBUGIT=1	\
 					COMPOSER_TARGETS="${FILES}"
 				declare ENTER=
 				read ENTER
