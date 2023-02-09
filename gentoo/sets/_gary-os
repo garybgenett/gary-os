@@ -441,6 +441,9 @@ net-mail/safecat
 mail-client/thunderbird
 www-client/firefox
 
+app-text/qpdfview
+app-text/xpdf
+
 net-misc/freerdp
 net-misc/tigervnc
 
