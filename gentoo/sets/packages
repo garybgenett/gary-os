@@ -392,6 +392,7 @@ media-gfx/inkscape
 app-office/libreoffice
 app-office/unoconv
 app-text/qpdfview
+app-text/xpdf
 
 app-text/calibre
 app-text/sdcv
