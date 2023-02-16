@@ -3466,6 +3466,25 @@ function mount-zfs {
 
 ########################################
 
+function loopit {
+	declare OPEN="$(alias | ${SED} -n "s|^alias[ ]open=['](.+)[']$|\1|gp")"
+	if [[ -z "${@}" ]]; then
+		${LS} | while read -r FILE; do
+			${MV} -i "${FILE}" "${FILE//\ /_}"
+		done
+	elif [[ -n "${OPEN}" ]]; then
+		${LL} *"${@}"*
+		${LS} *"${@}"* | while read -r FILE; do
+			echo -en "-- ${FILE}\n"
+			(${OPEN} "${FILE}" &)
+			sleep 1
+		done
+	fi
+	return 0
+}
+
+########################################
+
 function organize {
 	declare SEARCH="\*"
 	declare ORGANIZE="_mission"
