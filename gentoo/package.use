@@ -31,6 +31,7 @@ sys-process/atop			-modules	# gentoo required: make[1]: *** /lib/modules/<uname 
 
 ########################################
 
+app-emulation/libvirt			libvirtd	# gentoo required
 app-text/texlive-core			xetex		# gentoo required
 app-text/xmlto				text		# gentoo required
 dev-libs/xmlsec				gcrypt		# gentoo required
@@ -111,6 +112,7 @@ dev-libs/openssl			rfc3779
 dev-vcs/git				tk
 mail-client/mutt			-tokyocabinet gpg hcache sasl sidebar smime smtp
 mail-client/thunderbird			-crypt -lightning -wifi ldap	# installing "enigmail" and "lightning" plugins manually
+mail-mta/msmtp				mta
 media-libs/libprojectm			qt5
 media-sound/pulseaudio			bluetooth daemon
 media-sound/pulseaudio-daemon		alsa bluetooth dbus oss
@@ -134,10 +136,6 @@ x11-base/xorg-server			xnest xvfb
 x11-terms/rxvt-unicode			fading-colors focused-urgency font-styles mousewheel perl
 x11-wm/dwm				savedconfig
 
-app-emulation/libvirt			libvirtd	# gentoo required
-mail-mta/msmtp				mta		# gentoo required: replace mail-mta/nullmailer
-sys-apps/fwupd				minimal		# gentoo required: ( sys-apps/systemd | sys-auth/elogind ) -> sys-auth/polkit (!systemd ? sys-auth/elogind)
-
 */*					-tpm
 
 mail-client/thunderbird			-bindist
@@ -157,6 +155,7 @@ sys-libs/ncurses			tinfo
 */*					-spidermonkey	# requires: dev-lang/spidermonkey
 app-accessibility/espeak-ng		-man		# requires: app-text/ronn -> dev-lang/ruby
 dev-util/librnp				-man		# requires: dev-ruby/asciidocto -> dev-lang/ruby
+sys-apps/fwupd				minimal		# requires: ( sys-apps/systemd | sys-auth/elogind )
 
 ################################################################################
 
