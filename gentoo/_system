@@ -1574,7 +1574,12 @@ elif [[ ${1} == -U ]]; then
 		${FUN_GIT} pull --ff-only --all					|| EXIT 1
 		${FUN_GIT} checkout --force ${MARK}				|| EXIT 1
 		${FUN_GIT} reset --hard ${MARK}					|| EXIT 1
+		echo -en "\n"
+		echo -en ">>> REBUILDING GENTOO PORTAGE TREE METADATA <<<\n"
+		echo -en ">>> IT IS NORMAL FOR THIS TO TAKE SEVERAL MINUTES <<<\n"
+		echo -en "\n"
 		expect_wrapper egencache --verbose				\
+			--jobs ${CPUS}						\
 			--repo gentoo						\
 			--update						\
 			--update-manifests					\
