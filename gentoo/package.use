@@ -31,7 +31,6 @@ sys-process/atop			-modules	# gentoo required: make[1]: *** /lib/modules/<uname 
 
 ########################################
 
-app-emulation/libvirt			libvirtd	# gentoo required
 app-text/texlive-core			xetex		# gentoo required
 app-text/xmlto				text		# gentoo required
 dev-libs/xmlsec				gcrypt		# gentoo required
@@ -100,7 +99,7 @@ sys-apps/busybox			-pam		# gentoo required
 
 app-arch/p7zip				-rar
 app-editors/vim				-X gpm
-app-emulation/libvirt			-libvirtd lxc qemu
+app-emulation/libvirt			lxc qemu
 app-emulation/qemu			ncurses sdl spice
 app-emulation/spice			client gui
 app-emulation/virt-viewer		-libvirt spice vnc
@@ -111,7 +110,7 @@ app-office/libreoffice			java
 dev-libs/openssl			rfc3779
 dev-vcs/git				tk
 mail-client/mutt			-tokyocabinet gpg hcache sasl sidebar smime smtp
-mail-client/thunderbird			-crypt -lightning -wifi ldap	# installing "enigmail" and "lightning" plugins manually
+mail-client/thunderbird			-wifi ldap
 mail-mta/msmtp				daemon mta
 media-libs/libprojectm			qt5
 media-sound/pulseaudio			bluetooth daemon
