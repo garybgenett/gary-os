@@ -1933,15 +1933,15 @@ gentoo-sources-5.15.78.ebuild
 diff :: x11-plugins/gkrellaclock [rationale] ===========================================================================
 # custom patch
 Error: 'gkrellm_init_plugin': /usr/lib64/gkrellm2/plugins/gkrellaclock.so: undefined symbol: gkrellm_init_plugin
-# 2022-03-03 22:20:27 +0100 f46bd80082128d385618cbb0476e6bcc3d25c670 x11-plugins/gkrellaclock: destabilise for ppc
+# 2023-02-17 12:35:47 -0600 ecfda677d2479a95569550bc52a5d516c4a181bd net-analyzer/icinga2: add 2.13.7
 diff :: x11-plugins/gkrellaclock [source] ==============================================================================
 diff :: x11-plugins/gkrellaclock [target] ==============================================================================
 Only in ./x11-plugins/gkrellaclock: .keep
 Only in ./x11-plugins/gkrellaclock: .rationale
 Only in ./x11-plugins/gkrellaclock: .source
 diff -u -U10 -r ./x11-plugins/gkrellaclock/.source/Manifest ./x11-plugins/gkrellaclock/Manifest
---- ./x11-plugins/gkrellaclock/.source/Manifest	2022-11-14 21:14:58.184284302 -0000
-+++ ./x11-plugins/gkrellaclock/Manifest	2022-11-25 19:22:02.007145960 -0000
+--- ./x11-plugins/gkrellaclock/.source/Manifest	2023-02-17 20:35:53.555588777 -0000
++++ ./x11-plugins/gkrellaclock/Manifest	2023-02-18 09:43:34.641644749 -0000
 @@ -1 +1,13 @@
 +AUX _gkrellaclock.c 33385 BLAKE2B 16d9a7fdfe2031dfa3544964b55c6eed046d4e764ca62f09ea94d2cee06756cab8344c52caca240f9c9bd7f2cf1da2fdda3242210636f2597b336efcaae89abc SHA512 fc5c8b50ed8785d5581108d594904c098e16b2987b92b60cd695149804060181dabe807bb2d7810968d199ba0293f4bde21dbefee05261e160ba92055ce7458a
 +AUX gkrellaclock-makefile.fixed.patch 1410 BLAKE2B dd4fe1afd745130530a8d55cd3dbae1e2dfeafc997558808c58a97542b6aaf912043e99da2d328a492d71e5b25e080b2d2a8585f6283881cad558b4884b91b18 SHA512 bc08265f1a096a92200f832a3405947feab67b62852c42552ec751e91a4ba1ad9e4372e7c0dcad42b8ca03cd0dadfb847b0ce731a8acc0074ca73c808ac62539
@@ -1955,7 +1955,7 @@ diff -u -U10 -r ./x11-plugins/gkrellaclock/.source/Manifest ./x11-plugins/gkrell
 +AUX xclock_size_hack.patch.2012-04-06 11760 BLAKE2B 5a83af31642f163ea29d662032b325939d807da1378e06ea5a2672d7c9852158fb7542b103b55ffa3d3696685d61f24c238b8130a7bb4209c1663c0a20e63b2d SHA512 b03848e524a29fab6f2b55f588c07ed3dad03a41dad4194d28fe937e624d033c318ee6ccc7f1600b9fbc21de7462d786227281e9168bf0b884494eafcee0bdaf
 +AUX xclock_size_hack.patch.2017-08-29 11946 BLAKE2B 47a9a2cba27c1a63484405d17cc4e64e2662641a22e86cb6ae39d17ab7b5fde1e18bfc1ec64f88f8796fa2e57e9992a1a8b041b6ae196d6dccc7a35c51dacb7a SHA512 21ebd90820efb2e4bec5f8432ee5a4cc15748ab4163a24103e3eae061b5792123b24400b76cbd7533799bf64d46b6b3128778bb428350cdf0c0edc33394d287e
  DIST gkrellaclock-0.3.4.tar.gz 18853 BLAKE2B b91b4cb9ae42f68d3a3d430f7713170c788515280330a1f785f11d4335e859dbd6f840fb7e47fe8f77676bb55e97dda628fa79d442d4be8a37c69bcea836aa52 SHA512 2e6002bc4d535899cc8b86377d596bcee5e64d05fe4239eaab2de8e387a40b8dee600d9fcd5f30feb68bb3e54bf6b4745d4c7b79ea9fee57b856eeb3dac12524
-+EBUILD gkrellaclock-0.3.4-r9999.ebuild 838 BLAKE2B c86ebc87dc2fe65aa657c3586d3bc20c464825baeec4c1c1a39b42789f278bfea07b4d3d6a823d3ba41e26dc4e8147f12e105b9051721828b580871f8ea42c45 SHA512 81284f878ab1020c5d60f43ce7fa738056b396dce1739ce7eaae62d65668b938e4f340e42ceb67fc847c733d1431583c11c813b2145005b575e3406b998b83e3
++EBUILD gkrellaclock-0.3.4-r9999.ebuild 817 BLAKE2B 0a7473885d8418e7761e870c9966fadf01f049967293a1b7476f8d7bad8479ce529490432efebd0faa3273469d7974ba21a1593e858acd504d5ae7c9a791c1f6 SHA512 a766bed7bf7ea1d3ac424bea37a78154c8e43f1837db2a628781838c300d96f96245e0a6ed26a7b990c6cf8fdb47a65c3ab85515728c599afd6ff995d29bc13f
 Only in ./x11-plugins/gkrellaclock/files: _gkrellaclock.c
 Only in ./x11-plugins/gkrellaclock/files: gkrellaclock-makefile.fixed.patch
 Only in ./x11-plugins/gkrellaclock/files: gkrellaclock.c
@@ -1967,11 +1967,11 @@ Only in ./x11-plugins/gkrellaclock/files: xclock_size_hack.patch.2012-04-04
 Only in ./x11-plugins/gkrellaclock/files: xclock_size_hack.patch.2012-04-06
 Only in ./x11-plugins/gkrellaclock/files: xclock_size_hack.patch.2017-08-29
 Only in ./x11-plugins/gkrellaclock: files-patches
-Only in ./x11-plugins/gkrellaclock/.source: gkrellaclock-0.3.4-r1.ebuild
+Only in ./x11-plugins/gkrellaclock/.source: gkrellaclock-0.3.4-r2.ebuild
 Only in ./x11-plugins/gkrellaclock: gkrellaclock-0.3.4-r9999.ebuild
 Only in ./x11-plugins/gkrellaclock/.source: metadata.xml
 diff :: x11-plugins/gkrellaclock [files] ===============================================================================
-#>>> PATCHES=( "${FILESDIR}"/${PN}-makefile.patch )
+#>>>	"${FILESDIR}"/${PN}-makefile.patch
 	"${FILESDIR}"/${PN}-makefile.fixed.patch
 	"${FILESDIR}"/xclock_size_hack.patch
 
