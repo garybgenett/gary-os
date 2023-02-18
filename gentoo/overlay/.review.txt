@@ -1930,6 +1930,31 @@ gentoo-sources-5.10.154.ebuild
 gentoo-sources-5.15.78.ebuild
 
 ------------------------------------------------------------------------------------------------------------------------
+diff :: virtual/dist-kernel [rationale] ================================================================================
+# version archiving
+# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
+diff :: virtual/dist-kernel [source] ===================================================================================
+diff :: virtual/dist-kernel [target] ===================================================================================
+Only in ./virtual/dist-kernel: .keep
+Only in ./virtual/dist-kernel: .rationale
+Only in ./virtual/dist-kernel: .source
+Only in ./virtual/dist-kernel: Manifest
+Only in ./virtual/dist-kernel: dist-kernel-5.10.154.ebuild
+Only in ./virtual/dist-kernel/.source: dist-kernel-5.10.167.ebuild
+Only in ./virtual/dist-kernel/.source: dist-kernel-5.10.168.ebuild
+Only in ./virtual/dist-kernel: dist-kernel-5.15.78.ebuild
+Only in ./virtual/dist-kernel/.source: dist-kernel-5.15.94.ebuild
+Only in ./virtual/dist-kernel/.source: dist-kernel-5.4.231.ebuild
+Only in ./virtual/dist-kernel/.source: dist-kernel-6.1.12.ebuild
+Only in ./virtual/dist-kernel/.source: metadata.xml
+diff :: virtual/dist-kernel [files] ====================================================================================
+
+./virtual/dist-kernel:
+Manifest
+dist-kernel-5.10.154.ebuild
+dist-kernel-5.15.78.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
 diff :: x11-plugins/gkrellaclock [rationale] ===========================================================================
 # custom patch
 Error: 'gkrellm_init_plugin': /usr/lib64/gkrellm2/plugins/gkrellaclock.so: undefined symbol: gkrellm_init_plugin
