@@ -239,7 +239,7 @@ for TOKEN in $(cat ${GENDIR}/emerge.use); do
 				>>${GENDIR}/use.missing.global
 		else
 			grep_token "[:]${TOKEN}[ ][-]" ${REPDIR}/profiles/use.local.desc |
-				${GREP} -v "$(${SED} -n "s/^([^[:space:]]+)[[:space:]].*(${TOKEN}).*$/\1:\2/gp" ${ETCDIR}/package.use)" |
+				${GREP} -v "$(${SED} -n "s/^([^[:space:]]+)[[:space:]].*(${TOKEN}).*$/\1:\2/gp" ${ETCDIR}/package.use)" 2>/dev/null |
 				sort \
 				>>${GENDIR}/use.missing.local
 		fi
@@ -340,7 +340,7 @@ for FILE in $(
 done
 echo -en "."
 
-if [[ -x $(which WORK-eix-test-obsolete 2>/dev/null) ]]; then
+if [[ -x $(which eix-test-obsolete 2>/dev/null) ]]; then
 	echo -en "\n"					>>${GENDIR}/+checks 2>&1
 	echo -en "[eix]"				>>${GENDIR}/+checks 2>&1
 	echo -en "\n"					>>${GENDIR}/+checks 2>&1
