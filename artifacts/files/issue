@@ -6,14 +6,13 @@
 
 \e[1;34m ${_GNAME} Version:	\e[1;36m ${_VERSN}
 \e[1;34m ${_GNAME} Release Date:	\e[1;36m ${_RDATE}
-\e[1;34m Funtoo Commit Date:	\e[1;36m ${FUNDAT}
-\e[1;34m Funtoo Commit:		\e[1;36m ${FUNTOO}
+\e[1;34m Gentoo Commit Date:	\e[1;36m ${FUNDAT}
+\e[1;34m Gentoo Commit:		\e[1;36m ${FUNTOO}
 \e[1;34m Linux Kernel:		\e[1;36m ${KVER}
 
 \e[1;37m For source code, documentation and issues...
 
 \e[1;34m ${_GNAME}:		\e[1;36m github.com/garybgenett/gary-os
-\e[1;34m Funtoo Linux:		\e[1;36m funtoo.org
 \e[1;34m Gentoo Linux:		\e[1;36m gentoo.org
 
 \e[1;37m Some helpful notes...
