@@ -1390,6 +1390,8 @@ function git-export {
 	if [[ ! -d ${EXP_DIR}/.${EXP_NAM} ]]; then
 		${MKDIR} ${EXP_DIR}/.${EXP_NAM}			|| return 1
 		(cd ${EXP_DIR}/.${EXP_NAM} && ${GIT} init)	|| return 1
+		(cd ${EXP_DIR}/.${EXP_NAM} &&			\
+			${GIT} --move master main)		|| return 1
 	fi
 	for FILE in "${@}"; do
 		declare NAM="$(echo "${FILE}" | cut -d: -f1)"
@@ -1527,7 +1529,8 @@ function git-purge {
 		--original "refs/${FUNCNAME}" \
 		--parent-filter "[ ${PURGE} = \$GIT_COMMIT ] || cat" \
 		HEAD							|| return 1
-	${GIT} update-ref -d refs/${FUNCNAME}/refs/heads/master		|| return 1
+	${GIT} update-ref -d refs/${FUNCNAME}/refs/heads/master		||
+	${GIT} update-ref -d refs/${FUNCNAME}/refs/heads/main		|| return 1
 #>>>	${RM} ${DIR}.git/refs/${FUNCNAME}				|| return 1
 	git-clean							|| return 1
 	return 0
