@@ -477,9 +477,10 @@ alias rsync="${RSYNC_U}"
 ########################################
 
 export RCLONE_C="reporter rclone"
+#>>	-vv \
 #>>>	--fast-list \
 export RCLONE_U="${RCLONE_C} \
-	-vv \
+	-v \
 	--config ${HOME}/.rclone.conf \
 	--progress \
 	--one-file-system \
