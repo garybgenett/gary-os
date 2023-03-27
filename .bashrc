@@ -5098,8 +5098,7 @@ function task-export-drive-sync {
 		${GDRIVE_REMOTE}:/ \
 		/.g/_data/zactive/_drive \
 		&&
-	${RCLONE_C} about ${GDRIVE_REMOTE}: &&
-	echo "SUCCESS!"
+	${RCLONE_C} about ${GDRIVE_REMOTE}:
 	${LL} \
 		/.g/_data/zactive/_drive/_sync \
 		$(find /.g/_data/zactive/_drive/_sync -mindepth 1 -maxdepth 1 ! -type l)
