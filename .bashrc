@@ -3308,7 +3308,7 @@ function mount-zfs {
 			zfs_pool_status ${Z_ITEMS[@]}
 		else
 			echo -en "\n"
-			zfs_pool_status ${ZPOOL} ${DIR} ${@}
+			zfs_pool_status ${ZPOOL} ${DIR/#-} ${@}
 		fi
 		return 0
 	fi
