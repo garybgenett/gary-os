@@ -1859,6 +1859,16 @@ Everything needed to perform these steps is in the [Repository] or the
   * [x] [Checklist]
   * [x] [Publish]
 
+**Rolling Builds**
+
+  * `cd .setup/gentoo.make`
+    * `(cd _builds; rm ./_gentoo.working; ln ../../_toor ./_gentoo.working)`
+        * `(cd _build/gentoo/gentoo; git pull; GIT_PAGER= git-list -n1)`
+    * `vi ./gentoo/_funtoo`
+        * [ ] Update [Gentoo] commit
+    * `rm ./build/_build/gentoo-repo.* ./build/var/db/repos/gentoo*.tar.xz`
+    * `make DOREDO=true doit`
+
 ### Checklist ##################################################################
 [Checklist]: #checklist
 
