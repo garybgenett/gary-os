@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 source ${HOME}/.bashrc
+umask 022
 set -e
 ################################################################################
 # ./.pandoc_ebuilds.sh =
