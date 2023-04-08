@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 source ${HOME}/.bashrc
+umask 022
 ################################################################################
 
 #NOTE: ASSUMING LOCATION AND NAME OF THE "_SYSTEM" SCRIPT
