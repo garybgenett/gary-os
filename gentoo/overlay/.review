@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 source ${HOME}/.bashrc
+umask 022
 ################################################################################
 
 #>>> git-commit -- $(git-status gentoo/overlay 2>/dev/null | grep "<category>/<package>" | cut -d':' -f2 | sed "s|->.+$||g")
