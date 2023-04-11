@@ -128,6 +128,7 @@ sys-boot/grub
 sys-boot/os-prober
 sys-libs/efivar
 
+app-crypt/veracrypt
 #>>> app-forensics/sleuthkit		#{MOD} # requires: ( app-doc/doxygen | virtual/jdk | virtual/jre )
 sys-apps/gptfdisk
 sys-fs/cryptsetup
