@@ -13,6 +13,8 @@ sys-kernel/linux-firmware		no-source-code
 
 sys-apps/man-pages-posix		freedist
 
+app-crypt/veracrypt			truecrypt-3.0
+
 ########################################
 # programs
 

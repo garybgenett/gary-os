@@ -162,6 +162,7 @@ sys-power/nut
 sys-power/suspend
 sys-process/runit
 
+app-crypt/veracrypt
 app-forensics/sleuthkit
 sys-apps/gptfdisk
 sys-fs/cryptsetup
