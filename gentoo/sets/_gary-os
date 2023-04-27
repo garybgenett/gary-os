@@ -209,6 +209,7 @@ sys-fs/inotify-tools
 app-admin/sudo
 sys-libs/pam
 
+net-firewall/arptables
 net-firewall/ebtables
 net-firewall/iptables
 net-misc/bridge-utils

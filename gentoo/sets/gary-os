@@ -165,6 +165,7 @@ sys-process/time
 
 sys-libs/pam				#{MOD}
 
+net-firewall/arptables			#{MOD}
 net-firewall/ebtables			#{MOD}
 net-firewall/iptables			#{MOD}
 net-misc/bridge-utils			#{MOD}
