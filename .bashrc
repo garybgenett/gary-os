@@ -5023,14 +5023,14 @@ function task-export-calendar {
 		7z e -aoa -o${PIMDIR}/calendar-google $(ls -rt ${PIMDIR}/gary@tresobis.org.ical* | tail -n1)
 		${RM} ${PIMDIR}/gary@tresobis.org.ical*
 	fi
-	${WGET_C} --output-document \
-		${PIMDIR}/calendar-export.doodle.ics \
-		https://doodle.com/ics/mydoodle/j4afu5q0krixfr0gfm1iltcnl1rdpry9.ics
+#>>>	${WGET_C} --output-document \
+#>>>		${PIMDIR}/calendar-export.doodle.ics \
+#>>>		https://doodle.com/ics/mydoodle/j4afu5q0krixfr0gfm1iltcnl1rdpry9.ics
 #>>>		calendar-export.*.ics
+#>>>		calendar-export.doodle.ics
 	${SED} -i \
 		-e "s/^(DTSTAMP[:]).+$/\119700101T000000Z/g" \
-		calendar-google/*.ics \
-		calendar-export.doodle.ics
+		calendar-google/*.ics
 	sudo chown -vR plastic:plastic calendar*
 	sudo chmod -vR 750 calendar*
 	cd - >/dev/null
