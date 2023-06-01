@@ -1722,16 +1722,16 @@ Everything needed to perform these steps is in the [Repository] or the
 
 **Personal Build**
 
-**`Iterate {`**
+*`Iterate {`*
 
   * `make DOFAST=true doit`
-    * [x] **Errors()**
+    * [x] *Errors()*
   * `make gendir`
     * `vi ./build/_gentoo/+checks`
 
-**`}`**
+*`}`*
 
-**`Errors {`**
+*`Errors {`*
 
    * `make <package atom>`
      * [ ] Copy "gentoo browse" link to browser
@@ -1743,7 +1743,7 @@ Everything needed to perform these steps is in the [Repository] or the
      * `(cd _build/gentoo/gentoo; vdiff -l -20 -- <package atom>)`
    * `make emerge-<package atom|/|%>`
 
-**`}`**
+*`}`*
 
   * `cd .setup/gentoo.make`
     * `(cd _builds; rm ./_gentoo.working; ln ../../_toor ./_gentoo.working)`
@@ -1779,7 +1779,7 @@ Everything needed to perform these steps is in the [Repository] or the
     * [ ] Until `@world`, at least
         * `while :; do make DOFAST=true init; inotifywait --event modify gentoo/make.* gentoo/package.* gentoo/sets/*; done`
         * `(cd .setup; vi gentoo/make.* gentoo/package.* gentoo/sets/*; vdiff -g gentoo/make.* gentoo/package.* gentoo/sets/*)`
-    * [x] **Iterate()**
+    * [x] *Iterate()*
   * `./linux/_config ./build/usr/src/linux`
         * `rsync $(realpath ./linux/.default) ./build/usr/src/linux/.config`
         * `chroot ./build bash -c "(cd /usr/src/linux && make olddefconfig)"`
@@ -1791,9 +1791,9 @@ Everything needed to perform these steps is in the [Repository] or the
   * `cd .setup/gentoo.make`
     * `(cd .setup; git-commit ./linux ./gentoo)`
   * `make doit`
-    * [x] **Iterate()**
+    * [x] *Iterate()*
   * `make redo`
-    * [x] **Iterate()**
+    * [x] *Iterate()*
     * `(cd _builds; rsync ../../_toor/ ./_gary-os.working)`
   * `make edit`
     * `(cd _builds; rm ./_gentoo.working; ln _gentoo ./_gentoo.working)`
@@ -1802,7 +1802,7 @@ Everything needed to perform these steps is in the [Repository] or the
         * `rsync [...]/_root/{.runit,.setup} [...]/_toor/`
     * [ ] Boot to "\_toor"
         * [ ] Smoke test for 2-3 weeks
-        * [x] **Iterate()**
+        * [x] *Iterate()*
         * `_sync _sys _clone _full _setup`
     * [ ] Boot to "gary-os"
         * `_sync _sys _chroot [...]`
@@ -1815,35 +1815,35 @@ Everything needed to perform these steps is in the [Repository] or the
 
 **GaryOS Build**
 
-**`Validate { <kernel> <check> <option> <target>`**
+*`Validate { <kernel> <check> <option> <target>`*
 
-  * `make` **`${3}`** `DOREDO=true doit` **`${4}`**
-    * [x] **Iterate()**
-  * [ ] Target size of **`${1}`** or less (`make check` = Total disk usage: **`${2}`**)
+  * `make` *`${3}`* `DOREDO=true doit` *`${4}`*
+    * [x] *Iterate()*
+  * [ ] Target size of *`${1}`* or less (`make check` = Total disk usage: *`${2}`*)
     * [ ] Command comments at bottom of [gentoo/package.use]
-        * `make` **`${3}`** `depends-<package atom|/|%>`
-        * `make` **`${3}`** `depgraph-<package atom|/|%>`
-        * `make` **`${3}`** `belongs-<file path|/|%>`
-    * `make` **`${3}`** `DOREDO=true DOFAST=true doit` **`${4}`**
-        * `make` **`${3}`** `check`
+        * `make` *`${3}`* `depends-<package atom|/|%>`
+        * `make` *`${3}`* `depgraph-<package atom|/|%>`
+        * `make` *`${3}`* `belongs-<file path|/|%>`
+    * `make` *`${3}`* `DOREDO=true DOFAST=true doit` *`${4}`*
+        * `make` *`${3}`* `check`
     * `ll ./build/.gary-os-*`
-  * `make` **`${3}`** `gendir`
+  * `make` *`${3}`* `gendir`
     * [ ] Command comments at bottom of [gentoo/make.conf]
     * `vi ./build/_gentoo/+checks`
 
-**`}`**
+*`}`*
 
   * `cd .setup/gentoo.gary-os`
-  * [x] **Validate( 210MB 240MiB DOMODS=true devel )**
+  * [x] *Validate( 210MB 240MiB DOMODS=true devel )*
     * [ ] Minimized build note in `/etc/issue`
     * [ ] No `startx` in `/etc/issue`
-  * [x] **Validate( 850MB 1.4GiB '' devel )**
+  * [x] *Validate( 850MB 1.4GiB '' devel )*
   * `make DOTEST=true devel`
     * [ ] Verify `#{rootfs}` markers
   * `make ROOTFS=false devel`
     * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1 -m 8192`
     * [ ] Test kernel size and root filesystem resize
-  * [x] **Validate( 1.8GB 3.4GiB P=**\_**gary-os rootfs )**
+  * [x] *Validate( 1.8GB 3.4GiB P=*\_*gary-os rootfs )*
   * `(cd .setup; git-commit ./gentoo)`
   * `make DOREDO=true doit devel`
 
@@ -1861,6 +1861,12 @@ Everything needed to perform these steps is in the [Repository] or the
 
 **Rolling Builds**
 
+*`Retry {`*
+
+   * `make DOFAST=true init`
+
+*`}`*
+
   * `cd .setup/gentoo.make`
     * `(cd _builds; rm ./_gentoo.working; ln ../../_toor ./_gentoo.working)`
         * `(cd _build/gentoo/gentoo; git pull; GIT_PAGER= git-list -n1)`
@@ -1868,6 +1874,7 @@ Everything needed to perform these steps is in the [Repository] or the
         * [ ] Update [Gentoo] commit
     * `rm ./build/_build/gentoo-repo.* ./build/var/db/repos/gentoo*.tar.xz`
     * `make DOREDO=true doit`
+        * [x] *Retry()*
 
 ### Checklist ##################################################################
 [Checklist]: #checklist
