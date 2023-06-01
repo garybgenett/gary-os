@@ -33,6 +33,7 @@ sys-process/atop			-modules	# gentoo required [*]: make[1]: *** /lib/modules/<un
 
 app-text/texlive-core			xetex		# gentoo required
 app-text/xmlto				text		# gentoo required
+dev-libs/libpcre2			pcre32		# gentoo required
 dev-libs/xmlsec				gcrypt		# gentoo required
 dev-libs/xmlsec				nss		# gentoo required
 dev-python/PyQt5			declarative	# gentoo required
@@ -49,6 +50,7 @@ media-libs/libvpx			postproc	# gentoo required
 media-libs/opencv			contrib		# gentoo required
 media-libs/opencv			contribdnn	# gentoo required
 media-video/ffmpeg			vpx		# gentoo required
+media-video/ffmpeg			x265		# gentoo required
 net-dns/dnsmasq				script		# gentoo required
 net-libs/nodejs				inspector	# gentoo required
 net-libs/zeromq				drafts		# gentoo required

@@ -448,6 +448,7 @@ app-text/xpdf
 
 net-misc/freerdp
 net-misc/tigervnc
+x11-wm/xpra
 
 net-p2p/rtorrent
 
