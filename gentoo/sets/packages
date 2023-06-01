@@ -404,6 +404,7 @@ media-gfx/mcomix
 net-misc/freerdp
 net-misc/tigervnc
 x11-misc/x11vnc
+x11-wm/xpra
 
 app-mobilephone/scrcpy
 dev-util/android-tools
