@@ -50,7 +50,6 @@ media-libs/libvpx			postproc	# gentoo required
 media-libs/opencv			contrib		# gentoo required
 media-libs/opencv			contribdnn	# gentoo required
 media-video/ffmpeg			vpx		# gentoo required
-media-video/ffmpeg			x265		# gentoo required
 net-dns/dnsmasq				script		# gentoo required
 net-libs/nodejs				inspector	# gentoo required
 net-libs/zeromq				drafts		# gentoo required
@@ -138,6 +137,7 @@ x11-terms/rxvt-unicode			fading-colors focused-urgency font-styles mousewheel pe
 x11-wm/dwm				savedconfig
 
 */*					-tpm
+*/*					x265
 
 mail-client/thunderbird			-bindist
 www-client/firefox			-bindist
