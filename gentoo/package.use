@@ -27,6 +27,7 @@ media-video/ffmpeg			x264		# gentoo required
 sys-apps/fwupd				-introspection	# gentoo required
 sys-libs/gdbm				berkdb		# gentoo required
 
+sys-apps/coreutils			-gmp		# gentoo required [sys-apps/coreutils-9.3-r1]: configure: error: GMP not found, although --with-libgmp was specified. Try specifying --with-libgmp-prefix=DIR.
 sys-process/atop			-modules	# gentoo required [*]: make[1]: *** /lib/modules/<uname -r>/build: No such file or directory. Stop.
 
 ########################################
