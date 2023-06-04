@@ -52,7 +52,6 @@ media-libs/opencv			contribdnn	# gentoo required
 media-video/ffmpeg			vpx		# gentoo required
 net-dns/dnsmasq				script		# gentoo required
 net-libs/nodejs				inspector	# gentoo required
-net-libs/zeromq				drafts		# gentoo required
 sys-libs/zlib				minizip		# gentoo required
 
 ########################################
