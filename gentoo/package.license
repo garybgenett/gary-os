@@ -16,6 +16,11 @@ sys-apps/man-pages-posix		freedist
 app-crypt/veracrypt			truecrypt-3.0
 
 ########################################
+# x11
+
+media-libs/libva-intel-media-driver	no-source-code
+
+########################################
 # programs
 
 app-misc/atomicwallet			all-rights-reserved
