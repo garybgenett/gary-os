@@ -276,12 +276,19 @@ sys-kernel/genkernel
 ########################################
 # x11
 
+media-libs/libva
+media-libs/libva-intel-driver
+media-libs/libva-intel-media-driver
+media-video/libva-utils
+x11-apps/igt-gpu-tools
+
+x11-base/xorg-drivers
+x11-base/xorg-server
+
 app-misc/evtest
 x11-apps/xev
 x11-apps/xrandr
 x11-base/xorg-apps
-x11-base/xorg-drivers
-x11-base/xorg-server
 x11-misc/arandr
 x11-misc/xdg-utils
 
