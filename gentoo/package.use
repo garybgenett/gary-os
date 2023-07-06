@@ -6,6 +6,7 @@
 
 ################################################################################
 
+app-emulation/qemu			seccomp		# gentoo required
 app-office/libreoffice			dbus		# gentoo required
 app-text/poppler			cairo		# gentoo required
 app-text/poppler			qt5		# gentoo required
@@ -34,6 +35,7 @@ sys-process/atop			-modules	# gentoo required [*]: make[1]: *** /lib/modules/<un
 
 app-text/texlive-core			xetex		# gentoo required
 app-text/xmlto				text		# gentoo required
+dev-libs/libdbusmenu			gtk3		# gentoo required
 dev-libs/libpcre2			pcre32		# gentoo required
 dev-libs/xmlsec				gcrypt		# gentoo required
 dev-libs/xmlsec				nss		# gentoo required
