@@ -13,7 +13,22 @@ f6ea76da416341a94ad5ca88dbf4f947e4e7b531
 # (gentoo) 2022-11-05 15:38:20 +0200 d30661b40b31b050d67bfa09c84daae7cd42a546 profiles: package.mask asterisk-20*
 next 124ba4830d5b46bf2d8797c28b8b7929d7f35287
 
-#>>> gentoo
+#>>> gentoo (build)
 
 # 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
 19a28412bab445e6c35db9fd14702efbbef22c74
+
+#>>> gentoo (update)
+
+# 2023-01-16 21:09:27 +0100 cffa59e18ba99f89c5f790af06ffbdcef8a2c6c3 dev-scheme/bigloo: do not install links to static libs
+cffa59e18ba99f89c5f790af06ffbdcef8a2c6c3
+# 2023-02-17 12:35:47 -0600 ecfda677d2479a95569550bc52a5d516c4a181bd net-analyzer/icinga2: add 2.13.7
+ecfda677d2479a95569550bc52a5d516c4a181bd
+# 2023-03-16 08:07:35 +0200 f42ed8015bd13d02ad396e14e4deaa98d20fdb23 www-apps/drupal: drop 10.0.2
+f42ed8015bd13d02ad396e14e4deaa98d20fdb23
+# 2023-04-08 16:15:01 -0500 9eb6dff4627ac8017a781f2353e4d126d4b1fbe8 app-admin/helm: drop 3.9.4, 3.10.1
+9eb6dff4627ac8017a781f2353e4d126d4b1fbe8
+# 2023-05-31 20:07:43 -0400 b8241129e3de66e1c661eae9f1b5a8ceb8e63aac media-libs/ffmpegsource: Fix QA warning
+b8241129e3de66e1c661eae9f1b5a8ceb8e63aac
+# 2023-07-06 06:58:16 +0100 8aa9f0c823c3a569a512327be65cc9d039c89f32 net-analyzer/nmap: port 9999 to libpcre2
+8aa9f0c823c3a569a512327be65cc9d039c89f32
