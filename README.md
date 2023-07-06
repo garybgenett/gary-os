@@ -1875,6 +1875,7 @@ Everything needed to perform these steps is in the [Repository] or the
     * `rm ./build/_build/gentoo-repo.* ./build/var/db/repos/gentoo*.tar.xz`
     * `make DOREDO=true doit`
         * [x] *Retry()*
+    * `make edit`
 
 ### Checklist ##################################################################
 [Checklist]: #checklist
