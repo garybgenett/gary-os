@@ -1,0 +1,8 @@
+# updated version
+# bug fix
+Unhandled Python exception
+Caught signal 6 (SIGABRT)
+>> https://bugs.gentoo.org/876397
+>>	https://github.com/OpenShot/openshot-qt/commit/fff785eb1e3e0c30ed6ca57e2d1933aaa807ae22.patch
+>>	https://github.com/OpenShot/openshot-qt/commit/9748a13268d66a5949aebc970637b5903756d018.patch
+# 2023-03-16 08:07:35 +0200 f42ed8015bd13d02ad396e14e4deaa98d20fdb23 www-apps/drupal: drop 10.0.2
