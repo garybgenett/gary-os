@@ -1549,6 +1549,122 @@ Manifest
 games-envd-0.ebuild
 
 ------------------------------------------------------------------------------------------------------------------------
+diff :: media-libs/libopenshot [rationale] =============================================================================
+# updated version
+# bug fix
+Unhandled Python exception
+Caught signal 6 (SIGABRT)
+>> https://bugs.gentoo.org/876397
+>>	https://github.com/OpenShot/openshot-qt/commit/fff785eb1e3e0c30ed6ca57e2d1933aaa807ae22.patch
+>>	https://github.com/OpenShot/openshot-qt/commit/9748a13268d66a5949aebc970637b5903756d018.patch
+# 2023-03-16 08:07:35 +0200 f42ed8015bd13d02ad396e14e4deaa98d20fdb23 www-apps/drupal: drop 10.0.2
+diff :: media-libs/libopenshot [source] ================================================================================
+diff -u -U10 -r /var/db/repos/gentoo/media-libs/libopenshot/Manifest ./media-libs/libopenshot/.source/Manifest
+--- /var/db/repos/gentoo/media-libs/libopenshot/Manifest	2023-07-06 18:54:34.029490274 -0000
++++ ./media-libs/libopenshot/.source/Manifest	2023-04-08 22:59:16.000000000 -0000
+@@ -1,2 +1 @@
+ DIST libopenshot-0.2.7.tar.gz 22472544 BLAKE2B 511ed214f0ecc43294a787e1c0119f036e274a1e8d051cb6e926bf7a9b5cea416325a2e051fca758d1f80ec2b9d746a4dd268e5ac5322fe8539fa2041a8c4d9d SHA512 71cb0e4010d8f3ff453486c3da3c7019c6569066845dcc58f438049a08b1c8663f31c29a728ce5461e9d3a1ca550038b757d4528e62a26eeb45ecbe600353988
+-DIST libopenshot-0.3.2.tar.gz 26132237 BLAKE2B 5bc371481ddf69b5de909963cb83d1128066280e1259ae8b23f7ef5450f3da00ef1137dcefe2978e10d1a51931529f104aebdf0601be4b066c7ed371ea43439e SHA512 8891077af28a4db6bc3a7cd078ce5570a8f62e0795c13b0fff795eba60c3e977ece70247033ee4017c9785592355b7421655246a5d6807a5790bd18927739795
+diff -u -U10 -r /var/db/repos/gentoo/media-libs/libopenshot/libopenshot-0.2.7-r1.ebuild ./media-libs/libopenshot/.source/libopenshot-0.2.7-r1.ebuild
+--- /var/db/repos/gentoo/media-libs/libopenshot/libopenshot-0.2.7-r1.ebuild	2023-07-06 18:54:34.029490274 -0000
++++ ./media-libs/libopenshot/.source/libopenshot-0.2.7-r1.ebuild	2023-04-08 22:59:16.000000000 -0000
+@@ -1,16 +1,16 @@
+ # Copyright 1999-2023 Gentoo Authors
+ # Distributed under the terms of the GNU General Public License v2
+ 
+ EAPI=8
+ 
+-PYTHON_COMPAT=( python3_{10..11} )
++PYTHON_COMPAT=( python3_{9..10} )
+ 
+ inherit cmake python-single-r1 toolchain-funcs
+ 
+ DESCRIPTION="Video editing library used by OpenShot"
+ HOMEPAGE="https://www.openshot.org/"
+ SRC_URI="https://github.com/OpenShot/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+ 
+ LICENSE="GPL-3+"
+ SLOT="0/21"
+ KEYWORDS="amd64 x86"
+Only in /var/db/repos/gentoo/media-libs/libopenshot: libopenshot-0.3.2.ebuild
+diff -u -U10 -r /var/db/repos/gentoo/media-libs/libopenshot/metadata.xml ./media-libs/libopenshot/.source/metadata.xml
+--- /var/db/repos/gentoo/media-libs/libopenshot/metadata.xml	2023-07-06 18:54:34.029490274 -0000
++++ ./media-libs/libopenshot/.source/metadata.xml	2023-04-08 22:59:16.000000000 -0000
+@@ -10,15 +10,12 @@
+ 		<name>Gentoo Video project</name>
+ 	</maintainer>
+ 	<upstream>
+ 		<remote-id type="github">OpenShot/libopenshot</remote-id>
+ 		<bugs-to>https://github.com/OpenShot/libopenshot/issues</bugs-to>
+ 	</upstream>
+ 	<use>
+ 		<flag name="opencv">
+ 			Enable <pkg>media-libs/opencv</pkg> support
+ 		</flag>
+-		<flag name="babl">
+-			Enable <pkg>media-libs/babl</pkg> support
+-		</flag>
+ 	</use>
+ </pkgmetadata>
+diff :: media-libs/libopenshot [target] ================================================================================
+Only in ./media-libs/libopenshot: .rationale
+Only in ./media-libs/libopenshot: .source
+diff -u -U10 -r ./media-libs/libopenshot/.source/Manifest ./media-libs/libopenshot/Manifest
+--- ./media-libs/libopenshot/.source/Manifest	2023-04-08 22:59:16.000000000 -0000
++++ ./media-libs/libopenshot/Manifest	2023-06-01 00:35:06.937010017 -0000
+@@ -1 +1,4 @@
+ DIST libopenshot-0.2.7.tar.gz 22472544 BLAKE2B 511ed214f0ecc43294a787e1c0119f036e274a1e8d051cb6e926bf7a9b5cea416325a2e051fca758d1f80ec2b9d746a4dd268e5ac5322fe8539fa2041a8c4d9d SHA512 71cb0e4010d8f3ff453486c3da3c7019c6569066845dcc58f438049a08b1c8663f31c29a728ce5461e9d3a1ca550038b757d4528e62a26eeb45ecbe600353988
++DIST libopenshot-0.3.2.tar.gz 26132237 BLAKE2B 5bc371481ddf69b5de909963cb83d1128066280e1259ae8b23f7ef5450f3da00ef1137dcefe2978e10d1a51931529f104aebdf0601be4b066c7ed371ea43439e SHA512 8891077af28a4db6bc3a7cd078ce5570a8f62e0795c13b0fff795eba60c3e977ece70247033ee4017c9785592355b7421655246a5d6807a5790bd18927739795
++EBUILD libopenshot-0.2.7-r1.ebuild 2233 BLAKE2B 75f803a3d15eb485762872891a1a54ebad53dbce416d54d5ea58c6979dd312fc5ef40512320721470bfdaac76ac2e3868b3fc59ba8544a4ee4693ae2561123ec SHA512 42925c7e3f1be556f60843e1a7e2c9435b32658da87cb7b0526615d270c0615bf14ff3156e7e6fb90597d4a9809f1f3cce025b547caff3938e57887fe63e28f1
++EBUILD libopenshot-0.3.2.ebuild 2233 BLAKE2B 577d5413cb20dd8249fb22e8995d589ff6d5bb49bd61e92410277d7d4a640af88adebbad0b427844d4260320431fb96243a53c597e1141ca0b48c504fd9e5096 SHA512 8b6ddcc8417777ede95b35c9b327ec529bcaedb87c6239755b5d0ca8f4293972f0caaa54cf945792b80da6ec0c79e807481a135918d1558b5a9d71e75ea271d0
+Only in ./media-libs/libopenshot: libopenshot-0.3.2.ebuild
+Only in ./media-libs/libopenshot/.source: metadata.xml
+diff :: media-libs/libopenshot [files] =================================================================================
+
+./media-libs/libopenshot:
+Manifest
+libopenshot-0.2.7-r1.ebuild
+libopenshot-0.3.2.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: media-libs/libopenshot-audio [rationale] =======================================================================
+# updated version
+# bug fix
+Unhandled Python exception
+Caught signal 6 (SIGABRT)
+>> https://bugs.gentoo.org/876397
+>>	https://github.com/OpenShot/openshot-qt/commit/fff785eb1e3e0c30ed6ca57e2d1933aaa807ae22.patch
+>>	https://github.com/OpenShot/openshot-qt/commit/9748a13268d66a5949aebc970637b5903756d018.patch
+# 2023-03-16 08:07:35 +0200 f42ed8015bd13d02ad396e14e4deaa98d20fdb23 www-apps/drupal: drop 10.0.2
+diff :: media-libs/libopenshot-audio [source] ==========================================================================
+diff -u -U10 -r /var/db/repos/gentoo/media-libs/libopenshot-audio/Manifest ./media-libs/libopenshot-audio/.source/Manifest
+--- /var/db/repos/gentoo/media-libs/libopenshot-audio/Manifest	2023-07-06 18:54:34.029490274 -0000
++++ ./media-libs/libopenshot-audio/.source/Manifest	2023-04-08 22:59:16.000000000 -0000
+@@ -1,2 +1 @@
+ DIST libopenshot-audio-0.2.2.tar.gz 1808059 BLAKE2B fcf242bdd678d2e79e2775f3aff7507520a4e8b9ddc7696e1506beca0c1f8e0687d66dfa35a31748e2e622def6e1c22c160e9424c1c27527854ebcafc24413ca SHA512 9960c6225dd9b843d18134e851761bf12861220a2c63970055bc73d554725e56abd6d35339f7490b672faaf0699f58e3701ff8a966ab07af3264325a9d0dc472
+-DIST libopenshot-audio-0.3.2.tar.gz 1772366 BLAKE2B 3b0157f88d28cfc4d147eea86b621c836aee48510d76db6ec6e88773cc1ee677dc635ea9a84e04754be463a1cd4bc80e6830c7cbf31a968ed0900732b007ff7c SHA512 f10a709c748f37cd74a49e760eded67d14a24d4932401d62d616854c105f2d5a09b2a91f31190123d3f82f792f08976fedd9a4a2c1053b49bf18b9986e14be94
+Only in /var/db/repos/gentoo/media-libs/libopenshot-audio: libopenshot-audio-0.3.2.ebuild
+diff :: media-libs/libopenshot-audio [target] ==========================================================================
+Only in ./media-libs/libopenshot-audio: .rationale
+Only in ./media-libs/libopenshot-audio: .source
+diff -u -U10 -r ./media-libs/libopenshot-audio/.source/Manifest ./media-libs/libopenshot-audio/Manifest
+--- ./media-libs/libopenshot-audio/.source/Manifest	2023-04-08 22:59:16.000000000 -0000
++++ ./media-libs/libopenshot-audio/Manifest	2023-06-01 00:33:52.226156817 -0000
+@@ -1 +1,4 @@
+ DIST libopenshot-audio-0.2.2.tar.gz 1808059 BLAKE2B fcf242bdd678d2e79e2775f3aff7507520a4e8b9ddc7696e1506beca0c1f8e0687d66dfa35a31748e2e622def6e1c22c160e9424c1c27527854ebcafc24413ca SHA512 9960c6225dd9b843d18134e851761bf12861220a2c63970055bc73d554725e56abd6d35339f7490b672faaf0699f58e3701ff8a966ab07af3264325a9d0dc472
++DIST libopenshot-audio-0.3.2.tar.gz 1772366 BLAKE2B 3b0157f88d28cfc4d147eea86b621c836aee48510d76db6ec6e88773cc1ee677dc635ea9a84e04754be463a1cd4bc80e6830c7cbf31a968ed0900732b007ff7c SHA512 f10a709c748f37cd74a49e760eded67d14a24d4932401d62d616854c105f2d5a09b2a91f31190123d3f82f792f08976fedd9a4a2c1053b49bf18b9986e14be94
++EBUILD libopenshot-audio-0.2.2.ebuild 551 BLAKE2B 6a267cdd51ab9ce287c6fcfda4c29a12da8640d60a1f08e3c5adcf9f3f545fce24949dc60352182f4c0b8ca7e0213708ab5d152547fd529abd0f782c58005582 SHA512 ca83657277f9a98ed58a3d6a45b0b528679ac1ae183dcbef42858cc9f4c86f10e6d43df3e09f20d0f25885eebc98565c09a00a1fa00a434fd7c5a3124755df43
++EBUILD libopenshot-audio-0.3.2.ebuild 551 BLAKE2B 6a267cdd51ab9ce287c6fcfda4c29a12da8640d60a1f08e3c5adcf9f3f545fce24949dc60352182f4c0b8ca7e0213708ab5d152547fd529abd0f782c58005582 SHA512 ca83657277f9a98ed58a3d6a45b0b528679ac1ae183dcbef42858cc9f4c86f10e6d43df3e09f20d0f25885eebc98565c09a00a1fa00a434fd7c5a3124755df43
+Only in ./media-libs/libopenshot-audio: libopenshot-audio-0.3.2.ebuild
+Only in ./media-libs/libopenshot-audio/.source: metadata.xml
+diff :: media-libs/libopenshot-audio [files] ===========================================================================
+
+./media-libs/libopenshot-audio:
+Manifest
+libopenshot-audio-0.2.2.ebuild
+libopenshot-audio-0.3.2.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
 diff :: media-sound/synaesthesia [rationale] ===========================================================================
 #>>> removed package
 # 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
@@ -1578,6 +1694,175 @@ synaesthesia-2.4-r1.ebuild
 ./media-sound/synaesthesia/files:
 synaesthesia-2.4-inline-keyword.patch
 synaesthesia-2.4-respect-flags.patch
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: media-video/openshot [rationale] ===============================================================================
+# updated version
+# bug fix
+Unhandled Python exception
+Caught signal 6 (SIGABRT)
+>> https://bugs.gentoo.org/876397
+>>	https://github.com/OpenShot/openshot-qt/commit/fff785eb1e3e0c30ed6ca57e2d1933aaa807ae22.patch
+>>	https://github.com/OpenShot/openshot-qt/commit/9748a13268d66a5949aebc970637b5903756d018.patch
+# 2023-03-16 08:07:35 +0200 f42ed8015bd13d02ad396e14e4deaa98d20fdb23 www-apps/drupal: drop 10.0.2
+diff :: media-video/openshot [source] ==================================================================================
+diff :: media-video/openshot [target] ==================================================================================
+Only in ./media-video/openshot: .rationale
+Only in ./media-video/openshot: .source
+diff -u -U10 -r ./media-video/openshot/.source/Manifest ./media-video/openshot/Manifest
+--- ./media-video/openshot/.source/Manifest	2023-07-06 18:54:34.169488240 -0000
++++ ./media-video/openshot/Manifest	2023-07-06 18:59:32.185144252 -0000
+@@ -1,2 +1,7 @@
++AUX 9748a13268d66a5949aebc970637b5903756d018.patch 3563 BLAKE2B 9d9504512ad69bcb17f81e6220683dbc8a74c8318d9b5918968904085fe1d4441e0991c61a314d10cb0b416e0bf281af67ed2b9234505a4de845d953a87c5e72 SHA512 e567ac73b615d1317fd27f90db6ece1a3544b517aac4404600a17c64b346c94b70ce1624fceee73adf211b6215f381da707da4c53fd096a9b848926d8cc36ef0
++AUX fff785eb1e3e0c30ed6ca57e2d1933aaa807ae22.patch 103455 BLAKE2B 96c84fcb32fc46f511fb5e38388570776f90390b7106542dd1b04fcaba99da7613e1cb358be11e2f61306865c7b020e74c0ea15d84033bad8bd91703fe438016 SHA512 47f2b99b9f8da1d62846ce4ac3fba4f17f17402bcc3d4e7c3e8aee65268231a78bcc35fd55d7571313b8c269d0fb3ab4875605256865978a7801a6857255b9b0
+ DIST openshot-2.6.1.tar.gz 68566443 BLAKE2B b3a163983bdb811103e5d9307beeb38938719747f743dd58520a0166c08eb11f4592d47bf24224062f9db323a66a2f353eb22f087982b929d60a519cd2c40789 SHA512 9e2d1eae5d72ec2deab914e464dac0d84a864ba2ca63104fad57c90fc907764d5683149fb8136d50030cae993cef9a977e995b0783868988de4668e71a3a5ee2
+ DIST openshot-3.1.1.tar.gz 95843738 BLAKE2B 4059fe12b064692070278366f787789866dcbe39414d10217fb62b671dda98ebb6d2f76b8e1cfe2284a647e3d7ebc460b620ba0756a4542f5b26e7ef669e9b3e SHA512 4e5a42825abf8e3862957039169905a6f03872d81de454f52a57ace2e636e91b2f4e87ae603bf9669baa7d1bbbd6c0213efd0c72e23f2b209ba266af2fbe380f
++EBUILD openshot-2.6.1.ebuild 1511 BLAKE2B a8b1656764f2cb020b001fd0cbe8ce437c3e59e8facce629a64a0dc2d5ea56917d9867f2ff6354117ff42020e875766703843bffc350136fcc4d129df3d2c538 SHA512 5f57318b989510a668d954607c482020746469e811e44789dbe3a111d42d3d948a70f54abccc5061ab70be85fe8bde7ea6186173ec6524bd9aa562b7bc393a3b
++EBUILD openshot-3.1.1.ebuild 1365 BLAKE2B f7a01fd770197d711247ceac18b96bdfe90720e813e13b09577e4318262e88df1bf5692a1c5ac75f06db33f948c36092badea6bba377c8dce91ccea550e9685e SHA512 6ad06c4549c545530cfc11145b7c3a8e08c3b91583a5112fddefd80c0013a95deea39dbdc507cd4d8dc2a4c9045a6f76d9058c938ee684518d52a0d96ac0a06c
++EBUILD openshot-9999.ebuild 1660 BLAKE2B b8c5fc877f03ba4f2ed3ea10a39ef33b148a6e11d40d6402851211801a185a8b8e288df03627cf626690420bde6894fbb2378f1ebaa31d3eb6e732370946b390 SHA512 d0b721b677a33d8df203b6e3763c0325b68e579344ba1428b9b4e3d5aafbeb97dfe0e52ec007b370c3d432f6b846adfea7953fb3e386bb07471daf4fabe716b4
+Only in ./media-video/openshot: files
+Only in ./media-video/openshot/.source: metadata.xml
+diff -u -U10 -r ./media-video/openshot/.source/openshot-2.6.1.ebuild ./media-video/openshot/openshot-2.6.1.ebuild
+--- ./media-video/openshot/.source/openshot-2.6.1.ebuild	2023-07-06 18:54:34.169488240 -0000
++++ ./media-video/openshot/openshot-2.6.1.ebuild	2023-03-23 03:17:15.250407701 -0000
+@@ -1,17 +1,17 @@
+ # Copyright 1999-2023 Gentoo Authors
+ # Distributed under the terms of the GNU General Public License v2
+ 
+ EAPI=7
+ 
+-PYTHON_COMPAT=( python3_{10..11} )
+-PYTHON_REQ_USE="xml(+)"
++PYTHON_COMPAT=( python3_{9..10} )
++PYTHON_REQ_USE=xml
+ DISTUTILS_SINGLE_IMPL=1
+ 
+ inherit distutils-r1 xdg
+ 
+ MY_PN="${PN}-qt"
+ 
+ DESCRIPTION="Award-winning free and open-source video editor"
+ HOMEPAGE="https://openshot.org/"
+ SRC_URI="https://github.com/OpenShot/${MY_PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+ S="${WORKDIR}/${MY_PN}-${PV}"
+@@ -27,29 +27,36 @@
+ 		dev-python/PyQtWebEngine[${PYTHON_USEDEP}]
+ 		dev-python/pyzmq[${PYTHON_USEDEP}]
+ 		dev-python/requests[${PYTHON_USEDEP}]
+ 	')
+ 	>=media-libs/libopenshot-0.2.7:0=[python,${PYTHON_SINGLE_USEDEP}]"
+ DEPEND=""
+ BDEPEND="$(python_gen_cond_dep '
+ 		doc? ( dev-python/sphinx[${PYTHON_USEDEP}] )
+ 	')"
+ 
++#>>>
++PATCHES=(
++	"${FILESDIR}"/9748a13268d66a5949aebc970637b5903756d018.patch
++	"${FILESDIR}"/fff785eb1e3e0c30ed6ca57e2d1933aaa807ae22.patch
++)
++#>>>
++
+ src_prepare() {
+ 	distutils-r1_python_prepare_all
+ 	# prevent setup.py from trying to update MIME databases
+ 	sed -i 's/^ROOT =.*/ROOT = False/' setup.py || die
+ }
+ 
+ python_compile_all() {
+ 	use doc && emake -C doc html
+ }
+ 
+-python_test() {
+-	distutils_install_for_testing
+-	"${EPYTHON}" src/tests/query_tests.py -v --platform minimal || die
+-}
+-
+ python_install_all() {
+ 	use doc && local HTML_DOCS=( doc/_build/html/. )
+ 	distutils-r1_python_install_all
+ }
++
++python_test() {
++	distutils_install_for_testing
++	"${EPYTHON}" src/tests/query_tests.py -v --platform minimal || die
++}
+diff -u -U10 -r ./media-video/openshot/.source/openshot-3.1.1.ebuild ./media-video/openshot/openshot-3.1.1.ebuild
+--- ./media-video/openshot/.source/openshot-3.1.1.ebuild	2023-07-06 18:54:34.169488240 -0000
++++ ./media-video/openshot/openshot-3.1.1.ebuild	2023-06-01 00:29:08.598524016 -0000
+@@ -1,31 +1,31 @@
+ # Copyright 1999-2023 Gentoo Authors
+ # Distributed under the terms of the GNU General Public License v2
+ 
+ EAPI=7
+ 
+-PYTHON_COMPAT=( python3_{10..11} )
+-PYTHON_REQ_USE="xml(+)"
++PYTHON_COMPAT=( python3_{9..11} )
++#PYTHON_REQ_USE=xml
+ DISTUTILS_SINGLE_IMPL=1
+ 
+ inherit distutils-r1 xdg
+ 
+ MY_PN="${PN}-qt"
+ 
+ DESCRIPTION="Award-winning free and open-source video editor"
+ HOMEPAGE="https://openshot.org/"
+ SRC_URI="https://github.com/OpenShot/${MY_PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+ S="${WORKDIR}/${MY_PN}-${PV}"
+ 
+ LICENSE="GPL-3+"
+ SLOT="1"
+-KEYWORDS="~amd64 ~x86"
++KEYWORDS="amd64 ~x86"
+ IUSE="doc"
+ 
+ RDEPEND="$(python_gen_cond_dep '
+ 		dev-python/httplib2[${PYTHON_USEDEP}]
+ 		dev-python/PyQt5[${PYTHON_USEDEP},gui,svg,widgets]
+ 		dev-python/PyQtWebEngine[${PYTHON_USEDEP}]
+ 		dev-python/pyzmq[${PYTHON_USEDEP}]
+ 		dev-python/requests[${PYTHON_USEDEP}]
+ 	')
+ 	>=media-libs/libopenshot-0.3.2:0=[python,${PYTHON_SINGLE_USEDEP}]"
+@@ -37,19 +37,19 @@
+ src_prepare() {
+ 	distutils-r1_python_prepare_all
+ 	# prevent setup.py from trying to update MIME databases
+ 	sed -i 's/^ROOT =.*/ROOT = False/' setup.py || die
+ }
+ 
+ python_compile_all() {
+ 	use doc && emake -C doc html
+ }
+ 
+-python_test() {
+-	distutils_install_for_testing
+-	"${EPYTHON}" src/tests/query_tests.py -v --platform minimal || die
+-}
+-
+ python_install_all() {
+ 	use doc && local HTML_DOCS=( doc/_build/html/. )
+ 	distutils-r1_python_install_all
+ }
++
++python_test() {
++	distutils_install_for_testing
++	"${EPYTHON}" src/tests/query_tests.py -v --platform minimal || die
++}
+Only in ./media-video/openshot: openshot-9999.ebuild
+diff :: media-video/openshot [files] ===================================================================================
+
+./media-video/openshot:
+Manifest
+files
+openshot-2.6.1.ebuild
+openshot-3.1.1.ebuild
+openshot-9999.ebuild
+
+./media-video/openshot/files:
+9748a13268d66a5949aebc970637b5903756d018.patch
+fff785eb1e3e0c30ed6ca57e2d1933aaa807ae22.patch
 
 ------------------------------------------------------------------------------------------------------------------------
 diff :: sys-boot/grub [rationale] ======================================================================================
