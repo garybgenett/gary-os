@@ -2813,10 +2813,10 @@ function mount-robust {
 				modprobe --all fuse #>>> || return 1
 			fi
 			declare DID="false"
-			if [[ ${TYP} == ext4		]]; then DID="true"; fsck -MV -t ${TYP} -pC	${DEV} || return 1; fi
-			if [[ ${TYP} == exfat		]]; then DID="true"; fsck -MV -t ${TYP} -a	${DEV} || return 1; fi
-			if [[ ${TYP} == ntfs		]]; then DID="true"; fsck -MV -t ${TYP}-3g	${DEV} || return 1; fi
-			if [[ ${TYP} == vfat		]]; then DID="true"; fsck -MV -t ${TYP} -a	${DEV} || return 1; fi
+			if [[ ${TYP} == ext4		]]; then DID="true"; fsck -MV -t ${TYP} -pC	${DEV}; fi #>>> || return 1; fi
+			if [[ ${TYP} == exfat		]]; then DID="true"; fsck -MV -t ${TYP} -a	${DEV}; fi #>>> || return 1; fi
+			if [[ ${TYP} == ntfs		]]; then DID="true"; fsck -MV -t ${TYP}-3g	${DEV}; fi #>>> || return 1; fi
+			if [[ ${TYP} == vfat		]]; then DID="true"; fsck -MV -t ${TYP} -a	${DEV}; fi #>>> || return 1; fi
 			if ! ${OV} && [[ -d ${DEV}	]]; then DID="true"; mount -v --bind ${RO:+-o ${RO/%,}}						"${@}" ${DEV} ${DIR} || return 1; fi
 			if ! ${OV} && [[ -f ${DEV}	]]; then DID="true"; mount -v -o ${RO}loop							"${@}" ${DEV} ${DIR} || return 1; fi
 			if ${OV} && [[ -n ${TYP}	]]; then DID="true"; mount -v -t ${TYP} -o ${OVERLAY}						"${@}"        ${DIR} || return 1; fi
