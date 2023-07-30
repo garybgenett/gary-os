@@ -5079,22 +5079,31 @@ function task-export-drive {
 function task-export-drive-sync {
 	${RCLONE_U} sync \
 		--delete-excluded \
+		\
+		--filter "- /*/_template/**" \
+		--filter "- /*/_template.export/**" \
+		--filter "- /*/pictures/**" \
 		--filter "- /_pim/taskd/orgs/local/users/*/tx.data" \
 		--filter "- /_pim/tasks/undo.*" \
+		\
 		/.g/_data/zactive/_drive/_sync/ \
 		${GDRIVE_REMOTE}:/_sync \
 		&&
 	${RCLONE_U} sync \
 		--drive-shared-with-me \
-		--filter "- /The Ultimate Onewheel Knowledge Base*" \
+		\
+		--filter "- /The Ultimate*" \
 		--filter "- /email from*" \
+		\
 		${GDRIVE_REMOTE}:/ \
 		/.g/_data/zactive/_drive/_shared.all \
 		&&
 	${RCLONE_U} sync \
-		--filter "- /_share/*/gary/**" \
-		--filter "- /_share/transmetropolitan**" \
 		--filter "- /_sync/**" \
+		--filter "- /_shared.all/**" \
+		\
+		--filter "- /_share/*/gary/**" \
+		\
 		${GDRIVE_REMOTE}:/ \
 		/.g/_data/zactive/_drive \
 		&&
