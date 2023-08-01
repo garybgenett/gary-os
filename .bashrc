@@ -4342,7 +4342,7 @@ function zpim-commit {
 	${SED} -i \
 		-e "/^[[:space:]]+[<]DD[>]$/d" \
 		-e "s/<HR>([[:space:]])/<HR>\n\1/g" \
-		bookmarks.html
+		bookmarks*.html
 	${RM} \
 		passwords*.kdbx.lock \
 		passwords*.old.kdbx
