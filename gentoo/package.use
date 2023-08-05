@@ -116,6 +116,7 @@ mail-client/mutt			-tokyocabinet gpg hcache sasl sidebar smime smtp
 mail-client/thunderbird			-wifi ldap
 mail-mta/msmtp				daemon mta
 media-libs/libprojectm			qt5
+media-libs/mesa				vulkan vulkan-overlay
 media-sound/pulseaudio			bluetooth daemon
 media-sound/pulseaudio-daemon		alsa bluetooth dbus oss
 media-video/vlc				gui projectm run-as-root vlm
