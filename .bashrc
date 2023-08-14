@@ -1500,11 +1500,16 @@ function git-perms {
 		chown -R ${USERNAME}:plastic ./
 		find ./ -type d -exec chmod 755 {} \;
 		find ./ -type f -exec chmod 644 {} \;
-		chmod 755 $(find ./ | ${GREP} "Makefile") ${@}
+		chmod 755 $(
+			find ./ \
+			| ${GREP} \
+				-e "[/]Makefile$" \
+				-e "[/]gentoo.config$" \
+		) ${@}
 	else
 		${GIT_CMD} diff ${GIT_DIF} ${DIFF_OPTS} -R "${@}" |
 			${GREP} "^(diff|(old|new) mode)" |
-			${GIT_CMD} apply
+			${GIT_CMD} apply --allow-empty
 	fi
 	${GIT_STS}
 }
