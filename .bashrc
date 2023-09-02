@@ -5112,6 +5112,14 @@ function task-export-drive-sync {
 		${GDRIVE_REMOTE}:/ \
 		/.g/_data/zactive/_drive \
 		&&
+	(cd /.g/_data/zactive/_drive && \
+		pandoc \
+			--verbose \
+			--from docx \
+			--to markdown+fancy_lists+task_lists+lists_without_preceding_blankline \
+			--output todo.txt \
+			todo.docx \
+		) && \
 	${RCLONE_C} about ${GDRIVE_REMOTE}:
 	${LL} \
 		/.g/_data/zactive/_drive/_sync \
