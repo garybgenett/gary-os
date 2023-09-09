@@ -604,6 +604,7 @@ alias synctail="${GREP} -a '^ERROR[:][ ]' /.g/_data/-track/-sync/_sync.log ; ech
 ########################################
 
 alias astatus="zstatus ; echo ; zstatus -l 10 gdata/zactive ; echo ; estatus"
+alias bshow="_sync backup show"
 alias cal="cal --monday --three"
 alias clean="_sync clean"
 alias clock="clockywock"
@@ -634,7 +635,6 @@ alias quote="cd data.personal ; ${EDITOR} _quotes.txt ; strfile _quotes.txt _quo
 alias remind="remind -v -uplastic"
 alias schedule="remind -v -uplastic -g -m -b1 -cc+2 -w90 ${HOME}/.reminders"
 alias sheep="electricsheep --debug 1 --mplayer 1 --server d2v6.sheepserver.net"
-alias sknow="_sync backup know"
 alias smount="_sync mount"
 alias tasker="prompt -x +task"
 alias torrent="rtorrent -n -d ./ -s ./.torrent"
