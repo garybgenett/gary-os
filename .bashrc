@@ -5125,7 +5125,7 @@ function task-export-drive-sync {
 			-e "/^$/d" \
 			-e "s|[\\]||g" \
 			-e "s|[-][[:space:]]{3}|  * |g" \
-			-e "s|^([^[:space:]])|\n### \1|g" \
+			-e "s|^([^[:space:]])|\n#### \1|g" \
 			todo.md \
 		) && \
 	${RCLONE_C} about ${GDRIVE_REMOTE}:
