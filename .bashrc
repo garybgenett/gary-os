@@ -5118,8 +5118,15 @@ function task-export-drive-sync {
 			--verbose \
 			--from docx \
 			--to markdown+fancy_lists+task_lists+lists_without_preceding_blankline \
-			--output todo.txt \
+			--output todo.md \
 			todo.docx \
+			&& \
+		${SED} -i \
+			-e "/^$/d" \
+			-e "s|[\\]||g" \
+			-e "s|[-][[:space:]]{3}|  * |g" \
+			-e "s|^([^[:space:]])|\n### \1|g" \
+			todo.md \
 		) && \
 	${RCLONE_C} about ${GDRIVE_REMOTE}:
 	${LL} \
