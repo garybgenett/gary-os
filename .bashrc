@@ -5132,9 +5132,13 @@ function task-export-drive-sync {
 	${LL} \
 		/.g/_data/zactive/_drive/_sync \
 		$(find /.g/_data/zactive/_drive/_sync -mindepth 1 -maxdepth 1 ! -type l)
-	${LL} \
-		$(find -L /.g/_data/zactive/_drive/_sync -type l 2>/dev/null) \
-		$(find -L /.g/_data/zactive/_drive/_sync ! -type d ! -type f 2>/dev/null)
+		$(
+			find -L /.g/_data/zactive/_drive/_sync \
+				\( -path \*/.Composer -prune \) \
+				-o \( ! -type d ! -type f -print \) \
+				-o \( -type l -print \) \
+				2>/dev/null
+		)
 	return 0
 }
 
