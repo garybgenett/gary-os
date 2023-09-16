@@ -5048,8 +5048,6 @@ function task-export-calendar {
 
 ########################################
 
-#>>>		${TODOS_MD}
-
 function task-export-drive {
 	cd ${PIMDIR}
 	sudo chown plastic:plastic \
@@ -5077,9 +5075,14 @@ function task-export-drive {
 #>>>		${@} || return 1
 #>>>		"${SALES_MD}:${SALES_MD_ID}" \
 	if [[ ${1} == upload ]]; then
+#>>>		${RCLONE_U} copyto ${TODOS_MD} ${TODOS_MD_ID}
 		${RCLONE_U} copyto ${NOTES_MD} ${NOTES_MD_ID}
+		${RCLONE_U} copyto ${IDEAS_MD} ${IDEAS_MD_ID}
 	else
+		${RCLONE_U} copyto ${TODOS_MD_ID} ${TODOS_MD}
 		${RCLONE_U} copyto ${NOTES_MD_ID} ${NOTES_MD}
+		${RCLONE_U} copyto ${IDEAS_MD_ID} ${IDEAS_MD}
+		task-export-drive-sync todo
 	fi
 	cd - >/dev/null
 	return 0
@@ -5090,7 +5093,6 @@ function task-export-drive {
 function task-export-drive-sync {
 	if [[ ${1} == todo ]]; then
 		shift
-		${RCLONE_U} copyto ${TODOS_MD_ID} ${TODOS_MD} || return 1
 		pandoc \
 			--verbose \
 			--from ${TODOS_MD_FORMAT} \
@@ -6772,8 +6774,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 #>>>			task-export			|| return 1
 			zpim-commit tasks
 		elif [[ ${1} == [@] ]]; then
-			task-export-drive		|| return 1
-			task-export-drive-sync todo	|| return 1
+			task-export-drive || return 1
 			${EDITOR} +/"\[\ \]" -c "map ~ <ESC>:!${TW} todo<CR>" -c "map \\ <ESC>:!${TW} " \
 				${NOTES_MD} \
 				${IDEAS_MD} \
