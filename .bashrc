@@ -79,9 +79,12 @@ export MAILDIR="${HOME}/Maildir"
 export MAILCAPS="${HOME}/.mailcap"
 
 export GDRIVE_REMOTE="gdrive"
-export NOTES_MD="/.g/_data/zactive/_pim/tasks.notes.md";	export NOTES_MD_ID="gdrive:_notes.md" #>>> 1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e
-export IDEAS_MD="/.g/_data/zactive/writing/_imagination.md";	export IDEAS_MD_ID="gdrive:_write.md" #>>> 1_p06qeX31eFRTUJ2VKWhdfGUhaQBqF5k
-export SALES_MD="/.g/_data/zactive/_pim/zoho.today.md";		#>>>export SALES_MD_ID="1wQrnTw0I5pDfzlqeuKdBNCNvFH9Ifulz"
+export TODOS_MD_FORMAT="docx"
+export TODOS_MD_TEXT="_todo.md"
+export TODOS_MD="/.g/_data/zactive/_drive/_todo.docx";		export TODOS_MD_ID="gdrive:_todo.docx"	#>>> 1AXaQYxKJCi_p8mZIGmZOexKm3liaoH4p9JoweJUjedM
+export NOTES_MD="/.g/_data/zactive/_pim/tasks.notes.md";	export NOTES_MD_ID="gdrive:_notes.md"	#>>> 1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e
+export IDEAS_MD="/.g/_data/zactive/writing/_imagination.md";	export IDEAS_MD_ID="gdrive:_write.md"	#>>> 1_p06qeX31eFRTUJ2VKWhdfGUhaQBqF5k
+export SALES_MD="/.g/_data/zactive/_pim/zoho.today.md";		#>>>export SALES_MD_ID=""		#>>> 1wQrnTw0I5pDfzlqeuKdBNCNvFH9Ifulz
 
 ########################################
 
@@ -5045,6 +5048,8 @@ function task-export-calendar {
 
 ########################################
 
+#>>>		${TODOS_MD}
+
 function task-export-drive {
 	cd ${PIMDIR}
 	sudo chown plastic:plastic \
@@ -5083,6 +5088,25 @@ function task-export-drive {
 ########################################
 
 function task-export-drive-sync {
+	if [[ ${1} == todo ]]; then
+		shift
+		${RCLONE_U} copyto ${TODOS_MD_ID} ${TODOS_MD} || return 1
+		pandoc \
+			--verbose \
+			--from ${TODOS_MD_FORMAT} \
+			--to markdown+fancy_lists+task_lists+lists_without_preceding_blankline \
+			--output $(dirname ${TODOS_MD})/${TODOS_MD_TEXT} \
+			${TODOS_MD} \
+			|| return 1
+		${SED} -i \
+			-e "/^$/d" \
+			-e "s|[\\]||g" \
+			-e "s|[-][[:space:]]{3}|  * |g" \
+			-e "s|^([^[:space:]])|\n#### \1|g" \
+			$(dirname ${TODOS_MD})/${TODOS_MD_TEXT} \
+			|| return 1
+		return 0
+	fi
 	${RCLONE_U} sync \
 		--delete-excluded \
 		\
@@ -5113,21 +5137,7 @@ function task-export-drive-sync {
 		${GDRIVE_REMOTE}:/ \
 		/.g/_data/zactive/_drive \
 		&&
-	(cd /.g/_data/zactive/_drive && \
-		pandoc \
-			--verbose \
-			--from docx \
-			--to markdown+fancy_lists+task_lists+lists_without_preceding_blankline \
-			--output todo.md \
-			todo.docx \
-			&& \
-		${SED} -i \
-			-e "/^$/d" \
-			-e "s|[\\]||g" \
-			-e "s|[-][[:space:]]{3}|  * |g" \
-			-e "s|^([^[:space:]])|\n#### \1|g" \
-			todo.md \
-		) && \
+	${FUNCNAME} todo && \
 	${RCLONE_C} about ${GDRIVE_REMOTE}:
 	${LL} \
 		/.g/_data/zactive/_drive/_sync \
@@ -6762,7 +6772,8 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 #>>>			task-export			|| return 1
 			zpim-commit tasks
 		elif [[ ${1} == [@] ]]; then
-			task-export-drive || return 1
+			task-export-drive		|| return 1
+			task-export-drive-sync todo	|| return 1
 			${EDITOR} +/"\[\ \]" -c "map ~ <ESC>:!${TW} todo<CR>" -c "map \\ <ESC>:!${TW} " \
 				${NOTES_MD} \
 				${IDEAS_MD} \
