@@ -5112,9 +5112,18 @@ function task-export-drive-sync {
 	${RCLONE_U} sync \
 		--delete-excluded \
 		\
-		--filter "- /*/_template/**" \
+		--filter "- /*/.Composer/**" \
+		--filter "- /*/.composed" \
+		--filter "- /*/.composer.tmp/**" \
+		\
+		--filter "- /*/**firebase**.json" \
+		--filter "- /*/.firebase**" \
+		--filter "- /*/firebase**" \
+		\
 		--filter "- /*/_template.export/**" \
+		--filter "- /*/_template/**" \
 		--filter "- /*/pictures/**" \
+		\
 		--filter "- /_pim/taskd/orgs/local/users/*/tx.data" \
 		--filter "- /_pim/tasks/undo.*" \
 		\
