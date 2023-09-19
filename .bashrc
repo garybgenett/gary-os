@@ -6487,6 +6487,7 @@ function vlc-do {
 		shift
 	fi
 	killall -9 vlc
+	mixer -a -L
 	sleep 1
 	mixer ${VOLUME}
 	declare PLAYLIST="$(
