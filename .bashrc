@@ -1396,7 +1396,7 @@ function git-export {
 		${MKDIR} ${EXP_DIR}/.${EXP_NAM}			|| return 1
 		(cd ${EXP_DIR}/.${EXP_NAM} && ${GIT} init)	|| return 1
 		(cd ${EXP_DIR}/.${EXP_NAM} &&			\
-			${GIT} --move master main)		|| return 1
+			${GIT} branch --move master main)	|| return 1
 	fi
 	for FILE in "${@}"; do
 		declare NAM="$(echo "${FILE}" | cut -d: -f1)"
