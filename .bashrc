@@ -5051,14 +5051,17 @@ function task-export-calendar {
 function task-export-drive {
 	cd ${PIMDIR}
 	sudo chown plastic:plastic \
+		${TODOS_MD} \
 		${NOTES_MD} \
 		${IDEAS_MD}
 #>>>		${SALES_MD}
 	sudo chmod 755 \
+		$(dirname ${TODOS_MD}) ${NOTES_MD} \
 		$(dirname ${NOTES_MD}) ${NOTES_MD} \
 		$(dirname ${IDEAS_MD}) ${IDEAS_MD}
 #>>>		$(dirname ${SALES_MD}) ${SALES_MD}
 #>>>	gcalendar_export.pl \
+#>>>		"d|${TODOS_MD}:${TODOS_MD_ID}" \
 #>>>		"d|${NOTES_MD}:${NOTES_MD_ID}" \
 #>>>		"d|${IDEAS_MD}:${IDEAS_MD_ID}" \
 #>>>		"d|${SALES_MD}:${SALES_MD_ID}"
@@ -5066,10 +5069,12 @@ function task-export-drive {
 #>>>	${RSYNC_U} /.g/_data/zactive/_drive/_notes.md drive-notes.md
 #>>>	sudo chown -vR plastic:plastic drive*
 #>>>	sudo chmod -vR 750 drive*
+#>>>		"${TODOS_MD}:${TODOS_MD_ID}" \
 #>>>		"${NOTES_MD}:${NOTES_MD_ID}" \
 #>>>		"${IDEAS_MD}:${IDEAS_MD_ID}" \
 #>>>		"${SALES_MD}:${SALES_MD_ID}"
 #>>>	gdrive_export.pl \
+#>>>		"${TODOS_MD}:${TODOS_MD_ID}" \
 #>>>		"${NOTES_MD}:${NOTES_MD_ID}" \
 #>>>		"${IDEAS_MD}:${IDEAS_MD_ID}" \
 #>>>		${@} || return 1
@@ -5316,6 +5321,7 @@ function task-export-text {
 	declare NAME="${1}" && shift
 	cd ${PIMDIR}
 	sudo chmod 755 \
+		$(dirname ${TODOS_MD}) ${TODOS_MD} \
 		$(dirname ${NOTES_MD}) ${NOTES_MD} \
 		$(dirname ${IDEAS_MD}) ${IDEAS_MD}
 #>>>		$(dirname ${SALES_MD}) ${SALES_MD}
