@@ -5117,9 +5117,9 @@ function task-export-drive-sync {
 	${RCLONE_U} sync \
 		--delete-excluded \
 		\
-		--filter "- /*/.Composer/**" \
-		--filter "- /*/.composed" \
-		--filter "- /*/.composer.tmp/**" \
+		--filter "- /**/.Composer/*/**" \
+		--filter "- /**/.composed" \
+		--filter "- /**/.composer.tmp/**" \
 		\
 		--filter "- /*/**firebase**.json" \
 		--filter "- /*/.firebase**" \
