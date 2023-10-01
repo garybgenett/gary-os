@@ -1134,6 +1134,8 @@ function filter {
 
 ########################################
 
+declare VERACRYPT_OPTS="--verbose --text --volume-type normal --protect-hidden no --keyfiles= --pim 0 --filesystem none --fs-options="
+
 function format {
 	if [[ ${1} == -z ]]; then
 		shift
@@ -1150,6 +1152,11 @@ function format {
 	elif [[ ${1} == -n ]]; then
 		shift
 		mkfs.ntfs -vI "${@}"
+	elif [[ ${1} == -v ]]; then
+		shift
+		# https://www.veracrypt.fr/en/Hash%20Algorithms.html
+		# https://www.veracrypt.fr/en/Encryption%20Algorithms.html
+		veracrypt ${VERACRYPT_OPTS} --create --quick --random-source /dev/urandom --encryption AES --hash SHA-256 "${@}"
 	elif [[ ${1} == -l ]]; then
 		shift
 		# https://wiki.archlinux.org/index.php/Dm-crypt/Device_encryption#Encryption_options_for_LUKS_mode
@@ -2501,6 +2508,7 @@ function mount-robust {
 	declare RO=
 	declare DM="false"
 	declare OV="false"
+	declare VC="false"
 	declare ZF="false"
 	declare UN="false"
 	declare DEV=
@@ -2510,6 +2518,7 @@ function mount-robust {
 	if [[ ${1} == -0 ]]; then	RO="ro,";	shift; fi
 	if [[ ${1} == -d ]]; then	DM="true";	shift; fi
 	if [[ ${1} == -o ]]; then	OV="true";	shift; fi
+	if [[ ${1} == -c ]]; then	VC="true";	shift; fi
 	if [[ ${1} == -z ]]; then	ZF="true";	shift; fi
 	if [[ ${1} == -u ]]; then	UN="true";	shift; fi
 	if [[ -n ${1} ]]; then		DEV="${1}";	shift; fi
@@ -2561,6 +2570,26 @@ function mount-robust {
 		fi
 		echo -en "- (LUKS: ${DEV})\n" 1>&2
 		IS_LUKS="true"
+	fi
+	declare IS_VERA="false"
+	declare VERA_DEV="${DEV}"
+	function vera_dev {
+		declare DEV_OUT="$(veracrypt ${VERACRYPT_OPTS} --non-interactive --volume-properties ${VERA_DEV} 2>&1 | ${SED} -n "s|^Virtual[ ]Device[:][ ](.+)$|\1|gp")"
+		if [[ -z ${DEV_OUT} ]]; then
+			DEV_OUT="Unknown"
+		fi
+		echo -en "${DEV_OUT}"
+		return 0
+	}
+	if {
+		${VC} ||
+		veracrypt ${VERACRYPT_OPTS} --non-interactive --list ${VERA_DEV} >/dev/null 2>&1;
+	}; then
+		if ! ${TEST}; then
+			DEV="$(vera_dev)"
+		fi
+		echo -en "- (VeraCrypt: ${DEV})\n" 1>&2
+		IS_VERA="true"
 	fi
 	declare DEV_SRC="$(${FINDMNT} --output SOURCE --source ${DEV} 2>/dev/null | tail -n1)"; declare	DEV_TGT="$(${FINDMNT} --output TARGET --source ${DEV} 2>/dev/null | tail -n1)"
 	declare DIR_SRC="$(${FINDMNT} --output SOURCE --target ${DIR} 2>/dev/null | tail -n1)"; declare	DIR_TGT="$(${FINDMNT} --output TARGET --target ${DIR} 2>/dev/null | tail -n1)"
@@ -2699,7 +2728,12 @@ function mount-robust {
 	} || {
 		{ ${UN} && ! ${IS_MOUNT}; } && {
 			{
-				{ ! ${IS_LUKS} || [[ ! -b ${DEV} ]]; };
+				{
+					! ${IS_LUKS} &&
+					! ${IS_VERA};
+				} || {
+					[[ ! -b ${DEV} ]];
+				};
 			} && {
 				! ${IS_ZFS} ||
 				[[ -z ${ZFS_PINT} ]];
@@ -2775,12 +2809,28 @@ function mount-robust {
 				cryptsetup --verbose luksClose ${DEV} || return 1
 			fi
 		fi
+		if ${IS_VERA} && [[ -b ${DEV} ]]; then
+			echo -en "- Closing Encryption...\n"
+			if ! ${DEBUG}; then
+				veracrypt ${VERACRYPT_OPTS} --dismount ${VERA_DEV} || return 1
+			fi
+		fi
 	else
 		if ${IS_LUKS} && [[ ! -b ${DEV} ]]; then
 			echo -en "- Opening Encrypton...\n"
 			if ! ${DEBUG}; then
 				cryptsetup --verbose luksOpen ${LUKS_DEV} $(basename ${DEV})	|| return 1
 				cryptsetup --verbose luksDump ${LUKS_DEV}			|| return 1
+				if ${ZFS_CHECK_IMPORT} ${DEV} 2>&1 >/dev/null | ${GREP} -v "Failed Detection"; then IS_ZFS="true"; fi
+			fi
+		fi
+		if ${IS_VERA} && [[ ! -b ${DEV} ]]; then
+			echo -en "- Opening Encrypton...\n"
+			if ! ${DEBUG}; then
+				veracrypt ${VERACRYPT_OPTS} --mount --mount-options= ${VERA_DEV}		|| return 1
+				DEV="$(vera_dev)"
+				echo -en "- (VeraCrypt: ${DEV})\n" 1>&2
+				veracrypt ${VERACRYPT_OPTS} --non-interactive --volume-properties ${VERA_DEV}	|| return 1
 				if ${ZFS_CHECK_IMPORT} ${DEV} 2>&1 >/dev/null | ${GREP} -v "Failed Detection"; then IS_ZFS="true"; fi
 			fi
 		fi
