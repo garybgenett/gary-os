@@ -1151,7 +1151,7 @@ function format {
 		mkfs.exfat "${@}"
 	elif [[ ${1} == -n ]]; then
 		shift
-		mkfs.ntfs -vI "${@}"
+		mkfs.ntfs -vIQ "${@}"
 	elif [[ ${1} == -v ]]; then
 		shift
 		# https://www.veracrypt.fr/en/Hash%20Algorithms.html
