@@ -2581,9 +2581,13 @@ function mount-robust {
 		echo -en "${DEV_OUT}"
 		return 0
 	}
+#>>>	if {
+#>>>		${VC} ||
+#>>>		veracrypt ${VERACRYPT_OPTS} --non-interactive --list ${VERA_DEV} >/dev/null 2>&1;
+#>>>	}; then
 	if {
-		${VC} ||
-		veracrypt ${VERACRYPT_OPTS} --non-interactive --list ${VERA_DEV} >/dev/null 2>&1;
+		${VC} &&
+		veracrypt ${VERACRYPT_OPTS} --non-interactive --list ${VERA_DEV};
 	}; then
 		if ! ${TEST}; then
 			DEV="$(vera_dev)"
