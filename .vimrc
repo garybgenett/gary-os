@@ -35,12 +35,13 @@ syntax					on
 set background				=light
 set guioptions				=aciA
 
-highlight comment    guibg=black ctermbg=none guifg=darkcyan ctermfg=darkcyan
-highlight nontext    guibg=black ctermbg=none guifg=darkcyan ctermfg=darkcyan
-highlight specialkey guibg=black ctermbg=none guifg=darkcyan ctermfg=darkcyan
+highlight comment    guibg=black ctermbg=none guifg=darkgreen ctermfg=darkgreen
 
-highlight folded     guibg=black ctermbg=none guifg=darkblue ctermfg=darkblue
-highlight foldcolumn guibg=black ctermbg=none guifg=darkblue ctermfg=darkblue
+highlight nontext    guibg=black ctermbg=none guifg=lightblue ctermfg=lightblue
+highlight specialkey guibg=black ctermbg=none guifg=lightblue ctermfg=lightblue
+
+highlight folded     guibg=darkblue ctermbg=darkblue guifg=darkcyan ctermfg=darkcyan
+highlight foldcolumn guibg=darkblue ctermbg=darkblue guifg=darkcyan ctermfg=darkcyan
 
 "#######################################
 " interface
