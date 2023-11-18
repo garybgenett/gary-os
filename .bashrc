@@ -4138,6 +4138,11 @@ function shell {
 		return 0
 	fi
 	case ${DEST} in
+		(vpn)	DEST="lish-fremont.linode.com"
+			SHELL_TERM="vt100"
+			LOG="garybgenett"
+			OPTS="${OPTS} -t"
+			;;
 #>>>		(me)	DEST="me.garybgenett.net"
 		(me)	DEST="server.garybgenett.net"
 			if [[ ${HOSTNAME} != phoenix ]] &&
