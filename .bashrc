@@ -5466,7 +5466,7 @@ function task-export-text {
 		print NOTE "author: \"" . ${name} . "\"\n";
 		print NOTE "date: \"" . strftime("%Y-%m-%d", localtime(time())) . "\"\n";
 		print NOTE "---\n";
-		print NOTE "<!-- composer >> metainfo box-begin 0 >> -->\n";
+		print NOTE "<!-- composer >> metainfo box-begin 0 -->\n";
 		my $NOTE = {}; $NOTE->{"other"} = {};
 		my $multi_tag = [];
 		my $kanban_length = (64 - 2 - 7 - 4); #>>> maximum - marker<= > - annotations< [####]> - ellipsis< ...>
