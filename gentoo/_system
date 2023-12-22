@@ -1350,7 +1350,7 @@ if [[ ${1} == -i ]]; then
 		#note: this needs to match the name in the "${MAKEIT}" script
 		${PREPIT}_repdir										|| EXIT 1
 	fi
-	if ! ${DOFAST} && ! ${_CFG}; then
+	if ! ${_CFG} && ! ${DOFAST}; then
 		safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w		|| EXIT 1
 	fi
 	if ${_BLD}; then
