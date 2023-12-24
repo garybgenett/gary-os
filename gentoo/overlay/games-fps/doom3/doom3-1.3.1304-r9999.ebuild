@@ -2,9 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
 #>>> EAPI=5
+#>>> inherit eutils unpacker games
 EAPI=7
+inherit eutils-old unpacker games
 #>>>
-inherit eutils unpacker games
 
 MY_PV="1.3.1.1304"
 
