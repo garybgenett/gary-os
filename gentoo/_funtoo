@@ -32,3 +32,5 @@ f42ed8015bd13d02ad396e14e4deaa98d20fdb23
 b8241129e3de66e1c661eae9f1b5a8ceb8e63aac
 # 2023-07-06 06:58:16 +0100 8aa9f0c823c3a569a512327be65cc9d039c89f32 net-analyzer/nmap: port 9999 to libpcre2
 8aa9f0c823c3a569a512327be65cc9d039c89f32
+# 2023-12-17 14:57:10 -0500 3b63adf6f72e36bc19bf9712c0d65b4dd490fee8 metadata/stabilization-groups/qt: add dev-qt/qthttpserver:6 to qt6
+3b63adf6f72e36bc19bf9712c0d65b4dd490fee8
