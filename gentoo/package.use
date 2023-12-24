@@ -54,6 +54,7 @@ media-libs/opencv			contrib		# gentoo required
 media-libs/opencv			contribdnn	# gentoo required
 media-video/ffmpeg			vpx		# gentoo required
 net-dns/dnsmasq				script		# gentoo required
+net-libs/gnutls				pkcs11		# gentoo required
 net-libs/nodejs				inspector	# gentoo required
 sys-libs/zlib				minizip		# gentoo required
 
