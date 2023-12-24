@@ -32,9 +32,7 @@
 if [[ -z ${_BASE_ECLASS} ]]; then
 _BASE_ECLASS=1
 
-#>>> inherit eutils
-inherit eutils-old
-#>>>
+inherit eutils
 
 BASE_EXPF="src_unpack src_compile src_install"
 case "${EAPI:-0}" in
