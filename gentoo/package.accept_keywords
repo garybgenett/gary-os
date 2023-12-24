@@ -4,6 +4,8 @@
 
 =sys-boot/grub-9999			~amd64		# enable overlay version
 
+<media-video/ffmpeg-4.4.5		~amd64		# gentoo required [media-video/ffmpeg-4.4.4-r6]: src/libavcodec/x86/mathops.h:125: Error: operand type mismatch for `shr'
+
 ################################################################################
 
 sys-kernel/gentoo-kernel		~amd64		# gentoo required
@@ -21,6 +23,7 @@ x11-apps/igt-gpu-tools			~amd64		# gentoo required
 
 app-admin/haskell-updater		~amd64		# gentoo required
 app-text/pandoc				~amd64		# gentoo required
+app-text/pandoc-cli			~amd64		# gentoo required
 dev-haskell/*				~amd64		# gentoo required
 dev-lang/ghc				~amd64		# gentoo required
 
