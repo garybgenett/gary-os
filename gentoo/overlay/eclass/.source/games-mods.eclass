@@ -12,9 +12,7 @@
 # MOD_DIR - Subdirectory name for the mod, if applicable
 # MOD_ICON - Custom icon for the mod, instead of the default
 
-#>>> inherit eutils games
-inherit eutils-old games
-#>>>
+inherit eutils games
 
 EXPORT_FUNCTIONS src_install pkg_postinst
 
