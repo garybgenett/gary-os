@@ -238,16 +238,20 @@ QVGA+=" -vnc 127.0.0.1:9${QNUM}"
 
 ########################################
 
-QNET="-netdev user"
-QNET+=",id=user0"
-QNET+=",net=10.0.0.0/16"
-QNET+=",host=10.0.0.254"
-QNET+=",dns=10.0.0.253"
-QNET+=",smb=/tmp,smbserver=10.0.0.252"
-QNET+=",dhcpstart=10.0.${QNUM}.254"
-QNET+=",hostfwd=tcp::220${QNUM}-10.0.${QNUM}.254:22"
-QNET+=",hostfwd=tcp::443${QNUM}-10.0.${QNUM}.254:443"
-QNET+=",hostfwd=tcp::339${QNUM}-10.0.${QNUM}.254:3389"
+if ${NET_TAP}; then
+	QNET=
+else
+	QNET="-netdev user"
+	QNET+=",id=user0"
+	QNET+=",net=10.0.0.0/16"
+	QNET+=",host=10.0.0.254"
+	QNET+=",dns=10.0.0.253"
+	QNET+=",smb=/tmp,smbserver=10.0.0.252"
+	QNET+=",dhcpstart=10.0.${QNUM}.254"
+	QNET+=",hostfwd=tcp::220${QNUM}-10.0.${QNUM}.254:22"
+	QNET+=",hostfwd=tcp::443${QNUM}-10.0.${QNUM}.254:443"
+	QNET+=",hostfwd=tcp::339${QNUM}-10.0.${QNUM}.254:3389"
+fi
 
 for I in $(eval echo -en "{0..${NET_NUM}}"); do
 	if ${NET_TAP}; then
