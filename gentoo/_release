@@ -788,7 +788,7 @@ function _prepare_config {		#{isexit} #{doredo}
 	DOREDO="${DOREDO}" prepare_config_restore "null"			/init							|| return 1
 	DOREDO="${DOREDO}" prepare_config_restore sys-apps/sysvinit		/etc/inittab						|| return 1
 	DOREDO="${DOREDO}" prepare_config_restore sys-apps/baselayout		/etc/fstab						fstab			|| return 1
-	DOREDO="${DOREDO}" prepare_config_restore sys-libs/glibc		/etc/locale.gen						|| return 1
+	DOREDO="${DOREDO}" prepare_config_restore sys-apps/locale-gen		/etc/locale.gen						|| return 1
 	DOREDO="${DOREDO}" prepare_config_restore sys-apps/openrc		/etc/conf.d/hostname					|| return 1
 	DOREDO="${DOREDO}" prepare_config_restore "null"			/etc/profile.d/setterm.sh				|| return 1
 	DOREDO="${DOREDO}" prepare_config_restore net-wireless/wpa_supplicant	/etc/wpa_supplicant/wpa_supplicant.conf			wpa_supplicant.conf.bz2	|| return 1
