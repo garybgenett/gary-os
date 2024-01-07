@@ -3619,9 +3619,9 @@ function pages {
 
 function ports {
 	{
-		echo -en "\n"; netstat -an | ${GREP} "192.168.12.254" | ${GREP} "ESTABLISHED";
+		echo -en "\n"; netstat -an | ${GREP} "ESTABLISHED";
 		echo -en "\n"; for HOST in $(
-			netstat -an | ${GREP} "192.168.12.254" | ${GREP} "ESTABLISHED" |
+			netstat -an | ${GREP} "ESTABLISHED" |
 			awk '{print $5;}' | ${SED} "s|:.*$||g"
 			); do host ${HOST}; done;
 		echo -en "\n"; netstat -an
