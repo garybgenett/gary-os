@@ -801,11 +801,7 @@ function contacts {
 ########################################
 
 function date-string {
-	date --iso=seconds |
-		${SED} \
-			-e "s|[-]([0-9]{2}[:]?[0-9]{2})$|T\1|g" \
-			-e "s|[-:]||g" \
-			-e "s|T|-|g"
+	date +%Y%m%d-%H%M%S%z
 	return 0
 }
 
