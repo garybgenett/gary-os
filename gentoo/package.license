@@ -23,11 +23,11 @@ media-libs/libva-intel-media-driver	no-source-code
 ########################################
 # programs
 
-app-misc/atomicwallet			all-rights-reserved
-
 net-im/discord				all-rights-reserved
 net-im/slack				all-rights-reserved
 net-im/zoom				all-rights-reserved
+
+app-misc/atomicwallet			all-rights-reserved
 
 ########################################
 # games

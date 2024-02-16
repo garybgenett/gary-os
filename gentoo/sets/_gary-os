@@ -344,7 +344,6 @@ dev-vcs/git
 sys-apps/thunderbolt-software-user-space
 
 net-wireless/bluez
-net-wireless/bluez-hcidump
 net-wireless/bluez-tools
 
 app-forensics/cmospwd
@@ -427,6 +426,7 @@ net-wireless/hostapd
 app-admin/apache-tools
 www-servers/apache
 
+net-p2p/rtorrent
 net-vpn/tor
 
 ########################################
@@ -441,6 +441,10 @@ app-emulation/qemu-guest-agent
 app-emulation/spice-vdagent
 app-emulation/virt-viewer
 
+net-misc/freerdp
+net-misc/tigervnc
+x11-wm/xpra
+
 app-admin/keepassxc
 
 mail-client/mutt
@@ -452,12 +456,6 @@ www-client/firefox
 
 app-text/qpdfview
 app-text/xpdf
-
-net-misc/freerdp
-net-misc/tigervnc
-x11-wm/xpra
-
-net-p2p/rtorrent
 
 ########################################
 # media

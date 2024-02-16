@@ -359,6 +359,7 @@ net-wireless/hostapd
 app-admin/apache-tools
 www-servers/apache
 
+net-p2p/rtorrent
 net-vpn/tor
 
 ########################################
@@ -374,6 +375,14 @@ app-emulation/spice-vdagent
 app-emulation/virt-viewer
 app-emulation/wine-vanilla
 games-emulation/dosbox
+
+app-mobilephone/scrcpy
+dev-util/android-tools
+
+net-misc/freerdp
+net-misc/tigervnc
+x11-misc/x11vnc
+x11-wm/xpra
 
 app-admin/keepassxc
 app-misc/abook
@@ -393,6 +402,10 @@ www-client/firefox
 #>>> www-client/surf			# requires: net-libs/webkit -> dev-lang/ruby
 #>>> x11-misc/tabbed			# only used for: www-client/surf
 
+net-im/discord
+net-im/slack
+net-im/zoom
+
 media-gfx/gimp
 media-gfx/gnuclad
 media-gfx/graphviz
@@ -407,29 +420,15 @@ app-text/calibre
 app-text/sdcv
 media-gfx/mcomix
 
-net-misc/freerdp
-net-misc/tigervnc
-x11-misc/x11vnc
-x11-wm/xpra
-
-app-mobilephone/scrcpy
-dev-util/android-tools
-
 app-misc/atomicwallet
 #>>> net-p2p/bitcoin-cli
 #>>> net-p2p/bitcoin-qt
 #>>> net-p2p/bitcoind
 
-net-p2p/rtorrent
-
 app-admin/gkrellm
 x11-plugins/gkrellaclock
 x11-plugins/gkrellsun
 x11-plugins/gkrellweather
-
-net-im/discord
-net-im/slack
-net-im/zoom
 
 ########################################
 # media

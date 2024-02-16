@@ -34,17 +34,17 @@ net-wireless/bluez-tools		~amd64		# gentoo required
 ########################################
 # programs
 
+app-mobilephone/scrcpy			~amd64		# gentoo required
+
 app-misc/task				~amd64
 app-misc/taskd				~amd64		# gentoo required
 app-misc/timew				~amd64		# gentoo required
 
-app-mobilephone/scrcpy			~amd64		# gentoo required
-
-app-misc/atomicwallet			~amd64		# gentoo required
-
 net-im/discord				~amd64		# gentoo required
 net-im/slack				~amd64		# gentoo required
 net-im/zoom				~amd64		# gentoo required
+
+app-misc/atomicwallet			~amd64		# gentoo required
 
 ########################################
 # media
