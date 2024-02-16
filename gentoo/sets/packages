@@ -425,6 +425,8 @@ app-misc/atomicwallet
 #>>> net-p2p/bitcoin-qt
 #>>> net-p2p/bitcoind
 
+sci-geosciences/gpxsee
+
 app-admin/gkrellm
 x11-plugins/gkrellaclock
 x11-plugins/gkrellsun
