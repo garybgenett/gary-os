@@ -5156,6 +5156,7 @@ function task-export-drive-sync {
 		shift
 		pandoc \
 			--verbose \
+			--wrap="none" \
 			--from ${TODOS_MD_FORMAT} \
 			--to markdown+fancy_lists+task_lists+lists_without_preceding_blankline \
 			--output $(dirname ${TODOS_MD})/${TODOS_MD_TEXT} \
@@ -5165,9 +5166,11 @@ function task-export-drive-sync {
 			-e "/^$/d" \
 			-e "s|[\\]||g" \
 			-e "s|[-][[:space:]]{3}|  * |g" \
-			-e "s|^([^[:space:]])|\n#### \1|g" \
+			-e "s|^([#].+)$|\n\1|g" \
 			$(dirname ${TODOS_MD})/${TODOS_MD_TEXT} \
 			|| return 1
+		sudo chown plastic:plastic \
+			$(dirname ${TODOS_MD})/${TODOS_MD_TEXT}
 		return 0
 	fi
 	${RCLONE_U} sync \
