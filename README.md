@@ -269,7 +269,7 @@ a USB drive.
 
   1. Insert a new or empty USB drive at least 4GB in size
   2. Download the [Boot] archive, right click and 'Extract'
-  3. Double-click `rufus\*.exe`, click allow, and decline updates
+  3. Double-click `rufus*.exe`, click allow, and decline updates
      1. Show 'advanced drive properties' and check 'USB Drives'
      2. For 'Device', select the USB drive
      3. For 'Boot Selection', use the large 'Select' button and `loopfile.img`
@@ -1008,7 +1008,7 @@ and feel for GaryOS.
   | /etc/X11/Sessions/dwm     | Modified | Tune [dwm] running environment
 
 In cases where the files are modified or replaced, the original is kept as
-a `\*.gary-os` file.
+a `*.gary-os` file.
 
 In addition to the above, the [OpenRC] configuration is modified (see
 [Loader]).  This is primarily to disable all network daemons.  The [gpm] daemon
@@ -1383,7 +1383,7 @@ To create patches there is a function in [.bashrc].  Submit patches to
   ```
 
 The parent commit should be the last commit hash before your changes.  This will
-create `####-\*` patch files for each commit since the parent.  Email them as
+create `####-*` patch files for each commit since the parent.  Email them as
 attachments.  [GitHub] pull requests or links to commits in a forked repository
 also work.
 
@@ -2281,7 +2281,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * Completely up-to-date [Funtoo] [meta-repo] commit!
     * [Linux Kernel] configuration now from [Debian Kernel]
     * Streamlined [Builder] [Compile] process
-    * More comprehensive `FS\*` variable defaults
+    * More comprehensive `FS*` variable defaults
     * Improved "rootfs" overlay process and menu system in [Kernel]
     * Added [Tiny] kernel build
     * Color-branded [dwm]
