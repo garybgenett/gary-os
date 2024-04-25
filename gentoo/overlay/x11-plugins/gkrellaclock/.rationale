@@ -1,3 +1,3 @@
 # custom patch
 Error: 'gkrellm_init_plugin': /usr/lib64/gkrellm2/plugins/gkrellaclock.so: undefined symbol: gkrellm_init_plugin
-# 2023-02-17 12:35:47 -0600 ecfda677d2479a95569550bc52a5d516c4a181bd net-analyzer/icinga2: add 2.13.7
+# 2023-02-03 11:05:58 +0000 e360ddeb3da1b0a7948cc531067a23d7b3913666 x11-plugins/gkrellaclock: adopt
