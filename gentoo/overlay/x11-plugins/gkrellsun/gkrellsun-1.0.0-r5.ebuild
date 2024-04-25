@@ -19,10 +19,12 @@ DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext )"
 BDEPEND="virtual/pkgconfig"
 
+#>>>	"${FILESDIR}"/${P}-r5-makefile-fixes.patch
 PATCHES=(
 	"${FILESDIR}"/${P}-reenable.patch
 	"${FILESDIR}"/${P}-Respect-LDFLAGS.patch
-	"${FILESDIR}"/${P}-r5-makefile-fixes.patch
+	"${FILESDIR}"/${P}-r6-makefile-fixes.patch
+	"${FILESDIR}"/${P}-r6-include.patch
 )
 
 src_configure() {
