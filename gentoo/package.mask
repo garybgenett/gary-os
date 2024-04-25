@@ -9,7 +9,8 @@
 ########################################
 # toolkits
 
->=dev-lang/python-3.11			# gentoo required -- version
+<dev-lang/python-3.11			# gentoo required -- version
+>=dev-lang/python-3.12			# gentoo required -- version
 
 ########################################
 # games
