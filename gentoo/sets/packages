@@ -38,18 +38,18 @@ sys-firmware/sof-firmware
 ########################################
 # toolchain
 
+dev-build/autoconf
+dev-build/automake
+dev-build/make
 dev-lang/gnat-gpl
-sys-devel/autoconf
-sys-devel/automake
 sys-devel/binutils
 sys-devel/gcc
-sys-devel/make
 sys-devel/patch
 sys-libs/glibc
 
+dev-debug/gdb
 dev-util/ccache
 dev-util/debugedit
-sys-devel/gdb
 
 ########################################
 # system
@@ -264,6 +264,7 @@ virtual/perl-Time-Local
 
 dev-java/openjdk			# gentoo required -- source
 dev-lang/python
+dev-lang/rust				# gentoo required -- source
 net-libs/nodejs
 
 app-misc/jq
@@ -289,8 +290,8 @@ sys-apps/memtester
 sci-mathematics/calc
 sys-devel/bc
 
-dev-util/ltrace
-dev-util/strace
+dev-debug/ltrace
+dev-debug/strace
 dev-util/sysprof
 sys-apps/kexec-tools
 
@@ -410,7 +411,7 @@ media-gfx/graphviz
 media-gfx/inkscape
 
 app-office/libreoffice
-app-office/unoconv
+#>>> app-office/unoconv			# gentoo required	# requires: python_single_target_python3_10
 app-text/qpdfview
 app-text/xpdf
 

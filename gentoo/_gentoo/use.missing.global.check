@@ -2,6 +2,7 @@ build - !!internal use only!! DO NOT SET THIS FLAG YOURSELF!, used for creating 
 custom-cflags - Build with user-specified CFLAGS (unsupported)
 livecd - !!internal use only!! DO NOT SET THIS FLAG YOURSELF!, used during livecd building
 prefix - Defines if a Gentoo Prefix offset installation is used
+strip - Allow symbol stripping to be performed by the ebuild for special files
 test - Enable dependencies and/or preparations necessary to run tests (usually controlled by FEATURES=test but can be toggled independently)
 test-rust - Enable important test dependencies that require Rust toolchain
 vanilla - Do not add extra patches which change default behaviour; DO NOT USE THIS ON A GLOBAL SCALE as the severity of the meaning changes drastically
