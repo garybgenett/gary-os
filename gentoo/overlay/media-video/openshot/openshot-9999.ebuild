@@ -3,8 +3,8 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{9..11} )
-#PYTHON_REQ_USE=xml
+PYTHON_COMPAT=( python3_{10..11} )
+PYTHON_REQ_USE="xml(+)"
 DISTUTILS_SINGLE_IMPL=1
 
 #>>>inherit distutils-r1 xdg
@@ -18,11 +18,13 @@ DESCRIPTION="Award-winning free and open-source video editor"
 HOMEPAGE="https://openshot.org/"
 #>>>SRC_URI="https://github.com/OpenShot/${MY_PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 #>>>
-# 2023-06-11 12:24:45 -0500 f52e7447632783b8da2ddea127fb40c5382124e6 Merge pull request #5260 from OpenShot/effect-sequencing
+# 2024-03-27 15:05:10 -0500 8f2006a2540b65559971a9c87024ebd014cc3877 Merge pull request #5486 from OpenShot/copy-shear-menu
 EGIT_REPO_URI="https://github.com/OpenShot/${MY_PN}.git"
-EGIT_COMMIT="f52e7447632783b8da2ddea127fb40c5382124e6"
+EGIT_COMMIT="8f2006a2540b65559971a9c87024ebd014cc3877"
 #>>>
+#>>>S="${WORKDIR}/${MY_PN}-${PV}"
 S="${WORKDIR}/${PN}-${PV}"
+#>>>
 
 LICENSE="GPL-3+"
 SLOT="1"
@@ -52,12 +54,12 @@ python_compile_all() {
 	use doc && emake -C doc html
 }
 
-python_install_all() {
-	use doc && local HTML_DOCS=( doc/_build/html/. )
-	distutils-r1_python_install_all
-}
-
 python_test() {
 	distutils_install_for_testing
 	"${EPYTHON}" src/tests/query_tests.py -v --platform minimal || die
+}
+
+python_install_all() {
+	use doc && local HTML_DOCS=( doc/_build/html/. )
+	distutils-r1_python_install_all
 }
