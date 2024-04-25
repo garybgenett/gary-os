@@ -2,12 +2,10 @@
 # portage set configuration file
 ################################################################################
 
-#{LINPKG} sys-kernel/gentoo-kernel:5.10.154
-#{LINPKG} sys-kernel/gentoo-kernel:5.15.78
-#{LINPKG} sys-kernel/gentoo-sources:5.10.154
-#{LINPKG} sys-kernel/gentoo-sources:5.15.78
-#{KERNEL} 5.15.78 5.10.154
-#{KRNLNK} 5.10.154
+#{LINPKG} sys-kernel/gentoo-kernel:6.6.28
+#{LINPKG} sys-kernel/gentoo-sources:6.6.28
+#{KERNEL} 6.6.28
+#{KRNLNK} 6.6.28
 
 #{SELECT} cdparanoia:cdparanoia-paranoia
 #{SELECT} editor:vi

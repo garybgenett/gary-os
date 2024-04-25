@@ -59,8 +59,8 @@
 
 ########################################
 
-#{LINPKG} sys-kernel/gentoo-sources:5.10.154
-#{KERNEL} 5.10.154
+#{LINPKG} sys-kernel/gentoo-sources:6.6.28
+#{KERNEL} 6.6.28
 #{KRNLNK}
 
 #{SELECT} cdparanoia:cdparanoia-paranoia

@@ -2,9 +2,9 @@
 # portage package mask file
 ################################################################################
 
->sys-kernel/gentoo-kernel-5.15.78	# gentoo required -- version
->sys-kernel/gentoo-sources-5.15.78	# gentoo required -- version
->virtual/dist-kernel-5.15.78		# gentoo required -- version
+>sys-kernel/gentoo-kernel-6.6.28	# gentoo required -- version
+>sys-kernel/gentoo-sources-6.6.28	# gentoo required -- version
+>virtual/dist-kernel-6.6.28		# gentoo required -- version
 
 ########################################
 # toolkits
