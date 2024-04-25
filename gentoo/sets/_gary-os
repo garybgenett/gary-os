@@ -122,17 +122,17 @@ sys-kernel/linux-firmware
 ########################################
 # toolchain
 
-sys-devel/autoconf
-sys-devel/automake
+dev-build/autoconf
+dev-build/automake
+dev-build/make
 sys-devel/binutils
 sys-devel/gcc
-sys-devel/make
 sys-devel/patch
 sys-libs/glibc
 
+dev-debug/gdb
 dev-util/ccache
 dev-util/debugedit
-sys-devel/gdb
 
 ########################################
 # system
@@ -335,6 +335,7 @@ virtual/perl-MIME-Base64
 virtual/perl-Time-Local
 
 dev-lang/python
+dev-lang/rust				# gentoo required -- source
 
 app-misc/jq
 app-misc/yq
@@ -359,8 +360,8 @@ sys-apps/memtester
 sci-mathematics/calc
 sys-devel/bc
 
-dev-util/ltrace
-dev-util/strace
+dev-debug/ltrace
+dev-debug/strace
 dev-util/sysprof
 sys-apps/kexec-tools
 
