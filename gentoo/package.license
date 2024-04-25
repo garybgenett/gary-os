@@ -6,7 +6,6 @@
 # firmware
 
 sys-kernel/linux-firmware	linux-fw-redistributable	# gentoo required
-sys-kernel/linux-firmware		no-source-code	# gentoo required
 
 ########################################
 # system

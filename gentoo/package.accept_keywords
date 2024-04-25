@@ -2,12 +2,6 @@
 # portage package keywords file
 ################################################################################
 
-=sys-boot/grub-9999			~amd64		# enable overlay version
-
-<media-video/ffmpeg-4.4.5		~amd64		# gentoo required [media-video/ffmpeg-4.4.4-r6]: src/libavcodec/x86/mathops.h:125: Error: operand type mismatch for `shr'
-
-################################################################################
-
 sys-kernel/gentoo-kernel		~amd64		# gentoo required
 sys-kernel/gentoo-sources		~amd64		# gentoo required
 virtual/dist-kernel			~amd64		# gentoo required
@@ -21,14 +15,6 @@ x11-apps/igt-gpu-tools			~amd64		# gentoo required
 ########################################
 # toolkits
 
-app-admin/haskell-updater		~amd64		# gentoo required
-app-text/pandoc				~amd64		# gentoo required
-app-text/pandoc-cli			~amd64		# gentoo required
-dev-haskell/*				~amd64		# gentoo required
-dev-lang/ghc				~amd64		# gentoo required
-
-app-misc/yq				~amd64		# gentoo required
-
 net-wireless/bluez-tools		~amd64		# gentoo required
 
 ########################################
@@ -36,11 +22,11 @@ net-wireless/bluez-tools		~amd64		# gentoo required
 
 app-mobilephone/scrcpy			~amd64		# gentoo required
 
-app-misc/task				~amd64
+#>>> app-misc/task			~amd64		# gentoo required
 app-misc/taskd				~amd64		# gentoo required
 app-misc/timew				~amd64		# gentoo required
 
-net-im/discord				~amd64		# gentoo required
+#>>> net-im/discord			~amd64		# gentoo required
 net-im/slack				~amd64		# gentoo required
 net-im/zoom				~amd64		# gentoo required
 
@@ -54,8 +40,8 @@ media-video/peek			~amd64		# gentoo required
 ########################################
 # games
 
+#>>> games-misc/fortune-mod-all		~amd64		# gentoo required
 games-misc/fortune-mod-*		~amd64		# gentoo required
-games-misc/fortune-mod-all		~amd64		# gentoo required
 
 games-board/cgoban			~amd64		# gentoo required
 games-board/xboard			~amd64		# gentoo required
@@ -65,7 +51,7 @@ games-arcade/netris			~amd64		# gentoo required
 games-puzzle/ltris			~amd64		# gentoo required
 
 games-emulation/gnuboy			~amd64		# gentoo required
-games-emulation/mekanix			**		# gentoo required
+games-emulation/mekanix			~x86		# gentoo required
 games-emulation/nestopia		~amd64		# gentoo required
 games-emulation/stella			~amd64		# gentoo required
 

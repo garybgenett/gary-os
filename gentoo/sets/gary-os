@@ -57,11 +57,11 @@ sys-kernel/linux-firmware
 ########################################
 # toolchain
 
-sys-devel/autoconf
-sys-devel/automake
+dev-build/autoconf
+dev-build/automake
+dev-build/make				#{rootfs}
 sys-devel/binutils
 sys-devel/gcc
-sys-devel/make				#{rootfs}
 sys-devel/patch
 sys-libs/glibc
 
