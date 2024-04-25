@@ -1,29 +1,40 @@
 # custom selections
-# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
+# 2024-04-19 13:09:05 +0100 0cd4481bf0f054348dc784cfcdb1e2c32c2152bd dev-cpp/tbb: add 2021.12.0
 # games-misc/fortune-mod-bofh-excuses		*
 # games-misc/fortune-mod-calvin			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
 # games-misc/fortune-mod-chucknorris		*
+# games-misc/fortune-mod-debilneho		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-discworld		2017-12-10 09:09:04 +0100 5889c86307f9c6f61372ea8d0075a6d7d0171a0b games-misc/*: Update Manifest hashes
 # games-misc/fortune-mod-dubya			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-dune			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
 # games-misc/fortune-mod-firefly		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-flashrider		*
 # games-misc/fortune-mod-futurama		2019-12-25 22:47:40 +0100 e0992fcfb0637f29b3dd9619861c2d93fdcb03ac games-misc/fortune-mod-futurama: Fix checksum in Manifest.
 # games-misc/fortune-mod-gentoo-dev		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
 # games-misc/fortune-mod-gentoo-forums		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
-# games-misc/fortune-mod-kernelcookies		*
-# games-misc/fortune-mod-slackware		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
-# games-misc/fortune-mod-starwars		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
-# games-misc/fortune-mod-strangelove		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
-# games-misc/fortune-mod-dune			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
-# games-misc/fortune-mod-debilneho		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
-# games-misc/fortune-mod-discworld		2017-12-10 09:09:04 +0100 5889c86307f9c6f61372ea8d0075a6d7d0171a0b games-misc/*: Update Manifest hashes
-# games-misc/fortune-mod-flashrider		*
 # games-misc/fortune-mod-hitchhiker		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
 # games-misc/fortune-mod-homer			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
 # games-misc/fortune-mod-humorixfortunes	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-kernelcookies		*
 # games-misc/fortune-mod-osfortune		*
 # games-misc/fortune-mod-pqf			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
 # games-misc/fortune-mod-simpsons-chalkboard	2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-slackware		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
 # games-misc/fortune-mod-smac			2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
 # games-misc/fortune-mod-sp-fortunes		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
-# games-misc/fortune-mod-tao			2021-12-03 23:48:11 +0000 8ae498702ade8271624f069b7c95be40879e4dca games-misc/fortune-mod-tao: block newer games-misc/fortune-mod
+# games-misc/fortune-mod-starwars		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-strangelove		2019-10-11 17:35:28 +0200 219cdb34cca5c128540f9061ea3826b00a1cde7f games-misc: Remove *-fbsd KEYWORDS
+# games-misc/fortune-mod-tao			*
 # games-misc/fortune-mod-taow			*
 # games-misc/fortune-mod-zx-error		*
+# locale
+# games-misc/fortune-mod-at-linux
+# games-misc/fortune-mod-cs
+# games-misc/fortune-mod-fvl
+# games-misc/fortune-mod-it
+# games-misc/fortune-mod-norbert-tretkowski
+# games-misc/fortune-mod-rss
+# games-misc/fortune-mod-thomas-ogrisegg
+# skip
+# games-misc/fortune-mod-mormon
+# games-misc/fortune-mod-scriptures
