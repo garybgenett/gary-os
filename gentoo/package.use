@@ -6,8 +6,8 @@
 
 ################################################################################
 
+app-arch/libarchive			zstd		# gentoo required
 app-emulation/qemu			seccomp		# gentoo required
-app-office/libreoffice			dbus		# gentoo required
 app-text/poppler			cairo		# gentoo required
 app-text/poppler			qt5		# gentoo required
 dev-libs/boost				nls		# gentoo required
@@ -18,16 +18,19 @@ dev-qt/qtwidgets			dbus		# gentoo required
 media-gfx/graphviz			cairo		# gentoo required
 media-libs/gd				fontconfig	# gentoo required
 media-libs/gegl				cairo		# gentoo required
+media-libs/libopenshot			qt5		# gentoo required
 media-libs/libpulse			dbus		# gentoo required
 media-libs/libsdl			joystick	# gentoo required
 media-libs/libsdl2			joystick	# gentoo required
 media-libs/opencv			qt5		# gentoo required
 media-libs/suil				gtk2		# gentoo required
+media-video/ffmpeg			opus		# gentoo required
 media-video/ffmpeg			theora		# gentoo required
-media-video/ffmpeg			x264		# gentoo required
+net-misc/curl				http2		# gentoo required
 sys-apps/fwupd				-introspection	# gentoo required
 sys-libs/gdbm				berkdb		# gentoo required
 
+media-video/vlc				-vaapi		# gentoo required [*]: https://bugs.gentoo.org/864721
 sys-apps/coreutils			-gmp		# gentoo required [*]: configure: error: GMP not found, although --with-libgmp was specified. Try specifying --with-libgmp-prefix=DIR.
 sys-process/atop			-modules	# gentoo required [*]: make[1]: *** /lib/modules/<uname -r>/build: No such file or directory. Stop.
 
@@ -36,38 +39,42 @@ sys-process/atop			-modules	# gentoo required [*]: make[1]: *** /lib/modules/<un
 app-text/texlive-core			xetex		# gentoo required
 app-text/xmlto				text		# gentoo required
 dev-libs/libdbusmenu			gtk3		# gentoo required
-dev-libs/libpcre2			pcre32		# gentoo required
-dev-libs/xmlsec				gcrypt		# gentoo required
 dev-libs/xmlsec				nss		# gentoo required
 dev-python/PyQt5			declarative	# gentoo required
-dev-python/PyQt5			gui		# gentoo required
 dev-python/PyQt5			network		# gentoo required
 dev-python/PyQt5			printsupport	# gentoo required
 dev-python/PyQt5			webchannel	# gentoo required
 dev-python/PyQt5			widgets		# gentoo required
+dev-python/PyQt6			qml		# gentoo required
+dev-python/PyQt6			quick		# gentoo required
+dev-python/PyQt6			webchannel	# gentoo required
 dev-qt/qtmultimedia			widgets		# gentoo required
 dev-qt/qtwebchannel			qml		# gentoo required
 dev-qt/qtwebengine			widgets		# gentoo required
+media-libs/freetype			harfbuzz	# gentoo required
 media-libs/libsdl2			haptic		# gentoo required
 media-libs/libvpx			postproc	# gentoo required
 media-libs/opencv			contrib		# gentoo required
 media-libs/opencv			contribdnn	# gentoo required
+media-video/ffmpeg			chromium	# gentoo required
 media-video/ffmpeg			vpx		# gentoo required
 net-dns/dnsmasq				script		# gentoo required
 net-libs/gnutls				pkcs11		# gentoo required
 net-libs/nodejs				inspector	# gentoo required
+sys-kernel/installkernel		dracut		# gentoo required
 sys-libs/zlib				minizip		# gentoo required
+
+dev-lang/rust				profiler	# gentoo required
+virtual/rust				profiler	# gentoo required
 
 ########################################
 
 dev-libs/gmp				static-libs	# gentoo required
 dev-libs/libgcrypt			static-libs	# gentoo required
-dev-libs/libgpg-error			static-libs	# gentoo required
 dev-libs/lzo				static-libs	# gentoo required
 sys-apps/attr				static-libs	# gentoo required
 sys-libs/libcap				static-libs	# gentoo required
 sys-libs/libxcrypt			static-libs	# gentoo required
-sys-libs/pam				static-libs	# gentoo required
 sys-libs/zlib				static-libs	# gentoo required
 virtual/libcrypt			static-libs	# gentoo required
 
@@ -158,15 +165,20 @@ sys-libs/ncurses			tinfo
 
 */*					-libproxy	# requires: net-libs/libproxy -> dev-lang/spidermonkey
 */*					-spidermonkey	# requires: dev-lang/spidermonkey
-app-accessibility/espeak-ng		-man		# requires: app-text/ronn -> dev-lang/ruby
 dev-util/librnp				-man		# requires: dev-ruby/asciidocto -> dev-lang/ruby
 sys-apps/fwupd				minimal		# requires: ( sys-apps/systemd | sys-auth/elogind )
 
 ################################################################################
 
+#{NEW} dev-vcs/git			-tk		# gentoo required
+
 #{NEW} app-arch/libarchive		-lz4		# gentoo required
+#{NEW} dev-build/cmake			-gui		# gentoo required
+#{NEW} media-libs/freetype		-harfbuzz	# gentoo required
 #{NEW} media-libs/libsndfile		minimal		# gentoo required
 #{NEW} media-libs/tiff			-webp		# gentoo required
+#{NEW} net-misc/freerdp			-sdl		# gentoo required
+#{NEW} www-client/w3m			-imlib		# gentoo required
 
 ################################################################################
 
@@ -177,13 +189,13 @@ sys-apps/fwupd				minimal		# requires: ( sys-apps/systemd | sys-auth/elogind )
 #>>> - = remove
 #>>> / = remove (temporary)
 # * app-text/docbook-xsl-stylesheets
+# * dev-build/cmake
+# * dev-build/meson
 # * dev-lang/python
 # * dev-lang/vala
 # * dev-libs/glib
 # * dev-python/docutils = dev-python/pygments
 # * dev-python/pygments
-# * dev-util/cmake
-# * dev-util/meson
 # * media-fonts/dejavu = virtual/ttf-fonts
 # * media-libs/fontconfig
 # * media-libs/freetype = media-libs/fontconfig
