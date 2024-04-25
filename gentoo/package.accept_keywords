@@ -74,9 +74,9 @@ games-fps/doom3				~amd64		# gentoo required
 games-fps/doom3-ducttape		~amd64		# gentoo required
 games-fps/quakeforge			~amd64		# gentoo required
 
-#{MOD} games-fps/doom3-data			~amd64		# gentoo required
-#{MOD} games-fps/doom3-roe			~amd64		# gentoo required
-#{MOD} games-fps/quake1-data			~amd64		# gentoo required
+games-fps/doom3-data			~amd64		# gentoo required
+games-fps/doom3-roe			~amd64		# gentoo required
+games-fps/quake1-data			~amd64		# gentoo required
 
 ################################################################################
 # end of file
