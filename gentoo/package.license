@@ -49,9 +49,9 @@ app-arch/lha				lha
 games-fps/doom3				DOOM3
 games-fps/doom3-ducttape		freedist
 
-#{MOD} games-fps/doom3-data			DOOM3
-#{MOD} games-fps/doom3-roe			DOOM3
-#{MOD} games-fps/quake1-data			all-rights-reserved
+games-fps/doom3-data			DOOM3
+games-fps/doom3-roe			DOOM3
+games-fps/quake1-data			all-rights-reserved
 
 ################################################################################
 # end of file
