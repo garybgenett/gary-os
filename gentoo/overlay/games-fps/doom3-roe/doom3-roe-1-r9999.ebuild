@@ -2,9 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
 #>>> EAPI=5
+#>>> inherit eutils cdrom
 EAPI=7
+inherit eutils-old cdrom
 #>>>
-inherit eutils cdrom
 
 DESCRIPTION="Doom III: Resurrection of Evil expansion pack"
 HOMEPAGE="http://www.doom3.com/"
