@@ -3,9 +3,9 @@ inherit git-r3
 
 DESCRIPTION="Source port of the original Doom3"
 HOMEPAGE="https://dhewm3.org/"
-# 2022-06-13 03:36:23 +0200 2e71b99ee05ea65caa0fdafb0bbeeb9ddb997ced dhewm3 1.5.2  (tag: 1.5.2)
+# 2024-03-29 01:55:34 +0100 9892438a9bf57aa388cd7f1bcbdf9b9c1d5682e6 Update changelog for 1.5.3  (tag: 1.5.3)
 EGIT_REPO_URI="https://github.com/dhewm/dhewm3"
-EGIT_COMMIT="1.5.2"
+EGIT_COMMIT="1.5.3"
 
 LICENSE="GPL-3"
 SLOT="0"
