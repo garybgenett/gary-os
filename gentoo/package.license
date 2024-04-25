@@ -5,53 +5,53 @@
 ########################################
 # firmware
 
-sys-kernel/linux-firmware		linux-fw-redistributable
-sys-kernel/linux-firmware		no-source-code
+sys-kernel/linux-firmware	linux-fw-redistributable	# gentoo required
+sys-kernel/linux-firmware		no-source-code	# gentoo required
 
 ########################################
 # system
 
-sys-apps/man-pages-posix		freedist
+sys-apps/man-pages-posix		freedist	# gentoo required
 
-app-crypt/veracrypt			truecrypt-3.0
+app-crypt/veracrypt			truecrypt-3.0	# gentoo required
 
 ########################################
 # x11
 
-media-libs/libva-intel-media-driver	no-source-code
+media-libs/libva-intel-media-driver	no-source-code	# gentoo required
 
 ########################################
 # programs
 
-net-im/discord				all-rights-reserved
-net-im/slack				all-rights-reserved
-net-im/zoom				all-rights-reserved
+net-im/discord			all-rights-reserved	# gentoo required
+net-im/slack			all-rights-reserved	# gentoo required
+net-im/zoom			all-rights-reserved	# gentoo required
 
-app-misc/atomicwallet			all-rights-reserved
+app-misc/atomicwallet		all-rights-reserved	# gentoo required
 
 ########################################
 # games
 
-games-misc/fortune-mod-calvin		fairuse
-games-misc/fortune-mod-discworld	fairuse
-games-misc/fortune-mod-dubya		fairuse
-games-misc/fortune-mod-dune		free-noncomm
-games-misc/fortune-mod-firefly		fairuse
-games-misc/fortune-mod-futurama		fairuse
-games-misc/fortune-mod-humorixfortunes	fairuse
-games-misc/fortune-mod-humorixfortunes	freedist
-games-misc/fortune-mod-smac		fairuse
-games-misc/fortune-mod-strangelove	fairuse
+games-misc/fortune-mod-calvin		fairuse		# gentoo required
+games-misc/fortune-mod-discworld	fairuse		# gentoo required
+games-misc/fortune-mod-dubya		fairuse		# gentoo required
+games-misc/fortune-mod-dune		free-noncomm	# gentoo required
+games-misc/fortune-mod-firefly		fairuse		# gentoo required
+games-misc/fortune-mod-futurama		fairuse		# gentoo required
+games-misc/fortune-mod-humorixfortunes	fairuse		# gentoo required
+games-misc/fortune-mod-humorixfortunes	freedist	# gentoo required
+games-misc/fortune-mod-smac		fairuse		# gentoo required
+games-misc/fortune-mod-strangelove	fairuse		# gentoo required
 
-games-emulation/mekanix			mekanix
+games-emulation/mekanix			mekanix		# gentoo required
 
-app-arch/lha				lha
-games-fps/doom3				DOOM3
-games-fps/doom3-ducttape		freedist
+app-arch/lha				lha		# gentoo required
+games-fps/doom3				DOOM3		# gentoo required
+games-fps/doom3-ducttape		freedist	# gentoo required
 
-games-fps/doom3-data			DOOM3
-games-fps/doom3-roe			DOOM3
-games-fps/quake1-data			all-rights-reserved
+games-fps/doom3-data			DOOM3		# gentoo required
+games-fps/doom3-roe			DOOM3		# gentoo required
+games-fps/quake1-data		all-rights-reserved	# gentoo required
 
 ################################################################################
 # end of file
