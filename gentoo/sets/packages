@@ -264,7 +264,7 @@ virtual/perl-JSON-PP
 virtual/perl-MIME-Base64
 virtual/perl-Time-Local
 
-dev-java/openjdk			# gentoo required: force source version
+dev-java/openjdk			# gentoo required -- source
 dev-lang/python
 net-libs/nodejs
 
