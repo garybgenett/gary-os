@@ -102,7 +102,6 @@
 
 #note: match these up with "release_review" output
 #note: for "release_install" to work correctly, "#{fsexcl}" must be empty
-#{FSEXCL}
 
 #{FSPACK} base:/lib/modules
 #{FSPACK} base:/lib/firmware
@@ -112,6 +111,8 @@
 #{FSKEEP} emerge:/var/db/pkg
 #{FSKEEP} emerge:/var/db/repos/gentoo
 #{FSARCH} emerge:/var/db/repos/gentoo.git
+
+#{FSEXCL}
 
 ########################################
 # firmware
