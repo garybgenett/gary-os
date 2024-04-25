@@ -2,9 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 
 #>>> EAPI=5
+#>>> inherit eutils cdrom games
 EAPI=7
+inherit eutils-old cdrom games
 #>>>
-inherit eutils cdrom games
 
 DESCRIPTION="Doom 3 - data portion"
 HOMEPAGE="http://www.doom3.com/"
