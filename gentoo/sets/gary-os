@@ -15,12 +15,11 @@
 #{SELECT} unison:2.51
 #{SELECT} vi:vim
 #{SELECT} visual:vi
-#{MOD} #{SELECT} vi:busybox
 
 #{WINMGR} dwm
 #{WMHELP} doc>al+lf man>al+rt / cmd>al+p trm>al+sf+en web>al+cl+en / \`date --iso=s\`
 
-#>>> #{RCUPDT} xdg-settings set default-web-browser links-links-2.desktop	#{MOD}
+#>>> #{RCUPDT} xdg-settings set default-web-browser links-links-2.desktop
 #{RCUPDT} rc-update add gpm default		|| true
 #{RCUPDT} rc-update del sysklogd default	|| true
 #{RCUPDT} rc-update del netmount default	|| true
@@ -34,57 +33,21 @@
 
 #note: match these up with "release_review" output
 #note: for "release_install" to work correctly, "#{fsexcl}" must be empty
-#{FSEXCL}
-#{MOD} #{FSKEEP}
-#{MOD} #{FSARCH}
 
-#note: speed up boot time, and avoid memory cost, by only having these in the "#{mod}" build
-#note: size of the default "rootfs" file is not as much of a concern as the in-memory footprint
-#note: for the "#{mod}" build, the primary consideration is the kernel size
-#{MOD} #{FSPACK} base:/usr/bin
-#{MOD} #{FSPACK} base:/usr/lib
-#{MOD} #{FSPACK} base:/usr/lib64
-#{MOD} #{FSPACK} base:/usr/libexec
-#{MOD} #{FSPACK} base:/usr/sbin
-#{MOD} #{FSPACK} base:/usr/share
-
-#note: do everything possible to minimize the "#{mod}" build
-#note: some of these override definitions above and below
-#note: gary-os
-#{MOD} #{FSEXCL} mod:/.gary-os/.git
-#{MOD} #{FSEXCL} mod:/.gary-os/artifacts/archive
-#{MOD} #{FSEXCL} mod:/.gary-os/artifacts/images
-#note: build
-#{MOD} #{FSEXCL} mod:/lib/firmware
-#{MOD} #{FSEXCL} mod:/usr/include
-#{MOD} #{FSEXCL} mod:/usr/lib/llvm
-#{MOD} #{FSEXCL} mod:/usr/lib/python3.10/test
-#{MOD} #{FSEXCL} mod:/usr/libexec/gcc
-#{MOD} #{FSEXCL} mod:/usr/x86_64-pc-linux-gnu
+#{FSPACK} base:/lib/modules
+#{FSPACK} base:/lib/firmware
 
 #{FSPACK} docs:/usr/share/doc
 #{FSPACK} docs:/usr/share/info
 #{FSPACK} docs:/usr/share/man
-#{MOD} #{FSEXCL} docs:/usr/share/doc
-#{MOD} #{FSEXCL} docs:/usr/share/info
-#{MOD} #{FSEXCL} docs:/usr/share/man
-
-#NOTE: EVERYTHING BELOW IS MATCHED WITH "_GARY-OS"
-#NOTE: SOME OF THESE INTENTIONALLY RE-DEFINE THE DEFAULTS
-
-#{FSPACK} base:/lib/modules
-#{FSPACK} base:/lib/firmware
 
 #{FSARCH} emerge:/usr/share/genkernel/distfiles
 #{FSARCH} emerge:/usr/src/linux
 #{FSKEEP} emerge:/var/db/pkg
 #{FSKEEP} emerge:/var/db/repos/gentoo
 #{FSARCH} emerge:/var/db/repos/gentoo.git
-#{MOD} #{FSEXCL} emerge:/usr/share/genkernel/distfiles
-#{MOD} #{FSEXCL} emerge:/usr/src/linux
-#{MOD} #{FSEXCL} emerge:/var/db/pkg
-#{MOD} #{FSEXCL} emerge:/var/db/repos/gentoo
-#{MOD} #{FSEXCL} emerge:/var/db/repos/gentoo.git
+
+#{FSEXCL}
 
 ########################################
 # firmware
@@ -94,10 +57,10 @@ sys-kernel/linux-firmware
 ########################################
 # toolchain
 
-sys-devel/autoconf			#{MOD}
-sys-devel/automake			#{MOD}
-sys-devel/binutils			#{MOD}
-sys-devel/gcc				#{MOD}
+sys-devel/autoconf
+sys-devel/automake
+sys-devel/binutils
+sys-devel/gcc
 sys-devel/make				#{rootfs}
 sys-devel/patch
 sys-libs/glibc
@@ -105,20 +68,20 @@ sys-libs/glibc
 ########################################
 # system
 
-app-misc/ca-certificates		#{MOD}
-app-text/iso-codes			#{MOD}
-sys-libs/timezone-data			#{MOD}
+app-misc/ca-certificates
+app-text/iso-codes
+sys-libs/timezone-data
 
-sys-apps/man-db				#{MOD}
-sys-apps/man-pages			#{MOD}
-sys-apps/man-pages-posix		#{MOD}
-sys-apps/texinfo			#{MOD}
+sys-apps/man-db
+sys-apps/man-pages
+sys-apps/man-pages-posix
+sys-apps/texinfo
 
-app-misc/screen				#{MOD}
+app-misc/screen
 app-shells/bash				#{rootfs}
-app-shells/bash-completion		#{MOD}
-sys-apps/kbd				#{MOD}
-sys-libs/gpm				#{MOD}
+app-shells/bash-completion
+sys-apps/kbd
+sys-libs/gpm
 
 app-crypt/efitools
 sys-apps/busybox			#{rootfs}
@@ -129,22 +92,22 @@ sys-boot/os-prober
 sys-libs/efivar
 
 app-crypt/veracrypt
-#>>> app-forensics/sleuthkit		#{MOD} # requires: ( app-doc/doxygen | virtual/jdk | virtual/jre )
+#>>> app-forensics/sleuthkit		# requires: ( app-doc/doxygen | virtual/jdk | virtual/jre )
 sys-apps/gptfdisk
 sys-fs/cryptsetup
 sys-fs/dosfstools			#{rootfs}
 sys-fs/e2fsprogs			#{rootfs}
-sys-fs/encfs				#{MOD}
+sys-fs/encfs
 sys-fs/exfat-utils			#{rootfs}
 sys-fs/fuse				#{rootfs}
 sys-fs/fuse-exfat			#{rootfs}
 sys-fs/mdadm
 sys-fs/ntfs3g				#{rootfs}
-sys-fs/squashfs-tools			#{MOD}
+sys-fs/squashfs-tools
 sys-fs/zfs
 sys-fs/zfs-kmod
 
-sys-apps/attr				#{MOD}
+sys-apps/attr
 sys-apps/coreutils			#{rootfs}
 sys-apps/diffutils
 sys-apps/file
@@ -163,23 +126,23 @@ sys-process/procps
 sys-process/psmisc
 sys-process/time
 
-sys-libs/pam				#{MOD}
+sys-libs/pam
 
-net-firewall/arptables			#{MOD}
-net-firewall/ebtables			#{MOD}
-net-firewall/iptables			#{MOD}
-net-misc/bridge-utils			#{MOD}
+net-firewall/arptables
+net-firewall/ebtables
+net-firewall/iptables
+net-misc/bridge-utils
 net-misc/dhcpcd
 net-misc/iputils
-net-misc/vconfig			#{MOD}
-net-wireless/wavemon			#{MOD}
+net-misc/vconfig
+net-wireless/wavemon
 net-wireless/wireless-tools
 net-wireless/wpa_supplicant
-sys-apps/ethtool			#{MOD}
+sys-apps/ethtool
 sys-apps/iproute2
-sys-apps/net-tools			#{MOD}
+sys-apps/net-tools
 
-net-ftp/lftp				#{MOD}
+net-ftp/lftp
 net-misc/curl
 net-misc/rsync				#{rootfs}
 net-misc/wget				#{rootfs}
@@ -190,61 +153,61 @@ net-libs/gnutls
 net-misc/openssh
 
 app-editors/nano
-app-editors/vim				#{MOD} # requires: dev-util/ctags -> dev-python/docutils
-app-text/dos2unix			#{MOD}
+app-editors/vim
+app-text/dos2unix
 
 app-arch/bzip2
 app-arch/cpio
 app-arch/gzip
-app-arch/lz4				#{MOD}
-app-arch/p7zip				#{MOD}
+app-arch/lz4
+app-arch/p7zip
 app-arch/tar				#{rootfs}
 app-arch/xz-utils			#{rootfs}
 
-app-arch/cabextract			#{MOD}
+app-arch/cabextract
 
 ########################################
 # gentoo
 
-app-admin/eselect			#{MOD}
-sys-apps/portage			#{MOD}
+app-admin/eselect
+sys-apps/portage
 
-app-portage/eix				#{MOD}
-app-portage/gentoolkit			#{MOD}
-app-portage/mirrorselect		#{MOD}
-sys-kernel/genkernel			#{MOD}
+app-portage/eix
+app-portage/gentoolkit
+app-portage/mirrorselect
+sys-kernel/genkernel
 
 ########################################
 # x11
 
-x11-base/xorg-drivers			#{MOD}
-x11-base/xorg-server			#{MOD}
+x11-base/xorg-drivers
+x11-base/xorg-server
 
-x11-apps/xrandr				#{MOD}
-x11-misc/xdg-utils			#{MOD}
+x11-apps/xrandr
+x11-misc/xdg-utils
 
-x11-misc/dmenu				#{MOD}
-x11-wm/dwm				#{MOD}
+x11-misc/dmenu
+x11-wm/dwm
 
-x11-terms/rxvt-unicode			#{MOD}
+x11-terms/rxvt-unicode
 
-x11-apps/xset				#{MOD}
-x11-apps/xsetroot			#{MOD}
+x11-apps/xset
+x11-apps/xsetroot
 
 ########################################
 # toolkits
 
-dev-lang/perl				#{MOD}
+dev-lang/perl
 
-dev-lang/python				#{MOD}
+dev-lang/python
 
-dev-tcltk/expect			#{MOD} # requires: dev-lang/tcl
-dev-vcs/git				#{MOD}
+dev-tcltk/expect
+dev-vcs/git
 
 app-forensics/cmospwd
 sys-apps/flashrom
-#>>> sys-apps/fwupd			#{MOD} # requires: ( x11-libs/pango +introspection | dev-lang/vala )
-sys-apps/fwupd-efi			#{MOD}
+#>>> sys-apps/fwupd			# requires: ( x11-libs/pango +introspection | dev-lang/vala )
+sys-apps/fwupd-efi
 sys-apps/memtester
 
 ########################################
@@ -254,11 +217,11 @@ sys-apps/hdparm
 sys-apps/smartmontools
 sys-block/blktrace
 
-sys-apps/dcfldd				#{MOD}
-sys-fs/dd-rescue			#{MOD}
+sys-apps/dcfldd
+sys-fs/dd-rescue
 sys-fs/ddrescue
-sys-fs/ncdu				#{MOD}
-sys-fs/safecopy				#{MOD}
+sys-fs/ncdu
+sys-fs/safecopy
 
 sys-apps/dmidecode
 sys-apps/lshw
@@ -266,25 +229,25 @@ sys-apps/pciutils
 sys-apps/usbutils
 sys-power/acpitool
 
-net-analyzer/dnstracer			#{MOD}
-net-analyzer/httping			#{MOD}
-net-analyzer/nethogs			#{MOD}
-net-analyzer/nmap			#{MOD}
-net-analyzer/openbsd-netcat		#{MOD}
-net-analyzer/ssldump			#{MOD}
-net-analyzer/tcpdump			#{MOD}
-net-analyzer/traceroute			#{MOD}
-net-dns/bind-tools			#{MOD}
-net-dns/ddclient			#{MOD}
-net-misc/netkit-telnetd			#{MOD}
-net-misc/whois				#{MOD}
+net-analyzer/dnstracer
+net-analyzer/httping
+net-analyzer/nethogs
+net-analyzer/nmap
+net-analyzer/openbsd-netcat
+net-analyzer/ssldump
+net-analyzer/tcpdump
+net-analyzer/traceroute
+net-dns/bind-tools
+net-dns/ddclient
+net-misc/netkit-telnetd
+net-misc/whois
 
 ########################################
 # servers
 
 net-ftp/tftp-hpa			#{rootfs}
-net-misc/ntp				#{MOD}
-net-vpn/openvpn				#{MOD}
+net-misc/ntp
+net-vpn/openvpn
 
 ########################################
 # programs
@@ -294,8 +257,8 @@ mail-mta/msmtp
 ########################################
 # media
 
-app-cdr/cdrtools			#{MOD}
-app-cdr/dvd+rw-tools			#{MOD}
+app-cdr/cdrtools
+app-cdr/dvd+rw-tools
 
 ################################################################################
 # end of file
