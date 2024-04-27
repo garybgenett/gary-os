@@ -252,7 +252,7 @@ fi
 
 declare PACKDIRS_SKIP="
 	${LDIR}\*/kernel/kheaders_data.tar.xz
-	/usr/lib/python3.10/test/\*.tar.xz
+	/usr/lib/python\*/test/\*.tar.xz
 	/usr/share/calibre/hyphenation/dictionaries.tar.xz
 	/usr/share/fwupd/\*.tar.xz
 	/usr/share/genkernel/distfiles/\*.tar.xz
