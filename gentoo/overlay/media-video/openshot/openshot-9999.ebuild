@@ -8,7 +8,6 @@ PYTHON_REQ_USE="xml(+)"
 DISTUTILS_SINGLE_IMPL=1
 
 #>>>inherit distutils-r1 xdg
-#>>>
 inherit distutils-r1 xdg git-r3
 #>>>
 
@@ -17,12 +16,10 @@ MY_PN="${PN}-qt"
 DESCRIPTION="Award-winning free and open-source video editor"
 HOMEPAGE="https://openshot.org/"
 #>>>SRC_URI="https://github.com/OpenShot/${MY_PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-#>>>
+#>>>S="${WORKDIR}/${MY_PN}-${PV}"
 # 2024-03-27 15:05:10 -0500 8f2006a2540b65559971a9c87024ebd014cc3877 Merge pull request #5486 from OpenShot/copy-shear-menu
 EGIT_REPO_URI="https://github.com/OpenShot/${MY_PN}.git"
 EGIT_COMMIT="8f2006a2540b65559971a9c87024ebd014cc3877"
-#>>>
-#>>>S="${WORKDIR}/${MY_PN}-${PV}"
 S="${WORKDIR}/${PN}-${PV}"
 #>>>
 
