@@ -1,3 +1,10 @@
 # version archiving
-# 2022-11-13 00:20:24 +0100 19a28412bab445e6c35db9fd14702efbbef22c74 profiles: drop USE="cli dri" in 23.0
-# 2024-04-19 13:09:05 +0100 0cd4481bf0f054348dc784cfcdb1e2c32c2152bd dev-cpp/tbb: add 2021.12.0
+# virtual/dist-kernel
+#	5.10.154	2022-11-11 08:01:02 +0100 165ec26ec6be45ccf68b5817f924e41df65269ce sys-kernel/gentoo-kernel: Bump to 5.10.154
+#	6.6.28		2024-04-18 14:50:17 +0200 ad0c3f0148a08678a9f4dc996a40a9cd7eddca0e sys-kernel/gentoo-kernel: Update configs to g12
+# sys-kernel/gentoo-kernel
+#	5.10.154	2022-11-11 08:01:03 +0100 6ce7859e9fb276fc8d5a84dc4652c3f5335f04ce virtual/dist-kernel: Bump to 5.10.154
+#	6.6.28		2024-04-18 14:27:42 +0200 0c5a2a0f9b866209dca5bf778d416b6befd24a30 virtual/dist-kernel: Bump to 6.6.28
+# sys-kernel/gentoo-source
+#	5.10.154	2022-11-10 13:47:52 -0500 516a186fa354655eb8a1023194a98a65fb31f13e sys-kernel/gentoo-sources: add 5.10.154
+#	6.6.28		2024-04-18 16:34:23 +0900 abdc1c7abed421300e34ad63b97391b11eef9b3e sys-kernel/gentoo-sources: add 6.6.28
