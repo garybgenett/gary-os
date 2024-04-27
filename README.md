@@ -1163,11 +1163,10 @@ Kernel] and [Portage] configurations, along with the [stage3] tarball and
 needed to reproduce the build.
 
 After [Compile] or [Manage], the `/_gentoo` directory will be created by
-[gentoo/.emergent].  It performs a number of checks of the [Portage]
-configuration and the installed system.  The results are in the
-`/_gentoo/+checks` text file.  This file is very helpful in keeping a Portage
-configuration in line with upstream, particularly the addition or removal of
-`$USE` flags.
+[gentoo/.emergent].  It performs a number of checks of the Portage configuration
+and the installed system.  The results are in the `/_gentoo/+checks` text file.
+This file is very helpful in keeping a Portage configuration in line with
+upstream, particularly the addition or removal of `$USE` flags.
 
 The `/_gentoo.log` file is created every [Compile].  It contains the complete
 output of the build, for troubleshooting.  Please include this file when
