@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -52,8 +52,8 @@ BDEPEND="
 	sys-devel/flex
 	virtual/pkgconfig
 	doc? (
-		app-doc/doxygen[dot]
-		media-gfx/transfig
+		app-text/doxygen[dot]
+		>=media-gfx/fig2dev-3.2.9-r1
 	)"
 
 PATCHES=(
@@ -69,6 +69,7 @@ src_prepare() {
 
 src_configure() {
 	filter-lto #858755
+	unset LEX YACC #902997,884287
 
 	qf_client() {
 		echo $(usex client $(use_enable ${1}) --disable-${1})
