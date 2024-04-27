@@ -752,6 +752,9 @@ DOFAST=true doit` to skip some of the ancillary time-consuming steps until
 a successful build is achieved, and then do a final `make doit` to ensure they
 are run.  This is a real time saver.
 
+The `DOREDO=true` variable is also available, and forces an update and
+re-archive of the Portage tree.
+
 Successful completion of this phase is the #1 measure of a healthy build.  It
 can't be run too often.
 
@@ -761,6 +764,9 @@ Somewhere between a 'doit' and a 'redo', this rebuilds the [Linux Kernel] list
 and completes the 'doit' process, without performing a full system rebuild as is
 done with 'init' or 'redo'.  Primarily used during development to build and test
 new kernels and configurations.
+
+The `DOREDO=true` variable is also available, and removes all previous kernels,
+along with their modules and configurations.
 
 **Redo**
 
@@ -1788,12 +1794,13 @@ Everything needed to perform these steps is in the [Repository] or the
         * `vdiff $(realpath ./linux/.default) $(realpath ./linux/.config).*.DONE`
         * `rsync $(realpath ./linux/.config).*.DONE $(realpath ./linux/.config)`
         * `rm $(realpath ./linux/.config).*`
-  * `cd .setup/gentoo.make`
-    * `(cd .setup; git-commit ./linux ./gentoo)`
   * `make doit`
     * [x] *Iterate()*
+  * `cd .setup/gentoo.make`
+    * `(cd .setup; git-commit ./linux ./gentoo)`
   * `make redo`
     * [x] *Iterate()*
+    * `make DOMODS=true doit`
     * `(cd _builds; rsync ../../_toor/ ./_gary-os.working)`
   * `make edit`
     * `(cd _builds; rm ./_gentoo.working; ln _gentoo ./_gentoo.working)`
@@ -1817,14 +1824,14 @@ Everything needed to perform these steps is in the [Repository] or the
 
 *`Validate { <kernel> <check> <option> <target>`*
 
-  * `make` *`${3}`* `DOREDO=true doit` *`${4}`*
+  * `{ export` *`${3}`* `&& make doit && make DOREDO=true` *`${4}`* `;}`
     * [x] *Iterate()*
   * [ ] Target size of *`${1}`* or less (`make check` = Total disk usage: *`${2}`*)
     * [ ] Command comments at bottom of [gentoo/package.use]
         * `make` *`${3}`* `depends-<package atom|/|%>`
         * `make` *`${3}`* `depgraph-<package atom|/|%>`
         * `make` *`${3}`* `belongs-<file path|/|%>`
-    * `make` *`${3}`* `DOREDO=true DOFAST=true doit` *`${4}`*
+    * `{ export` *`${3}`* `&& export DOFAST=true && make doit && make DOREDO=true` *`${4}`* `;}`
         * `make` *`${3}`* `check`
     * `ll ./build/.gary-os-*`
   * `make` *`${3}`* `gendir`
@@ -1845,7 +1852,7 @@ Everything needed to perform these steps is in the [Repository] or the
     * [ ] Test kernel size and root filesystem resize
   * [x] *Validate( 1.8GB 3.4GiB P=*\_*gary-os rootfs )*
   * `(cd .setup; git-commit ./gentoo)`
-  * `make DOREDO=true doit devel`
+  * `make doit && make DOREDO=true devel`
 
 **Test & Publish**
 
@@ -1872,7 +1879,6 @@ Everything needed to perform these steps is in the [Repository] or the
         * `(cd _build/gentoo/gentoo; git pull; GIT_PAGER= git-list -n1)`
     * `vi ./gentoo/_funtoo`
         * [ ] Update [Gentoo] commit
-    * `rm ./build/_build/gentoo-repo.* ./build/var/db/repos/gentoo*.tar.xz`
     * `make DOREDO=true doit`
         * [x] *Retry()*
     * `make edit`
@@ -2148,13 +2154,13 @@ Everything in [Booting], [Running] and [Building] should be validated below.
   * `(cd coding/gary-os; git-commit -m "Stamped v#.# release." ./README.md)`
     * `make _publish_gitdir`
     * `(cd _builds/.gary-os/.gary-os; GIT_PAGER= git-list -n1)`
-  * `make DOREDO=true DOMODS=true doit release _prepare_packdirs`
+  * `{ export DOMODS=true && make doit && make DOREDO=true release ;}`
     * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.tiny.kernel 1`
     * [x] **Verify()**
-  * `make DOREDO=true doit release _prepare_packdirs`
+  * `{ make doit && make DOREDO=true release ;}`
     * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1`
     * [x] **Verify()**
-  * `make DOREDO=true P=_gary-os doit rootfs`
+  * `{ export P=_gary-os && make doit && make DOREDO=true rootfs ;}`
     * `_sync boot`
     * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1 groot=10.0.0.254 -m 8192`
     * [x] **Verify()**
