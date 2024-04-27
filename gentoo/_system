@@ -1347,6 +1347,10 @@ if [[ ${1} == -i ]]; then
 		{ ${_BLD} && ! ${DOFAST}; } ||
 		${DOREDO};
 	}; then
+		if ${DOREDO}; then
+			${RM}				${ARC_FILE}{,.git}.tar.xz				|| EXIT 1
+			${RM}				${TARGET}${REPDIR}{,.git}{,.tar.xz}			|| EXIT 1
+		fi
 		#note: this needs to match the name in the "${MAKEIT}" script
 		${PREPIT}_repdir										|| EXIT 1
 	fi
@@ -1359,11 +1363,13 @@ if [[ ${1} == -i ]]; then
 		fi
 	fi
 	if ${_KRN} && ! ${DOFAST}; then
-		${RM}					${TARGET}/boot/{System.map,vmlinuz,initramfs,config}-*	|| EXIT 1
-		${RM}					${TARGET}/boot/{_*,kernel{,.old}}			|| EXIT 1
-		${RM}					${TARGET}/etc/kernels/*					|| EXIT 1
-		${RM}					${TARGET}/lib/modules/*					|| EXIT 1
-		${RM}					${TARGET}${LDIR}*					|| EXIT 1
+		if ${DOREDO}; then
+			${RM}				${TARGET}/boot/{System.map,vmlinuz,initramfs,config}-*	|| EXIT 1
+			${RM}				${TARGET}/boot/{_*,kernel{,.old}}			|| EXIT 1
+			${RM}				${TARGET}/etc/kernels/*					|| EXIT 1
+			${RM}				${TARGET}/lib/modules/*					|| EXIT 1
+			${RM}				${TARGET}${LDIR}*					|| EXIT 1
+		fi
 		expect_wrapper				emerge ${_ASK} sys-kernel/genkernel ${LINPKG}		|| EXIT 1
 		if [[ -z ${KRNLNK} ]]; then KRNLNK="*"; fi
 		declare KERN="$(cd ${TARGET}/boot; ls vmlinuz-${KRNLNK}-gentoo*		2>/dev/null | ${GREP} -v "${_TITLE}" | sort | tail -n1)"
