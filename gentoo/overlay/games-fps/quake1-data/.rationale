@@ -2,4 +2,4 @@
 # automation of interactive ebuild
 usage: lha [-]<commands>[<options>] [-<options> ...] archive_file [file...]
 LHa: Error: Checksum error (LHarc file?)
-# 2021-09-11 09:55:31 +0200 38b155fa1bf907617067c98eb4ba3a5d0790eb1a **/metadata.xml: Replace http by https in DOCTYPE element
+# 2023-12-09 09:44:17 +0100 06eaf3bc64a09c586e3add31732829f71aa4bd37 games-fps/quake1-data: Add bindist restriction
