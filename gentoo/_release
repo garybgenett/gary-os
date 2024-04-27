@@ -1002,12 +1002,12 @@ function _prepare_packdirs {		#{isexit} #{doredo}
 		echo -en ">>> IT IS NORMAL FOR THIS TO TAKE SEVERAL MINUTES <<<\n"
 		echo -en "\n"
 		NEXT="$(eval find ${TARGET} \
-			$(variable_parse DEVDIRS "" "\\( -path ${TARGET}" " -prune \\) -o ") \
-			$(variable_parse PACKDIRS_SKIP "" "\\( -path ${TARGET}" " -prune \\) -o ") \
-			\\\( -path ${_FINAL} -prune \\\) -o \
-			\\\( -path ${TARGET}${ARCDIR} -prune \\\) -o \
-			\\\( -path ${TARGET}${DSTDIR} -prune \\\) -o \
-			\\\( -path ${TARGET}${PAKDIR} -prune \\\) -o \
+			$(variable_parse DEVDIRS	"" "\\( -path ${TARGET}" " -prune \\) -o ") \
+			$(variable_parse PACKDIRS_SKIP	"" "\\( -path ${TARGET}" " -prune \\) -o ") \
+			\\\( -path ${_FINAL}		-prune \\\) -o \
+			\\\( -path ${TARGET}${ARCDIR}	-prune \\\) -o \
+			\\\( -path ${TARGET}${DSTDIR}	-prune \\\) -o \
+			\\\( -path ${TARGET}${PAKDIR}	-prune \\\) -o \
 			-print |
 			${GREP} "[.]tar[.]xz$"
 		)"
