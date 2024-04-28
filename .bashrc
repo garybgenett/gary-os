@@ -2958,11 +2958,13 @@ function mount-zfs {
 	declare Z_PSEP=":"
 	declare Z_DSEP="."
 	declare ZOPTS=
-	ZOPTS+=" compression=lz4"
-	ZOPTS+=" canmount=noauto"
-	ZOPTS+=" sharenfs=off"
-	ZOPTS+=" sharesmb=off"
-	ZOPTS+=" relatime=on"
+	declare -a ZOPTS_KEEP=()
+	declare -a ZOPTS_PASS=()
+	ZOPTS+=" compression=lz4";	ZOPTS_KEEP+=(compression)
+	ZOPTS+=" canmount=noauto";	ZOPTS_PASS+=(canmount)
+	ZOPTS+=" sharenfs=off";		ZOPTS_KEEP+=(sharenfs)
+	ZOPTS+=" sharesmb=off";		ZOPTS_KEEP+=(sharesmb)
+	ZOPTS+=" relatime=on";		ZOPTS_KEEP+=(relatime)
 	declare ZOPTS_DONE="${ZOPTS}"
 	ZOPTS_DONE+=" mountpoint=none"
 	ZOPTS_DONE+=" readonly=on"
@@ -3479,6 +3481,15 @@ function mount-zfs {
 					${Z_MOUNT} "${@}" ${ZPOOL}			|| return 1
 				fi
 				for FILE in $(${Z_LIST_ALL/-t all/-t filesystem} ${ZPOOL} | ${GREP} -v "^${ZPOOL}$"); do
+					declare ZOPT=
+					declare ZOPT_DO=
+					for ZOPT in ${ZOPTS_KEEP[@]}; do
+						zfs inherit ${ZOPT} ${FILE}		|| return 1
+					done
+					for ZOPT in ${ZOPTS_PASS[@]}; do
+						ZOPT_DO="$(echo "${ZOPTS}" | ${GREP} -o "${ZOPT}=[^[:space:]]+")"
+						zfs set ${ZOPT_DO} ${FILE}		|| return 1
+					done
 					${Z_MOUNT} ${FILE}				|| return 1
 				done
 				zfs_pool_info						|| return 1
