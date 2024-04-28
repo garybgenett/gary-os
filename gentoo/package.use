@@ -139,7 +139,7 @@ sci-calculators/qalculate-gtk		-gnome
 sys-apps/fwupd				bluetooth flashrom nvme synaptics uefi
 sys-apps/iproute2			iptables
 sys-apps/smartmontools			-caps -daemon
-sys-boot/grub				device-mapper efiemu libzfs mount
+sys-boot/grub				device-mapper dist-kernel-cap efiemu libzfs mount
 sys-fs/zfs				-python rootfs
 www-client/firefox			-wifi
 www-servers/apache			-threads
