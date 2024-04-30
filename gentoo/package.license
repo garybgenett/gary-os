@@ -48,9 +48,9 @@ app-arch/lha				lha		# gentoo required
 games-fps/doom3				DOOM3		# gentoo required
 games-fps/doom3-ducttape		freedist	# gentoo required
 
-games-fps/doom3-data			DOOM3		# gentoo required
-games-fps/doom3-roe			DOOM3		# gentoo required
-games-fps/quake1-data		all-rights-reserved	# gentoo required
+#{MOD} games-fps/doom3-data		DOOM3		# gentoo required
+#{MOD} games-fps/doom3-roe		DOOM3		# gentoo required
+#{MOD} games-fps/quake1-data	all-rights-reserved	# gentoo required
 
 ################################################################################
 # end of file
