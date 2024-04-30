@@ -1073,7 +1073,7 @@ function _prepare_symlinks {		#{isexit} #{doredo}
 	[[ -n ${COMMIT} ]] && ${LN} --relative ${TARGET}/${CMTFIL}	${_FINAL}/${CMTFIL}				|| return 1
 	${LN} --relative ${TARGET}/.${_TITLE}/README.md			${_RAMFS}.${_GREAD}				|| return 1
 	${LN} --relative ${_RAMFS}.kernel.${_GPACK}			${_FINAL}/${_GPACK}				|| return 1
-	${LN} --relative ${_RAMFS}.${_G_MOD}.kernel.${_GPACK}		${_FINAL}/${_GPACK/%.txt/.${_G_MOD}.txt}	|| return 1
+#>>>	${LN} --relative ${_RAMFS}.${_G_MOD}.kernel.${_GPACK}		${_FINAL}/${_GPACK/%.txt/.${_G_MOD}.txt}	|| return 1
 	${LN} --relative ${_RAMFS}.rootfs.${_GPACK}			${_FINAL}/${_GPACK/%.txt/.${ROOTFS_NAME}.txt}	|| return 1
 	${LN} --relative ${TARGET}${ARCDIR}				${_FINAL}${ARCDIR}				|| return 1
 	${LN} --relative ${TARGET}${GENDIR}				${_FINAL}${GENDIR}				|| return 1
@@ -1728,8 +1728,8 @@ function release_fetch_list {		#>>>{dotest}
 		echo "${FET_BAS}.kernel"				>>${FET_PKG}
 		echo "${FET_BAS}.kernel.${_GPACK}"			>>${FET_PKG}
 		echo "${MASK}${FET_BAS}.grub.zip"			>>${FET_PKG}
-		echo "${MASK}${FET_BAS}.${_G_MOD}.kernel"		>>${FET_PKG}
-		echo "${MASK}${FET_BAS}.${_G_MOD}.kernel.${_GPACK}"	>>${FET_PKG}
+#>>>		echo "${MASK}${FET_BAS}.${_G_MOD}.kernel"		>>${FET_PKG}
+#>>>		echo "${MASK}${FET_BAS}.${_G_MOD}.kernel.${_GPACK}"	>>${FET_PKG}
 		echo "${MASK}${FET_BAS}.rootfs"				>>${FET_PKG}
 		echo "${MASK}${FET_BAS}.rootfs.${_GPACK}"		>>${FET_PKG}
 		shopt -s lastpipe
@@ -1776,7 +1776,8 @@ function _release_fetch {		#{ismain} #{doredo} #{dotest}
 			-o${FET_DST}/${_TITLE}.grub			${FET_DST}/${FET_BAS}.grub.zip			|| return 1
 		${RM}							${FET_DST}/${_TITLE}.grub/${FET_BAS}.grub	|| return 1
 	fi
-	for FILE in kernel ${_G_MOD}.kernel rootfs; do
+#>>>	for FILE in kernel ${_G_MOD}.kernel rootfs; do
+	for FILE in kernel rootfs; do
 		if {	[[ -f						${FET_DST}/${FET_BAS}.${FILE} ]] &&
 			[[ ! -f						${FET_DST}/${_TITLE}.${FILE} ]];
 		}; then
