@@ -81,7 +81,7 @@ RELEASE[9]="v5.0"; CMTHASH[9]="198fea2f4636949dad11ae710192e3fdb59ec446"
 RELEASE[10]="v6.0"; CMTHASH[10]="6ab204b331ef4d6a5dc3fcc8c817b72147207af8"
 RELEASE[11]="v7.0"; CMTHASH[11]="3e7b42964d34777a8d644b4602ea36132a8a6124"
 
-declare -a RELEASE_SKIP=(8)
+declare -a RELEASE_SKIP=(0 1 2 3 4 5 6 7 8 9)
 
 ########################################
 
@@ -2174,11 +2174,11 @@ function _publish_gitdir {		#{ismain}
 		); do
 			declare SKIP="false"
 			declare SNUM=
-			for SNUM in ${RELEASE_SKIP[*]}; do
-				if [[ ${NEXT} == ${SNUM} ]]; then
-					SKIP="true"
-				fi
-			done
+#>>>			for SNUM in ${RELEASE_SKIP[*]}; do
+#>>>				if [[ ${NEXT} == ${SNUM} ]]; then
+#>>>					SKIP="true"
+#>>>				fi
+#>>>			done
 			if ! ${SKIP}; then
 				${GIT} tag --force ${RELEASE[${NEXT}]} ${FILE}	|| return 1
 			fi
@@ -2319,8 +2319,8 @@ function _publish_export {
 			continue
 		fi
 		if {
-			[[ ${RELEASE[${INDEX}]} == ${RELEASE[-1]} ]] &&
-			[[ ${RELEASE[${INDEX}]} == ${_VERSN} ]];
+			[[ ${RELEASE[${INDEX}]} == ${RELEASE[-1]} ]];
+#>>>			&& [[ ${RELEASE[${INDEX}]} == ${_VERSN} ]];
 		}; then
 #>>>			publish_export_underscore ${DSTDIR}					|| return 1
 #>>>			publish_export_underscore ${PAKDIR}					|| return 1
