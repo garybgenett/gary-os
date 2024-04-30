@@ -1603,7 +1603,12 @@ elif [[ ${1} == -U ]]; then
 	if ${_GOS}; then
 		FILE="--fetchonly"
 	fi
-	expect_wrapper emerge --ask=n --emptytree ${FILE}			\
+	expect_wrapper emerge							\
+		--ask=n								\
+		--usepkg=n							\
+		--getbinpkg=n							\
+		--emptytree							\
+		${FILE}								\
 		\@system \@world						2>&1 | tee ${DSTDIR}.log
 	if [[ ${PIPESTATUS[0]} != 0 ]]; then
 		FAIL="true"
