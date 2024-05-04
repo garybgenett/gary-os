@@ -810,6 +810,7 @@ function _prepare_config {		#{isexit} #{doredo}
 	done
 	shopt ${LASTPIPE} lastpipe
 	prepare_config_issue														|| return 1
+	realdev									${TARGET}/dev						|| return 1
 	${LN} sbin/init								${TARGET}/init						|| return 1
 	${SED} -i "s|^[#](.+ttyS0.+vt100.*)$|\1|g"				${TARGET}/etc/inittab					|| return 1
 	${SED} -i "s|^([^#].+)$|#\1|g"						${TARGET}/etc/fstab					|| return 1
