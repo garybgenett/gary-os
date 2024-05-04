@@ -1612,7 +1612,7 @@ function release_grub_qcow_mount {	#>>>{dotest}
 		[[ -n ${GRUB_LEFI} ]];
 	}; then
 		${MKDIR}			${GRUB_DEST}/{${MOUNT_MBR},${MOUNT_EFI}}		|| return 1
-		mount-robust			${GRUB_LMBR} ${GRUB_DEST}/${MOUNT_MBR} -o nonempty	|| return 1
+		mount-robust			${GRUB_LMBR} ${GRUB_DEST}/${MOUNT_MBR}			|| return 1
 		mount-robust			${GRUB_LEFI} ${GRUB_DEST}/${MOUNT_EFI}			|| return 1
 	fi
 	return 0
