@@ -103,8 +103,8 @@
 #note: match these up with "release_review" output
 #note: for "release_install" to work correctly, "#{fsexcl}" must be empty
 
-#{FSPACK} base:/lib/modules
-#{FSPACK} base:/lib/firmware
+#{FSPACK} base:/usr/lib/modules
+#{FSPACK} base:/usr/lib/firmware
 
 #{FSKEEP} emerge:/usr/share/genkernel/distfiles
 #{FSKEEP} emerge:/usr/src/linux

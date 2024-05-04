@@ -377,8 +377,8 @@ export WMHELP="${WMHELP:-${_TITLE} / \`date --iso=seconds\`}"
 ########################################
 
 declare LDIR="/usr/src/linux"
-declare MDIR="/lib/modules"
-declare FDIR="/lib/firmware"
+declare MDIR="/usr/lib/modules"
+declare FDIR="/usr/lib/firmware"
 
 declare KVER=
 declare KCFG=
