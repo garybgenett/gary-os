@@ -95,7 +95,7 @@ for FILE in \
 	.setup \
 	.static \
 ; do
-	NEXT="$(cat /.g/_data/zactive{,/coding}/${FILE}.git/refs/heads/master 2>/dev/null)"
+	NEXT="$(cat /.g/_data/zactive{,/coding}/${FILE}.git/refs/heads/main 2>/dev/null)"
 	if [[ -n "${NEXT}" ]]; then
 		COMMIT="${COMMIT}${FILE}: ${NEXT}\n"
 	fi
