@@ -878,7 +878,9 @@ function _prepare_docdir {		#{dotest}
 	then ${RSYNC_U} ${G_REPO_GIT}/			${TARGET}/.${_TITLE}/.git		|| return 1
 	else ${RM}					${TARGET}/.${_TITLE}/.git		|| return 1
 	fi
-	${SED} -i "/worktree[ ][=]/d"			${TARGET}/.${_TITLE}/.git/config	|| return 1
+	if [[ -f ${TARGET}/.${_TITLE}/.git/config ]]; then
+		${SED} -i "/worktree[ ][=]/d"		${TARGET}/.${_TITLE}/.git/config	|| return 1
+	fi
 	#note: set the "makefile" to use "/" as the "$target" by default
 	${RM}						${TARGET}/.${_TITLE}/build		|| return 1
 	${LN} "/"					${TARGET}/.${_TITLE}/build		|| return 1
