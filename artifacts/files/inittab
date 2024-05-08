@@ -1,4 +1,4 @@
-::restart:/bin/switch_root -c /dev/console ${_GOVLY} /init || ${ROOTFS_SHELL} -l
+::restart:${ROOTFS_SROOT} -c /dev/console ${_GOVLY} /init || ${ROOTFS_SHELL} -l
 
 #>>> ::sysinit:${ROOTFS_SHELL} /initrc
 #>>> ::respawn:-${ROOTFS_SHELL}
