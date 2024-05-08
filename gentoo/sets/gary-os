@@ -91,7 +91,7 @@ sys-boot/grub
 sys-boot/os-prober
 sys-libs/efivar
 
-app-crypt/veracrypt
+#>>> app-crypt/veracrypt		# requires: x11-libs/wxGTK + non-free license
 #>>> app-forensics/sleuthkit		# requires: ( app-doc/doxygen | virtual/jdk | virtual/jre )
 sys-apps/gptfdisk
 sys-fs/cryptsetup
