@@ -1,5 +1,5 @@
 #!${ROOTFS_SHELL}
-PATH="/usr/sbin:/usr/bin:/sbin:/bin"
+PATH="${ROOTFS_PATH}"
 export ${ROOTFS_NAME}_init="false"
 export ${ROOTFS_NAME}_load="false"
 if [ "${1}" == "debug" ]; then
