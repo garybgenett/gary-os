@@ -28,7 +28,8 @@ export _GOVLY="/.overlay"
 export _GUNPK="/.unpack"
 export _GINST="/.install"
 
-export _G_MOD="tiny"
+export _G_MOD_TINY="tiny"
+export _G_MOD="mod"
 export _GREAD="readme.md"
 export _GPACK="packages.txt"
 
@@ -1124,8 +1125,8 @@ function _release_devel {		#{ismain} #{doredo} #{dotest}
 		DOREDO="true" DOFAST="true" DOTEST="true" _release_cpio			|| return 1
 	fi
 	DOREDO="true" _release_kernel							|| return 1
-	if [[ ! -f ${_RAMFS}.kernel			]]; then ${LN} --relative ${_RAMFS}.${_G_MOD}.kernel			${_RAMFS}.kernel		; fi
-	if [[ ! -f ${_RAMFS}.kernel.packages.txt	]]; then ${LN} --relative ${_RAMFS}.${_G_MOD}.kernel.packages.txt	${_RAMFS}.kernel.packages.txt	; fi
+#>>>	if [[ ! -f ${_RAMFS}.kernel			]]; then ${LN} --relative ${_RAMFS}.${_G_MOD}.kernel			${_RAMFS}.kernel		; fi
+#>>>	if [[ ! -f ${_RAMFS}.kernel.packages.txt	]]; then ${LN} --relative ${_RAMFS}.${_G_MOD}.kernel.packages.txt	${_RAMFS}.kernel.packages.txt	; fi
 	if [[ ! -f ${_RAMFS}.rootfs			]]; then ${LN} --relative ${_RAMFS}.cpio.rootfs				${_RAMFS}.rootfs		; fi
 	if [[ ! -f ${_RAMFS}.rootfs.packages.txt	]]; then ${LN} --relative ${_RAMFS}.cpio.rootfs.txt			${_RAMFS}.rootfs.packages.txt	; fi
 	if {
@@ -1573,9 +1574,9 @@ function release_grub_loopfile {	#>>>{dotest}
 	declare GRUB_DEST="${1}" && shift
 	declare GRUB_LMBR="${1}" && shift
 	declare GRUB_LEFI="${1}" && shift
-	if [[ ! -f ${_RAMFS}.kernel ]]; then
-		${LN} --relative ${_RAMFS}.${_G_MOD}.kernel		${_RAMFS}.kernel					|| return 1
-	fi
+#>>>	if [[ ! -f ${_RAMFS}.kernel ]]; then
+#>>>		${LN} --relative ${_RAMFS}.${_G_MOD}.kernel		${_RAMFS}.kernel					|| return 1
+#>>>	fi
 	if ${DOTEST}; then
 		${MKDIR}						${GRUB_DEST}/${MOUNT_EFI}/${_TITLE}			|| return 1
 		if ! ${RSYNC_W} --copy-links ${_RAMFS}.kernel		${GRUB_DEST}/${MOUNT_EFI}/${_TITLE}/${_TITLE}.efi	; then
@@ -2355,6 +2356,7 @@ function _publish_export {
 		${RM} $(publish_export_filelist ${_OUTDIR})					|| return 1
 		touch -r $(
 			${LS} -t ${_OUTDIR}/${RELEASE[${INDEX}]}/*.kernel 2>/dev/null		|
+			${GREP} -v "[.]${_G_MOD_TINY}[.]"					|
 			${GREP} -v "[.]${_G_MOD}[.]"						|
 			head -n1
 		) ${_OUTDIR}/${RELEASE[${INDEX}]}						|| return 1
@@ -2368,6 +2370,7 @@ function _publish_export {
 		fi
 		for NEXT in $(
 			${LS} ${_OUTDIR}/${INDEX}/*.{kernel,initrd,rootfs,grub.zip} 2>/dev/null	|
+			${GREP} -v "[.]${_G_MOD_TINY}[.]"					|
 			${GREP} -v "[.]${_G_MOD}[.]"
 		); do
 			declare OUTFILE="$(
