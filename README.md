@@ -1832,6 +1832,7 @@ Everything needed to perform these steps is in the [Repository] or the
         * `make` *`${3}`* `belongs-<file path|/|%>`
     * `make` *`${3}`* `DOFAST=true doit && make DOREDO=true` *`${4}`*
         * `make` *`${3}`* `check`
+        * `mkdir ./mnt; mount -o loop ./build/.gary-os-*/gary-os-*_64.cpio.rootfs ./mnt; ncdu ./mnt; umount ./mnt; rm ./mnt`
     * `ll ./build/.gary-os-*`
   * `make` *`${3}`* `gendir`
     * [ ] Command comments at bottom of [gentoo/make.conf]
