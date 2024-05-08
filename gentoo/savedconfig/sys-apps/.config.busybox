@@ -1,0 +1,9 @@
+# applets/applet_tables: duplicate applet name 'bb'
+# applets/applet_tables: duplicate applet name 'bbsh'
+#	https://bugs.gentoo.org/928744
+CONFIG_FEATURE_PREFER_APPLETS=n
+CONFIG_FEATURE_EDITING=y
+CONFIG_FEATURE_EDITING_VI=y
+CONFIG_BBCONFIG=y
+CONFIG_FEATURE_COMPRESS_BBCONFIG=y
+CONFIG_FEATURE_SH_STANDALONE=n
