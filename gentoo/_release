@@ -812,7 +812,7 @@ function _prepare_config {		#{isexit} #{doredo}
 	shopt ${LASTPIPE} lastpipe
 	prepare_config_issue														|| return 1
 	realdev									${TARGET}/dev						|| return 1
-	${LN} sbin/init								${TARGET}/init						|| return 1
+	${LN} --relative ${TARGET}/usr/bin/init					${TARGET}/init						|| return 1
 	${SED} -i "s|^[#](.+ttyS0.+vt100.*)$|\1|g"				${TARGET}/etc/inittab					|| return 1
 	${SED} -i "s|^([^#].+)$|#\1|g"						${TARGET}/etc/fstab					|| return 1
 	${RSYNC_C} --copy-links ${ARTDIR}/files/locale.gen			${TARGET}/etc/						|| return 1
