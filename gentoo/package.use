@@ -185,59 +185,69 @@ sys-apps/fwupd				minimal		# requires: ( sys-apps/systemd | sys-auth/elogind )
 #{CMD} make _prepare_packages ; grep "installed" ./build/.packages.txt | sort -nr | head -n50
 #{CMD} declare TOTAL="0"; for FILE in $(grep "installed" ./build/.packages.txt | awk '{print $1;}'); do TOTAL="$((${TOTAL}+${FILE}))"; done; echo "${TOTAL}"
 
-#>>> * = required
-#>>> - = remove
-#>>> / = remove (temporary)
-# * app-text/docbook-xsl-stylesheets
-# * dev-build/cmake
-# * dev-build/meson
-# * dev-lang/python
-# * dev-lang/vala
-# * dev-libs/glib
-# * dev-python/docutils = dev-python/pygments
-# * dev-python/pygments
-# * media-fonts/dejavu = virtual/ttf-fonts
-# * media-libs/fontconfig
-# * media-libs/freetype = media-libs/fontconfig
-# * media-libs/mesa
-# * sys-apps/systemd-utils
-# * sys-kernel/linux-firmware
-# - app-text/texlive-core
-# - dev-lang/ruby
-# - dev-lang/rust = gnome-base/librsvg
-# - dev-lang/tcl = dev-lang/tk
-# - dev-libs/boost = sys-block/thin-provisioning-tools
-# - dev-libs/gobject-introspection
-# - dev-libs/icu
-# - dev-python/cython
-# - dev-qt/qtcore
-# - dev-scheme/guile
-# - media-libs/harfbuzz = gnome-base/librsvg
-# - sys-apps/dbus
-# - sys-devel/llvm = dev-lang/rust
-# - x11-libs/cairo = gnome-base/librsvg
-# - x11-libs/gtk+ = x11-themes/adwaita-icon-theme
-# - x11-libs/pango = ( x11-libs/gtk+ | gnome-base/librsvg )
-# / dev-python/ensurepip-pip
-# / net-libs/libsmi
+#>>> required
+# dev-lang/python
+# dev-libs/glib
+# media-libs/fontconfig
+# media-libs/freetype = media-libs/fontconfig
+# sys-apps/systemd-utils
+# sys-kernel/linux-firmware
+
+#>>> remove
+# app-text/asciidoc
+# app-text/docbook-xml-dtd
+# app-text/docbook-xsl-stylesheets = app-text/docbook-xml-dtd
+# app-text/sgml-common
+# app-text/texlive-core
+# dev-build/cmake
+# dev-build/meson
+# dev-build/ninja
+# dev-lang/rust = gnome-base/librsvg
+# dev-lang/tcl = dev-lang/tk
+# dev-lang/vala
+# dev-lang/yasm
+# dev-libs/boost = sys-block/thin-provisioning-tools
+# dev-libs/gobject-introspection
+# dev-libs/icu
+# dev-python/cython = sys-apps/systemd-utils -> dev-python/lxml
+# dev-python/docutils = dev-python/pygments
+# dev-python/lxml
+# dev-python/pygments
+# dev-python/setuptools
+# dev-qt/qtcore
+# dev-scheme/guile
+# media-fonts/dejavu
+# media-fonts/font-util
+# media-libs/harfbuzz = gnome-base/librsvg
+# media-libs/mesa
+# sys-apps/dbus
+# sys-devel/clang = media-libs/mesa -> dev-libs/libclc
+# sys-devel/llvm = ( media-libs/mesa | sys-devel/clang )
+# x11-libs/cairo = gnome-base/librsvg
+# x11-libs/gtk+
+# x11-libs/pango = ( x11-libs/gtk+ | gnome-base/librsvg )
 
 ########################################
 
 #{GOS} dev-embedded/libftdi		-cxx		# dev-libs/boost
 #{GOS} dev-vcs/git			-tk		# dev-lang/tcl (dev-lang/tk)
 #{GOS} media-libs/freetype		-svg		# gnome-base/librsvg -> x11-libs/pango
+#{GOS} net-libs/libnet			-man		# app-text/doxygen -> app-text/ghostscript-gpl
 #{GOS} net-libs/nghttp2			-cxx		# dev-libs/boost
-#{GOS} net-wireless/wpa_supplicant	-qt5		# dev-qt/qtcore
 
-#{GOS} dev-lang/python			-ensurepip	# dev-python/ensurepip-wheels -> dev-python/ensurepip-pip
-#{GOS} dev-python/pydantic		-native-extensions	# dev-python/cython
 #{GOS} media-libs/freetype		-harfbuzz	# media-libs/harfbuzz
+#{GOS} media-libs/libcanberra		-gtk2		# x11-libs/gtk+
 #{GOS} media-libs/libcanberra		-gtk3		# x11-libs/gtk+
-#{GOS} net-analyzer/tcpdump		-smi		# net-libs/libsmi
+#{GOS} media-libs/mesa			-llvm		# sys-devel/llvm
 #{GOS} sys-fs/lvm2			-thin		# sys-block/thin-provisioning-tools -> dev-libs/boost
 
-#{GOS} x11-base/xorg-server		-xnest		# not needed, keep size down
-#{GOS} x11-base/xorg-server		-xvfb		# not needed, keep size down
+########################################
+
+#{GOS} media-libs/mesa			-vulkan		# media-libs/vulkan-loader
+#{GOS} media-libs/mesa			-vulkan-overlay	# media-libs/vulkan-loader
+#{GOS} net-wireless/wpa_supplicant	-qt5		# dev-qg/qtcore
+#{GOS} x11-base/xorg-server		-xnest		# keep size down
+#{GOS} x11-base/xorg-server		-xvfb		# keep size down
 
 ################################################################################
 # end of file
