@@ -1149,21 +1149,21 @@ function release_rootfs_cpio_tools {
 	if [[ -n ${1} ]]; then
 		ROOTFS_DEST="${1}" && shift
 	fi
-	declare BUSY_DIR="$(dirname			${ROOTFS_BUSYBOX})"
-	${MKDIR}					${ROOTFS_DEST}.dir${BUSY_DIR}		|| return 1
-	${RSYNC_U} ${TARGET}${ROOTFS_BUSYBOX}		${ROOTFS_DEST}.dir${ROOTFS_BUSYBOX}	|| return 1
-	chroot						${ROOTFS_DEST}.dir ${ROOTFS_BUSYBOX}	\
-							--install -s ${BUSY_DIR}		|| return 1
-	declare CORE_DIR="$(dirname			${ROOTFS_COREUTILS})"
-	${MKDIR}					${ROOTFS_DEST}.dir${CORE_DIR}		|| return 1
-	${RSYNC_U} ${TARGET}${ROOTFS_COREUTILS}		${ROOTFS_DEST}.dir${ROOTFS_COREUTILS}	|| return 1
+	declare BUSY_DIR="$(dirname				${ROOTFS_BUSYBOX})"
+	${MKDIR}						${ROOTFS_DEST}.dir${BUSY_DIR}				|| return 1
+	${RSYNC_U} ${TARGET}${ROOTFS_BUSYBOX}			${ROOTFS_DEST}.dir${ROOTFS_BUSYBOX}			|| return 1
+	chroot							${ROOTFS_DEST}.dir ${ROOTFS_BUSYBOX}			\
+								--install -s ${BUSY_DIR}				|| return 1
+	declare CORE_DIR="$(dirname				${ROOTFS_COREUTILS})"
+	${MKDIR}						${ROOTFS_DEST}.dir${CORE_DIR}				|| return 1
+	${RSYNC_U} ${TARGET}${ROOTFS_COREUTILS}			${ROOTFS_DEST}.dir${ROOTFS_COREUTILS}			|| return 1
 	for FILE in $(
 		${TARGET}${ROOTFS_COREUTILS} --help | ${GREP} "^[[:space:]]*[[]"
 	); do
-		${LN} --relative			${ROOTFS_DEST}.dir${ROOTFS_COREUTILS}	\
-							${ROOTFS_DEST}.dir${BUSY_DIR}/${FILE}	|| return 1
-		${LN} --relative			${ROOTFS_DEST}.dir${ROOTFS_COREUTILS}	\
-							${ROOTFS_DEST}.dir${CORE_DIR}/${FILE}	|| return 1
+		${LN} --relative				${ROOTFS_DEST}.dir${ROOTFS_COREUTILS}			\
+								${ROOTFS_DEST}.dir${BUSY_DIR}/${FILE}			|| return 1
+		${LN} --relative				${ROOTFS_DEST}.dir${ROOTFS_COREUTILS}			\
+								${ROOTFS_DEST}.dir${CORE_DIR}/${FILE}			|| return 1
 	done
 	return 0
 }
@@ -1174,19 +1174,19 @@ function release_rootfs_cpio_utils {
 		ROOTFS_DEST="${1}" && shift
 	fi
 	for FILE in ${ROOTFS_UTILS}; do
-		${MKDIR}				${ROOTFS_DEST}.dir$(dirname ${FILE})	|| return 1
-		if [[ -L				${ROOTFS_DEST}.dir${FILE}		]]; then
-			${RM}				${ROOTFS_DEST}.dir${FILE}		|| return 1
+		${MKDIR}			${ROOTFS_DEST}.dir$(dirname ${FILE})	|| return 1
+		if [[ -L			${ROOTFS_DEST}.dir${FILE}		]]; then
+			${RM}			${ROOTFS_DEST}.dir${FILE}		|| return 1
 		fi
-		${RSYNC_U} --copy-links			${TARGET}${FILE}			\
-							${ROOTFS_DEST}.dir${FILE}		|| return 1
-		${MKDIR}				${ROOTFS_DEST}.dir/lib			|| return 1
+		${RSYNC_U} --copy-links		${TARGET}${FILE}			\
+						${ROOTFS_DEST}.dir${FILE}		|| return 1
+		${MKDIR}			${ROOTFS_DEST}.dir/lib			|| return 1
 		for NEXT in $(
-			${ROOTFS_LDD}			${FILE}					|
-			${GREP} --only-matching		"[/][^[:space:]]+"			\
+			${ROOTFS_LDD}		${FILE}					|
+			${GREP} --only-matching	"[/][^[:space:]]+"			\
 		); do
-			${RSYNC_U} --copy-links		${TARGET}${NEXT}			\
-							${ROOTFS_DEST}.dir/lib/			|| return 1
+			${RSYNC_U} --copy-links	${TARGET}${NEXT}			\
+						${ROOTFS_DEST}.dir/lib/			|| return 1
 		done
 	done
 	return 0
@@ -1198,21 +1198,20 @@ function release_rootfs_cpio_files {
 		ROOTFS_DEST="${1}" && shift
 	fi
 	for FILE in ${ROOTFS_FILES}; do
-		${MKDIR}				${ROOTFS_DEST}.dir$(dirname ${FILE})	|| return 1
-		${RSYNC_C} --copy-links			${ARTDIR}/files/$(basename ${FILE})	\
-							${ROOTFS_DEST}.dir${FILE}		|| return 1
+		${MKDIR}				${ROOTFS_DEST}.dir$(dirname ${FILE})			|| return 1
+		${RSYNC_C} --copy-links			${ARTDIR}/files/$(basename ${FILE})			\
+							${ROOTFS_DEST}.dir${FILE}				|| return 1
 		for NEXT in ${ROOTFS_FILE_VARS}; do
-			${SED} -i "s|[$][{]${NEXT}[}]|${!NEXT}|g"				\
-							${ROOTFS_DEST}.dir${FILE}		|| return 1
+			${SED} -i "s|[$][{]${NEXT}[}]|${!NEXT}|g"						\
+							${ROOTFS_DEST}.dir${FILE}				|| return 1
 		done
 	done
-	touch						${ROOTFS_DEST}.dir/etc/passwd		\
-							${ROOTFS_DEST}.dir/etc/group		|| return 1
-	chroot						${ROOTFS_DEST}.dir ${ROOTFS_BUSYBOX}	\
-							adduser					\
-		-D -H -h / -u 0 -s ${ROOTFS_SHELL}	root					|| return 1
-	echo -en "${_GPASS}\n${_GPASS}\n" | chroot	${ROOTFS_DEST}.dir ${ROOTFS_BUSYBOX}	\
-							passwd root				|| return 1
+	touch						${ROOTFS_DEST}.dir/etc/passwd				\
+							${ROOTFS_DEST}.dir/etc/group				|| return 1
+	chroot						${ROOTFS_DEST}.dir ${ROOTFS_BUSYBOX}			\
+							adduser -D -H -h / -u 0 -s ${ROOTFS_SHELL} root		|| return 1
+	echo -en "${_GPASS}\n${_GPASS}\n" | chroot	${ROOTFS_DEST}.dir ${ROOTFS_BUSYBOX}			\
+							passwd root						|| return 1
 	return 0
 }
 
@@ -1221,27 +1220,27 @@ function release_rootfs_cpio {		#>>>{dotest}
 	if [[ -n ${1} ]]; then
 		ROOTFS_DEST="${1}" && shift
 	fi
-	${RM}						${ROOTFS_DEST}.dir				|| return 1
-	${MKDIR}					${ROOTFS_DEST}.dir/dev				|| return 1
-	realdev						${ROOTFS_DEST}.dir/dev				|| return 1
-	release_rootfs_cpio_tools			${ROOTFS_DEST}					|| return 1
-	release_rootfs_cpio_utils			${ROOTFS_DEST}					|| return 1
-	release_rootfs_cpio_files			${ROOTFS_DEST}					|| return 1
-	${LN} --relative				${ROOTFS_DEST}.dir/lib				\
-							${ROOTFS_DEST}.dir/lib64			|| return 1
-	${LN} --relative				${ROOTFS_DEST}.dir${ROOTFS_BUSYBOX}		\
-							${ROOTFS_DEST}.dir/init				|| return 1
+	${RM}						${ROOTFS_DEST}.dir					|| return 1
+	${MKDIR}					${ROOTFS_DEST}.dir/dev					|| return 1
+	realdev						${ROOTFS_DEST}.dir/dev					|| return 1
+	release_rootfs_cpio_tools			${ROOTFS_DEST}						|| return 1
+	release_rootfs_cpio_utils			${ROOTFS_DEST}						|| return 1
+	release_rootfs_cpio_files			${ROOTFS_DEST}						|| return 1
+	${LN} --relative				${ROOTFS_DEST}.dir/lib					\
+							${ROOTFS_DEST}.dir/lib64				|| return 1
+	${LN} --relative				${ROOTFS_DEST}.dir${ROOTFS_BUSYBOX}			\
+							${ROOTFS_DEST}.dir/init					|| return 1
 	echo -en "\n"
-	${DU_L}						${ROOTFS_DEST}.dir				|| return 1
-	(cd ${ROOTFS_DEST}.dir && ${LL} --directory	$(find ./ ! -type l | ${SED} "s|^[.][/]||g"))	|| return 1
+	${DU_L}						${ROOTFS_DEST}.dir					|| return 1
+	(cd ${ROOTFS_DEST}.dir && ${LL} --directory	$(find ./ ! -type l | ${SED} "s|^[.][/]||g"))		|| return 1
 	if ${DOTEST}; then
 		echo -en "\n"
-		safe_env equery belongs			${ROOTFS_BUSYBOX}				\
-							${ROOTFS_COREUTILS}				\
-							${ROOTFS_UTILS}					|| return 1
+		safe_env equery belongs			${ROOTFS_BUSYBOX}					\
+							${ROOTFS_COREUTILS}					\
+							${ROOTFS_UTILS}						|| return 1
 		sort -u					${SETDIR}/${FUNDIR}/sets/${_PKG} | ${GREP} "#{rootfs}"
 	fi
-	${RSYNC_U} ${ROOTFS_DEST}			${ROOTFS_DEST}.dir${ROOTFS_ROOT}		|| return 1
+	${RSYNC_U} ${ROOTFS_DEST}			${ROOTFS_DEST}.dir${ROOTFS_ROOT}			|| return 1
 	return 0
 }
 
