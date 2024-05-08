@@ -287,6 +287,8 @@ declare ROOTFS_ETC="/etc"
 declare ROOTFS_BIN="/usr/bin"
 declare ROOTFS_LIB="/usr/lib64"
 
+declare ROOTFS_PATH="${ROOTFS_BIN}:/$(basename ${ROOTFS_BIN})"
+declare ROOTFS_SROOT="${ROOTFS_BIN}/switch_root"
 declare ROOTFS_SHELL="/$(basename ${ROOTFS_BIN})/sh"
 #>>>if [[ -n $(${ROOTFS_LDD} ${ROOTFS_BASH} 2>/dev/null | ${GREP} "not a dynamic executable") ]]; then
 #>>>	ROOTFS_SHELL="/$(basename ${ROOTFS_BIN})/${ROOTFS_BASH}"
@@ -352,6 +354,8 @@ ROOTFS_ROOT_SRC
 ROOTFS_ROOT_OPT
 ROOTFS_FUNC
 ROOTFS_BASH
+ROOTFS_PATH
+ROOTFS_SROOT
 ROOTFS_SHELL
 "
 
@@ -1159,7 +1163,7 @@ function release_rootfs_cpio_tools {
 								--install -s ${ROOTFS_BIN}				|| return 1
 	${RSYNC_U} ${TARGET}${ROOTFS_BIN}/${ROOTFS_COREUTILS}	${ROOTFS_DEST}.dir${ROOTFS_BIN}/${ROOTFS_COREUTILS}	|| return 1
 	for FILE in $(
-		${TARGET}${ROOTFS_BIN}/${ROOTFS_COREUTILS} --help | ${GREP} "^[[:space:]]*[[]"
+		${TARGET}${ROOTFS_BIN}/${ROOTFS_COREUTILS} --help | ${SED} -n "s|^[[:space:]]*[[]||gp"
 	); do
 		${LN} --relative				${ROOTFS_DEST}.dir${ROOTFS_BIN}/${ROOTFS_COREUTILS}	\
 								${ROOTFS_DEST}.dir${ROOTFS_BIN}/${FILE}			|| return 1
