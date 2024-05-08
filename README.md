@@ -1800,7 +1800,6 @@ Everything needed to perform these steps is in the [Repository] or the
     * `(cd .setup; git-commit ./linux ./gentoo)`
   * `make redo`
     * [x] *Iterate()*
-    * `make DOMODS=true doit`
   * `make edit`
     * `(cd _builds; rm ./_gentoo.boot; ln _gentoo ./_gentoo.boot)`
     * `(cd _builds; rsync ./_gentoo/ ../../_toor)`
@@ -1814,7 +1813,7 @@ Everything needed to perform these steps is in the [Repository] or the
         * `_sync _sys _chroot [...]`
         * `rsync [...]/_toor/{.runit,.setup} [...]/_root/`
     * [ ] Boot to "\_root"
-  * `make doit`
+  * `make DOMODS=true doit`
     * `ll ./build/ ./build/_build`
     * `(cd .setup; git-commit ./gentoo)`
     * `(cd _builds; rsync ./_gentoo/ ../../_toor)`
@@ -1824,14 +1823,14 @@ Everything needed to perform these steps is in the [Repository] or the
 
 *`Validate { <kernel> <check> <option> <target>`*
 
-  * `{ export` *`${3}`* `&& make doit && make DOREDO=true` *`${4}`* `;}`
+  * `make` *`${3}`* `doit && make DOREDO=true` *`${4}`*
     * [x] *Iterate()*
   * [ ] Target size of *`${1}`* or less (`make check` = Total disk usage: *`${2}`*)
     * [ ] Command comments at bottom of [gentoo/package.use]
         * `make` *`${3}`* `depends-<package atom|/|%>`
         * `make` *`${3}`* `depgraph-<package atom|/|%>`
         * `make` *`${3}`* `belongs-<file path|/|%>`
-    * `{ export` *`${3}`* `&& export DOFAST=true && make doit && make DOREDO=true` *`${4}`* `;}`
+    * `make` *`${3}`* `DOFAST=true doit && make DOREDO=true` *`${4}`*
         * `make` *`${3}`* `check`
     * `ll ./build/.gary-os-*`
   * `make` *`${3}`* `gendir`
@@ -2155,13 +2154,13 @@ Everything in [Booting], [Running] and [Building] should be validated below.
   * `(cd coding/gary-os; git-commit -m "Stamped v#.# release." ./README.md)`
     * `make _publish_gitdir`
     * `(cd _builds/.gary-os/.gary-os; GIT_PAGER= git-list -n1)`
-  * `{ export DOMODS=true && make doit && make DOREDO=true release ;}`
+  * `make DOMODS=true doit && make DOMODS=true DOREDO=true release _prepare_packdirs`
     * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.tiny.kernel 1`
     * [x] **Verify()**
-  * `{ make doit && make DOREDO=true release ;}`
+  * `make doit && make DOREDO=true release _prepare_packdirs`
     * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1`
     * [x] **Verify()**
-  * `{ export P=_gary-os && make doit && make DOREDO=true rootfs ;}`
+  * `make P=_gary-os doit && make P=_gary-os DOREDO=true rootfs`
     * `_sync boot`
     * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1 groot=10.0.0.254 -m 8192`
     * [x] **Verify()**
