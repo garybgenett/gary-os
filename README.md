@@ -1768,6 +1768,7 @@ Everything needed to perform these steps is in the [Repository] or the
             * [ ] Command comments at top of [gentoo/package.use]
         * `(cd ./gentoo/overlay; ./.review -a)`
             * [ ] Review `.keep` packages
+        * [ ] Update `${RUFUS_VER}` number
     * `cd .setup/linux`
         * `(cd _build/gentoo/gentoo; grep -A10 SRC_URI ./sys-kernel/gentoo-kernel/gentoo-kernel-*.ebuild)`
             * `wget [...]`
