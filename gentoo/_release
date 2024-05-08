@@ -273,6 +273,7 @@ declare ROOTFS_CUST="false"
 declare ROOTFS_TYPE="squashfs"
 declare ROOTFS_COMP="-comp xz -b $((2**20)) -Xdict-size 100%"
 declare ROOTFS_OPTS="-noappend -info -xattrs ${ROOTFS_COMP} -wildcards -ef" #>>> ${ROOTFS_FILE}.exclude"
+declare ROOTFS_OPTS_MNT="xino=on"
 
 declare ROOTFS_ROOT="/.${_TITLE}.${ROOTFS_NAME}"
 declare ROOTFS_ROOT_SRC="${ROOTFS_ROOT/#\/\./\/${_TITLE}\/}"
@@ -350,6 +351,7 @@ KVER
 DOTEST
 ROOTFS_NAME
 ROOTFS_TYPE
+ROOTFS_OPTS_MNT
 ROOTFS_ROOT
 ROOTFS_ROOT_SRC
 ROOTFS_ROOT_OPT
