@@ -508,8 +508,10 @@ games-fps/doom3-ducttape
 games-fps/quakeforge
 
 # interactive ebuilds, which can be automated using:
-#	TARGET="/.g/_toor"; for FILE in quake doom3-disk1 doom3-disk2 doom3-disk3 doom3_roe; do mkdir -v ${TARGET}/tmp/${FILE}; mount -v -o ro,loop /.g/_data/source/id/${FILE}.iso ${TARGET}/tmp/${FILE}; done
-#	TARGET="/.g/_toor"; for FILE in quake doom3-disk1 doom3-disk2 doom3-disk3 doom3_roe; do umount -v ${TARGET}/tmp/${FILE}; done
+#	TARGET="$(realpath ${PWD}/build)"
+#	SOURCE=(quake doom3-disk1 doom3-disk2 doom3-disk3 doom3_roe)
+#	for FILE in ${SOURCE[*]}; do mkdir -v ${TARGET}/tmp/${FILE}; mount -v -o ro,loop /.g/_data/source/id/${FILE}.iso ${TARGET}/tmp/${FILE}; done
+#	for FILE in ${SOURCE[*]}; do umount -v ${TARGET}/tmp/${FILE}; done
 #{MOD} games-fps/doom3-data
 #{MOD} games-fps/doom3-roe
 #{MOD} games-fps/quake1-data
