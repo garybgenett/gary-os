@@ -4,7 +4,7 @@
 #>>> EAPI=5
 #>>> inherit eutils cdrom
 EAPI=7
-inherit eutils-old cdrom
+inherit eutils-old cdrom games desktop
 #>>>
 
 DESCRIPTION="Doom III: Resurrection of Evil expansion pack"
