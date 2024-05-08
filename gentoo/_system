@@ -759,9 +759,9 @@ function mount_dev_dirs {
 	if [[ -z ${1} ]]; then
 		print_info marker
 		print_info mount
-		if ! mount-robust --dev ${TARGET}		2>&1 |
+		mount-robust --dev ${TARGET}			2>&1 |
 			if ${QUIET}; then prompt -t; else cat; fi
-		then						return 1; fi
+			[[ ${PIPESTATUS[0]} == 0 ]]		|| return 1
 		print_info marker
 	elif [[ ${1} == -u ]]; then
 		shift
@@ -795,9 +795,9 @@ function mount_dev_dirs {
 				EXIT -X
 			fi
 		else
-			if ! mount-robust -u --dev ${TARGET}	2>&1 |
+			mount-robust -u --dev ${TARGET}		2>&1 |
 				if ${QUIET}; then prompt -t; else cat; fi
-			then					return 1; fi
+				[[ ${PIPESTATUS[0]} == 0 ]]	|| return 1
 		fi
 		print_info marker
 	fi
@@ -976,9 +976,9 @@ if [[ ${1} == -s ]]; then
 	if [[ ${1} == -e ]]; then
 		shift
 		#note: ensuring configuration is up-to-date
-		if ! ${_SOUL} ${QUIET_OPT} ${TOOR} -r	2>&1 |
+		${_SOUL} ${QUIET_OPT} ${TOOR} -r	2>&1 |
 			if ${QUIET}; then prompt -t; else cat; fi
-		then					EXIT 1; fi
+			[[ ${PIPESTATUS[0]} == 0 ]]	|| EXIT 1
 		expect_wrapper emerge ${_ASK}		\
 			${EMERGE_TREE_OPTS}		\
 			${EMERGE_UPDT_OPTS}		\
@@ -986,7 +986,7 @@ if [[ ${1} == -s ]]; then
 			--usepkg=n			\
 			--getbinpkg=n			\
 			${@:-\@system \@world}		2>&1 | prompt -c
-		[[ ${PIPESTATUS[0]} == 0 ]]		|| EXIT 1
+			[[ ${PIPESTATUS[0]} == 0 ]]	|| EXIT 1
 	else
 		safe_env bash --norc ${@:+-c "${@}"}	|| EXIT 1
 	fi
@@ -1003,9 +1003,9 @@ if [[ ${1} == -y ]]; then
 	shift
 	if ${DO_CHROOT}; then
 		#note: ensuring configuration is up-to-date
-		if ! ${_SOUL} ${QUIET_OPT} ${TOOR} -r	2>&1 |
+		${_SOUL} ${QUIET_OPT} ${TOOR} -r	2>&1 |
 			if ${QUIET}; then prompt -t; else cat; fi
-		then					EXIT 1; fi
+			[[ ${PIPESTATUS[0]} == 0 ]]	|| EXIT 1
 	fi
 	if [[ ${1} == -j ]]; then
 		shift
@@ -1182,8 +1182,9 @@ if [[ ${1} == -o ]]; then
 		declare LAY_DIR="${SETDIR}/${FUNDIR}/${LAYDIR}"
 		declare ETC_DIR="${TARGET}${ETCDIR}/${LAYDIR}"
 		#note: ensuring configuration is up-to-date
-		if ! ${_SOUL} ${QUIET_OPT} ${TOOR} -r										2>&1 |
-			if ${QUIET}; then prompt -t; else cat; fi; then								EXIT 1; fi
+		${_SOUL} ${QUIET_OPT} ${TOOR} -r										2>&1 |
+			if ${QUIET}; then prompt -t; else cat; fi
+			[[ ${PIPESTATUS[0]} == 0 ]]										|| EXIT 1
 		${MKDIR}	${ETC_DIR}/${FILE}			${LAY_DIR}/${FILE}/.source				|| EXIT 1
 		${RSYNC_U}	${TARGET}${REPDIR}/${FILE}/		${LAY_DIR}/${FILE}/.source				||
 		touch							${LAY_DIR}/${FILE}/.source/.null			|| EXIT 1
@@ -1654,8 +1655,9 @@ elif [[ ${1} == -U ]]; then
 elif { ${DO_CHROOT} && [[ ${1} == -! ]]; }; then
 	mount_dev_dirs						|| EXIT 1
 	#note: ensuring configuration is up-to-date
-	if ! ${_SOUL} ${QUIET_OPT} ${TOOR} -r			2>&1 |
-		if ${QUIET}; then prompt -t; else cat; fi; then	EXIT 1; fi
+	${_SOUL} ${QUIET_OPT} ${TOOR} -r			2>&1 |
+		if ${QUIET}; then prompt -t; else cat; fi
+		[[ ${PIPESTATUS[0]} == 0 ]]			|| EXIT 1
 	safe_env ${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -!	|| EXIT 1
 	mount_dev_dirs -u					|| EXIT 1
 	EXIT 0
