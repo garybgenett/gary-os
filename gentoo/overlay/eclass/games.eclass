@@ -52,7 +52,9 @@ fi
 # @DESCRIPTION:
 # Prefix where to install games, mostly used by GAMES_BINDIR. Games data should
 # still go into GAMES_DATADIR. May be set by the user.
-GAMES_PREFIX=${GAMES_PREFIX:-/usr/games}
+#>>>GAMES_PREFIX=${GAMES_PREFIX:-/usr/games}
+GAMES_PREFIX=${GAMES_PREFIX:-/usr}
+#>>>
 
 # @ECLASS-VARIABLE: GAMES_PREFIX_OPT
 # @DESCRIPTION:
