@@ -168,7 +168,7 @@ ${ROOTFS_NAME}() {
 			lowerdir="${mounts}.shm/lowerdir"
 			upperdir="${mounts}.shm/upperdir"
 			workdir="${mounts}.shm/workdir"
-			mount -v -t overlay overlay -o lowerdir=${lowerdir},upperdir=${upperdir},workdir=${workdir} ${mounts} || return 1
+			mount -v -t overlay overlay -o lowerdir=${lowerdir},upperdir=${upperdir},workdir=${workdir},${ROOTFS_OPTS_MNT} ${mounts} || return 1
 		fi
 		if [ -z "`grep -E "^shm ${mounts}${_GOVLY} tmpfs" /proc/mounts`" ]; then
 			mkdir -v -p ${mounts}${_GOVLY} || return 1
