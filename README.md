@@ -1751,8 +1751,8 @@ Everything needed to perform these steps is in the [Repository] or the
 *`}`*
 
   * `cd .setup/gentoo.make`
-    * `(cd _builds; rm ./_gentoo.working; ln ../../_toor ./_gentoo.working)`
-        * `(cd _toor; rm-all; ll)`
+    * `(cd _builds; rm ./_gentoo.working; ln _gentoo ./_gentoo.working)`
+        * `(cd _builds/_gentoo.working; rm-all; ll)`
         * `(cd _target/iso; vi ./.urls; ./.urls -f)`
         * `(cd _build/gentoo/gentoo; git pull; GIT_PAGER= git-list -n1)`
         * `(cd _build/gentoo/gentoo; ll ./sys-kernel/gentoo-sources)`
@@ -1801,10 +1801,9 @@ Everything needed to perform these steps is in the [Repository] or the
   * `make redo`
     * [x] *Iterate()*
     * `make DOMODS=true doit`
-    * `(cd _builds; rsync ../../_toor/ ./_gary-os.working)`
   * `make edit`
-    * `(cd _builds; rm ./_gentoo.working; ln _gentoo ./_gentoo.working)`
-    * `(cd _builds; rsync ../../_toor/ ./_gentoo)`
+    * `(cd _builds; rm ./_gentoo.boot; ln _gentoo ./_gentoo.boot)`
+    * `(cd _builds; rsync ./_gentoo/ ../../_toor)`
     * [ ] Boot to "gary-os"
         * `rsync [...]/_root/{.runit,.setup} [...]/_toor/`
     * [ ] Boot to "\_toor"
@@ -1818,6 +1817,7 @@ Everything needed to perform these steps is in the [Repository] or the
   * `make doit`
     * `ll ./build/ ./build/_build`
     * `(cd .setup; git-commit ./gentoo)`
+    * `(cd _builds; rsync ./_gentoo/ ../../_toor)`
     * `_sync _sys _clone _full _setup`
 
 **GaryOS Build**
@@ -1875,9 +1875,10 @@ Everything needed to perform these steps is in the [Repository] or the
 *`}`*
 
   * `cd .setup/gentoo.make`
+    * `(cd _builds; rm ./_gentoo.boot; ln ../../_toor ./_gentoo.boot)`
     * `(cd _builds; rm ./_gentoo.working; ln ../../_toor ./_gentoo.working)`
-        * `(cd _build/gentoo/gentoo; git pull; GIT_PAGER= git-list -n1)`
     * `vi ./gentoo/_funtoo`
+        * `(cd _build/gentoo/gentoo; git pull; GIT_PAGER= git-list -n1)`
         * [ ] Update [Gentoo] commit
     * `make DOREDO=true doit`
         * [x] *Retry()*
