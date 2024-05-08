@@ -100,9 +100,9 @@ mounts() {
 	if [ -z "${mounts}" ]; then
 		ln -v -fs /proc/mounts /etc/mtab || return 1
 		mdev -s || return 1
-		if [ -d "/proc/sys/kernel" ]; then
-			echo -en "mdev" >/proc/sys/kernel/hotplug
-		fi
+#>>>		if [ -d "/proc/sys/kernel" ]; then
+#>>>			echo -en "mdev" >/proc/sys/kernel/hotplug
+#>>>		fi
 	fi
 	return 0
 }
