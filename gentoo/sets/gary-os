@@ -37,10 +37,6 @@
 #{FSPACK} base:/usr/lib/modules
 #{FSPACK} base:/usr/lib/firmware
 
-#{FSPACK} docs:/usr/share/doc
-#{FSPACK} docs:/usr/share/info
-#{FSPACK} docs:/usr/share/man
-
 #{FSARCH} emerge:/usr/share/genkernel/distfiles
 #{FSARCH} emerge:/usr/src/linux
 #{FSKEEP} emerge:/var/db/pkg
