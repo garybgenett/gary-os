@@ -163,7 +163,7 @@ sys-power/nut
 sys-power/suspend
 sys-process/runit
 
-app-crypt/veracrypt
+#>>> app-crypt/veracrypt		# requires: x11-libs/wxGTK + non-free license
 app-forensics/sleuthkit
 sys-apps/gptfdisk
 sys-fs/cryptsetup
