@@ -1121,7 +1121,7 @@ function _release_devel {		#{ismain} #{doredo} #{dotest}
 		else
 			DOREDO="false" _prepare_config					|| return 1
 		fi
-		DOREDO="true" DOFAST="true" DOTEST="false" _release_cpio		|| return 1
+		DOREDO="true" DOFAST="true" DOTEST="true" _release_cpio			|| return 1
 	fi
 	DOREDO="true" _release_kernel							|| return 1
 	if [[ ! -f ${_RAMFS}.kernel			]]; then ${LN} --relative ${_RAMFS}.${_G_MOD}.kernel			${_RAMFS}.kernel		; fi
