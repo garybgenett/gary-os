@@ -371,6 +371,7 @@ if [ "${1}" == "un${ROOTFS_NAME}" ]; then
 	#note: doing it in reverse order of usage, to avoid any collisions
 	${ROOTFS_NAME} ${_GOVLY} false || ${ROOTFS_FUNC}
 	${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} false || ${ROOTFS_FUNC}
+	mount -l
 	${ROOTFS_FUNC} -
 else
 	if [ "${1}" == "${ROOTFS_NAME}" ]; then
