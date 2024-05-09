@@ -1110,9 +1110,9 @@ function _prepare_symlinks {		#{isexit} #{doredo}
 
 ################################################################################
 
-function _release_devel {		#{ismain} #{doredo} #{dotest}
+function _release_devel {		#{ismain} #{doredo} #{dofast}
 	DOTEST="true" _prepare_docdir							|| return 1
-	if ${DOTEST}; then
+	if ${DOFAST}; then
 		DOREDO="false" DOFAST="true" DOTEST="true" _release_cpio		|| return 1
 	else
 		if ${DOREDO}; then
