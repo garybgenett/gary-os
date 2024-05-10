@@ -209,6 +209,8 @@ sys-apps/memtester
 ########################################
 # utilities
 
+dev-debug/strace			#{rootfs}
+
 sys-apps/hdparm
 sys-apps/smartmontools
 sys-block/blktrace
