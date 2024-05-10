@@ -53,7 +53,7 @@ fi
 ########################################
 
 declare EMERGE_TREE_OPTS="--tree --unordered-display"
-declare EMERGE_UPDT_OPTS="${EMERGE_TREE_OPTS} --deep --newuse --update"
+declare EMERGE_UPDT_OPTS="${EMERGE_TREE_OPTS} --newrepo --newuse --deep --update"
 
 declare EMERGE_FTCH_OPTS="--fetch-all-uri"
 declare EMERGE_FTCH_GOS="--fetchonly"
