@@ -1795,6 +1795,7 @@ Everything needed to perform these steps is in the [Repository] or the
         * `rsync $(realpath ./linux/.config).*.DONE $(realpath ./linux/.config)`
         * `rm $(realpath ./linux/.config).*`
   * `make doit`
+    * [ ] Update `savedconfig` directory
     * [x] *Iterate()*
   * `cd .setup/gentoo.make`
     * `(cd .setup; git-commit ./linux ./gentoo)`
@@ -1841,11 +1842,12 @@ Everything needed to perform these steps is in the [Repository] or the
 *`}`*
 
   * `cd .setup/gentoo.gary-os`
+    * `make DOFAST=true init`
   * [x] *Validate( 210MB 240MiB DOMODS=true devel )*
     * [ ] Minimized build note in `/etc/issue`
     * [ ] No `startx` in `/etc/issue`
   * [x] *Validate( 850MB 1.4GiB '' devel )*
-  * `make DOTEST=true devel`
+  * `make DOFAST=true devel`
     * [ ] Verify `#{rootfs}` markers
   * `make ROOTFS=false devel`
     * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1 -m 8192`
