@@ -300,6 +300,7 @@ declare ROOTFS_SHELL="/$(basename ${ROOTFS_BIN})/sh"
 #note: verify accuracy using "${dotest}" in the "release_rootfs_cpio" function
 declare ROOTFS_UTILS="
 ${ROOTFS_BASH}
+strace
 \
 grep
 make
