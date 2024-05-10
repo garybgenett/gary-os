@@ -166,8 +166,8 @@ declare RUFUS_URL="https://github.com/pbatard/rufus/releases/download/v${RUFUS_V
 
 ########################################
 
-declare SHMEM_MEM="$(((2**20)*768))"
-declare SHMEM_SET="2560m"
+declare SHMEM_SET="$(( 10 *(2**8) ))m"
+declare SHMEM_BUF="$((  3 *(2**8) *(2**20) ))"
 
 ########################################
 
@@ -1478,7 +1478,7 @@ function release_kernel_shmem {
 	done
 	shopt ${LASTPIPE} lastpipe
 	echo -en ">>> TOTAL SHMEM: ${SHMEM}\n"
-	SHMEM="$(echo "((${SHMEM}+(${SHMEM_MEM}))/${SHMEM_PAGES})" | bc | ${SED} -r "s|[.].*$||g")"
+	SHMEM="$(echo "((${SHMEM}+(${SHMEM_BUF}))/${SHMEM_PAGES})" | bc | ${SED} -r "s|[.].*$||g")"
 	SHMEM="$(echo "(${SHMEM}*${SHMEM_PAGES})" | bc)"
 	echo -en ">>> FINAL SHMEM: ${SHMEM}\n"
 	if [[ -n "${SHMEM_SET}" ]]; then
