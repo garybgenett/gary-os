@@ -53,13 +53,9 @@ fi
 ########################################
 
 declare EMERGE_TREE_OPTS="--tree --unordered-display"
-declare EMERGE_UPDT_OPTS="${EMERGE_TREE_OPTS} --newrepo --newuse --deep --update"
 
 declare EMERGE_FTCH_OPTS="--fetch-all-uri"
 declare EMERGE_FTCH_GOS="--fetchonly"
-
-declare EMERGE_DCLN_OPTS=
-declare EMERGE_DCLN_GOS="--with-bdeps=n"
 
 ########################################
 
@@ -221,7 +217,6 @@ fi
 if [[ ${_PKG} == ${_TITLE} ]]; then
 	_GOS="true"
 	_GFG="false"
-	EMERGE_DCLN_OPTS="${EMERGE_DCLN_GOS}"
 fi
 #note: forcing unmodified configuration for full "_gary-os" build
 if [[ ${_PKG} == _${_TITLE} ]]; then
@@ -231,7 +226,6 @@ if [[ ${_PKG} == _${_TITLE} ]]; then
 #>>>	_MOD="false"
 	_GOS="true"
 	_GFG="true"
-	EMERGE_DCLN_OPTS="${EMERGE_DCLN_GOS}"
 fi
 
 ########################################
@@ -981,7 +975,6 @@ if [[ ${1} == -s ]]; then
 			[[ ${PIPESTATUS[0]} == 0 ]]	|| EXIT 1
 		expect_wrapper emerge ${_ASK}		\
 			${EMERGE_TREE_OPTS}		\
-			${EMERGE_UPDT_OPTS}		\
 			--selective=n			\
 			--usepkg=n			\
 			--getbinpkg=n			\
@@ -1532,7 +1525,7 @@ if [[ ${1} == -u ]]; then
 	if ! ${DOFAST}; then
 		safe_env ${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -w			|| EXIT 1
 	fi
-	expect_wrapper emerge ${_ASK} ${EMERGE_UPDT_OPTS} \@system \@world		|| EXIT 1
+	expect_wrapper emerge ${_ASK} \@system \@world					|| EXIT 1
 	if ! ${DOFAST}; then
 		# note: available on an "as needed" basis
 		# note: since gary-os is more about static builds than rolling upgrades, this is unnecessary
@@ -1546,7 +1539,7 @@ if [[ ${1} == -u ]]; then
 			for FILE in ${LINPKG}; do echo -en " --exclude ${FILE}"; done)	|| EXIT 1
 		expect_wrapper emerge ${_ASK} \@preserved-rebuild			|| EXIT 1
 	fi
-	expect_wrapper emerge ${_ASK} ${EMERGE_DCLN_OPTS} --depclean			|| EXIT 1
+	expect_wrapper emerge ${_ASK} --depclean					|| EXIT 1
 	if ! ${DOMODS} && ! ${DOFAST}; then
 		expect_wrapper revdep-rebuild --ignore					|| EXIT 1
 		expect_wrapper emaint --fix all						|| EXIT 1
