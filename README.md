@@ -13,9 +13,9 @@
 
 | [Documentation] | |
 |:---        |:---
-| [Overview] | [Quick Start], [Requirements], [Support], [Issues]
+| [Overview] | [Quick Start], [Requirements], [Support]
 | [Booting]  | [Linux], [Windows], [GRUB], [EFI], [PXE], [Virtual]
-| [Running]  | [Networking], [GUI], [Update], [Filesystem], [Minimal]
+| [Running]  | [Networking], [GUI], [Update], [Filesystem]
 | [Building] | [Compile], [Manage], [Image], [Install]
 
 | [Information] | |
@@ -122,26 +122,6 @@ While there appears to be some adoption of GaryOS, it is not yet enough to
 warrant a formal ticket system.  For any issues, or to share the creative ways
 you are using GaryOS, please contact the author directly at
 [gary-os@garybgenett.net].
-
-### Issues #####################################################################
-[Issues]: #issues
-
-This is a list of current known issues.  Ideally, this section would be empty.
-
-**GNU GRUB EFI "out of memory"**
-
-On some systems, earlier versions of [GNU GRUB] produced an "out of memory"
-error when booting a sufficiently large [Linux Kernel] or `initrd`, and this
-included [GaryOS].  The only workaround was to use the [Tiny] kernel.
-
-Just prior to [v7.0], an experimental patch was released upstream which
-corrected the issue, at least for GaryOS, and it was included in the version of
-GNU GRUB in [gentoo/overlay/] (see the [grub rationale file]) and the [Boot]
-file.  Since GaryOS is often booted by existing GNU GRUB installations, which
-would not yet have the fix, a [Tiny] kernel was also released.
-
-Once the updated GNU GRUB version is in general use, this issue will be removed,
-along with the [Minimal] section and the [Tiny] kernel.
 
 --------------------------------------------------------------------------------
 
@@ -630,31 +610,6 @@ required to load an external [Image].
 The `groot_size` value for the pre-made GaryOS [Rootfs] should be at least
 `4096m`, or `4g` if that format is preferred.  The [Boot] file is already
 correctly configured (see [GRUB]).
-
-### Minimal ####################################################################
-[Minimal]: #minimal
-
-On some systems, earlier versions of [GNU GRUB] produced an "out of memory"
-error when booting a sufficiently large [Linux Kernel] or `initrd`, and this
-included [GaryOS].  The only workaround was to create a "minified" [Tiny]
-version which could be used in place of [Kernel].  This version is roughly 25%
-the size of [Kernel], and a significant amount of packages and functionality was
-removed to achieve this.  It is a viable rescue system and [Filesystem]
-[Loader], but not much else should be expected of it.
-
-The [Boot] file is configured to locate it as `gary-os.tiny.kernel`.  If both
-`gary-os.kernel` and `gary-os.tiny.kernel` exist, [Boot] will first try the main
-[Kernel], and fall back to [Tiny] if it fails to load.  The
-[grub/grub.menu.gary-os.cfg] file also works this way.
-
-Just prior to [v7.0], an experimental patch was released upstream which
-corrected the issue, at least for GaryOS, and it was included in the version of
-GNU GRUB in [gentoo/overlay/] (see the [grub rationale file]) and the [Boot]
-file.  Since GaryOS is often booted by existing GNU GRUB installations, which
-would not yet have the fix, a [Tiny] kernel was also released.
-
-Once the updated GNU GRUB version is in general use, the [Tiny] kernel will no
-longer be released with GaryOS, and this section will be removed.
 
 --------------------------------------------------------------------------------
 
@@ -2024,13 +1979,12 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * `(cd _systems/qemu; ln windows-10.qcow2 windows.img)`
     * `sv restart qemu.windows`
 
-**[Networking] / [GUI] / [Minimal]**
+**[Networking] / [GUI]**
 
   * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.grub/loopfile.qcow2 1`
     * [ ] Ethernet [Networking]
     * [ ] [GUI]
   * [ ] Boot to "gary-os"
-    * [ ] Verify [Tiny]
     * [ ] Verify failed `Boot`
     * [ ] Wireless [Networking]
     * [ ] [GUI]
@@ -2221,9 +2175,10 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 [Downloads]: https://sourceforge.net/projects/gary-os/files
 
 [Kernel]: https://sourceforge.net/projects/gary-os/files/gary-os-v7.0-generic_64.kernel
-[Tiny]: https://sourceforge.net/projects/gary-os/files/v7.0/gary-os-v7.0-generic_64.tiny.kernel
 [Rootfs]: https://sourceforge.net/projects/gary-os/files/gary-os-v7.0-generic_64.rootfs
 [Boot]: https://sourceforge.net/projects/gary-os/files/gary-os-v7.0-generic_64.grub.zip
+
+  [Tiny]: https://sourceforge.net/projects/gary-os/files/v7.0/gary-os-v7.0-generic_64.tiny.kernel
 
 ### v7.0 2023-01-14 ############################################################
 [v7.0 2023-01-14]: #v70-2023-01-14
@@ -2259,7 +2214,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * Minor changes to package lists
   * [GRUB]
     * Latest development version of [GNU GRUB] (see [grub rationale file])
-    * At last, fixed the need for [Minimal] with upstream patch! (see [Issues])
+    * At last, fixed the need for [Tiny] with upstream patch!
     * Switched to `sfdisk` for partitioning
     * Upgraded to new version of [Rufus]
 
