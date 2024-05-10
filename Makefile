@@ -24,10 +24,10 @@ override O	?= $(GARYOS_DIR)/build
 override A	?= $(GARYOS_DIR)/artifacts
 override P	?= $(GARYOS_TTL)
 
-#>>> override ROOTFS	?=
+override ROOTFS	?=
 override DOMODS	?=
 override DOREDO	?=
-#>>> override DOFAST	?=
+override DOFAST	?=
 override DOTEST	?=
 
 override V	?=
