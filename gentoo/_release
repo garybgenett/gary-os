@@ -337,6 +337,9 @@ declare ROOTFS_FILES="
 /initrc
 ${ROOTFS_ETC}/inittab
 "
+declare ROOTFS_FILE_DIRS="
+/run/mount
+"
 declare ROOTFS_FILE_VARS="
 _GNAME
 _TITLE
@@ -1230,6 +1233,10 @@ function release_rootfs_cpio {		#>>>{dotest}
 	${MKDIR}					${ROOTFS_DEST}.dir${ROOTFS_ETC}				|| return 1
 	${MKDIR}					${ROOTFS_DEST}.dir${ROOTFS_BIN}				|| return 1
 	${MKDIR}					${ROOTFS_DEST}.dir${ROOTFS_LIB}				|| return 1
+	for FILE in ${ROOTFS_FILE_DIRS}; do
+		${MKDIR}				${ROOTFS_DEST}.dir${FILE}				|| return 1
+		touch					${ROOTFS_DEST}.dir${FILE}/.${_TITLE}			|| return 1
+	done
 	realdev						${ROOTFS_DEST}.dir/dev					|| return 1
 	${LN} --relative				${ROOTFS_DEST}.dir${ROOTFS_BIN}				\
 							${ROOTFS_DEST}.dir/$(basename ${ROOTFS_BIN})		|| return 1
