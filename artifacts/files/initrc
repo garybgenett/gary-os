@@ -176,10 +176,7 @@ ${ROOTFS_NAME}() {
 			mount -v -o move ${mounts}.shm ${mounts}${_GOVLY} || return 1
 		fi
 		if ${do_pak} && [ -d ${mounts}/.${_TITLE} ]; then
-#>>>			mounts ${mounts} true || return 1
-#>>>			chroot ${mounts} make -C /.${_TITLE} O=/ unpack || return 1
 			make -C ${mounts}/.${_TITLE} O=${mounts} unpack || return 1
-#>>>			mounts ${mounts} false || return 1
 		fi
 	fi
 	return 0
@@ -246,7 +243,9 @@ select() {
 				chroot /.${ROOTFS_ROOT_OPT} rc-update add dhcpcd default || ${ROOTFS_FUNC}
 				chroot /.${ROOTFS_ROOT_OPT} openrc || ${ROOTFS_FUNC}
 				chroot /.${ROOTFS_ROOT_OPT} rc-service dhcpcd restart || ${ROOTFS_FUNC}
-				count 9 27
+				if ! ${chroot_opt}; then
+					count 9 27
+				fi
 				mkdir -v -p `dirname /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}${${ROOTFS_ROOT_OPT}_file}` || ${ROOTFS_FUNC}
 				#note: creating the "shm" mount, and using "tftp" to put the image in the right place
 				#note: this way the image is only being put into memory once
@@ -372,6 +371,7 @@ if [ "${1}" == "un${ROOTFS_NAME}" ]; then
 	#note: doing it in reverse order of usage, to avoid any collisions
 	${ROOTFS_NAME} ${_GOVLY} false || ${ROOTFS_FUNC}
 	${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} false || ${ROOTFS_FUNC}
+	count 1 1
 	mount -l
 	${ROOTFS_FUNC} -
 else
