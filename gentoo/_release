@@ -299,6 +299,7 @@ declare ROOTFS_SHELL="/$(basename ${ROOTFS_BIN})/sh"
 
 #note: update the "#{rootfs}" markers in "sets/gary-os" whenever "$rootfs_utils" changes
 #note: verify accuracy using "${dotest}" in the "release_rootfs_cpio" function
+#>>> tftp
 declare ROOTFS_UTILS="
 ${ROOTFS_BASH}
 strace
@@ -308,7 +309,6 @@ make
 rsync
 sed
 tar
-tftp
 wget
 xz
 \
