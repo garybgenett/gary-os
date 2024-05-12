@@ -722,8 +722,8 @@ function expect_wrapper {
 	EXPECT_CMD+=" "; EXPECT_CMD+="set timeout -1;"
 	EXPECT_CMD+="";
 	EXPECT_CMD+=" "; EXPECT_CMD+="expect"
-	EXPECT_CMD+=" "; EXPECT_CMD+="-nocase yes*/*no*	{send y\\\\r; exp_continue;}"
-	EXPECT_CMD+=" "; EXPECT_CMD+="-nocase use-new*	{send u\\\\r; exp_continue;}"
+	EXPECT_CMD+=" "; EXPECT_CMD+="-nocase yes*/*no	{send y\\\\r; exp_continue;}"
+	EXPECT_CMD+=" "; EXPECT_CMD+="-nocase use-new	{send u\\\\r; exp_continue;}"
 	EXPECT_CMD+=" "; EXPECT_CMD+="default {}"
 	EXPECT_CMD+=" "; EXPECT_CMD+="eof"
 	EXPECT_CMD+=" "; EXPECT_CMD+=";"
