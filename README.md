@@ -26,8 +26,6 @@
 | [Release]  | [Process], [Checklist], [Publish]
 | [Versions] | [v7.0 2023-01-14], [v6.0 2021-09-12], [v5.0 2021-08-04], [(...)]
 
-[(...)]: #v40-2021-07-26
-
 [GaryOS]: http://www.garybgenett.net/projects/gary-os
 [Gary B. Genett]: http://www.garybgenett.net
 [gary-os@garybgenett.net]: mailto:gary-os@garybgenett.net?subject=GaryOS%20Submission&body=Thank%20you%20for%20sending%20a%20message%21
@@ -2177,6 +2175,8 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 [Kernel]: https://sourceforge.net/projects/gary-os/files/gary-os-v7.0-generic_64.kernel
 [Rootfs]: https://sourceforge.net/projects/gary-os/files/gary-os-v7.0-generic_64.rootfs
 [Boot]: https://sourceforge.net/projects/gary-os/files/gary-os-v7.0-generic_64.grub.zip
+
+[(...)]: #v40-2021-07-26
 
   [Tiny]: https://sourceforge.net/projects/gary-os/files/v7.0/gary-os-v7.0-generic_64.tiny.kernel
 
