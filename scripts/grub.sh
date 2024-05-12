@@ -33,6 +33,10 @@ echo -en "${HEADER}\n"
 echo -en "ARGUMENTS: ${_OPTS}\n"
 echo -en "${HEADER}\n"
 
+########################################
+
+declare TIMEOUT="5"
+
 ################################################################################
 
 declare GDEST="$(realpath ${1} 2>/dev/null)"
