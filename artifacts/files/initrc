@@ -237,7 +237,9 @@ select() {
 					select - "${${ROOTFS_ROOT_OPT}}" "${${ROOTFS_ROOT_OPT}_file}" || return 1
 					return 0
 				fi
-			elif [ -n "`echo "${${ROOTFS_ROOT_OPT}}" | grep -E "^[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+$"`" ]; then
+			elif	[ -n "`echo "${${ROOTFS_ROOT_OPT}}" | grep -E "^[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+$"`" ] &&
+				[ ! -f "${_GOVLY}.shm${ROOTFS_ROOT}" ]
+			then
 				chroot /.${ROOTFS_ROOT_OPT} rc-update add dhcpcd default || ${ROOTFS_FUNC}
 				chroot /.${ROOTFS_ROOT_OPT} openrc || ${ROOTFS_FUNC}
 				chroot /.${ROOTFS_ROOT_OPT} rc-service dhcpcd restart || ${ROOTFS_FUNC}
@@ -248,7 +250,7 @@ select() {
 				#note: creating the "shm" mount, and using "tftp" to put the image in the right place
 				#note: this way the image is only being put into memory once
 				${ROOTFS_NAME} ${_GOVLY} true || ${ROOTFS_FUNC}
-#>>>				if	! chroot /.${ROOTFS_ROOT_OPT} tftp -v ${${ROOTFS_ROOT_OPT}} -c get ${${ROOTFS_ROOT_OPT}_file} ${_GOVLY}.shm${ROOTFS_ROOT} &&
+#>>>				if	! tftp -v ${${ROOTFS_ROOT_OPT}} -c get ${${ROOTFS_ROOT_OPT}_file} ${_GOVLY}.shm${ROOTFS_ROOT} &&
 				if	! tftp ${${ROOTFS_ROOT_OPT}} -g -r ${${ROOTFS_ROOT_OPT}_file} -l ${_GOVLY}.shm${ROOTFS_ROOT} &&
 					! ${chroot_opt}
 				then
