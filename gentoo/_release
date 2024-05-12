@@ -293,9 +293,9 @@ declare ROOTFS_LIB="/usr/lib64"
 declare ROOTFS_PATH="${ROOTFS_BIN}:/$(basename ${ROOTFS_BIN})"
 declare ROOTFS_SROOT="${ROOTFS_BIN}/switch_root"
 declare ROOTFS_SHELL="/$(basename ${ROOTFS_BIN})/sh"
-#>>>if [[ -n $(${ROOTFS_LDD} ${ROOTFS_BASH} 2>/dev/null | ${GREP} "not a dynamic executable") ]]; then
-#>>>	ROOTFS_SHELL="/$(basename ${ROOTFS_BIN})/${ROOTFS_BASH}"
-#>>>fi
+#>>> if [[ -n $(${ROOTFS_LDD} ${ROOTFS_BASH} 2>/dev/null | ${GREP} "not a dynamic executable") ]]; then
+#>>> 	ROOTFS_SHELL="/$(basename ${ROOTFS_BIN})/${ROOTFS_BASH}"
+#>>> fi
 
 #note: update the "#{rootfs}" markers in "sets/gary-os" whenever "$rootfs_utils" changes
 #note: verify accuracy using "${dotest}" in the "release_rootfs_cpio" function
