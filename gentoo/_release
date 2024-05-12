@@ -1948,14 +1948,11 @@ function _release_unpack {		#{ismain} #{doredo} #{dotest}
 			[[ -n $(${GREP} "^[${PACKDIRS_KEEP}]${FILE}${FREGEX}$" ${UNPACK}) ]] ||
 			[[ -n $(${GREP} "^[${PACKDIRS_INST}]${FILE}${FREGEX}$" ${UNPACK}) ]]
 		}; then
-			echo -en ">>> UNPACKING: ${PFIL}"
+			echo -en ">>> UNPACKING: ${PFIL}\n"
 			if ! ${DOTEST}; then
-				echo -en " "
 #>>>				common_untar ${TARGET}${PFIL}								2>&1 | prompt -t
 				common_untar ${TARGET}${PFIL}								| prompt -t
 				[[ ${PIPESTATUS[0]} == 0 ]]								|| return 1
-			else
-				echo -en "\n"
 			fi
 		fi
 		if {
