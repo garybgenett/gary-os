@@ -788,11 +788,11 @@ where this can come from.
 There are two key requirements of the final image for it to work correctly.
 
   1. That `/init` is an executable location for the startup process
-  2. Has the same [Linux Kernel] version (the `/lib64/modules` directory)
+  2. Has the same [Linux Kernel] version (the `/usr/lib/modules` directory)
 
 [Image] tries to handle the first automatically.  Verify this, and be mindful of
 the second if the source directory is updated (such as [Update] or [Compile]).
-If needed, there is a `packdir` archive of the `/lib64/modules` directory in
+If needed, there is a `packdir` archive of the `/usr/lib/modules` directory in
 [Downloads].
 
 It may be important to review the package file that will be used.  There are
@@ -1238,7 +1238,7 @@ selection of a [Filesystem] to load.
 Once a [Filesystem] is loaded, directories are unpacked as specified in 'Package
 Directories' above, and `/init` on the target filesystem is booted.  The
 majority of Linux kernel modules will be loaded after this point, so it is
-important that the [Filesystem] has a `/lib64/modules` directory which matches
+important that the [Filesystem] has a `/usr/lib/modules` directory which matches
 the [GaryOS] [Kernel] version.  There is a `packdir` archive of this directory
 in [Downloads].
 
