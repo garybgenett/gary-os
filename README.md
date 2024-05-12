@@ -957,7 +957,7 @@ and feel for GaryOS.
   |:---                       |:---      |:---
   | /etc/issue                | Replaced | [artifacts/files/issue]
   | /etc/motd                 | Added    | [artifacts/files/issue]
-  | /init                     | Added    | Symbolic link to `/sbin/init`
+  | /init                     | Added    | Symbolic link to `/usr/bin/init`
   | /etc/inittab              | Modified | Added serial console
   | /etc/fstab                | Modified | Commented all lines
   | /etc/locale.gen           | Replaced | [artifacts/files/locale.gen]
@@ -1898,7 +1898,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
             * `q`
         * `rootfs =; mount /dev/sda1 /.groot; exit 1`
             * `mount; ls -la /.groot /.groot/.groot /.groot/.overlay; unrootfs; mount`
-            * `rm /usr/sbin/mount.*; rootfs /dev/sda1`
+            * `rm /usr/bin/mount.*; rootfs /dev/sda1`
             * [ ] Verify `rsync` phase (may exhaust memory)
             * [ ] If it crashes, reset and restart from here
             * `mount; ls -la /.overlay/.overlay; unrootfs; mount`
