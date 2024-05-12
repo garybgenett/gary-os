@@ -182,7 +182,8 @@ declare CPIO_FILE="${_RAMFS}.cpio"
 
 #note: this is an environment variable for "xz" and is not explicitly used in this script
 #note: this is not for direct "xz" commands, but for "tar --xz" archiving
-export XZ_OPT="--verbose --threads=1 --memlimit=${XZ_MEMLIM} --extreme -9"
+declare XZ_OPT_BASE="--threads=1 --memlimit=${XZ_MEMLIM} --extreme -9"
+export XZ_OPT="--verbose ${XZ_OPT_BASE}"
 
 declare XARGS="xargs --max-procs 0 --max-args 1 --null	--arg-file ${CPIO_FILE}.nul"
 declare CPIO_IN="cpio -v --create --format newc --null	--file ${CPIO_FILE}	--directory" #>>> ${TARGET}
@@ -1950,8 +1951,8 @@ function _release_unpack {		#{ismain} #{doredo} #{dotest}
 		}; then
 			echo -en ">>> UNPACKING: ${PFIL}\n"
 			if ! ${DOTEST}; then
-#>>>				common_untar ${TARGET}${PFIL}								2>&1 | prompt -t
-				common_untar ${TARGET}${PFIL}								| prompt -t
+#>>>				XZ_OPT="${XZ_OPT_BASE}" common_untar ${TARGET}${PFIL}					2>&1 | prompt -t
+				XZ_OPT="${XZ_OPT_BASE}" common_untar ${TARGET}${PFIL}					| prompt -t
 				[[ ${PIPESTATUS[0]} == 0 ]]								|| return 1
 			fi
 		fi
