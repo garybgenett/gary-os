@@ -2298,11 +2298,11 @@ function publish_export_gitbackup {
 function publish_export_packages {
 	declare SRC="${1}" && shift
 	declare DST="${1}" && shift
-	if [[ -d ${SRC} ]]; then
+	if [[ -d ${_FINAL}/${SRC} ]]; then
 		${RSYNC_U} --copy-links --delete-excluded	\
 			--filter="-_/*%*"			\
 			--filter="-_/.*"			\
-			${SRC}/ ${_OUTDIR}/${DST}		|| return 1
+			${_FINAL}/${SRC}/ ${_OUTDIR}/${DST}	|| return 1
 	fi
 	return 0
 }
@@ -2348,8 +2348,8 @@ function _publish_export {
 			[[ ${RELEASE[${INDEX}]} == ${RELEASE[-1]} ]];
 #>>>			&& [[ ${RELEASE[${INDEX}]} == ${_VERSN} ]];
 		}; then
-			publish_export_packages ${_FINAL}/_$(basename ${DSTDIR}) ${_DSTDIR}	|| return 1
-			publish_export_packages ${_FINAL}/_$(basename ${PAKDIR}) ${_PAKDIR}	|| return 1
+			publish_export_packages _$(basename ${DSTDIR}) ${_DSTDIR}		|| return 1
+			publish_export_packages _$(basename ${PAKDIR}) ${_PAKDIR}		|| return 1
 		fi
 		if {
 			[[ -n ${RELEASE[${INDEX}]} ]] && [[ -n ${CMTHASH[${INDEX}]} ]] &&
