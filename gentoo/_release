@@ -257,6 +257,9 @@ if ! ${DOTEST}; then
 	PACKDIRS="$(variable_parse PACKDIRS "" "" "" true | sort -u)"
 fi
 
+declare PACKDIRS_HIDE="
+	${REPDIR}.git
+"
 declare PACKDIRS_SKIP="
 	${LDIR}\*/kernel/kheaders_data.tar.xz
 	/usr/lib/python\*/test/\*.tar.xz
@@ -1825,7 +1828,7 @@ function _release_fetch {		#{ismain} #{doredo} #{dotest}
 function _release_unpack {		#{ismain} #{doredo} #{dotest}
 	declare UNPACK="${TARGET}${_GUNPK}"
 	declare DOINST="${TARGET}${_GINST}/${_TITLE}"
-	declare CREGEX+="([a-z]+[${PACKDIRS_CSEP}])?"
+	declare CREGEX="([a-z]+[${PACKDIRS_CSEP}])?"
 	declare FREGEX="(([[:space:]]+[(]).*([)]))?"
 	declare PRINTF="%-${PACKDIRS_PRNT}.${PACKDIRS_PRNT}s %s\n"
 	declare SORTER="-k1.2"
@@ -1866,6 +1869,9 @@ function _release_unpack {		#{ismain} #{doredo} #{dotest}
 	fi
 	if ${DOREDO}; then
 		variable_parse PACKDIRS | sort -u						>${UNPACK}		|| return 1
+		for FILE in ${PACKDIRS_HIDE}; do
+			${SED} -i "s%^(${CREGEX}${FILE})$%${PACKDIRS_GONE}\1%g"			${UNPACK}		|| return 1
+		done
 	fi
 	if [[ ! -f ${UNPACK} ]]; then
 		shopt -s lastpipe
