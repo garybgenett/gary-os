@@ -18,7 +18,7 @@
 #! declare G_PACK="${_GINST}/${_TITLE}/_packages"
 #! declare G_RNSV="/.runit/runsvdir/system"
 #! #############################################################################
-#! make -C ${SETDIR} DOMODS="true" unpack
+#! make -C ${SETDIR} unpack
 #! mount -o remount,rw,size=6g /.overlay
 #! [[ -b ${G_DISK} ]] && mount-robust ${G_DISK} ${_GINST}
 #! make -C ${SETDIR} DOREDO="true" unpack
@@ -50,7 +50,7 @@
 #! HOSTNAME="${_TITLE}" SETUP="${HOME}/setup" ${HOME}/setup/.setconf -r
 #! ${RM} ${G_RNSV}/tty*
 #! #####################################
-#! useradd -MU -d ${HOME} -s /bin/bash -u 1000 plastic
+#! useradd -MU -d ${HOME} -s /bin/bash -u 1000 plastic || true
 #! passwd root
 #! exit 0
 #! #############################################################################
