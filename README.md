@@ -1813,6 +1813,8 @@ Everything needed to perform these steps is in the [Repository] or the
 
   * `cd .setup/gentoo.gary-os`
     * `(cd _builds/.gary-os.release; rm ./v#.#; ln ../_gary-os.working/.gary-os-* ./v#.#)`
+        * `vi ./gentoo/_release`
+            * [ ] Add `${RELEASE[*]}` number, with empty `${CMTHASH[*]}`
         * `make DOREDO=true _release_grub`
         * `make _publish_release`
     * `(cd _builds; rm ./_gary-os.boot; ln _gary-os.working ./_gary-os.boot)`
@@ -1835,7 +1837,7 @@ Everything needed to perform these steps is in the [Repository] or the
     * `vi ./gentoo/_funtoo`
         * `(cd _build/gentoo/gentoo; git pull; GIT_PAGER= git-list -n1)`
         * [ ] Update [Gentoo] commit
-    * `make DOREDO=true doit`
+    * `make DOMODS=true DOREDO=true doit`
         * [x] *Retry()*
     * `make edit`
 
