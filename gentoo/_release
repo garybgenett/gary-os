@@ -2158,9 +2158,6 @@ function _publish_prep {
 	${RM}						${ROOTFS_FILE}.exclude			|| return 1
 	${RM}						${_RAMFS}.grub				|| return 1
 	${RM}						${TARGET}${DSTDIR}/{.[^.],}*checksum*	|| return 1
-	${RM}						${TARGET}/tmp/.ccache			|| return 1
-	${RM}						${TARGET}/tmp/*				|| return 1
-	${RM}						${TARGET}/var/tmp/tmp*			|| return 1
 	${SED} "s|^[#][{][^}]+[}][[:space:]]+||g"	${SETDIR}/${FUNDIR}/package.license	\
 		| ${SED} -n "s|^([^#[:space:]]+)[[:space:]]+([^[:space:]]+).*$|\1 \2|gp"	\
 		| eval ${SED}									\
@@ -2169,6 +2166,9 @@ function _publish_prep {
 			done)									\
 		| ${SED} "s|[[:space:]].+$||g"							\
 		| while read -r FILE; do ${RM}		${TARGET}${PAKDIR}/${FILE}-[0-9]*	|| return 1; done
+	${RM}						${TARGET}/tmp/.ccache			|| return 1
+	${RM}						${TARGET}/tmp/*				|| return 1
+	${RM}						${TARGET}/var/tmp/tmp*			|| return 1
 	return 0
 }
 
