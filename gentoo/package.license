@@ -2,6 +2,8 @@
 # portage package license file
 ################################################################################
 
+#note: update "RELEASE_LICENSES" in "_release" when these change
+
 ########################################
 # firmware
 
