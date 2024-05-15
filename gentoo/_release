@@ -2134,24 +2134,24 @@ function _publish_release {		#{ismain} #{doredo}
 ########################################
 
 function _publish_prep {
-	variable_parse DEVDIRS "" "" "/"	>${TARGET}/.gitignore			|| return 1
-	sort -u -o ${TARGET}/.gitignore		${TARGET}/.gitignore			|| return 1
-	${SED} -i "/^$/d"			${TARGET}/.gitignore			|| return 1
-	${RM}					${TARGET}${ARCDIR}/.subversion*		|| return 1
-	${RM}					${TARGET}${ARCDIR}/.wget*		|| return 1
-	${RM}					${TARGET}/.${_GPACK/%.txt}*		|| return 1
-	${RM}					${CPIO_FILE}				|| return 1
-	${RM}					${CPIO_FILE}.dir			|| return 1
-	${RM}					${CPIO_FILE}.${ROOTFS_NAME}		|| return 1
-	${RM}					${CPIO_FILE}.${ROOTFS_NAME}.dir		|| return 1
-	${RM}					${CPIO_FILE}.${ROOTFS_NAME}.exclude	|| return 1
-	${RM}					${ROOTFS_FILE}.dir			|| return 1
-	${RM}					${ROOTFS_FILE}.exclude			|| return 1
-	${RM}					${_RAMFS}.grub				|| return 1
-	${RM}					${TARGET}${DSTDIR}/{.[^.],}*checksum*	|| return 1
-	${RM}					${TARGET}/tmp/.ccache			|| return 1
-	${RM}					${TARGET}/tmp/*				|| return 1
-	${RM}					${TARGET}/var/tmp/tmp*			|| return 1
+	variable_parse DEVDIRS "" "" "/"		>${TARGET}/.gitignore			|| return 1
+	sort -u -o ${TARGET}/.gitignore			${TARGET}/.gitignore			|| return 1
+	${SED} -i "/^$/d"				${TARGET}/.gitignore			|| return 1
+	${RM}						${TARGET}${ARCDIR}/.subversion*		|| return 1
+	${RM}						${TARGET}${ARCDIR}/.wget*		|| return 1
+	${RM}						${TARGET}/.${_GPACK/%.txt}*		|| return 1
+	${RM}						${CPIO_FILE}				|| return 1
+	${RM}						${CPIO_FILE}.dir			|| return 1
+	${RM}						${CPIO_FILE}.${ROOTFS_NAME}		|| return 1
+	${RM}						${CPIO_FILE}.${ROOTFS_NAME}.dir		|| return 1
+	${RM}						${CPIO_FILE}.${ROOTFS_NAME}.exclude	|| return 1
+	${RM}						${ROOTFS_FILE}.dir			|| return 1
+	${RM}						${ROOTFS_FILE}.exclude			|| return 1
+	${RM}						${_RAMFS}.grub				|| return 1
+	${RM}						${TARGET}${DSTDIR}/{.[^.],}*checksum*	|| return 1
+	${RM}						${TARGET}/tmp/.ccache			|| return 1
+	${RM}						${TARGET}/tmp/*				|| return 1
+	${RM}						${TARGET}/var/tmp/tmp*			|| return 1
 	return 0
 }
 
