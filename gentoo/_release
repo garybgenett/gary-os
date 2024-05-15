@@ -2351,8 +2351,8 @@ function _publish_export {
 			continue
 		fi
 		if {
-			[[ ${RELEASE[${INDEX}]} == ${RELEASE[-1]} ]];
-#>>>			&& [[ ${RELEASE[${INDEX}]} == ${_VERSN} ]];
+			[[ ${RELEASE[${INDEX}]} == ${RELEASE[-1]} ]] &&
+			[[ ${RELEASE[${INDEX}]} == ${_VERSN} ]];
 		}; then
 			publish_export_packages _$(basename ${DSTDIR}) ${_DSTDIR}		|| return 1
 			publish_export_packages _$(basename ${PAKDIR}) ${_PAKDIR}		|| return 1
