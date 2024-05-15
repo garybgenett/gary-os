@@ -718,7 +718,8 @@ grub-install \
 	--directory="${GDEST}/_${GTYPE}" \
 	--boot-directory="${DO_MOUNT}" \
 	${GINST_DO}								|| exit_summary 1
-${RSYNC_U} ${DO_MOUNT}/ ${GDEST}/_${GTYPE}.boot					|| exit 1
+${MKDIR} ${GDEST}/_${GTYPE}.boot						|| exit 1
+${RSYNC_U} ${DO_MOUNT}/grub/ ${GDEST}/_${GTYPE}.boot/grub			|| exit 1
 ${RSYNC_U} ${GDEST}/${GTYPE/%-pc}.img ${GDEST}/_${GTYPE}.boot/grub/${GTYPE}/	|| exit 1
 grub-bios-setup \
 	--verbose \
@@ -744,7 +745,8 @@ grub-install \
 	--boot-directory="${DO_MOUNT}" \
 	--efi-directory="${DO_MOUNT}" \
 	${GINST_DO}								|| exit_summary 1
-${RSYNC_U} ${DO_MOUNT}/ ${GDEST}/_${ETYPE}.boot					|| exit 1
+${MKDIR} ${GDEST}/_${ETYPE}.boot						|| exit 1
+${RSYNC_U} ${DO_MOUNT}/grub/ ${GDEST}/_${ETYPE}.boot/grub			|| exit 1
 ${RSYNC_C} ${GDEST}/${ETYPE/%-efi}.efi ${DO_MOUNT}/${FILE}			|| exit 1
 mount-robust -u ${GINST_DO}${GPSEP}${GPEFI}					|| exit 1
 ${RM} ${DO_MOUNT}								|| exit 1
