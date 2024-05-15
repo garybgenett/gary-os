@@ -68,7 +68,7 @@ declare _OUTDIR="${_RELDIR}.release"
 declare _DSTDIR="distfiles"
 declare _PAKDIR="packages"
 
-declare _EAMARK="${_FINAL}/_EARLY_ACCESS_DIRECTORY--IN_DEVELOPMENT--UNSUPPORTED"
+declare _EAMARK="${_FINAL}/_EARLY_ACCESS_DIRECTORY--IN_DEVELOPMENT--UNSUPPORTED.txt"
 
 declare -a RELEASE=
 declare -a CMTHASH=
