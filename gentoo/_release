@@ -102,6 +102,15 @@ for FILE in \
 	fi
 done
 
+########################################
+
+declare RELEASE_LICENSES="
+	linux-fw-redistributable
+	freedist
+	fairuse
+	free-noncomm
+"
+
 ################################################################################
 
 declare LASTPIPE="$(shopt lastpipe | ${SED} "s%^.+(on|off)$%\1%g")"
@@ -2152,6 +2161,14 @@ function _publish_prep {
 	${RM}						${TARGET}/tmp/.ccache			|| return 1
 	${RM}						${TARGET}/tmp/*				|| return 1
 	${RM}						${TARGET}/var/tmp/tmp*			|| return 1
+	${SED} "s|^[#][{][^}]+[}][[:space:]]+||g"	${SETDIR}/${FUNDIR}/package.license	\
+		| ${SED} -n "s|^([^#[:space:]]+)[[:space:]]+([^[:space:]]+).*$|\1 \2|gp"	\
+		| eval ${SED}									\
+			$(for FILE in ${RELEASE_LICENSES}; do
+				echo -en " -e \"/[[:space:]]${FILE}$/d\""
+			done)									\
+		| ${SED} "s|[[:space:]].+$||g"							\
+		| while read -r FILE; do ${RM}		${TARGET}${PAKDIR}/${FILE}-[0-9]*	|| return 1; done
 	return 0
 }
 
