@@ -238,7 +238,7 @@ for FILE in ${MDIR} ${FDIR}		; do if ! variable_match "FSPACK FSKEEP FSARCH FSEX
 for FILE in ${REPDIR} ${LDIR} ${PDBDIR}	; do if ! variable_match "FSPACK FSKEEP FSARCH FSEXCL" ";" "${FILE}"; then FSKEEP+="; ${_TITLE}:${FILE}"; fi; done
 for FILE in ${REPDIR}.git		; do if ! variable_match "FSPACK FSKEEP FSARCH FSEXCL" ";" "${FILE}"; then FSARCH+="; ${_TITLE}:${FILE}"; fi; done
 for FILE in $((
-		find ${TARGET}/boot/{_,System.map,vmlinuz,initramfs,config}-*
+		find ${TARGET}/boot/{_,System.map,vmlinuz,initramfs,config}{-*,.old}
 		find ${TARGET}/etc/kernels	-mindepth 1 -maxdepth 1
 		find ${TARGET}${MDIR}		-mindepth 1 -maxdepth 1
 	) 2>/dev/null |
