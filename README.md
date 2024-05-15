@@ -1935,12 +1935,13 @@ Everything in [Booting], [Running] and [Building] should be validated below.
         * [ ] Uncomment `root-path`
         * [x] PXE
         * `ls -la /.overlay`
+  * `./scripts/qemu-minion.bsh /dev/null 1 -m 8192`
     * `vi [...]/dhcpd.conf; sv restart dhcpd tftpd`
         * [ ] Change `root-path` location
         * [ ] Uncomment `extensions-path`
         * [x] PXE
         * `ls -la /.overlay`
-  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.grub/loopfile.qcow2 1`
+  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.grub/loopfile.qcow2 1 -m 8192`
     * [x] Options
         * [x] `dhcp`
         * [x] `pxe: groot`
@@ -1953,20 +1954,21 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * `rm /tmp/qemu.windows.img.* /tmp/qemu.null.*`
     * `(cd _systems/qemu; rm windows.img)`
     * `(cd _systems/qemu; qemu-img create -f qcow2 -o compat=1.1,backing_file=$(ls windows-10.*.2-update.qcow2) windows.img)`
-  * `./scripts/qemu-windows.bsh / ALT -m 6144`
+  * `./scripts/qemu-windows.bsh / ALT -m 8192`
     * [ ] Download [Boot] and [Kernel] to the desktop
-    * [ ] Download and install [VirtualBox] (use desktop for new [Virtual])
+    * [ ] Download and install [VirtualBox]
+        * [ ] Use `Desktop` for new [Virtual]
         * [x] Task Manager, Performance
         * [ ] Verify boot
     * [ ] Install [GRUB]
-  * `./scripts/qemu-windows.bsh / ALT BOOT -m 6144`
+  * `./scripts/qemu-windows.bsh / ALT BOOT -m 8192`
     * [ ] Verify both "Windows" entries
         * `change cdrom0 [...]/en_windows_10_*.iso`
     * [x] Boot
         * `reboot`
     * [x] Windows
         * [ ] Run `bcdedit.bat` as 'Administrator'
-  * `./scripts/qemu-windows.bsh / ALT -m 6144`
+  * `./scripts/qemu-windows.bsh / ALT -m 8192`
     * [x] Windows
         * [x] GaryOS Grub (produces EFI error screen)
         * `<escape>`
@@ -1985,7 +1987,6 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * [ ] Ethernet [Networking]
     * [ ] [GUI]
   * [ ] Boot to "gary-os"
-    * [ ] Verify failed `Boot`
     * [ ] Wireless [Networking]
     * [ ] [GUI]
 
@@ -1997,11 +1998,14 @@ Everything in [Booting], [Running] and [Building] should be validated below.
         * `rc-update add dhcpcd default; openrc`
             * `mount -o remount,size=6144m /.overlay`
         * `source ./.bashrc`
-            * `rsync -L --filter=-_/sources --filter=-_/build --filter=-_/gary-os root@10.0.0.254:[...]/.setup/gentoo.gary-os/ /.gary-os`
             * `shell -i`
+            * `rsync -L --filter=-_/gentoo.git --filter=-_/sources --filter=-_/build --filter=-_/gary-os root@10.0.0.254:[...]/.setup/gentoo.gary-os/ /.gary-os`
         * `exit 0`
     * `cd /.gary-os`
-        * `mkdir /tmp/grub; HOME=/.gary-os GRUB_DIR=/.gary-os ./scripts/grub.sh /tmp/grub -fx -k/dev/sda1 /dev/sdb1`
+        * `touch ./overlay`
+            * *note: should not be necessary, but resolves: `grub-bios-setup: error: failed to get canonical path of 'overlay'.`*
+            * https://unix.stackexchange.com/a/429434
+        * `mkdir /tmp/grub; HOME=/.gary-os GRUB_DIR=/.gary-os/grub ./scripts/grub.sh /tmp/grub -fx -k/dev/sda1 /dev/sdb1`
             * `umount /dev/sdb*`
             * `gdisk /dev/sdb`
             * `./.bashrc format /dev/sdb1`
@@ -2011,18 +2015,22 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * `ls -la ./gary-os/`
         * `rm ./gary-os/gary-os-*.fetch`
         * `make fetch`
-            * `sed -i -e "s|^[#]||g" -e "/[.]rootfs$/d" ./gary-os/gary-os-*.fetch`
-            * `for FILE in $(cat ./gary-os/gary-os-*.fetch); do rsync -tvv -L --progress root@10.0.0.254:[...]/_builds/_gary-os.working/.gary-os-*/${FILE} /.install/gary-os/; done`
+            * `sed -i "s|^[#]||g" ./gary-os/gary-os-*.fetch`
+            * `for FILE in $(cat ./gary-os/gary-os-*.fetch); do rsync -L --progress root@10.0.0.254:[...]/_builds/_gary-os.working/.gary-os-*/${FILE} /.install/gary-os/; done`
             * `make DOTEST=true fetch`
     * `ls -la /.gary-os-*/`
         * `make DOREDO=true unpack`
-            * `emerge app-misc/hello`
-                * `hello`
-            * `emerge app-text/aspell`
-                * [ ] Verify from [SourceForge] package
+            * `sed -i "s|^[+]|*|g" /.unpack`
+            * `make unpack`
+        * `emerge app-misc/hello`
+            * `hello`
+        * `emerge app-text/aspell`
+            * [ ] Verify from [SourceForge] package
+    * `ls -la /.gary-os-*/`
         * `rm /.gary-os-*/gary-os-*.rootfs*`
             * `make rootfs`
-    * `ls -la ./sources/; ls -la /.gary-os/build.install/`
+            * `mount -o loop /.gary-os-*/gary-os-*.rootfs /mnt; ls -la /mnt; umount /mnt`
+    * `ls -la ./sources/; ls -la ./build.install/`
         * `rm ./build; ln -fsv /.install ./build`
         * `mv ./gary-os/gary-os-*.stage3.tar.xz ./gary-os/stage3-generic_64.tar.xz`
         * `make init`
@@ -2037,18 +2045,25 @@ Everything in [Booting], [Running] and [Building] should be validated below.
             * `df -h`
         * `make DOREDO=true install`
             * `cat /etc/issue`
+    * `vi /.install/etc/inittab`
+        * [ ] Uncomment serial console
   * `./scripts/qemu-minion.bsh /dev/null 1`
     * [ ] Verify default boot
+        * `hello`
         * `reboot`
     * [x] Boot (manually from GRUB command line)
         * `cd /.gary-os`
-        * `mkdir /tmp/grub; HOME=/.gary-os GRUB_DIR=/.gary-os ./scripts/grub.sh /tmp/grub /dev/sda1`
+        * `touch ./overlay`
+        * `mount -o remount,size=3072m /.overlay`
+        * `mkdir /tmp/grub; HOME=/.gary-os GRUB_DIR=/.gary-os/grub ./scripts/grub.sh /tmp/grub /dev/sda1`
         * `reboot`
     * [x] Install Menu
         * `<escape>`
     * [x] Install Boot
         * `cd /.gary-os`
-        * `make reset; vi /etc/portage/{make.conf,package.use}`
+        * `make reset`
+        * `vi +/#{GFG} /etc/portage/{make.conf,package.use}`
+        * `rm /var/db/repos/gentoo`
         * `make update`
         * `make upgrade`
   * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.grub/loopfile.qcow2 1 -m 8192`
