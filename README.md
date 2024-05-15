@@ -248,7 +248,6 @@ a USB drive.
   1. Insert a new or empty USB drive at least 4GB in size
   2. Download the [Boot] archive, right click and 'Extract'
   3. Double-click `rufus*.exe`, click allow, and decline updates
-     1. Show 'advanced drive properties' and check 'USB Drives'
      2. For 'Device', select the USB drive
      3. For 'Boot Selection', use the large 'Select' button and `loopfile.img`
      4. Click 'Start'
