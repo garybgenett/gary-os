@@ -350,6 +350,7 @@ Once [VirtualBox] is installed, create a new virtual machine.
   | Version           | Other Linux (64-bit)
   | Memory            | 4096 (or greater)
   | Virtual disk file | loopfile.qcow2 (from [Boot] archive)
+  | Enable EFI        | on
 
 This new virtual machine will run GaryOS [GRUB] and boot the [Kernel].
 
