@@ -1354,7 +1354,7 @@ if [[ ${1} == -i ]]; then
 		};
 	}; then
 		if ${DOREDO}; then
-			${RM}				${ARC_FILE}{,.git}.tar.xz				|| EXIT 1
+			${RM}				${TARGET}${ARCDIR}/${REP_FILE}{,.git}.tar.xz		|| EXIT 1
 			${RM}				${TARGET}${REPDIR}{,.git}{,.tar.xz}			|| EXIT 1
 		fi
 		#note: this needs to match the name in the "${MAKEIT}" script
