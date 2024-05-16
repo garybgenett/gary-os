@@ -238,13 +238,15 @@ for FILE in ${MDIR} ${FDIR}		; do if ! variable_match "FSPACK FSKEEP FSARCH FSEX
 for FILE in ${REPDIR} ${LDIR} ${PDBDIR}	; do if ! variable_match "FSPACK FSKEEP FSARCH FSEXCL" ";" "${FILE}"; then FSKEEP+="; ${_TITLE}:${FILE}"; fi; done
 for FILE in ${REPDIR}.git		; do if ! variable_match "FSPACK FSKEEP FSARCH FSEXCL" ";" "${FILE}"; then FSARCH+="; ${_TITLE}:${FILE}"; fi; done
 for FILE in $((
-		find ${TARGET}/boot/{_,System.map,vmlinuz,initramfs,config}{-*,.old}
+		find ${TARGET}/boot/{System.map,config,vmlinuz,initramfs}-*
+		find ${TARGET}/boot/*.old
+		find ${TARGET}/boot/_*
 		find ${TARGET}/etc/kernels	-mindepth 1 -maxdepth 1
 		find ${TARGET}${MDIR}		-mindepth 1 -maxdepth 1
 	) 2>/dev/null |
-		${GREP} -v "${KVER}-gentoo.${_TITLE}$" |
+		${GREP} -v "${KVER}-gentoo.${_TITLE}(.img)?$" |
 		${SED} "s|^${TARGET}||g" |
-		sort
+		sort -u
 	)				; do if ! variable_match "FSPACK FSKEEP FSARCH FSEXCL" ";" "${FILE}"; then FSEXCL+="; ${_TITLE}:${FILE}"; fi; done
 if ! ${DOTEST}; then
 	FSPACK="$(variable_parse FSPACK ";" "" "" true | sort -u | tr '\n' ';' | ${SED} -e "s|^;+||g" -e "s|;+$||g" -e "s|;| ; |g")"
