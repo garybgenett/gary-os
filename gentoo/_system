@@ -1336,6 +1336,7 @@ if [[ ${1} == -i ]]; then
 		fi
 		tar --numeric-owner --xattrs --xattrs-include='*.*' --xz -pvvx -C ${TARGET} -f \
 							${TARGET}${ARCDIR}/stage3-${ESUB}.tar.xz		|| EXIT 1
+		realdev					${TARGET}/dev						|| EXIT 1
 	fi
 	shift
 	mount_dev_dirs												|| EXIT 1
