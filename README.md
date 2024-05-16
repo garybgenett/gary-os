@@ -1754,7 +1754,9 @@ Everything needed to perform these steps is in the [Repository] or the
     * `(cd .setup; git-commit ./linux ./gentoo)`
   * `make redo`
     * [x] *Iterate()*
-  * `make edit`
+    * `make DOMODS=true doit`
+    * `(cd _builds; rsync ./_gentoo/ ./_gary-os.working)`
+  * `make DOMODS=true edit`
     * `(cd _builds; rm ./_gentoo.boot; ln _gentoo ./_gentoo.boot)`
     * `(cd _builds; rsync ./_gentoo/ ../../_toor)`
     * [ ] Boot to "gary-os"
@@ -1784,7 +1786,7 @@ Everything needed to perform these steps is in the [Repository] or the
         * `make` *`${3}`* `depends-<package atom|/|%>`
         * `make` *`${3}`* `depgraph-<package atom|/|%>`
         * `make` *`${3}`* `belongs-<file path|/|%>`
-    * `make` *`${3}`* `DOFAST=true doit && make DOREDO=true` *`${4}`*
+    * `make` *`${3}`* `DOFAST=true doit && make DOFAST=true` *`${4}`*
         * `make` *`${3}`* `check`
         * `mkdir ./mnt; mount -o loop ./build/.gary-os-*/gary-os-*_64.cpio.rootfs ./mnt; ncdu ./mnt; umount ./mnt; rm ./mnt`
     * `ll ./build/.gary-os-*`
@@ -1800,7 +1802,6 @@ Everything needed to perform these steps is in the [Repository] or the
     * [ ] Minimized build note in `/etc/issue`
     * [ ] No `startx` in `/etc/issue`
   * [x] *Validate( 850MB 1.4GiB '' devel )*
-  * `make DOFAST=true devel`
     * [ ] Verify `#{rootfs}` markers
   * `make ROOTFS=false devel`
     * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1 -m 8192`
