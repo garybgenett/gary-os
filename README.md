@@ -2124,16 +2124,21 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * `(cd _builds/.gary-os.release; rm ./v#.#)`
     * `make clean`
     * `ll ./build/ ./build/_build`
+  * `(cd .setup; vi gentoo/_release; git-commit -m "Incremented version number." gentoo/_release)`
+    * [ ] Commit `${_VERSN}` number
   * `(cd coding/gary-os; git-commit -m "Stamped v#.# release." ./README.md)`
     * `make _publish_gitdir`
     * `(cd _builds/.gary-os/.gary-os; GIT_PAGER= git-list -n1)`
   * `make DOMODS=true doit && make DOMODS=true DOREDO=true release _prepare_packdirs`
+    * `(cd _builds; rsync ./_gentoo/var/cache/{distfiles,binpkgs} ./_gary-os.working/var/cache/)`
     * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.tiny.kernel 1`
     * [x] **Verify()**
   * `make doit && make DOREDO=true release _prepare_packdirs`
+    * `(cd _builds; rsync ./_gentoo/var/cache/{distfiles,binpkgs} ./_gary-os.working/var/cache/)`
     * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1`
     * [x] **Verify()**
   * `make P=_gary-os doit && make P=_gary-os DOREDO=true rootfs`
+    * `(cd _builds; rsync ./_gentoo/var/cache/{distfiles,binpkgs} ./_gary-os.working/var/cache/)`
     * `_sync boot`
     * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1 groot=10.0.0.254 -m 8192`
     * [x] **Verify()**
@@ -2141,7 +2146,8 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * `ll ./build/ ./build/_build ./build/.gary-os-*`
   * `(cd _builds; rsync -L ./_gary-os.working/.gary-os-*/ ./_gary-os)`
     * `(cd _builds/_gary-os; git-backup <gentoo commit>.#; GIT_PAGER= git-list -n1)`
-    * `(cd .setup; vi gentoo/_release; git-commit -m "Published v#.# release." gentoo/_release)`
+  * `(cd .setup; vi gentoo/_release; git-commit -m "Published v#.# release." gentoo/_release)`
+    * [ ] Commit `${RELEASE[*]}` number
   * `make _publish_gitdir`
     * `(cd _builds/.gary-os/.gary-os; GIT_PAGER= git-list -n3)`
     * `(cd _builds/.gary-os/.gary-os; GIT_PAGER= git tag -l)`
@@ -2158,13 +2164,16 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * [ ] Update download button
   * <https://github.com/garybgenett/gary-os>
     * [ ] Test v#.# links
+  * `cd writing/garybgenett`
+    * `make -C projects && make site-force && make export-all`
+    * `git-save`
 
 **Personal**
 
   * `(cd _builds; rm ./_gary-os.boot; ln _gary-os ./_gary-os.boot)`
     * `_sync boot`
   * `cd .setup/gentoo.make`
-    * `make doit`
+    * `make DOMODS=true doit`
     * `make _publish_prep`
     * `(cd _builds/_gentoo; git-backup "gary-os v#.#"; GIT_PAGER= git-list -n1)`
   * `cd coding/gary-os-history`
