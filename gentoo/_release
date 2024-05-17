@@ -1639,19 +1639,19 @@ function release_grub_qcow_mount {	#>>>{dotest}
 	declare GRUB_LMBR="${1}" && shift
 	declare GRUB_LEFI="${1}" && shift
 	if [[ ! -b ${GRUB_LEFI} ]]; then
-		modprobe			nbd max_part=127					|| return 1
-		cat				/sys/module/nbd/parameters/max_part			|| return 1
+		modprobe			nbd max_part=127				|| return 1
+		cat				/sys/module/nbd/parameters/max_part		|| return 1
 		qemu-nbd --fork -nv -f qcow2 -c	${GRUB_LEFI/%p[0-9]} ${GRUB_DEST}/loopfile.qcow2	|| return 1
-		partx -t gpt -a			${GRUB_LEFI/%p[0-9]}					#>>> || return 1
+		partx -t gpt -a			${GRUB_LEFI/%p[0-9]}				#>>> || return 1
 		sleep 3
 	fi
 	if {
 		[[ -n ${GRUB_LMBR} ]] &&
 		[[ -n ${GRUB_LEFI} ]];
 	}; then
-		${MKDIR}			${GRUB_DEST}/{${MOUNT_MBR},${MOUNT_EFI}}		|| return 1
-		mount-robust			${GRUB_LMBR} ${GRUB_DEST}/${MOUNT_MBR}			|| return 1
-		mount-robust			${GRUB_LEFI} ${GRUB_DEST}/${MOUNT_EFI}			|| return 1
+		${MKDIR}			${GRUB_DEST}/{${MOUNT_MBR},${MOUNT_EFI}}	|| return 1
+		mount-robust			${GRUB_LMBR} ${GRUB_DEST}/${MOUNT_MBR}		|| return 1
+		mount-robust			${GRUB_LEFI} ${GRUB_DEST}/${MOUNT_EFI}		|| return 1
 	fi
 	return 0
 }
@@ -2405,8 +2405,10 @@ function _publish_export {
 		if [[ -L ${_OUTDIR}/${INDEX} ]]; then
 			continue
 		fi
-		for NEXT in $(
-			${LS} ${_OUTDIR}/${INDEX}/*.{kernel,initrd,rootfs,grub.zip} 2>/dev/null	|
+		for NEXT in $((
+				find ${_OUTDIR}/${INDEX}/*.{kernel,initrd,rootfs}
+				find ${_OUTDIR}/${INDEX}/*.{grub.zip,}
+			) 2>/dev/null								|
 			${GREP} -v "[.]${_G_MOD_TINY}[.]"					|
 			${GREP} -v "[.]${_G_MOD}[.]"
 		); do
