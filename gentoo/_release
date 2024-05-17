@@ -1755,7 +1755,8 @@ function _release_report {
 function release_fetch_list {		#>>>{dotest}
 	declare FET_BAS="${1}" && shift
 	declare FET_PKG="${1}" && shift
-	declare MASK="# "
+	declare MASKIT="# "
+	declare MASK="${MASKIT}"
 	if ${DOTEST}; then
 		MASK=
 	fi
@@ -1773,8 +1774,12 @@ function release_fetch_list {		#>>>{dotest}
 		echo "${MASK}${FET_BAS}.rootfs"				>>${FET_PKG}
 		echo "${MASK}${FET_BAS}.rootfs.${_GPACK}"		>>${FET_PKG}
 		shopt -s lastpipe
-		variable_parse PACKDIRS | while read -r FILE; do
+		variable_parse PACKDIRS | sort | while read -r FILE; do
 			echo "${MASK}$(common_packdir ${FILE})"		>>${FET_PKG}
+		done
+		for FILE in ${PACKDIRS_HIDE}; do
+			FILE="$(common_packdir ${FILE})"
+			${SED} -i "s|^(${FILE})$|${MASKIT}\1|g"		${FET_PKG}
 		done
 		shopt ${LASTPIPE} lastpipe
 		echo "${MASK}${FET_BAS}.stage3.tar.xz"			>>${FET_PKG}
