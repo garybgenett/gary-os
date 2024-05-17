@@ -891,7 +891,9 @@ if ${DEBUG}; then
 	QUIET="false"
 fi
 print_info marker;		print_info title
-print_info marker;		print_info usage
+if ${DEBUG}; then
+	print_info marker;	print_info usage
+fi
 if [[ -z ${_OPTS} ]]; then
 	EXIT 0
 fi
