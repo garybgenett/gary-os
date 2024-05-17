@@ -4,7 +4,7 @@
 
 | ![GaryOS Icon](artifacts/images/icon-v6.0.png "GaryOS Icon") | "The one file that does it all."
 |:---      |:---
-| Latest   | [v8.0 2024-05-16] -- [Kernel], [Rootfs], [Boot]
+| Latest   | [v8.0 2024-05-16] -- [Kernel], [Rootfs], [Boot], [Disk]
 | Homepage | <http://www.garybgenett.net/projects/gary-os>
 | Download | <https://sourceforge.net/projects/gary-os>
 | Source   | <https://github.com/garybgenett/gary-os>
@@ -330,11 +330,11 @@ running.
   qemu-system-x86_64 -m 4096 -kernel gary-os.kernel
   ```
 
-The [Boot] file has a pre-made QEMU image inside that is already installed with
-[GRUB] and the [Kernel].
+The [Disk] file is a pre-made QEMU image that is already installed with [GRUB]
+and the [Kernel].
 
   ```
-  qemu-system-x86_64 -m 4096 loopfile.qcow2
+  qemu-system-x86_64 -m 4096 gary-os-*.qcow2
   ```
 
 See [Checklist] for additional information on how QEMU is used in the
@@ -349,7 +349,7 @@ Once [VirtualBox] is installed, create a new virtual machine.
   | Type              | Linux
   | Version           | Other Linux (64-bit)
   | Memory            | 4096 (or greater)
-  | Virtual disk file | loopfile.qcow2 (from [Boot] archive)
+  | Virtual disk file | gary-os-*.qcow2 (the [Disk] file)
   | Enable EFI        | on
 
 This new virtual machine will run GaryOS [GRUB] and boot the [Kernel].
@@ -1860,7 +1860,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 
 **[GRUB] / [Filesystem]**
 
-  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.grub/loopfile.qcow2 1 MBR`
+  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.qcow2 1 MBR`
     * [x] Menu
         * [x] Options
             * [ ] Verify "gopts=true"
@@ -1915,7 +1915,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 
 **[EFI]**
 
-  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.grub/loopfile.qcow2 1`
+  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.qcow2 1`
     * [ ] EFI menu (using `\<escape\>`)
         * [x] Boot Maintenance Manager
         * [x] Boot From File
@@ -1939,7 +1939,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
         * [ ] Uncomment `extensions-path`
         * [x] PXE
         * `ls -la /.overlay`
-  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.grub/loopfile.qcow2 1 -m 8192`
+  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.qcow2 1 -m 8192`
     * [x] Options
         * [x] `dhcp`
         * [x] `pxe: groot`
@@ -1949,7 +1949,6 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 **[Windows] / [GRUB] / [Virtual]**
 
   * `sv stop qemu.windows`
-    * `rm /tmp/qemu.gary-os-* /tmp/qemu.loopfile.qcow2.* /tmp/qemu.null.*`
     * `rm /tmp/qemu.windows.img.*`
     * `(cd _systems/qemu; rm windows.img)`
     * `(cd _systems/qemu; qemu-img create -f qcow2 -o compat=1.1,backing_file=$(ls windows-10.*.2-update.qcow2) windows.img)`
@@ -1983,7 +1982,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 
 **[Networking] / [GUI]**
 
-  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.grub/loopfile.qcow2 1`
+  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.qcow2 1`
     * [ ] Ethernet [Networking]
     * [ ] [GUI]
   * [ ] Boot to "gary-os"
@@ -1992,8 +1991,8 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 
 **[Update] / [Manage] / [Image] / [Install]**
 
-  * `rm /tmp/qemu.gary-os-* /tmp/qemu.loopfile.qcow2.* /tmp/qemu.null.*`
-  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.grub/loopfile.qcow2 1 -m 8192`
+  * `rm /tmp/qemu.gary-os-* /tmp/qemu.null.*`
+  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.qcow2 1 -m 8192`
     * `cd /.gary-os`
         * `rc-update add dhcpcd default; openrc`
             * `mount -o remount,size=6144m /.overlay`
@@ -2066,11 +2065,11 @@ Everything in [Booting], [Running] and [Building] should be validated below.
         * `rm /var/db/repos/gentoo`
         * `make update`
         * `make upgrade`
-  * `rm /tmp/qemu.gary-os-* /tmp/qemu.loopfile.qcow2.* /tmp/qemu.null.*`
-  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.grub/loopfile.qcow2 1 -m 8192`
+  * `rm /tmp/qemu.gary-os-* /tmp/qemu.null.*`
+  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.qcow2 1 -m 8192`
     * [x] Boot Rootfs
         * [ ] Command comments in [gentoo/sets/\_gary-os]
-  * `rm /tmp/qemu.gary-os-* /tmp/qemu.loopfile.qcow2.* /tmp/qemu.null.*`
+  * `rm /tmp/qemu.gary-os-* /tmp/qemu.null.*`
 
 ### Publish ####################################################################
 [Publish]: #publish
@@ -2088,7 +2087,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
         * `if [ ${FILE} == .static ]; then LIST=".bashrc .vimrc scripts/grub.sh scripts/qemu*"; fi`
         * `(cd ${FILE}; vdiff -g $(sed -n "s|^$(basename ${FILE}): ||gp" [...]/_builds/_gary-os/_commit) ${LIST})`
     * [ ] Screenshots
-        * `(cd .setup/gentoo.gary-os; ./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.grub/loopfile.qcow2 1)`
+        * `(cd .setup/gentoo.gary-os; ./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.qcow2 1)`
             * [x] Peek
         * `wmctrl -i -r 0x00000000 -e 0,0,0,800,600`
             * `vi ~/.Xresources` -> `URxvt.background: rgb:00/00/00`
@@ -2199,6 +2198,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 [Kernel]: https://sourceforge.net/projects/gary-os/files/gary-os-v8.0-generic_64.kernel
 [Rootfs]: https://sourceforge.net/projects/gary-os/files/gary-os-v8.0-generic_64.rootfs
 [Boot]: https://sourceforge.net/projects/gary-os/files/gary-os-v8.0-generic_64.grub.zip
+[Disk]: https://sourceforge.net/projects/gary-os/files/gary-os-v8.0-generic_64.qcow2
 
 [(...)]: #v50-2021-08-04
 
@@ -2217,6 +2217,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
   | Kernel         | [gary-os-v8.0-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v8.0-generic_64.kernel)
   | Rootfs         | [gary-os-v8.0-generic_64.rootfs](https://sourceforge.net/projects/gary-os/files/gary-os-v8.0-generic_64.rootfs)
   | Boot           | [gary-os-v8.0-generic_64.grub.zip](https://sourceforge.net/projects/gary-os/files/gary-os-v8.0-generic_64.grub.zip)
+  | Disk           | [gary-os-v8.0-generic_64.qcow2](https://sourceforge.net/projects/gary-os/files/gary-os-v8.0-generic_64.qcow2)
   | Source Stage3  | [gary-os-v8.0-generic_64.stage3.tar.xz](https://sourceforge.net/projects/gary-os/files/v8.0/gary-os-v8.0-generic_64.stage3.tar.xz)
   | Source Portage | [gary-os-v8.0-generic_64.gentoo-repo.tar.xz](https://sourceforge.net/projects/gary-os/files/v8.0/gary-os-v8.0-generic_64.gentoo-repo.tar.xz)
 
@@ -2226,6 +2227,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * Improvements to [Builder], [Rootfs], and release processes
     * Removed build dependency packages from [Kernel], for size
     * Formally incorporated rolling build updates
+    * Separated [Disk] file from [Boot] archive
     * Retired [Tiny] kernel!
   * [Portage]
     * Updated and centralized `emerge` command-line options
