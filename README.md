@@ -2326,6 +2326,8 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * Better usage and error output
     * Cleaned up [Boot] archive
 
+  [Funtoo]: https://www.funtoo.org
+  [meta-repo]: https://github.com/funtoo/meta-repo
   [Debian Kernel]: https://www.debian.org/doc/manuals/debian-handbook/sect.kernel-compilation.pl.html
 
 ### v5.0 2021-08-04 ############################################################
@@ -2363,6 +2365,9 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * Added ZFS support
   * [GRUB]
     * Minor improvements and fixes
+
+  [Ego]: https://funtoo.org/Package:Ego
+  [gentoo/\_funtoo.kits]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_funtoo.kits
 
 ### v4.0 2021-07-26 ############################################################
 [v4.0 2021-07-26]: #v40-2021-07-26
