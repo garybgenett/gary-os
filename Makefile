@@ -31,6 +31,7 @@ override DOFAST	?=
 override DOTEST	?=
 
 override V	?=
+override D_OPT	:= -v
 override Q	:= -q
 ifneq ($(V),)
 override Q	:=
@@ -122,11 +123,11 @@ else
 	@$(ECHO) "\n"
 	@$(ECHO) "$(STATE)Environment variables to control build behavior (true / false):$(RESET)\n"
 	@$(ECHO) "\n"
-	@$(PRINTF) "Embedded Rootfs / Initrd (Unsupported):"	"ROOTFS=\"`SETDIR="$(C)" ROOTFS="$(ROOTFS)" $(C)/gentoo/_system -v $(CHROOT) ROOTFS`\""
-	@$(PRINTF) "Minified Build  / Standard Build:"		"DOMODS=\"`SETDIR="$(C)" DOMODS="$(DOMODS)" $(C)/gentoo/_system -v $(CHROOT) DOMODS`\""
-	@$(PRINTF) "Clean Rebuild   / No Overwrite:"		"DOREDO=\"`SETDIR="$(C)" DOREDO="$(DOREDO)" $(C)/gentoo/_system -v $(CHROOT) DOREDO`\""
-	@$(PRINTF) "Quick Build     / Do All Build Steps:"	"DOFAST=\"`SETDIR="$(C)" DOFAST="$(DOFAST)" $(C)/gentoo/_system -v $(CHROOT) DOFAST`\""
-	@$(PRINTF) "(Unsupported)   / Validation Build:"	"DOTEST=\"`SETDIR="$(C)" DOTEST="$(DOTEST)" $(C)/gentoo/_system -v $(CHROOT) DOTEST`\""
+	@$(PRINTF) "Embedded Rootfs / Initrd (Unsupported):"	"ROOTFS=\"`SETDIR="$(C)" ROOTFS="$(ROOTFS)" $(C)/gentoo/_system $(D_OPT) $(CHROOT) ROOTFS`\""
+	@$(PRINTF) "Minified Build  / Standard Build:"		"DOMODS=\"`SETDIR="$(C)" DOMODS="$(DOMODS)" $(C)/gentoo/_system $(D_OPT) $(CHROOT) DOMODS`\""
+	@$(PRINTF) "Clean Rebuild   / No Overwrite:"		"DOREDO=\"`SETDIR="$(C)" DOREDO="$(DOREDO)" $(C)/gentoo/_system $(D_OPT) $(CHROOT) DOREDO`\""
+	@$(PRINTF) "Quick Build     / Do All Build Steps:"	"DOFAST=\"`SETDIR="$(C)" DOFAST="$(DOFAST)" $(C)/gentoo/_system $(D_OPT) $(CHROOT) DOFAST`\""
+	@$(PRINTF) "(Unsupported)   / Validation Build:"	"DOTEST=\"`SETDIR="$(C)" DOTEST="$(DOTEST)" $(C)/gentoo/_system $(D_OPT) $(CHROOT) DOTEST`\""
 	@$(ECHO) "\n"
 	@$(ECHO) "$(STATE)Build script pass-through targets, for advanced use:$(RESET)\n"
 	@$(ECHO) "\n"
@@ -146,7 +147,7 @@ endif
 
 .PHONY: help
 help: usage
-	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system -v $(Q) $(CHROOT)
+	SETDIR="$(C)" SOURCE="$(S)" GOSDIR="$(O)" ARTDIR="$(A)" GOSPKG="$(P)" $(C)/gentoo/_system $(D_OPT) $(Q) $(CHROOT)
 
 ########################################
 
