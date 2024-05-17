@@ -1815,9 +1815,11 @@ function _release_fetch {		#{ismain} #{doredo} #{dotest}
 		else ${WGET_C} --directory-prefix			${FET_DST}/ ${_SFDOWN}/${FILE}			|| return 1
 		fi
 	done
-	if {	[[ -f							${FET_DST}/${FET_BAS}.grub.zip ]] &&
-		[[ ! -d							${FET_DST}/${_TITLE}.grub ]];
+	if {
+		${DOTEST} &&
+		[[ -f							${FET_DST}/${FET_BAS}.grub.zip ]];
 	}; then
+		${RM}							${FET_DST}/${_TITLE}.grub			|| return 1
 		7z e -aoa \
 			-x\!\*/loopfile\* \
 			-x\!\*/rufus\* \
@@ -1826,7 +1828,8 @@ function _release_fetch {		#{ismain} #{doredo} #{dotest}
 	fi
 #>>>	for FILE in kernel ${_G_MOD}.kernel rootfs; do
 	for FILE in kernel rootfs; do
-		if {	[[ -f						${FET_DST}/${FET_BAS}.${FILE} ]] &&
+		if {
+			[[ -f						${FET_DST}/${FET_BAS}.${FILE} ]] &&
 			[[ ! -f						${FET_DST}/${_TITLE}.${FILE} ]];
 		}; then
 			${LN}		${FET_BAS}.${FILE}		${FET_DST}/${_TITLE}.${FILE}			#>>> ||
