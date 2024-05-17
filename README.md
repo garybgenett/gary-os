@@ -1952,7 +1952,8 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 **[Windows] / [GRUB] / [Virtual]**
 
   * `sv stop qemu.windows`
-    * `rm /tmp/qemu.windows.img.* /tmp/qemu.null.*`
+    * `rm /tmp/qemu.gary-os-* /tmp/qemu.loopfile.qcow2.* /tmp/qemu.null.*`
+    * `rm /tmp/qemu.windows.img.*`
     * `(cd _systems/qemu; rm windows.img)`
     * `(cd _systems/qemu; qemu-img create -f qcow2 -o compat=1.1,backing_file=$(ls windows-10.*.2-update.qcow2) windows.img)`
   * `./scripts/qemu-windows.bsh / ALT -m 8192`
@@ -1980,6 +1981,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * [x] Boot
   * `(cd _systems/qemu; rm windows.img)`
     * `(cd _systems/qemu; ln windows-10.qcow2 windows.img)`
+    * `rm /tmp/qemu.windows.img.*`
     * `sv restart qemu.windows`
 
 **[Networking] / [GUI]**
@@ -1993,7 +1995,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 
 **[Update] / [Manage] / [Image] / [Install]**
 
-  * `rm /tmp/qemu.null.qcow2`
+  * `rm /tmp/qemu.gary-os-* /tmp/qemu.loopfile.qcow2.* /tmp/qemu.null.*`
   * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.grub/loopfile.qcow2 1 -m 8192`
     * `cd /.gary-os`
         * `rc-update add dhcpcd default; openrc`
@@ -2067,9 +2069,11 @@ Everything in [Booting], [Running] and [Building] should be validated below.
         * `rm /var/db/repos/gentoo`
         * `make update`
         * `make upgrade`
+  * `rm /tmp/qemu.gary-os-* /tmp/qemu.loopfile.qcow2.* /tmp/qemu.null.*`
   * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.grub/loopfile.qcow2 1 -m 8192`
     * [x] Boot Rootfs
         * [ ] Command comments in [gentoo/sets/\_gary-os]
+  * `rm /tmp/qemu.gary-os-* /tmp/qemu.loopfile.qcow2.* /tmp/qemu.null.*`
 
 ### Publish ####################################################################
 [Publish]: #publish
