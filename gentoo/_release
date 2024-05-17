@@ -1641,7 +1641,7 @@ function release_grub_qcow_mount {	#>>>{dotest}
 	if [[ ! -b ${GRUB_LEFI} ]]; then
 		modprobe			nbd max_part=127				|| return 1
 		cat				/sys/module/nbd/parameters/max_part		|| return 1
-		qemu-nbd --fork -nv -f qcow2 -c	${GRUB_LEFI/%p[0-9]} ${GRUB_DEST}/loopfile.qcow2	|| return 1
+		qemu-nbd --fork -nv -f qcow2 -c	${GRUB_LEFI/%p[0-9]} ${_RAMFS}.qcow2		|| return 1
 		partx -t gpt -a			${GRUB_LEFI/%p[0-9]}				#>>> || return 1
 		sleep 3
 	fi
@@ -1679,6 +1679,7 @@ function _release_grub {		#{doredo} #{dofast} #{dotest}
 	declare QCOW_SIZE="100G"
 	if ${DOREDO}; then
 		${RM}							${GRUB_DEST}*							|| return 1
+		${RM}							${_RAMFS}.qcow2							|| return 1
 	fi
 	if {
 		{ [[ ! -f ${GRUB_DEST}.tar.xz ]] && [[ ! -f ${GRUB_DEST}.zip ]]; } ||
@@ -1706,10 +1707,10 @@ function _release_grub {		#{doredo} #{dofast} #{dotest}
 			[[ -x $(which qemu-nbd) ]];
 		}; then
 			FILE=
-			if [[ ! -f ${GRUB_DEST}/loopfile.qcow2 ]]; then
+			if [[ ! -f ${_RAMFS}.qcow2 ]]; then
 				FILE="-f"
-				qemu-img create -f qcow2		${GRUB_DEST}/loopfile.qcow2 ${QCOW_SIZE}			|| return 1
-				qemu-img info				${GRUB_DEST}/loopfile.qcow2					|| return 1
+				qemu-img create -f qcow2		${_RAMFS}.qcow2 ${QCOW_SIZE}					|| return 1
+				qemu-img info				${_RAMFS}.qcow2							|| return 1
 			fi
 			release_grub_qcow_mount				${GRUB_DEST} "" ${GRUB_LEFI}					|| return 1
 #>>>			${SETDIR}/scripts/grub.sh			${GRUB_DEST} ${FILE} -k ${GRB_SIZ} ${GRUB_LEFI} ${GRB_OPT}	|| return 1
@@ -1769,6 +1770,7 @@ function release_fetch_list {		#>>>{dotest}
 		echo "${FET_BAS}.kernel"				>>${FET_PKG}
 		echo "${FET_BAS}.kernel.${_GPACK}"			>>${FET_PKG}
 		echo "${MASK}${FET_BAS}.grub.zip"			>>${FET_PKG}
+#>>>		echo "${MASK}${FET_BAS}.qcow2"				>>${FET_PKG}
 #>>>		echo "${MASK}${FET_BAS}.${_G_MOD}.kernel"		>>${FET_PKG}
 #>>>		echo "${MASK}${FET_BAS}.${_G_MOD}.kernel.${_GPACK}"	>>${FET_PKG}
 		echo "${MASK}${FET_BAS}.rootfs"				>>${FET_PKG}
@@ -2412,7 +2414,7 @@ function _publish_export {
 		fi
 		for NEXT in $((
 				find ${_OUTDIR}/${INDEX}/*.{kernel,initrd,rootfs}
-				find ${_OUTDIR}/${INDEX}/*.{grub.zip,}
+				find ${_OUTDIR}/${INDEX}/*.{grub.zip,qcow2}
 			) 2>/dev/null								|
 			${GREP} -v "[.]${_G_MOD_TINY}[.]"					|
 			${GREP} -v "[.]${_G_MOD}[.]"
