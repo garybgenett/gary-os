@@ -1788,7 +1788,7 @@ Everything needed to perform these steps is in the [Repository] or the
         * `make` *`${3}`* `belongs-<file path|/|%>`
     * `make` *`${3}`* `DOFAST=true doit && make` *`${3}`* `DOFAST=true` *`${4}`*
         * `make` *`${3}`* `check`
-        * `mkdir ./mnt; mount -o loop ./build/.gary-os-*/gary-os-*_64.cpio.rootfs ./mnt; ncdu ./mnt; umount ./mnt; rm ./mnt`
+        * `mkdir ./mnt; mount -o loop ./build/.gary-os-*/gary-os-*.cpio.rootfs ./mnt; ncdu ./mnt; umount ./mnt; rm ./mnt`
     * `ll ./build/.gary-os-*`
   * `make` *`${3}`* `gendir`
     * [ ] Command comments at bottom of [gentoo/make.conf]
@@ -1798,13 +1798,10 @@ Everything needed to perform these steps is in the [Repository] or the
 
   * `cd .setup/gentoo.gary-os`
     * `make DOFAST=true init`
-  * [x] *Validate( 210MB 240MiB DOMODS=true devel )*
-    * [ ] Minimized build note in `/etc/issue`
-    * [ ] No `startx` in `/etc/issue`
   * [x] *Validate( 850MB 1.4GiB '' devel )*
     * [ ] Verify `#{rootfs}` markers
   * `make ROOTFS=false devel`
-    * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1 -m 8192`
+    * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.kernel 1 -m 8192`
     * [ ] Test kernel size and root filesystem resize
   * [x] *Validate( 1.8GB 3.4GiB P=*\_*gary-os rootfs )*
   * `(cd .setup; git-commit ./gentoo)`
@@ -1853,7 +1850,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 
 **[Linux] / [Virtual]**
 
-  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1`
+  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.kernel 1`
     * [ ] Boot time
     * `rc-status`
         * `htop`
@@ -2134,17 +2131,13 @@ Everything in [Booting], [Running] and [Building] should be validated below.
   * `(cd coding/gary-os; git-commit -m "Stamped v#.# release." ./README.md)`
     * `make _publish_gitdir`
     * `(cd _builds/.gary-os/.gary-os; GIT_PAGER= git-list -n1)`
-  * `make DOMODS=true doit && make DOMODS=true DOREDO=true release _prepare_packdirs`
-    * `(cd _builds; rsync ./_gentoo/var/cache/{distfiles,binpkgs} ./_gary-os.working/var/cache/)`
-    * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.tiny.kernel 1`
-    * [x] **Verify()**
   * `make doit && make DOREDO=true release _prepare_packdirs`
     * `(cd _builds; rsync ./_gentoo/var/cache/{distfiles,binpkgs} ./_gary-os.working/var/cache/)`
-    * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1`
+    * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.kernel 1`
     * [x] **Verify()**
   * `make P=_gary-os doit && make P=_gary-os DOREDO=true rootfs`
     * `_sync boot`
-    * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1 "groot=10.0.0.254 groot_size=6144m" -m 8192`
+    * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.kernel 1 "groot=10.0.0.254 groot_size=6144m" -m 8192`
     * [x] **Verify()**
   * `make _publish_prep`
     * `ll ./build/ ./build/_build ./build/.gary-os-*`
