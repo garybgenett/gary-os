@@ -2116,11 +2116,12 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 **`Verify {`**
 
   * `cat ./build/etc/issue ./build/etc/motd ./build/_commit`
-  * `for FILE in coding/gary-os .setup .static; do (cd ${FILE}; GIT_PAGER= git-list -n1); done`
+  * `for FILE in coding/gary-os .setup .static; do (cd ${FILE}; GIT_PAGER= git-list -n1 2>/dev/null); done`
     * `(cd ./build/.gary-os; GIT_PAGER= git-list -n1)`
   * `./scripts/qemu-minion.bsh [...]`
     * `cd /.gary-os; GIT_PAGER= git log -n1; git status`
     * `GIT_PAGER= git diff`
+    * `startx`
 
 **`}`**
 
@@ -2142,9 +2143,8 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1`
     * [x] **Verify()**
   * `make P=_gary-os doit && make P=_gary-os DOREDO=true rootfs`
-    * `(cd _builds; rsync ./_gentoo/var/cache/{distfiles,binpkgs} ./_gary-os.working/var/cache/)`
     * `_sync boot`
-    * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1 groot=10.0.0.254 -m 8192`
+    * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*_64.kernel 1 "groot=10.0.0.254 groot_size=6144m" -m 8192`
     * [x] **Verify()**
   * `make _publish_prep`
     * `ll ./build/ ./build/_build ./build/.gary-os-*`
