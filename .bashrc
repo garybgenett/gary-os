@@ -2554,9 +2554,13 @@ function mount-robust {
 		{ [[ ! -d ${DEV} ]] && [[ ! -f ${DEV} ]] && ${OV}; } ||
 		{ [[ ! -d ${DIR} ]] && ! ${UN}; };
 	}; then
-		echo -en "- <Invalid Arguments!>\n" 1>&2
-		if ! ${DEBUG}; then
-			return 1
+		if ${UN}; then
+			echo -en "- <Does Not Exist!>\n" 1>&2
+		else
+			echo -en "- <Invalid Arguments!>\n" 1>&2
+			if ! ${DEBUG}; then
+				return 1
+			fi
 		fi
 	fi
 	declare IS_LUKS="false"
