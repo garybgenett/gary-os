@@ -2913,10 +2913,10 @@ function mount-zfs {
 	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#zfs-arc-min
 	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#zfs-arc-max
 	# https://serverfault.com/questions/581669/why-isnt-the-arc-max-setting-honoured-on-zfs-on-linux
-	declare ZFS_ARC_MIN="$(( (2**30) * 2 ))"	# default: dynamic	2G
-	declare ZFS_ARC_MAX="$(( (2**30) * 8 ))"	# default: dynamic	8G
+	declare ZFS_ARC_MIN="$(( (2**30) * 2 ))"	# default: dynamic => 2G
+	declare ZFS_ARC_MAX="$(( (2**30) * 8 ))"	# default: dynamic => 8G
 	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#zfs-prefetch-disable
-	# /proc/spl/kstat/zfs/arcstats
+	declare ZSTATS="/proc/spl/kstat/zfs"		# arcstats
 	declare ZFS_PRE_DIS="1"				# default: 0
 	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#snapshot
 	declare ZFS_ADMIN_SNAP="0"			# default: 1
@@ -2928,6 +2928,7 @@ function mount-zfs {
 	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#resilver
 	# https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#scrub
 	# https://www.svennd.be/tuning-of-zfs-module
+	declare ZPARAM="/sys/module/zfs/parameters"
 	declare -A ZFS_PARAM
 	ZFS_PARAM[TXG_TIME]="10";			ZFS_PARAM[TXG_TIME_DEF]="5"
 	ZFS_PARAM[SVR_DDEF]="1";			ZFS_PARAM[SVR_DDEF_DEF]="0"
@@ -2978,7 +2979,6 @@ function mount-zfs {
 			ZDEF=
 		fi
 		modprobe --all zfs >/dev/null 2>&1 #>>> || return 1
-		declare ZPARAM="/sys/module/zfs/parameters"
 		if [[ -d ${ZPARAM} ]]; then
 			echo -en "${ZFS_DBG_ENB}"			>${ZPARAM}/zfs_dbgmsg_enable
 			echo -en "${ZFS_DBG_SIZ}"			>${ZPARAM}/zfs_dbgmsg_maxsize
@@ -3105,7 +3105,7 @@ function mount-zfs {
 	declare RO="false"
 	declare UN="false"
 	declare SL="false"
-	declare SN="false"; declare SN_DBG="false"; declare SN_ALL="false"; declare SN_SKP=""; declare SN_OPT="-s"
+	declare SN="false"; declare SN_OPT="-s"; declare SN_DBG="false"; declare SN_ALL="false"; declare SN_SKP=""
 	declare DEV=
 	declare DIR=
 	if [[ ${1} == -! ]]; then		IMPORT="false";	shift; fi
@@ -3140,10 +3140,10 @@ function mount-zfs {
 				for FILE in $(
 					set | ${SED} -n "s|^.+[>][ ][$][{]ZPARAM[}]/([^;]+).*$|\1|gp" | sort -u
 				); do
-					printf "%-${ZFS_PARAM_PRINTF}.${ZFS_PARAM_PRINTF}s %s\n" "${FILE}" "$(cat /sys/module/zfs/parameters/${FILE})"
+					printf "%-${ZFS_PARAM_PRINTF}.${ZFS_PARAM_PRINTF}s %s\n" "${FILE}" "$(cat ${ZPARAM}/${FILE})"
 				done
 				echo -en "\n"
-				${GREP} --color=never "prefetch" /proc/spl/kstat/zfs/arcstats
+				${GREP} --color=never "prefetch" ${ZSTATS}/arcstats
 				echo -en "\n"
 			fi
 			zfs_pool_status
