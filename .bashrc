@@ -4111,7 +4111,7 @@ function shell {
 	declare DEST="${1}" && shift
 	declare PROMPT_NAME="${FUNCNAME}_${DEST}"
 	declare SHELL_TERM="${TERM}"
-	[[ -n ${1} ]] && [[ ${1} != -*(*) ]] && PROMPT_NAME="${1}" && SHELL_TERM="ansi" && shift
+	[[ -n ${1} ]] && [[ ${DEST} != x ]] && [[ ${1} != -*(*) ]] && PROMPT_NAME="${1}" && SHELL_TERM="ansi" && shift
 	declare SSH="sudo -H ssh -2"
 	declare LOG="root"
 	declare OPTS
@@ -4154,6 +4154,11 @@ function shell {
 			SHELL_TERM="vt100"
 			LOG="garybgenett"
 			OPTS="${OPTS} -t"
+			;;
+		(x)	DEST="server.garybgenett.net"
+			SHELL_TERM="vt100"
+			LOG="plastic"
+			OPTS="x"
 			;;
 #>>>		(me)	DEST="me.garybgenett.net"
 		(me)	DEST="server.garybgenett.net"
@@ -4200,7 +4205,11 @@ function shell {
 	fi
 	cd
 	prompt -x "${PROMPT_NAME}"
-	eval TERM="${SHELL_TERM}" ${SSH} ${LOG}@${DEST} ${OPTS} "${@}"
+	if [[ ${OPTS} == x ]]; then
+		TERM="${SHELL_TERM}" ${SSH} ${LOG}@${DEST} "export DISPLAY=:1 ; _menu ${@}" &
+	else
+		eval TERM="${SHELL_TERM}" ${SSH} ${LOG}@${DEST} ${OPTS} "${@}"
+	fi
 	prompt
 	cd - >/dev/null
 	return 0
