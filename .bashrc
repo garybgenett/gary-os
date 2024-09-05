@@ -2515,7 +2515,7 @@ function mount-robust {
 	if [[ ${1} == -0 ]]; then	RO="ro,";	shift; fi
 	if [[ ${1} == -d ]]; then	DM="true";	shift; fi
 	if [[ ${1} == -o ]]; then	OV="true";	shift; fi
-	if [[ ${1} == -c ]]; then	VC="true";	shift; fi
+	if [[ ${1} == -v ]]; then	VC="true";	shift; fi
 	if [[ ${1} == -z ]]; then	ZF="true";	shift; fi
 	if [[ ${1} == -u ]]; then	UN="true";	shift; fi
 	if [[ -n ${1} ]]; then		DEV="${1}";	shift; fi
