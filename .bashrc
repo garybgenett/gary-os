@@ -3474,6 +3474,7 @@ function mount-zfs {
 					ZPOOL="${ZNAME}"
 					${Z_IMPORT} -t ${ZPINT} ${ZPOOL}		|| return 1
 				fi
+				echo -en "- Mounting Pool...\n"
 				zfs set \
 					${ZOPTS} \
 					mountpoint=${DIR} \
@@ -3485,15 +3486,18 @@ function mount-zfs {
 					${Z_MOUNT} "${@}" ${ZPOOL}			|| return 1
 				fi
 				for FILE in $(${Z_LIST_ALL/-t all/-t filesystem} ${ZPOOL} | ${GREP} -v "^${ZPOOL}$"); do
-					declare ZOPT=
-					declare ZOPT_DO=
-					for ZOPT in ${ZOPTS_KEEP[@]}; do
-						zfs inherit ${ZOPT} ${FILE}		|| return 1
-					done
-					for ZOPT in ${ZOPTS_PASS[@]}; do
-						ZOPT_DO="$(echo "${ZOPTS}" | ${GREP} -o "${ZOPT}=[^[:space:]]+")"
-						zfs set ${ZOPT_DO} ${FILE}		|| return 1
-					done
+					echo -en "- Mounting Dataset... ${FILE}\n"
+#>>>
+#					declare ZOPT=
+#					declare ZOPT_DO=
+#					for ZOPT in ${ZOPTS_KEEP[@]}; do
+#						zfs inherit ${ZOPT} ${FILE}		|| return 1
+#					done
+#					for ZOPT in ${ZOPTS_PASS[@]}; do
+#						ZOPT_DO="$(echo "${ZOPTS}" | ${GREP} -o "${ZOPT}=[^[:space:]]+")"
+#						zfs set ${ZOPT_DO} ${FILE}		|| return 1
+#					done
+#>>>
 					${Z_MOUNT} ${FILE}				|| return 1
 				done
 				zfs_pool_info						|| return 1
