@@ -3521,7 +3521,7 @@ function mount-zfs {
 					zpool destroy ${ZPINT}				|| return 1
 				fi
 #>>>				wipefs --force --all ${ZDEVICE}				|| return 1
-				zpool attach -f ${ZPOOL} ${ZDIDS[0]} ${ZDEVICE}		|| return 1
+				zpool attach -f -s ${ZPOOL} ${ZDIDS[0]} ${ZDEVICE}	|| return 1
 			fi
 			if [[ ${ZSTAT} != online ]]; then
 				echo -en "- Activating Member... ${DEV}\n"
