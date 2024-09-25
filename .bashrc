@@ -2972,7 +2972,7 @@ function mount-zfs {
 	ZOPTS+=" relatime=on";		ZOPTS_KEEP+=(relatime)
 	declare ZOPTS_DONE="${ZOPTS}"
 	ZOPTS_DONE+=" mountpoint=none"
-	ZOPTS_DONE+=" readonly=on"
+	ZOPTS_DONE+=" readonly=on";	ZOPTS_KEEP+=(readonly)
 	function zfs_import_pools {
 		declare ZDEF="_DEF"
 		if ${ZFS_KILLER}; then
