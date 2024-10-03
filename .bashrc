@@ -2280,6 +2280,7 @@ function lf {
 		pulseaudio
 		qemu.*
 		syslog.conf
+		xpra
 	"
 	declare LF_RM="$(
 		find . -mindepth 1 -maxdepth 1 ! -type l |
