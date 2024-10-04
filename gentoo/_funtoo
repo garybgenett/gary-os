@@ -6,4 +6,6 @@
 0cd4481bf0f054348dc784cfcdb1e2c32c2152bd
 
 #>>> gentoo (update)
-0cd4481bf0f054348dc784cfcdb1e2c32c2152bd
+
+# 2024-10-04 10:09:58 +0200 2985dac46b96286bfc036d4a6c669ff6ee65b0b6 net-dns/pdns-recursor: drop 5.0.8
+2985dac46b96286bfc036d4a6c669ff6ee65b0b6
