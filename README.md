@@ -1825,7 +1825,7 @@ Everything needed to perform these steps is in the [Repository] or the
 
 *`Retry {`*
 
-   * `make DOFAST=true init`
+   * `make DOMODS=true DOFAST=true init`
 
 *`}`*
 
