@@ -36,6 +36,8 @@ app-misc/atomicwallet			~amd64		# gentoo required
 
 media-video/peek			~amd64		# gentoo required
 
+x11-plugins/gkrellsun			~amd64		# gentoo required [gkrellsun-1.0.0-r5 / gkrellsun-1.0.0-r6]: https://bugs.gentoo.org/901369
+
 ########################################
 # games
 
