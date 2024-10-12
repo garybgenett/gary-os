@@ -304,8 +304,8 @@ function portage_file {
 			${PORT_SEL}/sets/*	\
 			2>/dev/null)		\
 		; do
-			{ ${FUNCNAME} ${FILE} || return 1; }	>${FILE}.${FUNCNAME}	|| return 1
-			${MV} ${FILE}.${FUNCNAME}		${FILE}			|| return 1
+			{ ${FUNCNAME} ${FILE} || return 1; }	>${FILE}.${_TITLE}	|| return 1
+			${MV} ${FILE}.${_TITLE}			${FILE}			|| return 1
 		done
 	elif [[ -f ${PORT_SEL} ]]; then
 		cat ${PORT_SEL} |
