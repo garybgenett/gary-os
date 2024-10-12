@@ -13,6 +13,7 @@ app-text/poppler			qt5		# gentoo required
 dev-libs/boost				nls		# gentoo required
 dev-libs/quazip				qt5		# gentoo required
 dev-python/pygobject			cairo		# gentoo required
+dev-qt/qtbase				dbus		# gentoo required
 dev-qt/qtgui				dbus		# gentoo required
 dev-qt/qtwidgets			dbus		# gentoo required
 media-gfx/graphviz			cairo		# gentoo required
@@ -22,6 +23,7 @@ media-libs/libopenshot			qt5		# gentoo required
 media-libs/libpulse			dbus		# gentoo required
 media-libs/libsdl			joystick	# gentoo required
 media-libs/libsdl2			joystick	# gentoo required
+media-libs/mlt				jack		# gentoo required
 media-libs/opencv			qt5		# gentoo required
 media-libs/suil				gtk2		# gentoo required
 media-video/ffmpeg			opus		# gentoo required
@@ -54,6 +56,7 @@ dev-qt/qtwebengine			widgets		# gentoo required
 media-libs/freetype			harfbuzz	# gentoo required
 media-libs/libsdl2			haptic		# gentoo required
 media-libs/libvpx			postproc	# gentoo required
+media-libs/mlt				frei0r		# gentoo required
 media-libs/opencv			contrib		# gentoo required
 media-libs/opencv			contribdnn	# gentoo required
 media-video/ffmpeg			chromium	# gentoo required
