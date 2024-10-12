@@ -1,17 +1,4 @@
-# updated version
-# masked package
-- media-video/openshot-3.1.1::gentoo (masked by: package.mask)
-/var/db/repos/gentoo/profiles/package.mask:
-Michał Górny <mgorny@gentoo.org> (2024-03-26)
-Uses deprecated distutils-r1 API.  Depends on dev-qt/qtwebengine:5.
-Includes the libraries with no other reverse dependencies.
-Removal on 2024-04-25.  Bug #909996.
->> https://bugs.gentoo.org/909996
->>	https://projects.gentoo.org/python/guide/migration.html#migrating-to-pep-517-builds
-# bug fix
-Unhandled Python exception
-Caught signal 6 (SIGABRT)
->> https://bugs.gentoo.org/876397
->>	https://github.com/OpenShot/openshot-qt/commit/fff785eb1e3e0c30ed6ca57e2d1933aaa807ae22.patch
->>	https://github.com/OpenShot/openshot-qt/commit/9748a13268d66a5949aebc970637b5903756d018.patch
-# mark	2024-04-19 13:09:05 +0100 0cd4481bf0f054348dc784cfcdb1e2c32c2152bd dev-cpp/tbb: add 2021.12.0
+# removed package
+# openshot		2023-09-07 21:54:37 +0100 8436bf11a32bf521fdbea830dcff03e4cd0ea00a media-video/openshot: Stabilize 3.1.1 amd64, #913812
+# libopenshot		2024-01-11 17:04:37 +0100 f7fdfdaeec3764929686064a6054c38a6b2d7788 Move {app-doc → app-text}/doxygen
+# libopenshot-audio	2024-01-11 17:04:37 +0100 f7fdfdaeec3764929686064a6054c38a6b2d7788 Move {app-doc → app-text}/doxygen
