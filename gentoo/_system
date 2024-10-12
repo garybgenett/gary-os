@@ -259,8 +259,9 @@ fi
 
 ########################################
 
-#OPTIONS[STAGE]
+#OPTIONS[STAGE TMPFS]
 export STAGE="amd64-nomultilib-openrc"
+export TMPFS="${TMPFS:-$(( 30 * (10**3)**2 ))}"; declare TMPFS_CHAR="k"
 
 #OPTIONS[_CPU EARC ESUB GARC GSUB GOPT]
 export _CPU_RESET="CONFIG_GENERIC_CPU"
@@ -750,12 +751,27 @@ function mount_dev_dirs {
 	}; then
 		return 0
 	fi
+	declare DO_TMPFS="false"
+	declare IS_TMPFS="false"
+	if {
+		[[ ${TMPFS} == +([0-9]) ]] &&
+		[[ -f /proc/meminfo ]] &&
+		(( $(($(${SED} -n "s|^MemTotal[:][[:space:]]+([0-9]+).*$|\1|gp" /proc/meminfo) / 2)) >= ${TMPFS} ));
+	}; then
+		DO_TMPFS="true"
+	fi
+	if [[ $(findmnt --noheadings --output TARGET --target ${TARGET}${TMPDIR}) == ${TARGET}${TMPDIR} ]]; then
+		IS_TMPFS="true"
+	fi
 	if [[ -z ${1} ]]; then
 		print_info marker
 		print_info mount
-		mount-robust --dev ${TARGET}			2>&1 |
+		mount-robust --dev ${TARGET}								2>&1 |
 			if ${QUIET}; then prompt -t; else cat; fi
-			[[ ${PIPESTATUS[0]} == 0 ]]		|| return 1
+			[[ ${PIPESTATUS[0]} == 0 ]]							|| return 1
+		if ${DO_TMPFS} && ! ${IS_TMPFS} && [[ -d ${TARGET}${TMPDIR} ]]; then
+			mount -v -t tmpfs -o size="${TMPFS}${TMPFS_CHAR}" shm ${TARGET}${TMPDIR}	|| return 1
+		fi
 		print_info marker
 	elif [[ ${1} == -u ]]; then
 		shift
@@ -789,9 +805,12 @@ function mount_dev_dirs {
 				EXIT -X
 			fi
 		else
-			mount-robust -u --dev ${TARGET}		2>&1 |
+			if ${DO_TMPFS} && ${IS_TMPFS}; then
+				umount -rv ${TARGET}${TMPDIR}						|| return 1
+			fi
+			mount-robust -u --dev ${TARGET}							2>&1 |
 				if ${QUIET}; then prompt -t; else cat; fi
-				[[ ${PIPESTATUS[0]} == 0 ]]	|| return 1
+				[[ ${PIPESTATUS[0]} == 0 ]]						|| return 1
 		fi
 		print_info marker
 	fi
