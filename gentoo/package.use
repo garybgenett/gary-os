@@ -28,6 +28,7 @@ media-libs/opencv			qt5		# gentoo required
 media-libs/suil				gtk2		# gentoo required
 media-video/ffmpeg			opus		# gentoo required
 media-video/ffmpeg			theora		# gentoo required
+net-misc/curl				-gnutls		# gentoo required
 net-misc/curl				http2		# gentoo required
 sys-apps/fwupd				-introspection	# gentoo required
 sys-libs/gdbm				berkdb		# gentoo required
@@ -126,7 +127,7 @@ app-office/libreoffice			java
 dev-libs/openssl			rfc3779
 dev-vcs/git				tk
 mail-client/mutt			-tokyocabinet gpg hcache sasl sidebar smime smtp
-mail-client/thunderbird			-wifi ldap
+mail-client/thunderbird			-rust-extensions -wifi ldap
 mail-mta/msmtp				daemon mta
 media-libs/libprojectm			qt5
 media-libs/mesa				vulkan vulkan-overlay
