@@ -285,7 +285,7 @@ echo -en "."
 echo -en "\n"						>>${GENDIR}/+checks 2>&1
 echo -en "[binaries]"					>>${GENDIR}/+checks 2>&1
 echo -en "\n"						>>${GENDIR}/+checks 2>&1
-${GREP} "[-]bin[-]" ${GENDIR}/.emerge			>>${GENDIR}/+checks 2>&1
+${GREP} "[^[:space:]][-]bin[-]" ${GENDIR}/.emerge	>>${GENDIR}/+checks 2>&1
 echo -en "."
 
 echo -en "\n"						>>${GENDIR}/+checks 2>&1
@@ -353,11 +353,12 @@ echo -en "\n"						>>${GENDIR}/+checks 2>&1
 echo -en "[emerge]"					>>${GENDIR}/+checks 2>&1
 echo -en "\n"						>>${GENDIR}/+checks 2>&1
 ${GREP} -v \
-	-e "^$" \
 	-e "^These are the packages that would be merged" \
 	-e "^Calculating dependencies" \
+	-e "^Dependency resolution took" \
 	-e "^[[]ebuild[ ]" \
 	-e "^Total[:][ ]" \
+	-e "^$" \
 	${GENDIR}/.emerge				>>${GENDIR}/+checks 2>&1
 echo -en "."
 
