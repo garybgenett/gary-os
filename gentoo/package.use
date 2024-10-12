@@ -67,6 +67,8 @@ sys-libs/zlib				minizip		# gentoo required
 dev-lang/rust				profiler	# gentoo required
 virtual/rust				profiler	# gentoo required
 
+app-text/pandoc-cli			-server		# gentoo required [*]: https://forums.gentoo.org/viewtopic-t-1167497-start-0.html / <command line>: cannot satisfy -package-id pandoc-3.1.8-DMzFjk10EIKIM5idP0mC6d
+
 ########################################
 
 dev-libs/gmp				static-libs	# gentoo required
