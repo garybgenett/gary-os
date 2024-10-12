@@ -243,7 +243,7 @@ net-misc/unison
 net-misc/unison:2.51
 
 app-text/grip
-app-text/pandoc
+app-text/pandoc-cli
 app-text/texlive
 
 dev-lang/perl
