@@ -22,6 +22,12 @@ app-crypt/veracrypt			truecrypt-3.0	# gentoo required
 media-libs/libva-intel-media-driver	no-source-code	# gentoo required
 
 ########################################
+# toolkits
+
+dev-texlive/texlive-basic		OFL		# gentoo required
+dev-texlive/texlive-fontsrecommended	OFL		# gentoo required
+
+########################################
 # programs
 
 net-im/discord			all-rights-reserved	# gentoo required
