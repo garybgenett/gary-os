@@ -53,9 +53,11 @@ if [[ ${1} == -l ]]; then
 		| ${GREP} "[/][.]rationale$" \
 	); do
 		FILE="${FILE/%\/.rationale}"
-		echo -en "\n[${FILE}] ($(
-			${LS} ${FILE}/.keep 2>/dev/null
-		))\n"
+		echo -en "\n[${FILE}]"
+		if [[ -f ${FILE}/.keep ]]; then
+			echo -en " (.keep)"
+		fi
+		echo -en "\n"
 		cat ${FILE}/.rationale
 		if [[ ! -f ${FILE}/.keep ]]; then
 			FILES+=" ${FILE}"
