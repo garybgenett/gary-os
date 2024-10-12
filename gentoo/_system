@@ -1546,7 +1546,8 @@ if [[ ${1} == -u ]]; then
 	if ! ${DOMODS} && ! ${DOFAST}; then
 		expect_wrapper revdep-rebuild --ignore					|| EXIT 1
 		expect_wrapper emaint --fix all						|| EXIT 1
-		expect_wrapper eclean --verbose distfiles				|| EXIT 1
+#>>>		expect_wrapper eclean --verbose distfiles				|| EXIT 1
+		expect_wrapper eclean --verbose --deep distfiles			|| EXIT 1
 		expect_wrapper eclean --verbose packages				|| EXIT 1
 		if [[ -n "$(which eix-update 2>/dev/null)" ]]; then
 			expect_wrapper eix-update					|| EXIT 1
