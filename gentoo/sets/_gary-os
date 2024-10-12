@@ -67,7 +67,7 @@
 #{SELECT} editor:vi
 #{SELECT} locale:en_US.utf8
 #{SELECT} pager:less
-#{SELECT} unison:2.51
+#{SELECT} unison:2.53
 #{SELECT} vi:vim
 #{SELECT} visual:vi
 

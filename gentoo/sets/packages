@@ -11,7 +11,7 @@
 #{SELECT} editor:vi
 #{SELECT} locale:en_US.utf8
 #{SELECT} pager:less
-#{SELECT} unison:2.51
+#{SELECT} unison:2.53
 #{SELECT} vi:vim
 #{SELECT} visual:vi
 
@@ -240,7 +240,7 @@ x11-apps/mesa-progs
 
 net-misc/rclone
 net-misc/unison
-net-misc/unison:2.51
+net-misc/unison:2.53
 
 app-text/grip
 app-text/pandoc-cli
@@ -411,7 +411,7 @@ media-gfx/graphviz
 media-gfx/inkscape
 
 app-office/libreoffice
-#>>> app-office/unoconv			# gentoo required	# requires: python_single_target_python3_10
+app-office/unoconv
 app-text/qpdfview
 app-text/xpdf
 
