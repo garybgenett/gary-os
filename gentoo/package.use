@@ -221,7 +221,6 @@ sys-apps/fwupd				minimal		# requires: ( sys-apps/systemd | sys-auth/elogind )
 # dev-python/pygments
 # dev-python/setuptools
 # dev-qt/qtcore
-# dev-scheme/guile
 # media-fonts/dejavu
 # media-fonts/font-util
 # media-libs/harfbuzz = gnome-base/librsvg
