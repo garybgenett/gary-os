@@ -1562,7 +1562,7 @@ if [[ ${1} == -u ]]; then
 		expect_wrapper emerge ${_ASK} \@preserved-rebuild			|| EXIT 1
 	fi
 	expect_wrapper emerge ${_ASK} --depclean					|| EXIT 1
-	if ! ${DOMODS} && ! ${DOFAST}; then
+	if ! ${DOFAST}; then
 		expect_wrapper revdep-rebuild --ignore					|| EXIT 1
 		expect_wrapper emaint --fix all						|| EXIT 1
 #>>>		expect_wrapper eclean --verbose distfiles				|| EXIT 1
