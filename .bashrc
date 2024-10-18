@@ -1001,7 +1001,7 @@ function enc-fs {
 	echo -en "\n"
 #>>>	echo "${OUT}" | (${ENCFS} -f --stdinpass -dv "${@}") &
 	echo "${OUT}" | (${ENCFS} -f --stdinpass "${@}") &
-	sleep 1
+	sleep 2
 	if [[ -z $(${GREP} "encfs[ ]${DST}[ ]fuse.encfs" /proc/mounts) ]]; then
 		echo -en "${FUNCNAME}: failed!"
 		echo -en "\n"
