@@ -26,7 +26,7 @@ net-wireless/bluez-tools		~amd64		# gentoo required
 
 app-mobilephone/scrcpy			~amd64		# gentoo required
 
-<x11-wm/xpra-6.9999			~amd64		# gentoo required [xpra-4.4.6-r2 / xpra-6.0.1-r1]: python3_12
+<x11-wm/xpra-6.9999			~amd64		# gentoo required [xpra-4.4.6-r2 / xpra-6.*]: python3_12
 
 #>>> app-misc/task			~amd64		# gentoo required
 app-misc/taskd				~amd64		# gentoo required
