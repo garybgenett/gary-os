@@ -2476,3 +2476,40 @@ xclock_size_hack.patch
 xclock_size_hack.patch.2012-04-04
 xclock_size_hack.patch.2012-04-06
 xclock_size_hack.patch.2017-08-29
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: x11-wm/xpra [rationale] ========================================================================================
+# stable updated version
+# 2024-10-04 10:09:58 +0200 2985dac46b96286bfc036d4a6c669ff6ee65b0b6 net-dns/pdns-recursor: drop 5.0.8
+diff :: x11-wm/xpra [source] ===========================================================================================
+diff :: x11-wm/xpra [target] ===========================================================================================
+Only in ./x11-wm/xpra: .rationale
+Only in ./x11-wm/xpra: .source
+diff -u -U10 -r ./x11-wm/xpra/.source/Manifest ./x11-wm/xpra/Manifest
+--- ./x11-wm/xpra/.source/Manifest	2024-10-09 03:07:16.074863046 -0000
++++ ./x11-wm/xpra/Manifest	2024-11-08 22:54:30.077144828 -0000
+@@ -1,2 +1,4 @@
+-DIST xpra-4.4.6.tar.gz 4334932 BLAKE2B 0518c6807be85777bb67b0a3283a610c06a97813671bff6edc701533aaa8f26b96e423e56ba56491ede120697277f6935ee26976b49550dfd2d52bbcd2daebd8 SHA512 273ee959647c1281f18c7b1b24d3a5179c4b6ce81515cc34618c698e55bdc2a8e94f0e236d7ab41c7bf29fa7fde0b1a2a1432445b8aaaa0a75cd5a90f4858419
+-DIST xpra-6.0.1.tar.gz 17214848 BLAKE2B 81a26cd9aa9a61241ba47bc6712cd225499a82a8743c4f5655f4529d525788789452daaa0894a2cb9292caa7fd9aa64f82ce5b347c9c168815198e18145629b9 SHA512 3520dec19bb6999fc19ffcd3c385545f4a61f7cf50d4d6930eb39dec1341c79f6c4c8c45d526f43b33ed78d5359524103fcf1608dc705b40e330a7eb53de2475
++AUX xpra-9999-pep517.patch 282 BLAKE2B 5e94bc5c882ae768bc1e8f89e2077b551b2841801448cba3883e63954bb2cefcf21c8a631623590039670eac32c2d717ff38f60efa96200421684151b96e72d2 SHA512 62a4ca3e26141417dc928b1d06e852a7118143555af43ca3af05087f01bb1a6ca319835dd6c2dc6ac339f7f8742a004b4fe9e041903c6bd55d1259d388413605
++DIST xpra-6.2.1.tar.gz 17344793 BLAKE2B 725904c79b6c77c656fd34b63fc793a3a8c59d93bd176409b978ddffeb280066acae150e0d02318a728f28ca886c4af2d992b9e773418383b6b9c11514c4eaaa SHA512 5f2988e14ea04be7ecd3ac5afd7f1df1e841db607cd9398bc2a798be40005f78d77743b2248bf3d252ac81142381aa27e3588cfba238ba6f2f0124d18a3c9d85
++EBUILD xpra-6.2.1.ebuild 9779 BLAKE2B 03709a86587a56f715d53b74d51d5dd9d5af56ac8fb1a49e8e1252532319fa0971dfc371028729df2162ea317372adaf64b4c07b02892016ba0e04fe552a9bab SHA512 d00d7faa160211d0c8475bf5f9963cc49c4fc258749d39eb4a944214c6b7d627a8e6c1456c7f7b576560a65e12f04ecd59000751fbbda7b364740a0e839f1f37
++EBUILD xpra-6.9999.ebuild 9779 BLAKE2B 03709a86587a56f715d53b74d51d5dd9d5af56ac8fb1a49e8e1252532319fa0971dfc371028729df2162ea317372adaf64b4c07b02892016ba0e04fe552a9bab SHA512 d00d7faa160211d0c8475bf5f9963cc49c4fc258749d39eb4a944214c6b7d627a8e6c1456c7f7b576560a65e12f04ecd59000751fbbda7b364740a0e839f1f37
+Only in ./x11-wm/xpra/.source/files: xpra-4.4-xdummy.patch
+Only in ./x11-wm/xpra/.source/files: xpra-4.4.6_minimal-features.patch
+Only in ./x11-wm/xpra/.source: metadata.xml
+Only in ./x11-wm/xpra/.source: xpra-4.4.6-r2.ebuild
+Only in ./x11-wm/xpra/.source: xpra-6.0.1-r1.ebuild
+Only in ./x11-wm/xpra: xpra-6.2.1.ebuild
+Only in ./x11-wm/xpra/.source: xpra-9999.ebuild
+diff :: x11-wm/xpra [files] ============================================================================================
+	"${FILESDIR}/${PN}-9999-pep517.patch"
+
+./x11-wm/xpra:
+Manifest
+files
+xpra-6.2.1.ebuild
+xpra-6.9999.ebuild
+
+./x11-wm/xpra/files:
+xpra-9999-pep517.patch
