@@ -4211,7 +4211,7 @@ function shell {
 	cd
 	prompt -x "${PROMPT_NAME}"
 	if [[ ${OPTS} == x ]]; then
-		TERM="${SHELL_TERM}" ${SSH} ${LOG}@${DEST} "export DISPLAY=:1 ; _menu ${@}" &
+		TERM="${SHELL_TERM}" ${SSH} ${LOG}@${DEST} "prompt -d 1 ; DISPLAY=:1 _menu ${@}" &
 	else
 		eval TERM="${SHELL_TERM}" ${SSH} ${LOG}@${DEST} ${OPTS} "${@}"
 	fi
