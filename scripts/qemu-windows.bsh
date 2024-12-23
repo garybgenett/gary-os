@@ -10,8 +10,8 @@ declare QSYS="${1}"			; shift
 
 declare NC="nc -q 1 127.0.0.1 999${QNUM}"
 
-if [[ ${HOSTNAME} == bastion ]]; then
-	QMEM="$((1024*3))"
+if [[ ${HOSTNAME} == phoenix ]]; then
+	QMEM="$((1024*6))"
 fi
 
 ########################################
