@@ -3489,15 +3489,15 @@ function mount-zfs {
 				for FILE in $(${Z_LIST_ALL/-t all/-t filesystem} ${ZPOOL} | ${GREP} -v "^${ZPOOL}$"); do
 					echo -en "- Mounting Dataset... ${FILE}\n"
 #>>>
-#					declare ZOPT=
-#					declare ZOPT_DO=
-#					for ZOPT in ${ZOPTS_KEEP[@]}; do
-#						zfs inherit ${ZOPT} ${FILE}		|| return 1
-#					done
-#					for ZOPT in ${ZOPTS_PASS[@]}; do
-#						ZOPT_DO="$(echo "${ZOPTS}" | ${GREP} -o "${ZOPT}=[^[:space:]]+")"
-#						zfs set ${ZOPT_DO} ${FILE}		|| return 1
-#					done
+					declare ZOPT=
+					declare ZOPT_DO=
+					for ZOPT in ${ZOPTS_KEEP[@]}; do
+						zfs inherit ${ZOPT} ${FILE}		|| return 1
+					done
+					for ZOPT in ${ZOPTS_PASS[@]}; do
+						ZOPT_DO="$(echo "${ZOPTS}" | ${GREP} -o "${ZOPT}=[^[:space:]]+")"
+						zfs set ${ZOPT_DO} ${FILE}		|| return 1
+					done
 #>>>
 					${Z_MOUNT} ${FILE}				|| return 1
 				done
