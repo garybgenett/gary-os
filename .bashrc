@@ -383,7 +383,7 @@ export XPDF_READ="qpdfview"							; alias xpdf-read="${XPDF_READ}"
 export RDP="xfreerdp /dynamic-resolution /sound"				; alias rdp="${RDP}"
 export VNC="vncviewer -Shared -FullColor"					; alias vnc="${VNC}"
 export X2VNC="x2vnc -west -tunnel -shared -noblank -lockdelay 60 -timeout 60"	; alias x2vnc="${X2VNC}"
-export XPRA="xpra attach --socket-dir=/tmp/xpra"				; alias xpra="${XPRA}"
+export XPRA="xpra attach --socket-dir=/tmp/xpra --input-method=xim"		; alias xpra="${XPRA}"
 
 #>>>export VLC="vlc --intf ncurses --no-color"					; alias vlc-c="${VLC}"
 export VLC="vlc --intf ncurses --no-color --no-playlist-tree"			; alias vlc-c="${VLC}"
