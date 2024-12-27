@@ -5196,9 +5196,11 @@ function task-export-drive-sync {
 		${SED} -i \
 			-e "1,/^---$/d" \
 			-e "/^$/d" \
+			-e "/^[!]$/d" \
 			-e "s|[\\]||g" \
-			-e "s|[-][[:space:]]{3}|  * |g" \
+			-e "s|^[=][[:space:]]|#### |g" \
 			-e "s|^([#].+)$|\n\1|g" \
+			-e "s|[-][[:space:]]{3}|  * |g" \
 			${TODOS_MD_TEXT}${TODOS_MD_EXT}
 		sudo chown plastic:plastic \
 			${TODOS_MD_TEXT}${TODOS_MD_EXT}
