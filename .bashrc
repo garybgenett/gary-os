@@ -80,7 +80,7 @@ export MAILCAPS="${HOME}/.mailcap"
 
 export GDRIVE_REMOTE="gdrive"
 export TODOS_MD_FORMAT="docx"
-export TODOS_MD_TEXT="_todo.md"
+export TODOS_MD_TEXT="/.g/_data/zactive/_drive/_todo";		export TODOS_MD_EXT=".md.txt"
 export TODOS_MD="/.g/_data/zactive/_drive/_todo.docx";		export TODOS_MD_ID="gdrive:_todo.docx"	#>>> 1AXaQYxKJCi_p8mZIGmZOexKm3liaoH4p9JoweJUjedM
 export NOTES_MD="/.g/_data/zactive/_pim/tasks.notes.md";	export NOTES_MD_ID="gdrive:_notes.md"	#>>> 1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e
 export IDEAS_MD="/.g/_data/zactive/writing/_imagination.md";	export IDEAS_MD_ID="gdrive:_write.md"	#>>> 1_p06qeX31eFRTUJ2VKWhdfGUhaQBqF5k
@@ -5183,23 +5183,25 @@ function task-export-drive {
 function task-export-drive-sync {
 	if [[ ${1} == todo ]]; then
 		shift
-		pandoc \
-			--verbose \
-			--wrap="none" \
-			--from ${TODOS_MD_FORMAT} \
-			--to markdown+fancy_lists+task_lists+lists_without_preceding_blankline \
-			--output $(dirname ${TODOS_MD})/${TODOS_MD_TEXT} \
-			${TODOS_MD} \
+		make \
+			-f "${COMPOSER}" \
+			-C "$(dirname ${TODOS_MD})" \
+			COMPOSER_DEBUGIT="1" \
+			COMPOSER_KEEPING="" \
+			c_type="${TODOS_MD_FORMAT}" \
+			c_base="${TODOS_MD_TEXT}" \
+			c_list="${TODOS_MD}" \
+			extract \
 			|| return 1
 		${SED} -i \
+			-e "1,/^---$/d" \
 			-e "/^$/d" \
 			-e "s|[\\]||g" \
 			-e "s|[-][[:space:]]{3}|  * |g" \
 			-e "s|^([#].+)$|\n\1|g" \
-			$(dirname ${TODOS_MD})/${TODOS_MD_TEXT} \
-			|| return 1
+			${TODOS_MD_TEXT}${TODOS_MD_EXT}
 		sudo chown plastic:plastic \
-			$(dirname ${TODOS_MD})/${TODOS_MD_TEXT}
+			${TODOS_MD_TEXT}${TODOS_MD_EXT}
 		return 0
 	fi
 	${RCLONE_U} sync \
@@ -5366,8 +5368,12 @@ That's it!  Please see me with any comments or questions.
 END_OF_FILE
 	if [[ -f "${COMPOSER}" ]]; then
 		${MV} ${REPORT}.txt				${REPORT}.md
-		make -f "${COMPOSER}" -C "${REPORT_DIR}"	\
-			COMPOSER_DEBUGIT=1			${REPORT}.txt
+		make \
+			-f "${COMPOSER}" \
+			-C "${REPORT_DIR}" \
+			COMPOSER_DEBUGIT="1" \
+			COMPOSER_KEEPING="" \
+								${REPORT}.txt
 	fi
 	if [[ -f ${EMAIL_SIGN} ]]; then
 		echo -en "\n"					>>${REPORT}.txt
@@ -5380,8 +5386,12 @@ END_OF_FILE
 			echo -en "\t-- \n"			>>${REPORT}.md
 			${SED} "s|^|\t|g" ${EMAIL_SIGN}		>>${REPORT}.md
 		fi
-		make -f "${COMPOSER}" -C "${REPORT_DIR}"	\
-			COMPOSER_DEBUGIT=1			${REPORT}.html
+		make \
+			-f "${COMPOSER}" \
+			-C "${REPORT_DIR}" \
+			COMPOSER_DEBUGIT="1" \
+			COMPOSER_KEEPING="" \
+								${REPORT}.html
 		${SED} -i "/text\/css/d"			${REPORT}.html
 		${RM}						${REPORT_DIR}/.composed
 	fi
@@ -6941,7 +6951,7 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			if [[ -f "${COMPOSER}" ]]; then
 				make all			\
 					-C "${PIMDIR}"		\
-					COMPOSER_DEBUGIT=1	\
+					COMPOSER_DEBUGIT="1"	\
 					COMPOSER_TARGETS="${FILES}"
 				declare ENTER=
 				read ENTER
