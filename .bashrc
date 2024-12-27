@@ -6082,7 +6082,7 @@ function task-export-text {
 		} @{$multi_tag})) {
 			warn("MULTIPLE TAGS[" . $task->{"uuid"} . " " . $task->{"description"} . "](" . join(" ", @{$task->{"tags"}}) . ")");
 		};
-		if (-f "${ENV{COMPOSER}}") {
+		if (-f "${ENV{COMPOSER}}" && ${name} != 0) {
 			my $compose = "make all"
 				. " -C ${ENV{PIMDIR}}"
 				. " COMPOSER_DEBUGIT=1"
@@ -6965,6 +6965,11 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				${GIT} reset zoho* &&
 				${GIT_STS}
 			)
+		elif [[ ${1} == [0] ]]; then
+			shift
+			task-export-drive
+			task-export-text 0
+			(cd "${PIMDIR}" && GIT_PAGER= ${GIT_CMD} diff ${DIFF_OPTS} tasks.md)
 		elif [[ ${1} == [_] ]]; then
 			shift
 #>>>			task-switch -
