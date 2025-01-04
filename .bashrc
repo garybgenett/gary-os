@@ -6082,7 +6082,7 @@ function task-export-text {
 		} @{$multi_tag})) {
 			warn("MULTIPLE TAGS[" . $task->{"uuid"} . " " . $task->{"description"} . "](" . join(" ", @{$task->{"tags"}}) . ")");
 		};
-		if (-f "${ENV{COMPOSER}}" && ${name} != 0) {
+		if (-f "${ENV{COMPOSER}}" && "${name}" ne "0") {
 			my $compose = "make all"
 				. " -C ${ENV{PIMDIR}}"
 				. " COMPOSER_DEBUGIT=1"
