@@ -579,6 +579,7 @@ alias zplan="IMPERSONATE_NAME=task ${HOME}/.bashrc impersonate_command %"
 
 alias zdesk="cd ${NULLDIR} ; clear ; ${LL}"
 if [[ ${UNAME} == "Windows" ]]; then
+	export DISPLAY="$(ip route show default | cut -d' ' -f3):0"
 	alias wsl-link="${RM} \"${HOME}/Desktop\" && ${LN} --relative \"/mnt/c/Users/${USER}/Desktop\" \"${HOME}/\" && ${LN} --relative \"${HOME}/Desktop/_wsl/\"{.Xdefaults,.htoprc.bak,.vimrc} \"${HOME}/\" && ${LN} --relative \"${HOME}/Desktop/_wsl/.bashrc\" \"${HOME}/.bash_aliases\""
 	alias wsl="${RSYNC_U} root@server.garybgenett.net:{/.g/_data/zactive/.static/{.X*,.bash*,.htop*,.vim*,scripts/updebian},${COMPOSER}} \"${HOME}/Desktop/_wsl/\" && ${SED} -i \"s|([-]0[+]0)|+1800+1920 \# \1|g\" \"${HOME}/Desktop/_wsl/.Xdefaults\" && if [[ -d ${HOME}/Desktop/composer ]] ; then ${RSYNC_U} ${HOME}/Desktop/_wsl/Makefile ${HOME}/Desktop/composer/ ; fi && source \"${HOME}/Desktop/_wsl/.bashrc\""
 	alias backup="${RSYNC_U} \"${HOME}/Desktop/data\".* root@server.garybgenett.net:/.g/_data/zactive/ ; ${RSYNC_U} \"${HOME}/.history/shell/\"* root@server.garybgenett.net:/.g/_data/zactive/.history/shell/ && ssh root@server.garybgenett.net \"chmod -R 750 /.g/_data/zactive/\$(basename \"${HOME}/Desktop/data\".*)\""
