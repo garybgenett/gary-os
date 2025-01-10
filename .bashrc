@@ -80,6 +80,7 @@ export MAILCAPS="${HOME}/.mailcap"
 
 export GDRIVE_REMOTE="gdrive"
 export TODOS_MD_FORMAT="docx"
+export TODOS_MD_STATUS="/.g/_data/zactive/data.amazon/_status";	export TODOS_MD_STATUS_EXT=".docx"
 export TODOS_MD_TEXT="/.g/_data/zactive/_drive/_todo";		export TODOS_MD_EXT=".md.txt"
 export TODOS_MD="/.g/_data/zactive/_drive/_todo.docx";		export TODOS_MD_ID="gdrive:_todo.docx"	#>>> 1AXaQYxKJCi_p8mZIGmZOexKm3liaoH4p9JoweJUjedM
 export NOTES_MD="/.g/_data/zactive/_pim/tasks.notes.md";	export NOTES_MD_ID="gdrive:_notes.md"	#>>> 1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e
@@ -5189,6 +5190,16 @@ function task-export-drive-sync {
 		shift
 		make \
 			-f "${COMPOSER}" \
+			-C "$(dirname ${TODOS_MD_STATUS})" \
+			COMPOSER_DEBUGIT="1" \
+			COMPOSER_KEEPING="" \
+			c_type="${TODOS_MD_FORMAT}" \
+			c_base="${TODOS_MD_STATUS}" \
+			c_list="${TODOS_MD_STATUS}${TODOS_MD_STATUS_EXT}" \
+			extract \
+			|| return 1
+		make \
+			-f "${COMPOSER}" \
 			-C "$(dirname ${TODOS_MD})" \
 			COMPOSER_DEBUGIT="1" \
 			COMPOSER_KEEPING="" \
@@ -5198,15 +5209,17 @@ function task-export-drive-sync {
 			extract \
 			|| return 1
 		${SED} -i \
-			-e "1,/^---$/d" \
+			-e "/^---$/{1,/^---$/d}" \
 			-e "/^$/d" \
 			-e "/^[!]$/d" \
 			-e "s|[\\]||g" \
 			-e "s|^[=][[:space:]]|#### |g" \
 			-e "s|^([#].+)$|\n\1|g" \
 			-e "s|[-][[:space:]]{3}|  * |g" \
+			${TODOS_MD_STATUS}${TODOS_MD_EXT} \
 			${TODOS_MD_TEXT}${TODOS_MD_EXT}
 		sudo chown plastic:plastic \
+			${TODOS_MD_STATUS}${TODOS_MD_EXT} \
 			${TODOS_MD_TEXT}${TODOS_MD_EXT}
 		return 0
 	fi
