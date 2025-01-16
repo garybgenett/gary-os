@@ -80,12 +80,12 @@ export MAILCAPS="${HOME}/.mailcap"
 
 export GDRIVE_REMOTE="gdrive"
 export TODOS_MD_FORMAT="docx"
-export TODOS_MD_STATUS="/.g/_data/zactive/data.amazon/_status";	export TODOS_MD_STATUS_EXT=".docx"
-export TODOS_MD_TEXT="/.g/_data/zactive/_drive/_todo";		export TODOS_MD_EXT=".md.txt"
-export TODOS_MD="/.g/_data/zactive/_drive/_todo.docx";		export TODOS_MD_ID="gdrive:_todo.docx"	#>>> 1AXaQYxKJCi_p8mZIGmZOexKm3liaoH4p9JoweJUjedM
-export NOTES_MD="/.g/_data/zactive/_pim/tasks.notes.md";	export NOTES_MD_ID="gdrive:_notes.md"	#>>> 1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e
-export IDEAS_MD="/.g/_data/zactive/writing/_imagination.md";	export IDEAS_MD_ID="gdrive:_write.md"	#>>> 1_p06qeX31eFRTUJ2VKWhdfGUhaQBqF5k
-export SALES_MD="/.g/_data/zactive/_pim/zoho.today.md";		#>>>export SALES_MD_ID=""		#>>> 1wQrnTw0I5pDfzlqeuKdBNCNvFH9Ifulz
+export TODOS_MD_STATUS="/.g/_data/zactive/data.amazon/_status/_status";	export TODOS_MD_STATUS_EXT=".docx"
+export TODOS_MD_TEXT="/.g/_data/zactive/_drive/_todo";			export TODOS_MD_EXT=".md.txt"
+export TODOS_MD="/.g/_data/zactive/_drive/_todo.docx";			export TODOS_MD_ID="gdrive:_todo.docx"	#>>> 1AXaQYxKJCi_p8mZIGmZOexKm3liaoH4p9JoweJUjedM
+export NOTES_MD="/.g/_data/zactive/_pim/tasks.notes.md";		export NOTES_MD_ID="gdrive:_notes.md"	#>>> 1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e
+export IDEAS_MD="/.g/_data/zactive/writing/_imagination.md";		export IDEAS_MD_ID="gdrive:_write.md"	#>>> 1_p06qeX31eFRTUJ2VKWhdfGUhaQBqF5k
+export SALES_MD="/.g/_data/zactive/_pim/zoho.today.md";			#>>>export SALES_MD_ID=""		#>>> 1wQrnTw0I5pDfzlqeuKdBNCNvFH9Ifulz
 
 ########################################
 
@@ -5188,16 +5188,18 @@ function task-export-drive {
 function task-export-drive-sync {
 	if [[ ${1} == todo ]]; then
 		shift
-		make \
-			-f "${COMPOSER}" \
-			-C "$(dirname ${TODOS_MD_STATUS})" \
-			COMPOSER_DEBUGIT="1" \
-			COMPOSER_KEEPING="" \
-			c_type="${TODOS_MD_FORMAT}" \
-			c_base="${TODOS_MD_STATUS}" \
-			c_list="${TODOS_MD_STATUS}${TODOS_MD_STATUS_EXT}" \
-			extract \
-			|| return 1
+		if [ -f ${TODOS_MD_STATUS}${TODOS_MD_STATUS_EXT} ]; then
+			make \
+				-f "${COMPOSER}" \
+				-C "$(dirname ${TODOS_MD_STATUS})" \
+				COMPOSER_DEBUGIT="1" \
+				COMPOSER_KEEPING="" \
+				c_type="${TODOS_MD_FORMAT}" \
+				c_base="${TODOS_MD_STATUS}" \
+				c_list="${TODOS_MD_STATUS}${TODOS_MD_STATUS_EXT}" \
+				extract \
+				|| return 1
+		fi
 		make \
 			-f "${COMPOSER}" \
 			-C "$(dirname ${TODOS_MD})" \
