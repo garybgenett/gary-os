@@ -80,7 +80,7 @@ export MAILCAPS="${HOME}/.mailcap"
 
 export GDRIVE_REMOTE="gdrive"
 export TODOS_MD_FORMAT="docx"
-export TODOS_MD_STATUS="/.g/_data/zactive/data.amazon/_status/_status";	export TODOS_MD_STATUS_EXT=".docx"
+export TODOS_MD_STATUS="/.g/_data/zactive/data.work/_status/_status";	export TODOS_MD_STATUS_EXT=".docx"
 export TODOS_MD_TEXT="/.g/_data/zactive/_drive/_todo";			export TODOS_MD_EXT=".md.txt"
 export TODOS_MD="/.g/_data/zactive/_drive/_todo.docx";			export TODOS_MD_ID="gdrive:_todo.docx"	#>>> 1AXaQYxKJCi_p8mZIGmZOexKm3liaoH4p9JoweJUjedM
 export NOTES_MD="/.g/_data/zactive/_pim/tasks.notes.md";		export NOTES_MD_ID="gdrive:_notes.md"	#>>> 1asjTujzIRYBiqvXdBG34RD_fCN7GQN5e
