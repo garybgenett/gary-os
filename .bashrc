@@ -581,6 +581,7 @@ alias zplan="IMPERSONATE_NAME=task ${HOME}/.bashrc impersonate_command %"
 alias zdesk="cd ${NULLDIR} ; clear ; ${LL}"
 if [[ ${UNAME} == "Windows" ]]; then
 	export DISPLAY="$(ip route show default | cut -d' ' -f3):0"
+	declare STSBAS="$(ls -d ${HOME}/Desktop/data.*/${TODOS_MD_STATUS/#*\/data.work\/}${TODOS_MD_EXT})"; STSBAS="${STSBAS/%${TODOS_MD_EXT}}"
 	declare BKMDIR="$(ls -d ${HOME}/Desktop/data.*/bookmarks)"
 	declare MOZDIR="$(dirname "$(ls /mnt/c/Users/*/Application\ Data/Mozilla/Firefox/Profiles/*/prefs.js)")"
 	alias server="(urxvt -e bash -c \"${HOME}/.bash_aliases shell me\" &)"
@@ -609,19 +610,55 @@ if [[ ${UNAME} == "Windows" ]]; then
 		source ${HOME}/Desktop/_wsl/.bashrc
 		return 0
 	}
+	function status {
+		declare AUTO="false"
+		if [[ ${1} == -a ]]; then
+			AUTO="true"
+		fi
+		if [[ -f ${STSBAS}${TODOS_MD_EXT} ]]; then
+			! ${AUTO} && ${EDITOR} ${STSBAS}${TODOS_MD_EXT}
+			if ! diff ${DIFF_OPTS} \
+				$(ls ${STSBAS}-*${TODOS_MD_EXT} | tail -n1) \
+				${STSBAS}${TODOS_MD_EXT}
+			then
+				${RSYNC_U} \
+					${STSBAS}${TODOS_MD_EXT} \
+					${STSBAS}-$(date --iso)${TODOS_MD_EXT}
+				! ${AUTO} && vdiff \
+					$(ls ${STSBAS}-*${TODOS_MD_EXT} | tail -n2 | head -n1) \
+					${STSBAS}${TODOS_MD_EXT}
+			fi
+			! ${AUTO} && cat ${STSBAS}${TODOS_MD_EXT}
+		fi
+		return 0
+	}
 	function bookmarks {
-		${MV} ${BKMDIR}/bookmarks{,-$(date --iso)}.html
+		declare AUTO="false"
+		if [[ ${1} == -a ]]; then
+			AUTO="true"
+		fi
+		if [[ -f ${BKMDIR}/bookmarks.html ]]; then
 			${SED} -i \
 				-e "/^[[:space:]]+[<]DD[>]$/d" \
 				-e "s/<HR>([[:space:]])/<HR>\n\1/g" \
-				${BKMDIR}/bookmarks-$(date --iso).html
-				vdiff \
-					$(ls ${BKMDIR}/bookmarks-*.html | tail -n2 | head -n1) \
+				${BKMDIR}/bookmarks.html
+			if ! diff ${DIFF_OPTS} \
+				$(ls ${BKMDIR}/bookmarks-*.html | tail -n1) \
+				${BKMDIR}/bookmarks.html
+			then
+				${RSYNC_U} \
+					${BKMDIR}/bookmarks.html \
 					${BKMDIR}/bookmarks-$(date --iso).html
+				! ${AUTO} && vdiff \
+					$(ls ${BKMDIR}/bookmarks-*.html | tail -n2 | head -n1) \
+					${BKMDIR}/bookmarks.html
+			fi
+		fi
 		return 0
 	}
 	function backup {
-		bookmarks \
+		status -a \
+		&& bookmarks -a \
 		&& ${RSYNC_U} ${HOME}/Desktop/data.* root@server.garybgenett.net:/.g/_data/zactive/ \
 		&& ${RSYNC_U} ${HOME}/.history/shell/* root@server.garybgenett.net:/.g/_data/zactive/.history/shell/ \
 		&& ssh root@server.garybgenett.net "chmod -R 750 /.g/_data/zactive/$(basename ${HOME}/Desktop/data.*)" \
