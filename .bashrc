@@ -616,7 +616,9 @@ if [[ ${UNAME} == "Windows" ]]; then
 			AUTO="true"
 		fi
 		if [[ -f ${STSBAS}${TODOS_MD_EXT} ]]; then
-			! ${AUTO} && ${EDITOR} ${STSBAS}${TODOS_MD_EXT}
+			if ! ${AUTO}; then
+				${EDITOR} ${STSBAS}${TODOS_MD_EXT}
+			fi
 			if ! diff ${DIFF_OPTS} \
 				$(ls ${STSBAS}-*${TODOS_MD_EXT} | tail -n1) \
 				${STSBAS}${TODOS_MD_EXT}
@@ -624,11 +626,13 @@ if [[ ${UNAME} == "Windows" ]]; then
 				${RSYNC_U} \
 					${STSBAS}${TODOS_MD_EXT} \
 					${STSBAS}-$(date --iso)${TODOS_MD_EXT}
-				! ${AUTO} && vdiff \
+			fi
+			if ! ${AUTO}; then
+				vdiff \
 					$(ls ${STSBAS}-*${TODOS_MD_EXT} | tail -n2 | head -n1) \
 					${STSBAS}${TODOS_MD_EXT}
+				cat ${STSBAS}${TODOS_MD_EXT}
 			fi
-			! ${AUTO} && cat ${STSBAS}${TODOS_MD_EXT}
 		fi
 		return 0
 	}
@@ -649,7 +653,9 @@ if [[ ${UNAME} == "Windows" ]]; then
 				${RSYNC_U} \
 					${BKMDIR}/bookmarks.html \
 					${BKMDIR}/bookmarks-$(date --iso).html
-				! ${AUTO} && vdiff \
+			fi
+			if ! ${AUTO}; then
+				vdiff \
 					$(ls ${BKMDIR}/bookmarks-*.html | tail -n2 | head -n1) \
 					${BKMDIR}/bookmarks.html
 			fi
