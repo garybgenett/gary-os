@@ -581,17 +581,55 @@ alias zplan="IMPERSONATE_NAME=task ${HOME}/.bashrc impersonate_command %"
 alias zdesk="cd ${NULLDIR} ; clear ; ${LL}"
 if [[ ${UNAME} == "Windows" ]]; then
 	export DISPLAY="$(ip route show default | cut -d' ' -f3):0"
+	declare BKMDIR="$(ls -d ${HOME}/Desktop/data.*/bookmarks)"
 	declare MOZDIR="$(dirname "$(ls /mnt/c/Users/*/Application\ Data/Mozilla/Firefox/Profiles/*/prefs.js)")"
-	declare BKMDIR="$(ls -d "${HOME}/Desktop"/data.*/bookmarks)"
-	alias wsl-link="${RM} \"${HOME}/Desktop\" && ${LN} --relative \"/mnt/c/Users/${USER}/Desktop\" \"${HOME}/\" && ${LN} --relative \"${HOME}/Desktop/_wsl/\"{.Xdefaults,.htoprc.bak,.vimrc} \"${HOME}/\" && ${LN} --relative \"${HOME}/Desktop/_wsl/.bashrc\" \"${HOME}/.bash_aliases\""
-	alias wsl="${RSYNC_U} root@server.garybgenett.net:{/.g/_data/zactive/.static/{.X*,.bash*,.htop*,.vim*,scripts/updebian},${COMPOSER}} \"${HOME}/Desktop/_wsl/\" && ${SED} -i -e \"s|(81[x]30)[+]13[+]13|\\1|g\" -e \"s|([-]0[+]0)|+1800+1920 \# \1|g\" \"${HOME}/Desktop/_wsl/.Xdefaults\" && if [[ -d ${HOME}/Desktop/composer ]] ; then ${RSYNC_U} ${HOME}/Desktop/_wsl/Makefile ${HOME}/Desktop/composer/ ; fi && source \"${HOME}/Desktop/_wsl/.bashrc\""
-	alias backup-bookmarks="${MV} \"${BKMDIR}\"/bookmarks{,-$(date --iso)}.html ; ${SED} -i -e \"/^[[:space:]]+[<]DD[>]$/d\" -e \"s/<HR>([[:space:]])/<HR>\n\1/g\" \"${BKMDIR}\"/bookmarks-$(date --iso).html ; vdiff \"\`ls \"${BKMDIR}\"/bookmarks-*.html | tail -n2 | head -n1\`\" \"${BKMDIR}\"/bookmarks-$(date --iso).html"
-	alias backup="${RSYNC_U} \"${HOME}/Desktop\"/data.* root@server.garybgenett.net:/.g/_data/zactive/ ; ${RSYNC_U} \"${HOME}/.history/shell/\"* root@server.garybgenett.net:/.g/_data/zactive/.history/shell/ && ssh root@server.garybgenett.net \"chmod -R 750 /.g/_data/zactive/\$(basename \"${HOME}/Desktop\"/data.*)\""
 	alias server="(urxvt -e bash -c \"${HOME}/.bash_aliases shell me\" &)"
 	alias xterm="(urxvt &)"
 	alias xclock="${EDITOR} +/XClock.geometry ${HOME}/.Xdefaults ; (xclock &)"
 	alias open="/mnt/c/Windows/explorer.exe"
-	alias zdesk="cd \"${HOME}/Desktop\" ; clear ; ${LL}"
+	alias zdesk="cd ${HOME}/Desktop ; clear ; ${LL}"
+	function wsl-link {
+		${RM} ${HOME}/Desktop
+		${LN} --relative "/mnt/c/Users/${USER}/Desktop" ${HOME}/
+		${LN} --relative ${HOME}/Desktop/_wsl/{.Xdefaults,.htoprc.bak,.vimrc} ${HOME}/
+		${LN} --relative ${HOME}/Desktop/_wsl/.bashrc ${HOME}/.bash_aliases
+		return 0
+	}
+	function wsl {
+		${RSYNC_U} \
+			root@server.garybgenett.net:{/.g/_data/zactive/.static/{.X*,.bash*,.htop*,.vim*,scripts/updebian},${COMPOSER}} \
+			${HOME}/Desktop/_wsl/
+		${SED} -i \
+			-e "s|(81[x]30)[+]13[+]13|\1|g" \
+			-e "s|([-]0[+]0)|+1800+1920 # \1|g" \
+			${HOME}/Desktop/_wsl/.Xdefaults
+		if [[ -d ${HOME}/Desktop/composer ]]; then
+			${RSYNC_U} ${HOME}/Desktop/_wsl/Makefile ${HOME}/Desktop/composer/
+		fi
+		source ${HOME}/Desktop/_wsl/.bashrc
+		return 0
+	}
+	function bookmarks {
+		${MV} ${BKMDIR}/bookmarks{,-$(date --iso)}.html
+			${SED} -i \
+				-e "/^[[:space:]]+[<]DD[>]$/d" \
+				-e "s/<HR>([[:space:]])/<HR>\n\1/g" \
+				${BKMDIR}/bookmarks-$(date --iso).html
+				vdiff \
+					$(ls ${BKMDIR}/bookmarks-*.html | tail -n2 | head -n1) \
+					${BKMDIR}/bookmarks-$(date --iso).html
+		return 0
+	}
+	function backup {
+		bookmarks \
+		&& ${RSYNC_U} ${HOME}/Desktop/data.* root@server.garybgenett.net:/.g/_data/zactive/ \
+		&& ${RSYNC_U} ${HOME}/.history/shell/* root@server.garybgenett.net:/.g/_data/zactive/.history/shell/ \
+		&& ssh root@server.garybgenett.net "chmod -R 750 /.g/_data/zactive/$(basename ${HOME}/Desktop/data.*)" \
+		&& echo "success!" \
+		&& return 0
+		echo "failed!"
+		return 1
+	}
 fi
 if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
 	alias open="cygstart"
