@@ -5297,7 +5297,7 @@ function task-export-drive-sync {
 			-e "/^[!]$/d" \
 			-e "s|[\\]||g" \
 			-e "s|^[=][[:space:]]|# |g" \
-			-e "s|^([#].+)$|\n###\1|g" \
+			-e "s|^([#]{1,3}[[:space:]].+)$|\n###\1|g" \
 			-e "s|[-][[:space:]]{3}|  * |g" \
 			${TODOS_MD_STATUS}${TODOS_MD_EXT} \
 			${TODOS_MD_TEXT}${TODOS_MD_EXT}
