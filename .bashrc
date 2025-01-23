@@ -5258,7 +5258,7 @@ function task-export-drive {
 		${RCLONE_U} copyto ${TODOS_MD_ID} ${TODOS_MD}
 		${RCLONE_U} copyto ${NOTES_MD_ID} ${NOTES_MD}
 		${RCLONE_U} copyto ${IDEAS_MD_ID} ${IDEAS_MD}
-		task-export-drive-sync todo
+		task-export-drive-sync todo || return 1
 	fi
 	cd - >/dev/null
 	return 0
@@ -7068,9 +7068,12 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 			)
 		elif [[ ${1} == [0] ]]; then
 			shift
-			task-export-drive
-			task-export-text 0
-			(cd "${PIMDIR}" && GIT_PAGER= ${GIT_CMD} diff ${DIFF_OPTS} tasks.md)
+			task-export-drive	|| return 1
+			task-export-text 0	|| return 1
+			(cd "${PIMDIR}" && \
+				GIT_PAGER= ${GIT_CMD} reset tasks.md && \
+				GIT_PAGER= ${GIT_CMD} diff ${DIFF_OPTS} tasks.md
+			)
 		elif [[ ${1} == [_] ]]; then
 			shift
 #>>>			task-switch -
