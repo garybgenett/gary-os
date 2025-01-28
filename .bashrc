@@ -72,7 +72,13 @@ if [[ -n "$(uname -a | grep -i "Microsoft")" ]]; then
 	UNAME="Windows"
 fi
 
-export COMPOSER="/.g/_data/zactive/coding/composer/Makefile";	alias composer="make -f ${COMPOSER}"
+if [[ ${UNAME} == "Windows" ]]; then
+	export COMPOSER="${HOME}/composer/Makefile"
+else
+	export COMPOSER="/.g/_data/zactive/coding/composer/Makefile"
+fi
+alias composer="make -f ${COMPOSER}"
+
 export PIMDIR="/.g/_data/zactive/_pim"
 export NULLDIR="/.g/_data/zactive/_zcache"
 export MAILDIR="${HOME}/Maildir"
