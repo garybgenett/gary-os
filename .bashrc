@@ -7207,7 +7207,10 @@ fi
 
 ########################################
 
-if [[ "${SCRIPT}" == ".bashrc" ]]; then
+if {
+	[[ "${SCRIPT}" == ".bashrc" ]] ||
+	[[ "${SCRIPT}" == ".bash_aliases" ]];
+}; then
 	${@}
 	exit "${?}"
 fi
