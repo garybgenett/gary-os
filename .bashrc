@@ -685,6 +685,14 @@ if [[ ${UNAME} == "Windows" ]]; then
 		return 0
 	}
 	function backup {
+		declare DRV="w"
+		if [[ -n ${DRV} ]]; then
+			if [[ -z "$(${GREP} "^${DRV}[:][[:space:]]+[/]mnt[/]${DRV}[[:space:]]" /proc/mounts)" ]]; then
+				sudo ${MKDIR} /mnt/${DRV}
+				sudo mount -t drvfs ${DRV}: /mnt/${DRV}
+			fi
+			${GREP} "^${DRV}[:][[:space:]]+[/]mnt[/]${DRV}[[:space:]]" /proc/mounts
+		fi
 		status -a \
 		&& bookmarks -a \
 		&& ${RSYNC_U} ${DATDIR} root@server.garybgenett.net:/.g/_data/zactive/ \
