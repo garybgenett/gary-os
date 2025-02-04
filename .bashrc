@@ -589,6 +589,7 @@ if [[ ${UNAME} == "Windows" ]]; then
 	export DISPLAY="$(ip route show default | cut -d' ' -f3):0"
 	declare DATDIR="$(ls -d ${HOME}/Desktop/data.*)"; if [[ -z ${DATDIR} ]]; then DATDIR="${HOME}/Desktop/data"; fi
 	declare STSBAS="${DATDIR}/${TODOS_MD_STATUS/#*\/data.work\/}${TODOS_MD_EXT}"; STSBAS="${STSBAS/%${TODOS_MD_EXT}}"
+	declare DOCDIR="${DATDIR}/documents"
 	declare BKMDIR="${DATDIR}/bookmarks"
 	declare MOZDIR="$(dirname "$(ls /mnt/c/Users/*/Application\ Data/Mozilla/Firefox/Profiles/*/prefs.js)")"
 	alias server="(urxvt -e bash -c \"${HOME}/.bash_aliases shell me\" &)"
@@ -640,6 +641,17 @@ if [[ ${UNAME} == "Windows" ]]; then
 					${STSBAS}${TODOS_MD_EXT}
 				cat ${STSBAS}${TODOS_MD_EXT}
 			fi
+		fi
+		return 0
+	}
+	function quip {
+		if [[ -n ${1} ]]; then
+			declare QUIP="quip-${1//\//-}-"
+			${EDITOR} ${DOCDIR}/${QUIP}$(date --iso)${TODOS_MD_EXT}
+			vdiff \
+				$(ls ${DOCDIR}/${QUIP}*${TODOS_MD_EXT} | tail -n2 | head -n1) \
+				${DOCDIR}/${QUIP}$(date --iso)${TODOS_MD_EXT}
+			${LL} ${DOCDIR}/${QUIP}*
 		fi
 		return 0
 	}
