@@ -666,6 +666,9 @@ if [[ ${UNAME} == "Windows" ]]; then
 					$(ls ${BKMDIR}/bookmarks-*.html | tail -n2 | head -n1) \
 					${BKMDIR}/bookmarks.html
 			fi
+			${SED} -n "s|^.+quip-$(
+					basename ${DATDIR} | ${SED} "s|^data[.]||g"
+				)[.]com[/]([^\"]+).+$|\1|gp" ${BKMDIR}/bookmarks.html | ${GREP} "^.+[/].+$"
 		fi
 		return 0
 	}
