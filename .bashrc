@@ -587,8 +587,9 @@ alias zplan="IMPERSONATE_NAME=task ${HOME}/.bashrc impersonate_command %"
 alias zdesk="cd ${NULLDIR} ; clear ; ${LL}"
 if [[ ${UNAME} == "Windows" ]]; then
 	export DISPLAY="$(ip route show default | cut -d' ' -f3):0"
-	declare STSBAS="$(ls -d ${HOME}/Desktop/data.*/${TODOS_MD_STATUS/#*\/data.work\/}${TODOS_MD_EXT})"; STSBAS="${STSBAS/%${TODOS_MD_EXT}}"
-	declare BKMDIR="$(ls -d ${HOME}/Desktop/data.*/bookmarks)"
+	declare DATDIR="$(ls -d ${HOME}/Desktop/data.*)"; if [[ -z ${DATDIR} ]]; then DATDIR="${HOME}/Desktop/data"; fi
+	declare STSBAS="${DATDIR}/${TODOS_MD_STATUS/#*\/data.work\/}${TODOS_MD_EXT}"; STSBAS="${STSBAS/%${TODOS_MD_EXT}}"
+	declare BKMDIR="${DATDIR}/bookmarks"
 	declare MOZDIR="$(dirname "$(ls /mnt/c/Users/*/Application\ Data/Mozilla/Firefox/Profiles/*/prefs.js)")"
 	alias server="(urxvt -e bash -c \"${HOME}/.bash_aliases shell me\" &)"
 	alias xterm="(urxvt &)"
@@ -671,9 +672,9 @@ if [[ ${UNAME} == "Windows" ]]; then
 	function backup {
 		status -a \
 		&& bookmarks -a \
-		&& ${RSYNC_U} ${HOME}/Desktop/data.* root@server.garybgenett.net:/.g/_data/zactive/ \
+		&& ${RSYNC_U} ${DATDIR} root@server.garybgenett.net:/.g/_data/zactive/ \
 		&& ${RSYNC_U} ${HOME}/.history/shell/* root@server.garybgenett.net:/.g/_data/zactive/.history/shell/ \
-		&& ssh root@server.garybgenett.net "chmod -R 750 /.g/_data/zactive/$(basename ${HOME}/Desktop/data.*)" \
+		&& ssh root@server.garybgenett.net "chmod -R 750 /.g/_data/zactive/$(basename ${DATDIR})" \
 		&& echo "success!" \
 		&& return 0
 		echo "failed!"
