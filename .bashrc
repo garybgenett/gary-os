@@ -586,7 +586,8 @@ alias zplan="IMPERSONATE_NAME=task ${HOME}/.bashrc impersonate_command %"
 
 alias zdesk="cd ${NULLDIR} ; clear ; ${LL}"
 if [[ ${UNAME} == "Windows" ]]; then
-	export DISPLAY="$(ip route show default | cut -d' ' -f3):0"
+#>>>	export DISPLAY="$(ip route show default | cut -d' ' -f3):0"
+	export DISPLAY="127.0.0.1:0"
 	declare DATDIR="$(ls -d ${HOME}/Desktop/data.*)"; if [[ -z ${DATDIR} ]]; then DATDIR="${HOME}/Desktop/data"; fi
 	declare STSBAS="${DATDIR}/${TODOS_MD_STATUS/#*\/data.work\/}${TODOS_MD_EXT}"; STSBAS="${STSBAS/%${TODOS_MD_EXT}}"
 	declare DOCDIR="${DATDIR}/documents"
