@@ -4328,7 +4328,12 @@ function shell {
 	cd
 	prompt -x "${PROMPT_NAME}"
 	if [[ ${OPTS} == x ]]; then
-		TERM="${SHELL_TERM}" ${SSH} ${LOG}@${DEST} "prompt -d 1 ; DISPLAY=:1 _menu ${@}" &
+		if [[ ${1} == l ]]; then
+			TERM="${SHELL_TERM}" ${SSH} ${LOG}@${DEST} "prompt -d 1 ; DISPLAY=:1 _menu" \
+				| ${GREP} -o "${2}[^\"<[:space:]]*" | sort -u
+		else
+			TERM="${SHELL_TERM}" ${SSH} ${LOG}@${DEST} "prompt -d 1 ; DISPLAY=:1 _menu ${@}" &
+		fi
 	else
 		eval TERM="${SHELL_TERM}" ${SSH} ${LOG}@${DEST} ${OPTS} "${@}"
 	fi
