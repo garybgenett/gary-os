@@ -9,3 +9,5 @@
 
 # 2024-10-04 10:09:58 +0200 2985dac46b96286bfc036d4a6c669ff6ee65b0b6 net-dns/pdns-recursor: drop 5.0.8
 2985dac46b96286bfc036d4a6c669ff6ee65b0b6
+# 2025-02-15 12:39:12 +0100 8887b0e45e5c2accd150920bbf876b86e65d402b dev-python/python-jose: Remove upstream dep pins, optimize testing
+8887b0e45e5c2accd150920bbf876b86e65d402b
