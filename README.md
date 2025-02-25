@@ -1725,9 +1725,9 @@ Everything needed to perform these steps is in the [Repository] or the
     * `cd .setup/linux`
         * `(cd _build/gentoo/gentoo; grep -A10 SRC_URI ./sys-kernel/gentoo-kernel/gentoo-kernel-*.ebuild)`
             * `wget [...]`
-        * `mv ./kernel-x86_64-fedora.config ./default-gentoo64-[...]`
+        * `mv ./kernel-x86_64-fedora.config ./default-gentoo64.config-[...]`
             * `rm ./.default; ln default-gentoo64-[...] ./.default`
-            * `rsync $(realpath ./.default) ./config-gentoo64-[...]`
+            * `rsync -L ./.default ./config-gentoo64-[...]`
         * `rsync -L ./.options ./config-gentoo64-[...]-options`
             * `rm ./.config; ln config-gentoo64-[...] ./.config`
             * `rm ./.options; ln config-gentoo64-[...]-options ./.options`
