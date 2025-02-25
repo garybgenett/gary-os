@@ -1826,12 +1826,14 @@ Everything needed to perform these steps is in the [Repository] or the
 *`Retry {`*
 
    * `make DOMODS=true DOFAST=true init`
+   * `make DOMODS=true DOFAST=true doit`
 
 *`}`*
 
   * `cd .setup/gentoo.make`
     * `(cd _builds; rm ./_gentoo.boot; ln _gentoo.working ./_gentoo.boot)`
     * `(cd _builds; rm ./_gentoo.working; ln ../../_toor ./_gentoo.working)`
+    * `chmod -vR 755 ./gentoo/`
     * `vi ./gentoo/_funtoo`
         * `(cd _build/gentoo/gentoo; git pull; GIT_PAGER= git-list -n1)`
         * [ ] Update [Gentoo] commit
