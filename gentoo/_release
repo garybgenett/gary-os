@@ -106,12 +106,22 @@ done
 
 ########################################
 
+#{CMD} grep -v -e "^[#]" -e "^$" gentoo/package.license | sed -r "s|^[^[:space:]]+[[:space:]]+([^[:space:]]+).*$|\1|g" | sort -u
+
+#>>>
+#	DOOM3
+#	OFL
+#	fairuse
+#	free-noncomm
+#	freedist
+#	linux-fw-redistributable
+#	no-source-code
+#	truecrypt-3.0
+#>>>
 declare RELEASE_LICENSES="
-	linux-fw-redistributable
-	freedist
-	OFL
-	fairuse
-	free-noncomm
+	all-rights-reserved
+	lha
+	mekanix
 "
 
 ################################################################################
