@@ -11,7 +11,7 @@ app-emulation/qemu			seccomp		# gentoo required
 app-text/poppler			cairo		# gentoo required
 app-text/poppler			qt5		# gentoo required
 dev-libs/boost				nls		# gentoo required
-dev-libs/quazip				qt5		# gentoo required
+dev-libs/quazip				qt6		# gentoo required
 dev-python/pygobject			cairo		# gentoo required
 dev-qt/qtbase				dbus		# gentoo required
 dev-qt/qtgui				dbus		# gentoo required
@@ -19,12 +19,11 @@ dev-qt/qtwidgets			dbus		# gentoo required
 media-gfx/graphviz			cairo		# gentoo required
 media-libs/gd				fontconfig	# gentoo required
 media-libs/gegl				cairo		# gentoo required
-media-libs/libopenshot			qt5		# gentoo required
 media-libs/libpulse			dbus		# gentoo required
 media-libs/libsdl			joystick	# gentoo required
 media-libs/libsdl2			joystick	# gentoo required
 media-libs/mlt				jack		# gentoo required
-media-libs/opencv			qt5		# gentoo required
+media-libs/opencv			qt6		# gentoo required
 media-libs/suil				gtk2		# gentoo required
 media-video/ffmpeg			opus		# gentoo required
 media-video/ffmpeg			theora		# gentoo required
@@ -42,15 +41,16 @@ sys-process/atop			-modules	# gentoo required [*]: make[1]: *** /lib/modules/<un
 app-text/texlive-core			xetex		# gentoo required
 app-text/xmlto				text		# gentoo required
 dev-libs/libdbusmenu			gtk3		# gentoo required
+dev-libs/libnl				utils		# gentoo required
 dev-libs/xmlsec				nss		# gentoo required
-dev-python/PyQt5			declarative	# gentoo required
-dev-python/PyQt5			network		# gentoo required
-dev-python/PyQt5			printsupport	# gentoo required
-dev-python/PyQt5			webchannel	# gentoo required
-dev-python/PyQt5			widgets		# gentoo required
-dev-python/PyQt6			qml		# gentoo required
-dev-python/PyQt6			quick		# gentoo required
-dev-python/PyQt6			webchannel	# gentoo required
+dev-python/pyqt5			declarative	# gentoo required
+dev-python/pyqt5			network		# gentoo required
+dev-python/pyqt5			printsupport	# gentoo required
+dev-python/pyqt5			webchannel	# gentoo required
+dev-python/pyqt5			widgets		# gentoo required
+dev-python/pyqt6			qml		# gentoo required
+dev-python/pyqt6			quick		# gentoo required
+dev-python/pyqt6			webchannel	# gentoo required
 dev-qt/qtmultimedia			widgets		# gentoo required
 dev-qt/qtwebchannel			qml		# gentoo required
 dev-qt/qtwebengine			widgets		# gentoo required
@@ -135,12 +135,11 @@ media-sound/pulseaudio			bluetooth daemon
 media-sound/pulseaudio-daemon		alsa bluetooth dbus oss
 media-video/vlc				gui projectm run-as-root vlm
 net-analyzer/tcpdump			-chroot
-net-analyzer/wireshark			qt5
 net-fs/samba				client
 net-libs/gnutls				openpgp openssl tls-heartbeat tools
 net-misc/unison				-gtk
 net-vpn/openvpn				iproute2
-net-wireless/wpa_supplicant		qt5
+net-wireless/wpa_supplicant		qt6
 sci-calculators/qalculate-gtk		-gnome
 sys-apps/fwupd				bluetooth flashrom nvme synaptics uefi
 sys-apps/iproute2			iptables
@@ -256,7 +255,7 @@ sys-apps/fwupd				minimal		# requires: ( sys-apps/systemd | sys-auth/elogind )
 
 #{GOS} media-libs/mesa			-vulkan		# media-libs/vulkan-loader
 #{GOS} media-libs/mesa			-vulkan-overlay	# media-libs/vulkan-loader
-#{GOS} net-wireless/wpa_supplicant	-qt5		# dev-qt/qtcore
+#{GOS} net-wireless/wpa_supplicant	-qt6		# dev-qt/qtcore
 #{GOS} x11-base/xorg-server		-xnest		# keep size down
 #{GOS} x11-base/xorg-server		-xvfb		# keep size down
 
