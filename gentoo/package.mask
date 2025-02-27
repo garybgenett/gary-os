@@ -18,6 +18,8 @@
 games-misc/fortune-mod-mormon
 games-misc/fortune-mod-scriptures
 
+>=games-emulation/nestopia-1.53		# gentoo required [nestopia-1.53.* / nestopia-1.52.*]: needs >=x11-libs/fltk-1.4:1=[opengl]
+
 ################################################################################
 # end of file
 ################################################################################
