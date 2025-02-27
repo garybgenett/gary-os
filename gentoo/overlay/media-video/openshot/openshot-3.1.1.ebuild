@@ -1,1 +1,1 @@
-openshot-3.2.1.ebuild
+openshot-3.3.0.ebuild

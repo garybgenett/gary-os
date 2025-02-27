@@ -1,1 +1,1 @@
-libopenshot-audio-0.3.3.ebuild
+libopenshot-audio-0.4.0.ebuild
