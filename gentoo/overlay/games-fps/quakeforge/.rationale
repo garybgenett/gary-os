@@ -1,2 +1,2 @@
 #>>> removed package
-# 2024-01-11 17:04:37 +0100 f7fdfdaeec3764929686064a6054c38a6b2d7788 Move {app-doc → app-text}/doxygen
+# 2025-02-14 17:16:43 +0100 b4af72bd4f5af0bb23280e0b6d03dc09c839d591 games-fps/quakeforge: Fix incorrect REPLACING_VERSIONS usage
