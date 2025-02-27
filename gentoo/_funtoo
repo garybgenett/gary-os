@@ -19,10 +19,8 @@ next 124ba4830d5b46bf2d8797c28b8b7929d7f35287
 19a28412bab445e6c35db9fd14702efbbef22c74
 # 2024-04-19 13:09:05 +0100 0cd4481bf0f054348dc784cfcdb1e2c32c2152bd dev-cpp/tbb: add 2021.12.0
 0cd4481bf0f054348dc784cfcdb1e2c32c2152bd
+# 2025-02-15 12:39:12 +0100 8887b0e45e5c2accd150920bbf876b86e65d402b dev-python/python-jose: Remove upstream dep pins, optimize testing
+8887b0e45e5c2accd150920bbf876b86e65d402b
 
 #>>> gentoo (update)
-
-# 2024-10-04 10:09:58 +0200 2985dac46b96286bfc036d4a6c669ff6ee65b0b6 net-dns/pdns-recursor: drop 5.0.8
-2985dac46b96286bfc036d4a6c669ff6ee65b0b6
-# 2025-02-15 12:39:12 +0100 8887b0e45e5c2accd150920bbf876b86e65d402b dev-python/python-jose: Remove upstream dep pins, optimize testing
 8887b0e45e5c2accd150920bbf876b86e65d402b
