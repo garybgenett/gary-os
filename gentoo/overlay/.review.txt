@@ -11,12 +11,12 @@ Only in ./app-misc/atomicwallet/.source: .null
 Only in ./app-misc/atomicwallet: .rationale
 Only in ./app-misc/atomicwallet: .source
 Only in ./app-misc/atomicwallet: Manifest
-Only in ./app-misc/atomicwallet: atomicwallet-2.76.14.ebuild
+Only in ./app-misc/atomicwallet: atomicwallet-2.90.6.ebuild
 diff :: app-misc/atomicwallet [files] ==================================================================================
 
 ./app-misc/atomicwallet:
 Manifest
-atomicwallet-2.76.14.ebuild
+atomicwallet-2.90.6.ebuild
 
 ------------------------------------------------------------------------------------------------------------------------
 diff :: games-fps/dhewm3 [rationale] ===================================================================================
