@@ -8,8 +8,8 @@ inherit autotools flag-o-matic readme.gentoo-r1 toolchain-funcs
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/quakeforge/quakeforge.git"
-#>>>	2023-08-13 18:06:28 +0900 a3e99435df21f37fd39ad154ae3c4eeac13c34f1 [vulkan] Clean up lighting shaders a little
-	EGIT_COMMIT="a3e99435df21f37fd39ad154ae3c4eeac13c34f1"
+#>>>	2025-02-18 14:33:56 +0900 0df9a1e1e7f409e25d8d698957caac16358c17d7 [ruamoko] Update function names for IMP button/axis listeners
+	EGIT_COMMIT="0df9a1e1e7f409e25d8d698957caac16358c17d7"
 	KEYWORDS="~amd64 ~x86"
 #>>>
 else

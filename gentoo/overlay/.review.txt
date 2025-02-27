@@ -454,24 +454,24 @@ quake1-data-2.40-r1.ebuild
 ------------------------------------------------------------------------------------------------------------------------
 diff :: games-fps/quakeforge [rationale] ===============================================================================
 #>>> removed package
-# 2024-01-11 17:04:37 +0100 f7fdfdaeec3764929686064a6054c38a6b2d7788 Move {app-doc → app-text}/doxygen
+# 2025-02-14 17:16:43 +0100 b4af72bd4f5af0bb23280e0b6d03dc09c839d591 games-fps/quakeforge: Fix incorrect REPLACING_VERSIONS usage
 diff :: games-fps/quakeforge [source] ==================================================================================
 diff :: games-fps/quakeforge [target] ==================================================================================
 Only in ./games-fps/quakeforge: .keep
 Only in ./games-fps/quakeforge: .rationale
 Only in ./games-fps/quakeforge: .source
 diff -u -U10 -r ./games-fps/quakeforge/.source/Manifest ./games-fps/quakeforge/Manifest
---- ./games-fps/quakeforge/.source/Manifest	2024-04-26 22:21:36.414727245 -0000
-+++ ./games-fps/quakeforge/Manifest	2024-04-26 22:13:51.616747215 -0000
+--- ./games-fps/quakeforge/.source/Manifest	2025-02-22 02:04:49.292877890 -0000
++++ ./games-fps/quakeforge/Manifest	2025-02-21 22:01:33.995086589 -0000
 @@ -1 +1,2 @@
 -DIST quakeforge-0.7.2_p20210722.tar.gz 3157720 BLAKE2B 9757ed10a5f78d9b5f09029c149c3fc121daf4bef2cc5a1687d00d2d85c36065663407318478c801a4ae62dee03713e35009c91f590d1686678756da1aab7824 SHA512 1c3778ff73cffbb5cadc33e0b544935f822a0f983ed67945dbbd7f6624752b68e3da46f1836f38f22cbae9a9ac191eeacc256ca5da540c5448dfc1fb56b68aa4
 +AUX quakeforge-0.7.2_p20210722-skipped-tests.patch 491 BLAKE2B e9124ae690ee78825b921655f0ad297386a46b66151bcb7f0e9eff2bfc1a3f533b1b0beebdc863399519a104c098d4d2387fefa9a69d0dcfef7b442a7a5d73be SHA512 72e4a8f04cbc46f066fc3543a069a9d94a275c8f1a67028d90791c4c21d92ddd5e912b724c916ddee712b736fc098c747705f11619da2fc8162a8ad818c3b362
-+EBUILD quakeforge-9999.ebuild 4338 BLAKE2B b4869deda886e38025bc747363f58757d2bac9dc9377bccdaa660c9a401cb5de3a5b3d1eb11653d0c3dc8dc1ef989bdcbf30d8b31083144ecd74b78ad6ae42ec SHA512 b7db29a29669e11807643a983c9ac682da1857c4e3671f5157b8bf3451f8a1725a1e6418b2dfa056e95e8a11dbb4bfbec8d4721dcddace13cdd8cc469460768b
++EBUILD quakeforge-9999.ebuild 4356 BLAKE2B d6f43b395ae9aeef47a4dbf3ddd46cb04307a650fbe694104fd63a197d3528383fd03922424a930f209f8f46ab0df0de4057204578aaac2e42f6863f94b6b344 SHA512 a04b2e791c703f671d175ee1e0c55211ffdd448c184b6e3bd46cef02a367ac8232efcb8cc398df57543d3de0a3b336d3d15b7525c1343cb590960c04e928ea1e
 Only in ./games-fps/quakeforge/.source: metadata.xml
 Only in ./games-fps/quakeforge/.source: quakeforge-0.7.2_p20210722-r2.ebuild
 diff -u -U10 -r ./games-fps/quakeforge/.source/quakeforge-9999.ebuild ./games-fps/quakeforge/quakeforge-9999.ebuild
---- ./games-fps/quakeforge/.source/quakeforge-9999.ebuild	2024-04-26 22:21:36.554725429 -0000
-+++ ./games-fps/quakeforge/quakeforge-9999.ebuild	2024-04-26 22:13:31.885002023 -0000
+--- ./games-fps/quakeforge/.source/quakeforge-9999.ebuild	2025-02-22 02:04:49.292877890 -0000
++++ ./games-fps/quakeforge/quakeforge-9999.ebuild	2025-02-21 22:01:21.145140139 -0000
 @@ -1,20 +1,24 @@
  # Copyright 1999-2024 Gentoo Authors
  # Distributed under the terms of the GNU General Public License v2
@@ -483,8 +483,8 @@ diff -u -U10 -r ./games-fps/quakeforge/.source/quakeforge-9999.ebuild ./games-fp
  if [[ ${PV} == 9999 ]]; then
  	inherit git-r3
  	EGIT_REPO_URI="https://github.com/quakeforge/quakeforge.git"
-+#>>>	2023-08-13 18:06:28 +0900 a3e99435df21f37fd39ad154ae3c4eeac13c34f1 [vulkan] Clean up lighting shaders a little
-+	EGIT_COMMIT="a3e99435df21f37fd39ad154ae3c4eeac13c34f1"
++#>>>	2025-02-18 14:33:56 +0900 0df9a1e1e7f409e25d8d698957caac16358c17d7 [ruamoko] Update function names for IMP button/axis listeners
++	EGIT_COMMIT="0df9a1e1e7f409e25d8d698957caac16358c17d7"
 +	KEYWORDS="~amd64 ~x86"
 +#>>>
  else
