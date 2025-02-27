@@ -88,7 +88,7 @@ RDEPEND="
 		lz4? ( dev-python/lz4[${PYTHON_USEDEP}] )
 		lzo? ( >=dev-python/python-lzo-0.7.0[${PYTHON_USEDEP}] )
 		oauth? ( dev-python/oauthlib[${PYTHON_USEDEP}] )
-		opengl? ( dev-python/pyopengl_accelerate[${PYTHON_USEDEP}] )
+		opengl? ( dev-python/pyopengl-accelerate[${PYTHON_USEDEP}] )
 		webcam? (
 			dev-python/numpy[${PYTHON_USEDEP}]
 			dev-python/pyinotify[${PYTHON_USEDEP}]
@@ -128,7 +128,7 @@ python_prepare_all() {
 		sed -r -e '/pam_ENABLED/s/DEFAULT/False/' \
 			-e 's/^(xdg_open)_ENABLED = .*/\1_ENABLED = False/' \
 			-i setup.py || die
-		PATCHES+=( "${FILESDIR}"/${PN}-4.4.6_xpra-4.4.6_minimal-features.patch )
+		PATCHES+=( "${FILESDIR}"/${PN}-4.4.6_minimal-features.patch )
 	fi
 
 	distutils-r1_python_prepare_all
