@@ -1,1 +1,1 @@
-libopenshot-0.3.3.ebuild
+libopenshot-0.4.0.ebuild
