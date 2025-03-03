@@ -508,10 +508,10 @@ function print_info {
 		echo -en " "; date --iso=seconds
 		echo -en "${RESET}"
 		${QUIET} && QUIET="false" ${FUNCNAME} marker
-	elif [[ ${1} == "warning" ]]; then
+	elif [[ ${1} == "notice" ]]; then
 		${QUIET} && QUIET="false" ${FUNCNAME} marker
 		echo -en "${NOTES}"
-		echo -en ">>> GARYOS BUILD SCRIPT: WARNING! <<<"
+		echo -en ">>> GARYOS BUILD SCRIPT: NOTICE! <<<"
 		echo -en "${OTHER}"
 		echo -en " "; date --iso=seconds
 		echo -en "${RESET}"
@@ -865,7 +865,7 @@ function EXIT {
 		fi
 		print_info marker
 		if [[ ${EXIT} != 1 ]]; then
-			print_info warning
+			print_info notice
 		else
 			print_info error
 		fi
