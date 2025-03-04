@@ -1802,7 +1802,7 @@ function hist-grep {
 			sort |
 			${GREP} -a "${HIST_FINDS}"
 	else
-		${GREP} "${HIST_FINDS}" ${HOME}/.history/shell/${HOSTNAME}.${USER}.$(basename ${SHELL}).${HIST_DATES/#.}* |
+		${GREP} -a "${HIST_FINDS}" ${HOME}/.history/shell/${HOSTNAME}.${USER}.$(basename ${SHELL}).${HIST_DATES/#.}* |
 			cut -d: -f2- |
 			sort |
 			uniq --count |
