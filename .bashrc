@@ -2621,6 +2621,7 @@ function mount-robust {
 	declare DEBUG="false"
 	declare TEST="false"
 	declare RO=
+	declare XP="false"; declare _XP="-!"
 	declare DM="false"
 	declare OV="false"
 	declare VC="false"
@@ -2631,6 +2632,7 @@ function mount-robust {
 	if [[ ${1} == DEBUG ]]; then	DEBUG="true";	shift; fi
 	if [[ ${1} == TEST ]]; then	TEST="true";	shift; fi
 	if [[ ${1} == -0 ]]; then	RO="ro,";	shift; fi
+	if [[ ${1} == ${_XP} ]]; then	XP="true";	shift; fi
 	if [[ ${1} == -d ]]; then	DM="true";	shift; fi
 	if [[ ${1} == -o ]]; then	OV="true";	shift; fi
 	if [[ ${1} == -v ]]; then	VC="true";	shift; fi
@@ -2638,6 +2640,15 @@ function mount-robust {
 	if [[ ${1} == -u ]]; then	UN="true";	shift; fi
 	if [[ -n ${1} ]]; then		DEV="${1}";	shift; fi
 	if [[ -n ${1} ]]; then		DIR="${1}";	shift; fi
+	if [[ ${DEV} == --proc ]]; then
+		declare PROCESS="$(lsof | ${GREP} "[[:space:]]${DIR}([/].+)?$")"
+		if [[ -n ${PROCESS} ]]; then
+			echo -en "- <Processes Still Running In Mount!>\n" 1>&2
+			echo -en "${PROCESS}\n"
+			return 1
+		fi
+		return 0
+	fi
 	if [[ ${DEV} == --dev ]]; then
 		declare DEV_DIRS=(
 			/dev
@@ -2656,12 +2667,13 @@ function mount-robust {
 		declare DEV_DIR=
 		if ! ${UN} ]]; then
 			for DEV_DIR in ${DEV_DIRS[@]}; do
-				${MKDIR} ${DIR}${DEV_DIR}			|| return 1
-				${FUNCNAME} ${DEV_DIR} ${DIR}${DEV_DIR}		|| return 1
+				${MKDIR} ${DIR}${DEV_DIR}				|| return 1
+				${FUNCNAME} ${_XP} ${DEV_DIR} ${DIR}${DEV_DIR}		|| return 1
 			done
 		else
+			${FUNCNAME} --proc ${DIR}					|| return 1
 			for DEV_DIR in $(eval echo "{$((${#DEV_DIRS[@]}-1))..0}"); do
-				${FUNCNAME} -u ${DIR}${DEV_DIRS[${DEV_DIR}]}	|| return 1
+				${FUNCNAME} ${_XP} -u ${DIR}${DEV_DIRS[${DEV_DIR}]}	|| return 1
 			done
 		fi
 		return 0
@@ -2878,11 +2890,8 @@ function mount-robust {
 			elif [[ -b ${DEV} ]]; then
 				TRUE_DIR="${DEV_TGT}"
 			fi
-			declare PROCESS="$(lsof | ${GREP} "[[:space:]]${TRUE_DIR}([/].+)?$")"
-			if [[ -n ${PROCESS} ]]; then
-				echo -en "- <Processes Still Running In Mount!>\n" 1>&2
-				echo -en "${PROCESS}\n"
-				return 1
+			if ! ${XP}; then
+				${FUNCNAME} --proc ${TRUE_DIR}	|| return 1
 			fi
 			if ${IS_ZFS}; then
 				if ! ${DEBUG}; then
