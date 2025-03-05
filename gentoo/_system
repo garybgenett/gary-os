@@ -802,7 +802,7 @@ function mount_dev_dirs {
 #>>>
 				EXIT -1
 			else
-				EXIT -X
+				EXIT -0
 			fi
 		else
 			if ${DO_TMPFS} && ${IS_TMPFS}; then
@@ -854,35 +854,26 @@ trap "EXIT 1" SIGHUP SIGINT SIGKILL SIGTERM
 
 function EXIT {
 	declare EXIT="0"
-	if [[ ${1} != 0 ]] && [[ ${1} != -0 ]]; then
-		if [[ ${1} == -X ]]; then
-			EXIT="X" && shift
-		elif [[ ${1} == -1 ]]; then
+	if [[ ${1} == 0 ]]; then
+		print_info marker
+		print_info success
+		print_info marker
+	elif [[ ${1} == -0 ]]; then
+		print_info marker
+		print_info notice
+		print_info marker
+	else
+		if [[ ${1} == -1 ]]; then
 			EXIT="1" && shift
 		else
 			EXIT="${1}" && shift
 			mount_dev_dirs -u || EXIT -1
 		fi
 		print_info marker
-		if [[ ${EXIT} != 1 ]]; then
-			print_info notice
-		else
-			print_info error
-		fi
-		print_info marker
-	else
-		if [[ ${1} == -0 ]]; then
-			EXIT="0" && shift
-		fi
-		print_info marker
-		print_info success
+		print_info error
 		print_info marker
 	fi
-	if [[ ${EXIT} == "X" ]]; then
-		exit 0
-	else
-		exit ${EXIT}
-	fi
+	exit ${EXIT}
 }
 
 ########################################
@@ -958,15 +949,15 @@ then
 	mount_dev_dirs -u	|| EXIT 1
 	declare DOIT="${1}"	&& shift
 	${DOIT} "${@}"		|| EXIT -1
-	EXIT -0
+	EXIT 0
 fi
 
 ########################################
 
 if [[ -x ${1} ]]; then
 	declare DOIT="${1}"	&& shift
-	${DOIT} ${_SOUL} "${@}"	|| EXIT -1
-	EXIT -0
+	${DOIT} ${_SOUL} "${@}"	|| EXIT 1
+	EXIT 0
 fi
 
 ################################################################################
@@ -1469,7 +1460,7 @@ if [[ ${1} == -i ]]; then
 			echo -en "\n"
 			echo -en ">>> READY TO RUN THE BUILD WITHOUT 'DOFAST' ENABLED <<<\n"
 			echo -en "\n"
-			EXIT -X
+			EXIT -0
 		fi
 	fi
 	if ${_BLD}; then
