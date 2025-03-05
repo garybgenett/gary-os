@@ -988,12 +988,12 @@ if [[ ${1} == -s ]]; then
 	fi
 	shift
 	mount_dev_dirs					|| EXIT 1
+	#note: ensuring configuration is up-to-date
+	${_SOUL} ${QUIET_OPT} ${TOOR} -r	2>&1 |
+		if ${QUIET}; then prompt -t; else cat; fi
+		[[ ${PIPESTATUS[0]} == 0 ]]	|| EXIT 1
 	if [[ ${1} == -e ]]; then
 		shift
-		#note: ensuring configuration is up-to-date
-		${_SOUL} ${QUIET_OPT} ${TOOR} -r	2>&1 |
-			if ${QUIET}; then prompt -t; else cat; fi
-			[[ ${PIPESTATUS[0]} == 0 ]]	|| EXIT 1
 		expect_wrapper emerge ${_ASK}		\
 			${EMERGE_TREE_OPTS}		\
 			--selective=n			\
