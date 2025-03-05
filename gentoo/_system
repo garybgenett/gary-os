@@ -779,39 +779,13 @@ function mount_dev_dirs {
 		print_info umount
 		safe_env killall --verbose -9 gpg-agent 2>&1 |
 			if ${QUIET}; then prompt -t; else cat; fi
-		declare LSOF="$(
-			lsof |
-			${GREP} "${TARGET}" |
-			${GREP} -v "${TARGET}${GENDIR}.log$"
-		)"
-		if [[ -n ${LSOF} ]]; then
-			echo -en "\n"
-			echo -en ">>> THERE ARE STILL PROCESSES IN THE CHROOT <<<\n"
-			echo -en ">>> SKIPPING UNMOUNT <<<\n"
-			echo -en "\n"
-			echo "${LSOF}" | ${GREP} "${TARGET}" 2>&1 #>>> |
-#>>>				if ${QUIET}; then prompt -t; else cat; fi
-#>>>				if ! ${QUIET}; then echo -en "\n"; fi
-				echo -en "\n"
-#>>>
-			if [[ -n $(mount | ${GREP} "${TARGET}" 2>&1) ]]; then
-				mount | ${GREP} "${TARGET}" 2>&1 #>>> |
-#>>>					if ${QUIET}; then prompt -t; else cat; fi
-#>>>					if ! ${QUIET}; then echo -en "\n"; fi
-					echo -en "\n"
-#>>>
-				EXIT -1
-			else
-				EXIT -0
-			fi
-		else
-			if ${DO_TMPFS} && ${IS_TMPFS}; then
-				umount -rv ${TARGET}${TMPDIR}						|| return 1
-			fi
-			mount-robust -u --dev ${TARGET}							2>&1 |
-				if ${QUIET}; then prompt -t; else cat; fi
-				[[ ${PIPESTATUS[0]} == 0 ]]						|| return 1
+		if ${DO_TMPFS} && ${IS_TMPFS}; then
+			umount -rv ${TARGET}${TMPDIR}							|| return 1
 		fi
+		mount-robust -u --dev ${TARGET}								2>&1 |
+			if ${QUIET}; then prompt -t; else cat; fi
+#>>>			[[ ${PIPESTATUS[0]} == 0 ]]							|| return 1
+			[[ ${PIPESTATUS[0]} == 0 ]]							|| EXIT -1
 		print_info marker
 	fi
 	return 0
