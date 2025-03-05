@@ -2641,7 +2641,19 @@ function mount-robust {
 	if [[ -n ${1} ]]; then		DEV="${1}";	shift; fi
 	if [[ -n ${1} ]]; then		DIR="${1}";	shift; fi
 	if [[ ${DEV} == --proc ]]; then
-		declare PROCESS="$(lsof | ${GREP} "[[:space:]]${DIR}([/].+)?$")"
+		declare PROCESS="$(
+			lsof \
+			| ${GREP} "[[:space:]]${DIR}([/].+)?$" \
+			| if [[ -n "${@}" ]]; then
+				eval ${GREP} $(
+					for FILE in "${@}"; do
+						echo -en " -v \"${FILE}$\""
+					done
+				)
+			else
+				cat
+			fi
+		)"
 		if [[ -n ${PROCESS} ]]; then
 			echo -en "- <Processes Still Running In Mount!>\n" 1>&2
 			echo -en "${PROCESS}\n"
@@ -2671,7 +2683,7 @@ function mount-robust {
 				${FUNCNAME} ${_XP} ${DEV_DIR} ${DIR}${DEV_DIR}		|| return 1
 			done
 		else
-			${FUNCNAME} --proc ${DIR}					|| return 1
+			${FUNCNAME} --proc ${DIR} "${@}"				|| return 1
 			for DEV_DIR in $(eval echo "{$((${#DEV_DIRS[@]}-1))..0}"); do
 				${FUNCNAME} ${_XP} -u ${DIR}${DEV_DIRS[${DEV_DIR}]}	|| return 1
 			done
