@@ -609,10 +609,6 @@ if [[ ${UNAME} == "Windows" ]]; then
 		${RSYNC_U} \
 			root@server.garybgenett.net:{/.g/_data/zactive/.static/{.X*,.bash*,.htop*,.vim*,scripts/updebian},${COMPOSER}} \
 			${HOME}/Desktop/_wsl/
-		${SED} -i \
-			-e "s|(81[x]30)[+]13[+]13|\1|g" \
-			-e "s|([-]0[+]0)|+1800+1920 # \1|g" \
-			${HOME}/Desktop/_wsl/.Xdefaults
 		if [[ -d ${HOME}/Desktop/composer ]]; then
 			${RSYNC_U} ${HOME}/Desktop/_wsl/Makefile ${HOME}/Desktop/composer/
 		fi
