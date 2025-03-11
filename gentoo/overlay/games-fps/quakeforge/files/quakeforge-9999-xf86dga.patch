@@ -1,0 +1,89 @@
+diff -r -u -U10 quakeforge-9999/config.d/x11.m4 quakeforge-9999.new/config.d/x11.m4
+--- quakeforge-9999/config.d/x11.m4	2025-03-10 17:25:54.861443175 -0700
++++ quakeforge-9999.new/config.d/x11.m4	2025-03-10 17:31:29.439794974 -0700
+@@ -103,30 +103,30 @@
+ 	AS_HELP_STRING([--disable-dga], [do not use XFree86 DGA extension]),
+ 	HAVE_DGA=$enable_dga, HAVE_DGA=auto)
+ if test "x$HAVE_DGA" != xno; then
+ 	save_CPPFLAGS="$CPPFLAGS"
+ 	CPPFLAGS="$X_CFLAGS $CPPFLAGS"
+ 	AC_CHECK_HEADER(X11/extensions/Xxf86dga.h,
+ 		dnl Make sure the library works
+ 		[AC_CHECK_LIB(Xxf86dga, XF86DGAQueryVersion,
+ 			AC_DEFINE(HAVE_DGA, 1, [Define if you have the XFree86 DGA extension])
+ 			HAVE_DGA=yes
+-			DGA_LIBS="-lXxf86dga",,
++			DGA_LIBS="-llibXxf86dga",,
+ 			[$X_LIBS -lXext -lX11 $X_EXTRA_LIBS]
+ 		)],
+-		[AC_CHECK_HEADER(X11/extensions/xf86dga.h,
++		[AC_CHECK_HEADER(X11/extensions/xf86dga1.h,
+ 			dnl Make sure the library works
+ 			[AC_CHECK_LIB(Xxf86dga, XF86DGAQueryVersion,
+ 				AC_DEFINE(HAVE_DGA, 1, [Define if you have the XFree86 DGA extension])
+ 				AC_DEFINE(DGA_OLD_HEADERS, 1, [Define if DGA uses old headers])
+ 				HAVE_DGA=yes
+-				DGA_LIBS="-lXxf86dga",,
++				DGA_LIBS="-llibXxf86dga",,
+ 				[$X_LIBS -lXext -lX11 $X_EXTRA_LIBS]
+ 			)],
+ 			[],
+ 			[#include <X11/Xlib.h>]
+ 		)],
+ 		[#include <X11/Xlib.h>]
+ 	)
+ 	CPPFLAGS="$save_CPPFLAGS"
+ fi
+ AC_SUBST(DGA_LIBS)
+diff -r -u -U10 quakeforge-9999/libs/video/targets/dga_check.c quakeforge-9999.new/libs/video/targets/dga_check.c
+--- quakeforge-9999/libs/video/targets/dga_check.c	2025-03-10 17:25:54.936442132 -0700
++++ quakeforge-9999.new/libs/video/targets/dga_check.c	2025-03-10 17:30:28.906635109 -0700
+@@ -29,21 +29,21 @@
+ #ifdef HAVE_CONFIG_H
+ # include "config.h"
+ #endif
+ 
+ #include <stdlib.h>
+ #include <X11/Xlib.h>
+ #include <X11/Xproto.h>
+ 
+ #ifdef HAVE_DGA
+ # ifdef DGA_OLD_HEADERS
+-#  include <X11/extensions/xf86dga.h>
++#  include <X11/extensions/xf86dga1.h>
+ #  include <X11/extensions/xf86dgastr.h>
+ # else
+ #  include <X11/extensions/Xxf86dga.h>
+ #  include <X11/extensions/xf86dgaproto.h>
+ # endif
+ # ifndef XDGA_MAJOR_VERSION
+ #  ifdef XF86DGA_MAJOR_VERSION
+ #   define XDGA_MAJOR_VERSION XF86DGA_MAJOR_VERSION
+ #  else
+ #   error "Neither XDGA_MAJOR_VERSION nor XF86DGA_MAJOR_VERSION found."
+diff -r -u -U10 quakeforge-9999/libs/video/targets/in_x11.c quakeforge-9999.new/libs/video/targets/in_x11.c
+--- quakeforge-9999/libs/video/targets/in_x11.c	2025-03-10 17:25:54.936442132 -0700
++++ quakeforge-9999.new/libs/video/targets/in_x11.c	2025-03-10 17:30:28.906635109 -0700
+@@ -49,21 +49,21 @@
+ #include <X11/Xlib.h>
+ #include <X11/keysym.h>
+ #include <X11/XF86keysym.h>
+ #include <X11/XKBlib.h>
+ #include <X11/Sunkeysym.h>
+ #include <X11/Xutil.h>
+ #include <X11/Xatom.h>
+ 
+ #ifdef HAVE_DGA
+ # ifdef DGA_OLD_HEADERS
+-#  include <X11/extensions/xf86dga.h>
++#  include <X11/extensions/xf86dga1.h>
+ # else
+ #  include <X11/extensions/Xxf86dga.h>
+ # endif
+ #endif
+ #ifdef HAVE_XI2
+ # include <X11/extensions/XInput2.h>
+ #endif
+ #ifdef HAVE_XFIXES
+ # include <X11/extensions/Xfixes.h>
+ #endif
