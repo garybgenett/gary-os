@@ -779,13 +779,14 @@ function mount_dev_dirs {
 		print_info umount
 		safe_env killall --verbose -9 gpg-agent 2>&1 |
 			if ${QUIET}; then prompt -t; else cat; fi
-		if ${DO_TMPFS} && ${IS_TMPFS}; then
-			umount -rv ${TARGET}${TMPDIR}							|| return 1
-		fi
 		mount-robust -u --dev ${TARGET} ${GENDIR}.log						2>&1 |
 			if ${QUIET}; then prompt -t; else cat; fi
 #>>>			[[ ${PIPESTATUS[0]} == 0 ]]							|| return 1
 			[[ ${PIPESTATUS[0]} == 0 ]]							|| EXIT -1
+		if ${DO_TMPFS} && ${IS_TMPFS}; then
+#>>>			umount -rv ${TARGET}${TMPDIR}							|| return 1
+			umount -rv ${TARGET}${TMPDIR}							|| EXIT -1
+		fi
 		print_info marker
 	fi
 	return 0
