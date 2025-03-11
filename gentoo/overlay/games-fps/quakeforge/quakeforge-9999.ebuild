@@ -12,6 +12,14 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_COMMIT="0df9a1e1e7f409e25d8d698957caac16358c17d7"
 	KEYWORDS="~amd64 ~x86"
 #>>>
+#	https://bugs.gentoo.org/880545 / checking for c23... configure: error: QuakeForge requires C23 to compile
+#	https://stackoverflow.com/questions/9427145/how-do-i-remove-the-following-implicit-declaration-of-function-warnings / configure: error: GNU flex is required but was not found
+#>>>
+	append-flags "-std=c23 -D_POSIX_C_SOURCE=1"
+	PATCHES=(
+		"${FILESDIR}/${PN}-9999-xf86dga.patch"
+	)
+#>>>
 else
 	QUAKEFORGE_COMMIT=""
 	SRC_URI="https://github.com/quakeforge/quakeforge/archive/${QUAKEFORGE_COMMIT}.tar.gz -> ${P}.tar.gz"
@@ -24,8 +32,13 @@ HOMEPAGE="http://www.quakeforge.net/"
 
 LICENSE="GPL-2+"
 SLOT="0"
-IUSE="alsa +client debug doc flac jack ncurses oss png sdl vorbis vulkan wildmidi zlib"
+#>>>IUSE="alsa +client debug doc flac jack ncurses oss png sdl vorbis vulkan wildmidi zlib"
+IUSE="alsa +client debug dga doc flac jack ncurses oss png sdl vorbis vulkan wildmidi zlib"
+#>>>
+REQUIRED_USE="client dga jack vulkan"
+#>>>
 
+#>>>		dga? ( x11-libs/libXxf86dga )
 RDEPEND="
 	client? (
 		media-libs/libsamplerate
@@ -37,6 +50,7 @@ RDEPEND="
 		x11-libs/libXi
 		x11-libs/libXxf86vm
 		alsa? ( media-libs/alsa-lib )
+		dga? ( x11-libs/libXxf86dga )
 		flac? ( media-libs/flac:= )
 		jack? ( virtual/jack )
 		sdl? ( media-libs/libsdl[sound] )
@@ -81,6 +95,7 @@ src_configure() {
 		usex client $(use_enable ${1}) --disable-${1}
 	}
 
+#>>>		--disable-dga
 	local econfargs=(
 		$(qf_client alsa)
 		$(qf_client flac)
@@ -98,7 +113,7 @@ src_configure() {
 		$(use_enable zlib)
 		$(use_with client x)
 		--disable-Werror
-		--disable-dga
+		$(use_enable dga)
 		--disable-simd # all this does is append -mavx2 and similar
 		--enable-xdg
 		# non-x11 clients are mostly abandoned/broken (SDL1 still useful for pulseaudio)

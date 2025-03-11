@@ -160,6 +160,7 @@ www-client/firefox			-bindist
 
 games-fps/doom3				-dedicated
 games-fps/doom3-ducttape		-dedicated
+games-fps/quakeforge			client jack vulkan	# gentoo required
 
 ########################################
 
