@@ -32,6 +32,8 @@ app-mobilephone/scrcpy			~amd64		# gentoo required
 app-misc/taskd				~amd64		# gentoo required
 app-misc/timew				~amd64		# gentoo required
 
+net-mail/safecat			~amd64		# gentoo required [net-mail/safecat-1.13-r1 / net-mail/safecat-1.13-r2]: substdio.h:12:64: error: initialization of 'int (*)()' from incompatible pointer type 'ssize_t (*)(int,  const void *, size_t)' {aka 'long int (*)(int,  const void *, long unsigned int)'} [-Wincompatible-pointer-types]
+
 #>>> net-im/discord			~amd64		# gentoo required
 net-im/slack				~amd64		# gentoo required
 net-im/zoom				~amd64		# gentoo required
@@ -44,7 +46,7 @@ app-misc/atomicwallet			~amd64		# gentoo required
 media-video/peek			~amd64		# gentoo required
 media-video/shotcut			~amd64		# gentoo required
 
-x11-plugins/gkrellsun			~amd64		# gentoo required [gkrellsun-1.0.0-r5 / gkrellsun-1.0.0-r6]: https://bugs.gentoo.org/901369
+x11-plugins/gkrellsun			~amd64		# gentoo required [gkrellsun-1.0.0-r5 / gkrellsun-1.0.0-r6]: https://bugs.gentoo.org/901369 / gkrellsun.c:20:15: error: expected ')' before '?' token
 
 ########################################
 # games
@@ -72,6 +74,10 @@ games-fps/quakeforge			~amd64		# gentoo required
 #{MOD} games-fps/doom3-data		~amd64		# gentoo required
 #{MOD} games-fps/doom3-roe		~amd64		# gentoo required
 #{MOD} games-fps/quake1-data		~amd64		# gentoo required
+
+################################################################################
+
+<dev-libs/libvformat-1.14		~amd64		# gentoo required [dev-libs/libvformat-1.13-r2 / dev-libs/libvformat-1.13-r3]: https://bugs.gentoo.org/919257 / vf_access_calendar.c:200:38: error: passing argument 1 of 'vf_date_string_to_time' from incompatible pointer type [-Wincompatible-pointer-types]
 
 ################################################################################
 # end of file

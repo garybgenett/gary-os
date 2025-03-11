@@ -2,7 +2,7 @@
 # portage package use file
 ################################################################################
 
-#{CMD} sed -i -r "s|^(#WORK[ ])?(.+[ ]gentoo[ ]required.*)$|#WORK \2|g" ./gentoo/package.*
+#{CMD} sed -i -r "s|^(#WORK[ ])?(.+[ ]gentoo[ ]required.*)$|#WORK \2|g" ./gentoo/package.* ./gentoo/sets/*
 
 ################################################################################
 
@@ -11,7 +11,6 @@ app-emulation/qemu			seccomp		# gentoo required
 app-text/poppler			cairo		# gentoo required
 app-text/poppler			qt5		# gentoo required
 dev-libs/boost				nls		# gentoo required
-dev-libs/quazip				qt6		# gentoo required
 dev-python/pygobject			cairo		# gentoo required
 dev-qt/qtbase				dbus		# gentoo required
 dev-qt/qtgui				dbus		# gentoo required
@@ -24,7 +23,6 @@ media-libs/libsdl			joystick	# gentoo required
 media-libs/libsdl2			joystick	# gentoo required
 media-libs/mlt				jack		# gentoo required
 media-libs/opencv			qt6		# gentoo required
-media-libs/suil				gtk2		# gentoo required
 media-video/ffmpeg			opus		# gentoo required
 media-video/ffmpeg			theora		# gentoo required
 net-misc/curl				-gnutls		# gentoo required
@@ -32,13 +30,12 @@ net-misc/curl				http2		# gentoo required
 sys-apps/fwupd				-introspection	# gentoo required
 sys-libs/gdbm				berkdb		# gentoo required
 
-media-video/vlc				-vaapi		# gentoo required [*]: https://bugs.gentoo.org/864721
+app-arch/sharutils			nls		# gentoo required [app-arch/sharutils-4.15.2-r3]: https://bugs.gentoo.org/900248 / uuencode.c:204:3: error: implicit declaration of function 'bindtextdomain' [-Wimplicit-function-declaration]
+media-sound/aumix			nls		# gentoo required [media-sound/aumix-2.9.1-r1]: https://bugs.gentoo.org/919216 / common.c:229:17: error: implicit declaration of function 'bind_textdomain_codeset' [-Wimplicit-function-declaration]
 sys-apps/coreutils			-gmp		# gentoo required [*]: configure: error: GMP not found, although --with-libgmp was specified. Try specifying --with-libgmp-prefix=DIR.
-sys-process/atop			-modules	# gentoo required [*]: make[1]: *** /lib/modules/<uname -r>/build: No such file or directory. Stop.
 
 ########################################
 
-app-text/texlive-core			xetex		# gentoo required
 app-text/xmlto				text		# gentoo required
 dev-libs/libdbusmenu			gtk3		# gentoo required
 dev-libs/libnl				utils		# gentoo required
@@ -54,22 +51,17 @@ dev-python/pyqt6			webchannel	# gentoo required
 dev-qt/qtmultimedia			widgets		# gentoo required
 dev-qt/qtwebchannel			qml		# gentoo required
 dev-qt/qtwebengine			widgets		# gentoo required
-media-libs/freetype			harfbuzz	# gentoo required
-media-libs/libsdl2			haptic		# gentoo required
 media-libs/libvpx			postproc	# gentoo required
 media-libs/mlt				frei0r		# gentoo required
 media-libs/opencv			contrib		# gentoo required
 media-libs/opencv			contribdnn	# gentoo required
+media-libs/sdl2-ttf			-harfbuzz	# gentoo required
 media-video/ffmpeg			chromium	# gentoo required
-media-video/ffmpeg			vpx		# gentoo required
 net-dns/dnsmasq				script		# gentoo required
 net-libs/gnutls				pkcs11		# gentoo required
 net-libs/nodejs				inspector	# gentoo required
 sys-kernel/installkernel		dracut		# gentoo required
 sys-libs/zlib				minizip		# gentoo required
-
-dev-lang/rust				profiler	# gentoo required
-virtual/rust				profiler	# gentoo required
 
 app-text/pandoc-cli			-server		# gentoo required [*]: https://forums.gentoo.org/viewtopic-t-1167497-start-0.html / <command line>: cannot satisfy -package-id pandoc-3.1.8-DMzFjk10EIKIM5idP0mC6d
 
@@ -176,15 +168,10 @@ sys-apps/fwupd				minimal		# requires: ( sys-apps/systemd | sys-auth/elogind )
 
 ################################################################################
 
-#{NEW} app-arch/libarchive		-lz4		# gentoo required
 #{NEW} dev-build/cmake			-gui		# gentoo required
-#{NEW} dev-vcs/git			-tk		# gentoo required
 #{NEW} media-libs/libsndfile		minimal		# gentoo required
 #{NEW} media-libs/tiff			-webp		# gentoo required
-#{NEW} net-misc/freerdp			-sdl		# gentoo required
 #{NEW} www-client/w3m			-imlib		# gentoo required
-
-#{NEW} media-libs/freetype		-harfbuzz	# gentoo required
 
 ################################################################################
 
