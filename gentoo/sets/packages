@@ -246,6 +246,7 @@ net-misc/unison:2.53
 app-text/grip
 app-text/pandoc-cli
 app-text/texlive
+dev-haskell/cabal-install		# gentoo required [app-text/pandoc-cli-0.1.1-r1]: https://bugs.gentoo.org/920879 / https://bugs.gentoo.org/916785 / <command line>: cannot satisfy -package-id pandoc-3.1.8-DMzFjk10EIKIM5idP0mC6d
 
 dev-lang/perl
 dev-libs/libpcre
