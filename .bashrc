@@ -588,7 +588,7 @@ alias zdesk="cd ${NULLDIR} ; clear ; ${LL}"
 if [[ ${UNAME} == "Windows" ]]; then
 #>>>	export DISPLAY="$(ip route show default | cut -d' ' -f3):0"
 	export DISPLAY="127.0.0.1:0"
-	declare DATDIR="$(ls -d ${HOME}/Desktop/data.*)"; if [[ -z ${DATDIR} ]]; then DATDIR="${HOME}/Desktop/data"; fi
+	declare DATDIR="$(ls -d ${HOME}/Desktop/data.*)"; if [[ -z ${DATDIR} ]]; then DATDIR="${HOME}/Desktop"; fi
 	declare STSBAS="${DATDIR}/${TODOS_MD_STATUS/#*\/data.work\/}${TODOS_MD_EXT}"; STSBAS="${STSBAS/%${TODOS_MD_EXT}}"
 	declare DOCDIR="${DATDIR}/documents"
 	declare BKMDIR="${DATDIR}/bookmarks"
@@ -597,7 +597,8 @@ if [[ ${UNAME} == "Windows" ]]; then
 	alias xterm="(urxvt &)"
 	alias xclock="${EDITOR} +/XClock.geometry ${HOME}/.Xdefaults ; (xclock &)"
 	alias open="/mnt/c/Windows/explorer.exe"
-	alias zdesk="cd ${HOME}/Desktop ; clear ; ${LL}"
+#>>>	alias zdesk="cd ${HOME}/Desktop ; clear ; ${LL}"
+	alias zdesk="cd ${DATDIR} ; clear ; ${LL}"
 	function wsl-link {
 		${RM} ${HOME}/Desktop
 		${LN} --relative "/mnt/c/Users/${USER}/Desktop" ${HOME}/
