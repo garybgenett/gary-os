@@ -1705,7 +1705,7 @@ Everything needed to perform these steps is in the [Repository] or the
 
   * `cd .setup/gentoo.make`
     * `(cd _builds; rm ./_gentoo.working; ln _gentoo ./_gentoo.working)`
-        * `(cd _builds/_gentoo.working; rm-all; ll)`
+        * `(cd _builds/_gentoo; rm-all; ll)`
         * `(cd _target/iso; vi ./.urls; ./.urls -f)`
         * `(cd _build/gentoo/gentoo; git pull; GIT_PAGER= git-list -n1)`
         * `(cd _build/gentoo/gentoo; ll ./sys-kernel/gentoo-sources)`
@@ -1717,7 +1717,7 @@ Everything needed to perform these steps is in the [Repository] or the
         * `vi ./gentoo/sets/*`
             * [ ] [Linux Kernel] versions
             * [ ] Review
-        * `vi ./gentoo/package.*`
+        * `vi ./gentoo/package.* ./gentoo/sets/*`
             * [ ] Command comments at top of [gentoo/package.use]
         * `(cd ./gentoo/overlay; ./.review -a)`
             * [ ] Review `.keep` packages
@@ -1831,7 +1831,7 @@ Everything needed to perform these steps is in the [Repository] or the
 *`}`*
 
   * `cd .setup/gentoo.make`
-    * `(cd _builds; rm ./_gentoo.boot; ln _gentoo.working ./_gentoo.boot)`
+    * `(cd _builds; rm ./_gentoo.boot; ln ../../_toor ./_gentoo.boot)`
     * `(cd _builds; rm ./_gentoo.working; ln ../../_toor ./_gentoo.working)`
     * `chmod -vR 755 ./gentoo/`
     * `vi ./gentoo/_funtoo`
