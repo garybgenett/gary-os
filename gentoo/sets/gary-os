@@ -168,10 +168,10 @@ app-arch/cabextract
 app-admin/eselect
 sys-apps/portage
 
-app-portage/eix
+#>>> app-portage/eix			# too many dependencies
 app-portage/gentoolkit
-app-portage/mirrorselect
-sys-kernel/genkernel
+#>>> app-portage/mirrorselect		# too many dependencies
+#>>> sys-kernel/genkernel		# too many dependencies
 
 ########################################
 # x11
@@ -197,7 +197,7 @@ dev-lang/perl
 
 dev-lang/python
 
-dev-tcltk/expect
+#>>> dev-tcltk/expect			# requires: dev-lang/tcl
 dev-vcs/git
 
 app-forensics/cmospwd
