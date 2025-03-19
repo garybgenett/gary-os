@@ -665,7 +665,7 @@ if [[ ${UNAME} == "Windows" ]]; then
 				${BKMDIR}/bookmarks.html
 			if ! diff ${DIFF_OPTS} \
 				$(ls ${BKMDIR}/bookmarks-*.html | tail -n1) \
-				${BKMDIR}/bookmarks.html
+				${BKMDIR}/bookmarks.html >/dev/null
 			then
 				${RSYNC_U} \
 					${BKMDIR}/bookmarks.html \
