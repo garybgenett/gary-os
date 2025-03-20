@@ -2383,11 +2383,11 @@ function _publish_export {
 	); do
 		declare SKIP="false"
 		declare SNUM=
-		for SNUM in ${RELEASE_SKIP[*]}; do
-			if [[ ${INDEX} == ${SNUM} ]]; then
-				SKIP="true"
-			fi
-		done
+#>>>		for SNUM in ${RELEASE_SKIP[*]}; do
+#>>>			if [[ ${INDEX} == ${SNUM} ]]; then
+#>>>				SKIP="true"
+#>>>			fi
+#>>>		done
 		if ${SKIP}; then
 			continue
 		fi
@@ -2473,6 +2473,10 @@ function _publish_upload {
 	chown -R root:root	${_OUTDIR}					|| return 1
 	delete_empty		${_OUTDIR}					|| return 1
 	eval ${RSYNC_U} --copy-links --delete-excluded				\
+		$(for FILE in ${RELEASE_SKIP[*]}; do
+			echo -en " --filter=\"-_/${RELEASE[${FILE}]}\""
+			echo -en " --filter=\"-_/${_TITLE}-${RELEASE[${FILE}]}-*\""
+		done) \
 		--filter="-_/${_VERSN}/*/"					\
 		${_OUTDIR}/	${_SFFILE}					|| return 1
 	return 0
