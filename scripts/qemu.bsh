@@ -22,8 +22,11 @@ declare INDX_NET="4"
 
 declare BIOS="/usr/share/edk2-ovmf/OVMF_CODE.fd"
 if [[ ${1} == MBR ]]; then
-	BIOS="/usr/share/qemu/bios.bin"
+	BIOS="/usr/share/qemu/bios-256k.bin"
 	shift
+fi
+if [[ -n ${BIOS} ]]; then
+	BIOS="-bios ${BIOS}"
 fi
 
 declare DISK="scsi-hd"
@@ -320,7 +323,7 @@ eval exec qemu-system-x86_64 \
 	-nodefaults \
 	-no-user-config \
 	\
-	-bios ${BIOS} \
+	${BIOS} \
 	${QMCH} -m ${QMEM} \
 	\
 	${QMON} \
@@ -338,6 +341,7 @@ eval exec qemu-system-x86_64 \
 ########################################
 
 reset
+sleep 2
 if [[ ${INTERFACE} == display ]]; then
 #>>>	exec ${VNC} 127.0.0.1:599${QNUM} &
 	remote-viewer --title=SPICE:${QNUM} spice://127.0.0.1/?port=666${QNUM} &
