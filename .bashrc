@@ -1246,7 +1246,7 @@ function filter {
 
 ########################################
 
-declare VERACRYPT_OPTS="--verbose --text --volume-type normal --protect-hidden no --keyfiles= --pim 0 --filesystem none --fs-options="
+declare VERACRYPT_OPTS="--text --verbose --volume-type normal --protect-hidden no --keyfiles= --pim 0 --filesystem none --fs-options="
 
 function format {
 	if [[ ${1} == -z ]]; then
