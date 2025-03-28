@@ -600,8 +600,9 @@ if [[ ${UNAME} == "Windows" ]]; then
 #>>>	alias zdesk="cd ${HOME}/Desktop ; clear ; ${LL}"
 	alias zdesk="cd ${DATDIR} ; clear ; ${LL}"
 	function wsl-link {
-		${RM} ${HOME}/Desktop
+		${RM} ${HOME}/{Desktop,Downloads}
 		${LN} --relative "/mnt/c/Users/${USER}/Desktop" ${HOME}/
+		${LN} --relative "/mnt/c/Users/${USER}/Downloads" ${HOME}/
 		${LN} --relative ${HOME}/Desktop/_wsl/{.Xdefaults,.htoprc.bak,.vimrc} ${HOME}/
 		${LN} --relative ${HOME}/Desktop/_wsl/.bashrc ${HOME}/.bash_aliases
 		return 0
