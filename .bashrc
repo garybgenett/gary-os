@@ -603,13 +603,13 @@ if [[ ${UNAME} == "Windows" ]]; then
 		${RM} ${HOME}/{Desktop,Downloads}
 		${LN} --relative "/mnt/c/Users/${USER}/Desktop" ${HOME}/
 		${LN} --relative "/mnt/c/Users/${USER}/Downloads" ${HOME}/
-		${LN} --relative ${HOME}/Desktop/_wsl/{.Xdefaults,.htoprc.bak,.vimrc} ${HOME}/
+		${LN} --relative ${HOME}/Desktop/_wsl/{.Xdefaults,.bash_profile,.htoprc.bak,.screenrc,.vimrc} ${HOME}/
 		${LN} --relative ${HOME}/Desktop/_wsl/.bashrc ${HOME}/.bash_aliases
 		return 0
 	}
 	function wsl {
 		${RSYNC_U} \
-			root@server.garybgenett.net:{/.g/_data/zactive/.static/{.X*,.bash*,.htop*,.vim*,scripts/updebian},${COMPOSER}} \
+			root@server.garybgenett.net:{/.g/_data/zactive/.static/{.X*,.bash*,.htop*,.screen*,.vim*,scripts/updebian},${COMPOSER}} \
 			${HOME}/Desktop/_wsl/
 		if [[ -d ${HOME}/Desktop/composer ]]; then
 			${RSYNC_U} ${HOME}/Desktop/_wsl/Makefile ${HOME}/Desktop/composer/
@@ -4220,8 +4220,11 @@ function session {
 		killall -9 -v screen
 		screen -wipe
 	else
-		if (( $(id -u) != 0 )) &&
-		   { [[ -z ${CYGWIN} ]] && [[ -z ${CYGWIN_ROOT} ]]; }; then
+		if {
+			(( $(id -u) != 0 )) &&
+			[[ ${UNAME} != "Windows" ]] &&
+			{ [[ -z ${CYGWIN} ]] && [[ -z ${CYGWIN_ROOT} ]]; };
+		}; then
 			su - root
 		else
 			exec screen -xAR -S "${NAME}" "${@}" || return 1
