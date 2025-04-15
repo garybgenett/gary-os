@@ -1402,7 +1402,7 @@ function git-check {
 		} || {
 			[[ -f ${FILE}${OLD} ]] &&
 			[[ -z $(diff ${FILE} ${FILE}${OLD} 2>/dev/null) ]];
-		} then
+		}; then
 			${MV} ${FILE}${NEW} ${FILE}		|| return 1
 			${RM} ${FILE}${OLD}			|| return 1
 		fi
