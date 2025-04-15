@@ -588,6 +588,7 @@ alias zdesk="cd ${NULLDIR} ; clear ; ${LL}"
 if [[ ${UNAME} == "Windows" ]]; then
 #>>>	export DISPLAY="$(ip route show default | cut -d' ' -f3):0"
 	export DISPLAY="127.0.0.1:0"
+	declare DODRIVE="w"
 	declare DATDIR="$(ls -d ${HOME}/Desktop/data.*)"; if [[ -z ${DATDIR} ]]; then DATDIR="${HOME}/Desktop"; fi
 	declare STSBAS="${DATDIR}/${TODOS_MD_STATUS/#*\/data.work\/}${TODOS_MD_EXT}"; STSBAS="${STSBAS/%${TODOS_MD_EXT}}"
 	declare DOCDIR="${DATDIR}/documents"
@@ -683,15 +684,19 @@ if [[ ${UNAME} == "Windows" ]]; then
 		fi
 		return 0
 	}
-	function backup {
-		declare DRV="w"
-		if [[ -n ${DRV} ]]; then
-			if [[ -z "$(${GREP} "^${DRV}[:][[:space:]]+[/]mnt[/]${DRV}[[:space:]]" /proc/mounts)" ]]; then
-				sudo ${MKDIR} /mnt/${DRV}
-				sudo mount -t drvfs ${DRV}: /mnt/${DRV}
-			fi
-			${GREP} "^${DRV}[:][[:space:]]+[/]mnt[/]${DRV}[[:space:]]" /proc/mounts
+	function dodrive {
+		if {
+			[[ -n ${DODRIVE} ]] &&
+			[[ -z "$(${GREP} "^${DODRIVE}[:][[:space:]]+[/]mnt[/]${DODRIVE}[[:space:]]" /proc/mounts)" ]];
+		}; then
+			sudo ${MKDIR} /mnt/${DODRIVE}
+			sudo mount -t drvfs ${DODRIVE}: /mnt/${DODRIVE}
 		fi
+		${GREP} "^${DODRIVE}[:][[:space:]]+[/]mnt[/]${DODRIVE}[[:space:]]" /proc/mounts
+		return 0
+	}
+	function backup {
+		dodrive \
 		status -a \
 		&& bookmarks -a \
 		&& ${RSYNC_U} ${DATDIR} root@server.garybgenett.net:/.g/_data/zactive/ \
