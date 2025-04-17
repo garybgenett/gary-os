@@ -129,6 +129,7 @@ media-video/vlc				gui projectm run-as-root vlm
 net-analyzer/tcpdump			-chroot
 net-fs/samba				client
 net-libs/gnutls				openpgp openssl tls-heartbeat tools
+net-libs/nodejs				npm
 net-misc/unison				-gtk
 net-vpn/openvpn				iproute2
 net-wireless/wpa_supplicant		qt6
