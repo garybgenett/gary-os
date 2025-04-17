@@ -510,7 +510,9 @@ games-fps/doom3
 games-fps/doom3-ducttape
 #>>> games-fps/quakeforge		# requires: gcc backtrace.h
 
+
 # interactive ebuilds, which can be automated using:
+#	sed -nr "s|^#\t||gp" ./gentoo/sets/packages
 #	TARGET="$(realpath ${PWD}/build)"
 #	SOURCE=(quake doom3-disk1 doom3-disk2 doom3-disk3 doom3_roe)
 #	for FILE in ${SOURCE[*]}; do mkdir -v ${TARGET}/tmp/${FILE}; mount -v -o ro,loop /.g/_data/source/id/${FILE}.iso ${TARGET}/tmp/${FILE}; done
