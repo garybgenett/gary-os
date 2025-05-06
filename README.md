@@ -668,7 +668,7 @@ For the best performance, change the `MAKEOPTS -j` variable in
   grep "^processor" /proc/cpuinfo | wc -l
   ```
 
-The last line in [gentoo/\_funtoo] must be the release version and commit hash
+The last line in [gentoo/_funtoo] must be the release version and commit hash
 in [Portage] that it is desired to use for the packages repository.
 
 Make any desired Portage package selection and configuration changes, and then
@@ -800,7 +800,7 @@ GaryOS variables in them which control portions of this process, such as which
 directories to package, archive or exclude and what `rc-update` or other
 commands should be run to tailor the image filesystem (see [Loader]).  The
 defaults in [gentoo/sets/gary-os] should be reasonable.  A more complete
-configuration is in [gentoo/sets/\_gary-os].
+configuration is in [gentoo/sets/_gary-os].
 
   ```
   make rootfs
@@ -953,15 +953,15 @@ and feel for GaryOS.
 
   | File                      | Change   | Purpose
   |:---                       |:---      |:---
-  | /etc/issue                | Replaced | [\_artifacts/files/issue]
-  | /etc/motd                 | Added    | [\_artifacts/files/issue]
+  | /etc/issue                | Replaced | [_artifacts/files/issue]
+  | /etc/motd                 | Added    | [_artifacts/files/issue]
   | /init                     | Added    | Symbolic link to `/usr/bin/init`
   | /etc/inittab              | Modified | Added serial console
   | /etc/fstab                | Modified | Commented all lines
-  | /etc/locale.gen           | Replaced | [\_artifacts/files/locale.gen]
+  | /etc/locale.gen           | Replaced | [_artifacts/files/locale.gen]
   | /etc/conf.d/hostname      | Modified | Set to `gary-os`
   | /etc/profile.d/setterm.sh | Added    | Disabled terminal bell
-  | /etc/wpa_supplicant/wpa_supplicant.conf | Replaced | [\_artifacts/files/wpa_supplicant.conf]
+  | /etc/wpa_supplicant/wpa_supplicant.conf | Replaced | [_artifacts/files/wpa_supplicant.conf]
   | /etc/ssh/sshd_config      | Modified | Enabled `root` login
   | /etc/env.d/90xsession     | Added    | Set default window manager
   | /etc/X11/Sessions/dwm     | Modified | Tune [dwm] running environment
@@ -1087,19 +1087,19 @@ Type `make usage` (basic) or `make help` (advanced) to get started.
 
   * User interface for the build system
     * [GNU Make] (usage | help)
-    * [gentoo/\_system] -v
+    * [gentoo/_system] -v
   * [Building]
     * [Compile]
     * [Manage]
     * [Install]
 
-  | Component              | Purpose
-  |:---                    |:---
-  | [Makefile]             | Wrapper around the other components
-  | [gentoo/\_system]      | Worker for all of [Building] (core of [Builder])
-  | [gentoo/\_funtoo]      | [Gentoo] [Portage] commit tracking
-  | [gentoo/.emergent]     | Audit script which creates `/_gentoo` directory
-  | [gentoo.config]        | Optional customization for 'edit' in [Compile]
+  | Component          | Purpose
+  |:---                |:---
+  | [Makefile]         | Wrapper around the other components
+  | [gentoo/_system]   | Worker for all of [Building] (core of [Builder])
+  | [gentoo/_funtoo]   | [Gentoo] [Portage] commit tracking
+  | [gentoo/.emergent] | Audit script which creates `/_gentoo` directory
+  | [gentoo.config]    | Optional customization for 'edit' in [Compile]
 
 **Build Tuning**
 
@@ -1127,7 +1127,7 @@ reporting any issues (see [Support]).
 
 **Tooling**
 
-Another primary function of [Makefile] and [gentoo/\_system] is to provide
+Another primary function of [Makefile] and [gentoo/_system] is to provide
 helpful tooling for the sometimes arduous process of bringing [Compile] 'init'
 or 'redo' through to a successful build.  [Process] walks through the author's
 workflow, and has examples of these helpers.
@@ -1156,7 +1156,7 @@ References to this section:
   * [Manage]
     * Upgrade -- `/_gentoo`
   * [Repository]
-    * Heart and soul -- [gentoo/\_system]
+    * Heart and soul -- [gentoo/_system]
     * Audit script and information -- [gentoo/.emergent]
 
 These are to make sure everything is cross-linked, and that this section is
@@ -1180,12 +1180,12 @@ most helpful to think of it this way.
   * [Building]
     * [Image]
 
-  | Component            | Purpose
-  |:---                  |:---
-  | [Makefile]           | Wrapper around the other components
-  | [gentoo/\_system]    | All environment and variable initialization
-  | [gentoo/\_release]   | Worker for [Filesystem] [Image] (core of [Loader])
-  | [\_artifacts/files/] | [Filesystem] [Image] scripts and configuration
+  | Component           | Purpose
+  |:---                 |:---
+  | [Makefile]          | Wrapper around the other components
+  | [gentoo/_system]    | All environment and variable initialization
+  | [gentoo/_release]   | Worker for [Filesystem] [Image] (core of [Loader])
+  | [_artifacts/files/] | [Filesystem] [Image] scripts and configuration
 
 **Package Directories**
 
@@ -1213,7 +1213,7 @@ consideration when nesting, since doing things like `FSPACK` on a `FSKEEP`
 subdirectory will also produce undefined results.
 
 Complete examples of usage are in [gentoo/sets/gary-os] and
-[gentoo/sets/\_gary-os].
+[gentoo/sets/_gary-os].
 
 **Overlay Environment**
 
@@ -1251,7 +1251,7 @@ If desired, the intermediary environment used to locate and boot the
 a great learning experience for anyone interested in the [GNU/Linux] boot
 process or how live systems work.  In particular, there is a reference
 implementation of a completely in-memory [Squashfs] [Overlay] in
-[\_artifacts/files/initrc].
+[_artifacts/files/initrc].
 
 **References**
 
@@ -1267,7 +1267,7 @@ References to this section:
   * [Design]
     * [Linux Kernel] parameters
   * [Repository]
-    * Heart and soul -- [gentoo/\_release]
+    * Heart and soul -- [gentoo/_release]
 
 These are to make sure everything is cross-linked, and that this section is
 complete.
@@ -1309,7 +1309,7 @@ Hopefully, it will someday make these lists as well.
   * [DistroWatch]
 
 Snapshots of all discovered references to GaryOS are kept in
-[\_artifacts/archive/].  Please contact the author at [gary-os@garybgenett.net]
+[_artifacts/archive/].  Please contact the author at [gary-os@garybgenett.net]
 with any other acknowledgments you find.  The fact that you are reading this
 counts.
 
@@ -1435,7 +1435,7 @@ Here is an overview of the repository contents, in order of relative importance:
   | [Makefile]               | Primary interface to [Builder] and [Loader]
   | [packages.txt]           | [Kernel] packages, sizes and install information
   | [packages.rootfs.txt]    | [Rootfs] packages, sizes and install information
-  | [\_commit]               | Solely for author tracking of source repositories
+  | [_commit]                | Solely for author tracking of source repositories
 
   | Key Directories          | Purpose
   |:---                      |:---
@@ -1444,24 +1444,24 @@ Here is an overview of the repository contents, in order of relative importance:
   | [gentoo/]                | [Portage] configuration, [Builder] and [Loader]
   | [gentoo/overlay/]        | Version management and fixing broken packages
   | [scripts/]               | [GRUB] and [QEMU]
-  | [\_artifacts/files/]     | [Loader] scripts and [Image] configuration files
-  | [\_artifacts/patches/]   | [GaryOS] features and improvements
-  | [\_artifacts/archive/]   | Miscellaneous stash space, including [References]
-  | [\_artifacts/images/]    | Icons and screenshots
+  | [_artifacts/files/]      | [Loader] scripts and [Image] configuration files
+  | [_artifacts/patches/]    | [GaryOS] features and improvements
+  | [_artifacts/archive/]    | Miscellaneous stash space, including [References]
+  | [_artifacts/images/]     | Icons and screenshots
 
   | Core Files               | Purpose
   |:---                      |:---
   | [.bashrc]                | Scripting library (author's [Bash] configuration)
   | [scripts/grub.sh]        | [GRUB] backed worker script
-  | [linux/\_config]         | Simplifies [Linux Kernel] configuration updates
-  | [gentoo/\_system]        | Heart and soul of [Builder], and GaryOS itself
-  | [gentoo/\_release]       | Heart and soul of [Loader] (and publish process)
-  | [gentoo/\_funtoo]        | [Gentoo] [Portage] commit tracking
+  | [linux/_config]          | Simplifies [Linux Kernel] configuration updates
+  | [gentoo/_system]         | Heart and soul of [Builder], and GaryOS itself
+  | [gentoo/_release]        | Heart and soul of [Loader] (and publish process)
+  | [gentoo/_funtoo]         | [Gentoo] [Portage] commit tracking
   | [gentoo.config]          | Example for "Edit" stage in [Compile]
   | [gentoo/.emergent]       | Audit script and information (see [Builder])
   | [gentoo/savedconfig/x11-wm/dwm] | Slightly modified [dwm] configuration
   | [gentoo/sets/gary-os]    | [Kernel] packages, [Loader] and [Image]
-  | [gentoo/sets/\_gary-os]  | [Rootfs] packages, [Loader] and [Image]
+  | [gentoo/sets/_gary-os]   | [Rootfs] packages, [Loader] and [Image]
 
   | Other                    | Purpose
   |:---                      |:---
@@ -1470,7 +1470,7 @@ Here is an overview of the repository contents, in order of relative importance:
 
 The commit history for all these components reside in more than one personal
 repository.  They are merged together into the public GaryOS [Git] repository by
-[gentoo/\_release].  This means that even minor merging issues or the inclusion
+[gentoo/_release].  This means that even minor merging issues or the inclusion
 of new files will result in a public repository that can not 'fast-forward' and
 will require re-cloning.
 
@@ -1803,7 +1803,7 @@ Everything needed to perform these steps is in the [Repository] or the
   * `make ROOTFS=false devel`
     * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.kernel 1 -m 8192`
     * [ ] Test kernel size and root filesystem resize
-  * [x] *Validate( 1.8GB 3.4GiB P=*\_*gary-os rootfs )*
+  * [x] *Validate( 1.8GB 3.4GiB P=\_gary-os rootfs )*
   * `(cd .setup; git-commit ./gentoo)`
   * `make doit && make DOREDO=true devel`
 
@@ -2070,7 +2070,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
   * `rm /tmp/qemu.gary-os-* /tmp/qemu.null.*`
   * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.qcow2 1 -m 8192`
     * [x] Boot Rootfs
-        * [ ] Command comments in [gentoo/sets/\_gary-os]
+        * [ ] Command comments in [gentoo/sets/_gary-os]
   * `rm /tmp/qemu.gary-os-* /tmp/qemu.null.*`
 
 ### Publish ####################################################################
@@ -2315,7 +2315,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * Tightened up [gentoo/sets/] package lists
     * Consolidated and condensed Python versions
     * Eliminated Systemd, Surf, WebKit, SpiderMonkey, Ruby and CUPS
-    * Quieter, prettier and easier to read [gentoo/\_system] output
+    * Quieter, prettier and easier to read [gentoo/_system] output
     * Improved [gentoo/overlay/] management
     * Enhanced [gentoo/.emergent] output
   * [GRUB]
@@ -2358,7 +2358,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * Additional development helpers in [Makefile]
     * Achieved pure 64-bit
   * [Portage]
-    * Improved [meta-repo] tool in [gentoo/\_funtoo.kits]
+    * Improved [meta-repo] tool in [gentoo/_funtoo.kits]
     * Overhauled [gentoo/sets/] and [gentoo/overlay/]
     * Streamlined [gentoo/overlay/] management
     * Complete debug stripping of packages
