@@ -2,7 +2,7 @@
 
 --------------------------------------------------------------------------------
 
-| ![GaryOS Icon](artifacts/images/icon-v6.0.png "GaryOS Icon") | "The one file that does it all."
+| ![GaryOS Icon](_artifacts/images/icon-v6.0.png "GaryOS Icon") | "The one file that does it all."
 |:---      |:---
 | Latest   | [v8.0 2024-05-16] -- [Kernel], [Rootfs], [Boot], [Disk]
 | Homepage | <http://www.garybgenett.net/projects/gary-os>
@@ -70,9 +70,9 @@ Unique advantages:
 No other GNU/Linux distribution takes the same approach or has the same features
 as GaryOS.
 
-<!-- ![GaryOS CLI Screenshot](artifacts/images/screenshot_cli-v7.0.png "GaryOS CLI Screenshot") -->
-![GaryOS CLI Screenshot](artifacts/images/screenshot_cli-v7.0.gif "GaryOS CLI Screenshot")
-![GaryOS GUI Screenshot](artifacts/images/screenshot_gui-v7.0.gif "GaryOS GUI Screenshot")
+<!-- ![GaryOS CLI Screenshot](_artifacts/images/screenshot_cli-v7.0.png "GaryOS CLI Screenshot") -->
+![GaryOS CLI Screenshot](_artifacts/images/screenshot_cli-v7.0.gif "GaryOS CLI Screenshot")
+![GaryOS GUI Screenshot](_artifacts/images/screenshot_gui-v7.0.gif "GaryOS GUI Screenshot")
 
 ### Quick Start ################################################################
 [Quick Start]: #quick-start
@@ -953,15 +953,15 @@ and feel for GaryOS.
 
   | File                      | Change   | Purpose
   |:---                       |:---      |:---
-  | /etc/issue                | Replaced | [artifacts/files/issue]
-  | /etc/motd                 | Added    | [artifacts/files/issue]
+  | /etc/issue                | Replaced | [\_artifacts/files/issue]
+  | /etc/motd                 | Added    | [\_artifacts/files/issue]
   | /init                     | Added    | Symbolic link to `/usr/bin/init`
   | /etc/inittab              | Modified | Added serial console
   | /etc/fstab                | Modified | Commented all lines
-  | /etc/locale.gen           | Replaced | [artifacts/files/locale.gen]
+  | /etc/locale.gen           | Replaced | [\_artifacts/files/locale.gen]
   | /etc/conf.d/hostname      | Modified | Set to `gary-os`
   | /etc/profile.d/setterm.sh | Added    | Disabled terminal bell
-  | /etc/wpa_supplicant/wpa_supplicant.conf | Replaced | [artifacts/files/wpa_supplicant.conf]
+  | /etc/wpa_supplicant/wpa_supplicant.conf | Replaced | [\_artifacts/files/wpa_supplicant.conf]
   | /etc/ssh/sshd_config      | Modified | Enabled `root` login
   | /etc/env.d/90xsession     | Added    | Set default window manager
   | /etc/X11/Sessions/dwm     | Modified | Tune [dwm] running environment
@@ -1180,12 +1180,12 @@ most helpful to think of it this way.
   * [Building]
     * [Image]
 
-  | Component          | Purpose
-  |:---                |:---
-  | [Makefile]         | Wrapper around the other components
-  | [gentoo/\_system]  | All environment and variable initialization
-  | [gentoo/\_release] | Worker for [Filesystem] [Image] (core of [Loader])
-  | [artifacts/files/] | [Filesystem] [Image] scripts and configuration
+  | Component            | Purpose
+  |:---                  |:---
+  | [Makefile]           | Wrapper around the other components
+  | [gentoo/\_system]    | All environment and variable initialization
+  | [gentoo/\_release]   | Worker for [Filesystem] [Image] (core of [Loader])
+  | [\_artifacts/files/] | [Filesystem] [Image] scripts and configuration
 
 **Package Directories**
 
@@ -1251,7 +1251,7 @@ If desired, the intermediary environment used to locate and boot the
 a great learning experience for anyone interested in the [GNU/Linux] boot
 process or how live systems work.  In particular, there is a reference
 implementation of a completely in-memory [Squashfs] [Overlay] in
-[artifacts/files/initrc].
+[\_artifacts/files/initrc].
 
 **References**
 
@@ -1299,7 +1299,7 @@ someone other than themself.
 [GaryOS] has maintained a [steady stream of downloads] since its debut in
 February 2014.  It has also shown up in some notable places.
 
-  * [Gentoo ecosystem] ([2018-08](https://github.com/garybgenett/gary-os/raw/master/artifacts/archive/gentoo-20.08.pdf))
+  * [Gentoo ecosystem] ([2018-08](https://github.com/garybgenett/gary-os/raw/master/_artifacts/archive/gentoo-20.08.pdf))
   * [List of non-systemd distributions] (proudly)
   * [Softpedia review of v3.0] (not just a paste of the [README.md] text)
 
@@ -1309,7 +1309,7 @@ Hopefully, it will someday make these lists as well.
   * [DistroWatch]
 
 Snapshots of all discovered references to GaryOS are kept in
-[artifacts/archive/].  Please contact the author at [gary-os@garybgenett.net]
+[\_artifacts/archive/].  Please contact the author at [gary-os@garybgenett.net]
 with any other acknowledgments you find.  The fact that you are reading this
 counts.
 
@@ -1444,10 +1444,10 @@ Here is an overview of the repository contents, in order of relative importance:
   | [gentoo/]                | [Portage] configuration, [Builder] and [Loader]
   | [gentoo/overlay/]        | Version management and fixing broken packages
   | [scripts/]               | [GRUB] and [QEMU]
-  | [artifacts/files/]       | [Loader] scripts and [Image] configuration files
-  | [artifacts/patches/]     | [GaryOS] features and improvements
-  | [artifacts/archive/]     | Miscellaneous stash space, including [References]
-  | [artifacts/images/]      | Icons and screenshots
+  | [\_artifacts/files/]     | [Loader] scripts and [Image] configuration files
+  | [\_artifacts/patches/]   | [GaryOS] features and improvements
+  | [\_artifacts/archive/]   | Miscellaneous stash space, including [References]
+  | [\_artifacts/images/]    | Icons and screenshots
 
   | Core Files               | Purpose
   |:---                      |:---
@@ -1479,7 +1479,7 @@ will require re-cloning.
   [Makefile]: https://github.com/garybgenett/gary-os/blob/master/Makefile
   [packages.txt]: https://github.com/garybgenett/gary-os/blob/master/packages.txt
   [packages.rootfs.txt]: https://github.com/garybgenett/gary-os/blob/master/packages.rootfs.txt
-  [\_commit]: https://github.com/garybgenett/gary-os/blob/master/_commit
+  [_commit]: https://github.com/garybgenett/gary-os/blob/master/_commit
 
   [grub/]: https://github.com/garybgenett/gary-os/blob/master/grub
   [grub/grub.menu.gary-os.cfg]: https://github.com/garybgenett/gary-os/blob/master/grub/grub.menu.gary-os.cfg
@@ -1487,22 +1487,22 @@ will require re-cloning.
   [gentoo/]: https://github.com/garybgenett/gary-os/blob/master/gentoo
   [gentoo/overlay/]: https://github.com/garybgenett/gary-os/blob/master/gentoo/overlay
   [scripts/]: https://github.com/garybgenett/gary-os/blob/master/scripts
-  [artifacts/files/]: https://github.com/garybgenett/gary-os/blob/master/artifacts/files
-  [artifacts/patches/]: https://github.com/garybgenett/gary-os/blob/master/artifacts/patches
-  [artifacts/images/]: https://github.com/garybgenett/gary-os/blob/master/artifacts/images
-  [artifacts/archive/]: https://github.com/garybgenett/gary-os/blob/master/artifacts/archive
+  [_artifacts/files/]: https://github.com/garybgenett/gary-os/blob/master/_artifacts/files
+  [_artifacts/patches/]: https://github.com/garybgenett/gary-os/blob/master/_artifacts/patches
+  [_artifacts/images/]: https://github.com/garybgenett/gary-os/blob/master/_artifacts/images
+  [_artifacts/archive/]: https://github.com/garybgenett/gary-os/blob/master/_artifacts/archive
 
   [.bashrc]: https://github.com/garybgenett/gary-os/blob/master/.bashrc
   [scripts/grub.sh]: https://github.com/garybgenett/gary-os/blob/master/scripts/grub.sh
-  [linux/\_config]: https://github.com/garybgenett/gary-os/blob/master/linux/_config
-  [gentoo/\_system]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_system
-  [gentoo/\_release]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_release
-  [gentoo/\_funtoo]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_funtoo
+  [linux/_config]: https://github.com/garybgenett/gary-os/blob/master/linux/_config
+  [gentoo/_system]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_system
+  [gentoo/_release]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_release
+  [gentoo/_funtoo]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_funtoo
   [gentoo.config]: https://github.com/garybgenett/gary-os/blob/master/gentoo.config
   [gentoo/.emergent]: https://github.com/garybgenett/gary-os/blob/master/gentoo/.emergent
   [gentoo/savedconfig/x11-wm/dwm]: https://github.com/garybgenett/gary-os/blob/master/gentoo/savedconfig/x11-wm
   [gentoo/sets/gary-os]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/gary-os
-  [gentoo/sets/\_gary-os]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/_gary-os
+  [gentoo/sets/_gary-os]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/_gary-os
   [gentoo/sets/packages]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/packages
 
   [.vimrc]: https://github.com/garybgenett/gary-os/blob/master/.vimrc
@@ -1514,10 +1514,10 @@ will require re-cloning.
   [gentoo/make.conf]: https://github.com/garybgenett/gary-os/blob/master/gentoo/make.conf
   [gentoo/package.use]: https://github.com/garybgenett/gary-os/blob/master/gentoo/package.use
   [gentoo/sets/]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets
-  [artifacts/files/initrc]: https://github.com/garybgenett/gary-os/blob/master/artifacts/files/initrc
-  [artifacts/files/issue]: https://github.com/garybgenett/gary-os/blob/master/artifacts/files/issue
-  [artifacts/files/locale.gen]: https://github.com/garybgenett/gary-os/blob/master/artifacts/files/locale.gen
-  [artifacts/files/wpa_supplicant.conf]: https://github.com/garybgenett/gary-os/blob/master/artifacts/files/wpa_supplicant.conf
+  [_artifacts/files/initrc]: https://github.com/garybgenett/gary-os/blob/master/_artifacts/files/initrc
+  [_artifacts/files/issue]: https://github.com/garybgenett/gary-os/blob/master/_artifacts/files/issue
+  [_artifacts/files/locale.gen]: https://github.com/garybgenett/gary-os/blob/master/_artifacts/files/locale.gen
+  [_artifacts/files/wpa_supplicant.conf]: https://github.com/garybgenett/gary-os/blob/master/_artifacts/files/wpa_supplicant.conf
   [ego_commit_hack.patch]: https://github.com/garybgenett/gary-os/blob/master/gentoo/overlay/app-admin/ego/files-patches/add-commit-option-to-ego-sync.2.7.4-r1.patch
 
 ### Tools ######################################################################
@@ -2369,7 +2369,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * Minor improvements and fixes
 
   [Ego]: https://funtoo.org/Package:Ego
-  [gentoo/\_funtoo.kits]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_funtoo.kits
+  [gentoo/_funtoo.kits]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_funtoo.kits
 
 ### v4.0 2021-07-26 ############################################################
 [v4.0 2021-07-26]: #v40-2021-07-26
