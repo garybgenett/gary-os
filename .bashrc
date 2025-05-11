@@ -5374,8 +5374,7 @@ function task-export-drive-sync {
 		--delete-excluded \
 		\
 		--filter "- /**/.Composer/*/**" \
-		--filter "- /**/.composed" \
-		--filter "- /**/.composer.tmp/**" \
+		--filter "- /**/.composer.**" \
 		\
 		--filter "- /*/**firebase**.json" \
 		--filter "- /*/.firebase**" \
@@ -5559,7 +5558,6 @@ END_OF_FILE
 			COMPOSER_KEEPING="" \
 								${REPORT}.html
 		${SED} -i "/text\/css/d"			${REPORT}.html
-		${RM}						${REPORT_DIR}/.composed
 	fi
 	if [[ -n ${EMAIL_DEST} ]] && [[ -n ${EMAIL_MAIL} ]]; then
 #>>>		cat ${REPORT}.txt |
@@ -6250,9 +6248,9 @@ function task-export-text {
 			my $compose = "make all"
 				. " -C ${ENV{PIMDIR}}"
 				. " COMPOSER_DEBUGIT=1"
+				. " COMPOSER_KEEPING=\"\""
 				;
 			if (system(${compose}) != 0) { die(); };
-			unlink(${ENV{PIMDIR}} . "/.composed") || warn();
 		};
 	' -- "${NAME}" "${@}" || return 1
 	echo -en "\n"			>>tasks.md
@@ -7118,11 +7116,11 @@ if [[ ${IMPERSONATE_NAME} == task ]]; then
 				make all			\
 					-C "${PIMDIR}"		\
 					COMPOSER_DEBUGIT="1"	\
+					COMPOSER_KEEPING=""	\
 					COMPOSER_TARGETS="${FILES}"
 				declare ENTER=
 				read ENTER
 			fi
-			FILES=".composed ${FILES}"
 			(cd ${PIMDIR} &&
 				${RM} ${FILES} &&
 				${GIT} rm --force --ignore-unmatch ${FILES} &&
