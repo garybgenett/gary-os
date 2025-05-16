@@ -136,7 +136,7 @@ export LAYDIR="overlay"
 #OPTIONS[SETDIR CFGSCR ARTDIR]
 export SETDIR="${SETDIR:-/.g/_data/zactive/.setup}"
 export CFGSCR="${CFGSCR:-${SETDIR}/${FUNDIR}.config}"
-export ARTDIR="${ARTDIR:-/.g/_data/zactive/coding/gary-os/artifacts}"
+export ARTDIR="${ARTDIR:-/.g/_data/zactive/coding/gary-os/_artifacts}"
 
 #NOTE: UPDATE THESE WHEN THEY CHANGE IN THE "${MAKEIT}" SCRIPT
 
