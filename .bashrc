@@ -699,7 +699,13 @@ if [[ ${UNAME} == "Windows" ]]; then
 		dodrive \
 		status -a \
 		&& bookmarks -a \
-		&& ${RSYNC_U} ${DATDIR} root@server.garybgenett.net:/.g/_data/zactive/ \
+		&& { \
+			${RSYNC_U} ${DATDIR} root@server.garybgenett.net:/.g/_data/zactive/ \
+			| ${GREP} -v \
+				-e "^[.][L][.[:space:]]{9}" \
+				-e "^[.][df][.]{3}[p][.[:space:]]{5}" \
+				; \
+		} \
 		&& ${RSYNC_U} ${HOME}/.history/shell/* root@server.garybgenett.net:/.g/_data/zactive/.history/shell/ \
 		&& ssh root@server.garybgenett.net "chmod -R 750 /.g/_data/zactive/$(basename ${DATDIR})" \
 		&& echo "success!" \
