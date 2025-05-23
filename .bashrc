@@ -696,17 +696,22 @@ if [[ ${UNAME} == "Windows" ]]; then
 		return 0
 	}
 	function backup {
+		declare DRYRUN=
+		if [[ ${1} == -l ]]; then
+			DRYRUN="--dry-run"
+			shift
+		fi
 		dodrive \
 		status -a \
 		&& bookmarks -a \
 		&& { \
-			${RSYNC_U} ${DATDIR} root@server.garybgenett.net:/.g/_data/zactive/ \
+			${RSYNC_U} ${DRYRUN} ${DATDIR} root@server.garybgenett.net:/.g/_data/zactive/ \
 			| ${GREP} -v \
 				-e "^[.][L][.[:space:]]{9}" \
 				-e "^[.][df][.]{3}[p][.[:space:]]{5}" \
 				; \
 		} \
-		&& ${RSYNC_U} ${HOME}/.history/shell/* root@server.garybgenett.net:/.g/_data/zactive/.history/shell/ \
+		&& ${RSYNC_U} ${DRYRUN} ${HOME}/.history/shell/* root@server.garybgenett.net:/.g/_data/zactive/.history/shell/ \
 		&& ssh root@server.garybgenett.net "chmod -R 750 /.g/_data/zactive/$(basename ${DATDIR})" \
 		&& echo "success!" \
 		&& return 0
