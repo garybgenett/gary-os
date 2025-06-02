@@ -706,12 +706,12 @@ if [[ ${UNAME} == "Windows" ]]; then
 		&& bookmarks -a \
 		&& { \
 			${RSYNC_U} ${DRYRUN} ${DATDIR} root@server.garybgenett.net:/.g/_data/zactive/ \
-			| ${GREP} -v "^[.][Ldf][.]{3}[.p][.o][.[:space:]]{4}" \
+			| ${GREP} -v "^[.][Ldf][.[:space:]]{3}[p.[:space:]][o.[:space:]][.[:space:]]{4}" \
 			; \
 		} \
 		&& { \
 			${RSYNC_U} ${DRYRUN} ${HOME}/.history/shell/* root@server.garybgenett.net:/.g/_data/zactive/.history/shell/ \
-			| ${GREP} -v "^[.][Ldf][.]{3}[.p][.o][.[:space:]]{4}" \
+			| ${GREP} -v "^[.][Ldf][.[:space:]]{3}[p.[:space:]][o.[:space:]][.[:space:]]{4}" \
 			; \
 		} \
 		&& ssh root@server.garybgenett.net "chmod -R 750 /.g/_data/zactive/$(basename ${DATDIR})" \
