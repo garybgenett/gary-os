@@ -400,6 +400,7 @@ net-mail/safecat
 mail-client/thunderbird
 www-client/chromium
 www-client/firefox
+www-client/torbrowser-launcher
 #>>> www-client/surf			# requires: net-libs/webkit -> dev-lang/ruby
 #>>> x11-misc/tabbed			# only used for: www-client/surf
 
