@@ -21,6 +21,7 @@ media-libs/gegl				cairo		# gentoo required
 media-libs/libpulse			dbus		# gentoo required
 media-libs/libsdl			joystick	# gentoo required
 media-libs/libsdl2			joystick	# gentoo required
+media-libs/mesa				wayland		# gentoo required
 media-libs/mlt				jack		# gentoo required
 media-libs/opencv			qt6		# gentoo required
 media-video/ffmpeg			opus		# gentoo required
@@ -29,6 +30,7 @@ net-misc/curl				-gnutls		# gentoo required
 net-misc/curl				http2		# gentoo required
 sys-apps/fwupd				-introspection	# gentoo required
 sys-libs/gdbm				berkdb		# gentoo required
+x11-libs/gtk+				wayland		# gentoo required
 
 app-arch/sharutils			nls		# gentoo required [app-arch/sharutils-4.15.2-r3]: https://bugs.gentoo.org/900248 / uuencode.c:204:3: error: implicit declaration of function 'bindtextdomain' [-Wimplicit-function-declaration]
 media-sound/aumix			nls		# gentoo required [media-sound/aumix-2.9.1-r1]: https://bugs.gentoo.org/919216 / common.c:229:17: error: implicit declaration of function 'bind_textdomain_codeset' [-Wimplicit-function-declaration]

@@ -1,0 +1,13 @@
+image: $CI_REGISTRY/poncho/gentoo-qa-image:latest
+
+stages:
+  - pkgcheck
+
+variables:
+  GIT_DEPTH: 1
+
+pkgcheck:
+  stage: pkgcheck
+  script:
+    - pkgcheck --version
+    - pkgcheck scan --exit --profiles stable

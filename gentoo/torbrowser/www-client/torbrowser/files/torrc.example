@@ -1,0 +1,17 @@
+#DataDirectory /var/lib/tor/data
+#ClientOnionAuthDir /var/lib/tor/authdir
+
+#PidFile /run/tor/tor.pid
+
+#SocksPort 127.0.0.1:9050 ExtendedErrors IPv6Traffic PreferIPv6 KeepAliveIsolateSOCKSAuth
+#SocksPort unix:/run/tor/socks GroupWritable ExtendedErrors IPv6Traffic PreferIPv6 KeepAliveIsolateSOCKSAuth
+
+#ControlPort 127.0.0.1:9051
+#ControlPort unix:/run/tor/control GroupWritable
+
+# % tor --hash-password "my_password"
+#HashedControlPassword 16:E600ADC1B52C80BB6022A0E999A7734571A451EB6AE50FED489B72E3DF
+
+#CookieAuthentication 1
+#CookieAuthFileGroupReadable 1
+#CookieAuthFile /run/tor/control.authcookie
