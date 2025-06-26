@@ -1,0 +1,24 @@
+# /etc/env.d/99torbrowser
+#
+# Using a system-installed Tor process with Tor Browser:
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# The Tor ControlPort password should be given inside double quotes, inside
+# single quotes, i.e. if the ControlPort password is “secret” (without
+# curly quotes) then we must set the environment variable *exactly* like
+# this:
+#
+# TOR_CONTROL_PASSWD='"secret"'
+#
+# Yes, the variable MUST be double-quoted, then single-quoted, exactly as
+# shown. This is used by TorButton and Tor Launcher to authenticate to Tor's
+# ControlPort, and is necessary for using TB with a system-installed Tor.
+
+#TOR_SOCKS_HOST=127.0.0.1
+#TOR_SOCKS_PORT=9150
+#TOR_SOCKS_IPC_PATH=/run/tor/socks
+
+#TOR_CONTROL_HOST=127.0.0.1
+#TOR_CONTROL_PORT=9151
+#TOR_CONTROL_PASSWD='"secret"'
+#TOR_CONTROL_COOKIE_AUTH_FILE=/run/tor/control.authcookie
+#TOR_CONTROL_IPC_PATH=/run/tor/control

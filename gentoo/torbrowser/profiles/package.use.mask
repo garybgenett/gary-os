@@ -1,0 +1,4 @@
+# Poncho <poncho@spahan.ch> (2024-10-24)
+# Disable Wayland by default in 14.0
+# https://gitlab.torproject.org/tpo/applications/tor-browser/-/issues/43092
+>=www-client/torbrowser-128.3.0_p14000 wayland

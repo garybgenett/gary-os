@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer type="person">
+	<email>poncho@spahan.ch</email>
+	<name>Poncho</name>
+</maintainer>
+<use>
+	<flag name="clang">Use Clang compiler instead of GCC</flag>
+	<flag name="jumbo-build">Enable unified build - combines source files to speed up build process, but requires more memory</flag>
+	<flag name="system-av1">Use the system-wide <pkg>media-libs/dav1d</pkg>
+		and <pkg>media-libs/libaom</pkg> library instead of bundled</flag>
+	<flag name="system-harfbuzz">Use the system-wide <pkg>media-libs/harfbuzz</pkg>
+		and <pkg>media-gfx/graphite2</pkg> instead of bundled</flag>
+	<flag name="system-icu">Use the system-wide <pkg>dev-libs/icu</pkg>
+		instead of bundled</flag>
+	<flag name="system-jpeg">Use the system-wide <pkg>media-libs/libjpeg-turbo</pkg>
+		instead of bundled</flag>
+	<flag name="system-libevent">Use the system-wide <pkg>dev-libs/libevent</pkg>
+		instead of bundled</flag>
+	<flag name="system-libvpx">Use the system-wide <pkg>media-libs/libvpx</pkg>
+		instead of bundled</flag>
+	<flag name="system-png">Use the system-wide <pkg>media-libs/libpng</pkg>
+		instead of bundled (requires APNG patches)</flag>
+	<flag name="system-webp">Use the system-wide <pkg>media-libs/libwebp</pkg>
+		instead of bundled</flag>
+</use>
+</pkgmetadata>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE repositories SYSTEM "/dtd/repositories.dtd">
+<repositories xmlns="" version="1.0">
+   <repo quality="experimental" status="unofficial">
+      <name>torbrowser</name>
+      <description>Torbrowser without vidalia or tor</description>
+      <homepage>https://github.com/MeisterP/torbrowser-overlay</homepage>
+      <owner type="person">
+         <email>poncho@spahan.ch</email>
+         <name>Poncho</name>
+      </owner>
+      <source type="git">git://github.com/MeisterP/torbrowser-overlay.git</source>
+      <feed>https://github.com/MeisterP/torbrowser-overlay/commits/master.atom</feed>
+   </repo>
+</repositories>

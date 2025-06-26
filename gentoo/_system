@@ -128,10 +128,11 @@ export GRBDIR="grub"
 export LINDIR="linux"
 export FUNDIR="gentoo"
 
-#VARIABLES[FUNCMT AUDITS LAYDIR]
+#VARIABLES[FUNCMT AUDITS LAYDIR LAYLST]
 export FUNCMT="_funtoo"
 export AUDITS=".emergent"
 export LAYDIR="overlay"
+export LAYLST="torbrowser"
 
 #OPTIONS[SETDIR CFGSCR ARTDIR]
 export SETDIR="${SETDIR:-/.g/_data/zactive/.setup}"
@@ -1286,10 +1287,18 @@ if [[ ${1} == -r ]]; then
 	fi
 	${RSYNC_C/--delete --delete-during} --copy-links							\
 		--filter="-_/${LAYDIR}"										\
+		$(for FILE in ${LAYLST}; do
+			echo "--filter=-_/${FILE}"
+			echo "--filter=-_/${FILE}.git"
+		done)												\
 		${SETDIR}/${FUNDIR}/[a-z]*			${TARGET}${ETCDIR}/				|| EXIT 1
-	${RSYNC_U} ${SETDIR}/${FUNDIR}/${LAYDIR}/		${TARGET}${ETCDIR}/${LAYDIR}			|| EXIT 1
 	${MKDIR}						${TARGET}${ETCDIR}/repos.conf			|| EXIT 1
+	${RSYNC_U} ${SETDIR}/${FUNDIR}/${LAYDIR}/		${TARGET}${ETCDIR}/${LAYDIR}			|| EXIT 1
 	${LN} ../${LAYDIR}/overlay.conf				${TARGET}${ETCDIR}/repos.conf/			|| EXIT 1
+	for FILE in ${LAYLST}; do
+		${RSYNC_U} ${SETDIR}/${FUNDIR}/${FILE}/		${TARGET}${ETCDIR}/${FILE}			|| EXIT 1
+		${LN} ../${FILE}/${FILE}.conf			${TARGET}${ETCDIR}/repos.conf/			|| EXIT 1
+	done
 	if [[ ${1} != -! ]]; then
 		portage_file					${TARGET}${ARCDIR}/${FUNDIR}			|| EXIT 1
 		if [[ ${1} == -w ]]; then

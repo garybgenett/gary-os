@@ -34,6 +34,8 @@ app-misc/timew				~amd64		# gentoo required
 
 net-mail/safecat			~amd64		# gentoo required [net-mail/safecat-1.13-r1 / net-mail/safecat-1.13-r2]: substdio.h:12:64: error: initialization of 'int (*)()' from incompatible pointer type 'ssize_t (*)(int,  const void *, size_t)' {aka 'long int (*)(int,  const void *, long unsigned int)'} [-Wincompatible-pointer-types]
 
+www-client/torbrowser-launcher		~amd64		# gentoo required
+
 #>>> net-im/discord			~amd64		# gentoo required
 net-im/slack				~amd64		# gentoo required
 net-im/zoom				~amd64		# gentoo required
