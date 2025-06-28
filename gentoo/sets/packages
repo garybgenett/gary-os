@@ -426,6 +426,8 @@ app-misc/atomicwallet
 #>>> net-p2p/bitcoin-cli
 #>>> net-p2p/bitcoin-qt
 #>>> net-p2p/bitcoind
+net-p2p/monero
+net-p2p/monero-gui-bin
 
 sci-geosciences/gpxsee
 
