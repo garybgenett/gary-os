@@ -132,7 +132,7 @@ export FUNDIR="gentoo"
 export FUNCMT="_funtoo"
 export AUDITS=".emergent"
 export LAYDIR="overlay"
-export LAYLST="torbrowser"
+export LAYLST="guru torbrowser"
 
 #OPTIONS[SETDIR CFGSCR ARTDIR]
 export SETDIR="${SETDIR:-/.g/_data/zactive/.setup}"
