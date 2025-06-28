@@ -41,6 +41,8 @@ net-im/slack				~amd64		# gentoo required
 net-im/zoom				~amd64		# gentoo required
 
 app-misc/atomicwallet			~amd64		# gentoo required
+net-p2p/monero				~amd64		# gentoo required
+net-p2p/monero-gui-bin			~amd64		# gentoo required
 
 ########################################
 # media
@@ -80,6 +82,8 @@ games-fps/quakeforge			~amd64		# gentoo required
 ################################################################################
 
 <dev-libs/libvformat-1.14		~amd64		# gentoo required [dev-libs/libvformat-1.13-r2 / dev-libs/libvformat-1.13-r3]: https://bugs.gentoo.org/919257 / vf_access_calendar.c:200:38: error: passing argument 1 of 'vf_date_string_to_time' from incompatible pointer type [-Wincompatible-pointer-types]
+<dev-libs/randomx-1.3			~amd64		# gentoo required [dev-libs/randomx-1.2.1-r1]: dependency required by "net-p2p/monero-0.18.4.0-r5::guru"
+<dev-libs/supercop-1			~amd64		# gentoo required [dev-libs/supercop-0_p20200827]: dependency required by "net-p2p/monero-0.18.4.0-r5::guru"
 
 ################################################################################
 # end of file

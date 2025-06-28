@@ -133,6 +133,8 @@ net-fs/samba				client
 net-libs/gnutls				openpgp openssl tls-heartbeat tools
 net-libs/nodejs				npm
 net-misc/unison				-gtk
+net-p2p/monero				hw-wallet
+net-p2p/monero-gui-bin			-daemon -tools -wallet-cli -wallet-rpc
 net-vpn/openvpn				iproute2
 net-wireless/wpa_supplicant		qt6
 sci-calculators/qalculate-gtk		-gnome
