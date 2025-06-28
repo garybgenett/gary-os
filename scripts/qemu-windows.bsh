@@ -30,10 +30,10 @@ if [[ ${QSYS} == -c ]]; then
 fi
 
 if [[ ${QSYS} == -d ]]; then
-	qemu-img create -f qcow2 -o compat=1.1						${QNAM}.${QINS}.qcow2 100G
-	qemu-img create -f qcow2 -o compat=1.1,backing_file=${QNAM}.${QINS}.qcow2	${QNAM}.${QCFG}.qcow2
-	qemu-img create -f qcow2 -o compat=1.1,backing_file=${QNAM}.${QCFG}.qcow2	${QNAM}.${QUPD}.qcow2
-	qemu-img create -f qcow2 -o compat=1.1,backing_file=${QNAM}.${QUPD}.qcow2	${QNAM}.qcow2
+	qemu-img create -f qcow2 -F qcow2 -o compat=1.1						${QNAM}.${QINS}.qcow2 100G
+	qemu-img create -f qcow2 -F qcow2 -o compat=1.1,backing_file=${QNAM}.${QINS}.qcow2	${QNAM}.${QCFG}.qcow2
+	qemu-img create -f qcow2 -F qcow2 -o compat=1.1,backing_file=${QNAM}.${QCFG}.qcow2	${QNAM}.${QUPD}.qcow2
+	qemu-img create -f qcow2 -F qcow2 -o compat=1.1,backing_file=${QNAM}.${QUPD}.qcow2	${QNAM}.qcow2
 	${LN} ${QNAM}.${QINS}.qcow2 ${QFIL}
 #>>>	${LN} ${QNAM}.qcow2 ${QFIL}
 	echo -en "\n"
