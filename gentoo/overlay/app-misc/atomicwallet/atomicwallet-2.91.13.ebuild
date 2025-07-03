@@ -3,7 +3,7 @@ inherit desktop unpacker xdg
 
 DESCRIPTION="Crypto Wallet for Buying, Staking & Exchanging"
 HOMEPAGE="https://atomicwallet.io"
-SRC_URI="https://get.atomicwallet.io/download/atomicwallet-2.62.3.deb"
+SRC_URI="https://releases.atomicwallet.io/AtomicWallet-${PV}.deb"
 #>>> https://atomicwallet.io/licensing
 
 LICENSE="all-rights-reserved"
