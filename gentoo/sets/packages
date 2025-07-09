@@ -423,11 +423,11 @@ app-text/sdcv
 media-gfx/mcomix
 
 app-misc/atomicwallet
-#>>> net-p2p/bitcoin-cli
-#>>> net-p2p/bitcoin-qt
-#>>> net-p2p/bitcoind
+net-misc/xmrig
+net-p2p/bitcoin-core
 net-p2p/monero
 net-p2p/monero-gui-bin
+net-p2p/p2pool
 
 sci-geosciences/gpxsee
 
