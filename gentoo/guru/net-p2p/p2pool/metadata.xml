@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>adam.pimentel46@gmail.com</email>
+		<name>Adam Pimentel</name>
+	</maintainer>
+	<use>
+		<flag name="daemon">Install OpenRC scripts allowing for running p2pool as a system service</flag>
+	</use>
+	<upstream>
+		<bugs-to>https://github.com/SChernykh/p2pool/issues</bugs-to>
+		<changelog>https://github.com/SChernykh/p2pool/releases</changelog>
+		<remote-id type="github">SChernykh/p2pool</remote-id>
+	</upstream>
+</pkgmetadata>
