@@ -41,8 +41,9 @@ net-im/slack				~amd64		# gentoo required
 net-im/zoom				~amd64		# gentoo required
 
 app-misc/atomicwallet			~amd64		# gentoo required
-net-p2p/monero				~amd64		# gentoo required
+<net-p2p/monero-9999			~amd64		# gentoo required
 net-p2p/monero-gui-bin			~amd64		# gentoo required
+<net-p2p/p2pool-9999			~amd64		# gentoo required
 
 ########################################
 # media
