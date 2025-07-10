@@ -1,0 +1,179 @@
+diff -r -u -U10 xmrig.orig/doc/api/1/config.json xmrig/doc/api/1/config.json
+--- xmrig.orig/doc/api/1/config.json	2025-07-10 08:10:12.655629929 -0700
++++ xmrig/doc/api/1/config.json	2025-07-10 08:12:10.229006883 -0700
+@@ -5,21 +5,21 @@
+         "access-token": "TOKEN",
+         "worker-id": null,
+         "ipv6": false,
+         "restricted": false
+     },
+     "av": 1,
+     "background": false,
+     "colors": true,
+     "cpu-affinity": null,
+     "cpu-priority": null,
+-    "donate-level": 5,
++    "donate-level": 0,
+     "huge-pages": true,
+     "hw-aes": null,
+     "log-file": null,
+     "max-cpu-usage": 75,
+     "pools": [
+         {
+             "url": "pool.monero.hashvault.pro:3333",
+             "user": "48edfHu7V9Z84YzzMa6fUueoELZ9ZRXq9VetWzYGzKt52XU5xvqgzYnDK9URnRoJMk1j8nLwEVsaSWJ4fhdUyZijBGUicoD",
+             "pass": "x",
+             "keepalive": false,
+@@ -53,11 +53,11 @@
+             "affine_to_cpu": 2
+         },
+         {
+             "low_power_mode": 1,
+             "affine_to_cpu": 3
+         }
+     ],
+     "user-agent": null,
+     "syslog": false,
+     "watch": false
+-}
+\ No newline at end of file
++}
+diff -r -u -U10 xmrig.orig/doc/api/1/summary.json xmrig/doc/api/1/summary.json
+--- xmrig.orig/doc/api/1/summary.json	2025-07-10 08:10:12.655629929 -0700
++++ xmrig/doc/api/1/summary.json	2025-07-10 08:12:17.038912867 -0700
+@@ -5,21 +5,21 @@
+     "kind": "cpu",
+     "ua": "XMRig/2.6.0-beta3 (Linux x86_64) libuv/1.8.0 gcc/5.4.0",
+     "cpu": {
+         "brand": "Intel(R) Core(TM) i7-4770 CPU @ 3.40GHz",
+         "aes": true,
+         "x64": true,
+         "sockets": 1
+     },
+     "algo": "cryptonight",
+     "hugepages": true,
+-    "donate_level": 5,
++    "donate_level": 0,
+     "hashrate": {
+         "total": [
+             296.24,
+             296.23,
+             295.97
+         ],
+         "highest": 296.5,
+         "threads": [
+             [
+                 73.39,
+@@ -63,11 +63,11 @@
+         ],
+         "error_log": []
+     },
+     "connection": {
+         "pool": "pool.monero.hashvault.pro:3333",
+         "uptime": 953,
+         "ping": 35,
+         "failures": 0,
+         "error_log": []
+     }
+-}
+\ No newline at end of file
++}
+diff -r -u -U10 xmrig.orig/src/config.json xmrig/src/config.json
+--- xmrig.orig/src/config.json	2025-07-10 08:10:12.704629253 -0700
++++ xmrig/src/config.json	2025-07-10 08:13:46.670675345 -0700
+@@ -48,21 +48,21 @@
+         "cn/0": false,
+         "cn-lite/0": false
+     },
+     "cuda": {
+         "enabled": false,
+         "loader": null,
+         "nvml": true,
+         "cn/0": false,
+         "cn-lite/0": false
+     },
+-    "donate-level": 1,
++    "donate-level": 0,
+     "donate-over-proxy": 1,
+     "log-file": null,
+     "pools": [
+         {
+             "algo": null,
+             "coin": null,
+             "url": "donate.v2.xmrig.com:3333",
+             "user": "YOUR_WALLET_ADDRESS",
+             "pass": "x",
+             "rig-id": null,
+diff -r -u -U10 xmrig.orig/src/core/config/Config_default.h xmrig/src/core/config/Config_default.h
+--- xmrig.orig/src/core/config/Config_default.h	2025-07-10 08:10:12.704629253 -0700
++++ xmrig/src/core/config/Config_default.h	2025-07-10 08:08:47.110810667 -0700
+@@ -78,21 +78,21 @@
+         "cn/0": false,
+         "cn-lite/0": false
+     },
+     "cuda": {
+         "enabled": false,
+         "loader": null,
+         "nvml": true,
+         "cn/0": false,
+         "cn-lite/0": false
+     },
+-    "donate-level": 1,
++    "donate-level": 0,
+     "donate-over-proxy": 1,
+     "log-file": null,
+     "pools": [
+         {
+             "algo": null,
+             "coin": null,
+             "url": "donate.v2.xmrig.com:3333",
+             "user": "YOUR_WALLET_ADDRESS",
+             "pass": "x",
+             "rig-id": null,
+diff -r -u -U10 xmrig.orig/src/core/config/usage.h xmrig/src/core/config/usage.h
+--- xmrig.orig/src/core/config/usage.h	2025-07-10 08:10:12.704629253 -0700
++++ xmrig/src/core/config/usage.h	2025-07-10 08:14:53.476752879 -0700
+@@ -65,21 +65,21 @@
+     u += "      --daemon-zmq-port=N       daemon's zmq-pub port number (only use it if daemon has it enabled)\n";
+     u += "      --daemon-poll-interval=N  daemon poll interval in milliseconds (default: 1000)\n";
+     u += "      --daemon-job-timeout=N    daemon job timeout in milliseconds (default: 15000)\n";
+     u += "      --self-select=URL         self-select block templates from URL\n";
+     u += "      --submit-to-origin        also submit solution back to self-select URL\n";
+ #   endif
+ 
+     u += "  -r, --retries=N               number of times to retry before switch to backup server (default: 5)\n";
+     u += "  -R, --retry-pause=N           time to pause between retries (default: 5)\n";
+     u += "      --user-agent              set custom user-agent string for pool\n";
+-    u += "      --donate-level=N          donate level, default 1%% (1 minute in 100 minutes)\n";
++    u += "      --donate-level=N          donate level, default 0%% (0 minutes in 100 minutes)\n";
+     u += "      --donate-over-proxy=N     control donate over xmrig-proxy feature\n";
+ 
+     u += "\nCPU backend:\n";
+ 
+     u += "      --no-cpu                  disable CPU mining backend\n";
+     u += "  -t, --threads=N               number of CPU threads, proper CPU affinity required for some optimizations.\n";
+     u += "      --cpu-affinity=N          set process affinity to CPU core(s), mask 0x3 for cores 0 and 1\n";
+     u += "  -v, --av=N                    algorithm variation, 0 auto select\n";
+     u += "      --cpu-priority=N          set process priority (0 idle, 2 normal to 5 highest)\n";
+     u += "      --cpu-max-threads-hint=N  maximum CPU threads count (in percentage) hint for autoconfig\n";
+diff -r -u -U10 xmrig.orig/src/donate.h xmrig/src/donate.h
+--- xmrig.orig/src/donate.h	2025-07-10 08:10:12.725628963 -0700
++++ xmrig/src/donate.h	2025-07-10 08:15:26.058302953 -0700
+@@ -30,15 +30,15 @@
+  * then switch to the developer's pool for 1 minute, then switch again to your pool for 99 minutes
+  * and then switch again to developer's pool for 1 minute; these rounds will continue until the miner stops.
+  *
+  * Randomised only on the first round to prevent waves on the donation pool.
+  *
+  * Switching is instant and only happens after a successful connection, so you never lose any hashes.
+  *
+  * If you plan on changing donations to 0%, please consider making a one-off donation to my wallet:
+  * XMR: 48edfHu7V9Z84YzzMa6fUueoELZ9ZRXq9VetWzYGzKt52XU5xvqgzYnDK9URnRoJMk1j8nLwEVsaSWJ4fhdUyZijBGUicoD
+  */
+-constexpr const int kDefaultDonateLevel = 1;
+-constexpr const int kMinimumDonateLevel = 1;
++constexpr const int kDefaultDonateLevel = 0;
++constexpr const int kMinimumDonateLevel = 0;
+ 
+ 
+ #endif // XMRIG_DONATE_H
