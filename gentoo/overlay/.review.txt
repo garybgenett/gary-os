@@ -2141,6 +2141,84 @@ openshot-3.1.1.ebuild
 openshot-3.3.0.ebuild
 
 ------------------------------------------------------------------------------------------------------------------------
+diff :: net-misc/xmrig [rationale] =====================================================================================
+# no forced donations
+# 2025-06-24 21:05:38 -0400 90f8b527dac150d11b2c7841bde2dede9d64fbb4 net-misc/xmrig: add 6.24.0
+diff :: net-misc/xmrig [source] ========================================================================================
+diff :: net-misc/xmrig [target] ========================================================================================
+Only in ./net-misc/xmrig: .rationale
+Only in ./net-misc/xmrig: .source
+diff -u -U10 -r ./net-misc/xmrig/.source/Manifest ./net-misc/xmrig/Manifest
+--- ./net-misc/xmrig/.source/Manifest	2025-02-28 20:03:10.335803242 -0000
++++ ./net-misc/xmrig/Manifest	2025-07-10 16:48:37.438284252 -0000
+@@ -1,5 +1,5 @@
+-DIST xmrig-6.21.1.tar.gz 2416545 BLAKE2B 72ecdfc8c999aee91aef4f540211c5d5a6f1992c76211162a623e89391cedfcc2d5540f291d9915ee4180b83f58ef7f2eb1e3aff8dee49c72f41f90878d7ef62 SHA512 a9267708e61084db7116381adb2256a04c30eba0c84b571764cc73ccafc9276f55b6665529eb7b9c1785d582d0d280ced6ee7ca88a5e98f9bbdef2a9176a9794
+-DIST xmrig-6.21.3.tar.gz 2426720 BLAKE2B 11563169e51402313399109860e04dd13dfc9911504db571968d6a97112990ebb68a3019da836a4ac19a589c94ab4b5f2ebcbadce59452c278ea923e8abf475a SHA512 91e92f61e385b75715b0b00fcb772bf997f3db19ef47f43c4bda3662aec6276273551ac915a7a6eeef253deb8da5b0ec0b45e02f0b84211ab8f0f5a37f34c87e
+-DIST xmrig-6.22.0.tar.gz 2428500 BLAKE2B 3f675f909a5875c85a22eed8a89022d4895a1a6e7ec258ec87c624c5150487376b065bef4f50c0bafb062e07003ad3910c34634ec2266c458d7284014181daf3 SHA512 12eac61ea8b33a2932a0fdbd7a4ccbbf4f046578ecfd67adad4e7729f9de740060d11025d7ab6f17d7e19586ee59f041e761e3bb42c6fd766ea7029c15d97b42
+-DIST xmrig-6.22.1.tar.gz 2434991 BLAKE2B 69ca78c3f0c8adefb8b33a58e4e55739810fd3ce61ea636d8e1d29fe92f786eafa6368b77f3e5d9123964dc72be78b2df2a468ea9c56a649faf66a16c05c8b77 SHA512 4ebeaea8d4439f0f682a46c25a86ebc0e6129eb6a89d1c8036c05973e61b385c62200dc7ed702f4f6f52d2ad546953d0d941447ba1e3db54fec1adaecba20ea6
+-DIST xmrig-6.22.2.tar.gz 2435360 BLAKE2B c9b81ee93a008639709751b3924461d29216f8daa4beb3db96d983812efa5083926624aaea14d20692c3a3740a1ca178383b8b7cce0c1ad78a16f0299f891561 SHA512 4e25364737456711b09d5ed68e0d26b74cc2f4f4408ff5d02e0063bf67d6f38db5fe9af5d099dc4fd4b3f668baf2023cb816c049d38588ba1b54a8a2c0393269
++AUX xmrig-6.12.2-nonotls.patch 578 BLAKE2B 4d71c8d35be47fd12a019d7b8cb6e1b8787e153ab543b9b1e4079c911671ff886042d90cd439552bf364208d9a4afcc7fe088b50598bbc20e347b532dfc92a2d SHA512 fea6041879c414a4fc6006a413b217801d674f7b5d849d95c119d07e191c5d7a5e99fb959d89974b68be9df132ff480f8492645ba6821b369444b102596b06f3
++AUX xmrig-no_forced_donations.patch 6750 BLAKE2B 5afc36136ae170d2cb65b32f6097aa253a07dd9ba21ece7ac89aa1903fe20009943a983beac9081ff6bcfba04bb88328feda840c9742725783feec837a01a14f SHA512 34772551e656919c74acc16c998a4045bfeaf8aaba638d4f7c6031910a9cb887615ddef4463b7a5210d09947883878e9a9bbebb1af01f7184003279ffa34bc28
++AUX xmrig.service 946 BLAKE2B 1f3b28f8229183da528ac2b4279dd64b5c6f752720c6bdfe90fa9e127108623e4a577a274527249ee7a13969be97e9b1a4348f7c3e0798839d0ed3ee67b16188 SHA512 77da620627272113e7c77a090536b04cb5a89f4010060ffb21ea1c9edc50e0743f913a70e4fb612c23aeea2b8f1a3f9ce024a434076cf9498cce0b5f801faafa
++DIST xmrig-6.24.0.tar.gz 2439353 BLAKE2B df15e5a7633cac2a54cd75d4d935f56d490bd1757c0a43dbb987fffca1ad19760f998b28215da69c0b7c04878481638dbdfba4be36df124c5bf83a9c193fe1a5 SHA512 0ea9ce14e3e7543031447aed3d40055ef1d0e2cc125c69762291c2d4ade7c1c68ec4f715bbc737fb8d0a9305f07b78b674768610d523c1802686d77c6e29cf55
++EBUILD xmrig-6.24.0.ebuild 1439 BLAKE2B 506dff0097a580a72395d20a4088b70b3434e6b020523170ace42ea99e8cee268214eea53b80ac6a97cc5bc48628acee9d771de740ddab6687286517e013c895 SHA512 3164d60047793a7a9e6044fefa6b5943e9695d9469b4ad95b3d19d889b3b9f326dc3d29a66dc61f85672ee46be3a0f4c056f350bb334f406ac02456503d4afa7
+Only in ./net-misc/xmrig/files: xmrig-no_forced_donations.patch
+Only in ./net-misc/xmrig/.source: metadata.xml
+Only in ./net-misc/xmrig/.source: xmrig-6.21.1.ebuild
+Only in ./net-misc/xmrig/.source: xmrig-6.21.3.ebuild
+Only in ./net-misc/xmrig/.source: xmrig-6.22.0.ebuild
+Only in ./net-misc/xmrig/.source: xmrig-6.22.1.ebuild
+Only in ./net-misc/xmrig/.source: xmrig-6.22.2.ebuild
+Only in ./net-misc/xmrig: xmrig-6.24.0.ebuild
+Only in ./net-misc/xmrig/.source: xmrig-9999.ebuild
+diff :: net-misc/xmrig [files] =========================================================================================
+#>>>	"${FILESDIR}"/${PN}-no_forced_donations.patch
+	"${FILESDIR}"/${PN}-no_forced_donations.patch
+	"${FILESDIR}"/${PN}-6.12.2-nonotls.patch
+	systemd_dounit "${FILESDIR}"/xmrig.service
+
+./net-misc/xmrig:
+Manifest
+files
+xmrig-6.24.0.ebuild
+
+./net-misc/xmrig/files:
+xmrig-6.12.2-nonotls.patch
+xmrig-no_forced_donations.patch
+xmrig.service
+
+------------------------------------------------------------------------------------------------------------------------
+diff :: net-p2p/p2pool [rationale] =====================================================================================
+# no forced donations
+# source: guru overlay
+# 2025-06-21 16:45:59 +0200 19e4bbd2c9420d1e49f0684b16050a480a07624b net-p2p/p2pool: add 4.8 without libsodium dependency
+diff :: net-p2p/p2pool [source] ========================================================================================
+diff: /var/db/repos/gentoo/net-p2p/p2pool: No such file or directory
+diff :: net-p2p/p2pool [target] ========================================================================================
+Only in ./net-p2p/p2pool/.source: .null
+Only in ./net-p2p/p2pool: .rationale
+Only in ./net-p2p/p2pool: .source
+Only in ./net-p2p/p2pool: Manifest
+Only in ./net-p2p/p2pool: files
+Only in ./net-p2p/p2pool: p2pool-4.8.ebuild
+diff :: net-p2p/p2pool [files] =========================================================================================
+	"${FILESDIR}"/${PN}-no_forced_donations.patch
+		newconfd "${FILESDIR}"/${PN}-4.5-r1.confd ${PN}
+		newinitd "${FILESDIR}"/${PN}-4.5-r1.initd ${PN}
+
+./net-p2p/p2pool:
+Manifest
+files
+p2pool-4.8.ebuild
+
+./net-p2p/p2pool/files:
+SChernykh.asc
+flags.cmake
+p2pool-4.5-r1.confd
+p2pool-4.5-r1.initd
+p2pool-no_forced_donations.patch
+
+------------------------------------------------------------------------------------------------------------------------
 diff :: sys-kernel/gentoo-kernel [rationale] ===========================================================================
 # version archiving
 # virtual/dist-kernel

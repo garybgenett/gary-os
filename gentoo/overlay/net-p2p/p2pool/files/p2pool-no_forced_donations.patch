@@ -1,0 +1,43 @@
+diff -r -u -U10 p2pool.orig/CMakeLists.txt p2pool/CMakeLists.txt
+--- p2pool.orig/CMakeLists.txt	2025-07-10 09:33:57.459540962 -0700
++++ p2pool/CMakeLists.txt	2025-07-10 09:36:05.340628538 -0700
+@@ -12,21 +12,21 @@
+ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+ 
+ option(STATIC_BINARY "Build static binary" OFF)
+ option(STATIC_LIBS "Link libuv and libzmq statically" OFF)
+ option(WITH_RANDOMX "Include the RandomX library in the build. If this is turned off, p2pool will rely on monerod for verifying RandomX hashes" ON)
+ option(WITH_LTO "Use link-time compiler optimization (if linking fails for you, run cmake with -DWITH_LTO=OFF)" ON)
+ option(WITH_UPNP "Include UPnP support. If this is turned off, p2pool will not be able to configure port forwarding on UPnP-enabled routers." ON)
+ option(WITH_GRPC "Include gRPC support. If this is turned off, p2pool will not be able to merge mine with Tari." ON)
+ option(WITH_TLS "Include TLS support. If this is turned off, p2pool will not support Stratum TLS connections, and lack many other security features. It's recommended to keep it ON!" ON)
+ 
+-option(WITH_MERGE_MINING_DONATION "Merge mine donations to the author. This doesn't affect your hashrate or payouts in any way - only unused merge mining capacity will be utilised. If you merge mine yourself, your settings will take priority." ON)
++option(WITH_MERGE_MINING_DONATION "Merge mine donations to the author. This doesn't affect your hashrate or payouts in any way - only unused merge mining capacity will be utilised. If you merge mine yourself, your settings will take priority." OFF)
+ 
+ option(DEV_TEST_SYNC "[Developer only] Sync test, stop p2pool after sync is complete" OFF)
+ option(DEV_WITH_TSAN "[Developer only] Compile with thread sanitizer" OFF)
+ option(DEV_WITH_MSAN "[Developer only] Compile with memory sanitizer" OFF)
+ option(DEV_WITH_UBSAN "[Developer only] Compile with undefined behavior sanitizer" OFF)
+ option(DEV_WITH_ASAN "[Developer only] Compile with address sanitizer" OFF)
+ option(DEV_CLANG_TIDY "[Developer only] Compile for clang-tidy" OFF)
+ option(DEV_TRACK_MEMORY "[Developer only] Track memory allocations" OFF)
+ option(DEV_DEBUG "[Developer only] Compile a debug build" OFF)
+ 
+diff -r -u -U10 p2pool.orig/cppcheck/run.cmd p2pool/cppcheck/run.cmd
+--- p2pool.orig/cppcheck/run.cmd	2025-07-10 09:33:57.460540947 -0700
++++ p2pool/cppcheck/run.cmd	2025-07-10 09:25:38.996837307 -0700
+@@ -1,12 +1,12 @@
+ @echo off
+-"..\cppcheck-main\bin\cppcheck.exe" ../src/*.cpp -D__cppcheck__ -DSIZE_MAX=UINT64_MAX -DRAPIDJSON_ENDIAN=RAPIDJSON_LITTLEENDIAN -D_WIN32=1 -D_WIN64=1 -DWIN32=1 -D_WINDOWS=1 -DNDEBUG=1 -DWITH_GRPC=1 -DPROTOBUF_ENABLE_DEBUG_LOGGING_MAY_LEAK_PII=0 -DWITH_RANDOMX=1 -DWITH_UPNP=1 -DWITH_TLS=1 -DWITH_MERGE_MINING_DONATION=1 -DCURL_STATICLIB=1 -DWIN32_LEAN_AND_MEAN=1 -D_WIN32_WINNT=0x0600 -D_DISABLE_VECTOR_ANNOTATION=1 -D_DISABLE_STRING_ANNOTATION=1 -DZMQ_STATIC=1 -DHAVE_BITSCANREVERSE64=1 -DRAPIDJSON_PARSE_DEFAULT_FLAGS=kParseTrailingCommasFlag -DMINIUPNP_STATICLIB=1 -DCARES_STATICLIB=1 -DCMAKE_INTDIR="Release" -D__SSE2__=1 -D_MSC_VER=1929 --platform=win64 --std=c++17 --enable=all --inconclusive --inline-suppr --template="{file}:{line}:{id}{inconclusive: INCONCLUSIVE} {message}" --includes-file=includes.txt --suppressions-list=suppressions.txt --output-file=errors_full.txt --max-ctu-depth=3 --check-level=exhaustive --checkers-report=checkers_report.txt
++"..\cppcheck-main\bin\cppcheck.exe" ../src/*.cpp -D__cppcheck__ -DSIZE_MAX=UINT64_MAX -DRAPIDJSON_ENDIAN=RAPIDJSON_LITTLEENDIAN -D_WIN32=1 -D_WIN64=1 -DWIN32=1 -D_WINDOWS=1 -DNDEBUG=1 -DWITH_GRPC=1 -DPROTOBUF_ENABLE_DEBUG_LOGGING_MAY_LEAK_PII=0 -DWITH_RANDOMX=1 -DWITH_UPNP=1 -DWITH_TLS=1 -DWITH_MERGE_MINING_DONATION=0 -DCURL_STATICLIB=1 -DWIN32_LEAN_AND_MEAN=1 -D_WIN32_WINNT=0x0600 -D_DISABLE_VECTOR_ANNOTATION=1 -D_DISABLE_STRING_ANNOTATION=1 -DZMQ_STATIC=1 -DHAVE_BITSCANREVERSE64=1 -DRAPIDJSON_PARSE_DEFAULT_FLAGS=kParseTrailingCommasFlag -DMINIUPNP_STATICLIB=1 -DCARES_STATICLIB=1 -DCMAKE_INTDIR="Release" -D__SSE2__=1 -D_MSC_VER=1929 --platform=win64 --std=c++17 --enable=all --inconclusive --inline-suppr --template="{file}:{line}:{id}{inconclusive: INCONCLUSIVE} {message}" --includes-file=includes.txt --suppressions-list=suppressions.txt --output-file=errors_full.txt --max-ctu-depth=3 --check-level=exhaustive --checkers-report=checkers_report.txt
+ 
+ findstr /V /C:"external\src" errors_full.txt > errors_filtered0.txt
+ findstr /V /C:":checkersReport" errors_filtered0.txt > errors_filtered.txt
+ 
+ findstr /C:"There were critical errors" checkers_report.txt > checkers_report_filtered.txt
+ 
+ for /f %%i in ("errors_filtered.txt") do set size=%%~zi
+ if %size% gtr 0 (
+ 	type errors_filtered.txt
+ 	exit 1

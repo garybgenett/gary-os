@@ -133,6 +133,7 @@ net-fs/samba				client
 net-libs/gnutls				openpgp openssl tls-heartbeat tools
 net-libs/nodejs				npm
 net-misc/unison				-gtk
+net-misc/xmrig				-donate hwloc opencl ssl
 net-p2p/bitcoin-core			cli daemon gui
 net-p2p/monero				hw-wallet
 net-p2p/monero-gui-bin			-daemon -tools -wallet-cli -wallet-rpc
