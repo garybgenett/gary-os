@@ -1954,7 +1954,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
   * `sv stop qemu.windows`
     * `rm /tmp/qemu.windows.img.*`
     * `(cd _systems/qemu; rm windows.img)`
-    * `(cd _systems/qemu; qemu-img create -f qcow2 -o compat=1.1,backing_file=$(ls windows-10.*.2-update.qcow2) windows.img)`
+    * `(cd _systems/qemu; qemu-img create -f qcow2 -F qcow2 -o compat=1.1,backing_file=$(ls -L windows-10.*.qcow2 | tail -n1) windows.img)`
   * `./scripts/qemu-windows.bsh / ALT -m 8192`
     * [ ] Download [Boot] and [Kernel] to the desktop
     * [ ] Download and install [VirtualBox]
@@ -2010,10 +2010,11 @@ Everything in [Booting], [Running] and [Building] should be validated below.
         * `mkdir /tmp/grub; HOME=/.gary-os GRUB_DIR=/.gary-os/grub ./scripts/grub.sh /tmp/grub -fx -k/dev/sda1 /dev/sdb1`
             * `umount /dev/sdb*`
             * `gdisk /dev/sdb`
+                * [ ] Expand partition size
             * `./.bashrc format /dev/sdb1`
         * `make unpack`
-        * `mount /dev/sdb1 /.install`
-        * `mkdir /.install/gary-os`
+            * `mount /dev/sdb1 /.install`
+            * `mkdir /.install/gary-os`
     * `ls -la ./gary-os/`
         * `rm ./gary-os/gary-os-*.fetch`
         * `make fetch`
