@@ -1798,6 +1798,7 @@ Everything needed to perform these steps is in the [Repository] or the
 
   * `cd .setup/gentoo.gary-os`
     * `make DOFAST=true init`
+    * `make DOREDO=true krnl`
   * [x] *Validate( 850MB 1.4GiB '' devel )*
     * [ ] Verify `#{rootfs}` markers
   * `make ROOTFS=false devel`
