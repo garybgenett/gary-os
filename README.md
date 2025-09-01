@@ -2176,6 +2176,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * `make DOMODS=true doit`
     * `make _publish_prep`
     * `(cd _builds/_gentoo; git-backup "gary-os v#.#"; GIT_PAGER= git-list -n1)`
+    * `(cd _builds; rsync ./_gentoo/ ../../_toor)`
   * `cd coding/gary-os-history`
     * `ln ../gary-os.git ./.git`
     * `GIT_PAGER= git-list -n1`
