@@ -4,7 +4,7 @@
 
 | ![GaryOS Icon](_artifacts/images/icon-v6.0.png "GaryOS Icon") | "The one file that does it all."
 |:---      |:---
-| Latest   | [v8.0 2024-05-16] -- [Kernel], [Rootfs], [Boot], [Disk]
+| Latest   | [v9.0 2025-09-01] -- [Kernel], [Rootfs], [Boot], [Disk]
 | Homepage | <http://www.garybgenett.net/projects/gary-os>
 | Download | <https://sourceforge.net/projects/gary-os>
 | Source   | <https://github.com/garybgenett/gary-os>
@@ -24,7 +24,7 @@
 | [Project]  | [References], [Contributing], [Licensing]
 | [Details]  | [Versioning], [Repository], [Tools], [Ecosystem]
 | [Release]  | [Process], [Checklist], [Publish]
-| [Versions] | [v8.0 2024-05-16], [v7.0 2023-01-14], [v6.0 2021-09-12], [(...)]
+| [Versions] | [v9.0 2025-09-01], [v8.0 2024-05-16], [v7.0 2023-01-14], [(...)]
 
 [GaryOS]: http://www.garybgenett.net/projects/gary-os
 [Gary B. Genett]: http://www.garybgenett.net
@@ -2200,12 +2200,42 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 [License]: https://github.com/garybgenett/gary-os/blob/master/LICENSE.md
 [Downloads]: https://sourceforge.net/projects/gary-os/files
 
-[Kernel]: https://sourceforge.net/projects/gary-os/files/gary-os-v8.0-generic_64.kernel
-[Rootfs]: https://sourceforge.net/projects/gary-os/files/gary-os-v8.0-generic_64.rootfs
-[Boot]: https://sourceforge.net/projects/gary-os/files/gary-os-v8.0-generic_64.grub.zip
-[Disk]: https://sourceforge.net/projects/gary-os/files/gary-os-v8.0-generic_64.qcow2
+[Kernel]: https://sourceforge.net/projects/gary-os/files/gary-os-v9.0-generic_64.kernel
+[Rootfs]: https://sourceforge.net/projects/gary-os/files/gary-os-v9.0-generic_64.rootfs
+[Boot]: https://sourceforge.net/projects/gary-os/files/gary-os-v9.0-generic_64.grub.zip
+[Disk]: https://sourceforge.net/projects/gary-os/files/gary-os-v9.0-generic_64.qcow2
 
-[(...)]: #v50-2021-08-04
+[(...)]: #v60-2021-09-12
+
+### v9.0 2025-09-01 ############################################################
+[v9.0 2025-09-01]: #v90-2025-09-01
+[v9.0]: #v90-2025-09-01
+
+  **[Repository](https://github.com/garybgenett/gary-os/tree/v9.0)
+  / [Readme](https://github.com/garybgenett/gary-os/blob/v9.0/README.md)
+  / [License](https://github.com/garybgenett/gary-os/blob/v9.0/LICENSE.md)
+  / [Packages (Kernel)](https://github.com/garybgenett/gary-os/blob/v9.0/packages.txt)
+  / [Packages (Rootfs)](https://github.com/garybgenett/gary-os/blob/v9.0/packages.rootfs.txt)**
+
+  |                | |
+  |:---            |:---
+  | Kernel         | [gary-os-v9.0-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v9.0-generic_64.kernel)
+  | Rootfs         | [gary-os-v9.0-generic_64.rootfs](https://sourceforge.net/projects/gary-os/files/gary-os-v9.0-generic_64.rootfs)
+  | Boot           | [gary-os-v9.0-generic_64.grub.zip](https://sourceforge.net/projects/gary-os/files/gary-os-v9.0-generic_64.grub.zip)
+  | Disk           | [gary-os-v9.0-generic_64.qcow2](https://sourceforge.net/projects/gary-os/files/gary-os-v9.0-generic_64.qcow2)
+  | Source Stage3  | [gary-os-v9.0-generic_64.stage3.tar.xz](https://sourceforge.net/projects/gary-os/files/v9.0/gary-os-v9.0-generic_64.stage3.tar.xz)
+  | Source Portage | [gary-os-v9.0-generic_64.gentoo-repo.tar.xz](https://sourceforge.net/projects/gary-os/files/v9.0/gary-os-v9.0-generic_64.gentoo-repo.tar.xz)
+
+  * Overall
+      * Increased default initramfs size to `3072m` for [Kernel] packages growth
+      * Integrated `tmpfs` into build process, to optimize speed and disk usage
+      * General improvements to build/update process
+      * Renamed "artifacts" directory
+  * [Portage]
+      * Improved support for post-installation rolling builds/updates
+      * Added an option for additional package overlays
+  * [GRUB]
+      * Increased [Boot] `groot_size` to `4096m` for [Rootfs] packages growth
 
 ### v8.0 2024-05-16 ############################################################
 [v8.0 2024-05-16]: #v80-2024-05-16
