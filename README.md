@@ -150,7 +150,7 @@ details on these parameters are in [Filesystem] and [Loader].
 Starting from [GNU/Linux] is easier than with [Windows], for obvious reasons.
 There are two options.
 
-  1. Use an existing booloader configuration
+  1. Use an existing bootloader configuration
   2. Use the [GaryOS] [GRUB] tooling
 
 It is recommended to use the first if it is available.  The simplest version
@@ -535,7 +535,7 @@ Replace `6144` with the amount of MB to allocate.  This may also be specified
 as `6g` for GB.  GaryOS is tested with 6GB, to ensure this works with systems
 that have 8GB of memory.
 
-**Upack Directories**
+**Unpack Directories**
 
 GaryOS has a basic, self-documented, packages-like system for fetching and
 unpacking additional directories (see [Design]).
