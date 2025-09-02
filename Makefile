@@ -21,7 +21,7 @@ override CHROOT	:= -g
 override C	?= $(GARYOS_DIR)
 override S	?= $(GARYOS_DIR)/sources
 override O	?= $(GARYOS_DIR)/build
-override A	?= $(GARYOS_DIR)/artifacts
+override A	?= $(GARYOS_DIR)/_artifacts
 override P	?= $(GARYOS_TTL)
 
 override ROOTFS	?=
