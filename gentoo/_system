@@ -261,25 +261,35 @@ fi
 ########################################
 
 #OPTIONS[STAGE TMPFS]
-export STAGE="amd64-nomultilib-openrc"
-export TMPFS="${TMPFS:-$(( 30 * (10**3)**2 ))}"; declare TMPFS_CHAR="k"
+export STAGE_D="amd64-nomultilib-openrc"
+export TMPFS_D="$(( 30 * (10**3)**2 ))"; declare TMPFS_CHAR="k"
+export STAGE="${STAGE:-${STAGE_D}}"
+export TMPFS="${TMPFS:-${TMPFS_D}}"
 
 #OPTIONS[_CPU EARC ESUB GARC GSUB GOPT]
 export _CPU_RESET="CONFIG_GENERIC_CPU"
-export _CPU="${_CPU:-${_CPU_RESET}}"
-export EARC="${EARC:-x86-64bit}"
-export ESUB="${ESUB:-generic_64}"
-export GARC="${GARC:-x86-64}"
-export GSUB="${GSUB:-generic}"
-export GOPT="${GOPT:--O2}"
+export _CPU_D="${_CPU_RESET}"
+export EARC_D="x86-64bit"
+export ESUB_D="generic_64"
+export GARC_D="x86-64"
+export GSUB_D="generic"
+export GOPT_D="-O2"
+export _CPU="${_CPU:-${_CPU_D}}"
+export EARC="${EARC:-${EARC_D}}"
+export ESUB="${ESUB:-${ESUB_D}}"
+export GARC="${GARC:-${GARC_D}}"
+export GSUB="${GSUB:-${GSUB_D}}"
+export GOPT="${GOPT:-${GOPT_D}}"
 
 if ${_GOS}; then
-	_CPU="CONFIG_GENERIC_CPU"
-	EARC="x86-64bit"
-	ESUB="generic_64"
-	GARC="x86-64"
-	GSUB="generic"
-	GOPT="-O2"
+	STAGE="${STAGE_D}"
+	TMPFS="${TMPFS_D}"
+	_CPU="${_CPU_D}"
+	EARC="${EARC_D}"
+	ESUB="${ESUB_D}"
+	GARC="${GARC_D}"
+	GSUB="${GSUB_D}"
+	GOPT="${GOPT_D}"
 fi
 
 CPUS="$(${GREP} "^processor" /proc/cpuinfo | wc -l)"
