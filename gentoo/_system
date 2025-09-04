@@ -1546,6 +1546,21 @@ if [[ ${1} == -u ]]; then
 		expect_wrapper emerge ${_ASK} \@module-rebuild				$(
 			for FILE in ${LINPKG}; do echo -en " --exclude ${FILE}"; done)	|| EXIT 1
 		expect_wrapper emerge ${_ASK} \@preserved-rebuild			|| EXIT 1
+		declare FILES="$(
+			for FILE in $(qlist -vI 2>/dev/null); do
+				if [[ ! -f ${PAKDIR}/${FILE}.gpkg.tar ]]; then
+					echo -en " =${FILE}"
+				fi
+			done
+		)"
+		if [[ -n ${FILES} ]]; then
+			expect_wrapper emerge ${_ASK}					\
+				${EMERGE_TREE_OPTS}					\
+				--selective=n						\
+				--usepkg=n						\
+				--getbinpkg=n						\
+				${FILES}						|| EXIT 1
+		fi
 	fi
 	expect_wrapper emerge ${_ASK} --depclean					|| EXIT 1
 	if ! ${DOFAST}; then
