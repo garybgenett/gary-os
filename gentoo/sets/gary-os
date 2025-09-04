@@ -171,6 +171,7 @@ sys-apps/portage
 #>>> app-portage/eix			# too many dependencies
 app-portage/gentoolkit
 #>>> app-portage/mirrorselect		# too many dependencies
+app-portage/portage-utils
 #>>> sys-kernel/genkernel		# too many dependencies
 
 ########################################
