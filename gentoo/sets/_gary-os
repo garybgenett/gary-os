@@ -272,6 +272,7 @@ sys-apps/portage
 app-portage/eix
 app-portage/gentoolkit
 app-portage/mirrorselect
+app-portage/portage-utils
 sys-kernel/genkernel
 
 ########################################
