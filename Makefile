@@ -308,9 +308,9 @@ export COMPOSER_DEBUGIT	:= 1
 export TOC		:= 6
 export OPT		:= --metadata title="GaryOS Readme"
 
-override GREP	?= grep --color=auto -E
-override SED	?= sed -r
-override RM	?= rm -fv
+override GREP	:= grep --color=auto -E
+override SED	:= sed -r
+override RM	:= rm -fv
 
 .PHONY: readme
 readme:
