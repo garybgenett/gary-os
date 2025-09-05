@@ -4,7 +4,7 @@
 
 | ![GaryOS Icon](_artifacts/images/icon-v6.0.png "GaryOS Icon") | "The one file that does it all."
 |:---      |:---
-| Latest   | [v9.0 2025-09-03] -- [Kernel], [Rootfs], [Boot], [Disk]
+| Latest   | [v9.0 2025-09-05] -- [Kernel], [Rootfs], [Boot], [Disk]
 | Homepage | <http://www.garybgenett.net/projects/gary-os>
 | Download | <https://sourceforge.net/projects/gary-os>
 | Source   | <https://github.com/garybgenett/gary-os>
@@ -24,7 +24,7 @@
 | [Project]  | [References], [Contributing], [Licensing]
 | [Details]  | [Versioning], [Repository], [Tools], [Ecosystem]
 | [Release]  | [Process], [Checklist], [Publish]
-| [Versions] | [v9.0 2025-09-03], [v8.0 2024-05-16], [v7.0 2023-01-14], [(...)]
+| [Versions] | [v9.0 2025-09-05], [v8.0 2024-05-16], [v7.0 2023-01-14], [(...)]
 
 [GaryOS]: http://www.garybgenett.net/projects/gary-os
 [Gary B. Genett]: http://www.garybgenett.net
@@ -2207,9 +2207,9 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 
 [(...)]: #v60-2021-09-12
 
-### v9.0 2025-09-03 ############################################################
-[v9.0 2025-09-03]: #v90-2025-09-03
-[v9.0]: #v90-2025-09-03
+### v9.0 2025-09-05 ############################################################
+[v9.0 2025-09-05]: #v90-2025-09-05
+[v9.0]: #v90-2025-09-05
 
   **[Repository](https://github.com/garybgenett/gary-os/tree/v9.0)
   / [Readme](https://github.com/garybgenett/gary-os/blob/v9.0/README.md)
