@@ -1734,9 +1734,9 @@ Everything needed to perform these steps is in the [Repository] or the
         * `vi ./.options`
             * [ ] Update source kernel version
             * [ ] Review
-  * `make init`
+  * `make DOMODS=false init`
     * [ ] Until `@world`, at least
-        * `while :; do make DOFAST=true init; inotifywait --event modify gentoo/make.* gentoo/package.* gentoo/sets/*; done`
+        * `while :; do make DOMODS=false DOFAST=true init; inotifywait --event modify gentoo/make.* gentoo/package.* gentoo/sets/*; done`
         * `(cd .setup; vi gentoo/make.* gentoo/package.* gentoo/sets/*; vdiff -g gentoo/make.* gentoo/package.* gentoo/sets/*)`
     * [x] *Iterate()*
   * `./linux/_config ./build/usr/src/linux`
@@ -1747,12 +1747,12 @@ Everything needed to perform these steps is in the [Repository] or the
         * `vdiff $(realpath ./linux/.default) $(realpath ./linux/.config).*.DONE`
         * `rsync $(realpath ./linux/.config).*.DONE $(realpath ./linux/.config)`
         * `rm $(realpath ./linux/.config).*`
-  * `make doit`
+  * `make DOMODS=false doit`
     * [ ] Update `savedconfig` directory
     * [x] *Iterate()*
   * `cd .setup/gentoo.make`
     * `(cd .setup; git-commit ./linux ./gentoo)`
-  * `make redo`
+  * `make DOMODS=false redo`
     * [x] *Iterate()*
     * `make DOMODS=true doit`
     * `(cd _builds; rsync ./_gentoo/ ./_gary-os.working)`
@@ -1840,7 +1840,7 @@ Everything needed to perform these steps is in the [Repository] or the
         * [ ] Update [Gentoo] commit
     * `make DOMODS=true DOREDO=true doit`
         * [x] *Retry()*
-    * `make edit`
+    * `make DOMODS=true edit`
 
 ### Checklist ##################################################################
 [Checklist]: #checklist
