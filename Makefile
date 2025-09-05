@@ -3,7 +3,7 @@
 # GaryOS :: Primary Makefile
 ################################################################################
 
-override GARYOS_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
+override GARYOS_DIR := $(CURDIR)
 override GARYOS_TTL := gary-os
 
 ########################################
@@ -24,11 +24,11 @@ override O	?= $(GARYOS_DIR)/build
 override A	?= $(GARYOS_DIR)/_artifacts
 override P	?= $(GARYOS_TTL)
 
-override ROOTFS	?=
-override DOMODS	?=
-override DOREDO	?=
-override DOFAST	?=
-override DOTEST	?=
+override export ROOTFS	?=
+override export DOMODS	?=
+override export DOREDO	?=
+override export DOFAST	?=
+override export DOTEST	?=
 
 override V	?=
 override D_OPT	:= -v
