@@ -1654,8 +1654,8 @@ function release_grub_qcow_mount {	#>>>{dotest}
 		modprobe			nbd max_part=127				|| return 1
 		cat				/sys/module/nbd/parameters/max_part		|| return 1
 		qemu-nbd --fork -nv -f qcow2 -c	${GRUB_LEFI/%p[0-9]} ${_RAMFS}.qcow2		|| return 1
-		partx -t gpt -a			${GRUB_LEFI/%p[0-9]}				#>>> || return 1
-		sleep 3
+		sleep 2; partx -t gpt -a	${GRUB_LEFI/%p[0-9]}				#>>> || return 1
+		sleep 2
 	fi
 	if {
 		[[ -n ${GRUB_LMBR} ]] &&
