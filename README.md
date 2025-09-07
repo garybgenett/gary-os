@@ -1754,7 +1754,7 @@ Everything needed to perform these steps is in the [Repository] or the
     * `(cd .setup; git-commit ./linux ./gentoo)`
   * `make DOMODS=false redo`
     * [x] *Iterate()*
-    * `make DOMODS=true doit`
+    * `make DOMODS=false doit`
     * `(cd _builds; rsync ./_gentoo/ ./_gary-os.working)`
   * `make DOMODS=true edit`
     * `(cd _builds; rm ./_gentoo.boot; ln _gentoo ./_gentoo.boot)`
@@ -2174,6 +2174,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * `_sync boot`
   * `cd .setup/gentoo.make`
     * `make DOMODS=true doit`
+    * `make DOMODS=true edit`
     * `make _publish_prep`
     * `(cd _builds/_gentoo; git-backup "gary-os v#.#"; GIT_PAGER= git-list -n1)`
     * `(cd _builds; rsync ./_gentoo/ ../../_toor)`
