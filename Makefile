@@ -3,7 +3,7 @@
 # GaryOS :: Primary Makefile
 ################################################################################
 
-override GARYOS_DIR := $(CURDIR)
+override GARYOS_DIR := $(abspath $(dir $(firstword $(MAKEFILE_LIST))))
 override GARYOS_TTL := gary-os
 
 ########################################
