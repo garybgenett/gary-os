@@ -262,7 +262,7 @@ fi
 
 #OPTIONS[STAGE TMPFS]
 export STAGE_D="amd64-nomultilib-openrc"
-export TMPFS_D="$(( 30 * (10**3)**2 ))"; declare TMPFS_CHAR="k"
+export TMPFS_D="$(expr 32 \* 1024 \* 1024)"; declare TMPFS_CHAR="k"
 export STAGE="${STAGE:-${STAGE_D}}"
 export TMPFS="${TMPFS:-${TMPFS_D}}"
 
@@ -297,6 +297,7 @@ MEMS="$(${SED} -n "s|^MemTotal[:][^0-9]+([0-9]+)[^0-9]+$|\1|gp" /proc/meminfo)"
 MSAV="$(expr 4 \* 1024 \* 1024)"
 MPER="$(expr 2 \* 1024 \* 1024)"
 JOBS="$(expr \( ${MEMS} - ${MSAV} \) / ${MPER})"
+RAMD="$(expr ${MEMS} \* \( 2 / 3 \))"
 if [[ "${JOBS}" -gt "${CPUS}"	]]; then JOBS="${CPUS}"	; fi
 if [[ "${JOBS}" -le "0"		]]; then JOBS="1"	; fi
 
@@ -766,8 +767,7 @@ function mount_dev_dirs {
 	declare IS_TMPFS="false"
 	if {
 		[[ ${TMPFS} == +([0-9]) ]] &&
-		[[ -f /proc/meminfo ]] &&
-		(( $(($(${SED} -n "s|^MemTotal[:][[:space:]]+([0-9]+).*$|\1|gp" /proc/meminfo) / 2)) >= ${TMPFS} ));
+		(( ${TMPFS} <= ${RAMD} ));
 	}; then
 		DO_TMPFS="true"
 	fi
