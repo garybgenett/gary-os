@@ -84,11 +84,6 @@ virtual/libcrypt			static-libs	# gentoo required
 #{CMD} for FILE in /bin/busybox /usr/bin/coreutils /bin/bash /usr/bin/openssl /usr/bin/ssh /usr/bin/rsync /sbin/runit ; do echo ; echo "${FILE}"; ldd ./build${FILE}; done
 #{CMD} make emerge-busybox emerge-coreutils emerge-bash emerge-openssl emerge-openssh emerge-rsync emerge-runit
 
-sys-kernel/gentoo-kernel		hardened initramfs
-
-dev-java/openjdk			-system-bootstrap
-dev-lang/gnat-gpl			ada
-sys-devel/gcc				-ada cxx
 sys-libs/glibc				static-libs
 
 sys-apps/busybox			-make-symlinks savedconfig static
@@ -106,8 +101,11 @@ sys-apps/busybox			-pam		# gentoo required
 
 ########################################
 
-#>>> app-emulation/virtualbox		qt5 sdk vnc
+dev-lang/gnat-gpl			ada
+sys-devel/gcc				-ada cxx
+sys-kernel/gentoo-kernel		hardened initramfs
 
+#>>> app-emulation/virtualbox		qt5 sdk vnc
 app-arch/p7zip				-rar
 app-editors/vim				-X gpm
 app-emulation/libvirt			lxc qemu
@@ -153,6 +151,8 @@ x11-wm/dwm				savedconfig
 
 */*					-tpm
 */*					x265
+
+dev-java/openjdk			-system-bootstrap
 
 mail-client/thunderbird			-bindist
 www-client/firefox			-bindist
