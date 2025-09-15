@@ -327,7 +327,7 @@ done
 echo -en "."
 
 echo -en "\n"						>>${GENDIR}/+checks 2>&1
-echo -en "[${ETCDIR}/packages.*]"			>>${GENDIR}/+checks 2>&1
+echo -en "[${ETCDIR}/package.*]"			>>${GENDIR}/+checks 2>&1
 echo -en "\n"						>>${GENDIR}/+checks 2>&1
 for FILE in $(
 	${GREP} -h -v "^#>>>" ${ETCDIR}/package.* |
