@@ -767,6 +767,7 @@ function mount_dev_dirs {
 	declare IS_TMPFS="false"
 	if {
 		[[ ${TMPFS} == +([0-9]) ]] &&
+		(( ${TMPFS} > 0 )) &&
 		(( ${TMPFS} <= ${RAMD} ));
 	}; then
 		DO_TMPFS="true"
