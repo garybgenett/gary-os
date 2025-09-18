@@ -817,7 +817,6 @@ function prepare_config_restore {	#>>>{doredo}
 
 #NOTE: UPDATE THE "SYSTEM INSTALLATION" TABLE IN "README" WHEN MAKING CHANGES HERE
 
-#note: this is called statically in the "_system" script
 function _prepare_config {		#{isexit} #{doredo}
 	if {
 		! ${DOREDO} &&
@@ -2167,6 +2166,7 @@ function _publish_release {		#{ismain} #{doredo}
 
 ########################################
 
+#note: this is called statically in the "_system" script, under the "$_cfg" option
 function _publish_prep {
 	variable_parse DEVDIRS "" "" "/"		>${TARGET}/.gitignore			|| return 1
 	sort -u -o ${TARGET}/.gitignore			${TARGET}/.gitignore			|| return 1
@@ -2183,7 +2183,8 @@ function _publish_prep {
 	${RM}						${ROOTFS_FILE}.exclude			|| return 1
 	${RM}						${_RAMFS}.grub				|| return 1
 	${RM}						${TARGET}${DSTDIR}/{.[^.],}*checksum*	|| return 1
-	${SED} "s|^[#][{][^}]+[}][[:space:]]+||g"	${SETDIR}/${FUNDIR}/package.license	\
+	if ${_GOS}; then
+		${SED} "s|^[#][{][^}]+[}][[:space:]]+||g" ${SETDIR}/${FUNDIR}/package.license	\
 		| ${SED} -n "s|^([^#[:space:]]+)[[:space:]]+([^[:space:]]+).*$|\1 \2|gp"	\
 		| eval ${SED}									\
 			$(for FILE in ${RELEASE_LICENSES}; do
@@ -2191,6 +2192,7 @@ function _publish_prep {
 			done)									\
 		| ${SED} "s|[[:space:]].+$||g"							\
 		| while read -r FILE; do ${RM}		${TARGET}${PAKDIR}/${FILE}-[0-9]*	|| return 1; done
+	fi
 	${RM}						${TARGET}/tmp/.ccache			|| return 1
 	${RM}						${TARGET}/tmp/*				|| return 1
 	${RM}						${TARGET}/var/tmp/tmp*			|| return 1
