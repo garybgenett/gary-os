@@ -2142,7 +2142,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * `_sync boot`
     * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.kernel 1 "groot=10.0.0.254 groot_size=6144m" -m 8192`
     * [x] **Verify()**
-  * `make _publish_prep`
+  * `make DOREDO=true _publish_release`
     * `ll ./build/ ./build/_build ./build/.gary-os-*`
   * `(cd _builds; rsync -L ./_gary-os.working/.gary-os-*/ ./_gary-os)`
     * `(cd _builds/_gary-os; git-backup <gentoo commit>.#; GIT_PAGER= git-list -n1)`
@@ -2175,7 +2175,6 @@ Everything in [Booting], [Running] and [Building] should be validated below.
   * `cd .setup/gentoo.make`
     * `make DOMODS=true doit`
     * `make DOMODS=true edit`
-    * `make _publish_prep`
     * `(cd _builds/_gentoo; git-backup "gary-os v#.#"; GIT_PAGER= git-list -n1)`
     * `(cd _builds; rsync ./_gentoo/ ../../_toor)`
   * `cd coding/gary-os-history`
