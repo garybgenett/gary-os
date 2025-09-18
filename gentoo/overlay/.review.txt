@@ -453,12 +453,13 @@ quake1-data-2.40-r1.ebuild
 
 ------------------------------------------------------------------------------------------------------------------------
 diff :: games-fps/quakeforge [rationale] ===============================================================================
-#>>> removed package
+# removed package
 # archiving due to gcc "backtrace" not being included in gentoo
 #	https://bugs.gentoo.org/552098
 #	https://bugs.gentoo.org/922934
 # 2025-02-14 17:16:43 +0100 b4af72bd4f5af0bb23280e0b6d03dc09c839d591 games-fps/quakeforge: Fix incorrect REPLACING_VERSIONS usage
 diff :: games-fps/quakeforge [source] ==================================================================================
+diff: /var/db/repos/gentoo/games-fps/quakeforge: No such file or directory
 diff :: games-fps/quakeforge [target] ==================================================================================
 Only in ./games-fps/quakeforge: .keep
 Only in ./games-fps/quakeforge: .rationale
