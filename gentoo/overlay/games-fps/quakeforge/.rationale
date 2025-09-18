@@ -1,4 +1,4 @@
-#>>> removed package
+# removed package
 # archiving due to gcc "backtrace" not being included in gentoo
 #	https://bugs.gentoo.org/552098
 #	https://bugs.gentoo.org/922934
