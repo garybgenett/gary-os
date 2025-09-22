@@ -9,7 +9,7 @@
 app-arch/libarchive			zstd		# gentoo required
 app-emulation/qemu			seccomp		# gentoo required
 app-text/poppler			cairo		# gentoo required
-app-text/poppler			qt5		# gentoo required
+app-text/poppler			qt6		# gentoo required
 dev-libs/boost				nls		# gentoo required
 dev-python/pygobject			cairo		# gentoo required
 dev-qt/qtbase				dbus		# gentoo required
@@ -27,6 +27,7 @@ media-libs/opencv			qt6		# gentoo required
 media-video/ffmpeg			opus		# gentoo required
 media-video/ffmpeg			theora		# gentoo required
 net-misc/curl				-gnutls		# gentoo required
+net-misc/curl				adns		# gentoo required
 net-misc/curl				http2		# gentoo required
 sys-apps/fwupd				-introspection	# gentoo required
 sys-libs/gdbm				berkdb		# gentoo required
@@ -44,8 +45,6 @@ dev-libs/libnl				utils		# gentoo required
 dev-libs/xmlsec				nss		# gentoo required
 dev-python/pyqt5			declarative	# gentoo required
 dev-python/pyqt5			network		# gentoo required
-dev-python/pyqt5			printsupport	# gentoo required
-dev-python/pyqt5			webchannel	# gentoo required
 dev-python/pyqt5			widgets		# gentoo required
 dev-python/pyqt6			qml		# gentoo required
 dev-python/pyqt6			quick		# gentoo required
@@ -57,8 +56,8 @@ media-libs/libvpx			postproc	# gentoo required
 media-libs/mlt				frei0r		# gentoo required
 media-libs/opencv			contrib		# gentoo required
 media-libs/opencv			contribdnn	# gentoo required
+media-libs/opencv			features2d	# gentoo required
 media-libs/sdl2-ttf			-harfbuzz	# gentoo required
-media-video/ffmpeg			chromium	# gentoo required
 net-dns/dnsmasq				script		# gentoo required
 net-libs/gnutls				pkcs11		# gentoo required
 net-libs/nodejs				inspector	# gentoo required
@@ -101,11 +100,10 @@ sys-apps/busybox			-pam		# gentoo required
 
 ########################################
 
-dev-lang/gnat-gpl			ada
-sys-devel/gcc				-ada cxx
+sys-devel/gcc				ada cxx
 sys-kernel/gentoo-kernel		hardened initramfs
 
-#>>> app-emulation/virtualbox		qt5 sdk vnc
+#>>> app-emulation/virtualbox		gui sdk vnc
 app-arch/p7zip				-rar
 app-editors/vim				-X gpm
 app-emulation/libvirt			lxc qemu
@@ -123,7 +121,6 @@ mail-client/thunderbird			-rust-extensions -wifi ldap
 mail-mta/msmtp				daemon mta
 media-libs/libprojectm			qt5
 media-libs/mesa				vulkan vulkan-overlay
-media-sound/pulseaudio			bluetooth daemon
 media-sound/pulseaudio-daemon		alsa bluetooth dbus oss
 media-video/vlc				gui projectm run-as-root vlm
 net-analyzer/tcpdump			-chroot
@@ -143,6 +140,7 @@ sys-apps/iproute2			iptables
 sys-apps/smartmontools			-caps -daemon
 sys-boot/grub				device-mapper dist-kernel-cap efiemu libzfs mount
 sys-fs/zfs				-python rootfs
+www-client/chromium			-rar ffmpeg-chromium
 www-client/firefox			-wifi
 www-servers/apache			-threads
 x11-base/xorg-server			xnest xvfb
@@ -231,6 +229,8 @@ sys-apps/fwupd				minimal		# requires: ( sys-apps/systemd | sys-auth/elogind )
 #{GFG} dev-build/cmake			-gui		# gentoo required
 #{GFG} media-libs/libsndfile		minimal		# gentoo required
 
+#{GFG} sys-devel/gcc			-ada		# dev-lang/ada-bootstrap
+
 ########################################
 
 #{GOS} dev-build/cmake			-gui		# dev-qt/qtcore
@@ -244,6 +244,7 @@ sys-apps/fwupd				minimal		# requires: ( sys-apps/systemd | sys-auth/elogind )
 #{GOS} media-libs/libcanberra		-gtk2		# x11-libs/gtk+
 #{GOS} media-libs/libcanberra		-gtk3		# x11-libs/gtk+
 #{GOS} media-libs/mesa			-llvm		# sys-devel/llvm
+#{GOS} sys-devel/gcc			-ada		# dev-lang/ada-bootstrap
 #{GOS} sys-fs/lvm2			-thin		# sys-block/thin-provisioning-tools -> dev-libs/boost
 
 ########################################

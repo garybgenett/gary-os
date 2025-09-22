@@ -41,7 +41,6 @@ sys-firmware/sof-firmware
 dev-build/autoconf
 dev-build/automake
 dev-build/make
-dev-lang/gnat-gpl
 sys-devel/binutils
 sys-devel/gcc
 sys-devel/patch
@@ -459,7 +458,6 @@ media-sound/alsa-utils
 media-sound/aumix
 media-sound/pamix
 media-sound/pavucontrol
-media-sound/pulseaudio
 media-sound/pulseaudio-daemon
 media-sound/pulsemixer
 
