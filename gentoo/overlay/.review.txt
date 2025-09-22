@@ -2330,6 +2330,7 @@ diff :: net-p2p/p2pool [rationale] =============================================
 diff :: net-p2p/p2pool [source] ========================================================================================
 diff: /var/db/repos/gentoo/net-p2p/p2pool: No such file or directory
 diff :: net-p2p/p2pool [target] ========================================================================================
+Only in ./net-p2p/p2pool: .keep
 Only in ./net-p2p/p2pool/.source: .null
 Only in ./net-p2p/p2pool: .rationale
 Only in ./net-p2p/p2pool: .source
