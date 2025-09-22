@@ -1,0 +1,4 @@
+# python version fix
+!!! The ebuild selected to satisfy "app-office/unoconv" has unmet requirements.
+- app-office/unoconv-0.9.0-r1::gentoo USE="" PYTHON_SINGLE_TARGET="-python3_11 -python3_12"
+# 2024-12-17 18:39:25 +0100 ca331a455369b14a35f515af27fd79014f8fffa1 app-office/unoconv: destabilize 0.9.0-r1 for ~x86
