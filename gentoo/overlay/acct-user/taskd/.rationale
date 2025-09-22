@@ -1,0 +1,4 @@
+# removed package
+emerge: there are no ebuilds to satisfy "acct-user/taskd".
+(dependency required by "app-misc/taskd-1.1.0-r3::overlay" [ebuild])
+# 2024-01-14 23:13:51 +0100 2f0c91e20c163712884611bb366cb4131bca7fe4 acct-user/taskd: update EAPI 7 -> 8
