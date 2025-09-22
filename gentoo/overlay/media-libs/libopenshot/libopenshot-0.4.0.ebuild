@@ -21,6 +21,7 @@ IUSE="babl doc examples +imagemagick +opencv +python test"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 RESTRICT="!test? ( test )"
 
+#>>>	media-video/ffmpeg:0=[encode,x264,xvid,vpx,mp3,theora,vorbis]
 RDEPEND="dev-libs/jsoncpp:0=
 	dev-libs/protobuf:=
 	dev-qt/qtcore:5
@@ -28,7 +29,7 @@ RDEPEND="dev-libs/jsoncpp:0=
 	dev-qt/qtmultimedia:5[widgets]
 	dev-qt/qtsvg:5
 	>=media-libs/libopenshot-audio-0.3.0:0=
-	media-video/ffmpeg:0=[encode,x264,xvid,vpx,mp3,theora,vorbis]
+	media-video/ffmpeg:0=[x264,xvid,vpx,lame,theora,vorbis]
 	net-libs/cppzmq
 	net-libs/zeromq
 	babl? ( media-libs/babl )
