@@ -1,15 +1,18 @@
 # Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+#>>>EAPI=7
+EAPI=8
+#>>>
 
 #>>>PYTHON_COMPAT=( python3_{10..11} )
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 #>>>
 PYTHON_REQ_USE="xml(+)"
 DISTUTILS_SINGLE_IMPL=1
 
 #>>>inherit distutils-r1 xdg
+DISTUTILS_USE_PEP517="setuptools"
 inherit distutils-r1 xdg git-r3
 #>>>
 
@@ -33,8 +36,8 @@ IUSE="doc"
 #>>>		dev-python/pyqtWebEngine[${PYTHON_USEDEP}]
 RDEPEND="$(python_gen_cond_dep '
 		dev-python/httplib2[${PYTHON_USEDEP}]
-		dev-python/pyqt5[${PYTHON_USEDEP},gui,svg,widgets]
-		dev-python/pyqtwebengine[${PYTHON_USEDEP}]
+		dev-python/pyqt6[${PYTHON_USEDEP},gui,svg,widgets]
+		dev-python/pyqt6-webengine[${PYTHON_USEDEP}]
 		dev-python/pyzmq[${PYTHON_USEDEP}]
 		dev-python/requests[${PYTHON_USEDEP}]
 	')
@@ -48,6 +51,10 @@ src_prepare() {
 	distutils-r1_python_prepare_all
 	# prevent setup.py from trying to update MIME databases
 	sed -i 's/^ROOT =.*/ROOT = False/' setup.py || die
+#>>>
+	# ImportError: cannot import name 'install' from 'installer' (consider renaming '/var/tmp/portage/media-video/openshot-3.3.0/work/openshot-3.3.0/installer/__init__.py' if it has the same name as a library you intended to import)
+	rm installer/__init__.py
+#>>>
 }
 
 python_compile_all() {

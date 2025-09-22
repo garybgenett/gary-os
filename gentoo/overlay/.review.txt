@@ -2101,29 +2101,31 @@ games-envd-0.ebuild
 ------------------------------------------------------------------------------------------------------------------------
 diff :: media-libs/libopenshot [rationale] =============================================================================
 # removed package
+# https://bugs.gentoo.org/909996
 # openshot		2023-09-07 21:54:37 +0100 8436bf11a32bf521fdbea830dcff03e4cd0ea00a media-video/openshot: Stabilize 3.1.1 amd64, #913812
 # libopenshot		2024-01-11 17:04:37 +0100 f7fdfdaeec3764929686064a6054c38a6b2d7788 Move {app-doc → app-text}/doxygen
 # libopenshot-audio	2024-01-11 17:04:37 +0100 f7fdfdaeec3764929686064a6054c38a6b2d7788 Move {app-doc → app-text}/doxygen
 diff :: media-libs/libopenshot [source] ================================================================================
 diff: /var/db/repos/gentoo/media-libs/libopenshot: No such file or directory
 diff :: media-libs/libopenshot [target] ================================================================================
+Only in ./media-libs/libopenshot: .keep
 Only in ./media-libs/libopenshot: .rationale
 Only in ./media-libs/libopenshot: .source
 diff -u -U10 -r ./media-libs/libopenshot/.source/Manifest ./media-libs/libopenshot/Manifest
 --- ./media-libs/libopenshot/.source/Manifest	2024-10-10 08:33:40.090885142 -0000
-+++ ./media-libs/libopenshot/Manifest	2025-02-21 22:51:53.580615038 -0000
++++ ./media-libs/libopenshot/Manifest	2025-09-10 20:50:43.774532733 -0000
 @@ -1,2 +1,4 @@
 -DIST libopenshot-0.2.7.tar.gz 22472544 BLAKE2B 511ed214f0ecc43294a787e1c0119f036e274a1e8d051cb6e926bf7a9b5cea416325a2e051fca758d1f80ec2b9d746a4dd268e5ac5322fe8539fa2041a8c4d9d SHA512 71cb0e4010d8f3ff453486c3da3c7019c6569066845dcc58f438049a08b1c8663f31c29a728ce5461e9d3a1ca550038b757d4528e62a26eeb45ecbe600353988
  DIST libopenshot-0.3.2.tar.gz 26132237 BLAKE2B 5bc371481ddf69b5de909963cb83d1128066280e1259ae8b23f7ef5450f3da00ef1137dcefe2978e10d1a51931529f104aebdf0601be4b066c7ed371ea43439e SHA512 8891077af28a4db6bc3a7cd078ce5570a8f62e0795c13b0fff795eba60c3e977ece70247033ee4017c9785592355b7421655246a5d6807a5790bd18927739795
 +DIST libopenshot-0.4.0.tar.gz 26131657 BLAKE2B faf2bcabb484a167667c0b2191d8b51ee972d2c204ae7edebbfaa7500542eebdce2dc6c4a8134bc8490e5254190ebda1521e3f437d874df18a8c40dfb48ffed2 SHA512 e5aa91e2ec3f64952a60e069e3c843d3ac59c3f896d81dccd789e52244f442ceed2e62374b6aeeb2514a8b88557edd60faca33cadb06c297ff400aebc83f98a6
-+EBUILD libopenshot-0.3.2-r1.ebuild 2721 BLAKE2B fa1c47f57be311bbb63fdeac892512eb5658f9fc4eacbdf945e301391f878a39908a02db7340f5fccd50c33894e2a121b3aab50c673bba003cb4c502a2a86575 SHA512 86cf0732b99504d848fa38bcaf951a6782c2f1160f5c40fc97c0a568a2454e4a23d948a714d7196d15d630dacb570d98334ca0f6ac9de45c31774443ad7c52c1
-+EBUILD libopenshot-0.4.0.ebuild 2721 BLAKE2B fa1c47f57be311bbb63fdeac892512eb5658f9fc4eacbdf945e301391f878a39908a02db7340f5fccd50c33894e2a121b3aab50c673bba003cb4c502a2a86575 SHA512 86cf0732b99504d848fa38bcaf951a6782c2f1160f5c40fc97c0a568a2454e4a23d948a714d7196d15d630dacb570d98334ca0f6ac9de45c31774443ad7c52c1
++EBUILD libopenshot-0.3.2-r1.ebuild 2782 BLAKE2B d5128ec9a1ff0cb11e1bbaf17bf99c915840805d0417972a9411fe30bd683837c042f4efa42d991f5aa5246ac2c0e76232a5fe303b544a7f3e1a83a6980d8ee3 SHA512 9c161a500d91193d4db43a59b1f319bc8bb954d9d472e5deba9d8c23d20ccd64971b3760d44aa86fa942481c7a402f30f24e1ce13112c0293a661760224655be
++EBUILD libopenshot-0.4.0.ebuild 2782 BLAKE2B d5128ec9a1ff0cb11e1bbaf17bf99c915840805d0417972a9411fe30bd683837c042f4efa42d991f5aa5246ac2c0e76232a5fe303b544a7f3e1a83a6980d8ee3 SHA512 9c161a500d91193d4db43a59b1f319bc8bb954d9d472e5deba9d8c23d20ccd64971b3760d44aa86fa942481c7a402f30f24e1ce13112c0293a661760224655be
 Only in ./media-libs/libopenshot/.source: files
 Only in ./media-libs/libopenshot/.source: libopenshot-0.2.7-r1.ebuild
 diff -u -U10 -r ./media-libs/libopenshot/.source/libopenshot-0.3.2-r1.ebuild ./media-libs/libopenshot/libopenshot-0.3.2-r1.ebuild
 --- ./media-libs/libopenshot/.source/libopenshot-0.3.2-r1.ebuild	2024-10-10 08:33:40.090885142 -0000
-+++ ./media-libs/libopenshot/libopenshot-0.3.2-r1.ebuild	2025-02-21 22:51:35.601688201 -0000
-@@ -1,16 +1,18 @@
++++ ./media-libs/libopenshot/libopenshot-0.3.2-r1.ebuild	2025-09-10 20:50:36.486616053 -0000
+@@ -1,56 +1,59 @@
  # Copyright 1999-2024 Gentoo Authors
  # Distributed under the terms of the GNU General Public License v2
  
@@ -2143,7 +2145,25 @@ diff -u -U10 -r ./media-libs/libopenshot/.source/libopenshot-0.3.2-r1.ebuild ./m
  LICENSE="GPL-3+"
  SLOT="0/21"
  KEYWORDS="amd64 ~x86"
-@@ -34,23 +36,23 @@
+ IUSE="babl doc examples +imagemagick +opencv +python test"
+ 
+ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
+ RESTRICT="!test? ( test )"
+ 
++#>>>	media-video/ffmpeg:0=[encode,x264,xvid,vpx,mp3,theora,vorbis]
+ RDEPEND="dev-libs/jsoncpp:0=
+ 	dev-libs/protobuf:=
+ 	dev-qt/qtcore:5
+ 	dev-qt/qtgui:5
+ 	dev-qt/qtmultimedia:5[widgets]
+ 	dev-qt/qtsvg:5
+ 	>=media-libs/libopenshot-audio-0.3.0:0=
+-	media-video/ffmpeg:0=[encode,x264,xvid,vpx,mp3,theora,vorbis]
++	media-video/ffmpeg:0=[x264,xvid,vpx,lame,theora,vorbis]
+ 	net-libs/cppzmq
+ 	net-libs/zeromq
+ 	babl? ( media-libs/babl )
+ 	imagemagick? ( >=media-gfx/imagemagick-7:0=[cxx] )
  	opencv? ( >=media-libs/opencv-4.5.2:=[contrib,contribdnn] )
  	python? ( ${PYTHON_DEPS} )"
  DEPEND="${RDEPEND}"
@@ -2183,12 +2203,14 @@ libopenshot-0.4.0.ebuild
 ------------------------------------------------------------------------------------------------------------------------
 diff :: media-libs/libopenshot-audio [rationale] =======================================================================
 # removed package
+# https://bugs.gentoo.org/909996
 # openshot		2023-09-07 21:54:37 +0100 8436bf11a32bf521fdbea830dcff03e4cd0ea00a media-video/openshot: Stabilize 3.1.1 amd64, #913812
 # libopenshot		2024-01-11 17:04:37 +0100 f7fdfdaeec3764929686064a6054c38a6b2d7788 Move {app-doc → app-text}/doxygen
 # libopenshot-audio	2024-01-11 17:04:37 +0100 f7fdfdaeec3764929686064a6054c38a6b2d7788 Move {app-doc → app-text}/doxygen
 diff :: media-libs/libopenshot-audio [source] ==========================================================================
 diff: /var/db/repos/gentoo/media-libs/libopenshot-audio: No such file or directory
 diff :: media-libs/libopenshot-audio [target] ==========================================================================
+Only in ./media-libs/libopenshot-audio: .keep
 Only in ./media-libs/libopenshot-audio: .rationale
 Only in ./media-libs/libopenshot-audio: .source
 diff -u -U10 -r ./media-libs/libopenshot-audio/.source/Manifest ./media-libs/libopenshot-audio/Manifest
@@ -2269,42 +2291,49 @@ pulseaudio-17.0-backport-pr807.patch
 ------------------------------------------------------------------------------------------------------------------------
 diff :: media-video/openshot [rationale] ===============================================================================
 # removed package
+# https://bugs.gentoo.org/909996
 # openshot		2023-09-07 21:54:37 +0100 8436bf11a32bf521fdbea830dcff03e4cd0ea00a media-video/openshot: Stabilize 3.1.1 amd64, #913812
 # libopenshot		2024-01-11 17:04:37 +0100 f7fdfdaeec3764929686064a6054c38a6b2d7788 Move {app-doc → app-text}/doxygen
 # libopenshot-audio	2024-01-11 17:04:37 +0100 f7fdfdaeec3764929686064a6054c38a6b2d7788 Move {app-doc → app-text}/doxygen
 diff :: media-video/openshot [source] ==================================================================================
 diff: /var/db/repos/gentoo/media-video/openshot: No such file or directory
 diff :: media-video/openshot [target] ==================================================================================
+Only in ./media-video/openshot: .keep
 Only in ./media-video/openshot: .rationale
 Only in ./media-video/openshot: .source
 diff -u -U10 -r ./media-video/openshot/.source/Manifest ./media-video/openshot/Manifest
 --- ./media-video/openshot/.source/Manifest	2024-10-10 08:36:19.375764365 -0000
-+++ ./media-video/openshot/Manifest	2025-02-25 03:35:07.456390120 -0000
++++ ./media-video/openshot/Manifest	2025-09-16 00:35:30.686691665 -0000
 @@ -1,2 +1,2 @@
 -DIST openshot-2.6.1.tar.gz 68566443 BLAKE2B b3a163983bdb811103e5d9307beeb38938719747f743dd58520a0166c08eb11f4592d47bf24224062f9db323a66a2f353eb22f087982b929d60a519cd2c40789 SHA512 9e2d1eae5d72ec2deab914e464dac0d84a864ba2ca63104fad57c90fc907764d5683149fb8136d50030cae993cef9a977e995b0783868988de4668e71a3a5ee2
 -DIST openshot-3.1.1.tar.gz 95843738 BLAKE2B 4059fe12b064692070278366f787789866dcbe39414d10217fb62b671dda98ebb6d2f76b8e1cfe2284a647e3d7ebc460b620ba0756a4542f5b26e7ef669e9b3e SHA512 4e5a42825abf8e3862957039169905a6f03872d81de454f52a57ace2e636e91b2f4e87ae603bf9669baa7d1bbbd6c0213efd0c72e23f2b209ba266af2fbe380f
-+EBUILD openshot-3.1.1.ebuild 1679 BLAKE2B 86a9816556ebfb6517eb093a705d7e6d469501a7eb3e85c7c29d03cf8a9e4693253b974b54b93183f1867f9361c111a9746c38ef482d55e3c16a41dbcc16b21d SHA512 d951e86183a41536035f52fdf55d9cf83ab38cc9bf377c36146ba5cb122c965799ac0255e98a307e2e04d26394ec0ef873fc99cee1c5d0443c49e442a848c7d1
-+EBUILD openshot-3.3.0.ebuild 1679 BLAKE2B 86a9816556ebfb6517eb093a705d7e6d469501a7eb3e85c7c29d03cf8a9e4693253b974b54b93183f1867f9361c111a9746c38ef482d55e3c16a41dbcc16b21d SHA512 d951e86183a41536035f52fdf55d9cf83ab38cc9bf377c36146ba5cb122c965799ac0255e98a307e2e04d26394ec0ef873fc99cee1c5d0443c49e442a848c7d1
++EBUILD openshot-3.1.1.ebuild 1997 BLAKE2B 64353510ecd2e04d66000e094bc8abcb1d73419789dae481e5abf697ce2d8a5ecc302dfc04139c42a6e8f6dd3183407227de452955f149f4e8a6f5691921763f SHA512 875f871d40fb2fa4ac4168eeda100c49195cffe273319723f1cf3295982589cc9c42165f3e037091c7ff2cd81f687b549243b39ff630e2aee0b115112a332973
++EBUILD openshot-3.3.0.ebuild 1997 BLAKE2B 64353510ecd2e04d66000e094bc8abcb1d73419789dae481e5abf697ce2d8a5ecc302dfc04139c42a6e8f6dd3183407227de452955f149f4e8a6f5691921763f SHA512 875f871d40fb2fa4ac4168eeda100c49195cffe273319723f1cf3295982589cc9c42165f3e037091c7ff2cd81f687b549243b39ff630e2aee0b115112a332973
 Only in ./media-video/openshot/.source: metadata.xml
 Only in ./media-video/openshot/.source: openshot-2.6.1.ebuild
 diff -u -U10 -r ./media-video/openshot/.source/openshot-3.1.1.ebuild ./media-video/openshot/openshot-3.1.1.ebuild
 --- ./media-video/openshot/.source/openshot-3.1.1.ebuild	2024-10-10 08:36:19.389764179 -0000
-+++ ./media-video/openshot/openshot-3.1.1.ebuild	2025-02-25 03:34:26.529531113 -0000
-@@ -1,37 +1,47 @@
++++ ./media-video/openshot/openshot-3.1.1.ebuild	2025-09-16 00:34:56.024195428 -0000
+@@ -1,50 +1,67 @@
  # Copyright 1999-2023 Gentoo Authors
  # Distributed under the terms of the GNU General Public License v2
  
- EAPI=7
- 
+-EAPI=7
+-
 -PYTHON_COMPAT=( python3_{10..11} )
++#>>>EAPI=7
++EAPI=8
++#>>>
++
 +#>>>PYTHON_COMPAT=( python3_{10..11} )
-+PYTHON_COMPAT=( python3_{10..12} )
++PYTHON_COMPAT=( python3_{10..13} )
 +#>>>
  PYTHON_REQ_USE="xml(+)"
  DISTUTILS_SINGLE_IMPL=1
  
 -inherit distutils-r1 xdg
 +#>>>inherit distutils-r1 xdg
++DISTUTILS_USE_PEP517="setuptools"
 +inherit distutils-r1 xdg git-r3
 +#>>>
  
@@ -2332,8 +2361,8 @@ diff -u -U10 -r ./media-video/openshot/.source/openshot-3.1.1.ebuild ./media-vid
  		dev-python/httplib2[${PYTHON_USEDEP}]
 -		dev-python/PyQt5[${PYTHON_USEDEP},gui,svg,widgets]
 -		dev-python/PyQtWebEngine[${PYTHON_USEDEP}]
-+		dev-python/pyqt5[${PYTHON_USEDEP},gui,svg,widgets]
-+		dev-python/pyqtwebengine[${PYTHON_USEDEP}]
++		dev-python/pyqt6[${PYTHON_USEDEP},gui,svg,widgets]
++		dev-python/pyqt6-webengine[${PYTHON_USEDEP}]
  		dev-python/pyzmq[${PYTHON_USEDEP}]
  		dev-python/requests[${PYTHON_USEDEP}]
  	')
@@ -2344,6 +2373,23 @@ diff -u -U10 -r ./media-video/openshot/.source/openshot-3.1.1.ebuild ./media-vid
  	')"
  
  src_prepare() {
+ 	distutils-r1_python_prepare_all
+ 	# prevent setup.py from trying to update MIME databases
+ 	sed -i 's/^ROOT =.*/ROOT = False/' setup.py || die
++#>>>
++	# ImportError: cannot import name 'install' from 'installer' (consider renaming '/var/tmp/portage/media-video/openshot-3.3.0/work/openshot-3.3.0/installer/__init__.py' if it has the same name as a library you intended to import)
++	rm installer/__init__.py
++#>>>
+ }
+ 
+ python_compile_all() {
+ 	use doc && emake -C doc html
+ }
+ 
+ python_test() {
+ 	distutils_install_for_testing
+ 	"${EPYTHON}" src/tests/query_tests.py -v --platform minimal || die
+ }
 Only in ./media-video/openshot: openshot-3.3.0.ebuild
 diff :: media-video/openshot [files] ===================================================================================
 
