@@ -1,4 +1,5 @@
 # removed package
+# https://bugs.gentoo.org/909996
 # openshot		2023-09-07 21:54:37 +0100 8436bf11a32bf521fdbea830dcff03e4cd0ea00a media-video/openshot: Stabilize 3.1.1 amd64, #913812
 # libopenshot		2024-01-11 17:04:37 +0100 f7fdfdaeec3764929686064a6054c38a6b2d7788 Move {app-doc → app-text}/doxygen
 # libopenshot-audio	2024-01-11 17:04:37 +0100 f7fdfdaeec3764929686064a6054c38a6b2d7788 Move {app-doc → app-text}/doxygen
