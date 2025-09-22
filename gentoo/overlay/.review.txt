@@ -71,6 +71,32 @@ unoconv-0.9.0-r1.ebuild
 timeout.patch
 
 ------------------------------------------------------------------------------------------------------------------------
+diff :: games-emulation/nestopia [rationale] ===========================================================================
+# keep older version
+(x11-libs/fltk-1.4.4:1/1.4::gentoo, ebuild scheduled for merge) USE="X opengl (static-libs) -cairo -dbus -doc -examples -test -wayland" pulled in by
+>=x11-libs/fltk-1.4:1=[opengl] required by (games-emulation/nestopia-1.53.1:0/0::gentoo, ebuild scheduled for merge) USE="-doc"
+# 2025-03-23 22:40:44 -0400 3eaca02b4f210fa06b6ffe784cf8dec4a9712546 games-emulation/nestopia: add 1.53.1
+diff :: games-emulation/nestopia [source] ==============================================================================
+diff :: games-emulation/nestopia [target] ==============================================================================
+Only in ./games-emulation/nestopia: .rationale
+Only in ./games-emulation/nestopia: .source
+diff -u -U10 -r ./games-emulation/nestopia/.source/Manifest ./games-emulation/nestopia/Manifest
+--- ./games-emulation/nestopia/.source/Manifest	2025-09-09 16:29:59.792118700 -0000
++++ ./games-emulation/nestopia/Manifest	2025-09-15 14:32:07.485410218 -0000
+@@ -1 +1,2 @@
+-DIST nestopia-1.53.1.tar.gz 1704326 BLAKE2B 74ae4e2deec765aedac49309707067e837347eebf313a9579d1a53ca6bae41a760d839dbb3db899eac0642f1c50f496e934e44bc1a72e8725f69d4bb46703027 SHA512 607bad683e7b7a50444240b37a10ecf851114c3dcfb058ef5a18ff6ff7e4949afb32d6f6b9476ab55e6a61893a33337301575e717e9112ad0bef7205d0f83693
++DIST nestopia-1.52.1.tar.gz 1593358 BLAKE2B 31010b0b85e76a2cadcc48075be185076c728cb5742ef6a557e4f90a471ef4f2dd4c62e3580a01610b436b780747af4ef57c43f20cc0a000af01aef0899f97df SHA512 600f539e64e71ae732073a9e6781c67e54bd37d3253cf48b77d433396516d6ecf3e519e0f19107aca9dd81b3802b3948d9d242c44956682c988d4630b090273e
++EBUILD nestopia-1.52.1-r1.ebuild 818 BLAKE2B ed2a54eeb5ddbb4e9cb9af4f3880255ec0036a780c75fb78abef988749dca2ae32e167de83123796639a0be2961ca9a4b2efd14a3afae202aa4535ed25611b25 SHA512 916e4fdbc2bf3bccdff9c66536e3ff210b18734eda62895fb690969e01cf2cf59314d2fac5bfe5bd278387435b1e6d1b4e53cecbd183e59b84b019e616287607
+Only in ./games-emulation/nestopia/.source: metadata.xml
+Only in ./games-emulation/nestopia: nestopia-1.52.1-r1.ebuild
+Only in ./games-emulation/nestopia/.source: nestopia-1.53.1.ebuild
+diff :: games-emulation/nestopia [files] ===============================================================================
+
+./games-emulation/nestopia:
+Manifest
+nestopia-1.52.1-r1.ebuild
+
+------------------------------------------------------------------------------------------------------------------------
 diff :: games-fps/dhewm3 [rationale] ===================================================================================
 # custom package
 diff :: games-fps/dhewm3 [source] ======================================================================================

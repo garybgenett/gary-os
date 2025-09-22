@@ -1,0 +1,4 @@
+# keep older version
+(x11-libs/fltk-1.4.4:1/1.4::gentoo, ebuild scheduled for merge) USE="X opengl (static-libs) -cairo -dbus -doc -examples -test -wayland" pulled in by
+>=x11-libs/fltk-1.4:1=[opengl] required by (games-emulation/nestopia-1.53.1:0/0::gentoo, ebuild scheduled for merge) USE="-doc"
+# 2025-03-23 22:40:44 -0400 3eaca02b4f210fa06b6ffe784cf8dec4a9712546 games-emulation/nestopia: add 1.53.1
