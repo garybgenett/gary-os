@@ -297,7 +297,7 @@ MEMS="$(${SED} -n "s|^MemTotal[:][^0-9]+([0-9]+)[^0-9]+$|\1|gp" /proc/meminfo)"
 MSAV="$(expr 4 \* 1024 \* 1024)"
 MPER="$(expr 2 \* 1024 \* 1024)"
 JOBS="$(expr \( ${MEMS} - ${MSAV} \) / ${MPER})"
-RAMD="$(expr ${MEMS} \* \( 2 / 3 \))"
+RAMD="$(expr \( ${MEMS} \* 2 \) / 3)"
 if [[ "${JOBS}" -gt "${CPUS}"	]]; then JOBS="${CPUS}"	; fi
 if [[ "${JOBS}" -le "0"		]]; then JOBS="1"	; fi
 
@@ -767,10 +767,15 @@ function mount_dev_dirs {
 	declare IS_TMPFS="false"
 	if {
 		[[ ${TMPFS} == +([0-9]) ]] &&
-		(( ${TMPFS} > 0 )) &&
-		(( ${TMPFS} <= ${RAMD} ));
+		(( ${TMPFS} > 0 ));
 	}; then
-		DO_TMPFS="true"
+		if (( ${TMPFS} <= ${RAMD} )); then
+			DO_TMPFS="true"
+		else
+#>>>			echo -en "\n"
+			echo -en ">>> TMPFS VALUE (${TMPFS}) IS NOT LESS THAN OR EQUAL TO (${RAMD}) MAXIMUM <<<\n"
+#>>>			echo -en "\n"
+		fi
 	fi
 	if [[ $(findmnt --noheadings --output TARGET --target ${TARGET}${TMPDIR}) == ${TARGET}${TMPDIR} ]]; then
 		IS_TMPFS="true"
@@ -795,7 +800,7 @@ function mount_dev_dirs {
 			if ${QUIET}; then prompt -t; else cat; fi
 #>>>			[[ ${PIPESTATUS[0]} == 0 ]]							|| return 1
 			[[ ${PIPESTATUS[0]} == 0 ]]							|| EXIT -1
-		if ${DO_TMPFS} && ${IS_TMPFS}; then
+		if ${IS_TMPFS}; then
 #>>>			umount -rv ${TARGET}${TMPDIR}							|| return 1
 			umount -rv ${TARGET}${TMPDIR}							|| EXIT -1
 		fi
