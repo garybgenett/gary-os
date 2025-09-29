@@ -977,19 +977,24 @@ function _prepare_packages {
 
 ########################################
 
-function _prepare_repdir {
+function _prepare_repdir {		#{doredo}
 	if [[ -z ${TARGET} ]]; then
 		return 0
 	fi
 	declare ARC_FILE="${TARGET}${ARCDIR}/${REP_FILE}"
+	if ${DOREDO}; then
+		${RM}						${ARC_FILE}{,.git}.tar.xz		|| return 1
+		${RM}						${TARGET}${REPDIR}{,.git}.tar.xz	|| return 1
+	fi
 	if [[ -f ${ARC_FILE}.tar.xz ]] && [[ -f ${ARC_FILE}.git.tar.xz ]]; then
 		${RSYNC_U} ${ARC_FILE}.tar.xz			${TARGET}${REPDIR}.tar.xz		|| return 1
 		${RSYNC_U} ${ARC_FILE}.git.tar.xz		${TARGET}${REPDIR}.git.tar.xz		|| return 1
 	fi
 	if [[ ! -f ${TARGET}${REPDIR}.tar.xz ]] || [[ ! -f ${TARGET}${REPDIR}.git.tar.xz ]]; then
-		${RM}						${ARC_FILE}{,.git}.tar.xz		|| return 1
-		${RM}						${TARGET}${REPDIR}{,.git}{,.tar.xz}	|| return 1
-		if [[ -d ${GITDIR} ]]; then
+		if [[ ! -d ${GITDIR} ]]; then
+			${RM}					${TARGET}${REPDIR}{,.git}		|| return 1
+		else
+			${RM}					${TARGET}${REPDIR}			|| return 1
 			${MKDIR}				${TARGET}${REPDIR}.git			|| return 1
 			${RSYNC_U} ${GITDIR}/			${TARGET}${REPDIR}.git			|| return 1
 		fi
