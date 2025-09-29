@@ -1595,7 +1595,9 @@ elif [[ ${1} == -U ]]; then
 	if ${SYNC}; then
 		print_info update
 		if [[ -z "$(which git 2>/dev/null)" ]]; then
-			yes | emaint sync --allrepos				|| EXIT 1
+			expect_wrapper emaint sync				\
+				$(if [[ -n ${AUTO} ]]; then echo "--yes"; fi)	\
+				--allrepos					|| EXIT 1
 			expect_wrapper emerge ${_ASK} dev-vcs/git		|| EXIT 1
 		fi
 		if [[ ! -d ${REPDIR}.git ]]; then
