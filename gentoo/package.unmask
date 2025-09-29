@@ -2,7 +2,7 @@
 # portage package unmask file
 ################################################################################
 
-games-fps/quakeforge			# gentoo required: /var/db/repos/gentoo/profiles/package.mask = Removal on 2025-03-13. Bugs #931506, #926463, #919237, #908709, ...
+sys-fs/encfs				# gentoo required: /var/db/repos/gentoo/profiles/package.mask = Removal on 2025-12-16. Bug #960358.
 
 ################################################################################
 # end of file
