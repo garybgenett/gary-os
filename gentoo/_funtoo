@@ -21,10 +21,8 @@ next 124ba4830d5b46bf2d8797c28b8b7929d7f35287
 0cd4481bf0f054348dc784cfcdb1e2c32c2152bd
 # 2025-02-15 12:39:12 +0100 8887b0e45e5c2accd150920bbf876b86e65d402b dev-python/python-jose: Remove upstream dep pins, optimize testing
 8887b0e45e5c2accd150920bbf876b86e65d402b
+# 2025-09-27 16:38:25 +0200 df89eded9e945cccfcfe3bc2c4e7b07e49d176c6 dev-java/eclipse-ecj: drop 4.27-r1
+df89eded9e945cccfcfe3bc2c4e7b07e49d176c6
 
 #>>> gentoo (update)
-
-# 2025-09-09 18:14:43 +0300 5c1a92d97e607c747aa1c770fec8bfee3090761f mail-client/thunderbird-bin: stabilize 140.2.1 for amd64
-5c1a92d97e607c747aa1c770fec8bfee3090761f
-# 2025-09-23 20:09:26 +0300 9fb5488ef4aa8619551cb641bdc76928e6c24188 media-libs/osl: Stabilize 1.14.6.0 amd64, #963270
-9fb5488ef4aa8619551cb641bdc76928e6c24188
+df89eded9e945cccfcfe3bc2c4e7b07e49d176c6
