@@ -682,6 +682,7 @@ if [[ ${UNAME} == "Windows" ]]; then
 				-e "s|^.+[\"]([^\"]+quip[-]$(
 						basename ${DATDIR} | ${SED} "s|^data[.]||g"
 					)[.]com[/][^\"]+[/][^\"]+).+$|\1|gp" \
+				-e "s|^.+[\"]([^\"]+[?]podId[=][^\"]+).+$|\1|gp" \
 				-e "s|^.+[\"]([^\"]+[?]view[=][^\"]+).+$|\1|gp" \
 				${BKMDIR}/bookmarks.html \
 				| ${GREP} "^.+[/].+$"
