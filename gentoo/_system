@@ -1611,9 +1611,12 @@ elif [[ ${1} == -U ]]; then
 			MARK="${1}" && shift
 		fi
 		${FUN_GIT} checkout --force master				|| EXIT 1
+		${FUN_GIT} clean --force -d -x					|| EXIT 1
 		${FUN_GIT} pull --ff-only --all					|| EXIT 1
 		${FUN_GIT} checkout --force ${MARK}				|| EXIT 1
 		${FUN_GIT} reset --hard ${MARK}					|| EXIT 1
+#>>>		delete_empty ${REPDIR} -a					|| EXIT 1
+		delete_empty ${REPDIR}						|| EXIT 1
 		echo -en "\n"
 		echo -en ">>> REBUILDING GENTOO PORTAGE TREE METADATA <<<\n"
 		echo -en ">>> IT IS NORMAL FOR THIS TO TAKE SEVERAL MINUTES <<<\n"
