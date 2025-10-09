@@ -351,13 +351,14 @@ function portage_file {
 	return 0
 }
 
-#OPTIONS[LINPKG KERNEL KRNLNK]
+#OPTIONS[LINPKG KERNEL KRNLNK GENKRN]
 #OPTIONS[SELECT WINMGR WMHELP]
 #OPTIONS[RCUPDT FSUPDT FSPACK FSKEEP FSARCH FSEXCL]
 for FILE in	\
 	LINPKG	\
 	KERNEL	\
 	KRNLNK	\
+	GENKRN	\
 	\
 	FLAVOR	\
 	MIXINS	\
@@ -1415,15 +1416,18 @@ if [[ ${1} == -i ]]; then
 							${TARGET}${ARCDIR}/${KERN}				|| EXIT 1
 			kernel_cpu			${TARGET}${ARCDIR}/${KERN}				|| EXIT 1
 		fi
-		declare GEN_OPTS="--kernel-localversion=.${_TITLE} --loglevel=5 --bootloader=grub --install --symlink --luks --zfs"
-		declare GEN_ACTS="kernel"
-		expect_wrapper genkernel		${GEN_OPTS}						\
+		expect_wrapper genkernel		--kernel-localversion=".${_TITLE}"			\
+							--loglevel="5"						\
+							--bootloader="grub"					\
+							--install						\
+							--symlink						\
 							$(if [[ -z ${AUTO} ]]; then
 								echo "--menuconfig"
 							elif [[ -f ${ARCDIR}/${KERN} ]]; then
 								echo "--kernel-config=${ARCDIR}/${KERN}"
 							fi)							\
-							${GEN_ACTS}						|| EXIT 1
+							${GENKRN}						\
+							kernel							|| EXIT 1
 		${RSYNC_U} --copy-links			${TARGET}${LDIR}/.config				\
 							${TARGET}${ARCDIR}/${KERN}				|| EXIT 1
 		if ! ${_GOS}; then
