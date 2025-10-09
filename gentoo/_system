@@ -1410,17 +1410,20 @@ if [[ ${1} == -i ]]; then
 		KERN="${KCFG//${KVER}/${FILE}}"
 		${RM}					${TARGET}${LDIR}					|| EXIT 1
 		${LN} ${KSRC}				${TARGET}${LDIR}					|| EXIT 1
-		${RSYNC_U} --copy-links			${SETDIR}/${LINDIR}/${KERN}				\
+		if [[ -f ${SETDIR}/${LINDIR}/${KERN} ]]; then
+			${RSYNC_U} --copy-links		${SETDIR}/${LINDIR}/${KERN}				\
 							${TARGET}${ARCDIR}/${KERN}				|| EXIT 1
-		kernel_cpu				${TARGET}${ARCDIR}/${KERN}				|| EXIT 1
+			kernel_cpu			${TARGET}${ARCDIR}/${KERN}				|| EXIT 1
+		fi
 		declare GEN_OPTS="--kernel-localversion=.${_TITLE} --loglevel=5 --bootloader=grub --install --symlink --luks --zfs"
 		declare GEN_ACTS="kernel"
-		if [[ -z ${AUTO} ]]; then
-			expect_wrapper			genkernel ${GEN_OPTS} ${GEN_ACTS} --menuconfig		|| EXIT 1
-		else
-			expect_wrapper			genkernel ${GEN_OPTS} ${GEN_ACTS}			\
-							--kernel-config=${ARCDIR}/${KERN}			|| EXIT 1
-		fi
+		expect_wrapper genkernel		${GEN_OPTS}						\
+							$(if [[ -z ${AUTO} ]]; then
+								echo "--menuconfig"
+							elif [[ -f ${ARCDIR}/${KERN} ]]; then
+								echo "--kernel-config=${ARCDIR}/${KERN}"
+							fi)							\
+							${GEN_ACTS}						|| EXIT 1
 		${RSYNC_U} --copy-links			${TARGET}${LDIR}/.config				\
 							${TARGET}${ARCDIR}/${KERN}				|| EXIT 1
 		if ! ${_GOS}; then
