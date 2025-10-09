@@ -1382,7 +1382,9 @@ if [[ ${1} == -i ]]; then
 	fi
 	if ! ${DOFAST} && ${_KRN}; then
 		if ${DOREDO}; then
-			expect_wrapper			emerge ${_ASK} --unmerge ${LINPKG}			#>>> || EXIT 1
+#>>>			expect_wrapper			emerge ${_ASK} --unmerge ${LINPKG}			#>>> || EXIT 1
+			expect_wrapper			emerge ${_ASK} --unmerge sys-kernel/gentoo-kernel	#>>> || EXIT 1
+			expect_wrapper			emerge ${_ASK} --unmerge sys-kernel/gentoo-sources	#>>> || EXIT 1
 			${RM}				${TARGET}/boot/{System.map,vmlinuz,initramfs,config}*	|| EXIT 1
 			${RM}				${TARGET}/boot/{_*,kernel{,.old}}			|| EXIT 1
 			${RM}				${TARGET}/etc/kernels/*					|| EXIT 1
