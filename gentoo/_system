@@ -1318,6 +1318,7 @@ if [[ ${1} == -r ]]; then
 	done
 	if [[ ${1} != -! ]]; then
 		portage_file					${TARGET}${ARCDIR}/${FUNDIR}			|| EXIT 1
+		portage_file					${TARGET}${ETCDIR}				|| EXIT 1
 		if [[ ${1} == -w ]]; then
 			shift
 			safe_env				${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -w	|| EXIT 1
@@ -1473,7 +1474,6 @@ fi
 
 if [[ ${1} == -W ]]; then
 	shift
-	portage_file		${ETCDIR}	|| EXIT 1
 	cat /dev/null		>/var/lib/portage/world
 	echo "@${_PKG}"		>/var/lib/portage/world_sets
 	$(for NEXT in ${LINPKG}; do
