@@ -6,6 +6,7 @@
 #{LINPKG} sys-kernel/gentoo-sources:6.12.13
 #{KERNEL} 6.12.13
 #{KRNLNK} 6.12.13
+#{GENKRN} --e2fsprogs --luks --zfs
 
 #{SELECT} cdparanoia:cdparanoia-paranoia
 #{SELECT} editor:vi
