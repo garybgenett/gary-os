@@ -705,7 +705,7 @@ function _prepare_build {		#{doredo} #{dofast} #{dotest}
 	fi
 	DOTEST="${DOTEST}" _prepare_docdir	|| return 1
 	_prepare_packages			|| return 1
-	_prepare_repdir				|| return 1
+	DOREDO="false" _prepare_repdir		|| return 1
 	_prepare_linux				|| return 1
 	DOREDO="false" _prepare_packdirs	|| return 1
 	DOREDO="false" _prepare_symlinks	|| return 1
@@ -994,7 +994,7 @@ function _prepare_repdir {		#{doredo}
 		if [[ ! -d ${GITDIR} ]]; then
 			${RM}					${TARGET}${REPDIR}{,.git}		|| return 1
 		else
-			${RM}					${TARGET}${REPDIR}			|| return 1
+#>>>			${RM}					${TARGET}${REPDIR}			|| return 1
 			${MKDIR}				${TARGET}${REPDIR}.git			|| return 1
 			${RSYNC_U} ${GITDIR}/			${TARGET}${REPDIR}.git			|| return 1
 		fi
