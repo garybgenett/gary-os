@@ -1358,6 +1358,7 @@ if [[ ${1} == -i ]]; then
 		if ${_BLD}; then
 			${RM}				${TARGET}${ETCDIR}/savedconfig				|| EXIT 1
 		fi
+#>>>		safe_env				\
 							${_SOUL} ${QUIET_OPT} ${TOOR} ${AUTO} -r		|| EXIT 1
 	fi
 	if ! ${DOFAST} && {
