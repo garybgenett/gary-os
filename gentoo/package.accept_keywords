@@ -34,13 +34,9 @@ net-wireless/bluez-tools		~amd64		# gentoo required
 
 app-mobilephone/scrcpy			~amd64		# gentoo required
 
-<x11-wm/xpra-6.9999			~amd64		# gentoo required [xpra-4.4.6-r2 / xpra-6.*]: python3_12
-
 #>>> app-misc/task			~amd64		# gentoo required
 app-misc/taskd				~amd64		# gentoo required
 app-misc/timew				~amd64		# gentoo required
-
-net-mail/safecat			~amd64		# gentoo required [net-mail/safecat-1.13-r1 / net-mail/safecat-1.13-r2]: substdio.h:12:64: error: initialization of 'int (*)()' from incompatible pointer type 'ssize_t (*)(int,  const void *, size_t)' {aka 'long int (*)(int,  const void *, long unsigned int)'} [-Wincompatible-pointer-types]
 
 www-client/torbrowser-launcher		~amd64		# gentoo required
 
@@ -90,9 +86,8 @@ games-fps/quakeforge			~amd64		# gentoo required
 
 ################################################################################
 
-<dev-libs/libvformat-1.14		~amd64		# gentoo required [dev-libs/libvformat-1.13-r2 / dev-libs/libvformat-1.13-r3]: https://bugs.gentoo.org/919257 / vf_access_calendar.c:200:38: error: passing argument 1 of 'vf_date_string_to_time' from incompatible pointer type [-Wincompatible-pointer-types]
-<dev-libs/randomx-1.3			~amd64		# gentoo required [dev-libs/randomx-1.2.1-r1]: dependency required by "net-p2p/monero-0.18.4.0-r5::guru"
-<dev-libs/supercop-1			~amd64		# gentoo required [dev-libs/supercop-0_p20200827]: dependency required by "net-p2p/monero-0.18.4.0-r5::guru"
+dev-libs/randomx			~amd64		# gentoo required
+dev-libs/supercop			~amd64		# gentoo required
 
 ################################################################################
 # end of file

@@ -26,7 +26,6 @@ media-libs/libsdl2			joystick	# gentoo required
 media-libs/mesa				wayland		# gentoo required
 media-libs/mlt				jack		# gentoo required
 media-libs/opencv			qt6		# gentoo required
-media-video/ffmpeg			opus		# gentoo required
 media-video/ffmpeg			theora		# gentoo required
 net-misc/curl				adns		# gentoo required
 net-misc/curl				http2		# gentoo required
@@ -51,8 +50,6 @@ dev-python/pyqt6			qml		# gentoo required
 dev-python/pyqt6			quick		# gentoo required
 dev-python/pyqt6			webchannel	# gentoo required
 dev-qt/qtmultimedia			widgets		# gentoo required
-dev-qt/qtwebchannel			qml		# gentoo required
-dev-qt/qtwebengine			widgets		# gentoo required
 media-libs/libvpx			postproc	# gentoo required
 media-libs/mlt				frei0r		# gentoo required
 media-libs/opencv			contrib		# gentoo required
@@ -65,12 +62,9 @@ net-libs/nodejs				inspector	# gentoo required
 sys-kernel/installkernel		dracut		# gentoo required
 sys-libs/zlib				minizip		# gentoo required
 
-app-text/pandoc-cli			-server		# gentoo required [*]: https://forums.gentoo.org/viewtopic-t-1167497-start-0.html / <command line>: cannot satisfy -package-id pandoc-3.1.8-DMzFjk10EIKIM5idP0mC6d
-
 ########################################
 
 dev-libs/gmp				static-libs	# gentoo required
-dev-libs/libgcrypt			static-libs	# gentoo required
 dev-libs/lzo				static-libs	# gentoo required
 sys-apps/attr				static-libs	# gentoo required
 sys-libs/libcap				static-libs	# gentoo required
@@ -176,10 +170,16 @@ sys-apps/fwupd				minimal		# requires: ( sys-apps/systemd | sys-auth/elogind )
 
 ################################################################################
 
+#>>> #{NEW} dev-python/pillow		-truetype	# gentoo required
+
 #{NEW} dev-build/cmake			-gui		# gentoo required
 #{NEW} media-libs/libsndfile		minimal		# gentoo required
 #{NEW} media-libs/tiff			-webp		# gentoo required
 #{NEW} www-client/w3m			-imlib		# gentoo required
+
+########################################
+
+#{NEW} sys-devel/gcc			-ada		# gentoo required
 
 ################################################################################
 

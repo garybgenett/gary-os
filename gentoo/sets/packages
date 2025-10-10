@@ -111,7 +111,7 @@ sys-apps/which
 
 dev-libs/libcgroup
 sys-fs/sysfsutils
-sys-process/atop
+#>>> sys-process/atop			# gentoo required [sys-process/atop-2.12.0]: https://bugs.gentoo.org/959282 / netatop.o: error: objtool: init_module(): Magic init_module() function name is deprecated, use module_init(fn) instead
 sys-process/htop
 sys-process/iotop
 sys-process/lsof
@@ -247,7 +247,6 @@ net-misc/unison:2.53
 app-text/grip
 app-text/pandoc-cli
 app-text/texlive
-dev-haskell/cabal-install		# gentoo required [app-text/pandoc-cli-0.1.1-r1]: https://bugs.gentoo.org/920879 / https://bugs.gentoo.org/916785 / <command line>: cannot satisfy -package-id pandoc-3.1.8-DMzFjk10EIKIM5idP0mC6d
 
 dev-lang/perl
 dev-libs/libpcre
@@ -420,7 +419,7 @@ app-text/qpdfview
 app-text/xpdf
 
 app-text/calibre
-app-text/sdcv
+#>>> app-text/sdcv			# gentoo required [app-text/sdcv-0.5.5]: https://bugs.gentoo.org/945818 / /usr/include/glib-2.0/glib/gunicode.h:825:34: error: invalid conversion from 'const gchar*' {aka 'const char*'} to 'gchar*' {aka 'char*'} [-fpermissive]
 media-gfx/mcomix
 
 app-misc/atomicwallet
