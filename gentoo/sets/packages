@@ -2,10 +2,11 @@
 # portage set configuration file
 ################################################################################
 
-#{LINPKG} sys-kernel/gentoo-kernel:6.12.13
-#{LINPKG} sys-kernel/gentoo-sources:6.12.13
-#{KERNEL} 6.12.13
-#{KRNLNK} 6.12.13
+#{LINPKG} sys-kernel/gentoo-kernel:6.16.9
+#{LINPKG} sys-kernel/gentoo-sources:6.12.49
+#{LINPKG} sys-kernel/gentoo-sources:6.16.9
+#{KERNEL} 6.12.49 6.16.9
+#{KRNLNK}
 #{GENKRN} --e2fsprogs --luks --zfs
 
 #{SELECT} cdparanoia:cdparanoia-paranoia

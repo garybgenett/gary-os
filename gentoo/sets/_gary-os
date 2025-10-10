@@ -59,8 +59,8 @@
 
 ########################################
 
-#{LINPKG} sys-kernel/gentoo-sources:6.12.13
-#{KERNEL} 6.12.13
+#{LINPKG} sys-kernel/gentoo-sources:6.16.9
+#{KERNEL} 6.16.9
 #{KRNLNK}
 #{GENKRN} --e2fsprogs --luks --zfs
 
