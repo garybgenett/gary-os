@@ -1,2 +1,2 @@
 # https://gitweb.gentoo.org/repo/proj/guru.git
-# 2025-06-26 00:16:34 +0300 465196e5b2851713af3ee0fc7e2698065a48ba76 app-misc/doublecmd-bin: drop USE="qt5", revision bump
+# 2025-09-29 00:59:59 +0200 96e2dbba92c4eddf176b6a1d015ec8fdd859810a media-sound/lms: add missing rdep on dev-libs/pugixml  (HEAD -> master, origin/master, origin/HEAD)
