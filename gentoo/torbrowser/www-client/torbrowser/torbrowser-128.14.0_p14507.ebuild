@@ -3,11 +3,11 @@
 
 EAPI=8
 
-FIREFOX_PATCHSET="firefox-128esr-patches-11.tar.xz"
+FIREFOX_PATCHSET="firefox-128esr-patches-12.tar.xz"
 
 LLVM_COMPAT=( 17 18 19 )
 
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{11..13} )
 PYTHON_REQ_USE="ncurses,sqlite,ssl"
 
 # This will also filter rust versions that don't match LLVM_COMPAT in the non-clang path; this is fine.
@@ -23,10 +23,10 @@ MOZ_PV="${PV/_p*}esr"
 # see https://gitlab.torproject.org/tpo/applications/tor-browser-build/-/blob/maint-14.5/projects/firefox/config?ref_type=heads#L17
 # and https://gitlab.torproject.org/tpo/applications/tor-browser-build/-/blob/maint-14.5/projects/browser/config?ref_type=heads#L114
 # and https://gitlab.torproject.org/tpo/applications/tor-browser-build/-/tags
-TOR_PV="14.5.4"
-TOR_TAG="${TOR_PV%.*}-1-build1"
-NOSCRIPT_VERSION="13.0.8"
-NOSCRIPT_ID="4497468"
+TOR_PV="14.5.7"
+TOR_TAG="${TOR_PV%.*}-1-build5"
+NOSCRIPT_VERSION="13.0.9"
+NOSCRIPT_ID="4551629"
 CHANGELOG_TAG="${TOR_PV}-build1"
 
 inherit autotools check-reqs desktop flag-o-matic linux-info llvm-r1 multiprocessing \
@@ -58,7 +58,6 @@ KEYWORDS="~amd64"
 IUSE="+clang dbus hardened pulseaudio"
 IUSE+=" +system-av1 +system-harfbuzz +system-icu +system-jpeg +system-libevent +system-libvpx"
 IUSE+=" system-png +system-webp wayland +X"
-IUSE+=" +jumbo-build"
 
 REQUIRED_USE="|| ( X wayland )
 	wayland? ( dbus )"
@@ -112,7 +111,6 @@ COMMON_DEPEND="
 		>=media-libs/libaom-1.0.0:=
 	)
 	system-harfbuzz? (
-		>=media-gfx/graphite2-1.3.13
 		>=media-libs/harfbuzz-2.8.1:0=
 	)
 	system-icu? ( >=dev-libs/icu-73.1:= )
@@ -148,14 +146,14 @@ DEPEND="${COMMON_DEPEND}
 	)"
 
 llvm_check_deps() {
-	if ! has_version -b "sys-devel/clang:${LLVM_SLOT}" ; then
-		einfo "sys-devel/clang:${LLVM_SLOT} is missing! Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
+	if ! has_version -b "llvm-core/clang:${LLVM_SLOT}" ; then
+		einfo "llvm-core/clang:${LLVM_SLOT} is missing! Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
 		return 1
 	fi
 
 	if use clang && ! tc-ld-is-mold ; then
-		if ! has_version -b "sys-devel/lld:${LLVM_SLOT}" ; then
-			einfo "sys-devel/lld:${LLVM_SLOT} is missing! Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
+		if ! has_version -b "llvm-core/lld:${LLVM_SLOT}" ; then
+			einfo "llvm-core/lld:${LLVM_SLOT} is missing! Cannot use LLVM slot ${LLVM_SLOT} ..." >&2
 			return 1
 		fi
 	fi
@@ -239,35 +237,38 @@ pkg_pretend() {
 }
 
 pkg_setup() {
-	# Ensure we have enough disk space to compile
-	CHECKREQS_DISK_BUILD="6400M"
+	if [[ ${MERGE_TYPE} != binary ]] ; then
 
-	check-reqs_pkg_setup
-	llvm-r1_pkg_setup
-	rust_pkg_setup
-	python-any-r1_pkg_setup
+		# Ensure we have enough disk space to compile
+		CHECKREQS_DISK_BUILD="6400M"
 
-	# These should *always* be cleaned up anyway
-	unset \
-		DBUS_SESSION_BUS_ADDRESS \
-		DISPLAY \
-		ORBIT_SOCKETDIR \
-		SESSION_MANAGER \
-		XAUTHORITY \
-		XDG_CACHE_HOME \
-		XDG_SESSION_COOKIE
+		check-reqs_pkg_setup
+		llvm-r1_pkg_setup
+		rust_pkg_setup
+		python-any-r1_pkg_setup
 
-	# Build system is using /proc/self/oom_score_adj, bug #604394
-	addpredict /proc/self/oom_score_adj
+		# These should *always* be cleaned up anyway
+		unset \
+			DBUS_SESSION_BUS_ADDRESS \
+			DISPLAY \
+			ORBIT_SOCKETDIR \
+			SESSION_MANAGER \
+			XAUTHORITY \
+			XDG_CACHE_HOME \
+			XDG_SESSION_COOKIE
 
-	if ! mountpoint -q /dev/shm ; then
-		# If /dev/shm is not available, configure is known to fail with
-		# a traceback report referencing /usr/lib/pythonN.N/multiprocessing/synchronize.py
-		ewarn "/dev/shm is not mounted -- expect build failures!"
+		# Build system is using /proc/self/oom_score_adj, bug #604394
+		addpredict /proc/self/oom_score_adj
+
+		if ! mountpoint -q /dev/shm ; then
+			# If /dev/shm is not available, configure is known to fail with
+			# a traceback report referencing /usr/lib/pythonN.N/multiprocessing/synchronize.py
+			ewarn "/dev/shm is not mounted -- expect build failures!"
+		fi
+
+		# Ensure we use C locale when building, bug #746215
+		export LC_ALL=C
 	fi
-
-	# Ensure we use C locale when building, bug #746215
-	export LC_ALL=C
 
 	CONFIG_CHECK="~SECCOMP"
 	WARNING_SECCOMP="CONFIG_SECCOMP not set! This system will be unable to play DRM-protected content."
@@ -281,6 +282,11 @@ src_prepare() {
 	fi
 	rm -v "${WORKDIR}"/firefox-patches/*-bmo-1862601-system-icu-74.patch || die
 
+	# Workaround for bgo#915651 on musl
+	if use elibc_glibc ; then
+		rm -v "${WORKDIR}"/firefox-patches/*bgo-748849-RUST_TARGET_override.patch || die
+	fi
+
 	eapply "${WORKDIR}/firefox-patches"
 
 	# https://gitlab.torproject.org/tpo/applications/tor-browser/-/issues/20497#note_2873088
@@ -293,6 +299,15 @@ src_prepare() {
 
 	# Make cargo respect MAKEOPTS
 	export CARGO_BUILD_JOBS="$(makeopts_jobs)"
+
+	# Workaround for bgo#915651
+	if ! use elibc_glibc ; then
+		if use amd64 ; then
+			export RUST_TARGET="x86_64-unknown-linux-musl"
+		else
+			die "Unsupported architecture ${CHOST}"
+		fi
+	fi
 
 	# Make LTO respect MAKEOPTS
 	sed -i -e "s/multiprocessing.cpu_count()/$(makeopts_jobs)/" \
@@ -335,14 +350,12 @@ src_prepare() {
 	# Clear checksums from cargo crates we've manually patched.
 	# moz_clear_vendor_checksums xyz
 
-	# Respect choice for "jumbo-build"
 	# Changing the value for FILES_PER_UNIFIED_FILE may not work, see #905431
-	if [[ -n ${FILES_PER_UNIFIED_FILE} ]] && use jumbo-build; then
+	if [[ -n ${FILES_PER_UNIFIED_FILE} ]]; then
 		local my_files_per_unified_file=${FILES_PER_UNIFIED_FILE:=16}
 		elog ""
-		elog "jumbo-build defaults modified to ${my_files_per_unified_file}."
+		elog "build defaults modified to ${my_files_per_unified_file}."
 		elog "if you get a build failure, try undefining FILES_PER_UNIFIED_FILE,"
-		elog "if that fails try -jumbo-build before opening a bug report."
 		elog ""
 
 		sed -i -e "s/\"FILES_PER_UNIFIED_FILE\", 16/\"FILES_PER_UNIFIED_FILE\", "${my_files_per_unified_file}"/" \
@@ -465,7 +478,7 @@ src_configure() {
 		--without-wasm-sandboxed-libraries \
 		--with-intl-api \
 		--with-libclang-path="$(llvm-config --libdir)" \
-		--enable-system-ffi \
+		--with-system-ffi \
 		--with-system-nspr \
 		--with-system-nss \
 		--with-system-zlib \
@@ -478,7 +491,6 @@ src_configure() {
 
 	mozconfig_use_with system-av1
 	mozconfig_use_with system-harfbuzz
-	mozconfig_use_with system-harfbuzz system-graphite2
 	mozconfig_use_with system-icu
 	mozconfig_use_with system-jpeg
 	mozconfig_use_with system-libevent
@@ -506,8 +518,6 @@ src_configure() {
 	mozconfig_add_options_ac '--enable-audio-backends' --enable-audio-backends="${myaudiobackends::-1}"
 
 	mozconfig_add_options_ac '' --disable-necko-wifi
-
-	! use jumbo-build && mozconfig_add_options_ac '--disable-unified-build' --disable-unified-build
 
 	if use X && use wayland ; then
 		mozconfig_add_options_ac '+x11+wayland' --enable-default-toolkit=cairo-gtk3-x11-wayland
@@ -611,6 +621,10 @@ src_configure() {
 		mozconfig_add_options_ac 'relr elf-hack' --enable-elf-hack=relr
 	fi
 
+	if ! use elibc_glibc; then
+		mozconfig_add_options_ac '!elibc_glibc' --disable-jemalloc
+	fi
+
 	# System-av1 fix
 	use system-av1 && append-ldflags "-Wl,--undefined-version"
 
@@ -688,7 +702,7 @@ src_install() {
 	rm "${ED}${MOZILLA_FIVE_HOME}/${PN}-bin" || die
 	dosym ${PN} ${MOZILLA_FIVE_HOME}/${PN}-bin
 
-	# Don't install llvm-symbolizer from sys-devel/llvm package
+	# Don't install llvm-symbolizer from llvm-core/llvm package
 	if [[ -f "${ED}${MOZILLA_FIVE_HOME}/llvm-symbolizer" ]] ; then
 		rm -v "${ED}${MOZILLA_FIVE_HOME}/llvm-symbolizer" || die
 	fi
