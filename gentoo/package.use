@@ -28,7 +28,6 @@ media-libs/mlt				jack		# gentoo required
 media-libs/opencv			qt6		# gentoo required
 media-video/ffmpeg			opus		# gentoo required
 media-video/ffmpeg			theora		# gentoo required
-net-misc/curl				-gnutls		# gentoo required
 net-misc/curl				adns		# gentoo required
 net-misc/curl				http2		# gentoo required
 sys-apps/fwupd				-introspection	# gentoo required
@@ -129,6 +128,7 @@ net-analyzer/tcpdump			-chroot
 net-fs/samba				client
 net-libs/gnutls				openpgp openssl tls-heartbeat tools
 net-libs/nodejs				npm
+net-misc/curl				-openssl gnutls
 net-misc/unison				-gtk
 net-misc/xmrig				-donate hwloc opencl ssl
 net-p2p/bitcoin-core			cli daemon gui
