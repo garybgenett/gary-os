@@ -16,7 +16,7 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_SUBMODULES=()
 else
 	SRC_URI="https://github.com/monero-project/monero/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64 ~arm64 ~x86"
+	KEYWORDS="~amd64"
 fi
 
 LICENSE="BSD MIT"
@@ -56,7 +56,6 @@ BDEPEND="virtual/pkgconfig"
 PATCHES=(
 	"${FILESDIR}"/${PN}-0.18.3.3-miniupnp-api-18.patch
 	"${FILESDIR}"/${PN}-0.18.4.0-unbundle-dependencies.patch
-	"${FILESDIR}"/${PN}-0.18.4.0-cmake-4.patch
 )
 
 src_prepare() {
