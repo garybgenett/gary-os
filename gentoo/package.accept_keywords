@@ -25,7 +25,7 @@ app-text/pandoc-cli			~amd64		# gentoo required
 dev-haskell/*				~amd64		# gentoo required
 dev-lang/ghc				~amd64		# gentoo required
 
-dev-lang/python				~amd64		# gentoo required
+dev-lang/python				~amd64		# gentoo required -- version
 
 net-wireless/bluez-tools		~amd64		# gentoo required
 
