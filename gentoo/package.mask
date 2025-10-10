@@ -26,10 +26,9 @@
 games-misc/fortune-mod-mormon
 games-misc/fortune-mod-scriptures
 
->=games-emulation/nestopia-1.53		# gentoo required [nestopia-1.53.* / nestopia-1.52.*]: needs >=x11-libs/fltk-1.4:1=[opengl]
-
 ################################################################################
 
+>=games-emulation/nestopia-1.53		# gentoo required [nestopia-1.53.* / nestopia-1.52.*]: needs >=x11-libs/fltk-1.4:1=[opengl]
 >=sys-fs/ncdu-2.0			# gentoo required [sys-fs/ncdu-2.9.1 -> dev-lang/zig-0.14.1]: /var/tmp/portage/dev-lang/zig-0.14.1/temp/environment: line 3145: 224 Segmentation fault ./stage3/bin/zig env
 
 ################################################################################
