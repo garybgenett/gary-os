@@ -7,7 +7,6 @@
 </maintainer>
 <use>
 	<flag name="clang">Use Clang compiler instead of GCC</flag>
-	<flag name="jumbo-build">Enable unified build - combines source files to speed up build process, but requires more memory</flag>
 	<flag name="system-av1">Use the system-wide <pkg>media-libs/dav1d</pkg>
 		and <pkg>media-libs/libaom</pkg> library instead of bundled</flag>
 	<flag name="system-harfbuzz">Use the system-wide <pkg>media-libs/harfbuzz</pkg>
