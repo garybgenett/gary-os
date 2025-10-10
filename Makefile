@@ -298,6 +298,33 @@ gendir:
 
 ########################################
 
+override NULL		:=
+override define NEWLINE	=
+$(NULL)
+$(NULL)
+endef
+
+override PERMS_DIR	:= gentoo
+override PERM_DIRS	:= $(PERMS_DIR) linux
+override REPO_DIRS	:= guru torbrowser
+
+.PHONY: perms
+perms:
+	chmod -R 755 $(addprefix ./,$(addsuffix /,$(PERM_DIRS)))
+	find $(addprefix $(CURDIR)/$(PERMS_DIR)/,$(addsuffix /,$(REPO_DIRS))) -type d -exec chmod 755 \{\} \;
+	find $(addprefix $(CURDIR)/$(PERMS_DIR)/,$(addsuffix /,$(REPO_DIRS))) -type f -exec chmod 644 \{\} \;
+	$(foreach FILE,$(addprefix $(CURDIR)/$(PERMS_DIR)/,$(addsuffix /,$(REPO_DIRS))),\
+		cd $(FILE) && git \
+			--no-pager \
+			--git-dir=$(patsubst %/,%.git,$(FILE)) \
+			--work-tree=$(patsubst %/,%,$(FILE)) \
+			status \
+		| grep -v "deleted:"; \
+		$(call NEWLINE) \
+	)
+
+########################################
+
 export COMPOSER		?= $(GARYOS_DIR)/.Composer/Makefile
 export MARKDOWN_OUTPUT	:= GaryOS-Readme.md
 export COMPOSER_TARGETS	:= GaryOS-Readme.html GaryOS-Readme.pdf
