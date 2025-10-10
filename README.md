@@ -1722,28 +1722,25 @@ Everything needed to perform these steps is in the [Repository] or the
         * `(cd ./gentoo/overlay; ./.review -a)`
             * [ ] Review `.keep` packages
         * [ ] Update `${RUFUS_VER}` number
-    * `cd .setup/linux`
-        * `(cd _build/gentoo/gentoo; grep -A10 SRC_URI ./sys-kernel/gentoo-kernel/gentoo-kernel-*.ebuild)`
-            * `wget [...]`
-        * `mv ./kernel-x86_64-fedora.config ./default-gentoo64.config-[...]`
-            * `rm ./.default; ln default-gentoo64-[...] ./.default`
-            * `rsync -L ./.default ./config-gentoo64-[...]`
-        * `rsync -L ./.options ./config-gentoo64-[...]-options`
-            * `rm ./.config; ln config-gentoo64-[...] ./.config`
-            * `rm ./.options; ln config-gentoo64-[...]-options ./.options`
-        * `vi ./.options`
-            * [ ] Update source kernel version
-            * [ ] Review
   * `make DOMODS=false init`
     * [ ] Until `@world`, at least
         * `while :; do make DOMODS=false DOFAST=true init; inotifywait --event modify gentoo/make.* gentoo/package.* gentoo/sets/*; done`
         * `(cd .setup; vi gentoo/make.* gentoo/package.* gentoo/sets/*; vdiff -g gentoo/make.* gentoo/package.* gentoo/sets/*)`
     * [x] *Iterate()*
-  * `./linux/_config ./build/usr/src/linux`
+  * `rsync ./build/var/cache/distfiles/kernel-x86_64-fedora.* ./linux/`
+    * `mv ./linux/kernel-x86_64-fedora.* ./linux/default-gentoo64.config-[...]`
+        * `rm ./linux/.default; ln default-gentoo64.config-[...] ./linux/.default`
         * `rsync $(realpath ./linux/.default) ./build/usr/src/linux/.config`
         * `chroot ./build bash -c "(cd /usr/src/linux && make olddefconfig)"`
         * `rsync ./build/usr/src/linux/.config $(realpath ./linux/.default)`
-    * [ ] Review final version
+    * `rsync -L ./linux/.default ./linux/config-gentoo64-[...]`
+        * `rsync -L ./linux/.options ./linux/config-gentoo64-[...]-options`
+        * `rm ./linux/.config; ln config-gentoo64-[...] ./linux/.config`
+        * `rm ./linux/.options; ln config-gentoo64-[...]-options ./linux/.options`
+    * `vi ./linux/.options`
+        * [ ] Update source kernel version
+        * [ ] Review
+    * `vi ./linux/.config ./linux/.options; ./linux/_config ./build/usr/src/linux`
         * `vdiff $(realpath ./linux/.default) $(realpath ./linux/.config).*.DONE`
         * `rsync $(realpath ./linux/.config).*.DONE $(realpath ./linux/.config)`
         * `rm $(realpath ./linux/.config).*`
