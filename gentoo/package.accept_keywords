@@ -2,9 +2,15 @@
 # portage package keywords file
 ################################################################################
 
-sys-kernel/gentoo-kernel		~amd64		# gentoo required
-sys-kernel/gentoo-sources		~amd64		# gentoo required
-virtual/dist-kernel			~amd64		# gentoo required
+sys-kernel/gentoo-kernel		~amd64		# gentoo required -- version
+sys-kernel/gentoo-sources		~amd64		# gentoo required -- version
+virtual/dist-kernel			~amd64		# gentoo required -- version
+
+########################################
+# system
+
+sys-fs/zfs				~amd64		# gentoo required -- version
+sys-fs/zfs-kmod				~amd64		# gentoo required -- version
 
 ########################################
 # x11
