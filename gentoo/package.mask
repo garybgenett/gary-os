@@ -2,9 +2,17 @@
 # portage package mask file
 ################################################################################
 
->sys-kernel/gentoo-kernel-6.12.13	# gentoo required -- version
->sys-kernel/gentoo-sources-6.12.13	# gentoo required -- version
->virtual/dist-kernel-6.12.13		# gentoo required -- version
+>=sys-kernel/gentoo-kernel-6.17		# gentoo required -- version
+>=sys-kernel/gentoo-sources-6.17	# gentoo required -- version
+>=virtual/dist-kernel-6.17		# gentoo required -- version
+
+########################################
+# system
+
+<sys-fs/zfs-2.3				# gentoo required -- version
+<sys-fs/zfs-kmod-2.3			# gentoo required -- version
+>=sys-fs/zfs-2.4			# gentoo required -- version
+>=sys-fs/zfs-kmod-2.4			# gentoo required -- version
 
 ########################################
 # toolkits

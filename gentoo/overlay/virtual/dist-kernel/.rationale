@@ -3,11 +3,14 @@
 #	5.10.154	2022-11-11 08:01:03 +0100 6ce7859e9fb276fc8d5a84dc4652c3f5335f04ce virtual/dist-kernel: Bump to 5.10.154
 #	6.6.28		2024-04-18 14:27:42 +0200 0c5a2a0f9b866209dca5bf778d416b6befd24a30 virtual/dist-kernel: Bump to 6.6.28
 #	6.12.13		2025-02-08 14:44:18 +0100 6fc088e3d5e2f76a1dec414fa66ac919c6092594 virtual/dist-kernel: Bump to 6.12.13
+#	6.16.9		2025-09-25 12:06:54 +0200 066898f858d23897f36466ac6356ce28a3964737 virtual/dist-kernel: Bump to 6.16.9
 # sys-kernel/gentoo-kernel
 #	5.10.154	2022-11-11 08:01:02 +0100 165ec26ec6be45ccf68b5817f924e41df65269ce sys-kernel/gentoo-kernel: Bump to 5.10.154
 #	6.6.28		2024-04-18 14:50:17 +0200 ad0c3f0148a08678a9f4dc996a40a9cd7eddca0e sys-kernel/gentoo-kernel: Update configs to g12
 #	6.12.13		2025-02-08 14:44:17 +0100 be3aabc3d942c77c591dd5dd3f80d6eeedbf3a5f sys-kernel/gentoo-kernel: Bump to 6.12.13
+#	6.16.9		2025-09-25 12:06:52 +0200 98a0bfa64018d67a55ae7f594b65124226b98967 sys-kernel/gentoo-kernel: Bump to 6.16.9
 # sys-kernel/gentoo-sources
 #	5.10.154	2022-11-10 13:47:52 -0500 516a186fa354655eb8a1023194a98a65fb31f13e sys-kernel/gentoo-sources: add 5.10.154
 #	6.6.28		2024-04-18 16:34:23 +0900 abdc1c7abed421300e34ad63b97391b11eef9b3e sys-kernel/gentoo-sources: add 6.6.28
 #	6.12.13		2025-02-08 06:51:07 -0500 cdba755c2f6130794c58122d577579b6671e35dc sys-kernel/gentoo-sources: add 6.12.13
+#	6.12.49		2025-09-26 00:04:59 +0900 500a7829e149609b431c31a0d30c4c12ed96c7a6 sys-kernel/gentoo-sources: add 6.12.49
