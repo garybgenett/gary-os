@@ -86,6 +86,10 @@ games-fps/quakeforge			~amd64		# gentoo required
 
 ################################################################################
 
+#>>> <sys-devel/gcc-16			~amd64		# gentoo required [games-fps/quakeforge]: https://developers.redhat.com/articles/2025/01/30/how-implement-c23-embed-gcc-15 / configure: error: QuakeForge requires #embed to compile
+
+########################################
+
 dev-libs/randomx			~amd64		# gentoo required
 dev-libs/supercop			~amd64		# gentoo required
 

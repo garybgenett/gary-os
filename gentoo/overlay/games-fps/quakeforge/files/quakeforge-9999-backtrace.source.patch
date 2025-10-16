@@ -1,0 +1,543 @@
+From 1c5f2c9fdfca5cbd8a5d9a18fb4830dd5613bf50 Mon Sep 17 00:00:00 2001
+From: Jon Daniel <joneqdaniel@gmail.com>
+Date: Thu, 10 Apr 2025 00:18:47 +0200
+Subject: [PATCH 1/2] do not require backtrace make it an option
+
+---
+ config.d/backtrace.m4                | 11 +++++++++++
+ configure.ac                         |  3 +--
+ include/QF/backtrace.h               | 10 ++++++++++
+ libs/util/backtrace.c                | 10 ++--------
+ libs/video/renderer/vulkan/staging.c |  2 ++
+ nq/source/host.c                     |  2 ++
+ ruamoko/qwaq/builtins/graphics.c     |  5 ++++-
+ 7 files changed, 32 insertions(+), 11 deletions(-)
+
+diff --git a/config.d/backtrace.m4 b/config.d/backtrace.m4
+index 5dd2b0a080..70f44938d0 100644
+--- a/config.d/backtrace.m4
++++ b/config.d/backtrace.m4
+@@ -1,5 +1,16 @@
++AC_ARG_ENABLE(backtrace,
++	AS_HELP_STRING(
++		[--disable-backtrace],
++		[disable use of libbacktrace]
++	)
++)
++HAVE_BACKTRACE=no
++if test "x$enable_backtrace" = "xyes"; then
+ AC_CHECK_LIB([backtrace], [backtrace_create_state],
+ 	[HAVE_BACKTRACE=yes
+ 	 BACKTRACE_LIBS=-lbacktrace],
+ 	[HAVE_BACKTRACE=no])
+ AC_SUBST(BACKTRACE_LIBS)
++fi
++AM_CONDITIONAL(HAVE_BACKTRACE, test "x$HAVE_BACKTRACE" = "xyes")
++
+diff --git a/configure.ac b/configure.ac
+index b69fdbda66..135bd61adf 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -140,6 +140,7 @@ m4_include(config.d/paths.m4)
+ 
+ m4_include(config.d/build_control.m4)
+ m4_include(config.d/qfcc.m4)
++
+ m4_include(config.d/tracy.m4)
+ m4_include(config.d/backtrace.m4)
+ 
+@@ -178,7 +179,6 @@ case "${host}" in
+ 			[fontconfig, HAVE_FONTCONFIG],
+ 			[freetype, HAVE_FREETYPE],
+ 			[harfbuzz, HAVE_HARFBUZZ],
+-			[backtrace, HAVE_BACKTRACE],
+ 		])
+ 	;;
+ 	*linux*)
+@@ -203,7 +203,6 @@ case "${host}" in
+ 			[libfontconfig-dev, HAVE_FONTCONFIG],
+ 			[libfreetype-dev, HAVE_FREETYPE],
+ 			[libharfbuzz-dev, HAVE_HARFBUZZ],
+-			[backtrace, HAVE_BACKTRACE],
+ 		])
+ 	;;
+ esac
+diff --git a/include/QF/backtrace.h b/include/QF/backtrace.h
+index 29d209ea05..e69e016753 100644
+--- a/include/QF/backtrace.h
++++ b/include/QF/backtrace.h
+@@ -30,11 +30,21 @@
+ #ifndef __QF_backtrace_h
+ #define __QF_backtrace_h
+ 
++#ifdef HAVE_CONFIG_H
++#include "config.h"
++#endif
++
++#ifdef HAVE_BACKTRACE
++
+ #include <stdint.h>
++#include <inttypes.h>
++#include <string.h>
++#include <backtrace.h>
+ 
+ typedef struct dstring_s dstring_t;
+ 
+ void BT_Init (const char *filename);
+ void BT_pcInfo (dstring_t *str, uintptr_t pc);
++#endif
+ 
+ #endif// __QF_backtrace_h
+diff --git a/libs/util/backtrace.c b/libs/util/backtrace.c
+index 7a36fe761e..785e0a75ae 100644
+--- a/libs/util/backtrace.c
++++ b/libs/util/backtrace.c
+@@ -27,15 +27,8 @@
+ 		Boston, MA  02111-1307, USA
+ 
+ */
+-#ifdef HAVE_CONFIG_H
+-#include "config.h"
+-#endif
+-
+-#include <inttypes.h>
+-#include <string.h>
+-#include <backtrace.h>
+-
+ #include "QF/backtrace.h"
++#ifdef HAVE_BACKTRACE
+ #include "QF/dstring.h"
+ #include "QF/sys.h"
+ 
+@@ -74,3 +67,4 @@ BT_pcInfo (dstring_t *str, uintptr_t pc)
+ 		dasprintf (str, "(%"PRIxPTR")", pc);
+ 	}
+ }
++#endif
+diff --git a/libs/video/renderer/vulkan/staging.c b/libs/video/renderer/vulkan/staging.c
+index 483f2a03e9..985368a6ab 100644
+--- a/libs/video/renderer/vulkan/staging.c
++++ b/libs/video/renderer/vulkan/staging.c
+@@ -258,7 +258,9 @@ QFV_PacketAcquire (qfv_stagebuf_t *stage)
+ 		auto end = Sys_LongTime ();
+ 		if (end - start > 500) {
+ 			dstring_t  *str = dstring_newstr ();
++#ifdef HAVE_BACKTRACE
+ 			BT_pcInfo (str, (intptr_t) packet->owner);
++#endif
+ 			Sys_Printf ("QFV_PacketAcquire: long acquire %'d for %p:%s\n",
+ 						(int) (end - start), stage, str->str);
+ 			dstring_delete (str);
+diff --git a/nq/source/host.c b/nq/source/host.c
+index 79d6861792..431dbdb0ab 100644
+--- a/nq/source/host.c
++++ b/nq/source/host.c
+@@ -913,7 +913,9 @@ void
+ Host_Init (void)
+ {
+ 	qfZoneScoped (true);
++#ifdef HAVE_BACKTRACE
+ 	BT_Init (com_argv[0]);
++#endif
+ 	Sys_RegisterShutdown (Host_Shutdown, 0);
+ 	Sys_Printf ("Host_Init\n");
+ 
+diff --git a/ruamoko/qwaq/builtins/graphics.c b/ruamoko/qwaq/builtins/graphics.c
+index 70a11e91df..f8e8d17ac0 100644
+--- a/ruamoko/qwaq/builtins/graphics.c
++++ b/ruamoko/qwaq/builtins/graphics.c
+@@ -40,7 +40,9 @@ static __attribute__ ((used)) const char rcsid[] = "$Id$";
+ #include <errno.h>
+ #include <string.h>
+ 
++#ifdef HAVE_BACKTRACE
+ #include "QF/backtrace.h"
++#endif
+ #include "QF/cbuf.h"
+ #include "QF/draw.h"
+ #include "QF/image.h"
+@@ -456,8 +458,9 @@ BI_Graphics_Init (progs_t *pr)
+ 	qwaq_thread_t *thread = PR_Resources_Find (pr, "qwaq_thread");
+ 
+ 	PR_RegisterBuiltins (pr, builtins, 0);
++#ifdef HAVE_BACKTRACE
+ 	BT_Init (this_program);
+-
++#endif
+ 	QFS_SetConfig (PL_GetPropertyList (bi_dirconf, nullptr));
+ 	QFS_Init (thread->hunk, "qwaq");
+ 	PI_Init ();
+
+From a451e68b351f8ab852debad19bcfca21165941c5 Mon Sep 17 00:00:00 2001
+From: Jon Daniel <joneqdaniel@gmail.com>
+Date: Sun, 12 Oct 2025 19:53:26 +0000
+Subject: [PATCH 2/2] remove backtrace
+
+---
+ config.d/backtrace.m4                         | 16 -----
+ configure.ac                                  |  1 -
+ include/QF/Makemodule.am                      |  1 -
+ include/QF/backtrace.h                        | 50 -------------
+ libs/util/Makemodule.am                       |  1 -
+ libs/util/backtrace.c                         | 71 -------------------
+ libs/util/sys.c                               |  2 -
+ libs/video/renderer/vulkan/staging.c          |  5 --
+ .../video/renderer/vulkan/test/test-staging.c |  4 --
+ nq/source/host.c                              |  4 --
+ qw/source/cl_main.c                           |  2 -
+ qw/source/sv_main.c                           |  2 -
+ ruamoko/qwaq/builtins/graphics.c              |  6 --
+ 13 files changed, 165 deletions(-)
+ delete mode 100644 config.d/backtrace.m4
+ delete mode 100644 include/QF/backtrace.h
+ delete mode 100644 libs/util/backtrace.c
+
+diff --git a/config.d/backtrace.m4 b/config.d/backtrace.m4
+deleted file mode 100644
+index 70f44938d0..0000000000
+--- a/config.d/backtrace.m4
++++ /dev/null
+@@ -1,16 +0,0 @@
+-AC_ARG_ENABLE(backtrace,
+-	AS_HELP_STRING(
+-		[--disable-backtrace],
+-		[disable use of libbacktrace]
+-	)
+-)
+-HAVE_BACKTRACE=no
+-if test "x$enable_backtrace" = "xyes"; then
+-AC_CHECK_LIB([backtrace], [backtrace_create_state],
+-	[HAVE_BACKTRACE=yes
+-	 BACKTRACE_LIBS=-lbacktrace],
+-	[HAVE_BACKTRACE=no])
+-AC_SUBST(BACKTRACE_LIBS)
+-fi
+-AM_CONDITIONAL(HAVE_BACKTRACE, test "x$HAVE_BACKTRACE" = "xyes")
+-
+diff --git a/configure.ac b/configure.ac
+index 840855f661..7d930cd3de 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -143,7 +143,6 @@ m4_include(config.d/build_control.m4)
+ m4_include(config.d/qfcc.m4)
+ 
+ m4_include(config.d/tracy.m4)
+-m4_include(config.d/backtrace.m4)
+ 
+ AC_ARG_ENABLE(static-doc,
+ 	AS_HELP_STRING([--enable-static-doc],
+diff --git a/include/QF/Makemodule.am b/include/QF/Makemodule.am
+index 2eda2c8858..437d3e3527 100644
+--- a/include/QF/Makemodule.am
++++ b/include/QF/Makemodule.am
+@@ -1,7 +1,6 @@
+ include_qf = \
+ 	include/QF/alloc.h \
+ 	include/QF/animation.h \
+-	include/QF/backtrace.h \
+ 	include/QF/base64.h \
+ 	include/QF/bspfile.h \
+ 	include/QF/cbuf.h \
+diff --git a/include/QF/backtrace.h b/include/QF/backtrace.h
+deleted file mode 100644
+index e69e016753..0000000000
+--- a/include/QF/backtrace.h
++++ /dev/null
+@@ -1,50 +0,0 @@
+-/*
+-	backtrace.h
+-
+-	Support for dumping backtrace information.
+-
+-	Copyright (C) 2023 Bill Currie <bill@taniwha.org>
+-
+-	Author: Bill Currie <bill@taniwha.org>
+-	Date: 2023/12/04
+-
+-	This program is free software; you can redistribute it and/or
+-	modify it under the terms of the GNU General Public License
+-	as published by the Free Software Foundation; either version 2
+-	of the License, or (at your option) any later version.
+-
+-	This program is distributed in the hope that it will be useful,
+-	but WITHOUT ANY WARRANTY; without even the implied warranty of
+-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+-
+-	See the GNU General Public License for more details.
+-
+-	You should have received a copy of the GNU General Public License
+-	along with this program; if not, write to:
+-
+-		Free Software Foundation, Inc.
+-		59 Temple Place - Suite 330
+-		Boston, MA  02111-1307, USA
+-
+-*/
+-#ifndef __QF_backtrace_h
+-#define __QF_backtrace_h
+-
+-#ifdef HAVE_CONFIG_H
+-#include "config.h"
+-#endif
+-
+-#ifdef HAVE_BACKTRACE
+-
+-#include <stdint.h>
+-#include <inttypes.h>
+-#include <string.h>
+-#include <backtrace.h>
+-
+-typedef struct dstring_s dstring_t;
+-
+-void BT_Init (const char *filename);
+-void BT_pcInfo (dstring_t *str, uintptr_t pc);
+-#endif
+-
+-#endif// __QF_backtrace_h
+diff --git a/libs/util/Makemodule.am b/libs/util/Makemodule.am
+index bc1e602224..4b30dd5666 100644
+--- a/libs/util/Makemodule.am
++++ b/libs/util/Makemodule.am
+@@ -40,7 +40,6 @@ libs_util_libQFutil_la_LDFLAGS=		$(lib_ldflags)
+ libs_util_libQFutil_la_LIBADD=		$(util_asm) $(Z_LIBS) $(BACKTRACE_LIBS) $(DL_LIBS) $(WIN32_LIBS)
+ libs_util_libQFutil_la_DEPENDENCIES=	$(util_asm)
+ libs_util_libQFutil_la_SOURCES= \
+-	libs/util/backtrace.c \
+ 	libs/util/base64.c \
+ 	libs/util/bsearch.c \
+ 	libs/util/bspfile.c \
+diff --git a/libs/util/backtrace.c b/libs/util/backtrace.c
+deleted file mode 100644
+index 3729ad7904..0000000000
+--- a/libs/util/backtrace.c
++++ /dev/null
+@@ -1,71 +0,0 @@
+-/*
+-	backtrace.c
+-
+-	Support for dumping backtrace information.
+-
+-	Copyright (C) 2023 Bill Currie <bill@taniwha.org>
+-
+-	Author: Bill Currie <bill@taniwha.org>
+-	Date: 2023/12/04
+-
+-	This program is free software; you can redistribute it and/or
+-	modify it under the terms of the GNU General Public License
+-	as published by the Free Software Foundation; either version 2
+-	of the License, or (at your option) any later version.
+-
+-	This program is distributed in the hope that it will be useful,
+-	but WITHOUT ANY WARRANTY; without even the implied warranty of
+-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+-
+-	See the GNU General Public License for more details.
+-
+-	You should have received a copy of the GNU General Public License
+-	along with this program; if not, write to:
+-
+-		Free Software Foundation, Inc.
+-		59 Temple Place - Suite 330
+-		Boston, MA  02111-1307, USA
+-
+-*/
+-#include "QF/backtrace.h"
+-#ifdef HAVE_BACKTRACE
+-#include "QF/dstring.h"
+-#include "QF/sys.h"
+-
+-static struct backtrace_state *bt_state;
+-
+-static void bt_error (void *data, const char *msg, int errnum)
+-{
+-	if (errnum > 0) {
+-		Sys_Printf ("%s: %s\n", msg, strerror (errnum));
+-	} else if (errnum < 0) {
+-		Sys_Printf ("%s: no symbol table\n", msg);
+-	}
+-}
+-
+-void
+-BT_Init (const char *filename)
+-{
+-	bt_state = backtrace_create_state (filename, 1, bt_error, 0);
+-}
+-
+-static int
+-bt_print (void *data, uintptr_t pc, const char *fname, int lineno,
+-		  const char *func)
+-{
+-	dstring_t  *str = data;
+-	const char *nl = str->size && str->str[0] ? "\n" : "";
+-	dasprintf (str, "%s(%"PRIxPTR") %s:%s:%d", nl, pc, func, fname, lineno);
+-	return 0;
+-}
+-
+-void
+-BT_pcInfo (dstring_t *str, uintptr_t pc)
+-{
+-	if (bt_state) {
+-		backtrace_pcinfo (bt_state, pc, bt_print, bt_error, str);
+-	} else {
+-		dasprintf (str, "(%"PRIxPTR")", pc);
+-	}
+-}
+-#endif
+diff --git a/libs/util/sys.c b/libs/util/sys.c
+index 4b8e983a52..a42a8fa5b2 100644
+--- a/libs/util/sys.c
++++ b/libs/util/sys.c
+@@ -82,7 +82,6 @@
+ #include "qfalloca.h"
+ 
+ #include "QF/alloc.h"
+-#include "QF/backtrace.h"
+ #include "QF/cmd.h"
+ #include "QF/cvar.h"
+ #include "QF/dstring.h"
+@@ -612,7 +611,6 @@ Sys_Error (const char *error, ...)
+ 	in_sys_error = 1;
+ 
+ 	dstring_t *bt = dstring_newstr ();
+-	BT_backtrace (bt, 1);
+ 	sys_err_printf ("%s\n", bt->str);
+ 	dstring_delete (bt);
+ 
+diff --git a/libs/video/renderer/vulkan/staging.c b/libs/video/renderer/vulkan/staging.c
+index d9de832aab..3586ad79aa 100644
+--- a/libs/video/renderer/vulkan/staging.c
++++ b/libs/video/renderer/vulkan/staging.c
+@@ -29,7 +29,6 @@
+ #endif
+ #include <string.h>
+ 
+-#include "QF/backtrace.h"
+ #include "QF/dstring.h"
+ #include "QF/fbsearch.h"
+ 
+@@ -122,7 +121,6 @@ QFV_DestroyStagingBuffer (qfv_stagebuf_t *stage)
+ 		if (stat != VK_SUCCESS) {
+ 			dstring_t  *str = dstring_newstr ();
+ 			auto packet = &stage->packets.buffer[i];
+-			BT_pcInfo (str, (intptr_t) packet->owner);
+ 			Sys_Printf ("QFV_DestroyStagingBuffer: %d live packet in %p:%s\n",
+ 						stat, stage, str->str);
+ 			dstring_delete (str);
+@@ -379,9 +377,6 @@ QFV_PacketAcquire (qfv_stagebuf_t *stage, const char *name)
+ 		auto end = Sys_LongTime ();
+ 		if (end - start > 500) {
+ 			dstring_t  *str = dstring_newstr ();
+-#ifdef HAVE_BACKTRACE
+-			BT_pcInfo (str, (intptr_t) packet->owner);
+-#endif
+ 			Sys_Printf ("QFV_PacketAcquire: long acquire %'d for %p:%s\n",
+ 						(int) (end - start), stage, str->str);
+ 			dstring_delete (str);
+diff --git a/libs/video/renderer/vulkan/test/test-staging.c b/libs/video/renderer/vulkan/test/test-staging.c
+index ed8440747d..5ba50313bc 100644
+--- a/libs/video/renderer/vulkan/test/test-staging.c
++++ b/libs/video/renderer/vulkan/test/test-staging.c
+@@ -7,8 +7,6 @@
+ #include <stdlib.h>
+ #include <string.h>
+ 
+-#include "QF/backtrace.h"
+-
+ #include "QF/Vulkan/qf_vid.h"
+ #include "QF/Vulkan/device.h"
+ #include "QF/Vulkan/instance.h"
+@@ -187,8 +185,6 @@ _error (int line, const char *fmt, ...)
+ int
+ main (int argc, char **argv)
+ {
+-	BT_Init (argv[0]);
+-
+ 	qfv_stagebuf_t *stage = QFV_CreateStagingBuffer (&device, "", 1024, 0);
+ 
+ 	if (stage->size != 1024) {
+diff --git a/nq/source/host.c b/nq/source/host.c
+index cb5bec449e..c37d9765b5 100644
+--- a/nq/source/host.c
++++ b/nq/source/host.c
+@@ -32,7 +32,6 @@
+ # include <unistd.h>
+ #endif
+ 
+-#include "QF/backtrace.h"
+ #include "QF/cbuf.h"
+ #include "QF/dstring.h"
+ #include "QF/cmd.h"
+@@ -913,9 +912,6 @@ void
+ Host_Init (void)
+ {
+ 	qfZoneScoped (true);
+-#ifdef HAVE_BACKTRACE
+-	BT_Init (com_argv[0]);
+-#endif
+ 	Sys_RegisterShutdown (Host_Shutdown, 0);
+ 	Sys_Printf ("Host_Init\n");
+ 
+diff --git a/qw/source/cl_main.c b/qw/source/cl_main.c
+index ce7ee79340..f480230e2e 100644
+--- a/qw/source/cl_main.c
++++ b/qw/source/cl_main.c
+@@ -59,7 +59,6 @@
+ 
+ #include "qfalloca.h"
+ 
+-#include "QF/backtrace.h"
+ #include "QF/cbuf.h"
+ #include "QF/idparse.h"
+ #include "QF/cdaudio.h"
+@@ -2067,7 +2066,6 @@ CL_Autoexec (int phase, void *data)
+ void
+ Host_Init (void)
+ {
+-	BT_Init (com_argv[0]);
+ 	cl_cbuf = Cbuf_New (&id_interp);
+ 	cl_stbuf = Cbuf_New (&id_interp);
+ 
+diff --git a/qw/source/sv_main.c b/qw/source/sv_main.c
+index 8234e3bbb2..38c1a4c533 100644
+--- a/qw/source/sv_main.c
++++ b/qw/source/sv_main.c
+@@ -59,7 +59,6 @@
+ #include <stdarg.h>
+ #include <stdlib.h>
+ 
+-#include "QF/backtrace.h"
+ #include "QF/cbuf.h"
+ #include "QF/idparse.h"
+ #include "QF/cmd.h"
+@@ -2658,7 +2657,6 @@ SV_Init_Memory (void)
+ void
+ SV_Init (void)
+ {
+-	BT_Init (com_argv[0]);
+ 	sv_cbuf = Cbuf_New (&id_interp);
+ 	sv_args = Cbuf_ArgsNew ();
+ 
+diff --git a/ruamoko/qwaq/builtins/graphics.c b/ruamoko/qwaq/builtins/graphics.c
+index bec7f685e2..4cbf36f725 100644
+--- a/ruamoko/qwaq/builtins/graphics.c
++++ b/ruamoko/qwaq/builtins/graphics.c
+@@ -40,9 +40,6 @@ static __attribute__ ((used)) const char rcsid[] = "$Id$";
+ #include <errno.h>
+ #include <string.h>
+ 
+-#ifdef HAVE_BACKTRACE
+-#include "QF/backtrace.h"
+-#endif
+ #include "QF/cbuf.h"
+ #include "QF/draw.h"
+ #include "QF/image.h"
+@@ -543,9 +540,6 @@ BI_Graphics_Init (progs_t *pr)
+ 	qwaq_thread_t *thread = PR_Resources_Find (pr, "qwaq_thread");
+ 
+ 	PR_RegisterBuiltins (pr, builtins, 0);
+-#ifdef HAVE_BACKTRACE
+-	BT_Init (this_program);
+-#endif
+ 	QFS_SetConfig (PL_GetPropertyList (bi_dirconf, nullptr));
+ 	QFS_Init (thread->hunk, "qwaq");
+ 	PI_Init ();

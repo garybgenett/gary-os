@@ -8,15 +8,23 @@ inherit autotools flag-o-matic readme.gentoo-r1 toolchain-funcs
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/quakeforge/quakeforge.git"
-#>>>	2025-02-18 14:33:56 +0900 0df9a1e1e7f409e25d8d698957caac16358c17d7 [ruamoko] Update function names for IMP button/axis listeners
-	EGIT_COMMIT="0df9a1e1e7f409e25d8d698957caac16358c17d7"
+#>>>	2025-10-11 16:30:09 +0900 eb38238188ce53b2df7ac6f4a0fe3a4c1adf09fe [glsl] Use correct vertex offset in multi-mesh models
+	# In file included from libs/ui/text.c:45:
+	# ./include/compat.h:107:58: error: conflicting types for 'src'; have 'const char * restrict'
+	#   107 | char *stpcpy (char * restrict src, const char * restrict src);
+	#       |                                    ~~~~~~~~~~~~~~~~~~~~~~^~~
+	# ./include/compat.h:107:31: note: previous definition of 'src' with type 'char * restrict'
+	#   107 | char *stpcpy (char * restrict src, const char * restrict src);
+	#       |               ~~~~~~~~~~~~~~~~^~~
+	EGIT_COMMIT="eb38238188ce53b2df7ac6f4a0fe3a4c1adf09fe"
 	KEYWORDS="~amd64 ~x86"
 #>>>
 #	https://bugs.gentoo.org/880545 / checking for c23... configure: error: QuakeForge requires C23 to compile
-#	https://stackoverflow.com/questions/9427145/how-do-i-remove-the-following-implicit-declaration-of-function-warnings / configure: error: GNU flex is required but was not found
-#>>>
 	append-flags "-std=c23 -D_POSIX_C_SOURCE=1"
 	PATCHES=(
+#		https://github.com/quakeforge/quakeforge/pull/86
+		"${FILESDIR}/${PN}-9999-backtrace.patch"
+#		https://stackoverflow.com/questions/9427145/how-do-i-remove-the-following-implicit-declaration-of-function-warnings / configure: error: GNU flex is required but was not found
 		"${FILESDIR}/${PN}-9999-xf86dga.patch"
 	)
 #>>>
@@ -67,7 +75,9 @@ DEPEND="
 		x11-base/xorg-proto
 		vulkan? ( dev-util/vulkan-headers )
 	)"
+#>>>	>=sys-devel/gcc-15
 BDEPEND="
+	>=sys-devel/gcc-15
 	sys-devel/bison
 	sys-devel/flex
 	virtual/pkgconfig
@@ -95,8 +105,11 @@ src_configure() {
 		usex client $(use_enable ${1}) --disable-${1}
 	}
 
-#>>>		--disable-dga
 	local econfargs=(
+#>>>
+#		https://github.com/quakeforge/quakeforge/pull/86
+		--disable-backtrace
+#>>>
 		$(qf_client alsa)
 		$(qf_client flac)
 		$(qf_client jack)
@@ -113,7 +126,9 @@ src_configure() {
 		$(use_enable zlib)
 		$(use_with client x)
 		--disable-Werror
+#>>>		--disable-dga
 		$(use_enable dga)
+#>>>
 		--disable-simd # all this does is append -mavx2 and similar
 		--enable-xdg
 		# non-x11 clients are mostly abandoned/broken (SDL1 still useful for pulseaudio)
