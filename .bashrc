@@ -635,6 +635,12 @@ if [[ ${UNAME} == "Windows" ]]; then
 					${STSBAS}${TODOS_MD_EXT} \
 					${STSBAS}-$(date --iso)${TODOS_MD_EXT}
 			fi
+			cat ${STSBAS}${TODOS_MD_EXT} \
+				| ${SED} -n "/# AI Prompt/,/^#/p" \
+				| ${SED} \
+					-e "/^[#]/d" \
+					-e "/^[*[:space:]]*$/d" \
+				>${STSBAS}+ai_prompt${TODOS_MD_EXT}
 			if ! ${AUTO}; then
 				vdiff \
 					$(ls ${STSBAS}-*${TODOS_MD_EXT} | tail -n2 | head -n1) \
