@@ -510,8 +510,7 @@ app-arch/lha
 games-fps/dhewm3			#>>> custom package
 games-fps/doom3
 games-fps/doom3-ducttape
-#>>> games-fps/quakeforge		# requires: gcc backtrace.h
-
+#>>> games-fps/quakeforge		# see: overlay/games-fps/quakeforge/.rationale
 
 # interactive ebuilds, which can be automated using:
 #	sed -nr "s|^#\t||gp" ./gentoo/sets/packages
