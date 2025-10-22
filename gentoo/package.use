@@ -36,6 +36,7 @@ x11-libs/gtk+				wayland		# gentoo required
 app-arch/sharutils			nls		# gentoo required [app-arch/sharutils-4.15.2-r3]: https://bugs.gentoo.org/900248 / uuencode.c:204:3: error: implicit declaration of function 'bindtextdomain' [-Wimplicit-function-declaration]
 media-sound/aumix			nls		# gentoo required [media-sound/aumix-2.9.1-r1]: https://bugs.gentoo.org/919216 / common.c:229:17: error: implicit declaration of function 'bind_textdomain_codeset' [-Wimplicit-function-declaration]
 sys-apps/coreutils			-gmp		# gentoo required [*]: configure: error: GMP not found, although --with-libgmp was specified. Try specifying --with-libgmp-prefix=DIR.
+sys-process/atop			-modules	# gentoo required [sys-process/atop-2.12.0]: https://bugs.gentoo.org/959282 / netatop.o: error: objtool: init_module(): Magic init_module() function name is deprecated, use module_init(fn) instead
 
 ########################################
 
