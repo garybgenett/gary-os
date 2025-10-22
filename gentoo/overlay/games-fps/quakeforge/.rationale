@@ -1,2 +1,3 @@
 # removed package
+# still failing in: quakeforge-9999.ebuild
 # 2025-02-14 17:16:43 +0100 b4af72bd4f5af0bb23280e0b6d03dc09c839d591 games-fps/quakeforge: Fix incorrect REPLACING_VERSIONS usage
