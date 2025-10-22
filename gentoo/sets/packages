@@ -111,7 +111,7 @@ sys-apps/which
 
 dev-libs/libcgroup
 sys-fs/sysfsutils
-#>>> sys-process/atop			# gentoo required [sys-process/atop-2.12.0]: https://bugs.gentoo.org/959282 / netatop.o: error: objtool: init_module(): Magic init_module() function name is deprecated, use module_init(fn) instead
+sys-process/atop
 sys-process/htop
 sys-process/iotop
 sys-process/lsof
