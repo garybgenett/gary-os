@@ -1721,6 +1721,8 @@ Everything needed to perform these steps is in the [Repository] or the
             * [ ] Command comments at top of [gentoo/package.use]
         * `(cd ./gentoo/overlay; ./.review -a)`
             * [ ] Review `.keep` packages
+        * `(cd ./gentoo/*; git checkout .; git pull)`
+            * [ ] Update packages
         * [ ] Update `${RUFUS_VER}` number
   * `make DOMODS=false init`
     * [ ] Until `@world`, at least
@@ -1747,9 +1749,9 @@ Everything needed to perform these steps is in the [Repository] or the
   * `make DOMODS=false doit`
     * [ ] Update `savedconfig` directory
     * [x] *Iterate()*
-  * `cd .setup/gentoo.make`
+    * `make perms`
     * `(cd .setup; git-commit ./linux ./gentoo)`
-  * `make DOMODS=false redo`
+  * `make DOMODS=false DOREDO=true redo`
     * [x] *Iterate()*
     * `make DOMODS=false doit`
     * `(cd _builds; rsync ./_gentoo/ ./_gary-os.working)`
@@ -1768,7 +1770,8 @@ Everything needed to perform these steps is in the [Repository] or the
     * [ ] Boot to "\_root"
   * `make DOMODS=true doit`
     * `ll ./build/ ./build/_build`
-    * `(cd .setup; git-commit ./gentoo)`
+    * `make perms`
+    * `(cd .setup; git-commit ./linux ./gentoo)`
     * `(cd _builds; rsync ./_gentoo/ ../../_toor)`
     * `_sync _sys _clone _full _setup`
 
@@ -1802,7 +1805,8 @@ Everything needed to perform these steps is in the [Repository] or the
     * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.kernel 1 -m 8192`
     * [ ] Test kernel size and root filesystem resize
   * [x] *Validate( 1.8GB 3.4GiB P=\_gary-os rootfs )*
-  * `(cd .setup; git-commit ./gentoo)`
+  * `make perms`
+  * `(cd .setup; git-commit ./linux ./gentoo)`
   * `make doit && make DOREDO=true devel`
 
 **Test & Publish**
@@ -2174,6 +2178,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * `make DOMODS=true edit`
     * `(cd _builds/_gentoo; git-backup "gary-os v#.#"; GIT_PAGER= git-list -n1)`
     * `(cd _builds; rsync ./_gentoo/ ../../_toor)`
+    * `_sync _sys _clone _full _setup`
   * `cd coding/gary-os-history`
     * `ln ../gary-os.git ./.git`
     * `GIT_PAGER= git-list -n1`
