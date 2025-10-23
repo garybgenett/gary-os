@@ -1423,7 +1423,7 @@ if [[ ${1} == -i ]]; then
 							--symlink						\
 							$(if [[ -z ${AUTO} ]]; then
 								echo "--menuconfig"
-							elif [[ -f ${ARCDIR}/${KERN} ]]; then
+							elif [[ -f ${TARGET}${ARCDIR}/${KERN} ]]; then
 								echo "--kernel-config=${ARCDIR}/${KERN}"
 							fi)							\
 							${GENKRN}						\
