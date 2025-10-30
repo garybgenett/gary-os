@@ -712,6 +712,11 @@ if [[ ${UNAME} == "Windows" ]]; then
 			DRYRUN="--dry-run"
 			shift
 		fi
+		declare LINKS="$(find -L . -type l | grep -v "[/][_]sources[/]")"
+		if [[ -n ${LINKS} ]]; then
+			${LL} ${LINKS}
+			return 1
+		fi
 		dodrive \
 		status -a \
 		&& bookmarks -a \
