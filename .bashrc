@@ -665,6 +665,7 @@ if [[ ${UNAME} == "Windows" ]]; then
 		declare AUTO="false"
 		if [[ ${1} == -a ]]; then
 			AUTO="true"
+			shift
 		fi
 		if [[ -f ${BKMDIR}/bookmarks.html ]]; then
 			${SED} -i \
