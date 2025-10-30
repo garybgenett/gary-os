@@ -661,6 +661,42 @@ if [[ ${UNAME} == "Windows" ]]; then
 		fi
 		return 0
 	}
+	function context {
+		declare CLI="false"
+		if [[ ${1} == -s ]]; then
+			CLI="true"
+			shift
+		fi
+		if ${CLI} && [[ -f ${DATDIR}/_config/_q_cli.sh ]]; then
+			${EDITOR} ${DATDIR}/_config/_q_cli.sh
+			if ! diff ${DIFF_OPTS} \
+				$(ls ${DATDIR}/_config/_q_cli-*.sh | tail -n1) \
+				${DATDIR}/_config/_q_cli.sh >/dev/null
+			then
+				${RSYNC_U} \
+					${DATDIR}/_config/_q_cli.sh \
+					${DATDIR}/_config/_q_cli-$(date --iso).sh
+			fi
+			vdiff \
+				$(ls ${DATDIR}/_config/_q_cli-*.sh | tail -n2 | head -n1) \
+				${DATDIR}/_config/_q_cli.sh
+		fi
+		if ! ${CLI} && [[ -f ${DATDIR}/_context/persona.md ]]; then
+			${EDITOR} ${DATDIR}/_context/persona.md
+			if ! diff ${DIFF_OPTS} \
+				$(ls ${DATDIR}/_context/persona-*.md | tail -n1) \
+				${DATDIR}/_context/persona.md >/dev/null
+			then
+				${RSYNC_U} \
+					${DATDIR}/_context/persona.md \
+					${DATDIR}/_context/persona-$(date --iso).md
+			fi
+			vdiff \
+				$(ls ${DATDIR}/_context/persona-*.md | tail -n2 | head -n1) \
+				${DATDIR}/_context/persona.md
+		fi
+		return 0
+	}
 	function bookmarks {
 		declare AUTO="false"
 		if [[ ${1} == -a ]]; then
