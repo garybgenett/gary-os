@@ -109,9 +109,9 @@
 #{FSPACK} base:/usr/lib/modules
 #{FSPACK} base:/usr/lib/firmware
 
-#{FSKEEP} emerge:/usr/share/genkernel/distfiles
+#>>> #{FSKEEP} emerge:/usr/share/genkernel/distfiles
 #{FSKEEP} emerge:/usr/src/linux
-#{FSKEEP} emerge:/var/db/pkg
+#>>> #{FSKEEP} emerge:/var/db/pkg
 #{FSKEEP} emerge:/var/db/repos/gentoo
 #{FSARCH} emerge:/var/db/repos/gentoo.git
 

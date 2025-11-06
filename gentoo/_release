@@ -248,8 +248,9 @@ FSUPDT="$(echo "${FSUPDT}" | tr '\n' ';' | ${SED} -e "s|^;+||g" -e "s|;+$||g" -e
 #note: the "$repdir" and "$ldir" directories are packed in the "prepare_repdir" and "prepare_linux" functions, respectively
 #note: adding them here ensures they will be handled properly by functions like "release_reset" and "release_unpack", as though they were regular archives
 #note: the "$ldir-*" directories are handled in "$skipdirs" below
+#>>> for FILE in ${REPDIR} ${LDIR} ${PDBDIR}
 for FILE in ${MDIR} ${FDIR}		; do if ! variable_match "FSPACK FSKEEP FSARCH FSEXCL" ";" "${FILE}"; then FSPACK+="; ${_TITLE}:${FILE}"; fi; done
-for FILE in ${REPDIR} ${LDIR} ${PDBDIR}	; do if ! variable_match "FSPACK FSKEEP FSARCH FSEXCL" ";" "${FILE}"; then FSKEEP+="; ${_TITLE}:${FILE}"; fi; done
+for FILE in ${REPDIR} ${LDIR}		; do if ! variable_match "FSPACK FSKEEP FSARCH FSEXCL" ";" "${FILE}"; then FSKEEP+="; ${_TITLE}:${FILE}"; fi; done
 for FILE in ${REPDIR}.git		; do if ! variable_match "FSPACK FSKEEP FSARCH FSEXCL" ";" "${FILE}"; then FSARCH+="; ${_TITLE}:${FILE}"; fi; done
 for FILE in $((
 		find ${TARGET}/boot/{System.map,config,vmlinuz,initramfs}-*
