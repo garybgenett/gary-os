@@ -10,6 +10,7 @@
 #{GENKRN} --e2fsprogs
 #{GENKRN} --luks
 #{GENKRN} --zfs
+#{GENKRN} kernel
 
 #{SELECT} cdparanoia:cdparanoia-paranoia
 #{SELECT} editor:vi
