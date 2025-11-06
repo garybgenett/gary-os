@@ -390,6 +390,7 @@ sys-power/acpitool
 app-admin/procinfo-ng
 app-admin/sysstat
 app-misc/binwalk
+app-misc/rdfind
 app-text/tree
 sys-apps/dstat
 sys-apps/pv
