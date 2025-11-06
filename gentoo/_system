@@ -1416,9 +1416,12 @@ if [[ ${1} == -i ]]; then
 							${TARGET}${ARCDIR}/${KERN}				|| EXIT 1
 			kernel_cpu			${TARGET}${ARCDIR}/${KERN}				|| EXIT 1
 		fi
-		expect_wrapper genkernel		--kernel-localversion=".${_TITLE}"			\
-							--loglevel="5"						\
+#>							--compress-initramfs					\
+#>							--compress-initramfs-type="xz"				\
+		expect_wrapper genkernel		--loglevel="5"						\
 							--bootloader="grub"					\
+							--no-compress-initramfs					\
+							--kernel-localversion=".${_TITLE}"			\
 							--install						\
 							--symlink						\
 							$(if [[ -z ${AUTO} ]]; then
