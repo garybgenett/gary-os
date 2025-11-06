@@ -95,11 +95,13 @@ sys-apps/busybox			-pam		# gentoo required
 
 ########################################
 
+*/*					-firmware
 sys-boot/grub				device-mapper efiemu libzfs mount
 sys-devel/gcc				ada cxx
 sys-fs/zfs				-python rootfs
 sys-fs/zfs-kmod				dist-kernel-cap
 sys-kernel/gentoo-kernel		hardened strip
+sys-kernel/linux-firmware		-compress-xz -compress-zstd -unknown-license deduplicate redistributable
 
 #>>> app-emulation/virtualbox		gui sdk vnc
 #{MOD} www-client/chromium		-rar ffmpeg-chromium
