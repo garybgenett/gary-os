@@ -44,12 +44,17 @@
 #{FSKEEP} emerge:/var/db/repos/gentoo
 #{FSARCH} emerge:/var/db/repos/gentoo.git
 
-#{FSEXCL}
+#>>> #{FSEXCL}
+#{FSEXCL} base:/usr/lib/firmware/liquidio
+#{FSEXCL} base:/usr/lib/firmware/mellanox
+#{FSEXCL} base:/usr/lib/firmware/mrvl
+#{FSEXCL} base:/usr/lib/firmware/netronome
+#{FSEXCL} base:/usr/lib/firmware/qcom
 
 ########################################
 # firmware
 
-sys-kernel/linux-firmware
+sys-kernel/linux-firmware		# gentoo required
 
 ########################################
 # toolchain

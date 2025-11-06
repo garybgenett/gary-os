@@ -118,7 +118,7 @@
 ########################################
 # firmware
 
-sys-kernel/linux-firmware
+sys-kernel/linux-firmware		# gentoo required
 
 ########################################
 # toolchain
