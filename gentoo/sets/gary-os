@@ -42,7 +42,7 @@
 
 #>>> #{FSARCH} emerge:/usr/share/genkernel/distfiles
 #{FSARCH} emerge:/usr/src/linux
-#{FSKEEP} emerge:/var/db/pkg
+#>>> #{FSKEEP} emerge:/var/db/pkg
 #{FSKEEP} emerge:/var/db/repos/gentoo
 #{FSARCH} emerge:/var/db/repos/gentoo.git
 
