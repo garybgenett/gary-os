@@ -398,7 +398,7 @@ net-mail/isync
 net-mail/safecat
 
 mail-client/thunderbird
-www-client/chromium
+#{MOD} www-client/chromium
 www-client/firefox
 www-client/torbrowser-launcher
 #>>> www-client/surf			# requires: net-libs/webkit -> dev-lang/ruby
