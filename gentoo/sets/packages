@@ -33,7 +33,7 @@
 ########################################
 # firmware
 
-sys-kernel/linux-firmware
+sys-kernel/linux-firmware		# gentoo required
 
 sys-firmware/sof-firmware
 
