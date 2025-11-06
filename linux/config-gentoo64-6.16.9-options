@@ -35,6 +35,10 @@ Virtualization									CONFIG_VIRTUALIZATION=y
 		KVM for AMD processors support					CONFIG_KVM_AMD=y
 
 Enable loadable module support							CONFIG_MODULES=y
+	Module compression							CONFIG_MODULE_COMPRESS=n
+		Module compression type						CONFIG_MODULE_COMPRESS_XZ=y [XZ]
+		Automatically compress all modules				CONFIG_MODULE_COMPRESS_ALL=y
+		Support in-kernel module decompression				CONFIG_MODULE_DECOMPRESS=y
 
 Device Drivers
 	Block devices								CONFIG_BLK_DEV=y
