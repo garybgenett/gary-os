@@ -1433,8 +1433,7 @@ if [[ ${1} == -i ]]; then
 							elif [[ -f ${TARGET}${ARCDIR}/${KERN} ]]; then
 								echo "--kernel-config=${ARCDIR}/${KERN}"
 							fi)							\
-							${GENKRN}						\
-							kernel							|| EXIT 1
+							${GENKRN:-all}						|| EXIT 1
 		${RSYNC_U} --copy-links			${TARGET}${LDIR}/.config				\
 							${TARGET}${ARCDIR}/${KERN}				|| EXIT 1
 		if ! ${_GOS}; then
