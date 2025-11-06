@@ -1579,7 +1579,7 @@ if [[ ${1} == -u ]]; then
 	if ! ${DOFAST}; then
 		expect_wrapper revdep-rebuild --ignore					|| EXIT 1
 		expect_wrapper emaint --fix all						|| EXIT 1
-#>>>		expect_wrapper eclean --verbose --deep distfiles			|| EXIT 1
+#>>>		expect_wrapper eclean --verbose --deep --package-names distfiles	|| EXIT 1
 		expect_wrapper eclean --verbose distfiles				|| EXIT 1
 		expect_wrapper eclean --verbose packages				|| EXIT 1
 		if [[ -n "$(which eix-update 2>/dev/null)" ]]; then
