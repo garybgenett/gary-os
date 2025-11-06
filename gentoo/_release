@@ -889,6 +889,7 @@ function _prepare_docdir {		#{dotest}
 	fi
 	declare G_REPO_GIT="${_G_REPO}.git"
 	declare G_REPO_SRC="${_G_REPO}"
+	declare G_REPO_EXL=()
 	declare G_REPO_OPT=
 	if [[ -n ${COMMIT} ]] && [[ -d ${_G_REPO} ]]; then
 		if ${DOTEST} && {
@@ -897,6 +898,7 @@ function _prepare_docdir {		#{dotest}
 		}; then
 			G_REPO_SRC="${SETDIR}"
 			G_REPO_OPT="--copy-links"
+			G_REPO_EXL=(${FUNDIR}/*.git)
 		fi
 	elif {
 		[[ -s ${SETDIR}/.gitignore ]] &&
@@ -904,7 +906,6 @@ function _prepare_docdir {		#{dotest}
 	}; then
 		G_REPO_GIT="${SETDIR}/.git"
 		G_REPO_SRC="${SETDIR}"
-		G_REPO_OPT=
 	else
 #>>>		${RM}					${TARGET}/.${_TITLE}			|| return 1
 		return 0
@@ -916,6 +917,9 @@ function _prepare_docdir {		#{dotest}
 		--filter="P_/.git"								\
 		$(${GREP} -v -e "^[#]" -e "^$" ${SETDIR}/.gitignore | while read -r FILE; do
 			echo "--filter=\"-_${FILE/%\/}\""
+		done)										\
+		$(for FILE in ${G_REPO_EXL[@]}; do
+			echo "--filter=\"-_${FILE}\""
 		done)										\
 		--filter="-_/.${_GPACK/%.txt}*"							\
 		--filter="-_/build.${_GINST/#\/.}"						\
