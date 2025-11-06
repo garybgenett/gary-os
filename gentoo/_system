@@ -1419,6 +1419,7 @@ if [[ ${1} == -i ]]; then
 #>							--compress-initramfs					\
 #>							--compress-initramfs-type="xz"				\
 		expect_wrapper genkernel		--loglevel="5"						\
+							--strip="all"						\
 							--bootloader="grub"					\
 							--no-compress-initramfs					\
 							--kernel-localversion=".${_TITLE}"			\
