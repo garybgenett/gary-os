@@ -1018,7 +1018,11 @@ function _prepare_repdir {		#{doredo}
 
 function prepare_linux_directory {
 	declare DODIR="${1}" && shift
-	if [[ ! -d ${TARGET}${DODIR} ]]; then
+	if {
+		[[ ! -d ${TARGET}${DODIR} ]] ||
+		[[ -L ${TARGET}${DODIR} ]];
+	}; then
+		${RM}						${TARGET}${DODIR}		|| return 1
 		${RM}						${TARGET}${DODIR}.${_TITLE}	|| return 1
 		${MKDIR}					${TARGET}${DODIR}.${_TITLE}	|| return 1
 		common_gpkg_tar									\

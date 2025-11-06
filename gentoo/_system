@@ -1406,11 +1406,14 @@ if [[ ${1} == -i ]]; then
 			${LN} ${KERN}			${TARGET}${LDIR}					|| EXIT 1
 		fi
 	fi
-	if ! ${DOFAST} && ${_KRN}; then for FILE in ${KERNEL}; do
+	for FILE in ${KERNEL}; do
 		KSRC="${KBAS//${KVER}/${FILE}}"
 		KERN="${KCFG//${KVER}/${FILE}}"
 		${RM}					${TARGET}${LDIR}					|| EXIT 1
 		${LN} ${KSRC}				${TARGET}${LDIR}					|| EXIT 1
+		if ${DOFAST} || ! ${_KRN}; then
+			continue
+		fi
 		if [[ -f ${SETDIR}/${LINDIR}/${KERN} ]]; then
 			${RSYNC_U} --copy-links		${SETDIR}/${LINDIR}/${KERN}				\
 							${TARGET}${ARCDIR}/${KERN}				|| EXIT 1
@@ -1445,7 +1448,7 @@ if [[ ${1} == -i ]]; then
 			[[ -L				${TARGET}/boot/kernel.old				]] ||
 			${LN} ${KERN}			${TARGET}/boot/kernel.old				|| EXIT 1
 		fi
-	done; fi
+	done
 	if ${_GOS}; then
 		${RM}					${TARGET}/boot/_kernel					|| EXIT 1
 		${RM}					${TARGET}/boot/_initrd					|| EXIT 1
