@@ -232,6 +232,8 @@ sys-apps/fwupd				minimal		# requires: ( sys-apps/systemd | sys-auth/elogind )
 
 ########################################
 
+#>>> #{GFG} dev-python/pillow		-truetype	# gentoo required
+
 #{GFG} dev-build/cmake			-gui		# gentoo required
 #{GFG} media-libs/libsndfile		minimal		# gentoo required
 
