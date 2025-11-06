@@ -102,6 +102,7 @@ sys-fs/zfs				-python rootfs
 sys-fs/zfs-kmod				dist-kernel-cap
 sys-kernel/gentoo-kernel		hardened strip
 sys-kernel/linux-firmware		-compress-xz -compress-zstd -unknown-license deduplicate redistributable
+sys-kernel/linux-firmware		-savedconfig	# gentoo required [*]: The following REQUIRED_USE flag constraints are unsatisfied: / savedconfig? ( !deduplicate )
 
 #>>> app-emulation/virtualbox		gui sdk vnc
 #{MOD} www-client/chromium		-rar ffmpeg-chromium
