@@ -338,6 +338,7 @@ virtual/perl-Time-Local
 
 dev-lang/python
 dev-lang/rust				# gentoo required -- source
+net-libs/nodejs
 
 app-misc/jq
 app-misc/yq
