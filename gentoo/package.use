@@ -96,7 +96,10 @@ sys-apps/busybox			-pam		# gentoo required
 
 ########################################
 
+sys-boot/grub				device-mapper efiemu libzfs mount
 sys-devel/gcc				ada cxx
+sys-fs/zfs				-python rootfs
+sys-fs/zfs-kmod				dist-kernel dist-kernel-cap
 sys-kernel/gentoo-kernel		hardened initramfs
 
 #>>> app-emulation/virtualbox		gui sdk vnc
@@ -136,9 +139,6 @@ sci-calculators/qalculate-gtk		-gnome
 sys-apps/fwupd				bluetooth flashrom nvme synaptics uefi
 sys-apps/iproute2			iptables
 sys-apps/smartmontools			-caps -daemon
-sys-boot/grub				device-mapper efiemu libzfs mount
-sys-fs/zfs				-python rootfs
-sys-fs/zfs-kmod				dist-kernel dist-kernel-cap
 www-client/firefox			-wifi
 www-servers/apache			-threads
 x11-base/xorg-server			xnest xvfb
