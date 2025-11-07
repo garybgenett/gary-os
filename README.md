@@ -1781,6 +1781,7 @@ Everything needed to perform these steps is in the [Repository] or the
 
   * `make` *`${3}`* `doit && make` *`${3}`* `DOREDO=true` *`${4}`*
     * [x] *Iterate()*
+    * `rm ./build/usr/bin/ninja; make emerge-app-alternatives%ninja`
   * [ ] Target size of *`${1}`* or less (`make check` = Total disk usage: *`${2}`*)
     * [ ] Command comments at bottom of [gentoo/package.use]
         * `make` *`${3}`* `depends-<package atom|/|%>`
@@ -1801,13 +1802,14 @@ Everything needed to perform these steps is in the [Repository] or the
     * `make DOREDO=true krnl`
   * [x] *Validate( 850MB 1.4GiB '' devel )*
     * [ ] Verify `#{rootfs}` markers
+    * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.kernel 1`
   * `make ROOTFS=false devel`
-    * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.kernel 1 -m 8192`
     * [ ] Test kernel size and root filesystem resize
+    * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.kernel 1 -m 8192`
   * [x] *Validate( 1.8GB 3.4GiB P=\_gary-os rootfs )*
   * `make perms`
-  * `(cd .setup; git-commit ./linux ./gentoo)`
-  * `make doit && make DOREDO=true devel`
+    * `(cd .setup; git-commit ./linux ./gentoo)`
+    * `make doit && make DOREDO=true devel`
 
 **Test & Publish**
 
@@ -1815,6 +1817,7 @@ Everything needed to perform these steps is in the [Repository] or the
     * `(cd _builds/.gary-os.release; rm ./v#.#; ln ../_gary-os.working/.gary-os-* ./v#.#)`
         * `vi ./gentoo/_release`
             * [ ] Add `${RELEASE[*]}` number, with empty `${CMTHASH[*]}`
+            * [ ] Update `${RELEASE_SKIP[*]}` to only keep last 3 releases
         * `make DOREDO=true _release_grub`
         * `make _publish_release`
     * `(cd _builds; rm ./_gary-os.boot; ln _gary-os.working ./_gary-os.boot)`
