@@ -689,15 +689,15 @@ if [[ ${UNAME} == "Windows" ]]; then
 			${EDITOR} ${LIST[@]}
 			for FILE in ${LIST[@]//.md}; do
 				if ! diff ${DIFF_OPTS} \
-					$(ls ${DATDIR}/_context/${FILE}-*.md | tail -n1) \
-					${DATDIR}/_context/${FILE}.md >/dev/null
+					$(ls ${FILE}-*.md | tail -n1) \
+					${FILE}.md >/dev/null
 				then
 					${RSYNC_U} \
-						${DATDIR}/_context/${FILE}.md \
-						${DATDIR}/_context/${FILE}-$(date --iso).md
+						${FILE}.md \
+						${FILE}-$(date --iso).md
 					vdiff \
-						$(ls ${DATDIR}/_context/${FILE}-*.md | tail -n2 | head -n1) \
-						${DATDIR}/_context/${FILE}.md
+						$(ls ${FILE}-*.md | tail -n2 | head -n1) \
+						${FILE}.md
 				fi
 			done
 		fi
