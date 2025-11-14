@@ -682,12 +682,12 @@ if [[ ${UNAME} == "Windows" ]]; then
 				${DATDIR}/_config/_q_cli.sh
 		fi
 		if ! ${CLI} && [[ -n $(find ${DATDIR}/_context/*.md 2>/dev/null) ]]; then
-			declare LIST="$(
+			declare LIST=($(
 				find ${DATDIR}/_context/*.md \
 				| ${GREP} -v "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
-			)"
-			${EDITOR} ${LIST}
-			for FILE in ${LIST//.md}; do
+			))
+			${EDITOR} ${LIST[@]}
+			for FILE in ${LIST[@]//.md}; do
 				if ! diff ${DIFF_OPTS} \
 					$(ls ${DATDIR}/_context/${FILE}-*.md | tail -n1) \
 					${DATDIR}/_context/${FILE}.md >/dev/null
