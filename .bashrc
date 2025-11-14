@@ -681,19 +681,25 @@ if [[ ${UNAME} == "Windows" ]]; then
 				$(ls ${DATDIR}/_config/_q_cli-*.sh | tail -n2 | head -n1) \
 				${DATDIR}/_config/_q_cli.sh
 		fi
-		if ! ${CLI} && [[ -f ${DATDIR}/_context/persona.md ]]; then
-			${EDITOR} ${DATDIR}/_context/persona.md
-			if ! diff ${DIFF_OPTS} \
-				$(ls ${DATDIR}/_context/persona-*.md | tail -n1) \
-				${DATDIR}/_context/persona.md >/dev/null
-			then
-				${RSYNC_U} \
-					${DATDIR}/_context/persona.md \
-					${DATDIR}/_context/persona-$(date --iso).md
-			fi
-			vdiff \
-				$(ls ${DATDIR}/_context/persona-*.md | tail -n2 | head -n1) \
-				${DATDIR}/_context/persona.md
+		if ! ${CLI} && [[ -n $(find ${DATDIR}/_context/*.md 2>/dev/null) ]]; then
+			declare LIST="$(
+				find ${DATDIR}/_context/*.md \
+				| ${GREP} -v "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+			)"
+			${EDITOR} ${LIST}
+			for FILE in ${LIST//.md}; do
+				if ! diff ${DIFF_OPTS} \
+					$(ls ${DATDIR}/_context/${FILE}-*.md | tail -n1) \
+					${DATDIR}/_context/${FILE}.md >/dev/null
+				then
+					${RSYNC_U} \
+						${DATDIR}/_context/${FILE}.md \
+						${DATDIR}/_context/${FILE}-$(date --iso).md
+					vdiff \
+						$(ls ${DATDIR}/_context/${FILE}-*.md | tail -n2 | head -n1) \
+						${DATDIR}/_context/${FILE}.md
+				fi
+			done
 		fi
 		return 0
 	}
