@@ -4266,10 +4266,10 @@ function reporter {
 
 function rsynclook {
 	${GREP} -v \
-		-e '^[.<>][fdDLS][ ]' \
 		-e '^[[]generator[]]' \
 		-e '^[[]receiver[]]' \
-		-e '^[[]sender[]]'
+		-e '^[[]sender[]]' \
+		-e '^[.][dfDLS][ ]'
 }
 
 ########################################
