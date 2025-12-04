@@ -765,12 +765,12 @@ if [[ ${UNAME} == "Windows" ]]; then
 		&& bookmarks -a \
 		&& { \
 			${RSYNC_U} ${DRYRUN} ${DATDIR} root@server.garybgenett.net:/.g/_data/zactive/ \
-			| ${GREP} -v "^[.][Ldf][.[:space:]]{3}[p.[:space:]][o.[:space:]][.[:space:]]{4}" \
+			| rsynclook \
 			; \
 		} \
 		&& { \
 			${RSYNC_U} ${DRYRUN} ${HOME}/.history/shell/* root@server.garybgenett.net:/.g/_data/zactive/.history/shell/ \
-			| ${GREP} -v "^[.][Ldf][.[:space:]]{3}[p.[:space:]][o.[:space:]][.[:space:]]{4}" \
+			| rsynclook \
 			; \
 		} \
 		&& ssh root@server.garybgenett.net "chmod -R 750 /.g/_data/zactive/$(basename ${DATDIR})" \
@@ -4269,6 +4269,7 @@ function rsynclook {
 		-e '^[[]generator[]]' \
 		-e '^[[]receiver[]]' \
 		-e '^[[]sender[]]' \
+		-e "^[.][dfL][.[:space:]]{3}[p.[:space:]][o.[:space:]][.[:space:]]{4}" \
 		-e '^[.][dfDLS][ ]'
 }
 
