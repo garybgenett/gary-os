@@ -791,8 +791,6 @@ fi
 
 ########################################
 
-alias rsynclook="${GREP} -v -e '^[.<>][fdDLS][ ]' -e '^[[]generator[]]' -e '^[[]sender[]]' -e '^[[]receiver[]]'"
-
 alias dmesgtail="dmesg --kernel --human --decode --ctime --follow"
 alias logtail="tail --follow /.runit/log/syslogd"
 alias synctail="${GREP} -a '^ERROR[:][ ]' /.g/_data/-track/-sync/_sync.log ; echo ; tail --follow /.g/_data/-track/-sync/_sync.log"
@@ -4262,6 +4260,16 @@ function reporter {
 		};
 	fi
 	return 0
+}
+
+########################################
+
+function rsynclook {
+	${GREP} -v \
+		-e '^[.<>][fdDLS][ ]' \
+		-e '^[[]generator[]]' \
+		-e '^[[]receiver[]]' \
+		-e '^[[]sender[]]'
 }
 
 ########################################
