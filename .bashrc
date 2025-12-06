@@ -4303,7 +4303,7 @@ function rsynclook {
 		-e '^[[]generator[]]' \
 		-e '^[[]receiver[]]' \
 		-e '^[[]sender[]]' \
-		-e "^[.][dfL][.[:space:]]{3}[p.[:space:]][o.[:space:]][.[:space:]]{4}" \
+		-e "^[.][dfL][.[:space:]]{3}[p.[:space:]][o.[:space:]][g.[:space:]][.[:space:]]{3}" \
 		-e '^[.][dfDLS][ ]'
 }
 
