@@ -606,6 +606,8 @@ if [[ ${UNAME} == "Windows" ]]; then
 		${LN} --relative "/mnt/c/Users/${USER}/Downloads" ${HOME}/
 		${LN} --relative ${HOME}/Desktop/_wsl/{.Xdefaults,.bash_profile,.htoprc.bak,.screenrc,.vimrc} ${HOME}/
 		${LN} --relative ${HOME}/Desktop/_wsl/.bashrc ${HOME}/.bash_aliases
+		sudo ${RM} /root/.ssh && \
+		sudo ${LN} --relative ${HOME}/.ssh /root/
 		return 0
 	}
 	function wsl {
@@ -755,7 +757,7 @@ if [[ ${UNAME} == "Windows" ]]; then
 			DRYRUN="--dry-run"
 			shift
 		fi
-		declare LINKS="$(find -L . -type l | grep -v "[/][_]sources[/]")"
+		declare LINKS="$(find -L ${DATDIR} -type l | grep -v "[/][_]sources[/]")"
 		if [[ -n ${LINKS} ]]; then
 			${LL} ${LINKS}
 			return 1
@@ -764,13 +766,33 @@ if [[ ${UNAME} == "Windows" ]]; then
 		status -a \
 		&& bookmarks -a \
 		&& { \
-			${RSYNC_U} ${DRYRUN} ${DATDIR} root@server.garybgenett.net:/.g/_data/zactive/ \
+			${RSYNC_U} \
+				${DRYRUN} \
+				${DATDIR} \
+				root@server.garybgenett.net:/.g/_data/zactive/ \
 			| rsynclook \
 			; \
 		} \
 		&& { \
-			${RSYNC_U} ${DRYRUN} ${HOME}/.history/shell/* root@server.garybgenett.net:/.g/_data/zactive/.history/shell/ \
+			${RSYNC_U} \
+				${DRYRUN} \
+				${HOME}/.history/shell/* \
+				root@server.garybgenett.net:/.g/_data/zactive/.history/shell/ \
 			| rsynclook \
+			; \
+		} \
+		&& { \
+			if [[ -d /mnt/wsl/system ]]; then \
+				sudo -E ${HOME}/.bash_aliases ${RSYNC_U} \
+					${DRYRUN} \
+					/mnt/wsl/system/.history/* \
+					root@server.garybgenett.net:/.g/_data/zactive/.history/shell/ \
+				| rsynclook \
+				; \
+			else \
+				true \
+				; \
+			fi \
 			; \
 		} \
 		&& ssh root@server.garybgenett.net "chmod -R 750 /.g/_data/zactive/$(basename ${DATDIR})" \
