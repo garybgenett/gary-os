@@ -765,6 +765,29 @@ if [[ ${UNAME} == "Windows" ]]; then
 		dodrive \
 		status -a \
 		&& bookmarks -a \
+		&& ${MKDIR} ${DATDIR}/.history \
+		&& { \
+			${RSYNC_U} \
+				${DRYRUN} \
+				${HOME}/.history/shell/* \
+				${DATDIR}/.history/ \
+			| rsynclook \
+			; \
+		} \
+		&& { \
+			if [[ -d /mnt/wsl/system ]]; then \
+				sudo -E ${HOME}/.bash_aliases ${RSYNC_U} \
+					${DRYRUN} \
+					/mnt/wsl/system/.history/* \
+					${DATDIR}/.history/ \
+				| rsynclook \
+				; \
+			else \
+				true \
+				; \
+			fi \
+			; \
+		} \
 		&& { \
 			${RSYNC_U} \
 				${DRYRUN} \
@@ -774,28 +797,17 @@ if [[ ${UNAME} == "Windows" ]]; then
 			; \
 		} \
 		&& { \
-			${RSYNC_U} \
-				${DRYRUN} \
-				${HOME}/.history/shell/* \
-				root@server.garybgenett.net:/.g/_data/zactive/.history/shell/ \
-			| rsynclook \
-			; \
-		} \
-		&& { \
-			if [[ -d /mnt/wsl/system ]]; then \
-				sudo -E ${HOME}/.bash_aliases ${RSYNC_U} \
-					${DRYRUN} \
-					/mnt/wsl/system/.history/* \
-					root@server.garybgenett.net:/.g/_data/zactive/.history/shell/ \
-				| rsynclook \
-				; \
+			if [[ -z ${DRYRUN} ]]; then \
+				ssh root@server.garybgenett.net " \
+					${LN} --relative /.g/_data/zactive/$(basename ${DATDIR})/.history/* /.g/_data/zactive/.history/shell/ ; \
+					chmod -R 750 /.g/_data/zactive/$(basename ${DATDIR}) ; \
+				"; \
 			else \
 				true \
 				; \
 			fi \
 			; \
 		} \
-		&& ssh root@server.garybgenett.net "chmod -R 750 /.g/_data/zactive/$(basename ${DATDIR})" \
 		&& echo "success!" \
 		&& return 0
 		echo "failed!"
