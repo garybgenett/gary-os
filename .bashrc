@@ -4515,13 +4515,15 @@ function sync-dir {
 	declare REP_FUL="${1}" && shift
 	${MKDIR} $(dirname ${BAS_DIR}/${REP_DST})
 	if [[ ${REP_TYP} == repo ]]; then
+#>>>		declare REPO_CMD="${BAS_DIR}/_repo/repo"
+		declare REPO_CMD="repo"
 		if [[ ! -d ${BAS_DIR}/${REP_DST} ]]; then
 			${MKDIR} ${BAS_DIR}/${REP_DST}
 			(cd ${BAS_DIR}/${REP_DST} &&
-				reporter ${BAS_DIR}/_repo/repo init -u ${REP_SRC//\/=\// })
+				reporter ${REPO_CMD} init -v -u ${REP_SRC//\/=\// })
 		fi
 		(cd ${BAS_DIR}/${REP_DST} &&
-			reporter ${BAS_DIR}/_repo/repo sync)
+			reporter ${REPO_CMD} sync -v -c -j10)
 	elif [[ ${REP_TYP} == git ]]; then
 		if [[ ! -d ${BAS_DIR}/${REP_DST} ]]; then
 			git-clone ${REP_SRC} ${BAS_DIR}/${REP_DST}
