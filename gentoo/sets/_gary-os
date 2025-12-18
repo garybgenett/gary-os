@@ -348,6 +348,7 @@ app-misc/yq
 dev-db/sqlite
 dev-tcltk/expect
 dev-vcs/git
+dev-vcs/repo
 
 sys-apps/thunderbolt-software-user-space
 
