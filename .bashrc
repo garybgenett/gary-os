@@ -368,8 +368,9 @@ export GIT_DIF="--find-renames --full-index --summary --stat=128,128"
 export GIT_FMT="${GIT_DIF} --pretty=fuller --date=iso --decorate"
 export GIT_PAT="${GIT_DIF} --attach --binary --keep-subject"
 
-export REPO_CMD="reporter repo --time --trace --trace-to-stderr --no-pager"	; alias repo="${REPO_CMD}"
-export REPO_SYN="${REPO_CMD} sync -c -j10"					; alias repo-sync="${REPO_SYN}"
+export REPO_CMD="reporter repo --verbose --trace --trace-to-stderr --time --no-pager"	; alias repo="${REPO_CMD}"
+export REPO_INI="${REPO_CMD} init --verbose"						; alias repo-init="${REPO_INI}"
+export REPO_SYN="${REPO_CMD} sync --verbose --current-branch --jobs=10"			; alias repo-sync="${REPO_SYN}"
 
 ########################################
 
@@ -4516,7 +4517,7 @@ function sync-dir {
 	if [[ ${REP_TYP} == repo ]]; then
 		if [[ ! -d ${BAS_DIR}/${REP_DST} ]]; then
 			${MKDIR} ${BAS_DIR}/${REP_DST}
-			(cd ${BAS_DIR}/${REP_DST} && ${REPO_CMD} init -u ${REP_SRC//\/=\// })
+			(cd ${BAS_DIR}/${REP_DST} && ${REPO_INI} --manifest-url=${REP_SRC//\/=\// })
 		fi
 		(cd ${BAS_DIR}/${REP_DST} && ${REPO_SYN})
 	elif [[ ${REP_TYP} == git ]]; then
