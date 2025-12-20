@@ -372,6 +372,9 @@ export GIT_DIF="--find-renames --full-index --summary --stat=128,128"
 export GIT_FMT="${GIT_DIF} --pretty=fuller --date=iso --decorate"
 export GIT_PAT="${GIT_DIF} --attach --binary --keep-subject"
 
+export REPO_CMD="reporter repo --time --trace --trace-to-stderr --no-pager"	; alias repo="${REPO_CMD}"
+export REPO_SYN="${REPO_CMD} sync -c -j10"					; alias repo-sync="${REPO_SYN}"
+
 ########################################
 
 export HTOPRC="${HOME}/.htoprc"
@@ -4515,15 +4518,11 @@ function sync-dir {
 	declare REP_FUL="${1}" && shift
 	${MKDIR} $(dirname ${BAS_DIR}/${REP_DST})
 	if [[ ${REP_TYP} == repo ]]; then
-#>>>		declare REPO_CMD="${BAS_DIR}/_repo/repo"
-		declare REPO_CMD="repo"
 		if [[ ! -d ${BAS_DIR}/${REP_DST} ]]; then
 			${MKDIR} ${BAS_DIR}/${REP_DST}
-			(cd ${BAS_DIR}/${REP_DST} &&
-				reporter ${REPO_CMD} init -v -u ${REP_SRC//\/=\// })
+			(cd ${BAS_DIR}/${REP_DST} && ${REPO_CMD} init -u ${REP_SRC//\/=\// })
 		fi
-		(cd ${BAS_DIR}/${REP_DST} &&
-			reporter ${REPO_CMD} sync -v -c -j10)
+		(cd ${BAS_DIR}/${REP_DST} && ${REPO_SYN})
 	elif [[ ${REP_TYP} == git ]]; then
 		if [[ ! -d ${BAS_DIR}/${REP_DST} ]]; then
 			git-clone ${REP_SRC} ${BAS_DIR}/${REP_DST}
