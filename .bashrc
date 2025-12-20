@@ -355,10 +355,6 @@ export RM_ALL="${RM} {.[^.],}*"					; alias rm-all="${RM_ALL}"
 
 ########################################
 
-export CVS="reporter cvs"			; alias cvs="${CVS}"
-export SVN="reporter svn"			; alias svn="${SVN}"
-export SVNSYNC="reporter svnsync"		; alias svnsync="${SVNSYNC}"
-
 export GIT_TRACE="1"
 export GIT_CMD="git"
 export GIT="reporter ${GIT_CMD}"		#>>> ; alias git="${GIT}"
