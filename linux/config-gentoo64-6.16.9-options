@@ -70,6 +70,11 @@ Device Drivers
 			VGA text console					CONFIG_VGA_CONSOLE=y
 			Framebuffer Console support				CONFIG_FRAMEBUFFER_CONSOLE=y
 		Bootup logo							CONFIG_LOGO=n
+	Sound card support							CONFIG_SOUND=m
+		Advanced Linux Sound Architecture				CONFIG_SND=m
+			Enable OSS Emulation					CONFIG_SND_OSSEMUL=y
+				OSS Mixer API					CONFIG_SND_MIXER_OSS=m
+				OSS PCM (digital audio) API			CONFIG_SND_PCM_OSS=m
 	HID support
 		HID bus support							CONFIG_HID=y
 		Generic HID driver						CONFIG_HID_GENERIC=y
