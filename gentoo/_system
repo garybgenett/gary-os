@@ -1478,8 +1478,7 @@ if [[ ${1} == -i ]]; then
 		fi
 	fi
 	if ${_BLD}; then
-#>>>		expect_wrapper				emerge ${_ASK} --emptytree \@system \@world		|| EXIT 1
-		expect_wrapper				emerge ${_ASK} --emptytree \@system \@${_PKG}		|| EXIT 1
+		expect_wrapper				emerge ${_ASK} --emptytree \@system \@world		|| EXIT 1
 	fi
 	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -u		|| EXIT 1
 	mount_dev_dirs -u											|| EXIT 1
