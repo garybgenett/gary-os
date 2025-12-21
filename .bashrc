@@ -4519,7 +4519,17 @@ function sync-dir {
 			${MKDIR} ${BAS_DIR}/${REP_DST}
 			(cd ${BAS_DIR}/${REP_DST} && ${REPO_INI} --manifest-url=${REP_SRC//\/=\// })
 		fi
-		(cd ${BAS_DIR}/${REP_DST} && ${REPO_SYN})
+		(cd ${BAS_DIR}/${REP_DST} && ${REPO_SYN} --force-sync)
+		declare ANDROID_BLD="$(echo -en "${REP_DST}" | ${SED} "s|^[^.]+[.]||g")"
+		if [[ ${REP_DST} != ${ANDROID_BLD} ]]; then
+			(cd ${BAS_DIR}/${REP_DST} && \
+				prompt -z bash -c " \
+					source build/envsetup.sh && \
+					breakfast ${ANDROID_BLD} && \
+					m clean \
+				" \
+			)
+		fi
 	elif [[ ${REP_TYP} == git ]]; then
 		if [[ ! -d ${BAS_DIR}/${REP_DST} ]]; then
 			git-clone ${REP_SRC} ${BAS_DIR}/${REP_DST}
