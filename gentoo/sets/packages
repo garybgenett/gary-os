@@ -192,6 +192,7 @@ app-portage/gentoolkit
 sys-apps/portage
 sys-kernel/genkernel
 
+app-eselect/eselect-repository
 app-portage/eix
 app-portage/mirrorselect
 app-portage/portage-utils
@@ -243,6 +244,7 @@ x11-apps/mesa-progs
 ########################################
 # toolkits
 
+app-crypt/gocryptfs
 net-misc/rclone
 net-misc/unison
 net-misc/unison:2.53
@@ -278,6 +280,7 @@ app-misc/yq
 dev-db/sqlite
 dev-tcltk/expect
 dev-vcs/git
+dev-vcs/git-lfs
 dev-vcs/repo
 
 sys-apps/thunderbolt-software-user-space
