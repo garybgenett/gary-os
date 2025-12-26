@@ -199,6 +199,8 @@ x11-apps/xsetroot
 ########################################
 # toolkits
 
+app-crypt/gocryptfs
+net-misc/rclone
 sys-fs/encfs
 
 dev-lang/perl
