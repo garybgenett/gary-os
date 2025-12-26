@@ -9,6 +9,7 @@
 #{KRNLNK}
 #{GENKRN} --e2fsprogs
 #{GENKRN} --luks
+#{GENKRN} --unionfs
 #{GENKRN} --zfs
 #{GENKRN} kernel
 
