@@ -1424,8 +1424,12 @@ if [[ ${1} == -i ]]; then
 		expect_wrapper genkernel		--loglevel="5"						\
 							--strip="all"						\
 							--bootloader="grub"					\
-							--no-compress-initramfs					\
 							--kernel-localversion=".${_TITLE}"			\
+							--no-compress-initramfs					\
+							--ramdisk-modules					\
+							--busybox						\
+							--mrproper						\
+							--sandbox						\
 							--install						\
 							--symlink						\
 							$(if [[ -z ${AUTO} ]]; then
