@@ -174,7 +174,6 @@ sys-apps/gptfdisk
 sys-fs/cryptsetup
 sys-fs/dosfstools
 sys-fs/e2fsprogs
-sys-fs/encfs
 sys-fs/exfat-utils
 sys-fs/fuse
 sys-fs/fuse-exfat
@@ -272,13 +271,13 @@ app-arch/rpm
 # gentoo
 
 app-admin/eselect
+app-portage/gentoolkit
 sys-apps/portage
+sys-kernel/genkernel
 
 app-portage/eix
-app-portage/gentoolkit
 app-portage/mirrorselect
 app-portage/portage-utils
-sys-kernel/genkernel
 
 ########################################
 # x11
@@ -323,6 +322,8 @@ x11-misc/xvkbd
 
 ########################################
 # toolkits
+
+sys-fs/encfs
 
 dev-lang/perl
 dev-libs/libpcre
