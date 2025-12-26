@@ -103,7 +103,6 @@ sys-apps/gptfdisk
 sys-fs/cryptsetup
 sys-fs/dosfstools			#{rootfs}
 sys-fs/e2fsprogs			#{rootfs}
-sys-fs/encfs
 sys-fs/exfat-utils			#{rootfs}
 sys-fs/fuse				#{rootfs}
 sys-fs/fuse-exfat			#{rootfs}
@@ -176,12 +175,8 @@ app-arch/cabextract
 # gentoo
 
 app-admin/eselect
-sys-apps/portage
-
-#>>> app-portage/eix			# too many dependencies
 app-portage/gentoolkit
-#>>> app-portage/mirrorselect		# too many dependencies
-app-portage/portage-utils
+sys-apps/portage
 #>>> sys-kernel/genkernel		# too many dependencies
 
 ########################################
@@ -203,6 +198,8 @@ x11-apps/xsetroot
 
 ########################################
 # toolkits
+
+sys-fs/encfs
 
 dev-lang/perl
 

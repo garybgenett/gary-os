@@ -91,7 +91,6 @@ sys-apps/gptfdisk
 sys-fs/cryptsetup
 sys-fs/dosfstools
 sys-fs/e2fsprogs
-sys-fs/encfs
 sys-fs/exfat-utils
 sys-fs/fuse
 sys-fs/fuse-exfat
@@ -189,13 +188,13 @@ app-arch/rpm
 # gentoo
 
 app-admin/eselect
+app-portage/gentoolkit
 sys-apps/portage
+sys-kernel/genkernel
 
 app-portage/eix
-app-portage/gentoolkit
 app-portage/mirrorselect
 app-portage/portage-utils
-sys-kernel/genkernel
 
 ########################################
 # x11
@@ -247,6 +246,7 @@ x11-apps/mesa-progs
 net-misc/rclone
 net-misc/unison
 net-misc/unison:2.53
+sys-fs/encfs
 
 app-text/grip
 app-text/pandoc-cli
