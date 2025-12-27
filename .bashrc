@@ -411,8 +411,13 @@ alias emerge="${EMERGE}"
 
 ########################################
 
-export ENCFS6_CONFIG="${ENCFS6_CONFIG:-/.g/_data/zactive/.static/.encfs/encfs6.primary.xml}"
-export ENCFS_FILE="${ENCFS6_CONFIG/%xml/asc}"
+export CRYPTFS_KEY="${CRYPTFS_KEY:-/.g/_data/zactive/.static/.encfs/cryptfs.key}"
+export CRYPTFS_GPG="${CRYPTFS_KEY/%key/asc}"
+export ENCFS_KEY="${ENCFS_KEY:-/.g/_data/zactive/.static/.encfs/encfs.key}"
+export ENCFS_GPG="${ENCFS_KEY/%key/asc}"
+
+#>>>	--idle=60 \
+export CRYPTFS="gocryptfs"
 
 #>>>	--verbose \
 #>>>	--idle=60 \
@@ -423,6 +428,7 @@ export ENCFS="encfs \
 	--public \
 "
 
+alias cryptfs="${CRYPTFS}"
 alias encfs="${ENCFS}"
 
 ########################################
@@ -1212,21 +1218,31 @@ function email-copy {
 
 function enc-fs {
 	declare DST="${#}"; DST="$(realpath ${!DST})"
+	declare ENC_CMD="${CRYPTFS}"
+	declare ENC_KEY="${CRYPTFS_KEY}"
+	declare ENC_GPG="${CRYPTFS_GPG}"
+	if [[ ${1} == -! ]]; then
+		ENC_CMD="${ENCFS}"
+		ENC_KEY="${ENCFS_KEY}"
+		ENC_GPG="${ENCFS_GPG}"
+		shift
+	fi
 	declare OUT=
-	if [[ ! -f ${ENCFS_FILE} ]]; then
+	if [[ ! -f ${ENC_GPG} ]]; then
 		echo -en "${FUNCNAME}: "
 		read -s OUT
 		echo -en "\n"
 	else
-		OUT="$(gpg --decrypt ${ENCFS_FILE} 2>/dev/null)"
+		OUT="$(gpg --decrypt ${ENC_GPG} 2>/dev/null)"
 	fi
-	mount-robust -u ${DST}
+	mount-robust -! -u ${DST} || return 1
 	echo -en "${FUNCNAME}: mounting..."
 	echo -en "\n"
-#>>>	echo "${OUT}" | (${ENCFS} -f --stdinpass -dv "${@}") &
-	echo "${OUT}" | (${ENCFS} -f --stdinpass "${@}") &
+	if [[ ${ENC_CMD} == ${CRYPTFS} ]]; then echo "${OUT}" | (${ENC_CMD} -fg -config ${ENC_KEY} "${@}") &
+	elif [[ ${ENC_CMD} == ${ENCFS} ]]; then echo "${OUT}" | (${ENC_CMD} -f --config ${ENC_KEY} --stdinpass "${@}") &
+	fi
 	sleep 2
-	if [[ -z $(${GREP} "encfs[ ]${DST}[ ]fuse.encfs" /proc/mounts) ]]; then
+	if [[ -z $(${GREP} "[ ]${DST}[ ]fuse.$(basename ${ENC_CMD/% *})[ -]" /proc/mounts) ]]; then
 		echo -en "${FUNCNAME}: failed!"
 		echo -en "\n"
 		return 1
