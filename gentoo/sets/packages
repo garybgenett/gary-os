@@ -10,6 +10,7 @@
 #{GENKRN} --e2fsprogs
 #{GENKRN} --luks
 #{GENKRN} --unionfs
+#{GENKRN} --virtio
 #{GENKRN} --zfs
 #{GENKRN} kernel
 
