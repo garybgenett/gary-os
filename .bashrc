@@ -471,12 +471,14 @@ export RSYNC_W="${RSYNC_C} \
 	--delete \
 	--delete-during \
 "
-export RSYNC_U="${RSYNC_W} \
+export RSYNC_S="${RSYNC_W} \
 	--sparse \
 	--devices \
 	--specials \
 	--hard-links \
 	--links \
+"
+export RSYNC_U="${RSYNC_S} \
 	--perms \
 	--numeric-ids \
 	--owner \
@@ -1255,23 +1257,55 @@ function enc-fs {
 ########################################
 
 function enc-rsync {
+	declare REVERSE="true"
+	if [[ ${1} == -! ]]; then
+		REVERSE="false"
+		shift
+	fi
 	if [[ ${1} == -c ]]; then
 		shift
 		lsof | ${GREP} "^encfs" | ${GREP} "${@}"
 		return 0
 	fi
+	declare PRT="22"
+	if [[ ${1} == +([0-9]) ]]; then
+		PRT="${1}"
+		shift
+	fi
 	declare SRC="${1}" && shift
 	declare DST="${1}" && shift
+	declare MNT="/mnt/.${FUNCNAME}/$(basename ${SRC})"
+	declare TGT=
+	if [[ ${1} == [+]+(*) ]]; then
+		MNT="/mnt/.${FUNCNAME}/${1/#+}"
+		TGT="${1}"
+		shift
+	fi
 	if [[ -z ${SRC} ]] || [[ -z ${DST} ]]; then
 		return 1
 	fi
 	declare FAIL="false"
-	declare MNT="/mnt/.${FUNCNAME}/$(basename ${SRC})"
-	${MKDIR} ${MNT}				|| return 1
-	enc-fs -o ro --reverse ${SRC} ${MNT}	|| return 1
-	${RSYNC_U} "${@}" ${MNT}/ ${DST}	|| FAIL="true"
-	mount-robust -u ${MNT}			|| FAIL="true"
-	${FAIL}					&& return 1
+	${MKDIR} ${MNT}					|| return 1
+	if ${REVERSE}; then
+		touch ${MNT}.exclude
+		enc-fs					\
+			-o ro				\
+			-reverse			\
+			-exclude-from ${MNT}.exclude	\
+			${SRC} ${MNT}			|| return 1
+		${RSYNC_U}				\
+			--rsh="ssh -p${PRT}"		\
+			"${@}"				\
+			${MNT}/ ${DST}			|| FAIL="true"
+		mount-robust -! -u ${MNT}		|| FAIL="true"
+	else
+		enc-sshfs -r ${PRT} ${DST} ${MNT}	|| return 1
+		${RSYNC_S}				\
+			"${@}"				\
+			${SRC}/ ${MNT}			|| FAIL="true"
+		enc-sshfs -u ${PRT} ${DST} ${MNT}	|| return 1
+	fi
+	${FAIL}						&& return 1
 #>>>	${RM} ${MNT}
 	return 0
 }
