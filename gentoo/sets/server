@@ -37,6 +37,9 @@ app-shells/bash-completion
 sys-apps/openrc
 sys-boot/grub
 
+sys-fs/e2fsprogs
+sys-fs/fuse
+
 sys-apps/gptfdisk
 sys-fs/fuse
 
