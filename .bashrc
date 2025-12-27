@@ -1289,34 +1289,40 @@ function enc-sshfs {
 		UMT="true"
 		shift
 	fi
+	declare PRT="22"
+	if [[ ${1} == +([0-9]) ]]; then
+		PRT="${1}"
+		shift
+	fi
 	declare SRC="${1}" && shift
 	declare DST="${1}" && shift
+	declare MNT="/mnt/.${FUNCNAME}/$(basename ${DST})"
 	declare TGT=
 	if [[ ${1} == [+]+(*) ]]; then
-		TGT="/${1/#+}" && shift
+		TGT="/${1/#+}"
+		shift
 	fi
 	if [[ -z ${SRC} ]] || [[ -z ${DST} ]]; then
 		return 1
 	fi
-	declare MNT="/mnt/.${FUNCNAME}/$(basename ${DST})"
 	if ! ${UMT}; then
 		${MKDIR} ${MNT}
 		if [[ -z $(${GREP} "${SRC}[ ]${MNT}[ ]fuse.sshfs" /proc/mounts) ]]; then
-			(sshfs -f -o ${RWR} ${SRC} ${MNT}) &
+			(sshfs -f -o ${RWR} -p ${PRT} ${SRC} ${MNT}) &
+			sleep 1
 		fi
-		sleep 1
 		if [[ -z $(${GREP} "${SRC}[ ]${MNT}[ ]fuse.sshfs" /proc/mounts) ]]; then
 			return 1
 		fi
 		${MKDIR} ${MNT}${TGT}			|| return 1
 		enc-fs -o ${RWR} ${MNT}${TGT} ${DST}	|| return 1
 	else
-		mount-robust -u ${DST}			|| return 1
-		mount-robust -u ${MNT}			|| return 1
+		mount-robust -! -u ${DST}		|| return 1
+		mount-robust -! -u ${MNT}		|| return 1
 #>>>		${RM} ${MNT}
 	fi
 	${GREP} "^${SRC}[ ]${MNT}[ ]fuse.sshfs"		/proc/mounts
-	${GREP} "^encfs[ ]${DST}[ ]fuse.encfs"		/proc/mounts
+	${GREP} "[ ]${DST}[ ]fuse.[a-z]+[ ]"		/proc/mounts
 	return 0
 }
 
