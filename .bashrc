@@ -72,12 +72,12 @@ if [[ -n "$(uname -a | grep -i "Microsoft")" ]]; then
 	UNAME="Windows"
 fi
 
-export COMPOSER="/.g/_data/zactive/coding/composer/Makefile"
+export COMPOSER_SRC="/.g/_data/zactive/coding/composer/Makefile"
+export COMPOSER="${COMPOSER_SRC}"
 if [[ ${UNAME} == "Windows" ]]; then
-	alias composer="make -f ${HOME}/composer/Makefile"
-else
-	alias composer="make -f ${COMPOSER}"
+	export COMPOSER="${HOME}/composer/Makefile"
 fi
+alias composer="make -f ${COMPOSER}"
 
 export PIMDIR="/.g/_data/zactive/_pim"
 export NULLDIR="/.g/_data/zactive/_zcache"
@@ -602,6 +602,8 @@ if [[ ${UNAME} == "Windows" ]]; then
 	declare DOCDIR="${DATDIR}/documents"
 	declare BKMDIR="${DATDIR}/bookmarks"
 	declare MOZDIR="$(dirname "$(ls /mnt/c/Users/*/Application\ Data/Mozilla/Firefox/Profiles/*/prefs.js)")"
+	declare WRDCMD="$(ls /mnt/c/Program\ Files/Microsoft\ Office/root/Office*/winword.exe)"
+	declare WRDTPL="$(ls /mnt/c/Users/gbgenett/AppData/Roaming/Microsoft/Templates/Normal.dotm)"
 	alias server="(urxvt -e bash -c \"${HOME}/.bash_aliases shell me\" &)"
 	alias xterm="(urxvt &)"
 	alias xclock="${EDITOR} +/XClock.geometry ${HOME}/.Xdefaults ; (xclock &)"
@@ -620,7 +622,7 @@ if [[ ${UNAME} == "Windows" ]]; then
 	}
 	function wsl {
 		${RSYNC_U} \
-			root@server.garybgenett.net:{/.g/_data/zactive/{.setup/_misc/playlist*,.static/{.X*,.bash*,.htop*,.screen*,.vim*,scripts/updebian}},${COMPOSER}} \
+			root@server.garybgenett.net:{/.g/_data/zactive/{.setup/_misc/playlist*,.static/{.X*,.bash*,.htop*,.screen*,.vim*,scripts/updebian}},${COMPOSER_SRC}} \
 			${HOME}/Desktop/_wsl/
 		if [[ -d ${HOME}/Desktop/composer ]]; then
 			${RSYNC_U} ${HOME}/Desktop/_wsl/Makefile ${HOME}/Desktop/composer/
@@ -634,6 +636,7 @@ if [[ ${UNAME} == "Windows" ]]; then
 			AUTO="true"
 		fi
 		if [[ -f ${STSBAS}${TODOS_MD_EXT} ]]; then
+			export DODATE="$(date --iso)"
 			if ! ${AUTO}; then
 				${EDITOR} ${STSBAS}${TODOS_MD_EXT}
 			fi
@@ -643,7 +646,7 @@ if [[ ${UNAME} == "Windows" ]]; then
 			then
 				${RSYNC_U} \
 					${STSBAS}${TODOS_MD_EXT} \
-					${STSBAS}-$(date --iso)${TODOS_MD_EXT}
+					${STSBAS}-${DODATE}${TODOS_MD_EXT}
 			fi
 #>			cat ${STSBAS}${TODOS_MD_EXT} \
 #>				| ${SED} -n "/# AI Prompt/,/^#/p" \
@@ -661,17 +664,51 @@ if [[ ${UNAME} == "Windows" ]]; then
 		return 0
 	}
 	function quip {
+		export DODATE="$(date --iso)"
 		if [[ -n ${1} ]]; then
-			declare QUIP="quip-${1//\//-}-"
-			${EDITOR} ${DOCDIR}/${QUIP}$(date --iso)${TODOS_MD_EXT}
+			declare QUIP="$(echo "${1}" | ${SED} "s|^(http[s]?[:][/][/][^/]+)[/]([^/]+)[/]([^#]+)?.*$|\1|g")"
+			declare Q_ID="$(echo "${1}" | ${SED} "s|^(http[s]?[:][/][/][^/]+)[/]([^/]+)[/]([^#]+)?.*$|\2|g")"
+			declare Q_TL="$(echo "${1}" | ${SED} "s|^(http[s]?[:][/][/][^/]+)[/]([^/]+)[/]([^#]+)?.*$|\3|g")"
+			QUIP="quip-${Q_ID}-${Q_TL//\//-}"
+			${EDITOR} ${DOCDIR}/${QUIP}-${DODATE}${TODOS_MD_EXT}
 			vdiff \
-				$(ls ${DOCDIR}/${QUIP}*${TODOS_MD_EXT} | tail -n2 | head -n1) \
-				${DOCDIR}/${QUIP}$(date --iso)${TODOS_MD_EXT}
-			${LL} ${DOCDIR}/${QUIP}*
+				$(ls ${DOCDIR}/${QUIP}-*${TODOS_MD_EXT} | tail -n2 | head -n1) \
+				${DOCDIR}/${QUIP}-${DODATE}${TODOS_MD_EXT}
+			${LL} ${DOCDIR}/${QUIP}-*
+			echo "${QUIP}-${DODATE}" | ${GREP} "^.*$"
+		fi
+		return 0
+	}
+	function loop {
+		export DODATE="$(date --iso)"
+		if [[ -n ${1} ]]; then
+			declare LOOP="$(echo "${1}" | ${SED} "s|^(http[s]?[:][/][/].+)[/]([^/]+)[.]loop[?]d[=]([^&]+).*$|\1|g")"
+			declare L_ID="$(echo "${1}" | ${SED} "s|^(http[s]?[:][/][/].+)[/]([^/]+)[.]loop[?]d[=]([^&]+).*$|\3|g")"
+			declare L_TL="$(echo "${1}" | ${SED} "s|^(http[s]?[:][/][/].+)[/]([^/]+)[.]loop[?]d[=]([^&]+).*$|\2|g")"
+			LOOP="loop-${L_ID}-${L_TL//\%20/-}"
+			touch ${DOCDIR}/${LOOP}-${DODATE}${TODOS_MD_STATUS_EXT}
+			"${WRDCMD}" /t"$(wslpath -a -w ${WRDTPL})" "$(wslpath -a -w ${DOCDIR})"/${LOOP}-${DODATE}${TODOS_MD_STATUS_EXT}
+			make \
+				-f "${COMPOSER}" \
+				-C "${DOCDIR}" \
+				COMPOSER_DEBUGIT="1" \
+				COMPOSER_KEEPING="" \
+				c_type="${TODOS_MD_FORMAT}" \
+				c_base="${LOOP}-${DODATE}" \
+				c_list="${LOOP}-${DODATE}${TODOS_MD_STATUS_EXT}" \
+				extract \
+				|| return 1
+			${EDITOR} ${DOCDIR}/${LOOP}-${DODATE}${TODOS_MD_EXT}
+			vdiff \
+				$(ls ${DOCDIR}/${LOOP}-*${TODOS_MD_EXT} | tail -n2 | head -n1) \
+				${DOCDIR}/${LOOP}-${DODATE}${TODOS_MD_EXT}
+			${LL} ${DOCDIR}/${LOOP}-*
+			echo "${LOOP}-${DODATE}" | ${GREP} "^.*$"
 		fi
 		return 0
 	}
 	function context {
+		export DODATE="$(date --iso)"
 		declare CLI="false"
 		if [[ ${1} == -s ]]; then
 			CLI="true"
@@ -685,7 +722,7 @@ if [[ ${UNAME} == "Windows" ]]; then
 			then
 				${RSYNC_U} \
 					${DATDIR}/_config/_q_cli.sh \
-					${DATDIR}/_config/_q_cli-$(date --iso).sh
+					${DATDIR}/_config/_q_cli-${DODATE}.sh
 			fi
 			vdiff \
 				$(ls ${DATDIR}/_config/_q_cli-*.sh | tail -n2 | head -n1) \
@@ -704,7 +741,7 @@ if [[ ${UNAME} == "Windows" ]]; then
 				then
 					${RSYNC_U} \
 						${FILE}.md \
-						${FILE}-$(date --iso).md
+						${FILE}-${DODATE}.md
 					vdiff \
 						$(ls ${FILE}-*.md | tail -n2 | head -n1) \
 						${FILE}.md
@@ -714,6 +751,7 @@ if [[ ${UNAME} == "Windows" ]]; then
 		return 0
 	}
 	function bookmarks {
+		export DODATE="$(date --iso)"
 		declare AUTO="false"
 		if [[ ${1} == -a ]]; then
 			AUTO="true"
@@ -730,7 +768,7 @@ if [[ ${UNAME} == "Windows" ]]; then
 			then
 				${RSYNC_U} \
 					${BKMDIR}/bookmarks.html \
-					${BKMDIR}/bookmarks-$(date --iso).html
+					${BKMDIR}/bookmarks-${DODATE}.html
 			fi
 			if ! ${AUTO}; then
 				vdiff \
