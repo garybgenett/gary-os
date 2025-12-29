@@ -666,25 +666,26 @@ if [[ ${UNAME} == "Windows" ]]; then
 	function quip {
 		export DODATE="$(date --iso)"
 		if [[ -n ${1} ]]; then
-			declare QUIP="$(echo "${1}" | ${SED} "s|^(http[s]?[:][/][/][^/]+)[/]([^/]+)[/]([^#]+)?.*$|\1|g")"
-			declare Q_ID="$(echo "${1}" | ${SED} "s|^(http[s]?[:][/][/][^/]+)[/]([^/]+)[/]([^#]+)?.*$|\2|g")"
-			declare Q_TL="$(echo "${1}" | ${SED} "s|^(http[s]?[:][/][/][^/]+)[/]([^/]+)[/]([^#]+)?.*$|\3|g")"
+			declare Q_LK="$(echo "${1}" | ${SED} "s|^(https[:][/][/]quip[-][^/]+)[/]([^/]+)[/]([^#]+)?.*$|\1|g")"
+			declare Q_ID="$(echo "${1}" | ${SED} "s|^(https[:][/][/]quip[-][^/]+)[/]([^/]+)[/]([^#]+)?.*$|\2|g")"
+			declare Q_TL="$(echo "${1}" | ${SED} "s|^(https[:][/][/]quip[-][^/]+)[/]([^/]+)[/]([^#]+)?.*$|\3|g")"
 			QUIP="quip-${Q_ID}-${Q_TL//\//-}"
 			${EDITOR} ${DOCDIR}/${QUIP}-${DODATE}${TODOS_MD_EXT}
 			vdiff \
 				$(ls ${DOCDIR}/${QUIP}-*${TODOS_MD_EXT} | tail -n2 | head -n1) \
 				${DOCDIR}/${QUIP}-${DODATE}${TODOS_MD_EXT}
 			${LL} ${DOCDIR}/${QUIP}-*
-			echo "${QUIP}-${DODATE}" | ${GREP} "^.*$"
+			echo "${Q_LK}/${Q_ID}"		| ${GREP} "^.*$"
+			echo "${QUIP}-${DODATE}"	| ${GREP} "^.*$"
 		fi
 		return 0
 	}
 	function loop {
 		export DODATE="$(date --iso)"
 		if [[ -n ${1} ]]; then
-			declare LOOP="$(echo "${1}" | ${SED} "s|^(http[s]?[:][/][/].+)[/]([^/]+)[.]loop[?]d[=]([^&]+).*$|\1|g")"
-			declare L_ID="$(echo "${1}" | ${SED} "s|^(http[s]?[:][/][/].+)[/]([^/]+)[.]loop[?]d[=]([^&]+).*$|\3|g")"
-			declare L_TL="$(echo "${1}" | ${SED} "s|^(http[s]?[:][/][/].+)[/]([^/]+)[.]loop[?]d[=]([^&]+).*$|\2|g")"
+			declare L_LK="$(echo "${1}" | ${SED} "s|^(https[:][/][/].+)[/]([^/]+)[.]loop[?]d[=]([^&]+).*$|\1|g")"
+			declare L_ID="$(echo "${1}" | ${SED} "s|^(https[:][/][/].+)[/]([^/]+)[.]loop[?]d[=]([^&]+).*$|\3|g")"
+			declare L_TL="$(echo "${1}" | ${SED} "s|^(https[:][/][/].+)[/]([^/]+)[.]loop[?]d[=]([^&]+).*$|\2|g")"
 			LOOP="loop-${L_ID}-${L_TL//\%20/-}"
 			touch ${DOCDIR}/${LOOP}-${DODATE}${TODOS_MD_STATUS_EXT}
 			"${WRDCMD}" /t"$(wslpath -a -w ${WRDTPL})" "$(wslpath -a -w ${DOCDIR})"/${LOOP}-${DODATE}${TODOS_MD_STATUS_EXT}
@@ -703,7 +704,8 @@ if [[ ${UNAME} == "Windows" ]]; then
 				$(ls ${DOCDIR}/${LOOP}-*${TODOS_MD_EXT} | tail -n2 | head -n1) \
 				${DOCDIR}/${LOOP}-${DODATE}${TODOS_MD_EXT}
 			${LL} ${DOCDIR}/${LOOP}-*
-			echo "${LOOP}-${DODATE}" | ${GREP} "^.*$"
+			echo "${L_LK}/${L_TL}.loop?d=${L_ID}"	| ${GREP} "^.*$"
+			echo "${LOOP}-${DODATE}"		| ${GREP} "^.*$"
 		fi
 		return 0
 	}
@@ -776,13 +778,14 @@ if [[ ${UNAME} == "Windows" ]]; then
 					${BKMDIR}/bookmarks.html
 			fi
 			${SED} -n \
-				-e "s|^.+[\"]([^\"]+quip[-]$(
-						basename ${DATDIR} | ${SED} "s|^data[.]||g"
-					)[.]com[/][^\"]+[/][^\"]+).+$|\1|gp" \
-				-e "s|^.+[\"]([^\"]+[?]podId[=][^\"]+).+$|\1|gp" \
-				-e "s|^.+[\"]([^\"]+[?]view[=][^\"]+).+$|\1|gp" \
+				-e "s|^.+HREF[=][\"]([^\"]+quip[-][^\"]+[.]com[/][^\"]+).+[>]([^<]+[-][ ]Quip)[<][^<]+$|\2 = \1|gp" \
+				-e "s|^.+HREF[=][\"]([^\"]+quip[-][^\"]+[.]com[/][^\"]+[/][^\"]+).+[>]([^<]+)[<][^<]+$|\2 = \1|gp" \
+				-e "s|^.+HREF[=][\"]([^\"]+loop[.]cloud[.]microsoft[^\"]+).+[>]([^<]+)[<][^<]+$|\2 = \1|gp" \
+				-e "s|^.+HREF[=][\"]([^\"]+[.]loop[?]d[=][^\"]+[&][^\"]+).+[>]([^<]+)[<][^<]+$|\2 = \1|gp" \
+				-e "s|^.+HREF[=][\"]([^\"]+app[.]smartsheet[.]com[/][^\"]+).+[>]([^<]+[-][ ]Smartsheet[.]com)[<][^<]+$|\2 = \1|gp" \
+				-e "s|^.+HREF[=][\"]([^\"]+app[.]smartsheet[.]com[/][^\"]+[?]view[=][^\"]+).+[>]([^<]+)[<][^<]+$|\2 = \1|gp" \
 				${BKMDIR}/bookmarks.html \
-				| ${GREP} "^.+[/].+$"
+				| ${GREP} "^.+[[:space:]][=]"
 		fi
 		return 0
 	}
