@@ -2126,6 +2126,8 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * `cd /.gary-os; GIT_PAGER= git log -n1; git status`
     * `GIT_PAGER= git diff`
     * `startx`
+  * `vipw && vigr`
+    * `ll /etc/passwd* /etc/group* /etc/*shadow*`
 
 **`}`**
 
@@ -2151,7 +2153,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
   * `(cd _builds; rsync -L ./_gary-os.working/.gary-os-*/ ./_gary-os)`
     * `(cd _builds/_gary-os; git-backup <gentoo commit>.#; GIT_PAGER= git-list -n1)`
   * `(cd .setup; vi gentoo/_release; git-commit -m "Published v#.# release." gentoo/_release)`
-    * [ ] Commit `${RELEASE[*]}` number
+    * [ ] Commit `${RELEASE[*]}` number and `${RELEASE_SKIP[*]}` limiter
   * `make _publish_gitdir`
     * `(cd _builds/.gary-os/.gary-os; GIT_PAGER= git-list -n3)`
     * `(cd _builds/.gary-os/.gary-os; GIT_PAGER= git tag -l)`
@@ -2177,11 +2179,14 @@ Everything in [Booting], [Running] and [Building] should be validated below.
   * `(cd _builds; rm ./_gary-os.boot; ln _gary-os ./_gary-os.boot)`
     * `_sync boot`
   * `cd .setup/gentoo.make`
-    * `make DOMODS=true doit`
-    * `make DOMODS=true edit`
+    * `make perms`
+        * `make DOMODS=true doit`
+        * `make DOMODS=true edit`
+        * `vi ./build/_gentoo/+checks`
+        * `ll ./build/ ./build/_build`
     * `(cd _builds/_gentoo; git-backup "gary-os v#.#"; GIT_PAGER= git-list -n1)`
-    * `(cd _builds; rsync --filter="-_/var/cache/distfiles" ./_gentoo/ ../../_toor)`
-    * `_sync _sys _clone _full _setup`
+        * `(cd _builds; rsync --filter="-_/var/cache/distfiles" ./_gentoo/ ../../_toor)`
+        * `_sync _sys _clone _full _setup`
   * `cd coding/gary-os-history`
     * `ln ../gary-os.git ./.git`
     * `GIT_PAGER= git-list -n1`
