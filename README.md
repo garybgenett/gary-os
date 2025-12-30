@@ -1757,7 +1757,7 @@ Everything needed to perform these steps is in the [Repository] or the
     * `(cd _builds; rsync ./_gentoo/ ./_gary-os.working)`
   * `make DOMODS=true edit`
     * `(cd _builds; rm ./_gentoo.boot; ln _gentoo ./_gentoo.boot)`
-    * `(cd _builds; rsync ./_gentoo/ ../../_toor)`
+    * `(cd _builds; rsync --filter="-_/var/cache/distfiles" ./_gentoo/ ../../_toor)`
     * [ ] Boot to "gary-os"
         * `rsync [...]/_root/{.runit,.setup} [...]/_toor/`
     * [ ] Boot to "\_toor"
@@ -1772,7 +1772,7 @@ Everything needed to perform these steps is in the [Repository] or the
     * `ll ./build/ ./build/_build`
     * `make perms`
     * `(cd .setup; git-commit ./linux ./gentoo)`
-    * `(cd _builds; rsync ./_gentoo/ ../../_toor)`
+    * `(cd _builds; rsync --filter="-_/var/cache/distfiles" ./_gentoo/ ../../_toor)`
     * `_sync _sys _clone _full _setup`
 
 **GaryOS Build**
@@ -2180,7 +2180,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * `make DOMODS=true doit`
     * `make DOMODS=true edit`
     * `(cd _builds/_gentoo; git-backup "gary-os v#.#"; GIT_PAGER= git-list -n1)`
-    * `(cd _builds; rsync ./_gentoo/ ../../_toor)`
+    * `(cd _builds; rsync --filter="-_/var/cache/distfiles" ./_gentoo/ ../../_toor)`
     * `_sync _sys _clone _full _setup`
   * `cd coding/gary-os-history`
     * `ln ../gary-os.git ./.git`
