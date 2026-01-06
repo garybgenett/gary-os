@@ -731,11 +731,33 @@ if [[ ${UNAME} == "Windows" ]]; then
 				${DATDIR}/_config/_q_cli.sh
 		fi
 		if ! ${CLI} && [[ -n $(find ${DATDIR}/_context/*.md 2>/dev/null) ]]; then
+			declare AGNT=($(
+				find ${DATDIR}/_context/_agent-*.md \
+				| ${GREP} -v "[0-9]{4}[-][0-9]{2}[-][0-9]{2}" \
+				| sort -u
+			))
 			declare LIST=($(
 				find ${DATDIR}/_context/*.md \
-				| ${GREP} -v "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+				| ${GREP} -v "[0-9]{4}[-][0-9]{2}[-][0-9]{2}" \
+				| sort -u
 			))
 			${EDITOR} ${LIST[@]}
+cat >${DATDIR}/_context/.composer.mk <<_EOF_
+#>>>override MAKEJOBS		:= 0
+override COMPOSER_DEBUGIT	:= 1
+override COMPOSER_KEEPING	:=
+ifneq (\$(COMPOSER_CURDIR),)
+override COMPOSER_TARGETS	:= $(basename ${AGNT[@]//.md/.html})
+override COMPOSER_SUBDIRS	:= .null
+endif
+_EOF_
+			make \
+				-f "${COMPOSER}" \
+				-C "${DATDIR}/_context" \
+				install-force
+			make \
+				-C "${DATDIR}/_context" \
+				all
 			for FILE in ${LIST[@]//.md}; do
 				if ! diff ${DIFF_OPTS} \
 					$(ls ${FILE}-*.md | tail -n1) \
