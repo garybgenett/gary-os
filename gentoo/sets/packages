@@ -429,7 +429,6 @@ app-text/xpdf
 
 app-text/calibre
 dev-python/pycryptodome			# gentoo required [app-text/calibre]: missing dependency
-#>>> app-text/sdcv			# gentoo required [app-text/sdcv-0.5.5]: https://bugs.gentoo.org/945818 / /usr/include/glib-2.0/glib/gunicode.h:825:34: error: invalid conversion from 'const gchar*' {aka 'const char*'} to 'gchar*' {aka 'char*'} [-fpermissive]
 media-gfx/mcomix
 
 app-misc/atomicwallet
