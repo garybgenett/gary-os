@@ -705,7 +705,6 @@ if [[ ${UNAME} == "Windows" ]]; then
 				${DOCDIR}/${LOOP}-${DODATE}${TODOS_MD_EXT}
 			${LL} ${DOCDIR}/${LOOP}-*
 			echo "${L_LK}/${L_TL}.loop?d=${L_ID}"	| ${GREP} "^.*$"
-			echo "${LOOP}-${DODATE}"		| ${GREP} "^.*$"
 		fi
 		return 0
 	}
