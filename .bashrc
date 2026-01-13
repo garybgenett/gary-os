@@ -1358,7 +1358,14 @@ function enc-rsync {
 		${RSYNC_U}				\
 			--rsh="ssh -p${PRT}"		\
 			"${@}"				\
-			${MNT}/ ${DST}			|| FAIL="true"
+			${MNT}/ ${DST}			|| {
+				find ${SRC} \
+					\( ! -type d \) \
+					\( ! -type f \) \
+					\( ! -type l \) \
+					-print;
+				FAIL="true";
+			}
 		mount-robust -! -u ${MNT}		|| FAIL="true"
 	else
 		enc-sshfs -r ${PRT} ${DST} ${MNT}	|| return 1
