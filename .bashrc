@@ -746,7 +746,7 @@ cat >${DATDIR}/_context/.composer.mk <<_EOF_
 override COMPOSER_DEBUGIT	:= 1
 override COMPOSER_KEEPING	:=
 ifneq (\$(COMPOSER_CURDIR),)
-override COMPOSER_TARGETS	:= $(basename ${AGNT[@]//.md/.html})
+override COMPOSER_TARGETS	:=$(for FILE in ${AGNT[@]//.md/.html}; do echo -en " $(basename ${FILE})"; done)
 override COMPOSER_SUBDIRS	:= .null
 endif
 _EOF_
