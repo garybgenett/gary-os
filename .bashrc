@@ -830,10 +830,23 @@ _EOF_
 		declare LINKS="$(
 			find -L ${DATDIR} -type l \
 			| ${GREP} -v "[/][_]sources[/]" \
-			| ${SED} "s|^${DATDIR}[/]||g"
+			| ${SED} "s|^${DATDIR}[/]||g" \
+			| sort
 		)"
 		if [[ -n ${LINKS} ]]; then
 			(cd ${DATDIR}; ${LL} ${LINKS})
+			if [[ -n "${@}" ]]; then
+				echo "=== ${1} -> ${2}"
+				declare LINK=
+				for FILE in ${LINKS}; do
+					LINK="$(readlink --canonicalize-missing ${DATDIR}/${FILE})"
+					if [[ -n $(echo "${LINK}" | ${GREP} "[/]${1}[/]") ]]; then
+						LINK="$(echo "${LINK}" | ${SED} "s|[/]${1}[/]|/${2}/|g")"
+						${LN} --relative ${LINK} ${DATDIR}/${FILE}
+					fi
+				done
+				(cd ${DATDIR}; ${LL} ${LINKS})
+			fi
 			return 1
 		fi
 		dodrive \
