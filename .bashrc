@@ -827,9 +827,13 @@ _EOF_
 			DRYRUN="--dry-run"
 			shift
 		fi
-		declare LINKS="$(find -L ${DATDIR} -type l | grep -v "[/][_]sources[/]")"
+		declare LINKS="$(
+			find -L ${DATDIR} -type l \
+			| ${GREP} -v "[/][_]sources[/]" \
+			| ${SED} "s|^${DATDIR}[/]||g"
+		)"
 		if [[ -n ${LINKS} ]]; then
-			${LL} ${LINKS}
+			(cd ${DATDIR}; ${LL} ${LINKS})
 			return 1
 		fi
 		dodrive \
