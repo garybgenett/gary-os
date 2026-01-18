@@ -765,6 +765,9 @@ variables:
   site-config:
     navbars:
       composer:	null
+    pages:
+      header:	.composer.header
+      footer:	.composer.footer
     cols:
       break:	md
       size:	[ 3, 9, 0 ]
@@ -777,6 +780,12 @@ variables:
       - box-begin 0
       - contents
       - box-end
+_EOF_
+cat >${DATDIR}/_context/.composer.header <<_EOF_
+<!-- composer >> metainfo box-begin 0 -->
+_EOF_
+cat >${DATDIR}/_context/.composer.footer <<_EOF_
+<!-- composer >> box-end -->
 _EOF_
 			make \
 				-f "${COMPOSER}" \
