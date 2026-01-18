@@ -752,13 +752,31 @@ if [[ ${UNAME} == "Windows" ]]; then
 			))
 			if [[ "${AGNT[@]}" != "${COMP[@]}" ]]; then
 cat >${DATDIR}/_context/.composer.mk <<_EOF_
-#>>>override MAKEJOBS		:= 0
-override COMPOSER_DEBUGIT	:= 1
+override MAKEJOBS		:= 0
 override COMPOSER_KEEPING	:=
 ifneq (\$(COMPOSER_CURDIR),)
 override COMPOSER_TARGETS	:= ${AGNT[@]}
 override COMPOSER_SUBDIRS	:= .null
+override c_site			:= 1
 endif
+_EOF_
+cat >${DATDIR}/_context/.composer.yml <<_EOF_
+variables:
+  site-config:
+    navbars:
+      composer:	null
+    cols:
+      break:	md
+      size:	[ 3, 9, 0 ]
+      resize:	[ 0, 12, 0 ]
+  site-nav-top:
+    CONTENTS:
+      - contents
+  site-nav-left:
+    CONTENTS:
+      - box-begin 0
+      - contents
+      - box-end
 _EOF_
 			make \
 				-f "${COMPOSER}" \
