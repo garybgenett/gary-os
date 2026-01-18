@@ -733,7 +733,8 @@ if [[ ${UNAME} == "Windows" ]]; then
 			declare AGNT=($(
 				find ${DATDIR}/_context/_agent-*.md \
 				| ${GREP} -v "[0-9]{4}[-][0-9]{2}[-][0-9]{2}" \
-				| sort -u
+				| sort -u \
+				| while read -r FILE; do echo -en " $(basename ${FILE/%.md/.html})"; done
 			))
 			declare LIST=($(
 				find ${DATDIR}/_context/*.md \
@@ -741,12 +742,21 @@ if [[ ${UNAME} == "Windows" ]]; then
 				| sort -u
 			))
 			${EDITOR} ${LIST[@]}
+			declare COMP=($(
+				make \
+					-f "${COMPOSER}" \
+					-C "${DATDIR}/_context" \
+					config.COMPOSER_TARGETS \
+					2>/dev/null \
+				| ${SED} "/^make[:]/d"
+			))
+			if [[ "${AGNT[@]}" != "${COMP[@]}" ]]; then
 cat >${DATDIR}/_context/.composer.mk <<_EOF_
 #>>>override MAKEJOBS		:= 0
 override COMPOSER_DEBUGIT	:= 1
 override COMPOSER_KEEPING	:=
 ifneq (\$(COMPOSER_CURDIR),)
-override COMPOSER_TARGETS	:=$(for FILE in ${AGNT[@]//.md/.html}; do echo -en " $(basename ${FILE})"; done)
+override COMPOSER_TARGETS	:= ${AGNT[@]}
 override COMPOSER_SUBDIRS	:= .null
 endif
 _EOF_
@@ -754,6 +764,7 @@ _EOF_
 				-f "${COMPOSER}" \
 				-C "${DATDIR}/_context" \
 				install-force
+			fi
 			make \
 				-C "${DATDIR}/_context" \
 				all
