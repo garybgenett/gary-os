@@ -753,7 +753,7 @@ if [[ ${UNAME} == "Windows" ]]; then
 			if [[ "${AGNT[@]}" != "${COMP[@]}" ]]; then
 cat >${DATDIR}/_context/.composer.mk <<_EOF_
 override MAKEJOBS		:= 0
-override COMPOSER_KEEPING	:=
+#>>>override COMPOSER_KEEPING	:=
 ifneq (\$(COMPOSER_CURDIR),)
 override COMPOSER_TARGETS	:= ${AGNT[@]}
 override COMPOSER_SUBDIRS	:= .null
@@ -886,6 +886,9 @@ _EOF_
 				(cd ${DATDIR}; ${LL} ${LINKS})
 			fi
 			return 1
+		fi
+		if [[ -z ${DRYRUN} ]]; then
+			${RM} ${DATDIR}/_context/.composer.{log,tmp}
 		fi
 		dodrive \
 		status -a \
