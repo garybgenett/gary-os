@@ -710,8 +710,13 @@ if [[ ${UNAME} == "Windows" ]]; then
 	}
 	function context {
 		export DODATE="$(date --iso)"
+		declare RUN="false"
 		declare GUI="false"
 		declare CLI="false"
+		if [[ ${1} == -r ]]; then
+			RUN="true"
+			shift
+		fi
 		if [[ ${1} == -g ]]; then
 			GUI="true"
 			shift
@@ -721,10 +726,12 @@ if [[ ${UNAME} == "Windows" ]]; then
 			shift
 		fi
 		if ${CLI} && [[ -f ${DATDIR}/_config/_q_cli.sh ]]; then
-			if ${GUI}; then
-				${GVI/#*;} ${DATDIR}/_config/_q_cli.sh
-			else
-				${EDITOR} ${DATDIR}/_config/_q_cli.sh
+			if ! ${RUN}; then
+				if ${GUI}; then
+					${GVI/#*;} ${DATDIR}/_config/_q_cli.sh
+				else
+					${EDITOR} ${DATDIR}/_config/_q_cli.sh
+				fi
 			fi
 			if ! diff ${DIFF_OPTS} \
 				$(ls ${DATDIR}/_config/_q_cli-*.sh | tail -n1) \
@@ -750,10 +757,12 @@ if [[ ${UNAME} == "Windows" ]]; then
 				| ${GREP} -v "[0-9]{4}[-][0-9]{2}[-][0-9]{2}" \
 				| sort -u
 			))
-			if ${GUI}; then
-				${GVI/#*;} ${LIST[@]}
-			else
-				${EDITOR} ${LIST[@]}
+			if ! ${RUN}; then
+				if ${GUI}; then
+					${GVI/#*;} ${LIST[@]}
+				else
+					${EDITOR} ${LIST[@]}
+				fi
 			fi
 			declare COMP=($(
 				make \
