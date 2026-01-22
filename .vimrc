@@ -33,6 +33,8 @@ highlight normal     guibg=black ctermbg=none guifg=gray     ctermfg=gray
 filetype				on
 syntax					on
 set background				=light
+set guifont				=Monospace\ 9
+"set guioptions				=acimA
 set guioptions				=aciA
 
 highlight comment    guibg=black ctermbg=none guifg=darkgreen ctermfg=darkgreen
