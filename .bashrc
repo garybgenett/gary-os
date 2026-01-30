@@ -5677,10 +5677,10 @@ function task-export-drive-sync {
 			-e "/^$/d" \
 			-e "s|[\\]||g" \
 			-e "s|^[=][[:space:]]|# |g" \
-			-e "s|^([#]{1,3}[[:space:]].+)$|###\1|g" \
-			-e "s|^([#]+[[:space:]].+)$|\n\1|g" \
-			-e "s|[-][[:space:]]{3}|* |g" \
-			-e "s|[0-9a-z]+[.][[:space:]]{1,2}|1. |g" \
+			-e "s|^([#]{1,3}[[:space:]])|###\1|g" \
+			-e "s|^([#]+[[:space:]])|\n\1|g" \
+			-e "s|^([[:space:]]*)[-][[:space:]]|\1* |g" \
+			-e "s|^([[:space:]]*)[0-9a-z]+[.][[:space:]]{1,2}|\11. |g" \
 			${TODOS_MD_STATUS}${TODOS_MD_EXT} \
 			${TODOS_MD_TEXT}${TODOS_MD_EXT}
 		sudo chown plastic:plastic \
