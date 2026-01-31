@@ -3353,7 +3353,7 @@ function mount-robust {
 
 function mount-zfs {
 	declare ZFS_TRACE="${ZFS_TRACE:-false}"
-	declare ZFS_SETUP="${ZFS_SETUP:-true}"
+	declare ZFS_SETUP="${ZFS_SETUP:-false}"
 	declare ZFS_ROTATE="${ZFS_ROTATE:-true}"
 	declare ZFS_KILLER="${ZFS_KILLER:-false}"
 	declare ZFS_SNAPSHOTS="${ZFS_SNAPSHOTS:-0}"
@@ -3418,16 +3418,14 @@ function mount-zfs {
 	declare ZOPTS=
 	declare -a ZOPTS_KEEP=()
 	declare -a ZOPTS_PASS=()
-	if ${ZFS_SETUP}; then
-		ZOPTS+=" compression=lz4";	ZOPTS_KEEP+=(compression)
-		ZOPTS+=" canmount=noauto";	ZOPTS_PASS+=(canmount)
-		ZOPTS+=" sharenfs=off";		ZOPTS_KEEP+=(sharenfs)
-		ZOPTS+=" sharesmb=off";		ZOPTS_KEEP+=(sharesmb)
-		ZOPTS+=" relatime=on";		ZOPTS_KEEP+=(relatime)
-	fi
+	ZOPTS+=" compression=lz4";	ZOPTS_KEEP+=(compression)
+	ZOPTS+=" canmount=noauto";	ZOPTS_PASS+=(canmount)
+	ZOPTS+=" sharenfs=off";		ZOPTS_KEEP+=(sharenfs)
+	ZOPTS+=" sharesmb=off";		ZOPTS_KEEP+=(sharesmb)
+	ZOPTS+=" relatime=on";		ZOPTS_KEEP+=(relatime)
 	declare ZOPTS_DONE="${ZOPTS}"
 	ZOPTS_DONE+=" mountpoint=none"
-	ZOPTS_DONE+=" readonly=on";		ZOPTS_KEEP+=(readonly)
+	ZOPTS_DONE+=" readonly=on";	ZOPTS_KEEP+=(readonly)
 	function zfs_import_pools {
 		declare ZDEF="_DEF"
 		if ${ZFS_KILLER}; then
@@ -3555,6 +3553,23 @@ function mount-zfs {
 		fi
 		return 0
 	}
+	function zfs_pool_set {
+		declare ZOPT=
+		declare ZOPT_DO=
+		echo -en "- Setting Pool Options...\n"
+		zfs set ${ZOPTS} ${ZPOOL}			|| return 1
+		for FILE in $(${Z_LIST_ALL/-t all/-t filesystem} ${ZPOOL} | ${GREP} -v "^${ZPOOL}$"); do
+			echo -en "- Setting Dataset Options... ${FILE}\n"
+			for ZOPT in ${ZOPTS_KEEP[@]}; do
+				zfs inherit ${ZOPT} ${FILE}	|| return 1
+			done
+			for ZOPT in ${ZOPTS_PASS[@]}; do
+				ZOPT_DO="$(echo "${ZOPTS}" | ${GREP} -o "${ZOPT}=[^[:space:]]+")"
+				zfs set ${ZOPT_DO} ${FILE}	|| return 1
+			done
+		done
+		return 0
+	}
 	declare IMPORT="true"
 	declare IS="false"
 	declare RO="false"
@@ -3600,6 +3615,9 @@ function mount-zfs {
 				echo -en "\n"
 				${GREP} --color=never "prefetch" ${ZSTATS}/arcstats
 				echo -en "\n"
+			fi
+			if ${ZFS_SETUP}; then
+				zfs_pool_set || return 1
 			fi
 			zfs_pool_status
 			return 0
@@ -3934,7 +3952,6 @@ function mount-zfs {
 				fi
 				echo -en "- Mounting Pool...\n"
 				zfs set \
-					${ZOPTS} \
 					mountpoint=${DIR} \
 					$(if ${RO}; then	echo "readonly=on"
 						else		echo "readonly=off"
@@ -3945,19 +3962,11 @@ function mount-zfs {
 				fi
 				for FILE in $(${Z_LIST_ALL/-t all/-t filesystem} ${ZPOOL} | ${GREP} -v "^${ZPOOL}$"); do
 					echo -en "- Mounting Dataset... ${FILE}\n"
-					if ${ZFS_SETUP}; then
-						declare ZOPT=
-						declare ZOPT_DO=
-						for ZOPT in ${ZOPTS_KEEP[@]}; do
-							zfs inherit ${ZOPT} ${FILE}	|| return 1
-						done
-						for ZOPT in ${ZOPTS_PASS[@]}; do
-							ZOPT_DO="$(echo "${ZOPTS}" | ${GREP} -o "${ZOPT}=[^[:space:]]+")"
-							zfs set ${ZOPT_DO} ${FILE}	|| return 1
-						done
-					fi
 					${Z_MOUNT} ${FILE}				|| return 1
 				done
+				if ${ZFS_SETUP}; then
+					zfs_pool_set					|| return 1
+				fi
 				zfs_pool_info						|| return 1
 			fi
 			return 0
