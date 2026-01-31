@@ -3352,6 +3352,8 @@ function mount-robust {
 ########################################
 
 function mount-zfs {
+	declare ZFS_TRACE="${ZFS_TRACE:-false}"
+	declare ZFS_SETUP="${ZFS_SETUP:-true}"
 	declare ZFS_ROTATE="${ZFS_ROTATE:-true}"
 	declare ZFS_KILLER="${ZFS_KILLER:-false}"
 	declare ZFS_SNAPSHOTS="${ZFS_SNAPSHOTS:-0}"
@@ -3416,14 +3418,16 @@ function mount-zfs {
 	declare ZOPTS=
 	declare -a ZOPTS_KEEP=()
 	declare -a ZOPTS_PASS=()
-	ZOPTS+=" compression=lz4";	ZOPTS_KEEP+=(compression)
-	ZOPTS+=" canmount=noauto";	ZOPTS_PASS+=(canmount)
-	ZOPTS+=" sharenfs=off";		ZOPTS_KEEP+=(sharenfs)
-	ZOPTS+=" sharesmb=off";		ZOPTS_KEEP+=(sharesmb)
-	ZOPTS+=" relatime=on";		ZOPTS_KEEP+=(relatime)
+	if ${ZFS_SETUP}; then
+		ZOPTS+=" compression=lz4";	ZOPTS_KEEP+=(compression)
+		ZOPTS+=" canmount=noauto";	ZOPTS_PASS+=(canmount)
+		ZOPTS+=" sharenfs=off";		ZOPTS_KEEP+=(sharenfs)
+		ZOPTS+=" sharesmb=off";		ZOPTS_KEEP+=(sharesmb)
+		ZOPTS+=" relatime=on";		ZOPTS_KEEP+=(relatime)
+	fi
 	declare ZOPTS_DONE="${ZOPTS}"
 	ZOPTS_DONE+=" mountpoint=none"
-	ZOPTS_DONE+=" readonly=on";	ZOPTS_KEEP+=(readonly)
+	ZOPTS_DONE+=" readonly=on";		ZOPTS_KEEP+=(readonly)
 	function zfs_import_pools {
 		declare ZDEF="_DEF"
 		if ${ZFS_KILLER}; then
@@ -3621,6 +3625,9 @@ function mount-zfs {
 			return 1
 		fi
 		return 0
+	fi
+	if ${ZFS_TRACE}; then
+		set -x
 	fi
 	if ${IMPORT}; then
 		zfs_import_pools || return 1
@@ -3938,17 +3945,17 @@ function mount-zfs {
 				fi
 				for FILE in $(${Z_LIST_ALL/-t all/-t filesystem} ${ZPOOL} | ${GREP} -v "^${ZPOOL}$"); do
 					echo -en "- Mounting Dataset... ${FILE}\n"
-#>>>
-					declare ZOPT=
-					declare ZOPT_DO=
-					for ZOPT in ${ZOPTS_KEEP[@]}; do
-						zfs inherit ${ZOPT} ${FILE}		|| return 1
-					done
-					for ZOPT in ${ZOPTS_PASS[@]}; do
-						ZOPT_DO="$(echo "${ZOPTS}" | ${GREP} -o "${ZOPT}=[^[:space:]]+")"
-						zfs set ${ZOPT_DO} ${FILE}		|| return 1
-					done
-#>>>
+					if ${ZFS_SETUP}; then
+						declare ZOPT=
+						declare ZOPT_DO=
+						for ZOPT in ${ZOPTS_KEEP[@]}; do
+							zfs inherit ${ZOPT} ${FILE}	|| return 1
+						done
+						for ZOPT in ${ZOPTS_PASS[@]}; do
+							ZOPT_DO="$(echo "${ZOPTS}" | ${GREP} -o "${ZOPT}=[^[:space:]]+")"
+							zfs set ${ZOPT_DO} ${FILE}	|| return 1
+						done
+					fi
 					${Z_MOUNT} ${FILE}				|| return 1
 				done
 				zfs_pool_info						|| return 1
@@ -3994,6 +4001,9 @@ function mount-zfs {
 		fi
 		${Z_STATUS} ${ZPOOL}
 		return 0
+	fi
+	if ${ZFS_TRACE}; then
+		set +x
 	fi
 	return 0
 }
