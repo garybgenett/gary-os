@@ -3616,9 +3616,6 @@ function mount-zfs {
 				${GREP} --color=never "prefetch" ${ZSTATS}/arcstats
 				echo -en "\n"
 			fi
-			if ${ZFS_SETUP}; then
-				zfs_pool_set || return 1
-			fi
 			zfs_pool_status
 			return 0
 		else
@@ -3779,6 +3776,9 @@ function mount-zfs {
 				ZPOOL="${ZDATA}"
 			fi
 			echo -en "\n"
+			if ${ZFS_SETUP}; then
+				zfs_pool_set || return 1
+			fi
 			zfs_pool_status ${ZPOOL}
 		fi
 		return 0
@@ -3964,9 +3964,6 @@ function mount-zfs {
 					echo -en "- Mounting Dataset... ${FILE}\n"
 					${Z_MOUNT} ${FILE}				|| return 1
 				done
-				if ${ZFS_SETUP}; then
-					zfs_pool_set					|| return 1
-				fi
 				zfs_pool_info						|| return 1
 			fi
 			return 0
@@ -4007,6 +4004,9 @@ function mount-zfs {
 			[[ ${ZTYPE} == device ]];
 		}; then
 			zfs_mount_member						|| return 1
+		fi
+		if ${ZFS_SETUP}; then
+			zfs_pool_set							|| return 1
 		fi
 		${Z_STATUS} ${ZPOOL}
 		return 0
