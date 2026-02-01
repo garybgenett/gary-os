@@ -3351,6 +3351,9 @@ function mount-robust {
 
 ########################################
 
+# ZFS_KILLER="true" mount-zfs -?
+# ZFS_TRACE="true" ZFS_SETUP="true" mount-zfs -? [pool]
+
 function mount-zfs {
 	declare ZFS_TRACE="${ZFS_TRACE:-false}"
 	declare ZFS_SETUP="${ZFS_SETUP:-false}"
