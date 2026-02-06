@@ -3845,7 +3845,7 @@ function mount-zfs {
 				); do
 					echo -en "- Destroying Snapshot... ${Z_SNAP}\n"
 					if ! ${SN_DBG}; then
-						zfs destroy ${Z_SNAP}	|| return 1
+						zfs destroy ${Z_SNAP}	#>>> || return 1
 					fi
 				done
 			done
