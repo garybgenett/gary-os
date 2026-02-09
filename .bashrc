@@ -748,7 +748,9 @@ if [[ ${UNAME} == "Windows" ]]; then
 		fi
 		if ! ${CLI} && [[ -n $(find ${DATDIR}/_context/*.md 2>/dev/null) ]]; then
 			declare AGNT=($(
-				find ${DATDIR}/_context/_agent-*.md \
+				find \
+					${DATDIR}/_context/_agent-*.md \
+					${DATDIR}/_context/_resource-*.md \
 				| ${GREP} -v "[0-9]{4}[-][0-9]{2}[-][0-9]{2}" \
 				| sort -u \
 				| while read -r FILE; do echo -en " $(basename ${FILE/%.md/.html})"; done
