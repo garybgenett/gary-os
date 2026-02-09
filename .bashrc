@@ -610,6 +610,7 @@ if [[ ${UNAME} == "Windows" ]]; then
 	alias open="/mnt/c/Windows/explorer.exe"
 #>>>	alias zdesk="cd ${HOME}/Desktop ; clear ; ${LL}"
 	alias zdesk="cd ${DATDIR} ; clear ; ${LL}"
+	alias here="cd \$(realpath \${PWD}) ; clear ; ${LL}"
 	function wsl-link {
 		${RM} ${HOME}/{Desktop,Downloads}
 		${LN} --relative "/mnt/c/Users/${USER}/Desktop" ${HOME}/
