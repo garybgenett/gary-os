@@ -726,6 +726,19 @@ if [[ ${UNAME} == "Windows" ]]; then
 			CLI="true"
 			shift
 		fi
+		declare AGNT=($(
+			find \
+				${DATDIR}/_context/_agent-*.md \
+				${DATDIR}/_context/_resource-*.md \
+			| ${GREP} -v "[0-9]{4}[-][0-9]{2}[-][0-9]{2}" \
+			| sort -u \
+			| while read -r FILE; do echo -en " $(basename ${FILE/%.md/.html})"; done
+		))
+		declare LIST=($(
+			find ${DATDIR}/_context/*.md \
+			| ${GREP} -v "[0-9]{4}[-][0-9]{2}[-][0-9]{2}" \
+			| sort -u
+		))
 		if ${CLI} && [[ -f ${DATDIR}/_config/_q_cli.sh ]]; then
 			if ! ${RUN}; then
 				if ${GUI}; then
@@ -747,19 +760,6 @@ if [[ ${UNAME} == "Windows" ]]; then
 				${DATDIR}/_config/_q_cli.sh
 		fi
 		if ! ${CLI} && [[ -n $(find ${DATDIR}/_context/*.md 2>/dev/null) ]]; then
-			declare AGNT=($(
-				find \
-					${DATDIR}/_context/_agent-*.md \
-					${DATDIR}/_context/_resource-*.md \
-				| ${GREP} -v "[0-9]{4}[-][0-9]{2}[-][0-9]{2}" \
-				| sort -u \
-				| while read -r FILE; do echo -en " $(basename ${FILE/%.md/.html})"; done
-			))
-			declare LIST=($(
-				find ${DATDIR}/_context/*.md \
-				| ${GREP} -v "[0-9]{4}[-][0-9]{2}[-][0-9]{2}" \
-				| sort -u
-			))
 			if ! ${RUN}; then
 				if ${GUI}; then
 					${GVI/#*;} ${LIST[@]}
@@ -834,6 +834,13 @@ _EOF_
 				fi
 			done
 		fi
+		${MKDIR} ${HOME}/Desktop/_context
+		${RSYNC_C} \
+			$(ls ${DATDIR}/_config/_q_cli-*.sh | tail -n1) \
+			$(for FILE in ${LIST[@]//.md}; do
+				ls ${FILE}-*.md | tail -n1
+			done) \
+			${HOME}/Desktop/_context/
 		return 0
 	}
 	function bookmarks {
