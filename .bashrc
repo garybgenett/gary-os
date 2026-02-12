@@ -834,13 +834,21 @@ _EOF_
 				fi
 			done
 		fi
-		${MKDIR} ${HOME}/Desktop/_context
-		${RSYNC_C} \
+		${MKDIR} ${HOME}/Desktop/_context/_templates
+		${RSYNC_U} --copy-links \
 			$(ls ${DATDIR}/_config/_q_cli-*.sh | tail -n1) \
 			$(for FILE in ${LIST[@]//.md}; do
 				ls ${FILE}-*.md | tail -n1
 			done) \
 			${HOME}/Desktop/_context/
+		find ${DATDIR}/_context/_templates -type f -o -type l \
+			| ${GREP} -v "[0-9]{4}[-][0-9]{2}[-][0-9]{2}" \
+			| sort -u \
+		| while read -r FILE; do
+			${RSYNC_U} --copy-links \
+				$(ls $(echo "${FILE}" | ${SED} "s|[.][^.]+$||g")-* | tail -n1) \
+				${HOME}/Desktop/_context/_templates/
+		done
 		return 0
 	}
 	function bookmarks {
