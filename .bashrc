@@ -713,17 +713,12 @@ if [[ ${UNAME} == "Windows" ]]; then
 		export DODATE="$(date --iso)"
 		declare RUN="false"
 		declare GUI="false"
-		declare CLI="false"
 		if [[ ${1} == -r ]]; then
 			RUN="true"
 			shift
 		fi
 		if [[ ${1} == -g ]]; then
 			GUI="true"
-			shift
-		fi
-		if [[ ${1} == -s ]]; then
-			CLI="true"
 			shift
 		fi
 		declare AGNT=($(
@@ -734,37 +729,24 @@ if [[ ${UNAME} == "Windows" ]]; then
 			| sort -u \
 			| while read -r FILE; do echo -en " $(basename ${FILE/%.md/.html})"; done
 		))
-		declare LIST=($(
+		declare LIST=(
+			${DATDIR}/_config/_q_cli.sh
+		$(
 			find ${DATDIR}/_context/*.md \
 			| ${GREP} -v "[0-9]{4}[-][0-9]{2}[-][0-9]{2}" \
 			| sort -u
 		))
-		if ${CLI} && [[ -f ${DATDIR}/_config/_q_cli.sh ]]; then
+		declare TMPL=($(
+			find ${DATDIR}/_context/_templates -type f \
+			| ${GREP} -v "[0-9]{4}[-][0-9]{2}[-][0-9]{2}" \
+			| sort -u
+		))
+		if [[ -n ${LIST[@]} ]] || [[ -n ${TMPL[@]} ]]; then
 			if ! ${RUN}; then
 				if ${GUI}; then
-					${GVI/#*;} ${DATDIR}/_config/_q_cli.sh
+					${GVI/#*;} ${LIST[@]} ${TMPL[@]}
 				else
-					${EDITOR} ${DATDIR}/_config/_q_cli.sh
-				fi
-			fi
-			if ! diff ${DIFF_OPTS} \
-				$(ls ${DATDIR}/_config/_q_cli-*.sh | tail -n1) \
-				${DATDIR}/_config/_q_cli.sh >/dev/null
-			then
-				${RSYNC_U} \
-					${DATDIR}/_config/_q_cli.sh \
-					${DATDIR}/_config/_q_cli-${DODATE}.sh
-			fi
-			vdiff \
-				$(ls ${DATDIR}/_config/_q_cli-*.sh | tail -n2 | head -n1) \
-				${DATDIR}/_config/_q_cli.sh
-		fi
-		if ! ${CLI} && [[ -n $(find ${DATDIR}/_context/*.md 2>/dev/null) ]]; then
-			if ! ${RUN}; then
-				if ${GUI}; then
-					${GVI/#*;} ${LIST[@]}
-				else
-					${EDITOR} ${LIST[@]}
+					${EDITOR} ${LIST[@]} ${TMPL[@]}
 				fi
 			fi
 			declare COMP=($(
@@ -820,35 +802,37 @@ _EOF_
 			make \
 				-C "${DATDIR}/_context" \
 				all
-			for FILE in ${LIST[@]//.md}; do
+			for FILE in ${LIST[@]} ${TMPL[@]}; do
+				declare FIL="$(echo "${FILE}" | ${SED} "s|^(.+)[.]([^.]+)$|\1|g")"
+				declare EXT="$(echo "${FILE}" | ${SED} "s|^(.+)[.]([^.]+)$|\2|g")"
 				if ! diff ${DIFF_OPTS} \
-					$(ls ${FILE}-*.md | tail -n1) \
-					${FILE}.md >/dev/null
+					$(ls ${FIL}-*.${EXT} | tail -n1) \
+					${FIL}.${EXT} >/dev/null
 				then
 					${RSYNC_U} \
-						${FILE}.md \
-						${FILE}-${DODATE}.md
+						${FIL}.${EXT} \
+						${FIL}-${DODATE}.${EXT}
 					vdiff \
-						$(ls ${FILE}-*.md | tail -n2 | head -n1) \
-						${FILE}.md
+						$(ls ${FIL}-*.${EXT} | tail -n2 | head -n1) \
+						${FIL}.${EXT}
 				fi
 			done
 		fi
-		${MKDIR} ${HOME}/Desktop/_context/_templates
-		${RSYNC_U} --copy-links \
-			$(ls ${DATDIR}/_config/_q_cli-*.sh | tail -n1) \
-			$(for FILE in ${LIST[@]//.md}; do
-				ls ${FILE}-*.md | tail -n1
+		${RSYNC_U} \
+			$(for FILE in ${LIST[@]}; do
+				declare FIL="$(echo "${FILE}" | ${SED} "s|^(.+)[.]([^.]+)$|\1|g")"
+				declare EXT="$(echo "${FILE}" | ${SED} "s|^(.+)[.]([^.]+)$|\2|g")"
+				ls ${FIL}-*.${EXT} | tail -n1
 			done) \
-			${HOME}/Desktop/_context/
-		find ${DATDIR}/_context/_templates -type f -o -type l \
-			| ${GREP} -v "[0-9]{4}[-][0-9]{2}[-][0-9]{2}" \
-			| sort -u \
-		| while read -r FILE; do
-			${RSYNC_U} --copy-links \
-				$(ls $(echo "${FILE}" | ${SED} "s|[.][^.]+$||g")-* | tail -n1) \
-				${HOME}/Desktop/_context/_templates/
-		done
+			${DATDIR}/_context.export/
+		${RSYNC_U} \
+			$(for FILE in ${TMPL[@]}; do
+				declare FIL="$(echo "${FILE}" | ${SED} "s|^(.+)[.]([^.]+)$|\1|g")"
+				declare EXT="$(echo "${FILE}" | ${SED} "s|^(.+)[.]([^.]+)$|\2|g")"
+				ls ${FIL}-*.${EXT} | tail -n1
+			done) \
+			${DATDIR}/_context.export/_templates/
+		${LL} --recursive ${DATDIR}/_context.export
 		return 0
 	}
 	function bookmarks {
