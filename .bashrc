@@ -832,6 +832,15 @@ _EOF_
 				ls ${FIL}-*.${EXT} | tail -n1
 			done) \
 			${DATDIR}/_context.export/_templates/
+		for FILE in ${LIST[@]} ${TMPL[@]}; do
+			declare FIL="$(echo "${FILE}" | ${SED} "s|^(.+)[.]([^.]+)$|\1|g")"
+			declare EXT="$(echo "${FILE}" | ${SED} "s|^(.+)[.]([^.]+)$|\2|g")"
+			FIL="$(echo "${FIL}" | ${SED} \
+				-e "s|^(${DATDIR})/_config|\1/_context|g" \
+				-e "s|^(${DATDIR}/_context)|\1.export|g" \
+			)"
+			${RM} $(ls ${FIL}-*.${EXT} | sort -nr | tail -n+2)
+		done
 		${LL} --recursive ${DATDIR}/_context.export
 		return 0
 	}
