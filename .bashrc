@@ -841,7 +841,7 @@ _EOF_
 			)"
 			${RM} $(ls ${FIL}-*.${EXT} | sort -nr | tail -n+2)
 		done
-		${LL} --recursive ${DATDIR}/_context.export
+		${LL} --recursive ${DATDIR}/_context.export/
 		return 0
 	}
 	function bookmarks {
