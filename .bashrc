@@ -928,7 +928,8 @@ _EOF_
 		if [[ -z ${DRYRUN} ]]; then
 			${RM} ${DATDIR}/_context/.composer.{log,tmp}
 		fi
-		dodrive \
+#>>>		dodrive \
+#>>>		&&
 		status -a \
 		&& bookmarks -a \
 		&& ${MKDIR} ${DATDIR}/.history \
