@@ -721,10 +721,10 @@ if [[ ${UNAME} == "Windows" ]]; then
 			GUI="true"
 			shift
 		fi
+#>>>				${DATDIR}/_context/_resource-*.md \
 		declare AGNT=($(
 			find \
 				${DATDIR}/_context/_agent-*.md \
-				${DATDIR}/_context/_resource-*.md \
 			| ${GREP} -v "[0-9]{4}[-][0-9]{2}[-][0-9]{2}" \
 			| sort -u \
 			| while read -r FILE; do echo -en " $(basename ${FILE/%.md/.html})"; done
@@ -765,6 +765,11 @@ ifneq (\$(COMPOSER_CURDIR),)
 override COMPOSER_TARGETS	:= ${AGNT[@]}
 override COMPOSER_SUBDIRS	:= .null
 override c_site			:= 1
+${AGNT[@]}: \\
+$(for FILE in ${LIST[@]} ${TMPL[@]}; do echo -e "${FILE} \\" | ${SED} "s%^${DATDIR}/(_config|_context)/%\t%g"; done)
+
+$(for FILE in ${LIST[@]} ${TMPL[@]}; do echo -e "${FILE} \\" | ${SED} "s%^${DATDIR}/(_config|_context)/%%g"; done)
+: ;
 endif
 _EOF_
 cat >${DATDIR}/_context/.composer.yml <<_EOF_
