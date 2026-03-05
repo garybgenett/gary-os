@@ -766,9 +766,9 @@ override COMPOSER_TARGETS	:= ${AGNT[@]}
 override COMPOSER_SUBDIRS	:= .null
 override c_site			:= 1
 ${AGNT[@]}: \\
-$(for FILE in ${LIST[@]} ${TMPL[@]}; do echo -e "${FILE} \\" | ${SED} "s%^${DATDIR}/(_config|_context)/%\t%g"; done)
+$(for FILE in ${LIST[@]} ${TMPL[@]}; do echo -e "${FILE} \\" | ${SED} "s%^${DATDIR}%\t..%g"; done)
 
-$(for FILE in ${LIST[@]} ${TMPL[@]}; do echo -e "${FILE} \\" | ${SED} "s%^${DATDIR}/(_config|_context)/%%g"; done)
+$(for FILE in ${LIST[@]} ${TMPL[@]}; do echo -e "${FILE} \\" | ${SED} "s%^${DATDIR}%..%g"; done)
 : ;
 endif
 _EOF_
