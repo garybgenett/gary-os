@@ -823,18 +823,19 @@ _EOF_
 				fi
 			done
 		fi
+#>>>				ls ${FIL}-*.${EXT} | tail -n1
 		${RSYNC_U} \
 			$(for FILE in ${LIST[@]}; do
 				declare FIL="$(echo "${FILE}" | ${SED} "s|^(.+)[.]([^.]+)$|\1|g")"
 				declare EXT="$(echo "${FILE}" | ${SED} "s|^(.+)[.]([^.]+)$|\2|g")"
-				ls ${FIL}-*.${EXT} | tail -n1
+				ls ${FIL}.${EXT}
 			done) \
 			${DATDIR}/_context.export/
 		${RSYNC_U} \
 			$(for FILE in ${TMPL[@]}; do
 				declare FIL="$(echo "${FILE}" | ${SED} "s|^(.+)[.]([^.]+)$|\1|g")"
 				declare EXT="$(echo "${FILE}" | ${SED} "s|^(.+)[.]([^.]+)$|\2|g")"
-				ls ${FIL}-*.${EXT} | tail -n1
+				ls ${FIL}.${EXT}
 			done) \
 			${DATDIR}/_context.export/_templates/
 		for FILE in ${LIST[@]} ${TMPL[@]}; do
