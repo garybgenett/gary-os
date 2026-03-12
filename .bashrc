@@ -845,7 +845,7 @@ _EOF_
 				-e "s|^(${DATDIR})/_config|\1/_context|g" \
 				-e "s|^(${DATDIR}/_context)|\1.export|g" \
 			)"
-			${RM} $(ls ${FIL}-*.${EXT} | sort -nr | tail -n+2)
+			${RM} $(ls ${FIL}-*.${EXT} 2>/dev/null | sort -nr | tail -n+2)
 		done
 		${LL} --recursive ${DATDIR}/_context.export/
 		return 0
