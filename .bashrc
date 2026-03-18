@@ -646,6 +646,7 @@ if [[ ${UNAME} == "Windows" ]]; then
 				${STSBAS}${TODOS_MD_EXT}
 			then
 				${RSYNC_U} \
+					--copy-links \
 					${STSBAS}${TODOS_MD_EXT} \
 					${STSBAS}-${DODATE}${TODOS_MD_EXT}
 			fi
@@ -815,6 +816,7 @@ _EOF_
 					${FIL}.${EXT} >/dev/null
 				then
 					${RSYNC_U} \
+						--copy-links \
 						${FIL}.${EXT} \
 						${FIL}-${DODATE}.${EXT}
 					vdiff \
@@ -825,6 +827,7 @@ _EOF_
 		fi
 #>>>				ls ${FIL}-*.${EXT} | tail -n1
 		${RSYNC_U} \
+			--copy-links \
 			$(for FILE in ${LIST[@]}; do
 				declare FIL="$(echo "${FILE}" | ${SED} "s|^(.+)[.]([^.]+)$|\1|g")"
 				declare EXT="$(echo "${FILE}" | ${SED} "s|^(.+)[.]([^.]+)$|\2|g")"
@@ -832,6 +835,7 @@ _EOF_
 			done) \
 			${DATDIR}/_context.export/
 		${RSYNC_U} \
+			--copy-links \
 			$(for FILE in ${TMPL[@]}; do
 				declare FIL="$(echo "${FILE}" | ${SED} "s|^(.+)[.]([^.]+)$|\1|g")"
 				declare EXT="$(echo "${FILE}" | ${SED} "s|^(.+)[.]([^.]+)$|\2|g")"
@@ -867,6 +871,7 @@ _EOF_
 				${BKMDIR}/bookmarks.html >/dev/null
 			then
 				${RSYNC_U} \
+					--copy-links \
 					${BKMDIR}/bookmarks.html \
 					${BKMDIR}/bookmarks-${DODATE}.html
 			fi
