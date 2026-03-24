@@ -975,6 +975,9 @@ _EOF_
 					${LN} --relative /.g/_data/zactive/$(basename ${DATDIR})/.history/* /.g/_data/zactive/.history/shell/ ; \
 					chmod -R 750 /.g/_data/zactive/$(basename ${DATDIR}) ; \
 				"; \
+				if [[ -f ${DATDIR}/_export.sh ]]; then \
+					${DATDIR}/_export.sh; \
+				fi; \
 			else \
 				true \
 				; \
