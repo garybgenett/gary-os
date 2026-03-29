@@ -742,6 +742,11 @@ if [[ ${UNAME} == "Windows" ]]; then
 			| ${GREP} -v "[0-9]{4}[-][0-9]{2}[-][0-9]{2}" \
 			| sort -u
 		))
+		declare EXPT=(
+			${LIST[@]}
+		$(
+			find ${DATDIR}/_context/*.html
+		))
 		if [[ -n ${LIST[@]} ]] || [[ -n ${TMPL[@]} ]]; then
 			if ! ${RUN}; then
 				if ${GUI}; then
@@ -763,7 +768,7 @@ cat >${DATDIR}/_context/.composer.mk <<_EOF_
 override MAKEJOBS		:= 0
 #>>>override COMPOSER_KEEPING	:=
 ifneq (\$(COMPOSER_CURDIR),)
-override COMPOSER_TARGETS	:= ${AGNT[@]}
+override COMPOSER_TARGETS	:= $(if [[ -f ${DATDIR}/_context/README.md ]]; then echo "README.html "; fi)${AGNT[@]}
 override COMPOSER_SUBDIRS	:= .null
 override c_site			:= 1
 ${AGNT[@]}: \\
@@ -828,7 +833,7 @@ _EOF_
 #>>>				ls ${FIL}-*.${EXT} | tail -n1
 		${RSYNC_U} \
 			--copy-links \
-			$(for FILE in ${LIST[@]}; do
+			$(for FILE in ${EXPT[@]}; do
 				declare FIL="$(echo "${FILE}" | ${SED} "s|^(.+)[.]([^.]+)$|\1|g")"
 				declare EXT="$(echo "${FILE}" | ${SED} "s|^(.+)[.]([^.]+)$|\2|g")"
 				ls ${FIL}.${EXT}
