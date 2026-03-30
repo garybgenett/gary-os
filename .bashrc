@@ -949,8 +949,7 @@ _EOF_
 				${DRYRUN} \
 				${HOME}/.history/shell/* \
 				${DATDIR}/.history/ \
-			| rsynclook \
-			; \
+			| rsynclook; \
 		} \
 		&& { \
 			if [[ -d /mnt/wsl/system ]]; then \
@@ -958,21 +957,26 @@ _EOF_
 					${DRYRUN} \
 					/mnt/wsl/system/.history/* \
 					${DATDIR}/.history/ \
-				| rsynclook \
-				; \
+				| rsynclook; \
 			else \
-				true \
-				; \
-			fi \
-			; \
+				true; \
+			fi; \
+		} \
+		&& { \
+			if [[ -z ${DRYRUN} ]]; then \
+				if [[ -f ${DATDIR}/_export.sh ]]; then \
+					${DATDIR}/_export.sh; \
+				fi; \
+			else \
+				true; \
+			fi; \
 		} \
 		&& { \
 			${RSYNC_U} \
 				${DRYRUN} \
 				${DATDIR} \
 				root@server.garybgenett.net:/.g/_data/zactive/ \
-			| rsynclook \
-			; \
+			| rsynclook; \
 		} \
 		&& { \
 			if [[ -z ${DRYRUN} ]]; then \
@@ -980,14 +984,9 @@ _EOF_
 					${LN} --relative /.g/_data/zactive/$(basename ${DATDIR})/.history/* /.g/_data/zactive/.history/shell/ ; \
 					chmod -R 750 /.g/_data/zactive/$(basename ${DATDIR}) ; \
 				"; \
-				if [[ -f ${DATDIR}/_export.sh ]]; then \
-					${DATDIR}/_export.sh; \
-				fi; \
 			else \
-				true \
-				; \
-			fi \
-			; \
+				true; \
+			fi; \
 		} \
 		&& echo "success!" \
 		&& return 0
