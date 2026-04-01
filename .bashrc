@@ -623,7 +623,7 @@ if [[ ${UNAME} == "Windows" ]]; then
 	}
 	function wsl {
 		${RSYNC_U} \
-			root@server.garybgenett.net:{/.g/_data/zactive/{.setup/_misc/playlist*,.static/{.X*,.bash*,.htop*,.screen*,.vim*,scripts/updebian}},${COMPOSER_SRC}} \
+			root@server.garybgenett.net:{/.g/_data/zactive/{.setup/{_misc/playlist*,_tools/putty{,.reg}},.static/{.X*,.bash*,.htop*,.screen*,.vim*,scripts/updebian}},${COMPOSER_SRC}} \
 			${HOME}/Desktop/_wsl/
 		if [[ -d ${HOME}/Desktop/composer ]]; then
 			${RSYNC_U} ${HOME}/Desktop/_wsl/Makefile ${HOME}/Desktop/composer/
