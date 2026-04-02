@@ -725,6 +725,7 @@ if [[ ${UNAME} == "Windows" ]]; then
 #>>>				${DATDIR}/_context/_resource-*.md \
 		declare AGNT=($(
 			find \
+				${DATDIR}/_context/README.md \
 				${DATDIR}/_context/_agent-*.md \
 			| ${GREP} -v "[0-9]{4}[-][0-9]{2}[-][0-9]{2}" \
 			| sort -u \
@@ -768,7 +769,7 @@ cat >${DATDIR}/_context/.composer.mk <<_EOF_
 override MAKEJOBS		:= 0
 #>>>override COMPOSER_KEEPING	:=
 ifneq (\$(COMPOSER_CURDIR),)
-override COMPOSER_TARGETS	:= $(if [[ -f ${DATDIR}/_context/README.md ]]; then echo "README.html "; fi)${AGNT[@]}
+override COMPOSER_TARGETS	:= ${AGNT[@]}
 override COMPOSER_SUBDIRS	:= .null
 override c_site			:= 1
 ${AGNT[@]}: \\
