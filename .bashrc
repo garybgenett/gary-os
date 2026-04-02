@@ -772,6 +772,7 @@ ifneq (\$(COMPOSER_CURDIR),)
 override COMPOSER_TARGETS	:= ${AGNT[@]}
 override COMPOSER_SUBDIRS	:= .null
 override c_site			:= 1
+$(for FILE in ${AGNT[@]}; do echo -e "override $(basename ${FILE}) := $(basename ${FILE/%.html/.md})"; done)
 ${AGNT[@]}: \\
 $(for FILE in ${LIST[@]} ${TMPL[@]}; do echo -e "${FILE} \\" | ${SED} "s%^${DATDIR}%\t..%g"; done)
 
