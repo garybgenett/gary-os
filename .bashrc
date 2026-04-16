@@ -335,7 +335,7 @@ export MV="mv -v"			; alias mv="${MV}"
 export PS="ps u -ww --sort=pid -e"	; alias psl="${PS/ -ww}"
 export RM="rm -frv"			; alias rm="${RM}"
 export RMDIR="rmdir -v"			; alias rmdir="${RMDIR}"
-export SED="sed -r"			; alias sed="${SED}"
+export SED="sed -r --follow-symlinks"	; alias sed="${SED}"
 
 if [[ -n ${CYGWIN} ]] || [[ -n ${CYGWIN_ROOT} ]]; then
 	unalias sed
