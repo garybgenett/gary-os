@@ -4563,7 +4563,8 @@ function rsynclook {
 		-e '^[[]receiver[]]' \
 		-e '^[[]sender[]]' \
 		-e "^[.][dfL][.[:space:]]{3}[p.[:space:]][o.[:space:]][g.[:space:]][.[:space:]]{3}" \
-		-e '^[.][dfDLS][ ]'
+		-e '^[.][dfDLS][ ]' \
+		-e '^[h][f][ ]'
 }
 
 ########################################
