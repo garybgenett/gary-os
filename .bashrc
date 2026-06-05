@@ -2802,7 +2802,8 @@ function mixer {
 	declare MIXER_DAT="/proc/asound/cards"
 	declare MIXER_DEV="/dev/mixer"
 	declare MIXER_CMD="(pactl|pavucontrol)"
-	declare MIXER_LVL=
+	declare MIXER_LVL_DEF="10"
+	declare MIXER_LVL="${MIXER_LVL_DEF}"
 	if [[ ${1} == +([0-9]) ]]; then
 		MIXER_LVL="${1}"
 		shift
@@ -2939,7 +2940,7 @@ function mixer {
 	fi
 	if [[ -z ${MIXER_SNK} ]] || [[ ${1} == -a ]]; then
 		[[ ${1} == -a ]] && shift
-		if [[ -n ${MIXER_LVL} ]]; then
+		if { [[ -n ${MIXER_LVL} ]] && [[ ${MIXER_LVL} != ${MIXER_LVL_DEF} ]]; }; then
 			echo -en "\n"
 			aumix -d ${MIXER_DEV} -L -v ${MIXER_LVL} -w ${MIXER_LVL}
 		elif [[ -n ${@} ]]; then
@@ -2948,7 +2949,7 @@ function mixer {
 		else
 			aumix -d ${MIXER_DEV} -C ansi
 		fi
-	elif [[ -z ${MIXER_LVL} ]] && [[ -z ${@} ]]; then
+	elif { [[ -z ${MIXER_LVL} ]] || [[ ${MIXER_LVL} == ${MIXER_LVL_DEF} ]]; } && [[ -z ${@} ]]; then
 		pulsemixer --color 2 || pamix
 	fi
 	echo -en "\n"
