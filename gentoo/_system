@@ -1205,7 +1205,9 @@ fi
 if [[ ${1} == -l ]]; then
 #>>>	shift
 	if ${DO_CHROOT}; then
+		mount_dev_dirs		|| EXIT 1
 		safe_env ${MYSELF} ${QUIET_OPT} ${TOOR} "${@}" || EXIT 1
+		mount_dev_dirs -u	|| EXIT 1
 		EXIT 0
 	fi
 	shift
