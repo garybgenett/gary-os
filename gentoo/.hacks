@@ -30,16 +30,19 @@ ipcrm --all=shm
 ########################################
 echo -en "\n"
 
+declare ZRAM=
 declare ZSIZ="8G"
 
 modprobe zram num_devices="1"
-ZRAM="$(swapon --noheadings --output-all | grep "^/dev/zram" | cut -d' ' -f1 | head -n1)"
+[[ -z ${ZRAM} ]] && ZRAM="$(swapon	--noheadings --output-all | grep "^/dev/zram" | cut -d' ' -f1 | head -n1)"
+[[ -z ${ZRAM} ]] && ZRAM="$(zramctl	--noheadings --output-all | grep "^/dev/zram" | cut -d' ' -f1 | head -n1)"
 if [[ ${1} == -z ]]; then shift
 	if [[ -n ${1} ]]; then
 		ZSIZ="${1}" && shift
 	fi
 	if [[ -z ${ZRAM} ]]; then
-		ZRAM="$(zramctl --find --algorithm lz4 --streams 21 --size ${ZSIZ})"
+#>>>		ZRAM="$(zramctl --find --algorithm lz4 --streams 21 --size ${ZSIZ})"
+		ZRAM="$(zramctl --find --algorithm lz4 --size ${ZSIZ})"
 	fi
 	echo -en "${ZSIZ}" >/sys/block/$(basename ${ZRAM})/mem_limit
 	mkswap ${ZRAM}
