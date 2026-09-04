@@ -1729,12 +1729,9 @@ Everything needed to perform these steps is in the [Repository] or the
         * `while :; do make DOMODS=false DOFAST=true init; inotifywait --event modify gentoo/make.* gentoo/package.* gentoo/sets/*; done`
         * `(cd .setup; vi gentoo/make.* gentoo/package.* gentoo/sets/*; vdiff -g gentoo/make.* gentoo/package.* gentoo/sets/*)`
     * [x] *Iterate()*
-  * `rsync ./build/var/cache/distfiles/kernel-x86_64-fedora.* ./linux/`
-    * `mv ./linux/kernel-x86_64-fedora.* ./linux/default-gentoo64.config-[...]`
+  * `ll ./linux/`
+    * `rsync ./build/usr/src/linux-*-gentoo-dist-hardened/.config ./linux/default-gentoo64.config-[...]`
         * `rm ./linux/.default; ln default-gentoo64.config-[...] ./linux/.default`
-        * `rsync $(realpath ./linux/.default) ./build/usr/src/linux/.config`
-        * `chroot ./build bash -c "(cd /usr/src/linux && make olddefconfig)"`
-        * `rsync ./build/usr/src/linux/.config $(realpath ./linux/.default)`
     * `rsync -L ./linux/.default ./linux/config-gentoo64-[...]`
         * `rsync -L ./linux/.options ./linux/config-gentoo64-[...]-options`
         * `rm ./linux/.config; ln config-gentoo64-[...] ./linux/.config`
@@ -1754,6 +1751,7 @@ Everything needed to perform these steps is in the [Repository] or the
   * `make DOMODS=false DOREDO=true redo`
     * [x] *Iterate()*
     * `make DOMODS=false doit`
+    * `vdiff $(realpath ./linux/.default) ./build/usr/src/linux-*-gentoo-dist-hardened/.config`
     * `(cd _builds; rsync ./_gentoo/ ./_gary-os.working)`
   * `make DOMODS=true edit`
     * `(cd _builds; rm ./_gentoo.boot; ln _gentoo ./_gentoo.boot)`
