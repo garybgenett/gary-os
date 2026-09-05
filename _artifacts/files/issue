@@ -10,7 +10,7 @@
 \e[1;34m Gentoo Commit:		\e[1;36m ${FUNTOO}
 \e[1;34m Linux Kernel:		\e[1;36m ${KVER}
 
-\e[1;37m For source code, documentation and issues...
+\e[1;37m For source code, documentation, and issues...
 
 \e[1;34m ${_GNAME}:		\e[1;36m github.com/garybgenett/gary-os
 \e[1;34m Gentoo Linux:		\e[1;36m gentoo.org
