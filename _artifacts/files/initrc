@@ -176,7 +176,7 @@ ${ROOTFS_NAME}() {
 			mount -v -o move ${mounts}.shm ${mounts}${_GOVLY} || return 1
 		fi
 		if ${do_pak} && [ -d ${mounts}/.${_TITLE} ]; then
-			make -C ${mounts}/.${_TITLE} O=${mounts} unpack || return 1
+			chroot ${mounts} make -C /.${_TITLE} O=/ unpack || return 1
 		fi
 	fi
 	return 0
@@ -217,16 +217,19 @@ select() {
 		then
 			#note: mounting and unpacking the default image in place
 			#note: it is already in memory, and does not need to be copied
-			${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} ${ROOTFS_ROOT} false true || ${ROOTFS_FUNC}
+			#note: doing this in two steps so the "unpack" run has a full system
+			${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} ${ROOTFS_ROOT} false false || ${ROOTFS_FUNC}
+			#note: openrc needs "/proc", but we want it to mount and manage "/dev" independently
 			mounts /.${ROOTFS_ROOT_OPT} true || ${ROOTFS_FUNC}
+			umount -v /.${ROOTFS_ROOT_OPT}/dev || ${ROOTFS_FUNC}
 			if [ ! -d /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT} ]; then
 				mkdir -v -p /.${ROOTFS_ROOT_OPT}/run/openrc || ${ROOTFS_FUNC}
 				touch /.${ROOTFS_ROOT_OPT}/run/openrc/softlevel || ${ROOTFS_FUNC}
-				chroot /.${ROOTFS_ROOT_OPT} rc-update add udev default || ${ROOTFS_FUNC}
-				chroot /.${ROOTFS_ROOT_OPT} rc-update add modules default || ${ROOTFS_FUNC}
 				chroot /.${ROOTFS_ROOT_OPT} openrc || ${ROOTFS_FUNC}
 				mkdir -v -p /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT} || ${ROOTFS_FUNC}
 			fi
+			#note: running "unpack" now that the full system is ready
+			${ROOTFS_NAME} /.${ROOTFS_ROOT_OPT} ${ROOTFS_ROOT} false true || ${ROOTFS_FUNC}
 			if	[ -n "`echo "${${ROOTFS_ROOT_OPT}}" | grep -E "^/dev/.+$"`" ] &&
 				[ -z "`grep -E "^${${ROOTFS_ROOT_OPT}} /.${ROOTFS_ROOT_OPT}/.${ROOTFS_ROOT_OPT}" /proc/mounts`" ]
 			then
