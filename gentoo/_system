@@ -351,9 +351,9 @@ function portage_file {
 	return 0
 }
 
-#OPTIONS[LINPKG KERNEL KRNLNK GENKRN]
-#OPTIONS[SELECT WINMGR WMHELP]
-#OPTIONS[RCUPDT FSUPDT FSPACK FSKEEP FSARCH FSEXCL]
+#SOURCED[LINPKG KERNEL KRNLNK GENKRN]
+#SOURCED[SELECT WINMGR WMHELP]
+#SOURCED[RCUPDT FSUPDT FSPACK FSKEEP FSARCH FSEXCL]
 for FILE in	\
 	LINPKG	\
 	KERNEL	\
@@ -408,7 +408,10 @@ if ! ${IS_CHROOT} && [[ -n ${TOOR} ]]; then
 fi
 
 export SAFE_ENV=
-for FILE in $(${SED} -n "s|^.*[#]OPTIONS[[](.+)[]]$|\1|gp" ${_SOUL}); do
+for FILE in \
+	$(${SED} -n "s|^.*[#]OPTIONS[[](.+)[]]$|\1|gp" ${_SOUL}) \
+	$(${SED} -n "s|^.*[#]SOURCED[[](.+)[]]$|\1|gp" ${_SOUL}) \
+; do
 	SAFE_ENV+=" ${FILE}=\"${!FILE}\""
 done
 SAFE_ENV="${SAFE_ENV/#\ }"
@@ -655,7 +658,7 @@ function print_info {
 		starter_var "QUIET"; #>>> starter_var "QUIET_OPT"
 		echo -en "\n"
 		declare BEG="true"
-		for FILE in SETTINGS OPTIONS VARIABLES; do
+		for FILE in SETTINGS OPTIONS SOURCED VARIABLES; do
 			if ${BEG}; then BEG="false"; else echo -en "\n"; fi
 			echo -en "${NOTES}"
 			echo -en ">>> ${FILE} <<<"
@@ -663,6 +666,11 @@ function print_info {
 			if [[ ${FILE} == OPTIONS ]]; then
 				echo -en "${STATE}"
 				echo -en ">>> THESE CAN BE CHANGED <<<"
+				echo -en "${RESET}\n"
+			fi
+			if [[ ${FILE} == SOURCED ]]; then
+				echo -en "${STATE}"
+				echo -en ">>> THESE CAN BE CHANGED / OR SOURCED FROM (sets/\$*PKG) <<<"
 				echo -en "${RESET}\n"
 			fi
 			echo -en "\n"
