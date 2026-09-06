@@ -105,26 +105,6 @@ for FILE in \
 	fi
 done
 
-########################################
-
-#{CMD} grep -v -e "^[#]" -e "^$" gentoo/package.license | sed -r "s|^[^[:space:]]+[[:space:]]+([^[:space:]]+).*$|\1|g" | sort -u
-
-#>>>
-#	DOOM3
-#	OFL
-#	fairuse
-#	free-noncomm
-#	freedist
-#	linux-fw-redistributable
-#	no-source-code
-#	truecrypt-3.0
-#>>>
-declare RELEASE_LICENSES="
-	all-rights-reserved
-	lha
-	mekanix
-"
-
 ################################################################################
 
 declare LASTPIPE="$(shopt lastpipe | ${SED} "s%^.+(on|off)$%\1%g")"
@@ -2197,16 +2177,14 @@ function _publish_prep {
 	${RM}						${ROOTFS_FILE}.exclude			|| return 1
 	${RM}						${_RAMFS}.grub				|| return 1
 	${RM}						${TARGET}${DSTDIR}/{.[^.],}*checksum*	|| return 1
-	if ${_GOS}; then
-		${SED} "s|^[#][{][^}]+[}][[:space:]]+||g" ${SETDIR}/${FUNDIR}/package.license	\
+	${SED} "s|^[#][{][^}]+[}][[:space:]]+||g"	${SETDIR}/${FUNDIR}/package.license	\
 		| ${SED} -n "s|^([^#[:space:]]+)[[:space:]]+([^[:space:]]+).*$|\1 \2|gp"	\
-		| eval ${SED}									\
-			$(for FILE in ${RELEASE_LICENSES}; do
-				echo -en " -e \"/[[:space:]]${FILE}$/d\""
+		| eval ${SED} -n								\
+			$(for FILE in ${NODIST}; do
+				echo -en " -e \"/[[:space:]]${FILE}$/p\""
 			done)									\
 		| ${SED} "s|[[:space:]].+$||g"							\
 		| while read -r FILE; do ${RM}		${TARGET}${PAKDIR}/${FILE}-[0-9]*	|| return 1; done
-	fi
 	${RM}						${TARGET}/tmp/.ccache			|| return 1
 	${RM}						${TARGET}/tmp/*				|| return 1
 	${RM}						${TARGET}/var/tmp/tmp*			|| return 1

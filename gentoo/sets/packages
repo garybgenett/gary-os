@@ -14,6 +14,8 @@
 #{GENKRN} --zfs
 #{GENKRN} kernel
 
+#{NODIST}
+
 #{SELECT} cdparanoia:cdparanoia-paranoia
 #{SELECT} editor:vi
 #{SELECT} locale:en_US.utf8
@@ -26,7 +28,6 @@
 #{WMHELP}
 
 #{CMD} find /usr/share | grep -E "[.]desktop$" | sort
-
 #>>> #{RCUPDT} xdg-settings set default-web-browser chromium-browser-chromium.desktop
 #>>> #{RCUPDT} xdg-settings set default-web-browser firefox-esr.desktop
 #{FSUPDT}

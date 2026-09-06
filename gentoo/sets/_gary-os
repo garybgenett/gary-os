@@ -69,6 +69,11 @@
 #{GENKRN} --zfs
 #{GENKRN} kernel
 
+#{CMD} grep -v -e "^[#]" -e "^$" gentoo/package.license | sed -r "s|^[^[:space:]]+[[:space:]]+([^[:space:]]+).*$|\1|g" | sort -u
+#{NODIST} all-rights-reserved
+#{NODIST} lha
+#{NODIST} mekanix
+
 #{SELECT} cdparanoia:cdparanoia-paranoia
 #{SELECT} editor:vi
 #{SELECT} locale:en_US.utf8
