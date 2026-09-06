@@ -360,9 +360,6 @@ for FILE in	\
 	KRNLNK	\
 	GENKRN	\
 	\
-	FLAVOR	\
-	MIXINS	\
-	\
 	SELECT	\
 	WINMGR	\
 	WMHELP	\
