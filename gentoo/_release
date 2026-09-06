@@ -54,8 +54,7 @@ declare _LOGIN="garybgenett"
 
 declare _GITHUB="ssh://git@github.com/${_LOGIN}/${_TITLE}.git"
 declare _SFCODE="ssh://${_LOGIN}@git.code.sf.net/p/${_TITLE}/code"
-declare _SFFILE="${_LOGIN}@web.sourceforge.net:/home/frs/project/${_TITLE}"
-declare _SFRSSH="${_LOGIN},${_TITLE}@shell.sourceforge.net create"
+declare _SFFILE="${_LOGIN}@frs.sourceforge.net:/home/frs/project/${_TITLE}"
 declare _SFDOWN="https://sourceforge.net/projects/gary-os/files/${_VERSN}"
 
 declare _DOCDIR="/.g/_data/zactive/coding/${_TITLE}"
@@ -2282,12 +2281,6 @@ function _publish_gitdir {		#{ismain}
 		setup:/.g/_data/zactive/.setup:${SETUP_FILES/#^}			\
 		static:/.g/_data/zactive/.static:${STATIC_FILES/#^}			\
 											|| return 1
-	FILE="git --git-dir=/home/git/p/${_TITLE}/code.git config"
-	NEXT=
-	NEXT+="${FILE} --unset receive.denynonfastforwards;"
-	NEXT+="${FILE} --list;"
-	NEXT+="exit 0;"
-	echo -en "${NEXT}\n" | ssh ${_SFRSSH}						|| return 1
 	${GIT} --git-dir=${_RELDIR}/.${_TITLE}.git --work-tree=${_RELDIR}/.${_TITLE}	\
 		push --force --mirror ${_SFCODE}					|| return 1
 	return 0
