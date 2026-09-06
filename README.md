@@ -2237,15 +2237,15 @@ Everything in [Booting], [Running] and [Building] should be validated below.
   | Source Portage | [gary-os-v9.0-generic_64.gentoo-repo.tar.xz](https://sourceforge.net/projects/gary-os/files/v9.0/gary-os-v9.0-generic_64.gentoo-repo.tar.xz)
 
   * Overall
-      * Increased default initramfs size to `3072m` for [Kernel] packages growth
-      * Integrated `tmpfs` into build process, to optimize speed and disk usage
-      * General improvements to build/update process
-      * Renamed "artifacts" directory
+    * Increased default initramfs size to `3072m` for [Kernel] packages growth
+    * Integrated `tmpfs` into build process, to optimize speed and disk usage
+    * General improvements to build/update process
+    * Renamed "artifacts" directory
   * [Portage]
-      * Improved support for post-installation rolling builds/updates
-      * Added an option for additional package overlays
+    * Improved support for post-installation rolling builds/updates
+    * Added an option for additional package overlays
   * [GRUB]
-      * Increased [Boot] `groot_size` to `4096m` for [Rootfs] packages growth
+    * Increased [Boot] `groot_size` to `4096m` for [Rootfs] packages growth
 
 ### v8.0 2024-05-16 ############################################################
 [v8.0 2024-05-16]: #v80-2024-05-16
