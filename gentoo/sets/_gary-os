@@ -91,10 +91,11 @@
 #{RCUPDT} rc-update del dbus default		|| true
 #{RCUPDT} rc-update show
 
+#{FSUPDT} modprobe --verbose e1000
+
 #note: this is a hidden, undocumented option for the author's personal setup
 #note: see "$fsupdt" in "gentoo/sets/_gary-os"
 #note: see "$fsupdt" in "gentoo/_release" (release_unpack)
-#{FSUPDT}				#{MOD}
 #>>> #{MOD} #{FSUPDT} usermod --home ${SETDIR} --shell /bin/bash root	|| true
 #{MOD} #{FSUPDT} rm -frv /root ; ln -fsv ${SETDIR} /root
 #{MOD} #{FSUPDT} ln -fsv /usr/share/zoneinfo/US/Pacific /etc/localtime

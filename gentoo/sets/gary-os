@@ -35,7 +35,7 @@
 #{RCUPDT} rc-update del dbus default		|| true
 #{RCUPDT} rc-update show
 
-#{FSUPDT}
+#{FSUPDT} modprobe --verbose e1000
 
 #note: match these up with "release_review" output
 #note: for "release_install" to work correctly, "#{fsexcl}" must be empty

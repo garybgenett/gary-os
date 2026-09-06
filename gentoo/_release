@@ -237,10 +237,10 @@ declare PACKDIRS_MARK="-"
 
 declare PACKDIRS_DEFL="${PACKDIRS_INST}"
 
+#>>> rc-service udev restart || true
+#>>> rc-service modules restart || true
+#>>> rc-service keymaps restart || true
 FSUPDT="
-rc-service udev restart || true
-rc-service modules restart || true
-rc-service keymaps restart || true
 ${FSUPDT}
 "
 FSUPDT="$(echo "${FSUPDT}" | tr '\n' ';' | ${SED} -e "s|^;+||g" -e "s|;+$||g" -e "s|;| ; |g")"
