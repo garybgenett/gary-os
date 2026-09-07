@@ -966,7 +966,13 @@ function _prepare_repdir {		#{doredo}
 		return 0
 	fi
 	declare ARC_FILE="${TARGET}${ARCDIR}/${REP_FILE}"
-	if ${DOREDO}; then
+	if {
+		{
+			{ [[ ! -f ${ARC_FILE}.tar.xz ]] || [[ ! -f ${ARC_FILE}.git.tar.xz ]]; } &&
+			{ [[ ! -f ${TARGET}${REPDIR}.tar.xz ]] || [[ ! -f ${TARGET}${REPDIR}.git.tar.xz ]]; };
+		} ||
+		${DOREDO};
+	}; then
 		${RM}						${ARC_FILE}{,.git}.tar.xz		|| return 1
 		${RM}						${TARGET}${REPDIR}{,.git}.tar.xz	|| return 1
 	fi
