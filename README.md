@@ -1299,7 +1299,7 @@ someone other than themself.
 [GaryOS] has maintained a [steady stream of downloads] since its debut in
 February 2014.  It has also shown up in some notable places.
 
-  * [Gentoo ecosystem] ([2018-08](https://github.com/garybgenett/gary-os/raw/master/_artifacts/archive/gentoo-20.08.pdf))
+  * [Gentoo ecosystem] ([2018-08](https://github.com/garybgenett/gary-os/raw/main/_artifacts/archive/gentoo-20.08.pdf))
   * [List of non-systemd distributions] (proudly)
   * [Softpedia review of v3.0] (not just a paste of the [README.md] text)
 
@@ -1475,52 +1475,52 @@ repository.  They are merged together into the public GaryOS [Git] repository by
 of new files will result in a public repository that can not 'fast-forward' and
 will require re-cloning.
 
-  [README.md]: https://github.com/garybgenett/gary-os/blob/master/README.md
-  [LICENSE.md]: https://github.com/garybgenett/gary-os/blob/master/LICENSE.md
-  [Makefile]: https://github.com/garybgenett/gary-os/blob/master/Makefile
-  [packages.txt]: https://github.com/garybgenett/gary-os/blob/master/packages.txt
-  [packages.rootfs.txt]: https://github.com/garybgenett/gary-os/blob/master/packages.rootfs.txt
-  [_commit]: https://github.com/garybgenett/gary-os/blob/master/_commit
+  [README.md]: https://github.com/garybgenett/gary-os/blob/main/README.md
+  [LICENSE.md]: https://github.com/garybgenett/gary-os/blob/main/LICENSE.md
+  [Makefile]: https://github.com/garybgenett/gary-os/blob/main/Makefile
+  [packages.txt]: https://github.com/garybgenett/gary-os/blob/main/packages.txt
+  [packages.rootfs.txt]: https://github.com/garybgenett/gary-os/blob/main/packages.rootfs.txt
+  [_commit]: https://github.com/garybgenett/gary-os/blob/main/_commit
 
-  [grub/]: https://github.com/garybgenett/gary-os/blob/master/grub
-  [grub/grub.menu.gary-os.cfg]: https://github.com/garybgenett/gary-os/blob/master/grub/grub.menu.gary-os.cfg
-  [linux/]: https://github.com/garybgenett/gary-os/blob/master/linux
-  [gentoo/]: https://github.com/garybgenett/gary-os/blob/master/gentoo
-  [gentoo/overlay/]: https://github.com/garybgenett/gary-os/blob/master/gentoo/overlay
-  [scripts/]: https://github.com/garybgenett/gary-os/blob/master/scripts
-  [_artifacts/files/]: https://github.com/garybgenett/gary-os/blob/master/_artifacts/files
-  [_artifacts/patches/]: https://github.com/garybgenett/gary-os/blob/master/_artifacts/patches
-  [_artifacts/images/]: https://github.com/garybgenett/gary-os/blob/master/_artifacts/images
-  [_artifacts/archive/]: https://github.com/garybgenett/gary-os/blob/master/_artifacts/archive
+  [grub/]: https://github.com/garybgenett/gary-os/blob/main/grub
+  [grub/grub.menu.gary-os.cfg]: https://github.com/garybgenett/gary-os/blob/main/grub/grub.menu.gary-os.cfg
+  [linux/]: https://github.com/garybgenett/gary-os/blob/main/linux
+  [gentoo/]: https://github.com/garybgenett/gary-os/blob/main/gentoo
+  [gentoo/overlay/]: https://github.com/garybgenett/gary-os/blob/main/gentoo/overlay
+  [scripts/]: https://github.com/garybgenett/gary-os/blob/main/scripts
+  [_artifacts/files/]: https://github.com/garybgenett/gary-os/blob/main/_artifacts/files
+  [_artifacts/patches/]: https://github.com/garybgenett/gary-os/blob/main/_artifacts/patches
+  [_artifacts/images/]: https://github.com/garybgenett/gary-os/blob/main/_artifacts/images
+  [_artifacts/archive/]: https://github.com/garybgenett/gary-os/blob/main/_artifacts/archive
 
-  [.bashrc]: https://github.com/garybgenett/gary-os/blob/master/.bashrc
-  [scripts/grub.sh]: https://github.com/garybgenett/gary-os/blob/master/scripts/grub.sh
-  [linux/_config]: https://github.com/garybgenett/gary-os/blob/master/linux/_config
-  [gentoo/_system]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_system
-  [gentoo/_release]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_release
-  [gentoo/_funtoo]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_funtoo
-  [gentoo.config]: https://github.com/garybgenett/gary-os/blob/master/gentoo.config
-  [gentoo/.emergent]: https://github.com/garybgenett/gary-os/blob/master/gentoo/.emergent
-  [gentoo/savedconfig/x11-wm/dwm]: https://github.com/garybgenett/gary-os/blob/master/gentoo/savedconfig/x11-wm
-  [gentoo/sets/gary-os]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/gary-os
-  [gentoo/sets/_gary-os]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/_gary-os
-  [gentoo/sets/packages]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/packages
+  [.bashrc]: https://github.com/garybgenett/gary-os/blob/main/.bashrc
+  [scripts/grub.sh]: https://github.com/garybgenett/gary-os/blob/main/scripts/grub.sh
+  [linux/_config]: https://github.com/garybgenett/gary-os/blob/main/linux/_config
+  [gentoo/_system]: https://github.com/garybgenett/gary-os/blob/main/gentoo/_system
+  [gentoo/_release]: https://github.com/garybgenett/gary-os/blob/main/gentoo/_release
+  [gentoo/_funtoo]: https://github.com/garybgenett/gary-os/blob/main/gentoo/_funtoo
+  [gentoo.config]: https://github.com/garybgenett/gary-os/blob/main/gentoo.config
+  [gentoo/.emergent]: https://github.com/garybgenett/gary-os/blob/main/gentoo/.emergent
+  [gentoo/savedconfig/x11-wm/dwm]: https://github.com/garybgenett/gary-os/blob/main/gentoo/savedconfig/x11-wm
+  [gentoo/sets/gary-os]: https://github.com/garybgenett/gary-os/blob/main/gentoo/sets/gary-os
+  [gentoo/sets/_gary-os]: https://github.com/garybgenett/gary-os/blob/main/gentoo/sets/_gary-os
+  [gentoo/sets/packages]: https://github.com/garybgenett/gary-os/blob/main/gentoo/sets/packages
 
-  [.htoprc]: https://github.com/garybgenett/gary-os/blob/master/.htoprc.bak
-  [.vimrc]: https://github.com/garybgenett/gary-os/blob/master/.vimrc
+  [.htoprc]: https://github.com/garybgenett/gary-os/blob/main/.htoprc.bak
+  [.vimrc]: https://github.com/garybgenett/gary-os/blob/main/.vimrc
   [gkrellaclock]: http://gkrellm.srcbox.net
-  [xclock_size_hack.patch]: https://github.com/garybgenett/gary-os/blob/master/gentoo/overlay/x11-plugins/gkrellaclock/files-patches/xclock_size_hack.patch
+  [xclock_size_hack.patch]: https://github.com/garybgenett/gary-os/blob/main/gentoo/overlay/x11-plugins/gkrellaclock/files-patches/xclock_size_hack.patch
 
   <!-- Global Links -->
 
-  [gentoo/make.conf]: https://github.com/garybgenett/gary-os/blob/master/gentoo/make.conf
-  [gentoo/package.use]: https://github.com/garybgenett/gary-os/blob/master/gentoo/package.use
-  [gentoo/sets/]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets
-  [_artifacts/files/initrc]: https://github.com/garybgenett/gary-os/blob/master/_artifacts/files/initrc
-  [_artifacts/files/issue]: https://github.com/garybgenett/gary-os/blob/master/_artifacts/files/issue
-  [_artifacts/files/locale.gen]: https://github.com/garybgenett/gary-os/blob/master/_artifacts/files/locale.gen
-  [_artifacts/files/wpa_supplicant.conf]: https://github.com/garybgenett/gary-os/blob/master/_artifacts/files/wpa_supplicant.conf
-  [ego_commit_hack.patch]: https://github.com/garybgenett/gary-os/blob/master/gentoo/overlay/app-admin/ego/files-patches/add-commit-option-to-ego-sync.2.7.4-r1.patch
+  [gentoo/make.conf]: https://github.com/garybgenett/gary-os/blob/main/gentoo/make.conf
+  [gentoo/package.use]: https://github.com/garybgenett/gary-os/blob/main/gentoo/package.use
+  [gentoo/sets/]: https://github.com/garybgenett/gary-os/blob/main/gentoo/sets
+  [_artifacts/files/initrc]: https://github.com/garybgenett/gary-os/blob/main/_artifacts/files/initrc
+  [_artifacts/files/issue]: https://github.com/garybgenett/gary-os/blob/main/_artifacts/files/issue
+  [_artifacts/files/locale.gen]: https://github.com/garybgenett/gary-os/blob/main/_artifacts/files/locale.gen
+  [_artifacts/files/wpa_supplicant.conf]: https://github.com/garybgenett/gary-os/blob/main/_artifacts/files/wpa_supplicant.conf
+  [ego_commit_hack.patch]: https://github.com/garybgenett/gary-os/blob/main/gentoo/overlay/app-admin/ego/files-patches/add-commit-option-to-ego-sync.2.7.4-r1.patch
 
 ### Tools ######################################################################
 [Tools]: #tools
@@ -2209,7 +2209,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 ## Versions ####################################################################
 [Versions]: #versions
 
-[License]: https://github.com/garybgenett/gary-os/blob/master/LICENSE.md
+[License]: https://github.com/garybgenett/gary-os/blob/main/LICENSE.md
 [Downloads]: https://sourceforge.net/projects/gary-os/files
 
 [Kernel]: https://sourceforge.net/projects/gary-os/files/gary-os-v9.0-generic_64.kernel
@@ -2325,7 +2325,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * Upgraded to new version of [Rufus]
 
   [GPKG binary package]: https://wiki.gentoo.org/wiki/Binary_package_guide
-  [grub rationale file]: https://github.com/garybgenett/gary-os/blob/master/gentoo/overlay/sys-boot/grub/.rationale
+  [grub rationale file]: https://github.com/garybgenett/gary-os/blob/main/gentoo/overlay/sys-boot/grub/.rationale
 
 ### v6.0 2021-09-12 ############################################################
 [v6.0 2021-09-12]: #v60-2021-09-12
@@ -2414,7 +2414,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * Minor improvements and fixes
 
   [Ego]: https://funtoo.org/Package:Ego
-  [gentoo/_funtoo.kits]: https://github.com/garybgenett/gary-os/blob/master/gentoo/_funtoo.kits
+  [gentoo/_funtoo.kits]: https://github.com/garybgenett/gary-os/blob/main/gentoo/_funtoo.kits
 
 ### v4.0 2021-07-26 ############################################################
 [v4.0 2021-07-26]: #v40-2021-07-26
