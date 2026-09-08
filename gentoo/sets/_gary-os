@@ -18,8 +18,9 @@
 #! declare G_PACK="${_GINST}/${_TITLE}/_packages"
 #! declare G_RNSV="/.runit/runsvdir/system"
 #! #############################################################################
-#! make -C ${SETDIR} DOMODS="true" unpack
-#! mount -o remount,rw,size=6g /.overlay
+#! mount -o remount,rw,size=8g /.overlay
+#! sed -i -r "s|[#][{]MOD[}][ ]||g" ./gentoo/sets/_gary-os
+#! make -C ${SETDIR} unpack
 #! [[ -b ${G_DISK} ]] && mount-robust ${G_DISK} ${_GINST}
 #! make -C ${SETDIR} DOREDO="true" unpack
 #! #####################################
@@ -30,7 +31,7 @@
 #! ${LN} ${G_PACK} /var/cache/binpkgs
 #! #####################################
 #! export HOME="${_HOME}"
-#! cd / && ${MKDIR} ${HOME} && ${RM} /root && ${LN} ${HOME} /root && cd -
+#! ${MKDIR} ${HOME} && ${RM} /root && ${LN} ${HOME} /root
 #! shell -i
 #! shell -h
 #! ${HOME}/scripts/_sync mount g null || true
@@ -39,10 +40,7 @@
 #! #>>> mount /dev/sr0 /mnt && cd /mnt && ./VBoxLinuxAdditions.run && cd - && umount /dev/sr0 && ${MKDIR} /.g/_data && mount -t vboxsf _data /.g/_data
 #! rc-update add qemu-guest-agent default || true
 #! rc-update add spice-vdagent default || true
-#! rc-update add sysklogd default || true
-#! rc-update add openvpn default || true
 #! openrc
-#! echo | (vpn -v || true)
 #! #####################################
 #! ${SED} -i "s|^(.+agetty.+tty[5-9].+)$|#\1|g" /etc/inittab && telinit q
 #! ${MKDIR} ${G_RNSV} && ${RM} $(dirname ${G_RNSV})/current && ${LN} $(basename ${G_RNSV}) $(dirname ${G_RNSV})/current
@@ -104,7 +102,6 @@
 #>>> #{MOD} #{FSUPDT} usermod --home ${SETDIR} --shell /bin/bash root	|| true
 #{MOD} #{FSUPDT} rm -frv /root ; ln -fsv ${SETDIR} /root
 #{MOD} #{FSUPDT} ln -fsv /usr/share/zoneinfo/US/Pacific /etc/localtime
-#{MOD} #{FSUPDT} ln -fsv /bin/runsvdir /usr/bin/runsvdir
 #{MOD} #{FSUPDT} rc-update add wpa_supplicant default	|| true
 #{MOD} #{FSUPDT} rc-update add dhcpcd default		|| true
 #{MOD} #{FSUPDT} rc-update add sshd default		|| true
