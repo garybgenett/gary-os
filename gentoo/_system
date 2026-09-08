@@ -447,6 +447,7 @@ URI
 "
 declare KEEPVARS="
 ${SKIPVARS}
+HOME
 PATH
 "
 
