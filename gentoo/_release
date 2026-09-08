@@ -2272,6 +2272,7 @@ function _publish_gitdir {		#{ismain}
 	SETUP_FILES+="^gentoo"
 	declare STATIC_FILES=
 	STATIC_FILES+="^.bashrc"
+	STATIC_FILES+="^.htoprc.bak"
 	STATIC_FILES+="^.vimrc"
 	STATIC_FILES+="^scripts/grub.sh"
 	STATIC_FILES+="^scripts/metro.sh"
