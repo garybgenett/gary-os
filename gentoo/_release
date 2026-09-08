@@ -379,7 +379,7 @@ ROOTFS_SHELL
 ########################################
 
 function realdev {
-	#note: ported over directly from: https://github.com/garybgenett/runit/blob/master/runit/1
+	#note: ported over directly from: https://github.com/garybgenett/runit/blob/main/runit/1
 	FILE="${1}" && shift
 	[ ! -d ${FILE}/pts     ] && mkdir -m 0755 ${FILE}/pts
 	[ ! -d ${FILE}/shm     ] && mkdir -m 0755 ${FILE}/shm

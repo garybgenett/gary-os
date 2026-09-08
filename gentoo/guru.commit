@@ -1,2 +1,2 @@
 # https://gitweb.gentoo.org/repo/proj/guru.git
-# 2025-09-29 00:59:59 +0200 96e2dbba92c4eddf176b6a1d015ec8fdd859810a media-sound/lms: add missing rdep on dev-libs/pugixml  (HEAD -> master, origin/master, origin/HEAD)
+# 2025-09-29 00:59:59 +0200 96e2dbba92c4eddf176b6a1d015ec8fdd859810a media-sound/lms: add missing rdep on dev-libs/pugixml
