@@ -1465,6 +1465,7 @@ Here is an overview of the repository contents, in order of relative importance:
 
   | Other                    | Purpose
   |:---                      |:---
+  | [.htoprc]                | Keeps this handy and also published online
   | [.vimrc]                 | Keeps this handy and also published online
   | [xclock_size_hack.patch] | Make [gkrellaclock] look like `xclock`
 
@@ -1505,6 +1506,7 @@ will require re-cloning.
   [gentoo/sets/_gary-os]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/_gary-os
   [gentoo/sets/packages]: https://github.com/garybgenett/gary-os/blob/master/gentoo/sets/packages
 
+  [.htoprc]: https://github.com/garybgenett/gary-os/blob/master/.htoprc.bak
   [.vimrc]: https://github.com/garybgenett/gary-os/blob/master/.vimrc
   [gkrellaclock]: http://gkrellm.srcbox.net
   [xclock_size_hack.patch]: https://github.com/garybgenett/gary-os/blob/master/gentoo/overlay/x11-plugins/gkrellaclock/files-patches/xclock_size_hack.patch
