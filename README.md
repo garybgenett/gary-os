@@ -4,7 +4,7 @@
 
 | ![GaryOS Icon](_artifacts/images/icon-v6.0.png "GaryOS Icon") | "The one file that does it all."
 |:---      |:---
-| Latest   | [v9.0 2025-09-08] -- [Kernel], [Rootfs], [Boot], [Disk]
+| Latest   | [v10.0 2026-09-08] -- [Kernel], [Rootfs], [Boot], [Disk]
 | Homepage | <http://www.garybgenett.net/projects/gary-os>
 | Download | <https://sourceforge.net/projects/gary-os>
 | Source   | <https://github.com/garybgenett/gary-os>
@@ -24,7 +24,7 @@
 | [Project]  | [References], [Contributing], [Licensing]
 | [Details]  | [Versioning], [Repository], [Tools], [Ecosystem]
 | [Release]  | [Process], [Checklist], [Publish]
-| [Versions] | [v9.0 2025-09-08], [v8.0 2024-05-16], [v7.0 2023-01-14], [(...)]
+| [Versions] | [v10.0 2026-09-08], [v9.0 2025-09-08], [v8.0 2024-05-16], [(...)]
 
 [GaryOS]: http://www.garybgenett.net/projects/gary-os
 [Gary B. Genett]: http://www.garybgenett.net
@@ -2226,12 +2226,47 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 [License]: https://github.com/garybgenett/gary-os/blob/main/LICENSE.md
 [Downloads]: https://sourceforge.net/projects/gary-os/files
 
-[Kernel]: https://sourceforge.net/projects/gary-os/files/gary-os-v9.0-generic_64.kernel
-[Rootfs]: https://sourceforge.net/projects/gary-os/files/gary-os-v9.0-generic_64.rootfs
-[Boot]: https://sourceforge.net/projects/gary-os/files/gary-os-v9.0-generic_64.grub.zip
-[Disk]: https://sourceforge.net/projects/gary-os/files/gary-os-v9.0-generic_64.qcow2
+[Kernel]: https://sourceforge.net/projects/gary-os/files/gary-os-v10.0-generic_64.kernel
+[Rootfs]: https://sourceforge.net/projects/gary-os/files/gary-os-v10.0-generic_64.rootfs
+[Boot]: https://sourceforge.net/projects/gary-os/files/gary-os-v10.0-generic_64.grub.zip
+[Disk]: https://sourceforge.net/projects/gary-os/files/gary-os-v10.0-generic_64.qcow2
 
-[(...)]: #v60-2021-09-12
+[(...)]: #v70-2023-01-14
+
+### v10.0 2026-09-08 ###########################################################
+[v10.0 2026-09-08]: #v100-2026-09-08
+[v10.0]: #v100-2026-09-08
+
+  **[Repository](https://github.com/garybgenett/gary-os/tree/v10.0)
+  / [Readme](https://github.com/garybgenett/gary-os/blob/v10.0/README.md)
+  / [License](https://github.com/garybgenett/gary-os/blob/v10.0/LICENSE.md)
+  / [Packages (Kernel)](https://github.com/garybgenett/gary-os/blob/v10.0/packages.txt)
+  / [Packages (Rootfs)](https://github.com/garybgenett/gary-os/blob/v10.0/packages.rootfs.txt)**
+
+  |                | |
+  |:---            |:---
+  | Kernel         | [gary-os-v10.0-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v10.0-generic_64.kernel)
+  | Rootfs         | [gary-os-v10.0-generic_64.rootfs](https://sourceforge.net/projects/gary-os/files/gary-os-v10.0-generic_64.rootfs)
+  | Boot           | [gary-os-v10.0-generic_64.grub.zip](https://sourceforge.net/projects/gary-os/files/gary-os-v10.0-generic_64.grub.zip)
+  | Disk           | [gary-os-v10.0-generic_64.qcow2](https://sourceforge.net/projects/gary-os/files/gary-os-v10.0-generic_64.qcow2)
+  | Source Stage3  | [gary-os-v10.0-generic_64.stage3.tar.xz](https://sourceforge.net/projects/gary-os/files/v10.0/gary-os-v10.0-generic_64.stage3.tar.xz)
+  | Source Portage | [gary-os-v10.0-generic_64.gentoo-repo.tar.xz](https://sourceforge.net/projects/gary-os/files/v10.0/gary-os-v10.0-generic_64.gentoo-repo.tar.xz)
+
+  * Overall
+    * More robust `tmpfs` handling
+    * Promoted `/var/db/pkg` out of `FS*`, for stability
+    * Added `GENKRN` option for genkernel configuration
+    * Added `NODIST` option for removal of non-distributable packages
+    * Fixed "rootfs" overlay process, so `FSUPDT` works properly in the chroot
+    * General improvements to build/update process
+    * Minor improvements and fixes to supporting scripts
+  * [Portage]
+    * Improved handling of [Linux Kernel] `$USE` flags
+    * Minor improvements to [gentoo/overlay/]
+    * General integration of upstream changes
+  * [GRUB]
+    * Increased [Boot] `groot_size` to `6144m` for [Rootfs] packages growth
+    * Upgraded to new version of [Rufus]
 
 ### v9.0 2025-09-08 ############################################################
 [v9.0 2025-09-08]: #v90-2025-09-08
