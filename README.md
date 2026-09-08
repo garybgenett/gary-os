@@ -1865,12 +1865,12 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * `rc-status`
         * `htop`
         * `free; df -h; ls -la / /.overlay /.overlay/*`
-    * `mount -o remount,size=3072m /; df -h`
-        * `mount -o remount,size=3072m /.overlay; df -h`
+    * `mount -o remount,size=4096m /; df -h`
+        * `mount -o remount,size=4096m /.overlay; df -h`
 
 **[GRUB] / [Filesystem]**
 
-  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.qcow2 1 MBR`
+  * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.qcow2 1 MBR -m 8192`
     * [x] Menu
         * [x] Options
             * [ ] Verify "gopts=true"
@@ -1939,31 +1939,34 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * `(cd .store; rsync -L ./gary-os/gary-os.kernel ./_rescue)`
         * [ ] Verify direct boot
     * `(cd .store; rsync -L ./gary-os/gary-os.grub/x86_64.efi ./_rescue)`
+        * [ ] Verify default PXE boot
     * `vi [...]/dhcpd.conf; sv restart dhcpd tftpd`
         * [ ] Uncomment `root-path`
-        * [x] PXE
+    * [x] PXE
         * `ls -la /.overlay`
   * `./scripts/qemu-minion.bsh /dev/null 1 -m 8192`
     * `vi [...]/dhcpd.conf; sv restart dhcpd tftpd`
         * [ ] Change `root-path` location
         * [ ] Uncomment `extensions-path`
-        * [x] PXE
+    * [x] PXE
         * `ls -la /.overlay`
   * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.qcow2 1 -m 8192`
+    * `/.setup/.setconf; sv restart dhcpd tftpd`
     * [x] Options
         * [x] `dhcp`
-        * [x] `pxe: groot`
+        * [x] `pxe: rootfs`
+        * [x] `reset`
     * [x] PXE
-  * `/.setup/.setconf; sv restart dhcpd tftpd`
+        * `ls -la /.overlay`
 
 **[Windows] / [GRUB] / [Virtual]**
 
   * `sv stop qemu.windows`
-    * `rm /tmp/qemu.windows.img.*`
+    * `rm /tmp/qemu.windows.img.* /tmp/qemu.null.*`
     * `(cd _systems/qemu; rm windows.img)`
-    * `(cd _systems/qemu; qemu-img create -f qcow2 -F qcow2 -o compat=1.1,backing_file=$(ls -L windows-10.*.qcow2 | tail -n1) windows.img)`
+    * `(cd _systems/qemu; qemu-img create -f qcow2 -F qcow2 -o compat=1.1,backing_file=$(ls -L windows-10.*.qcow2 | tail -n1) windows.img; qemu-img info --backing-chain windows.img)`
   * `./scripts/qemu-windows.bsh / ALT -m 8192`
-    * [ ] Download [Boot] and [Kernel] to the desktop
+    * [ ] Download [Kernel], [Boot] and [Disk] to the desktop
     * [ ] Download and install [VirtualBox]
         * [ ] Use `Desktop` for new [Virtual]
         * [x] Task Manager, Performance
@@ -1987,7 +1990,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * [x] Boot
   * `(cd _systems/qemu; rm windows.img)`
     * `(cd _systems/qemu; ln windows-10.qcow2 windows.img)`
-    * `rm /tmp/qemu.windows.img.*`
+    * `rm /tmp/qemu.windows.img.* /tmp/qemu.null.*`
     * `sv restart qemu.windows`
 
 **[Networking] / [GUI]**
@@ -2002,20 +2005,24 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 **[Update] / [Manage] / [Image] / [Install]**
 
   * `rm /tmp/qemu.gary-os-* /tmp/qemu.null.*`
+    * `(cd _systems/qemu; qemu-img create -f qcow2 gary-os.qcow2 100G)`
   * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.qcow2 1 -m 8192`
+    * [x] Boot
+        * `ln -r [...]/_systems/qemu/gary-os.qcow2 /tmp/qemu.gary-os-*.qcow2`
     * `cd /.gary-os`
+        * `set -o vi`
+            * `alias ll="ls -la"`
         * `rc-update add dhcpcd default; openrc`
             * `mount -o remount,size=6144m /.overlay`
-        * `source ./.bashrc`
-            * `shell -i`
-            * `rsync -L --filter=-_/gentoo.git --filter=-_/sources --filter=-_/build --filter=-_/gary-os root@10.0.0.254:[...]/.setup/gentoo.gary-os/ /.gary-os`
-        * `exit 0`
-    * `cd /.gary-os`
+        * `./.bashrc shell -i`
+            * `rm ~/.ssh/config`
+            * `rsync -avv -L --filter=-_/gentoo.git --filter=-_/sources --filter=-_/build --filter=-_/gary-os root@10.0.0.254:[...]/.setup/gentoo.gary-os/ /.gary-os`
+    * `ls -la ./gary-os/`
         * `touch ./overlay`
             * *note: should not be necessary, but resolves: `grub-bios-setup: error: failed to get canonical path of 'overlay'.`*
-            * https://unix.stackexchange.com/a/429434
+            * https://unix.stackexchange.com/a/659712
         * `mkdir /tmp/grub; HOME=/.gary-os GRUB_DIR=/.gary-os/grub ./scripts/grub.sh /tmp/grub -fx -k/dev/sda1 /dev/sdb1`
-            * `umount /dev/sdb*`
+            * `umount /dev/sdb*; rm -frv /tmp/grub`
             * `gdisk /dev/sdb`
                 * [ ] Expand partition size
             * `./.bashrc format /dev/sdb1`
@@ -2026,7 +2033,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
         * `rm ./gary-os/gary-os-*.fetch`
         * `make fetch`
             * `sed -i "s|^[#]||g" ./gary-os/gary-os-*.fetch`
-            * `for FILE in $(cat ./gary-os/gary-os-*.fetch); do rsync -L --progress root@10.0.0.254:[...]/_builds/_gary-os.working/.gary-os-*/${FILE} /.install/gary-os/; done`
+            * `for FILE in $(cat ./gary-os/gary-os-*.fetch); do rsync -avv -L --progress root@10.0.0.254:[...]/_builds/_gary-os.working/.gary-os-*/${FILE} /.install/gary-os/; done`
             * `make DOTEST=true fetch`
     * `ls -la /.gary-os-*/`
         * `make DOREDO=true unpack`
@@ -2039,10 +2046,10 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * `ls -la /.gary-os-*/`
         * `rm /.gary-os-*/gary-os-*.rootfs*`
             * `make rootfs`
-            * `mount -o loop /.gary-os-*/gary-os-*.rootfs /mnt; ls -la /mnt; umount /mnt`
+            * `mount -o loop /.gary-os-*/gary-os-*.rootfs /mnt; ls -la /mnt /mnt/.gary-os; umount /mnt`
     * `ls -la ./sources/; ls -la ./build.install/`
         * `rm ./build; ln -fsv /.install ./build`
-        * `mv ./gary-os/gary-os-*.stage3.tar.xz ./gary-os/stage3-generic_64.tar.xz`
+        * `rsync -avv ./gary-os/gary-os-*.stage3.tar.xz ./gary-os/stage3-generic_64.tar.xz`
         * `make init`
             * [ ] Exit with \<ctrl-c\> once unpacking the `stage3`
         * `ls -la ./build/ ./build/_build`
@@ -2050,37 +2057,43 @@ Everything in [Booting], [Running] and [Building] should be validated below.
         * `rm ./build; ln -fsv / ./build`
         * `make install`
             * [ ] Copy and paste GRUB instructions
+            * `vi /.install/etc/fstab`
+                * [ ] Change "sdb" to "sda"
+            * `vi /.install/etc/inittab`
+                * [ ] Uncomment serial console
+        * `ls -la /.install /.install/.gary-os`
             * `cat /.install/etc/issue`
-            * `ls -la /.install`
             * `df -h`
+            * `umount /.install`
         * `make DOREDO=true install`
             * `cat /etc/issue`
-    * `vi /.install/etc/inittab`
-        * [ ] Uncomment serial console
   * `./scripts/qemu-minion.bsh /dev/null 1`
     * [ ] Verify default boot
         * `hello`
         * `reboot`
     * [x] Boot (manually from GRUB command line)
-        * `cd /.gary-os`
+        * `configfile (hd1,1)/gary-os/gary-os.grub/gary-os.grub.cfg`
+    * `cd /.gary-os`
         * `touch ./overlay`
-        * `mount -o remount,size=3072m /.overlay`
         * `mkdir /tmp/grub; HOME=/.gary-os GRUB_DIR=/.gary-os/grub ./scripts/grub.sh /tmp/grub /dev/sda1`
+            * `umount /dev/sda*; rm -frv /tmp/grub`
         * `reboot`
     * [x] Install Menu
         * `<escape>`
     * [x] Install Boot
         * `cd /.gary-os`
         * `make reset`
-        * `vi +/#{GFG} /etc/portage/{make.conf,package.use}`
-        * `rm /var/db/repos/gentoo`
-        * `make update`
+            * `vi +/#{GFG} /etc/portage/{make.conf,package.use}`
         * `make upgrade`
-  * `rm /tmp/qemu.gary-os-* /tmp/qemu.null.*`
+            * [ ] Verify from [SourceForge] packages
+            * [ ] Exit with \<ctrl-c\> once successfully running
+        * `rm -frv /var/db/repos/gentoo`
+        * `make update`
   * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.qcow2 1 -m 8192`
     * [x] Boot Rootfs
         * [ ] Command comments in [gentoo/sets/_gary-os]
   * `rm /tmp/qemu.gary-os-* /tmp/qemu.null.*`
+    * `(cd _systems/qemu; rm gary-os.qcow2)`
 
 ### Publish ####################################################################
 [Publish]: #publish
