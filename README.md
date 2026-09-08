@@ -1749,7 +1749,7 @@ Everything needed to perform these steps is in the [Repository] or the
     * [ ] Update `savedconfig` directory
     * [ ] Verify `NODIST` license list
     * [x] *Iterate()*
-    * `make perms`
+  * `make perms`
     * `(cd .setup; git-commit ./linux ./gentoo)`
   * `make DOMODS=false DOREDO=true redo`
     * [x] *Iterate()*
@@ -1771,10 +1771,10 @@ Everything needed to perform these steps is in the [Repository] or the
     * [ ] Boot to "\_root"
   * `make DOMODS=true doit`
     * `ll ./build/ ./build/_build`
-    * `make perms`
-    * `(cd .setup; git-commit ./linux ./gentoo)`
     * `(cd _builds; rsync --filter="-_/var/cache/distfiles" ./_gentoo/ ../../_toor)`
     * `_sync _sys _clone _full _setup`
+  * `make perms`
+    * `(cd .setup; git-commit ./linux ./gentoo)`
 
 **GaryOS Build**
 
@@ -1810,8 +1810,6 @@ Everything needed to perform these steps is in the [Repository] or the
   * [x] *Validate( 2.3GB 4.2GiB P=\_gary-os rootfs )*
   * `make perms`
     * `(cd .setup; git-commit ./linux ./gentoo)`
-    * `make doit && make DOREDO=true devel`
-    * `rm ./build/.gary-os-*/gary-os-*.cpio*`
 
 **Test & Publish**
 
@@ -1820,11 +1818,14 @@ Everything needed to perform these steps is in the [Repository] or the
         * `vi ./gentoo/_release`
             * [ ] Add `${RELEASE[*]}` number, with empty `${CMTHASH[*]}`
             * [ ] Update `${RELEASE_SKIP[*]}` to only keep last 2 releases
+        * `make doit && make DOREDO=true devel`
+            * `rm ./build/.gary-os-*/gary-os-*.cpio*`
         * `make DOREDO=true _release_grub`
+            * `rm ./build/.gary-os-*/gary-os-*.grub ./build/.gary-os-*/gary-os-*.qcow2`
+            * `make DOREDO=false DOTEST=true _release_grub`
         * `make _publish_release`
     * `(cd _builds; rm ./_gary-os.boot; ln _gary-os.working ./_gary-os.boot)`
         * `_sync boot`
-    * `make DOREDO=true DOTEST=true _release_grub`
   * [x] [Checklist]
   * [x] [Publish]
 
