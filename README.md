@@ -2110,6 +2110,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
         * `if [ ${FILE} == .setup ]; then LIST="grub linux gentoo"; fi`
         * `if [ ${FILE} == .static ]; then LIST=".bashrc .vimrc scripts/grub.sh scripts/qemu*"; fi`
         * `(cd ${FILE}; vdiff -g $(sed -n "s|^$(basename ${FILE}): ||gp" [...]/_builds/_gary-os/_commit) ${LIST})`
+        * `(cd ${FILE}; vdiff -g ${LIST})`
     * [ ] Screenshots
         * `(cd .setup/gentoo.gary-os; ./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.qcow2 1)`
             * [x] Peek
