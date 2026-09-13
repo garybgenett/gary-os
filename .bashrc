@@ -592,6 +592,12 @@ alias zcode="cd /.g/_data/zactive/coding ; clear ; ${LL}"
 alias zwrite="cd /.g/_data/zactive/writing ; clear ; ${LL}"
 alias zplan="IMPERSONATE_NAME=task ${HOME}/.bashrc impersonate_command %"
 
+alias here="cd \$(realpath \${PWD}) ; clear ; ${LL}"
+alias server="(urxvt -e bash -c \"${HOME}/.bash_aliases shell me\" &)"
+alias xclock="${EDITOR} +/XClock.geometry ${HOME}/.Xdefaults ; (xclock &)"
+alias xterm="(urxvt &)"
+
+alias open=""
 alias zdesk="cd ${NULLDIR} ; clear ; ${LL}"
 if [[ ${UNAME} == "Windows" ]]; then
 #>>>	export DISPLAY="$(ip route show default | cut -d' ' -f3):0"
@@ -604,13 +610,9 @@ if [[ ${UNAME} == "Windows" ]]; then
 	declare MOZDIR="$(dirname "$(ls /mnt/c/Users/*/Application\ Data/Mozilla/Firefox/Profiles/*/prefs.js)")"
 	declare WRDCMD="$(ls /mnt/c/Program\ Files/Microsoft\ Office/root/Office*/winword.exe)"
 	declare WRDTPL="$(ls /mnt/c/Users/gbgenett/AppData/Roaming/Microsoft/Templates/Normal.dotm)"
-	alias server="(urxvt -e bash -c \"${HOME}/.bash_aliases shell me\" &)"
-	alias xterm="(urxvt &)"
-	alias xclock="${EDITOR} +/XClock.geometry ${HOME}/.Xdefaults ; (xclock &)"
 	alias open="/mnt/c/Windows/explorer.exe"
 #>>>	alias zdesk="cd ${HOME}/Desktop ; clear ; ${LL}"
 	alias zdesk="cd ${DATDIR} ; clear ; ${LL}"
-	alias here="cd \$(realpath \${PWD}) ; clear ; ${LL}"
 	function wsl-link {
 		${RM} ${HOME}/{Desktop,Downloads}
 		${LN} --relative "/mnt/c/Users/${USER}/Desktop" ${HOME}/
