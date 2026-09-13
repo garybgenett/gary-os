@@ -5,25 +5,34 @@ EAPI=8
 
 DOCS_BUILDER=doxygen
 
-inherit cmake docs systemd
+inherit cmake docs systemd verify-sig
 
 DESCRIPTION="The secure, private, untraceable cryptocurrency"
 HOMEPAGE="https://www.getmonero.org"
+
+LICENSE="BSD MIT"
+SLOT="0"
+IUSE="+daemon hw-wallet readline +tools +wallet-cli +wallet-rpc cpu_flags_x86_aes verify-sig"
+REQUIRED_USE="|| ( daemon tools wallet-cli wallet-rpc )"
+RESTRICT="test"
+
+SOURCE_NAME="${PN}-source-v${PV}"
+SOURCE_ARCHIVE="${SOURCE_NAME}.tar.bz2"
 
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/monero-project/monero.git"
 	EGIT_SUBMODULES=()
 else
-	SRC_URI="https://github.com/monero-project/monero/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+	VERIFY_SIG_OPENPGP_KEY_PATH=/usr/share/openpgp-keys/monero/binaryfate.asc
+	SRC_URI="
+		https://downloads.getmonero.org/cli/source/${SOURCE_ARCHIVE}
+		verify-sig? ( https://raw.githubusercontent.com/monero-project/monero-site/71456b9f871ead4e77db84d8fe5dc4109578af45/downloads/hashes.txt -> ${P}-release-hashes.txt )
+	"
+	# Todo: replace this hashes.txt URL with one based on ${P} (See https://github.com/monero-project/monero/issues/10760)
 	KEYWORDS="~amd64"
 fi
 
-LICENSE="BSD MIT"
-SLOT="0"
-IUSE="+daemon hw-wallet readline +tools +wallet-cli +wallet-rpc cpu_flags_x86_aes monero-supercop"
-REQUIRED_USE="|| ( daemon tools wallet-cli wallet-rpc )"
-RESTRICT="test"
 # Test requires python's requests, psutil, deepdiff which are packaged
 # but also monotonic & zmq which we do not have
 
@@ -35,9 +44,8 @@ DEPEND="
 	dev-libs/openssl:=
 	dev-libs/randomx
 	dev-libs/rapidjson
-	monero-supercop? ( dev-libs/supercop )
-	net-dns/unbound:=[threads]
-	net-libs/miniupnpc:=
+	dev-libs/supercop
+	net-dns/unbound:=[threads(+)]
 	net-libs/zeromq:=
 	daemon? (
 		acct-group/monero
@@ -51,13 +59,29 @@ DEPEND="
 	)
 "
 RDEPEND="${DEPEND}"
-BDEPEND="virtual/pkgconfig"
+BDEPEND="
+	virtual/pkgconfig
+	verify-sig? ( sec-keys/openpgp-keys-monero )
+"
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-0.18.3.3-miniupnp-api-18.patch
-	"${FILESDIR}"/${PN}-0.18.4.0-unbundle-dependencies.patch
+	"${FILESDIR}"/${PN}-0.18.5.0-unbundle-dependencies.patch
 )
 
+src_unpack() {
+	if use verify-sig; then
+		pushd "${DISTDIR}" > /dev/null || die
+			verify-sig_verify_message "${DISTDIR}"/"${P}"-release-hashes.txt - | \
+				grep -F "${SOURCE_ARCHIVE}" | \
+				verify-sig_verify_unsigned_checksums - sha256 "${SOURCE_ARCHIVE}"
+		popd || die
+	fi
+	unpack "${SOURCE_ARCHIVE}" || die
+	mv "${SOURCE_NAME}" "${S}" || die
+	# The previous github source archive didn't have these external directories,
+	# I will just remove them here in case they interfere with dependency de-vendorization:
+	rm -r "${S}"/external/{randomx,rapidjson,supercop,trezor-common} || die
+}
 
 src_prepare() {
 	# The build system does not recognize the release tarball (bug?)
@@ -68,9 +92,6 @@ src_prepare() {
 }
 
 src_configure() {
-	if use monero-supercop; then
-		PATCHES+=("${FILESDIR}"/${PN}-0.18.4.0-external-supercop.patch)
-	fi
 	local mycmakeargs=(
 		# TODO: Update CMake to install built libraries (help wanted)
 		-DBUILD_SHARED_LIBS=OFF
