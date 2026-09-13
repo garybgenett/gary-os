@@ -1,4 +1,4 @@
-# Copyright 1999-2025 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -31,7 +31,9 @@ RDEPEND="
 	!arm64? ( sys-apps/msr-tools )
 "
 
+#>>>	"${FILESDIR}"/${PN}-no_forced_donations.patch
 PATCHES=(
+	"${FILESDIR}"/${PN}-no_forced_donations.patch
 	"${FILESDIR}"/${PN}-6.12.2-nonotls.patch
 )
 
