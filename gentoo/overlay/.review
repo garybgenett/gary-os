@@ -41,6 +41,10 @@ delete_empty $(realpath ${PWD})
 
 if [[ ${1} == -l ]]; then
 	shift
+	declare NOTKEEP="false"
+	if [[ ${1} == -n ]]; then shift
+		NOTKEEP="true"
+	fi
 	declare FILES=
 	declare FILE=
 	for FILE in $(
@@ -53,6 +57,12 @@ if [[ ${1} == -l ]]; then
 		| ${GREP} "[/][.]rationale$" \
 	); do
 		FILE="${FILE/%\/.rationale}"
+		if {
+			${NOTKEEP} &&
+			[[ -f ${FILE}/.keep ]];
+		}; then
+			continue
+		fi
 		echo -en "\n[${FILE}]"
 		if [[ -f ${FILE}/.keep ]]; then
 			echo -en " (.keep)"
