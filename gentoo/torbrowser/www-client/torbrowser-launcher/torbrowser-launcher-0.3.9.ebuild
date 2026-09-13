@@ -1,10 +1,10 @@
-# Copyright 1999-2025 Gentoo Authors
+# Copyright 1999-2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{12..14} )
 
 inherit distutils-r1 optfeature xdg
 
@@ -25,7 +25,7 @@ FIREFOX_BIN="app-accessibility/at-spi2-core
 	sys-apps/dbus
 	virtual/freedesktop-icon-theme
 	>=x11-libs/cairo-1.10[X]
-	x11-libs/gdk-pixbuf
+	x11-libs/gdk-pixbuf:2
 	>=x11-libs/gtk+-3.11:3[wayland,X]
 	x11-libs/libX11
 	x11-libs/libxcb
@@ -46,7 +46,7 @@ RDEPEND="${PYTHON_DEPS}
 	${FIREFOX_BIN}
 	dev-python/gpgmepy[${PYTHON_USEDEP}]
 	dev-python/packaging[${PYTHON_USEDEP}]
-	dev-python/pyqt5[${PYTHON_USEDEP},widgets]
+	dev-python/pyside[${PYTHON_USEDEP},core,gui,widgets]
 	dev-python/pysocks[${PYTHON_USEDEP}]
 	dev-python/distro[${PYTHON_USEDEP}]
 	dev-python/packaging[${PYTHON_USEDEP}]
