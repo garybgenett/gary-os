@@ -1,0 +1,2 @@
+move app-misc/ledger-live app-misc/ledger-live-bin
+move dev-libs/qrcodegen dev-libs/qr-code-generator
