@@ -1,0 +1,5 @@
+# https://bugs.gentoo.org/949219
+xglock.c:170:1: error: conflicting types for 'secured_malloc'; have 'void *(gulong)' {aka 'void *(long unsigned int)'}
+170 | secured_malloc(gulong sz)
+    | ^~~~~~~~~~~~~~
+# 2026-09-09 20:39:39 +0100 b25521e5edcc1b94475f9251b491e641b0e5896b sys-apps/intune-portal: Fix bwrap symlink issue, allow patching
