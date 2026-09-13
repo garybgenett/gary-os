@@ -88,7 +88,7 @@ RELEASE[13]="v8.0"; CMTHASH[13]="5ff6d062b683165da5bb0310256c07a041076f9b"
 RELEASE[14]="v9.0"; CMTHASH[14]="db965902ab0c739beaa9afed13d90455c4151ba1"
 RELEASE[15]="v10.0"; CMTHASH[15]="bf1fc9cd1b57a96dddf919d56e79f126b75530f7"
 
-declare -a RELEASE_SKIP=({0..13})
+declare -a RELEASE_SKIP=({0..14})
 
 ########################################
 
