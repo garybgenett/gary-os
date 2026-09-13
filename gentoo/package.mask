@@ -26,12 +26,9 @@ games-misc/fortune-mod-scriptures
 
 ################################################################################
 
-# gentoo required [sys-libs/readline-8.3_p1 / sys-libs/readline-8.2_p13-r1]: (seems to break bash history appending, overwriting previous sessions)
->=app-shells/bash-5.3			# gentoo required
->=sys-libs/readline-8.3			# gentoo required
-
 >=games-emulation/nestopia-1.53		# gentoo required [nestopia-1.53.* / nestopia-1.52.*]: needs >=x11-libs/fltk-1.4:1=[opengl]
->=sys-fs/ncdu-2.0			# gentoo required [sys-fs/ncdu-2.9.1 -> dev-lang/zig-0.14.1]: /var/tmp/portage/dev-lang/zig-0.14.1/temp/environment: line 3145: 224 Segmentation fault ./stage3/bin/zig env
+>=sys-boot/grub-2.14			# gentoo required [grub-2.14-r5 / grub-2.12-r12]: https://bugs.gentoo.org/972543 / /usr/x86_64-pc-linux-gnu/binutils-bin/2.46.1/ld: kernel.exec: in function `grub_util_find_root_devices_from_poolname': / /var/tmp/portage/sys-boot/grub-2.14-r5/work/grub-2.14/grub-core/osdep/unix/getroot.c:170:(.text+0xd896): undefined reference to `grub_get_libzfs_handle'
+>=sys-fs/ncdu-2.0			# gentoo required [sys-fs/ncdu-2.9.1 -> dev-lang/zig-0.15.1]: /var/tmp/portage/dev-lang/zig-0.15.1/temp/environment: line 3469: ./stage3/bin/zig: cannot execute: required file not found
 
 ################################################################################
 # end of file

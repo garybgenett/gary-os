@@ -14,8 +14,6 @@ app-text/poppler			qt6		# gentoo required
 dev-libs/boost				nls		# gentoo required
 dev-python/pygobject			cairo		# gentoo required
 dev-qt/qtbase				dbus		# gentoo required
-dev-qt/qtgui				dbus		# gentoo required
-dev-qt/qtwidgets			dbus		# gentoo required
 llvm-core/lld				zstd		# gentoo required
 llvm-core/llvm				zstd		# gentoo required
 media-gfx/graphviz			cairo		# gentoo required
@@ -35,6 +33,7 @@ sys-libs/gdbm				berkdb		# gentoo required
 x11-libs/gtk+				wayland		# gentoo required
 
 app-arch/sharutils			nls		# gentoo required [app-arch/sharutils-4.15.2-r3]: https://bugs.gentoo.org/900248 / uuencode.c:204:3: error: implicit declaration of function 'bindtextdomain' [-Wimplicit-function-declaration]
+media-sound/aumix			-gpm		# gentoo required [media-sound/aumix-2.9.1-r1]: https://bugs.gentoo.org/949570 / mouse.c:80:24: error: assignment to 'int (*)(WINDOW *)' {aka 'int (*)(struct _win_st *)'} from incompatible pointer type 'int (*)(void)' [-Wincompatible-pointer-types]
 media-sound/aumix			nls		# gentoo required [media-sound/aumix-2.9.1-r1]: https://bugs.gentoo.org/919216 / common.c:229:17: error: implicit declaration of function 'bind_textdomain_codeset' [-Wimplicit-function-declaration]
 sys-apps/coreutils			-gmp		# gentoo required [*]: configure: error: GMP not found, although --with-libgmp was specified. Try specifying --with-libgmp-prefix=DIR.
 
@@ -43,35 +42,34 @@ sys-apps/coreutils			-gmp		# gentoo required [*]: configure: error: GMP not foun
 app-text/xmlto				text		# gentoo required
 dev-libs/libdbusmenu			gtk3		# gentoo required
 dev-libs/libnl				utils		# gentoo required
+dev-libs/libsecp256k1			musig		# gentoo required
 dev-libs/xmlsec				nss		# gentoo required
-dev-python/pyqt5			declarative	# gentoo required
-dev-python/pyqt5			network		# gentoo required
-dev-python/pyqt5			widgets		# gentoo required
 dev-python/pyqt6			qml		# gentoo required
 dev-python/pyqt6			quick		# gentoo required
 dev-python/pyqt6			webchannel	# gentoo required
-dev-qt/qtmultimedia			widgets		# gentoo required
+dev-qt/qt5compat			qml		# gentoo required
+kde-frameworks/sonnet			qml		# gentoo required
+media-libs/freetype			harfbuzz	# gentoo required
 media-libs/libvpx			postproc	# gentoo required
 media-libs/mlt				frei0r		# gentoo required
 media-libs/opencv			contrib		# gentoo required
 media-libs/opencv			contribdnn	# gentoo required
 media-libs/opencv			features2d	# gentoo required
-media-libs/sdl2-ttf			-harfbuzz	# gentoo required
+media-libs/sdl-mixer			-mod		# gentoo required
 net-dns/dnsmasq				script		# gentoo required
 net-libs/gnutls				pkcs11		# gentoo required
-net-libs/nodejs				inspector	# gentoo required
 sys-kernel/installkernel		dracut		# gentoo required
 sys-libs/zlib				minizip		# gentoo required
 
 ########################################
 
-dev-libs/gmp				static-libs	# gentoo required
 dev-libs/lzo				static-libs	# gentoo required
 sys-apps/attr				static-libs	# gentoo required
 sys-libs/libcap				static-libs	# gentoo required
 sys-libs/libxcrypt			static-libs	# gentoo required
 sys-libs/zlib				static-libs	# gentoo required
 virtual/libcrypt			static-libs	# gentoo required
+virtual/zlib				static-libs	# gentoo required
 
 ################################################################################
 
@@ -91,7 +89,6 @@ net-misc/openssh			static
 sys-process/runit			static
 
 net-misc/openssh			-pam		# gentoo required
-net-misc/openssh			-pie		# gentoo required
 sys-apps/busybox			-pam		# gentoo required
 
 ########################################
@@ -175,16 +172,8 @@ sys-apps/fwupd				minimal		# requires: ( sys-apps/systemd | sys-auth/elogind )
 
 ################################################################################
 
-#>>> #{NEW} dev-python/pillow		-truetype	# gentoo required
-
-#{NEW} dev-build/cmake			-gui		# gentoo required
 #{NEW} media-libs/libsndfile		minimal		# gentoo required
 #{NEW} media-libs/tiff			-webp		# gentoo required
-#{NEW} www-client/w3m			-imlib		# gentoo required
-
-########################################
-
-#{NEW} sys-devel/gcc			-ada		# gentoo required
 
 ################################################################################
 
@@ -233,8 +222,6 @@ sys-apps/fwupd				minimal		# requires: ( sys-apps/systemd | sys-auth/elogind )
 # x11-libs/pango = ( x11-libs/gtk+ | gnome-base/librsvg )
 
 ########################################
-
-#>>> #{GFG} dev-python/pillow		-truetype	# gentoo required
 
 #{GFG} dev-build/cmake			-gui		# gentoo required
 #{GFG} media-libs/libsndfile		minimal		# gentoo required

@@ -211,6 +211,7 @@ net-misc/rclone
 dev-lang/perl
 
 dev-lang/python
+dev-lang/rust				# gentoo required -- source
 
 #>>> dev-tcltk/expect			# requires: dev-lang/tcl
 dev-vcs/git
