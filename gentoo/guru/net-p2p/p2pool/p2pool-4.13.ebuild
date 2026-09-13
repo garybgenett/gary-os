@@ -12,7 +12,7 @@ inherit cmake verify-sig
 DESCRIPTION="Decentralized pool for Monero mining"
 HOMEPAGE="https://p2pool.io"
 SRC_URI="
-	https://github.com/SChernykh/p2pool/releases/download/v${PV}/p2pool_source.tar.xz -> ${P}.tar.xz
+	https://github.com/SChernykh/p2pool/releases/download/v${PV}/p2pool_source-v${PV}.tar.xz -> ${P}.tar.xz
 	verify-sig? ( https://github.com/SChernykh/p2pool/releases/download/v${PV}/sha256sums.txt.asc -> ${P}_shasums.asc )
 "
 
