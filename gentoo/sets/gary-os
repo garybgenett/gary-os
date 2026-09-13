@@ -167,11 +167,11 @@ app-editors/nano
 app-editors/vim
 app-text/dos2unix
 
+app-arch/7zip
 app-arch/bzip2
 app-arch/cpio
 app-arch/gzip
 app-arch/lz4
-app-arch/p7zip
 app-arch/tar				#{rootfs}
 app-arch/xz-utils			#{rootfs}
 
@@ -207,7 +207,6 @@ x11-apps/xsetroot
 
 app-crypt/gocryptfs
 net-misc/rclone
-sys-fs/encfs
 
 dev-lang/perl
 
@@ -251,7 +250,6 @@ net-analyzer/openbsd-netcat
 net-analyzer/ssldump
 net-analyzer/tcpdump
 net-analyzer/traceroute
-net-dns/bind-tools
 net-dns/ddclient
 net-misc/netkit-telnetd
 net-misc/whois
@@ -259,6 +257,7 @@ net-misc/whois
 ########################################
 # servers
 
+net-dns/bind
 net-ftp/tftp-hpa			#{rootfs}
 net-misc/ntp
 net-vpn/openvpn

@@ -96,11 +96,11 @@ app-dicts/aspell-en
 app-text/aspell
 app-vim/vim-spell-en
 
+app-arch/7zip
 app-arch/bzip2
 app-arch/cpio
 app-arch/gzip
 app-arch/lz4
-app-arch/p7zip
 app-arch/tar
 app-arch/xz-utils
 
@@ -141,7 +141,6 @@ net-analyzer/openbsd-netcat
 net-analyzer/ssldump
 net-analyzer/tcpdump
 net-analyzer/traceroute
-net-dns/bind-tools
 net-misc/netkit-telnetd
 net-misc/whois
 
@@ -150,6 +149,7 @@ net-fs/sshfs
 ########################################
 # servers
 
+net-dns/bind
 net-misc/ntp
 net-vpn/openvpn
 

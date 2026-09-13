@@ -257,11 +257,11 @@ app-text/aspell
 app-vim/vim-spell-en
 app-vim/vim-spell-es
 
+app-arch/7zip
 app-arch/bzip2
 app-arch/cpio
 app-arch/gzip
 app-arch/lz4
-app-arch/p7zip
 app-arch/sharutils
 app-arch/tar
 app-arch/xz-utils
@@ -330,7 +330,6 @@ x11-misc/xvkbd
 
 app-crypt/gocryptfs
 net-misc/rclone
-sys-fs/encfs
 
 dev-lang/perl
 dev-libs/libpcre
@@ -420,7 +419,6 @@ net-analyzer/tcptrace
 net-analyzer/tcptraceroute
 net-analyzer/traceroute
 net-analyzer/wireshark
-net-dns/bind-tools
 net-dns/ddclient
 net-misc/netkit-telnetd
 net-misc/socat
@@ -469,7 +467,6 @@ app-admin/keepassxc
 
 mail-client/mutt
 mail-mta/msmtp
-net-mail/safecat
 
 mail-client/thunderbird
 www-client/firefox
