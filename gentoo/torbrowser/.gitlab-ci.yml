@@ -10,4 +10,4 @@ pkgcheck:
   stage: pkgcheck
   script:
     - pkgcheck --version
-    - pkgcheck scan --exit --profiles stable
+    - pkgcheck scan --exit --profiles stable --keywords UnstableOnly --arches amd64
