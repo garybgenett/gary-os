@@ -20,8 +20,6 @@ x11-apps/igt-gpu-tools			~amd64		# gentoo required
 ########################################
 # toolkits
 
-app-crypt/gocryptfs			~amd64		# gentoo required
-
 app-admin/haskell-updater		~amd64		# gentoo required
 app-text/pandoc-cli			~amd64		# gentoo required
 dev-haskell/*				~amd64		# gentoo required
@@ -36,8 +34,8 @@ net-wireless/bluez-tools		~amd64		# gentoo required
 
 app-mobilephone/scrcpy			~amd64		# gentoo required
 
+app-admin/keepassxc			~amd64		# gentoo required
 #>>> app-misc/task			~amd64		# gentoo required
-app-misc/taskd				~amd64		# gentoo required
 app-misc/timew				~amd64		# gentoo required
 
 www-client/torbrowser-launcher		~amd64		# gentoo required
@@ -56,8 +54,6 @@ net-p2p/monero-gui-bin			~amd64		# gentoo required
 
 media-video/peek			~amd64		# gentoo required
 media-video/shotcut			~amd64		# gentoo required
-
-x11-plugins/gkrellsun			~amd64		# gentoo required [gkrellsun-1.0.0-r5 / gkrellsun-1.0.0-r6]: https://bugs.gentoo.org/901369 / gkrellsun.c:20:15: error: expected ')' before '?' token
 
 ########################################
 # games
@@ -88,7 +84,7 @@ games-fps/quakeforge			~amd64		# gentoo required
 
 ################################################################################
 
-#>>> <sys-devel/gcc-16			~amd64		# gentoo required [games-fps/quakeforge]: https://developers.redhat.com/articles/2025/01/30/how-implement-c23-embed-gcc-15 / configure: error: QuakeForge requires #embed to compile
+x11-wm/xpra				~amd64		# gentoo required [xpra-6.2.5-r1 / xpra-6.4.4]: https://bugs.gentoo.org/981818 / /usr/include/pygobject-3.0/pygobject.h:23:10: fatal error: pygobject-types.h: No such file or directory
 
 ########################################
 

@@ -424,7 +424,6 @@ app-text/qpdfview
 app-text/xpdf
 
 app-text/calibre
-dev-python/pycryptodome			# gentoo required [app-text/calibre]: missing dependency
 media-gfx/mcomix
 
 app-misc/atomicwallet
