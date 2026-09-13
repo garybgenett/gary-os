@@ -1,0 +1,5 @@
+# newer version
+# https://bugs.gentoo.org/945020
+func.c:8550:40: error: initialization of 'VALUE (*)(void)' {aka 'struct value (*)(void)'} from incompatible pointer type 'VALUE (*)(int, VALUE **)' {aka 'struct value (*)(int, struct value **)'} [-Wincompatible-pointer-types]
+8550 | {"access", 1, 2, 0, OP_NOP, 0, f_access,
+# 2026-09-09 20:39:39 +0100 b25521e5edcc1b94475f9251b491e641b0e5896b sys-apps/intune-portal: Fix bwrap symlink issue, allow patching
