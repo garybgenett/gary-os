@@ -172,11 +172,11 @@ app-text/aspell
 app-vim/vim-spell-en
 app-vim/vim-spell-es
 
+app-arch/7zip
 app-arch/bzip2
 app-arch/cpio
 app-arch/gzip
 app-arch/lz4
-app-arch/p7zip
 app-arch/sharutils
 app-arch/tar
 app-arch/xz-utils
@@ -250,7 +250,6 @@ app-crypt/gocryptfs
 net-misc/rclone
 net-misc/unison
 net-misc/unison:2.53
-sys-fs/encfs
 
 app-text/grip
 app-text/pandoc-cli
@@ -284,8 +283,6 @@ dev-tcltk/expect
 dev-vcs/git
 dev-vcs/git-lfs
 dev-vcs/repo
-
-sys-apps/thunderbolt-software-user-space
 
 net-wireless/bluez
 net-wireless/bluez-tools
@@ -341,11 +338,10 @@ net-analyzer/nmap
 net-analyzer/openbsd-netcat
 net-analyzer/ssldump
 net-analyzer/tcpdump
-net-analyzer/tcptrace
+#>>> net-analyzer/tcptrace
 net-analyzer/tcptraceroute
 net-analyzer/traceroute
 net-analyzer/wireshark
-net-dns/bind-tools
 net-dns/ddclient
 net-misc/netkit-telnetd
 net-misc/socat
@@ -400,13 +396,12 @@ app-admin/keepassxc
 app-misc/abook
 app-misc/remind
 app-misc/task
-app-misc/taskd
+#>>> app-misc/taskd
 app-misc/timew
 
 mail-client/mutt
 mail-mta/msmtp
 net-mail/isync
-net-mail/safecat
 
 mail-client/thunderbird
 #{MOD} www-client/chromium
@@ -441,10 +436,10 @@ net-p2p/p2pool
 
 sci-geosciences/gpxsee
 
-app-admin/gkrellm
-x11-plugins/gkrellaclock
-x11-plugins/gkrellsun
-x11-plugins/gkrellweather
+#>>> app-admin/gkrellm
+#>>> x11-plugins/gkrellaclock
+#>>> x11-plugins/gkrellsun
+#>>> x11-plugins/gkrellweather
 
 ########################################
 # media
@@ -488,7 +483,7 @@ media-video/vlc
 media-sound/ardour
 media-sound/audacity
 media-sound/hydrogen
-media-sound/lmms
+#>>> media-sound/lmms
 
 media-video/openshot
 media-video/peek
@@ -511,8 +506,9 @@ games-arcade/lbreakout2
 games-arcade/netris
 games-puzzle/ltris
 
-games-emulation/gnuboy
+#>>> games-emulation/gnuboy
 games-emulation/mekanix
+games-emulation/mgba
 games-emulation/nestopia
 games-emulation/stella
 
