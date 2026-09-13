@@ -57,8 +57,8 @@
 
 ########################################
 
-#{LINPKG} sys-kernel/gentoo-sources:6.16.9
-#{KERNEL} 6.16.9
+#{LINPKG} sys-kernel/gentoo-sources:7.2.4
+#{KERNEL} 7.2.4
 #{KRNLNK}
 #{GENKRN} --e2fsprogs
 #{GENKRN} --luks
