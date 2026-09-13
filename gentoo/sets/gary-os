@@ -4,8 +4,8 @@
 
 #{CMD} cp -a ./gentoo/sets/gary-os{.BAK,}; sed -r -i.BAK -e "s%([[:space:]]+)#[{](MOD|rootfs)[}][[:space:]]*%\1%g" -e "s%[[:space:]]+$%%g" ./gentoo/sets/gary-os; diff ./gentoo/sets/{_,}gary-os
 
-#{LINPKG} sys-kernel/gentoo-sources:6.16.9
-#{KERNEL} 6.16.9
+#{LINPKG} sys-kernel/gentoo-sources:7.2.4
+#{KERNEL} 7.2.4
 #{KRNLNK}
 #{GENKRN} --e2fsprogs
 #{GENKRN} --luks
