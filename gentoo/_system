@@ -1232,7 +1232,7 @@ if [[ ${1} == -l ]]; then
 		else
 			echo -en "https://packages.gentoo.org/packages/${NEXT}\n"
 			echo -en "https://gitweb.gentoo.org/repo/gentoo.git/log/${NEXT}\n"
-			echo -en "https://gentoobrowse.randomdan.homeip.net/package/${NEXT}#bugs\n"
+			echo -en "https://gentoobrowse.randomdan.homeip.net/packages/${NEXT}#bugs\n"
 			${LL} -d ${DSTDIR}/$(basename ${FILE})*
 			${LL} -d ${PAKDIR}/${NEXT}*
 			${LL} -d ${TMPDIR}/${NEXT}-[0-9]*/temp/build.log
@@ -1609,9 +1609,9 @@ if [[ ${1} == -u ]]; then
 
 ########################################
 
-#{CMD} declare DISTFILES="/.g/_data/_builds/_gentoo/var/cache/portage/distfiles"
+#{CMD} declare DISTFILES="/.g/_data/_builds/_gentoo/var/cache/distfiles"
 #{CMD} declare DISTFILES="/.g/_data/_builds/.gary-os.release/_distfiles"
-#{CMD} (source ./.bashrc; for FILE in ${FILELIST}; do eval \${RSYNC_U} ${DISTFILES}/${FILE} ./build/var/cache/portage/distfiles/; done)
+#{CMD} (source ./.bashrc; for FILE in ${FILELIST}; do eval \${RSYNC_U} ${DISTFILES}/${FILE} ./build/var/cache/distfiles/; done)
 
 elif [[ ${1} == -U ]]; then
 	shift
