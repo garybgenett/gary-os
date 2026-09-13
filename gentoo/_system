@@ -214,6 +214,10 @@ if ! ${_BASH_SOURCED}; then
 	fi
 fi
 
+#note: override for "doit" follow-up during "init" pass of new builds
+if ${DOTEST}; then
+	_NEW="true"
+fi
 #note: detection of a "gary-os" build is based purely on the package set name
 if [[ ${_PKG} == ${_TITLE} ]]; then
 	_GOS="true"
