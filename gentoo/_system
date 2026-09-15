@@ -1432,8 +1432,8 @@ if [[ ${1} == -i ]]; then
 							${TARGET}${ARCDIR}/${KERN}				|| EXIT 1
 			kernel_cpu			${TARGET}${ARCDIR}/${KERN}				|| EXIT 1
 		fi
-#>							--compress-initramfs					\
-#>							--compress-initramfs-type="xz"				\
+#>>>							--compress-initramfs					\
+#>>>							--compress-initramfs-type="xz"				\
 		expect_wrapper genkernel		--loglevel="5"						\
 							--strip="all"						\
 							--bootloader="grub"					\
