@@ -313,7 +313,7 @@ fi
 
 export MORE="less -rX"						; alias more="${MORE}"
 export VI="${REALTIME} vim -u ${HOME}/.vimrc -i NONE -p"	; alias vi="${VI}"
-export GVI="prompt -d -x ; ${VI} -g"				; alias gvim="${GVI}"
+export GVI="${VI} -g"						; alias gvim="${GVI/ vim / gvim }"
 export VIEW="${VI}"						; alias view="${VIEW}"
 
 if [[ "${-/i}" != "${-}" ]]; then
