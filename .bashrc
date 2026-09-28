@@ -103,7 +103,7 @@ export LC_ALL=
 
 export HISTFILE="${HOSTNAME}.${USER}.$(basename ${SHELL}).$(date +%Y-%m)"
 export HISTFILE="${HOME}/.history/shell/${HISTFILE}"
-export HISTSIZE="$(( (2**31)-1 ))"
+export HISTSIZE="-1" #>>> $(( (2**30)-1 ))
 export HISTFILESIZE="${HISTSIZE}"
 export HISTTIMEFORMAT="%Y-%m-%dT%H:%M:%S "
 export HISTCONTROL=
@@ -225,6 +225,7 @@ else
 fi
 if [[ "${SCRIPT}" != ".bashrc" ]]; then
 	export PROMPT_COMMAND="IMPERSONATE_MODE=\"true\"; echo -en \"${PRE_PROMPT}\";"
+	export PROMPT_COMMAND+="history -a; history -c; history -r;"
 fi
 if [[ -n ${PROMPT_KEY} ]] &&
    [[ "${SCRIPT}" != ".bashrc" ]] &&
@@ -248,6 +249,7 @@ if [[ ${PROMPT} == [+]*(*) ]]; then
 	history -a
 	HISTFILE="${HOSTNAME}.${USER}.${IMPERSONATE_NAME}.$(date +%Y-%m)"
 	HISTFILE="${HOME}/.history/shell/${HISTFILE}"
+	history -c
 	history -r
 	function impersonate_command { return 0; }
 	function impersonate_shell {
@@ -272,7 +274,7 @@ if [[ ${PROMPT} == [+]*(*) ]]; then
 		fi
 		return 1
 	}
-	alias quit="${IMPERSONATE_QUIT} history -a; prompt; history -r;"
+	alias quit="${IMPERSONATE_QUIT} history -a; prompt; history -c; history -r;"
 	eval ${IMPERSONATE_TRAP}
 fi
 
