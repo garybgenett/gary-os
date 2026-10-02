@@ -192,6 +192,7 @@ app-arch/rpm
 # gentoo
 
 app-admin/eselect
+app-eselect/eselect-python		# gentoo required -- source
 app-portage/gentoolkit
 sys-apps/portage
 sys-kernel/genkernel
