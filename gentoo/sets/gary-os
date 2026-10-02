@@ -18,6 +18,7 @@
 #{NODIST} all-rights-reserved
 #{NODIST} lha
 #{NODIST} mekanix
+#{NODIST} truecrypt-3.0
 
 #{LCLGEN} C.UTF-8
 #{LCLGEN} en_US.UTF-8
