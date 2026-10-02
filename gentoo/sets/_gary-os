@@ -348,7 +348,7 @@ virtual/perl-MIME-Base64
 virtual/perl-Time-Local
 
 dev-lang/python
-dev-lang/rust				# gentoo required -- source
+#>>> dev-lang/rust			# gentoo required -- source
 net-libs/nodejs
 
 app-misc/jq

@@ -149,7 +149,10 @@ x11-wm/dwm				savedconfig
 */*					-tpm
 */*					x265
 
-dev-java/openjdk			-system-bootstrap
+dev-java/openjdk			-jbootstrap		# gentoo-required -- source
+dev-java/openjdk			-system-bootstrap	# gentoo-required -- source
+dev-lang/rust				-mrustc-bootstrap	# gentoo-required -- source
+dev-lang/rust				-system-bootstrap	# gentoo-required -- source
 
 mail-client/thunderbird			-bindist
 www-client/firefox			-bindist
