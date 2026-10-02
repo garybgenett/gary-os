@@ -1,4 +1,6 @@
 # version archiving
+#	6.18.50		2026-09-09 20:39:39 +0100 b25521e5edcc1b94475f9251b491e641b0e5896b sys-apps/intune-portal: Fix bwrap symlink issue, allow patching
+#	7.2.4		2026-09-09 20:39:39 +0100 b25521e5edcc1b94475f9251b491e641b0e5896b sys-apps/intune-portal: Fix bwrap symlink issue, allow patching
 # virtual/dist-kernel
 #	5.10.154	2022-11-11 08:01:03 +0100 6ce7859e9fb276fc8d5a84dc4652c3f5335f04ce virtual/dist-kernel: Bump to 5.10.154
 #	6.6.28		2024-04-18 14:27:42 +0200 0c5a2a0f9b866209dca5bf778d416b6befd24a30 virtual/dist-kernel: Bump to 6.6.28
@@ -14,3 +16,4 @@
 #	6.6.28		2024-04-18 16:34:23 +0900 abdc1c7abed421300e34ad63b97391b11eef9b3e sys-kernel/gentoo-sources: add 6.6.28
 #	6.12.13		2025-02-08 06:51:07 -0500 cdba755c2f6130794c58122d577579b6671e35dc sys-kernel/gentoo-sources: add 6.12.13
 #	6.12.49		2025-09-26 00:04:59 +0900 500a7829e149609b431c31a0d30c4c12ed96c7a6 sys-kernel/gentoo-sources: add 6.12.49
+#	6.16.9		2025-09-26 00:04:15 +0900 dec8cb767d2cdf7f9d2be9e5d24a57145c5ab2dc sys-kernel/gentoo-sources: add 6.16.9
