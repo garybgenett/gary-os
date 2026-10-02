@@ -2165,6 +2165,7 @@ function _publish_prep {
 	sort -u -o ${TARGET}/.gitignore			${TARGET}/.gitignore			|| return 1
 	${SED} -i "/^$/d"				${TARGET}/.gitignore			|| return 1
 	${RM}						${TARGET}${ARCDIR}/.subversion*		|| return 1
+	${RM}						${TARGET}${ARCDIR}/.vim*		|| return 1
 	${RM}						${TARGET}${ARCDIR}/.wget*		|| return 1
 	${RM}						${TARGET}/.${_GPACK/%.txt}*		|| return 1
 	${RM}						${CPIO_FILE}				|| return 1
@@ -2178,7 +2179,7 @@ function _publish_prep {
 	${RM}						${TARGET}${DSTDIR}/{.[^.],}*checksum*	|| return 1
 	${SED} "s|^[#][{][^}]+[}][[:space:]]+||g"	${SETDIR}/${FUNDIR}/package.license	\
 		| ${SED} -n "s|^([^#[:space:]]+)[[:space:]]+([^[:space:]]+).*$|\1 \2|gp"	\
-		| eval ${SED} -n								\
+		| eval ${SED} -n -e "/^$/p"							\
 			$(for FILE in ${NODIST}; do
 				echo -en " -e \"/[[:space:]]${FILE}$/p\""
 			done)									\
