@@ -67,10 +67,7 @@
 #{GENKRN} --zfs
 #{GENKRN} kernel
 
-#{CMD} grep -v -e "^[#]" -e "^$" gentoo/package.license | sed -r "s|^[^[:space:]]+[[:space:]]+([^[:space:]]+).*$|\1|g" | sort -u
-#{NODIST} all-rights-reserved
-#{NODIST} lha
-#{NODIST} mekanix
+#{NODIST}
 
 #{LCLGEN} C.UTF-8
 #{LCLGEN} en_US.UTF-8
