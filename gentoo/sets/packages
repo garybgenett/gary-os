@@ -2,10 +2,9 @@
 # portage set configuration file
 ################################################################################
 
-#{LINPKG} sys-kernel/gentoo-kernel:7.2.4
-#{LINPKG} sys-kernel/gentoo-sources:6.16.9
-#{LINPKG} sys-kernel/gentoo-sources:7.2.4
-#{KERNEL} 6.16.9 7.2.4
+#{LINPKG} sys-kernel/gentoo-kernel:6.18.50
+#{LINPKG} sys-kernel/gentoo-sources:6.18.50
+#{KERNEL} 6.18.50
 #{KRNLNK}
 #{GENKRN} --e2fsprogs
 #{GENKRN} --luks
