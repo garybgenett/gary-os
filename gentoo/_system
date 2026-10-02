@@ -1559,7 +1559,6 @@ if [[ ${1} == -w ]]; then
 		fi
 		eselect ${KEY} list
 	done
-	ldconfig
 	echo -en "${LCLGEN}" | tr ' ' '\n' | tr '.' ' '	>/tmp/locale.gen
 	locale-gen --jobs ${JOBS} --config		/tmp/locale.gen
 	${RM}						/tmp/locale.gen
