@@ -27,6 +27,11 @@
 >=dev-lang/rust-bin-1.95		# gentoo required -- version
 
 ########################################
+# programs
+
+>=app-misc/task-3			# gentoo required -- version
+
+########################################
 # games
 
 games-misc/fortune-mod-mormon
