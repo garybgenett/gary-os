@@ -360,8 +360,6 @@ dev-vcs/git
 dev-vcs/git-lfs
 dev-vcs/repo
 
-sys-apps/thunderbolt-software-user-space
-
 net-wireless/bluez
 net-wireless/bluez-tools
 
@@ -416,7 +414,7 @@ net-analyzer/nmap
 net-analyzer/openbsd-netcat
 net-analyzer/ssldump
 net-analyzer/tcpdump
-net-analyzer/tcptrace
+#>>> net-analyzer/tcptrace
 net-analyzer/tcptraceroute
 net-analyzer/traceroute
 net-analyzer/wireshark
@@ -487,7 +485,6 @@ media-libs/alsa-lib
 media-libs/alsa-oss
 media-plugins/alsa-plugins
 media-sound/alsa-utils
-
 media-sound/aumix
 
 media-video/vlc

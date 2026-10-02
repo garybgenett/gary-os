@@ -121,7 +121,7 @@ mail-client/mutt			-tokyocabinet gpg hcache sasl sidebar smime smtp
 mail-client/thunderbird			-rust-extensions -wifi ldap
 mail-mta/msmtp				daemon mta
 media-libs/libprojectm			qt5
-media-libs/mesa				vulkan vulkan-overlay
+media-libs/mesa				vulkan
 media-sound/pulseaudio-daemon		alsa bluetooth dbus oss
 media-video/vlc				gui projectm run-as-root vlm
 net-analyzer/tcpdump			-chroot
@@ -215,6 +215,7 @@ sys-apps/fwupd				minimal		# requires: ( sys-apps/systemd | sys-auth/elogind )
 # dev-python/pygments
 # dev-python/setuptools
 # dev-qt/qtcore
+# gnome-base/librsvg
 # media-fonts/dejavu
 # media-fonts/font-util
 # media-libs/harfbuzz = gnome-base/librsvg
@@ -228,7 +229,6 @@ sys-apps/fwupd				minimal		# requires: ( sys-apps/systemd | sys-auth/elogind )
 
 ########################################
 
-#{GFG} dev-build/cmake			-gui		# gentoo required
 #{GFG} media-libs/libsndfile		minimal		# gentoo required
 
 #{GFG} sys-devel/gcc			-ada		# dev-lang/ada-bootstrap
@@ -239,15 +239,12 @@ sys-apps/fwupd				minimal		# requires: ( sys-apps/systemd | sys-auth/elogind )
 #{GOS} dev-embedded/libftdi		-cxx		# dev-libs/boost
 #{GOS} dev-vcs/git			-tk		# dev-lang/tcl (dev-lang/tk)
 #{GOS} media-libs/freetype		-svg		# gnome-base/librsvg -> x11-libs/pango
-#{GOS} media-libs/mesa			-vulkan		# media-libs/vulkan-loader
-#{GOS} media-libs/mesa			-vulkan-overlay	# media-libs/vulkan-loader
+#{GOS} media-libs/mesa			-vulkan		# dev-util/vulkan-headers
 #{GOS} net-libs/libnet			-man		# app-text/doxygen -> app-text/ghostscript-gpl
 #{GOS} net-libs/nghttp2			-cxx		# dev-libs/boost
 #{GOS} net-wireless/wpa_supplicant	-gui		# dev-qt/qtcore
 
 #{GOS} media-libs/freetype		-harfbuzz	# media-libs/harfbuzz
-#{GOS} media-libs/libcanberra		-gtk2		# x11-libs/gtk+
-#{GOS} media-libs/libcanberra		-gtk3		# x11-libs/gtk+
 #{GOS} media-libs/mesa			-llvm		# sys-devel/llvm
 #{GOS} sys-devel/gcc			-ada		# dev-lang/ada-bootstrap
 #{GOS} sys-fs/lvm2			-thin		# sys-block/thin-provisioning-tools -> dev-libs/boost
