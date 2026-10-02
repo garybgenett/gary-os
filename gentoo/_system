@@ -1400,16 +1400,19 @@ if [[ ${1} == -i ]]; then
 	fi
 	if ! ${DOFAST} && ${_KRN}; then
 		if ${DOREDO}; then
-#>>>			expect_wrapper			emerge ${_ASK} --unmerge ${LINPKG}			#>>> || EXIT 1
-			expect_wrapper			emerge ${_ASK} --unmerge sys-kernel/gentoo-kernel	#>>> || EXIT 1
-			expect_wrapper			emerge ${_ASK} --unmerge sys-kernel/gentoo-sources	#>>> || EXIT 1
+			expect_wrapper			emerge ${_ASK} --unmerge				\
+								sys-kernel/gentoo-kernel			\
+								sys-kernel/gentoo-sources			\
+								${LINPKG}					#>>> || EXIT 1
 			${RM}				${TARGET}/boot/{System.map,vmlinuz,initramfs,config}*	|| EXIT 1
 			${RM}				${TARGET}/boot/{_*,kernel{,.old}}			|| EXIT 1
 			${RM}				${TARGET}/etc/kernels/*					|| EXIT 1
 			${RM}				${TARGET}/lib/modules/*					|| EXIT 1
 			${RM}				${TARGET}${LDIR}*					|| EXIT 1
 		fi
-		expect_wrapper				emerge ${_ASK} sys-kernel/genkernel ${LINPKG}		|| EXIT 1
+		expect_wrapper				emerge ${_ASK}						\
+								sys-kernel/genkernel				\
+								${LINPKG}					|| EXIT 1
 		if [[ -z ${KRNLNK} ]]; then KRNLNK="*"; fi
 		declare KERN="$(cd ${TARGET}/boot; ls vmlinuz-${KRNLNK}-gentoo*		2>/dev/null | ${GREP} -v "${_TITLE}" | sort | tail -n1)"
 		declare INIT="$(cd ${TARGET}/boot; ls initramfs-${KRNLNK}-gentoo*	2>/dev/null | ${GREP} -v "${_TITLE}" | sort | tail -n1)"
@@ -1499,7 +1502,8 @@ if [[ ${1} == -i ]]; then
 		fi
 	fi
 	if ${_BLD}; then
-		expect_wrapper				emerge ${_ASK} --emptytree \@system \@world		|| EXIT 1
+		expect_wrapper				emerge ${_ASK} --emptytree \@system \@world		$(
+			for FILE in ${LINPKG}; do echo -en " --exclude ${FILE}"; done)				|| EXIT 1
 	fi
 	safe_env					${MYSELF} ${QUIET_OPT} ${TOOR} ${AUTO} -u		|| EXIT 1
 	mount_dev_dirs -u											|| EXIT 1
