@@ -1401,6 +1401,10 @@ if [[ ${1} == -i ]]; then
 	if ! ${DOFAST} && ${_KRN}; then
 		if ${DOREDO}; then
 			expect_wrapper			emerge ${_ASK} --unmerge				\
+								\@module-rebuild				\
+								$(equery list @module-rebuild				| ${SED} "s|[-][0-9][[:alnum:]_.-]+$||g" \
+									| while read -r FILE; do equery depends ${FILE}	| ${SED} "s|[-][0-9][[:alnum:]_.-]+$||g"
+								done)						\
 								sys-kernel/gentoo-kernel			\
 								sys-kernel/gentoo-sources			\
 								${LINPKG}					#>>> || EXIT 1
