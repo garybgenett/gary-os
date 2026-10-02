@@ -239,8 +239,11 @@ sys-apps/fwupd				minimal		# requires: ( sys-apps/systemd | sys-auth/elogind )
 #{GOS} dev-embedded/libftdi		-cxx		# dev-libs/boost
 #{GOS} dev-vcs/git			-tk		# dev-lang/tcl (dev-lang/tk)
 #{GOS} media-libs/freetype		-svg		# gnome-base/librsvg -> x11-libs/pango
+#{GOS} media-libs/mesa			-vulkan		# media-libs/vulkan-loader
+#{GOS} media-libs/mesa			-vulkan-overlay	# media-libs/vulkan-loader
 #{GOS} net-libs/libnet			-man		# app-text/doxygen -> app-text/ghostscript-gpl
 #{GOS} net-libs/nghttp2			-cxx		# dev-libs/boost
+#{GOS} net-wireless/wpa_supplicant	-gui		# dev-qt/qtcore
 
 #{GOS} media-libs/freetype		-harfbuzz	# media-libs/harfbuzz
 #{GOS} media-libs/libcanberra		-gtk2		# x11-libs/gtk+
@@ -248,12 +251,6 @@ sys-apps/fwupd				minimal		# requires: ( sys-apps/systemd | sys-auth/elogind )
 #{GOS} media-libs/mesa			-llvm		# sys-devel/llvm
 #{GOS} sys-devel/gcc			-ada		# dev-lang/ada-bootstrap
 #{GOS} sys-fs/lvm2			-thin		# sys-block/thin-provisioning-tools -> dev-libs/boost
-
-########################################
-
-#{GOS} media-libs/mesa			-vulkan		# media-libs/vulkan-loader
-#{GOS} media-libs/mesa			-vulkan-overlay	# media-libs/vulkan-loader
-#{GOS} net-wireless/wpa_supplicant	-gui		# dev-qt/qtcore
 #{GOS} x11-base/xorg-server		-xnest		# keep size down
 #{GOS} x11-base/xorg-server		-xvfb		# keep size down
 
