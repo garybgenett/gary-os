@@ -818,7 +818,6 @@ function _prepare_config {		#{isexit} #{doredo}
 	DOREDO="${DOREDO}" prepare_config_restore "null"			/init							|| return 1
 	DOREDO="${DOREDO}" prepare_config_restore sys-apps/sysvinit		/etc/inittab						|| return 1
 	DOREDO="${DOREDO}" prepare_config_restore sys-apps/baselayout		/etc/fstab						fstab			|| return 1
-	DOREDO="${DOREDO}" prepare_config_restore sys-apps/locale-gen		/etc/locale.gen						|| return 1
 	DOREDO="${DOREDO}" prepare_config_restore sys-apps/openrc		/etc/conf.d/hostname					|| return 1
 	DOREDO="${DOREDO}" prepare_config_restore "null"			/etc/profile.d/setterm.sh				|| return 1
 	DOREDO="${DOREDO}" prepare_config_restore net-wireless/wpa_supplicant	/etc/wpa_supplicant/wpa_supplicant.conf			wpa_supplicant.conf.bz2	|| return 1
@@ -826,9 +825,6 @@ function _prepare_config {		#{isexit} #{doredo}
 	DOREDO="${DOREDO}" prepare_config_restore "null"			/etc/env.d/90xsession					|| return 1
 	DOREDO="${DOREDO}" prepare_config_restore x11-wm/dwm			/etc/X11/Sessions/dwm					|| return 1
 	if ${DOREDO}; then
-		${SED} -i "s|^[#](en_US)|\1|g"					${TARGET}/etc/locale.gen				|| return 1
-		safe_env							/usr/sbin/locale-gen					|| return 1
-		safe_env							/usr/sbin/env-update					|| return 1
 		return 0
 	fi
 	shopt -s lastpipe
@@ -840,7 +836,6 @@ function _prepare_config {		#{isexit} #{doredo}
 	${LN} --relative ${TARGET}/usr/bin/init					${TARGET}/init						|| return 1
 	${SED} -i "s|^[#](.+ttyS0.+vt100.*)$|\1|g"				${TARGET}/etc/inittab					|| return 1
 	${SED} -i "s|^([^#].+)$|#\1|g"						${TARGET}/etc/fstab					|| return 1
-	${RSYNC_C} --copy-links ${ARTDIR}/files/locale.gen			${TARGET}/etc/						|| return 1
 	${SED} -i "s|^(hostname=[\"]?)[^\"]+([\"]?)$|\1${_TITLE}\2|g"		${TARGET}/etc/conf.d/hostname				|| return 1
 	echo -en "setterm -blength 0\n"						>${TARGET}/etc/profile.d/setterm.sh			|| return 1
 	${RSYNC_C} --copy-links ${ARTDIR}/files/wpa_supplicant.conf		${TARGET}/etc/wpa_supplicant/				|| return 1
@@ -855,8 +850,6 @@ function _prepare_config {		#{isexit} #{doredo}
 		-e "s|^(exec[ ].*)$|${FILE}\1|g"											\
 										${TARGET}/etc/X11/Sessions/dwm				|| return 1
 	${SED} -i "s|^(.*xsetroot[ ][-]name[ ]).*$|\1\"${WMHELP}\"|g"		${TARGET}/etc/X11/Sessions/dwm				|| return 1
-	safe_env								/usr/sbin/locale-gen					|| return 1
-	safe_env								/usr/sbin/env-update					|| return 1
 	echo -en "${_GPASS}\n${_GPASS}\n" | safe_env				/usr/bin/passwd root					|| return 1
 	return 0
 }

@@ -16,9 +16,12 @@
 
 #{NODIST}
 
+#{LCLGEN} C.UTF-8
+#{LCLGEN} en_US.UTF-8
+
 #{SELECT} cdparanoia:cdparanoia-paranoia
 #{SELECT} editor:vi
-#{SELECT} locale:en_US.utf8
+#{SELECT} locale:en_US.UTF-8
 #{SELECT} pager:less
 #{SELECT} unison:2.53
 #{SELECT} vi:vim

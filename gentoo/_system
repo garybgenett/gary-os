@@ -356,7 +356,7 @@ function portage_file {
 }
 
 #SOURCED[LINPKG KERNEL KRNLNK GENKRN]
-#SOURCED[NODIST SELECT WINMGR WMHELP]
+#SOURCED[NODIST LCLGEN SELECT WINMGR WMHELP]
 #SOURCED[RCUPDT FSUPDT FSPACK FSKEEP FSARCH FSEXCL]
 for FILE in	\
 	LINPKG	\
@@ -365,6 +365,7 @@ for FILE in	\
 	GENKRN	\
 	\
 	NODIST	\
+	LCLGEN	\
 	SELECT	\
 	WINMGR	\
 	WMHELP	\
@@ -381,6 +382,9 @@ for FILE in	\
 ; do
 	eval export ${FILE}=\"${!FILE:-$(portage_file ${SETDIR}/${FUNDIR}/sets/${_PKG} ${FILE} " ; ")}\"
 done
+if [[ -z ${LCLGEN} ]]; then
+	export LCLGEN="C.UTF-8 en_US.UTF-8"
+fi
 export WINMGR="${WINMGR:-dwm}"
 export WMHELP="${WMHELP:-${_TITLE} / \`date --iso=seconds\`}"
 
@@ -1556,8 +1560,10 @@ if [[ ${1} == -w ]]; then
 		eselect ${KEY} list
 	done
 	ldconfig
+	echo -en "${LCLGEN}" | tr ' ' '\n' | tr '.' ' '	>/tmp/locale.gen
+	locale-gen --jobs ${JOBS} --config		/tmp/locale.gen
+	${RM}						/tmp/locale.gen
 	env-update
-	locale-gen
 	EXIT 0
 fi
 
