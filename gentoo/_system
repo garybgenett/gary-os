@@ -1536,7 +1536,7 @@ if [[ ${1} == -w ]]; then
 		gcc-config --list-profiles
 	fi
 	if [[ -n "$(which java-config 2>/dev/null)" ]]; then
-		java-config $(java-config --list-available-vm			| ${SED} -n "s|^.*[[](.+)[]].*$|\1|gp" | ${GREP} -o "openjdk[-][0-9]+" | sort -uV | tail -n1)
+		java-config $(java-config --list-available-vm			| ${SED} -n "s|^.*[[](.+)[]].*$|\1|gp" | sort -uV | tail -n1)
 		java-config --list-available-vms
 	fi
 	for FILE in \
@@ -1544,6 +1544,7 @@ if [[ ${1} == -w ]]; then
 		gcc \
 		java-vm \
 		python \
+		rust \
 	; do
 		if [[ ${FILE} == java-vm ]]; then
 			eselect ${FILE} set system $(eselect ${FILE} list	| ${SED} -n "s|^.*[[][0-9]+[]][[:space:]]+([^[:space:]]+).*$|\1|gp" | sort -uV | tail -n1)
