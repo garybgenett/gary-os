@@ -2,12 +2,14 @@
 # portage package mask file
 ################################################################################
 
->=sys-kernel/gentoo-kernel-7.3		# gentoo required -- version
->=sys-kernel/gentoo-sources-7.3		# gentoo required -- version
->=virtual/dist-kernel-7.3		# gentoo required -- version
+>=sys-kernel/gentoo-kernel-6.19		# gentoo required -- version
+>=sys-kernel/gentoo-sources-6.19	# gentoo required -- version
+>=virtual/dist-kernel-6.19		# gentoo required -- version
 
 ########################################
 # system
+
+>=sys-fs/fuse-4				# gentoo required -- version
 
 >=sys-fs/zfs-2.4			# gentoo required -- version
 >=sys-fs/zfs-kmod-2.4			# gentoo required -- version
@@ -15,8 +17,14 @@
 ########################################
 # toolkits
 
-<dev-lang/python-3.13			# gentoo required -- version
+>=dev-java/openjdk-22			# gentoo required -- version
+>=dev-java/openjdk-bin-22		# gentoo required -- version
+>=virtual/jdk-22			# gentoo required -- version
+
 >=dev-lang/python-3.14			# gentoo required -- version
+
+>=dev-lang/rust-1.95			# gentoo required -- version
+>=dev-lang/rust-bin-1.95		# gentoo required -- version
 
 ########################################
 # games
@@ -25,6 +33,17 @@ games-misc/fortune-mod-mormon
 games-misc/fortune-mod-scriptures
 
 ################################################################################
+
+>=app-crypt/gcr-5			# gentoo required -- version
+>=app-text/docbook-xml-dtd-4.6		# gentoo required -- version
+>=dev-qt/qtbase-7			# gentoo required -- version
+>=gui-libs/gtk-5			# gentoo required -- version
+>=llvm-core/clang-23			# gentoo required -- version
+>=llvm-core/llvm-23			# gentoo required -- version
+>=media-libs/libprojectm-4		# gentoo required -- version
+>=x11-libs/gtk+-4			# gentoo required -- version
+
+########################################
 
 >=games-emulation/nestopia-1.53		# gentoo required [nestopia-1.53.* / nestopia-1.52.*]: needs >=x11-libs/fltk-1.4:1=[opengl]
 >=sys-boot/grub-2.14			# gentoo required [grub-2.14-r5 / grub-2.12-r12]: https://bugs.gentoo.org/972543 / /usr/x86_64-pc-linux-gnu/binutils-bin/2.46.1/ld: kernel.exec: in function `grub_util_find_root_devices_from_poolname': / /var/tmp/portage/sys-boot/grub-2.14-r5/work/grub-2.14/grub-core/osdep/unix/getroot.c:170:(.text+0xd896): undefined reference to `grub_get_libzfs_handle'
