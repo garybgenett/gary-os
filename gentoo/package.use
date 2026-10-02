@@ -104,6 +104,7 @@ sys-kernel/linux-firmware		-savedconfig	# gentoo required [*]: The following REQ
 
 #>>> app-emulation/virtualbox		gui sdk vnc
 #{MOD} www-client/chromium		ffmpeg-chromium
+app-arch/7zip				symlink
 app-editors/vim				-X gpm
 app-emulation/libvirt			lxc qemu
 app-emulation/qemu			ncurses sdl spice
