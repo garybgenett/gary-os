@@ -575,7 +575,7 @@ if [[ -n ${DO_MOUNT} ]]; then
 		if [[ ${DO_MOUNT} == -m ]]; then
 			if [[ -f ${GINST} ]]; then
 				losetup -d ${LOOP_DEVICE}			#>>> || exit 1
-				losetup -v -P ${LOOP_DEVICE} ${GINST}		|| exit 1
+				losetup -P ${LOOP_DEVICE} ${GINST}		|| exit 1
 				partx -t gpt -a ${LOOP_DEVICE}			#>>> || exit 1
 				sleep 3
 			fi
@@ -654,7 +654,7 @@ else
 			of=${GINST}				|| exit 1
 	fi
 	losetup -d ${LOOP_DEVICE}				#>>> || exit 1
-	losetup -v -P ${LOOP_DEVICE} ${GINST}			|| exit 1
+	losetup -P ${LOOP_DEVICE} ${GINST}			|| exit 1
 	partx -t gpt -a ${LOOP_DEVICE}				#>>> || exit 1
 	sleep 3
 	GINST_DO="${LOOP_DEVICE}"
