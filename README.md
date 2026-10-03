@@ -1709,17 +1709,24 @@ Everything needed to perform these steps is in the [Repository] or the
         * `(cd _build/gentoo/gentoo; git pull; GIT_PAGER= git-list -n1)`
         * `(cd _build/gentoo/gentoo; ll ./sys-kernel/gentoo-sources)`
         * `(cd _build/gentoo/gentoo; ll ./sys-kernel/gentoo-kernel)`
+        * `(cd _build/gentoo/gentoo; grep "MODULES_KERNEL" ./sys-fs/zfs{,-kmod}/zfs-*.ebuild)`
+        * `(cd _build/gentoo/gentoo; grep "KEYWORDS" ./sys-fs/zfs{,-kmod}/zfs-*.ebuild)`
+        * `(cd _build/gentoo/gentoo; grep "KEYWORDS" ./dev-lang/python/python-*.ebuild)`
+        * `(cd _build/gentoo/gentoo; grep "KEYWORDS" ./dev-lang/rust/rust-*.ebuild)`
+        * `(cd _build/gentoo/gentoo; grep "KEYWORDS" ./dev-java/openjdk/openjdk-*.ebuild)`
     * `vi ./gentoo/_release`
         * [ ] Update `${_VERSN}` number
         * `vi ./gentoo/_funtoo`
             * [ ] Update [Gentoo] commit
-        * `vi ./gentoo/sets/*`
+        * `vi ./gentoo/sets/* ./gentoo/package.mask gentoo/make.conf`
+            * [ ] Command comments at top of [gentoo/package.use]
             * [ ] [Linux Kernel] versions
-            * [ ] Review
+            * [ ] Package versions
+            * [ ] Python version
         * `vi ./gentoo/package.* ./gentoo/sets/*`
             * [ ] Command comments at top of [gentoo/package.use]
         * `(cd ./gentoo/overlay; ./.review -a)`
-            * [ ] Review `.keep` packages
+            * [ ] Verify `.keep` packages
         * `(cd ./gentoo/*; git checkout .; git pull)`
             * [ ] Update packages
         * [ ] Update `${RUFUS_VER}` number
@@ -1728,6 +1735,7 @@ Everything needed to perform these steps is in the [Repository] or the
         * `while :; do make DOMODS=false DOFAST=true init; inotifywait --event modify gentoo/make.* gentoo/package.* gentoo/sets/*; done`
         * `(cd .setup; vi gentoo/make.* gentoo/package.* gentoo/sets/*; vdiff -g gentoo/make.* gentoo/package.* gentoo/sets/*)`
     * [x] *Iterate()*
+        * `make DOFAST=true DOTEST=true doit`
   * `ll ./linux/`
     * `rsync ./build/usr/src/linux-*-gentoo-dist-hardened/.config ./linux/default-gentoo64.config-[...]`
         * `rm ./linux/.default; ln default-gentoo64.config-[...] ./linux/.default`
@@ -1737,12 +1745,15 @@ Everything needed to perform these steps is in the [Repository] or the
         * `rm ./linux/.options; ln config-gentoo64-[...]-options ./linux/.options`
     * `vi ./linux/.options`
         * [ ] Update source kernel version
-        * [ ] Review
     * `vi ./linux/.config ./linux/.options; ./linux/_config ./build/usr/src/linux`
         * `vdiff $(realpath ./linux/.default) $(realpath ./linux/.config).*.DONE`
         * `rsync $(realpath ./linux/.config).*.DONE $(realpath ./linux/.config)`
         * `rm $(realpath ./linux/.config).*`
+    * `make DOMODS=false DOREDO=true krnl`
+        * `vdiff $(realpath ./linux/.default) ./build/usr/src/linux-*-gentoo-dist-hardened/.config`
+        * `vdiff $(realpath ./linux/.config) ./build/usr/src/linux/.config`
   * `make DOMODS=false doit`
+    * [ ] Remove unnecessary binary packages
     * [ ] Update `savedconfig` directory
     * [ ] Verify `NODIST` license list
     * [x] *Iterate()*
@@ -1751,7 +1762,6 @@ Everything needed to perform these steps is in the [Repository] or the
   * `make DOMODS=false DOREDO=true redo`
     * [x] *Iterate()*
     * `make DOMODS=false doit`
-    * `vdiff $(realpath ./linux/.default) ./build/usr/src/linux-*-gentoo-dist-hardened/.config`
     * `(cd _builds; rsync ./_gentoo/ ./_gary-os.working)`
   * `make DOMODS=true edit`
     * `(cd _builds; rm ./_gentoo.boot; ln _gentoo ./_gentoo.boot)`
