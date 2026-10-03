@@ -606,7 +606,7 @@ defaults in the [Boot] configuration file, sourced from
 required to load an external [Image].
 
 The `groot_size` value for the pre-made GaryOS [Rootfs] should be at least
-`4096m`, or `4g` if that format is preferred.  The [Boot] file is already
+`6144m`, or `6g` if that format is preferred.  The [Boot] file is already
 correctly configured (see [GRUB]).
 
 --------------------------------------------------------------------------------
