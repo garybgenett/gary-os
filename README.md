@@ -867,9 +867,9 @@ or `mount -o remount,size=6144m /.overlay` after booting (see [Update]).
   mount -o remount,size=6144m /.overlay
   ```
 
-It is strongly advised to at least skim through the [Gentoo Installation Guide]
-or the [Gentoo Installation Guide].  GaryOS aims to simplify the process, and is
-not meant to supplant all understanding of it.
+It is strongly advised to at least skim through the [Gentoo Installation Guide].
+GaryOS aims to simplify the process, and is not meant to supplant all
+understanding of it.
 
 **Unpack**
 
@@ -881,11 +881,8 @@ the install will be incomplete.
   make DOREDO=true unpack
   ```
 
-Both [Kernel] and [Rootfs] require [Networking] for this, although [Rootfs]
-already has all of the absolutely necessary directories locally.  For
-a network-less install, use [Rootfs] and follow the unpacking instructions in
-[Update].  Namely, edit the `/.unpack` file to skip the external
-`gentoo-repo.git` directory.
+[Kernel] will require [Networking] for this.  [Rootfs] already has all of the
+necessary directories locally, and can be used for a completely offline install.
 
 **Configuration Files** *(Optional)*
 
