@@ -443,12 +443,14 @@ export UNISON_W="reporter unison \
 	-log \
 	-logfile ${UNISON}/${UNISON_LOG} \
 	-times \
-	-perms 0"
+	-perms 0 \
+"
 export UNISON_U="${UNISON_W} \
 	-perms -1 \
 	-numericids \
 	-owner \
-	-group"
+	-group \
+"
 export UNISON_F="${UNISON_U} \
 	-fastcheck=false \
 "
