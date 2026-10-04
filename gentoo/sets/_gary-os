@@ -19,7 +19,7 @@
 #! declare G_RNSV="/.runit/runsvdir/system"
 #! #############################################################################
 #! mount -o remount,rw,size=8g /.overlay
-#! sed -i -r "s|[#][{]MOD[}][ ]||g" ./gentoo/sets/_gary-os
+#! sed -i -r "s|[#][{]MOD[}][ ]||g" ${SETDIR}/gentoo/sets/_gary-os
 #! make -C ${SETDIR} unpack
 #! [[ -b ${G_DISK} ]] && mount-robust ${G_DISK} ${_GINST}
 #! make -C ${SETDIR} DOREDO="true" unpack
