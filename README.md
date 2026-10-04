@@ -2044,7 +2044,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
             * `make DOTEST=true fetch`
     * `ls -la /.gary-os-*/`
         * `make DOREDO=true unpack`
-            * `sed -i "s|^[+]|*|g" /.unpack`
+            * `sed -i "s|^[^#]|*|g" /.unpack`
             * `make unpack`
         * `emerge app-misc/hello`
             * `hello`
@@ -2094,8 +2094,8 @@ Everything in [Booting], [Running] and [Building] should be validated below.
         * `make upgrade`
             * [ ] Verify from [SourceForge] packages
             * [ ] Exit with \<ctrl-c\> once successfully running
-        * `rm -frv /var/db/repos/gentoo`
         * `make update`
+            * [ ] Exit with \<ctrl-c\> once successfully running
   * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.qcow2 1 -m 8192`
     * [x] Boot Rootfs
         * [ ] Command comments in [gentoo/sets/_gary-os]
