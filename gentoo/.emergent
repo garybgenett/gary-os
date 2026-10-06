@@ -26,11 +26,11 @@ function grep_token {
 
 ################################################################################
 
-#note: the ".working" directory is a hard-set assumption
+#note: the ".build" directory is a hard-set assumption
 
 if [[ ${1} == -v ]]; then
 	declare CUR="${TARGET}"
-	declare NEW="${TARGET}.working"
+	declare NEW="${TARGET}.build"
 	declare PKG
 	for PKG in $(
 		${GREP} -v "^[#]" ${ETCDIR}/package.keywords |

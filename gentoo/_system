@@ -97,8 +97,8 @@ export GITDIR="${GITDIR:-https://anongit.gentoo.org/git/repo/gentoo}"
 
 #>>> #OPTIONS[BLDDIR WRKDIR GOSDIR]
 export BLDDIR="${BLDDIR:-/.g/_data/_builds/_gentoo}"
-export WRKDIR="${WRKDIR:-${BLDDIR}.working}"
-export GOSDIR="${GOSDIR:-/.g/_data/_builds/_${_TITLE}.working}"
+export WRKDIR="${WRKDIR:-${BLDDIR}.build}"
+export GOSDIR="${GOSDIR:-/.g/_data/_builds/_${_TITLE}.build}"
 
 #>>> #OPTIONS[BLDPKG WRKPKG TORPKG GOSPKG]
 export BLDPKG="${BLDPKG:-packages}"
