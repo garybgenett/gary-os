@@ -1703,7 +1703,7 @@ Everything needed to perform these steps is in the [Repository] or the
 *`}`*
 
   * `cd .setup/gentoo.make`
-    * `(cd _builds; rm ./_gentoo.working; ln _gentoo ./_gentoo.working)`
+    * `(cd _builds; rm ./_gentoo.build; ln _gentoo ./_gentoo.build)`
         * `(cd _builds/_gentoo; rm-all; ll)`
         * `(cd _target/iso; vi ./.urls; ./.urls -f)`
         * `(cd _build/gentoo/gentoo; git pull; GIT_PAGER= git-list -n1)`
@@ -1762,7 +1762,7 @@ Everything needed to perform these steps is in the [Repository] or the
   * `make DOMODS=false DOREDO=true redo`
     * [x] *Iterate()*
     * `make DOMODS=false doit`
-    * `(cd _builds; rsync ./_gentoo/ ./_gary-os.working)`
+    * `(cd _builds; rsync ./_gentoo/ ./_gary-os.build)`
   * `make DOMODS=true edit`
     * `(cd _builds; rm ./_gentoo.boot; ln _gentoo ./_gentoo.boot)`
     * `(cd _builds; rsync --filter="-_/var/cache/distfiles" ./_gentoo/ ../../_toor)`
@@ -1821,7 +1821,7 @@ Everything needed to perform these steps is in the [Repository] or the
 **Test & Publish**
 
   * `cd .setup/gentoo.gary-os`
-    * `(cd _builds/.gary-os.release; rm ./v#.#; ln ../_gary-os.working/.gary-os-* ./v#.#)`
+    * `(cd _builds/.gary-os.release; rm ./v#.#; ln ../_gary-os.build/.gary-os-* ./v#.#)`
         * `vi ./gentoo/_release`
             * [ ] Add `${RELEASE[*]}` number, with empty `${CMTHASH[*]}`
             * [ ] Update `${RELEASE_SKIP[*]}` to only keep last 2 releases
@@ -1831,7 +1831,7 @@ Everything needed to perform these steps is in the [Repository] or the
             * `rm ./build/.gary-os-*/gary-os-*.grub ./build/.gary-os-*/gary-os-*.qcow2`
             * `make DOREDO=false DOTEST=true _release_grub`
         * `make _publish_release`
-    * `(cd _builds; rm ./_gary-os.boot; ln _gary-os.working ./_gary-os.boot)`
+    * `(cd _builds; rm ./_gary-os.boot; ln _gary-os.build ./_gary-os.boot)`
         * `_sync boot`
   * [x] [Checklist]
   * [x] [Publish]
@@ -1847,7 +1847,7 @@ Everything needed to perform these steps is in the [Repository] or the
 
   * `cd .setup/gentoo.make`
     * `(cd _builds; rm ./_gentoo.boot; ln ../../_toor ./_gentoo.boot)`
-    * `(cd _builds; rm ./_gentoo.working; ln ../../_toor ./_gentoo.working)`
+    * `(cd _builds; rm ./_gentoo.build; ln ../../_toor ./_gentoo.build)`
     * `chmod -vR 755 ./gentoo/`
     * `vi ./gentoo/_funtoo`
         * `(cd _build/gentoo/gentoo; git pull; GIT_PAGER= git-list -n1)`
@@ -2040,7 +2040,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
         * `rm ./gary-os/gary-os-*.fetch`
         * `make fetch`
             * `sed -i "s|^[#]||g" ./gary-os/gary-os-*.fetch`
-            * `for FILE in $(cat ./gary-os/gary-os-*.fetch); do rsync -avv -L --progress root@10.0.0.254:[...]/_builds/_gary-os.working/.gary-os-*/${FILE} /.install/gary-os/; done`
+            * `for FILE in $(cat ./gary-os/gary-os-*.fetch); do rsync -avv -L --progress root@10.0.0.254:[...]/_builds/_gary-os.build/.gary-os-*/${FILE} /.install/gary-os/; done`
             * `make DOTEST=true fetch`
     * `ls -la /.gary-os-*/`
         * `make DOREDO=true unpack`
@@ -2165,7 +2165,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * `make _publish_gitdir`
     * `(cd _builds/.gary-os/.gary-os; GIT_PAGER= git-list -n1)`
   * `make doit && make DOREDO=true release _prepare_packdirs`
-    * `(cd _builds; rsync ./_gentoo/var/cache/{distfiles,binpkgs} ./_gary-os.working/var/cache/)`
+    * `(cd _builds; rsync ./_gentoo/var/cache/{distfiles,binpkgs} ./_gary-os.build/var/cache/)`
     * `./scripts/qemu-minion.bsh ./build/.gary-os-*/gary-os-*.kernel 1`
     * [x] **Verify()**
   * `make P=_gary-os doit && make P=_gary-os DOREDO=true rootfs`
@@ -2174,7 +2174,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * [x] **Verify()**
   * `make DOREDO=true _publish_release`
     * `ll ./build/ ./build/_build ./build/.gary-os-*`
-  * `(cd _builds; rsync -L ./_gary-os.working/.gary-os-*/ ./_gary-os)`
+  * `(cd _builds; rsync -L ./_gary-os.build/.gary-os-*/ ./_gary-os)`
     * `(cd _builds/_gary-os; git-backup <gentoo commit>.#; GIT_PAGER= git-list -n1)`
   * `(cd .setup; vi gentoo/_release; git-commit -m "Published v#.# release." gentoo/_release)`
     * [ ] Commit `${RELEASE[*]}` number and `${RELEASE_SKIP[*]}` limiter
