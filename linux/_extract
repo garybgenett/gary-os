@@ -2,7 +2,7 @@
 source ${HOME}/.bashrc
 ################################################################################
 
-ISO="$(ls /.g/_data/_target/iso/grml*.iso | tail -n1)"
+ISO="$(ls /.g/_data/source/_target/iso/grml*.iso | tail -n1)"
 KRN="/boot/grml64full/vmlinuz"
 
 echo -en "ISO: ${ISO}\n"

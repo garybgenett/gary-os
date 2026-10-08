@@ -92,7 +92,7 @@ if [[ ${DOTEST} != true ]] && [[ ${DOTEST} != false ]]; then DOTEST="false"; fi
 ########################################
 
 #OPTIONS[SOURCE GITDIR]
-export SOURCE="${SOURCE:-/.g/_data/_target/iso}"
+export SOURCE="${SOURCE:-/.g/_data/source/_target/iso}"
 export GITDIR="${GITDIR:-https://anongit.gentoo.org/git/repo/gentoo}"
 
 #>>> #OPTIONS[BLDDIR WRKDIR GOSDIR]
