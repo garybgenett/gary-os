@@ -1,3 +1,4 @@
 # removed package
 # still failing in: quakeforge-9999.ebuild
+# package.accept_keywords: <sys-devel/gcc-16 ~amd64 # gentoo required [games-fps/quakeforge]: https://developers.redhat.com/articles/2025/01/30/how-implement-c23-embed-gcc-15 / configure: error: QuakeForge requires #embed to compile
 # 2025-02-14 17:16:43 +0100 b4af72bd4f5af0bb23280e0b6d03dc09c839d591 games-fps/quakeforge: Fix incorrect REPLACING_VERSIONS usage
