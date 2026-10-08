@@ -129,9 +129,8 @@ export CCACHE_DIR="/tmp/.ccache"
 ########################################
 
 export CDPATH=".:${HOME}"
-export CDPATH+=":/.g"
 export CDPATH+=":/.g/_data"
-export CDPATH+=":/.g/_data/media"
+export CDPATH+=":/.g/_data/+paths"
 export CDPATH+=":/.g/_data/zactive"
 
 export PATH="${HOME}"
