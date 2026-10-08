@@ -99,10 +99,10 @@ fi
 
 # [...]/vioscsi/w10/amd64
 #>>>	${RM} /tmp/qemu.windows.img.*
-#>>>	${LN} $(${LS} /.g/_data/_target/install/_qemu/virtio-win-*.iso	| sort -n | tail -n1) /tmp/qemu.windows.img.qcow2
-#>>>	${LN} $(${LS} /.g/_data/source/microsoft/en_windows_*.iso	| sort -n | tail -n1) /tmp/qemu.windows.img.iso
-#>>>	${LN} $(${LS} /.g/_data/source/microsoft/en_office_*.iso	| sort -n | tail -n1) /tmp/qemu.windows.img.iso
-#>>>	${LN} $(${LS} /.g/_data/source/microsoft/en_visio_*.iso		| sort -n | tail -n1) /tmp/qemu.windows.img.iso
+#>>>	${LN} $(${LS} /.g/_data/source/_target/install/qemu/virtio-win-*.iso	| sort -n | tail -n1) /tmp/qemu.windows.img.qcow2
+#>>>	${LN} $(${LS} /.g/_data/source/microsoft/en_windows_*.iso		| sort -n | tail -n1) /tmp/qemu.windows.img.iso
+#>>>	${LN} $(${LS} /.g/_data/source/microsoft/en_office_*.iso		| sort -n | tail -n1) /tmp/qemu.windows.img.iso
+#>>>	${LN} $(${LS} /.g/_data/source/microsoft/en_visio_*.iso			| sort -n | tail -n1) /tmp/qemu.windows.img.iso
 #>>>	${LL} /tmp/qemu.windows.img.*
 #>>>	exec qemu.bsh "${QNUM}" "${QMEM}" "${QFIL}" / ALT \
 
