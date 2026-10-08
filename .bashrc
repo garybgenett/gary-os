@@ -1066,6 +1066,7 @@ alias workspace="_sync workspace"
 alias wpa="ip-setup wpa"
 alias zshow="_sync zfs show"
 alias zstatus="mount-zfs -! -?"
+alias zusage="_sync zfs usage"
 
 if [[ "${UNAME}" == "Darwin" ]]; then
 	alias trust="/_install/_mac_osx.txt -r ; /_install/_mac_osx.txt -x ; /_install/_mac_osx.txt -s"
