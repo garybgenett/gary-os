@@ -22,9 +22,9 @@ media-libs/libva-intel-media-driver	no-source-code	# gentoo required
 ########################################
 # programs
 
-net-im/discord			all-rights-reserved	# gentoo required
-net-im/slack			all-rights-reserved	# gentoo required
-net-im/zoom			all-rights-reserved	# gentoo required
+#>>> net-im/discord		all-rights-reserved	# gentoo required
+#>>> net-im/slack		all-rights-reserved	# gentoo required
+#>>> net-im/zoom		all-rights-reserved	# gentoo required
 
 app-misc/atomicwallet		all-rights-reserved	# gentoo required
 

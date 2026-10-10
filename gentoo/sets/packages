@@ -413,9 +413,9 @@ www-client/torbrowser-launcher
 #>>> www-client/surf			# requires: net-libs/webkit -> dev-lang/ruby
 #>>> x11-misc/tabbed			# only used for: www-client/surf
 
-net-im/discord
-net-im/slack
-net-im/zoom
+#>>> net-im/discord
+#>>> net-im/slack
+#>>> net-im/zoom
 
 media-gfx/gimp
 media-gfx/gnuclad
