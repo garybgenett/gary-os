@@ -825,6 +825,7 @@ function _prepare_config {		#{isexit} #{doredo}
 	DOREDO="${DOREDO}" prepare_config_restore "null"			/etc/env.d/90xsession					|| return 1
 	DOREDO="${DOREDO}" prepare_config_restore x11-wm/dwm			/etc/X11/Sessions/dwm					|| return 1
 	if ${DOREDO}; then
+		safe_env							/usr/sbin/env-update					|| return 1
 		return 0
 	fi
 	shopt -s lastpipe
@@ -850,6 +851,7 @@ function _prepare_config {		#{isexit} #{doredo}
 		-e "s|^(exec[ ].*)$|${FILE}\1|g"											\
 										${TARGET}/etc/X11/Sessions/dwm				|| return 1
 	${SED} -i "s|^(.*xsetroot[ ][-]name[ ]).*$|\1\"${WMHELP}\"|g"		${TARGET}/etc/X11/Sessions/dwm				|| return 1
+	safe_env								/usr/sbin/env-update					|| return 1
 	echo -en "${_GPASS}\n${_GPASS}\n" | safe_env				/usr/bin/passwd root					|| return 1
 	return 0
 }
