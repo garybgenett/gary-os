@@ -2163,7 +2163,7 @@ function _publish_prep {
 	variable_parse DEVDIRS "" "" "/"		>${TARGET}/.gitignore			|| return 1
 	sort -u -o ${TARGET}/.gitignore			${TARGET}/.gitignore			|| return 1
 	${SED} -i "/^$/d"				${TARGET}/.gitignore			|| return 1
-	${RM}						${TARGET}${ARCDIR}/.subversion*		|| return 1
+	${RM}						${TARGET}${ARCDIR}/.less*		|| return 1
 	${RM}						${TARGET}${ARCDIR}/.vim*		|| return 1
 	${RM}						${TARGET}${ARCDIR}/.wget*		|| return 1
 	${RM}						${TARGET}/.${_GPACK/%.txt}*		|| return 1
