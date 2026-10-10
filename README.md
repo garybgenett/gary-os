@@ -2414,7 +2414,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * Added [Tiny] kernel build
     * Color-branded [dwm]
   * [Portage]
-    * Promoted "FUNTOO" variable
+    * Promoted `FUNTOO` variable
     * Tightened up [gentoo/sets/] package lists
     * Consolidated and condensed Python versions
     * Eliminated Systemd, Surf, WebKit, SpiderMonkey, Ruby and CUPS
