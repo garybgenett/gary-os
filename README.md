@@ -1753,6 +1753,7 @@ Everything needed to perform these steps is in the [Repository] or the
         * `vdiff $(realpath ./linux/.default) ./build/usr/src/linux-*-gentoo-dist-hardened/.config`
         * `vdiff $(realpath ./linux/.config) ./build/usr/src/linux/.config`
   * `make DOMODS=false doit`
+    * `(cd ./gentoo/overlay; ./.review -l -n)`
     * [ ] Remove unnecessary binary packages
     * [ ] Update `savedconfig` directory
     * [ ] Verify `NODIST` license list
