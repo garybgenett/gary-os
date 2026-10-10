@@ -4,7 +4,7 @@
 
 | ![GaryOS Icon](_artifacts/images/icon-v6.0.png "GaryOS Icon") | "The one file that does it all."
 |:---      |:---
-| Latest   | [v10.0 2026-09-08] -- [Kernel], [Rootfs], [Boot], [Disk]
+| Latest   | [v11.0 2026-10-10] -- [Kernel], [Rootfs], [Boot], [Disk]
 | Homepage | <http://www.garybgenett.net/projects/gary-os>
 | Download | <https://sourceforge.net/projects/gary-os>
 | Source   | <https://github.com/garybgenett/gary-os>
@@ -24,7 +24,7 @@
 | [Project]  | [References], [Contributing], [Licensing]
 | [Details]  | [Versioning], [Repository], [Tools], [Ecosystem]
 | [Release]  | [Process], [Checklist], [Publish]
-| [Versions] | [v10.0 2026-09-08], [v9.0 2025-09-08], [v8.0 2024-05-16], [(...)]
+| [Versions] | [v11.0 2026-10-10], [v10.0 2026-09-08], [v9.0 2025-09-08], [(...)]
 
 [GaryOS]: http://www.garybgenett.net/projects/gary-os
 [Gary B. Genett]: http://www.garybgenett.net
@@ -2235,12 +2235,44 @@ Everything in [Booting], [Running] and [Building] should be validated below.
 [License]: https://github.com/garybgenett/gary-os/blob/main/LICENSE.md
 [Downloads]: https://sourceforge.net/projects/gary-os/files
 
-[Kernel]: https://sourceforge.net/projects/gary-os/files/gary-os-v10.0-generic_64.kernel
-[Rootfs]: https://sourceforge.net/projects/gary-os/files/gary-os-v10.0-generic_64.rootfs
-[Boot]: https://sourceforge.net/projects/gary-os/files/gary-os-v10.0-generic_64.grub.zip
-[Disk]: https://sourceforge.net/projects/gary-os/files/gary-os-v10.0-generic_64.qcow2
+[Kernel]: https://sourceforge.net/projects/gary-os/files/gary-os-v11.0-generic_64.kernel
+[Rootfs]: https://sourceforge.net/projects/gary-os/files/gary-os-v11.0-generic_64.rootfs
+[Boot]: https://sourceforge.net/projects/gary-os/files/gary-os-v11.0-generic_64.grub.zip
+[Disk]: https://sourceforge.net/projects/gary-os/files/gary-os-v11.0-generic_64.qcow2
 
-[(...)]: #v70-2023-01-14
+[(...)]: #v80-2024-05-16
+
+### v11.0 2026-10-10 ###########################################################
+[v11.0 2026-10-10]: #v110-2026-10-10
+[v11.0]: #v110-2026-10-10
+
+  **[Repository](https://github.com/garybgenett/gary-os/tree/v11.0)
+  / [Readme](https://github.com/garybgenett/gary-os/blob/v11.0/README.md)
+  / [License](https://github.com/garybgenett/gary-os/blob/v11.0/LICENSE.md)
+  / [Packages (Kernel)](https://github.com/garybgenett/gary-os/blob/v11.0/packages.txt)
+  / [Packages (Rootfs)](https://github.com/garybgenett/gary-os/blob/v11.0/packages.rootfs.txt)**
+
+  |                | |
+  |:---            |:---
+  | Kernel         | [gary-os-v11.0-generic_64.kernel](https://sourceforge.net/projects/gary-os/files/gary-os-v11.0-generic_64.kernel)
+  | Rootfs         | [gary-os-v11.0-generic_64.rootfs](https://sourceforge.net/projects/gary-os/files/gary-os-v11.0-generic_64.rootfs)
+  | Boot           | [gary-os-v11.0-generic_64.grub.zip](https://sourceforge.net/projects/gary-os/files/gary-os-v11.0-generic_64.grub.zip)
+  | Disk           | [gary-os-v11.0-generic_64.qcow2](https://sourceforge.net/projects/gary-os/files/gary-os-v11.0-generic_64.qcow2)
+  | Source Stage3  | [gary-os-v11.0-generic_64.stage3.tar.xz](https://sourceforge.net/projects/gary-os/files/v11.0/gary-os-v11.0-generic_64.stage3.tar.xz)
+  | Source Portage | [gary-os-v11.0-generic_64.gentoo-repo.tar.xz](https://sourceforge.net/projects/gary-os/files/v11.0/gary-os-v11.0-generic_64.gentoo-repo.tar.xz)
+
+  * Overall
+    * Minimized X.Org *(Mesa and LLVM have become too expensive)*
+    * Enhancements and fixes to `eselect` in build process
+    * Added `LCLGEN` option for "locale" configuration
+    * Improved [Linux Kernel] build process
+    * Minor enhancements to supporting scripts
+  * [Portage]
+    * Comprehensive package slot management and tracking
+    * Accepted binary Rust and OpenJDK *(not supplanted by source versions)*
+    * Removed several antiquated packages
+  * [GRUB]
+    * No notable changes
 
 ### v10.0 2026-09-08 ###########################################################
 [v10.0 2026-09-08]: #v100-2026-09-08
