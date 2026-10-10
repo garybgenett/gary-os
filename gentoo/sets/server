@@ -2,7 +2,8 @@
 # portage set configuration file
 ################################################################################
 
-sys-kernel/gentoo-sources
+sys-kernel/gentoo-kernel
+#>>> sys-kernel/gentoo-sources
 
 ########################################
 # firmware
@@ -37,10 +38,8 @@ app-shells/bash-completion
 sys-apps/openrc
 sys-boot/grub
 
-sys-fs/e2fsprogs
-sys-fs/fuse
-
 sys-apps/gptfdisk
+sys-fs/e2fsprogs
 sys-fs/fuse
 
 sys-apps/attr
