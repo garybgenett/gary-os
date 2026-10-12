@@ -1833,6 +1833,7 @@ Everything needed to perform these steps is in the [Repository] or the
             * `make DOREDO=false DOTEST=true _release_grub`
         * `make _publish_release`
     * `(cd _builds; rm ./_gary-os.boot; ln _gary-os.build ./_gary-os.boot)`
+        * `rm [...]/{.boot,.store}/gary-os/*`
         * `_sync boot`
   * [x] [Checklist]
   * [x] [Publish]
