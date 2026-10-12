@@ -2153,7 +2153,7 @@ Everything in [Booting], [Running] and [Building] should be validated below.
     * `GIT_PAGER= git diff`
     * `startx`
   * `vipw && vigr`
-    * `ll /etc/passwd* /etc/group* /etc/*shadow*`
+    * `ls -la /etc/passwd* /etc/group* /etc/*shadow*`
 
 **`}`**
 
