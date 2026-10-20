@@ -589,7 +589,7 @@ alias reboot="sudo runit-init 6"
 
 alias a="alias"
 alias c="clear"
-alias h="history"
+alias h="history | ${GREP} \"^[[:space:]]+[0-9]+\" | sort -k2"
 alias hg="history | ${GREP}"
 
 ########################################
