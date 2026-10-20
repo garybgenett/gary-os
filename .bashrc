@@ -5743,6 +5743,7 @@ function task-export-drive-sync {
 			-e "/^$/d" \
 			-e "s|[\\]||g" \
 			-e "s|^[=][[:space:]]|# |g" \
+			-e "s|^([#].+)[[:space:]]+[{][^}]+[}]$|\1|g" \
 			-e "s|^([#]{1,3}[[:space:]])|###\1|g" \
 			-e "s|^([#]+[[:space:]])|\n\1|g" \
 			-e "s|^([[:space:]]*)[-][[:space:]]|\1* |g" \
